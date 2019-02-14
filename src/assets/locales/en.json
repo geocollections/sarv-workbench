@@ -1,0 +1,372 @@
+{
+  "main": {
+    "pagination": "Show {num} results per page",
+    "rating5": "5 - superb",
+    "rating4": "4 - very good",
+    "rating3": "3 - good",
+    "rating2": "2 - almost good",
+    "rating1": "1 - alright",
+    "rating0": "0 - neutral",
+    "rating-1": "-1 - below average",
+    "rating-2": "-2 - poorish",
+    "rating-3": "-3 - poor",
+    "rating-4": "-4 - very poor",
+    "rating-5": "-5 - useless"
+
+  },
+  "login": {
+    "password": "Password",
+    "idCard": "ID-card",
+    "passwordMessage": "Please enter your username and password",
+    "idCardMessage": "Make sure that ID-card is in the reader and connected to a computer",
+    "username": "Username",
+    "loginButton": "LOGIN",
+    "overlay": "Logging in..."
+  },
+  "header": {
+    "title": "Geocollections data management",
+    "files": "Files",
+    "references": "References",
+    "addAttachment": "Add new file",
+    "editAttachment": "My files",
+    "addReference": "Add new reference",
+    "editReference": "My references",
+    "lang": "{lang}",
+    "settings": "Settings",
+    "logOut": "Log out"
+  },
+  "footer": {
+    "info": "Questions and comments about the database and website: Olle Hints",
+    "ttuLink": "Institute of Geology at Tallinn University of Technology"
+  },
+  "frontPage":{
+    "welcome": "Welcome",
+    "info": "This application allows adding and editing files related to geology and geocollections, including photo archive, images of collection specimens, scanned publications, tabular data files etc. All files are linked to user and institution and each user can see and edit only the files he/she has authored and/or entered into the database. However, all files that are not marked as private will be publicly shown on geocollections portal at",
+    "collapseFiles": "Files",
+    "collapseReference": "Reference",
+    "buttons": {
+      "photoArchive": "Add photo",
+      "specimenImage": "Add specimen image",
+      "otherFiles": "Add other file",
+      "digitisedReference": "Add digitised reference",
+      "reference": "Add reference",
+      "myFiles": "My files",
+      "myReferences": "My references"
+    },
+    "developmentSettings": {
+      "button": "Remove all default settings",
+      "message": "Removes all saved values, might help if something is not loading/working correctly (only in development)"
+    }
+  },
+  "add": {
+    "attachment": "Attachment",
+    "photoArchive": "Photo archive",
+    "specimenImage": "Specimen images",
+    "otherFiles": "Other files",
+    "digitisedReference": "Digitised reference",
+    "reference": "Reference",
+    "referenceCollection": "Reference collections",
+    "journal": "Journals",
+    "overlay": "Please wait! Sending data...",
+    "buttons": {
+      "resetFile": "Reset file | Reset files",
+      "add": "Save",
+      "addAnother": "Save and add another",
+      "clearFields": "Clear fields",
+      "clearLocalStorage": "Remove defaults",
+      "cancel": "Cancel file upload"
+    },
+    "inputs": {
+      "fileInput": "Choose or drop a file...",
+      "referenceFileInput": "Choose or drop a linked file...",
+      "fileInputMaxError": "Maximum of 10 files are allowed to upload at a time. (Number of files: {num})",
+      "numOfFiles": "files",
+      "autocomplete": "search...",
+      "resetRating": "Reset rating",
+      "keywords": "Search or add a keyword",
+      "keywordsAdd": "Add this as new keyword",
+      "keywordsRemove": "Remove keywords",
+      "autocompleteSearch": "Search starts from {num}rd letter",
+      "newImageset": "Add new imageset",
+      "newJournal": "Add new journal"
+    },
+    "errors": {
+      "files": "Upload at least 1 file (max 10). File name should be less than 100 chars and without õ,ä,ö,ü etc.",
+      "authorMultiple": "At least one author field must be filled",
+      "author": "This field can't be empty",
+      "imagesetId": "This field can't be empty",
+      "specimen": "This field can't be empty",
+      "imagesetNumber": "This field can't be empty",
+      "imagesetNumberExists": "This imageset already exists",
+      "emptyField": "This field can't be empty"
+    }
+  },
+  "edit": {
+    "heading": "File ID",
+    "link": "View file in Geocollections",
+    "referenceLink": "View reference in Geocollections",
+    "imageNumber": "Image number",
+    "filename": "Filename",
+    "original_filename": "Original filename",
+    "attachment_format_value": "Attachment format value",
+    "image_width": "Image width",
+    "image_height": "Image height",
+    "date_added": "Date added",
+    "user_added": "User added",
+    "date_changed": "Date changed",
+    "user_changed": "User changed",
+    "specimen": "Specimen",
+    "imageInfo": "Image info",
+    "locality": "Locality",
+    "view": "View",
+    "viewMessage": "View file in geocollections portal",
+    "editMessage": "Edit file",
+    "overlay": "Please wait! Changing data...",
+    "isLoading": "Please wait!, Searching...",
+    "buttons": {
+      "save": "Save",
+      "saveAndContinue": "Save and continue editing",
+      "cancel": "Cancel file change"
+    },
+    "locked": "This file is locked and can't be changed",
+    "photoArchive": "Photo archive",
+    "specimenImage": "Specimen images",
+    "otherFiles": "Other files",
+    "digitisedReference": "Digitised reference"
+  },
+  "editReference": {
+    "heading": "Reference ID",
+    "editMessage": "Edit reference",
+    "viewMessage": "View reference in geocollections portal",
+    "id": "ID",
+    "author": "Author",
+    "year": "Year",
+    "title": "Pealkiri",
+    "bookJournal": "Book or journal",
+    "abstractKeywordsRemarks": "Abstract, keywords or remarks"
+  },
+  "attachments": {
+    "header": "My attachments",
+    "file": "File",
+    "format": "Format",
+    "number": "Number",
+    "author": "Author",
+    "date": "Date",
+    "specimen": "Specimen",
+    "reference": "Reference",
+    "specimenImageAttachment": "Type",
+    "photoArchiveFile": "Photo",
+    "specimenFile": "Specimen",
+    "digitisedReferenceFile": "Reference",
+    "otherFile": "File",
+    "edit": "Edit",
+    "errors": {
+      "noFiles1": "Unfortunately we didn't find any files. Go to",
+      "noFiles2": "and start uploading."
+    }
+  },
+  "references": {
+    "header": "My references",
+    "reference": "Reference",
+    "title": "Title",
+    "book": "Book",
+    "journal": "Journal",
+    "volume": "Volume",
+    "pages": "Pages",
+    "errors": {
+      "noFiles1": "Unfortunately we didn't find any references. Go to",
+      "noFiles2": "and start uploading."
+    }
+  },
+  "photoArchive": {
+    "author": "Author",
+    "authorFree": "Autor free",
+    "dateCreated": "Date created",
+    "dateCreatedFree": "Date created free",
+    "imageType": "Image type",
+    "device": "Device",
+    "deviceTxt": "Device",
+    "agentDigitised": "Agent digitised",
+    "dateDigitised": "Date digitised",
+    "deviceDigitised": "Device digitised",
+    "imagesetId": "Imageset ID",
+    "imagePlace": "Image place",
+    "locality": "Locality",
+    "imageLatitude": "Image latitude",
+    "imageLongitude": "Image longitude",
+    "imageAltitude": "Image altitude",
+    "imageObject": "Image object",
+    "imagePeople": "Image people",
+    "imageDescription": "Image description",
+    "imageDescriptionEn": "Image description en",
+    "keywords": "Keywords",
+    "stars": "Rating",
+    "licence": "Licence",
+    "copyrightAgent": "Copyright agent",
+    "preferred": "Preferred",
+    "private": "Private",
+    "locked": "Locked",
+    "collapseMap": "Map"
+  },
+  "specimenImage": {
+    "author": "Author",
+    "dateCreated": "Date created",
+    "dateCreatedFree": "Date created free",
+    "imageType": "Image type",
+    "device": "Device",
+    "deviceTxt": "Device",
+    "agentDigitised": "Agent digitised",
+    "dateDigitised": "Date digitised",
+    "deviceDigitised": "Device digitised",
+    "specimen": "Specimen",
+    "imageScalebar": "Image scalebar",
+    "imageDescription": "Image description",
+    "imageDescriptionEn": "Image description en",
+    "keywords": "Keywords",
+    "stars": "Rating",
+    "licence": "Licence",
+    "copyrightAgent": "Copyright agent",
+    "preferred": "Preferred",
+    "private": "Private",
+    "locked": "Locked"
+  },
+  "otherFiles": {
+    "author": "Author",
+    "authorFree": "Author free",
+    "dateCreated": "Date created",
+    "dateCreatedFree": "Date created free",
+    "imageType": "Image type",
+    "device": "Device",
+    "deviceTxt": "Device",
+    "agentDigitised": "Agent digitised",
+    "dateDigitised": "Date digitised",
+    "deviceDigitised": "Device digitised",
+    "type": "Type",
+    "imageScalebar": "Image scalebar",
+    "description": "Description",
+    "descriptionEn": "Description en",
+    "keywords": "Keywords",
+    "stars": "Rating",
+    "licence": "Licence",
+    "copyrightAgent": "Copyright agent",
+    "preferred": "Preferred",
+    "private": "Private",
+    "locked": "Locked",
+    "remarks": "Remarks",
+    "relatedData": "Related data",
+    "relatedDataDefault": "Choose related table",
+    "relatedTables": {
+      "collection": "Collection",
+      "specimen": "Specimen",
+      "sample": "Sample",
+      "sample_series": "Sample series",
+      "analysis": "Analysis",
+      "dataset": "Dataset",
+      "doi": "Doi",
+      "locality": "Locality",
+      "drillcore": "Drillcore",
+      "drillcore_box": "Drillcore box",
+      "preparation": "Preparation",
+      "reference": "Reference",
+      "storage": "Storage",
+      "attachment": "Attachment"
+    }
+  },
+  "digitisedReference": {
+    "reference": "Reference",
+    "dateDigitisedFree": "Date digitised free"
+  },
+  "imageset": {
+    "imagesetNumber": "Imageset number",
+    "author": "Author",
+    "description": "Description"
+  },
+  "collection": {
+    "name": "Name"
+  },
+  "specimen": {
+    "specimenNumber": "Specimen no"
+  },
+  "sample": {
+    "number": "Number"
+  },
+  "sample_series": {
+    "name": "Name"
+  },
+  "analysis": {
+    "sample": "Sample #"
+  },
+  "dataset": {
+    "name": "Name"
+  },
+  "doi": {
+    "identifier": "DOI"
+  },
+  "locality": {
+    "locality": "Locality"
+  },
+  "drillcore": {
+    "drillcore": "Drillcore"
+  },
+  "drillcore_box": {
+    "drillcore": "Drillcore - No"
+  },
+  "preparation": {
+    "number": "Number"
+  },
+  "reference": {
+    "reference": "Reference",
+    "author": "Author(s)",
+    "type": "Type",
+    "language": "Lang",
+    "year": "Year",
+    "title": "Title",
+    "titleOriginal": "Title (orig.)",
+    "book": "Book",
+    "bookOriginal": "Book (orig.)",
+    "publisher": "Publisher",
+    "publisherPlace": "Publisher place",
+    "journal": "Journal",
+    "journalAdditional": "Journal (Add'l)",
+    "volume": "Volume",
+    "number": "Number",
+    "pages": "Pages",
+    "figures": "Figures",
+    "abstract": "Abstract",
+    "remarks": "Remarks",
+    "journalTxt": "Journal text",
+    "relatedFile": "Related file(s)"
+  },
+  "journal": {
+    "journalName": "Journal name",
+    "journalShort": "Journal short",
+    "publisher": "Publisher",
+    "remarks": "Remarks"
+  },
+  "storage": {
+    "storage": "Storage"
+  },
+  "messages": {
+    "langChange": "Changed language!",
+    "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@ttu.ee",
+    "checkForm": "Make sure everything is correct!",
+    "loginError": "Something went wrong!",
+    "loginIdError": "Something went wrong! Try restarting your browser and make sure that ID-card is connected to a computer.",
+    "uploadError": "Upload failed!",
+    "inputNoResults": "No results!",
+    "defaultsRemoved": "Defaults removed!",
+    "editError": "Couldn't get data!",
+    "cancelRequest": "Cancel",
+    "validFileFormat": "This '{file}' is not an image file!",
+    "validFileFormatPDF": "This '{file}' is not a .pdf file!"
+  },
+  "titles": {
+    "main": "Geocollections Data Management",
+    "dashboard": "Geocollections Data Management: Dashboard",
+    "addAttachment": "Geocollections Data Management: Add attachment",
+    "editAttachment": "Geocollections Data Management: Edit attachment",
+    "addReference": "Geocollections Data Management: Add reference",
+    "editReference": "Geocollections Data Management: Edit reference",
+    "settings": "Geocollections Data Management: Settings"
+  }
+}

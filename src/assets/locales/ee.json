@@ -1,0 +1,372 @@
+{
+  "main": {
+    "pagination": "Kuva {num} kaupa",
+    "rating5": "5 - super",
+    "rating4": "4 - väga hea",
+    "rating3": "3 - hea pilt",
+    "rating2": "2 - normaalne",
+    "rating1": "1 - käib kah",
+    "rating0": "0 - neutraalne",
+    "rating-1": "-1 - alla keskmise",
+    "rating-2": "-2 - kehvake",
+    "rating-3": "-3 - halb",
+    "rating-4": "-4 - väga halb",
+    "rating-5": "-5 - kasutuskõlbmatu"
+  },
+  "login": {
+    "password": "Parool",
+    "idCard": "ID-kaart",
+    "passwordMessage": "Palun sisesta oma kasutajanimi ja parool",
+    "idCardMessage": "Kontrolli, et ID-kaart oleks lugejas ja arvutiga ühendatud",
+    "username": "Kasutajanimi",
+    "loginButton": "LOGI SISSE",
+    "overlay": "Login sisse..."
+  },
+  "header": {
+    "title": "Geokogude andmehaldus",
+    "files": "Failid",
+    "references": "Kirjandus",
+    "addAttachment": "Lisa uus fail",
+    "editAttachment": "Minu failid",
+    "addReference": "Lisa uus kirjandus",
+    "editReference": "Minu kirjandus",
+    "lang": "{lang}",
+    "settings": "Seaded",
+    "logOut": "Logi välja",
+    "view": "Vaata"
+  },
+  "footer": {
+    "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
+    "ttuLink": "TalTech Geoloogia Instituut"
+  },
+  "frontPage":{
+    "welcome": "Tere",
+    "info": "Siin saab geokogude infosüsteemi kasutaja lisada ja parandada geoloogia ja kollektsioonidega seotud faile: fotoarhiivi pilte, kollektsioonieksemplaride pilte, skaneeritud publikatsioone, tabelkujul andmefaile jms. Kõik failid on seotud konkreetse kasutaja ning asutusega. Järk-järgult lisanduvad siia funktsioonid ka muude andmeobjektide haldamiseks. Iga kasutaja saab esialgu näha ja muuta ainult enda autorlusega ja/või enda sisestatud andmeid, aga kõik kirjed, mis ei ole märgitud privaatseks, muutuvad avalikult nähtavaks geokogude portaalis",
+    "collapseFiles": "Failid",
+    "collapseReference": "Kirjandus",
+    "buttons": {
+      "photoArchive": "Lisa pilt",
+      "specimenImage": "Lisa eksemplari pilt",
+      "otherFiles": "Lisa fail",
+      "digitisedReference": "Lisa digiteeritud kirjandus",
+      "reference": "Lisa kirjandus",
+      "myFiles": "Minu failid",
+      "myReferences": "Minu kirjandus"
+    },
+    "developmentSettings": {
+      "button": "Kustuta kõik vaikimisi väärtused",
+      "message": "Kustutab kõik vaikimisi väärtused, võib aidata kui midagi ei lae/tööta korralikult (ainult arenduse käigus)"
+    }
+  },
+  "add": {
+    "attachment": "Failid",
+    "photoArchive": "Fotoarhiiv",
+    "specimenImage": "Eksemplari pildid",
+    "otherFiles": "Muud failid",
+    "digitisedReference": "Digiteeritud kirjandus",
+    "reference": "Kirjandus",
+    "referenceCollection": "Kirjanduse kogumikud",
+    "journal": "Ajakirjad",
+    "overlay": "Palun oodake! Saadan infot...",
+    "buttons": {
+      "resetFile": "Eemalda fail | Eemalda failid",
+      "add": "Salvesta",
+      "addAnother": "Salvesta ja lisa teine",
+      "clearFields": "Puhasta väljad",
+      "clearLocalStorage": "Eemalda vaikimisi väärtused",
+      "cancel": "Katkesta faili üleslaadimine"
+    },
+    "inputs": {
+      "fileInput": "Vali või lohista fail...",
+      "referenceFileInput": "Vali või lohista seotud fail...",
+      "fileInputMaxError": "Maksimaalselt on võimalik 10 faili üles laadida. (Failide arv: {num})",
+      "numOfFiles": "faili",
+      "autocomplete": "otsi...",
+      "resetRating": "Eemalda hinnang",
+      "keywords": "Otsi või lisa märksõna",
+      "keywordsAdd": "Lisa see uue märksõnana",
+      "keywordsRemove": "Eemalda märksõnad",
+      "autocompleteSearch": "Otsing algab {num}ndast tähemärgist",
+      "newImageset": "Lisa uus pildiseeria",
+      "newJournal": "Lisa uus ajakiri"
+    },
+    "errors": {
+      "files": "Lae üles vähemalt 1 fail (max 10). Nimi olgu lühem kui 100 märki ja ilma täpitähtedeta.",
+      "authorMultiple": "Vähemalt üks autori väli peab olema täidetud",
+      "author": "See väli ei tohi olla tühi",
+      "imagesetId": "See väli ei tohi olla tühi",
+      "specimen": "See väli ei tohi olla tühi",
+      "imagesetNumber": "See väli ei tohi olla tühi",
+      "imagesetNumberExists": "See pildiseeria on juba olemas",
+      "emptyField": "See väli ei tohi olla tühi"
+    }
+  },
+  "edit": {
+    "heading": "Fail ID",
+    "link": "Vaata faili geokogudes",
+    "referenceLink": "Vaata viidet geokogudes",
+    "imageNumber": "Pildi number",
+    "filename": "Failinimi",
+    "original_filename": "Originaal failinimi",
+    "attachment_format_value": "Manuseformaadi väärtus",
+    "image_width": "Pildi laius",
+    "image_height": "Pildi kõrgus",
+    "date_added": "Lisatud",
+    "user_added": "Lisas",
+    "date_changed": "Muudetud",
+    "user_changed": "Muutis",
+    "specimen": "Eksemplar",
+    "imageInfo": "Pildi info",
+    "locality": "Lokaliteet",
+    "view": "Vaata",
+    "viewMessage": "Vaata faili geokogude portaalis",
+    "editMessage": "Muuda faili",
+    "overlay": "Palun oodake! Muudan infot...",
+    "isLoading": "Palun oodake!, Otsin...",
+    "buttons": {
+      "save": "Salvesta",
+      "saveAndContinue": "Salvesta ja jätka muutmist",
+      "cancel": "Katkesta faili muutmine"
+    },
+    "locked": "Seda faili ei saa muuta, sest see on lukus",
+    "photoArchive": "Fotoarhiiv",
+    "specimenImage": "Eksemplari pildid",
+    "otherFiles": "Muud failid",
+    "digitisedReference": "Digiteeritud kirjandus"
+  },
+  "editReference": {
+    "heading": "Viite ID",
+    "editMessage": "Muuda viidet",
+    "viewMessage": "Vaata viidet geokogude portaalis",
+    "id": "ID",
+    "author": "Autor",
+    "year": "Aasta",
+    "title": "Pealkiri",
+    "bookJournal": "Raamat või ajakiri",
+    "abstractKeywordsRemarks": "Abstrakt, märksõnad või lisainfo"
+  },
+  "attachments": {
+    "header": "Minu failid",
+    "file": "Fail",
+    "format": "Formaat",
+    "number": "Number",
+    "author": "Autor",
+    "date": "Aeg",
+    "specimen": "Eksemplar",
+    "reference": "Kirjandus",
+    "specimenImageAttachment": "Tüüp",
+    "photoArchiveFile": "Foto",
+    "specimenFile": "Eksemplar",
+    "digitisedReferenceFile": "Kirjandus",
+    "otherFile": "Fail",
+    "edit": "Muuda",
+    "errors": {
+      "noFiles1": "Kahjuks ei leitud mitte ühtegi faili. Minge",
+      "noFiles2": "ja alustage üleslaadimist."
+    }
+  },
+  "references": {
+    "header": "Minu kirjandus",
+    "reference": "Viide",
+    "title": "Pealkiri",
+    "book": "Kogumik",
+    "journal": "Ajakiri",
+    "volume": "Köide",
+    "pages": "Lk.",
+    "errors": {
+      "noFiles1": "Kahjuks ei leitud mitte ühtegi viidet. Minge",
+      "noFiles2": "ja alustage üleslaadimist."
+    }
+  },
+  "photoArchive": {
+    "author": "Autor",
+    "authorFree": "Autor vaba",
+    "dateCreated": "Kuupäev",
+    "dateCreatedFree": "Kuupäev vaba",
+    "imageType": "Pildi tüüp",
+    "device": "Seade",
+    "deviceTxt": "Seade",
+    "agentDigitised": "Digiteerija",
+    "dateDigitised": "Digiteerimise kp",
+    "deviceDigitised": "Digiteerimise seade",
+    "imagesetId": "Pildiseeria ID",
+    "imagePlace": "Pildi koht",
+    "locality": "Lokaliteet",
+    "imageLatitude": "Pildi laiuskraad",
+    "imageLongitude": "Pildi pikkuskraad",
+    "imageAltitude": "Pildi kõrgus merepinnast",
+    "imageObject": "Pildi objekt",
+    "imagePeople": "Inimesed pildil",
+    "imageDescription": "Pildi kirjeldus",
+    "imageDescriptionEn": "Pildi kirjeldus en",
+    "keywords": "Märksõnad",
+    "stars": "Hinnang",
+    "licence": "Litsents",
+    "copyrightAgent": "Autoriõigused",
+    "preferred": "Eelistatud",
+    "private": "Privaatne",
+    "locked": "Lukustatud",
+    "collapseMap": "Kaart"
+  },
+  "specimenImage": {
+    "author": "Autor",
+    "dateCreated": "Kuupäev",
+    "dateCreatedFree": "Kuupäev vaba",
+    "imageType": "Pildi tüüp",
+    "device": "Seade",
+    "deviceTxt": "Seade",
+    "agentDigitised": "Digiteerija",
+    "dateDigitised": "Digiteerimise kp",
+    "deviceDigitised": "Digiteerimise seade",
+    "specimen": "Eksemplar",
+    "imageScalebar": "Pildi skaala",
+    "imageDescription": "Pildi kirjeldus",
+    "imageDescriptionEn": "Pildi kirjeldus en",
+    "keywords": "Märksõnad",
+    "stars": "Hinnang",
+    "licence": "Litsents",
+    "copyrightAgent": "Autoriõigused",
+    "preferred": "Eelistatud",
+    "private": "Privaatne",
+    "locked": "Lukustatud"
+  },
+  "otherFiles": {
+    "author": "Autor",
+    "authorFree": "Autor vaba",
+    "dateCreated": "Kuupäev",
+    "dateCreatedFree": "Kuupäev vaba",
+    "imageType": "Pildi tüüp",
+    "device": "Seade",
+    "deviceTxt": "Seade",
+    "agentDigitised": "Digiteerija",
+    "dateDigitised": "Digiteerimise kp",
+    "deviceDigitised": "Digiteerimise seade",
+    "type": "Tüüp",
+    "imageScalebar": "Pildi skaala",
+    "description": "Kirjeldus",
+    "descriptionEn": "Kirjeldus en",
+    "keywords": "Märksõnad",
+    "stars": "Hinnang",
+    "licence": "Litsents",
+    "copyrightAgent": "Autoriõigused",
+    "preferred": "Eelistatud",
+    "private": "Privaatne",
+    "locked": "Lukustatud",
+    "remarks": "Lisainfo",
+    "relatedData": "Seotud andmed",
+    "relatedDataDefault": "Vali seotud tabel",
+    "relatedTables": {
+      "collection": "Kollektsioon",
+      "specimen": "Eksemplar",
+      "sample": "Proov",
+      "sample_series": "Proovi seeria",
+      "analysis": "Analüüs",
+      "dataset": "Andmestik",
+      "doi": "DOI",
+      "locality": "Lokaliteet",
+      "drillcore": "Puursüdamik",
+      "drillcore_box": "Puursüdamiku kast",
+      "preparation": "Preparaat",
+      "reference": "Kirjandus",
+      "storage": "Hoidla",
+      "attachment": "Fail"
+    }
+  },
+  "digitisedReference": {
+    "reference": "Kirjandus",
+    "dateDigitisedFree": "Digiteerimise kp vaba"
+  },
+  "imageset": {
+    "imagesetNumber": "Pildiseeria number",
+    "author": "Autor",
+    "description": "Kirjeldus"
+  },
+  "collection": {
+    "name": "Nimi"
+  },
+  "specimen": {
+    "specimenNumber": "Eksemplari nr"
+  },
+  "sample": {
+    "number": "Number"
+  },
+  "sample_series": {
+    "name": "Nimi"
+  },
+  "analysis": {
+    "sample": "Proov #"
+  },
+  "dataset": {
+    "name": "Nimi"
+  },
+  "doi": {
+    "identifier": "DOI"
+  },
+  "locality": {
+    "locality": "Leiukoht"
+  },
+  "drillcore": {
+    "drillcore": "Puursüdamik"
+  },
+  "drillcore_box": {
+    "drillcore": "Puursüdamik - Nr"
+  },
+  "preparation": {
+    "number": "Number"
+  },
+  "reference": {
+    "reference": "Viide",
+    "author": "Autor(id)",
+    "type": "Tüüp",
+    "language": "Keel",
+    "year": "Aasta",
+    "title": "Pealkiri",
+    "titleOriginal": "Pealkiri (orig.)",
+    "book": "Kogumik",
+    "bookOriginal": "Kogumik (orig.)",
+    "publisher": "Kirjastus",
+    "publisherPlace": "Kirjastuse asukoht",
+    "journal": "Ajakiri",
+    "journalAdditional": "Ajakirja lisainfo",
+    "volume": "Köide",
+    "number": "Number",
+    "pages": "Leheküljed",
+    "figures": "Joonised",
+    "abstract": "Abstrakt",
+    "remarks": "Lisainfo",
+    "journalTxt": "Ajakiri tekstina",
+    "relatedFile": "Seotud fail(id)"
+  },
+  "journal": {
+    "journalName": "Ajakirja nimi",
+    "journalShort": "Ajakiri lühike",
+    "publisher": "Kirjastaja",
+    "remarks": "Lisainfo"
+  },
+  "storage": {
+    "storage": "Hoidla"
+  },
+  "messages": {
+    "langChange": "Vahetasite keelt!",
+    "easterEggError": "Mida sa teha üritad :D ??? Kui sa ei tea, kuidas see juhtus, siis palun võta ühendust olle.hints@ttu.ee",
+    "checkForm": "Kontrolli, et kõik väljad oleks korrektselt täidetud!",
+    "loginError": "Midagi läks valesti!",
+    "loginIdError": "Midagi läks valesti! Proovi brauserile restarti teha ja kontrolli, et ID-kaart oleks arvutiga ühendatud.",
+    "uploadError": "Üleslaadimine ebaõnnestus!",
+    "inputNoResults": "Tulemused puuduvad!",
+    "defaultsRemoved": "Vaikimisi väärtused eemaldatud!",
+    "editError": "Ei õnnestunud andmeid saada!",
+    "cancelRequest": "Katkesta",
+    "validFileFormat": "See '{file}' ei ole pildifail!",
+    "validFileFormatPDF": "See '{file}' ei ole .pdf fail!"
+  },
+  "titles": {
+    "main": "Geokogude andmehaldus",
+    "dashboard": "Geokogude andmehaldus: Pealeht",
+    "addAttachment": "Geokogude andmehaldus: Lisa fail",
+    "editAttachment": "Geokogude andmehaldus: Muuda faili",
+    "addReference": "Geokogude andmehaldus: Lisa viide",
+    "editReference": "Geokogude andmehaldus: Muuda viidet",
+    "settings": "Geokogude andmehaldus: Seaded"
+  }
+}
