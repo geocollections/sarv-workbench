@@ -375,5 +375,8 @@
     "addReference": "Geokogude andmehaldus: Lisa viide",
     "editReference": "Geokogude andmehaldus: Muuda viidet",
     "settings": "Geokogude andmehaldus: Seaded"
+  },
+  "logs": {
+    "title": "Logid"
   }
 }

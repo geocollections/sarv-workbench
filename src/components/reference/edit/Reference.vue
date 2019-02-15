@@ -482,7 +482,7 @@
     </div>
 
 
-    <div class="row mt-3 mb-3">
+    <div class="row mt-3 mb-2">
       <div class="col" v-if="!isReferenceLocked">
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
@@ -493,13 +493,8 @@
     </div>
 
 
-
-    <!-- LOGS START -->
-
-    <!-- FILE INFORMATION -->
-    <div class="col-sm-6">
-      <file-information :data="data" :reference="true"/>
-    </div>
+    <!-- LOGS -->
+    <log table="reference" :id="reference.id"></log>
 
 
   </div>
@@ -513,7 +508,7 @@
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
 
   import VueMultiselect from 'vue-multiselect'
-  import FileInformation from "@/components/partial/FileInformation.vue";
+  import Log from '@/components/partial/Log.vue'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastError } from "@/assets/js/iziToast/iziToast";
 
@@ -522,8 +517,8 @@
   export default {
     components: {
       FontAwesomeIcon,
-      FileInformation,
       VueMultiselect,
+      Log,
     },
     props: ['data','attach','loc','refkey'],
     name: "Reference",

@@ -375,5 +375,8 @@
     "addReference": "Geocollections Data Management: Add reference",
     "editReference": "Geocollections Data Management: Edit reference",
     "settings": "Geocollections Data Management: Settings"
+  },
+  "logs": {
+    "title": "Logs"
   }
 }
