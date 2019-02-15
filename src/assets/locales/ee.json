@@ -83,7 +83,7 @@
       "numOfFiles": "faili",
       "autocomplete": "otsi...",
       "resetRating": "Eemalda hinnang",
-      "keywords": "Otsi või lisa märksõna",
+      "tags": "Otsi või lisa märksõna",
       "keywordsAdd": "Lisa see uue märksõnana",
       "keywordsRemove": "Eemalda märksõnad",
       "autocompleteSearch": "Otsing algab {num}ndast tähemärgist",
@@ -199,7 +199,7 @@
     "imagePeople": "Inimesed pildil",
     "imageDescription": "Pildi kirjeldus",
     "imageDescriptionEn": "Pildi kirjeldus en",
-    "keywords": "Märksõnad",
+    "tags": "Märksõnad",
     "stars": "Hinnang",
     "licence": "Litsents",
     "copyrightAgent": "Autoriõigused",
@@ -222,7 +222,7 @@
     "imageScalebar": "Pildi skaala",
     "imageDescription": "Pildi kirjeldus",
     "imageDescriptionEn": "Pildi kirjeldus en",
-    "keywords": "Märksõnad",
+    "tags": "Märksõnad",
     "stars": "Hinnang",
     "licence": "Litsents",
     "copyrightAgent": "Autoriõigused",
@@ -245,7 +245,7 @@
     "imageScalebar": "Pildi skaala",
     "description": "Kirjeldus",
     "descriptionEn": "Kirjeldus en",
-    "keywords": "Märksõnad",
+    "tags": "Märksõnad",
     "stars": "Hinnang",
     "licence": "Litsents",
     "copyrightAgent": "Autoriõigused",
@@ -336,7 +336,13 @@
     "remarks": "Lisainfo",
     "journalTxt": "Ajakiri tekstina",
     "relatedFile": "Seotud fail(id)",
-    "is_oa": "OpenAccess"
+    "is_oa": "OpenAccess",
+    "tags": "Autori märksõnad",
+    "relatedTables": {
+      "attachment": "Fail",
+      "locality": "Lokaliteet",
+      "reference_keyword": "Kasutaja märksõnad"
+    }
   },
   "journal": {
     "journalName": "Ajakirja nimi",

@@ -322,14 +322,15 @@
       <div class="col-sm-4">
         <b-form-select id="related_data" v-model="relatedTable" class="mb-3">
           <option :value="null">{{ this.$t('otherFiles.relatedDataDefault') }}</option>
-          <option value="attachment">{{ this.$t('otherFiles.relatedTables.attachment') }}</option>
-          <option value="locality">{{ this.$t('otherFiles.relatedTables.locality') }}</option>
+          <option value="attachment">{{ this.$t('reference.relatedTables.attachment') }}</option>
+          <option value="locality">{{ this.$t('reference.relatedTables.locality') }}</option>
+          <option value="reference_keyword">{{ this.$t('reference.relatedTables.reference_keyword') }}</option>
         </b-form-select>
       </div>
 
 
       <div class="col-sm-2" v-if="relatedTable !== null">
-        <label :for="relatedTable">{{ this.$t('otherFiles.relatedTables.' + relatedTable) }}:</label>
+        <label :for="relatedTable">{{ this.$t('reference.relatedTables.' + relatedTable) }}:</label>
       </div>
 
       <div class="col-sm-4" v-if="relatedTable !== null">
@@ -355,14 +356,14 @@
       <!-- ATTACHMENT -->
       <div class="col-sm-6" v-if="edit.related_data.attachment !== null && edit.related_data.attachment.length > 0">
 
-        <p class="h4">{{ $t('otherFiles.relatedTables.attachment') }}</p>
+        <p class="h4">{{ $t('reference.relatedTables.attachment') }}</p>
 
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
             <tr>
               <th>ID</th>
-              <th>{{ $t('otherFiles.relatedTables.attachment') }}</th>
+              <th>{{ $t('reference.relatedTables.attachment') }}</th>
               <th></th>
             </tr>
             </thead>
@@ -391,7 +392,7 @@
       <!-- LOCALITY -->
       <div class="col-sm-6" v-if="edit.related_data.locality !== null && edit.related_data.locality.length > 0">
 
-        <p class="h4">{{ $t('otherFiles.relatedTables.locality') }}</p>
+        <p class="h4">{{ $t('reference.relatedTables.locality') }}</p>
 
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
@@ -430,13 +431,43 @@
         </div>
       </div>
 
+      <!-- REFERENE KEYWORD -->
+      <div class="col-sm-6" v-if="edit.related_data.reference_keyword !== null && edit.related_data.reference_keyword.length > 0">
+
+        <p class="h4">{{ $t('reference.relatedTables.reference_keyword') }}</p>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('reference.relatedTables.reference_keyword') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="(entity, index) in edit.related_data.reference_keyword">
+              <td>{{ entity.id }}</td>
+
+              <td>{{ entity.keyword }}</td>
+
+              <td class="text-center delete-relation" @click="edit.related_data.reference_keyword.splice(index, 1)">
+                <font-awesome-icon icon="times"></font-awesome-icon>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
 
     <!-- CHECKBOXES -->
     <div class="row">
       <div class="col">
-        <b-form-checkbox id="is_oa" v-model="reference.is_oa" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_oa" v-model="edit.is_oa" value="1" unchecked-value="0">
           {{ $t('reference.is_oa') }}
         </b-form-checkbox>
 
@@ -494,7 +525,7 @@
       FileInformation,
       VueMultiselect,
     },
-    props: ['data','attach','loc'],
+    props: ['data','attach','loc','refkey'],
     name: "Reference",
 
     data() {
@@ -503,6 +534,7 @@
         reference: this.data,
         attachment: this.attach,
         locality: this.loc,
+        reference_keyword: this.refkey,
         isFileLocked: this.data.is_locked,
         files: null, // TODO
         isDragging: false,
@@ -517,11 +549,13 @@
           relatedData: {
             locality: [],
             attachment: [],
+            reference_keyword: []
           }
         },
         searchingRelatedData: {
           locality: false,
           attachment: false,
+          refernce_keyword: false,
         },
         relatedTable: null,
         myKeywords: [],
@@ -557,6 +591,7 @@
           related_data: {
             attachment: this.buildRelatedData(this.attach, 'attachment'),
             locality: this.buildRelatedData(this.loc, 'locality'),
+            reference_keyword: this.buildRelatedData(this.refkey, 'reference_keyword'),
           }
         },
       }
@@ -648,8 +683,14 @@
          *** RELATED DATA START ***
          **************************/
 
-        if (unformattedData.related_data.locality !== null && typeof unformattedData.related_data.locality !== 'undefined') {
-          if (unformattedData.related_data.locality.length === 0) uploadableData.related_data.locality = null
+        if (unformattedData.locality !== null && typeof unformattedData.locality !== 'undefined') {
+          if (unformattedData.locality.length === 0) uploadableData.locality = null
+        }
+        if (unformattedData.attachment !== null && typeof unformattedData.attachment !== 'undefined') {
+          if (unformattedData.attachment.length === 0) uploadableData.attachment = null
+        }
+        if (unformattedData.reference_keyword !== null && typeof unformattedData.reference_keyword !== 'undefined') {
+          if (unformattedData.reference_keyword.length === 0) uploadableData.reference_keyword = null
         }
 
         /**************************
@@ -805,10 +846,12 @@
       buildRelatedData(relatedData, field) {
         let attachments = []
         let localities = []
+        let referenceKeywords = []
 
         for (const data in relatedData) {
           let attachment = {}
           let locality = {}
+          let referenceKeyword = {}
 
           if (field === 'attachment') {
             if (relatedData[data].id !== null) {
@@ -830,11 +873,20 @@
             }
           }
 
+          if (field === 'reference_keyword') {
+            if (relatedData[data].id !== null) {
+              referenceKeyword.id = relatedData[data].id
+              referenceKeyword.keyword = relatedData[data].keyword
+              referenceKeywords.push(referenceKeyword)
+            }
+          }
+
         }
 
 
         if (field === 'attachment' && attachments.length > 0) return attachments
         if (field === 'locality' && localities.length > 0) return localities
+        if (field === 'reference_keyword' && referenceKeywords.length > 0) return referenceKeywords
 
         return null
       },
@@ -872,6 +924,10 @@
             case 'locality':
               search += 'multi_search=value:' + query + ';fields:id,locality,locality_en;lookuptype:icontains'
               fields += ',locality,locality_en'
+              break
+            case 'reference_keyword':
+              search += 'multi_search=value:' + query + ';fields:id,keyword;lookuptype:icontains'
+              fields += ',keyword'
               break
             default:
               search += 'id__icontains=' + query
@@ -912,6 +968,9 @@
           case 'locality':
             if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
             return `${option.id} - (${option.locality_en})`
+          case 'reference_keyword':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.keyword})`
+            return `${option.id} - (${option.keyword})`
           default:
             return `${option.id}`
         }

@@ -336,7 +336,13 @@
     "remarks": "Remarks",
     "journalTxt": "Journal text",
     "relatedFile": "Related file(s)",
-    "is_oa": "OpenAccess"
+    "is_oa": "OpenAccess",
+    "keywords": "Author keywords",
+    "relatedTables": {
+      "attachment": "Attachment",
+      "locality": "Locality",
+      "reference_keyword": "User keywords"
+    }
   },
   "journal": {
     "journalName": "Journal name",

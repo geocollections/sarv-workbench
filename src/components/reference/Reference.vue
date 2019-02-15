@@ -265,29 +265,29 @@
       </div>
     </div>
 
-    <!-- KEYWORDS -->
+    <!-- AUTHOR KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`keywords`">{{ $t('otherFiles.keywords') }}:</label>
+        <label :for="`author-keywords`">{{ $t('reference.authorKeywords') }}:</label>
       </div>
 
       <div class="col-9 mb-2">
-        <vue-multiselect v-model="reference.tags"
-                         id="keywords"
+        <vue-multiselect v-model="reference.authorKeywords"
+                         id="author-keywords"
                          :tag-placeholder="$t('add.inputs.keywordsAdd')"
                          :placeholder="$t('add.inputs.keywords')"
                          label="name"
                          track-by="name"
-                         :options="myKeywords"
+                         :options="myAuthorKeywords"
                          :multiple="true"
                          :taggable="true"
                          :show-labels="false"
-                         @tag="addKeyword"></vue-multiselect>
+                         @tag="addAuthorKeyword"></vue-multiselect>
       </div>
 
       <div class="col-1 mb-2">
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeKeywords"
-                @click="reference.tags = null">
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeAuthorKeywords"
+                @click="reference.authorKeywords = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
@@ -324,14 +324,15 @@
       <div class="col-sm-4">
         <b-form-select id="related_data" v-model="relatedTable" class="mb-3">
           <option :value="null">{{ this.$t('otherFiles.relatedDataDefault') }}</option>
-          <option value="attachment">{{ this.$t('otherFiles.relatedTables.attachment') }}</option>
-          <option value="locality">{{ this.$t('otherFiles.relatedTables.locality') }}</option>
+          <option value="attachment">{{ this.$t('reference.relatedTables.attachment') }}</option>
+          <option value="locality">{{ this.$t('reference.relatedTables.locality') }}</option>
+          <option value="reference_keyword">{{ this.$t('reference.relatedTables.reference_keyword') }}</option>
         </b-form-select>
       </div>
 
 
       <div class="col-sm-2" v-if="relatedTable !== null">
-        <label :for="relatedTable">{{ this.$t('otherFiles.relatedTables.' + relatedTable) }}:</label>
+        <label :for="relatedTable">{{ this.$t('reference.relatedTables.' + relatedTable) }}:</label>
       </div>
 
       <div class="col-sm-4" v-if="relatedTable !== null">
@@ -357,14 +358,14 @@
       <!-- ATTACHMENT -->
       <div class="col-sm-6" v-if="reference.related_data.attachment !== null && reference.related_data.attachment.length > 0">
 
-        <p class="h4">{{ $t('otherFiles.relatedTables.attachment') }}</p>
+        <p class="h4">{{ $t('reference.relatedTables.attachment') }}</p>
 
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
             <tr>
               <th>ID</th>
-              <th>{{ $t('otherFiles.relatedTables.attachment') }}</th>
+              <th>{{ $t('reference.relatedTables.attachment') }}</th>
               <th></th>
             </tr>
             </thead>
@@ -393,7 +394,7 @@
       <!-- LOCALITY -->
       <div class="col-sm-6" v-if="reference.related_data.locality !== null && reference.related_data.locality.length > 0">
 
-        <p class="h4">{{ $t('otherFiles.relatedTables.locality') }}</p>
+        <p class="h4">{{ $t('reference.relatedTables.locality') }}</p>
 
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
@@ -432,66 +433,38 @@
         </div>
       </div>
 
+      <!-- REFERENE KEYWORD -->
+      <div class="col-sm-6" v-if="reference.related_data.reference_keyword !== null && reference.related_data.reference_keyword.length > 0">
+
+        <p class="h4">{{ $t('reference.relatedTables.reference_keyword') }}</p>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('reference.relatedTables.reference_keyword') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="(entity, index) in reference.related_data.reference_keyword">
+              <td>{{ entity.id }}</td>
+
+              <td>{{ entity.keyword }}</td>
+
+              <td class="text-center delete-relation" @click="reference.related_data.reference_keyword.splice(index, 1)">
+                <font-awesome-icon icon="times"></font-awesome-icon>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
-    <!-- FILE -->
-    <!--<div class="row">-->
-    <!--<div class="col-sm-2">-->
-    <!--<label :for="`files`">{{ $t('reference.relatedFile') }}:</label>-->
-    <!--</div>-->
-
-    <!--<div class="col-sm-10 col-md-4 mb-2">-->
-    <!--<label :for="`files`"-->
-    <!--v-bind:class="{ dragging : isDragging }"-->
-    <!--v-on:dragover.stop.prevent="isDragging = true"-->
-    <!--v-on:dragleave.stop.prevent="isDragging = false"-->
-    <!--v-on:drop.stop.prevent="dropFile"-->
-    <!--class="btn btn-outline-primary btn-block">{{ $t('add.inputs.fileInput') }}-->
-    <!--</label>-->
-
-    <!--<div class="mt-2 alert alert-warning" v-if="files !== null && files.length >= 10">{{ $t('add.inputs.fileInputMaxError', { num: files.length }) }}</div>-->
-
-    <!--<div class="mt-2" v-if="files !== null && files.length > 0">-->
-    <!--<div v-if="files.length > 0" >-->
-
-    <!--<ul class="list-unstyled">-->
-    <!--<li class="mt-2" v-for="(file, key) in files">-->
-
-    <!--<span><i class="far fa-file"></i></span>-->
-
-    <!--<span><b>{{ file.name }}</b></span>-->
-
-    <!--</li>-->
-    <!--</ul>-->
-
-    <!--</div>-->
-    <!--</div>-->
-
-    <!--&lt;!&ndash; TODO: https://github.com/bootstrap-vue/bootstrap-vue/issues/1526, If multiple then accept does not take multiple formats. BUG &ndash;&gt;-->
-    <!--&lt;!&ndash; TODO: BUG: If too many files or long filenames then breaks the input design &ndash;&gt;-->
-    <!--<b-form-file v-model="files"-->
-    <!--id="files"-->
-    <!--:state="filesState"-->
-    <!--multiple-->
-    <!--plain-->
-    <!--style="display: none"-->
-    <!--ref="fileinput"-->
-    <!--accept=".pdf"-->
-    <!--:placeholder="$t('add.inputs.fileInput')">-->
-    <!--</b-form-file>-->
-
-    <!--<b-form-text v-if="!filesState">{{ $t('add.errors.files') }}.</b-form-text>-->
-
-    <!--</div>-->
-
-    <!--<div class="col-sm-12 col-md-6 mb-2">-->
-    <!--<button class="btn btn-outline-danger" v-if="filesState" :disabled="sendingData" @click="clearFile">-->
-    <!--<span v-show="files.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>-->
-    <!--<span v-show="files.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>-->
-    <!--</button>-->
-    <!--</div>-->
-
-    <!--</div>-->
 
     <!-- CHECKBOXES -->
     <div class="row">
@@ -563,14 +536,16 @@
           relatedData: {
             locality: [],
             attachment: [],
+            reference_keyword: [],
           }
         },
         searchingRelatedData: {
           locality: false,
           attachment: false,
+          reference_keyword: false,
         },
         relatedTable: null,
-        myKeywords: [],
+        myAuthorKeywords: [],
         reference: {
           reference: null,
           author: null,
@@ -601,7 +576,7 @@
           url: null,
           isbn: null,
           issn: null,
-          tags: null,
+          authorKeywords: null,
           abstract: null,
           remarks: null,
           journal_txt: null,
@@ -611,6 +586,7 @@
           related_data: {
             locality: null,
             attachment: null,
+            reference_keyword: null,
           }
         },
       }
@@ -645,8 +621,8 @@
         return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
       },
 
-      removeKeywords() {
-        return this.reference.tags !== null && this.reference.tags.length > 0
+      removeAuthorKeywords() {
+        return this.reference.authorKeywords !== null && this.reference.authorKeywords.length > 0
       },
     },
 
@@ -734,14 +710,14 @@
         // Building correct fields
         if (objectToUpload.type !== null) uploadableObject.type = objectToUpload.type.id
         if (objectToUpload.language !== null) uploadableObject.language = objectToUpload.language.id
-        if (objectToUpload.tags !== null && typeof objectToUpload.tags !== 'undefined') {
-          if (objectToUpload.tags.length !== 0) {
-            let arrayOfKeywords = objectToUpload.tags.map(function (word) {
+        if (objectToUpload.authorKeywords !== null && typeof objectToUpload.authorKeywords !== 'undefined') {
+          if (objectToUpload.authorKeywords.length !== 0) {
+            let arrayOfKeywords = objectToUpload.authorKeywords.map(function (word) {
               return word['name']
             })
-            uploadableObject.tags = arrayOfKeywords.join('|')
+            uploadableObject.authorKeywords = arrayOfKeywords.join('|')
           } else {
-            uploadableObject.tags = null
+            uploadableObject.authorKeywords = null
           }
         }
 
@@ -757,6 +733,9 @@
         if (objectToUpload.attachment !== null && typeof objectToUpload.attachment !== 'undefined') {
           if (objectToUpload.attachment.length === 0) uploadableObject.attachment = null
         }
+        if (objectToUpload.reference_keyword !== null && typeof objectToUpload.reference_keyword !== 'undefined') {
+          if (objectToUpload.reference_keyword.length === 0) uploadableObject.reference_keyword = null
+        }
 
         /************************
          *** RELATED DATA END ***
@@ -770,14 +749,14 @@
         return JSON.stringify(uploadableObject)
       },
 
-      addKeyword(newKeyword) {
+      addAuthorKeyword(newKeyword) {
         // let lowerCaseKeyword = newKeyword.toLowerCase()
         // const keyword = {name: lowerCaseKeyword}
         const keyword = {name: newKeyword}
 
-        this.myKeywords.push(keyword)
-        if (this.reference.tags === null) this.reference.tags = []
-        this.reference.tags.push(keyword)
+        this.myAuthorKeywords.push(keyword)
+        if (this.reference.authorKeywords === null) this.reference.authorKeywords = []
+        this.reference.authorKeywords.push(keyword)
       },
 
 
@@ -916,6 +895,10 @@
               search += 'multi_search=value:' + query + ';fields:id,locality,locality_en;lookuptype:icontains'
               fields += ',locality,locality_en'
               break
+            case 'reference_keyword':
+              search += 'multi_search=value:' + query + ';fields:id,keyword;lookuptype:icontains'
+              fields += ',keyword'
+              break
             default:
               search += 'id__icontains=' + query
               fields += ''
@@ -955,6 +938,9 @@
           case 'locality':
             if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
             return `${option.id} - (${option.locality_en})`
+          case 'reference_keyword':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.keyword})`
+            return `${option.id} - (${option.keyword})`
           default:
             return `${option.id}`
         }
@@ -1027,7 +1013,7 @@
           url: null,
           isbn: null,
           issn: null,
-          tags: null,
+          authorKeywords: null,
           abstract: null,
           journal_txt: null,
           remarks: null,
@@ -1037,6 +1023,7 @@
           related_data: {
             locality: null,
             attachment: null,
+            reference_keyword: null,
           }
         }
       },

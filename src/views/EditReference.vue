@@ -11,8 +11,8 @@
 
 
     <div v-if="reference !== null">
-      <div v-if="isReference && isAttachment && isLocalityReference">
-        <reference :data="reference" v-bind:attach="attachment" :loc="locality" v-on:edit-data="change"/>
+      <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword">
+        <reference :data="reference" v-bind:attach="attachment" :loc="locality" :refkey="reference_keyword" v-on:edit-data="change"/>
       </div>
     </div>
 
@@ -39,6 +39,7 @@
         reference: null,
         attachment: null,
         locality: null,
+        reference_keyword: null,
         searchParameters: {
           id: this.id,
           author: null
@@ -59,6 +60,7 @@
         this.getReference(this.searchParameters)
         this.getAttachment(this.searchParameters)
         this.getLocalityReference(this.searchParameters)
+        this.getReferenceKeyword(this.searchParameters)
       }
     },
 
@@ -73,6 +75,10 @@
 
       isLocalityReference() {
         return this.locality !== null
+      },
+
+      isReferenceKeyword() {
+        return this.reference_keyword !== null
       }
     },
 
@@ -83,6 +89,7 @@
         this.getReference(this.searchParameters)
         this.getAttachment(this.searchParameters)
         this.getLocalityReference(this.searchParameters)
+        this.getReferenceKeyword(this.searchParameters)
       }
     },
 
@@ -143,7 +150,7 @@
       getReference(params) {
         this.$http.get(this.apiUrl + 'reference/' + params.id, {
           params: {
-            // user_added: params.author.user,
+            user_added: params.author.user,
             format: 'json',
           }
         }).then(response => {
@@ -193,10 +200,29 @@
         })
       },
 
+      // TODO: Also this should use the author field.
+      getReferenceKeyword(params) {
+        this.$http.get(this.apiUrl + 'reference_keyword/', {
+          params: {
+            reference: params.id,
+            format: 'json',
+          }
+        }).then(response => {
+          console.log(response)
+          if (response.status === 200) {
+            if (response.body.count > 0) this.reference_keyword = response.body.results
+            else this.reference_keyword = []
+          }
+        }, errResponse => {
+          console.log('ERROR: ' + JSON.stringify(errResponse))
+        })
+      },
+
       resetData() {
         this.reference = null
         this.attachment = null
         this.locality = null
+        this.reference_keyword = null
       }
     }
   }
