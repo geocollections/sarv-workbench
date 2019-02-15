@@ -24,7 +24,7 @@
               <li class="mt-2" v-for="(file, key) in files">
 
                 <span>
-                  <font-awesome-icon icon="file"></font-awesome-icon>
+                  <font-awesome-icon icon="file"></font-awesome-icon>&nbsp;
                 </span>
 
                 <span><b>{{ file.name }}</b></span>
@@ -150,10 +150,10 @@
 
       <div class="col-sm-4 mb-2">
         <datepicker id="date_digitised"
-                    v-model="upload.date_digitised"
-                    :bootstrap-styling="true"
-                    :clear-button="true"
-                    clear-button-icon="fas fa-times date-clear-button"
+                    v-model="edit.date_digitised"
+                    lang="en"
+                    :first-day-of-week="1"
+                    format="DD MMM YYYY"
                     input-class="form-control"></datepicker>
       </div>
     </div>
@@ -204,7 +204,7 @@
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
 
-  import Datepicker from 'vuejs-datepicker'
+  import Datepicker from 'vue2-datepicker'
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'

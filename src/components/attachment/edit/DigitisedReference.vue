@@ -104,9 +104,9 @@
       <div class="col-sm-4 mb-2">
         <datepicker id="date_digitised"
                     v-model="edit.date_digitised"
-                    :bootstrap-styling="true"
-                    :clear-button="true"
-                    clear-button-icon="fas fa-times date-clear-button"
+                    lang="en"
+                    :first-day-of-week="1"
+                    format="DD MMM YYYY"
                     input-class="form-control"></datepicker>
       </div>
     </div>
@@ -155,7 +155,7 @@
 
 <script>
   import VueMultiselect from 'vue-multiselect'
-  import Datepicker from 'vuejs-datepicker'
+  import Datepicker from 'vue2-datepicker'
   import cloneDeep from 'lodash/cloneDeep'
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";

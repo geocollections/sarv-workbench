@@ -99,9 +99,9 @@
       <div class="col-sm-4 mb-2">
         <datepicker id="date_created"
                     v-model="edit.date_created"
-                    :bootstrap-styling="true"
-                    :clear-button="true"
-                    clear-button-icon="fas fa-times date-clear-button"
+                    lang="en"
+                    :first-day-of-week="1"
+                    format="DD MMM YYYY"
                     input-class="form-control"></datepicker>
       </div>
 
@@ -282,28 +282,11 @@
       <div class="col-sm-4 mb-2">
         <datepicker id="date_digitised"
                     v-model="edit.date_digitised"
-                    :bootstrap-styling="true"
-                    :clear-button="true"
-                    clear-button-icon="fas fa-times date-clear-button"
+                    lang="en"
+                    :first-day-of-week="1"
+                    format="DD MMM YYYY"
                     input-class="form-control"></datepicker>
       </div>
-      <!--<div class="col-sm-2">-->
-      <!--<label :for="`device_digitised`">{{ $t('specimenImage.deviceDigitised') }}:</label>-->
-      <!--</div>-->
-
-      <!--<div class="col-sm-4 mb-2">-->
-      <!--<vue-multiselect v-model="edit.device_digitised"-->
-      <!--id="device_digitised"-->
-      <!--:options="autocomplete.devices"-->
-      <!--@open="maybeGetDevices"-->
-      <!--track-by="name"-->
-      <!--label="name"-->
-      <!--:loading="searchingDevices"-->
-      <!--:placeholder="$t('add.inputs.autocomplete')"-->
-      <!--:show-labels="false">-->
-      <!--<template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
-      <!--</vue-multiselect>-->
-      <!--</div>-->
     </div>
 
     <!-- STARS -->
@@ -367,7 +350,7 @@
   import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 
   import VueMultiselect from 'vue-multiselect'
-  import Datepicker from 'vuejs-datepicker'
+  import Datepicker from 'vue2-datepicker'
   import cloneDeep from 'lodash/cloneDeep'
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";

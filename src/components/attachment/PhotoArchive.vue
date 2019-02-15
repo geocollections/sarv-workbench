@@ -137,9 +137,9 @@
       <div class="col-sm-4 mb-2">
         <datepicker id="date_created"
                     v-model="photo_archive.date_created"
-                    :bootstrap-styling="true"
-                    :clear-button="true"
-                    clear-button-icon="fas fa-times date-clear-button"
+                    lang="en"
+                    :first-day-of-week="1"
+                    format="DD MMM YYYY"
                     input-class="form-control"></datepicker>
       </div>
 
@@ -393,9 +393,9 @@
       <div class="col-sm-4 mb-2">
         <datepicker id="date_digitised"
                     v-model="photo_archive.date_digitised"
-                    :bootstrap-styling="true"
-                    :clear-button="true"
-                    clear-button-icon="fas fa-times date-clear-button"
+                    lang="en"
+                    :first-day-of-week="1"
+                    format="DD MMM YYYY"
                     input-class="form-control"></datepicker>
       </div>
     </div>
@@ -461,7 +461,7 @@
   import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
   import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 
-  import Datepicker from 'vuejs-datepicker'
+  import Datepicker from 'vue2-datepicker'
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
   import MapComponent from '@/components/partial/MapComponent'
@@ -480,6 +480,12 @@
       MapComponent,
     },
     name: "PhotoArchive",
+    metaInfo: {
+      link: [
+        { rel: 'stylesheet', href: '/css/index.css' },
+        // { rel: 'favicon', href: 'favicon.ico' }
+      ]
+    },
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',
@@ -1156,8 +1162,8 @@
     margin-left: 0.45rem;
   }
 
-  /* This makes it on top of map */
-  .vdp-datepicker__calendar {
-    z-index: 1500 !important;
+  /* FIX: so that datepicker won't go under map in photo archive */
+  .vue2leaflet-map {
+    z-index: 950;
   }
 </style>

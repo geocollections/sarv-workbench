@@ -117,3 +117,9 @@ body {
 /********************************
  ***  EDIT IMAGE PREVIEW END  ***
  ********************************/
+
+
+/* DATEPICKER STYLES */
+.mx-datepicker {
+  width: 100% !important;
+}

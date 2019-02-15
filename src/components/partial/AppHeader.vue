@@ -17,13 +17,13 @@
         <b-navbar-nav>
 
           <b-nav-item-dropdown :text="$t('header.files')">
-            <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }">{{ $t('header.addAttachment') }}</b-dropdown-item>
-            <b-dropdown-item :to="{ path: '/attachment' }">{{ $t('header.editAttachment') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown :text="$t('header.references')">
-            <b-dropdown-item :to="{ path: '/reference/add' }">{{ $t('header.addReference') }}</b-dropdown-item>
-            <b-dropdown-item :to="{ path: '/reference' }">{{ $t('header.editReference') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-dropdown-item>
           </b-nav-item-dropdown>
 
 
