@@ -801,10 +801,6 @@
     <!-- CHECKBOXES -->
     <div class="row">
       <div class="col">
-        <!--<b-form-checkbox id="is_preferred" v-model="edit.is_preferred" value="1" unchecked-value="0">-->
-        <!--{{ $t('otherFiles.preferred') }}-->
-        <!--</b-form-checkbox>-->
-
         <b-form-checkbox id="is_private" v-model="edit.is_private" value="1" unchecked-value="0">
           {{ $t('otherFiles.private') }}
         </b-form-checkbox>
