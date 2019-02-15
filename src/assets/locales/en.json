@@ -335,7 +335,8 @@
     "abstract": "Abstract",
     "remarks": "Remarks",
     "journalTxt": "Journal text",
-    "relatedFile": "Related file(s)"
+    "relatedFile": "Related file(s)",
+    "is_oa": "OpenAccess"
   },
   "journal": {
     "journalName": "Journal name",

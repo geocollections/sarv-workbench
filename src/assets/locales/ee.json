@@ -335,7 +335,8 @@
     "abstract": "Abstrakt",
     "remarks": "Lisainfo",
     "journalTxt": "Ajakiri tekstina",
-    "relatedFile": "Seotud fail(id)"
+    "relatedFile": "Seotud fail(id)",
+    "is_oa": "OpenAccess"
   },
   "journal": {
     "journalName": "Ajakirja nimi",

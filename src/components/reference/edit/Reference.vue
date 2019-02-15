@@ -436,6 +436,10 @@
     <!-- CHECKBOXES -->
     <div class="row">
       <div class="col">
+        <b-form-checkbox id="is_oa" v-model="reference.is_oa" value="1" unchecked-value="0">
+          {{ $t('reference.is_oa') }}
+        </b-form-checkbox>
+
         <b-form-checkbox id="is_private" v-model="edit.is_private" value="1" unchecked-value="0">
           {{ $t('otherFiles.private') }}
         </b-form-checkbox>
@@ -547,6 +551,7 @@
           abstract: this.data.abstract,
           remarks: this.data.remarks,
           journal_txt: this.data.journal_txt,
+          is_oa: this.data.is_oa ? '1' : '0',
           is_private: this.data.is_private ? '1' : '0',
           is_locked: this.data.is_locked ? '1' : '0',
           related_data: {
