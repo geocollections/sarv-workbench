@@ -135,7 +135,7 @@
                 }
 
                 if (!continueEditing) {
-                  this.$router.push({ path: '/edit' })
+                  this.$router.push({ path: '/attachment' })
                 }
               }
               if (typeof response.body.error !== 'undefined') {

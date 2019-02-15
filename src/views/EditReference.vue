@@ -118,7 +118,7 @@
                 }
 
                 if (!continueEditing) {
-                  this.$router.push({ path: '/edit' })
+                  this.$router.push({ path: '/reference' })
                 }
               }
               if (typeof response.body.error !== 'undefined') {
