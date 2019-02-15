@@ -59,7 +59,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <datepicker id="date_digitised"
+        <datepicker id="date_created"
                     v-model="edit.date_created"
                     lang="en"
                     :first-day-of-week="1"

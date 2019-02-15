@@ -670,7 +670,7 @@
                 }
 
                 if (!addAnother) {
-                  this.$router.push({ path: '/edit' })
+                  this.$router.push({ path: '/reference' })
                 } else {
                   // this.clearFile()
                 }

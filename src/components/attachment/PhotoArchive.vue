@@ -759,7 +759,7 @@
                 }
 
                 if (!addAnother) {
-                  this.$router.push({ path: '/edit' })
+                  this.$router.push({ path: '/attachment' })
                 } else {
                   this.clearFile()
                 }

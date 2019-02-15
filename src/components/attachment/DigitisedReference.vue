@@ -150,7 +150,7 @@
 
       <div class="col-sm-4 mb-2">
         <datepicker id="date_digitised"
-                    v-model="edit.date_digitised"
+                    v-model="upload.date_digitised"
                     lang="en"
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
@@ -320,7 +320,7 @@
                 }
 
                 if (!addAnother) {
-                  this.$router.push({ path: '/edit' })
+                  this.$router.push({ path: '/attachment' })
                 } else {
                   this.clearFile()
                 }
