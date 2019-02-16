@@ -11,17 +11,54 @@
         <b-form-input id="reference" v-model="edit.reference" :state="referenceState" type="text"></b-form-input>
       </div>
 
+      
+      <div class="col-sm-2">
+        <label :for="`year`">{{ $t('reference.year') }}:</label>
+      </div>
 
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="year" v-model="edit.year" :state="yearState" type="number"></b-form-input>
+      </div>
+      
+    </div>
+
+    <!-- AUTHOR and YEAR -->
+    <div class="row">
       <div class="col-sm-2">
         <label :for="`author`">{{ $t('reference.author') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-10 mb-2">
         <b-form-input id="author" v-model="edit.author" :state="authorState" type="text"></b-form-input>
       </div>
     </div>
 
-    <!-- TYPE, LANGUAGE and YEAR -->
+
+    <!-- TITLE -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`title`">{{ $t('reference.title') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="title" v-model="edit.title" :state="titleState" type="text" 
+                         :rows="1" :max-rows="4"></b-form-textarea>
+      </div>
+    </div>
+    
+    <!-- TITLE ORIGINAL -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="title_original" v-model="edit.title_original" type="text" 
+                         :rows="1" :max-rows="4"></b-form-textarea>
+      </div>
+    </div>
+    
+    <!-- TYPE, LANGUAGE -->
     <div class="row">
       <div class="col-sm-2">
         <label :for="`type`">{{ $t('reference.type') }}:</label>
@@ -61,38 +98,6 @@
       </div>
     </div>
 
-    <!-- YEAR -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`year`">{{ $t('reference.year') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="year" v-model="edit.year" :state="yearState" type="number"></b-form-input>
-      </div>
-    </div>
-
-    <!-- TITLE and TITLE ORIGINAL -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`title`">{{ $t('reference.title') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-textarea id="title" v-model="edit.title" :state="titleState" type="text" size="sm"
-                         :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-textarea id="title_original" v-model="edit.title_original" type="text" size="sm"
-                         :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
-      </div>
-    </div>
 
     <!-- BOOK and BOOK ORIGINAL -->
     <div class="row">
@@ -140,7 +145,7 @@
         <label :for="`journal`">{{ $t('reference.journal') }}:</label>
       </div>
 
-      <div class="col-sm-9 mb-2">
+      <div class="col-sm-4 mb-2">
         <vue-multiselect v-model="edit.journal"
                          id="journal"
                          :options="autocomplete.journals"
@@ -155,15 +160,14 @@
         </vue-multiselect>
       </div>
 
+      <!--
       <div class="col-sm-1 mb-2">
         <a href="javascript:void(0)" @click="openInNewWindow({object: 'journal', height: 500})" class="btn btn-outline-info" :title="$t('add.inputs.newJournal')">
           <font-awesome-icon icon="plus"></font-awesome-icon>
         </a>
       </div>
-    </div>
-
-    <!-- JOURNAL ADDITIONAL and JOURNAL TXT -->
-    <div class="row">
+      -->
+      
       <div class="col-sm-2">
         <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
       </div>
@@ -172,14 +176,6 @@
         <b-form-input id="journal_additional" v-model="edit.journal_additional" type="text"></b-form-input>
       </div>
 
-
-      <div class="col-sm-2">
-        <label :for="`journal_txt`">{{ $t('reference.journalTxt') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="journal_txt" v-model="edit.journal_txt" type="text"></b-form-input>
-      </div>
     </div>
 
     <!-- VOLUME and NUMBER -->
@@ -296,19 +292,20 @@
         <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-10 mb-2">
         <b-form-textarea id="abstract" v-model="edit.abstract" type="text" size="sm"
-                         :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+                         :rows="3" :max-rows="10"></b-form-textarea>
       </div>
-
-
+    </div>
+    <!-- ABSTRACT and REMARKS -->
+    <div class="row">
       <div class="col-sm-2">
         <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-10 mb-2">
         <b-form-textarea id="remarks" v-model="edit.remarks" type="text" size="sm"
-                         :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+                         :rows="1" :max-rows="10"></b-form-textarea>
       </div>
     </div>
 
@@ -324,7 +321,7 @@
           <option :value="null">{{ this.$t('otherFiles.relatedDataDefault') }}</option>
           <option value="attachment">{{ this.$t('reference.relatedTables.attachment') }}</option>
           <option value="locality">{{ this.$t('reference.relatedTables.locality') }}</option>
-          <option value="reference_keyword">{{ this.$t('reference.relatedTables.reference_keyword') }}</option>
+          <!--<option value="reference_keyword">{{ this.$t('reference.relatedTables.reference_keyword') }}</option>-->
         </b-form-select>
       </div>
 
@@ -431,7 +428,7 @@
         </div>
       </div>
 
-      <!-- REFERENE KEYWORD -->
+      <!-- REFERENE KEYWORD 
       <div class="col-sm-6" v-if="edit.related_data.reference_keyword !== null && edit.related_data.reference_keyword.length > 0">
 
         <p class="h4">{{ $t('reference.relatedTables.reference_keyword') }}</p>
@@ -462,7 +459,7 @@
       </div>
 
     </div>
-
+-->
 
     <!-- CHECKBOXES -->
     <div class="row">
@@ -529,7 +526,7 @@
         reference: this.data,
         attachment: this.attach,
         locality: this.loc,
-        reference_keyword: this.refkey,
+        //reference_keyword: this.refkey,
         isFileLocked: this.data.is_locked,
         files: null, // TODO
         isDragging: false,
@@ -544,13 +541,13 @@
           relatedData: {
             locality: [],
             attachment: [],
-            reference_keyword: []
+            //reference_keyword: []
           }
         },
         searchingRelatedData: {
           locality: false,
           attachment: false,
-          refernce_keyword: false,
+          //refernce_keyword: false,
         },
         relatedTable: null,
         myKeywords: [],
@@ -566,8 +563,8 @@
           book_original: this.data.book_original,
           publisher: this.data.publisher,
           publisher_place: this.data.publisher_place,
-          journal: this.data.journal,
-          journal_additional: this.data.journal,
+          journal: this.buildJournal(),
+          journal_additional: this.data.journal_additional,
           volume: this.data.volume,
           number: this.data.number,
           pages: this.data.pages,
@@ -579,14 +576,13 @@
           tags: this.buildTags(),
           abstract: this.data.abstract,
           remarks: this.data.remarks,
-          journal_txt: this.data.journal_txt,
           is_oa: this.data.is_oa ? '1' : '0',
           is_private: this.data.is_private ? '1' : '0',
           is_locked: this.data.is_locked ? '1' : '0',
           related_data: {
             attachment: this.buildRelatedData(this.attach, 'attachment'),
             locality: this.buildRelatedData(this.loc, 'locality'),
-            reference_keyword: this.buildRelatedData(this.refkey, 'reference_keyword'),
+            //reference_keyword: this.buildRelatedData(this.refkey, 'reference_keyword'),
           }
         },
       }
@@ -662,6 +658,7 @@
         // Building correct fields
         if (unformattedData.type !== null && typeof unformattedData.type !== 'undefined') uploadableData.type = unformattedData.type.id
         if (unformattedData.language !== null && typeof unformattedData.language !== 'undefined') uploadableData.language = unformattedData.language.id
+        if (unformattedData.journal !== null && typeof unformattedData.journal !== 'undefined') uploadableData.journal = unformattedData.journal.id
         if (unformattedData.tags !== null && typeof unformattedData.tags !== 'undefined') {
           if (unformattedData.tags.length !== 0) {
             let arrayOfKeywords = unformattedData.tags.map(function (word) {
@@ -684,9 +681,9 @@
         if (unformattedData.attachment !== null && typeof unformattedData.attachment !== 'undefined') {
           if (unformattedData.attachment.length === 0) uploadableData.attachment = null
         }
-        if (unformattedData.reference_keyword !== null && typeof unformattedData.reference_keyword !== 'undefined') {
-          if (unformattedData.reference_keyword.length === 0) uploadableData.reference_keyword = null
-        }
+        //if (unformattedData.reference_keyword !== null && typeof unformattedData.reference_keyword !== 'undefined') {
+        //  if (unformattedData.reference_keyword.length === 0) uploadableData.reference_keyword = null
+        //}
 
         /**************************
          ***  RELATED DATA END  ***
@@ -770,7 +767,7 @@
       getJournals(query) {
         if (query.length > 0) {
           // Building url like that because otherwise it encodes spaces with plusses or something weird
-          let url = this.apiUrl + 'journal/?multi_search=value:' + query + ';fields:id,journal_name,journal_short;lookuptype:icontains&format=json'
+          let url = this.apiUrl + 'journal/?multi_search=value:' + query + ';fields:id,journal_name,journal_short;lookuptype:icontains&fields=id,journal_name&format=json'
 
           this.searchingJournals = true;
 
@@ -837,11 +834,20 @@
           return null
         }
       },
-
+      buildJournal() {
+          if (this.data.journal__id !== null) {
+            return {
+              id: this.data.journal__id,
+              journal_name: this.data.journal__journal_name,
+            }
+          } else {
+            return null
+          }
+      },
       buildRelatedData(relatedData, field) {
         let attachments = []
         let localities = []
-        let referenceKeywords = []
+        //let referenceKeywords = []
 
         for (const data in relatedData) {
           let attachment = {}
@@ -868,20 +874,20 @@
             }
           }
 
-          if (field === 'reference_keyword') {
+          /*if (field === 'reference_keyword') {
             if (relatedData[data].id !== null) {
               referenceKeyword.id = relatedData[data].id
               referenceKeyword.keyword = relatedData[data].keyword
               referenceKeywords.push(referenceKeyword)
             }
-          }
+          }*/
 
         }
 
 
         if (field === 'attachment' && attachments.length > 0) return attachments
         if (field === 'locality' && localities.length > 0) return localities
-        if (field === 'reference_keyword' && referenceKeywords.length > 0) return referenceKeywords
+        //if (field === 'reference_keyword' && referenceKeywords.length > 0) return referenceKeywords
 
         return null
       },
@@ -920,10 +926,10 @@
               search += 'multi_search=value:' + query + ';fields:id,locality,locality_en;lookuptype:icontains'
               fields += ',locality,locality_en'
               break
-            case 'reference_keyword':
-              search += 'multi_search=value:' + query + ';fields:id,keyword;lookuptype:icontains'
-              fields += ',keyword'
-              break
+            //case 'reference_keyword':
+            //  search += 'multi_search=value:' + query + ';fields:id,keyword;lookuptype:icontains'
+            //  fields += ',keyword'
+            //  break
             default:
               search += 'id__icontains=' + query
               fields += ''
@@ -963,9 +969,9 @@
           case 'locality':
             if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
             return `${option.id} - (${option.locality_en})`
-          case 'reference_keyword':
-            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.keyword})`
-            return `${option.id} - (${option.keyword})`
+          //case 'reference_keyword':
+          //  if (this.$i18n.locale === 'ee') return `${option.id} - (${option.keyword})`
+          //  return `${option.id} - (${option.keyword})`
           default:
             return `${option.id}`
         }

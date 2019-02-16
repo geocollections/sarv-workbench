@@ -18,18 +18,19 @@
             <thead class="thead-light">
               <tr>
                 <th>User</th>
+                <th>Time</th>
                 <th>Command</th>
                 <th>Muutused</th>
-                <th>Time</th>
+
               </tr>
             </thead>
 
             <tbody>
               <tr v-for="entity in logs">
                 <td><b>{{ entity.user }}</b></td>
+                <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
                 <td>{{ entity.command }}</td>
-                <td>{{ entity.changes }}</td>
-                <td>{{ entity.time | moment('MMM Do YYYY HH:mm:ss')}}</td>
+                <td style="max-width: 30rem; padding:0.3rem; margin: 0;"><div style="height: 2rem !important; overflow: auto;">{{ entity.changes }}</div></td>
               </tr>
             </tbody>
           </table>
@@ -87,5 +88,9 @@
 </script>
 
 <style scoped>
-
+.log  {
+	width: 100%;
+	margin-top: 2rem; 
+	font-size: 0.8em;
+}
 </style>
