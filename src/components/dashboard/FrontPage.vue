@@ -52,13 +52,13 @@
 
       </div>
     </div>
-
+<!--
     <div class="row">
       <div class="col">
         <attachments :show-search="false" />
       </div>
     </div>
-
+-->
   </div>
 </template>
 

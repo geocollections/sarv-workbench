@@ -456,10 +456,9 @@
             </tbody>
           </table>
         </div>
-      </div>
-
+      </div>-->
     </div>
--->
+
 
     <!-- CHECKBOXES -->
     <div class="row">
