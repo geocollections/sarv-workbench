@@ -1,4 +1,4 @@
-# sarv-file-imageset
+# sarv-edit
 
 ## Project setup
 ```
