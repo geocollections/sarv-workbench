@@ -11,7 +11,7 @@
         <b-form-input id="reference" v-model="edit.reference" :state="referenceState" type="text"></b-form-input>
       </div>
 
-      
+
       <div class="col-sm-2">
         <label :for="`year`">{{ $t('reference.year') }}:</label>
       </div>
@@ -19,7 +19,7 @@
       <div class="col-sm-4 mb-2">
         <b-form-input id="year" v-model="edit.year" :state="yearState" type="number"></b-form-input>
       </div>
-      
+
     </div>
 
     <!-- AUTHOR and YEAR -->
@@ -41,11 +41,11 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="title" v-model="edit.title" :state="titleState" type="text" 
+        <b-form-textarea id="title" v-model="edit.title" :state="titleState" type="text"
                          :rows="1" :max-rows="4"></b-form-textarea>
       </div>
     </div>
-    
+
     <!-- TITLE ORIGINAL -->
     <div class="row">
       <div class="col-sm-2">
@@ -53,11 +53,11 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="title_original" v-model="edit.title_original" type="text" 
+        <b-form-textarea id="title_original" v-model="edit.title_original" type="text"
                          :rows="1" :max-rows="4"></b-form-textarea>
       </div>
     </div>
-    
+
     <!-- TYPE, LANGUAGE -->
     <div class="row">
       <div class="col-sm-2">
@@ -167,7 +167,7 @@
         </a>
       </div>
       -->
-      
+
       <div class="col-sm-2">
         <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
       </div>
@@ -428,7 +428,7 @@
         </div>
       </div>
 
-      <!-- REFERENE KEYWORD 
+      <!-- REFERENE KEYWORD
       <div class="col-sm-6" v-if="edit.related_data.reference_keyword !== null && edit.related_data.reference_keyword.length > 0">
 
         <p class="h4">{{ $t('reference.relatedTables.reference_keyword') }}</p>
@@ -833,6 +833,7 @@
           return null
         }
       },
+
       buildJournal() {
           if (this.data.journal__id !== null) {
             return {
@@ -843,6 +844,7 @@
             return null
           }
       },
+
       buildRelatedData(relatedData, field) {
         let attachments = []
         let localities = []

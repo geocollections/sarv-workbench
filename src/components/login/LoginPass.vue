@@ -8,17 +8,43 @@
       <b>{{message}}</b>
     </div>
 
-    <div class="form-group">
-      <input type="text" @keyup.enter="logIn()" class="form-control" :placeholder="$t('login.username')" v-model="user.username" v-bind:disabled="loggingIn"/>
-    </div>
+    <b-form @submit="logIn">
+      <b-form-group label-for="username">
+        <b-form-input
+          id="username"
+          type="text"
+          v-model="user.username"
+          required
+          autocomplete="username"
+          :placeholder="$t('login.username')" />
+      </b-form-group>
 
-    <div class="form-group">
-      <input type="password" @keyup.enter="logIn()" class="form-control" :placeholder="$t('login.password')" v-model="user.password" v-bind:disabled="loggingIn"/>
-    </div>
+      <b-form-group label-for="password">
+        <b-form-input
+          id="password"
+          type="password"
+          v-model="user.password"
+          required
+          autocomplete="password"
+          :placeholder="$t('login.password')" />
+      </b-form-group>
 
-    <button class="btn btn-primary" @click="logIn()" v-bind:disabled="loggingIn">
-      {{ $t('login.loginButton') }} <font-awesome-icon icon="sign-in-alt"></font-awesome-icon>
-    </button>
+      <b-button type="submit" variant="primary" v-bind:disabled="loggingIn">
+        {{ $t('login.loginButton') }} <font-awesome-icon icon="sign-in-alt"></font-awesome-icon>
+      </b-button>
+    </b-form>
+
+    <!--<div class="form-group">-->
+      <!--<input type="text" class="form-control" :placeholder="$t('login.username')" v-model="user.username" v-bind:disabled="loggingIn"/>-->
+    <!--</div>-->
+
+    <!--<div class="form-group">-->
+      <!--<input type="password" class="form-control" :placeholder="$t('login.password')" v-model="user.password" v-bind:disabled="loggingIn"/>-->
+    <!--</div>-->
+
+    <!--<button class="btn btn-primary" @click="logIn()" v-bind:disabled="loggingIn">-->
+      <!--{{ $t('login.loginButton') }} <font-awesome-icon icon="sign-in-alt"></font-awesome-icon>-->
+    <!--</button>-->
 
   </div>
 </template>
@@ -63,7 +89,10 @@
     },
     methods: {
 
-      logIn() {
+      logIn(evt) {
+        evt.preventDefault()
+
+        console.log('hi')
 
         if (!this.loggingIn) {
           this.loggingIn = true;

@@ -112,9 +112,9 @@
               if (typeof response.body.message !== 'undefined') {
 
                 if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                  toastSuccess(response.body.message_et);
+                  toastSuccess({text: response.body.message_et});
                 } else {
-                  toastSuccess(response.body.message);
+                  toastSuccess({text: response.body.message});
                 }
 
                 if (!continueEditing) {
