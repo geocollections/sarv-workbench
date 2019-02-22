@@ -16,12 +16,21 @@
 
         <b-navbar-nav>
 
-          <b-nav-item-dropdown :text="$t('header.files')">
+          <!-- class="d-none d-lg-block" visible-lg and up  (hidden-md and down) -->
+          <!-- class="d-lg-none d-xl-none" visible-md and down (hidden-lg and up) -->
+
+          <b-nav-item class="d-none d-lg-block" :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-nav-item>
+          <b-nav-item class="d-none d-lg-block" :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-nav-item>
+
+          <b-nav-item class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>
+          <b-nav-item class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
+
+          <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.files')">
             <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-dropdown-item>
             <b-dropdown-item :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-dropdown-item>
           </b-nav-item-dropdown>
 
-          <b-nav-item-dropdown :text="$t('header.references')">
+          <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.references')">
             <b-dropdown-item :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-dropdown-item>
             <b-dropdown-item :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -30,8 +39,10 @@
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
-          <!-- Navbar dropdowns -->
-          <b-nav-item-dropdown :text="$t('header.lang', { lang: this.$i18n.locale === 'ee' ? 'EST' : 'ENG' })" right>
+          <b-nav-item class="d-none d-lg-block" @click="changeLang('ee')">EST &nbsp;<span class="flag-icon flag-icon-ee flag-icon-squared circle-flag"></span></b-nav-item>
+          <b-nav-item class="d-none d-lg-block" @click="changeLang('en')">ENG &nbsp;<span class="flag-icon flag-icon-gb flag-icon-squared circle-flag"></span></b-nav-item>
+
+          <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.lang', { lang: this.$i18n.locale === 'ee' ? 'EST' : 'ENG' })" right>
             <b-dropdown-item @click="changeLang('ee')">EST &nbsp;<span class="flag-icon flag-icon-ee flag-icon-squared circle-flag"></span></b-dropdown-item>
             <b-dropdown-item @click="changeLang('en')">ENG &nbsp;<span class="flag-icon flag-icon-gb flag-icon-squared circle-flag"></span></b-dropdown-item>
           </b-nav-item-dropdown>
