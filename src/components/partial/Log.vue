@@ -44,12 +44,13 @@
 </template>
 
 <script>
+  import { fetchLogs } from "@/assets/js/api/apiCalls";
+
   export default {
     props: ['table', 'id'],
     name: "Log",
     data() {
       return {
-        apiUrl: 'https://rwapi.geocollections.info/log/',
         logs: []
       }
     },
@@ -63,15 +64,12 @@
     },
     methods: {
       getLogs() {
-        this.$http.get(this.apiUrl, {
-          params: {
-            table_name: this.table,
-            row_id: this.id,
-            order_by: '-id',
-            format: 'json'
-          }
+
+        fetchLogs({
+          table_name: this.table,
+          row_id: this.id,
+          order_by: '-id',
         }).then(response => {
-          console.log(response)
           if (response.status === 200) {
             if (response.body.count > 0) {
               this.logs = response.body.results;
@@ -79,9 +77,7 @@
               this.logs = []
             }
           }
-        }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
-        })
+        }, errResponse => {})
       }
     }
   }
@@ -90,7 +86,7 @@
 <style scoped>
 .log  {
 	width: 100%;
-	margin-top: 2rem; 
+	margin-top: 2rem;
 	font-size: 0.8em;
 }
 </style>

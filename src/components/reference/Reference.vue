@@ -506,6 +506,13 @@
   import VueMultiselect from 'vue-multiselect'
   import FilePreview from '@/components/partial/FilePreview.vue';
   import cloneDeep from 'lodash/cloneDeep'
+
+  import {
+    fetchListReferenceTypes,
+    fetchListLanguages,
+    fetchJournals
+  } from "@/assets/js/api/apiCalls";
+
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
   library.add(faPlus, faTrashAlt, faTimes)
@@ -772,14 +779,7 @@
       getTypes() {
         this.searchingTypes = true;
 
-        this.$http.get(this.apiUrl + 'list_reference_type/', {
-          params: {
-            value__isnull: 'false',
-            value_en__isnull: 'false',
-            format: 'json'
-          }
-        }).then(response => {
-          console.log(response)
+        fetchListReferenceTypes({value__isnull: 'false', value_en__isnull: 'false',}).then(response => {
           if (response.status === 200) {
             if (response.body.count > 0) {
               this.autocomplete.types = response.body.results;
@@ -789,7 +789,6 @@
           }
           this.searchingTypes = false;
         }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
           this.searchingTypes = false;
         })
       },
@@ -801,14 +800,7 @@
       getLanguages() {
         this.searchingLanguages = true;
 
-        this.$http.get(this.apiUrl + 'list_language/', {
-          params: {
-            value__isnull: 'false',
-            value_en__isnull: 'false',
-            format: 'json'
-          }
-        }).then(response => {
-          console.log(response)
+        fetchListLanguages({value__isnull: 'false', value_en__isnull: 'false'}).then(response => {
           if (response.status === 200) {
             if (response.body.count > 0) {
               this.autocomplete.languages = response.body.results;
@@ -818,27 +810,21 @@
           }
           this.searchingLanguages = false;
         }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
           this.searchingLanguages = false;
         })
       },
 
       getJournals(query) {
         if (query.length > 0) {
-          // Building url like that because otherwise it encodes spaces with plusses or something weird
-          let url = this.apiUrl + 'journal/?multi_search=value:' + query + ';fields:id,journal_name,journal_short;lookuptype:icontains&format=json'
-
           this.searchingJournals = true;
 
-          this.$http.get(url).then(response => {
-            console.log(response)
+          fetchJournals(query).then(response => {
             if (response.status === 200) {
               if (response.body.count > 0) this.autocomplete.journals = response.body.results;
               else this.autocomplete.journals = []
             }
             this.searchingJournals = false;
           }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse))
             this.searchingJournals = false;
           })
         }

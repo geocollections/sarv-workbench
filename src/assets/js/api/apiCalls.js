@@ -31,13 +31,6 @@ function fetchPost (child, postData, config) {
   });
 }
 
-// function applyMode(mode, separator = '=', prefix = '', queryJoiner = '&') {
-//   let returnVal = "";
-//   // if(mode === 'in_baltoscandia') returnVal = `${queryJoiner}in_baltoscandia${separator}1`;
-//   if (mode === 'in_estonia') returnVal = `${queryJoiner}${prefix}in_estonia${separator}1`;
-//   return returnVal
-// }
-
 
 
 /*******************
@@ -61,6 +54,32 @@ export function fetchLogout() {
  *******************/
 
 
+
+/***************************
+ *** AUTOCOMPLETES START ***
+ ***************************/
+
+export function fetchListReferenceTypes(data) {
+  return fetch(`list_reference_type/?value__isnull=${data.value__isnull}&value_en__isnull=${data.value_en__isnull}&format=json`)
+}
+
+export function fetchListLanguages(data) {
+  return fetch(`list_language/?value__isnull=${data.value__isnull}&value_en__isnull=${data.value_en__isnull}&format=json`)
+}
+
+export function fetchJournals(query) {
+  return fetch(`journal/?multi_search=value:${query};fields:id,journal_name,journal_short;lookuptype:icontains&format=json`)
+}
+
+/***************************
+ *** AUTOCOMPLETES START ***
+ ***************************/
+
+
+
+export function fetchLogs(data) {
+  return fetch(`log/?table_name=${data.table_name}&row_id=${data.row_id}&order_by=${data.order_by}&format=json`)
+}
 
 // export function fetchRock (id,mode) {
 //   return fetch(`rock/?id=${id}&format=json`)
