@@ -68,6 +68,9 @@
   import {faHome} from '@fortawesome/free-solid-svg-icons'
   import {faCog} from '@fortawesome/free-solid-svg-icons'
 
+  import { toastSuccess, toastInfo } from "@/assets/js/iziToast/iziToast";
+  import { fetchLogout } from "@/assets/js/api/apiCalls";
+
   library.add(faSignOutAlt, faHome, faCog)
 
   export default {
@@ -77,7 +80,6 @@
     name: "app-header",
     data() {
       return {
-        apiUrl: 'https://rwapi.geocollections.info/logout/',
         user: ''
       }
     },
@@ -94,28 +96,28 @@
     methods: {
 
       logOut() {
+        // Deleting data from Session Storage...
         if (this.$session.exists() && this.$session.get('authUser') != null) {
           this.$session.remove('authUser');
           this.$session.destroy();
         }
 
-        this.$http.get(this.apiUrl).then(response => {
+        // Initiates a logout request to api
+        fetchLogout().then(response => {
           if (response.status === 200) {
-            console.log(response)
             this.$router.push({path: '/'})
 
             if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-              this.toastSuccess(response.body.message_et);
+              toastSuccess({text: response.body.message_et});
             } else {
-              this.toastSuccess(response.body.message);
+              toastSuccess({text: response.body.message});
             }
 
           }
-        }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse));
-        })
+        }, errResponse => {})
       },
 
+      // Changes application's language
       changeLang(lang) {
         if (this.$localStorage.get('geocollectionsFileUploadLang') === lang) return;
         this.$localStorage.set('geocollectionsFileUploadLang', lang)
@@ -123,23 +125,7 @@
 
         lang === 'ee' ? this.$moment.locale('et') : this.$moment.locale(lang)
 
-        this.toastInfo(this.$t('messages.langChange'))
-      },
-
-      toastSuccess(text) {
-        this.$toast.success(text, 'OK', {
-          position: 'bottomRight',
-          timeout: 2000,
-          pauseOnHover: false
-        })
-      },
-
-      toastInfo(text) {
-        this.$toast.info(text, 'Info', {
-          position: 'bottomRight',
-          timeout: 2000,
-          pauseOnHover: false
-        })
+        toastInfo({text: this.$t('messages.langChange')})
       },
 
     }

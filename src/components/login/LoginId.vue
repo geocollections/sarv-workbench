@@ -22,6 +22,9 @@
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faIdCard} from '@fortawesome/free-solid-svg-icons'
+
+  import { fetchLoginId } from "@/assets/js/api/apiCalls";
+
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
   library.add(faIdCard)
@@ -51,9 +54,8 @@
         if (!this.loggingIn) {
           this.loggingIn = true;
 
-          this.$http.get('https://rwapi.geocollections.info/loginid/').then(response => {
+          fetchLoginId().then(response => {
             if (response.status === 200) {
-              console.log(response);
               if (response.body.user != null) {
                 this.$session.start()
                 this.$session.set('authUser', response.body)
@@ -80,12 +82,12 @@
               this.loggingIn = false;
             }
           }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse));
             this.message = this.$t('messages.loginIdError')
             toastError({text: this.$t('messages.loginIdError')})
             this.error = true;
             this.loggingIn = false;
           })
+
         } else {
           console.log('What are you trying to do?')
         }

@@ -34,18 +34,6 @@
       </b-button>
     </b-form>
 
-    <!--<div class="form-group">-->
-      <!--<input type="text" class="form-control" :placeholder="$t('login.username')" v-model="user.username" v-bind:disabled="loggingIn"/>-->
-    <!--</div>-->
-
-    <!--<div class="form-group">-->
-      <!--<input type="password" class="form-control" :placeholder="$t('login.password')" v-model="user.password" v-bind:disabled="loggingIn"/>-->
-    <!--</div>-->
-
-    <!--<button class="btn btn-primary" @click="logIn()" v-bind:disabled="loggingIn">-->
-      <!--{{ $t('login.loginButton') }} <font-awesome-icon icon="sign-in-alt"></font-awesome-icon>-->
-    <!--</button>-->
-
   </div>
 </template>
 
@@ -54,6 +42,9 @@
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faSignInAlt} from '@fortawesome/free-solid-svg-icons'
+
+  import { fetchLogin } from "@/assets/js/api/apiCalls";
+
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
   library.add(faSignInAlt)
@@ -92,22 +83,11 @@
       logIn(evt) {
         evt.preventDefault()
 
-        console.log('hi')
-
         if (!this.loggingIn) {
           this.loggingIn = true;
 
-          this.$http.post('https://rwapi.geocollections.info/login/',
-            {
-              user: this.user.username,
-              pwd: this.user.password
-            },
-            {
-              emulateJSON: true
-            }
-          ).then(response => {
+          fetchLogin({user: this.user.username, pwd: this.user.password}).then(response => {
             if (response.status === 200) {
-              console.log(response);
               if (response.body.user != null) {
                 this.$session.start()
                 this.$session.set('authUser', response.body)
@@ -133,13 +113,14 @@
               }
               this.loggingIn = false;
             }
+
           }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse));
             this.message = this.$t('messages.loginError');
             toastError({text: this.$t('messages.loginError')})
             this.error = true;
             this.loggingIn = false;
           })
+
         } else {
           console.log('What are you trying to do?')
         }
