@@ -168,6 +168,8 @@
   "references": {
     "header": "My references",
     "reference": "Reference",
+    "author": "Author(s)",
+    "year": "Year",
     "title": "Title",
     "book": "Book",
     "journal": "Journal",

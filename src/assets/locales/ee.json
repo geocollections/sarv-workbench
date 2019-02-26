@@ -168,6 +168,8 @@
   "references": {
     "header": "Minu kirjandus",
     "reference": "Viide",
+    "author": "Autor(id)",
+    "year": "Aasta",
     "title": "Pealkiri",
     "book": "Kogumik",
     "journal": "Ajakiri",

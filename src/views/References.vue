@@ -72,12 +72,28 @@
                   </span>
               </th>
 
+              <!--<th>-->
+                <!--<span @click="changeOrder('reference')">-->
+                      <!--<font-awesome-icon v-if="searchParameters.watched.orderBy !== 'reference' && searchParameters.watched.orderBy !== '-reference'" :icon="sort"/>-->
+                      <!--<font-awesome-icon v-else :icon="sortingDirection" />-->
+                      <!--{{ $t('references.reference') }}-->
+                  <!--</span>-->
+              <!--</th>-->
+
               <th>
-                <span @click="changeOrder('reference')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'reference' && searchParameters.watched.orderBy !== '-reference'" :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection" />
-                      {{ $t('references.reference') }}
-                  </span>
+                <span @click="changeOrder('author')">
+                    <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'author' && searchParameters.watched.orderBy !== '-author'" :icon="sort"/>
+                    <font-awesome-icon v-else :icon="sortingDirection" />
+                    {{ $t('references.author') }}
+                </span>
+              </th>
+
+              <th>
+                <span @click="changeOrder('year')">
+                    <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'year' && searchParameters.watched.orderBy !== '-year'" :icon="sort"/>
+                    <font-awesome-icon v-else :icon="sortingDirection" />
+                    {{ $t('references.year') }}
+                </span>
               </th>
 
               <th>
@@ -88,13 +104,13 @@
                   </span>
               </th>
 
-              <th>
-                <span @click="changeOrder('book')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'book' && searchParameters.watched.orderBy !== '-book'" :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection" />
-                      {{ $t('references.book') }}
-                  </span>
-              </th>
+              <!--<th>-->
+                <!--<span @click="changeOrder('book')">-->
+                      <!--<font-awesome-icon v-if="searchParameters.watched.orderBy !== 'book' && searchParameters.watched.orderBy !== '-book'" :icon="sort"/>-->
+                      <!--<font-awesome-icon v-else :icon="sortingDirection" />-->
+                      <!--{{ $t('references.book') }}-->
+                  <!--</span>-->
+              <!--</th>-->
 
               <th>
                 <span @click="changeOrder('journal__journal_name')">
@@ -121,6 +137,8 @@
               </th>
 
               <th></th>
+
+              <th></th>
             </tr>
             </thead>
 
@@ -131,13 +149,17 @@
                 <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')" >{{ entity.id }}</router-link>
               </td>
 
-              <td>
-                <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')" >{{ entity.reference }}</router-link>
-              </td>
+              <!--<td>-->
+                <!--<router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')" >{{ entity.reference }}</router-link>-->
+              <!--</td>-->
+
+              <td>{{ entity.author }}</td>
+
+              <td>{{ entity.year }}</td>
 
               <td>{{ entity.title }}</td>
 
-              <td>{{ entity.book }}</td>
+              <!--<td>{{ entity.book }}</td>-->
 
               <td>{{ entity.journal__journal_name }}</td>
 
@@ -147,6 +169,10 @@
 
               <td>
                 <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})" :title="$t('editReference.viewMessage')">{{ $t('edit.view') }}</a>
+              </td>
+
+              <td>
+                <a v-if="entity.doi" href="javascript:void(0)" @click="openDOI({doi: entity.doi})">DOI</a>
               </td>
 
             </tr>
@@ -238,7 +264,7 @@
             orderBy: '-id',
           },
           author: null,
-          fields: 'id,reference,title,title_original,book,journal__journal_name,volume,pages'
+          fields: 'id,reference,author,year,title,title_original,book,journal__journal_name,volume,pages,doi'
         },
         response: {
           count: 0,
@@ -353,7 +379,12 @@
           case "doi":
             width = 1000;
         }
-        window.open('http://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
+        window.open('https://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
+      },
+
+      openDOI(params) {
+        let width = 1000;
+        window.open('https://doi.org/' + params.doi, '', 'width=' + width + ',height=750')
       },
     }
   }
