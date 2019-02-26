@@ -294,7 +294,7 @@
 
       <div class="col-sm-10 mb-2">
         <b-form-textarea id="abstract" v-model="edit.abstract" type="text" size="sm"
-                         :rows="3" :max-rows="10"></b-form-textarea>
+                         :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
     <!-- ABSTRACT and REMARKS -->
@@ -305,7 +305,7 @@
 
       <div class="col-sm-10 mb-2">
         <b-form-textarea id="remarks" v-model="edit.remarks" type="text" size="sm"
-                         :rows="1" :max-rows="10"></b-form-textarea>
+                         :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
 
