@@ -30,7 +30,7 @@
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
-    "editReference": "My references",
+    "editReference": "References",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out"
@@ -51,7 +51,7 @@
       "digitisedReference": "Add digitised reference",
       "reference": "Add reference",
       "myFiles": "My files",
-      "myReferences": "My references"
+      "myReferences": "References"
     },
     "developmentSettings": {
       "button": "Remove all default settings",

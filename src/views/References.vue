@@ -306,7 +306,8 @@
 
         this.$http.get(url, {
           params: {
-            user_added: searchParameters.author.user,
+            // References can be seen by anyone
+            // user_added: searchParameters.author.user,
             page: searchParameters.watched.page,
             paginate_by: searchParameters.watched.paginateBy,
             order_by: searchParameters.watched.orderBy,

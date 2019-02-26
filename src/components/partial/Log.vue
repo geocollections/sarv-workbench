@@ -1,5 +1,5 @@
 <template>
-  <div class="log">
+  <div class="log" v-if="logs.length > 0">
 
     <div class="row">
 

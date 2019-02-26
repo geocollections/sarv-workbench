@@ -150,7 +150,7 @@
       getReference(params) {
         this.$http.get(this.apiUrl + 'reference/' + params.id, {
           params: {
-            user_added: params.author.user,
+            // user_added: params.author.user,
             format: 'json',
           }
         }).then(response => {

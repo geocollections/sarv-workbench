@@ -29,7 +29,7 @@
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa uus kirjandus",
-    "editReference": "Minu kirjandus",
+    "editReference": "Kirjandus",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -51,7 +51,7 @@
       "digitisedReference": "Lisa digiteeritud kirjandus",
       "reference": "Lisa kirjandus",
       "myFiles": "Minu failid",
-      "myReferences": "Minu kirjandus"
+      "myReferences": "Kirjandus"
     },
     "developmentSettings": {
       "button": "Kustuta kõik vaikimisi väärtused",
