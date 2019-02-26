@@ -268,7 +268,7 @@
     <!-- AUTHOR KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`author-keywords`">{{ $t('reference.authorKeywords') }}:</label>
+        <label :for="`author-keywords`">{{ $t('reference.keywords') }}:</label>
       </div>
 
       <div class="col-9 mb-2">

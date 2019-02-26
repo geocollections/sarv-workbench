@@ -261,16 +261,14 @@
         apiUrl: 'https://rwapi.geocollections.info/reference/',
         noResults: null,
         isLoading: false,
+        searchFields: '',
         searchParameters: {
           watched: {
             page: 1,
             paginateBy: 50,
-            // TODO: Maybe change order functionality to multi
             orderBy: '-id',
           },
-          // author: null,
           fields: 'id,reference,author,year,title,title_original,book,journal__journal_name,volume,pages,doi,attachment__filename',
-          searchFields: '',
         },
         response: {
           count: 0,
@@ -298,23 +296,18 @@
     watch: {
       'searchParameters.watched': {
         handler: function () {
-          this.searchMyFiles(this.searchParameters)
+          this.searchMyFiles(this.searchParameters, this.searchFields)
         },
         deep: true
       }
     },
 
     created: function () {
-      // if (this.$session.exists() && this.$session.get('authUser') !== null) {
-      //   this.searchParameters.author = this.$session.get('authUser')
-      // }
-
+      console.log('I am created')
       // Remembers search parameters set by the user #106 https://github.com/geocollections/sarv-edit/issues/106
-      console.log('hi i am created')
       const referenceSearchHistory = this.$localStorage.get('referenceSearchHistory', 'fallbackValue')
       if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
         this.searchParameters.watched = referenceSearchHistory.watched // {page, paginate, order}
-        this.searchParameters.searchFields = referenceSearchHistory.searchFields // 'field_name1=field_value1&field_name2=field_value2'
       }
 
       this.searchMyFiles(this.searchParameters)
@@ -323,39 +316,30 @@
     methods: {
       search(searchData) {
         // Search data is saved because if user changes pagination then the search won't get reset
-        this.searchParameters.searchFields = searchData;
-        this.searchMyFiles(this.searchParameters)
+        this.searchFields = searchData;
 
-        // if (searchData.length > 0) {
-        //   this.searchMyFiles(this.searchParameters, searchData)
-        // } else {
-        //   this.searchMyFiles(this.searchParameters)
-        // }
+        if (searchData.length > 0) {
+          this.searchMyFiles(this.searchParameters, searchData)
+        } else {
+          this.searchMyFiles(this.searchParameters)
+        }
       },
 
-      searchMyFiles(searchParameters) {
-        let url = searchParameters.searchFields
+      searchMyFiles(searchParameters, url) {
+        if (typeof url !== 'undefined' && url.length > 0) {
+          url = this.apiUrl + '?' + url
+          // url = this.apiUrl + '?' + encodeURIComponent(url)
+        } else {
+          url = this.apiUrl
+        }
+        console.log(url)
 
-        console.log('this is saved to storage')
-        console.log(searchParameters)
         // Saving search parameters to local storage for more comfortable user experience
         this.$localStorage.set('referenceSearchHistory', searchParameters)
 
-        if (typeof url !== 'undefined' && url.length > 0) {
-          // searchParameters.searchFields = this.apiUrl + '?' + searchParameters.searchFields
-          searchParameters.searchFields = ''
-          searchParameters.searchFields = '?' + url
-          // url = this.apiUrl + '?' + encodeURIComponent(url)
-        } else {
-          // searchParameters.searchFields = this.apiUrl
-          searchParameters.searchFields = ''
-        }
-
-        console.log(searchParameters.searchFields)
-
         this.isLoading = true
 
-        this.$http.get(this.apiUrl + searchParameters.searchFields, {
+        this.$http.get(url, {
           params: {
             // References can be seen by anyone
             // user_added: searchParameters.author.user,

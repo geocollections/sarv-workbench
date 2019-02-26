@@ -261,7 +261,7 @@
     <!-- KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`keywords`">{{ $t('otherFiles.keywords') }}:</label>
+        <label :for="`keywords`">{{ $t('reference.keywords') }}:</label>
       </div>
 
       <div class="col-9 mb-2">

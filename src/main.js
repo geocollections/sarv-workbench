@@ -146,6 +146,9 @@ new Vue({
     myFilesPreferences: {
       type: Array
     },
+    referenceSearchHistory: {
+      type: Object
+    },
   },
   render: h => h(App)
 }).$mount('#app')
