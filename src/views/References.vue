@@ -139,6 +139,9 @@
               <th></th>
 
               <th></th>
+
+              <th></th>
+              
             </tr>
             </thead>
 
@@ -174,7 +177,10 @@
               <td>
                 <a v-if="entity.doi" href="javascript:void(0)" @click="openDOI({doi: entity.doi})">DOI</a>
               </td>
-
+              
+              <td>
+                <a v-if="entity.attachment__filename" href="javascript:void(0)" @click="openPdf({pdf: entity.attachment__filename})">pdf</a>
+              </td> 
             </tr>
             </tbody>
 
@@ -264,7 +270,7 @@
             orderBy: '-id',
           },
           author: null,
-          fields: 'id,reference,author,year,title,title_original,book,journal__journal_name,volume,pages,doi'
+          fields: 'id,reference,author,year,title,title_original,book,journal__journal_name,volume,pages,doi,attachment__filename'
         },
         response: {
           count: 0,
@@ -383,8 +389,11 @@
       },
 
       openDOI(params) {
-        let width = 1000;
-        window.open('https://doi.org/' + params.doi, '', 'width=' + width + ',height=750')
+        window.open('https://doi.org/' + params.doi, '', 'width=1000,height=900')
+      },
+      
+      openPdf(params) {
+          window.open('https://files.geocollections.info/' + params.pdf.substring(0, 2) + '/' + params.pdf.substring(2, 4) + '/' + params.pdf, '', 'width=1000,height=900')
       },
     }
   }
