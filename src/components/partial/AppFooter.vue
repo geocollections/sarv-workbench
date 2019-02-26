@@ -3,7 +3,7 @@
 
     <footer>
       {{ $t('footer.info') }},
-      <a href="https://ttu.ee/geoloogia-instituut" target="_blank">{{ $t('footer.ttuLink') }}</a>,
+      <a href="https://ttu.ee/geoloogia-instituut" target="_blank" rel="noopener">{{ $t('footer.ttuLink') }}</a>,
       <a href="mailto:olle.hints@ttu.ee">olle.hints@ttu.ee</a>
     </footer>
 
