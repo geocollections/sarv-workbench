@@ -14,7 +14,6 @@
     "@fortawesome/vue-fontawesome": "^0.1.5",
     "bootstrap-vue": "^2.0.0-rc.13",
     "exif-js": "^2.3.0",
-    "flag-icon-css": "^3.3.0",
     "lodash": "^4.17.11",
     "vue": "^2.6.7",
     "vue-cookie": "^1.1.4",

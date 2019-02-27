@@ -31,7 +31,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import 'izitoast/dist/css/iziToast.min.css' // Pop-up messages style
-import 'flag-icon-css/css/flag-icon.min.css' // Flag icons
 import 'vue-multiselect/dist/vue-multiselect.min.css' // Select input
 // Custom css
 import '@/assets/css/styles.css'

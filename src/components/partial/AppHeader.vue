@@ -39,12 +39,12 @@
         </b-navbar-nav>
 
         <b-navbar-nav class="ml-auto">
-          <b-nav-item class="d-none d-lg-block" @click="changeLang('ee')">EST &nbsp;<span class="flag-icon flag-icon-ee flag-icon-squared circle-flag"></span></b-nav-item>
-          <b-nav-item class="d-none d-lg-block" @click="changeLang('en')">ENG &nbsp;<span class="flag-icon flag-icon-gb flag-icon-squared circle-flag"></span></b-nav-item>
+          <b-nav-item class="d-none d-lg-block" @click="changeLang('ee')">EST &nbsp;<span class="flag flag-ee flag-squared flag-circle"></span></b-nav-item>
+          <b-nav-item class="d-none d-lg-block" @click="changeLang('en')">ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span></b-nav-item>
 
           <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.lang', { lang: this.$i18n.locale === 'ee' ? 'EST' : 'ENG' })" right>
-            <b-dropdown-item @click="changeLang('ee')">EST &nbsp;<span class="flag-icon flag-icon-ee flag-icon-squared circle-flag"></span></b-dropdown-item>
-            <b-dropdown-item @click="changeLang('en')">ENG &nbsp;<span class="flag-icon flag-icon-gb flag-icon-squared circle-flag"></span></b-dropdown-item>
+            <b-dropdown-item @click="changeLang('ee')">EST &nbsp;<span class="flag flag-ee flag-squared flag-circle"></span></b-dropdown-item>
+            <b-dropdown-item @click="changeLang('en')">ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span></b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown :text="userFirstLetterUpperCase" right>
@@ -149,5 +149,35 @@
     .only-big-screen {
       display: none;
     }
+  }
+
+  .flag {
+    position: relative;
+    display: inline-block;
+    width: 1.33333333em;
+    line-height: 1em;
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+  }
+
+  .flag:before {
+    content: "\A0";
+  }
+
+  .flag-ee {
+    background-image: url("../../assets/ee.svg");
+  }
+
+  .flag-en {
+    background-image: url("../../assets/en.svg");
+  }
+
+  .flag-squared {
+    width: 1em;
+  }
+
+  .flag-circle {
+    border-radius: 100%;
   }
 </style>
