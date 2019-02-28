@@ -115,8 +115,8 @@
           console.log(newVal)
           const fields = this.buildFields(newVal)
 
-          // Saves user preferences to local storage
-          this.$localStorage.set('myFilesPreferences', newVal.specimen_image_attachment)
+          // Saves user preferences to local storage, in the future it should save it to API, #106
+          this.$localStorage.set('attachmentSearchHistory', newVal)
 
           this.$emit('search-data', fields, newVal.specimen_image_attachment)
         },
@@ -126,12 +126,12 @@
 
     created: function () {
       // Gets user preferences from local storage
-      const myFilesPreferences = this.$localStorage.get('myFilesPreferences', 'fallbackValue')
+      const attachmentSearchHistory = this.$localStorage.get('attachmentSearchHistory', 'fallbackValue')
 
       // Initial Attachments.vue search is triggered here, if user has preferences
       // then search is emitted in watcher otherwise it is emitted here.
-      if (myFilesPreferences !== 'fallbackValue' && myFilesPreferences.length > 0) {
-        this.searchParameters.specimen_image_attachment = myFilesPreferences
+      if (attachmentSearchHistory !== 'fallbackValue' && Object.keys(attachmentSearchHistory).length !== 0 && attachmentSearchHistory.constructor === Object) {
+        this.searchParameters = attachmentSearchHistory
       } else {
         const fields = this.buildFields(this.searchParameters)
         this.$emit('search-data', fields, this.searchParameters.specimen_image_attachment)
@@ -140,6 +140,7 @@
 
     methods: {
 
+      // TODO: Could it be possible to add this logic into apiCalls.js file. Should look into it.
       buildFields(data) {
         let fields = ''
 

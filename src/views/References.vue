@@ -305,10 +305,11 @@
     created: function () {
       console.log('I am created')
       // Remembers search parameters set by the user #106 https://github.com/geocollections/sarv-edit/issues/106
-      const referenceSearchHistory = this.$localStorage.get('referenceSearchHistory', 'fallbackValue')
-      if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
-        this.searchParameters.watched = referenceSearchHistory.watched // {page, paginate, order}
-      }
+      // TODO: Should name it differently or append it somehow, because of SearchField.vue
+      // const referenceSearchHistory = this.$localStorage.get('referenceSearchHistory', 'fallbackValue')
+      // if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
+      //   this.searchParameters.watched = referenceSearchHistory.watched // {page, paginate, order}
+      // }
 
       this.searchMyFiles(this.searchParameters)
     },
@@ -335,7 +336,8 @@
         console.log(url)
 
         // Saving search parameters to local storage for more comfortable user experience
-        this.$localStorage.set('referenceSearchHistory', searchParameters)
+        // TODO: Should name it differently or append it somehow, because of SearchField.vue
+        // this.$localStorage.set('referenceSearchHistory', searchParameters)
 
         this.isLoading = true
 

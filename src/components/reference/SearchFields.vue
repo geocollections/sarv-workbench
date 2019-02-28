@@ -90,10 +90,29 @@
     watch: {
       'searchParameters': {
         handler: function (newVal, oldVal) {
+          console.log(newVal)
           const fields = this.buildFields(newVal)
+
+          // Saves user preferences to local storage, in the future it should save it to API, #106
+          this.$localStorage.set('referenceSearchHistory', newVal)
+
           this.$emit('search-data', fields)
         },
         deep: true
+      }
+    },
+
+    created: function () {
+      // Gets user preferences from local storage
+      const referenceSearchHistory = this.$localStorage.get('referenceSearchHistory', 'fallbackValue')
+
+      // Initial References.vue search is triggered here, if user has preferences
+      // then search is emitted in watcher otherwise it is emitted here.
+      if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
+        this.searchParameters = referenceSearchHistory
+      } else {
+        const fields = this.buildFields(this.searchParameters)
+        this.$emit('search-data', fields)
       }
     },
 

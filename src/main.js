@@ -142,8 +142,8 @@ new Vue({
     imageset: {
       type: Object
     },
-    myFilesPreferences: {
-      type: Array
+    attachmentSearchHistory: {
+      type: Object
     },
     referenceSearchHistory: {
       type: Object
