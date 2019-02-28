@@ -303,15 +303,11 @@
     },
 
     created: function () {
-      console.log('I am created')
-      // Remembers search parameters set by the user #106 https://github.com/geocollections/sarv-edit/issues/106
-      // TODO: Should name it differently or append it somehow, because of SearchField.vue
-      // const referenceSearchHistory = this.$localStorage.get('referenceSearchHistory', 'fallbackValue')
-      // if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
-      //   this.searchParameters.watched = referenceSearchHistory.watched // {page, paginate, order}
-      // }
-
-      // this.searchMyFiles(this.searchParameters)
+      // Gets searchParameters from local storage, #106
+      const referenceSearchHistory = this.$localStorage.get('referenceSearchHistory', 'fallbackValue')
+      if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
+        this.searchParameters = referenceSearchHistory.searchParameters
+      }
     },
 
     methods: {
@@ -335,9 +331,18 @@
         }
         console.log(url)
 
-        // Saving search parameters to local storage for more comfortable user experience
-        // TODO: Should name it differently or append it somehow, because of SearchField.vue
-        // this.$localStorage.set('referenceSearchHistory', searchParameters)
+        // Gets referenceSearchHistory from local storage,
+        // appends search parameters (page, paginateBy, orderBy) to it and saves it again
+        let referenceSearchHistory = this.$localStorage.get('referenceSearchHistory', 'fallbackValue')
+        if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
+          referenceSearchHistory.searchParameters = searchParameters
+          this.$localStorage.set('referenceSearchHistory', referenceSearchHistory)
+        } else {
+          // Use case if referenceSearchHistory doesn't exist in local storage
+          referenceSearchHistory = {}
+          referenceSearchHistory.searchParameters = searchParameters
+          this.$localStorage.set('referenceSearchHistory', referenceSearchHistory)
+        }
 
         this.isLoading = true
 
