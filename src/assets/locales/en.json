@@ -380,5 +380,8 @@
   },
   "logs": {
     "title": "Logs"
+  },
+  "buttons": {
+    "deletePreferences": "Clear filters and ordering"
   }
 }

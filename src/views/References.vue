@@ -311,7 +311,7 @@
       //   this.searchParameters.watched = referenceSearchHistory.watched // {page, paginate, order}
       // }
 
-      this.searchMyFiles(this.searchParameters)
+      // this.searchMyFiles(this.searchParameters)
     },
 
     methods: {

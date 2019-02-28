@@ -254,6 +254,7 @@
       Spinner
     },
     props: {
+      // TODO: Maybe delete it because this is not used in front page anymore
       showSearch: {
         type: Boolean,
         default: true
@@ -416,6 +417,7 @@
         }
       },
 
+      // Toggle methods are used to show field specimen or reference link in table
       toggleSpecimen(specimenImageAttachment) {
         specimenImageAttachment.includes('1') ? this.showSpecimen = true : this.showSpecimen = false
       },

@@ -66,6 +66,13 @@
       </div>
     </div>
 
+    <!-- Removes search preferences like local storage and search parameters-->
+    <div class="row mt-3">
+      <div class="col">
+        <b-button variant="danger" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+      </div>
+    </div>
+
 
   </div>
 </template>
@@ -149,6 +156,19 @@
 
         return fields
       },
+
+      // Deletes local storage value + resets search parameters to default
+      deleteSearchPreferences() {
+        this.$localStorage.remove('referenceSearchHistory')
+        this.searchParameters = {
+          author: null,
+          year: null,
+          title: null,
+          bookJournal: null,
+          abstractKeywordsRemarks: null,
+          id: null,
+        }
+      }
     }
   }
 </script>

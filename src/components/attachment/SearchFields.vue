@@ -88,6 +88,13 @@
       </div>
     </div>
 
+    <!-- Removes search preferences like local storage and search parameters-->
+    <div class="row mt-3">
+      <div class="col">
+        <b-button variant="danger" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+      </div>
+    </div>
+
 
   </div>
 </template>
@@ -177,6 +184,19 @@
 
         return fields
       },
+
+      // Deletes local storage value + resets search parameters to default
+      deleteSearchPreferences() {
+        this.$localStorage.remove('attachmentSearchHistory')
+        this.searchParameters = {
+          image_number: null,
+          filename: null,
+          specimen: null,
+          imageInfo: null,
+          locality: null,
+          specimen_image_attachment: ['2', '1', '3', '4'],
+        }
+      }
     }
   }
 </script>

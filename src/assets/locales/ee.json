@@ -380,5 +380,8 @@
   },
   "logs": {
     "title": "Logid"
+  },
+  "buttons": {
+    "deletePreferences": "Tühista filtrid ja sorteerimine"
   }
 }
