@@ -138,7 +138,10 @@
       // Initial Attachments.vue search is triggered here, if user has preferences
       // then search is emitted in watcher otherwise it is emitted here.
       if (attachmentSearchHistory !== 'fallbackValue' && Object.keys(attachmentSearchHistory).length !== 0 && attachmentSearchHistory.constructor === Object) {
-        this.searchParameters = attachmentSearchHistory
+        // Checking if any of the search fields data is included in local storage, if it isn't then it shouldn't be added to this.searchParameters
+        if (typeof attachmentSearchHistory.image_number !== 'undefined') {
+          this.searchParameters = attachmentSearchHistory
+        }
       } else {
         const fields = this.buildFields(this.searchParameters)
         this.$emit('search-data', fields, this.searchParameters.specimen_image_attachment)

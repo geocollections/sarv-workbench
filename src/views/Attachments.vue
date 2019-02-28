@@ -319,6 +319,12 @@
         this.searchParameters.author = this.$session.get('authUser')
       }
 
+      // Gets searchParameters from local storage, #106
+      const attachmentSearchHistory = this.$localStorage.get('attachmentSearchHistory', 'fallbackValue')
+      if (attachmentSearchHistory !== 'fallbackValue' && Object.keys(attachmentSearchHistory).length !== 0 && attachmentSearchHistory.constructor === Object) {
+        this.searchParameters = attachmentSearchHistory.searchParameters
+      }
+
       // Only run search here if front page without search fields
       // Otherwise initial search is triggered in SearchFields.vue
       if (!this.showSearch) this.searchMyFiles(this.searchParameters)
@@ -349,6 +355,20 @@
         }
 
         console.log(url)
+
+        // Gets attachmentSearchHistory from local storage,
+        // appends search parameters (page, paginateBy, orderBy) to it and saves it again
+        let attachmentSearchHistory = this.$localStorage.get('attachmentSearchHistory', 'fallbackValue')
+        if (attachmentSearchHistory !== 'fallbackValue' && Object.keys(attachmentSearchHistory).length !== 0 && attachmentSearchHistory.constructor === Object) {
+          attachmentSearchHistory.searchParameters = searchParameters
+          this.$localStorage.set('attachmentSearchHistory', attachmentSearchHistory)
+        } else {
+          // Use case if attachmentSearchHistory doesn't exist in local storage
+          attachmentSearchHistory = {}
+          attachmentSearchHistory.searchParameters = searchParameters
+          this.$localStorage.set('attachmentSearchHistory', attachmentSearchHistory)
+        }
+
 
         this.isLoading = true
 

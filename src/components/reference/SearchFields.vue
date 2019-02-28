@@ -117,7 +117,6 @@
       // then search is emitted in watcher otherwise it is emitted here.
       if (referenceSearchHistory !== 'fallbackValue' && Object.keys(referenceSearchHistory).length !== 0 && referenceSearchHistory.constructor === Object) {
         // Checking if any of the search fields data is included in local storage, if it isn't then it shouldn't be added to this.searchParameters
-        console.log(typeof referenceSearchHistory.author !== 'undefined')
         if (typeof referenceSearchHistory.author !== 'undefined') {
           this.searchParameters = referenceSearchHistory
         }
