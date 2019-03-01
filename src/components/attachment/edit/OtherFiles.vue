@@ -823,12 +823,17 @@
     </div>
 
 
+    <!-- LOGS -->
+    <log table="attachment" :id="data.id"></log>
+    
+    
   </div>
 </template>
 
 <script>
   import VueMultiselect from 'vue-multiselect'
   import Datepicker from 'vue2-datepicker'
+  import Log from '@/components/partial/Log.vue'
   import cloneDeep from 'lodash/cloneDeep'
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
@@ -840,6 +845,7 @@
       FilePreview,
       VueMultiselect,
       Datepicker,
+      Log,
     },
     props:['data', 'attachLink'],
     name: "OtherFiles",

@@ -397,7 +397,7 @@
     </div>
 
     <!-- LOGS -->
-    <log table="attachment" :id="attachment.id"></log>
+    <log table="attachment" :id="data.id"></log>
 
 
   </div>
