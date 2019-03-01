@@ -47,7 +47,7 @@
   import { fetchLogs } from "@/assets/js/api/apiCalls";
 
   export default {
-    props: ['table', 'id'],
+    props: ['table', 'reference'],
     name: "Log",
     data() {
       return {
@@ -55,7 +55,7 @@
       }
     },
     watch: {
-      'id':{
+      'reference':{
         handler: function (newVal, oldVal) {
           this.getLogs()
         },
@@ -67,7 +67,7 @@
 
         fetchLogs({
           table_name: this.table,
-          row_id: this.id,
+          row_id: this.reference.id,
           order_by: '-id',
         }).then(response => {
           if (response.status === 200) {

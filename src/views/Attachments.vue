@@ -1,7 +1,7 @@
 <template>
   <div class="attachments">
 
-    <spinner v-show="isLoading && showSearch"
+    <spinner v-show="isLoading"
              class="loading-overlay-search"
              text-fg-color="#000000"
              line-fg-color="#5cb85c"
@@ -11,11 +11,108 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
+
+    <!-- SEARCH FIELDS START -->
     <div class="row mt-4">
       <div class="col">
-        <search-fields v-if="showSearch" v-on:search-data="search"/>
+        <div class="search-fields">
+
+          <div class="row">
+
+            <!-- IMAGE_NUMBER -->
+            <div class="col-sm-2">
+              <label :for="`image_number`">{{ $t('edit.imageNumber') }}:</label>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <b-form-input v-model="searchParameters.image_number" id="image_number" type="text"></b-form-input>
+            </div>
+
+            <!-- FILENAME -->
+            <div class="col-sm-2">
+              <label :for="`filename`">{{ $t('edit.filename') }}:</label>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <b-form-input v-model="searchParameters.filename" id="filename" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <div class="row">
+
+            <!-- SPECIMEN -->
+            <div class="col-sm-2">
+              <label :for="`specimen`">{{ $t('edit.specimen') }}:</label>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <b-form-input v-model="searchParameters.specimen" id="specimen" type="text"></b-form-input>
+            </div>
+
+            <!-- IMAGE INFO -->
+            <div class="col-sm-2">
+              <label :for="`image_info`">{{ $t('edit.imageInfo') }}:</label>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <b-form-input id="image_info" v-model="searchParameters.imageInfo" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <div class="row">
+
+            <!-- LOCALITY -->
+            <div class="col-sm-2">
+              <label :for="`locality`">{{ $t('edit.locality') }}:</label>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <b-form-input id="locality" v-model="searchParameters.locality" type="text"></b-form-input>
+            </div>
+
+            <!-- TODO: Add author search for admins -->
+            <!--<div class="col-sm-2">-->
+            <!--<label :for="`author`">{{ $t('edit.author') }}:</label>-->
+            <!--</div>-->
+
+          </div>
+
+          <!-- CHECKBOXES -->
+          <div class="row">
+            <div class="col">
+              <b-form-checkbox-group v-model="searchParameters.specimen_image_attachment">
+
+                <b-form-checkbox value="2">
+                  {{ $t('edit.photoArchive') }}
+                </b-form-checkbox>
+
+                <b-form-checkbox value="1">
+                  {{ $t('edit.specimenImage') }}
+                </b-form-checkbox>
+
+                <b-form-checkbox value="3">
+                  {{ $t('edit.otherFiles') }}
+                </b-form-checkbox>
+
+                <b-form-checkbox value="4">
+                  {{ $t('edit.digitisedReference') }}
+                </b-form-checkbox>
+
+              </b-form-checkbox-group>
+            </div>
+          </div>
+
+          <!-- Removes search preferences like local storage and search parameters-->
+          <div class="row mt-3">
+            <div class="col">
+              <b-button variant="danger" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
+    <!-- SEARCH FIELDS END -->
 
 
     <div class="row mt-4">
@@ -32,7 +129,7 @@
 
     <div class="row mt-3" v-if="response.count > 0">
       <div class="col-sm-6 col-md-3 pl-3 pr-3 t-paginate-by-center">
-        <b-form-select v-model="searchParameters.watched.paginateBy" class="mb-3">
+        <b-form-select v-model="searchParameters.paginateBy" class="mb-3">
           <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
           <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
           <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -44,13 +141,13 @@
       </div>
 
       <div class="col-sm-12 col-md-3 export-center">
-        <!-- TODO: Add export? Answer: No currently not needed -->
+        <!-- Question: Add export? Answer: No currently not needed -->
         <!--<export-buttons filename="dataSearch"></export-buttons>-->
       </div>
 
       <div class="col-sm-12 col-md-6 pagination-center">
         <b-pagination
-          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count" v-model="searchParameters.watched.page" :per-page="searchParameters.watched.paginateBy">
+          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count" v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
         </b-pagination>
       </div>
     </div>
@@ -68,7 +165,7 @@
 
               <th>
                   <span @click="changeOrder('id')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'id' && searchParameters.watched.orderBy !== '-id'" :icon="sort"/>
+                      <font-awesome-icon v-if="searchParameters.orderBy !== 'id' && searchParameters.orderBy !== '-id'" :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection" />
                       ID
                   </span>
@@ -78,7 +175,7 @@
 
               <th>
                   <span @click="changeOrder('image_number')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'image_number' && searchParameters.watched.orderBy !== '-image_number'" :icon="sort"/>
+                      <font-awesome-icon v-if="searchParameters.orderBy !== 'image_number' && searchParameters.orderBy !== '-image_number'" :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection" />
                       {{ $t('attachments.number') }}
                   </span>
@@ -86,7 +183,7 @@
 
               <th>
                   <span @click="changeOrder('author__agent')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'author__agent' && searchParameters.watched.orderBy !== '-author__agent'" :icon="sort"/>
+                      <font-awesome-icon v-if="searchParameters.orderBy !== 'author__agent' && searchParameters.orderBy !== '-author__agent'" :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection" />
                       {{ $t('attachments.author') }}
                   </span>
@@ -94,7 +191,7 @@
 
               <th>
                   <span @click="changeOrder('date_created')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'date_created' && searchParameters.watched.orderBy !== '-date_created'" :icon="sort"/>
+                      <font-awesome-icon v-if="searchParameters.orderBy !== 'date_created' && searchParameters.orderBy !== '-date_created'" :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection" />
                       {{ $t('attachments.date') }}
                   </span>
@@ -102,7 +199,7 @@
 
               <th v-if="showSpecimen">
                   <span @click="changeOrder('specimen')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'specimen' && searchParameters.watched.orderBy !== '-specimen'" :icon="sort"/>
+                      <font-awesome-icon v-if="searchParameters.orderBy !== 'specimen' && searchParameters.orderBy !== '-specimen'" :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection" />
                       {{ $t('attachments.specimen') }}
                   </span>
@@ -110,7 +207,7 @@
 
               <th v-if="showReference">
                   <span @click="changeOrder('reference__reference')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'reference__reference' && searchParameters.watched.orderBy !== '-reference__reference'" :icon="sort"/>
+                      <font-awesome-icon v-if="searchParameters.orderBy !== 'reference__reference' && searchParameters.orderBy !== '-reference__reference'" :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection" />
                       {{ $t('attachments.reference') }}
                   </span>
@@ -118,7 +215,7 @@
 
               <th>
                   <span @click="changeOrder('specimen_image_attachment')">
-                      <font-awesome-icon v-if="searchParameters.watched.orderBy !== 'specimen_image_attachment' && searchParameters.watched.orderBy !== '-specimen_image_attachment'" :icon="sort"/>
+                      <font-awesome-icon v-if="searchParameters.orderBy !== 'specimen_image_attachment' && searchParameters.orderBy !== '-specimen_image_attachment'" :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection" />
                       {{ $t('attachments.specimenImageAttachment') }}
                   </span>
@@ -197,7 +294,7 @@
 
     <div class="row mt-3" v-if="response.count > 0">
       <div class="col-sm-6 col-md-3 pl-3 pr-3 t-paginate-by-center">
-        <b-form-select v-model="searchParameters.watched.paginateBy" class="mb-3">
+        <b-form-select v-model="searchParameters.paginateBy" class="mb-3">
           <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
           <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
           <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -209,13 +306,13 @@
       </div>
 
       <div class="col-sm-12 col-md-3 export-center">
-        <!-- TODO: Add export -->
+        <!-- Question: Add export? Answer: No currently not needed -->
         <!--<export-buttons filename="dataSearch"></export-buttons>-->
       </div>
 
       <div class="col-sm-12 col-md-6 pagination-center">
         <b-pagination
-          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count" v-model="searchParameters.watched.page" :per-page="searchParameters.watched.paginateBy">
+          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count" v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
         </b-pagination>
       </div>
     </div>
@@ -235,6 +332,7 @@
 </template>
 
 <script>
+  import Spinner from 'vue-simple-spinner'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
@@ -242,23 +340,14 @@
   import {faSortUp} from '@fortawesome/free-solid-svg-icons'
   import {faSortDown} from '@fortawesome/free-solid-svg-icons'
 
-  import SearchFields from '@/components/attachment/SearchFields.vue'
-  import Spinner from 'vue-simple-spinner'
+  import { fetchAttachments } from "@/assets/js/api/apiCalls";
 
   library.add(faFile, faSort, faSortUp, faSortDown)
 
   export default {
     components: {
       FontAwesomeIcon,
-      SearchFields,
       Spinner
-    },
-    props: {
-      // TODO: Maybe delete it because this is not used in front page anymore
-      showSearch: {
-        type: Boolean,
-        default: true
-      }
     },
     name: "Attachments",
     data() {
@@ -270,14 +359,16 @@
         showSpecimen: true,
         showReference: true,
         searchParameters: {
-          watched: {
-            page: 1,
-            paginateBy: 50,
-            // TODO: Maybe change order functionality to multi
-            orderBy: '-id',
-          },
+          image_number: null,
+          filename: null,
+          specimen: null,
+          imageInfo: null,
+          locality: null,
+          specimen_image_attachment: ['2', '1', '3', '4'],
+          page: 1,
+          paginateBy: 50,
+          orderBy: '-id',
           author: null,
-          fields: 'id,uuid_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment'
         },
         response: {
           count: 0,
@@ -285,12 +376,7 @@
         },
       }
     },
-    metaInfo () {
-      return {
-        // Because Attachments.vue is also used in Dashboard.vue, front page shows user's attachments
-        title: this.showSearch ? this.$t('titles.editAttachment') : this.$t('titles.dashboard')
-      }
-    },
+
     computed: {
       file() {
         return faFile
@@ -301,14 +387,14 @@
       },
 
       sortingDirection() {
-        return this.searchParameters.watched.orderBy.includes('-') ? faSortDown : faSortUp
+        return this.searchParameters.orderBy.includes('-') ? faSortDown : faSortUp
       }
     },
 
     watch: {
-      'searchParameters.watched': {
+      'searchParameters': {
         handler: function () {
-          this.searchMyFiles(this.searchParameters, this.searchFields)
+          this.searchAttachments(this.searchParameters)
         },
         deep: true
       }
@@ -316,74 +402,30 @@
 
     created: function () {
       if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        this.searchParameters.author = this.$session.get('authUser')
+        // TODO: How to get passed nicely so it won't initiate watcher
+        // this.searchParameters.author = this.$session.get('authUser')
       }
 
       // Gets searchParameters from local storage, #106
       const attachmentSearchHistory = this.$localStorage.get('attachmentSearchHistory', 'fallbackValue')
       if (attachmentSearchHistory !== 'fallbackValue' && Object.keys(attachmentSearchHistory).length !== 0 && attachmentSearchHistory.constructor === Object) {
-        this.searchParameters = attachmentSearchHistory.searchParameters
+        this.searchParameters = attachmentSearchHistory
+      } else {
+        this.searchAttachments(this.searchParameters)
       }
-
-      // Only run search here if front page without search fields
-      // Otherwise initial search is triggered in SearchFields.vue
-      if (!this.showSearch) this.searchMyFiles(this.searchParameters)
     },
 
     methods: {
 
-      search(searchData, specimenImageAttachment) {
-        // Search data is saved because if user changes pagination then the search won't get reset
-        this.searchFields = searchData;
-
-        this.toggleSpecimen(specimenImageAttachment)
-        this.toggleReference(specimenImageAttachment)
-
-        if (searchData.length > 0) {
-          this.searchMyFiles(this.searchParameters, searchData)
-        } else {
-          this.searchMyFiles(this.searchParameters)
-        }
-      },
-
-      searchMyFiles(searchParameters, url) {
-        if (typeof url !== 'undefined' && url.length > 0) {
-          url = this.apiUrl + '?' + url
-          // url = this.apiUrl + '?' + encodeURIComponent(url)
-        } else {
-          url = this.apiUrl
-        }
-
-        console.log(url)
-
-        // Gets attachmentSearchHistory from local storage,
-        // appends search parameters (page, paginateBy, orderBy) to it and saves it again
-        let attachmentSearchHistory = this.$localStorage.get('attachmentSearchHistory', 'fallbackValue')
-        if (attachmentSearchHistory !== 'fallbackValue' && Object.keys(attachmentSearchHistory).length !== 0 && attachmentSearchHistory.constructor === Object) {
-          attachmentSearchHistory.searchParameters = searchParameters
-          this.$localStorage.set('attachmentSearchHistory', attachmentSearchHistory)
-        } else {
-          // Use case if attachmentSearchHistory doesn't exist in local storage
-          attachmentSearchHistory = {}
-          attachmentSearchHistory.searchParameters = searchParameters
-          this.$localStorage.set('attachmentSearchHistory', attachmentSearchHistory)
-        }
-
+      searchAttachments(searchParameters) {
+        this.toggleSpecimen(searchParameters.specimen_image_attachment)
+        this.toggleReference(searchParameters.specimen_image_attachment)
 
         this.isLoading = true
 
-        // TODO: Append or_search author data to url few lines up
-        this.$http.get(url, {
-          params: {
-            or_search: 'author_id:' + searchParameters.author.agent_id + ';user_added:' + searchParameters.author.user,
-            page: searchParameters.watched.page,
-            paginate_by: searchParameters.watched.paginateBy,
-            order_by: searchParameters.watched.orderBy,
-            fields: searchParameters.fields,
-            format: 'json',
-          }
-        }).then(response => {
-          console.log(response)
+        this.$localStorage.set('attachmentSearchHistory', searchParameters)
+
+        fetchAttachments(searchParameters).then(response => {
           if (response.status === 200) {
             if (response.body.count === 0) this.noResults = true
             if (response.body.count > 0) this.noResults = false
@@ -392,21 +434,20 @@
           }
           this.isLoading = false
         }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
           this.isLoading = false
         })
       },
 
       changeOrder(orderValue) {
-        if (this.searchParameters.watched.orderBy === orderValue) {
+        if (this.searchParameters.orderBy === orderValue) {
           if (orderValue.charAt(0) !== '-') {
             orderValue = '-' + orderValue;
           } else {
             orderValue = orderValue.substring(1);
           }
         }
-        this.searchParameters.watched.page = 1;
-        this.searchParameters.watched.orderBy = orderValue;
+        this.searchParameters.page = 1;
+        this.searchParameters.orderBy = orderValue;
       },
 
       openGeoInNewWindow(params) {
@@ -445,6 +486,23 @@
       toggleReference(specimenImageAttachment) {
         specimenImageAttachment.includes('4') ? this.showReference = true : this.showReference = false
       },
+
+      // Deletes local storage value + resets search parameters to default
+      deleteSearchPreferences() {
+        this.$localStorage.remove('attachmentSearchHistory')
+        this.searchParameters = {
+          image_number: null,
+          filename: null,
+          specimen: null,
+          imageInfo: null,
+          locality: null,
+          specimen_image_attachment: ['2', '1', '3', '4'],
+          page: 1,
+          paginateBy: 50,
+          orderBy: '-id',
+          author: null,
+        }
+      }
 
     }
   }
