@@ -81,12 +81,10 @@ export function fetchJournals(query) {
  *** ATTACHMENTS START ***
  *************************/
 
-export function fetchAttachments(data) {
+export function fetchAttachments(data, author) {
   const fields = 'id,uuid_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment'
   let searchFields = ''
-  console.log(data)
 
-  // or_search: 'author_id:' + searchParameters.author.agent_id + ';user_added:' + searchParameters.author.user,
   if (data.image_number !== null && data.image_number.trim().length > 0) {
     searchFields += 'image_number__icontains=' + data.image_number
   }
@@ -112,9 +110,9 @@ export function fetchAttachments(data) {
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    return fetch(`attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`attachment/?${searchFields}&or_search=author_id:${author.agent_id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    return fetch(`attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`attachment/?or_search=author_id:${author.agent_id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 

@@ -358,6 +358,7 @@
         searchFields: '',
         showSpecimen: true,
         showReference: true,
+        author: null,
         searchParameters: {
           image_number: null,
           filename: null,
@@ -368,7 +369,7 @@
           page: 1,
           paginateBy: 50,
           orderBy: '-id',
-          author: null,
+          // author: null,
         },
         response: {
           count: 0,
@@ -403,7 +404,7 @@
     created: function () {
       if (this.$session.exists() && this.$session.get('authUser') !== null) {
         // TODO: How to get passed nicely so it won't initiate watcher
-        // this.searchParameters.author = this.$session.get('authUser')
+        this.author = this.$session.get('authUser')
       }
 
       // Gets searchParameters from local storage, #106
@@ -425,7 +426,7 @@
 
         this.$localStorage.set('attachmentSearchHistory', searchParameters)
 
-        fetchAttachments(searchParameters).then(response => {
+        fetchAttachments(searchParameters, this.author).then(response => {
           if (response.status === 200) {
             if (response.body.count === 0) this.noResults = true
             if (response.body.count > 0) this.noResults = false
@@ -500,7 +501,7 @@
           page: 1,
           paginateBy: 50,
           orderBy: '-id',
-          author: null,
+          // author: null,
         }
       }
 
