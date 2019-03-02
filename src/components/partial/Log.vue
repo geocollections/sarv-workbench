@@ -47,7 +47,7 @@
   import { fetchLogs } from "@/assets/js/api/apiCalls";
 
   export default {
-    props: ['table', 'data'],
+    props: ['table', 'data', 'formattedData'],
     name: "Log",
     data() {
       return {
@@ -55,12 +55,11 @@
       }
     },
     watch: {
-      'reference':{
+      'formattedData':{
         handler: function (newVal, oldVal) {
           this.getLogs()
         },
         immediate: true,
-        deep: true
       }
     },
     methods: {

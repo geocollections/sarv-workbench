@@ -16,7 +16,7 @@
       </div>
 
       <!-- LOGS -->
-      <log table="reference" :data="reference"></log>
+      <log table="reference" :data="reference" :formatted-data="formattedData"></log>
     </div>
 
   </div>
@@ -45,6 +45,7 @@
         attachment: null,
         locality: null,
         reference_keyword: null,
+        formattedData: '',
         searchParameters: {
           id: this.id,
           author: null
@@ -124,6 +125,9 @@
 
                 if (!continueEditing) {
                   this.$router.push({ path: '/reference' })
+                } else {
+                  // Changing this initiates new log request
+                  this.formattedData = data
                 }
               }
               if (typeof response.body.error !== 'undefined') {

@@ -29,7 +29,7 @@
       </div>
 
       <!-- LOGS -->
-      <log table="attachment" :data="attachment"></log>
+      <log table="attachment" :data="attachment" :formatted-data="formattedData"></log>
     </div>
 
   </div>
@@ -63,6 +63,7 @@
         attachment: null,
         attachment_link: null,
         specimenImageAttachment: null,
+        formattedData: '',
         searchParameters: {
           id: this.id,
           author: null
@@ -142,6 +143,9 @@
 
                 if (!continueEditing) {
                   this.$router.push({ path: '/attachment' })
+                } else {
+                  // Changing this initiates new log request
+                  this.formattedData = data
                 }
               }
               if (typeof response.body.error !== 'undefined') {
