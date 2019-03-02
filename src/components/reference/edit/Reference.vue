@@ -258,35 +258,38 @@
       </div>
     </div>
 
-    <!-- KEYWORDS -->
+    <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`keywords`">{{ $t('reference.keywords') }}:</label>
+        <label :for="`reference_keyword`">{{ $t('reference.referenceKeyword') }}:</label>
       </div>
 
       <div class="col-9 mb-2">
-        <vue-multiselect v-model="edit.tags"
-                         id="keywords"
-                         :tag-placeholder="$t('add.inputs.keywordsAdd')"
-                         :placeholder="$t('add.inputs.keywords')"
-                         label="name"
-                         track-by="name"
-                         :options="myKeywords"
+        <!-- TODO: Enable Reference Keyword when API starts supporting it -->
+        <vue-multiselect :disabled="true" v-model="edit.related_data.reference_keyword"
+                         id="reference_keyword"
+                         @open="getReferenceKeywords"
+                         :options="autocomplete.reference_keyword"
+                         :loading="searchingReferenceKeywords"
                          :multiple="true"
-                         :taggable="true"
-                         :show-labels="false"
-                         @tag="addKeyword"></vue-multiselect>
+                         :close-on-select="false"
+                         track-by="id"
+                         label="keyword"
+                         :tag-placeholder="$t('add.inputs.keywordsAdd')"
+                         :placeholder="$t('add.inputs.keywords')"></vue-multiselect>
       </div>
 
       <div class="col-1 mb-2">
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeKeywords"
-                @click="edit.tags = null">
+        <!-- TODO: Enable Reference Keyword when API starts supporting it -->
+        <!-- :disabled="!removeReferenceKeyword" -->
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="true"
+                @click="edit.related_data.reference_keyword = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
     </div>
 
-    <!-- ABSTRACT and REMARKS -->
+    <!-- ABSTRACT -->
     <div class="row">
       <div class="col-sm-2">
         <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
@@ -297,7 +300,8 @@
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
-    <!-- ABSTRACT and REMARKS -->
+
+    <!-- REMARKS -->
     <div class="row">
       <div class="col-sm-2">
         <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
@@ -309,6 +313,16 @@
       </div>
     </div>
 
+    <!-- AUTHOR KEYWORDS -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-input id="author_keywords" v-model="edit.author_keywords" type="text"></b-form-input>
+      </div>
+    </div>
 
     <!-- RELATED DATA -->
     <div class="row">
@@ -321,7 +335,6 @@
           <option :value="null">{{ this.$t('otherFiles.relatedDataDefault') }}</option>
           <option value="attachment">{{ this.$t('reference.relatedTables.attachment') }}</option>
           <option value="locality">{{ this.$t('reference.relatedTables.locality') }}</option>
-          <!--<option value="reference_keyword">{{ this.$t('reference.relatedTables.reference_keyword') }}</option>-->
         </b-form-select>
       </div>
 
@@ -428,35 +441,6 @@
         </div>
       </div>
 
-      <!-- REFERENE KEYWORD
-      <div class="col-sm-6" v-if="edit.related_data.reference_keyword !== null && edit.related_data.reference_keyword.length > 0">
-
-        <p class="h4">{{ $t('reference.relatedTables.reference_keyword') }}</p>
-
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>{{ $t('reference.relatedTables.reference_keyword') }}</th>
-              <th></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr v-for="(entity, index) in edit.related_data.reference_keyword">
-              <td>{{ entity.id }}</td>
-
-              <td>{{ entity.keyword }}</td>
-
-              <td class="text-center delete-relation" @click="edit.related_data.reference_keyword.splice(index, 1)">
-                <font-awesome-icon icon="times"></font-awesome-icon>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>-->
     </div>
 
 
@@ -500,8 +484,10 @@
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
 
   import VueMultiselect from 'vue-multiselect'
+  import FilePreview from '@/components/partial/FilePreview.vue'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastError } from "@/assets/js/iziToast/iziToast";
+  import { fetchReferenceKeywords } from "@/assets/js/api/apiCalls";
 
   library.add(faPlus, faTrashAlt, faTimes)
 
@@ -509,6 +495,7 @@
     components: {
       FontAwesomeIcon,
       VueMultiselect,
+      FilePreview,
     },
     props: ['data','attach','loc','refkey'],
     name: "Reference",
@@ -519,28 +506,24 @@
         reference: this.data,
         attachment: this.attach,
         locality: this.loc,
-        //reference_keyword: this.refkey,
         isFileLocked: this.data.is_locked,
-        files: null, // TODO
-        isDragging: false,
-
         searchingTypes: false,
         searchingLanguages: false,
         searchingJournals: false,
+        searchingReferenceKeywords: false,
         autocomplete: {
           types: [],
           languages: [],
           journals: [],
+          reference_keyword: [],
           relatedData: {
             locality: [],
             attachment: [],
-            //reference_keyword: []
           }
         },
         searchingRelatedData: {
           locality: false,
           attachment: false,
-          //refernce_keyword: false,
         },
         relatedTable: null,
         myKeywords: [],
@@ -566,8 +549,8 @@
           url: this.data.url,
           isbn: this.data.isbn,
           issn: this.data.issn,
-          tags: this.buildTags(),
           abstract: this.data.abstract,
+          author_keywords: this.data.author_keywords,
           remarks: this.data.remarks,
           is_oa: this.data.is_oa ? '1' : '0',
           is_private: this.data.is_private ? '1' : '0',
@@ -575,17 +558,13 @@
           related_data: {
             attachment: this.buildRelatedData(this.attach, 'attachment'),
             locality: this.buildRelatedData(this.loc, 'locality'),
-            //reference_keyword: this.buildRelatedData(this.refkey, 'reference_keyword'),
+            // reference_keyword: null,
           }
         },
       }
     },
 
     computed: {
-      filesState() {
-        return this.files !== null && this.files.length > 0
-      },
-
       referenceState() {
         return this.edit.reference !== null
       },
@@ -616,11 +595,8 @@
         return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
       },
 
-      removeKeywords() {
-        if (this.edit.tags !== null) {
-          return this.edit.tags.length > 0
-        }
-        return false
+      removeReferenceKeyword() {
+        return this.edit.related_data.reference_keyword !== null && this.edit.related_data.reference_keyword.length > 0
       },
 
       isReferenceLocked() {
@@ -652,16 +628,7 @@
         if (unformattedData.type !== null && typeof unformattedData.type !== 'undefined') uploadableData.type = unformattedData.type.id
         if (unformattedData.language !== null && typeof unformattedData.language !== 'undefined') uploadableData.language = unformattedData.language.id
         if (unformattedData.journal !== null && typeof unformattedData.journal !== 'undefined') uploadableData.journal = unformattedData.journal.id
-        if (unformattedData.tags !== null && typeof unformattedData.tags !== 'undefined') {
-          if (unformattedData.tags.length !== 0) {
-            let arrayOfKeywords = unformattedData.tags.map(function (word) {
-              return word['name']
-            })
-            uploadableData.tags = arrayOfKeywords.join('|')
-          } else {
-            uploadableData.tags = null
-          }
-        }
+
 
 
         /**************************
@@ -674,13 +641,11 @@
         if (unformattedData.attachment !== null && typeof unformattedData.attachment !== 'undefined') {
           if (unformattedData.attachment.length === 0) uploadableData.attachment = null
         }
-        //if (unformattedData.reference_keyword !== null && typeof unformattedData.reference_keyword !== 'undefined') {
-        //  if (unformattedData.reference_keyword.length === 0) uploadableData.reference_keyword = null
-        //}
 
         /**************************
          ***  RELATED DATA END  ***
          **************************/
+
 
 
         console.log('This object is sent in string format:')
@@ -778,6 +743,22 @@
         }
       },
 
+      getReferenceKeywords() {
+        if (this.autocomplete.reference_keyword.length <= 0) {
+          this.searchingReferenceKeywords = true
+
+          fetchReferenceKeywords().then(response => {
+            if (response.status === 200) {
+              if (response.body.count > 0) this.autocomplete.reference_keyword = response.body.results;
+              else this.autocomplete.reference_keyword = []
+            }
+            this.searchingReferenceKeywords = false
+          }, errResponse => {
+            this.searchingReferenceKeywords = false
+          })
+        }
+      },
+
       /************************
        *** AUTOCOMPLETE END ***
        ************************/
@@ -812,22 +793,6 @@
         }
       },
 
-      buildTags() {
-        if (this.data.tags !== null) {
-          let tagArray = this.data.tags.split('|')
-          let tags = []
-
-          for (let i = 0; i < tagArray.length; i++) {
-            let tag = {}
-            tag.name = tagArray[i]
-            tags.push(tag)
-          }
-          return tags
-        } else {
-          return null
-        }
-      },
-
       buildJournal() {
           if (this.data.journal__id !== null) {
             return {
@@ -842,12 +807,10 @@
       buildRelatedData(relatedData, field) {
         let attachments = []
         let localities = []
-        //let referenceKeywords = []
 
         for (const data in relatedData) {
           let attachment = {}
           let locality = {}
-          let referenceKeyword = {}
 
           if (field === 'attachment') {
             if (relatedData[data].id !== null) {
@@ -859,7 +822,7 @@
               attachments.push(attachment)
             }
           }
-          // TODO
+
           if (field === 'locality') {
             if (relatedData[data].locality__id !== null) {
               locality.id = relatedData[data].locality__id
@@ -869,20 +832,11 @@
             }
           }
 
-          /*if (field === 'reference_keyword') {
-            if (relatedData[data].id !== null) {
-              referenceKeyword.id = relatedData[data].id
-              referenceKeyword.keyword = relatedData[data].keyword
-              referenceKeywords.push(referenceKeyword)
-            }
-          }*/
-
         }
 
 
         if (field === 'attachment' && attachments.length > 0) return attachments
         if (field === 'locality' && localities.length > 0) return localities
-        //if (field === 'reference_keyword' && referenceKeywords.length > 0) return referenceKeywords
 
         return null
       },
@@ -896,16 +850,6 @@
       /*********************
        *** HELPERS START ***
        *********************/
-
-      addKeyword(newKeyword) {
-        // let lowerCaseKeyword = newKeyword.toLowerCase()
-        // const keyword = {name: lowerCaseKeyword}
-        const keyword = {name: newKeyword}
-
-        this.myKeywords.push(keyword)
-        if (this.edit.tags === null) this.edit.tags = []
-        this.edit.tags.push(keyword)
-      },
 
       getRelatedData(query, id) {
         if (query.length > 0) {
@@ -921,10 +865,6 @@
               search += 'multi_search=value:' + query + ';fields:id,locality,locality_en;lookuptype:icontains'
               fields += ',locality,locality_en'
               break
-            //case 'reference_keyword':
-            //  search += 'multi_search=value:' + query + ';fields:id,keyword;lookuptype:icontains'
-            //  fields += ',keyword'
-            //  break
             default:
               search += 'id__icontains=' + query
               fields += ''
@@ -964,9 +904,6 @@
           case 'locality':
             if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
             return `${option.id} - (${option.locality_en})`
-          //case 'reference_keyword':
-          //  if (this.$i18n.locale === 'ee') return `${option.id} - (${option.keyword})`
-          //  return `${option.id} - (${option.keyword})`
           default:
             return `${option.id}`
         }

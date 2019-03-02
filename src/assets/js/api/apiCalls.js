@@ -157,6 +157,10 @@ export function fetchReferences(data) {
   }
 }
 
+export function fetchReferenceKeywords() {
+  return fetch(`keyword/`)
+}
+
 /************************
  ***  REFERENCES END  ***
  ************************/
