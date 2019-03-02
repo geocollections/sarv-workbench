@@ -490,7 +490,7 @@
 
 
     <!-- LOGS -->
-    <log table="reference" :id="reference.id"></log>
+    <log table="reference" :data="reference"></log>
 
 
   </div>

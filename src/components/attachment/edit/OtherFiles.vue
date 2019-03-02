@@ -824,9 +824,9 @@
 
 
     <!-- LOGS -->
-    <log table="attachment" :id="data.id"></log>
-    
-    
+    <log table="attachment" :data="data"></log>
+
+
   </div>
 </template>
 
