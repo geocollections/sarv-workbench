@@ -9,6 +9,14 @@
       </div>
     </div>
 
+    <!-- TODO: Fix it! -->
+    <div class="row" v-if="!isPrivate && reference !== null">
+      <div class="col-sm-12 mb-2">
+        <a class="no-underline" :href="'http://geocollections.info/reference/' + this.reference.id" target="_blank" rel="noopener noreferrer">
+          <b>{{ $t('edit.referenceLink') }}</b>
+        </a>
+      </div>
+    </div>
 
     <div v-if="reference !== null">
       <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword">
@@ -85,6 +93,18 @@
 
       isReferenceKeyword() {
         return this.reference_keyword !== null
+      },
+
+      isPrivate() {
+        if (this.reference !== null) {
+          if (this.formattedData === '') {
+            return this.reference.is_private
+          } else {
+            const newJsonData = JSON.parse(this.formattedData)
+            console.log(newJsonData)
+            return newJsonData.is_private
+          }
+        }
       }
     },
 
@@ -155,11 +175,9 @@
         this.previousRequest.abort()
       },
 
-      // TODO: If admin then do not add or_search using author data
       getReference(params) {
         this.$http.get(this.apiUrl + 'reference/' + params.id, {
           params: {
-            // user_added: params.author.user,
             format: 'json',
           }
         }).then(response => {
@@ -173,7 +191,6 @@
         })
       },
 
-      // TODO: Also this should use the author field.
       getAttachment(params) {
         this.$http.get(this.apiUrl + 'attachment/', {
           params: {
@@ -191,7 +208,6 @@
         })
       },
 
-      // TODO: Also this should use the author field.
       getLocalityReference(params) {
         this.$http.get(this.apiUrl + 'locality_reference/', {
           params: {
@@ -209,7 +225,6 @@
         })
       },
 
-      // TODO: Also this should use the author field.
       getReferenceKeyword(params) {
         this.$http.get(this.apiUrl + 'reference_keyword/', {
           params: {
