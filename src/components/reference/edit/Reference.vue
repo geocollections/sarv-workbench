@@ -2,7 +2,7 @@
   <div class="reference">
 
     <!-- REFERENCE and AUTHOR -->
-    <div class="row mt-3">
+    <div class="row">
       <div class="col-sm-2">
         <label :for="`reference`">{{ $t('reference.reference') }}:</label>
       </div>

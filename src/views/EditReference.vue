@@ -9,14 +9,7 @@
       </div>
     </div>
 
-    <!-- TODO: Fix it! -->
-    <div class="row" v-if="!isPrivate && reference !== null">
-      <div class="col-sm-12 mb-2">
-        <a class="no-underline" :href="'http://geocollections.info/reference/' + this.reference.id" target="_blank" rel="noopener noreferrer">
-          <b>{{ $t('edit.referenceLink') }}</b>
-        </a>
-      </div>
-    </div>
+    <geocollection-link :attachment="attachment" :reference="reference" :formatted-data="formattedData"></geocollection-link>
 
     <div v-if="reference !== null">
       <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword">
@@ -34,6 +27,7 @@
   import Spinner from 'vue-simple-spinner'
   import Reference from '@/components/reference/edit/Reference.vue'
   import Log from '@/components/partial/Log.vue'
+  import GeocollectionLink from '@/components/partial/GeocollectionsLink.vue'
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
@@ -42,6 +36,7 @@
       Spinner,
       Reference,
       Log,
+      GeocollectionLink,
     },
     name: "EditReference",
     props: ['id'],
@@ -94,18 +89,6 @@
       isReferenceKeyword() {
         return this.reference_keyword !== null
       },
-
-      isPrivate() {
-        if (this.reference !== null) {
-          if (this.formattedData === '') {
-            return this.reference.is_private
-          } else {
-            const newJsonData = JSON.parse(this.formattedData)
-            console.log(newJsonData)
-            return newJsonData.is_private
-          }
-        }
-      }
     },
 
     created: function () {
@@ -146,7 +129,7 @@
                 if (!continueEditing) {
                   this.$router.push({ path: '/reference' })
                 } else {
-                  // Changing this initiates new log request
+                  // Changing this basically re-renders child components with new data.
                   this.formattedData = data
                 }
               }
