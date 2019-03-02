@@ -396,9 +396,6 @@
       </div>
     </div>
 
-    <!-- LOGS -->
-    <log table="attachment" :data="data"></log>
-
 
   </div>
 </template>
@@ -416,7 +413,6 @@
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
   import MapComponent from '@/components/partial/MapComponent'
-  import Log from '@/components/partial/Log.vue'
   import { toastError } from "@/assets/js/iziToast/iziToast";
 
   library.add(faChevronUp, faChevronDown, faTrashAlt)
@@ -429,7 +425,6 @@
       VueMultiselect,
       Datepicker,
       MapComponent,
-      Log,
     },
     props:['data'],
     name: "PhotoArchive",

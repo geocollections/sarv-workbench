@@ -489,10 +489,6 @@
     </div>
 
 
-    <!-- LOGS -->
-    <log table="reference" :data="reference"></log>
-
-
   </div>
 </template>
 
@@ -504,7 +500,6 @@
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
 
   import VueMultiselect from 'vue-multiselect'
-  import Log from '@/components/partial/Log.vue'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastError } from "@/assets/js/iziToast/iziToast";
 
@@ -514,7 +509,6 @@
     components: {
       FontAwesomeIcon,
       VueMultiselect,
-      Log,
     },
     props: ['data','attach','loc','refkey'],
     name: "Reference",

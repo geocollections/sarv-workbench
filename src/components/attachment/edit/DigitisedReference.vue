@@ -151,9 +151,6 @@
     </div>
 
 
-    <!-- LOGS -->
-    <log table="attachment" :data="data"></log>
-
   </div>
 </template>
 
@@ -164,7 +161,6 @@
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
   import { toastError } from "@/assets/js/iziToast/iziToast";
-  import Log from '@/components/partial/Log.vue'
 
   export default {
     components: {
@@ -172,7 +168,6 @@
       FileInformation,
       VueMultiselect,
       Datepicker,
-      Log,
     },
     name: "DigitisedReference",
     props:['data'],

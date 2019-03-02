@@ -59,7 +59,8 @@
         handler: function (newVal, oldVal) {
           this.getLogs()
         },
-        immediate: true
+        immediate: true,
+        deep: true
       }
     },
     methods: {
@@ -86,7 +87,7 @@
 <style scoped>
 .log  {
 	width: 100%;
-	margin-top: 2rem;
+	margin-top: 1rem;
 	font-size: 0.8em;
 }
 </style>

@@ -27,6 +27,9 @@
       <div v-if="isDigitisedReference">
         <digitised-reference :data="attachment" v-on:edit-data="change"/>
       </div>
+
+      <!-- LOGS -->
+      <log table="attachment" :data="attachment"></log>
     </div>
 
   </div>
@@ -38,6 +41,8 @@
   import OtherFiles from '@/components/attachment/edit/OtherFiles.vue'
   import DigitisedReference from '@/components/attachment/edit/DigitisedReference.vue'
   import Spinner from 'vue-simple-spinner'
+  import Log from '@/components/partial/Log.vue'
+
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
   export default {
@@ -46,7 +51,8 @@
       SpecimenImage,
       OtherFiles,
       DigitisedReference,
-      Spinner
+      Spinner,
+      Log,
     },
     props: ['id'],
     name: "EditAttachment",

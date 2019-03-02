@@ -14,6 +14,9 @@
       <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword">
         <reference :data="reference" v-bind:attach="attachment" :loc="locality" :refkey="reference_keyword" v-on:edit-data="change"/>
       </div>
+
+      <!-- LOGS -->
+      <log table="reference" :data="reference"></log>
     </div>
 
   </div>
@@ -22,6 +25,7 @@
 <script>
   import Spinner from 'vue-simple-spinner'
   import Reference from '@/components/reference/edit/Reference.vue'
+  import Log from '@/components/partial/Log.vue'
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
@@ -29,6 +33,7 @@
     components: {
       Spinner,
       Reference,
+      Log,
     },
     name: "EditReference",
     props: ['id'],
