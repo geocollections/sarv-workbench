@@ -20,7 +20,7 @@
 
     <div v-if="reference !== null">
       <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword">
-        <reference :data="reference" v-bind:attach="attachment" :loc="locality" :refkey="reference_keyword" v-on:edit-data="change"/>
+        <reference :data="reference" v-bind:attach="attachment" :loc="locality" :keywords="reference_keyword" v-on:edit-data="change"/>
       </div>
 
       <!-- LOGS -->

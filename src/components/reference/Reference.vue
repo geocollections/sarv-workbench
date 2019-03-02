@@ -268,15 +268,14 @@
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`reference_keyword`">{{ $t('reference.referenceKeyword') }}:</label>
+        <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
       </div>
 
       <div class="col-9 mb-2">
-        <!-- TODO: Enable Reference Keyword when API starts supporting it -->
-        <vue-multiselect :disabled="true" v-model="reference.related_data.reference_keyword"
-                         id="reference_keyword"
+        <vue-multiselect v-model="reference.related_data.keyword"
+                         id="keyword"
                          @open="getReferenceKeywords"
-                         :options="autocomplete.reference_keyword"
+                         :options="autocomplete.keyword"
                          :loading="searchingReferenceKeywords"
                          :multiple="true"
                          :close-on-select="false"
@@ -287,10 +286,8 @@
       </div>
 
       <div class="col-1 mb-2">
-        <!-- TODO: Enable Reference Keyword when API starts supporting it -->
-        <!-- :disabled="!removeReferenceKeyword" -->
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="true"
-                @click="reference.related_data.reference_keyword = null">
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeReferenceKeyword"
+                @click="reference.related_data.keyword = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
@@ -524,7 +521,7 @@
           types: [],
           languages: [],
           journals: [],
-          reference_keyword: [],
+          keyword: [],
           relatedData: {
             locality: [],
             attachment: [],
@@ -575,7 +572,7 @@
           related_data: {
             locality: null,
             attachment: null,
-            // reference_keyword: null,
+            keyword: null,
           }
         },
       }
@@ -607,7 +604,7 @@
       },
 
       removeReferenceKeyword() {
-        return this.reference.related_data.reference_keyword !== null && this.reference.related_data.reference_keyword.length > 0
+        return this.reference.related_data.keyword !== null && this.reference.related_data.keyword.length > 0
       },
     },
 
@@ -777,13 +774,13 @@
       },
 
       getReferenceKeywords() {
-        if (this.autocomplete.reference_keyword.length <= 0) {
+        if (this.autocomplete.keyword.length <= 0) {
           this.searchingReferenceKeywords = true
 
           fetchReferenceKeywords().then(response => {
             if (response.status === 200) {
-              if (response.body.count > 0) this.autocomplete.reference_keyword = response.body.results;
-              else this.autocomplete.reference_keyword = []
+              if (response.body.count > 0) this.autocomplete.keyword = response.body.results;
+              else this.autocomplete.keyword = []
             }
             this.searchingReferenceKeywords = false
           }, errResponse => {
@@ -932,7 +929,7 @@
           related_data: {
             locality: null,
             attachment: null,
-            // reference_keyword: null,
+            keyword: null,
           }
         }
       },

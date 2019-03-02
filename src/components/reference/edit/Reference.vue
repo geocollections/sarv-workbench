@@ -261,15 +261,14 @@
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`reference_keyword`">{{ $t('reference.referenceKeyword') }}:</label>
+        <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
       </div>
 
       <div class="col-9 mb-2">
-        <!-- TODO: Enable Reference Keyword when API starts supporting it -->
-        <vue-multiselect :disabled="true" v-model="edit.related_data.reference_keyword"
-                         id="reference_keyword"
+        <vue-multiselect v-model="edit.related_data.keyword"
+                         id="keyword"
                          @open="getReferenceKeywords"
-                         :options="autocomplete.reference_keyword"
+                         :options="autocomplete.keyword"
                          :loading="searchingReferenceKeywords"
                          :multiple="true"
                          :close-on-select="false"
@@ -280,10 +279,8 @@
       </div>
 
       <div class="col-1 mb-2">
-        <!-- TODO: Enable Reference Keyword when API starts supporting it -->
-        <!-- :disabled="!removeReferenceKeyword" -->
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="true"
-                @click="edit.related_data.reference_keyword = null">
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeReferenceKeyword"
+                @click="edit.related_data.keyword = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
@@ -497,7 +494,7 @@
       VueMultiselect,
       FilePreview,
     },
-    props: ['data','attach','loc','refkey'],
+    props: ['data','attach','loc','keywords'],
     name: "Reference",
 
     data() {
@@ -506,6 +503,7 @@
         reference: this.data,
         attachment: this.attach,
         locality: this.loc,
+        reference_keyword: this.keywords,
         isFileLocked: this.data.is_locked,
         searchingTypes: false,
         searchingLanguages: false,
@@ -515,7 +513,7 @@
           types: [],
           languages: [],
           journals: [],
-          reference_keyword: [],
+          keyword: [],
           relatedData: {
             locality: [],
             attachment: [],
@@ -558,7 +556,7 @@
           related_data: {
             attachment: this.buildRelatedData(this.attach, 'attachment'),
             locality: this.buildRelatedData(this.loc, 'locality'),
-            // reference_keyword: null,
+            keyword: this.buildRelatedData(this.keywords, 'reference_keyword'),
           }
         },
       }
@@ -596,7 +594,7 @@
       },
 
       removeReferenceKeyword() {
-        return this.edit.related_data.reference_keyword !== null && this.edit.related_data.reference_keyword.length > 0
+        return this.edit.related_data.keyword !== null && this.edit.related_data.keyword.length > 0
       },
 
       isReferenceLocked() {
@@ -744,13 +742,13 @@
       },
 
       getReferenceKeywords() {
-        if (this.autocomplete.reference_keyword.length <= 0) {
+        if (this.autocomplete.keyword.length <= 0) {
           this.searchingReferenceKeywords = true
 
           fetchReferenceKeywords().then(response => {
             if (response.status === 200) {
-              if (response.body.count > 0) this.autocomplete.reference_keyword = response.body.results;
-              else this.autocomplete.reference_keyword = []
+              if (response.body.count > 0) this.autocomplete.keyword = response.body.results;
+              else this.autocomplete.keyword = []
             }
             this.searchingReferenceKeywords = false
           }, errResponse => {
@@ -807,10 +805,12 @@
       buildRelatedData(relatedData, field) {
         let attachments = []
         let localities = []
+        let referenceKeywords = []
 
         for (const data in relatedData) {
           let attachment = {}
           let locality = {}
+          let referenceKeyword = {}
 
           if (field === 'attachment') {
             if (relatedData[data].id !== null) {
@@ -832,11 +832,20 @@
             }
           }
 
+          if (field === 'reference_keyword') {
+            if (relatedData[data].keyword !== null) {
+              referenceKeyword.id = relatedData[data].keyword
+              referenceKeyword.keyword = relatedData[data].keyword__keyword
+              referenceKeywords.push(referenceKeyword)
+            }
+          }
+
         }
 
 
         if (field === 'attachment' && attachments.length > 0) return attachments
         if (field === 'locality' && localities.length > 0) return localities
+        if (field === 'reference_keyword' && referenceKeywords.length > 0) return referenceKeywords
 
         return null
       },
