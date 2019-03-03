@@ -3,9 +3,9 @@
     <div class="row">
       <div class="col">
 
-        <div v-for="(entity, index) in data">
+        <div class="list" v-for="(entity, index) in data">
 
-          <div class="list ml-2 p-1">
+          <div class="list-row ml-2 p-1">
             <span>
               <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')">
                 <b>{{(page - 1) * paginateBy + index + 1}}.</b>
@@ -104,10 +104,14 @@
 </script>
 
 <style scoped>
-  .list {
-    font-size: 0.9rem;
+  .list:not(:first-child) {
     border-top: dotted 1.2pt #ccc
   }
+
+  .list-row {
+    font-size: 0.9rem;
+  }
+
   .green-link {
     color: green;
   }
