@@ -127,7 +127,7 @@ export function fetchAttachments(data, author) {
  ************************/
 
 export function fetchReferences(data) {
-  const fields = 'id,author,year,title,journal__journal_name,volume,pages,doi,attachment__filename'
+  const fields = 'id,author,year,title,journal__journal_name,volume,pages,doi,attachment__filename,book,publisher,publisher_place,url'
   let searchFields = ''
 
   if (data.author !== null && data.author.trim().length > 0) {

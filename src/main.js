@@ -148,6 +148,10 @@ new Vue({
     referenceSearchHistory: {
       type: Object
     },
+    referenceViewType: {
+      type: Boolean,
+      default: false
+    },
   },
   render: h => h(App)
 }).$mount('#app')

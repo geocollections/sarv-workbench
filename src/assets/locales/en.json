@@ -179,7 +179,10 @@
     "errors": {
       "noFiles1": "Unfortunately we didn't find any references. Go to",
       "noFiles2": "and start uploading."
-    }
+    },
+    "toggleViewLabel": "Toggle between table and list view",
+    "tableView": "Table view",
+    "listView": "List view"
   },
   "photoArchive": {
     "author": "Author",

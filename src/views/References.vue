@@ -69,7 +69,8 @@
             </div>
 
             <div class="col-sm-4 mb-2">
-              <b-form-input id="abstract_keywords_remarks" v-model="searchParameters.abstractKeywordsRemarks" type="text"></b-form-input>
+              <b-form-input id="abstract_keywords_remarks" v-model="searchParameters.abstractKeywordsRemarks"
+                            type="text"></b-form-input>
             </div>
 
             <!-- ID -->
@@ -82,13 +83,24 @@
             </div>
           </div>
 
+          <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
+          <div class="row">
+            <div class="col">
+              <b-form-group :label="$t('references.toggleViewLabel')">
+                <b-form-radio-group v-model="isListView">
+                  <b-form-radio :value="false">{{ $t('references.tableView') }}</b-form-radio>
+                  <b-form-radio :value="true">{{ $t('references.listView') }}</b-form-radio>
+                </b-form-radio-group>
+              </b-form-group>
+            </div>
+          </div>
+
           <!-- Removes search preferences like local storage and search parameters-->
-          <div class="row mt-3">
+          <div class="row">
             <div class="col">
               <b-button variant="danger" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
             </div>
           </div>
-
 
         </div>
       </div>
@@ -98,12 +110,12 @@
 
     <div class="row mt-4">
       <div class="col">
-        <span>
-          <b>{{ $t('references.header') }}</b>
-          <sup class="font-larger" v-bind:class="{ 'badge-style': response.count > 0 }">
-            <b-badge pill variant="info">{{ response.count }}</b-badge>
-          </sup>
-        </span>
+          <span>
+            <b>{{ $t('references.header') }}</b>
+            <sup class="font-larger" v-bind:class="{ 'badge-style': response.count > 0 }">
+              <b-badge pill variant="info">{{ response.count }}</b-badge>
+            </sup>
+          </span>
       </div>
     </div>
 
@@ -128,14 +140,15 @@
 
       <div class="col-sm-12 col-md-6 pagination-center">
         <b-pagination
-          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count" v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
+          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count"
+          v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
         </b-pagination>
       </div>
     </div>
 
 
     <!-- REFERENCE TABLE -->
-    <div class="row" v-if="response.count > 0">
+    <div class="row" v-if="!isListView && response.count > 0">
       <div class="col">
 
         <div class="table-responsive">
@@ -144,59 +157,73 @@
             <thead class="thead-light">
             <tr class="th-sort">
               <th>
-                <span @click="changeOrder('id')">
-                      <font-awesome-icon v-if="searchParameters.orderBy !== 'id' && searchParameters.orderBy !== '-id'" :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection" />
-                      ID
+                  <span @click="changeOrder('id')">
+                        <font-awesome-icon
+                          v-if="searchParameters.orderBy !== 'id' && searchParameters.orderBy !== '-id'"
+                          :icon="sort"/>
+                        <font-awesome-icon v-else :icon="sortingDirection"/>
+                        ID
+                    </span>
+              </th>
+
+              <th>
+                  <span @click="changeOrder('author')">
+                      <font-awesome-icon
+                        v-if="searchParameters.orderBy !== 'author' && searchParameters.orderBy !== '-author'"
+                        :icon="sort"/>
+                      <font-awesome-icon v-else :icon="sortingDirection"/>
+                      {{ $t('references.author') }}
                   </span>
               </th>
 
               <th>
-                <span @click="changeOrder('author')">
-                    <font-awesome-icon v-if="searchParameters.orderBy !== 'author' && searchParameters.orderBy !== '-author'" :icon="sort"/>
-                    <font-awesome-icon v-else :icon="sortingDirection" />
-                    {{ $t('references.author') }}
-                </span>
-              </th>
-
-              <th>
-                <span @click="changeOrder('year')">
-                    <font-awesome-icon v-if="searchParameters.orderBy !== 'year' && searchParameters.orderBy !== '-year'" :icon="sort"/>
-                    <font-awesome-icon v-else :icon="sortingDirection" />
-                    {{ $t('references.year') }}
-                </span>
-              </th>
-
-              <th>
-                <span @click="changeOrder('title')">
-                      <font-awesome-icon v-if="searchParameters.orderBy !== 'title' && searchParameters.orderBy !== '-title'" :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection" />
-                      {{ $t('references.title') }}
+                  <span @click="changeOrder('year')">
+                      <font-awesome-icon
+                        v-if="searchParameters.orderBy !== 'year' && searchParameters.orderBy !== '-year'"
+                        :icon="sort"/>
+                      <font-awesome-icon v-else :icon="sortingDirection"/>
+                      {{ $t('references.year') }}
                   </span>
               </th>
 
               <th>
-                <span @click="changeOrder('journal__journal_name')">
-                      <font-awesome-icon v-if="searchParameters.orderBy !== 'journal__journal_name' && searchParameters.orderBy !== '-journal__journal_name'" :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection" />
-                      {{ $t('references.journal') }}
-                  </span>
+                  <span @click="changeOrder('title')">
+                        <font-awesome-icon
+                          v-if="searchParameters.orderBy !== 'title' && searchParameters.orderBy !== '-title'"
+                          :icon="sort"/>
+                        <font-awesome-icon v-else :icon="sortingDirection"/>
+                        {{ $t('references.title') }}
+                    </span>
               </th>
 
               <th>
-                <span @click="changeOrder('volume')">
-                      <font-awesome-icon v-if="searchParameters.orderBy !== 'volume' && searchParameters.orderBy !== '-volume'" :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection" />
-                      {{ $t('references.volume') }}
-                  </span>
+                  <span @click="changeOrder('journal__journal_name')">
+                        <font-awesome-icon
+                          v-if="searchParameters.orderBy !== 'journal__journal_name' && searchParameters.orderBy !== '-journal__journal_name'"
+                          :icon="sort"/>
+                        <font-awesome-icon v-else :icon="sortingDirection"/>
+                        {{ $t('references.journal') }}
+                    </span>
               </th>
 
               <th>
-                <span @click="changeOrder('pages')">
-                      <font-awesome-icon v-if="searchParameters.orderBy !== 'pages' && searchParameters.orderBy !== '-pages'" :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection" />
-                      {{ $t('references.pages') }}
-                  </span>
+                  <span @click="changeOrder('volume')">
+                        <font-awesome-icon
+                          v-if="searchParameters.orderBy !== 'volume' && searchParameters.orderBy !== '-volume'"
+                          :icon="sort"/>
+                        <font-awesome-icon v-else :icon="sortingDirection"/>
+                        {{ $t('references.volume') }}
+                    </span>
+              </th>
+
+              <th>
+                  <span @click="changeOrder('pages')">
+                        <font-awesome-icon
+                          v-if="searchParameters.orderBy !== 'pages' && searchParameters.orderBy !== '-pages'"
+                          :icon="sort"/>
+                        <font-awesome-icon v-else :icon="sortingDirection"/>
+                        {{ $t('references.pages') }}
+                    </span>
               </th>
 
               <th></th>
@@ -212,7 +239,9 @@
             <tr v-for="entity in response.results">
 
               <td>
-                <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')" >{{ entity.id }}</router-link>
+                <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')">{{
+                  entity.id }}
+                </router-link>
               </td>
 
               <td>{{ entity.author }}</td>
@@ -228,7 +257,8 @@
               <td>{{ entity.pages }}</td>
 
               <td>
-                <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})" :title="$t('editReference.viewMessage')">{{ $t('edit.view') }}</a>
+                <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})"
+                   :title="$t('editReference.viewMessage')">{{ $t('edit.view') }}</a>
               </td>
 
               <td>
@@ -236,7 +266,8 @@
               </td>
 
               <td>
-                <a v-if="entity.attachment__filename" href="javascript:void(0)" @click="openPdf({pdf: entity.attachment__filename})">pdf</a>
+                <a v-if="entity.attachment__filename" href="javascript:void(0)"
+                   @click="openPdf({pdf: entity.attachment__filename})">pdf</a>
               </td>
             </tr>
             </tbody>
@@ -246,6 +277,9 @@
 
       </div>
     </div>
+
+    <!-- LIST VIEW -->
+    <list-view v-if="isListView && response.count > 0" :data="response.results" :page="searchParameters.page" :paginate-by="searchParameters.paginateBy" />
 
 
     <div class="row mt-3" v-if="response.count > 0">
@@ -268,7 +302,8 @@
 
       <div class="col-sm-12 col-md-6 pagination-center">
         <b-pagination
-          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count" v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
+          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count"
+          v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
         </b-pagination>
       </div>
     </div>
@@ -278,7 +313,9 @@
       <div class="col">
         <p>
           {{ $t('references.errors.noFiles1') }}
-          <b><router-link :to="{ path: '/reference/add' }">{{ $t('header.addReference') }}</router-link></b>
+          <b>
+            <router-link :to="{ path: '/reference/add' }">{{ $t('header.addReference') }}</router-link>
+          </b>
           {{ $t('references.errors.noFiles2') }}
         </p>
       </div>
@@ -289,18 +326,20 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import {library} from '@fortawesome/fontawesome-svg-core'
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
   import {faSort} from '@fortawesome/free-solid-svg-icons'
   import {faSortUp} from '@fortawesome/free-solid-svg-icons'
   import {faSortDown} from '@fortawesome/free-solid-svg-icons'
-  import { fetchReferences } from "@/assets/js/api/apiCalls";
+  import {fetchReferences} from "@/assets/js/api/apiCalls";
+  import ListView from "../components/reference/ListView";
 
   library.add(faFile, faSort, faSortUp, faSortDown)
 
   export default {
     components: {
+      ListView,
       FontAwesomeIcon,
       Spinner,
     },
@@ -315,6 +354,7 @@
       return {
         noResults: null,
         isLoading: false,
+        isListView: false,
         searchParameters: {
           author: null,
           year: null,
@@ -333,7 +373,7 @@
       }
     },
 
-    metaInfo () {
+    metaInfo() {
       return {
         title: this.$t('titles.editReference')
       }
@@ -355,6 +395,9 @@
           this.searchReferences(this.searchParameters)
         },
         deep: true
+      },
+      'isListView'(newVal, oldVal) {
+        this.$localStorage.set('referenceViewType', newVal)
       }
     },
 
@@ -366,6 +409,8 @@
       } else {
         this.searchReferences(this.searchParameters)
       }
+
+      this.isListView = this.$localStorage.get('referenceViewType', false)
     },
 
     methods: {
@@ -420,12 +465,13 @@
       },
 
       openPdf(params) {
-          window.open('https://files.geocollections.info/' + params.pdf.substring(0, 2) + '/' + params.pdf.substring(2, 4) + '/' + params.pdf, '', 'width=1000,height=900')
+        window.open('https://files.geocollections.info/' + params.pdf.substring(0, 2) + '/' + params.pdf.substring(2, 4) + '/' + params.pdf, '', 'width=1000,height=900')
       },
 
       // Deletes local storage value + resets search parameters to default
       deleteSearchPreferences() {
         this.$localStorage.remove('referenceSearchHistory')
+        this.$localStorage.remove('referenceViewType')
         this.searchParameters = {
           author: null,
           year: null,
@@ -437,6 +483,7 @@
           paginateBy: 50,
           orderBy: '-id',
         }
+        this.isListView = false
       }
     }
   }

@@ -179,7 +179,10 @@
     "errors": {
       "noFiles1": "Kahjuks ei leitud mitte ühtegi viidet. Minge",
       "noFiles2": "ja alustage üleslaadimist."
-    }
+    },
+    "toggleViewLabel": "Vaheta tabeli ja listi vaate vahel",
+    "tableView": "Tabeli vaade",
+    "listView": "Listi vaade"
   },
   "photoArchive": {
     "author": "Autor",
