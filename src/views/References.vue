@@ -267,7 +267,8 @@
 
               <td>
                 <a v-if="entity.attachment__filename" href="javascript:void(0)"
-                   @click="openPdf({pdf: entity.attachment__filename})">pdf</a>
+                   @click="openPdf({pdf: entity.attachment__filename})">PDF</a>
+                <a v-if="entity.attachment__filename === null && entity.url" :href="entity.url" target="_blank" rel="noopener noreferrer">PDF</a>
               </td>
             </tr>
             </tbody>
