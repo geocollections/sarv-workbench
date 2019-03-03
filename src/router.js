@@ -143,6 +143,37 @@ const router = new Router({
         },
       ]
     },
+    {
+      path: '/locality',
+      component: () => import('./views/Localities.vue'),
+      meta: {
+        requiresAuth: true
+      },
+    },
+    {
+      path: '/locality/:id(\\d+)',
+      props: true,
+      component: () => import('./views/EditLocality.vue'),
+      meta: {
+        requiresAuth: true
+      },
+    },
+    {
+      path: '/locality/add',
+      component: () => import('./views/AddLocality.vue'),
+      meta: {
+        requiresAuth: true
+      },
+      children: [
+        {
+          path: '',
+          component: () => import('./components/reference/Reference.vue'),
+          meta: {
+            requiresAuth: true
+          },
+        }
+      ]
+    },
     // {
     //   path: '/about',
     //   name: 'about',

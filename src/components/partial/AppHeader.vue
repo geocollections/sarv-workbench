@@ -25,6 +25,9 @@
           <b-nav-item class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>
           <b-nav-item class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
 
+          <!--<b-nav-item class="d-none d-lg-block" :to="{ path: '/locality/add' }" exact>{{ $t('header.addLocality') }}</b-nav-item>-->
+          <!--<b-nav-item class="d-none d-lg-block" :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-nav-item>-->
+
           <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.files')">
             <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-dropdown-item>
             <b-dropdown-item :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-dropdown-item>
@@ -34,6 +37,11 @@
             <b-dropdown-item :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-dropdown-item>
             <b-dropdown-item :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-dropdown-item>
           </b-nav-item-dropdown>
+
+          <!--<b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.localities')">-->
+            <!--<b-dropdown-item :to="{ path: '/locality/add' }" exact>{{ $t('header.addLocality') }}</b-dropdown-item>-->
+            <!--<b-dropdown-item :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-dropdown-item>-->
+          <!--</b-nav-item-dropdown>-->
 
 
         </b-navbar-nav>

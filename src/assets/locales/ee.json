@@ -26,10 +26,13 @@
     "title": "Geokogude andmehaldus",
     "files": "Failid",
     "references": "Kirjandus",
+    "localities": "Lokaliteet",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa uus kirjandus",
     "editReference": "Kirjandus",
+    "addLocality": "Lisa uus lokaliteet",
+    "editLocality": "Lokaliteet",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -145,6 +148,17 @@
     "title": "Pealkiri",
     "bookJournal": "Raamat või ajakiri",
     "abstractKeywordsRemarks": "Abstrakt, märksõnad või lisainfo"
+  },
+  "editLocality": {
+    "heading": "Lokaliteedi ID",
+    "editMessage": "Muuda lokaliteedit",
+    "viewMessage": "Vaata lokaliteedit geokogude portaalis",
+    "id": "ID",
+    "locality": "Lokaliteet",
+    "number": "Number",
+    "county": "Küla:asutusüksus",
+    "country": "Riik:value",
+    "creator": "Sisestaja"
   },
   "attachments": {
     "header": "Minu failid",
@@ -382,6 +396,8 @@
     "editAttachment": "Geokogude andmehaldus: Muuda faili",
     "addReference": "Geokogude andmehaldus: Lisa viide",
     "editReference": "Geokogude andmehaldus: Muuda viidet",
+    "addLocality": "Geokogude andmehaldus: Lisa lokaliteet",
+    "editLocality": "Geokogude andmehaldus: Muuda lokaliteet",
     "settings": "Geokogude andmehaldus: Seaded"
   },
   "logs": {

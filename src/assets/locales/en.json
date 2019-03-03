@@ -27,10 +27,13 @@
     "title": "Geocollections data management",
     "files": "Files",
     "references": "References",
+    "localities": "Localities",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
     "editReference": "References",
+    "addLocality": "Add new locality",
+    "editLocality": "Localities",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out"
@@ -145,6 +148,17 @@
     "title": "Pealkiri",
     "bookJournal": "Book or journal",
     "abstractKeywordsRemarks": "Abstract, keywords or remarks"
+  },
+  "editLocality": {
+    "heading": "Locality ID",
+    "editMessage": "Edit locality",
+    "viewMessage": "View locality in geocollections portal",
+    "id": "ID",
+    "locality": "Locality",
+    "number": "Number",
+    "county": "County",
+    "country": "Country",
+    "creator": "Creator"
   },
   "attachments": {
     "header": "My attachments",

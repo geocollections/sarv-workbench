@@ -166,7 +166,6 @@ export function fetchReferenceKeywords() {
  ************************/
 
 
-
 /******************
  *** LOGS START ***
  ******************/
@@ -182,3 +181,32 @@ export function fetchLatestLogs(data) {
 /******************
  *** LOGS END ***
  ******************/
+
+
+/************************
+ *** LOCALITIES START ***
+ ************************/
+
+export function fetchLocalities(data) {
+  const fields = 'id,asustusyksus__asustusyksus_en,asustusyksus__asustusyksus,country__value_en,country__value,locality_en,locality,maakond__maakond_en,maakond__maakond'
+  let searchFields = ''
+
+  if (data.locality !== null && data.locality.trim().length > 0) {
+    searchFields += 'author__icontains=' + data.locality
+  }
+
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += '&id__icontains=' + data.id
+  }
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+
+  if (searchFields.length > 0) {
+    return fetch(`locality/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`locality/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
+
+/************************
+ ***  LOCALITIES END  ***
+ ************************/
