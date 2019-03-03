@@ -360,7 +360,7 @@
     <!-- SHOWING RELATED_DATA -->
     <div class="row">
 
-      <!-- ATTACHMENT -->
+      <!-- ATTACHMENT LINK-->
       <div class="col-sm-6" v-if="edit.related_data.attachment !== null && edit.related_data.attachment.length > 0">
 
         <p class="h4">{{ $t('reference.relatedTables.attachment') }}</p>
@@ -495,7 +495,7 @@
       VueMultiselect,
       FilePreview,
     },
-    props: ['data','attach','loc','keywords'],
+    props: ['data','attach','loc','keywords', 'attachLink'],
     name: "Reference",
 
     data() {
@@ -555,7 +555,7 @@
           is_private: this.data.is_private ? '1' : '0',
           is_locked: this.data.is_locked ? '1' : '0',
           related_data: {
-            attachment: this.buildRelatedData(this.attach, 'attachment'),
+            attachment: this.buildRelatedData(this.attachLink, 'attachment'),
             locality: this.buildRelatedData(this.loc, 'locality'),
             keyword: this.buildRelatedData(this.keywords, 'reference_keyword'),
           }
@@ -804,23 +804,24 @@
       },
 
       buildRelatedData(relatedData, field) {
-        let attachments = []
+        console.log(relatedData)
+        let attachmentLinks = []
         let localities = []
         let referenceKeywords = []
 
         for (const data in relatedData) {
-          let attachment = {}
+          let attachmentLink = {}
           let locality = {}
           let referenceKeyword = {}
 
           if (field === 'attachment') {
-            if (relatedData[data].id !== null) {
-              attachment.id = relatedData[data].id
-              attachment.uuid_filename = relatedData[data].uuid_filename
-              attachment.description = relatedData[data].description
-              attachment.description_en = relatedData[data].description_en
-              attachment.author__agent = relatedData[data].author__agent
-              attachments.push(attachment)
+            if (relatedData[data].attachment !== null) {
+              attachmentLink.id = relatedData[data].attachment
+              attachmentLink.uuid_filename = relatedData[data].attachment__uuid_filename
+              attachmentLink.description = relatedData[data].attachment__description
+              attachmentLink.description_en = relatedData[data].attachment__description_en
+              attachmentLink.author__agent = relatedData[data].attachment__author__agent
+              attachmentLinks.push(attachmentLink)
             }
           }
 
@@ -844,7 +845,7 @@
         }
 
 
-        if (field === 'attachment' && attachments.length > 0) return attachments
+        if (field === 'attachment' && attachmentLinks.length > 0) return attachmentLinks
         if (field === 'locality' && localities.length > 0) return localities
         if (field === 'reference_keyword' && referenceKeywords.length > 0) return referenceKeywords
 
