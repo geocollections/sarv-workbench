@@ -30,7 +30,9 @@
                 <td><b>{{ entity.user }}</b></td>
                 <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
                 <td>{{ entity.command }}</td>
-                <td style="max-width: 30rem; padding:0.3rem; margin: 0;"><div style="height: 2rem !important; overflow: auto;">{{ entity.changes }}</div></td>
+                <td style="max-width: 25rem; padding:0.3rem; margin: 0;">
+                  <div style="height: 3rem !important; overflow: auto;">{{ entity.changes }}</div>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -44,7 +46,7 @@
 </template>
 
 <script>
-  import { fetchLogs } from "@/assets/js/api/apiCalls";
+  import { fetchSpecificLogs } from "@/assets/js/api/apiCalls";
 
   export default {
     props: ['table', 'data', 'formattedData'],
@@ -60,12 +62,12 @@
           this.getLogs()
         },
         immediate: true,
-      }
+      },
     },
     methods: {
       getLogs() {
 
-        fetchLogs({
+        fetchSpecificLogs({
           table_name: this.table,
           row_id: this.data.id,
           order_by: '-id',

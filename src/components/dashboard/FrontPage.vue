@@ -52,13 +52,11 @@
 
       </div>
     </div>
-<!--
-    <div class="row">
-      <div class="col">
-        <attachments :show-search="false" />
-      </div>
-    </div>
--->
+
+
+    <recent-activity class="mt-2" :user="user"></recent-activity>
+
+
   </div>
 </template>
 
@@ -68,11 +66,13 @@
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faChevronUp} from '@fortawesome/free-solid-svg-icons'
   import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
+  import RecentActivity from "./RecentActivity";
 
   library.add(faChevronUp, faChevronDown)
 
   export default {
     components: {
+      RecentActivity,
       Attachments,
       FontAwesomeIcon
     },
