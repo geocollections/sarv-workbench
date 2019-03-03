@@ -17,11 +17,10 @@
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
               <tr>
-                <th>User</th>
-                <th>Time</th>
-                <th>Command</th>
-                <th>Muutused</th>
-
+                <th>{{ $t('logs.user') }}</th>
+                <th>{{ $t('logs.time') }}</th>
+                <th>{{ $t('logs.command') }}</th>
+                <th>{{ $t('logs.changes') }}</th>
               </tr>
             </thead>
 

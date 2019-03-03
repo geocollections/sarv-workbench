@@ -56,8 +56,7 @@
     "developmentSettings": {
       "button": "Remove all default settings",
       "message": "Removes all saved values, might help if something is not loading/working correctly (only in development)"
-    },
-    "recentActivity": "Your recent activities"
+    }
   },
   "add": {
     "attachment": "Attachment",
@@ -382,7 +381,13 @@
     "settings": "Geocollections Data Management: Settings"
   },
   "logs": {
-    "title": "Logs"
+    "title": "Logs",
+    "recentlyAdded": "Recently added",
+    "recentlyUpdated": "Recently updated",
+    "user": "User",
+    "time": "Time",
+    "command": "Command",
+    "changes": "Changes"
   },
   "buttons": {
     "deletePreferences": "Clear filters and ordering"

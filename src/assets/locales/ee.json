@@ -381,7 +381,13 @@
     "settings": "Geokogude andmehaldus: Seaded"
   },
   "logs": {
-    "title": "Logid"
+    "title": "Logid",
+    "recentlyAdded": "Hiljuti lisatud",
+    "recentlyUpdated": "Hiljuti uuendatud",
+    "user": "Kasutaja",
+    "time": "Aeg",
+    "command": "Tegevus",
+    "changes": "Muutused"
   },
   "buttons": {
     "deletePreferences": "Tühista filtrid ja sorteerimine"

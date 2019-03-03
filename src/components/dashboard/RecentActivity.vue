@@ -6,15 +6,14 @@
       <!-- RECENTLY ADDED -->
       <div class="col-lg-6">
 
-        <p class="h4">Recently Added:</p>
+        <p class="h4">{{ $t('logs.recentlyAdded') }}:</p>
 
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
             <tr>
               <th>ID</th>
-              <th>Time</th>
-
+              <th>{{ $t('logs.time') }}</th>
             </tr>
             </thead>
 
@@ -34,19 +33,18 @@
       </div>
 
 
-      <!-- RECENTLY CHANGED -->
+      <!-- RECENTLY UPDATED -->
       <div class="col-lg-6">
 
-        <p class="h4">Recently Updated:</p>
+        <p class="h4">{{ $t('logs.recentlyUpdated') }}:</p>
 
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
             <tr>
               <th>ID</th>
-              <th>Time</th>
-              <th>Muutused</th>
-
+              <th>{{ $t('logs.time') }}</th>
+              <th>{{ $t('logs.changes') }}</th>
             </tr>
             </thead>
 
