@@ -12,8 +12,13 @@
     <geocollection-link :attachment="attachment" :reference="reference" :formatted-data="formattedData"></geocollection-link>
 
     <div v-if="reference !== null">
-      <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword">
-        <reference :data="reference" v-bind:attach="attachment" :loc="locality" :keywords="reference_keyword" v-on:edit-data="change"/>
+      <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword && isAttachmentLink">
+        <reference :data="reference"
+                   v-bind:attach="attachment"
+                   :loc="locality"
+                   :keywords="reference_keyword"
+                   :attach-link="attachment_link"
+                   v-on:edit-data="change"/>
       </div>
 
       <!-- LOGS -->
@@ -30,6 +35,7 @@
   import GeocollectionLink from '@/components/partial/GeocollectionsLink.vue'
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+  import { fetchAttachmentLink } from "@/assets/js/api/apiCalls";
 
   export default {
     components: {
@@ -48,6 +54,7 @@
         attachment: null,
         locality: null,
         reference_keyword: null,
+        attachment_link: null,
         formattedData: '',
         searchParameters: {
           id: this.id,
@@ -70,6 +77,7 @@
         this.getAttachment(this.searchParameters)
         this.getLocalityReference(this.searchParameters)
         this.getReferenceKeyword(this.searchParameters)
+        this.getAttachmentLink(this.searchParameters)
       }
     },
 
@@ -89,6 +97,10 @@
       isReferenceKeyword() {
         return this.reference_keyword !== null
       },
+
+      isAttachmentLink() {
+        return this.attachment_link !== null
+      }
     },
 
     created: function () {
@@ -99,6 +111,7 @@
         this.getAttachment(this.searchParameters)
         this.getLocalityReference(this.searchParameters)
         this.getReferenceKeyword(this.searchParameters)
+        this.getAttachmentLink(this.searchParameters)
       }
     },
 
@@ -225,11 +238,23 @@
         })
       },
 
+      getAttachmentLink(params) {
+        fetchAttachmentLink({
+          reference: params.id
+        }).then(response => {
+          if (response.status === 200) {
+            if (response.body.count > 0) this.attachment_link = response.body.results
+            else this.attachment_link = []
+          }
+        }, errResponse => {})
+      },
+
       resetData() {
         this.reference = null
         this.attachment = null
         this.locality = null
         this.reference_keyword = null
+        this.attachment_link = null
       }
     }
   }

@@ -161,6 +161,10 @@ export function fetchReferenceKeywords() {
   return fetch(`keyword/`)
 }
 
+export function fetchAttachmentLink(data) {
+  return fetch(`attachment_link/?reference=${data.reference}&format=json`)
+}
+
 /************************
  ***  REFERENCES END  ***
  ************************/
