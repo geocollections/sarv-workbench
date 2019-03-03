@@ -463,6 +463,7 @@
       <div class="col" v-if="!isReferenceLocked">
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
+        <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
       </div>
       <div class="col-sm-6" v-else>
         <div class="alert alert-info">{{ $t('edit.locked') }}</div>

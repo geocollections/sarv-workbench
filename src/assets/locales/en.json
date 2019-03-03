@@ -126,6 +126,7 @@
     "buttons": {
       "save": "Save",
       "saveAndContinue": "Save and continue editing",
+      "cancelWithoutSaving": "Cancel without saving",
       "cancel": "Cancel file change"
     },
     "locked": "This file is locked and can't be changed",

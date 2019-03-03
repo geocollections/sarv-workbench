@@ -126,6 +126,7 @@
     "buttons": {
       "save": "Salvesta",
       "saveAndContinue": "Salvesta ja jätka muutmist",
+      "cancelWithoutSaving": "Lahku salvestamata",
       "cancel": "Katkesta faili muutmine"
     },
     "locked": "Seda faili ei saa muuta, sest see on lukus",
