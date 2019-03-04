@@ -19,7 +19,6 @@
       <div class="col-sm-4 mb-2">
         <b-form-input id="year" v-model="edit.year" :state="yearState" type="number"></b-form-input>
       </div>
-
     </div>
 
     <!-- AUTHOR and YEAR -->
@@ -98,47 +97,6 @@
       </div>
     </div>
 
-
-    <!-- BOOK and BOOK ORIGINAL -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`book`">{{ $t('reference.book') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="book" v-model="edit.book" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="book_original" v-model="edit.book_original" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- PUBLISHER and PUBLISHER PLACE -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`publisher`">{{ $t('reference.publisher') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="publisher" v-model="edit.publisher" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`publisher_place`">{{ $t('reference.publisherPlace') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="publisher_place" v-model="edit.publisher_place" type="text"></b-form-input>
-      </div>
-    </div>
-
     <!-- JOURNAL -->
     <div class="row">
       <div class="col-sm-2">
@@ -195,6 +153,46 @@
 
       <div class="col-sm-4 mb-2">
         <b-form-input id="number" v-model="edit.number" type="text"></b-form-input>
+      </div>
+    </div>    
+
+    <!-- BOOK and BOOK ORIGINAL -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`book`">{{ $t('reference.book') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="book" v-model="edit.book" type="text"></b-form-input>
+      </div>
+
+
+      <div class="col-sm-2">
+        <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="book_original" v-model="edit.book_original" type="text"></b-form-input>
+      </div>
+    </div>
+
+    <!-- PUBLISHER and PUBLISHER PLACE -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`publisher`">{{ $t('reference.publisher') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="publisher" v-model="edit.publisher" type="text"></b-form-input>
+      </div>
+
+
+      <div class="col-sm-2">
+        <label :for="`publisher_place`">{{ $t('reference.publisherPlace') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="publisher_place" v-model="edit.publisher_place" type="text"></b-form-input>
       </div>
     </div>
 
@@ -258,6 +256,41 @@
       </div>
     </div>
 
+    <!-- ABSTRACT -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="abstract" v-model="edit.abstract" type="text" size="sm"
+                         :rows="1" :max-rows="20"></b-form-textarea>
+      </div>
+    </div>
+    
+    <!-- AUTHOR KEYWORDS -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-input id="author_keywords" v-model="edit.author_keywords" type="text"></b-form-input>
+      </div>
+    </div>
+    
+    <!-- REMARKS -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="remarks" v-model="edit.remarks" type="text" size="sm"
+                         :rows="1" :max-rows="20"></b-form-textarea>
+      </div>
+    </div>
+
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
@@ -284,42 +317,7 @@
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
-    </div>
-
-    <!-- ABSTRACT -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea id="abstract" v-model="edit.abstract" type="text" size="sm"
-                         :rows="1" :max-rows="20"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- REMARKS -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea id="remarks" v-model="edit.remarks" type="text" size="sm"
-                         :rows="1" :max-rows="20"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- AUTHOR KEYWORDS -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-input id="author_keywords" v-model="edit.author_keywords" type="text"></b-form-input>
-      </div>
-    </div>
+    </div>    
 
     <!-- RELATED DATA -->
     <div class="row">
