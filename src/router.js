@@ -141,39 +141,44 @@ const router = new Router({
             requiresAuth: true
           }
         },
-      ]
-    },
-    {
-      path: '/locality',
-      component: () => import('./views/Localities.vue'),
-      meta: {
-        requiresAuth: true
-      },
-    },
-    {
-      path: '/locality/:id(\\d+)',
-      props: true,
-      component: () => import('./views/EditLocality.vue'),
-      meta: {
-        requiresAuth: true
-      },
-    },
-    {
-      path: '/locality/add',
-      component: () => import('./views/AddLocality.vue'),
-      meta: {
-        requiresAuth: true
-      },
-      children: [
         {
-          path: '',
-          component: () => import('./components/reference/Reference.vue'),
+          path: '/locality',
+          component: () => import('./views/Localities.vue'),
           meta: {
             requiresAuth: true
           },
-        }
+        },
+        {
+          path: '/locality/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditLocality.vue'),
+          meta: {
+            requiresAuth: true
+          },
+        },
+        {
+          path: '/locality/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/locality/Locality.vue'),
+              meta: {
+                title:'titles.addLocality',
+                subForms:[
+                  {path:'/locality/add',name:'add.locality'}
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
       ]
     },
+
     // {
     //   path: '/about',
     //   name: 'about',

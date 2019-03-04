@@ -68,6 +68,7 @@
     "otherFiles": "Muud failid",
     "digitisedReference": "Digiteeritud kirjandus",
     "reference": "Kirjandus",
+    "locality": "Lokaliteet",
     "referenceCollection": "Kirjanduse kogumikud",
     "journal": "Ajakirjad",
     "overlay": "Palun oodake! Saadan infot...",
@@ -323,7 +324,12 @@
     "identifier": "DOI"
   },
   "locality": {
-    "locality": "Leiukoht"
+    "locality": "Lokaliteet",
+    "locality_en": "Lokaliteet ingl. k.",
+    "number": "Number",
+    "other_number": "Muud numbrid",
+    "type": "Tüüp",
+    "belongs": "Kuulub"
   },
   "drillcore": {
     "drillcore": "Puursüdamik"

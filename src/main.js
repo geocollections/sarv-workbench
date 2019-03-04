@@ -152,6 +152,13 @@ new Vue({
       type: Boolean,
       default: false
     },
+    localitySearchHistory: {
+      type: Object
+    },
+    localityViewType: {
+      type: Boolean,
+      default: false
+    },
   },
   render: h => h(App)
 }).$mount('#app')

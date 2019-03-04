@@ -32,10 +32,8 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchLocalities} from "@/assets/js/api/apiCalls";
-  import SearchField from "../components/partial/SearchField";
   export default {
     components: {
-      SearchField,
       ListModuleCore
     },
     name: "Localities",
