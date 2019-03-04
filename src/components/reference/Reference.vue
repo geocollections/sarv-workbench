@@ -4,7 +4,7 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
     <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 
-    <!-- REFERENCE and AUTHOR -->
+    <!-- REFERENCE and YEAR -->
     <div class="row">
       <div class="col-sm-2">
         <label :for="`reference`">{{ $t('reference.reference') }}:</label>
@@ -16,15 +16,51 @@
 
 
       <div class="col-sm-2">
-        <label :for="`author`">{{ $t('reference.author') }}:</label>
+        <label :for="`year`">{{ $t('reference.year') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
+        <b-form-input id="year" v-model="reference.year" :state="yearState" type="number"></b-form-input>
+      </div>
+    </div>
+    
+    <!-- AUTHOR -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`author`">{{ $t('reference.author') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
         <b-form-input id="author" v-model="reference.author" :state="authorState" type="text"></b-form-input>
       </div>
     </div>
+    
 
-    <!-- TYPE, LANGUAGE and YEAR -->
+    <!-- TITLE -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`title`">{{ $t('reference.title') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="title" v-model="reference.title" :state="titleState" type="text"
+                         :rows="1" :max-rows="4"></b-form-textarea>
+      </div>
+    </div>
+    
+    <!-- TITLE ORIGINAL -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="title_original" v-model="reference.title_original" type="text"
+                         :rows="1" :max-rows="4"></b-form-textarea>
+      </div>
+    </div>
+    
+    <!-- TYPE, LANGUAGE -->
     <div class="row">
       <div class="col-sm-2">
         <label :for="`type`">{{ $t('reference.type') }}:</label>
@@ -64,38 +100,64 @@
       </div>
     </div>
 
-    <!-- YEAR -->
+    <!-- JOURNAL -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`year`">{{ $t('reference.year') }}:</label>
+        <label :for="`journal`">{{ $t('reference.journal') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="year" v-model="reference.year" :state="yearState" type="number"></b-form-input>
+        <vue-multiselect v-model="reference.journal"
+                         id="journal"
+                         :options="autocomplete.journals"
+                         :internal-search="false"
+                         :preserve-search="true"
+                         @search-change="getJournals"
+                         label="journal_name"
+                         :loading="searchingJournals"
+                         :placeholder="$t('add.inputs.autocomplete')"
+                         :show-labels="false">
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
       </div>
+
+      <!--
+      <div class="col-sm-1 mb-2">
+        <a href="javascript:void(0)" @click="openInNewWindow({object: 'journal', height: 500})" class="btn btn-outline-info" :title="$t('add.inputs.newJournal')">
+          <font-awesome-icon icon="plus"></font-awesome-icon>
+        </a>
+      </div>
+      -->
+
+      <div class="col-sm-2">
+        <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="journal_additional" v-model="reference.journal_additional" type="text"></b-form-input>
+      </div>
+
     </div>
 
-    <!-- TITLE and TITLE ORIGINAL -->
+    <!-- VOLUME and NUMBER -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`title`">{{ $t('reference.title') }}:</label>
+        <label :for="`volume`">{{ $t('reference.volume') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-textarea id="title" v-model="reference.title" :state="titleState" type="text" size="sm"
-                         :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+        <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
       </div>
 
 
       <div class="col-sm-2">
-        <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
+        <label :for="`number`">{{ $t('reference.number') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-textarea id="title_original" v-model="reference.title_original" type="text" size="sm"
-                         :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+        <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
       </div>
-    </div>
+    </div>    
 
     <!-- BOOK and BOOK ORIGINAL -->
     <div class="row">
@@ -136,74 +198,7 @@
         <b-form-input id="publisher_place" v-model="reference.publisher_place" type="text"></b-form-input>
       </div>
     </div>
-
-    <!-- JOURNAL -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`journal`">{{ $t('reference.journal') }}:</label>
-      </div>
-
-      <div class="col-sm-9 mb-2">
-        <vue-multiselect v-model="reference.journal"
-                         id="journal"
-                         :options="autocomplete.journals"
-                         :internal-search="false"
-                         :preserve-search="true"
-                         @search-change="getJournals"
-                         label="journal_name"
-                         :loading="searchingJournals"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-      <div class="col-sm-1 mb-2">
-        <a href="javascript:void(0)" @click="openInNewWindow({object: 'journal', height: 500})" class="btn btn-outline-info" :title="$t('add.inputs.newJournal')">
-          <font-awesome-icon icon="plus"></font-awesome-icon>
-        </a>
-      </div>
-    </div>
-
-    <!-- JOURNAL ADDITIONAL and JOURNAL TXT -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="journal_additional" v-model="reference.journal_additional" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`journal_txt`">{{ $t('reference.journalTxt') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="journal_txt" v-model="reference.journal_txt" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- VOLUME and NUMBER -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`volume`">{{ $t('reference.volume') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`number`">{{ $t('reference.number') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
-      </div>
-    </div>
+    
 
     <!-- PAGES and FIGURES -->
     <div class="row">
@@ -265,6 +260,41 @@
       </div>
     </div>
 
+    <!-- ABSTRACT -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="abstract" v-model="reference.abstract" type="text" size="sm"
+                         :rows="1" :max-rows="20"></b-form-textarea>
+      </div>
+    </div>
+
+    <!-- AUTHOR KEYWORDS -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
+      </div>
+    </div>
+    
+    <!-- REMARKS -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="remarks" v-model="reference.remarks" type="text" size="sm"
+                         :rows="1" :max-rows="20"></b-form-textarea>
+      </div>
+    </div>
+
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
@@ -291,43 +321,8 @@
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
-    </div>
-
-    <!-- ABSTRACT -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea id="abstract" v-model="reference.abstract" type="text" size="sm"
-                         :rows="1" :max-rows="20"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- REMARKS -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea id="remarks" v-model="reference.remarks" type="text" size="sm"
-                         :rows="1" :max-rows="20"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- AUTHOR KEYWORDS -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
-      </div>
-    </div>
-
+    </div>    
+    
     <!-- RELATED DATA -->
     <div class="row">
       <div class="col-sm-2">

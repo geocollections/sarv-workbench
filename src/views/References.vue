@@ -83,22 +83,20 @@
             </div>
           </div>
 
-          <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
+          
           <div class="row">
-            <div class="col">
-              <b-form-group :label="$t('references.toggleViewLabel')">
+          <!-- Removes search preferences like local storage and search parameters-->
+            <div class="col-sm-3 mt-3">
+              <b-button variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+            </div>          	
+            <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
+            <div class="col-sm-3 mt-3">
+              <b-form-group>
                 <b-form-radio-group v-model="isListView">
                   <b-form-radio :value="false">{{ $t('references.tableView') }}</b-form-radio>
                   <b-form-radio :value="true">{{ $t('references.listView') }}</b-form-radio>
                 </b-form-radio-group>
               </b-form-group>
-            </div>
-          </div>
-
-          <!-- Removes search preferences like local storage and search parameters-->
-          <div class="row">
-            <div class="col">
-              <b-button variant="danger" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
             </div>
           </div>
 

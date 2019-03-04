@@ -6,14 +6,17 @@
         <div class="list" v-for="(entity, index) in data">
 
           <div class="list-row ml-2 p-1">
-            <span>
+            <!--<span>
               <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')">
                 <b>{{(page - 1) * paginateBy + index + 1}}.</b>
               </router-link>
-            </span>
-
-            <span v-if="entity.author">
-              {{ entity.author }},
+            </span>-->
+            
+            
+            <span v-if="entity.author" class="ablack">
+              <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')">
+                {{ entity.author }},
+              </router-link>
             </span>
 
             <span v-if="entity.year">
@@ -25,11 +28,11 @@
             </span>
 
             <span v-if="entity.book">
-              {{ entity.book }},
+              {{ entity.book }}. 
             </span>
 
             <span v-if="entity.publisher">
-              {{ entity.publisher }}.
+              {{ entity.publisher }},
             </span>
 
             <span v-if="entity.publisher_place">
@@ -37,11 +40,15 @@
             </span>
 
             <span v-if="entity.journal__journal_name">
-              <i>{{ entity.journal__journal_name }}</i>,
+              <i>{{ entity.journal__journal_name }}</i> 
             </span>
 
-            <span v-if="entity.name">
-              <b>{{ entity.volume }}</b>,
+            <span v-if="entity.volume">
+              {{ entity.volume }},
+            </span>
+
+            <span v-if="entity.number">
+              {{ entity.number }},
             </span>
 
             <span v-if="entity.pages">
@@ -51,7 +58,7 @@
             <!-- TODO: DOI LINK -->
             <span v-if="entity.doi">
               <a href="javascript:void(0)" @click="openDOI({doi: entity.doi})">
-                <b>DOI </b>
+                 https://doi.org/{{ entity.doi }} 
               </a>
             </span>
 
@@ -104,19 +111,25 @@
 </script>
 
 <style scoped>
-  .list:not(:first-child) {
-    border-top: dotted 1.2pt #ccc
+  .list/*:not(:first-child)*/ {
+    /*border-top: dotted 1.2pt #ccc;*/
+    padding: 0.2em 0 0 4em;
+    text-indent: -4em;  
   }
 
   .list-row {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .green-link {
-    color: green;
+    color: #FF5100;
   }
 
   .red-link {
-    color: red;
+    color: #B43900;
+  }
+  
+  .ablack a:link, .ablack a:visited {
+	  color: #000;
   }
 </style>
