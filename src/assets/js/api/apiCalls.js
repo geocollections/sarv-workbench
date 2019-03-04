@@ -211,6 +211,18 @@ export function fetchLocalities(data) {
   }
 }
 
+export function fetchListLocalityTypes() {
+  return fetch(`list_locality_type/?format=json`)
+}
+export function fetchListLocalityExtent() {
+  return fetch(`list_locality_extent/?format=json`)
+}
+export function fetchListCoordinateMethod() {
+  return fetch(`list_coordinate_method/?format=json`)
+}
+export function fetchListCoordinatePrecision() {
+  return fetch(`list_coordinate_precision/?format=json`)
+}
 /************************
  ***  LOCALITIES END  ***
  ************************/
