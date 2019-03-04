@@ -7,11 +7,11 @@
     <!-- LOCALITY AND LOCALITY ENG -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`locality_en`">{{ $t('locality.locality') }}:</label>
+        <label :for="`locality`">{{ $t('locality.locality') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="locality" v-model="locality.locality" type="text"></b-form-input>
+        <b-form-input id="locality" :state="isDefinedAndNotNull(locality.locality)" v-model="locality.locality" type="text"></b-form-input>
       </div>
 
 
@@ -372,6 +372,24 @@
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
+
+    <!-- CHECKBOXES -->
+    <div class="row">
+      <div class="col">
+        <b-form-checkbox id="is_private" v-model="locality.is_private" value="1" unchecked-value="0">
+          {{ $t('locality.private') }}
+        </b-form-checkbox>
+      </div>
+    </div>
+
+
+    <div class="row mt-3 mb-3">
+      <div class="col">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">{{ $t('add.buttons.add') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">{{ $t('add.buttons.addAnother') }}</button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">{{ $t('add.buttons.clearFields') }}</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -380,6 +398,7 @@
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
+  import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import {
     fetchListLocalityTypes,
     fetchListLocalityExtent,
@@ -399,13 +418,89 @@
       }
     },
     methods: {
-      isDefinedAndNotNull(value) { return !!value && value !== null },
+      isDefinedAndNotNull(value) { return !!value && value !== null && value.trim().length > 0},
       isDefinedAndNotEmpty(value) { return !!value && value.length > 0 },
       cancelRequest() {this.previousRequest.abort()},
       handleResponse(response){
         if (response.status === 200) {
-          return (response.body.count > 0) ? response.body.results : this.autocomplete.localityTypes = []
+          return (response.body.count > 0) ? response.body.results : []
         }
+      },
+      formatDataForUpload(objectToUpload) {
+
+      },
+
+      validate(object){
+        let vm = this, isValid = true;
+        this.requiredFields.forEach(function (el) {
+          isValid &= vm.isDefinedAndNotNull(vm[object][el])
+        })
+        return isValid
+      },
+
+      add(addAnother, object) {
+        if (this.validate(object) && !this.sendingData) {
+
+          this.sendingData = true;
+          this.loadingPercent = 0;
+
+          let formData = new FormData()
+
+          const dataToUpload = this.formatDataForUpload();
+          formData.append('data', dataToUpload)
+
+          // this.$http.post(this.apiUrl + 'add/reference/', formData, {
+          //   before(request) {
+          //     this.previousRequest = request
+          //   },
+          //   progress: (e) => {
+          //     if (e.lengthComputable) {
+          //       // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
+          //       this.loadingPercent = Math.round((e.loaded / e.total) * 100)
+          //     }
+          //   }
+          // }).then(response => {
+          //   console.log(response)
+          //   this.sendingData = false
+          //   if (response.status === 200) {
+          //     if (typeof response.body.message !== 'undefined') {
+          //
+          //       if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+          //         toastSuccess({text: response.body.message_et});
+          //       } else {
+          //         toastSuccess({text: response.body.message});
+          //       }
+          //
+          //       if (!addAnother) {
+          //         this.$router.push({ path: '/reference' })
+          //       }
+          //     }
+          //     if (typeof response.body.error !== 'undefined') {
+          //
+          //       if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+          //         toastError({text: response.body.error_et});
+          //       } else {
+          //         toastError({text: response.body.error});
+          //       }
+          //
+          //     }
+          //   }
+          // }, errResponse => {
+          //   console.log('ERROR: ' + JSON.stringify(errResponse))
+          //   this.sendingData = false
+          //   toastError({text: this.$t('messages.uploadError')})
+          // })
+
+        } else if (this.sendingData) {
+          // This shouldn't run unless user deletes html elements and tries to press 'add' button again
+          toastError({text: this.$t('messages.easterEggError')})
+        } else {
+          toastError({text: this.$t('messages.checkForm')})
+        }
+
+      },
+      reset(object) {
+        this[object] = {}
       }
     }
   };
@@ -419,47 +514,17 @@
       Spinner,
     },
     mixins: [mixin],
-    data(){
-        return {
-          autocomplete: {
-            localityTypes: [], belongs: [], extent: [], coordPrecision: [], coordMethod:[],
-            coordAssigner: [], country:[], county: [], parish:[], strat_top: [],strat_lower: []
-          },
-          locality: {},
-          fields:[
-            {id:"locality",title:"locality.locality",type:"text", required: true},
-            {id:"locality_en",title:"locality.locality_en",type:"text", required: true},
-            {id:"number",title:"locality.number",type:"text", customFieldClass:"col-sm-6", customLabelClass:"col-sm-4", customInputClass:"col-sm-8"},
-            {id:"other_number",title:"locality.other_number",type:"text",customFieldClass:"col-sm-6",customLabelClass:"col-sm-4", customInputClass:"col-sm-8"},
-            {id:"type",title:"locality.type",type:"text", fieldType:"autocomplete", options: [] },
-            {id:"belongs",title:"locality.belongs",type:"text"},
-            {id:"latitude",title:"locality.latitude",type:"number"},
-            {id:"longitude",title:"locality.longitude",type:"number"},
-            {id:"altitude",title:"locality.altitude",type:"number"},
-            {id:"vertical",title:"locality.vertical",type:"number"},
-
-            {id:"extent",title:"locality.extent",type:"text", fieldType:"autocomplete",options: [] },
-            {id:"coordX",title:"locality.coordX",type:"number"},
-            {id:"coordY",title:"locality.coordY",type:"number"},
-            {id:"coordSystem",title:"locality.coordSystem",type:"text"},
-            {id:"coordPrecision",title:"locality.coordPrecision",type:"text",fieldType:"autocomplete",options: []},
-            {id:"coordMethod",title:"locality.coordMethod",type:"text",fieldType:"autocomplete",options: []},
-            {id:"coordAssigner",title:"locality.coordAssigner",type:"text"},
-            {id:"country",title:"locality.country",type:"text",fieldType:"autocomplete",options: []},
-            {id:"county",title:"locality.county",type:"text"},
-            {id:"parish",title:"locality.parish",type:"text"},
-            {id:"area",title:"locality.area",type:"text"},
-            {id:"strat_top",title:"locality.strat_top",type:"text"},
-            {id:"strat_top_free",title:"locality.strat_top_free",type:"text"},
-            {id:"strat_lower",title:"locality.strat_lower",type:"text"},
-            {id:"strat_lower_free",title:"locality.strat_lower_free",type:"text"},
-            {id:"maaamaet_pa",title:"locality.maaamaet_pa",type:"number"},
-            {id:"eelis_id",title:"locality.eelis_id",type:"text"},
-            {id:"description",title:"locality.description",fieldType: "textarea", type:"text",customFieldClass:"col-sm-12", customLabelClass:"col-sm-2", customInputClass:"col-sm-10"},
-            {id:"additionalInfo",title:"locality.additionalInfo",fieldType: "textarea", type:"text",customFieldClass:"col-sm-12", customLabelClass:"col-sm-2", customInputClass:"col-sm-10"},
-          ]
-        }
+    data() {
+      return {
+        autocomplete: {
+          localityTypes: [], belongs: [], extent: [], coordPrecision: [], coordMethod: [],
+          coordAssigner: [], country: [], county: [], parish: [], strat_top: [], strat_lower: []
+        },
+        requiredFields: ['locality'],
+        locality: {}
+      }
     },
+
     computed: {
       commonLabel() {
         return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
@@ -471,20 +536,19 @@
     created() {
       fetchListLocalityTypes().then(response => {
         this.autocomplete.localityTypes = this.handleResponse(response);
-      })
+      });
       fetchListLocalityExtent().then(response => {
         this.autocomplete.extent = this.handleResponse(response);
-      })
+      });
       fetchListCoordinateMethod().then(response => {
         this.autocomplete.coordMethod = this.handleResponse(response);
-      })
+      });
       fetchListCoordinatePrecision().then(response => {
         this.autocomplete.coordPrecision = this.handleResponse(response);
-      })
+      });
       fetchListCountry().then(response => {
         this.autocomplete.country = this.handleResponse(response);
-      })
-
+      });
       fetchListCounty().then(response => {
         this.autocomplete.county = this.handleResponse(response);
       })

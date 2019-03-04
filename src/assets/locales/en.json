@@ -345,14 +345,15 @@
     "county": "County",
     "parish": "Parish",
     "area": "Aria",
-    "strat_top": "Stat. top",
-    "strat_top_free": "Stat. top free",
-    "strat_lower": "Stat. lower",
-    "strat_lower_free": "Stat. lower free",
+    "strat_top": "Strat. top",
+    "strat_top_free": "Strat. top free",
+    "strat_lower": "Strat. lower",
+    "strat_lower_free": "Strat. lower free",
     "maaamaet_pa": "Maa-amet pa. ID",
     "eelis_id": "EELIS ID",
     "description": "Locality description",
-    "additionalInfo": "Additional information"
+    "additionalInfo": "Additional information",
+    "private": "Private"
   },
   "drillcore": {
     "drillcore": "Drillcore"

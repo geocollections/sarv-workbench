@@ -345,14 +345,15 @@
     "county": "Maakond",
     "parish": "Vald",
     "area": "Küla",
-    "strat_top": "Stat. ülemine",
-    "strat_top_free": "Stat. ül. vaba",
-    "strat_lower": "Stat. alumine",
-    "strat_lower_free": "Stat. al. vaba",
+    "strat_top": "Strat. ülemine",
+    "strat_top_free": "Strat. ül. vaba",
+    "strat_lower": "Strat. alumine",
+    "strat_lower_free": "Strat. al. vaba",
     "maaamaet_pa": "Maa-amet pa. ID",
     "eelis_id": "EELIS ID",
     "description": "Asukoha kirjeldus",
-    "additionalInfo": "Lisainfo"
+    "additionalInfo": "Lisainfo",
+    "private": "Privaatne"
   },
   "drillcore": {
     "drillcore": "Puursüdamik"
