@@ -324,7 +324,34 @@
     "identifier": "DOI"
   },
   "locality": {
-    "locality": "Locality"
+    "locality": "Locality (Est)",
+    "locality_en": "Locality",
+    "number": "Number",
+    "other_number": "Another number",
+    "type": "Type",
+    "belongs": "Belongs",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "altitude": "Height, m",
+    "vertical": "Vert. ulatus, m",
+    "range": "Ulatus",
+    "coordX": "X(N), m",
+    "coordY": "Y(S), m",
+    "coordSystem": "Coord. system",
+    "coordAccuracy": "Coord. accuracy",
+    "coordMethod": "Coord. method",
+    "coordAssigner": "Coord. assigner",
+    "country": "Country",
+    "county": "County",
+    "parish": "Parish",
+    "area": "Aria",
+    "stat_top": "Stat. top",
+    "stat_top_free": "Stat. top free",
+    "stat_lower": "Stat. lower",
+    "stat_lower_free": "Stat. lower free",
+    "maaamaet_pa": "Maa-amet pa. ID",
+    "eelis_id": "EELIS ID",
+    "description": "Locality description"
   },
   "drillcore": {
     "drillcore": "Drillcore"
