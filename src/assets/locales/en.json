@@ -351,7 +351,8 @@
     "stat_lower_free": "Stat. lower free",
     "maaamaet_pa": "Maa-amet pa. ID",
     "eelis_id": "EELIS ID",
-    "description": "Locality description"
+    "description": "Locality description",
+    "additionalInfo": "Additional information"
   },
   "drillcore": {
     "drillcore": "Drillcore"

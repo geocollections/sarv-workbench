@@ -351,7 +351,8 @@
     "stat_lower_free": "Stat. al. vaba",
     "maaamaet_pa": "Maa-amet pa. ID",
     "eelis_id": "EELIS ID",
-    "description": "Asukoha kirjeldus"
+    "description": "Asukoha kirjeldus",
+    "additionalInfo": "Lisainfo"
   },
   "drillcore": {
     "drillcore": "Puursüdamik"
