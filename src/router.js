@@ -151,10 +151,22 @@ const router = new Router({
         {
           path: '/locality/:id(\\d+)',
           props: true,
-          component: () => import('./views/EditLocality.vue'),
+          component: () => import('./views/EditForm.vue'),
           meta: {
             requiresAuth: true
           },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/locality/Locality.vue'),
+              meta: {
+                isEdit:true,
+                title:'titles.editLocality',
+                heading:'editLocality.heading',
+                requiresAuth: true
+              },
+            }
+          ]
         },
         {
           path: '/locality/add',
@@ -167,6 +179,7 @@ const router = new Router({
               path: '',
               component: () => import('./components/locality/Locality.vue'),
               meta: {
+                isEdit:false,
                 title:'titles.addLocality',
                 subForms:[
                   {path:'/locality/add',name:'add.locality'}

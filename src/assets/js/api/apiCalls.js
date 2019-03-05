@@ -229,6 +229,9 @@ export function fetchListCountry() {
 export function autocompleSearch(query) {
   return fetch(`${query}&format=json`)
 }
+export function fetchLocality(id) {
+  return fetch(`locality/?id=${id}&format=json`)
+}
 
 /************************
  ***  LOCALITIES END  ***
