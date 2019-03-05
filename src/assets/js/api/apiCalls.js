@@ -226,15 +226,10 @@ export function fetchListCoordinatePrecision() {
 export function fetchListCountry() {
   return fetch(`list_country/?format=json`)
 }
-export function fetchListCounty() {
-  return fetch(`list_county/?format=json`)
+export function autocompleSearch(query) {
+  return fetch(`${query}&format=json`)
 }
-export function fetchListParish() {
-  return fetch(`list_parish/?format=json`)
-}
-export function fetchListArea() {
-  return fetch(`list_area/?format=json`)
-}
+
 /************************
  ***  LOCALITIES END  ***
  ************************/

@@ -36,11 +36,11 @@
 
 
       <div class="col-sm-2">
-        <label :for="`other_number`">{{ $t('locality.other_number') }}:</label>
+        <label :for="`code`">{{ $t('locality.code') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="other_number" v-model="locality.other_number" type="text"></b-form-input>
+        <b-form-input id="code" v-model="locality.code" type="text"></b-form-input>
       </div>
     </div>
 
@@ -64,16 +64,17 @@
 
 
       <div class="col-sm-2">
-        <label :for="`belongs`">{{ $t('locality.belongs') }}:</label>
+        <label :for="`parent`">{{ $t('locality.parent') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.belongs" :disabled="true"
-                         id="belongs"
-                         :options="autocomplete.belongs"
-                         track-by="id"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
+        <vue-multiselect class="align-middle" v-model="locality.parent" deselect-label="Can't remove this value"
+                         :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :options="autocomplete.parent" :searchable="true" @search-change="autcompleteLocalitySearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>
+            {{ $i18n.locale=== 'ee' ? option.locality :option.locality_en }}</strong> </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
@@ -102,20 +103,20 @@
     <!-- ALTITUDE AND VERTICAL -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`altitude`">{{ $t('locality.altitude') }}:</label>
+        <label :for="`elevation`">{{ $t('locality.elevation') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="altitude" v-model="locality.altitude" type="number"></b-form-input>
+        <b-form-input id="elevation" v-model="locality.elevation" type="number"></b-form-input>
       </div>
 
 
       <div class="col-sm-2">
-        <label :for="`vertical`">{{ $t('locality.vertical') }}:</label>
+        <label :for="`depth`">{{ $t('locality.depth') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="vertical" v-model="locality.vertical" type="number"></b-form-input>
+        <b-form-input id="depth" v-model="locality.depth" type="number"></b-form-input>
       </div>
     </div>
 
@@ -138,43 +139,43 @@
       </div>
 
       <div class="col-sm-2">
-        <label :for="`coordX`">{{ $t('locality.coordX') }}:</label>
+        <label :for="`coordx`">{{ $t('locality.coordx') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="coordX" v-model="locality.coordX" type="number"></b-form-input>
+        <b-form-input id="coordx" v-model="locality.coordx" type="number"></b-form-input>
       </div>
     </div>
 
     <!-- COORDINATE Y AND COORD SYSTEM -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`coordY`">{{ $t('locality.coordY') }}:</label>
+        <label :for="`coordy`">{{ $t('locality.coordy') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="coordY" v-model="locality.coordY" type="number"></b-form-input>
+        <b-form-input id="coordy" v-model="locality.coordy" type="number"></b-form-input>
       </div>
 
 
       <div class="col-sm-2">
-        <label :for="`coordSystem`">{{ $t('locality.coordSystem') }}:</label>
+        <label :for="`coord_system`">{{ $t('locality.coord_system') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="coordSystem" v-model="locality.coordSystem" type="text"></b-form-input>
+        <b-form-input id="coord_system" v-model="locality.coord_system" type="text"></b-form-input>
       </div>
     </div>
 
     <!-- COORD PRECISION AND  COORD METHOD  -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`coordPrecision`">{{ $t('locality.coordPrecision') }}:</label>
+        <label :for="`coord_det_precision`">{{ $t('locality.coord_det_precision') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.type"
-                         id="coordPrecision"
+        <vue-multiselect v-model="locality.coord_det_precision"
+                         id="coord_det_precision"
                          :options="autocomplete.coordPrecision"
                          track-by="id"
                          :label="commonLabel"
@@ -186,12 +187,12 @@
 
 
       <div class="col-sm-2">
-        <label :for="`coordMethod`">{{ $t('locality.coordMethod') }}:</label>
+        <label :for="`coord_det_method`">{{ $t('locality.coord_det_method') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.coordMethod"
-                         id="coordMethod"
+        <vue-multiselect v-model="locality.coord_det_method"
+                         id="coord_det_method"
                          :options="autocomplete.coordMethod"
                          track-by="id"
                          :label="commonLabel"
@@ -205,12 +206,12 @@
     <!-- ASSIGNER AND COUNTRY  -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`coordAssigner`">{{ $t('locality.coordAssigner') }}:</label>
+        <label :for="`coord_det_agent`">{{ $t('locality.coord_det_agent') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.coordAssigner" :disabled="true"
-                         id="coordAssigner"
+        <vue-multiselect v-model="locality.coord_det_agent" :disabled="true"
+                         id="coord_det_agent"
                          :options="autocomplete.coordAssigner"
                          track-by="id"
                          :label="commonLabel"
@@ -238,125 +239,90 @@
       </div>
     </div>
 
-    <!-- COUNTY AND PARISH  -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`county`">{{ $t('locality.county') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.county"
-                         id="county"
-                         :options="autocomplete.county"
-                         track-by="id"
-                         :label="countyLabel"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`parish`">{{ $t('locality.parish') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.parish" :disabled="true"
-                         id="parish"
-                         :options="autocomplete.parish"
-                         track-by="id"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-    </div>
-
     <!-- STRAT TOP AND STRAT TOP FREE-->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`strat_top`">{{ $t('locality.strat_top') }}:</label>
+        <label :for="`stratigraphy_top`">{{ $t('locality.stratigraphy_top') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.strat_top" :disabled="true"
-                         id="strat_top"
-                         :options="autocomplete.strat_top"
-                         track-by="id"
-                         label="countyLabel"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
+        <vue-multiselect class="align-middle" v-model="locality.stratigraphy_top" deselect-label="Can't remove this value"
+                         :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :options="autocomplete.stratigraphy_top" :searchable="true" @search-change="autcompleteStratigraphySearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>
+            {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
 
 
       <div class="col-sm-2">
-        <label :for="`strat_top_free`">{{ $t('locality.strat_top_free') }}:</label>
+        <label :for="`stratigraphy_top_free`">{{ $t('locality.stratigraphy_top_free') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="strat_top_free" v-model="locality.strat_top_free" type="text"></b-form-input>
+        <b-form-input id="stratigraphy_top_free" v-model="locality.stratigraphy_top_free" type="text"></b-form-input>
       </div>
     </div>
 
     <!-- STRAT LOWER AND STRAT LOWER FREE-->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`strat_lower`">{{ $t('locality.strat_lower') }}:</label>
+        <label :for="`stratigraphy_base`">{{ $t('locality.stratigraphy_base') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.strat_lower" :disabled="true"
-                         id="strat_lower"
-                         :options="autocomplete.strat_lower"
-                         track-by="id"
-                         label="countyLabel"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
+        <vue-multiselect class="align-middle" v-model="locality.stratigraphy_base" deselect-label="Can't remove this value"
+                         :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :options="autocomplete.stratigraphy_top" :searchable="true" @search-change="autcompleteStratigraphySearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>
+            {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
 
 
       <div class="col-sm-2">
-        <label :for="`strat_lower_free`">{{ $t('locality.strat_lower_free') }}:</label>
+        <label :for="`stratigraphy_base_free`">{{ $t('locality.stratigraphy_base_free') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="strat_lower_free" v-model="locality.strat_lower_free" type="text"></b-form-input>
+        <b-form-input id="stratigraphy_base_free" v-model="locality.stratigraphy_base_free" type="text"></b-form-input>
       </div>
     </div>
 
     <!-- MAAAMET PA AND EELIS ID -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`maaamaet_pa`">{{ $t('locality.maaamaet_pa') }}:</label>
+        <label :for="`maaamet_pa_id`">{{ $t('locality.maaamet_pa_id') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="maaamaet_pa" v-model="locality.maaamaet_pa" type="number"></b-form-input>
+        <b-form-input id="maaamet_pa_id" v-model="locality.maaamet_pa_id" type="number"></b-form-input>
       </div>
 
 
       <div class="col-sm-2">
-        <label :for="`eelis_id`">{{ $t('locality.eelis_id') }}:</label>
+        <label :for="`eelis`">{{ $t('locality.eelis') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="eelis_id" v-model="locality.eelis_id" type="text"></b-form-input>
+        <b-form-input id="eelis" v-model="locality.eelis" type="text"></b-form-input>
       </div>
     </div>
 
     <!-- DESCRIPTION -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`description`">{{ $t('locality.description') }}:</label>
+        <label :for="`remarks_location`">{{ $t('locality.remarks_location') }}:</label>
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="description" v-model="locality.description" type="text" size="sm"
+        <b-form-textarea id="remarks_location" v-model="locality.remarks_location" type="text" size="sm"
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
@@ -364,11 +330,11 @@
     <!-- ADDITIONAL INFO -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`additionalInfo`">{{ $t('locality.additionalInfo') }}:</label>
+        <label :for="`remarks`">{{ $t('locality.remarks') }}:</label>
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="additionalInfo" v-model="locality.additionalInfo" type="text" size="sm"
+        <b-form-textarea id="remarks" v-model="locality.remarks" type="text" size="sm"
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
@@ -405,10 +371,10 @@
     fetchListCoordinateMethod,
     fetchListCoordinatePrecision,
     fetchListCountry,
-    fetchListCounty,
-    fetchListParish
+    fetchLocality
   } from "@/assets/js/api/apiCalls";
-
+  import cloneDeep from 'lodash/cloneDeep'
+  import {autocompleSearch} from "../../assets/js/api/apiCalls";
   let mixin = {
     data(){
       return {
@@ -427,7 +393,9 @@
         }
       },
       formatDataForUpload(objectToUpload) {
-
+        let uploadableObject = cloneDeep(objectToUpload)
+        console.log('This object is sent in string format:\n'+uploadableObject)
+        return JSON.stringify(uploadableObject)
       },
 
       validate(object){
@@ -446,50 +414,51 @@
 
           let formData = new FormData()
 
-          const dataToUpload = this.formatDataForUpload();
+          const dataToUpload = this.formatDataForUpload(this[object]);
+          console.log(dataToUpload)
           formData.append('data', dataToUpload)
 
-          // this.$http.post(this.apiUrl + 'add/reference/', formData, {
-          //   before(request) {
-          //     this.previousRequest = request
-          //   },
-          //   progress: (e) => {
-          //     if (e.lengthComputable) {
-          //       // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
-          //       this.loadingPercent = Math.round((e.loaded / e.total) * 100)
-          //     }
-          //   }
-          // }).then(response => {
-          //   console.log(response)
-          //   this.sendingData = false
-          //   if (response.status === 200) {
-          //     if (typeof response.body.message !== 'undefined') {
-          //
-          //       if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-          //         toastSuccess({text: response.body.message_et});
-          //       } else {
-          //         toastSuccess({text: response.body.message});
-          //       }
-          //
-          //       if (!addAnother) {
-          //         this.$router.push({ path: '/reference' })
-          //       }
-          //     }
-          //     if (typeof response.body.error !== 'undefined') {
-          //
-          //       if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-          //         toastError({text: response.body.error_et});
-          //       } else {
-          //         toastError({text: response.body.error});
-          //       }
-          //
-          //     }
-          //   }
-          // }, errResponse => {
-          //   console.log('ERROR: ' + JSON.stringify(errResponse))
-          //   this.sendingData = false
-          //   toastError({text: this.$t('messages.uploadError')})
-          // })
+          this.$http.post(this.apiUrl + 'add/'+object+'/', formData, {
+            before(request) {
+              this.previousRequest = request
+            },
+            progress: (e) => {
+              if (e.lengthComputable) {
+                // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
+                this.loadingPercent = Math.round((e.loaded / e.total) * 100)
+              }
+            }
+          }).then(response => {
+            console.log(response)
+            this.sendingData = false
+            if (response.status === 200) {
+              if (typeof response.body.message !== 'undefined') {
+
+                if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+                  toastSuccess({text: response.body.message_et});
+                } else {
+                  toastSuccess({text: response.body.message});
+                }
+
+                if (!addAnother) {
+                  this.$router.push({ path: '/'+object })
+                }
+              }
+              if (typeof response.body.error !== 'undefined') {
+
+                if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+                  toastError({text: response.body.error_et});
+                } else {
+                  toastError({text: response.body.error});
+                }
+
+              }
+            }
+          }, errResponse => {
+            console.log('ERROR: ' + JSON.stringify(errResponse))
+            this.sendingData = false
+            toastError({text: this.$t('messages.uploadError')})
+          })
 
         } else if (this.sendingData) {
           // This shouldn't run unless user deletes html elements and tries to press 'add' button again
@@ -501,7 +470,36 @@
       },
       reset(object) {
         this[object] = {}
-      }
+      },
+      getAutocompleteQueryParameters(type,val) {
+        let query = '';
+        switch (type) {
+          case 'locality': query = `locality/?multi_search=value:${val};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`; break;
+          case 'stratigraphy': query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`; break;
+          default:
+            break;
+        }
+        return query
+      },
+
+      autcompleteLocalitySearch(value){
+        this.autocompliteSearch(value,this.autocomplete.loaders.locality,'locality','parent')
+      },
+      autcompleteStratigraphySearch(value){
+        this.autocompliteSearch(value,this.autocomplete.loaders.stratigraphy,'stratigraphy','stratigraphy_top')
+      },
+      autocompliteSearch(value,isLoading, type, options) {
+        if(value.length < 3)  this.autocomplete[options] = [];
+        if(value.length > 2) {
+          let query = this.getAutocompleteQueryParameters(type,value)
+          if(query.length === 0) return
+          isLoading = true;
+          autocompleSearch(query).then((response) => {
+            isLoading = false;
+            this.autocomplete[options] = this.handleResponse(response)
+          });
+        }
+      },
     }
   };
 
@@ -517,8 +515,9 @@
     data() {
       return {
         autocomplete: {
-          localityTypes: [], belongs: [], extent: [], coordPrecision: [], coordMethod: [],
-          coordAssigner: [], country: [], county: [], parish: [], strat_top: [], strat_lower: []
+          loaders: { locality:false, stratigraphy:false },
+          localityTypes: [], parent: [], extent: [], coordPrecision: [], coordMethod: [],
+          coordAssigner: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
         },
         requiredFields: ['locality'],
         locality: {}
@@ -529,9 +528,12 @@
       commonLabel() {
         return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
       },
-      countyLabel() {
-        return this.$i18n.locale === 'ee' ? 'maakond' : 'maakond_en'
+      localityLabel() {
+        return this.$i18n.locale === 'ee' ? 'locality' : 'locality_en'
       },
+      stratigraphyLabel() {
+        return this.$i18n.locale === 'ee' ? 'stratigraphy' : 'stratigraphy_en'
+      }
     },
     created() {
       fetchListLocalityTypes().then(response => {
@@ -549,9 +551,6 @@
       fetchListCountry().then(response => {
         this.autocomplete.country = this.handleResponse(response);
       });
-      fetchListCounty().then(response => {
-        this.autocomplete.county = this.handleResponse(response);
-      })
     },
     methods: {
 
