@@ -70,6 +70,7 @@
       <div class="col-sm-4 mb-2">
         <vue-multiselect class="align-middle" v-model="locality.parent" deselect-label="Can't remove this value"
                          :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.locality"
                          :options="autocomplete.parent" :searchable="true" @search-change="autcompleteLocalitySearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
@@ -210,13 +211,12 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="locality.coord_det_agent" :disabled="true"
-                         id="coord_det_agent"
-                         :options="autocomplete.coordAssigner"
-                         track-by="id"
-                         :label="commonLabel"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
+        <vue-multiselect class="align-middle" v-model="locality.coord_det_agent" deselect-label="Can't remove this value"
+                         label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.agent"
+                         :options="autocomplete.coord_det_agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
@@ -247,8 +247,9 @@
 
       <div class="col-sm-4 mb-2">
         <vue-multiselect class="align-middle" v-model="locality.stratigraphy_top" deselect-label="Can't remove this value"
+                         :loading="autocomplete.loaders.stratigraphy_top"
                          :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :options="autocomplete.stratigraphy_top" :searchable="true" @search-change="autcompleteStratigraphySearch"
+                         :options="autocomplete.stratigraphy_top" :searchable="true" @search-change="autcompleteStratigraphyTopSearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
           <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -276,7 +277,8 @@
       <div class="col-sm-4 mb-2">
         <vue-multiselect class="align-middle" v-model="locality.stratigraphy_base" deselect-label="Can't remove this value"
                          :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :options="autocomplete.stratigraphy_top" :searchable="true" @search-change="autcompleteStratigraphySearch"
+                         :loading="autocomplete.loaders.stratigraphy_base"
+                         :options="autocomplete.stratigraphy_base" :searchable="true" @search-change="autcompleteStratigraphyBaseSearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
           <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -384,7 +386,8 @@
       }
     },
     methods: {
-      isDefinedAndNotNull(value) { return !!value && value !== null && value.trim().length > 0},
+      isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && value.trim().length > 0},
+      isDefinedAndNotNull(value) {return !!value && value !== null},
       isDefinedAndNotEmpty(value) { return !!value && value.length > 0 },
       cancelRequest() {this.previousRequest.abort()},
       handleResponse(response){
@@ -394,6 +397,16 @@
       },
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
+        console.log(objectToUpload)
+        if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
+        if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id
+        if (this.isDefinedAndNotNull(objectToUpload.extent)) uploadableObject.extent = objectToUpload.extent.id
+        if (this.isDefinedAndNotNull(objectToUpload.coord_det_precision)) uploadableObject.coord_det_precision = objectToUpload.coord_det_precision.id
+        if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
+        if (this.isDefinedAndNotNull(objectToUpload.coord_det_agent)) uploadableObject.coord_det_agent = objectToUpload.coord_det_agent.id
+        if (this.isDefinedAndNotNull(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id
+        if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
+        if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
         console.log('This object is sent in string format:\n'+uploadableObject)
         return JSON.stringify(uploadableObject)
       },
@@ -401,7 +414,7 @@
       validate(object){
         let vm = this, isValid = true;
         this.requiredFields.forEach(function (el) {
-          isValid &= vm.isDefinedAndNotNull(vm[object][el])
+          isValid &= vm.isDefinedAndNotNullAndNotEmptyString(vm[object][el])
         })
         return isValid
       },
@@ -475,7 +488,10 @@
         let query = '';
         switch (type) {
           case 'locality': query = `locality/?multi_search=value:${val};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`; break;
-          case 'stratigraphy': query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`; break;
+          case 'stratigraphy_top':
+          case 'stratigraphy_base':
+            query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`; break;
+          case 'agent': query = `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent`; break;
           default:
             break;
         }
@@ -483,19 +499,25 @@
       },
 
       autcompleteLocalitySearch(value){
-        this.autocompliteSearch(value,this.autocomplete.loaders.locality,'locality','parent')
+        this.autocompliteSearch(value,'locality','parent')
       },
-      autcompleteStratigraphySearch(value){
-        this.autocompliteSearch(value,this.autocomplete.loaders.stratigraphy,'stratigraphy','stratigraphy_top')
+      autcompleteStratigraphyTopSearch(value){
+        this.autocompliteSearch(value,'stratigraphy_top','stratigraphy_top')
       },
-      autocompliteSearch(value,isLoading, type, options) {
+      autcompleteStratigraphyBaseSearch(value){
+        this.autocompliteSearch(value,'stratigraphy_base','stratigraphy_base')
+      },
+      autcompleteAgentSearch(value){
+        this.autocompliteSearch(value,'agent','coord_det_agent')
+      },
+      autocompliteSearch(value,type, options) {
         if(value.length < 3)  this.autocomplete[options] = [];
         if(value.length > 2) {
           let query = this.getAutocompleteQueryParameters(type,value)
           if(query.length === 0) return
-          isLoading = true;
+          this.autocomplete.loaders[type] = true;
           autocompleSearch(query).then((response) => {
-            isLoading = false;
+            this.autocomplete.loaders[type] = false;
             this.autocomplete[options] = this.handleResponse(response)
           });
         }
@@ -515,9 +537,9 @@
     data() {
       return {
         autocomplete: {
-          loaders: { locality:false, stratigraphy:false },
+          loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false },
           localityTypes: [], parent: [], extent: [], coordPrecision: [], coordMethod: [],
-          coordAssigner: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
+          coord_det_agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
         },
         requiredFields: ['locality'],
         locality: {}
