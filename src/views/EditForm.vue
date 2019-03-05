@@ -22,10 +22,3 @@
     },
   }
 </script>
-
-<style scoped>
-  .router-link-exact-active {
-    color: #fff;
-    background-color: #007bff;
-  }
-</style>
