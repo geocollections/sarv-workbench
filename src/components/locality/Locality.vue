@@ -375,7 +375,9 @@
     fetchLocality,
   } from "@/assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
-  import formManipulation from './../mixins/mixins'
+
+  import formManipulation  from './../mixins/formManipulation'
+  import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
 
   export default {
     name: "Locality",
@@ -385,7 +387,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation],
+    mixins: [formManipulation,autocompleteFieldManipulation],
     data() {
       return {
         autocomplete: {
