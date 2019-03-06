@@ -192,7 +192,7 @@ export function fetchLatestLogs(data) {
  ************************/
 
 export function fetchLocalities(data) {
-  const fields = 'id,asustusyksus__asustusyksus_en,asustusyksus__asustusyksus,country__value_en,country__value,locality_en,locality,maakond__maakond_en,maakond__maakond'
+  const fields = 'id,country__value_en,country__value,locality_en,locality,maakond__maakond_en,maakond__maakond'
   let searchFields = ''
 
   if (data.locality !== null && data.locality.trim().length > 0) {

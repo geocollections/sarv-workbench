@@ -160,7 +160,7 @@
     "number": "Number",
     "county": "Küla:asutusüksus",
     "country": "Riik:value",
-    "creator": "Sisestaja"
+    "agent": "Sisestaja"
   },
   "attachments": {
     "header": "Minu failid",
@@ -325,6 +325,7 @@
     "identifier": "DOI"
   },
   "locality": {
+    "header": "Minu lokaliteedid",
     "locality": "Lokaliteet",
     "locality_en": "Lokaliteet ingl. k.",
     "number": "Number",

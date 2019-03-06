@@ -1,8 +1,72 @@
 <template>
   <div>
-    {{searchParameters}}
-    {{response}}
+    <!--{{searchParameters}}-->
+    <!--{{response}}-->
+    <div class="row mt-4">
+      <div class="col">
+          <span>
+            <b>{{ $t(module+'.header') }}</b>
+            <sup class="font-larger" v-bind:class="{ 'badge-style': response.count > 0 }">
+              <b-badge pill variant="info">{{ response.count }}</b-badge>
+            </sup>
+          </span>
+      </div>
+    </div>
 
+    <div class="row mt-3" v-if="response.count > 0">
+      <div class="col-sm-6 col-md-3 pl-3 pr-3 t-paginate-by-center">
+        <b-form-select v-model="searchParameters.paginateBy" class="mb-3">
+          <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+          <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+          <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+          <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+          <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+          <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+          <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+        </b-form-select>
+      </div>
+
+      <div class="col-sm-12 col-md-3 export-center">
+        <!-- Question: Add export? Answer: No currently not needed -->
+        <!--<export-buttons filename="dataSearch"></export-buttons>-->
+      </div>
+
+      <div class="col-sm-12 col-md-6 pagination-center">
+        <b-pagination
+          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count"
+          v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
+        </b-pagination>
+      </div>
+    </div>
+
+    <!-- REFERENCE TABLE -->
+    <div class="row" v-if="response.count > 0">
+      <div class="col">
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+
+            <thead class="thead-light">
+              <tr class="th-sort">
+                <th v-for="item in fields">
+                    <span @click="changeOrder(item.id)">
+                          <font-awesome-icon
+                            v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
+                            :icon="sort"/>
+                          <font-awesome-icon v-else :icon="sortingDirection"/>
+                          {{ $t(item.title)}}
+                      </span>
+                </th>
+              </tr>
+            </thead>
+
+            <router-view :response="response"/>
+
+          </table>
+        </div>
+
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,6 +89,14 @@
     props: {
       apiCall: {
         type: Function
+      },
+      fields: {
+        type: Array,
+        default: []
+      },
+      module: {
+        type: String,
+        default: null
       },
       title: {
         type: String,
@@ -112,6 +184,20 @@
         }, errResponse => {
           this.isLoading = false
         })
+      },
+
+      changeOrder(orderValue) {
+        if (this.searchParameters.orderBy === orderValue) {
+          if (orderValue.charAt(0) !== '-') {
+            orderValue = '-' + orderValue;
+          } else {
+            orderValue = orderValue.substring(1);
+          }
+        }
+        let searchParametes = this.searchParameters;
+        searchParametes.page = 1;
+        searchParametes.orderBy = orderValue;
+        this.$emit('search-params-changed',searchParametes);
       },
 
       // Deletes local storage value + resets search parameters to default

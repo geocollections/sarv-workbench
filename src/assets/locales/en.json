@@ -160,7 +160,7 @@
     "number": "Number",
     "county": "County",
     "country": "Country",
-    "creator": "Creator"
+    "agent": "Creator"
   },
   "attachments": {
     "header": "My attachments",
@@ -325,6 +325,7 @@
     "identifier": "DOI"
   },
   "locality": {
+    "header": "My localities",
     "locality": "Locality (Est)",
     "locality_en": "Locality",
     "number": "Number",

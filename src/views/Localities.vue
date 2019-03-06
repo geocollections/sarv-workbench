@@ -17,7 +17,9 @@
     </div>
     <!-- SEARCH FIELDS END -->
     <list-module-core
+      module="locality"
       title="titles.editLocality"
+      :fields="fields"
       :searchParameters="searchParameters"
       :api-call="fetchLocalities"
       search-history="localitySearchHistory"
@@ -25,6 +27,7 @@
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParameters"
     ></list-module-core>
+
   </div>
 
 </template>
@@ -39,13 +42,13 @@
     name: "Localities",
     data() {
       return {
+        response: {},
         fields:[
           {id:"id",title:"editLocality.id",type:"number"},
           {id:"locality",title:"editLocality.locality",type:"text"},
           {id:"number",title:"editLocality.number",type:"text"},
-          {id:"county",title:"editLocality.county",type:"text"},
           {id:"country",title:"editLocality.country",type:"text"},
-          {id:"creator",title:"editLocality.creator",type:"text"}
+          {id:"agent",title:"editLocality.agent",type:"text"}
 
 
         ],
@@ -57,9 +60,6 @@
         return new Promise((resolve) => {
           resolve(fetchLocalities(this.searchParameters))
         });
-      },
-      searchParameterChanged(obj) {
-        console.log(obj)
       },
       searchParametersChanged(newParams) {
         this.searchParameters = newParams

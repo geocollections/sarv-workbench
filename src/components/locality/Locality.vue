@@ -2,7 +2,7 @@
   <div>
 
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
-    
+
     <!-- LOCALITY AND LOCALITY ENG -->
     <div class="row">
       <div class="col-sm-2">

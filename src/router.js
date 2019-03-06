@@ -147,6 +147,15 @@ const router = new Router({
           meta: {
             requiresAuth: true
           },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/locality/LocalityTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
         },
         {
           path: '/locality/:id(\\d+)',
