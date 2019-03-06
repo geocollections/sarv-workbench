@@ -298,7 +298,7 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-input id="tags" v-model="reference.tags" type="text"></b-form-input>
+        <b-form-input id="tags" v-model="edit.tags" type="text"></b-form-input>
       </div>
     </div>
     
@@ -559,6 +559,7 @@
           issn: this.data.issn,
           abstract: this.data.abstract,
           author_keywords: this.data.author_keywords,
+          tags: this.data.tags,
           remarks: this.data.remarks,
           is_oa: this.data.is_oa ? '1' : '0',
           is_private: this.data.is_private ? '1' : '0',

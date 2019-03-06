@@ -570,6 +570,7 @@
           issn: null,
           abstract: null,
           author_keywords: null,
+          tags: null,
           remarks: null,
           journal_txt: null,
           is_oa: '0',
