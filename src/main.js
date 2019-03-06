@@ -108,7 +108,12 @@ Vue.http.interceptors.push((request, next) => {
       }
     }
   });
-})
+});
+
+Vue.directive('translate', function (el, binding) {
+  let value = i18n.locale === 'ee' ? binding.value.et : binding.value.en
+  el.innerHTML = value === undefined || value === null ? '' : value
+});
 
 new Vue({
   i18n,

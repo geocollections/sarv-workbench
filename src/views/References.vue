@@ -347,7 +347,7 @@
         type: Boolean,
         default: true
       }
-    },
+    },/////
     name: "References",
     data() {
       return {

@@ -8,13 +8,13 @@
       </router-link>
     </td>
 
-    <td>{{ entity.locality }}</td>
+    <td v-translate="{ et: entity.locality, en: entity.locality_en }"></td>
 
     <td>{{ entity.number }}</td>
 
-    <td>{{ entity.country }}</td>
+    <td  v-translate="{ et: entity.country__value, en: entity.country__value_en }"></td>
 
-    <td>{{ entity.agent }}</td>
+    <td>{{ entity.user_added }}</td>
 
   </tr>
 

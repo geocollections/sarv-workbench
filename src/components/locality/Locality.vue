@@ -343,7 +343,7 @@
     <!-- CHECKBOXES -->
     <div class="row">
       <div class="col">
-        <b-form-checkbox id="is_private" v-model="locality.is_private" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="locality.is_private" :value="true" :unchecked-value="false">
           {{ $t('locality.private') }}
         </b-form-checkbox>
       </div>
@@ -433,8 +433,9 @@
           let handledResponse = this.handleResponse(response);
           if(handledResponse.length > 0) {
             this.locality = this.handleResponse(response)[0];
+            this.fillAutocompleteFields(this.locality)
+            this.removeUnnecessaryFields();
             this.$emit('data-loaded',this.locality)
-            this.fillAutocompleteFields()
             this.sendingData = false;
           } else {
             this.sendingData = false;
@@ -456,19 +457,34 @@
         if (this.isDefinedAndNotNull(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
-        console.log('This object is sent in string format:\n'+uploadableObject)
+        console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)
       },
-      fillAutocompleteFields(){
-        this.locality.type = {value:this.locality.type__value,value_en:this.locality.type__value_en,id:this.locality.type__value_id}
-        this.locality.parent = {locality:this.locality.parent__locality,locality_en:this.locality.parent__locality_en,id:this.locality.parent__id}
-        this.locality.extent = {value:this.locality.extent__value,value_en:this.locality.extent__value_en,id:this.locality.extent__id}
-        this.locality.coord_det_precision = {value:this.locality.coord_det_precision__value,value_en:this.locality.coord_det_precision__value_en,id:this.locality.coord_det_precision__id}
-        this.locality.coord_det_method = {value:this.locality.coord_det_method__value,value_en:this.locality.coord_det_method__value_en,id:this.locality.coord_det_method__id}
-        this.locality.coord_det_agent = {agent:this.locality.coord_det_agent__agent,id:this.locality.coord_det_agent__id}
-        this.locality.country = {value:this.locality.country__value,value_en:this.locality.country__value_en,id:this.locality.country__id}
-        this.locality.stratigraphy_top = {stratigraphy:this.locality.stratigraphy_top__stratigraphy,stratigraphy_en:this.locality.stratigraphy_top__stratigraphy_en,id:this.locality.stratigraphy_top__id}
-        this.locality.stratigraphy_base = {stratigraphy:this.locality.stratigraphy_base__stratigraphy,stratigraphy_en:this.locality.stratigraphy_base__stratigraphy_en,id:this.locality.stratigraphy_base__id}
+      removeUnnecessaryFields(){
+        let copyFields = ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
+          'coordx','coordy','coord_system','stratigraphy_top_free','stratigraphy_base_free','maaamet_pa_id','eelis',
+          'remarks_location','remarks','is_private', 'type','parent','extent','coord_det_precision','coord_det_method',
+          'coord_det_agent','country','stratigraphy_top','stratigraphy_base']
+
+        let vm = this;
+        //copy only certain fields
+        Object.entries(this.locality).forEach(entry => {
+          if (copyFields.indexOf(entry[0]) < 0) {
+            delete vm.locality[entry[0]]
+          }
+        });
+      },
+
+      fillAutocompleteFields(obj){
+        this.locality.type = {value:obj.type__value,value_en:obj.type__value_en,id:obj.type__id}
+        this.locality.parent = {locality:obj.parent__locality,locality_en:obj.parent__locality_en,id:obj.parent__id}
+        this.locality.extent = {value:obj.extent__value,value_en:obj.extent__value_en,id:obj.extent__id}
+        this.locality.coord_det_precision = {value:obj.coord_det_precision__value,value_en:obj.coord_det_precision__value_en,id:obj.coord_det_precision__id}
+        this.locality.coord_det_method = {value:obj.coord_det_method__value,value_en:obj.coord_det_method__value_en,id:obj.coord_det_method__id}
+        this.locality.coord_det_agent = {agent:obj.coord_det_agent__agent,id:obj.coord_det_agent__id}
+        this.locality.country = {value:obj.country__value,value_en:obj.country__value_en,id:obj.country__id}
+        this.locality.stratigraphy_top = {stratigraphy:obj.stratigraphy_top__stratigraphy,stratigraphy_en:obj.stratigraphy_top__stratigraphy_en,id:obj.stratigraphy_top__id}
+        this.locality.stratigraphy_base = {stratigraphy:obj.stratigraphy_base__stratigraphy,stratigraphy_en:obj.stratigraphy_base__stratigraphy_en,id:obj.stratigraphy_base__id}
       }
     }
 

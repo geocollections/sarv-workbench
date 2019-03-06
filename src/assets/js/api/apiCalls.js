@@ -192,16 +192,29 @@ export function fetchLatestLogs(data) {
  ************************/
 
 export function fetchLocalities(data) {
-  const fields = 'id,country__value_en,country__value,locality_en,locality,maakond__maakond_en,maakond__maakond'
+  const fields = 'id,country__value_en,country__value,locality_en,locality,user_added,number'
   let searchFields = ''
 
-  if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += 'author__icontains=' + data.locality
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`
   }
 
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += '&id__icontains=' + data.id
+  if (data.locality !== null && data.locality.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.locality};fields:locality_en,locality;lookuptype:icontains`
   }
+
+  if (data.number !== null && data.number.trim().length > 0) {
+    searchFields += `&number__icontains=${data.number}`
+  }
+
+  if (data.country !== null && data.country.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.country};fields:country__value_en,country__value;lookuptype:icontains`
+  }
+
+  if (data.agent !== null && data.agent.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.agent};fields:user_added;lookuptype:icontains`
+  }
+
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {

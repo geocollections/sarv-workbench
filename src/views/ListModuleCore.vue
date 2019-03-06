@@ -1,7 +1,15 @@
 <template>
   <div>
-    <!--{{searchParameters}}-->
-    <!--{{response}}-->
+    <spinner v-show="isLoading"
+             class="loading-overlay-search"
+             text-fg-color="#000000"
+             line-fg-color="#5cb85c"
+             line-bg-color="#000000"
+             :line-size="5"
+             size="100"
+             :font-size="30"
+             :message="$t('edit.isLoading')"></spinner>
+
     <div class="row mt-4">
       <div class="col">
           <span>
@@ -167,7 +175,6 @@
 
     methods: {
       search(searchParameters) {
-
         this.isLoading = true
 
         this.$localStorage.set(this.searchHistory, searchParameters)
