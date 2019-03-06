@@ -1,8 +1,7 @@
 <template>
   <div>
 
-    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
-    <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
+    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- LOCALITY AND LOCALITY ENG -->
     <div class="row">
@@ -429,11 +428,13 @@
       });
 
       if(this.$route.meta.isEdit) {
+        this.sendingData = true;
         fetchLocality(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if(handledResponse.length > 0) {
-            this.locality = this.handleResponse(response)[0]
+            this.locality = this.handleResponse(response)[0];
             this.fillAutocompleteFields()
+            this.sendingData = false;
           }
         });
 

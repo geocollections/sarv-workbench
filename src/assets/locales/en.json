@@ -126,6 +126,7 @@
     "viewMessage": "View file in geocollections portal",
     "editMessage": "Edit file",
     "overlay": "Please wait! Changing data...",
+    "overlayLoading": "Please wait! Loading data...",
     "isLoading": "Please wait!, Searching...",
     "buttons": {
       "save": "Save",

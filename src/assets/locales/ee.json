@@ -126,6 +126,7 @@
     "viewMessage": "Vaata faili geokogude portaalis",
     "editMessage": "Muuda faili",
     "overlay": "Palun oodake! Muudan infot...",
+    "overlayLoading": "Palun oodake! Laen infot...",
     "isLoading": "Palun oodake!, Otsin...",
     "buttons": {
       "save": "Salvesta",
