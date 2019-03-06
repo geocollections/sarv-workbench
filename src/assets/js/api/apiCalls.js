@@ -213,7 +213,7 @@ export function fetchLocalities(data) {
   if (data.agent !== null && data.agent.trim().length > 0) {
     searchFields += '&user_added__icontains='+data.agent
   }
-  
+
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {

@@ -41,7 +41,7 @@ const formManipulation = {
         console.log(dataToUpload)
         formData.append('data', dataToUpload)
 
-        this.$http.post(this.apiUrl + 'add/'+object+'/', formData, {
+        this.$http.post(this.apiUrl + (formData.id ? 'change' : 'add')+'/'+object+'/', formData, {
           before(request) {
             this.previousRequest = request
           },
