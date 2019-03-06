@@ -295,6 +295,17 @@
       </div>
     </div>
 
+    <!-- ALLOW TEMPORARILY USER TAGS -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`tags`">Kasutaja märksõnad (ajutine lahendus):</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-input id="tags" v-model="reference.tags" type="text"></b-form-input>
+      </div>
+    </div>
+    
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
@@ -559,6 +570,7 @@
           issn: null,
           abstract: null,
           author_keywords: null,
+          tags: null,
           remarks: null,
           journal_txt: null,
           is_oa: '0',
@@ -678,7 +690,7 @@
         // Building correct fields
         if (objectToUpload.type !== null) uploadableObject.type = objectToUpload.type.id
         if (objectToUpload.language !== null) uploadableObject.language = objectToUpload.language.id
-
+        if (objectToUpload.journal !== null) uploadableObject.journal = objectToUpload.journal.id
 
 
         /**************************
