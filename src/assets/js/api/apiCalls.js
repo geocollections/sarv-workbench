@@ -194,7 +194,6 @@ export function fetchLatestLogs(data) {
 export function fetchLocalities(data) {
   const fields = 'id,country__value_en,country__value,locality_en,locality,user_added,number'
   let searchFields = ''
-
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`
   }
@@ -210,9 +209,8 @@ export function fetchLocalities(data) {
   if (data.country !== null && data.country.trim().length > 0) {
     searchFields += `&multi_search=value:${data.country};fields:country__value_en,country__value;lookuptype:icontains`
   }
-
   if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agent};fields:user_added;lookuptype:icontains`
+    searchFields += `&user_added__icontains=${data.agent}`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
