@@ -2,7 +2,7 @@
   <div>
 
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
-
+    
     <!-- LOCALITY AND LOCALITY ENG -->
     <div class="row">
       <div class="col-sm-2">
@@ -433,7 +433,10 @@
           let handledResponse = this.handleResponse(response);
           if(handledResponse.length > 0) {
             this.locality = this.handleResponse(response)[0];
+            this.$emit('data-loaded',this.locality)
             this.fillAutocompleteFields()
+            this.sendingData = false;
+          } else {
             this.sendingData = false;
           }
         });
@@ -457,15 +460,15 @@
         return JSON.stringify(uploadableObject)
       },
       fillAutocompleteFields(){
-        this.locality.type = ({value:this.locality.type__value,value_en:this.locality.type__value_en,id:this.locality.type__value_id})
-        this.locality.parent = ({locality:this.locality.parent__locality,locality_en:this.locality.parent__locality_en,id:this.locality.parent__id})
-        this.locality.extent = ({value:this.locality.extent__value,value_en:this.locality.extent__value_en,id:this.locality.extent__id})
-        this.locality.coord_det_precision = ({value:this.locality.coord_det_precision__value,value_en:this.locality.coord_det_precision__value_en,id:this.locality.coord_det_precision__id})
-        this.locality.coord_det_method = ({value:this.locality.coord_det_method__value,value_en:this.locality.coord_det_method__value_en,id:this.locality.coord_det_method__id})
-        this.locality.coord_det_agent = ({agent:this.locality.coord_det_agent__agent,id:this.locality.coord_det_agent__id})
-        this.locality.country = ({value:this.locality.country__value,value_en:this.locality.country__value_en,id:this.locality.country__id})
-        this.locality.stratigraphy_top = ({stratigraphy:this.locality.stratigraphy_top__stratigraphy,stratigraphy_en:this.locality.stratigraphy_top__stratigraphy_en,id:this.locality.stratigraphy_top__id})
-        this.locality.stratigraphy_base = ({stratigraphy:this.locality.stratigraphy_base__stratigraphy,stratigraphy_en:this.locality.stratigraphy_base__stratigraphy_en,id:this.locality.stratigraphy_base__id})
+        this.locality.type = {value:this.locality.type__value,value_en:this.locality.type__value_en,id:this.locality.type__value_id}
+        this.locality.parent = {locality:this.locality.parent__locality,locality_en:this.locality.parent__locality_en,id:this.locality.parent__id}
+        this.locality.extent = {value:this.locality.extent__value,value_en:this.locality.extent__value_en,id:this.locality.extent__id}
+        this.locality.coord_det_precision = {value:this.locality.coord_det_precision__value,value_en:this.locality.coord_det_precision__value_en,id:this.locality.coord_det_precision__id}
+        this.locality.coord_det_method = {value:this.locality.coord_det_method__value,value_en:this.locality.coord_det_method__value_en,id:this.locality.coord_det_method__id}
+        this.locality.coord_det_agent = {agent:this.locality.coord_det_agent__agent,id:this.locality.coord_det_agent__id}
+        this.locality.country = {value:this.locality.country__value,value_en:this.locality.country__value_en,id:this.locality.country__id}
+        this.locality.stratigraphy_top = {stratigraphy:this.locality.stratigraphy_top__stratigraphy,stratigraphy_en:this.locality.stratigraphy_top__stratigraphy_en,id:this.locality.stratigraphy_top__id}
+        this.locality.stratigraphy_base = {stratigraphy:this.locality.stratigraphy_base__stratigraphy,stratigraphy_en:this.locality.stratigraphy_base__stratigraphy_en,id:this.locality.stratigraphy_base__id}
       }
     }
 

@@ -7,18 +7,33 @@
       </div>
     </div>
 
-    <router-view/>
-
+    <router-view v-on:data-loaded="test"/>
+    <!-- LOGS -->
+    <log v-if="locality !== null" table="locality" :data="locality"></log>
   </div>
 </template>
 
 <script>
+  import Log from '@/components/partial/Log.vue'
   export default {
     name: "EditForm",
+    components: {
+      Log
+    },
+    data(){
+      return {
+        locality : null
+      }
+    },
     metaInfo () {
       return {
         title: this.$t(this.$route.meta.title) + ' ' + this.$route.params.id
       }
     },
+    methods: {
+      test(data) {
+        this.locality = data
+      }
+    }
   }
 </script>
