@@ -209,10 +209,11 @@ export function fetchLocalities(data) {
   if (data.country !== null && data.country.trim().length > 0) {
     searchFields += `&multi_search=value:${data.country};fields:country__value_en,country__value;lookuptype:icontains`
   }
-  if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += `&user_added__icontains=${data.agent}`
-  }
 
+  if (data.agent !== null && data.agent.trim().length > 0) {
+    searchFields += '&user_added__icontains='+data.agent
+  }
+  
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
