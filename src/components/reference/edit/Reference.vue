@@ -482,7 +482,6 @@
     </div>
 
 
-    {{isChanged && showModal}}
     <confirmation-box title="reference.reference"
                       :title-extra="edit.reference"
                       v-if="isChanged && showModal"
