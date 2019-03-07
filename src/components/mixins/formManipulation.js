@@ -40,7 +40,7 @@ const formManipulation = {
         const dataToUpload = this.formatDataForUpload(this[object]);
 
         formData.append('data', dataToUpload)
-        let url = this[object].id === undefined ? 'add/'+object+'/'+ this[object].id : 'change'+object+'/';
+        let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/' + this[object].id;
         this.$http.post(this.apiUrl + url, formData, {
           before(request) {
             this.previousRequest = request
