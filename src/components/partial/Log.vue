@@ -30,7 +30,7 @@
                 <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
                 <td>{{ entity.command }}</td>
                 <td style="max-width: 25rem; padding:0.3rem; margin: 0;">
-                  <div style="height: 3rem !important; overflow: auto;">{{ entity.changes }}</div>
+                  <div style="max-height: 5rem !important; overflow: auto;">{{ entity.changes }}</div>
                 </td>
               </tr>
             </tbody>
@@ -89,5 +89,8 @@
 	width: 100%;
 	margin-top: 1rem;
 	font-size: 0.8em;
+}
+.log .table th, .table td {
+	padding: 0.3rem;
 }
 </style>

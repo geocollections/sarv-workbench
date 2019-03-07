@@ -3,7 +3,7 @@
 
     <!-- REFERENCE and AUTHOR -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`reference`">{{ $t('reference.reference') }}:</label>
       </div>
 
@@ -12,7 +12,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`year`">{{ $t('reference.year') }}:</label>
       </div>
 
@@ -23,7 +23,7 @@
 
     <!-- AUTHOR and YEAR -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`author`">{{ $t('reference.author') }}:</label>
       </div>
 
@@ -35,7 +35,7 @@
 
     <!-- TITLE -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`title`">{{ $t('reference.title') }}:</label>
       </div>
 
@@ -47,7 +47,7 @@
 
     <!-- TITLE ORIGINAL -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
       </div>
 
@@ -59,7 +59,7 @@
 
     <!-- TYPE, LANGUAGE -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`type`">{{ $t('reference.type') }}:</label>
       </div>
 
@@ -78,7 +78,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`language`">{{ $t('reference.language') }}:</label>
       </div>
 
@@ -99,7 +99,7 @@
 
     <!-- JOURNAL -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`journal`">{{ $t('reference.journal') }}:</label>
       </div>
 
@@ -126,7 +126,7 @@
       </div>
       -->
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
       </div>
 
@@ -138,7 +138,7 @@
 
     <!-- VOLUME and NUMBER -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`volume`">{{ $t('reference.volume') }}:</label>
       </div>
 
@@ -147,7 +147,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`number`">{{ $t('reference.number') }}:</label>
       </div>
 
@@ -158,7 +158,7 @@
 
     <!-- BOOK and BOOK ORIGINAL -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`book`">{{ $t('reference.book') }}:</label>
       </div>
 
@@ -167,7 +167,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
       </div>
 
@@ -178,7 +178,7 @@
 
     <!-- PUBLISHER and PUBLISHER PLACE -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`publisher`">{{ $t('reference.publisher') }}:</label>
       </div>
 
@@ -187,7 +187,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`publisher_place`">{{ $t('reference.publisherPlace') }}:</label>
       </div>
 
@@ -198,7 +198,7 @@
 
     <!-- PAGES and FIGURES -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`pages`">{{ $t('reference.pages') }}:</label>
       </div>
 
@@ -207,7 +207,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`figures`">{{ $t('reference.figures') }}:</label>
       </div>
 
@@ -218,7 +218,7 @@
 
     <!-- DOI and URL -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`doi`">DOI:</label>
       </div>
 
@@ -227,7 +227,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`url`">URL:</label>
       </div>
 
@@ -238,7 +238,7 @@
 
     <!-- ISBN and ISSN -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`isbn`">ISBN:</label>
       </div>
 
@@ -247,7 +247,7 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`issn`">ISSN:</label>
       </div>
 
@@ -258,7 +258,7 @@
 
     <!-- ABSTRACT -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
       </div>
 
@@ -270,7 +270,7 @@
     
     <!-- AUTHOR KEYWORDS -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
       </div>
 
@@ -281,7 +281,7 @@
     
     <!-- REMARKS -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
       </div>
 
@@ -293,7 +293,7 @@
 
     <!-- ALLOW TEMPORARILY USER TAGS -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`tags`">Kasutaja märksõnad (ajutine lahendus):</label>
       </div>
 
@@ -304,7 +304,7 @@
     
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
       </div>
 
@@ -332,7 +332,7 @@
 
     <!-- RELATED DATA -->
     <div class="row">
-      <div class="col-sm-2">
+      <div class="col-sm-2 lbl-right">
         <label :for="`related_data`">{{ $t('otherFiles.relatedData') }}:</label>
       </div>
 
@@ -957,9 +957,11 @@
 
 <style scoped>
   label {
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.1rem;
+    font-size: 0.9rem;
+  	color: #666;
   }
-
+  
   .delete-relation {
     transition: background-color 500ms ease-in-out;
     vertical-align: middle;
@@ -969,4 +971,11 @@
     cursor: pointer;
     background-color: rgba(220,53,69, 0.7);
   }
+  
+  @media (min-width: 576px) {
+	  .lbl-right {
+		  text-align: right;
+	  }
+  }
+  
 </style>
