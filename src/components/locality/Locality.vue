@@ -352,9 +352,12 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">{{ $t('add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">{{ $t('add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">{{ $t('add.buttons.clearFields') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
   </div>
