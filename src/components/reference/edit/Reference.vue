@@ -473,7 +473,7 @@
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
 
-        <button v-if="isChanged" v-b-modal.confirmation class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>
+        <button v-if="isChanged" @click="showModal = !showModal" class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>
         <router-link v-else class="btn btn-danger mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
       </div>
       <div class="col-sm-6" v-else>
@@ -484,8 +484,9 @@
 
     <confirmation-box title="reference.reference"
                       :title-extra="edit.reference"
+                      v-if="isChanged && showModal"
                       table="reference"
-                      v-on:save="sendData(true)"></confirmation-box>
+                      v-on:user-choice="confirmationBox"></confirmation-box>
 
 
   </div>
@@ -526,6 +527,7 @@
         reference_keyword: this.keywords,
         isFileLocked: this.data.is_locked,
         isChanged: false,
+        showModal: false,
         searchingTypes: false,
         searchingLanguages: false,
         searchingJournals: false,
@@ -634,6 +636,22 @@
     },
 
     methods: {
+
+      confirmationBox(userChoice) {
+        this.showModal = false
+
+        if (userChoice === 'LEAVE') {
+          this.$router.push({ path: '/reference' })
+        }
+
+        if (userChoice === 'CONTINUE') {
+          // DO NOTHING
+        }
+
+        if (userChoice === 'SAVE') {
+          this.sendData(true)
+        }
+      },
 
 
 
@@ -979,7 +997,7 @@
     font-size: 0.9rem;
   	color: #666;
   }
-  
+
   .delete-relation {
     transition: background-color 500ms ease-in-out;
     vertical-align: middle;
@@ -989,11 +1007,11 @@
     cursor: pointer;
     background-color: rgba(220,53,69, 0.7);
   }
-  
+
   @media (min-width: 576px) {
 	  .lbl-right {
 		  text-align: right;
 	  }
   }
-  
+
 </style>

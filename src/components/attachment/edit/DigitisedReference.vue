@@ -144,12 +144,20 @@
       <div class="col" v-if="!isAttachmentLocked">
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
-        <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
+
+        <button v-if="isChanged" @click="showModal = !showModal" class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>
+        <router-link v-else class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
       </div>
       <div class="col-sm-6" v-else>
         <div class="alert alert-info">{{ $t('edit.locked') }}</div>
       </div>
     </div>
+
+    <confirmation-box title="edit.digitisedReference"
+                      :title-extra="edit.eference"
+                      v-if="isChanged && showModal"
+                      table="attachment"
+                      v-on:user-choice="confirmationBox"></confirmation-box>
 
 
   </div>
@@ -161,6 +169,7 @@
   import cloneDeep from 'lodash/cloneDeep'
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
+  import ConfirmationBox from "../../partial/ConfirmationBox";
   import { toastError } from "@/assets/js/iziToast/iziToast";
 
   export default {
@@ -169,6 +178,7 @@
       FileInformation,
       VueMultiselect,
       Datepicker,
+      ConfirmationBox
     },
     name: "DigitisedReference",
     props:['data'],
@@ -177,6 +187,8 @@
         apiUrl: 'https://rwapi.geocollections.info/',
         attachment: this.data,
         isFileLocked: this.data.is_locked,
+        isChanged: false,
+        showModal: false,
         autocomplete: {
           references: [],
           copyrightAgents: [],
@@ -200,6 +212,15 @@
       }
     },
 
+    watch: {
+      'edit': {
+        handler: function () {
+          this.isChanged = true
+        },
+        deep: true
+      }
+    },
+
     computed: {
       referenceState() {
         return this.edit.reference !== null
@@ -211,6 +232,24 @@
     },
 
     methods: {
+
+      confirmationBox(userChoice) {
+        this.showModal = false
+
+        if (userChoice === 'LEAVE') {
+          this.$router.push({ path: '/attachment' })
+        }
+
+        if (userChoice === 'CONTINUE') {
+          // DO NOTHING
+        }
+
+        if (userChoice === 'SAVE') {
+          this.sendData(true)
+        }
+      },
+
+
 
       /******************
        *** SEND START ***
