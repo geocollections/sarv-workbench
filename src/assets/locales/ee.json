@@ -443,5 +443,11 @@
   },
   "buttons": {
     "deletePreferences": "Tühista filtrid ja sorteerimine"
+  },
+  "confirmation": {
+    "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",
+    "leave": "Jah, lahku",
+    "continue": "Jätka muutmist",
+    "save": "Salvesta muudatused"
   }
 }

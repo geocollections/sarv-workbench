@@ -441,5 +441,11 @@
   },
   "buttons": {
     "deletePreferences": "Clear filters and ordering"
+  },
+  "confirmation": {
+    "question": "Are you sure you want to leave without saving the edits?",
+    "leave": "Yes, leave",
+    "continue": "Continue editing",
+    "save": "Save the record"
   }
 }
