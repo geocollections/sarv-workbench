@@ -180,7 +180,9 @@
     "errors": {
       "noFiles1": "Kahjuks ei leitud mitte ühtegi faili. Minge",
       "noFiles2": "ja alustage üleslaadimist."
-    }
+    },
+    "link":"Link",
+    "remarks":"Lisainfo"
   },
   "references": {
     "header": "Minu kirjandus",
@@ -355,7 +357,13 @@
     "eelis": "EELIS ID",
     "remarks_location": "Asukoha kirjeldus",
     "remarks": "Lisainfo",
-    "private": "Privaatne"
+    "private": "Privaatne",
+    "relatedTables": {
+      "reference": "Kirjandusviited",
+      "synonym": "Nime sünonüümid",
+      "attachment": "Manused",
+      "stratigraphy": "Strat. piirid"
+    }
   },
   "drillcore": {
     "drillcore": "Puursüdamik"
@@ -397,6 +405,21 @@
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad"
     }
+  },
+  "synonym": {
+    "synonym":"Sünonüüm",
+    "reference":"Viide",
+    "pages":"Lk.",
+    "remarks":"Lisainfo"
+  },
+  "stratigraphy": {
+    "stratigraphy":"Stratigraafia",
+    "base":"Alum. piir (m)",
+    "top":"Ülem. piir (m)",
+    "reference":"Viide",
+    "author":"Autor",
+    "year":"Autor",
+    "is_preferred":"Eelistatud"
   },
   "journal": {
     "journalName": "Ajakirja nimi",

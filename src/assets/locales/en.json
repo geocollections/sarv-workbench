@@ -180,7 +180,9 @@
     "errors": {
       "noFiles1": "Unfortunately we didn't find any files. Go to",
       "noFiles2": "and start uploading."
-    }
+    },
+    "link":"Link",
+    "remarks":"Remarks"
   },
   "references": {
     "header": "My references",
@@ -355,7 +357,13 @@
     "eelis": "EELIS ID",
     "remarks_location": "Locality description",
     "remarks": "Additional information",
-    "private": "Private"
+    "private": "Private",
+    "relatedTables": {
+      "reference": "Reference",
+      "synonym": "Synonyms",
+      "attachment": "Attachment",
+      "stratigraphy": "Stratigraphy"
+    }
   },
   "drillcore": {
     "drillcore": "Drillcore"
@@ -397,6 +405,21 @@
       "locality": "Locality",
       "reference_keyword": "User keywords"
     }
+  },
+  "stratigraphy": {
+    "stratigraphy":"Stratigraafia",
+    "base":"Alum. piir (m)",
+    "top":"Ülem. piir (m)",
+    "reference":"Link",
+    "author":"Author",
+    "year":"Year",
+    "is_preferred":"Is preferred?"
+  },
+  "synonym": {
+    "synonym":"Sünonüüm",
+    "reference":"Viide",
+    "pages":"Lk.",
+    "remarks":"Lisainfo"
   },
   "journal": {
     "journalName": "Journal name",

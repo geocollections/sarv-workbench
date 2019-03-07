@@ -349,6 +349,148 @@
       </div>
     </div>
 
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row">
+      <div class="col mt-5 mb-5">
+        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important;">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('reference')" class="nav-link"  :class="{ active: activeTab === 'reference' }">{{ $t('locality.relatedTables.reference') }}</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('synonym')" class="nav-link"  :class="{ active: activeTab === 'synonym' }">{{ $t('locality.relatedTables.synonym') }}</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('attachment')" class="nav-link"  :class="{ active: activeTab === 'attachment' }">{{ $t('locality.relatedTables.attachment') }}</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('stratigraphy')" class="nav-link"  :class="{ active: activeTab === 'stratigraphy' }">{{ $t('locality.relatedTables.stratigraphy') }}</a>
+          </li>
+        </ul>
+        <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'reference'}" role="tabpanel">
+          <div class="col-sm-8" v-if="activeTab === 'reference' && relatedData['reference'] !== null && relatedData['reference'].length > 0">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                  <th>{{ $t('reference.reference') }}</th>
+                  <th>{{ $t('reference.pages') }}</th>
+                  <th>{{ $t('reference.figures') }}</th>
+                  <th>{{ $t('reference.remarks') }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr v-for="(entity, index) in relatedData.reference">
+                  <td>
+                    <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})">
+                      {{ entity.reference__reference }}
+                    </a>
+                  </td>
+                  <td>{{ entity.pages }}</td>
+                  <td>{{ entity.figures }}</td>
+                  <td>{{ entity.remarks }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="#tab-synonym" class="tab-pane row" :class="{active: activeTab === 'synonym'}" role="tabpanel">
+          <div class="col-sm-8" v-if="activeTab === 'synonym'">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                  <th>{{ $t('synonym.synonym') }}</th>
+                  <th>{{ $t('synonym.reference') }}</th>
+                  <th>{{ $t('synonym.pages') }}</th>
+                  <th>{{ $t('synonym.remarks') }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr v-for="(entity, index) in relatedData.synonym">
+                  <td>{{ entity.synonym }}</td>
+                  <td>{{ entity.reference__reference }}</td>
+                  <td>{{ entity.pages }}</td>
+                  <td>{{ entity.remarks }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="#tab-attachment" class="tab-pane row" :class="{active: activeTab === 'attachment'}" role="tabpanel">
+          <div class="col-sm-8" v-if="activeTab === 'attachment'">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                  <th>{{ $t('attachments.link') }}</th>
+                  <th>{{ $t('attachments.remarks') }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr v-for="(entity, index) in relatedData.attachment">
+                  <td>{{ entity.original_filename }}</td>
+                  <td>{{ entity.remarks }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div id="#tab-stratygraphy" class="tab-pane row" :class="{active: activeTab === 'stratigraphy'}" role="tabpanel">
+          <div class="col-sm-8" v-if="activeTab === 'stratigraphy'">
+            <div class="table-responsive">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                  <th>{{ $t('stratigraphy.stratigraphy') }}</th>
+                  <th>{{ $t('stratigraphy.base') }}</th>
+                  <th>{{ $t('stratigraphy.top') }}</th>
+                  <th>{{ $t('stratigraphy.reference') }}</th>
+                  <th>{{ $t('stratigraphy.author') }}</th>
+                  <th>{{ $t('stratigraphy.year') }}</th>
+                  <th>{{ $t('stratigraphy.is_preferred') }}</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr v-for="(entity, index) in relatedData.stratigraphy">
+                  <td>
+                    <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'stratigraphy', id: entity.stratigraphy_id})"
+                    v-translate="{et:entity.stratigraphy__stratigraphy ,en:entity.stratigraphy__stratigraphy_en}"></a>
+                  </td>
+
+                  <td>{{ entity.depth_base }}</td>
+                  <td>{{ entity.depth_top }}</td>
+                  <td>
+                    <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.reference__id})">
+                      {{entity.reference__reference}}
+                    </a>
+                  </td>
+                  <td>{{ entity.agent__agent }}</td>
+                  <td>{{ entity.year }}</td>
+                  <td>{{ entity.current === true ? '+' : '' }}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row m-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length === 0">
+          <h4>{{$t('messages.inputNoResults')}}</h4>
+        </div>
+        <div class="col-xs-12 pagination-center">
+          <b-pagination
+            size="sm" align="left" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count" v-model="relatedData.page[activeTab]" :per-page="10">
+          </b-pagination>
+        </div>
+
+      </div>
+    </div>
 
     <div class="row mt-3 mb-3">
       <div class="col">
@@ -375,7 +517,11 @@
     fetchListCoordinatePrecision,
     fetchListCountry,
     fetchLocality,
-  } from "@/assets/js/api/apiCalls";
+    fetchLocalityReference,
+    fetchLocalitySynonym,
+    fetchLocalityAttachment,
+    fetchLocalityStratigraphy
+  } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
 
   import formManipulation  from './../mixins/formManipulation'
@@ -392,6 +538,12 @@
     mixins: [formManipulation,autocompleteFieldManipulation],
     data() {
       return {
+        activeTab: 'reference',
+        relatedData: {
+          reference:[], synonym: [], attachment:[], stratigraphy:[],
+          page : {reference:1, synonym: 1, attachment:1, stratigraphy:1},
+          count: 0
+        },
         autocomplete: {
           loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false },
           localityTypes: [], parent: [], extent: [], coordPrecision: [], coordMethod: [],
@@ -445,8 +597,11 @@
           }
         });
 
+        // FETCH FIRST TAB RELATED DATA
+        this.setActiveTab('reference')
       }
     },
+
     methods: {
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
@@ -488,6 +643,36 @@
         this.locality.country = {value:obj.country__value,value_en:obj.country__value_en,id:obj.country__id}
         this.locality.stratigraphy_top = {stratigraphy:obj.stratigraphy_top__stratigraphy,stratigraphy_en:obj.stratigraphy_top__stratigraphy_en,id:obj.stratigraphy_top__id}
         this.locality.stratigraphy_base = {stratigraphy:obj.stratigraphy_base__stratigraphy,stratigraphy_en:obj.stratigraphy_base__stratigraphy_en,id:obj.stratigraphy_base__id}
+      },
+
+      setActiveTab(type){
+        this.activeTab = type;
+
+        let query;
+        if(type === 'reference') {
+          query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.reference)
+        } else if(type === 'synonym') {
+          query = fetchLocalitySynonym(this.$route.params.id,this.relatedData.page.synonym)
+        } else if(type === 'attachment') {
+          query = fetchLocalityAttachment(this.$route.params.id,this.relatedData.page.attachment)
+        } else if(type === 'stratigraphy') {
+          query = fetchLocalityStratigraphy(this.$route.params.id,this.relatedData.page.stratigraphy)
+        }
+
+        query.then(response => {
+          this.relatedData[type] = this.handleResponse(response);
+          this.relatedData.count = response.body.count;
+        });
+
+      }
+
+    },
+    watch: {
+      'relatedData.page': {
+        handler: function (newVal) {
+          this.setActiveTab(this.activeTab)
+        },
+        deep: true
       }
     }
 

@@ -1,4 +1,3 @@
-
 import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
 const formManipulation = {
@@ -35,12 +34,17 @@ const formManipulation = {
         this.sendingData = true;
         this.loadingPercent = 0;
 
-        let formData = new FormData()
+
+        let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
+
+        if(this[object].id !== undefined){
+          delete this[object]['id']
+        }
 
         const dataToUpload = this.formatDataForUpload(this[object]);
+        let formData = new FormData();
+        formData.append('data', dataToUpload);
 
-        formData.append('data', dataToUpload)
-        let url = this[object].id === undefined ? 'add/'+object+'/'+ this[object].id : 'change'+object+'/';
         this.$http.post(this.apiUrl + url, formData, {
           before(request) {
             this.previousRequest = request
