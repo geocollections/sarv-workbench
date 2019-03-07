@@ -334,12 +334,20 @@
       <div class="col" v-if="!isAttachmentLocked">
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
-        <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
+
+        <button v-if="isChanged" @click="showModal = !showModal" class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>
+        <router-link v-else class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
       </div>
       <div class="col-sm-6" v-else>
         <div class="alert alert-info">{{ $t('edit.locked') }}</div>
       </div>
     </div>
+
+
+    <confirmation-box title="edit.photoArchive"
+                      v-if="isChanged && showModal"
+                      table="reference"
+                      v-on:user-choice="confirmationBox"></confirmation-box>
 
 
   </div>
@@ -355,6 +363,7 @@
   import cloneDeep from 'lodash/cloneDeep'
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
+  import ConfirmationBox from "../../partial/ConfirmationBox";
   import { toastError } from "@/assets/js/iziToast/iziToast";
 
   library.add(faTrashAlt)
@@ -366,6 +375,7 @@
       FileInformation,
       VueMultiselect,
       Datepicker,
+      ConfirmationBox
     },
     name: "SpecimenImage",
     props:['data'],
@@ -376,6 +386,8 @@
         localityQuerySmall: false,
         specimenQuerySmall: false,
         isFileLocked: this.data.is_locked,
+        isChanged: false,
+        showModal: false,
         autocomplete: {
           authors: [],
           specimens: [],
@@ -416,6 +428,16 @@
         }
       }
     },
+
+    watch: {
+      'edit': {
+        handler: function () {
+          this.isChanged = true
+        },
+        deep: true
+      }
+    },
+
     computed: {
       authorState() {
         if (this.edit.author !== null) return true
@@ -452,6 +474,24 @@
     },
 
     methods: {
+
+      confirmationBox(userChoice) {
+        this.showModal = false
+
+        if (userChoice === 'LEAVE') {
+          this.$router.push({ path: '/attachment' })
+        }
+
+        if (userChoice === 'CONTINUE') {
+          // DO NOTHING
+        }
+
+        if (userChoice === 'SAVE') {
+          this.sendData(true)
+        }
+      },
+
+
 
       /******************
        *** SEND START ***
