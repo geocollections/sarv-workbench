@@ -154,7 +154,7 @@
       <div class="col-sm-4 mb-2">
         <b-form-input id="number" v-model="edit.number" type="text"></b-form-input>
       </div>
-    </div>    
+    </div>
 
     <!-- BOOK and BOOK ORIGINAL -->
     <div class="row">
@@ -267,7 +267,7 @@
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
-    
+
     <!-- AUTHOR KEYWORDS -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -278,7 +278,7 @@
         <b-form-input id="author_keywords" v-model="edit.author_keywords" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- REMARKS -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -301,7 +301,7 @@
         <b-form-input id="tags" v-model="edit.tags" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -328,7 +328,7 @@
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
-    </div>    
+    </div>
 
     <!-- RELATED DATA -->
     <div class="row">
@@ -473,11 +473,15 @@
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
         <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
+        <button v-b-modal.confirmation class="btn btn-success mr-2 mb-2" >TEST CONFIRMATION</button>
       </div>
       <div class="col-sm-6" v-else>
         <div class="alert alert-info">{{ $t('edit.locked') }}</div>
       </div>
     </div>
+
+
+    <confirmation-box title="reference.reference"></confirmation-box>
 
 
   </div>
@@ -495,11 +499,13 @@
   import cloneDeep from 'lodash/cloneDeep'
   import { toastError } from "@/assets/js/iziToast/iziToast";
   import { fetchReferenceKeywords } from "@/assets/js/api/apiCalls";
+  import ConfirmationBox from "../../partial/ConfirmationBox";
 
   library.add(faPlus, faTrashAlt, faTimes)
 
   export default {
     components: {
+      ConfirmationBox,
       FontAwesomeIcon,
       VueMultiselect,
       FilePreview,
