@@ -485,7 +485,6 @@
     <confirmation-box title="reference.reference"
                       :title-extra="edit.reference"
                       table="reference"
-                      v-if="isChanged"
                       v-on:save="sendData(true)"></confirmation-box>
 
 

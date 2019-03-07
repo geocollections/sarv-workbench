@@ -8,6 +8,7 @@
              header-bg-variant="dark"
              header-text-variant="light"
              centered
+             lazy
              ref="confirmation"
              :title="titleExtra ? titleExtra : $t(title)">
       <p class="my-2 h5">{{ this.$t('confirmation.question') }}</p>
@@ -42,6 +43,7 @@
     name: "ConfirmationBox",
     methods: {
       buttonPressed(value) {
+        // TODO: Somehow this does not run before router push
         this.$refs.confirmation.hide()
 
         if (value === 'LEAVE') {
