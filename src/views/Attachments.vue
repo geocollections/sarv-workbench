@@ -75,11 +75,11 @@
             <!--<label :for="`author`">{{ $t('edit.author') }}:</label>-->
             <!--</div>-->
 
-          </div>
+
 
           <!-- CHECKBOXES -->
-          <div class="row">
-            <div class="col">
+
+            <div class="col-6">
               <b-form-checkbox-group v-model="searchParameters.specimen_image_attachment">
 
                 <b-form-checkbox value="2">
@@ -105,7 +105,7 @@
           <!-- Removes search preferences like local storage and search parameters-->
           <div class="row mt-3">
             <div class="col">
-              <b-button variant="danger" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+              <b-button variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
             </div>
           </div>
 

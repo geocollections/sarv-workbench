@@ -89,16 +89,16 @@ export function fetchAttachments(data, author) {
     searchFields += 'image_number__icontains=' + data.image_number
   }
   if (data.filename !== null && data.filename.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.filename + ';searchFields:original_filename,uuid_filename;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.filename + ';fields:original_filename,uuid_filename;lookuptype:icontains'
   }
   if (data.specimen !== null && data.specimen.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.specimen + ';searchFields:specimen__id,specimen__specimen_id;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.specimen + ';fields:specimen__id,specimen__specimen_id;lookuptype:icontains'
   }
   if (data.imageInfo !== null && data.imageInfo.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.imageInfo + ';searchFields:description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.imageInfo + ';fields:description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:icontains'
   }
   if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.locality + ';searchFields:locality__locality,locality__locality_en;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.locality + ';fields:locality__locality,locality__locality_en;lookuptype:icontains'
   }
   if (data.specimen_image_attachment.length > 0 && data.specimen_image_attachment.length <= 3) {
     searchFields += '&specimen_image_attachment__in=' + data.specimen_image_attachment
