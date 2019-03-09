@@ -11,7 +11,15 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
-
+    <div class="row mt-4">
+      <div class="col-sm-6">
+        <p class="h2">{{ $t('references.header') }}</p>
+      </div>
+      <div class="col-sm-6 ralign">
+      	<router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('add.new') }}</router-link>
+      </div>      
+    </div>
+             
     <!-- SEARCH FIELDS START -->
     <div class="row mt-4">
       <div class="col">
@@ -86,11 +94,11 @@
           
           <div class="row">
           <!-- Removes search preferences like local storage and search parameters-->
-            <div class="col-sm-3 mt-3">
+            <div class="col-sm-6 mt-3">
               <b-button variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
             </div>          	
             <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
-            <div class="col-sm-3 mt-3">
+            <div class="col-sm-6 mt-3">
               <b-form-group>
                 <b-form-radio-group v-model="isListView">
                   <b-form-radio :value="false">{{ $t('references.tableView') }}</b-form-radio>
@@ -543,5 +551,8 @@
 
   span {
     white-space: nowrap;
+  }
+  .ralign {
+	text-align: right !important;  
   }
 </style>

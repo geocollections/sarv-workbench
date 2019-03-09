@@ -127,7 +127,7 @@ export function fetchAttachments(data, author) {
  ************************/
 
 export function fetchReferences(data) {
-  const fields = 'id,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,publisher,publisher_place,url'
+  const fields = 'id,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,book_editor,publisher,publisher_place,url'
   let searchFields = ''
 
   if (data.author !== null && data.author.trim().length > 0) {
@@ -140,7 +140,7 @@ export function fetchReferences(data) {
     searchFields += '&multi_search=value:' + data.title + ';fields:title,title_original;lookuptype:icontains'
   }
   if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.bookJournal + ';fields:book,journal__journal_name;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.bookJournal + ';fields:book,book_editor,journal__journal_name;lookuptype:icontains'
   }
   if (data.abstractKeywordsRemarks !== null && data.abstractKeywordsRemarks.trim().length > 0) {
     searchFields += '&multi_search=value:' + data.abstractKeywordsRemarks + ';fields:abstract,tags,remarks;lookuptype:icontains'

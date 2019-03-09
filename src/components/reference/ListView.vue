@@ -27,6 +27,14 @@
               {{ entity.title }}.
             </span>
 
+            <span v-if="entity.book_editor || entity.book">
+              In: 
+            </span>
+              
+            <span v-if="entity.book_editor">
+              {{ entity.book_editor }} (ed.), 
+            </span>
+              
             <span v-if="entity.book">
               {{ entity.book }}. 
             </span>

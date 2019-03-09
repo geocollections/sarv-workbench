@@ -62,6 +62,7 @@
     }
   },
   "add": {
+    "new": "Add new",
     "attachment": "Attachment",
     "photoArchive": "Photo archive",
     "specimenImage": "Specimen images",
@@ -95,7 +96,7 @@
       "newJournal": "Add new journal"
     },
     "errors": {
-      "files": "Upload at least 1 file (max 10). File name should be less than 100 chars and without õ,ä,ö,ü etc.",
+      "files": "Upload at least 1 file (max 10). File name should be less than 100 chars and without Ćµ,Ć¤,Ć¶,Ć¼ etc.",
       "authorMultiple": "At least one author field must be filled",
       "author": "This field can't be empty",
       "imagesetId": "This field can't be empty",
@@ -384,6 +385,7 @@
     "titleOriginal": "Title (orig.)",
     "book": "Book",
     "bookOriginal": "Book (orig.)",
+    "book_editor": "Toimetaja(d)",
     "publisher": "Publisher",
     "publisherPlace": "Publisher place",
     "journal": "Journal",
@@ -409,14 +411,14 @@
   "stratigraphy": {
     "stratigraphy":"Stratigraafia",
     "base":"Alum. piir (m)",
-    "top":"Ülem. piir (m)",
+    "top":"Ć�lem. piir (m)",
     "reference":"Link",
     "author":"Author",
     "year":"Year",
     "is_preferred":"Is preferred?"
   },
   "synonym": {
-    "synonym":"Sünonüüm",
+    "synonym":"SĆ¼nonĆ¼Ć¼m",
     "reference":"Viide",
     "pages":"Lk.",
     "remarks":"Lisainfo"
