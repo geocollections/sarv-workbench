@@ -96,7 +96,7 @@
       "newJournal": "Add new journal"
     },
     "errors": {
-      "files": "Upload at least 1 file (max 10). File name should be less than 100 chars and without Ćµ,Ć¤,Ć¶,Ć¼ etc.",
+      "files": "Upload at least 1 file (max 10). File name should be less than 100 chars and without õ,ä,ö,ü etc.",
       "authorMultiple": "At least one author field must be filled",
       "author": "This field can't be empty",
       "imagesetId": "This field can't be empty",
@@ -409,19 +409,19 @@
     }
   },
   "stratigraphy": {
-    "stratigraphy":"Stratigraafia",
-    "base":"Alum. piir (m)",
-    "top":"Ć�lem. piir (m)",
+    "stratigraphy":"Stratigraphy",
+    "base":"Lower boundary (m)",
+    "top":"Upper boundary (m)",
     "reference":"Link",
     "author":"Author",
     "year":"Year",
     "is_preferred":"Is preferred?"
   },
   "synonym": {
-    "synonym":"SĆ¼nonĆ¼Ć¼m",
-    "reference":"Viide",
-    "pages":"Lk.",
-    "remarks":"Lisainfo"
+    "synonym":"Synonym",
+    "reference":"Reference",
+    "pages":"Page",
+    "remarks":"Remarks"
   },
   "journal": {
     "journalName": "Journal name",
@@ -434,7 +434,7 @@
   },
   "messages": {
     "langChange": "Changed language!",
-    "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@ttu.ee",
+    "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@taltech.ee",
     "checkForm": "Make sure everything is correct!",
     "loginError": "Something went wrong!",
     "loginIdError": "Something went wrong! Try restarting your browser and make sure that ID-card is connected to a computer.",
