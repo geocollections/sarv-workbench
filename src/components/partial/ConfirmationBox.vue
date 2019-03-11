@@ -4,7 +4,6 @@
     <b-modal id="confirmation"
              header-bg-variant="dark"
              header-text-variant="light"
-             v-model="show"
              centered
              lazy
              scrollable

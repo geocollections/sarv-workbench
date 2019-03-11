@@ -366,6 +366,46 @@
       </div>
     </div>
 
+
+    <!-- FILE -->
+    <div class="row" v-if="attachment !== null">
+      <div class="col-sm-6">
+        <p class="h4">{{ $t('attachments.otherFile') }}</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6 mb-4 text-center">
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>{{ $t('reference.relatedTables.attachment') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+              <td class="text-center">
+                <file-preview :data="attachment[0]"/>
+              </td>
+
+              <td>
+                <router-link :to="{ path: '/attachment/' + attachment[0].id }">
+                  {{ this.$t('edit.editMessage') }}
+                  <!--<span v-if="attachment[0].original_filename">{{ attachment[0].original_filename }}</span>-->
+                  <!--<span v-else>{{ attachment[0].id }}</span>-->
+                </router-link>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
     <!-- SHOWING RELATED_DATA -->
     <div class="row">
 
@@ -472,21 +512,12 @@
       <div class="col" v-if="!isReferenceLocked">
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
-
-        <button v-if="isChanged" @click="showModal = !showModal" class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>
-        <router-link v-else class="btn btn-danger mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
+        <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
       </div>
       <div class="col-sm-6" v-else>
         <div class="alert alert-info">{{ $t('edit.locked') }}</div>
       </div>
     </div>
-
-
-    <confirmation-box title="reference.reference"
-                      :title-extra="edit.reference"
-                      v-if="isChanged && showModal"
-                      table="reference"
-                      v-on:user-choice="confirmationBox"></confirmation-box>
 
 
   </div>
@@ -504,13 +535,11 @@
   import cloneDeep from 'lodash/cloneDeep'
   import { toastError } from "@/assets/js/iziToast/iziToast";
   import { fetchReferenceKeywords } from "@/assets/js/api/apiCalls";
-  import ConfirmationBox from "../../partial/ConfirmationBox";
 
   library.add(faPlus, faTrashAlt, faTimes)
 
   export default {
     components: {
-      ConfirmationBox,
       FontAwesomeIcon,
       VueMultiselect,
       FilePreview,
@@ -526,8 +555,6 @@
         locality: this.loc,
         reference_keyword: this.keywords,
         isFileLocked: this.data.is_locked,
-        isChanged: false,
-        showModal: false,
         searchingTypes: false,
         searchingLanguages: false,
         searchingJournals: false,
@@ -589,7 +616,7 @@
     watch: {
       'edit': {
         handler: function () {
-          this.isChanged = true
+          this.$emit('object-changed', true)
         },
         deep: true
       }
@@ -636,24 +663,6 @@
     },
 
     methods: {
-
-      confirmationBox(userChoice) {
-        this.showModal = false
-
-        if (userChoice === 'LEAVE') {
-          this.$router.push({ path: '/reference' })
-        }
-
-        if (userChoice === 'CONTINUE') {
-          // DO NOTHING
-        }
-
-        if (userChoice === 'SAVE') {
-          this.sendData(true)
-        }
-      },
-
-
 
       /******************
        *** SEND START ***
@@ -864,12 +873,15 @@
 
           if (field === 'attachment') {
             if (relatedData[data].attachment !== null) {
-              attachmentLink.id = relatedData[data].attachment
-              attachmentLink.uuid_filename = relatedData[data].attachment__uuid_filename
-              attachmentLink.description = relatedData[data].attachment__description
-              attachmentLink.description_en = relatedData[data].attachment__description_en
-              attachmentLink.author__agent = relatedData[data].attachment__author__agent
-              attachmentLinks.push(attachmentLink)
+              // Checks that attachment doesn't go into related data part
+              if (relatedData[data].attachment !== this.attach[0].id) {
+                attachmentLink.id = relatedData[data].attachment
+                attachmentLink.uuid_filename = relatedData[data].attachment__uuid_filename
+                attachmentLink.description = relatedData[data].attachment__description
+                attachmentLink.description_en = relatedData[data].attachment__description_en
+                attachmentLink.author__agent = relatedData[data].attachment__author__agent
+                attachmentLinks.push(attachmentLink)
+              }
             }
           }
 
