@@ -70,7 +70,7 @@
         <vue-multiselect class="align-middle" v-model="locality.parent" deselect-label="Can't remove this value"
                          :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.locality"
-                         :options="autocomplete.parent" :searchable="true" @search-change="autcompleteLocalitySearch"
+                         :options="autocomplete.locality" :searchable="true" @search-change="autcompleteLocalitySearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
           <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -213,7 +213,7 @@
         <vue-multiselect class="align-middle" v-model="locality.coord_det_agent" deselect-label="Can't remove this value"
                          label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.agent"
-                         :options="autocomplete.coord_det_agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -546,23 +546,11 @@
         },
         autocomplete: {
           loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false },
-          localityTypes: [], parent: [], extent: [], coordPrecision: [], coordMethod: [],
-          coord_det_agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
+          localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [],
+          agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
         },
         requiredFields: ['locality'],
         locality: {}
-      }
-    },
-
-    computed: {
-      commonLabel() {
-        return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
-      },
-      localityLabel() {
-        return this.$i18n.locale === 'ee' ? 'locality' : 'locality_en'
-      },
-      stratigraphyLabel() {
-        return this.$i18n.locale === 'ee' ? 'stratigraphy' : 'stratigraphy_en'
       }
     },
     created() {

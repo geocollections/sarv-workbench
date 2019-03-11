@@ -267,6 +267,9 @@ export function fetchLocalityStratigraphy(id,page = 1) {
 export function fetchSample(id) {
   return fetch(`sample/?id=${id}&format=json`)
 }
+export function fetchSamplePurpose() {
+  return fetch(`list_sample_purpose/?order_by=value&format=json`)
+}
 /************************
  ***  SAMPLES END  ***
  ************************/
