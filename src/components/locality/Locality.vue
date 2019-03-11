@@ -70,7 +70,7 @@
         <vue-multiselect class="align-middle" v-model="locality.parent" deselect-label="Can't remove this value"
                          :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.locality"
-                         :options="autocomplete.parent" :searchable="true" @search-change="autcompleteLocalitySearch"
+                         :options="autocomplete.locality" :searchable="true" @search-change="autcompleteLocalitySearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
           <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -107,7 +107,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="elevation" v-model="locality.elevation" type="number"></b-form-input>
+        <b-form-input id="elevation" v-model="locality.elevation" type="number" step="0.01"></b-form-input>
       </div>
 
 
@@ -213,7 +213,7 @@
         <vue-multiselect class="align-middle" v-model="locality.coord_det_agent" deselect-label="Can't remove this value"
                          label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.agent"
-                         :options="autocomplete.coord_det_agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -546,23 +546,11 @@
         },
         autocomplete: {
           loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false },
-          localityTypes: [], parent: [], extent: [], coordPrecision: [], coordMethod: [],
-          coord_det_agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
+          localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [],
+          agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
         },
         requiredFields: ['locality'],
         locality: {}
-      }
-    },
-
-    computed: {
-      commonLabel() {
-        return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
-      },
-      localityLabel() {
-        return this.$i18n.locale === 'ee' ? 'locality' : 'locality_en'
-      },
-      stratigraphyLabel() {
-        return this.$i18n.locale === 'ee' ? 'stratigraphy' : 'stratigraphy_en'
       }
     },
     created() {
@@ -606,6 +594,8 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
         console.log(objectToUpload)
+        if (this.isDefinedAndNotNull(objectToUpload.elevation)) uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
+        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
         if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id
         if (this.isDefinedAndNotNull(objectToUpload.extent)) uploadableObject.extent = objectToUpload.extent.id

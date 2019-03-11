@@ -62,6 +62,7 @@
     }
   },
   "add": {
+    "new": "Add new",
     "attachment": "Attachment",
     "photoArchive": "Photo archive",
     "specimenImage": "Specimen images",
@@ -161,6 +162,11 @@
     "county": "County",
     "country": "Country",
     "agent": "Creator"
+  },
+  "editSample": {
+    "heading": "Sample ID",
+    "editMessage": "Edit sample",
+    "viewMessage": "View sample in geocollections portal"
   },
   "attachments": {
     "header": "My attachments",
@@ -312,7 +318,43 @@
     "specimenNumber": "Specimen no"
   },
   "sample": {
-    "number": "Number"
+    "number": "Number",
+    "number_additional": "Old number",
+    "number_field": "Field number",
+    "series": "Series",
+    "sample_purpose": "Purpose",
+    "sample_type": "Type",
+    "parent_sample": "Related sample",
+    "parent_specimen": "Specimen",
+    "locality": "Locality",
+    "locality_free": "Loc. txt",
+    "depth": "Depth (m)",
+    "depth_interval": "Depth to",
+    "latitude": "Lat",
+    "longitude": "Long",
+    "stratigraphy": "Stratigraphy",
+    "lithostratigraphy": "Litostrat.",
+    "stratigraphy_free": "Stratigraphy txt",
+    "stratigraphy_bed": "Strat. bed",
+    "agent_collected": "Collected by",
+    "agent_collected_free": "Coll. txt",
+    "date_collected": "Coll. date",
+    "date_collected_free": "Coll. date",
+    "classification_rock": "Rock",
+    "rock": "Rock txt",
+    "rock_en": "Rock EN",
+    "fossils": "Fossils",
+    "palaeontology": "Micropal.",
+    "analysis": "Ananlyses",
+    "is_private": "Is private?",
+    "mass": "Weight (g)",
+    "storage": "Storage",
+    "storage_additional": "Storage",
+    "owner": "Owner",
+    "user_added": "Added by",
+    "date_added": "Added",
+    "user_changed": "Changed by",
+    "date_changed": "Changed"
   },
   "sample_series": {
     "name": "Name"
@@ -384,6 +426,7 @@
     "titleOriginal": "Title (orig.)",
     "book": "Book",
     "bookOriginal": "Book (orig.)",
+    "book_editor": "Toimetaja(d)",
     "publisher": "Publisher",
     "publisherPlace": "Publisher place",
     "journal": "Journal",
@@ -407,19 +450,19 @@
     }
   },
   "stratigraphy": {
-    "stratigraphy":"Stratigraafia",
-    "base":"Alum. piir (m)",
-    "top":"Ülem. piir (m)",
+    "stratigraphy":"Stratigraphy",
+    "base":"Lower boundary (m)",
+    "top":"Upper boundary (m)",
     "reference":"Link",
     "author":"Author",
     "year":"Year",
     "is_preferred":"Is preferred?"
   },
   "synonym": {
-    "synonym":"Sünonüüm",
-    "reference":"Viide",
-    "pages":"Lk.",
-    "remarks":"Lisainfo"
+    "synonym":"Synonym",
+    "reference":"Reference",
+    "pages":"Page",
+    "remarks":"Remarks"
   },
   "journal": {
     "journalName": "Journal name",
@@ -432,7 +475,7 @@
   },
   "messages": {
     "langChange": "Changed language!",
-    "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@ttu.ee",
+    "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@taltech.ee",
     "checkForm": "Make sure everything is correct!",
     "loginError": "Something went wrong!",
     "loginIdError": "Something went wrong! Try restarting your browser and make sure that ID-card is connected to a computer.",
@@ -451,6 +494,10 @@
     "editAttachment": "Geocollections Data Management: Edit attachment",
     "addReference": "Geocollections Data Management: Add reference",
     "editReference": "Geocollections Data Management: Edit reference",
+    "addLocality": "Geocollections Data Management: Add locality",
+    "editLocality": "Geocollections Data Management: Edit locality",
+    "addSample": "Geocollections Data Management: Add sample",
+    "editSample": "Geocollections Data Management: Edit sample",
     "settings": "Geocollections Data Management: Settings"
   },
   "logs": {

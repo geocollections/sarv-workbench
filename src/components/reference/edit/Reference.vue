@@ -156,6 +156,26 @@
       </div>
     </div>
 
+    <!-- PAGES and BOOK EDITOR -->
+    <div class="row">
+      <div class="col-sm-2 lbl-right">
+        <label :for="`pages`">{{ $t('reference.pages') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="pages" v-model="edit.pages" type="text"></b-form-input>
+      </div>
+
+
+      <div class="col-sm-2 lbl-right">
+        <label :for="`book_editor`">{{ $t('reference.book_editor') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="book_editor" v-model="edit.book_editor" type="text"></b-form-input>
+      </div>
+    </div>
+    
     <!-- BOOK and BOOK ORIGINAL -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -193,26 +213,6 @@
 
       <div class="col-sm-4 mb-2">
         <b-form-input id="publisher_place" v-model="edit.publisher_place" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- PAGES and FIGURES -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`pages`">{{ $t('reference.pages') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="pages" v-model="edit.pages" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`figures`">{{ $t('reference.figures') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="figures" v-model="edit.figures" type="text"></b-form-input>
       </div>
     </div>
 
@@ -585,6 +585,7 @@
           title_original: this.data.title_original,
           book: this.data.book,
           book_original: this.data.book_original,
+          book_editor: this.data.book_editor,
           publisher: this.data.publisher,
           publisher_place: this.data.publisher_place,
           journal: this.buildJournal(),

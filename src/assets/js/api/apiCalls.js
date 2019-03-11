@@ -89,16 +89,16 @@ export function fetchAttachments(data, author) {
     searchFields += 'image_number__icontains=' + data.image_number
   }
   if (data.filename !== null && data.filename.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.filename + ';searchFields:original_filename,uuid_filename;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.filename + ';fields:original_filename,uuid_filename;lookuptype:icontains'
   }
   if (data.specimen !== null && data.specimen.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.specimen + ';searchFields:specimen__id,specimen__specimen_id;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.specimen + ';fields:specimen__id,specimen__specimen_id;lookuptype:icontains'
   }
   if (data.imageInfo !== null && data.imageInfo.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.imageInfo + ';searchFields:description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.imageInfo + ';fields:description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:icontains'
   }
   if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.locality + ';searchFields:locality__locality,locality__locality_en;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.locality + ';fields:locality__locality,locality__locality_en;lookuptype:icontains'
   }
   if (data.specimen_image_attachment.length > 0 && data.specimen_image_attachment.length <= 3) {
     searchFields += '&specimen_image_attachment__in=' + data.specimen_image_attachment
@@ -127,7 +127,7 @@ export function fetchAttachments(data, author) {
  ************************/
 
 export function fetchReferences(data) {
-  const fields = 'id,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,publisher,publisher_place,url'
+  const fields = 'id,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,book_editor,publisher,publisher_place,url'
   let searchFields = ''
 
   if (data.author !== null && data.author.trim().length > 0) {
@@ -140,7 +140,7 @@ export function fetchReferences(data) {
     searchFields += '&multi_search=value:' + data.title + ';fields:title,title_original;lookuptype:icontains'
   }
   if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.bookJournal + ';fields:book,journal__journal_name;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.bookJournal + ';fields:book,book_editor,journal__journal_name;lookuptype:icontains'
   }
   if (data.abstractKeywordsRemarks !== null && data.abstractKeywordsRemarks.trim().length > 0) {
     searchFields += '&multi_search=value:' + data.abstractKeywordsRemarks + ';fields:abstract,tags,remarks;lookuptype:icontains'
@@ -259,4 +259,63 @@ export function fetchLocalityStratigraphy(id,page = 1) {
 
 /************************
  ***  LOCALITIES END  ***
+ ************************/
+
+/************************
+ ***  SAMPLES START  ***
+ ************************/
+export function fetchSample(id) {
+  return fetch(`sample/?id=${id}&format=json`)
+}
+export function fetchSamplePurpose() {
+  return fetch(`list_sample_purpose/?order_by=value&format=json`)
+}
+
+export function fetchSamples(data) {
+  const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
+    'number_field,locality_free,depth,stratigraphy__stratigraphy'
+  let searchFields = ''
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`
+  }
+
+  if (data.number !== null && data.number.trim().length > 0) {
+    searchFields += `&number__icontains=${data.number}`
+  }
+
+  if (data.number_additional !== null && data.number_additional.trim().length > 0) {
+    searchFields += `&number_additional__icontains=${data.number_additional}`
+  }
+
+  if (data.number_field !== null && data.number_field.trim().length > 0) {
+    searchFields += `&number_field__icontains=${data.number_field}`
+  }
+
+  if (data.locality !== null && data.locality.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.locality};fields:locality__locality_en,locality__locality;lookuptype:icontains`
+  }
+
+  if (data.locality_free !== null && data.locality_free.trim().length > 0) {
+    searchFields += `&locality_free__icontains=${data.locality_free}`
+  }
+  if (data.depth !== null && data.depth.trim().length > 0) {
+    searchFields += '&depth__exact='+data.depth
+  }
+  if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy;lookuptype:icontains`
+  }
+  if (data.agent !== null && data.agent.trim().length > 0) {
+    searchFields += '&agent_collected__agent__icontains='+data.agent
+  }
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+
+  if (searchFields.length > 0) {
+    return fetch(`sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
+/************************
+ ***  SAMPLES END  ***
  ************************/
