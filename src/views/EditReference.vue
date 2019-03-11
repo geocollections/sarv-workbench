@@ -18,12 +18,20 @@
                    :loc="locality"
                    :keywords="reference_keyword"
                    :attach-link="attachment_link"
+                   v-on:object-changed="changeValue"
                    v-on:edit-data="change"/>
       </div>
 
       <!-- LOGS -->
       <log table="reference" :data="reference" :formatted-data="formattedData"></log>
     </div>
+
+
+    <confirmation-box title="reference.reference"
+                      :title-extra="reference.reference"
+                      v-if="isChanged"
+                      table="reference"
+                      v-on:user-choice="confirmationBox"></confirmation-box>
 
   </div>
 </template>
@@ -33,6 +41,7 @@
   import Reference from '@/components/reference/edit/Reference.vue'
   import Log from '@/components/partial/Log.vue'
   import GeocollectionLink from '@/components/partial/GeocollectionsLink.vue'
+  import ConfirmationBox from '@/components/partial/ConfirmationBox.vue'
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import { fetchAttachmentLink } from "@/assets/js/api/apiCalls";
@@ -43,6 +52,7 @@
       Reference,
       Log,
       GeocollectionLink,
+      ConfirmationBox
     },
     name: "EditReference",
     props: ['id'],
@@ -56,6 +66,8 @@
         reference_keyword: null,
         attachment_link: null,
         formattedData: '',
+        isChanged: false,
+        userChoice: null,
         searchParameters: {
           id: this.id,
           author: null
@@ -67,6 +79,22 @@
       return {
         title: this.$t('titles.editReference') + ' ' + this.id
       }
+    },
+
+    beforeRouteLeave(to, from, next) {
+      // TODO
+      // if (this.isChanged) {
+        // const answer = this.$root.$emit('bv::show::modal','confirmation')
+        // console.log(answer)
+        // const answer = window.confirm(this.$t('confirmation.question'))
+        // if (answer) {
+        //   next()
+        // } else {
+        //   next(false)
+        // }
+      // } else {
+      //   next()
+      // }
     },
 
     watch: {
@@ -116,6 +144,28 @@
     },
 
     methods: {
+
+      changeValue(value) {
+        console.log(value)
+        this.isChanged = value
+      },
+
+      confirmationBox(userChoice) {
+        console.log('User Choice: ' + userChoice)
+        this.userChoice = userChoice
+        //
+        if (userChoice === 'LEAVE') {
+          this.$router.push({ path: '/reference' })
+        }
+        //
+        // if (userChoice === 'CONTINUE') {
+        //   // DO NOTHING
+        // }
+        //
+        // if (userChoice === 'SAVE') {
+        //   this.sendData(true)
+        // }
+      },
 
       change(data, continueEditing) {
         console.log(data)
