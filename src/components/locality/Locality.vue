@@ -107,7 +107,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="elevation" v-model="locality.elevation" type="number"></b-form-input>
+        <b-form-input id="elevation" v-model="locality.elevation" type="number" step="0.01"></b-form-input>
       </div>
 
 
@@ -606,6 +606,7 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
         console.log(objectToUpload)
+        if (this.isDefinedAndNotNull(objectToUpload.elevation)) uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
         if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
         if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id
         if (this.isDefinedAndNotNull(objectToUpload.extent)) uploadableObject.extent = objectToUpload.extent.id

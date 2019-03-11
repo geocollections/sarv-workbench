@@ -260,3 +260,13 @@ export function fetchLocalityStratigraphy(id,page = 1) {
 /************************
  ***  LOCALITIES END  ***
  ************************/
+
+/************************
+ ***  SAMPLES START  ***
+ ************************/
+export function fetchSample(id) {
+  return fetch(`sample/?id=${id}&format=json`)
+}
+/************************
+ ***  SAMPLES END  ***
+ ************************/

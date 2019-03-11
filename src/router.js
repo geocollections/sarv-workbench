@@ -170,6 +170,7 @@ const router = new Router({
               component: () => import('./components/locality/Locality.vue'),
               meta: {
                 isEdit:true,
+                table:'locality',
                 title:'titles.editLocality',
                 heading:'editLocality.heading',
                 requiresAuth: true
@@ -192,6 +193,48 @@ const router = new Router({
                 title:'titles.addLocality',
                 subForms:[
                   {path:'/locality/add',name:'add.locality'}
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/sample/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/sample/Sample.vue'),
+              meta: {
+                isEdit:true,
+                table:'sample',
+                title:'titles.editSample',
+                heading:'editSample.heading',
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/sample/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/sample/Sample.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addSample',
+                subForms:[
+                  {path:'/sample/add',name:'add.sample'}
                 ],
                 requiresAuth: true
               },

@@ -7,9 +7,9 @@
       </div>
     </div>
 
-    <router-view v-on:data-loaded="test"/>
+    <router-view v-on:data-loaded="setData"/>
     <!-- LOGS -->
-    <log v-if="locality !== null" table="locality" :data="locality"></log>
+    <log v-if="data !== null" :table="$route.meta.table" :data="data"></log>
   </div>
 </template>
 
@@ -22,7 +22,7 @@
     },
     data(){
       return {
-        locality : null
+        data : null
       }
     },
     metaInfo () {
@@ -31,8 +31,8 @@
       }
     },
     methods: {
-      test(data) {
-        this.locality = data
+      setData(data) {
+        this.data = data
       }
     }
   }
