@@ -270,6 +270,52 @@ export function fetchSample(id) {
 export function fetchSamplePurpose() {
   return fetch(`list_sample_purpose/?order_by=value&format=json`)
 }
+
+export function fetchSamples(data) {
+  const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
+    'number_field,locality_free,depth,stratigraphy__stratigraphy'
+  let searchFields = ''
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`
+  }
+
+  if (data.number !== null && data.number.trim().length > 0) {
+    searchFields += `&number__icontains=${data.number}`
+  }
+
+  if (data.number_additional !== null && data.number_additional.trim().length > 0) {
+    searchFields += `&number_additional__icontains=${data.number_additional}`
+  }
+
+  if (data.number_field !== null && data.number_field.trim().length > 0) {
+    searchFields += `&number_field__icontains=${data.number_field}`
+  }
+
+  if (data.locality !== null && data.locality.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.locality};fields:locality__locality_en,locality__locality;lookuptype:icontains`
+  }
+
+  if (data.locality_free !== null && data.locality_free.trim().length > 0) {
+    searchFields += `&locality_free__icontains=${data.locality_free}`
+  }
+  if (data.depth !== null && data.depth.trim().length > 0) {
+    searchFields += '&depth__exact='+data.depth
+  }
+  if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy;lookuptype:icontains`
+  }
+  if (data.agent !== null && data.agent.trim().length > 0) {
+    searchFields += '&agent_collected__agent__icontains='+data.agent
+  }
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+
+  if (searchFields.length > 0) {
+    return fetch(`sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
 /************************
  ***  SAMPLES END  ***
  ************************/

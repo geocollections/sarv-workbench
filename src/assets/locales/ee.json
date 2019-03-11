@@ -166,9 +166,7 @@
   "editSample": {
     "heading": "Proovi ID",
     "editMessage": "Muuda proovi",
-    "viewMessage": "Vaata proovi geokogude portaalis",
-    "id": "ID",
-    "locality": "Lokaliteet"
+    "viewMessage": "Vaata proovi geokogude portaalis"
   },
   "attachments": {
     "header": "Minu failid",
@@ -320,6 +318,8 @@
     "specimenNumber": "Eksemplari nr"
   },
   "sample": {
+    "header": "Minu proovid",
+    "id": "ID",
     "number": "Number",
     "number_additional": "Old number",
     "number_field": "Field number",

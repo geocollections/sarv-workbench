@@ -166,8 +166,7 @@
   "editSample": {
     "heading": "Sample ID",
     "editMessage": "Edit sample",
-    "viewMessage": "View sample in geocollections portal",
-    "id": "ID"
+    "viewMessage": "View sample in geocollections portal"
   },
   "attachments": {
     "header": "My attachments",

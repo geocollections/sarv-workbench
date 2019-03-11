@@ -56,7 +56,7 @@
 
             <thead class="thead-light">
               <tr class="th-sort">
-                <th v-for="item in fields">
+                <th v-for="item in fields" v-if="item.onlySearch === undefined">
                     <span @click="changeOrder(item.id)">
                           <font-awesome-icon
                             v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"

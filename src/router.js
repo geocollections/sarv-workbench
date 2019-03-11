@@ -200,6 +200,22 @@ const router = new Router({
           ]
         },
         {
+          path: '/sample',
+          component: () => import('./views/Samples.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/sample/SampleTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
           path: '/sample/:id(\\d+)',
           props: true,
           component: () => import('./views/EditForm.vue'),
