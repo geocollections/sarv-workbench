@@ -1,6 +1,15 @@
 <template>
   <div>
-
+    <div class="row mt-3 mb-3">
+      <div class="col">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+      </div>
+    </div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- LOCALITY AND LOCALITY ENG -->
@@ -367,7 +376,7 @@
           </li>
         </ul>
         <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'reference'}" role="tabpanel">
-          <div class="col-sm-8" v-if="activeTab === 'reference' && relatedData['reference'] !== null && relatedData['reference'].length > 0">
+          <div class="col-sm-8" v-if="activeTab === 'reference'">
             <div class="table-responsive">
               <table class="table table-hover table-bordered">
                 <thead class="thead-light">
@@ -389,6 +398,22 @@
                   <td>{{ entity.pages }}</td>
                   <td>{{ entity.figures }}</td>
                   <td>{{ entity.remarks }}</td>
+                </tr>
+                <tr>
+                  <td>
+                    <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.reference" deselect-label="Can't remove this value"
+                                     label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                     :loading="autocomplete.loaders.reference"
+                                     :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
+                                     :allow-empty="true"  :show-no-results="false" :max-height="600"
+                                     :open-direction="'bottom'">
+                      <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+                      <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                    </vue-multiselect>
+                  </td>
+                  <td>{{ relatedData.insert.reference.pages }}</td>
+                  <td>{{ relatedData.insert.reference.figures }}</td>
+                  <td>{{ relatedData.insert.reference.remarks }}</td>
                 </tr>
                 </tbody>
               </table>
@@ -480,28 +505,27 @@
             </div>
           </div>
         </div>
-        <div class="row m-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length === 0">
-          <h4>{{$t('messages.inputNoResults')}}</h4>
-        </div>
-        <div class="col-xs-12 pagination-center">
-          <b-pagination
-            size="sm" align="left" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count" v-model="relatedData.page[activeTab]" :per-page="10">
-          </b-pagination>
-        </div>
+        <div class="row mb-4 pt-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length === 0">
+          <div class="col-md-8">
+            <button class="btn float-right btn-sm btn-outline-danger mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
+              {{$t('edit.buttons.cancel')}}</button>
+            <button class="btn float-right btn-sm btn-outline-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
+            {{$t('edit.buttons.save')}}</button>
+          </div>
+          <div class="col-md-4 pagination-center">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+            </b-pagination>
+          </div>
 
+        </div>
+        <!--<div class="row m-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length === 0">-->
+          <!--<h4>{{$t('messages.inputNoResults')}}</h4>-->
+        <!--</div>-->
       </div>
     </div>
 
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
-      </div>
-    </div>
+
   </div>
 </template>
 
@@ -541,12 +565,13 @@
         activeTab: 'reference',
         relatedData: {
           reference:[], synonym: [], attachment:[], stratigraphy:[],
+          insert: {reference:{}, synonym: {}, attachment:{}, stratigraphy:{}},
           page : {reference:1, synonym: 1, attachment:1, stratigraphy:1},
-          count: 0
+          count: {reference:0, synonym: 0, attachment:0, stratigraphy:0}
         },
         autocomplete: {
-          loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false },
-          localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [],
+          loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false,reference:false },
+          localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [],reference:[],
           agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
         },
         requiredFields: ['locality'],
@@ -605,6 +630,13 @@
         if (this.isDefinedAndNotNull(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
+
+        //related_data
+        if(uploadableObject.related_data === undefined) uploadableObject.related_data = {}
+
+        if (this.isDefinedAndNotNull(this.relatedData.insert.reference))
+          uploadableObject.related_data.reference = this.relatedData.insert.reference
+
         console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)
       },
@@ -637,7 +669,7 @@
 
       setActiveTab(type){
         this.activeTab = type;
-
+        if(this.relatedData[type].length > 0) return;
         let query;
         if(type === 'reference') {
           query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.reference)
@@ -651,7 +683,8 @@
 
         query.then(response => {
           this.relatedData[type] = this.handleResponse(response);
-          this.relatedData.count = response.body.count;
+          this.relatedData.count[type] = response.body.count;
+          // this.addInsertField(type)
         });
 
       }

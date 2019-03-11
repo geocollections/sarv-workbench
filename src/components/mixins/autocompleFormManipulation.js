@@ -44,6 +44,9 @@ const autocompleteFieldManipulation = {
         case 'specimen':
           query = `specimen/?multi_search=value:${val};fields:specimen_id;lookuptype:icontains&fields=id,specimen_id`;
           break;
+        case 'reference':
+          query = `reference/?multi_search=value:${val};fields:reference;lookuptype:icontains&fields=id,reference,pages,figures,remarks`;
+          break;
         default:
           break;
       }
@@ -77,7 +80,10 @@ const autocompleteFieldManipulation = {
       this.autocompliteSearch(value, 'sample', 'sample',1)
     },
     autcompleteSpecimenSearch(value) {
-      this.autocompliteSearch(value, 'specimen', 'specimen',1)
+      this.autocompliteSearch(value, 'specimen', 'specimen')
+    },
+    autcompleteReferenceSearch(value) {
+      this.autocompliteSearch(value, 'reference', 'reference')
     },
     autocompliteSearch(value, type, options, minLength = 3) {
       if (value.length < minLength) this.autocomplete[options] = [];
