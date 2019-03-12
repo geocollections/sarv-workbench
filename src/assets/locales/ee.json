@@ -63,6 +63,7 @@
   },
   "add": {
     "new": "Lisa uus",
+    "newRelation": "Lisa uus seos",
     "attachment": "Failid",
     "photoArchive": "Fotoarhiiv",
     "specimenImage": "Eksemplari pildid",

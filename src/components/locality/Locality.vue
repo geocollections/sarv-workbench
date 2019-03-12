@@ -372,7 +372,7 @@
         <div class="row mb-4 pt-1">
           <div class="col">
             <button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"
-                    :disabled="sendingData" @click="addRelatedData">{{$t('add.new')}}</button>
+                    :disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>
           </div>
           <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
@@ -382,7 +382,6 @@
         </div>
       </div>
     </div>
-
     <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
@@ -567,10 +566,6 @@
           this.activeTab = type;
           this.loadRelatedData(type);
         }
-
-        // if(this.relatedData[type].length > 0) return;
-
-
       },
       loadRelatedData(type){
         let query;
@@ -599,8 +594,8 @@
         return JSON.stringify(uploadableObject)
       },
       addRelatedData(type) {
+        if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
         let formData = new FormData();
-
         if(type === undefined) type = this.activeTab;
         if(type === 'locality_reference') {
           //check if reference selected
@@ -634,7 +629,6 @@
 
         this.sendingData = true;
         this.loadingPercent = 0;
-
         this.$http.post(this.apiUrl + 'add/'+type+'/', formData, {
           before(request) {
             this.previousRequest = request
@@ -652,7 +646,8 @@
             if (typeof response.body.message !== 'undefined') {
               // RELOAD RELATED DATA IN CURRENT TAB
               this.loadRelatedData(type);
-
+              // CLEAR PREVIOUS INSERT DATA
+              this.relatedData.insert[this.activeTab]={};
               if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
                 toastSuccess({text: response.body.message_et});
               } else {

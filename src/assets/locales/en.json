@@ -63,6 +63,7 @@
   },
   "add": {
     "new": "Add new",
+    "newRelation": "Add new relation",
     "attachment": "Attachment",
     "photoArchive": "Photo archive",
     "specimenImage": "Specimen images",

@@ -1,6 +1,6 @@
 <template>
   <div id="#tab-stratygraphy" class="tab-pane row" :class="{active: activeTab === 'locality_stratigraphy'}" role="tabpanel">
-    <div class="col-sm-8" v-if="activeTab === 'locality_stratigraphy'">
+    <div class="col-sm-12" v-if="activeTab === 'locality_stratigraphy'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
@@ -12,6 +12,7 @@
             <th>{{ $t('stratigraphy.author') }}</th>
             <th>{{ $t('stratigraphy.year') }}</th>
             <th>{{ $t('stratigraphy.is_preferred') }}</th>
+            <th v-if="relatedData.insert.locality_stratigraphy.stratigraphy"></th>
           </tr>
           </thead>
 
@@ -32,6 +33,7 @@
             <td>{{ entity.agent__agent }}</td>
             <td>{{ entity.year }}</td>
             <td class="text-center">{{ entity.current === true ? '+' : '' }}</td>
+            <td v-if="relatedData.insert.locality_stratigraphy.stratigraphy"></td>
           </tr>
           <tr class="related-input-data">
             <td>
@@ -46,10 +48,10 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td><b-form-input v-model="relatedData.insert.locality_reference.depth_base" type="text"/></td>
-            <td><b-form-input v-model="relatedData.insert.locality_reference.depth_top" type="text"/></td>
+            <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_base" type="text"/></td>
+            <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_top" type="text"/></td>
             <td>
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.locality_stratigraphy.reference" deselect-label="Can't remove this value"
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.reference" deselect-label="Can't remove this value"
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference"
                                :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
@@ -69,9 +71,9 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td><b-form-input v-model="relatedData.insert.locality_reference.year" type="text"/></td>
+            <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.year" type="text"/></td>
             <td class="text-center">
-              <b-form-checkbox id="is_current" v-model="relatedData.insert.locality_stratigraphy.is_current" :value="true" :unchecked-value="false">
+              <b-form-checkbox id="is_current" v-model="relatedData.insert.locality_stratigraphy.current" :value="true" :unchecked-value="false">
               </b-form-checkbox>
             </td>
             <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.locality_stratigraphy = {}"  v-if="relatedData.insert.locality_stratigraphy.stratigraphy">
@@ -110,6 +112,6 @@
     line-height: 1;
     z-index: 999 !important;
     width: 100%;
-    min-width: 20em!important
+    min-width: 10em!important
   }
 </style>
