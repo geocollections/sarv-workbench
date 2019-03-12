@@ -8,6 +8,10 @@
     </div>
 
     <router-view v-on:data-loaded="setData"/>
+
+    <confirmation-box :title-extra="'SOME TITLE'"
+                      custom-question="confirmation.relatedDataQuestion"
+                      :table="$route.meta.table"/>
     <!-- LOGS -->
     <log v-if="data !== null" :table="$route.meta.table" :data="data"></log>
   </div>
@@ -15,14 +19,17 @@
 
 <script>
   import Log from '@/components/partial/Log.vue'
+  import ConfirmationBox from "../components/partial/ConfirmationBoxOlesja";
   export default {
     name: "EditForm",
     components: {
+      ConfirmationBox,
       Log
     },
     data(){
       return {
-        data : null
+        data : null,
+        isConfirmation: false
       }
     },
     metaInfo () {

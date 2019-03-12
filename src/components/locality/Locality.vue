@@ -1,15 +1,5 @@
 <template>
   <div>
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
-      </div>
-    </div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- LOCALITY AND LOCALITY ENG -->
@@ -382,7 +372,7 @@
         <div class="row mb-4 pt-1">
           <div class="col">
             <button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"
-                    :disabled="sendingData" @click="addRelatedData()">{{$t('add.new')}}</button>
+                    :disabled="sendingData" @click="addRelatedData">{{$t('add.new')}}</button>
           </div>
           <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
@@ -393,7 +383,16 @@
       </div>
     </div>
 
-
+    <div class="row mt-3 mb-3">
+      <div class="col">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -489,8 +488,22 @@
         this.setActiveTab('locality_reference')
       }
     },
-
+    mounted(){
+      this.$root.$on('user-choice', this.handleUserChoice);
+    },
     methods: {
+      handleUserChoice(choice){
+        this.$root.$emit('close-confirmation');
+        console.log(choice)
+        if(choice === 'LEAVE') {
+          this.setActiveTab(this.nextTab, false)
+        } else if(choice === 'CONTINUE') {
+          // NOTHING TO DO
+        } else if(choice === 'SAVE') {
+          this.addRelatedData(this.activeTab);
+          this.setActiveTab(this.nextTab, false);
+        }
+      },
       setDefaultRalatedData(){
         return {
           locality_reference:[], locality_synonym: [], attachment:[], locality_stratigraphy:[],
@@ -544,9 +557,22 @@
         this.locality.stratigraphy_base = {stratigraphy:obj.stratigraphy_base__stratigraphy,stratigraphy_en:obj.stratigraphy_base__stratigraphy_en,id:obj.stratigraphy_base__id}
       },
 
-      setActiveTab(type){
-        this.activeTab = type;
-        if(this.relatedData[type].length > 0) return;
+      setActiveTab(type, isWarning = true){
+        this.nextTab = type;
+        if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
+          this.$root.$emit('show-confirmation');
+        } else {
+          // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
+          this.relatedData.insert[this.activeTab]={};
+          this.activeTab = type;
+          this.loadRelatedData(type);
+        }
+
+        // if(this.relatedData[type].length > 0) return;
+
+
+      },
+      loadRelatedData(type){
         let query;
         if(type === 'locality_reference') {
           query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.locality_reference)
@@ -562,7 +588,6 @@
           this.relatedData[type] = this.handleResponse(response);
           this.relatedData.count[type] = response.body.count;
         });
-
       },
       formatRelatedDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
@@ -577,7 +602,6 @@
         let formData = new FormData();
 
         if(type === undefined) type = this.activeTab;
-
         if(type === 'locality_reference') {
           //check if reference selected
           if(this.relatedData.insert.locality_reference.reference === undefined) {
@@ -626,15 +650,13 @@
           this.sendingData = false
           if (response.status === 200) {
             if (typeof response.body.message !== 'undefined') {
+              // RELOAD RELATED DATA IN CURRENT TAB
+              this.loadRelatedData(type);
 
               if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
                 toastSuccess({text: response.body.message_et});
               } else {
                 toastSuccess({text: response.body.message});
-              }
-
-              if (!addAnother) {
-                this.$router.push({ path: '/'+object })
               }
             }
             if (typeof response.body.error !== 'undefined') {
@@ -652,8 +674,6 @@
           this.sendingData = false
           toastError({text: this.$t('messages.uploadError')})
         })
-
-
       }
 
     },

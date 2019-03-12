@@ -23,6 +23,14 @@ const formManipulation = {
     isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && value.trim().length > 0},
     isDefinedAndNotNull(value) {return !!value && value !== null},
     isDefinedAndNotEmpty(value) { return !!value && value.length > 0 },
+    isEmptyObject(value) {
+      for(var prop in value) {
+        if (Object.prototype.hasOwnProperty.call(value, prop)) {
+          return false;
+        }
+      }
+      return true;
+    },
     cancelRequest() {this.previousRequest.abort()},
     handleResponse(response){
       if (response.status === 200) {

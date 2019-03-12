@@ -514,6 +514,7 @@
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",
+    "relatedDataQuestion": "Are you sure you want to leave tab without saving?",
     "leave": "Yes, leave",
     "continue": "Continue editing",
     "save": "Save the record"

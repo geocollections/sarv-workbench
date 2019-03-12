@@ -12,9 +12,9 @@
       <p class="my-2 h5">{{ this.$t(customQuestion ? customQuestion : 'confirmation.question') }}</p>
 
       <template slot="modal-footer">
-        <b-button variant="outline-danger" v-on:click="$emit('user-choice', 'LEAVE')">{{ this.$t('confirmation.leave') }}</b-button>
-        <b-button variant="outline-success" v-on:click="$emit('user-choice', 'CONTINUE')">{{ this.$t('confirmation.continue') }}</b-button>
-        <b-button variant="outline-success" v-on:click="$emit('user-choice', 'SAVE')">{{ this.$t('confirmation.save') }}</b-button>
+        <b-button variant="outline-danger" @click="$root.$emit('user-choice', 'LEAVE')">{{ this.$t('confirmation.leave') }}</b-button>
+        <b-button variant="outline-success" @click="$root.$emit('user-choice', 'CONTINUE')">{{ this.$t('confirmation.continue') }}</b-button>
+        <b-button variant="outline-success" @click="$root.$emit('user-choice', 'SAVE')">{{ this.$t('confirmation.save') }}</b-button>
       </template>
 
     </b-modal>
@@ -51,6 +51,7 @@
     mounted(){
       this.$root.$on('show-confirmation', this.showModal);
       this.$root.$on('close-confirmation', this.hideModal);
+      console.log(this.$root)
     },
     methods: {
       showModal(){
