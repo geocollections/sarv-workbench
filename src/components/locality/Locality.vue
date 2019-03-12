@@ -361,167 +361,35 @@
     <!-- SHOWING RELATED_DATA -->
     <div class="row">
       <div class="col mt-5 mb-5">
-        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important;">
+        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('reference')" class="nav-link"  :class="{ active: activeTab === 'reference' }">{{ $t('locality.relatedTables.reference') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"  :class="{ active: activeTab === 'locality_reference' }">{{ $t('locality.relatedTables.reference') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('synonym')" class="nav-link"  :class="{ active: activeTab === 'synonym' }">{{ $t('locality.relatedTables.synonym') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('locality_synonym')" class="nav-link"  :class="{ active: activeTab === 'locality_synonym' }">{{ $t('locality.relatedTables.synonym') }}</a>
           </li>
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('attachment')" class="nav-link"  :class="{ active: activeTab === 'attachment' }">{{ $t('locality.relatedTables.attachment') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('stratigraphy')" class="nav-link"  :class="{ active: activeTab === 'stratigraphy' }">{{ $t('locality.relatedTables.stratigraphy') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('locality_stratigraphy')" class="nav-link"  :class="{ active: activeTab === 'locality_stratigraphy' }">{{ $t('locality.relatedTables.stratigraphy') }}</a>
           </li>
         </ul>
-        <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'reference'}" role="tabpanel">
-          <div class="col-sm-8" v-if="activeTab === 'reference'">
-            <div class="table-responsive">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                <tr>
-                  <th>{{ $t('reference.reference') }}</th>
-                  <th>{{ $t('reference.pages') }}</th>
-                  <th>{{ $t('reference.figures') }}</th>
-                  <th>{{ $t('reference.remarks') }}</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr v-for="(entity, index) in relatedData.reference">
-                  <td>
-                    <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})">
-                      {{ entity.reference__reference }}
-                    </a>
-                  </td>
-                  <td>{{ entity.pages }}</td>
-                  <td>{{ entity.figures }}</td>
-                  <td>{{ entity.remarks }}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.reference" deselect-label="Can't remove this value"
-                                     label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                                     :loading="autocomplete.loaders.reference"
-                                     :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
-                                     :allow-empty="true"  :show-no-results="false" :max-height="600"
-                                     :open-direction="'bottom'">
-                      <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
-                      <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-                    </vue-multiselect>
-                  </td>
-                  <td>{{ relatedData.insert.reference.pages }}</td>
-                  <td>{{ relatedData.insert.reference.figures }}</td>
-                  <td>{{ relatedData.insert.reference.remarks }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
+        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <locality-synonym :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
+        <locality-attachment :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
+        <locality-stratigraphy :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
+        <div class="row mb-4 pt-1">
+          <div class="col">
+            <button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"
+                    :disabled="sendingData" @click="addRelatedData()">{{$t('add.new')}}</button>
           </div>
-        </div>
-        <div id="#tab-synonym" class="tab-pane row" :class="{active: activeTab === 'synonym'}" role="tabpanel">
-          <div class="col-sm-8" v-if="activeTab === 'synonym'">
-            <div class="table-responsive">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                <tr>
-                  <th>{{ $t('synonym.synonym') }}</th>
-                  <th>{{ $t('synonym.reference') }}</th>
-                  <th>{{ $t('synonym.pages') }}</th>
-                  <th>{{ $t('synonym.remarks') }}</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr v-for="(entity, index) in relatedData.synonym">
-                  <td>{{ entity.synonym }}</td>
-                  <td>{{ entity.reference__reference }}</td>
-                  <td>{{ entity.pages }}</td>
-                  <td>{{ entity.remarks }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div id="#tab-attachment" class="tab-pane row" :class="{active: activeTab === 'attachment'}" role="tabpanel">
-          <div class="col-sm-8" v-if="activeTab === 'attachment'">
-            <div class="table-responsive">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                <tr>
-                  <th>{{ $t('attachments.link') }}</th>
-                  <th>{{ $t('attachments.remarks') }}</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr v-for="(entity, index) in relatedData.attachment">
-                  <td>{{ entity.original_filename }}</td>
-                  <td>{{ entity.remarks }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div id="#tab-stratygraphy" class="tab-pane row" :class="{active: activeTab === 'stratigraphy'}" role="tabpanel">
-          <div class="col-sm-8" v-if="activeTab === 'stratigraphy'">
-            <div class="table-responsive">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                <tr>
-                  <th>{{ $t('stratigraphy.stratigraphy') }}</th>
-                  <th>{{ $t('stratigraphy.base') }}</th>
-                  <th>{{ $t('stratigraphy.top') }}</th>
-                  <th>{{ $t('stratigraphy.reference') }}</th>
-                  <th>{{ $t('stratigraphy.author') }}</th>
-                  <th>{{ $t('stratigraphy.year') }}</th>
-                  <th>{{ $t('stratigraphy.is_preferred') }}</th>
-                </tr>
-                </thead>
-
-                <tbody>
-                <tr v-for="(entity, index) in relatedData.stratigraphy">
-                  <td>
-                    <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'stratigraphy', id: entity.stratigraphy_id})"
-                    v-translate="{et:entity.stratigraphy__stratigraphy ,en:entity.stratigraphy__stratigraphy_en}"></a>
-                  </td>
-
-                  <td>{{ entity.depth_base }}</td>
-                  <td>{{ entity.depth_top }}</td>
-                  <td>
-                    <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.reference__id})">
-                      {{entity.reference__reference}}
-                    </a>
-                  </td>
-                  <td>{{ entity.agent__agent }}</td>
-                  <td>{{ entity.year }}</td>
-                  <td>{{ entity.current === true ? '+' : '' }}</td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="row mb-4 pt-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length === 0">
-          <div class="col-md-8">
-            <button class="btn float-right btn-sm btn-outline-danger mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
-              {{$t('edit.buttons.cancel')}}</button>
-            <button class="btn float-right btn-sm btn-outline-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality')">
-            {{$t('edit.buttons.save')}}</button>
-          </div>
-          <div class="col-md-4 pagination-center">
+          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
             </b-pagination>
           </div>
-
         </div>
-        <!--<div class="row m-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length === 0">-->
-          <!--<h4>{{$t('messages.inputNoResults')}}</h4>-->
-        <!--</div>-->
       </div>
     </div>
 
@@ -531,8 +399,10 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
+  import { library } from '@fortawesome/fontawesome-svg-core'
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import {faTimes} from '@fortawesome/free-solid-svg-icons'
   import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
   import {
     fetchListLocalityTypes,
@@ -547,13 +417,21 @@
     fetchLocalityStratigraphy
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
-
+  import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
-
+  import LocalityReference from "./relatedTables/LocalityReference";
+  import LocalitySynonym from "./relatedTables/LocalitySynonym";
+  import LocalityAttachment from "./relatedTables/LocalityAttachment";
+  import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
+  library.add(faTimes)
   export default {
     name: "Locality",
     components: {
+      LocalityStratigraphy,
+      LocalityAttachment,
+      LocalitySynonym,
+      LocalityReference,
       BFormInput,
       FontAwesomeIcon,
       VueMultiselect,
@@ -562,17 +440,14 @@
     mixins: [formManipulation,autocompleteFieldManipulation],
     data() {
       return {
-        activeTab: 'reference',
-        relatedData: {
-          reference:[], synonym: [], attachment:[], stratigraphy:[],
-          insert: {reference:{}, synonym: {}, attachment:{}, stratigraphy:{}},
-          page : {reference:1, synonym: 1, attachment:1, stratigraphy:1},
-          count: {reference:0, synonym: 0, attachment:0, stratigraphy:0}
-        },
+        activeTab: 'locality_reference',
+        relatedData: this.setDefaultRalatedData(),
         autocomplete: {
-          loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false,reference:false },
+          loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false,
+            reference:false, synonym:false, attachment:false, stratigraphy:false},
           localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [],reference:[],
-          agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: []
+          agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: [], synonym:[],
+          attachment: [], stratigraphy: []
         },
         requiredFields: ['locality'],
         locality: {}
@@ -611,11 +486,19 @@
         });
 
         // FETCH FIRST TAB RELATED DATA
-        this.setActiveTab('reference')
+        this.setActiveTab('locality_reference')
       }
     },
 
     methods: {
+      setDefaultRalatedData(){
+        return {
+          locality_reference:[], locality_synonym: [], attachment:[], locality_stratigraphy:[],
+          insert: {locality_reference:{}, locality_synonym: {}, attachment:{}, locality_stratigraphy:{}},
+          page : {locality_reference:1, locality_synonym: 1, attachment:1, locality_stratigraphy:1},
+          count: {locality_reference:0, locality_synonym: 0, attachment:0, locality_stratigraphy:0}
+        }
+      },
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
         console.log(objectToUpload)
@@ -630,12 +513,6 @@
         if (this.isDefinedAndNotNull(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
-
-        //related_data
-        if(uploadableObject.related_data === undefined) uploadableObject.related_data = {}
-
-        if (this.isDefinedAndNotNull(this.relatedData.insert.reference))
-          uploadableObject.related_data.reference = this.relatedData.insert.reference
 
         console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)
@@ -671,21 +548,111 @@
         this.activeTab = type;
         if(this.relatedData[type].length > 0) return;
         let query;
-        if(type === 'reference') {
-          query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.reference)
-        } else if(type === 'synonym') {
-          query = fetchLocalitySynonym(this.$route.params.id,this.relatedData.page.synonym)
+        if(type === 'locality_reference') {
+          query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.locality_reference)
+        } else if(type === 'locality_synonym') {
+          query = fetchLocalitySynonym(this.$route.params.id,this.relatedData.page.locality_synonym)
         } else if(type === 'attachment') {
           query = fetchLocalityAttachment(this.$route.params.id,this.relatedData.page.attachment)
-        } else if(type === 'stratigraphy') {
-          query = fetchLocalityStratigraphy(this.$route.params.id,this.relatedData.page.stratigraphy)
+        } else if(type === 'locality_stratigraphy') {
+          query = fetchLocalityStratigraphy(this.$route.params.id,this.relatedData.page.locality_stratigraphy)
         }
 
         query.then(response => {
           this.relatedData[type] = this.handleResponse(response);
           this.relatedData.count[type] = response.body.count;
-          // this.addInsertField(type)
         });
+
+      },
+      formatRelatedDataForUpload(objectToUpload) {
+        let uploadableObject = cloneDeep(objectToUpload);
+        uploadableObject.locality = this.locality.id;
+        if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
+        if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
+        if (this.isDefinedAndNotNull(uploadableObject.stratigraphy)) uploadableObject.stratigraphy = uploadableObject.stratigraphy.id;
+        if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
+        return JSON.stringify(uploadableObject)
+      },
+      addRelatedData(type) {
+        let formData = new FormData();
+
+        if(type === undefined) type = this.activeTab;
+
+        if(type === 'locality_reference') {
+          //check if reference selected
+          if(this.relatedData.insert.locality_reference.reference === undefined) {
+            toastError({text: this.$t('messages.checkForm')});
+            return
+          }
+          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.locality_reference));
+        } else if (type === 'locality_synonym'){
+          //check if synonym selected
+          if(this.relatedData.insert.locality_synonym.synonym === undefined) {
+            toastError({text: this.$t('messages.checkForm')});
+            return
+          }
+          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.locality_synonym));
+        } else if (type === 'attachment'){
+          //check if synonym selected
+          if(this.relatedData.insert.attachment.attachment === undefined) {
+            toastError({text: this.$t('messages.checkForm')});
+            return
+          }
+          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.attachment));
+        } else if (type === 'locality_stratigraphy'){
+          //check if synonym selected
+          if(this.relatedData.insert.locality_stratigraphy.stratigraphy === undefined) {
+            toastError({text: this.$t('messages.checkForm')});
+            return
+          }
+          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.locality_stratigraphy));
+        }
+
+        this.sendingData = true;
+        this.loadingPercent = 0;
+
+        this.$http.post(this.apiUrl + 'add/'+type+'/', formData, {
+          before(request) {
+            this.previousRequest = request
+          },
+          progress: (e) => {
+            if (e.lengthComputable) {
+              // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
+              this.loadingPercent = Math.round((e.loaded / e.total) * 100)
+            }
+          }
+        }).then(response => {
+          console.log(response)
+          this.sendingData = false
+          if (response.status === 200) {
+            if (typeof response.body.message !== 'undefined') {
+
+              if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+                toastSuccess({text: response.body.message_et});
+              } else {
+                toastSuccess({text: response.body.message});
+              }
+
+              if (!addAnother) {
+                this.$router.push({ path: '/'+object })
+              }
+            }
+            if (typeof response.body.error !== 'undefined') {
+
+              if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+                toastError({text: response.body.error_et});
+              } else {
+                toastError({text: response.body.error});
+              }
+
+            }
+          }
+        }, errResponse => {
+          console.log('ERROR: ' + JSON.stringify(errResponse))
+          this.sendingData = false
+          toastError({text: this.$t('messages.uploadError')})
+        })
+
 
       }
 
@@ -693,6 +660,7 @@
     watch: {
       'relatedData.page': {
         handler: function (newVal) {
+          console.log(newVal)
           this.setActiveTab(this.activeTab)
         },
         deep: true
@@ -704,5 +672,6 @@
 </script>
 
 <style scoped>
+
 
 </style>

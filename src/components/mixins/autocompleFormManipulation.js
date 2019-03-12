@@ -47,6 +47,12 @@ const autocompleteFieldManipulation = {
         case 'reference':
           query = `reference/?multi_search=value:${val};fields:reference;lookuptype:icontains&fields=id,reference,pages,figures,remarks`;
           break;
+        case 'synonym':
+          query = `locality_synonym/?multi_search=value:${val};fields:synonym;lookuptype:icontains&fields=id,synonym,reference__reference,pages,remarks`;
+          break;
+        case 'attachment':
+          query = `attachment/?multi_search=value:${val};fields:original_filename;lookuptype:icontains&fields=id,original_filename,remarks`;
+          break;
         default:
           break;
       }
@@ -84,6 +90,12 @@ const autocompleteFieldManipulation = {
     },
     autcompleteReferenceSearch(value) {
       this.autocompliteSearch(value, 'reference', 'reference')
+    },
+    autcompleteSynonymSearch(value) {
+      this.autocompliteSearch(value, 'synonym', 'synonym')
+    },
+    autcompleteAttachmentSearch(value) {
+      this.autocompliteSearch(value, 'attachment', 'attachment')
     },
     autocompliteSearch(value, type, options, minLength = 3) {
       if (value.length < minLength) this.autocomplete[options] = [];

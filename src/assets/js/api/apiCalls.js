@@ -248,7 +248,7 @@ export function fetchLocalityReference(id,page = 1) {
   return fetch(`locality_reference/?locality__id=${id}&page=${page}&paginate_by=10&format=json`)
 }
 export function fetchLocalitySynonym(id,page = 1) {
-  return fetch(`locality_reference/?locality__id=${id}&page=${page}&paginate_by=10&format=json`)
+  return fetch(`locality_synonym/?locality_id=${id}&page=${page}&paginate_by=10&format=json`)
 }
 export function fetchLocalityAttachment(id,page = 1) {
   return fetch(`attachment/?attach_link__locality__id=${id}&page=${page}&paginate_by=10&fields=original_filename,attach_link__locality__id,remarks&format=json`)

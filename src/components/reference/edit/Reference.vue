@@ -175,7 +175,7 @@
         <b-form-input id="book_editor" v-model="edit.book_editor" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- BOOK and BOOK ORIGINAL -->
     <div class="row">
       <div class="col-sm-2 lbl-right">

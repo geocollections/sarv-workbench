@@ -1,4 +1,10 @@
 import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
+import VueMultiselect from 'vue-multiselect';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {faTimes} from '@fortawesome/free-solid-svg-icons'
+library.add(faTimes)
 
 const formManipulation = {
   data(){
@@ -7,6 +13,11 @@ const formManipulation = {
       loadingPercent: 0,
       sendingData: false,
     }
+  },
+  components: {
+    BFormInput,
+    VueMultiselect,
+    FontAwesomeIcon
   },
   methods: {
     isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && value.trim().length > 0},
@@ -97,6 +108,21 @@ const formManipulation = {
     },
     reset(object) {
       this[object] = {}
+    },
+
+    openGeoInNewWindow(params) {
+      let width = 600;
+      switch (params.object) {
+        case "specimen":
+          width = 1050;
+          break;
+        case "locality":
+          width = 1025;
+          break;
+        case "doi":
+          width = 1000;
+      }
+      window.open('https://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
     },
   }
 };
