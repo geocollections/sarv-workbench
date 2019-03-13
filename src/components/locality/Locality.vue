@@ -359,7 +359,7 @@
             <a href="#" v-on:click.prevent="setActiveTab('locality_synonym')" class="nav-link"  :class="{ active: activeTab === 'locality_synonym' }">{{ $t('locality.relatedTables.synonym') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment')" class="nav-link"  :class="{ active: activeTab === 'attachment' }">{{ $t('locality.relatedTables.attachment') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('locality.relatedTables.attachment') }}</a>
           </li>
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('locality_stratigraphy')" class="nav-link"  :class="{ active: activeTab === 'locality_stratigraphy' }">{{ $t('locality.relatedTables.stratigraphy') }}</a>
@@ -367,7 +367,7 @@
         </ul>
         <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <locality-synonym :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
-        <locality-attachment :locality="locality" :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
+        <locality-attachment :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
         <locality-stratigraphy :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
           <div class="col">
@@ -493,7 +493,6 @@
     methods: {
       handleUserChoice(choice){
         this.$root.$emit('close-confirmation');
-        console.log(choice)
         if(choice === 'LEAVE') {
           this.setActiveTab(this.nextTab, false)
         } else if(choice === 'CONTINUE') {
@@ -505,15 +504,14 @@
       },
       setDefaultRalatedData(){
         return {
-          locality_reference:[], locality_synonym: [], attachment:[], locality_stratigraphy:[],
-          insert: {locality_reference:{}, locality_synonym: {}, attachment:{}, locality_stratigraphy:{}},
-          page : {locality_reference:1, locality_synonym: 1, attachment:1, locality_stratigraphy:1},
-          count: {locality_reference:0, locality_synonym: 0, attachment:0, locality_stratigraphy:0}
+          locality_reference:[], locality_synonym: [], attachment_link:[], locality_stratigraphy:[],
+          insert: {locality_reference:{}, locality_synonym: {}, attachment_link:{}, locality_stratigraphy:{}},
+          page : {locality_reference:1, locality_synonym: 1, attachment_link:1, locality_stratigraphy:1},
+          count: {locality_reference:0, locality_synonym: 0, attachment_link:0, locality_stratigraphy:0}
         }
       },
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
-        console.log(objectToUpload)
         if (this.isDefinedAndNotNull(objectToUpload.elevation)) uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
@@ -526,7 +524,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
         if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
 
-        console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
+        // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)
       },
       removeUnnecessaryFields(){
@@ -573,8 +571,8 @@
           query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.locality_reference)
         } else if(type === 'locality_synonym') {
           query = fetchLocalitySynonym(this.$route.params.id,this.relatedData.page.locality_synonym)
-        } else if(type === 'attachment') {
-          query = fetchLocalityAttachment(this.$route.params.id,this.relatedData.page.attachment)
+        } else if(type === 'attachment_link') {
+          query = fetchLocalityAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
         } else if(type === 'locality_stratigraphy') {
           query = fetchLocalityStratigraphy(this.$route.params.id,this.relatedData.page.locality_stratigraphy)
         }
@@ -611,13 +609,13 @@
             return
           }
           formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.locality_synonym));
-        } else if (type === 'attachment'){
+        } else if (type === 'attachment_link'){
           //check if synonym selected
-          if(this.relatedData.insert.attachment.attachment === undefined) {
+          if(this.relatedData.insert.attachment_link.attachment === undefined) {
             toastError({text: this.$t('messages.checkForm')});
             return
           }
-          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.attachment));
+          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.attachment_link));
         } else if (type === 'locality_stratigraphy'){
           //check if synonym selected
           if(this.relatedData.insert.locality_stratigraphy.stratigraphy === undefined) {

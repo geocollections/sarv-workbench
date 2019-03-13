@@ -51,7 +51,6 @@
     mounted(){
       this.$root.$on('show-confirmation', this.showModal);
       this.$root.$on('close-confirmation', this.hideModal);
-      console.log(this.$root)
     },
     methods: {
       showModal(){

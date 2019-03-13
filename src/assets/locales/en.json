@@ -487,7 +487,8 @@
     "cancelRequest": "Cancel",
     "validFileFormat": "This '{file}' is not an image file!",
     "validFileFormatPDF": "This '{file}' is not a .pdf file!",
-    "localityAttachmentInfo":"Choose attachment link or add new"
+    "localityAttachmentInfo":"Choose attachment link or add new",
+    "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga '{ data }'. Lõpetamiseks mine tagasi lokaliteedi vormile"
   },
   "titles": {
     "main": "Geocollections Data Management",

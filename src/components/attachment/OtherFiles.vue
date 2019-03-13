@@ -3,7 +3,6 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
     <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 
-    <!--<b-alert show variant="warning">ID:{{ createRelationWith.id }} {{ $t(createRelationWith.locality )}}</b-alert>-->
     <!-- FILE -->
     <div class="row">
       <div class="col-sm-12 col-md-6 mb-2">
@@ -991,12 +990,6 @@
     },
 
     watch: {
-      '$store.state.createRelationWith': {
-        handler: function (newVal) {
-          console.log(newVal)
-        },
-        deep: true
-      },
       'files': function (newVal) {
 
         this.resetMetaData()
@@ -1065,7 +1058,6 @@
     },
 
     computed: {
-      createRelationWith () { return this.$store.state['createRelationWith'] },
       filesState() {
         return this.files !== null && this.files.length > 0
       },
@@ -1112,6 +1104,7 @@
       },
     },
     created: function () {
+      console.log(this.$parent.createRelationWith)
       // Gets saved form values from local storage
       const otherFiles = this.$localStorage.get('otherFiles', 'fallbackValue')
       if (otherFiles !== 'fallbackValue' && Object.keys(otherFiles).length !== 0 && otherFiles.constructor === Object) {
@@ -1183,6 +1176,10 @@
                 } else {
                   toastSuccess({text: response.body.message});
                 }
+                //create relation with locality
+                if(this.$parent.createRelationWith !== null ){
+                  this.addRelationWithLocality(response.body.attachment_id);
+                }
 
                 if (!addAnother) {
                   this.$router.push({ path: '/attachment' })
@@ -1212,6 +1209,47 @@
         } else {
           toastError({text: this.$t('messages.checkForm')})
         }
+      },
+
+      addRelationWithLocality(attachmentId){
+        let formData = new FormData()
+        let uploadableObject = {
+          attachment:attachmentId,
+          locality: this.$store.state['createRelationWith'].id
+        };
+
+        const dataToUpload = JSON.stringify(uploadableObject);
+        formData.append('data', dataToUpload)
+
+        this.$http.post(this.apiUrl + 'add/attachment_link/', formData, {
+          before(request) {
+            this.previousRequest = request
+          }
+        }).then(response => {
+          console.log(response)
+          this.sendingData = false
+          if (response.status === 200) {
+            if (typeof response.body.message !== 'undefined') {
+              if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+                toastSuccess({text: response.body.message_et});
+              } else {
+                toastSuccess({text: response.body.message});
+              }
+            }
+            if (typeof response.body.error !== 'undefined') {
+
+              if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+                toastError({text: response.body.error_et});
+              } else {
+                toastError({text: response.body.error});
+              }
+
+            }
+          }
+        }, errResponse => {
+          console.log('ERROR: ' + JSON.stringify(errResponse))
+        })
+
       },
 
       formatDataForUpload(objectToUpload) {

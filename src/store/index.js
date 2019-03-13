@@ -9,7 +9,7 @@ export function createStore () {
 
   return new Vuex.Store({
     state: {
-      createRelationWith: ''
+      createRelationWith: null
     },
     actions,
     mutations,

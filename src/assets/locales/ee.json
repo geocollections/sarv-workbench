@@ -489,7 +489,9 @@
     "cancelRequest": "Katkesta",
     "validFileFormat": "See '{file}' ei ole pildifail!",
     "validFileFormatPDF": "See '{file}' ei ole .pdf fail!",
-    "localityAttachmentInfo":"Vali link manusele või lisa uus"
+    "localityAttachmentInfo":"Vali link manusele või lisa uus",
+    "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga {data}. Lõpetamiseks mine tagasi lokaliteedi vormile"
+
   },
   "titles": {
     "main": "Geokogude andmehaldus",

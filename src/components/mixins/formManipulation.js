@@ -5,7 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
-
+import cloneDeep from 'lodash/cloneDeep'
 library.add(faTimes, faExternalLinkAlt)
 
 const formManipulation = {
@@ -55,9 +55,10 @@ const formManipulation = {
         this.sendingData = true;
         this.loadingPercent = 0;
 
-
+        console.log(this)
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
 
+        let editableObject = cloneDeep(this[object]);
         if(this[object].id !== undefined){
           delete this[object]['id']
         }
@@ -87,7 +88,10 @@ const formManipulation = {
               } else {
                 toastSuccess({text: response.body.message});
               }
-
+              //before save object ID was removed
+              this[object] = editableObject;
+              //Reload logs is not working TODO
+              this.$emit('data-loaded',this[object])
               if (!addAnother) {
                 this.$router.push({ path: '/'+object })
               }

@@ -1,25 +1,25 @@
 <template>
-  <div id="#tab-attachment" class="tab-pane row" :class="{active: activeTab === 'attachment'}" role="tabpanel">
-    <div class="col-sm-8" v-if="activeTab === 'attachment'">
+  <div id="#tab-attachment" class="tab-pane row" :class="{active: activeTab === 'attachment_link'}" role="tabpanel">
+    <div class="col-sm-8" v-if="activeTab === 'attachment_link'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
             <th>{{ $t('attachments.link') }}</th>
             <th>{{ $t('attachments.remarks') }}</th>
-            <th v-if="relatedData.insert.attachment.id"></th>
+            <th v-if="relatedData.insert.attachment_link.attachment"></th>
           </tr>
           </thead>
 
           <tbody>
-          <tr v-for="(entity, index) in relatedData.attachment">
+          <tr v-for="(entity, index) in relatedData.attachment_link">
             <td>{{ entity.original_filename}}</td>
             <td>{{ entity.remarks }}</td>
-            <td v-if="relatedData.insert.attachment.id"></td>
+            <td v-if="relatedData.insert.attachment_link.attachment"></td>
           </tr>
           <tr class="related-input-data">
             <td>
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.attachment.attachment" deselect-label="Can't remove this value"
+              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.attachment_link.attachment" deselect-label="Can't remove this value"
                                label="original_filename" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.attachment"
                                :options="autocomplete.attachment" :searchable="true" @search-change="autcompleteAttachmentSearch"
@@ -28,8 +28,8 @@
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.original_filename }}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect></td>
-            <td><b-form-input v-model="relatedData.insert.attachment.remarks" type="text"/></td>
-            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.attachment = {}"  v-if="relatedData.insert.attachment.id">
+            <td><b-form-input v-model="relatedData.insert.attachment_link.remarks" type="text"/></td>
+            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.attachment_link = {}"  v-if="relatedData.insert.attachment_link.attachment">
               <font-awesome-icon icon="times"/>
             </td>
           </tr>
@@ -63,6 +63,7 @@
           let createRelationWith = this.$parent.locality
           this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith })
           this.$router.push({ path:'/attachment/add/other_file'})
+          // this.$router.push({path:'/attachment/add/other_file', query: Object.assign({}, this.$route.query, { newKey: 'newValue' }) })
           // this.windowOpenNewTab('/attachment/add/other_file',{}, { createLocalityRelation: this.$parent.locality})
         }
       }
