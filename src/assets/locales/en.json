@@ -513,7 +513,8 @@
     "changes": "Changes"
   },
   "buttons": {
-    "deletePreferences": "Clear filters and ordering"
+    "deletePreferences": "Clear filters and ordering",
+    "cancel": "Cancel"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",

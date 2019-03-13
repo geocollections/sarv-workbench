@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: If edit or add then add margin bottom (54px) so buttons wouldn't cover the footer -->
   <div class="footer">
 
     <footer>

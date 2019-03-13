@@ -15,12 +15,16 @@
 
     <router-view/>
 
+    <bottom-options></bottom-options>
+
   </div>
 </template>
 
 <script>
+  import BottomOptions from "../components/partial/BottomOptions";
   export default {
     name: "AddReference",
+    components: {BottomOptions},
     metaInfo () {
       return {
         title: this.$t('titles.addReference')
