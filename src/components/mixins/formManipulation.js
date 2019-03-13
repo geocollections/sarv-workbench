@@ -3,8 +3,10 @@ import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
 import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
-library.add(faTimes)
+
+library.add(faTimes, faExternalLinkAlt)
 
 const formManipulation = {
   data(){
@@ -117,7 +119,10 @@ const formManipulation = {
     reset(object) {
       this[object] = {}
     },
-
+    windowOpenNewTab(name, path,query = {}, meta) {
+      let routeData = this.$router.resolve({path: path, query: query, meta: meta});
+      window.open(routeData.href, '_blank');
+    },
     openGeoInNewWindow(params) {
       let width = 600;
       switch (params.object) {

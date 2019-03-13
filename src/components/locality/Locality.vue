@@ -367,7 +367,7 @@
         </ul>
         <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <locality-synonym :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
-        <locality-attachment :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
+        <locality-attachment :locality="locality" :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
         <locality-stratigraphy :related-data="relatedData" :autocomplete="autocomplete"  :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
           <div class="col">

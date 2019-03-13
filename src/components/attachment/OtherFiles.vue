@@ -1,9 +1,9 @@
 <template>
   <div class="other-files">
-
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
     <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 
+    <!--<b-alert show variant="warning">ID:{{ createRelationWith.id }} {{ $t(createRelationWith.locality )}}</b-alert>-->
     <!-- FILE -->
     <div class="row">
       <div class="col-sm-12 col-md-6 mb-2">
@@ -854,7 +854,6 @@
         <button class="btn btn-warning mr-2 mb-2" @click="clearLocalStorage">{{ $t('add.buttons.clearLocalStorage') }}</button>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -862,16 +861,14 @@
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
-
   import Datepicker from 'vue2-datepicker'
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'
   import EXIF from 'exif-js'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
-
   library.add(faFile)
-
+  import Vue from 'vue'
   export default {
     components: {
       FontAwesomeIcon,
@@ -994,6 +991,12 @@
     },
 
     watch: {
+      '$store.state.createRelationWith': {
+        handler: function (newVal) {
+          console.log(newVal)
+        },
+        deep: true
+      },
       'files': function (newVal) {
 
         this.resetMetaData()
@@ -1062,6 +1065,7 @@
     },
 
     computed: {
+      createRelationWith () { return this.$store.state['createRelationWith'] },
       filesState() {
         return this.files !== null && this.files.length > 0
       },
@@ -1107,7 +1111,6 @@
         return false
       },
     },
-
     created: function () {
       // Gets saved form values from local storage
       const otherFiles = this.$localStorage.get('otherFiles', 'fallbackValue')
@@ -1702,7 +1705,7 @@
         this.$localStorage.remove('otherFiles')
         this.$localStorage.remove('otherFilesKeywords')
         toastInfo({text: this.$t('messages.defaultsRemoved')})
-      },
+      }
     }
   }
 </script>

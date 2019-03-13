@@ -30,11 +30,19 @@
               </vue-multiselect></td>
             <td><b-form-input v-model="relatedData.insert.attachment.remarks" type="text"/></td>
             <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.attachment = {}"  v-if="relatedData.insert.attachment.id">
-              <font-awesome-icon icon="times"></font-awesome-icon>
+              <font-awesome-icon icon="times"/>
             </td>
           </tr>
           </tbody>
         </table>
+      </div>
+      <div class="col-12 p-0 mb-3" style="margin-top: -15px!important;">
+        <b-form-text >{{$t('messages.localityAttachmentInfo')}}&ensp;
+          <a href="javascript:void(0)" @click="createAttachmentRelation">
+            <font-awesome-icon icon="external-link-alt"/>
+          </a>
+        </b-form-text>
+
       </div>
     </div>
   </div>
@@ -42,7 +50,6 @@
 
 <script>
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
-
     export default {
         name: "LocalityAttachment",
       props: {
@@ -50,8 +57,15 @@
         autocomplete: Object,
         activeTab: String
       },
-
-      mixins: [autocompleteFieldManipulation]
+      mixins: [autocompleteFieldManipulation],
+      methods: {
+        createAttachmentRelation() {
+          let createRelationWith = this.$parent.locality
+          this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith })
+          this.$router.push({ path:'/attachment/add/other_file'})
+          // this.windowOpenNewTab('/attachment/add/other_file',{}, { createLocalityRelation: this.$parent.locality})
+        }
+      }
     }
 </script>
 

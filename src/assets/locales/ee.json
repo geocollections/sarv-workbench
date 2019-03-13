@@ -488,7 +488,8 @@
     "editError": "Ei õnnestunud andmeid saada!",
     "cancelRequest": "Katkesta",
     "validFileFormat": "See '{file}' ei ole pildifail!",
-    "validFileFormatPDF": "See '{file}' ei ole .pdf fail!"
+    "validFileFormatPDF": "See '{file}' ei ole .pdf fail!",
+    "localityAttachmentInfo":"Vali link manusele või lisa uus"
   },
   "titles": {
     "main": "Geokogude andmehaldus",

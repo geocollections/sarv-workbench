@@ -486,7 +486,8 @@
     "editError": "Couldn't get data!",
     "cancelRequest": "Cancel",
     "validFileFormat": "This '{file}' is not an image file!",
-    "validFileFormatPDF": "This '{file}' is not a .pdf file!"
+    "validFileFormatPDF": "This '{file}' is not a .pdf file!",
+    "localityAttachmentInfo":"Choose attachment link or add new"
   },
   "titles": {
     "main": "Geocollections Data Management",

@@ -83,6 +83,7 @@ const router = new Router({
             {
               path: 'other_file',
               component: () => import('./components/attachment/OtherFiles.vue'),
+              props: (route) => ({ from: route }),
               meta: {
                 requiresAuth: true
               }

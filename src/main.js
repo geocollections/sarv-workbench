@@ -9,6 +9,8 @@ import VueIziToast from 'vue-izitoast' // Pop-up messages
 import VueI18n from 'vue-i18n' // Translations
 import VueMoment from 'vue-moment'
 import VueCookie from 'vue-cookie'
+import { createStore } from './store'
+import { sync } from 'vuex-router-sync'
 
 // Leaflet START
 import { L } from 'vue2-leaflet'
@@ -115,8 +117,10 @@ Vue.directive('translate', function (el, binding) {
   el.innerHTML = value === undefined || value === null ? '' : value
 });
 
+const store = createStore();
 new Vue({
   i18n,
+  store,
   router,
   localStorage: {
     photoArchive: {

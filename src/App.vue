@@ -7,7 +7,6 @@
 
 <script>
   import LangButtons from '@/components/partial/LangButtons'
-
   export default {
     components: {LangButtons},
     name: 'App'
