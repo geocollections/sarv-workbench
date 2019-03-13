@@ -368,13 +368,13 @@
 
 
     <!-- FILE -->
-    <div class="row" v-if="attachment !== null">
+    <div class="row"  v-if="attachment !== null && attachment.length > 0">
       <div class="col-sm-6">
         <p class="h4">{{ $t('attachments.otherFile') }}</p>
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" v-if="attachment !== null && attachment.length > 0">
       <div class="col-sm-6 mb-4 text-center">
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
@@ -862,7 +862,10 @@
       },
 
       buildRelatedData(relatedData, field) {
+
+        console.log(field)
         console.log(relatedData)
+
         let attachmentLinks = []
         let localities = []
         let referenceKeywords = []
@@ -904,8 +907,6 @@
           }
 
         }
-
-
         if (field === 'attachment' && attachmentLinks.length > 0) return attachmentLinks
         if (field === 'locality' && localities.length > 0) return localities
         if (field === 'reference_keyword' && referenceKeywords.length > 0) return referenceKeywords
