@@ -344,12 +344,8 @@
     </div>
 
 
-    <confirmation-box title="edit.photoArchive"
-                      v-if="isChanged && showModal"
-                      table="reference"
-                      v-on:user-choice="confirmationBox"></confirmation-box>
-
-
+    <bottom-options :success-button="$t('edit.buttons.save')"
+                    :danger-button="$t('edit.buttons.cancelWithoutSaving')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
   </div>
 </template>
 
@@ -363,19 +359,19 @@
   import cloneDeep from 'lodash/cloneDeep'
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
-  import ConfirmationBox from "../../partial/ConfirmationBox";
   import { toastError } from "@/assets/js/iziToast/iziToast";
+  import BottomOptions from "../../partial/BottomOptions";
 
   library.add(faTrashAlt)
 
   export default {
     components: {
+      BottomOptions,
       FontAwesomeIcon,
       FilePreview,
       FileInformation,
       VueMultiselect,
       Datepicker,
-      ConfirmationBox
     },
     name: "SpecimenImage",
     props:['data'],
@@ -475,20 +471,9 @@
 
     methods: {
 
-      confirmationBox(userChoice) {
-        this.showModal = false
-
-        if (userChoice === 'LEAVE') {
-          this.$router.push({ path: '/attachment' })
-        }
-
-        if (userChoice === 'CONTINUE') {
-          // DO NOTHING
-        }
-
-        if (userChoice === 'SAVE') {
-          this.sendData(true)
-        }
+      hoverButtonClicked(choice) {
+        if (choice === "SAVE") this.sendData(false)
+        if (choice === "CANCEL") this.$router.push({ path: '/attachment' })
       },
 
 

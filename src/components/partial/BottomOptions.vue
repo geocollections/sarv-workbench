@@ -45,6 +45,7 @@
     width: 100%;
     padding: 8px 16px;
     box-shadow: 0 4px 10px #000;
+    z-index: 1; /* Maybe need to make it even more higher */
   }
 
   .hover-button {

@@ -23,7 +23,7 @@
         <b-form-input id="year" v-model="reference.year" :state="yearState" type="number"></b-form-input>
       </div>
     </div>
-    
+
     <!-- AUTHOR -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -34,7 +34,7 @@
         <b-form-input id="author" v-model="reference.author" :state="authorState" type="text"></b-form-input>
       </div>
     </div>
-    
+
 
     <!-- TITLE -->
     <div class="row">
@@ -47,7 +47,7 @@
                          :rows="1" :max-rows="4"></b-form-textarea>
       </div>
     </div>
-    
+
     <!-- TITLE ORIGINAL -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -59,7 +59,7 @@
                          :rows="1" :max-rows="4"></b-form-textarea>
       </div>
     </div>
-    
+
     <!-- TYPE, LANGUAGE -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -157,7 +157,7 @@
       <div class="col-sm-4 mb-2">
         <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
       </div>
-    </div>    
+    </div>
 
     <!-- PAGES and BOOK EDITOR -->
     <div class="row">
@@ -178,7 +178,7 @@
         <b-form-input id="book_editor" v-model="reference.book_editor" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- BOOK and BOOK ORIGINAL -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -218,7 +218,7 @@
         <b-form-input id="publisher_place" v-model="reference.publisher_place" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- DOI and URL -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -281,7 +281,7 @@
         <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- REMARKS -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -304,7 +304,7 @@
         <b-form-input id="tags" v-model="reference.tags" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- REFERENCE KEYWORDS -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -331,8 +331,8 @@
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
-    </div>    
-    
+    </div>
+
     <!-- RELATED DATA -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -479,6 +479,10 @@
       </div>
     </div>
 
+
+    <bottom-options :success-button="$t('add.buttons.add')"
+                    :danger-button="$t('add.buttons.clearFields')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
+
   </div>
 </template>
 
@@ -502,11 +506,13 @@
   } from "@/assets/js/api/apiCalls";
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+  import BottomOptions from "../partial/BottomOptions";
 
   library.add(faPlus, faTrashAlt, faTimes)
 
   export default {
     components: {
+      BottomOptions,
       FontAwesomeIcon,
       VueMultiselect,
       FilePreview,
@@ -615,6 +621,11 @@
     },
 
     methods: {
+
+      hoverButtonClicked(choice) {
+        if (choice === "SAVE") this.add(false)
+        if (choice === "CANCEL") this.reset()
+      },
 
       add(addAnother) {
 
@@ -966,7 +977,7 @@
     cursor: pointer;
     background-color: rgba(220,53,69, 0.7);
   }
-  
+
   @media (min-width: 576px) {
 	  .lbl-right {
 		  text-align: right;
