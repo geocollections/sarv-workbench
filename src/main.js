@@ -168,6 +168,13 @@ new Vue({
       type: Boolean,
       default: false
     },
+    librarySearchHistory: {
+      type: Object
+    },
+    libraryViewType: {
+      type: Boolean,
+      default: false
+    }
   },
   render: h => h(App)
 }).$mount('#app')

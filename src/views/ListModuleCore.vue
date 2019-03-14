@@ -75,6 +75,20 @@
 
       </div>
     </div>
+
+
+    <div class="row mt-3" v-if="noResults">
+      <div class="col">
+        <p>
+          {{ $t('add.errors.noResults1') }}
+          <b>
+            <router-link :to="{ path: '/' + module + '/add' }">{{ $t(module + '.addNew') }}</router-link>
+          </b>
+          {{ $t('add.errors.noResults2') }}
+        </p>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -219,5 +233,12 @@
 </script>
 
 <style scoped>
+  .badge-style > span {
+    padding-left: 0.4em;
+    padding-right: 0.4em;
+  }
 
+  .font-larger {
+    font-size: larger;
+  }
 </style>

@@ -258,17 +258,66 @@ const router = new Router({
             }
           ]
         },
+        {
+          path: '/library',
+          component: () => import('./views/Libraries.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/library/LibraryTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/library/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/library/Library.vue'),
+              meta: {
+                isEdit:true,
+                table:'library',
+                title:'titles.editLibrary',
+                heading:'editLibrary.heading',
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/library/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/library/Library.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addLibrary',
+                subForms:[
+                  {path:'/library/add',name:'add.library'}
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
       ]
     },
-
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (about.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    // }
   ]
 })
 

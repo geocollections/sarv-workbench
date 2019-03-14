@@ -10,7 +10,7 @@ const api = {
 function fetch (child) {
   return new Promise((resolve, reject) => {
     Vue.http.get(api.url + child, {}).then(response => {
-      // console.log(response)
+      console.log(response)
       resolve(response);
     }, errResponse => {
       console.log('ERROR: ' + JSON.stringify(errResponse));
@@ -319,3 +319,43 @@ export function fetchSamples(data) {
 /************************
  ***  SAMPLES END  ***
  ************************/
+
+
+
+/***********************
+ *** LIBRARIES START ***
+ ***********************/
+
+export function fetchLibraries(data) {
+  const fields = 'id,author_txt,year,title,title_en,is_private'
+  let searchFields = ''
+  if (data.author_txt !== null && data.author_txt.trim().length > 0) {
+    searchFields += `author_txt__icontains=${data.author_txt}`
+  }
+
+  if (data.year !== null && data.year.trim().length > 0) {
+    searchFields += `&year__icontains=${data.year}`
+  }
+
+  if (data.title !== null && data.title.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.title};fields:title,title_en;lookuptype:icontains`
+  }
+
+  // Can't search from reference field
+  // if (data.reference !== null && data.reference.trim().length > 0) {
+  //   searchFields += `&reference__icontains=${data.reference}`
+  // }
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+
+  if (searchFields.length > 0) {
+    return fetch(`library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
+
+
+/***********************
+ ***  LIBRARIES END  ***
+ ***********************/
