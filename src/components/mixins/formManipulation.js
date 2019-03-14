@@ -120,6 +120,55 @@ const formManipulation = {
       }
 
     },
+    saveData(isNew,type,formData) {
+      return new Promise(resolve => {
+        resolve(this.request(isNew,type,formData))
+      })
+    },
+    request(isNew,object,formData) {
+      this.sendingData = true;
+      this.loadingPercent = 0;
+      let path = isNew === true ? 'add' : 'change';
+      this.$http.post(this.apiUrl + path+'/'+object+'/', formData, {
+        before(request) {
+          this.previousRequest = request
+        },
+        progress: (e) => {
+          if (e.lengthComputable) {
+            // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
+            this.loadingPercent = Math.round((e.loaded / e.total) * 100)
+          }
+        }
+      }).then(response => {
+        console.log(response)
+        this.sendingData = false
+        if (response.status === 200) {
+          if (typeof response.body.message !== 'undefined') {
+            if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+              toastSuccess({text: response.body.message_et});
+            } else {
+              toastSuccess({text: response.body.message});
+            }
+            return true
+          }
+          if (typeof response.body.error !== 'undefined') {
+
+            if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+              toastError({text: response.body.error_et});
+            } else {
+              toastError({text: response.body.error});
+            }
+            return false
+
+          }
+        }
+      }, errResponse => {
+        console.log('ERROR: ' + JSON.stringify(errResponse))
+        this.sendingData = false
+        toastError({text: this.$t('messages.uploadError')})
+        return false;
+      })
+    },
     reset(object) {
       this[object] = {}
     },

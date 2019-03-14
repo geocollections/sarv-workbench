@@ -582,7 +582,13 @@
           this.relatedData.count[type] = response.body.count;
         });
       },
-      formatRelatedDataForUpload(objectToUpload) {
+      checkRequiredFields(type){
+        if(type === 'locality_reference') return this.relatedData.insert[type].reference === undefined;
+        if(type === 'locality_synonym') return this.relatedData.insert[type].synonym === undefined;
+        if(type === 'attachment_link') return this.relatedData.insert[type].attachment === undefined;
+        if(type === 'locality_stratigraphy') return this.relatedData.insert[type].stratigraphy === undefined;
+      },
+      formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.locality = this.locality.id;
         if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
@@ -591,82 +597,28 @@
         if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
         return JSON.stringify(uploadableObject)
       },
+      formatRelatedDataForUpload(type,formData){
+        if(this.checkRequiredFields(type)) {
+          toastError({text: this.$t('messages.checkForm')});
+          return
+        }
+        formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
+      },
+      
       addRelatedData(type) {
         if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
         let formData = new FormData();
         if(type === undefined) type = this.activeTab;
-        if(type === 'locality_reference') {
-          //check if reference selected
-          if(this.relatedData.insert.locality_reference.reference === undefined) {
-            toastError({text: this.$t('messages.checkForm')});
-            return
-          }
-          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.locality_reference));
-        } else if (type === 'locality_synonym'){
-          //check if synonym selected
-          if(this.relatedData.insert.locality_synonym.synonym === undefined) {
-            toastError({text: this.$t('messages.checkForm')});
-            return
-          }
-          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.locality_synonym));
-        } else if (type === 'attachment_link'){
-          //check if synonym selected
-          if(this.relatedData.insert.attachment_link.attachment === undefined) {
-            toastError({text: this.$t('messages.checkForm')});
-            return
-          }
-          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.attachment_link));
-        } else if (type === 'locality_stratigraphy'){
-          //check if synonym selected
-          if(this.relatedData.insert.locality_stratigraphy.stratigraphy === undefined) {
-            toastError({text: this.$t('messages.checkForm')});
-            return
-          }
-          formData.append('data', this.formatRelatedDataForUpload(this.relatedData.insert.locality_stratigraphy));
-        }
 
-        this.sendingData = true;
-        this.loadingPercent = 0;
-        this.$http.post(this.apiUrl + 'add/'+type+'/', formData, {
-          before(request) {
-            this.previousRequest = request
-          },
-          progress: (e) => {
-            if (e.lengthComputable) {
-              // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
-              this.loadingPercent = Math.round((e.loaded / e.total) * 100)
-            }
-          }
-        }).then(response => {
-          console.log(response)
-          this.sendingData = false
-          if (response.status === 200) {
-            if (typeof response.body.message !== 'undefined') {
-              // RELOAD RELATED DATA IN CURRENT TAB
-              this.loadRelatedData(type);
-              // CLEAR PREVIOUS INSERT DATA
-              this.relatedData.insert[this.activeTab]={};
-              if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                toastSuccess({text: response.body.message_et});
-              } else {
-                toastSuccess({text: response.body.message});
-              }
-            }
-            if (typeof response.body.error !== 'undefined') {
+        this.formatRelatedDataForUpload(type,formData);
 
-              if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-                toastError({text: response.body.error_et});
-              } else {
-                toastError({text: response.body.error});
-              }
-
-            }
-          }
-        }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
-          this.sendingData = false
-          toastError({text: this.$t('messages.uploadError')})
-        })
+        this.saveData(true,type,formData).then(isSuccessfullySaved => {
+          if(isSuccessfullySaved === false) return;
+          // RELOAD RELATED DATA IN CURRENT TAB
+          this.loadRelatedData(type);
+          // CLEAR PREVIOUS INSERT DATA
+          this.relatedData.insert[this.activeTab]={};
+        });
       }
 
     },
