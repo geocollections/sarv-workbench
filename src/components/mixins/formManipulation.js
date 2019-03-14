@@ -48,14 +48,11 @@ const formManipulation = {
       })
       return isValid
     },
-
+    
     add(addAnother, object) {
+      let vm = this;
       if (this.validate(object) && !this.sendingData) {
 
-        this.sendingData = true;
-        this.loadingPercent = 0;
-
-        console.log(this)
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
 
         let editableObject = cloneDeep(this[object]);
@@ -67,69 +64,39 @@ const formManipulation = {
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
-        this.$http.post(this.apiUrl + url, formData, {
-          before(request) {
-            this.previousRequest = request
-          },
-          progress: (e) => {
-            if (e.lengthComputable) {
-              // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
-              this.loadingPercent = Math.round((e.loaded / e.total) * 100)
-            }
+        this.saveData(object,formData,url).then(isSuccessfullySaved => {
+          console.log(isSuccessfullySaved)
+          if (isSuccessfullySaved === undefined && isSuccessfullySaved === false) return;
+          //before save object ID was removed
+          this[object] = editableObject;
+          //Reload logs is not working TODO
+          this.$emit('data-loaded',this[object]);
+          if (!addAnother) {
+            this.$router.push({ path: '/'+object })
           }
-        }).then(response => {
-          console.log(response)
-          this.sendingData = false
-          if (response.status === 200) {
-            if (typeof response.body.message !== 'undefined') {
-
-              if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                toastSuccess({text: response.body.message_et});
-              } else {
-                toastSuccess({text: response.body.message});
-              }
-              //before save object ID was removed
-              this[object] = editableObject;
-              //Reload logs is not working TODO
-              this.$emit('data-loaded',this[object])
-              if (!addAnother) {
-                this.$router.push({ path: '/'+object })
-              }
-            }
-            if (typeof response.body.error !== 'undefined') {
-
-              if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-                toastError({text: response.body.error_et});
-              } else {
-                toastError({text: response.body.error});
-              }
-
-            }
-          }
-        }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
-          this.sendingData = false
-          toastError({text: this.$t('messages.uploadError')})
-        })
+        });
 
       } else if (this.sendingData) {
         // This shouldn't run unless user deletes html elements and tries to press 'add' button again
-        toastError({text: this.$t('messages.easterEggError')})
+        toastError({text: vm.$t('messages.easterEggError')})
       } else {
-        toastError({text: this.$t('messages.checkForm')})
+        toastError({text: vm.$t('messages.checkForm')})
       }
 
     },
-    saveData(isNew,type,formData) {
+
+    saveData(type,formData,url) {
       return new Promise(resolve => {
-        resolve(this.request(isNew,type,formData))
+        resolve(this.request(type,formData,url))
       })
     },
-    request(isNew,object,formData) {
+    request(object,formData,url) {
+      let vm = this;
       this.sendingData = true;
       this.loadingPercent = 0;
-      let path = isNew === true ? 'add' : 'change';
-      this.$http.post(this.apiUrl + path+'/'+object+'/', formData, {
+      url = url ? url : this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
+
+      this.$http.post(this.apiUrl + url, formData, {
         before(request) {
           this.previousRequest = request
         },
@@ -163,9 +130,9 @@ const formManipulation = {
           }
         }
       }, errResponse => {
-        console.log('ERROR: ' + JSON.stringify(errResponse))
+        console.log('ERROR: ' + JSON.stringify(errResponse));
         this.sendingData = false
-        toastError({text: this.$t('messages.uploadError')})
+        toastError({text: vm.$t('messages.uploadError')});
         return false;
       })
     },

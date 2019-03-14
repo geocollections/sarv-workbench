@@ -604,7 +604,7 @@
         }
         formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
       },
-      
+
       addRelatedData(type) {
         if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
         let formData = new FormData();
@@ -612,7 +612,7 @@
 
         this.formatRelatedDataForUpload(type,formData);
 
-        this.saveData(true,type,formData).then(isSuccessfullySaved => {
+        this.saveData(type,formData).then(isSuccessfullySaved => {
           if(isSuccessfullySaved === false) return;
           // RELOAD RELATED DATA IN CURRENT TAB
           this.loadRelatedData(type);
