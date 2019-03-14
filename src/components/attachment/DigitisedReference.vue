@@ -196,6 +196,10 @@
       </div>
     </div>
 
+
+    <bottom-options :success-button="$t('add.buttons.add')"
+                    :danger-button="$t('add.buttons.clearFields')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
+
   </div>
 </template>
 
@@ -209,11 +213,13 @@
   import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
+  import BottomOptions from "../partial/BottomOptions";
 
   library.add(faFile)
 
   export default {
     components: {
+      BottomOptions,
       VueMultiselect,
       Datepicker,
       Spinner,
@@ -275,6 +281,11 @@
     },
 
     methods: {
+
+      hoverButtonClicked(choice) {
+        if (choice === "SAVE") this.add(false)
+        if (choice === "CANCEL") this.reset()
+      },
 
       add(addAnother) {
 

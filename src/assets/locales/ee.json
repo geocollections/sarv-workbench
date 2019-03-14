@@ -73,6 +73,7 @@
     "locality": "Lokaliteet",
     "referenceCollection": "Kirjanduse kogumikud",
     "journal": "Ajakirjad",
+    "library": "Kogumik",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -104,7 +105,9 @@
       "specimen": "See väli ei tohi olla tühi",
       "imagesetNumber": "See väli ei tohi olla tühi",
       "imagesetNumberExists": "See pildiseeria on juba olemas",
-      "emptyField": "See väli ei tohi olla tühi"
+      "emptyField": "See väli ei tohi olla tühi",
+      "noResults1": "Kahjuks ei leitud mitte ühtegi tulemust. Minge",
+      "noResults2": "ja alustage üleslaadimist."
     }
   },
   "edit": {
@@ -168,6 +171,11 @@
     "heading": "Proovi ID",
     "editMessage": "Muuda proovi",
     "viewMessage": "Vaata proovi geokogude portaalis"
+  },
+  "editLibrary": {
+    "heading": "Kogumiku ID",
+    "editMessage": "Muuda kogumikku",
+    "viewMessage": "Vaata kogumikku geokogude portaalis"
   },
   "attachments": {
     "header": "Minu failid",
@@ -357,7 +365,8 @@
     "user_added": "Added by",
     "date_added": "Added",
     "user_changed": "Changed by",
-    "date_changed": "Changed"
+    "date_changed": "Changed",
+    "addNew": "Lisage uus Proov"
   },
   "sample_series": {
     "name": "Nimi"
@@ -408,7 +417,8 @@
       "synonym": "Nime sünonüümid",
       "attachment": "Manused",
       "stratigraphy": "Strat. piirid"
-    }
+    },
+    "addNew": "Lisage uus Lokaliteet"
   },
   "drillcore": {
     "drillcore": "Puursüdamik"
@@ -476,6 +486,16 @@
   "storage": {
     "storage": "Hoidla"
   },
+  "library": {
+    "header": "Minu kogumikud",
+    "author_txt": "Autor",
+    "year": "Aasta",
+    "title": "Pealkiri",
+    "reference": "Viide",
+    "isPrivate": "Avalik",
+    "id": "ID",
+    "addNew": "Lisage uus Kogumik"
+  },
   "messages": {
     "langChange": "Vahetasite keelt!",
     "easterEggError": "Mida sa teha üritad :D ??? Kui sa ei tea, kuidas see juhtus, siis palun võta ühendust olle.hints@ttu.ee",
@@ -504,6 +524,8 @@
     "editLocality": "Geokogude andmehaldus: Muuda lokaliteet",
     "addSample": "Geokogude andmehaldus: Lisa proov",
     "editSample": "Geokogude andmehaldus: Muuda proov",
+    "editLibrary": "Geokogude andmehaldus: Muuda kogumikke",
+    "addLibrary": "Geokogude andmehaldus: Lisa kogumik",
     "settings": "Geokogude andmehaldus: Seaded"
   },
   "logs": {
@@ -516,7 +538,8 @@
     "changes": "Muutused"
   },
   "buttons": {
-    "deletePreferences": "Tühista filtrid ja sorteerimine"
+    "deletePreferences": "Tühista filtrid ja sorteerimine",
+    "cancel": "Katkesta"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",

@@ -853,6 +853,11 @@
         <button class="btn btn-warning mr-2 mb-2" @click="clearLocalStorage">{{ $t('add.buttons.clearLocalStorage') }}</button>
       </div>
     </div>
+
+
+    <bottom-options :success-button="$t('add.buttons.add')"
+                    :danger-button="$t('add.buttons.clearFields')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
+
   </div>
 </template>
 
@@ -1132,6 +1137,11 @@
       }
     },
     methods: {
+
+      hoverButtonClicked(choice) {
+        if (choice === "SAVE") this.add(false)
+        if (choice === "CANCEL") this.reset()
+      },
 
       add(addAnother) {
         if (this.filesState && this.descriptionState && this.descriptionEnState && this.authorState && !this.sendingData) {

@@ -520,6 +520,9 @@
     </div>
 
 
+    <bottom-options :success-button="$t('edit.buttons.save')"
+                    :danger-button="$t('edit.buttons.cancelWithoutSaving')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
+
   </div>
 </template>
 
@@ -535,11 +538,13 @@
   import cloneDeep from 'lodash/cloneDeep'
   import { toastError } from "@/assets/js/iziToast/iziToast";
   import { fetchReferenceKeywords } from "@/assets/js/api/apiCalls";
+  import BottomOptions from "../../partial/BottomOptions";
 
   library.add(faPlus, faTrashAlt, faTimes)
 
   export default {
     components: {
+      BottomOptions,
       FontAwesomeIcon,
       VueMultiselect,
       FilePreview,
@@ -664,6 +669,11 @@
     },
 
     methods: {
+
+      hoverButtonClicked(choice) {
+        if (choice === "SAVE") this.sendData(false)
+        if (choice === "CANCEL") this.$router.push({ path: '/reference' })
+      },
 
       /******************
        *** SEND START ***

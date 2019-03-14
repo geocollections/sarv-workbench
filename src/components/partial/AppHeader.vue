@@ -18,10 +18,10 @@
 
           <!-- class="d-none d-lg-block" visible-lg and up  (hidden-md and down) -->
           <!-- class="d-lg-none d-xl-none" visible-md and down (hidden-lg and up) -->
-          
+
           <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-nav-item>
           <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-nav-item>
-          
+
           <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
           <!-- <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>-->
 
@@ -144,6 +144,10 @@
 </script>
 
 <style scoped>
+  nav {
+    box-shadow: 0 -4px 10px #000;
+  }
+
   .circle-flag {
     border-radius: 100%;
   }

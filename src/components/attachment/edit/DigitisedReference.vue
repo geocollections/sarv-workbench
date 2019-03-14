@@ -153,12 +153,9 @@
       </div>
     </div>
 
-    <confirmation-box title="edit.digitisedReference"
-                      :title-extra="edit.eference"
-                      v-if="isChanged && showModal"
-                      table="attachment"
-                      v-on:user-choice="confirmationBox"></confirmation-box>
 
+    <bottom-options :success-button="$t('edit.buttons.save')"
+                    :danger-button="$t('edit.buttons.cancelWithoutSaving')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
 </template>
@@ -169,16 +166,16 @@
   import cloneDeep from 'lodash/cloneDeep'
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
-  import ConfirmationBox from "../../partial/ConfirmationBox";
   import { toastError } from "@/assets/js/iziToast/iziToast";
+  import BottomOptions from "../../partial/BottomOptions";
 
   export default {
     components: {
+      BottomOptions,
       FilePreview,
       FileInformation,
       VueMultiselect,
       Datepicker,
-      ConfirmationBox
     },
     name: "DigitisedReference",
     props:['data'],
@@ -233,20 +230,9 @@
 
     methods: {
 
-      confirmationBox(userChoice) {
-        this.showModal = false
-
-        if (userChoice === 'LEAVE') {
-          this.$router.push({ path: '/attachment' })
-        }
-
-        if (userChoice === 'CONTINUE') {
-          // DO NOTHING
-        }
-
-        if (userChoice === 'SAVE') {
-          this.sendData(true)
-        }
+      hoverButtonClicked(choice) {
+        if (choice === "SAVE") this.sendData(false)
+        if (choice === "CANCEL") this.$router.push({ path: '/attachment' })
       },
 
 

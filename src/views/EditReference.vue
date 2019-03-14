@@ -95,6 +95,7 @@
       // } else {
       //   next()
       // }
+      next()
     },
 
     watch: {

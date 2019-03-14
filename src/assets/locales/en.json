@@ -73,6 +73,7 @@
     "locality": "Locality",
     "referenceCollection": "Reference collections",
     "journal": "Journals",
+    "library": "Library",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -104,7 +105,9 @@
       "specimen": "This field can't be empty",
       "imagesetNumber": "This field can't be empty",
       "imagesetNumberExists": "This imageset already exists",
-      "emptyField": "This field can't be empty"
+      "emptyField": "This field can't be empty",
+      "noResults1": "Unfortunately we didn't find any results. Go to",
+      "noResults2": "and start uploading."
     }
   },
   "edit": {
@@ -168,6 +171,11 @@
     "heading": "Sample ID",
     "editMessage": "Edit sample",
     "viewMessage": "View sample in geocollections portal"
+  },
+  "editLibrary": {
+    "heading": "Library ID",
+    "editMessage": "Edit library",
+    "viewMessage": "View library in geocollections portal"
   },
   "attachments": {
     "header": "My attachments",
@@ -355,7 +363,8 @@
     "user_added": "Added by",
     "date_added": "Added",
     "user_changed": "Changed by",
-    "date_changed": "Changed"
+    "date_changed": "Changed",
+    "addNew": "Add new Sample"
   },
   "sample_series": {
     "name": "Name"
@@ -406,7 +415,8 @@
       "synonym": "Synonyms",
       "attachment": "Attachment",
       "stratigraphy": "Stratigraphy"
-    }
+    },
+    "addNew": "Add new Locality"
   },
   "drillcore": {
     "drillcore": "Drillcore"
@@ -474,6 +484,16 @@
   "storage": {
     "storage": "Storage"
   },
+  "library": {
+    "header": "My Libraries",
+    "author_txt": "Author",
+    "year": "Year",
+    "title": "Title",
+    "reference": "Reference",
+    "isPrivate": "Public",
+    "id": "ID",
+    "addNew": "Add new Library"
+  },
   "messages": {
     "langChange": "Changed language!",
     "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@taltech.ee",
@@ -501,6 +521,8 @@
     "editLocality": "Geocollections Data Management: Edit locality",
     "addSample": "Geocollections Data Management: Add sample",
     "editSample": "Geocollections Data Management: Edit sample",
+    "editLibrary": "Geocollections Data Management: Edit library",
+    "addLibrary": "Geocollections Data Management: Add library",
     "settings": "Geocollections Data Management: Settings"
   },
   "logs": {
@@ -513,7 +535,8 @@
     "changes": "Changes"
   },
   "buttons": {
-    "deletePreferences": "Clear filters and ordering"
+    "deletePreferences": "Clear filters and ordering",
+    "cancel": "Cancel"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",
