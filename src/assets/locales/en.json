@@ -73,6 +73,7 @@
     "locality": "Locality",
     "referenceCollection": "Reference collections",
     "journal": "Journals",
+    "library": "Library",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",

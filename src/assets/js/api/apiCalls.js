@@ -326,6 +326,10 @@ export function fetchSamples(data) {
  *** LIBRARIES START ***
  ***********************/
 
+export function fetchLibrary(id) {
+  return fetch(`library/?id=${id}&format=json`)
+}
+
 export function fetchLibraries(data) {
   const fields = 'id,author_txt,year,title,title_en,is_private'
   let searchFields = ''

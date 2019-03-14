@@ -73,6 +73,7 @@
     "locality": "Lokaliteet",
     "referenceCollection": "Kirjanduse kogumikud",
     "journal": "Ajakirjad",
+    "library": "Kogumik",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
