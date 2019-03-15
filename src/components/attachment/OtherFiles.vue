@@ -862,6 +862,7 @@
 </template>
 
 <script>
+  import formManipulation  from './../mixins/formManipulation'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
@@ -881,6 +882,7 @@
       Spinner,
     },
     name: "OtherFiles",
+    mixins: [formManipulation],
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',
@@ -1109,7 +1111,6 @@
       },
     },
     created: function () {
-      console.log(this.$parent.createRelationWith)
       // Gets saved form values from local storage
       const otherFiles = this.$localStorage.get('otherFiles', 'fallbackValue')
       if (otherFiles !== 'fallbackValue' && Object.keys(otherFiles).length !== 0 && otherFiles.constructor === Object) {
@@ -1188,7 +1189,7 @@
                 }
                 //create relation with locality
                 if(this.$parent.createRelationWith !== null ){
-                  this.addRelationWithLocality(response.body.attachment_id);
+                  this.addRelationBetweenLocalityAndAttachment(response.body.attachment_id,'attachment_link');
                 }
 
                 if (!addAnother) {
@@ -1219,47 +1220,6 @@
         } else {
           toastError({text: this.$t('messages.checkForm')})
         }
-      },
-
-      addRelationWithLocality(attachmentId){
-        let formData = new FormData()
-        let uploadableObject = {
-          attachment:attachmentId,
-          locality: this.$store.state['createRelationWith'].id
-        };
-
-        const dataToUpload = JSON.stringify(uploadableObject);
-        formData.append('data', dataToUpload)
-
-        this.$http.post(this.apiUrl + 'add/attachment_link/', formData, {
-          before(request) {
-            this.previousRequest = request
-          }
-        }).then(response => {
-          console.log(response)
-          this.sendingData = false
-          if (response.status === 200) {
-            if (typeof response.body.message !== 'undefined') {
-              if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                toastSuccess({text: response.body.message_et});
-              } else {
-                toastSuccess({text: response.body.message});
-              }
-            }
-            if (typeof response.body.error !== 'undefined') {
-
-              if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-                toastError({text: response.body.error_et});
-              } else {
-                toastError({text: response.body.error});
-              }
-
-            }
-          }
-        }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
-        })
-
       },
 
       formatDataForUpload(objectToUpload) {

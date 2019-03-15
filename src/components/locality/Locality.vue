@@ -99,6 +99,24 @@
       </div>
     </div>
 
+    <!-- MAP -->
+    <div class="row">
+      <div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"
+           :class="showCollapseMap ? 'collapsed' : null">
+        {{ $t('photoArchive.collapseMap') }}
+        <font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>
+        <font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>
+      </div>
+    </div>
+
+    <div class="row mb-2">
+      <div class="col-md-6 offset-md-3">
+        <b-collapse v-model="showCollapseMap" id="collapseMap">
+          <map-component v-bind:location="{ lat: locality.latitude ? locality.latitude : null, lng: locality.longitude ? locality.longitude : null }" v-on:get-location="updateLocation" />
+        </b-collapse>
+      </div>
+    </div>
+
     <!-- ALTITUDE AND VERTICAL -->
     <div class="row">
       <div class="col-sm-2">
@@ -396,11 +414,12 @@
 </template>
 
 <script>
+
   import Spinner from 'vue-simple-spinner'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faTimes} from '@fortawesome/free-solid-svg-icons'
+  import {faTimes, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons'
   import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
   import {
     fetchListLocalityTypes,
@@ -422,7 +441,8 @@
   import LocalitySynonym from "./relatedTables/LocalitySynonym";
   import LocalityAttachment from "./relatedTables/LocalityAttachment";
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
-  library.add(faTimes)
+  import MapComponent from '@/components/partial/MapComponent'
+  library.add(faTimes, faChevronUp, faChevronDown)
   export default {
     name: "Locality",
     components: {
@@ -434,6 +454,7 @@
       FontAwesomeIcon,
       VueMultiselect,
       Spinner,
+      MapComponent,
     },
     mixins: [formManipulation,autocompleteFieldManipulation],
     data() {
@@ -448,7 +469,8 @@
           attachment: [], stratigraphy: []
         },
         requiredFields: ['locality'],
-        locality: {}
+        locality: {},
+        showCollapseMap: true,
       }
     },
     created() {
@@ -513,6 +535,8 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
         if (this.isDefinedAndNotNull(objectToUpload.elevation)) uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
+        if (objectToUpload.latitude === '') uploadableObject.latitude = objectToUpload.latitude.toFixed(6)
+        if (objectToUpload.longitude === '') uploadableObject.longitude = objectToUpload.longitude.toFixed(6)
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
         if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id
@@ -612,14 +636,20 @@
 
         this.formatRelatedDataForUpload(type,formData);
 
-        this.saveData(type,formData).then(isSuccessfullySaved => {
-          if(isSuccessfullySaved === false) return;
+        let url = 'add/'+type+'/';
+
+        this.saveData(type,formData,url).then(isSuccessfullySaved => {
           // RELOAD RELATED DATA IN CURRENT TAB
           this.loadRelatedData(type);
           // CLEAR PREVIOUS INSERT DATA
           this.relatedData.insert[this.activeTab]={};
         });
-      }
+      },
+
+      updateLocation(location) {
+        this.locality.latitude = location.lat.toFixed(6)
+        this.locality.longitude = location.lng.toFixed(6)
+      },
 
     },
     watch: {
@@ -637,6 +667,19 @@
 </script>
 
 <style scoped>
+  .toggle-collapse {
+    font-weight: bold;
+    /*font-size: large;*/
+  }
 
+  .toggle-collapse:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
+
+  /* Map height */
+  #collapseMap {
+    height: 50vh;
+  }
 
 </style>

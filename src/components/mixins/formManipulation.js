@@ -48,7 +48,7 @@ const formManipulation = {
       })
       return isValid
     },
-    
+
     add(addAnother, object) {
       let vm = this;
       if (this.validate(object) && !this.sendingData) {
@@ -90,11 +90,10 @@ const formManipulation = {
         resolve(this.request(type,formData,url))
       })
     },
+
     request(object,formData,url) {
-      let vm = this;
       this.sendingData = true;
       this.loadingPercent = 0;
-      url = url ? url : this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
 
       this.$http.post(this.apiUrl + url, formData, {
         before(request) {
@@ -132,10 +131,28 @@ const formManipulation = {
       }, errResponse => {
         console.log('ERROR: ' + JSON.stringify(errResponse));
         this.sendingData = false
-        toastError({text: vm.$t('messages.uploadError')});
+        toastError({text: this.$t('messages.uploadError')});
         return false;
       })
     },
+    addRelationBetweenLocalityAndAttachment(attachmentId, object){
+      let formData = new FormData()
+      let uploadableObject = {
+        attachment:attachmentId,
+        locality: this.$store.state['createRelationWith'].id
+      };
+
+      const dataToUpload = JSON.stringify(uploadableObject);
+      formData.append('data', dataToUpload)
+
+      let url = 'add/'+object+'/';
+
+      this.saveData(object,formData,url).then(isSuccessfullySaved => {
+          //
+      });
+
+    },
+
     reset(object) {
       this[object] = {}
     },
