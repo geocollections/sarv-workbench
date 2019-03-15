@@ -47,6 +47,9 @@
     "info": "This application allows adding and editing files related to geology and geocollections, including photo archive, images of collection specimens, scanned publications, tabular data files etc. All files are linked to user and institution and each user can see and edit only the files he/she has authored and/or entered into the database. However, all files that are not marked as private will be publicly shown on geocollections portal at",
     "collapseFiles": "Files",
     "collapseReference": "Reference",
+    "collapseLocality": "Locality",
+    "collapseSample": "Sample",
+    "collapseLibrary": "Library",
     "buttons": {
       "photoArchive": "Add photo",
       "specimenImage": "Add specimen image",
@@ -54,7 +57,13 @@
       "digitisedReference": "Add digitised reference",
       "reference": "Add reference",
       "myFiles": "My files",
-      "myReferences": "References"
+      "myReferences": "References",
+      "locality": "Add locality",
+      "localities": "Localities",
+      "sample": "Add sample",
+      "samples": "Samples",
+      "library": "Add library",
+      "libraries": "Libraries"
     },
     "developmentSettings": {
       "button": "Remove all default settings",
