@@ -47,6 +47,9 @@
     "info": "Siin saab geokogude infosüsteemi kasutaja lisada ja parandada geoloogia ja kollektsioonidega seotud faile: fotoarhiivi pilte, kollektsioonieksemplaride pilte, skaneeritud publikatsioone, tabelkujul andmefaile jms. Kõik failid on seotud konkreetse kasutaja ning asutusega. Järk-järgult lisanduvad siia funktsioonid ka muude andmeobjektide haldamiseks. Iga kasutaja saab esialgu näha ja muuta ainult enda autorlusega ja/või enda sisestatud andmeid, aga kõik kirjed, mis ei ole märgitud privaatseks, muutuvad avalikult nähtavaks geokogude portaalis",
     "collapseFiles": "Failid",
     "collapseReference": "Kirjandus",
+    "collapseLocality": "Lokaliteet",
+    "collapseSample": "Proov",
+    "collapseLibrary": "Kogumik",
     "buttons": {
       "photoArchive": "Lisa pilt",
       "specimenImage": "Lisa eksemplari pilt",
@@ -54,7 +57,13 @@
       "digitisedReference": "Lisa digiteeritud kirjandus",
       "reference": "Lisa kirjandus",
       "myFiles": "Minu failid",
-      "myReferences": "Kirjandus"
+      "myReferences": "Kirjandus",
+      "locality": "Lisa lokaliteet",
+      "localities": "Lokaliteedid",
+      "sample": "Lisa proov",
+      "samples": "Proovid",
+      "library": "Lisa kogumik",
+      "libraries": "Kogumikud"
     },
     "developmentSettings": {
       "button": "Kustuta kõik vaikimisi väärtused",
