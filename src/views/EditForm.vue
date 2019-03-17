@@ -13,7 +13,7 @@
                       custom-question="confirmation.relatedDataQuestion"
                       :table="$route.meta.table"/>
     <!-- LOGS -->
-    <log v-if="data !== null" :table="$route.meta.table" :data="data"></log>
+    <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData"></log>
   </div>
 </template>
 
@@ -29,6 +29,7 @@
     data(){
       return {
         data : null,
+        formattedData:null,
         isConfirmation: false
       }
     },
@@ -40,6 +41,7 @@
     methods: {
       setData(data) {
         this.data = data
+        if(this.data !== null) this.formattedData = data;
       }
     }
   }

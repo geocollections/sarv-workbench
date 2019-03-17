@@ -58,6 +58,7 @@
     watch: {
       'formattedData':{
         handler: function (newVal, oldVal) {
+          console.log(newVal)
           this.getLogs()
         },
         immediate: true,

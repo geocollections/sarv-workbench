@@ -70,8 +70,7 @@ const formManipulation = {
           //before save object ID was removed
           this[object] = editableObject;
           //Reload logs is not working TODO
-          console.log('reload logs')
-          this.$emit('data-loaded',this[object]);
+          this.$emit('data-loaded',editableObject);
           if (!addAnother) {
             this.$router.push({ path: '/'+object })
           }
