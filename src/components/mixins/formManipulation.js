@@ -174,6 +174,15 @@ const formManipulation = {
       }
       window.open('https://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
     },
+    removeUnnecessaryFields(object,copyFields){
+      let vm = this;
+      //copy only certain fields
+      Object.entries(this[object]).forEach(entry => {
+        if (copyFields.indexOf(entry[0]) < 0) {
+          delete vm[object][entry[0]]
+        }
+      });
+    },
   }
 };
 

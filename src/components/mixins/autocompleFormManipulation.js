@@ -23,7 +23,16 @@ const autocompleteFieldManipulation = {
         case 'locality':
           query = `locality/?multi_search=value:${val};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`;
           break;
+        case 'additional_storage':
+        case 'storage':
+          query = `location/?multi_search=value:${val};fields:location;lookuptype:icontains&fields=id,location`;
+          break;
         case 'stratigraphy':
+          query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=chronostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
+          break;
+        case 'lithostratigraphy':
+          query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=lithostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
+          break;
         case 'stratigraphy_top':
         case 'stratigraphy_base':
           query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
@@ -63,6 +72,15 @@ const autocompleteFieldManipulation = {
     },
     autcompleteStratigraphySearch(value) {
       this.autocompliteSearch(value, 'stratigraphy', 'stratigraphy')
+    },
+    autcompleteLithostratigraphySearch(value) {
+      this.autocompliteSearch(value, 'lithostratigraphy', 'lithostratigraphy')
+    },
+    autcompleteStorageSearch(value) {
+      this.autocompliteSearch(value, 'storage', 'storage')
+    },
+    autcompleteAdditionalStorageSearch(value) {
+      this.autocompliteSearch(value, 'storage_additional', 'storage_additional')
     },
     autcompleteStratigraphyTopSearch(value) {
       this.autocompliteSearch(value, 'stratigraphy_top', 'stratigraphy_top')

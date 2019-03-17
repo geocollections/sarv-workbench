@@ -461,6 +461,10 @@
       return {
         activeTab: 'locality_reference',
         relatedData: this.setDefaultRalatedData(),
+        copyFields : ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
+          'coordx','coordy','coord_system','stratigraphy_top_free','stratigraphy_base_free','maaamet_pa_id','eelis',
+          'remarks_location','remarks','is_private', 'type','parent','extent','coord_det_precision','coord_det_method',
+          'coord_det_agent','country','stratigraphy_top','stratigraphy_base'],
         autocomplete: {
           loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false,
             reference:false, synonym:false, attachment:false, stratigraphy:false},
@@ -502,7 +506,7 @@
           if(handledResponse.length > 0) {
             this.locality = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.locality)
-            this.removeUnnecessaryFields();
+            this.removeUnnecessaryFields('locality',this.copyFields);
             this.$emit('data-loaded',this.locality)
             this.sendingData = false;
           } else {
@@ -539,7 +543,8 @@
       },
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isDefinedAndNotNull(objectToUpload.elevation)) uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
+        if (this.isDefinedAndNotNull(objectToUpload.elevation))
+          uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
         if (objectToUpload.latitude === '')
           uploadableObject.latitude = this.isDefinedAndNotNull(objectToUpload.latitude) ? objectToUpload.latitude.toFixed(6) : null
         if (objectToUpload.longitude === '')
@@ -557,20 +562,6 @@
 
         // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)
-      },
-      removeUnnecessaryFields(){
-        let copyFields = ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
-          'coordx','coordy','coord_system','stratigraphy_top_free','stratigraphy_base_free','maaamet_pa_id','eelis',
-          'remarks_location','remarks','is_private', 'type','parent','extent','coord_det_precision','coord_det_method',
-          'coord_det_agent','country','stratigraphy_top','stratigraphy_base']
-
-        let vm = this;
-        //copy only certain fields
-        Object.entries(this.locality).forEach(entry => {
-          if (copyFields.indexOf(entry[0]) < 0) {
-            delete vm.locality[entry[0]]
-          }
-        });
       },
 
       fillAutocompleteFields(obj){

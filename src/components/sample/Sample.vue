@@ -120,7 +120,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.parent" deselect-label="Can't remove this value"
+        <vue-multiselect class="align-middle" v-model="sample.locality" deselect-label="Can't remove this value"
                          :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.locality"
                          :options="autocomplete.locality" :searchable="true" @search-change="autcompleteLocalitySearch"
@@ -207,7 +207,16 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="lithostratigraphy" v-model="sample.lithostratigraphy" type="text"  :disabled="true"></b-form-input>
+        <vue-multiselect class="align-middle" v-model="sample.lithostratigraphy" deselect-label="Can't remove this value"
+                         :loading="autocomplete.loaders.lithostratigraphy"
+                         :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :options="autocomplete.lithostratigraphy" :searchable="true" @search-change="autcompleteLithostratigraphySearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>
+            {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
       </div>
     </div>
 
@@ -343,7 +352,15 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="storage" v-model="sample.storage" type="text" :disabled="true"></b-form-input>
+        <vue-multiselect class="align-middle" v-model="sample.storage" deselect-label="Can't remove this value"
+                         :loading="autocomplete.loaders.storage" id="storage"
+                         label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
       </div>
     </div>
     <!-- OWNER-->
@@ -353,7 +370,15 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="storage_additional" v-model="sample.storage_additional" type="text"  :disabled="true"></b-form-input>
+        <vue-multiselect class="align-middle" v-model="sample.storage_additional" deselect-label="Can't remove this value"
+                         :loading="autocomplete.loaders.additional_storage" id="storage_additional"
+                         label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :options="autocomplete.storage_additional" :searchable="true" @search-change="autcompleteAdditionalStorageSearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
       </div>
 
       <div class="col-sm-2">
@@ -427,13 +452,18 @@
       data() {
         return {
           activeTab: 'analyses',
+          copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
+            'parent_sample','parent_specimen','depth','depth_interval','latitude','longitude','stratigraphy','lithostratigraphy',
+            'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
+            'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
+            'rock_palaeontology','analysis','locality','locality_free','remarks','is_private'],
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
-              litostratigraphy:false, agent:false, rock:false, storage1:false, storage2:false, owner:false   },
-            series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],litostratigraphy:[],agent:[],
-            rock:[],storage1:[],storage2:[],owner:[]
+              lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false   },
+            series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
+            rock:[],storage:[],storage_additional:[],owner:[]
           },
-          requiredFields: ['sample'],
+          requiredFields: ['number'],
           sample: {}
         }
       },
@@ -448,6 +478,8 @@
             let handledResponse = this.handleResponse(response);
             if(handledResponse.length > 0) {
               this.sample = this.handleResponse(response)[0];
+              this.fillAutocompleteFields(this.sample)
+              this.removeUnnecessaryFields('sample', this.copyFields);
               this.$emit('data-loaded',this.sample)
               this.sendingData = false;
             } else {
@@ -458,8 +490,42 @@
       },
 
       methods: {
+        formatDataForUpload(objectToUpload) {
+          let uploadableObject = cloneDeep(objectToUpload)
+
+          if (objectToUpload.latitude === '')
+            uploadableObject.latitude = this.isDefinedAndNotNull(objectToUpload.latitude) ? objectToUpload.latitude.toFixed(6) : null
+          if (objectToUpload.longitude === '')
+            uploadableObject.longitude = this.isDefinedAndNotNull(objectToUpload.longitude) ? objectToUpload.longitude.toFixed(6) : null
+          if (this.isDefinedAndNotNull(objectToUpload.rock_palaeontology)) uploadableObject.rock_palaeontology = objectToUpload.rock_palaeontology === true ? '1' : '0';
+          if (this.isDefinedAndNotNull(objectToUpload.analysis)) uploadableObject.analysis = objectToUpload.analysis === true ? '1' : '0';
+          if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+          //autocomplete fields
+
+          if (this.isDefinedAndNotNull(objectToUpload.series)) uploadableObject.series = objectToUpload.series.id
+          if (this.isDefinedAndNotNull(objectToUpload.sample_purpose)) uploadableObject.sample_purpose = objectToUpload.sample_purpose.id
+          if (this.isDefinedAndNotNull(objectToUpload.parent_sample)) uploadableObject.parent_sample = objectToUpload.parent_sample.id
+          if (this.isDefinedAndNotNull(objectToUpload.parent_specimen)) uploadableObject.parent_specimen = objectToUpload.parent_specimen.id
+          if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
+          if (this.isDefinedAndNotNull(objectToUpload.stratigraphy)) uploadableObject.stratigraphy = objectToUpload.stratigraphy.id
+          if (this.isDefinedAndNotNull(objectToUpload.lithostratigraphy)) uploadableObject.lithostratigraphy = objectToUpload.lithostratigraphy.id
+          if (this.isDefinedAndNotNull(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id
+          if (this.isDefinedAndNotNull(objectToUpload.classification_rock)) uploadableObject.classification_rock = objectToUpload.classification_rock.id
+          if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
+          // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
+          return JSON.stringify(uploadableObject)
+        },
         fillAutocompleteFields(obj){
-          // this.locality.type = {value:obj.type__value,value_en:obj.type__value_en,id:obj.type__id}
+          this.sample.series = {name:obj.series__name,id:obj.series_id}
+          this.sample.sample_purpose = {value:obj.sample_purpose__value,value_en:obj.sample_purpose__value_en,id:obj.sample_purpose__id}
+          this.sample.parent_sample = {number:obj.parent_sample__number,id:obj.parent_sample}
+          this.sample.parent_specimen = {specimen_id:obj.parent_specimen__specimen_id,id:obj.parent_specimen}
+          this.sample.locality = {locality:obj.locality__locality,locality_en:obj.locality__locality_en,id:obj.locality__locality__id}
+          this.sample.stratigraphy = {stratigraphy:obj.stratigraphy__stratigraphy,stratigraphy_en:obj.stratigraphy__stratigraphy_en,id:obj.stratigraphy__stratigraphy__id}
+          this.sample.lithostratigraphy = {stratigraphy:obj.lithostratigraphy__stratigraphy,stratigraphy_en:obj.lithostratigraphy__stratigraphy_en,id:obj.lithostratigraphy_id}
+          this.sample.agent_collected = {agent:obj.agent_collected__agent,id:obj.agent_collected__id}
+          this.sample.classification_rock = {locality:obj.classification_rock__name,locality_en:obj.classification_rock__name_en,id:obj.classification_rock__id}
+          this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
         },
 
         setActiveTab(type){
