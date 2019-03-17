@@ -112,7 +112,7 @@
     <div class="row mb-2">
       <div class="col-md-6 offset-md-3">
         <b-collapse v-model="showCollapseMap" id="collapseMap">
-          <map-component v-bind:location="{ lat: locality.latitude ? locality.latitude : null, lng: locality.longitude ? locality.longitude : null }" v-on:get-location="updateLocation" />
+          <map-component v-bind:location="{ lat: locality.latitude ? (locality.latitude).toString() : null, lng: locality.longitude ? (locality.longitude).toString() : null }" v-on:get-location="updateLocation" />
         </b-collapse>
       </div>
     </div>
@@ -473,6 +473,11 @@
         showCollapseMap: true,
       }
     },
+    computed: {
+      isLocalityDataLoaded(){
+        return this.locality.latitude || this.locality.longitude
+      }
+    },
     created() {
       fetchListLocalityTypes().then(response => {
         this.autocomplete.localityTypes = this.handleResponse(response);
@@ -535,8 +540,10 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
         if (this.isDefinedAndNotNull(objectToUpload.elevation)) uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
-        if (objectToUpload.latitude === '') uploadableObject.latitude = objectToUpload.latitude.toFixed(6)
-        if (objectToUpload.longitude === '') uploadableObject.longitude = objectToUpload.longitude.toFixed(6)
+        if (objectToUpload.latitude === '')
+          uploadableObject.latitude = this.isDefinedAndNotNull(objectToUpload.latitude) ? objectToUpload.latitude.toFixed(6) : null
+        if (objectToUpload.longitude === '')
+          uploadableObject.longitude = this.isDefinedAndNotNull(objectToUpload.longitude) ? objectToUpload.longitude.toFixed(6) : null
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
         if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id

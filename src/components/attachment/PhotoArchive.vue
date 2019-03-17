@@ -458,6 +458,7 @@
 </template>
 
 <script>
+  import formManipulation  from './../mixins/formManipulation'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faPlus} from '@fortawesome/free-solid-svg-icons'
@@ -484,6 +485,8 @@
       MapComponent,
     },
     name: "PhotoArchive",
+
+    mixins: [formManipulation],
     metaInfo: {
       link: [
         { rel: 'stylesheet', href: '/css/index.css' },
@@ -765,6 +768,11 @@
                   toastSuccess({text: response.body.message_et});
                 } else {
                   toastSuccess({text: response.body.message});
+                }
+                console.log('Creating relation with' + this.$parent.createRelationWith.id + ' ' + response.body.attachment_id)
+                //create relation with locality
+                if(this.$parent.createRelationWith !== null ){
+                  this.addRelationBetweenLocalityAndAttachment(response.body.attachment_id,'attachment_link');
                 }
 
                 if (!addAnother) {

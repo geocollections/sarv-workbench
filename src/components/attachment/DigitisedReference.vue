@@ -1,6 +1,5 @@
 <template>
   <div class="digitised-reference">
-
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
     <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 
@@ -204,6 +203,7 @@
 </template>
 
 <script>
+  import formManipulation  from './../mixins/formManipulation'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
@@ -225,6 +225,7 @@
       Spinner,
     },
     name: "DigitisedReference",
+    mixins: [formManipulation],
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',
@@ -328,6 +329,11 @@
                   toastSuccess({text: response.body.message_et});
                 } else {
                   toastSuccess({text: response.body.message});
+                }
+
+                //create relation with locality
+                if(this.$parent.createRelationWith !== null ){
+                  this.addRelationBetweenLocalityAndAttachment(response.body.attachment_id,'attachment_link');
                 }
 
                 if (!addAnother) {

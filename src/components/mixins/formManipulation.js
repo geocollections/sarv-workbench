@@ -6,6 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import {faTimes} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
+import Vue from 'vue'
+
 library.add(faTimes, faExternalLinkAlt)
 
 const formManipulation = {
@@ -40,7 +42,6 @@ const formManipulation = {
       }
     },
 
-
     validate(object){
       let vm = this, isValid = true;
       this.requiredFields.forEach(function (el) {
@@ -50,7 +51,6 @@ const formManipulation = {
     },
 
     add(addAnother, object) {
-      let vm = this;
       if (this.validate(object) && !this.sendingData) {
 
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
@@ -70,6 +70,7 @@ const formManipulation = {
           //before save object ID was removed
           this[object] = editableObject;
           //Reload logs is not working TODO
+          console.log('reload logs')
           this.$emit('data-loaded',this[object]);
           if (!addAnother) {
             this.$router.push({ path: '/'+object })
@@ -78,20 +79,20 @@ const formManipulation = {
 
       } else if (this.sendingData) {
         // This shouldn't run unless user deletes html elements and tries to press 'add' button again
-        toastError({text: vm.$t('messages.easterEggError')})
+        toastError({text: this.$t('messages.easterEggError')})
       } else {
-        toastError({text: vm.$t('messages.checkForm')})
+        toastError({text: this.$t('messages.checkForm')})
       }
 
     },
 
     saveData(type,formData,url) {
       return new Promise(resolve => {
-        resolve(this.request(type,formData,url))
+        this.request(type,formData,url,resolve)
       })
     },
 
-    request(object,formData,url) {
+    request(object,formData,url,resolve) {
       this.sendingData = true;
       this.loadingPercent = 0;
 
@@ -106,7 +107,6 @@ const formManipulation = {
           }
         }
       }).then(response => {
-        console.log(response)
         this.sendingData = false
         if (response.status === 200) {
           if (typeof response.body.message !== 'undefined') {
@@ -115,7 +115,7 @@ const formManipulation = {
             } else {
               toastSuccess({text: response.body.message});
             }
-            return true
+            resolve(true)
           }
           if (typeof response.body.error !== 'undefined') {
 
@@ -124,15 +124,16 @@ const formManipulation = {
             } else {
               toastError({text: response.body.error});
             }
-            return false
+            resolve(false)
 
           }
         }
       }, errResponse => {
+        console.log(this.$t('messages.uploadError'))
         console.log('ERROR: ' + JSON.stringify(errResponse));
         this.sendingData = false
         toastError({text: this.$t('messages.uploadError')});
-        return false;
+        resolve(false)
       })
     },
     addRelationBetweenLocalityAndAttachment(attachmentId, object){
@@ -148,7 +149,7 @@ const formManipulation = {
       let url = 'add/'+object+'/';
 
       this.saveData(object,formData,url).then(isSuccessfullySaved => {
-          //
+          console.log("Relation created with locality id: "+ this.$store.state['createRelationWith'].id)
       });
 
     },

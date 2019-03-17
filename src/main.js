@@ -16,7 +16,6 @@ import { sync } from 'vuex-router-sync'
 import { L } from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css' // Leaflet css
 
-
 // this part resolve an issue where the markers would not appear
 delete L.Icon.Default.prototype._getIconUrl;
 
