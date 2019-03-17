@@ -169,7 +169,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="latitude" v-model="sample.latitude" type="number"></b-form-input>
+        <b-form-input id="latitude" v-model="sample.latitude1" type="number"></b-form-input>
       </div>
 
 
@@ -178,7 +178,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="longitude" v-model="sample.longitude" type="number"></b-form-input>
+        <b-form-input id="longitude" v-model="sample.longitude1" type="number"></b-form-input>
       </div>
     </div>
 
@@ -396,10 +396,22 @@
         </vue-multiselect>
       </div>
     </div>
+    <!-- DESCRIPTION -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`remarks_location`">{{ $t('locality.remarks') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-textarea id="remarks_location" v-model="sample.remarks" type="text" size="sm"
+                         :rows="1" :max-rows="20"></b-form-textarea>
+      </div>
+    </div>
+
     <!-- IS PRIVATE AND MASS-->
     <div class="row mb-3 mt-3">
       <div class="col">
-        <b-form-checkbox id="rock_palaeontology" v-model="sample.rock_palaeontology" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="palaeontology" v-model="sample.palaeontology" :value="true" :unchecked-value="false">
           {{ $t('sample.palaeontology') }}
         </b-form-checkbox>
 
@@ -453,10 +465,10 @@
         return {
           activeTab: 'analyses',
           copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
-            'parent_sample','parent_specimen','depth','depth_interval','latitude','longitude','stratigraphy','lithostratigraphy',
+            'parent_sample','parent_specimen','depth','depth_interval','latitude1','longitude1','stratigraphy','lithostratigraphy',
             'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
             'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
-            'rock_palaeontology','analysis','locality','locality_free','remarks','is_private'],
+            'palaeontology','analysis','locality','locality_free','remarks','is_private'],
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
               lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false   },
@@ -493,11 +505,11 @@
         formatDataForUpload(objectToUpload) {
           let uploadableObject = cloneDeep(objectToUpload)
 
-          if (objectToUpload.latitude === '')
-            uploadableObject.latitude = this.isDefinedAndNotNull(objectToUpload.latitude) ? objectToUpload.latitude.toFixed(6) : null
-          if (objectToUpload.longitude === '')
-            uploadableObject.longitude = this.isDefinedAndNotNull(objectToUpload.longitude) ? objectToUpload.longitude.toFixed(6) : null
-          if (this.isDefinedAndNotNull(objectToUpload.rock_palaeontology)) uploadableObject.rock_palaeontology = objectToUpload.rock_palaeontology === true ? '1' : '0';
+          if (objectToUpload.latitude1 === '')
+            uploadableObject.latitude1 = this.isDefinedAndNotNull(objectToUpload.latitude1) ? objectToUpload.latitude1.toFixed(6) : null
+          if (objectToUpload.longitude1 === '')
+            uploadableObject.longitude1 = this.isDefinedAndNotNull(objectToUpload.longitude1) ? objectToUpload.longitude1.toFixed(6) : null
+          if (this.isDefinedAndNotNull(objectToUpload.palaeontology)) uploadableObject.palaeontology = objectToUpload.palaeontology === true ? '1' : '0';
           if (this.isDefinedAndNotNull(objectToUpload.analysis)) uploadableObject.analysis = objectToUpload.analysis === true ? '1' : '0';
           if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
           //autocomplete fields
@@ -512,6 +524,8 @@
           if (this.isDefinedAndNotNull(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id
           if (this.isDefinedAndNotNull(objectToUpload.classification_rock)) uploadableObject.classification_rock = objectToUpload.classification_rock.id
           if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
+          if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
+          if (this.isDefinedAndNotNull(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id
           // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
           return JSON.stringify(uploadableObject)
         },
@@ -526,6 +540,8 @@
           this.sample.agent_collected = {agent:obj.agent_collected__agent,id:obj.agent_collected__id}
           this.sample.classification_rock = {locality:obj.classification_rock__name,locality_en:obj.classification_rock__name_en,id:obj.classification_rock__id}
           this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
+          this.sample.storage = {location:obj.storage__location,id:obj.storage__location}
+          this.sample.storage_additional = {location:obj.storage_additional__location_location,id:obj.storage_additional__location}
         },
 
         setActiveTab(type){
