@@ -21,8 +21,8 @@
               </a>
               -->
               <router-link :to="{ path: '/reference/' + entity.reference }" target="_blank">
-  				{{ entity.reference__reference }}
-			  </router-link>
+                {{ entity.reference__reference }}
+              </router-link>
             </td>
             <td>{{ entity.pages }}</td>
             <td>{{ entity.figures }}</td>

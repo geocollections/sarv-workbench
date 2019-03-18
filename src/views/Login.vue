@@ -4,6 +4,16 @@
         <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
             <b-tabs>
 
+                <b-tab :title="$t('login.idCard')">
+                    <div class="row mt-3 mb-3">
+                        <div class="col">
+
+                            <login-id/>
+
+                        </div>
+                    </div>
+                </b-tab>
+
                 <b-tab :title="$t('login.password')">
                     <div class="row mt-3 mb-3">
                         <div class="col">
@@ -14,15 +24,7 @@
                     </div>
                 </b-tab>
 
-                <b-tab :title="$t('login.idCard')">
-                    <div class="row mt-3 mb-3">
-                        <div class="col">
 
-                            <login-id/>
-
-                        </div>
-                    </div>
-                </b-tab>
 
             </b-tabs>
 
