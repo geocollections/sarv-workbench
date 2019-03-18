@@ -28,7 +28,7 @@
             </span>
 
             <span v-if="entity.book_editor || entity.book">
-              In: 
+              <i>In: </i> 
             </span>
               
             <span v-if="entity.book_editor">
@@ -36,7 +36,7 @@
             </span>
               
             <span v-if="entity.book">
-              {{ entity.book }}. 
+              <i>{{ entity.book }}</i>. 
             </span>
 
             <span v-if="entity.publisher">
@@ -59,10 +59,14 @@
               {{ entity.number }},
             </span>
 
-            <span v-if="entity.pages">
+            <span v-if="entity.pages && entity.journal__journal_name">
               {{ entity.pages }}.
             </span>
-
+            
+            <span v-else>
+              pp. {{ entity.pages }}.
+            </span>
+              
             <!-- TODO: DOI LINK -->
             <span v-if="entity.doi">
               <a href="javascript:void(0)" @click="openDOI({doi: entity.doi})">
