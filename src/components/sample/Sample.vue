@@ -540,8 +540,8 @@
           this.sample.agent_collected = {agent:obj.agent_collected__agent,id:obj.agent_collected__id}
           this.sample.classification_rock = {locality:obj.classification_rock__name,locality_en:obj.classification_rock__name_en,id:obj.classification_rock__id}
           this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
-          this.sample.storage = {location:obj.storage__location,id:obj.storage__location}
-          this.sample.storage_additional = {location:obj.storage_additional__location_location,id:obj.storage_additional__location}
+          this.sample.storage = {location:obj.storage__location,id:obj.storage}
+          this.sample.storage_additional = {location:obj.storage_additional__location_location,id:obj.storage_additional}
         },
 
         setActiveTab(type){
