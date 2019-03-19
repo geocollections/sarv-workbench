@@ -55,6 +55,16 @@ const formManipulation = {
       return isValid
     },
 
+    // addRelatedDataX(object,link_object, link_table) {
+    //   if(object === 'sample'){
+    //     console.log('adding related data');
+    //     this[object].related_data = {};
+    //     this[object].related_data[link_object] = this.mapRelatedData(this.relatedData[link_table],link_table);
+    //     this[object].related_data[link_object].push(this.mapRelatedDataForUpload(this.relatedData.insert[link_table]))
+    //     console.log(this[object].related_data[link_object])
+    //   }
+    // },
+
     add(addAnother, object) {
       if (this.validate(object) && !this.sendingData) {
 
@@ -64,7 +74,7 @@ const formManipulation = {
         if(this[object].id !== undefined){
           delete this[object]['id']
         }
-
+        // this.addRelatedDataX(object,'reference','sample_reference');
         const dataToUpload = this.formatDataForUpload(this[object]);
         let formData = new FormData();
         formData.append('data', dataToUpload);
@@ -239,6 +249,15 @@ const formManipulation = {
       }
       formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
     },
+  },
+  watch: {
+    'relatedData.page': {
+      handler: function (newVal) {
+        console.log(newVal)
+        this.setActiveTab(this.activeTab)
+      },
+      deep: true
+    }
   }
 };
 

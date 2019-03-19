@@ -324,6 +324,10 @@ export function fetchSamples(data, agent) {
     return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
+
+export function fetchSampleReference(id,page = 1) {
+  return fetch(`sample_reference/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
+}
 /************************
  ***  SAMPLES END  ***
  ************************/

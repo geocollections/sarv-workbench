@@ -601,15 +601,6 @@
         this.locality.longitude = location.lng.toFixed(6)
       },
 
-    },
-    watch: {
-      'relatedData.page': {
-        handler: function (newVal) {
-          console.log(newVal)
-          this.setActiveTab(this.activeTab)
-        },
-        deep: true
-      }
     }
 
   }

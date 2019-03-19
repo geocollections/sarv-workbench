@@ -442,7 +442,8 @@
   import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
   import {
     fetchSample,
-    fetchSamplePurpose
+    fetchSamplePurpose,
+    fetchSampleReference
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
@@ -558,39 +559,48 @@
           this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
         },
 
+        // mapRelatedData(data, object) {
+        //   let returnList = [];
+        //   if(object === 'sample_reference') {
+        //     data.forEach(entity => {
+        //       returnList.push({ id: entity.reference, reference: entity.reference__reference, remarks: entity.remarks
+        //       })
+        //     })
+        //   }
+        //   return returnList;
+        // },
+        //
+        // mapRelatedDataForUpload(entity) {
+        //   return entity.reference ? {id: entity.reference.id, reference: entity.reference.reference,
+        //     remarks: entity.remarks} : null;
+        // },
 
-        loadRelatedData(type){
-          // let query;
-          // if(type === 'sample_reference') {
-          //   query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.sample_reference)
-          // }
-          //
-          // query.then(response => {
-          //   this.relatedData[type] = this.handleResponse(response);
-          //   this.relatedData.count[type] = response.body.count;
-          // });
+        loadRelatedData(object){
+          let query;
+          if(object === 'sample_reference') {
+            query = fetchSampleReference(this.$route.params.id,this.relatedData.page.sample_reference)
+          }
+
+          query.then(response => {
+            this.relatedData[object] = this.handleResponse(response);
+            this.relatedData.count[object] = response.body.count;
+          });
         },
 
+        //check required fields for related data
         checkRequiredFields(type){
           if(type === 'sample_reference') return this.relatedData.insert[type].reference === undefined;
         },
 
         formatRelatedData(objectToUpload) {
           let uploadableObject = cloneDeep(objectToUpload);
-          uploadableObject.locality = this.locality.id;
+          uploadableObject.sample = this.sample.id;
           if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
           return JSON.stringify(uploadableObject)
         },
 
       },
-      watch: {
-        'relatedData.page': {
-          handler: function (newVal) {
-            this.setActiveTab(this.activeTab)
-          },
-          deep: true
-        }
-      }
+
 
     }
 </script>
