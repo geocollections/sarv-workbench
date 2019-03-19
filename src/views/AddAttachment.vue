@@ -25,9 +25,8 @@
       </div>
     </div>
 
-    <b-alert show variant="warning" v-if="createRelationWith !== null">
-      {{$t('messages.localityAttachmentRelationInfo',
-      { data: `ID: ${createRelationWith.id} ${$i18n.locale === 'ee' ? createRelationWith.locality : createRelationWith.locality_en}` })}}
+    <b-alert show variant="warning" v-if="createRelationWith.data !== null">
+      {{ createRelationWith.info }}
       <a class="small" href="javascript:void(0)" @click="navigateBack">
         <font-awesome-icon icon="external-link-alt"/>
       </a>
@@ -65,7 +64,7 @@
     },
     methods:{
       navigateBack() {
-        this.$router.push({ path:'/locality/'+this.createRelationWith.id})
+        this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
       }
     }
   }

@@ -1,20 +1,20 @@
 <template>
-  <div id="#tab-attachment" class="tab-pane row" :class="{active: activeTab === 'attachment_link'}" role="tabpanel">
-    <div class="col-sm-8" v-if="activeTab === 'attachment_link'">
+  <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'attachment_link'}" role="tabpanel">
+    <div class="col-sm-12" v-if="activeTab === 'attachment_link'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
-            <th>{{ $t('attachments.link') }}</th>
-            <th v-if="relatedData.insert.attachment_link.attachment"></th>
+            <th>{{ $t('reference.reference') }}</th>
+            <th v-if="relatedData.insert.attachment_link.reference"></th>
           </tr>
           </thead>
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.attachment_link">
-            <td>{{ entity.original_filename}}</td>
-            <td>{{ entity.remarks }}</td>
-            <td v-if="relatedData.insert.attachment_link.attachment"></td>
+            <td>{{entity.original_filename}}
+            </td>
+            <td v-if="relatedData.insert.attachment_link.reference"></td>
           </tr>
           <tr class="related-input-data">
             <td>
@@ -28,8 +28,8 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.attachment_link = {}"  v-if="relatedData.insert.attachment_link.attachment">
-              <font-awesome-icon icon="times"/>
+            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.attachment_link = {}" v-if="relatedData.insert.attachment_link.reference">
+              <font-awesome-icon icon="times"></font-awesome-icon>
             </td>
           </tr>
           </tbody>
@@ -41,7 +41,6 @@
             <font-awesome-icon icon="external-link-alt"/>
           </a>
         </b-form-text>
-
       </div>
     </div>
   </div>
@@ -49,8 +48,9 @@
 
 <script>
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
+
     export default {
-        name: "SampleAttachment",
+      name: "SampleAttachment",
       props: {
         relatedData: Object,
         autocomplete: Object,
@@ -59,7 +59,9 @@
       mixins: [autocompleteFieldManipulation],
       methods: {
         createAttachmentRelation() {
-          let createRelationWith = this.$parent.sample
+          let createRelationWith = { object: 'sample', data: this.$parent.sample,
+            info: this.$t('messages.sampleAttachmentRelationInfo',
+              { data: `ID: ${this.$parent.sample.id} (${this.$parent.sample.number})` })};
           this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith })
           this.$router.push({ path:'/attachment/add/other_file'})
         }
@@ -68,15 +70,33 @@
 </script>
 
 <style scoped>
+  .table { 
+	font-size: 0.9rem; 
+  }
+  .table td, .table th {
+	padding: 0.25rem 0.4rem;  
+  }
   .related-input-data td{
     /*min-width: 10em !important;*/
     padding: 0.2em!important;
   }
-
   .multiselect {
     line-height: 1;
     z-index: 999 !important;
     width: 100%;
-    min-width: 20em!important
+    min-width: 10em!important;
+  
+  }
+  .multiselect__tags {
+	border: none;
+ font-size: 0.8rem;
+  }
+  input, .multiselect__single, .multiselect__input, .multiselect__tags, .multiselect__tag-icon:after, .multiselect__option:after, .multiselect__option--selected  {
+	font-size: 0.9rem !important;
+    font-weight: light;
+  padding:0.25rem;
+  } 
+  input {
+	border: none;
   }
 </style>

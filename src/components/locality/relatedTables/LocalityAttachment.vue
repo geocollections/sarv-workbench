@@ -42,7 +42,6 @@
             <font-awesome-icon icon="external-link-alt"/>
           </a>
         </b-form-text>
-
       </div>
     </div>
   </div>
@@ -60,8 +59,10 @@
       mixins: [autocompleteFieldManipulation],
       methods: {
         createAttachmentRelation() {
-          let createRelationWith = this.$parent.locality
-          this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith })
+          let createRelationWith = { object: 'locality', data: this.$parent.locality,
+            info: this.$t('messages.localityAttachmentRelationInfo',
+            { data: `ID: ${this.$parent.locality.id} ${this.$i18n.locale === 'ee' ? this.$parent.locality.locality : this.$parent.locality.locality_en}` })};
+          this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith });
           this.$router.push({ path:'/attachment/add/other_file'})
           // this.$router.push({path:'/attachment/add/other_file', query: Object.assign({}, this.$route.query, { newKey: 'newValue' }) })
           // this.windowOpenNewTab('/attachment/add/other_file',{}, { createLocalityRelation: this.$parent.locality})

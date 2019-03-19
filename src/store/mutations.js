@@ -6,6 +6,6 @@ export default {
     Vue.set(state,'createRelationWith', createRelationWith )
   },
   REMOVE_RELATION_OBJECT: (state) => {
-    Vue.set(state,'createRelationWith', null )
+    Vue.set(state,'createRelationWith',  { object: null, data: null, info: null } )
   },
 }

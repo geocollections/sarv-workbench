@@ -154,8 +154,9 @@ const formManipulation = {
       let formData = new FormData()
       let uploadableObject = {
         attachment:attachmentId,
-        locality: this.$store.state['createRelationWith'].id
+        locality: this.$store.state['createRelationWith'].data.id
       };
+      uploadableObject[this.$store.state['createRelationWith'].object] =  this.$store.state['createRelationWith'].data.id
 
       const dataToUpload = JSON.stringify(uploadableObject);
       formData.append('data', dataToUpload)

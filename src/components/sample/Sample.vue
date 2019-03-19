@@ -404,9 +404,13 @@
       <div class="col mt-5 mb-5">
         <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('locality.relatedTables.attachment') }}</a>
+          </li>
+          <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('locality.relatedTables.reference') }}</a>
           </li>
         </ul>
+        <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
           <div class="col">
@@ -443,6 +447,7 @@
   import {
     fetchSample,
     fetchSamplePurpose,
+    fetchLSampleAttachment,
     fetchSampleReference
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
@@ -450,9 +455,11 @@
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
   import SampleReference from "./relatedTables/SampleReference";
+  import SampleAttachment from "./relatedTables/SampleAttachment";
     export default {
       name: "Sample",
       components: {
+        SampleAttachment,
         SampleReference,
         BFormInput,
         FontAwesomeIcon,
@@ -473,10 +480,10 @@
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
               lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
-              reference:false,
+              reference:false,  attachment:false,
             },
             series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
-            rock:[],storage:[],storage_additional:[],owner:[], reference: []
+            rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: []
           },
           requiredFields: ['number'],
           sample: {}
@@ -510,10 +517,10 @@
       methods: {
         setDefaultRalatedData(){
           return {
-            sample_reference:[],
-            insert: {sample_reference:{}},
-            page : {sample_reference:1},
-            count: {sample_reference:0}
+            sample_reference:[], attachment_link: [],
+            insert: {sample_reference:{},attachment_link:{}},
+            page : {sample_reference:1,attachment_link:1},
+            count: {sample_reference:0,attachment_link:0}
           }
         },
 
@@ -579,6 +586,8 @@
           let query;
           if(object === 'sample_reference') {
             query = fetchSampleReference(this.$route.params.id,this.relatedData.page.sample_reference)
+          } else if(object === 'attachment_link') {
+            query = fetchLSampleAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
           }
 
           query.then(response => {
@@ -595,6 +604,7 @@
         formatRelatedData(objectToUpload) {
           let uploadableObject = cloneDeep(objectToUpload);
           uploadableObject.sample = this.sample.id;
+          if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
           if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
           return JSON.stringify(uploadableObject)
         },
