@@ -82,21 +82,30 @@
     <!-- LATITUDE AND LONGITUDE -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`latitude`">{{ $t('locality.latitude') }}:</label>
+        <label :for="`latitude`">Lat | Long:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-3 mb-2">
         <b-form-input id="latitude" v-model="locality.latitude" type="number"></b-form-input>
       </div>
 
-
+<!--
       <div class="col-sm-2">
         <label :for="`longitude`">{{ $t('locality.longitude') }}:</label>
       </div>
-
-      <div class="col-sm-4 mb-2">
+-->
+      <div class="col-sm-3 mb-2">
         <b-form-input id="longitude" v-model="locality.longitude" type="number"></b-form-input>
       </div>
+      
+      <div class="col-sm-2">
+        <label :for="`elevation`">{{ $t('locality.elevation') }}:</label>
+      </div>
+
+      <div class="col-sm-2 mb-2">
+        <b-form-input id="elevation" v-model="locality.elevation" type="number" step="0.01"></b-form-input>
+      </div>
+      
     </div>
 
     <!-- MAP -->
@@ -110,32 +119,17 @@
     </div>
 
     <div class="row mb-2">
-      <div class="col-md-6 offset-md-3">
+      <div class="col">
         <b-collapse v-model="showCollapseMap" id="collapseMap">
           <map-component v-bind:location="{ lat: locality.latitude ? (locality.latitude).toString() : null, lng: locality.longitude ? (locality.longitude).toString() : null }" v-on:get-location="updateLocation" />
         </b-collapse>
       </div>
     </div>
 
-    <!-- ALTITUDE AND VERTICAL -->
+    <!-- ALTITUDE AND VERTICAL 
     <div class="row">
-      <div class="col-sm-2">
-        <label :for="`elevation`">{{ $t('locality.elevation') }}:</label>
-      </div>
 
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="elevation" v-model="locality.elevation" type="number" step="0.01"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`depth`">{{ $t('locality.depth') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="depth" v-model="locality.depth" type="number"></b-form-input>
-      </div>
-    </div>
+    </div>-->
 
     <!-- COORDINATE X AND EXTENT -->
     <div class="row">
@@ -154,7 +148,19 @@
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
+      <div class="col-sm-2">
+        <label :for="`depth`">{{ $t('locality.depth') }}:</label>
+      </div>
 
+      <div class="col-sm-4 mb-2">
+        <b-form-input id="depth" v-model="locality.depth" type="number"></b-form-input>
+      </div>
+    </div>
+
+    <!-- COORDINATE Y AND COORD SYSTEM -->
+    <!--
+    <div class="row">
+    
       <div class="col-sm-2">
         <label :for="`coordx`">{{ $t('locality.coordx') }}:</label>
       </div>
@@ -162,10 +168,7 @@
       <div class="col-sm-4 mb-2">
         <b-form-input id="coordx" v-model="locality.coordx" type="number"></b-form-input>
       </div>
-    </div>
-
-    <!-- COORDINATE Y AND COORD SYSTEM -->
-    <div class="row">
+    
       <div class="col-sm-2">
         <label :for="`coordy`">{{ $t('locality.coordy') }}:</label>
       </div>
@@ -183,7 +186,7 @@
         <b-form-input id="coord_system" v-model="locality.coord_system" type="text"></b-form-input>
       </div>
     </div>
-
+    -->
     <!-- COORD PRECISION AND  COORD METHOD  -->
     <div class="row">
       <div class="col-sm-2">
@@ -472,7 +475,7 @@
           agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: [], synonym:[],
           attachment: [], stratigraphy: []
         },
-        requiredFields: ['locality'],
+        requiredFields: ['locality','locality_en'],
         locality: {},
         showCollapseMap: true,
       }
@@ -622,5 +625,7 @@
   #collapseMap {
     height: 50vh;
   }
-
+  .vue2leaflet-map, .leaflet-container {
+	  cursor: crosshair;
+  }
 </style>
