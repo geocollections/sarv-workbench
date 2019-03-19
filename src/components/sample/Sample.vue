@@ -2,13 +2,12 @@
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <!-- NUMBER AND NUMBER ADDITIONAL  -->
     <div class="row">
       <div class="col-sm-2">
         <label :for="`number`">{{ $t('sample.number') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-2 mb-2">
         <b-form-input id="number" v-model="sample.number" type="text"></b-form-input>
       </div>
 
@@ -17,46 +16,30 @@
         <label :for="`number_additional`">{{ $t('sample.number_additional') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-2 mb-2">
         <b-form-input id="number_additional" v-model="sample.number_additional" type="text"></b-form-input>
       </div>
-    </div>
 
-    <!-- FIELD NUMBER AND SERIES  -->
-    <div class="row">
       <div class="col-sm-2">
         <label :for="`number_field`">{{ $t('sample.number_field') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-2 mb-2">
         <b-form-input id="number_field" v-model="sample.number_field" type="text"></b-form-input>
       </div>
 
-
-      <div class="col-sm-2">
-        <label :for="`series`">{{ $t('sample.series') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.series" deselect-label="Can't remove this value"
-                         label="name" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.series"
-                         :options="autocomplete.series" :searchable="true" @search-change="autcompleteSampleSeriesSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name}}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
     </div>
 
-    <!-- SAMPLE PURPOSE AND TYPE  -->
+    <!-- FIELD NUMBER AND SERIES  -->
     <div class="row">
+
+
+      <!-- SAMPLE PURPOSE AND TYPE  -->
       <div class="col-sm-2">
         <label :for="`sample_purpose`">{{ $t('sample.sample_purpose') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-2 mb-2">
         <vue-multiselect v-model="sample.sample_purpose" v-if="isDefinedAndNotEmpty(autocomplete.purpose)"
                          id="type"
                          :options="autocomplete.purpose"
@@ -69,45 +52,26 @@
       </div>
 
 
-      <div class="col-sm-2">
+      <div class="col-sm-1">
         <label :for="`sample_type`">{{ $t('sample.sample_type') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-3 mb-2">
         <b-form-input id="sample_type" v-model="sample.sample_type" type="text"></b-form-input>
       </div>
-    </div>
-    <!-- SAMPLE PARENT AND SPECIMEN -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`parent_sample`">{{ $t('sample.parent_sample') }}:</label>
+
+      <div class="col-sm-1">
+        <label :for="`series`">{{ $t('sample.series') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.parent_sample" deselect-label="Can't remove this value"
-                         label="number" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.sample"
-                         :options="autocomplete.sample" :searchable="true" @search-change="autcompleteSampleSearch"
+      <div class="col-sm-3 mb-2">
+        <vue-multiselect class="align-middle" v-model="sample.series" deselect-label="Can't remove this value"
+                         label="name" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.series"
+                         :options="autocomplete.series" :searchable="true" @search-change="autcompleteSampleSeriesSearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.number}}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`parent_specimen`">{{ $t('sample.parent_specimen') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.parent_specimen" deselect-label="Can't remove this value"
-                         label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.specimen"
-                         :options="autocomplete.specimen" :searchable="true" @search-change="autcompleteSpecimenSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong> </template>
+          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name}}</strong> </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
@@ -131,8 +95,21 @@
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
+      <div class="col-sm-2">
+        <label :for="`depth`">{{ $t('sample.depth') }}:</label>
+      </div>
 
+      <div class="col-sm-2 mb-2">
+        <b-form-input id="depth" v-model="sample.depth" type="number"></b-form-input>
+      </div>
 
+      <div class="col-sm-2 mb-2">
+        <b-form-input id="depth_interval" v-model="sample.depth_interval" type="number"></b-form-input>
+      </div>
+    </div>
+
+    <!-- DEPTH AND DEPTH INTERVAL -->
+    <div class="row">
       <div class="col-sm-2">
         <label :for="`locality_free`">{{ $t('sample.locality_free') }}:</label>
       </div>
@@ -140,44 +117,22 @@
       <div class="col-sm-4 mb-2">
         <b-form-input id="locality_free" v-model="sample.locality_free" type="text"></b-form-input>
       </div>
-    </div>
 
-    <!-- DEPTH AND DEPTH INTERVAL -->
-    <div class="row">
+      <!-- LATITUDE AND LONGITUDE -->
       <div class="col-sm-2">
-        <label :for="`depth`">{{ $t('sample.depth') }}:</label>
+        <label :for="`latitude`">Lat/Long:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="depth" v-model="sample.depth" type="number"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`depth_interval`">{{ $t('sample.depth_interval') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="depth_interval" v-model="sample.depth_interval" type="number"></b-form-input>
-      </div>
-    </div>
-
-    <!-- LATITUDE AND LONGITUDE -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`latitude`">{{ $t('sample.latitude') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-2 mb-2">
         <b-form-input id="latitude" v-model="sample.latitude1" type="number"></b-form-input>
       </div>
 
-
-      <div class="col-sm-2">
-        <label :for="`longitude`">{{ $t('sample.longitude') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
+      <!--
+            <div class="col-sm-2">
+              <label :for="`longitude`">{{ $t('sample.longitude') }}:</label>
+            </div>
+      -->
+      <div class="col-sm-2 mb-2">
         <b-form-input id="longitude" v-model="sample.longitude1" type="number"></b-form-input>
       </div>
     </div>
@@ -246,7 +201,7 @@
         <label :for="`agent_collected`">{{ $t('sample.agent_collected') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-3 mb-2">
         <vue-multiselect class="align-middle" v-model="sample.agent_collected" deselect-label="Can't remove this value"
                          label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.agent"
@@ -257,14 +212,24 @@
         </vue-multiselect>
       </div>
 
-
+      <div class="col-sm-3 mb-2">
+        <b-form-input id="agent_collected_free" v-model="sample.agent_collected_free" type="text" placeholder="coll. txt"></b-form-input>
+      </div>
       <div class="col-sm-2">
-        <label :for="`agent_collected_free`">{{ $t('sample.agent_collected_free') }}:</label>
+        <label :for="`owner`">{{ $t('sample.owner') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="agent_collected_free" v-model="sample.agent_collected_free" type="text"></b-form-input>
+      <div class="col-sm-2 mb-2">
+        <vue-multiselect class="align-middle" v-model="sample.owner" deselect-label="Can't remove this value"
+                         label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.owner"
+                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteOwnerSearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
       </div>
+
     </div>
     <!-- DATE COLLECTED AND DATE COLLECTED FREE -->
     <div class="row">
@@ -297,6 +262,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
+
         <vue-multiselect class="align-middle" v-model="sample.classification_rock" deselect-label="Can't remove this value"
                          :loading="autocomplete.loaders.rock"
                          :label="rockLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
@@ -343,7 +309,7 @@
         <label :for="`mass`">{{ $t('sample.mass') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-2 mb-2">
         <b-form-input id="mass" v-model="sample.mass" type="number"></b-form-input>
       </div>
 
@@ -351,7 +317,7 @@
         <label :for="`storage`">{{ $t('sample.storage') }}:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-3 mb-2">
         <vue-multiselect class="align-middle" v-model="sample.storage" deselect-label="Can't remove this value"
                          :loading="autocomplete.loaders.storage" id="storage"
                          label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
@@ -362,14 +328,7 @@
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
-    </div>
-    <!-- OWNER-->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`storage_additional`">{{ $t('sample.storage_additional') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-3 mb-2">
         <vue-multiselect class="align-middle" v-model="sample.storage_additional" deselect-label="Can't remove this value"
                          :loading="autocomplete.loaders.additional_storage" id="storage_additional"
                          label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
@@ -380,22 +339,44 @@
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
+    </div>
 
+    <!-- SAMPLE PARENT AND SPECIMEN -->
+    <div class="row">
       <div class="col-sm-2">
-        <label :for="`owner`">{{ $t('sample.owner') }}:</label>
+        <label :for="`parent_sample`">{{ $t('sample.parent_sample') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.owner" deselect-label="Can't remove this value"
-                         label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.owner"
-                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteOwnerSearch"
+        <vue-multiselect class="align-middle" v-model="sample.parent_sample" deselect-label="Can't remove this value"
+                         label="number" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.sample"
+                         :options="autocomplete.sample" :searchable="true" @search-change="autcompleteSampleSearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.number}}</strong> </template>
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
+      </div>
+
+
+      <div class="col-sm-2">
+        <label :for="`parent_specimen`">{{ $t('sample.parent_specimen') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <vue-multiselect class="align-middle" v-model="sample.parent_specimen" deselect-label="Can't remove this value"
+                         label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.specimen"
+                         :options="autocomplete.specimen" :searchable="true" @search-change="autcompleteSpecimenSearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong> </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
     </div>
+
     <!-- DESCRIPTION -->
     <div class="row">
       <div class="col-sm-2">
@@ -422,6 +403,28 @@
         <b-form-checkbox id="is_private" v-model="sample.is_private" :value="true" :unchecked-value="false">
           {{ $t('sample.is_private') }}
         </b-form-checkbox>
+      </div>
+    </div>
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row">
+      <div class="col mt-5 mb-5">
+        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('locality.relatedTables.reference') }}</a>
+          </li>
+        </ul>
+        <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <div class="row mb-4 pt-1">
+          <div class="col">
+            <button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"
+                    :disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>
+          </div>
+          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+            </b-pagination>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -451,9 +454,11 @@
   import Datepicker from 'vue2-datepicker'
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
+  import SampleReference from "./relatedTables/SampleReference";
     export default {
       name: "Sample",
       components: {
+        SampleReference,
         BFormInput,
         FontAwesomeIcon,
         Datepicker,
@@ -463,7 +468,8 @@
       mixins: [formManipulation,autocompleteFieldManipulation],
       data() {
         return {
-          activeTab: 'analyses',
+          activeTab: 'locality_reference',
+          relatedData: this.setDefaultRalatedData(),
           copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
             'parent_sample','parent_specimen','depth','depth_interval','latitude1','longitude1','stratigraphy','lithostratigraphy',
             'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
@@ -471,9 +477,11 @@
             'palaeontology','analysis','locality','locality_free','remarks','is_private'],
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
-              lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false   },
+              lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
+              reference:false,
+            },
             series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
-            rock:[],storage:[],storage_additional:[],owner:[]
+            rock:[],storage:[],storage_additional:[],owner:[], reference: []
           },
           requiredFields: ['number'],
           sample: {}
@@ -499,9 +507,21 @@
             }
           });
         }
+
+        // FETCH FIRST TAB RELATED DATA
+        this.setActiveTab('sample_reference')
       },
 
       methods: {
+        setDefaultRalatedData(){
+          return {
+            sample_reference:[],
+            insert: {sample_reference:{}},
+            page : {sample_reference:1},
+            count: {sample_reference:0}
+          }
+        },
+
         formatDataForUpload(objectToUpload) {
           let uploadableObject = cloneDeep(objectToUpload)
 
@@ -538,15 +558,35 @@
           this.sample.stratigraphy = {stratigraphy:obj.stratigraphy__stratigraphy,stratigraphy_en:obj.stratigraphy__stratigraphy_en,id:obj.stratigraphy__stratigraphy__id}
           this.sample.lithostratigraphy = {stratigraphy:obj.lithostratigraphy__stratigraphy,stratigraphy_en:obj.lithostratigraphy__stratigraphy_en,id:obj.lithostratigraphy_id}
           this.sample.agent_collected = {agent:obj.agent_collected__agent,id:obj.agent_collected__id}
-          this.sample.classification_rock = {locality:obj.classification_rock__name,locality_en:obj.classification_rock__name_en,id:obj.classification_rock__id}
+          this.sample.classification_rock = {name:obj.classification_rock__name,name_en:obj.classification_rock__name_en,id:obj.classification_rock__id}
           this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
           this.sample.storage = {location:obj.storage__location,id:obj.storage}
-          this.sample.storage_additional = {location:obj.storage_additional__location_location,id:obj.storage_additional}
+          this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
         },
 
-        setActiveTab(type){
-          this.activeTab = type;
-        }
+
+        loadRelatedData(type){
+          // let query;
+          // if(type === 'sample_reference') {
+          //   query = fetchLocalityReference(this.$route.params.id,this.relatedData.page.sample_reference)
+          // }
+          //
+          // query.then(response => {
+          //   this.relatedData[type] = this.handleResponse(response);
+          //   this.relatedData.count[type] = response.body.count;
+          // });
+        },
+
+        checkRequiredFields(type){
+          if(type === 'sample_reference') return this.relatedData.insert[type].reference === undefined;
+        },
+
+        formatRelatedData(objectToUpload) {
+          let uploadableObject = cloneDeep(objectToUpload);
+          uploadableObject.locality = this.locality.id;
+          if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
+          return JSON.stringify(uploadableObject)
+        },
 
       },
       watch: {

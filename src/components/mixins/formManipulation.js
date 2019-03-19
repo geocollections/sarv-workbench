@@ -23,6 +23,11 @@ const formManipulation = {
     VueMultiselect,
     FontAwesomeIcon
   },
+
+  mounted(){
+    this.$root.$on('user-choice', this.handleUserChoice);
+  },
+
   methods: {
     isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && value.trim().length > 0},
     isDefinedAndNotNull(value) {return !!value && value !== null},
@@ -174,6 +179,7 @@ const formManipulation = {
       }
       window.open('https://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
     },
+
     removeUnnecessaryFields(object,copyFields){
       let vm = this;
       //copy only certain fields
@@ -182,6 +188,56 @@ const formManipulation = {
           delete vm[object][entry[0]]
         }
       });
+    },
+
+    handleUserChoice(choice){
+      this.$root.$emit('close-confirmation');
+      if(choice === 'LEAVE') {
+        this.setActiveTab(this.nextTab, false)
+      } else if(choice === 'CONTINUE') {
+        // NOTHING TO DO
+      } else if(choice === 'SAVE') {
+        this.addRelatedData(this.activeTab);
+        this.setActiveTab(this.nextTab, false);
+      }
+    },
+
+    setActiveTab(type, isWarning = true){
+      this.nextTab = type;
+      if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
+        this.$root.$emit('show-confirmation');
+      } else {
+        // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
+        this.relatedData.insert[this.activeTab]={};
+        this.activeTab = type;
+        this.loadRelatedData(type);
+      }
+    },
+
+
+    addRelatedData(type) {
+      if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
+      let formData = new FormData();
+      if(type === undefined) type = this.activeTab;
+
+      this.formatRelatedDataForUpload(type,formData);
+
+      let url = 'add/'+type+'/';
+
+      this.saveData(type,formData,url).then(isSuccessfullySaved => {
+        // RELOAD RELATED DATA IN CURRENT TAB
+        this.loadRelatedData(type);
+        // CLEAR PREVIOUS INSERT DATA
+        this.relatedData.insert[this.activeTab]={};
+      });
+    },
+
+    formatRelatedDataForUpload(type,formData){
+      if(this.checkRequiredFields(type)) {
+        toastError({text: this.$t('messages.checkForm')});
+        return
+      }
+      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
     },
   }
 };

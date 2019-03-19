@@ -518,21 +518,8 @@
         this.setActiveTab('locality_reference')
       }
     },
-    mounted(){
-      this.$root.$on('user-choice', this.handleUserChoice);
-    },
+
     methods: {
-      handleUserChoice(choice){
-        this.$root.$emit('close-confirmation');
-        if(choice === 'LEAVE') {
-          this.setActiveTab(this.nextTab, false)
-        } else if(choice === 'CONTINUE') {
-          // NOTHING TO DO
-        } else if(choice === 'SAVE') {
-          this.addRelatedData(this.activeTab);
-          this.setActiveTab(this.nextTab, false);
-        }
-      },
       setDefaultRalatedData(){
         return {
           locality_reference:[], locality_synonym: [], attachment_link:[], locality_stratigraphy:[],
@@ -576,17 +563,6 @@
         this.locality.stratigraphy_base = {stratigraphy:obj.stratigraphy_base__stratigraphy,stratigraphy_en:obj.stratigraphy_base__stratigraphy_en,id:obj.stratigraphy_base__id}
       },
 
-      setActiveTab(type, isWarning = true){
-        this.nextTab = type;
-        if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
-          this.$root.$emit('show-confirmation');
-        } else {
-          // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
-          this.relatedData.insert[this.activeTab]={};
-          this.activeTab = type;
-          this.loadRelatedData(type);
-        }
-      },
       loadRelatedData(type){
         let query;
         if(type === 'locality_reference') {
@@ -618,30 +594,6 @@
         if (this.isDefinedAndNotNull(uploadableObject.stratigraphy)) uploadableObject.stratigraphy = uploadableObject.stratigraphy.id;
         if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
         return JSON.stringify(uploadableObject)
-      },
-      formatRelatedDataForUpload(type,formData){
-        if(this.checkRequiredFields(type)) {
-          toastError({text: this.$t('messages.checkForm')});
-          return
-        }
-        formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
-      },
-
-      addRelatedData(type) {
-        if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
-        let formData = new FormData();
-        if(type === undefined) type = this.activeTab;
-
-        this.formatRelatedDataForUpload(type,formData);
-
-        let url = 'add/'+type+'/';
-
-        this.saveData(type,formData,url).then(isSuccessfullySaved => {
-          // RELOAD RELATED DATA IN CURRENT TAB
-          this.loadRelatedData(type);
-          // CLEAR PREVIOUS INSERT DATA
-          this.relatedData.insert[this.activeTab]={};
-        });
       },
 
       updateLocation(location) {

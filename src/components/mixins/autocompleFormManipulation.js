@@ -23,7 +23,7 @@ const autocompleteFieldManipulation = {
         case 'locality':
           query = `locality/?multi_search=value:${val};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`;
           break;
-        case 'additional_storage':
+        case 'storage_additional':
         case 'storage':
           query = `location/?multi_search=value:${val};fields:location;lookuptype:icontains&fields=id,location`;
           break;
