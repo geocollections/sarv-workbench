@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div class="row mt-4">
+      <div class="col-sm-6">
+        <p class="h2">{{ $t('header.samples') }}</p>
+      </div>
+      <div class="col-sm-6 ralign">
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/sample/add' }">{{ $t('add.new') }}</router-link>
+      </div>
+    </div>
     <!-- SEARCH FIELDS START -->
     <div class="row mt-4">
       <div class="col">
@@ -44,28 +52,41 @@
       return {
         response: {},
         fields:[
-          {id:"id",title:"sample.id",type:"number"},
           {id:"number",title:"sample.number",type:"text"},
-          {id:"number_additional",title:"sample.number_additional",type:"text", onlySearch:true},
-          {id:"number_field",title:"sample.number_field",type:"text", onlySearch:true},
+          //{id:"number_additional",title:"sample.number_additional",type:"text", onlySearch:true},
+          //{id:"number_field",title:"sample.number_field",type:"text", onlySearch:true},
+          {id:"id",title:"sample.id",type:"number"},
           {id:"locality",title:"sample.locality",type:"text"},
-          {id:"locality_free",title:"sample.locality_free",type:"text", onlySearch:true},
+          //{id:"locality_free",title:"sample.locality_free",type:"text", onlySearch:true},
           {id:"depth",title:"sample.depth",type:"text"},
           {id:"stratigraphy",title:"sample.stratigraphy",type:"text"},
-          {id:"lithostratigraphy",title:"sample.lithostratigraphy",type:"text", onlySearch:true},
+          //{id:"lithostratigraphy",title:"sample.lithostratigraphy",type:"text", onlySearch:true},
           {id:"agent",title:"sample.agent_collected",type:"text"},
-          {id:"date_collected",title:"sample.date_collected",type:"text", onlySearch:true},
+          //{id:"rock",title:"sample.rock",type:"text", onlySearch:true},
+          //{id:"date_collected",title:"sample.date_collected",type:"text", onlySearch:true},
           {id:"storage",title:"sample.storage",type:"text"}
-
-
         ],
         searchParameters: this.setDefaultSearchParameters()
       }
     },
+    created: function () {
+        // Gets user data from session storage
+        if (this.$session.exists() && this.$session.get('authUser') !== null) {
+          const user = this.$session.get('authUser')
+          this.agent = {
+            id: user.agent_id,
+            agent: null,
+            forename: user.user,
+            surename: null,
+            user: user.user,
+          }
+          //console.log(this.agent);
+        }
+      },
     methods: {
       fetchSamples() {
         return new Promise((resolve) => {
-          resolve(fetchSamples(this.searchParameters))
+          resolve(fetchSamples(this.searchParameters, this.agent))
         });
       },
       searchParametersChanged(newParams) {
@@ -93,5 +114,7 @@
 </script>
 
 <style scoped>
-
+.ralign {
+	text-align: right !important;  
+  }
 </style>

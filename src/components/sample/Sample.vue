@@ -33,8 +33,7 @@
     <!-- FIELD NUMBER AND SERIES  -->
     <div class="row">
 
-
-      <!-- SAMPLE PURPOSE AND TYPE  -->
+    <!-- SAMPLE PURPOSE AND TYPE  -->
       <div class="col-sm-2">
         <label :for="`sample_purpose`">{{ $t('sample.sample_purpose') }}:</label>
       </div>
@@ -118,7 +117,7 @@
         <b-form-input id="locality_free" v-model="sample.locality_free" type="text"></b-form-input>
       </div>
 
-      <!-- LATITUDE AND LONGITUDE -->
+    <!-- LATITUDE AND LONGITUDE -->
       <div class="col-sm-2">
         <label :for="`latitude`">Lat/Long:</label>
       </div>
@@ -127,11 +126,6 @@
         <b-form-input id="latitude" v-model="sample.latitude1" type="number"></b-form-input>
       </div>
 
-      <!--
-            <div class="col-sm-2">
-              <label :for="`longitude`">{{ $t('sample.longitude') }}:</label>
-            </div>
-      -->
       <div class="col-sm-2 mb-2">
         <b-form-input id="longitude" v-model="sample.longitude1" type="number"></b-form-input>
       </div>

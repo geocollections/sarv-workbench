@@ -28,6 +28,8 @@
           <b-nav-item v-if="permissions.locality" class="d-none d-lg-block" :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-nav-item>
           <!-- <b-nav-item v-if="permissions.locality" class="d-none d-lg-block" :to="{ path: '/locality/add' }" exact>{{ $t('header.addLocality') }}</b-nav-item> -->
 
+          <b-nav-item v-if="permissions.sample" class="d-none d-lg-block" :to="{ path: '/sample' }" exact>{{ $t('header.samples') }}</b-nav-item>
+
           <b-nav-item-dropdown v-if="permissions.attachment" class="d-lg-none d-xl-none" :text="$t('header.files')">
             <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-dropdown-item>
             <b-dropdown-item :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-dropdown-item>
@@ -43,6 +45,10 @@
             <b-dropdown-item :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-dropdown-item>
           </b-nav-item-dropdown>
 
+          <b-nav-item-dropdown v-if="permissions.sample" class="d-lg-none d-xl-none" :text="$t('header.samples')">
+            <b-dropdown-item :to="{ path: '/sample/add' }" exact>{{ $t('header.addSample') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/sample' }" exact>{{ $t('header.editSample') }}</b-dropdown-item>
+          </b-nav-item-dropdown>
 
         </b-navbar-nav>
 
