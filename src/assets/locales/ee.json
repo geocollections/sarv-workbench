@@ -169,7 +169,7 @@
     "abstractKeywordsRemarks": "Abstrakt, märksõnad või lisainfo"
   },
   "editLocality": {
-    "heading": "Lokaliteedi ID",
+    "heading": "Lokaliteet",
     "editMessage": "Muuda lokaliteedit",
     "viewMessage": "Vaata lokaliteedit geokogude portaalis",
     "id": "ID",
@@ -180,12 +180,12 @@
     "agent": "Sisestaja"
   },
   "editSample": {
-    "heading": "Proovi ID",
+    "heading": "Proov",
     "editMessage": "Muuda proovi",
     "viewMessage": "Vaata proovi geokogude portaalis"
   },
   "editLibrary": {
-    "heading": "Kogumiku ID",
+    "heading": "Kogumik",
     "editMessage": "Muuda kogumikku",
     "viewMessage": "Vaata kogumikku geokogude portaalis"
   },

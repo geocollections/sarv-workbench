@@ -209,11 +209,11 @@
       <div class="col-sm-3 mb-2">
         <b-form-input id="agent_collected_free" v-model="sample.agent_collected_free" type="text" placeholder="coll. txt"></b-form-input>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-1">
         <label :for="`owner`">{{ $t('sample.owner') }}:</label>
       </div>
 
-      <div class="col-sm-2 mb-2">
+      <div class="col-sm-3 mb-2">
         <vue-multiselect class="align-middle" v-model="sample.owner" deselect-label="Can't remove this value"
                          label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.owner"
