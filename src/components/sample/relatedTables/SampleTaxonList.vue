@@ -5,15 +5,15 @@
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr class="text-center">
-            <th>Taxon</th>
-            <th>Taxon txt</th>
-            <th>Abundance</th>
-            <th>Det.</th>
-            <th>Det. date <font-awesome-icon icon="calendar-alt" title="Date identified"/></th>
-            <th>Extra</th>
-            <th>Preparation</th>
-            <th><font-awesome-icon icon="user-lock" title="Is private?"/></th>
-            <th><font-awesome-icon icon="comment-alt" title="Remark"/></th>
+            <th>{{ $t('taxon.taxon') }}</th>
+            <th>{{ $t('taxon.taxon_free') }}</th>
+            <th>{{ $t('taxon.abundance') }}</th>
+            <th>{{ $t('taxon.det_agent') }}</th>
+            <th>{{ $t('taxon.det_date') }} <font-awesome-icon icon="calendar-alt" title="Date identified"/></th>
+            <th>{{ $t('taxon.extra') }}</th>
+            <th>{{ $t('taxon.preparation') }}</th>
+            <th><font-awesome-icon icon="user-lock" :title="$t('taxon.is_private')"/></th>
+            <th><font-awesome-icon icon="comment-alt" :title="$t('taxon.remarks')"/></th>
             <th v-if="relatedData.insert.taxon_list.taxon"></th>
           </tr>
           </thead>

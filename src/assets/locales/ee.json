@@ -378,13 +378,41 @@
     "date_added": "Added",
     "user_changed": "Changed by",
     "date_changed": "Changed",
-    "addNew": "Lisage uus Proov"
+    "addNew": "Lisage uus Proov",
+    "relatedTables": {
+      "reference": "Kirjandusviited",
+      "analysis": "Analüüsid",
+      "attachment": "Manused",
+      "preparation": "Eeltööd",
+      "identified_taxa": "Identified taxa"
+    }
+  },
+  "taxon": {
+    "taxon": "Taxon",
+    "taxon_free": "Taxon, txt",
+    "abundance": "Abundande",
+    "det_agent": "Det.",
+    "det_date": "Det. date",
+    "extra": "Extra",
+    "preparation": "Preparation",
+    "is_private": "Privaatne?",
+    "remarks": "Lisainfo"
   },
   "sample_series": {
     "name": "Nimi"
   },
   "analysis": {
-    "sample": "Proov #"
+    "sample": "Proov #",
+    "method": "Metoodika",
+    "method_specification": "Met. täpsustus",
+    "mass": "Mass",
+    "date": "Kuupäev",
+    "date_end": "Kp. lõpp",
+    "date_free": "Kp. tekstina",
+    "agent": "Analüüsija",
+    "remarks": "Lisainfo",
+    "location": "Asukoht",
+    "is_locked": "Kinnine?"
   },
   "dataset": {
     "name": "Nimi"
@@ -439,7 +467,12 @@
     "drillcore": "Puursüdamik - Nr"
   },
   "preparation": {
-    "number": "Number"
+    "number": "Number",
+    "preparation_number": "Prep. number",
+    "fossil_group": "Fossilrühm",
+    "storage": "Hoiukoht",
+    "remarks": "Lisainfo",
+    "method_id": "Metoodika ID"
   },
   "reference": {
     "reference": "Viide",

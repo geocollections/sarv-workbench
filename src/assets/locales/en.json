@@ -376,13 +376,41 @@
     "date_added": "Added",
     "user_changed": "Changed by",
     "date_changed": "Changed",
-    "addNew": "Add new Sample"
+    "addNew": "Add new Sample",
+    "relatedTables": {
+      "reference": "References",
+      "analysis": "Analyses",
+      "attachment": "Attachments",
+      "preparation": "Preparations",
+      "identified_taxa": "Identified taxa"
+    }
   },
   "sample_series": {
     "name": "Name"
   },
   "analysis": {
-    "sample": "Sample #"
+    "sample": "Sample #",
+    "method": "Methodology",
+    "method_specification": "Met. specification",
+    "mass": "Mass",
+    "date": "Date",
+    "date_end": "Date end",
+    "date_free": "Date free",
+    "agent": "Analized by",
+    "remarks": "Remarks",
+    "location": "Location",
+    "is_locked": "Is locked?"
+  },
+  "taxon": {
+    "taxon": "Taxon",
+    "taxon_free": "Taxon, txt",
+    "abundance": "Abundande",
+    "det_agent": "Det.",
+    "det_date": "Det. date",
+    "extra": "Extra",
+    "preparation": "Preparation",
+    "is_private": "Is private?",
+    "remarks": "Remarks"
   },
   "dataset": {
     "name": "Name"
@@ -437,7 +465,12 @@
     "drillcore": "Drillcore - No"
   },
   "preparation": {
-    "number": "Number"
+    "number": "Number",
+    "preparation_number": "Prep. number",
+    "fossil_group": "Fossil group",
+    "storage": "Storage",
+    "remarks": "Remarks",
+    "method_id": "Method ID"
   },
   "reference": {
     "reference": "Reference",

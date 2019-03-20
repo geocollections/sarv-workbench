@@ -5,11 +5,11 @@
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
-            <th>Prep. number</th>
-            <th>Fossiilirühm</th>
-            <th>Hoiukoht</th>
-            <th>Märkused</th>
-            <th>Metoodika ID</th>
+            <th>{{ $t('preparation.preparation_number') }}</th>
+            <th>{{ $t('preparation.fossil_group') }}</th>
+            <th>{{ $t('preparation.storage') }}</th>
+            <th>{{ $t('preparation.remarks') }}</th>
+            <th>{{ $t('preparation.method_id') }}</th>
             <th v-if="relatedData.insert.preparation.preparation_number"></th>
           </tr>
           </thead>

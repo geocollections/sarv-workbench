@@ -404,19 +404,19 @@
       <div class="col mt-5 mb-5">
         <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"  :class="{ active: activeTab === 'analysis' }">Analyses</a>
+            <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"  :class="{ active: activeTab === 'analysis' }">{{ $t('sample.relatedTables.analysis') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"  :class="{ active: activeTab === 'preparation' }">Preparations</a>
+            <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"  :class="{ active: activeTab === 'preparation' }">{{ $t('sample.relatedTables.preparation') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">Identified taxa</a>
+            <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">{{ $t('sample.relatedTables.identified_taxa') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('locality.relatedTables.attachment') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('sample.relatedTables.attachment') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('locality.relatedTables.reference') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('sample.relatedTables.reference') }}</a>
           </li>
         </ul>
         <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
@@ -544,7 +544,7 @@
         }
 
         // FETCH FIRST TAB RELATED DATA
-        this.setActiveTab('sample_reference')
+        this.setActiveTab('analysis')
       },
 
       methods: {

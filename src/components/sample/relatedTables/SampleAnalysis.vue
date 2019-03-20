@@ -5,16 +5,16 @@
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
-            <th>Metoodika</th>
-            <th>Met. täpsustus</th>
-            <th>Mass</th>
-            <th>Kuupäev</th>
-            <th>Lõpp kp</th>
-            <th>Aeg tekstina</th>
-            <th>Analüüsija</th>
-            <th>Märkused</th>
-            <th>Asukoht</th>
-            <th><font-awesome-icon icon="lock" title="Is locked?"/></th>
+            <th>{{ $t('analysis.method') }}</th>
+            <th>{{ $t('analysis.method_specification') }}</th>
+            <th>{{ $t('analysis.mass') }}</th>
+            <th>{{ $t('analysis.date') }}</th>
+            <th>{{ $t('analysis.date_end') }}</th>
+            <th>{{ $t('analysis.date_free') }}</th>
+            <th>{{ $t('analysis.agent') }}</th>
+            <th>{{ $t('analysis.remarks') }}</th>
+            <th>{{ $t('analysis.location') }}</th>
+            <th><font-awesome-icon icon="lock" :title="$t('analysis.is_locked')"/></th>
             <th v-if="relatedData.insert.analysis.analysis_method"></th>
           </tr>
           </thead>
