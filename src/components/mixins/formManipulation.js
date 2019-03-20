@@ -55,16 +55,6 @@ const formManipulation = {
       return isValid
     },
 
-    // addRelatedDataX(object,link_object, link_table) {
-    //   if(object === 'sample'){
-    //     console.log('adding related data');
-    //     this[object].related_data = {};
-    //     this[object].related_data[link_object] = this.mapRelatedData(this.relatedData[link_table],link_table);
-    //     this[object].related_data[link_object].push(this.mapRelatedDataForUpload(this.relatedData.insert[link_table]))
-    //     console.log(this[object].related_data[link_object])
-    //   }
-    // },
-
     add(addAnother, object) {
       if (this.validate(object) && !this.sendingData) {
 
@@ -74,7 +64,7 @@ const formManipulation = {
         if(this[object].id !== undefined){
           delete this[object]['id']
         }
-        // this.addRelatedDataX(object,'reference','sample_reference');
+
         const dataToUpload = this.formatDataForUpload(this[object]);
         let formData = new FormData();
         formData.append('data', dataToUpload);
@@ -150,11 +140,10 @@ const formManipulation = {
         resolve(false)
       })
     },
-    addRelationBetweenLocalityAndAttachment(attachmentId, object){
+    addRelationBetweenAnyObjectAndAttachment(attachmentId, object){
       let formData = new FormData()
       let uploadableObject = {
-        attachment:attachmentId,
-        locality: this.$store.state['createRelationWith'].data.id
+        attachment:attachmentId
       };
       uploadableObject[this.$store.state['createRelationWith'].object] =  this.$store.state['createRelationWith'].data.id
 
@@ -248,7 +237,11 @@ const formManipulation = {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
-      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
+      // if(type === 'analysis') {
+      //   formData.append('data', this.formatRelatedDataSpecialCase(this.relatedData.insert[type]));
+      // } else {
+        formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
+      // }
     },
   },
   watch: {

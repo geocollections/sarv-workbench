@@ -404,12 +404,24 @@
       <div class="col mt-5 mb-5">
         <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"  :class="{ active: activeTab === 'analysis' }">Analyses</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"  :class="{ active: activeTab === 'preparation' }">Preparations</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">Identified taxa</a>
+          </li>
+          <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('locality.relatedTables.attachment') }}</a>
           </li>
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('locality.relatedTables.reference') }}</a>
           </li>
         </ul>
+        <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
@@ -448,7 +460,12 @@
     fetchSample,
     fetchSamplePurpose,
     fetchLSampleAttachment,
-    fetchSampleReference
+    fetchSampleReference,
+    fetchSampleAnalysis,
+    fetchAnalysisMethod,
+    fetchFossilGroup,
+    fetchSamplePreparation,
+    fetchTaxonList
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
@@ -456,9 +473,15 @@
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
   import SampleReference from "./relatedTables/SampleReference";
   import SampleAttachment from "./relatedTables/SampleAttachment";
+  import SampleAnalysis from "./relatedTables/SampleAnalysis";
+  import SamplePreparation from "./relatedTables/SamplePreparation";
+  import SampleTaxonList from "./relatedTables/SampleTaxonList";
     export default {
       name: "Sample",
       components: {
+        SampleTaxonList,
+        SamplePreparation,
+        SampleAnalysis,
         SampleAttachment,
         SampleReference,
         BFormInput,
@@ -480,18 +503,27 @@
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
               lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
-              reference:false,  attachment:false,
+              reference:false,  attachment:false, analysis_method: false,fossil_group:false
             },
             series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
-            rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: []
+            rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
+            fossil_group:[]
           },
           requiredFields: ['number'],
           sample: {}
         }
       },
       created() {
+        fetchAnalysisMethod().then(response => {
+          this.autocomplete.analysisMethod = this.handleResponse(response);
+        });
+
         fetchSamplePurpose().then(response => {
           this.autocomplete.purpose = this.handleResponse(response);
+        });
+
+        fetchFossilGroup().then(response => {
+          this.autocomplete.fossil_group = this.handleResponse(response);
         });
 
         if(this.$route.meta.isEdit) {
@@ -517,10 +549,10 @@
       methods: {
         setDefaultRalatedData(){
           return {
-            sample_reference:[], attachment_link: [],
-            insert: {sample_reference:{},attachment_link:{}},
-            page : {sample_reference:1,attachment_link:1},
-            count: {sample_reference:0,attachment_link:0}
+            sample_reference:[], attachment_link: [], analysis: [], preparation:[], taxon_list:[],
+            insert: {sample_reference:{},attachment_link:{},analysis:{},preparation:{}, taxon_list:{}},
+            page : {sample_reference:1,attachment_link:1,analysis:1,preparation:1, taxon_list:1},
+            count: {sample_reference:0,attachment_link:0,analysis:0,preparation:0, taxon_list:0}
           }
         },
 
@@ -566,25 +598,36 @@
           this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
         },
 
-        // mapRelatedData(data, object) {
-        //   let returnList = [];
-        //   if(object === 'sample_reference') {
-        //     data.forEach(entity => {
-        //       returnList.push({ id: entity.reference, reference: entity.reference__reference, remarks: entity.remarks
-        //       })
-        //     })
-        //   }
-        //   return returnList;
-        // },
-        //
-        // mapRelatedDataForUpload(entity) {
-        //   return entity.reference ? {id: entity.reference.id, reference: entity.reference.reference,
-        //     remarks: entity.remarks} : null;
-        // },
+        mapRelatedData(data, object) {
+          let returnList = [];
+
+          data.forEach(entity => {
+            if(object === 'sample') returnList.push({ id: entity.sample, number: entity.sample__number})
+            if(object === 'analysis_method') returnList.push({ id: entity.sample, number: entity.sample__number})
+          });
+
+          return returnList;
+        },
+
+        mapRelatedDataForUpload(object,entity) {
+          if(object === 'analysis_method')
+            return { id: entity.id, analysis_method: entity.analysis_method,
+              method_en: entity.method_en};
+          else {
+            return { id: entity.id, number: entity.number};
+          }
+        },
 
         loadRelatedData(object){
           let query;
-          if(object === 'sample_reference') {
+
+          if(object === 'analysis') {
+            query = fetchSampleAnalysis(this.$route.params.id,this.relatedData.page.analysis)
+          } else if(object === 'preparation') {
+            query = fetchSamplePreparation(this.$route.params.id,this.relatedData.page.preparation)
+          } else if(object === 'taxon_list') {
+            query = fetchTaxonList(this.$route.params.id,this.relatedData.page.taxon_list)
+          } else if(object === 'sample_reference') {
             query = fetchSampleReference(this.$route.params.id,this.relatedData.page.sample_reference)
           } else if(object === 'attachment_link') {
             query = fetchLSampleAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
@@ -598,6 +641,7 @@
 
         //check required fields for related data
         checkRequiredFields(type){
+          if(type === 'sample_attachment') return this.relatedData.insert[type].attachment === undefined;
           if(type === 'sample_reference') return this.relatedData.insert[type].reference === undefined;
         },
 
@@ -606,8 +650,31 @@
           uploadableObject.sample = this.sample.id;
           if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
           if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
+          if (this.isDefinedAndNotNull(uploadableObject.analysis_method)) uploadableObject.analysis_method = uploadableObject.analysis_method.id;
+          if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
           return JSON.stringify(uploadableObject)
         },
+
+        formatRelatedDataSpecialCase(objectToUpload) {
+          let uploadableObject = cloneDeep(objectToUpload);
+          uploadableObject.related_data = {}
+          delete uploadableObject['analysis_method'];
+          uploadableObject.related_data.analysis_method = this.mapRelatedData(this.relatedData['analysis'],'analysis_method');
+          // uploadableObject.related_data.sample = this.mapRelatedData(this.relatedData['analysis'],'sample');
+          uploadableObject.related_data.analysis_method.push(this.mapRelatedDataForUpload('analysis_method',this.relatedData.insert['analysis']));
+          // uploadableObject.related_data.sample.push(this.mapRelatedDataForUpload('sample',this.sample));
+          return JSON.stringify(uploadableObject)
+        },
+
+        // addRelatedDataX(object,link_object, link_table) {
+        //   if(object === 'sample'){
+        //     console.log('adding related data');
+        //     this[object].related_data = {};
+        //     this[object].related_data[link_object] = this.mapRelatedData(this.relatedData[link_table],link_table);
+        //     this[object].related_data[link_object].push(this.mapRelatedDataForUpload(this.relatedData.insert[link_table]))
+        //     console.log(this[object].related_data[link_object])
+        //   }
+        // },
 
       },
 

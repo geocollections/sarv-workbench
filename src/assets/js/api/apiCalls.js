@@ -270,6 +270,12 @@ export function fetchSample(id) {
 export function fetchSamplePurpose() {
   return fetch(`list_sample_purpose/?order_by=value&format=json`)
 }
+export function fetchFossilGroup() {
+  return fetch(`taxon/?fields=fossil_group__taxon&fossil_group__taxon!=null&distinct=true&format=json`)
+}
+export function fetchAnalysisMethod() {
+  return fetch(`analysis_method/?order_by=analysis_method&format=json`)
+}
 
 export function fetchSamples(data, agent) {
   const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
@@ -323,6 +329,15 @@ export function fetchSamples(data, agent) {
 	//console.log(agent);
     return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
+}
+export function fetchSampleAnalysis(id,page = 1) {
+  return fetch(`analysis/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
+}
+export function fetchSamplePreparation(id,page = 1) {
+  return fetch(`preparation/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
+}
+export function fetchTaxonList(id,page = 1) {
+  return fetch(`taxon_list/?sample_id=${id}&page=${page}&paginate_by=10&format=json`)
 }
 export function fetchLSampleAttachment(id,page = 1) {
   return fetch(`attachment/?attach_link__sample__id=${id}&page=${page}&paginate_by=10&fields=original_filename,attach_link__sample__id&format=json`)

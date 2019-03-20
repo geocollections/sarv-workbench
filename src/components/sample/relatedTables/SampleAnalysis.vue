@@ -1,35 +1,79 @@
 <template>
-  <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'sample_analysis'}" role="tabpanel">
-    <div class="col-sm-12" v-if="activeTab === 'sample_analysis'">
+  <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'analysis'}" role="tabpanel">
+    <div class="col-sm-12" v-if="activeTab === 'analysis'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
-            <th>{{ $t('reference.reference') }}</th>
-            <th>{{ $t('reference.remarks') }}</th>
-            <th v-if="relatedData.insert.sample_analysis.reference"></th>
+            <th>Metoodika</th>
+            <th>Met. täpsustus</th>
+            <th>Mass</th>
+            <th>Kuupäev</th>
+            <th>Lõpp kp</th>
+            <th>Aeg tekstina</th>
+            <th>Analüüsija</th>
+            <th>Märkused</th>
+            <th>Asukoht</th>
+            <th>Kinnine?</th>
+            <th v-if="relatedData.insert.analysis.analysis_method"></th>
           </tr>
           </thead>
 
           <tbody>
-          <tr v-for="(entity, index) in relatedData.sample_analysis">
-            <td>
-              <router-link :to="{ path: '/reference/' + entity.reference }" target="_blank">
-                {{ entity.reference__reference }}
-              </router-link>
-            </td>
-            <td>{{ entity.remarks }}</td>
-            <td v-if="relatedData.insert.sample_analysis.reference"></td>
+          <tr v-for="(entity, index) in relatedData.analysis">
+            <td v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
+            <td>{{entity.method_details}}</td>
+            <td>{{entity.mass}}</td>
+            <td>{{entity.date}}</td>
+            <td>{{entity.date_end}}</td>
+            <td>{{entity.date_free}}</td>
+            <td>{{entity.agent__agent}}</td>
+            <td>{{entity.remarks}}</td>
+            <td>{{entity.location}}</td>
+            <td class="text-center">{{ entity.is_private === 1 ? '+' : '' }}</td>
+            <td v-if="relatedData.insert.analysis.analysis_method"></td>
           </tr>
           <tr class="related-input-data">
             <td>
-
+              <vue-multiselect v-model="relatedData.insert.analysis.analysis_method" v-if="isDefinedAndNotEmpty(autocomplete.analysisMethod)"
+                               :options="autocomplete.analysisMethod"
+                               track-by="id"
+                               :label="analysisMethodLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </td>
+            <td><b-form-input v-model="relatedData.insert.analysis.method_details" type="text"/></td>
+            <td><b-form-input v-model="relatedData.insert.analysis.mass" type="number"/></td>
+            <td><datepicker id="date"
+                                   v-model="relatedData.insert.analysis.date"
+                                   lang="en"
+                                   :first-day-of-week="1"
+                                   format="DD MMM YYYY"
+                                   input-class="form-control"/></td>
+            <td><datepicker id="date_end"
+                            v-model="relatedData.insert.analysis.date_end"
+                            lang="en"
+                            :first-day-of-week="1"
+                            format="DD MMM YYYY"
+                            input-class="form-control"/></td>
+            <td><b-form-input v-model="relatedData.insert.analysis.date_free" type="text"/></td>
             <td>
-              <b-form-input v-model="relatedData.insert.sample_analysis.remarks" type="text"/>
-              <!--<b-form-textarea max-rows="6" id="reference_remarks" v-model="relatedData.insert.reference.remarks" rows="2" />-->
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.analysis.agent" deselect-label="Can't remove this value"
+                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </td>
-            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.sample_analysis = {}" v-if="relatedData.insert.sample_analysis.reference">
+            <td><b-form-input v-model="relatedData.insert.analysis.remarks" type="text"/></td>
+            <td><b-form-input v-model="relatedData.insert.analysis.location" type="text"/></td>
+            <td class="text-center"><b-form-checkbox v-model="relatedData.insert.analysis.is_private" :value="true" :unchecked-value="false"/></td>
+
+            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.analysis = {}" v-if="relatedData.insert.analysis.analysis_method">
               <font-awesome-icon icon="times"></font-awesome-icon>
             </td>
           </tr>
@@ -42,9 +86,12 @@
 
 <script>
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
-
+  import Datepicker from 'vue2-datepicker'
     export default {
-      name: "SampleReference",
+      name: "SampleAnalysis",
+      components: {
+        Datepicker
+      },
       props: {
         relatedData: Object,
         autocomplete: Object,

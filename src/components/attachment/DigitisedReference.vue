@@ -333,7 +333,7 @@
 
                 //create relation with locality
                 if(this.$parent.createRelationWith !== null ){
-                  this.addRelationBetweenLocalityAndAttachment(response.body.attachment_id,'attachment_link');
+                  this.addRelationBetweenAnyObjectAndAttachment(response.body.attachment_id,'attachment_link');
                 }
 
                 if (!addAnother) {

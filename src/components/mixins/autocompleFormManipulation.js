@@ -14,6 +14,9 @@ const autocompleteFieldManipulation = {
     },
     rockLabel() {
       return this.$i18n.locale === 'ee' ? 'name' : 'name_en'
+    },
+    analysisMethodLabel() {
+      return this.$i18n.locale === 'ee' ? 'analysis_method' : 'method_en'
     }
   },
   methods: {
