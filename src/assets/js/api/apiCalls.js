@@ -271,7 +271,7 @@ export function fetchSamplePurpose() {
   return fetch(`list_sample_purpose/?order_by=value&format=json`)
 }
 export function fetchFossilGroup() {
-  return fetch(`taxon/?fields=fossil_group__taxon&fossil_group__taxon!=null&distinct=true&format=json`)
+  return fetch(`taxon/?fields=taxon,id&is_fossil_group=1&format=json`)
 }
 export function fetchAnalysisMethod() {
   return fetch(`analysis_method/?order_by=analysis_method&format=json`)
@@ -337,7 +337,7 @@ export function fetchSamplePreparation(id,page = 1) {
   return fetch(`preparation/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
 }
 export function fetchTaxonList(id,page = 1) {
-  return fetch(`taxon_list/?sample_id=${id}&page=${page}&paginate_by=10&format=json`)
+  return fetch(`taxon_list/?sample=${id}&page=${page}&paginate_by=10&format=json`)
 }
 export function fetchLSampleAttachment(id,page = 1) {
   return fetch(`attachment/?attach_link__sample__id=${id}&page=${page}&paginate_by=10&fields=original_filename,attach_link__sample__id&format=json`)

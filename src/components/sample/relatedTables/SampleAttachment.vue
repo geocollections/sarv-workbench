@@ -5,7 +5,7 @@
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
-            <th>{{ $t('reference.reference') }}</th>
+            <th>{{ $t('reference.reference') }}<font-awesome-icon class="ml-2" icon="link"/></th>
             <th v-if="relatedData.insert.attachment_link.reference"></th>
           </tr>
           </thead>

@@ -16,36 +16,45 @@
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.preparation">
-            <td v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
-            <td>{{entity}}</td>
-            <td>{{entity.fossil_group}}</td>
-            <td>{{entity.storage}}</td>
+            <td>{{entity.preparation_number}}</td>
+            <td>{{entity.taxon__taxon}}</td>
+            <td>{{entity.storage__location}}</td>
             <td>{{entity.remarks}}</td>
-            <td>{{entity.date_free}}</td>
+            <td>{{entity.analysis}}</td>
             <td v-if="relatedData.insert.preparation.preparation_number"></td>
           </tr>
           <tr class="related-input-data">
             <td><b-form-input v-model="relatedData.insert.preparation.preparation_number" type="text"/></td>
             <td>
-              <vue-multiselect v-model="relatedData.insert.preparation.fossil_group" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"
+              <vue-multiselect v-model="relatedData.insert.preparation.taxon" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"
                                :options="autocomplete.fossil_group"
                                track-by="id"
-                               label="fossil_group__taxon"
+                               label="taxon"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td><b-form-input v-model="relatedData.insert.preparation.storage" type="text"/></td>
+            <td>
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.storage" deselect-label="Can't remove this value"
+                                      :loading="autocomplete.loaders.storage" id="storage"
+                                      label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                      :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                                      :allow-empty="true"  :show-no-results="false" :max-height="600"
+                                      :open-direction="'bottom'">
+              <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect></td>
             <td><b-form-input v-model="relatedData.insert.preparation.remarks" type="text"/></td>
 
             <td>
-              <vue-multiselect v-model="relatedData.insert.preparation.analysis_method" v-if="isDefinedAndNotEmpty(autocomplete.analysisMethod)"
-                               :options="autocomplete.analysisMethod"
-                               track-by="id"
-                               :label="analysisMethodLabel"
-                               :placeholder="$t('add.inputs.autocomplete')"
-                               :show-labels="false">
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.analysis" deselect-label="Can't remove this value"
+                               :loading="autocomplete.loaders.analysis" id="analysis"
+                               label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.analysis" :searchable="true" @search-change="autcompleteAnalysisSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.id}}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>

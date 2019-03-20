@@ -4,41 +4,78 @@
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
-          <tr>
+          <tr class="text-center">
             <th>Taxon</th>
             <th>Taxon txt</th>
             <th>Abundance</th>
             <th>Det.</th>
-            <th>Det. date</th>
+            <th>Det. date <font-awesome-icon icon="calendar-alt" title="Date identified"/></th>
             <th>Extra</th>
             <th>Preparation</th>
-            <th>Is private</th>
-            <th>Remarks</th>
+            <th><font-awesome-icon icon="user-lock" title="Is private?"/></th>
+            <th><font-awesome-icon icon="comment-alt" title="Remark"/></th>
             <th v-if="relatedData.insert.taxon_list.taxon"></th>
           </tr>
           </thead>
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.taxon_list">
-            <td v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
-            <td>{{entity.fossil_group}}</td>
-            <td>{{entity.storage}}</td>
-            <td>{{entity.remarks}}</td>
-            <td>{{entity.fossil_group}}</td>
-            <td>{{entity.storage}}</td>
+            <td>{{entity.taxon__taxon}}</td>
+            <td>{{entity.name}}</td>
+            <td>{{entity.frequency}}</td>
+            <td>{{entity.agent_identified__agent}}</td>
+            <td>{{entity.date_identified}}</td>
+            <td class="text-center">{{ entity.extra === true ? '&#10003' : '' }}</td>
+            <td>{{entity.preparation}}</td>
+            <td class="text-center">{{ entity.is_private === true ? '&#10003' : '' }}</td>
             <td>{{entity.remarks}}</td>
             <td v-if="relatedData.insert.taxon_list.taxon"></td>
           </tr>
           <tr class="related-input-data">
-            <td><b-form-input v-model="relatedData.insert.taxon_list.taxon" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.storage" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text" :disabled="true"/></td>
-            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text" :disabled="true"/></td>
+            <td>
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.taxon" deselect-label="Can't remove this value"
+                               :loading="autocomplete.loaders.taxon" id="taxon"
+                               label="taxon" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.taxon" :searchable="true" @search-change="autcompleteTaxonSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.taxon}}</strong> </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
+            <td><b-form-input v-model="relatedData.insert.taxon_list.name" type="text"/></td>
+            <td><b-form-input v-model="relatedData.insert.taxon_list.frequency" type="number"/></td>
+            <td>
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.agent_identified" deselect-label="Can't remove this value"
+                                      label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                      :loading="autocomplete.loaders.agent"
+                                      :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                                      :allow-empty="true"  :show-no-results="false" :max-height="600"
+                                      :open-direction="'bottom'">
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect></td>
+            <td>
+              <datepicker id="date"
+                          v-model="relatedData.insert.taxon_list.date_identified"
+                          lang="en"
+                          :first-day-of-week="1"
+                          format="DD MMM YYYY"
+                          input-class="form-control"/>
+            </td>
+            <td class="text-center"><b-form-checkbox v-model="relatedData.insert.taxon_list.extra" :value="true" :unchecked-value="false"/></td>
+            <td>
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.preparation" deselect-label="Can't remove this value"
+                               :loading="autocomplete.loaders.preparation" id="preparation"
+                               label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.preparation" :searchable="true" @search-change="autcompletePreparationSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.id}}</strong> </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
+            <td class="text-center"><b-form-checkbox v-model="relatedData.insert.taxon_list.is_private" :value="true" :unchecked-value="false"/></td>
+            <td><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text"/></td>
             <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.taxon_list = {}" v-if="relatedData.insert.taxon_list.taxon">
               <font-awesome-icon icon="times"></font-awesome-icon>
             </td>

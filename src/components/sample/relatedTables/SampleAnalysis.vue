@@ -14,7 +14,7 @@
             <th>Analüüsija</th>
             <th>Märkused</th>
             <th>Asukoht</th>
-            <th>Kinnine?</th>
+            <th><font-awesome-icon icon="lock" title="Is locked?"/></th>
             <th v-if="relatedData.insert.analysis.analysis_method"></th>
           </tr>
           </thead>
@@ -30,7 +30,7 @@
             <td>{{entity.agent__agent}}</td>
             <td>{{entity.remarks}}</td>
             <td>{{entity.location}}</td>
-            <td class="text-center">{{ entity.is_private === 1 ? '+' : '' }}</td>
+            <td class="text-center">{{ entity.is_private === 1 ? '&#10003' : '' }}</td>
             <td v-if="relatedData.insert.analysis.analysis_method"></td>
           </tr>
           <tr class="related-input-data">

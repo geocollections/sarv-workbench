@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import {faTimes} from '@fortawesome/free-solid-svg-icons'
+import {faTimes, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import Vue from 'vue'
 
-library.add(faTimes, faExternalLinkAlt)
+library.add(faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink)
 
 const formManipulation = {
   data(){
@@ -243,6 +243,13 @@ const formManipulation = {
         formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
       // }
     },
+
+    formatDateForUpload(date){
+      if (typeof date === 'string')
+        return date.split('T')[0]
+      else
+        return date.toISOString().split('T')[0]
+    }
   },
   watch: {
     'relatedData.page': {

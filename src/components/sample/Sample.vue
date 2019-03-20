@@ -503,11 +503,12 @@
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
               lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
-              reference:false,  attachment:false, analysis_method: false,fossil_group:false
+              reference:false,  attachment:false, analysis_method: false,fossil_group:false, analysis:false, taxon:false,
+              preparation:false
             },
             series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
             rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
-            fossil_group:[]
+            fossil_group:[], analysis: [],taxon:[],preparation:[]
           },
           requiredFields: ['number'],
           sample: {}
@@ -598,26 +599,6 @@
           this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
         },
 
-        mapRelatedData(data, object) {
-          let returnList = [];
-
-          data.forEach(entity => {
-            if(object === 'sample') returnList.push({ id: entity.sample, number: entity.sample__number})
-            if(object === 'analysis_method') returnList.push({ id: entity.sample, number: entity.sample__number})
-          });
-
-          return returnList;
-        },
-
-        mapRelatedDataForUpload(object,entity) {
-          if(object === 'analysis_method')
-            return { id: entity.id, analysis_method: entity.analysis_method,
-              method_en: entity.method_en};
-          else {
-            return { id: entity.id, number: entity.number};
-          }
-        },
-
         loadRelatedData(object){
           let query;
 
@@ -652,29 +633,19 @@
           if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
           if (this.isDefinedAndNotNull(uploadableObject.analysis_method)) uploadableObject.analysis_method = uploadableObject.analysis_method.id;
           if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
+          if (this.isDefinedAndNotNull(uploadableObject.agent_identified)) uploadableObject.agent_identified = uploadableObject.agent_identified.id;
+          if (this.isDefinedAndNotNull(uploadableObject.date)) uploadableObject.date = this.formatDateForUpload(uploadableObject.date)
+          if (this.isDefinedAndNotNull(uploadableObject.date_end)) uploadableObject.date_end = this.formatDateForUpload(uploadableObject.date_end)
+          if (this.isDefinedAndNotNull(uploadableObject.date_identified)) uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified)
+          if (this.isDefinedAndNotNull(uploadableObject.taxon)) uploadableObject.taxon = uploadableObject.taxon.id;
+          if (this.isDefinedAndNotNull(uploadableObject.storage)) uploadableObject.storage = uploadableObject.storage.id;
+          if (this.isDefinedAndNotNull(uploadableObject.analysis)) uploadableObject.analysis = uploadableObject.analysis.id;
+          if (this.isDefinedAndNotNull(uploadableObject.preparation)) uploadableObject.preparation = uploadableObject.preparation.id;
+
+
+
           return JSON.stringify(uploadableObject)
         },
-
-        formatRelatedDataSpecialCase(objectToUpload) {
-          let uploadableObject = cloneDeep(objectToUpload);
-          uploadableObject.related_data = {}
-          delete uploadableObject['analysis_method'];
-          uploadableObject.related_data.analysis_method = this.mapRelatedData(this.relatedData['analysis'],'analysis_method');
-          // uploadableObject.related_data.sample = this.mapRelatedData(this.relatedData['analysis'],'sample');
-          uploadableObject.related_data.analysis_method.push(this.mapRelatedDataForUpload('analysis_method',this.relatedData.insert['analysis']));
-          // uploadableObject.related_data.sample.push(this.mapRelatedDataForUpload('sample',this.sample));
-          return JSON.stringify(uploadableObject)
-        },
-
-        // addRelatedDataX(object,link_object, link_table) {
-        //   if(object === 'sample'){
-        //     console.log('adding related data');
-        //     this[object].related_data = {};
-        //     this[object].related_data[link_object] = this.mapRelatedData(this.relatedData[link_table],link_table);
-        //     this[object].related_data[link_object].push(this.mapRelatedDataForUpload(this.relatedData.insert[link_table]))
-        //     console.log(this[object].related_data[link_object])
-        //   }
-        // },
 
       },
 

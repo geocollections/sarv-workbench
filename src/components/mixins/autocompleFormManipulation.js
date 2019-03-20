@@ -23,6 +23,12 @@ const autocompleteFieldManipulation = {
     getAutocompleteQueryParameters(type, val) {
       let query = '';
       switch (type) {
+        case 'analysis':
+          query = `analysis/?multi_search=value:${val};fields:id;lookuptype:icontains&fields=id,analysis_method__analysis_method,analysis_method__method_en`;
+          break;
+        case 'preparation':
+          query = `preparation/?multi_search=value:${val};fields:preparation_number,id;lookuptype:icontains&fields=id,preparation_number`;
+          break;
         case 'locality':
           query = `locality/?multi_search=value:${val};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`;
           break;
@@ -65,13 +71,22 @@ const autocompleteFieldManipulation = {
         case 'attachment':
           query = `attachment/?multi_search=value:${val};fields:original_filename;lookuptype:icontains&fields=id,original_filename,remarks`;
           break;
+        case 'taxon':
+          query = `taxon/?multi_search=value:${val};fields:taxon;lookuptype:icontains&fields=id,taxon`;
+          break;
         default:
           break;
       }
       return query
     },
-    autcompleteLocalitySearch(value) {
-      this.autocompliteSearch(value, 'locality', 'locality')
+    autcompleteAnalysisSearch(value) {
+      this.autocompliteSearch(value, 'analysis', 'analysis')
+    },
+    autcompletePreparationSearch(value) {
+      this.autocompliteSearch(value, 'preparation', 'preparation')
+    },
+    autcompleteTaxonSearch(value) {
+      this.autocompliteSearch(value, 'taxon', 'taxon')
     },
     autcompleteStratigraphySearch(value) {
       this.autocompliteSearch(value, 'stratigraphy', 'stratigraphy')
