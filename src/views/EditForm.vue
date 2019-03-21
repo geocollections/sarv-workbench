@@ -9,7 +9,7 @@
 
     <router-view v-on:data-loaded="setData"/>
 
-    <div class="row" v-if="data.date_added != null && data.date_changed != null">
+    <div class="row" v-if="data != null && data.date_added != null && data.date_changed != null">
       <div class="col-sm-6">
         <label>{{ $t('frontPage.added_date') }} {{data.date_added | moment('DD.MM.YYYY | HH:mm:ss')}}</label>
       </div>
