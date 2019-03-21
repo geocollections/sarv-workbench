@@ -9,6 +9,16 @@
 
     <router-view v-on:data-loaded="setData"/>
 
+    <div class="row" v-if="data.date_added != null && data.date_changed != null">
+      <div class="col-sm-6">
+        <label>{{ $t('frontPage.added_date') }} {{data.date_added | moment('DD.MM.YYYY | HH:mm:ss')}}</label>
+      </div>
+      <div class="col-sm-6">
+        <label>{{ $t('frontPage.changed_date') }} {{data.date_changed | moment('DD.MM.YYYY | HH:mm:ss')}}</label>
+      </div>
+
+
+    </div>
     <confirmation-box :title-extra="'SOME TITLE'"
                       custom-question="confirmation.relatedDataQuestion"
                       :table="$route.meta.table"/>

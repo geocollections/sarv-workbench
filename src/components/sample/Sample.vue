@@ -493,13 +493,15 @@
       mixins: [formManipulation,autocompleteFieldManipulation],
       data() {
         return {
-          activeTab: 'locality_reference',
+          activeTab: 'analysis',
           relatedData: this.setDefaultRalatedData(),
           copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
             'parent_sample','parent_specimen','depth','depth_interval','latitude1','longitude1','stratigraphy','lithostratigraphy',
             'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
             'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
-            'palaeontology','analysis','locality','locality_free','remarks','is_private'],
+            'palaeontology','analysis','locality','locality_free','remarks','is_private','date_added','date_changed', 'user_added',
+            'user_changed',
+          ],
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
               lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
@@ -625,6 +627,9 @@
         checkRequiredFields(type){
           if(type === 'sample_attachment') return this.relatedData.insert[type].attachment === undefined;
           if(type === 'sample_reference') return this.relatedData.insert[type].reference === undefined;
+          // if(type === 'analysis') return this.relatedData.insert[type].reference === undefined;
+          // if(type === 'preparation') return this.relatedData.insert[type].reference === undefined;
+          // if(type === 'taxon_list') return this.relatedData.insert[type].reference === undefined;
         },
 
         formatRelatedData(objectToUpload) {

@@ -71,7 +71,9 @@
     "developmentSettings": {
       "button": "Remove all default settings",
       "message": "Removes all saved values, might help if something is not loading/working correctly (only in development)"
-    }
+    },
+    "added_date":"Added",
+    "changed_date":"Changed"
   },
   "add": {
     "new": "Add new",

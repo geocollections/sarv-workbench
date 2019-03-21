@@ -71,7 +71,9 @@
     "developmentSettings": {
       "button": "Kustuta kõik vaikimisi väärtused",
       "message": "Kustutab kõik vaikimisi väärtused, võib aidata kui midagi ei lae/tööta korralikult (ainult arenduse käigus)"
-    }
+    },
+    "added_date":"Lisatud",
+    "changed_date":"Muudetud"
   },
   "add": {
     "new": "Lisa uus",
