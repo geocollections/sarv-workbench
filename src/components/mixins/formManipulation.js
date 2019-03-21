@@ -201,7 +201,8 @@ const formManipulation = {
         this.setActiveTab(this.nextTab, false);
       }
     },
-
+    //Mixin method
+    loadRelatedData(){},
     setActiveTab(type, isWarning = true){
       this.nextTab = type;
       if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
@@ -209,7 +210,8 @@ const formManipulation = {
       } else {
         // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
         this.relatedData.insert[this.activeTab]={};
-        this.activeTab = type;
+        // this.activeTab = type;
+        this.$emit('tab-changed',type);
         this.loadRelatedData(type);
       }
     },

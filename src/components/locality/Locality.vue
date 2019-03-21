@@ -516,13 +516,16 @@
             this.sendingData = false;
           }
         });
-
+        //Manipulation with data itself should be done in class
+        this.$on('tab-changed',this.setTab);
         // FETCH FIRST TAB RELATED DATA
         this.setActiveTab('locality_reference')
       }
     },
 
     methods: {
+
+      setTab(type){ this.activeTab  = type },
       setDefaultRalatedData(){
         return {
           locality_reference:[], locality_synonym: [], attachment_link:[], locality_stratigraphy:[],

@@ -542,12 +542,13 @@
             }
           });
         }
-
+        this.$on('tab-changed',this.setTab);
         // FETCH FIRST TAB RELATED DATA
         this.setActiveTab('analysis')
       },
 
       methods: {
+        setTab(type){ this.activeTab  = type },
         setDefaultRalatedData(){
           return {
             sample_reference:[], attachment_link: [], analysis: [], preparation:[], taxon_list:[],

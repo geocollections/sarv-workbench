@@ -85,6 +85,9 @@ const autocompleteFieldManipulation = {
     autcompletePreparationSearch(value) {
       this.autocompliteSearch(value, 'preparation', 'preparation')
     },
+    autcompleteLocalitySearch(value) {
+      this.autocompliteSearch(value, 'locality', 'locality')
+    },
     autcompleteTaxonSearch(value) {
       this.autocompliteSearch(value, 'taxon', 'taxon')
     },
