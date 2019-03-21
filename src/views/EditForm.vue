@@ -3,22 +3,13 @@
 
     <div class="row mt-4">
       <div class="col">
-        <p class="h2">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
+        <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
+        <span class="float-right"><button class="btn btn-primary mb-2" @click="saveAsNew">{{ $t('add.saveAsNew') }}</button></span>
       </div>
     </div>
+    <router-view v-on:data-loaded="setData" v-on:related-data-info="setRelatedData"/>
 
-    <router-view v-on:data-loaded="setData"/>
-
-    <div class="row" v-if="data != null && data.date_added != null && data.date_changed != null">
-      <div class="col-sm-6">
-        <label>{{ $t('frontPage.added_date') }} {{data.date_added | moment('DD.MM.YYYY | HH:mm:ss')}}</label>
-      </div>
-      <div class="col-sm-6">
-        <label>{{ $t('frontPage.changed_date') }} {{data.date_changed | moment('DD.MM.YYYY | HH:mm:ss')}}</label>
-      </div>
-
-
-    </div>
+    <save-as-new-modal :title-extra="'Some title'" :related-data="relatedData"/>
     <confirmation-box :title-extra="'SOME TITLE'"
                       custom-question="confirmation.relatedDataQuestion"
                       :table="$route.meta.table"/>
@@ -30,15 +21,18 @@
 <script>
   import Log from '@/components/partial/Log.vue'
   import ConfirmationBox from "../components/partial/ConfirmationBoxOlesja";
+  import SaveAsNewModal from "../components/partial/SaveAsNewModal";
   export default {
     name: "EditForm",
     components: {
+      SaveAsNewModal,
       ConfirmationBox,
       Log
     },
     data(){
       return {
         data : null,
+        relatedData:[],
         formattedData:null,
         isConfirmation: false
       }
@@ -49,9 +43,15 @@
       }
     },
     methods: {
+      saveAsNew(){
+        this.$root.$emit('show-save-as-new-modal',true)
+      },
       setData(data) {
         this.data = data
         if(this.data !== null) this.formattedData = data;
+      },
+      setRelatedData(data){
+        this.relatedData = data
       }
     }
   }

@@ -410,13 +410,13 @@
             <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"  :class="{ active: activeTab === 'preparation' }">{{ $t('sample.relatedTables.preparation') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">{{ $t('sample.relatedTables.identified_taxa') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">{{ $t('sample.relatedTables.taxon_list') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('sample.relatedTables.attachment') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('sample.relatedTables.attachment_link') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('sample.relatedTables.reference') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('sample.relatedTables.sample_reference') }}</a>
           </li>
         </ul>
         <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
@@ -499,8 +499,7 @@
             'parent_sample','parent_specimen','depth','depth_interval','latitude1','longitude1','stratigraphy','lithostratigraphy',
             'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
             'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
-            'palaeontology','analysis','locality','locality_free','remarks','is_private','date_added','date_changed', 'user_added',
-            'user_changed',
+            'palaeontology','analysis','locality','locality_free','remarks','is_private'
           ],
           autocomplete: {
             loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
@@ -545,6 +544,7 @@
           });
         }
         this.$on('tab-changed',this.setTab);
+        this.$emit('related-data-info',['analysis','preparation','taxon_list','attachment_link','sample_reference']);
         // FETCH FIRST TAB RELATED DATA
         this.setActiveTab('analysis')
       },
@@ -632,9 +632,13 @@
           // if(type === 'taxon_list') return this.relatedData.insert[type].reference === undefined;
         },
 
-        formatRelatedData(objectToUpload) {
+        formatRelatedData(objectToUpload, idOfCopy)  {
           let uploadableObject = cloneDeep(objectToUpload);
-          uploadableObject.sample = this.sample.id;
+          if(idOfCopy === undefined) {
+            uploadableObject.sample = this.sample.id;
+          } else {
+            uploadableObject.sample = idOfCopy;
+          }
           if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
           if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
           if (this.isDefinedAndNotNull(uploadableObject.analysis_method)) uploadableObject.analysis_method = uploadableObject.analysis_method.id;
@@ -653,6 +657,12 @@
           return JSON.stringify(uploadableObject)
         },
 
+        saveAsNew(data) {
+          let i = 0;
+          for (i in data.numberOfCopies ){
+            this.add(true, 'sample', true, data.relatedData);
+          }
+        }
       },
 
 

@@ -26,6 +26,7 @@ const formManipulation = {
 
   mounted(){
     this.$root.$on('user-choice', this.handleUserChoice);
+    this.$root.$on('save-object-as-new', this.saveAsNew);
   },
 
   methods: {
@@ -55,8 +56,12 @@ const formManipulation = {
       return isValid
     },
 
-    add(addAnother, object) {
+    add(addAnother, object, isCopy = false, copyOfRelatedData = []) {
       if (this.validate(object) && !this.sendingData) {
+
+        if(isCopy === true) {
+          delete this[object]['id']
+        }
 
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
 
@@ -69,12 +74,14 @@ const formManipulation = {
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
-        this.saveData(object,formData,url).then(isSuccessfullySaved => {
-          console.log(isSuccessfullySaved)
-          if (isSuccessfullySaved === undefined && isSuccessfullySaved === false) return;
+        this.saveData(object,formData,url).then(savedObjectId => {
+          if(copyOfRelatedData.length > 0) {
+            console.log("Created copy of "+object+ " id:"+savedObjectId)
+            this.addCopyOfRelatedData(copyOfRelatedData,savedObjectId);
+          }
+          if (savedObjectId === undefined || savedObjectId === false || isCopy) return;
           //before save object ID was removed
           this[object] = editableObject;
-          //Reload logs is not working TODO
           this.$emit('data-loaded',editableObject);
           if (!addAnother) {
             this.$router.push({ path: '/'+object })
@@ -119,7 +126,7 @@ const formManipulation = {
             } else {
               toastSuccess({text: response.body.message});
             }
-            resolve(true)
+            resolve(response.body.id)
           }
           if (typeof response.body.error !== 'undefined') {
 
@@ -128,7 +135,7 @@ const formManipulation = {
             } else {
               toastError({text: response.body.error});
             }
-            resolve(false)
+            resolve(undefined)
 
           }
         }
@@ -137,7 +144,7 @@ const formManipulation = {
         console.log('ERROR: ' + JSON.stringify(errResponse));
         this.sendingData = false
         toastError({text: this.$t('messages.uploadError')});
-        resolve(false)
+        resolve(undefined)
       })
     },
     addRelationBetweenAnyObjectAndAttachment(attachmentId, object){
@@ -201,8 +208,10 @@ const formManipulation = {
         this.setActiveTab(this.nextTab, false);
       }
     },
-    //Mixin method
+    //Methods logic implemented in certain class
     loadRelatedData(){},
+    saveAsNew(){},
+
     setActiveTab(type, isWarning = true){
       this.nextTab = type;
       if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
@@ -215,7 +224,15 @@ const formManipulation = {
         this.loadRelatedData(type);
       }
     },
-
+    addCopyOfRelatedData(relatedData, idOfCopy){
+      let type;
+      for(type in relatedData) {
+        if(this.isEmptyObject(this.relatedData.insert[type])) return;
+        let formData = new FormData();
+        formData.append('data', this.formatRelatedData(this.relatedData.insert[type],idOfCopy));
+        this.saveData(type,formData,'add/'+type+'/');
+      }
+    },
 
     addRelatedData(type) {
       if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
@@ -239,11 +256,8 @@ const formManipulation = {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
-      // if(type === 'analysis') {
-      //   formData.append('data', this.formatRelatedDataSpecialCase(this.relatedData.insert[type]));
-      // } else {
-        formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
-      // }
+
+      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
     },
 
     formatDateForUpload(date){
@@ -251,7 +265,8 @@ const formManipulation = {
         return date.split('T')[0]
       else
         return date.toISOString().split('T')[0]
-    }
+    },
+
   },
   watch: {
     'relatedData.page': {
