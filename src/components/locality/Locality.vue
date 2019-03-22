@@ -509,7 +509,7 @@
           if(handledResponse.length > 0) {
             this.locality = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.locality)
-            this.removeUnnecessaryFields('locality',this.copyFields);
+            this.removeUnnecessaryFields(this.locality,this.copyFields);
             this.$emit('data-loaded',this.locality)
             this.sendingData = false;
           } else {

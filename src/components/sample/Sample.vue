@@ -6,7 +6,7 @@
       <div class="col-sm-2">
         <label :for="`number`">{{ $t('sample.number') }}:</label>
       </div>
-      
+
       <div class="col-sm-2 mb-2">
         <b-form-input id="number" v-model="sample.number" type="text"></b-form-input>
       </div>
@@ -470,6 +470,7 @@
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
   import formManipulation  from './../mixins/formManipulation'
+  import copyForm  from './../mixins/copyForm'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
   import SampleReference from "./relatedTables/SampleReference";
   import SampleAttachment from "./relatedTables/SampleAttachment";
@@ -490,7 +491,7 @@
         VueMultiselect,
         Spinner,
       },
-      mixins: [formManipulation,autocompleteFieldManipulation],
+      mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
       data() {
         return {
           tabs:['analysis','preparation','taxon_list','attachment_link','sample_reference'],
@@ -536,7 +537,7 @@
             if(handledResponse.length > 0) {
               this.sample = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.sample)
-              this.removeUnnecessaryFields('sample', this.copyFields);
+              this.removeUnnecessaryFields(this.sample, this.copyFields);
               this.$emit('data-loaded',this.sample)
               this.sendingData = false;
             } else {

@@ -26,7 +26,6 @@ const formManipulation = {
 
   mounted(){
     this.$root.$on('user-choice', this.handleUserChoice);
-    this.$root.$on('save-object-as-new', this.saveAsNew);
   },
 
   methods: {
@@ -75,9 +74,8 @@ const formManipulation = {
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
-        this.saveData(object,formData,url).then(savedObjectId => {
-          if(isCopy === true) {
-            console.log("Created copy of "+object+ " id:"+savedObjectId);
+        this.saveData(object,formData,url, isCopy).then(savedObjectId => {
+          if(isCopy === true && savedObjectId) {
             this.addCopyOfRelatedData(copyOfRelatedData,savedObjectId);
             return true;
           } else if (isCopy === true && savedObjectId === undefined) return false;
@@ -102,14 +100,14 @@ const formManipulation = {
 
     },
 
-    saveData(type,formData,url) {
+    saveData(type,formData,url, isCopy = false) {
       return new Promise(resolve => {
-        this.request(type,formData,url,resolve)
+        this.request(type,formData,url,resolve, isCopy)
       })
     },
 
-    request(object,formData,url,resolve) {
-      this.sendingData = true;
+    request(object,formData,url,resolve, isCopy) {
+      this.sendingData = isCopy ? false : true;
       this.loadingPercent = 0;
 
       this.$http.post(this.apiUrl + url, formData, {
@@ -193,11 +191,10 @@ const formManipulation = {
     },
 
     removeUnnecessaryFields(object,copyFields){
-      let vm = this;
       //copy only certain fields
-      Object.entries(this[object]).forEach(entry => {
+      Object.entries(object).forEach(entry => {
         if (copyFields.indexOf(entry[0]) < 0) {
-          delete vm[object][entry[0]]
+          delete object[entry[0]]
         }
       });
     },
@@ -215,7 +212,6 @@ const formManipulation = {
     },
     //Methods logic implemented in certain class
     loadRelatedData(){},
-    saveAsNew(){},
 
     setActiveTab(type, isWarning = true){
       this.nextTab = type;
@@ -230,41 +226,6 @@ const formManipulation = {
       }
     },
 
-    removeUnnecessaryFields2(object,copyFields){
-      let copy = cloneDeep(object)
-      //copy only certain fields
-
-      Object.entries(copy).forEach(entry => {
-        if (copyFields.indexOf(entry[0]) < 0) {
-          delete copy[entry[0]]
-        }
-      });
-      return copy;
-    },
-
-    addCopyOfRelatedData(relatedData, idOfCopy, object = 'sample'){
-      let type;
-
-      Object.entries(relatedData).forEach(entry => {
-        if(entry[1] === undefined || entry[1] === false) return;
-        type = entry[0];
-        if(!this.isEmptyObject(this.relatedData[type])) {
-          this.relatedData[type].forEach(entry => {
-            if(type === 'attachment_link') {
-              entry['attachment'] = entry.id
-            }
-            let copy = this.removeUnnecessaryFields2(entry,this.relatedData.copyFields[type]);
-            copy[object] = idOfCopy;
-            console.log(entry)
-            let formData = new FormData();
-            formData.append('data', this.formatRelatedData(copy,true));
-
-            this.saveData(type,formData,'add/'+type+'/');
-          })
-        }
-
-      })
-    },
 
     addRelatedData(type) {
       if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
@@ -295,7 +256,6 @@ const formManipulation = {
   watch: {
     'relatedData.page': {
       handler: function (newVal) {
-        console.log(newVal)
         this.setActiveTab(this.activeTab)
       },
       deep: true
