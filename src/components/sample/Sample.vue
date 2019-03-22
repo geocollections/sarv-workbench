@@ -546,6 +546,8 @@
           });
         }
         this.$on('tab-changed',this.setTab);
+        this.$root.$on('related-data-modified',this.editRelatedData);
+        this.$root.$on('edit-row',this.editRow);
 
         this.$emit('related-data-info',this.tabs);
         // FETCH FIRST TAB RELATED DATA
@@ -563,7 +565,7 @@
             copyFields: {
               sample_reference:['reference','remarks'],
               attachment_link: ['attachment'],
-              analysis: ['analysis_method','method_details','mass','date','date_end','date_free','agent','remarks','location'],
+              analysis: ['analysis_method','method_details','mass','date','date_end','date_free','agent','remarks','location','is_private'],
               preparation:['taxon','storage','remarks','analysis'],
               taxon_list:['taxon','name','frequency','agent_identified','date_identified','extra','preparation','is_private','remarks']
             },
@@ -613,6 +615,13 @@
           this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
           this.sample.storage = {location:obj.storage__location,id:obj.storage}
           this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
+        },
+
+        fillRelatedDataAutocompleteFields(obj){
+          obj.analysis_method = {analysis_method:obj.analysis_method__analysis_method, method_en:obj.analysis_method__method_en,id:obj.analysis_method}
+          obj.agent = {agent:obj.agent__agent,id:obj.agent}
+          obj.is_private = obj.is_private === 1
+          return obj
         },
 
         loadRelatedData(object){

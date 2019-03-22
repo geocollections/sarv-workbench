@@ -21,9 +21,9 @@
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.analysis">
-            <td v-if="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
+            <td v-show="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
             <td v-if="entity.editMode">
-              <vue-multiselect v-model="entity.new.analysis_method" v-if="isDefinedAndNotEmpty(autocomplete.analysisMethod)"
+              <vue-multiselect v-model="entity.new.analysis_method"
                                :options="autocomplete.analysisMethod"
                                track-by="id"
                                :label="analysisMethodLabel"
@@ -32,27 +32,27 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td v-if="!entity.editMode">{{entity.method_details}}</td>
+            <td v-show="!entity.editMode">{{entity.method_details}}</td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.method_details" type="text"/></td>
-            <td v-if="!entity.editMode">{{entity.mass}}</td>
+            <td v-show="!entity.editMode">{{entity.mass}}</td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.mass" type="number"/></td>
-            <td v-if="!entity.editMode">{{entity.date}}</td>
+            <td v-show="!entity.editMode">{{entity.date}}</td>
             <td v-if="entity.editMode"><datepicker id="date1"
                             v-model="entity.new.date"
                             lang="en"
                             :first-day-of-week="1"
                             format="DD MMM YYYY"
                             input-class="form-control"/></td>
-            <td v-if="!entity.editMode">{{entity.date_end}}</td>
+            <td v-show="!entity.editMode">{{entity.date_end}}</td>
             <td v-if="entity.editMode"><datepicker id="date_end1"
                             v-model="entity.new.date_end"
                             lang="en"
                             :first-day-of-week="1"
                             format="DD MMM YYYY"
                             input-class="form-control"/></td>
-            <td v-if="!entity.editMode">{{entity.date_free}}</td>
+            <td v-show="!entity.editMode">{{entity.date_free}}</td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.date_free" type="text"/></td>
-            <td v-if="!entity.editMode">{{entity.agent__agent}}</td>
+            <td v-show="!entity.editMode">{{entity.agent__agent}}</td>
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.agent" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
@@ -63,16 +63,16 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td v-if="!entity.editMode">{{entity.remarks}}</td>
+            <td v-show="!entity.editMode">{{entity.remarks}}</td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.remarks" type="text"/></td>
-            <td v-if="!entity.editMode">{{entity.location}}</td>
+            <td v-show="!entity.editMode">{{entity.location}}</td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.location" type="text"/></td>
-            <td class="text-center">{{ entity.is_private === 1 ? '&#10003' : '' }}</td>
-            <!--<td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="relatedData.insert.analysis.is_private" :value="true" :unchecked-value="false"/></td>-->
+            <td v-show="!entity.editMode" class="text-center">{{ entity.is_private === 1 ? '&#10003' : '' }}</td>
+            <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.is_private" :value="true" :unchecked-value="false"/></td>
 
             <td style="padding: 0.6em!important;">
-              <button v-if="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="editRow(entity)"><font-awesome-icon icon="pencil-alt"/></button>
-              <button v-if="entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="editRow(entity)" :disabled="sendingData">E</button>
+              <button v-if="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-if="entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData">E</button>
               <button class="float-right btn btn-sm btn-outline-danger" @click="removeRow(entity)" :disabled="true">D</button>
             </td>
           </tr>

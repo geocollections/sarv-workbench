@@ -228,6 +228,25 @@ const formManipulation = {
       }
     },
 
+    editRelatedData(object) {
+      if(this.isEmptyObject(object.new)) return;
+      let formData = new FormData();
+
+      //CHECK REQUIRED FIELDS !!!
+      let type = this.activeTab;
+      if(this.checkRequiredFields(type)) {
+        toastError({text: this.$t('messages.checkForm')});
+        return
+      }
+      let editableObject = this.removeUnnecessaryFields(object.new,this.relatedData.copyFields[type]);
+      formData.append('data', this.formatRelatedData(editableObject));
+      this.saveData(type,formData,'change/'+type+'/'+ object.id).then(isSuccessfullySaved => {
+      //  UPDATE ROW DATA
+        this.$set(object, '', object.new);
+        this.$set(object, 'new', {});
+        this.$set(object, 'editMode', false)
+      });
+    },
 
     addRelatedData(type) {
       if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
@@ -252,14 +271,12 @@ const formManipulation = {
 
       formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
     },
+    fillRelatedDataAutocompleteFields(){},
     editRow(entity){
       // console.log("EDIT RECORD" + JSON.stringify(entity));
-
-      this.$set(entity, 'new', cloneDeep(entity))
-      console.log(entity)
+      this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
       this.$set(entity, 'editMode', !entity.editMode)
     },
-
 
     removeRow(entity){
       console.log("DELETE RECORD" + JSON.stringify(entity))
