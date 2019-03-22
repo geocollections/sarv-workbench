@@ -340,7 +340,7 @@ export function fetchTaxonList(id,page = 1) {
   return fetch(`taxon_list/?sample=${id}&page=${page}&paginate_by=10&format=json`)
 }
 export function fetchLSampleAttachment(id,page = 1) {
-  return fetch(`attachment/?attach_link__sample__id=${id}&page=${page}&paginate_by=10&fields=original_filename,attach_link__sample__id&format=json`)
+  return fetch(`attachment/?attach_link__sample__id=${id}&page=${page}&paginate_by=10&fields=id,original_filename,attach_link__sample__id&format=json`)
 }
 export function fetchSampleReference(id,page = 1) {
   return fetch(`sample_reference/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)

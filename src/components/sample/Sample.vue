@@ -6,7 +6,7 @@
       <div class="col-sm-2">
         <label :for="`number`">{{ $t('sample.number') }}:</label>
       </div>
-
+      
       <div class="col-sm-2 mb-2">
         <b-form-input id="number" v-model="sample.number" type="text"></b-form-input>
       </div>
@@ -493,6 +493,7 @@
       mixins: [formManipulation,autocompleteFieldManipulation],
       data() {
         return {
+          tabs:['analysis','preparation','taxon_list','attachment_link','sample_reference'],
           activeTab: 'analysis',
           relatedData: this.setDefaultRalatedData(),
           copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
@@ -544,8 +545,12 @@
           });
         }
         this.$on('tab-changed',this.setTab);
-        this.$emit('related-data-info',['analysis','preparation','taxon_list','attachment_link','sample_reference']);
+
+        this.$emit('related-data-info',this.tabs);
         // FETCH FIRST TAB RELATED DATA
+        this.tabs.forEach(entity => {
+          this.loadRelatedData(entity);
+        });
         this.setActiveTab('analysis')
       },
 
@@ -554,6 +559,13 @@
         setDefaultRalatedData(){
           return {
             sample_reference:[], attachment_link: [], analysis: [], preparation:[], taxon_list:[],
+            copyFields: {
+              sample_reference:['reference','remarks'],
+              attachment_link: ['attachment'],
+              analysis: ['analysis_method','method_details','mass','date','date_end','date_free','agent','remarks','location'],
+              preparation:['taxon','storage','remarks','analysis'],
+              taxon_list:['taxon','name','frequency','agent_identified','date_identified','extra','preparation','is_private','remarks']
+            },
             insert: {sample_reference:{},attachment_link:{},analysis:{},preparation:{}, taxon_list:{}},
             page : {sample_reference:1,attachment_link:1,analysis:1,preparation:1, taxon_list:1},
             count: {sample_reference:0,attachment_link:0,analysis:0,preparation:0, taxon_list:0}
@@ -592,8 +604,8 @@
           this.sample.sample_purpose = {value:obj.sample_purpose__value,value_en:obj.sample_purpose__value_en,id:obj.sample_purpose__id}
           this.sample.parent_sample = {number:obj.parent_sample__number,id:obj.parent_sample}
           this.sample.parent_specimen = {specimen_id:obj.parent_specimen__specimen_id,id:obj.parent_specimen}
-          this.sample.locality = {locality:obj.locality__locality,locality_en:obj.locality__locality_en,id:obj.locality__locality__id}
-          this.sample.stratigraphy = {stratigraphy:obj.stratigraphy__stratigraphy,stratigraphy_en:obj.stratigraphy__stratigraphy_en,id:obj.stratigraphy__stratigraphy__id}
+          this.sample.locality = {locality:obj.locality__locality,locality_en:obj.locality__locality_en,id:obj.locality__id}
+          this.sample.stratigraphy = {stratigraphy:obj.stratigraphy__stratigraphy,stratigraphy_en:obj.stratigraphy__stratigraphy_en,id:obj.stratigraphy__id}
           this.sample.lithostratigraphy = {stratigraphy:obj.lithostratigraphy__stratigraphy,stratigraphy_en:obj.lithostratigraphy__stratigraphy_en,id:obj.lithostratigraphy_id}
           this.sample.agent_collected = {agent:obj.agent_collected__agent,id:obj.agent_collected__id}
           this.sample.classification_rock = {name:obj.classification_rock__name,name_en:obj.classification_rock__name_en,id:obj.classification_rock__id}
@@ -632,15 +644,13 @@
           // if(type === 'taxon_list') return this.relatedData.insert[type].reference === undefined;
         },
 
-        formatRelatedData(objectToUpload, idOfCopy)  {
+        formatRelatedData(objectToUpload, idOfCopy = false)  {
           let uploadableObject = cloneDeep(objectToUpload);
-          if(idOfCopy === undefined) {
-            uploadableObject.sample = this.sample.id;
-          } else {
-            uploadableObject.sample = idOfCopy;
-          }
-          if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
-          if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
+
+          if(idOfCopy === false) uploadableObject.sample = this.sample.id;
+
+          if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
+          if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
           if (this.isDefinedAndNotNull(uploadableObject.analysis_method)) uploadableObject.analysis_method = uploadableObject.analysis_method.id;
           if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
           if (this.isDefinedAndNotNull(uploadableObject.agent_identified)) uploadableObject.agent_identified = uploadableObject.agent_identified.id;
@@ -656,11 +666,21 @@
 
           return JSON.stringify(uploadableObject)
         },
-
+        waitUntilAllCopiesSaved(){
+          this.$root.$emit('copied-data-saved','PROBLEM')
+        },
         saveAsNew(data) {
-          let i = 0;
-          for (i in data.numberOfCopies ){
-            this.add(true, 'sample', true, data.relatedData);
+          let numberOfSaves = 0;
+
+          for (let i = 0; i < parseInt(data.numberOfCopies); i++ ){
+            console.log('saving copy #' +(i+1));
+            numberOfSaves += this.add(true, 'sample', true, data.relatedData) === true ? 1 : 0;
+            //stop loading after last data saved
+            if(i === data.numberOfCopies-1 && numberOfSaves === data.numberOfCopies) {
+              this.$root.$emit('copied-data-saved','SAVED')
+            } else if(i === data.numberOfCopies-1 && numberOfSaves !== data.numberOfCopies) {
+              setTimeout(this.waitUntilAllCopiesSaved, 500)
+            }
           }
         }
       },

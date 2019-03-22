@@ -41,6 +41,7 @@ const formManipulation = {
       }
       return true;
     },
+    formatDateForUpload(date){ return typeof date === 'string' ? date.split('T')[0] : date.toISOString().split('T')[0];},
     cancelRequest() {this.previousRequest.abort()},
     handleResponse(response){
       if (response.status === 200) {
@@ -52,7 +53,7 @@ const formManipulation = {
       let vm = this, isValid = true;
       this.requiredFields.forEach(function (el) {
         isValid &= vm.isDefinedAndNotNullAndNotEmptyString(vm[object][el])
-      })
+      });
       return isValid
     },
 
@@ -75,17 +76,21 @@ const formManipulation = {
         formData.append('data', dataToUpload);
 
         this.saveData(object,formData,url).then(savedObjectId => {
-          if(copyOfRelatedData.length > 0) {
-            console.log("Created copy of "+object+ " id:"+savedObjectId)
+          if(isCopy === true) {
+            console.log("Created copy of "+object+ " id:"+savedObjectId);
             this.addCopyOfRelatedData(copyOfRelatedData,savedObjectId);
-          }
-          if (savedObjectId === undefined || savedObjectId === false || isCopy) return;
+            return true;
+          } else if (isCopy === true && savedObjectId === undefined) return false;
+
+          if (savedObjectId === undefined || savedObjectId === false) return;
           //before save object ID was removed
           this[object] = editableObject;
           this.$emit('data-loaded',editableObject);
           if (!addAnother) {
             this.$router.push({ path: '/'+object })
           }
+        }, errResponse => {
+          return false;
         });
 
       } else if (this.sendingData) {
@@ -224,14 +229,41 @@ const formManipulation = {
         this.loadRelatedData(type);
       }
     },
-    addCopyOfRelatedData(relatedData, idOfCopy){
+
+    removeUnnecessaryFields2(object,copyFields){
+      let copy = cloneDeep(object)
+      //copy only certain fields
+
+      Object.entries(copy).forEach(entry => {
+        if (copyFields.indexOf(entry[0]) < 0) {
+          delete copy[entry[0]]
+        }
+      });
+      return copy;
+    },
+
+    addCopyOfRelatedData(relatedData, idOfCopy, object = 'sample'){
       let type;
-      for(type in relatedData) {
-        if(this.isEmptyObject(this.relatedData.insert[type])) return;
-        let formData = new FormData();
-        formData.append('data', this.formatRelatedData(this.relatedData.insert[type],idOfCopy));
-        this.saveData(type,formData,'add/'+type+'/');
-      }
+
+      Object.entries(relatedData).forEach(entry => {
+        if(entry[1] === undefined || entry[1] === false) return;
+        type = entry[0];
+        if(!this.isEmptyObject(this.relatedData[type])) {
+          this.relatedData[type].forEach(entry => {
+            if(type === 'attachment_link') {
+              entry['attachment'] = entry.id
+            }
+            let copy = this.removeUnnecessaryFields2(entry,this.relatedData.copyFields[type]);
+            copy[object] = idOfCopy;
+            console.log(entry)
+            let formData = new FormData();
+            formData.append('data', this.formatRelatedData(copy,true));
+
+            this.saveData(type,formData,'add/'+type+'/');
+          })
+        }
+
+      })
     },
 
     addRelatedData(type) {
@@ -241,9 +273,7 @@ const formManipulation = {
 
       this.formatRelatedDataForUpload(type,formData);
 
-      let url = 'add/'+type+'/';
-
-      this.saveData(type,formData,url).then(isSuccessfullySaved => {
+      this.saveData(type,formData,'add/'+type+'/').then(isSuccessfullySaved => {
         // RELOAD RELATED DATA IN CURRENT TAB
         this.loadRelatedData(type);
         // CLEAR PREVIOUS INSERT DATA
@@ -260,12 +290,6 @@ const formManipulation = {
       formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
     },
 
-    formatDateForUpload(date){
-      if (typeof date === 'string')
-        return date.split('T')[0]
-      else
-        return date.toISOString().split('T')[0]
-    },
 
   },
   watch: {
