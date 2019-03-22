@@ -93,6 +93,8 @@
           this.hideModal();
         } else if(status === 'PROBLEM') {
           console.log("SOME DATA WAS NOT SAVED")
+        } else {
+          console.log("SOMETHING ELSE")
         }
       }
     }

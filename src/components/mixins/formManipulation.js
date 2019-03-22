@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import {faTimes, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink} from '@fortawesome/free-solid-svg-icons'
+import {faTimes, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import Vue from 'vue'
 
-library.add(faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink)
+library.add(faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt)
 
 const formManipulation = {
   data(){
@@ -81,6 +81,7 @@ const formManipulation = {
           } else if (isCopy === true && savedObjectId === undefined) return false;
 
           if (savedObjectId === undefined || savedObjectId === false) return;
+
           //before save object ID was removed
           this[object] = editableObject;
           this.$emit('data-loaded',editableObject);
@@ -138,7 +139,7 @@ const formManipulation = {
             } else {
               toastError({text: response.body.error});
             }
-            resolve(undefined)
+            resolve(false)
 
           }
         }
@@ -197,6 +198,7 @@ const formManipulation = {
           delete object[entry[0]]
         }
       });
+      return object;
     },
 
     handleUserChoice(choice){
@@ -250,7 +252,18 @@ const formManipulation = {
 
       formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
     },
+    editRow(entity){
+      // console.log("EDIT RECORD" + JSON.stringify(entity));
 
+      this.$set(entity, 'new', cloneDeep(entity))
+      console.log(entity)
+      this.$set(entity, 'editMode', !entity.editMode)
+    },
+
+
+    removeRow(entity){
+      console.log("DELETE RECORD" + JSON.stringify(entity))
+    }
 
   },
   watch: {

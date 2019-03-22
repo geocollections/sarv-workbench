@@ -425,10 +425,10 @@
         <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
-          <div class="col">
-            <button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"
-                    :disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>
-          </div>
+          <!--<div class="col">-->
+            <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
+                    <!--:disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>-->
+          <!--</div>-->
           <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
@@ -670,6 +670,7 @@
         waitUntilAllCopiesSaved(){
           this.$root.$emit('copied-data-saved','PROBLEM')
         },
+
         saveAsNew(data) {
           let numberOfSaves = 0;
 

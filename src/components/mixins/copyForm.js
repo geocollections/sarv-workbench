@@ -23,9 +23,9 @@ const copyForm = {
             if(type === 'attachment_link') {
               entry['attachment'] = entry.id
             }
-            let copy = this.removeUnnecessaryFields(cloneDeep(object),this.relatedData.copyFields[type]);
+
+            let copy = this.removeUnnecessaryFields(cloneDeep(this.relatedData[type]),this.relatedData.copyFields[type]);
             copy[object] = idOfCopy;
-            console.log(entry)
             let formData = new FormData();
             formData.append('data', this.formatRelatedData(copy,true));
 

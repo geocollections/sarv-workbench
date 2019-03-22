@@ -15,23 +15,66 @@
             <th>{{ $t('analysis.remarks') }}</th>
             <th>{{ $t('analysis.location') }}</th>
             <th><font-awesome-icon icon="lock" :title="$t('analysis.is_locked')"/></th>
-            <th v-if="relatedData.insert.analysis.analysis_method"></th>
+            <th style="width: 5.5em"></th>
           </tr>
           </thead>
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.analysis">
-            <td v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
-            <td>{{entity.method_details}}</td>
-            <td>{{entity.mass}}</td>
-            <td>{{entity.date}}</td>
-            <td>{{entity.date_end}}</td>
-            <td>{{entity.date_free}}</td>
-            <td>{{entity.agent__agent}}</td>
-            <td>{{entity.remarks}}</td>
-            <td>{{entity.location}}</td>
+            <td v-if="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
+            <td v-if="entity.editMode">
+              <vue-multiselect v-model="entity.new.analysis_method" v-if="isDefinedAndNotEmpty(autocomplete.analysisMethod)"
+                               :options="autocomplete.analysisMethod"
+                               track-by="id"
+                               :label="analysisMethodLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
+            <td v-if="!entity.editMode">{{entity.method_details}}</td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.method_details" type="text"/></td>
+            <td v-if="!entity.editMode">{{entity.mass}}</td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.mass" type="number"/></td>
+            <td v-if="!entity.editMode">{{entity.date}}</td>
+            <td v-if="entity.editMode"><datepicker id="date1"
+                            v-model="entity.new.date"
+                            lang="en"
+                            :first-day-of-week="1"
+                            format="DD MMM YYYY"
+                            input-class="form-control"/></td>
+            <td v-if="!entity.editMode">{{entity.date_end}}</td>
+            <td v-if="entity.editMode"><datepicker id="date_end1"
+                            v-model="entity.new.date_end"
+                            lang="en"
+                            :first-day-of-week="1"
+                            format="DD MMM YYYY"
+                            input-class="form-control"/></td>
+            <td v-if="!entity.editMode">{{entity.date_free}}</td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.date_free" type="text"/></td>
+            <td v-if="!entity.editMode">{{entity.agent__agent}}</td>
+            <td v-if="entity.editMode">
+              <vue-multiselect class="align-middle" v-model="entity.new.agent" deselect-label="Can't remove this value"
+                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
+            <td v-if="!entity.editMode">{{entity.remarks}}</td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.remarks" type="text"/></td>
+            <td v-if="!entity.editMode">{{entity.location}}</td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.location" type="text"/></td>
             <td class="text-center">{{ entity.is_private === 1 ? '&#10003' : '' }}</td>
-            <td v-if="relatedData.insert.analysis.analysis_method"></td>
+            <!--<td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="relatedData.insert.analysis.is_private" :value="true" :unchecked-value="false"/></td>-->
+
+            <td style="padding: 0.6em!important;">
+              <button v-if="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="editRow(entity)"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-if="entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="editRow(entity)" :disabled="sendingData">E</button>
+              <button class="float-right btn btn-sm btn-outline-danger" @click="removeRow(entity)" :disabled="true">D</button>
+            </td>
           </tr>
           <tr class="related-input-data">
             <td>
@@ -73,8 +116,11 @@
             <td><b-form-input v-model="relatedData.insert.analysis.location" type="text"/></td>
             <td class="text-center"><b-form-checkbox v-model="relatedData.insert.analysis.is_private" :value="true" :unchecked-value="false"/></td>
 
-            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.analysis = {}" v-if="relatedData.insert.analysis.analysis_method">
-              <font-awesome-icon icon="times"></font-awesome-icon>
+            <td style="padding: 0.6em!important;">
+              <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
+              <button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>
+
+              <button class="float-right btn btn-sm btn-outline-danger" @click="relatedData.insert.analysis = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>
           </tbody>
@@ -98,7 +144,7 @@
         activeTab: String
       },
 
-      mixins: [autocompleteFieldManipulation]
+      mixins: [autocompleteFieldManipulation],
     }
 </script>
 
