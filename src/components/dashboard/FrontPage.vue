@@ -7,6 +7,15 @@
       </div>
     </div>
 
+    <div class="row mt-4">
+      <div class="col">
+        <b-card class="p-3 border border-danger larger">
+          See tarkavara on testimisjärgus. Kui mõni funktsioon siin ei tööta, siis proovi eelmist versiooni: <a href="https://edit.geocollections.info">https://edit.geocollections.info</a>.<br />
+          Vigadest anna teada githubis: <a href="https://github.com/geocollections/sarv-edit">https://github.com/geocollections/sarv-edit</a> või kirjuta: olle.hints@taltech.ee, või helista: 5130157.
+        </b-card>
+      </div>
+    </div>
+  
     <div class="row mt-3">
       <div class="col-sm-6 mb-2">
         <p>{{ $t('frontPage.info') }}: <a href="https://geocollections.info" target="_blank">https://geocollections.info</a></p>
