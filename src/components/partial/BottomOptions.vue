@@ -3,16 +3,16 @@
 
     <div class="row">
       <div class="col-6 text-center">
+        <b-button class="hover-button" variant="outline-success" v-on:click="$emit('button-clicked', 'SAVE')">
+          {{ successButton ? successButton : this.$t('edit.buttons.save') }}
+        </b-button>
+      </div>
+      <div class="col-6 text-center">
         <b-button class="hover-button" variant="outline-danger" v-on:click="$emit('button-clicked', 'CANCEL')">
           {{ dangerButton ? dangerButton : this.$t('buttons.cancel') }}
         </b-button>
       </div>
 
-      <div class="col-6 text-center">
-        <b-button class="hover-button" variant="outline-success" v-on:click="$emit('button-clicked', 'SAVE')">
-          {{ successButton ? successButton : this.$t('edit.buttons.save') }}
-        </b-button>
-      </div>
     </div>
 
   </div>

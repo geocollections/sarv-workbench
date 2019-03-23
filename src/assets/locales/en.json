@@ -24,7 +24,7 @@
     "overlay": "Logging in..."
   },
   "header": {
-    "title": "Geocollections data management",
+    "title": "SARV2",
     "files": "Files",
     "references": "References",
     "localities": "Localities",
@@ -53,6 +53,7 @@
     "collapseLocality": "Locality",
     "collapseSample": "Sample",
     "collapseLibrary": "Library",
+    "collapseFindFast":"Find fast",
     "buttons": {
       "photoArchive": "Add photo",
       "specimenImage": "Add specimen image",
@@ -80,11 +81,13 @@
     "saveAsNew": "Save as new",
     "newRelation": "Add new relation",
     "attachment": "Attachment",
+    "newAttachment": "Add new file",
     "photoArchive": "Photo archive",
     "specimenImage": "Specimen images",
     "otherFiles": "Other files",
     "digitisedReference": "Digitised reference",
     "reference": "Reference",
+    "newReference": "Add new reference",
     "locality": "Locality",
     "referenceCollection": "Reference collections",
     "journal": "Journals",

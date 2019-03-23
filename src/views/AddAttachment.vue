@@ -1,9 +1,12 @@
 <template>
   <div class="add-attachment">
 
-    <div class="row mt-3 mb-4">
-      <div class="col">
+    <div class="row mt-4 page-title">
+      <div class="col-sm-6">
+        <p class="h2">{{ $t('add.newAttachment') }}</p>
+      </div>
 
+      <div class="col-sm-6 ralign">
         <ul class="nav nav-pills">
           <li class="nav-item">
             <router-link class="nav-link" :to="{ path: '/attachment/add/photo_archive' }">{{ $t('add.photoArchive') }}</router-link>

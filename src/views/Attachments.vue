@@ -11,7 +11,15 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
-
+   <div class="row mt-4 page-title">
+     <div class="col-sm-6">
+       <p class="h2">{{ $t('header.files') }}</p>
+     </div>
+     <div class="col-sm-6 ralign">
+     	<router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/attachment/add' }">{{ $t('add.new') }}</router-link>
+     </div>      
+   </div>
+             
     <!-- SEARCH FIELDS START -->
     <div class="row mt-4">
       <div class="col">

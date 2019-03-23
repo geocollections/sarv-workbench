@@ -1,7 +1,7 @@
 <template>
   <div class="edit-form">
 
-    <div class="row mt-4">
+    <div class="row mt-4 page-title">
       <div class="col">
         <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
         <span class="float-right"><button class="btn btn-primary mb-2" @click="saveAsNew">{{ $t('add.saveAsNew') }}</button></span>
@@ -13,6 +13,7 @@
     <confirmation-box :title-extra="'SOME TITLE'"
                       custom-question="confirmation.relatedDataQuestion"
                       :table="$route.meta.table"/>
+    
     <!-- LOGS -->
     <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData"></log>
   </div>
@@ -56,3 +57,6 @@
     }
   }
 </script>
+<style scoped>
+
+</style>

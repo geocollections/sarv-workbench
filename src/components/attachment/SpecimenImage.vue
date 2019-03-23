@@ -6,7 +6,7 @@
 
     <!-- FILE -->
     <div class="row">
-      <div class="col-sm-12 col-md-6 mb-2">
+      <div class="col-sm-12 mb-2">
         <label :for="`files`"
                v-bind:class="{ dragging : isDragging }"
                v-on:dragover.stop.prevent="isDragging = true"

@@ -2,8 +2,13 @@
   <div class="reference">
 
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
-    <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 
+    <div class="row mt-4 page-title">
+      <div class="col-sm-6">
+        <p class="h2">{{ $t('add.newReference') }}</p>
+      </div>
+    </div>
+    
     <!-- REFERENCE and YEAR -->
     <div class="row">
       <div class="col-sm-2 lbl-right">

@@ -386,13 +386,13 @@
     <!-- IS PRIVATE AND MASS-->
     <div class="row mb-3 mt-3">
       <div class="col">
-        <b-form-checkbox id="palaeontology" v-model="sample.palaeontology" :value="true" :unchecked-value="false">
+        <!--<b-form-checkbox id="palaeontology" v-model="sample.palaeontology" :value="true" :unchecked-value="false">
           {{ $t('sample.palaeontology') }}
         </b-form-checkbox>
 
         <b-form-checkbox id="analysis" v-model="sample.analysis" :value="true" :unchecked-value="false">
           {{ $t('sample.analysis') }}
-        </b-form-checkbox>
+        </b-form-checkbox>-->
 
         <b-form-checkbox id="is_private" v-model="sample.is_private" :value="true" :unchecked-value="false">
           {{ $t('sample.is_private') }}

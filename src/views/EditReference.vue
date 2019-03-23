@@ -3,13 +3,16 @@
 
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('edit.overlay')"></spinner>
 
-    <div class="row mt-4">
-      <div class="col">
+    <div class="row mt-4 page-title">
+      <div class="col-6">
         <p class="h2">{{ $t('editReference.heading') }}: <b>{{id}}</b></p>
+      </div>
+      <div class="col-6 ralign">
+        <geocollection-link :attachment="attachment" :reference="reference" :formatted-data="formattedData"></geocollection-link>
       </div>
     </div>
 
-    <geocollection-link :attachment="attachment" :reference="reference" :formatted-data="formattedData"></geocollection-link>
+    
 
     <div v-if="reference !== null">
       <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword && isAttachmentLink">
