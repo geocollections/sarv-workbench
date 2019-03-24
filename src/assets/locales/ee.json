@@ -23,7 +23,7 @@
     "overlay": "Login sisse..."
   },
   "header": {
-    "title": "SARV2",
+    "title": "SARVf2",
     "files": "Failid",
     "references": "Kirjandus",
     "localities": "Lokaliteedid",
@@ -147,7 +147,7 @@
     "locality": "Lokaliteet",
     "view": "Vaata",
     "viewMessage": "Vaata faili geokogude portaalis",
-    "editMessage": "Muuda faili",
+    "editMessage": "Muuda faili infot",
     "overlay": "Palun oodake! Muudan infot...",
     "overlayLoading": "Palun oodake! Laen infot...",
     "isLoading": "Palun oodake!, Otsin...",
@@ -508,7 +508,7 @@
     "is_oa": "OpenAccess",
     "keywords": "Autori märksõnad",
     "relatedTables": {
-      "attachment": "Fail",
+      "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad"
     }

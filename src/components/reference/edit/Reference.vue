@@ -370,32 +370,25 @@
     <!-- FILE -->
     <div class="row"  v-if="attachment !== null && attachment.length > 0">
       <div class="col-sm-6">
-        <p class="h4">{{ $t('attachments.otherFile') }}</p>
+        <p class="h4">Digitaalne versioon (pdf)</p>
       </div>
     </div>
 
     <div class="row" v-if="attachment !== null && attachment.length > 0">
-      <div class="col-sm-6 mb-4 text-center">
+      <div class="col-sm-6 mb-4">
         <div class="table-responsive">
           <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-              <th>{{ $t('reference.relatedTables.attachment') }}</th>
-              <th></th>
-            </tr>
-            </thead>
-
             <tbody>
             <tr>
-              <td class="text-center">
+              <td>
                 <file-preview :data="attachment[0]"/>
               </td>
 
               <td>
                 <router-link :to="{ path: '/attachment/' + attachment[0].id }">
-                  {{ this.$t('edit.editMessage') }}
-                  <!--<span v-if="attachment[0].original_filename">{{ attachment[0].original_filename }}</span>-->
-                  <!--<span v-else>{{ attachment[0].id }}</span>-->
+                  {{ this.$t('edit.editMessage') }}: 
+                  <span v-if="attachment[0].original_filename">{{ attachment[0].original_filename }}</span>
+                  <span v-else>{{ attachment[0].id }}</span>
                 </router-link>
               </td>
             </tr>
@@ -404,7 +397,6 @@
         </div>
       </div>
     </div>
-
 
     <!-- SHOWING RELATED_DATA -->
     <div class="row">
@@ -418,22 +410,24 @@
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
             <tr>
+              <th></th>
               <th>ID</th>
-              <th>{{ $t('reference.relatedTables.attachment') }}</th>
               <th></th>
             </tr>
             </thead>
 
             <tbody>
             <tr v-for="(entity, index) in edit.related_data.attachment">
-              <td>
-                <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'file', id: entity.id})">
-                  {{ entity.id }}
-                </a>
-              </td>
 
-              <td class="text-center">
+
+              <td>
                 <file-preview :data="entity" />
+              </td>
+              <td>
+                <!--<a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'file', id: entity.id})">-->
+                <router-link :to="{ path: '/attachment/' + entity.id }">
+                  {{ $t('edit.editMessage') }}: {{ entity.description }} (File ID: {{ entity.id }})
+                </router-link>
               </td>
 
               <td class="text-center delete-relation" @click="edit.related_data.attachment.splice(index, 1)">
@@ -467,9 +461,11 @@
             <tbody>
             <tr v-for="(entity, index) in edit.related_data.locality">
               <td>
-                <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'locality', id: entity.id})">
+                <router-link :to="{ path: '/locality/' + entity.id }">
+                <!--<a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'locality', id: entity.id})">-->
                   {{ entity.id }}
-                </a>
+                </router-link>
+                <!--</a>-->
               </td>
 
               <td>{{ $i18n.locale === 'ee' ? entity.locality : entity.locality_en }}</td>

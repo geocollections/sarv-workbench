@@ -506,7 +506,7 @@
     "is_oa": "OpenAccess",
     "keywords": "Author keywords",
     "relatedTables": {
-      "attachment": "Attachment",
+      "attachment": "Related data files",
       "locality": "Locality",
       "reference_keyword": "User keywords"
     }
