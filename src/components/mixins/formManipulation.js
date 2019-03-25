@@ -212,13 +212,9 @@ const formManipulation = {
         this.setActiveTab(this.nextTab, false);
       }
     },
-    //Methods logic implemented in certain class
-    loadRelatedData(){},
 
     setActiveTab(type, isWarning = true){
       this.nextTab = type;
-      console.log(this.activeTab)
-      console.log(this.relatedData.insert[this.activeTab])
       if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
         this.$root.$emit('show-confirmation');
       } else {
@@ -244,7 +240,7 @@ const formManipulation = {
       formData.append('data', this.formatRelatedData(editableObject));
       this.saveData(type,formData,'change/'+type+'/'+ object.id).then(isSuccessfullySaved => {
       //  UPDATE ROW DATA
-        this.$set(object, '', object.new);
+        Object.assign(object, object.new);
         this.$set(object, 'new', {});
         this.$set(object, 'editMode', false)
       });
@@ -256,22 +252,23 @@ const formManipulation = {
       if(type === undefined) type = this.activeTab;
 
       this.formatRelatedDataForUpload(type,formData);
-
       this.saveData(type,formData,'add/'+type+'/').then(isSuccessfullySaved => {
         // RELOAD RELATED DATA IN CURRENT TAB
-        this.loadRelatedData(type);
+
+        //DO not forget method called from child component (related data)
+        this.$parent.loadRelatedData(type);
         // CLEAR PREVIOUS INSERT DATA
         this.relatedData.insert[this.activeTab]={};
       });
     },
 
     formatRelatedDataForUpload(type,formData){
-      if(this.checkRequiredFields(type)) {
+      if(this.$parent.checkRequiredFields(type)) {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
 
-      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
+      formData.append('data', this.$parent.formatRelatedData(this.relatedData.insert[type]));
     },
     fillRelatedDataAutocompleteFields(){},
     editRow(entity){
