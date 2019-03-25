@@ -63,7 +63,7 @@
               {{ entity.pages }}.
             </span>
             
-            <span v-else>
+            <span v-else-if="entity.pages">
               pp. {{ entity.pages }}.
             </span>
               

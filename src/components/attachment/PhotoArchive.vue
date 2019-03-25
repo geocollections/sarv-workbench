@@ -6,7 +6,7 @@
 
     <!-- FILE -->
     <div class="row">
-      <div class="col-sm-12 col-md-6 mb-2">
+      <div class="col-sm-12 mb-2">
         <label :for="`files`"
                v-bind:class="{ dragging : isDragging }"
                v-on:dragover.stop.prevent="isDragging = true"
@@ -218,7 +218,7 @@
     </div>
 
     <div class="row mb-2">
-      <div class="col-md-6 offset-md-3">
+      <div class="col-md-12">
         <b-collapse v-model="showCollapseMap" id="collapseMap">
           <map-component v-bind:location="{ lat: photo_archive.image_latitude, lng: photo_archive.image_longitude }" v-on:get-location="updateLocation" />
         </b-collapse>
@@ -1163,6 +1163,7 @@
   /* Map height */
   #collapseMap {
     height: 50vh;
+    border: 1px solid #ccc;
   }
 
   .remove-rating:hover {

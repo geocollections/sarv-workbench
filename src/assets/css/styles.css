@@ -6,7 +6,8 @@ body {
 }
 
 body {
-    font-family: Titillium Web, sans-serif !important;
+    /*font-family: Titillium Web, sans-serif !important;*/
+    background-color: #f8f9fa;
 }
 
 
@@ -123,3 +124,38 @@ body {
 .mx-datepicker {
   width: 100% !important;
 }
+
+
+/* CUSTOM STYLES */
+  .table {
+      background-color: #fff;
+  }
+  .table td {
+	font-size: 0.9rem;
+	padding: 0.25rem 0.4rem;  
+  }
+ .table th {
+		font-size: 0.9rem;
+		padding: 0.5rem 0.4rem;  
+	  }
+label {
+	font-size: 0.9rem;
+	padding: 0.20rem 0.4rem;
+	color: #666;
+}
+.ralign {
+	text-align: right !important;  
+}
+
+.page-title { 
+	margin-bottom: 1rem; 
+	border-bottom: solid 1px #999;
+}
+
+/*
+.bg-light {
+	
+	background-color: #666 !important;
+	color: #fff !important;
+}
+*/

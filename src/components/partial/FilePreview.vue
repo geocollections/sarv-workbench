@@ -9,10 +9,10 @@
       <img class="image-preview"
            v-if="data.uuid_filename.endsWith('jpg') || data.uuid_filename.endsWith('jpeg') || data.uuid_filename.endsWith('png')"
            :src="getFileLink({size: 'medium', filename: data.uuid_filename})" alt="NO IMAGE"/>
-      <font-awesome-icon v-else icon="file" size="5x"></font-awesome-icon>
+      <font-awesome-icon v-else icon="file" size="3x"></font-awesome-icon>
     </a>
 
-    <font-awesome-icon v-else icon="file" size="5x"></font-awesome-icon>
+    <font-awesome-icon v-else icon="file" size="3x"></font-awesome-icon>
 
   </div>
 </template>

@@ -11,7 +11,7 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
-    <div class="row mt-4">
+    <div class="row mt-4 page-title">
       <div class="col-sm-6">
         <p class="h2">{{ $t('references.header') }}</p>
       </div>
@@ -95,7 +95,7 @@
           <div class="row">
           <!-- Removes search preferences like local storage and search parameters-->
             <div class="col-sm-6 mt-3">
-              <b-button variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+              <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
             </div>          	
             <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
             <div class="col-sm-6 mt-3">
@@ -552,7 +552,5 @@
   span {
     white-space: nowrap;
   }
-  .ralign {
-	text-align: right !important;  
-  }
+
 </style>

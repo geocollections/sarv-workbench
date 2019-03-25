@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row mt-4">
+    <div class="row mt-4 page-title">
       <div class="col-sm-6">
         <p class="h2">{{ $t('header.samples') }}</p>
       </div>
