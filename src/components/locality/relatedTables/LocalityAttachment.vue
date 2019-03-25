@@ -7,15 +7,24 @@
           <tr>
             <th>{{ $t('attachments.link') }}</th>
             <th>{{ $t('attachments.remarks') }}</th>
-            <th v-if="relatedData.insert.attachment_link.attachment"></th>
+            <th style="width: 5.7em"></th>
           </tr>
           </thead>
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.attachment_link">
             <td>{{ entity.original_filename}}</td>
-            <td>{{ entity.remarks }}</td>
-            <td v-if="relatedData.insert.attachment_link.attachment"></td>
+            <td  v-if="!entity.editMode" >{{ entity.remarks }}</td>
+
+            <td v-if="entity.editMode" ><b-form-input v-model="entity.new.remarks" type="text"/></td>
+
+            <td style="padding: 0.6em!important;">
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$root.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            </td>
           </tr>
           <tr class="related-input-data">
             <td>
@@ -29,8 +38,9 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect></td>
             <td><b-form-input v-model="relatedData.insert.attachment_link.remarks" type="text"/></td>
-            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.attachment_link = {}"  v-if="relatedData.insert.attachment_link.attachment">
-              <font-awesome-icon icon="times"/>
+            <td style="padding: 0.6em!important;">
+              <button class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-added', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.attachment_link = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>
           </tbody>
@@ -48,6 +58,7 @@
 </template>
 
 <script>
+  import formManipulation  from './../../mixins/formManipulation';
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
     export default {
         name: "LocalityAttachment",
@@ -56,7 +67,7 @@
         autocomplete: Object,
         activeTab: String
       },
-      mixins: [autocompleteFieldManipulation],
+      mixins: [formManipulation, autocompleteFieldManipulation],
       methods: {
         createAttachmentRelation() {
           let createRelationWith = { object: 'locality', data: this.$parent.locality,

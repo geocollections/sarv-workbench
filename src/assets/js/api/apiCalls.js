@@ -251,7 +251,7 @@ export function fetchLocalitySynonym(id,page = 1) {
   return fetch(`locality_synonym/?locality_id=${id}&page=${page}&paginate_by=10&format=json`)
 }
 export function fetchLocalityAttachment(id,page = 1) {
-  return fetch(`attachment/?attach_link__locality__id=${id}&page=${page}&paginate_by=10&fields=original_filename,attach_link__locality__id,remarks&format=json`)
+  return fetch(`attachment/?attach_link__locality__id=${id}&page=${page}&paginate_by=10&fields=id,original_filename,attach_link__locality__id,remarks&format=json`)
 }
 export function fetchLocalityStratigraphy(id,page = 1) {
   return fetch(`locality_stratigraphy/?locality_id=${id}&page=${page}&paginate_by=10&format=json`)

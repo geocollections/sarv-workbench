@@ -462,6 +462,7 @@
     mixins: [formManipulation,autocompleteFieldManipulation],
     data() {
       return {
+        tabs:['locality_reference','locality_synonym','attachment_link','locality_stratigraphy'],
         activeTab: 'locality_reference',
         relatedData: this.setDefaultRalatedData(),
         copyFields : ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
@@ -518,6 +519,16 @@
         });
         //Manipulation with data itself should be done in class
         this.$on('tab-changed',this.setTab);
+        this.$root.$on('related-data-modified',this.editRelatedData);
+        this.$root.$on('related-data-added',this.addRelatedData);
+        this.$root.$on('edit-row',this.editRow);
+        this.$root.$on('allow-remove-row',this.allowRemove);
+
+        this.$emit('related-data-info',this.tabs);
+        // FETCH FIRST TAB RELATED DATA
+        this.tabs.forEach(entity => {
+          this.loadRelatedData(entity);
+        });
         // FETCH FIRST TAB RELATED DATA
         this.setActiveTab('locality_reference')
       }
@@ -529,6 +540,12 @@
       setDefaultRalatedData(){
         return {
           locality_reference:[], locality_synonym: [], attachment_link:[], locality_stratigraphy:[],
+          copyFields: {
+            locality_reference:['reference','pages','figures','remarks'],
+            locality_synonym: ['attachment'],
+            attachment_link: ['attachment','remarks'],
+            locality_stratigraphy:['taxon','storage','remarks','analysis'],
+          },
           insert: {locality_reference:{}, locality_synonym: {}, attachment_link:{}, locality_stratigraphy:{}},
           page : {locality_reference:1, locality_synonym: 1, attachment_link:1, locality_stratigraphy:1},
           count: {locality_reference:0, locality_synonym: 0, attachment_link:0, locality_stratigraphy:0}
@@ -569,6 +586,22 @@
         this.locality.stratigraphy_base = {stratigraphy:obj.stratigraphy_base__stratigraphy,stratigraphy_en:obj.stratigraphy_base__stratigraphy_en,id:obj.stratigraphy_base__id}
       },
 
+
+      fillRelatedDataAutocompleteFields(obj){
+        // obj.analysis_method = {analysis_method:obj.analysis_method__analysis_method, method_en:obj.analysis_method__method_en,id:obj.analysis_method}
+        // obj.agent = {agent:obj.agent__agent,id:obj.agent}
+        // obj.fossil_group = {taxon:obj.taxon__taxon,id:obj.taxon}
+        // obj.storage = {location:obj.storage__location,id:obj.storage}
+        // obj.analysis = {id:obj.analysis}
+        // obj.taxon = {taxon:obj.taxon__taxon, id:obj.taxon}
+        // obj.agent_identified = {agent:obj.agent_identified__agent, id:obj.agent_identified}
+        // obj.preparation = { id:obj.analysis}
+        //
+
+        obj.reference = { reference:obj.reference__reference, id:obj.reference}
+        return obj
+      },
+
       loadRelatedData(type){
         let query;
         if(type === 'locality_reference') {
@@ -586,11 +619,11 @@
           this.relatedData.count[type] = response.body.count;
         });
       },
-      checkRequiredFields(type){
-        if(type === 'locality_reference') return this.relatedData.insert[type].reference === undefined;
-        if(type === 'locality_synonym') return this.relatedData.insert[type].synonym === undefined;
-        if(type === 'attachment_link') return this.relatedData.insert[type].attachment === undefined;
-        if(type === 'locality_stratigraphy') return this.relatedData.insert[type].stratigraphy === undefined;
+      checkRequiredFields(type,obj){
+        // if(type === 'locality_reference') return obj.reference === undefined;
+        // if(type === 'locality_synonym') return obj.synonym === undefined;
+        // if(type === 'attachment_link') return obj.attachment === undefined;
+        // if(type === 'locality_stratigraphy') return obj.stratigraphy === undefined;
       },
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);

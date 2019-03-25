@@ -628,7 +628,7 @@
           obj.taxon = {taxon:obj.taxon__taxon, id:obj.taxon}
           obj.agent_identified = {agent:obj.agent_identified__agent, id:obj.agent_identified}
           obj.preparation = { id:obj.analysis}
-          console.log(obj.preparation)
+
           obj.reference = { reference:obj.reference__reference, id:obj.reference}
           return obj
         },

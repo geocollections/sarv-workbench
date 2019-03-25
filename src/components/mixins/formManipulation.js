@@ -237,7 +237,7 @@ const formManipulation = {
 
       //CHECK REQUIRED FIELDS !!!
       let type = this.activeTab;
-      if(this.checkRequiredFields(type)) {
+      if(this.checkRequiredFields(type,object.new)) {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
@@ -257,7 +257,12 @@ const formManipulation = {
       let formData = new FormData();
       if(type === undefined) type = this.activeTab;
 
-      this.formatRelatedDataForUpload(type,formData);
+      if(this.checkRequiredFields(type,this.relatedData.insert[type])) {
+        toastError({text: this.$t('messages.checkForm')});
+        return
+      }
+
+      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
       this.saveData(type,formData,'add/'+type+'/').then(isSuccessfullySaved => {
         // RELOAD RELATED DATA IN CURRENT TAB
         this.loadRelatedData(type);
@@ -266,14 +271,7 @@ const formManipulation = {
       });
     },
 
-    formatRelatedDataForUpload(type,formData){
-      if(this.checkRequiredFields(type)) {
-        toastError({text: this.$t('messages.checkForm')});
-        return
-      }
 
-      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
-    },
     // ?
     loadRelatedData(){},
     fillRelatedDataAutocompleteFields(){},
