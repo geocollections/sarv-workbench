@@ -3,12 +3,12 @@ import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
 import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
-import {faTimes, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt} from '@fortawesome/free-solid-svg-icons'
+
+import {faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import Vue from 'vue'
 
-library.add(faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt)
+library.add(faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
@@ -217,6 +217,8 @@ const formManipulation = {
 
     setActiveTab(type, isWarning = true){
       this.nextTab = type;
+      console.log(this.activeTab)
+      console.log(this.relatedData.insert[this.activeTab])
       if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
         this.$root.$emit('show-confirmation');
       } else {
@@ -276,6 +278,10 @@ const formManipulation = {
       // console.log("EDIT RECORD" + JSON.stringify(entity));
       this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
       this.$set(entity, 'editMode', !entity.editMode)
+    },
+
+    removeMessage(){
+
     },
 
     removeRow(entity){

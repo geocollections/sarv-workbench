@@ -620,6 +620,9 @@
         fillRelatedDataAutocompleteFields(obj){
           obj.analysis_method = {analysis_method:obj.analysis_method__analysis_method, method_en:obj.analysis_method__method_en,id:obj.analysis_method}
           obj.agent = {agent:obj.agent__agent,id:obj.agent}
+          obj.fossil_group = {agent:obj.taxon__taxon,id:obj.taxon}
+          obj.storage = {agent:obj.storage__location,id:obj.storage}
+          obj.analysis = {id:obj.analysis}
           return obj
         },
 

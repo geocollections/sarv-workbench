@@ -10,18 +10,61 @@
             <th>{{ $t('preparation.storage') }}</th>
             <th>{{ $t('preparation.remarks') }}</th>
             <th>{{ $t('preparation.method_id') }}</th>
-            <th v-if="relatedData.insert.preparation.preparation_number"></th>
+            <th style="width: 5.7em"></th>
           </tr>
           </thead>
 
           <tbody>
-          <tr v-for="(entity, index) in relatedData.preparation">
-            <td>{{entity.preparation_number}}</td>
-            <td>{{entity.taxon__taxon}}</td>
-            <td>{{entity.storage__location}}</td>
-            <td>{{entity.remarks}}</td>
-            <td>{{entity.analysis}}</td>
-            <td v-if="relatedData.insert.preparation.preparation_number"></td>
+          <tr v-for="(entity, index) in relatedData.preparation"  :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+            <td v-if="!entity.editMode">{{entity.preparation_number}}</td>
+            <td v-if="!entity.editMode">{{entity.taxon__taxon}}</td>
+            <td v-if="!entity.editMode">{{entity.storage__location}}</td>
+            <td v-if="!entity.editMode">{{entity.remarks}}</td>
+            <td v-if="!entity.editMode">{{entity.analysis}}</td>
+
+            <td v-if="entity.editMode"><b-form-input v-model="relatedData.insert.preparation.preparation_number" type="text"/></td>
+            <td v-if="entity.editMode">
+              <vue-multiselect v-model="relatedData.insert.preparation.taxon" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"
+                               :options="autocomplete.fossil_group"
+                               track-by="id"
+                               label="taxon"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
+            <td v-if="entity.editMode">
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.storage" deselect-label="Can't remove this value"
+                               :loading="autocomplete.loaders.storage" id="storage"
+                               label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect></td>
+            <td v-if="entity.editMode"><b-form-input v-model="relatedData.insert.preparation.remarks" type="text"/></td>
+
+            <td v-if="entity.editMode">
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.analysis" deselect-label="Can't remove this value"
+                               :loading="autocomplete.loaders.analysis" id="analysis"
+                               label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.analysis" :searchable="true" @search-change="autcompleteAnalysisSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.id}}</strong> </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
+
+            <td style="padding: 0.6em!important;" v-if="entity.editMode">
+              <button  class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            </td>
+            <td style="padding: 0.6em!important;" v-if="!entity.editMode">
+              <button  class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-outline-danger" @click="removeMessage" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            </td>
           </tr>
           <tr class="related-input-data">
             <td><b-form-input v-model="relatedData.insert.preparation.preparation_number" type="text"/></td>
@@ -59,8 +102,10 @@
               </vue-multiselect>
             </td>
 
-            <td style="padding: 0.6em!important;" class="text-center delete-relation" @click="relatedData.insert.preparation = {}" v-if="relatedData.insert.preparation.preparation_number">
-              <font-awesome-icon icon="times"></font-awesome-icon>
+            <td style="padding: 0.6em!important;">
+              <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
+              <button class="float-left btn btn-sm btn-success" @click="addRelatedData(activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.preparation = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>
           </tbody>

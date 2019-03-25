@@ -14,13 +14,13 @@
             <th>{{ $t('analysis.agent') }}</th>
             <th>{{ $t('analysis.remarks') }}</th>
             <th>{{ $t('analysis.location') }}</th>
-            <th><font-awesome-icon icon="lock" :title="$t('analysis.is_locked')"/></th>
-            <th style="width: 5.5em"></th>
+            <th class="text-center"><font-awesome-icon icon="lock" :title="$t('analysis.is_locked')"/></th>
+            <th style="width: 5.7em"></th>
           </tr>
           </thead>
 
           <tbody>
-          <tr v-for="(entity, index) in relatedData.analysis">
+          <tr v-for="(entity, index) in relatedData.analysis" :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }" >
             <td v-show="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.analysis_method"
@@ -70,10 +70,13 @@
             <td v-show="!entity.editMode" class="text-center">{{ entity.is_private === true ? '&#10003' : '' }}</td>
             <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.is_private" :value="true" :unchecked-value="false"/></td>
 
-            <td style="padding: 0.6em!important;">
-              <button v-if="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)"><font-awesome-icon icon="pencil-alt"/></button>
-              <button v-if="entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData">E</button>
-              <button class="float-right btn btn-sm btn-outline-danger" @click="removeRow(entity)" :disabled="true">D</button>
+            <td style="padding: 0.6em!important;" v-if="entity.editMode">
+              <button  class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            </td>
+            <td style="padding: 0.6em!important;" v-if="!entity.editMode">
+              <button  class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-outline-danger" @click="removeMessage" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
             </td>
           </tr>
           <tr class="related-input-data">
@@ -118,9 +121,8 @@
 
             <td style="padding: 0.6em!important;">
               <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
-              <button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>
-
-              <button class="float-right btn btn-sm btn-outline-danger" @click="relatedData.insert.analysis = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
+              <button class="float-left btn btn-sm btn-success" @click="addRelatedData(activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.analysis = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>
           </tbody>
