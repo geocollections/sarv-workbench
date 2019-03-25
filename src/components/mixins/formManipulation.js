@@ -226,6 +226,11 @@ const formManipulation = {
       }
     },
 
+
+    /** RELATED DATA STARTS**/
+    /** related data is child component for such classes as locality, sample... and all methods from those classes
+     * should be called as $parent but you can listen event in parent classes ex. this.$root.$on('related-data-added',this.addRelatedData);**/
+
     editRelatedData(object) {
       if(this.isEmptyObject(object.new)) return;
       let formData = new FormData();
@@ -238,9 +243,10 @@ const formManipulation = {
       }
       let editableObject = this.removeUnnecessaryFields(object.new,this.relatedData.copyFields[type]);
       formData.append('data', this.formatRelatedData(editableObject));
+
       this.saveData(type,formData,'change/'+type+'/'+ object.id).then(isSuccessfullySaved => {
-      //  UPDATE ROW DATA
-        Object.assign(object, object.new);
+        //  UPDATE ROW DATA
+        object = cloneDeep(object.new)
         this.$set(object, 'new', {});
         this.$set(object, 'editMode', false)
       });
@@ -254,22 +260,22 @@ const formManipulation = {
       this.formatRelatedDataForUpload(type,formData);
       this.saveData(type,formData,'add/'+type+'/').then(isSuccessfullySaved => {
         // RELOAD RELATED DATA IN CURRENT TAB
-
-        //DO not forget method called from child component (related data)
-        this.$parent.loadRelatedData(type);
+        this.loadRelatedData(type);
         // CLEAR PREVIOUS INSERT DATA
         this.relatedData.insert[this.activeTab]={};
       });
     },
 
     formatRelatedDataForUpload(type,formData){
-      if(this.$parent.checkRequiredFields(type)) {
+      if(this.checkRequiredFields(type)) {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
 
-      formData.append('data', this.$parent.formatRelatedData(this.relatedData.insert[type]));
+      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
     },
+    // ?
+    loadRelatedData(){},
     fillRelatedDataAutocompleteFields(){},
     editRow(entity){
       // console.log("EDIT RECORD" + JSON.stringify(entity));
@@ -282,6 +288,8 @@ const formManipulation = {
     removeRow(entity){
       console.log("DELETE RECORD" + JSON.stringify(entity))
     }
+
+    /** RELATED DATA ENDS**/
 
   },
   watch: {

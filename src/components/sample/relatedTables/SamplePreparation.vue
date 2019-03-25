@@ -103,7 +103,7 @@
 
             <td style="padding: 0.6em!important;">
               <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
-              <button class="float-left btn btn-sm btn-success" @click="addRelatedData(activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-added', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
               <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.preparation = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>

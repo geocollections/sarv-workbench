@@ -547,6 +547,7 @@
         }
         this.$on('tab-changed',this.setTab);
         this.$root.$on('related-data-modified',this.editRelatedData);
+        this.$root.$on('related-data-added',this.addRelatedData);
         this.$root.$on('edit-row',this.editRow);
         this.$root.$on('allow-remove-row',this.allowRemove);
 
@@ -626,7 +627,8 @@
           obj.analysis = {id:obj.analysis}
           obj.taxon = {taxon:obj.taxon__taxon, id:obj.taxon}
           obj.agent_identified = {agent:obj.agent_identified__agent, id:obj.agent_identified}
-          obj.preparation = { id:obj.preparation__id}
+          obj.preparation = { id:obj.analysis}
+          console.log(obj.preparation)
           obj.reference = { reference:obj.reference__reference, id:obj.reference}
           return obj
         },
@@ -654,8 +656,8 @@
 
         //check required fields for related data
         checkRequiredFields(type){
-          if(type === 'sample_attachment') return this.relatedData.insert[type].attachment === undefined;
-          if(type === 'sample_reference') return this.relatedData.insert[type].reference === undefined;
+          // if(type === 'sample_attachment') return this.relatedData.insert[type].attachment === undefined;
+          // if(type === 'sample_reference') return this.relatedData.insert[type].reference === undefined;
           // if(type === 'analysis') return this.relatedData.insert[type].reference === undefined;
           // if(type === 'preparation') return this.relatedData.insert[type].reference === undefined;
           // if(type === 'taxon_list') return this.relatedData.insert[type].reference === undefined;
