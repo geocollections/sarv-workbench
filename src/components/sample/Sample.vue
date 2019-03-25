@@ -620,7 +620,6 @@
         fillRelatedDataAutocompleteFields(obj){
           obj.analysis_method = {analysis_method:obj.analysis_method__analysis_method, method_en:obj.analysis_method__method_en,id:obj.analysis_method}
           obj.agent = {agent:obj.agent__agent,id:obj.agent}
-          obj.is_private = obj.is_private === 1
           return obj
         },
 

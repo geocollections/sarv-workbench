@@ -67,7 +67,7 @@
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.remarks" type="text"/></td>
             <td v-show="!entity.editMode">{{entity.location}}</td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.location" type="text"/></td>
-            <td v-show="!entity.editMode" class="text-center">{{ entity.is_private === 1 ? '&#10003' : '' }}</td>
+            <td v-show="!entity.editMode" class="text-center">{{ entity.is_private === true ? '&#10003' : '' }}</td>
             <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.is_private" :value="true" :unchecked-value="false"/></td>
 
             <td style="padding: 0.6em!important;">
