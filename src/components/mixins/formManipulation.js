@@ -279,11 +279,9 @@ const formManipulation = {
       this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
       this.$set(entity, 'editMode', !entity.editMode)
     },
-
-    removeMessage(){
-
+    allowRemove(entity){
+      this.$set(entity, 'allowRemove', true)
     },
-
     removeRow(entity){
       console.log("DELETE RECORD" + JSON.stringify(entity))
     }

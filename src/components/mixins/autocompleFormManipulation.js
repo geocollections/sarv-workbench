@@ -1,7 +1,5 @@
 import {autocompleSearch} from "@/assets/js/api/apiCalls";
-import formManipulation from "@/components/mixins/formManipulation";
 const autocompleteFieldManipulation = {
-  mixins:[formManipulation],
   computed: {
     commonLabel() {
       return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
@@ -146,6 +144,11 @@ const autocompleteFieldManipulation = {
           this.autocomplete.loaders[type] = false;
           this.autocomplete[options] = this.handleResponse(response)
         });
+      }
+    },
+    handleResponse(response){
+      if (response.status === 200) {
+        return (response.body.count > 0) ? response.body.results : []
       }
     },
   }

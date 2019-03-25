@@ -548,6 +548,7 @@
         this.$on('tab-changed',this.setTab);
         this.$root.$on('related-data-modified',this.editRelatedData);
         this.$root.$on('edit-row',this.editRow);
+        this.$root.$on('allow-remove-row',this.allowRemove);
 
         this.$emit('related-data-info',this.tabs);
         // FETCH FIRST TAB RELATED DATA
@@ -620,9 +621,13 @@
         fillRelatedDataAutocompleteFields(obj){
           obj.analysis_method = {analysis_method:obj.analysis_method__analysis_method, method_en:obj.analysis_method__method_en,id:obj.analysis_method}
           obj.agent = {agent:obj.agent__agent,id:obj.agent}
-          obj.fossil_group = {agent:obj.taxon__taxon,id:obj.taxon}
-          obj.storage = {agent:obj.storage__location,id:obj.storage}
+          obj.fossil_group = {taxon:obj.taxon__taxon,id:obj.taxon}
+          obj.storage = {location:obj.storage__location,id:obj.storage}
           obj.analysis = {id:obj.analysis}
+          obj.taxon = {taxon:obj.taxon__taxon, id:obj.taxon}
+          obj.agent_identified = {agent:obj.agent_identified__agent, id:obj.agent_identified}
+          obj.preparation = { id:obj.preparation__id}
+          obj.reference = { reference:obj.reference__reference, id:obj.reference}
           return obj
         },
 

@@ -54,7 +54,7 @@
     },
     methods: {
       showModal(){
-        this.$refs.confirmation.show()
+        this.$refs.confirmation.show();
       },
       hideModal(){
         this.$refs.confirmation.hide()

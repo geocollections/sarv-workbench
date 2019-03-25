@@ -20,7 +20,7 @@
             </td>
             <td v-if="!entity.editMode">{{ entity.remarks }}</td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.sample_reference.reference" deselect-label="Can't remove this value"
+              <vue-multiselect class="align-middle" v-model="entity.new.reference" deselect-label="Can't remove this value"
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference"
                                :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
@@ -31,15 +31,14 @@
               </vue-multiselect>
             </td>
             <td v-if="entity.editMode">
-              <b-form-input v-model="relatedData.insert.sample_reference.remarks" type="text"/>
+              <b-form-input v-model="entity.new.remarks" type="text"/>
             </td>
-            <td style="padding: 0.6em!important;" v-if="entity.editMode">
-              <button  class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
-            </td>
-            <td style="padding: 0.6em!important;" v-if="!entity.editMode">
-              <button  class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-outline-danger" @click="removeMessage" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            <td style="padding: 0.6em!important;">
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$root.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
             </td>
           </tr>
           <tr class="related-input-data">
@@ -61,7 +60,7 @@
             <td style="padding: 0.6em!important;">
               <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
               <button class="float-left btn btn-sm btn-success" @click="addRelatedData(activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.reference = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
+              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.sample_reference = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>
           </tbody>
@@ -72,6 +71,8 @@
 </template>
 
 <script>
+
+  import formManipulation  from './../../mixins/formManipulation';
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
 
     export default {
@@ -82,7 +83,7 @@
         activeTab: String
       },
 
-      mixins: [autocompleteFieldManipulation]
+      mixins: [formManipulation,autocompleteFieldManipulation]
     }
 </script>
 

@@ -22,9 +22,9 @@
             <td v-if="!entity.editMode">{{entity.remarks}}</td>
             <td v-if="!entity.editMode">{{entity.analysis}}</td>
 
-            <td v-if="entity.editMode"><b-form-input v-model="relatedData.insert.preparation.preparation_number" type="text"/></td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.preparation_number" type="text"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect v-model="relatedData.insert.preparation.taxon" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"
+              <vue-multiselect v-model="entity.new.taxon" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"
                                :options="autocomplete.fossil_group"
                                track-by="id"
                                label="taxon"
@@ -34,7 +34,7 @@
               </vue-multiselect>
             </td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.storage" deselect-label="Can't remove this value"
+              <vue-multiselect class="align-middle" v-model="entity.new.storage" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.storage" id="storage"
                                label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
@@ -43,10 +43,10 @@
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect></td>
-            <td v-if="entity.editMode"><b-form-input v-model="relatedData.insert.preparation.remarks" type="text"/></td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.remarks" type="text"/></td>
 
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.analysis" deselect-label="Can't remove this value"
+              <vue-multiselect class="align-middle" v-model="entity.new.analysis" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.analysis" id="analysis"
                                label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.analysis" :searchable="true" @search-change="autcompleteAnalysisSearch"
@@ -57,13 +57,12 @@
               </vue-multiselect>
             </td>
 
-            <td style="padding: 0.6em!important;" v-if="entity.editMode">
-              <button  class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
-            </td>
-            <td style="padding: 0.6em!important;" v-if="!entity.editMode">
-              <button  class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-outline-danger" @click="removeMessage" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            <td style="padding: 0.6em!important;">
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$root.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
             </td>
           </tr>
           <tr class="related-input-data">
@@ -116,6 +115,8 @@
 </template>
 
 <script>
+
+  import formManipulation  from './../../mixins/formManipulation';
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
   import Datepicker from 'vue2-datepicker'
     export default {
@@ -129,7 +130,7 @@
         activeTab: String
       },
 
-      mixins: [autocompleteFieldManipulation]
+      mixins: [formManipulation,autocompleteFieldManipulation]
     }
 </script>
 

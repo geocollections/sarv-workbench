@@ -14,7 +14,7 @@
           <tr v-for="(entity, index) in relatedData.attachment_link"  :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
             <td  v-if="!entity.editMode">{{entity.original_filename}}</td>
             <td  v-if="entity.editMode">
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.attachment_link.attachment" deselect-label="Can't remove this value"
+              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="entity.new.attachment" deselect-label="Can't remove this value"
                                label="original_filename" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.attachment"
                                :options="autocomplete.attachment" :searchable="true" @search-change="autcompleteAttachmentSearch"
@@ -24,13 +24,12 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td style="padding: 0.6em!important;" v-if="entity.editMode">
-              <button  class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
-            </td>
-            <td style="padding: 0.6em!important;" v-if="!entity.editMode">
-              <button  class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-outline-danger" @click="removeMessage" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            <td style="padding: 0.6em!important;">
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$root.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
             </td>
           </tr>
           <tr class="related-input-data">
@@ -66,6 +65,8 @@
 </template>
 
 <script>
+
+  import formManipulation  from './../../mixins/formManipulation';
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
 
     export default {
@@ -75,7 +76,7 @@
         autocomplete: Object,
         activeTab: String
       },
-      mixins: [autocompleteFieldManipulation],
+      mixins: [formManipulation,autocompleteFieldManipulation],
       methods: {
         createAttachmentRelation() {
           let createRelationWith = { object: 'sample', data: this.$parent.sample,

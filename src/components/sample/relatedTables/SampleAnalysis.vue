@@ -70,13 +70,12 @@
             <td v-show="!entity.editMode" class="text-center">{{ entity.is_private === true ? '&#10003' : '' }}</td>
             <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.is_private" :value="true" :unchecked-value="false"/></td>
 
-            <td style="padding: 0.6em!important;" v-if="entity.editMode">
-              <button  class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
-            </td>
-            <td style="padding: 0.6em!important;" v-if="!entity.editMode">
-              <button  class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-outline-danger" @click="removeMessage" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            <td style="padding: 0.6em!important;">
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$root.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
             </td>
           </tr>
           <tr class="related-input-data">
@@ -133,20 +132,22 @@
 </template>
 
 <script>
-  import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
+  import formManipulation  from './../../mixins/formManipulation';
+  import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation'
   import Datepicker from 'vue2-datepicker'
     export default {
       name: "SampleAnalysis",
       components: {
         Datepicker
       },
+
+      mixins: [formManipulation,autocompleteFieldManipulation],
+
       props: {
         relatedData: Object,
         autocomplete: Object,
         activeTab: String
-      },
-
-      mixins: [autocompleteFieldManipulation],
+      }
     }
 </script>
 

@@ -30,8 +30,8 @@
             <td v-if="!entity.editMode" class="text-center">{{ entity.is_private === true ? '&#10003' : '' }}</td>
             <td v-if="!entity.editMode">{{entity.remarks}}</td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.taxon" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.taxon" id="taxon"
+              <vue-multiselect class="align-middle" v-model="entity.new.taxon" deselect-label="Can't remove this value"
+                               :loading="autocomplete.loaders.taxon" id="taxon1"
                                label="taxon" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.taxon" :searchable="true" @search-change="autcompleteTaxonSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
@@ -40,10 +40,10 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td v-if="entity.editMode"><b-form-input v-model="relatedData.insert.taxon_list.name" type="text"/></td>
-            <td v-if="entity.editMode"><b-form-input v-model="relatedData.insert.taxon_list.frequency" type="number"/></td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.name" type="text"/></td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.frequency" type="number"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.agent_identified" deselect-label="Can't remove this value"
+              <vue-multiselect class="align-middle" v-model="entity.new.agent_identified" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
                                :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
@@ -53,15 +53,15 @@
               </vue-multiselect></td>
             <td v-if="entity.editMode">
               <datepicker id="date1"
-                          v-model="relatedData.insert.taxon_list.date_identified"
+                          v-model="entity.new.date_identified"
                           lang="en"
                           :first-day-of-week="1"
                           format="DD MMM YYYY"
                           input-class="form-control"/>
             </td>
-            <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="relatedData.insert.taxon_list.extra" :value="true" :unchecked-value="false"/></td>
+            <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.extra" :value="true" :unchecked-value="false"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.preparation" deselect-label="Can't remove this value"
+              <vue-multiselect class="align-middle" v-model="entity.new.preparation" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.preparation" id="preparation"
                                label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.preparation" :searchable="true" @search-change="autcompletePreparationSearch"
@@ -71,16 +71,15 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
-            <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="relatedData.insert.taxon_list.is_private" :value="true" :unchecked-value="false"/></td>
-            <td v-if="entity.editMode"><b-form-input v-model="relatedData.insert.taxon_list.remarks" type="text"/></td>
+            <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.is_private" :value="true" :unchecked-value="false"/></td>
+            <td v-if="entity.editMode"><b-form-input v-model="entity.new.remarks" type="text"/></td>
 
-            <td style="padding: 0.6em!important;" v-if="entity.editMode">
-              <button  class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
-            </td>
-            <td style="padding: 0.6em!important;" v-if="!entity.editMode">
-              <button  class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-outline-danger" @click="removeMessage" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            <td style="padding: 0.6em!important;">
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$root.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
             </td>
           </tr>
           <tr class="related-input-data">
@@ -142,6 +141,8 @@
 </template>
 
 <script>
+
+  import formManipulation  from './../../mixins/formManipulation';
   import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
   import Datepicker from 'vue2-datepicker'
     export default {
@@ -155,7 +156,7 @@
         activeTab: String
       },
 
-      mixins: [autocompleteFieldManipulation]
+      mixins: [formManipulation,autocompleteFieldManipulation]
     }
 </script>
 
