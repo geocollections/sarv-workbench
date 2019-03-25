@@ -5,6 +5,7 @@
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
+            <th>ID</th>
             <th>{{ $t('preparation.preparation_number') }}</th>
             <th>{{ $t('preparation.fossil_group') }}</th>
             <th>{{ $t('preparation.storage') }}</th>
@@ -16,6 +17,7 @@
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.preparation"  :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+            <td>{{entity.id}}</td>
             <td v-if="!entity.editMode">{{entity.preparation_number}}</td>
             <td v-if="!entity.editMode">{{entity.taxon__taxon}}</td>
             <td v-if="!entity.editMode">{{entity.storage__location}}</td>
@@ -66,6 +68,7 @@
             </td>
           </tr>
           <tr class="related-input-data">
+            <td></td>
             <td><b-form-input v-model="relatedData.insert.preparation.preparation_number" type="text"/></td>
             <td>
               <vue-multiselect v-model="relatedData.insert.preparation.taxon" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"

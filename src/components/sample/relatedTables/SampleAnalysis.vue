@@ -5,6 +5,7 @@
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
           <tr>
+            <th>ID</th>
             <th>{{ $t('analysis.method') }}</th>
             <th>{{ $t('analysis.method_specification') }}</th>
             <th>{{ $t('analysis.mass') }}</th>
@@ -21,6 +22,7 @@
 
           <tbody>
           <tr v-for="(entity, index) in relatedData.analysis" :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }" >
+            <td>{{entity.id}}</td>
             <td v-show="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.analysis_method"
@@ -79,6 +81,7 @@
             </td>
           </tr>
           <tr class="related-input-data">
+            <td></td>
             <td>
               <vue-multiselect v-model="relatedData.insert.analysis.analysis_method" v-if="isDefinedAndNotEmpty(autocomplete.analysisMethod)"
                                :options="autocomplete.analysisMethod"
