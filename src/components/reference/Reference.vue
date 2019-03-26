@@ -8,7 +8,7 @@
         <p class="h2">{{ $t('add.newReference') }}</p>
       </div>
     </div>
-    
+
     <!-- REFERENCE and YEAR -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -728,7 +728,9 @@
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
 
-        return JSON.stringify(uploadableObject)
+        const uploadableObjectWithoutWhitespace = JSON.stringify(uploadableObject).replace(/"\s+|\s+"/g, '"')
+
+        return uploadableObjectWithoutWhitespace
       },
 
 

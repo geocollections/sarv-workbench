@@ -15,7 +15,7 @@
         </b-card>
       </div>
     </div>
-  
+
     <div class="row mt-3">
       <div class="col-sm-6 mb-2">
         <p>{{ $t('frontPage.info') }}: <a href="https://geocollections.info" target="_blank">https://geocollections.info</a></p>
@@ -67,7 +67,7 @@
         <div class="row">
           <div class="col-md-6">
 
-            <!-- REFERENCE 
+            <!-- REFERENCE
             <div class="mt-3 mb-2 toggle-collapse" @click="showCollapseReference = !showCollapseReference"
                  :class="showCollapseReference ? 'collapsed' : null">
               {{ $t('frontPage.collapseReference') }}
@@ -83,15 +83,16 @@
                 <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{
                   $t('frontPage.buttons.reference') }}
                 </router-link>
--->
+
               </b-card>
             </b-collapse>
+            -->
 
           </div>
 
           <div class="col-md-6">
 
-            <!-- LOCALITY 
+            <!-- LOCALITY
             <div class="mt-3 mb-2 toggle-collapse" @click="showCollapseLocality = !showCollapseLocality"
                  :class="showCollapseLocality ? 'collapsed' : null">
               {{ $t('frontPage.collapseLocality') }}
@@ -117,7 +118,7 @@
         <div class="row">
           <div class="col-md-6">
 
-            <!-- SAMPLE 
+            <!-- SAMPLE
             <div class="mt-3 mb-2 toggle-collapse" @click="showCollapseSample = !showCollapseSample"
                  :class="showCollapseSample ? 'collapsed' : null">
               {{ $t('frontPage.collapseSample') }}
@@ -140,7 +141,7 @@
 
           <div class="col-md-6">
 
-            <!-- LIBRARY 
+            <!-- LIBRARY
             <div class="mt-3 mb-2 toggle-collapse" @click="showCollapseLibrary = !showCollapseLibrary"
                  :class="showCollapseLibrary ? 'collapsed' : null">
               {{ $t('frontPage.collapseLibrary') }}
