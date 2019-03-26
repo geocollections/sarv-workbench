@@ -519,12 +519,13 @@
         });
         //Manipulation with data itself should be done in class
         this.$on('tab-changed',this.setTab);
-        this.$root.$on('related-data-modified',this.editRelatedData);
-        this.$root.$on('related-data-added',this.addRelatedData);
-        this.$root.$on('edit-row',this.editRow);
-        this.$root.$on('allow-remove-row',this.allowRemove);
 
-        this.$emit('related-data-info',this.tabs);
+        this.$on('related-data-modified',this.editRelatedData);
+        this.$on('related-data-added',this.addRelatedData);
+        this.$on('edit-row',this.editRow);
+        this.$on('allow-remove-row',this.allowRemove);
+
+        // this.$emit('related-data-info',this.tabs);
         // FETCH FIRST TAB RELATED DATA
         this.tabs.forEach(entity => {
           this.loadRelatedData(entity);
@@ -542,9 +543,9 @@
           locality_reference:[], locality_synonym: [], attachment_link:[], locality_stratigraphy:[],
           copyFields: {
             locality_reference:['reference','pages','figures','remarks'],
-            locality_synonym: ['attachment'],
+            locality_synonym: ['synonym','reference','pages','remarks'],
             attachment_link: ['attachment','remarks'],
-            locality_stratigraphy:['taxon','storage','remarks','analysis'],
+            locality_stratigraphy:['stratigraphy','depth_base','depth_top','reference','agent','year','current'],
           },
           insert: {locality_reference:{}, locality_synonym: {}, attachment_link:{}, locality_stratigraphy:{}},
           page : {locality_reference:1, locality_synonym: 1, attachment_link:1, locality_stratigraphy:1},
@@ -588,17 +589,9 @@
 
 
       fillRelatedDataAutocompleteFields(obj){
-        // obj.analysis_method = {analysis_method:obj.analysis_method__analysis_method, method_en:obj.analysis_method__method_en,id:obj.analysis_method}
-        // obj.agent = {agent:obj.agent__agent,id:obj.agent}
-        // obj.fossil_group = {taxon:obj.taxon__taxon,id:obj.taxon}
-        // obj.storage = {location:obj.storage__location,id:obj.storage}
-        // obj.analysis = {id:obj.analysis}
-        // obj.taxon = {taxon:obj.taxon__taxon, id:obj.taxon}
-        // obj.agent_identified = {agent:obj.agent_identified__agent, id:obj.agent_identified}
-        // obj.preparation = { id:obj.analysis}
-        //
-
         obj.reference = { reference:obj.reference__reference, id:obj.reference}
+        obj.stratigraphy = {stratigraphy:obj.stratigraphy__stratigraphy,stratigraphy_en:obj.stratigraphy__stratigraphy_en,id:obj.stratigraphy__id}
+        obj.agent = {agent:obj.agent__agent,id:obj.agent}
         return obj
       },
 

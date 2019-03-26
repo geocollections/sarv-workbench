@@ -73,11 +73,11 @@
             <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.is_private" :value="true" :unchecked-value="false"/></td>
 
             <td style="padding: 0.6em!important;">
-              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$parent.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
               <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
 
-              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$root.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$root.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$parent.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$parent.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
             </td>
           </tr>
           <tr class="related-input-data">
@@ -123,7 +123,7 @@
 
             <td style="padding: 0.6em!important;">
               <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
-              <button class="float-left btn btn-sm btn-success" @click="$root.$emit('related-data-added', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-left btn btn-sm btn-success" @click="$parent.$emit('related-data-added', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
               <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.analysis = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>
@@ -150,6 +150,11 @@
         relatedData: Object,
         autocomplete: Object,
         activeTab: String
+      },
+      methods: {
+        test(){
+          console.log('TEST')
+        }
       }
     }
 </script>

@@ -546,10 +546,11 @@
           });
         }
         this.$on('tab-changed',this.setTab);
-        this.$root.$on('related-data-modified',this.editRelatedData);
-        this.$root.$on('related-data-added',this.addRelatedData);
-        this.$root.$on('edit-row',this.editRow);
-        this.$root.$on('allow-remove-row',this.allowRemove);
+
+        this.$on('related-data-modified',this.editRelatedData);
+        this.$on('related-data-added',this.addRelatedData);
+        this.$on('edit-row',this.editRow);
+        this.$on('allow-remove-row',this.allowRemove);
 
         this.$emit('related-data-info',this.tabs);
         // FETCH FIRST TAB RELATED DATA
