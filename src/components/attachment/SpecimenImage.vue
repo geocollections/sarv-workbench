@@ -382,6 +382,7 @@
   import cloneDeep from 'lodash/cloneDeep'
   import EXIF from 'exif-js'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
+  import BottomOptions from '@/components/partial/BottomOptions.vue'
 
   library.add(faTrashAlt)
 
@@ -391,6 +392,7 @@
       VueMultiselect,
       Datepicker,
       Spinner,
+      BottomOptions
     },
     name: "SpecimenImage",
     mixins: [formManipulation],

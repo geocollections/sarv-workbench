@@ -339,7 +339,9 @@
                 if (!addAnother) {
                   this.$router.push({ path: '/attachment' })
                 } else {
+                  // Clears file and reference combo
                   this.clearFile()
+                  this.upload.reference = null
                 }
               }
               if (typeof response.body.error !== 'undefined') {

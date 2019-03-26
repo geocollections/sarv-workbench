@@ -473,6 +473,7 @@
   import cloneDeep from 'lodash/cloneDeep'
   import EXIF from 'exif-js'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
+  import BottomOptions from '@/components/partial/BottomOptions.vue'
 
   library.add(faPlus, faChevronUp, faChevronDown, faTrashAlt)
 
@@ -483,6 +484,7 @@
       Datepicker,
       Spinner,
       MapComponent,
+      BottomOptions
     },
     name: "PhotoArchive",
 
