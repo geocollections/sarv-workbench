@@ -177,7 +177,7 @@
       getAttachment(params) {
         this.$http.get(this.apiUrl + 'attachment/' + params.id, {
           params: {
-            or_search: 'author_id:' + params.author.agent_id + ';user_added:' + params.author.user,
+            or_search: 'author_id:' + params.author.agent_id + ';user_added:' + params.author.user + ';user_changed:' + params.author.user,
             format: 'json',
           }
         }).then(response => {
