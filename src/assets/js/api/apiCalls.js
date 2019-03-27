@@ -273,6 +273,13 @@ export function fetchSamplePurpose() {
 export function fetchFossilGroup() {
   return fetch(`taxon/?fields=taxon,id&is_fossil_group=1&format=json`)
 }
+
+export function fetchSampleRelatedAnalysis(id) {
+  return fetch(`analysis/?sample=${id}&fields=id&format=json`)
+}
+export function fetchSampleRelatedPreparation(id) {
+  return fetch(`preparation/?sample=${id}&fields=id&format=json`)
+}
 export function fetchAnalysisMethod() {
   return fetch(`analysis_method/?order_by=analysis_method&format=json`)
 }

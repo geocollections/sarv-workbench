@@ -2,7 +2,7 @@
   <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'taxon_list'}" role="tabpanel">
     <div class="col-sm-12" v-if="activeTab === 'taxon_list'">
       <div class="table-responsive-sm">
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover table-bordered related-table">
           <thead class="thead-light">
           <tr class="text-center">
             <th>{{ $t('taxon.taxon') }}</th>
@@ -14,7 +14,7 @@
             <th>{{ $t('taxon.preparation') }}</th>
             <th><font-awesome-icon icon="user-lock" :title="$t('taxon.is_private')"/></th>
             <th><font-awesome-icon icon="comment-alt" :title="$t('taxon.remarks')"/></th>
-            <th style="width: 5.7em"></th>
+            <th class="btn-th"></th>
           </tr>
           </thead>
 
@@ -31,11 +31,11 @@
             <td v-if="!entity.editMode">{{entity.remarks}}</td>
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.taxon" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.taxon" id="taxon1"
+                               :loading="autocomplete.loaders.taxon" id="taxon1"  select-label=""
                                label="taxon" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.taxon" :searchable="true" @search-change="autcompleteTaxonSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.taxon}}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -45,10 +45,10 @@
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.agent_identified" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent"
+                               :loading="autocomplete.loaders.agent"  select-label=""
                                :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :open-direction="'top'">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect></td>
             <td v-if="entity.editMode">
@@ -61,12 +61,13 @@
             </td>
             <td v-if="entity.editMode" class="text-center"><b-form-checkbox v-model="entity.new.extra" :value="true" :unchecked-value="false"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.preparation" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.preparation" id="preparation"
+              <vue-multiselect class="align-middle" v-model="entity.new.preparation" deselect-label=""
+                               id="preparation"  select-label=""
                                label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.preparation" :searchable="true" @search-change="autcompletePreparationSearch"
+                               :custom-label="customPreparationLabel"
+                               :options="relatedData.preparation"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.id}}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -85,7 +86,7 @@
           <tr class="related-input-data">
             <td>
               <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.taxon" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.taxon" id="taxon"
+                               :loading="autocomplete.loaders.taxon" id="taxon"  select-label=""
                                label="taxon" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.taxon" :searchable="true" @search-change="autcompleteTaxonSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
@@ -99,7 +100,7 @@
             <td>
               <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.agent_identified" deselect-label="Can't remove this value"
                                       label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                                      :loading="autocomplete.loaders.agent"
+                                      :loading="autocomplete.loaders.agent"  select-label=""
                                       :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
                                       :allow-empty="true"  :show-no-results="false" :max-height="600"
                                       :open-direction="'bottom'">
@@ -115,10 +116,10 @@
             </td>
             <td class="text-center"><b-form-checkbox v-model="relatedData.insert.taxon_list.extra" :value="true" :unchecked-value="false"/></td>
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.preparation" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.preparation" id="preparation"
-                               label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.preparation" :searchable="true" @search-change="autcompletePreparationSearch"
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.preparation" deselect-label=""
+                               id="preparation"  select-label=""
+                               :custom-label="customPreparationLabel"  track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="relatedData.preparation"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.id}}</strong> </template>
@@ -156,38 +157,16 @@
         activeTab: String
       },
 
-      mixins: [formManipulation,autocompleteFieldManipulation]
+      mixins: [formManipulation,autocompleteFieldManipulation],
+
+      methods: {
+        customPreparationLabel(item) {
+          return `${item.id} (${item.preparation_number})`
+        }
+      }
     }
 </script>
-
+<style src="../../../assets/css/relatedDataStyle.css"></style>
 <style scoped>
-  .table { 
-	font-size: 0.9rem; 
-  }
-  .table td, .table th {
-	padding: 0.25rem 0.4rem;  
-  }
-  .related-input-data td{
-    /*min-width: 10em !important;*/
-    padding: 0.2em!important;
-  }
-  .multiselect {
-    line-height: 1;
-    z-index: 999 !important;
-    width: 100%;
-    min-width: 10em!important;
-  
-  }
-  .multiselect__tags {
-	border: none;
- font-size: 0.8rem;
-  }
-  input, .multiselect__single, .multiselect__input, .multiselect__tags, .multiselect__tag-icon:after, .multiselect__option:after, .multiselect__option--selected  {
-	font-size: 0.9rem !important;
-    font-weight: light;
-  padding:0.25rem;
-  } 
-  input {
-	border: none;
-  }
+
 </style>

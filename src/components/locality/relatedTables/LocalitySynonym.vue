@@ -9,7 +9,7 @@
             <th>{{ $t('synonym.reference') }}</th>
             <th>{{ $t('synonym.pages') }}</th>
             <th>{{ $t('synonym.remarks') }}</th>
-            <th style="width: 5.7em"></th>
+            <th class="btn-th"></th>
           </tr>
           </thead>
 
@@ -22,12 +22,12 @@
 
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.synonym" type="text"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="entity.new.reference" deselect-label="Can't remove this value"
+              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="entity.new.reference" deselect-label="" select-label=""
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference"
                                :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
                                :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'bottom'">
+                               :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -49,7 +49,7 @@
             <td><b-form-input v-model="relatedData.insert.locality_synonym.synonym" type="text"/></td>
             <td>
               <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.locality_synonym.reference" deselect-label="Can't remove this value"
-                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')" select-label=""
                                :loading="autocomplete.loaders.reference"
                                :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
                                :allow-empty="true"  :show-no-results="false"
@@ -89,17 +89,7 @@
       mixins: [formManipulation,autocompleteFieldManipulation]
     }
 </script>
-
+<style src="../../../assets/css/relatedDataStyle.css"></style>
 <style scoped>
-  .related-input-data td{
-    /*min-width: 10em !important;*/
-    padding: 0.2em!important;
-  }
 
-  .multiselect {
-    line-height: 1;
-    z-index: 999 !important;
-    width: 100%;
-    min-width: 20em!important
-  }
 </style>

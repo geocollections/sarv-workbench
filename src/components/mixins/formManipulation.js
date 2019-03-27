@@ -16,6 +16,7 @@ const formManipulation = {
       apiUrl: 'https://rwapi.geocollections.info/',
       loadingPercent: 0,
       sendingData: false,
+      editMode: false,
     }
   },
   components: {
@@ -40,7 +41,13 @@ const formManipulation = {
       }
       return true;
     },
-    formatDateForUpload(date){ return typeof date === 'string' ? date.split('T')[0] : date.toISOString().split('T')[0];},
+    formatDateForUpload(date){
+      date = new Date(date)
+      let tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+      let localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, -1);
+      return typeof date === 'string' ? date.split('T')[0] : localISOTime.split('T')[0];
+    },
+
     cancelRequest() {this.previousRequest.abort()},
     handleResponse(response){
       if (response.status === 200) {
@@ -79,11 +86,10 @@ const formManipulation = {
             this.addCopyOfRelatedData(copyOfRelatedData,savedObjectId);
             return true;
           } else if (isCopy === true && savedObjectId === undefined) return false;
-
-          if (savedObjectId === undefined || savedObjectId === false) return;
-
           //before save object ID was removed
           this[object] = editableObject;
+          if (savedObjectId === undefined || savedObjectId === false) return;
+
           this.$emit('data-loaded',editableObject);
           if (!addAnother) {
             this.$router.push({ path: '/'+object })
@@ -243,12 +249,22 @@ const formManipulation = {
       }
       let editableObject = this.removeUnnecessaryFields(object.new,this.relatedData.copyFields[type]);
       formData.append('data', this.formatRelatedData(editableObject));
-
+      this.loadRelatedData(type).then(response => {
+        console.log(response);
+        // this allows to set edit mode for multiple row
+        this.$set(object, 'editMode', false)
+        // it is required to edit only one record
+        this.editMode = false;
+      });
       this.saveData(type,formData,'change/'+type+'/'+ object.id).then(isSuccessfullySaved => {
         //  UPDATE ROW DATA
-        object = cloneDeep(object.new)
-        this.$set(object, 'new', {});
-        this.$set(object, 'editMode', false)
+        // object = cloneDeep(object.new)
+        // this.$set(object, 'new', {});
+        // RELOAD RELATED DATA IN CURRENT TAB
+        this.loadRelatedData(type).then(response => {
+          console.log(response)
+          this.$set(object, 'editMode', false)
+        });
       });
     },
 
@@ -276,9 +292,11 @@ const formManipulation = {
     loadRelatedData(){},
     fillRelatedDataAutocompleteFields(){},
     editRow(entity){
+      if(this.editMode === true) return;
       // console.log("EDIT RECORD" + JSON.stringify(entity));
       this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
       this.$set(entity, 'editMode', !entity.editMode)
+      this.editMode = true;
     },
     allowRemove(entity){
       this.$set(entity, 'allowRemove', true)

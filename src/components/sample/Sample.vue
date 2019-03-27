@@ -234,6 +234,7 @@
       <div class="col-sm-4 mb-2">
         <datepicker id="date_collected"
                     v-model="sample.date_collected"
+                    use-utc="true "
                     lang="en"
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
@@ -420,8 +421,8 @@
           </li>
         </ul>
         <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-        <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-        <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
+        <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
         <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
@@ -465,7 +466,9 @@
     fetchAnalysisMethod,
     fetchFossilGroup,
     fetchSamplePreparation,
-    fetchTaxonList
+    fetchTaxonList,
+    fetchSampleRelatedAnalysis,
+    fetchSampleRelatedPreparation
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
@@ -492,6 +495,9 @@
         Spinner,
       },
       mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
+      computed: {
+        getParentId() { return this.sample.id}
+      },
       data() {
         return {
           tabs:['analysis','preparation','taxon_list','attachment_link','sample_reference'],
@@ -511,7 +517,7 @@
             },
             series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
             rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
-            fossil_group:[], analysis: [],taxon:[],preparation:[]
+            fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[]
           },
           requiredFields: ['number'],
           sample: {}
@@ -558,10 +564,12 @@
           this.loadRelatedData(entity);
         });
         this.setActiveTab('analysis')
+
       },
 
       methods: {
         setTab(type){ this.activeTab  = type },
+
         setDefaultRalatedData(){
           return {
             sample_reference:[], attachment_link: [], analysis: [], preparation:[], taxon_list:[],
@@ -588,6 +596,9 @@
           if (this.isDefinedAndNotNull(objectToUpload.palaeontology)) uploadableObject.palaeontology = objectToUpload.palaeontology === true ? '1' : '0';
           if (this.isDefinedAndNotNull(objectToUpload.analysis)) uploadableObject.analysis = objectToUpload.analysis === true ? '1' : '0';
           if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+
+          if (this.isDefinedAndNotNull(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
+
           //autocomplete fields
 
           if (this.isDefinedAndNotNull(objectToUpload.series)) uploadableObject.series = objectToUpload.series.id
@@ -628,7 +639,7 @@
           obj.analysis = {id:obj.analysis}
           obj.taxon = {taxon:obj.taxon__taxon, id:obj.taxon}
           obj.agent_identified = {agent:obj.agent_identified__agent, id:obj.agent_identified}
-          obj.preparation = { id:obj.analysis}
+          obj.preparation = { id:obj.preparation}
 
           obj.reference = { reference:obj.reference__reference, id:obj.reference}
           return obj
@@ -648,10 +659,12 @@
           } else if(object === 'attachment_link') {
             query = fetchLSampleAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
           }
-
-          query.then(response => {
-            this.relatedData[object] = this.handleResponse(response);
-            this.relatedData.count[object] = response.body.count;
+          return new Promise(resolve => {
+            query.then(response => {
+              this.relatedData[object] = this.handleResponse(response);
+              this.relatedData.count[object] = response.body.count;
+              resolve(true)
+            });
           });
         },
 

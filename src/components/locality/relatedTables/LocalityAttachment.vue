@@ -2,12 +2,12 @@
   <div id="#tab-attachment" class="tab-pane row" :class="{active: activeTab === 'attachment_link'}" role="tabpanel">
     <div class="col-sm-8" v-if="activeTab === 'attachment_link'">
       <div class="table-responsive-sm">
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
             <th>{{ $t('attachments.link') }}</th>
             <th>{{ $t('attachments.remarks') }}</th>
-            <th style="width: 5.7em"></th>
+            <th class="btn-th"></th>
           </tr>
           </thead>
 
@@ -30,7 +30,7 @@
             <td>
               <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.attachment_link.attachment" deselect-label="Can't remove this value"
                                label="original_filename" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.attachment"
+                               :loading="autocomplete.loaders.attachment" select-label=""
                                :options="autocomplete.attachment" :searchable="true" @search-change="autcompleteAttachmentSearch"
                                :allow-empty="true"  :show-no-results="false"
                                :open-direction="'bottom'">
@@ -81,17 +81,7 @@
       }
     }
 </script>
-
+<style src="../../../assets/css/relatedDataStyle.css"></style>
 <style scoped>
-  .related-input-data td{
-    /*min-width: 10em !important;*/
-    padding: 0.2em!important;
-  }
 
-  .multiselect {
-    line-height: 1;
-    z-index: 999 !important;
-    width: 100%;
-    min-width: 20em!important
-  }
 </style>

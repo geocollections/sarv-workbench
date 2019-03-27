@@ -2,7 +2,7 @@
   <div id="#tab-stratygraphy" class="tab-pane row" :class="{active: activeTab === 'locality_stratigraphy'}" role="tabpanel">
     <div class="col-sm-12" v-if="activeTab === 'locality_stratigraphy'">
       <div class="table-responsive-sm">
-        <table class="table table-hover table-bordered">
+        <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
             <th>{{ $t('stratigraphy.stratigraphy') }}</th>
@@ -12,7 +12,7 @@
             <th>{{ $t('stratigraphy.author') }}</th>
             <th>{{ $t('stratigraphy.year') }}</th>
             <th>{{ $t('stratigraphy.is_preferred') }}</th>
-            <th style="width: 5.7em"></th>
+            <th class="btn-th"></th>
           </tr>
           </thead>
 
@@ -36,11 +36,11 @@
 
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.stratigraphy" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.stratigraphy"
+                               :loading="autocomplete.loaders.stratigraphy" select-label=""
                                :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.stratigraphy" :searchable="true" @search-change="autcompleteStratigraphySearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
                   {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -51,10 +51,10 @@
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.reference" deselect-label="Can't remove this value"
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.reference"
+                               :loading="autocomplete.loaders.reference" select-label=""
                                :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
                                :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'bottom'">
+                               :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -62,10 +62,10 @@
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.agent" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent"
+                               :loading="autocomplete.loaders.agent" select-label=""
                                :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :open-direction="'top'">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -86,7 +86,7 @@
           <tr class="related-input-data">
             <td>
               <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.stratigraphy" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.stratigraphy"
+                               :loading="autocomplete.loaders.stratigraphy" select-label=""
                                :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.stratigraphy" :searchable="true" @search-change="autcompleteStratigraphySearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
@@ -101,7 +101,7 @@
             <td>
               <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.reference" deselect-label="Can't remove this value"
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.reference"
+                               :loading="autocomplete.loaders.reference" select-label=""
                                :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
                                :allow-empty="true"  :show-no-results="false"
                                :open-direction="'bottom'">
@@ -112,7 +112,7 @@
             <td>
               <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.agent" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent"
+                               :loading="autocomplete.loaders.agent" select-label=""
                                :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
@@ -152,16 +152,7 @@
     }
 </script>
 
+<style src="../../../assets/css/relatedDataStyle.css"></style>
 <style scoped>
-  .related-input-data td{
-    /*min-width: 10em !important;*/
-    padding: 0.2em!important;
-  }
 
-  .multiselect {
-    line-height: 1;
-    z-index: 999 !important;
-    width: 100%;
-    min-width: 10em!important
-  }
 </style>
