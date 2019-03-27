@@ -517,7 +517,9 @@
 
 
     <bottom-options :success-button="$t('edit.buttons.save')"
-                    :danger-button="$t('edit.buttons.cancelWithoutSaving')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
+                    :danger-button="$t('edit.buttons.cancelWithoutSaving')"
+                    object="reference"
+                    v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
 </template>
@@ -666,9 +668,9 @@
 
     methods: {
 
-      hoverButtonClicked(choice) {
+      hoverButtonClicked(choice, object) {
         if (choice === "SAVE") this.sendData(false)
-        if (choice === "CANCEL") this.$router.push({ path: '/reference' })
+        if (choice === "CANCEL") this.$router.push({ path: '/' + object })
       },
 
       /******************

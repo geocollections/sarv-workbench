@@ -3,12 +3,12 @@
 
     <div class="row">
       <div class="col-6 text-center">
-        <b-button class="hover-button" variant="outline-success" v-on:click="$emit('button-clicked', 'SAVE')">
+        <b-button class="hover-button" variant="outline-success" v-on:click="$emit('button-clicked', 'SAVE', object)">
           {{ successButton ? successButton : this.$t('edit.buttons.save') }}
         </b-button>
       </div>
       <div class="col-6 text-center">
-        <b-button class="hover-button" variant="outline-danger" v-on:click="$emit('button-clicked', 'CANCEL')">
+        <b-button class="hover-button" variant="outline-danger" v-on:click="$emit('button-clicked', 'CANCEL', object)">
           {{ dangerButton ? dangerButton : this.$t('buttons.cancel') }}
         </b-button>
       </div>
@@ -28,6 +28,10 @@
       dangerButton: {
         type: String,
         default: null
+      },
+      object: {
+        type: String,
+        default: 'attachment'
       }
     },
     name: "BottomOptions"
@@ -45,7 +49,7 @@
     width: 100%;
     padding: 8px 16px;
     box-shadow: 0 4px 10px #000;
-    z-index: 1; /* Maybe need to make it even more higher */
+    z-index: 1000;
   }
 
   .hover-button {

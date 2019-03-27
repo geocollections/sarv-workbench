@@ -303,9 +303,14 @@ const formManipulation = {
     },
     removeRow(entity){
       console.log("DELETE RECORD" + JSON.stringify(entity))
-    }
+    },
 
     /** RELATED DATA ENDS**/
+
+    hoverSaveOrCancelButtonClicked(choice, object) {
+      if (choice === "SAVE") this.add(false, object)
+      if (choice === "CANCEL") this.$router.push({ path: '/' + object })
+    }
 
   },
   watch: {

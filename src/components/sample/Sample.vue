@@ -449,6 +449,11 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
+
+    <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
+                    :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
+                    object="sample"
+                    v-on:button-clicked="hoverSaveOrCancelButtonClicked"></bottom-options>
   </div>
 </template>
 
@@ -480,9 +485,11 @@
   import SampleAnalysis from "./relatedTables/SampleAnalysis";
   import SamplePreparation from "./relatedTables/SamplePreparation";
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
+  import BottomOptions from "../partial/BottomOptions";
     export default {
       name: "Sample",
       components: {
+        BottomOptions,
         SampleTaxonList,
         SamplePreparation,
         SampleAnalysis,
