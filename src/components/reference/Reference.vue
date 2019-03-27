@@ -9,6 +9,63 @@
       </div>
     </div>
 
+    <!-- FILE -->
+    <div class="row">
+      <div class="col-sm-12 mb-2">
+        <label :for="`files`"
+               v-bind:class="{ dragging : isDragging }"
+               v-on:dragover.stop.prevent="isDragging = true"
+               v-on:dragleave.stop.prevent="isDragging = false"
+               v-on:drop.stop.prevent="dropFile"
+               class="btn btn-outline-primary btn-block">{{ $t('add.inputs.fileInput') }}
+        </label>
+
+        <div class="mt-2 alert alert-warning" v-if="files !== null && files.length >= 10">{{ $t('add.inputs.fileInputMaxError', { num: files.length }) }}</div>
+
+        <div class="mt-2" v-if="files !== null && files.length > 0">
+          <div v-if="files.length > 0" >
+
+            <ul class="list-unstyled">
+              <li class="mt-2" v-for="(file, key) in files">
+
+                <span>
+                  <font-awesome-icon icon="file"></font-awesome-icon>&nbsp;
+                </span>
+
+                <span><b>{{ file.name }}</b></span>
+
+              </li>
+            </ul>
+
+          </div>
+        </div>
+
+        <!-- TODO: https://github.com/bootstrap-vue/bootstrap-vue/issues/1526, If multiple then accept does not take multiple formats. BUG -->
+        <!-- TODO: BUG: If too many files or long filenames then breaks the input design -->
+        <b-form-file v-model="files"
+                     id="files"
+                     :state="filesState"
+                     multiple
+                     plain
+                     style="display: none"
+                     ref="fileinput"
+                     accept=".pdf"
+                     :placeholder="$t('add.inputs.fileInput')">
+        </b-form-file>
+
+        <b-form-text v-if="!filesState">{{ $t('add.errors.files') }}.</b-form-text>
+
+      </div>
+
+      <div class="col-sm-12 col-md-6 mb-2">
+        <button class="btn btn-outline-danger" v-if="filesState" :disabled="sendingData" @click="clearFile">
+          <span v-show="files.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
+          <span v-show="files.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
+        </button>
+      </div>
+
+    </div>
+
     <!-- REFERENCE and YEAR -->
     <div class="row">
       <div class="col-sm-2 lbl-right">
@@ -531,6 +588,8 @@
         apiUrl: 'https://rwapi.geocollections.info/',
         loadingPercent: 0,
         sendingData: false,
+        files: null,
+        isDragging: false,
         searchingTypes: false,
         searchingLanguages: false,
         searchingJournals: false,
@@ -612,6 +671,10 @@
 
       titleState() {
         return this.reference.title !== null && this.reference.title.length > 0
+      },
+
+      filesState() {
+        return this.files !== null && this.files.length > 0
       },
 
       typeLabel() {
@@ -818,6 +881,33 @@
       /************************
        *** AUTOCOMPLETE END ***
        ************************/
+
+
+
+      /***************************
+       *** FILE DROPPING START ***
+       ***************************/
+
+      dropFile(event) {
+        let files = []
+        for (let i = 0; i < event.dataTransfer.files.length; i++) {
+          if (event.dataTransfer.files[i].type.includes('pdf')) {
+            files.push(event.dataTransfer.files[i])
+          } else {
+            toastError({text: this.$t('messages.validFileFormatPDF', { file: event.dataTransfer.files[i].name })})
+          }
+        }
+
+        if (files.length > 0) {
+          this.files = files
+        }
+
+        this.isDragging = false
+      },
+
+      /**************************
+       *** FILE DROPPING END  ***
+       **************************/
 
 
 
