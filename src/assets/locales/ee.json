@@ -591,7 +591,9 @@
   },
   "buttons": {
     "deletePreferences": "Tühista filtrid ja sorteerimine",
-    "cancel": "Katkesta"
+    "cancel": "Katkesta",
+    "next": "Järgmine",
+    "previous": "Eelmine"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",

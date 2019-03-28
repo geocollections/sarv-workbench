@@ -435,7 +435,8 @@
     fetchLocalityReference,
     fetchLocalitySynonym,
     fetchLocalityAttachment,
-    fetchLocalityStratigraphy
+    fetchLocalityStratigraphy,
+    fetchLocalities
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
@@ -458,88 +459,99 @@
       FontAwesomeIcon,
       VueMultiselect,
       Spinner,
-      MapComponent,
+      MapComponent
     },
     mixins: [formManipulation,autocompleteFieldManipulation],
-    data() {
-      return {
-        tabs:['locality_reference','locality_synonym','attachment_link','locality_stratigraphy'],
-        activeTab: 'locality_reference',
-        relatedData: this.setDefaultRalatedData(),
-        copyFields : ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
-          'coordx','coordy','coord_system','stratigraphy_top_free','stratigraphy_base_free','maaamet_pa_id','eelis',
-          'remarks_location','remarks','is_private', 'type','parent','extent','coord_det_precision','coord_det_method',
-          'coord_det_agent','country','stratigraphy_top','stratigraphy_base'],
-        autocomplete: {
-          loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false,
-            reference:false, synonym:false, attachment:false, stratigraphy:false},
-          localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [],reference:[],
-          agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: [], synonym:[],
-          attachment: [], stratigraphy: []
-        },
-        requiredFields: ['locality','locality_en'],
-        locality: {},
-        showCollapseMap: true,
-      }
-    },
-    computed: {
-      isLocalityDataLoaded(){
-        return this.locality.latitude || this.locality.longitude
-      }
-    },
-    created() {
-      fetchListLocalityTypes().then(response => {
-        this.autocomplete.localityTypes = this.handleResponse(response);
-      });
-      fetchListLocalityExtent().then(response => {
-        this.autocomplete.extent = this.handleResponse(response);
-      });
-      fetchListCoordinateMethod().then(response => {
-        this.autocomplete.coordMethod = this.handleResponse(response);
-      });
-      fetchListCoordinatePrecision().then(response => {
-        this.autocomplete.coordPrecision = this.handleResponse(response);
-      });
-      fetchListCountry().then(response => {
-        this.autocomplete.country = this.handleResponse(response);
-      });
 
-      if(this.$route.meta.isEdit) {
-        this.sendingData = true;
-        fetchLocality(this.$route.params.id).then(response => {
-          let handledResponse = this.handleResponse(response);
-          if(handledResponse.length > 0) {
-            this.locality = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.locality)
-            this.removeUnnecessaryFields(this.locality,this.copyFields);
-            this.$emit('data-loaded',this.locality)
-            this.$emit('set-object','locality')
-            this.sendingData = false;
-          } else {
-            this.sendingData = false;
-          }
-        });
-        //Manipulation with data itself should be done in class
-        this.$on('tab-changed',this.setTab);
+    data() { return this.setInitialData() },
 
-        this.$on('related-data-modified',this.editRelatedData);
-        this.$on('related-data-added',this.addRelatedData);
-        this.$on('edit-row',this.editRow);
-        this.$on('allow-remove-row',this.allowRemove);
-
-        // this.$emit('related-data-info',this.tabs);
-        // FETCH FIRST TAB RELATED DATA
-        this.tabs.forEach(entity => {
-          this.loadRelatedData(entity);
-        });
-        // FETCH FIRST TAB RELATED DATA
-        this.setActiveTab('locality_reference')
-      }
-    },
+    created() { this.loadFullInfo() },
 
     methods: {
 
       setTab(type){ this.activeTab  = type },
+
+      setInitialData(){
+        return {
+          tabs:['locality_reference','locality_synonym','attachment_link','locality_stratigraphy'],
+          activeTab: 'locality_reference',
+          relatedData: this.setDefaultRalatedData(),
+          copyFields : ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
+            'coordx','coordy','coord_system','stratigraphy_top_free','stratigraphy_base_free','maaamet_pa_id','eelis',
+            'remarks_location','remarks','is_private', 'type','parent','extent','coord_det_precision','coord_det_method',
+            'coord_det_agent','country','stratigraphy_top','stratigraphy_base'],
+          autocomplete: {
+            loaders: { locality:false, stratigraphy_top:false,stratigraphy_base:false, agent:false,
+              reference:false, synonym:false, attachment:false, stratigraphy:false},
+            localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [],reference:[],
+            agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: [], synonym:[],
+            attachment: [], stratigraphy: []
+          },
+          requiredFields: ['locality','locality_en'],
+          locality: {},
+          showCollapseMap: true,
+          previousRecord: {},
+          nextRecord: {},
+          searchParameters: this.setDefaultSearchParameters()
+        }
+      },
+
+      reloadData(){
+        Object.assign(this.$data, this.setInitialData());
+        this.loadFullInfo()
+      },
+
+      loadFullInfo() {
+        fetchListLocalityTypes().then(response => {
+          this.autocomplete.localityTypes = this.handleResponse(response);
+        });
+        fetchListLocalityExtent().then(response => {
+          this.autocomplete.extent = this.handleResponse(response);
+        });
+        fetchListCoordinateMethod().then(response => {
+          this.autocomplete.coordMethod = this.handleResponse(response);
+        });
+        fetchListCoordinatePrecision().then(response => {
+          this.autocomplete.coordPrecision = this.handleResponse(response);
+        });
+        fetchListCountry().then(response => {
+          this.autocomplete.country = this.handleResponse(response);
+        });
+
+        if(this.$route.meta.isEdit) {
+          this.sendingData = true;
+          fetchLocality(this.$route.params.id).then(response => {
+            let handledResponse = this.handleResponse(response);
+            if(handledResponse.length > 0) {
+              this.locality = this.handleResponse(response)[0];
+              this.fillAutocompleteFields(this.locality)
+              this.removeUnnecessaryFields(this.locality,this.copyFields);
+              this.$emit('data-loaded',this.locality)
+              this.$emit('set-object','locality')
+              this.sendingData = false;
+              this.getListRecords('locality')
+            } else {
+              this.sendingData = false;
+            }
+          });
+          //Manipulation with data itself should be done in class
+          this.$on('tab-changed',this.setTab);
+
+          this.$on('related-data-modified',this.editRelatedData);
+          this.$on('related-data-added',this.addRelatedData);
+          this.$on('edit-row',this.editRow);
+          this.$on('allow-remove-row',this.allowRemove);
+
+          // this.$emit('related-data-info',this.tabs);
+          // FETCH FIRST TAB RELATED DATA
+          this.tabs.forEach(entity => {
+            this.loadRelatedData(entity);
+          });
+          // FETCH FIRST TAB RELATED DATA
+          this.setActiveTab('locality_reference')
+        }
+      },
+
       setDefaultRalatedData(){
         return {
           locality_reference:[], locality_synonym: [], attachment_link:[], locality_stratigraphy:[],
@@ -637,8 +649,37 @@
         this.locality.latitude = location.lat.toFixed(6)
         this.locality.longitude = location.lng.toFixed(6)
       },
+      fetchList(localStorageData) {
+        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+        return new Promise((resolve) => {
+          resolve(fetchLocalities(params))
+        });
+      },
 
+      setDefaultSearchParameters() {
+        return {
+          locality: null,
+          number: null,
+          county: null,
+          country: null,
+          agent: null,
+          id: null,
+          page: 1,
+          paginateBy: 50,
+          orderBy: '-id',
+        }
+      },
+    },
+
+    watch: {
+      '$route.params.id': {
+        handler: function (newval, oldval) {
+          this.reloadData()
+        },
+        deep: true
+      }
     }
+
 
   }
 

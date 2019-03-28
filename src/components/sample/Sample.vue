@@ -469,7 +469,8 @@
     fetchSamplePreparation,
     fetchTaxonList,
     fetchSampleRelatedAnalysis,
-    fetchSampleRelatedPreparation
+    fetchSampleRelatedPreparation,
+    fetchSamples
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
@@ -498,81 +499,92 @@
         Spinner,
       },
       mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
-      computed: {
-        getParentId() { return this.sample.id}
-      },
-      data() {
-        return {
-          tabs:['analysis','preparation','taxon_list','attachment_link','sample_reference'],
-          activeTab: 'analysis',
-          relatedData: this.setDefaultRalatedData(),
-          copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
-            'parent_sample','parent_specimen','depth','depth_interval','latitude1','longitude1','stratigraphy','lithostratigraphy',
-            'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
-            'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
-            'palaeontology','analysis','locality','locality_free','remarks','is_private'
-          ],
-          autocomplete: {
-            loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
-              lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
-              reference:false,  attachment:false, analysis_method: false,fossil_group:false, analysis:false, taxon:false,
-              preparation:false
-            },
-            series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
-            rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
-            fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[]
-          },
-          requiredFields: ['number'],
-          sample: {}
-        }
-      },
-      created() {
-        fetchAnalysisMethod().then(response => {
-          this.autocomplete.analysisMethod = this.handleResponse(response);
-        });
+      data() { return this.setInitialData() },
 
-        fetchSamplePurpose().then(response => {
-          this.autocomplete.purpose = this.handleResponse(response);
-        });
-
-        fetchFossilGroup().then(response => {
-          this.autocomplete.fossil_group = this.handleResponse(response);
-        });
-
-        if(this.$route.meta.isEdit) {
-          this.sendingData = true;
-          fetchSample(this.$route.params.id).then(response => {
-            let handledResponse = this.handleResponse(response);
-            if(handledResponse.length > 0) {
-              this.sample = this.handleResponse(response)[0];
-              this.fillAutocompleteFields(this.sample)
-              this.removeUnnecessaryFields(this.sample, this.copyFields);
-              this.$emit('data-loaded',this.sample)
-              this.$emit('set-object','sample')
-              this.sendingData = false;
-            } else {
-              this.sendingData = false;
-            }
-          });
-        }
-        this.$on('tab-changed',this.setTab);
-
-        this.$on('related-data-modified',this.editRelatedData);
-        this.$on('related-data-added',this.addRelatedData);
-        this.$on('edit-row',this.editRow);
-        this.$on('allow-remove-row',this.allowRemove);
-
-        this.$emit('related-data-info',this.tabs);
-        // FETCH FIRST TAB RELATED DATA
-        this.tabs.forEach(entity => {
-          this.loadRelatedData(entity);
-        });
-        this.setActiveTab('analysis')
-
-      },
+      created() { this.loadFullInfo() },
 
       methods: {
         setTab(type){ this.activeTab  = type },
+
+        setInitialData() {
+          return {
+            tabs:['analysis','preparation','taxon_list','attachment_link','sample_reference'],
+            activeTab: 'analysis',
+            relatedData: this.setDefaultRalatedData(),
+            copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
+              'parent_sample','parent_specimen','depth','depth_interval','latitude1','longitude1','stratigraphy','lithostratigraphy',
+              'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
+              'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
+              'palaeontology','analysis','locality','locality_free','remarks','is_private'
+            ],
+            autocomplete: {
+              loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
+                lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
+                reference:false,  attachment:false, analysis_method: false,fossil_group:false, analysis:false, taxon:false,
+                preparation:false
+              },
+              series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
+              rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
+              fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[]
+            },
+            requiredFields: ['number'],
+            sample: {},
+            previousRecord: {},
+            nextRecord: {},
+            searchParameters: this.setDefaultSearchParameters()
+          }
+        },
+
+        reloadData(){
+          Object.assign(this.$data, this.setInitialData());
+          this.loadFullInfo()
+        },
+
+        loadFullInfo() {
+          fetchAnalysisMethod().then(response => {
+            this.autocomplete.analysisMethod = this.handleResponse(response);
+          });
+
+          fetchSamplePurpose().then(response => {
+            this.autocomplete.purpose = this.handleResponse(response);
+          });
+
+          fetchFossilGroup().then(response => {
+            this.autocomplete.fossil_group = this.handleResponse(response);
+          });
+
+          if(this.$route.meta.isEdit) {
+            this.sendingData = true;
+            fetchSample(this.$route.params.id).then(response => {
+              let handledResponse = this.handleResponse(response);
+              if(handledResponse.length > 0) {
+                this.sample = this.handleResponse(response)[0];
+                this.fillAutocompleteFields(this.sample)
+                this.removeUnnecessaryFields(this.sample, this.copyFields);
+                this.$emit('data-loaded', this.sample)
+                this.$emit('set-object','sample');
+                this.sendingData = false;
+                this.getListRecords('sample')
+              } else {
+                this.sendingData = false;
+              }
+            });
+          }
+          this.$on('tab-changed',this.setTab);
+
+          this.$on('related-data-modified',this.editRelatedData);
+          this.$on('related-data-added',this.addRelatedData);
+          this.$on('edit-row',this.editRow);
+          this.$on('allow-remove-row',this.allowRemove);
+
+
+          this.$emit('related-data-info',this.tabs);
+          // FETCH FIRST TAB RELATED DATA
+          this.tabs.forEach(entity => {
+            this.loadRelatedData(entity);
+          });
+          this.setActiveTab('analysis')
+        },
 
         setDefaultRalatedData(){
           return {
@@ -720,10 +732,38 @@
               setTimeout(this.waitUntilAllCopiesSaved, 500)
             }
           }
-        }
+        },
+        fetchList(localStorageData) {
+          let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+          return new Promise((resolve) => {
+            resolve(fetchSamples(params, this.$parent.agent))
+          });
+        },
+
+        setDefaultSearchParameters() {
+          return {
+            locality: null,
+            number: null,
+            depth: null,
+            stratigraphy: null,
+            agent: null,
+            storage: null,
+            id: null,
+            page: 1,
+            paginateBy: 50,
+            orderBy: '-id',
+          }
+        },
       },
 
-
+      watch: {
+        '$route.params.id': {
+          handler: function (newval, oldval) {
+            this.reloadData()
+          },
+          deep: true
+        }
+      }
     }
 </script>
 

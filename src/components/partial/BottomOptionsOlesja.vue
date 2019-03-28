@@ -2,24 +2,50 @@
   <div class="bottom-options">
 
     <div class="row">
-      <div class="col-6 text-center">
+      <div class="col-2">
+        <b-button class="hover-button" v-if="isNavigationShown && !previousDisabled" variant="outline-info"
+                  v-on:click="$parent.$emit('button-clicked', 'PREVIOUS', object)">
+          <font-awesome-icon icon="angle-double-left" :title="$t('buttons.previous')"/> {{ $t('buttons.previous') }}
+        </b-button>
+      </div>
+        <div class="col-4 text-right">
         <b-button class="hover-button" variant="outline-success" v-on:click="$parent.$emit('button-clicked', 'SAVE', object)">
           {{ successButton ? successButton : this.$t('edit.buttons.save') }}
         </b-button>
       </div>
-      <div class="col-6 text-center">
+      <div class="col-4 text-left">
         <b-button class="hover-button" variant="outline-danger" v-on:click="$parent.$emit('button-clicked', 'CANCEL', object)">
           {{ dangerButton ? dangerButton : this.$t('buttons.cancel') }}
         </b-button>
       </div>
-
+      <div class="col-2 text-right">
+        <b-button class="hover-button" v-if="isNavigationShown && !nextDisabled" variant="outline-info" v-on:click="$parent.$emit('button-clicked', 'NEXT', object)">
+          {{ $t('buttons.next') }} <font-awesome-icon icon="angle-double-right" :title="$t('buttons.next')"/>
+        </b-button>
+      </div>
     </div>
 
   </div>
 </template>
 
 <script>
+  import {faAngleDoubleLeft,faAngleDoubleRight} from '@fortawesome/free-solid-svg-icons'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import { library } from '@fortawesome/fontawesome-svg-core'
+  library.add(faAngleDoubleLeft,faAngleDoubleRight)
+
   export default {
+    components: {
+      FontAwesomeIcon
+    },
+    name: "BottomOptions",
+    data() {
+      return {
+        nextDisabled : false,
+        previousDisabled : false
+      }
+    },
+
     props: {
       successButton: {
         type: String,
@@ -32,9 +58,24 @@
       object: {
         type: String,
         default: 'attachment'
-      }
+      },
+      isNavigationShown: {
+        type: Boolean,
+        default: false
+      },
     },
-    name: "BottomOptions"
+    mounted(){
+      this.$root.$on('disable-previous', this.disablePrevious);
+      this.$root.$on('disable-next', this.disableNext);
+    },
+    methods: {
+      disableNext(data) {
+        this.nextDisabled = data
+      },
+      disablePrevious(data) {
+        this.previousDisabled = data
+      }
+    }
   }
 </script>
 

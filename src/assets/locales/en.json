@@ -588,7 +588,9 @@
   },
   "buttons": {
     "deletePreferences": "Clear filters and ordering",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "next": "Järgmine",
+    "previous": "Eelmine"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",

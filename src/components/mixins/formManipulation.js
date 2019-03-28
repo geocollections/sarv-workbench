@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 import {faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
-import Vue from 'vue'
+import findIndex from 'lodash/findIndex';
 
 library.add(faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
@@ -307,14 +307,68 @@ const formManipulation = {
 
     /** RELATED DATA ENDS**/
 
+    /** SHOW NEXT OR PREVIOUS RECORD STARTS**/
+    findCurrentRecord(list,id) {
+      return findIndex(list, function(item) { return item.id === id })
+    },
+    getListRecords(object) {
+      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+
+      if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object) {
+
+      }
+
+      this.listSearch(searchHistory).then( results => {
+        if(results.length === 0) {
+          this.$root.$emit('disable-previous',true);
+          this.$root.$emit('disable-next',true);
+          return
+        }
+
+        let currentRecordId = this.findCurrentRecord(cloneDeep(results),this[object].id)
+        if(currentRecordId === 0) {
+          this.$root.$emit('disable-previous',true)
+        } else {
+          this.previousRecord = results[currentRecordId-1].id;
+          this.$root.$emit('disable-previous',false)
+        }
+        if(currentRecordId === results.length-1) {
+          this.$root.$emit('disable-next',true)
+        } else {
+          this.nextRecord = results[currentRecordId+1].id;
+          this.$root.$emit('disable-next',false)
+        }
+
+      })
+    },
+
+    listSearch(searchParams) {
+      this.sendingData = true;
+      return new Promise((resolve) => {
+      this.fetchList(searchParams).then(response => {
+        if (response.status === 200) {
+          if (response.body.count === 0) resolve([]);
+          if (response.body.count > 0)  resolve(response.body.results)
+        }
+        this.sendingData = false
+        }, errResponse => {
+          this.sendingData = false
+        })
+      });
+    },
+
     hoverSaveOrCancelButtonClicked(choice, object) {
-      console.log(object)
       if (choice === "SAVE") this.add(true, object)
       if (choice === "CANCEL") this.$router.push({ path: '/' + object })
+      if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });
+      if (choice === "NEXT") this.$router.push({ path: '/' + object + '/' + this.nextRecord });
     }
+
+    /** SHOW NEXT OR PREVIOUS RECORD ENDS**/
 
   },
   watch: {
+
     'relatedData.page': {
       handler: function (newVal) {
         this.setActiveTab(this.activeTab)

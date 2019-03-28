@@ -11,7 +11,7 @@
 
     <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
                     :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
-                    :object="object"/>
+                    :object="object" :is-navigation-shown="$route.meta.isNavigationShow"/>
 
     <save-as-new-modal :title-extra="'Some title'" :related-data="relatedData"/>
     <confirmation-box :title-extra="'SOME TITLE'"
@@ -39,6 +39,7 @@
     data(){
       return {
         data : null,
+        agent: null,
         object : null,
         relatedData:[],
         formattedData:null,
@@ -51,6 +52,22 @@
         title: this.$t(this.$route.meta.title) + ' ' + this.$route.params.id
       }
     },
+
+    created: function () {
+      // Gets user data from session storage
+      if (this.$session.exists() && this.$session.get('authUser') !== null) {
+        const user = this.$session.get('authUser')
+        this.agent = {
+          id: user.agent_id,
+          agent: null,
+          forename: user.user,
+          surename: null,
+          user: user.user,
+        }
+        //console.log(this.agent);
+      }
+    },
+
     methods: {
       saveAsNew(){
         this.$root.$emit('show-save-as-new-modal',true)

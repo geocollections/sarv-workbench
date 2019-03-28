@@ -174,6 +174,7 @@ const router = new Router({
                 table:'locality',
                 title:'titles.editLocality',
                 heading:'editLocality.heading',
+                isNavigationShow: true,
                 requiresAuth: true
               },
             }
@@ -232,6 +233,7 @@ const router = new Router({
                 table:'sample',
                 title:'titles.editSample',
                 heading:'editSample.heading',
+                isNavigationShow: true,
                 requiresAuth: true
               },
             }
@@ -290,6 +292,7 @@ const router = new Router({
                 table:'library',
                 title:'titles.editLibrary',
                 heading:'editLibrary.heading',
+                isNavigationShow:false,
                 requiresAuth: true
               },
             }
