@@ -56,7 +56,7 @@
 
             <thead class="thead-light">
               <tr class="th-sort">
-                <th v-for="item in fields" v-if="item.onlySearch === undefined">
+                <th v-for="item in columns" v-if="item.onlySearch === undefined">
                     <span @click="changeOrder(item.id)">
                           <font-awesome-icon
                             v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
@@ -93,6 +93,7 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import Spinner from 'vue-simple-spinner'
   import {library} from '@fortawesome/fontawesome-svg-core'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
@@ -112,7 +113,7 @@
       apiCall: {
         type: Function
       },
-      fields: {
+      columns: {
         type: Array,
         default: []
       },
@@ -125,8 +126,7 @@
         default: null
       },
       searchParameters: {
-        type: Object,
-        default: null
+        type: Object
       },
       searchHistory: {
         type: String,
@@ -162,11 +162,13 @@
 
       sortingDirection() {
         return this.searchParameters.orderBy.includes('-') ? faSortDown : faSortUp
-      }
+      },
+
     },
     watch: {
       'searchParameters': {
         handler: function () {
+          console.log('WATHCing')
           this.search(this.searchParameters)
         },
         deep: true
@@ -176,8 +178,9 @@
       }
     },
 
-    mounted: function () {
+    created: function () {
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue')
+      // console.log(searchHistory)
       if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object) {
         this.$emit('search-params-changed',searchHistory);
       } else {
@@ -189,9 +192,14 @@
 
     methods: {
       search(searchParameters) {
-        this.isLoading = true
 
-        this.$localStorage.set(this.searchHistory, searchParameters)
+        this.isLoading = true
+        //I don't know how to check if an object is serializable... at least i haven't found the solution
+        //sample search returns [object Object] but locality object {locality:null,...}
+        // if(this.searchHistory === 'sampleSearchHistory') searchParameters = JSON.stringify(searchParameters);
+        console.log(this.searchHistory)
+        console.log(searchParameters)
+        this.$localStorage.set(this.searchHistory,  searchParameters)
         this.$emit('search-params-changed',searchParameters);
         this.apiCall().then(response => {
 

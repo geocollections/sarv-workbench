@@ -13,7 +13,7 @@
       <div class="col">
         <div class="search-fields">
           <div class="d-flex flex-row flex-wrap">
-            <div class="col-sm-6" v-for="field,idx in fields">
+            <div class="col-sm-6" v-for="field,idx in filters">
                 <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
                 <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
                               v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
@@ -27,7 +27,7 @@
     <list-module-core
       module="locality"
       title="titles.editLocality"
-      :fields="fields"
+      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchLocalities"
       search-history="localitySearchHistory"
@@ -51,14 +51,19 @@
     data() {
       return {
         response: {},
-        fields:[
+        columns:[
           {id:"id",title:"editLocality.id",type:"number"},
           {id:"locality",title:"editLocality.locality",type:"text"},
           {id:"number",title:"editLocality.number",type:"text"},
           {id:"country",title:"editLocality.country",type:"text"},
           {id:"agent",title:"editLocality.agent",type:"text"}
-
-
+        ],
+        filters:[
+          {id:"id",title:"editLocality.id",type:"number"},
+          {id:"locality",title:"editLocality.locality",type:"text"},
+          {id:"number",title:"editLocality.number",type:"text"},
+          {id:"country",title:"editLocality.country",type:"text"},
+          {id:"agent",title:"editLocality.agent",type:"text"}
         ],
         searchParameters: this.setDefaultSearchParameters()
       }

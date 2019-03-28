@@ -296,22 +296,22 @@ export function fetchSamples(data, agent) {
     //searchFields += `&number__icontains=${data.number}`
     searchFields += `&multi_search=value:${data.number};fields:number,number_additional,number_field;lookuptype:icontains`
   }
-
-  if (data.number_additional !== null && data.number_additional.trim().length > 0) {
-    searchFields += `&number_additional__icontains=${data.number_additional}`
-  }
-
-  if (data.number_field !== null && data.number_field.trim().length > 0) {
-    searchFields += `&number_field__icontains=${data.number_field}`
-  }
+  //
+  // if (data.number_additional !== null && data.number_additional.trim().length > 0) {
+  //   searchFields += `&number_additional__icontains=${data.number_additional}`
+  // }
+  //
+  // if (data.number_field !== null && data.number_field.trim().length > 0) {
+  //   searchFields += `&number_field__icontains=${data.number_field}`
+  // }
 
   if (data.locality !== null && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${data.locality};fields:locality__locality_en,locality__locality,locality_free;lookuptype:icontains`
   }
-
-  if (data.locality_free !== null && data.locality_free.trim().length > 0) {
-    searchFields += `&locality_free__icontains=${data.locality_free}`
-  }
+  //
+  // if (data.locality_free !== null && data.locality_free.trim().length > 0) {
+  //   searchFields += `&locality_free__icontains=${data.locality_free}`
+  // }
   if (data.depth !== null && data.depth.trim().length > 0) {
     //searchFields += '&depth__exact='+data.depth
     searchFields += `&multi_search=value:${data.depth};fields:depth,depth_interval;lookuptype:icontains`
@@ -331,7 +331,7 @@ export function fetchSamples(data, agent) {
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner:${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
 	//console.log(agent);
     return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)

@@ -13,7 +13,7 @@
       <div class="col">
         <div class="search-fields">
           <div class="d-flex flex-row flex-wrap">
-            <div class="col-sm-6" v-for="field,idx in fields">
+            <div class="col-sm-6" v-for="field,idx in filters">
                 <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
                 <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
                               v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
@@ -27,7 +27,7 @@
     <list-module-core
       module="sample"
       title="titles.editSample"
-      :fields="fields"
+      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchSamples"
       search-history="sampleSearchHistory"
@@ -35,14 +35,13 @@
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParameters"
     ></list-module-core>
-
   </div>
 
 </template>
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import {fetchSamples} from "@/assets/js/api/apiCalls";
+  import {fetchSamples, fetchLibrary} from "@/assets/js/api/apiCalls";
   export default {
     components: {
       ListModuleCore
@@ -51,7 +50,7 @@
     data() {
       return {
         response: {},
-        fields:[
+        columns:[
           {id:"number",title:"sample.number",type:"text"},
           //{id:"number_additional",title:"sample.number_additional",type:"text", onlySearch:true},
           //{id:"number_field",title:"sample.number_field",type:"text", onlySearch:true},
@@ -64,6 +63,15 @@
           {id:"agent",title:"sample.agent_collected",type:"text"},
           //{id:"rock",title:"sample.rock",type:"text", onlySearch:true},
           //{id:"date_collected",title:"sample.date_collected",type:"text", onlySearch:true},
+          {id:"storage",title:"sample.storage",type:"text"}
+        ],
+        filters:[
+          {id:"number",title:"sample.number",type:"text"},
+          {id:"id",title:"sample.id",type:"number"},
+          {id:"locality",title:"sample.locality",type:"text"},
+          {id:"depth",title:"sample.depth",type:"text"},
+          {id:"stratigraphy",title:"sample.stratigraphy",type:"text"},
+          {id:"agent",title:"sample.agent_collected",type:"text"},
           {id:"storage",title:"sample.storage",type:"text"}
         ],
         searchParameters: this.setDefaultSearchParameters()
@@ -96,13 +104,13 @@
         return {
           locality: null,
           number: null,
-          number_additional: null,
-          number_field: null,
-          locality_free: null,
-          stratigraphy: null,
-          storage: null,
+          // number_additional: null,
+          // number_field: null,
+          // locality_free: null,
           depth: null,
+          stratigraphy: null,
           agent: null,
+          storage: null,
           id: null,
           page: 1,
           paginateBy: 50,
