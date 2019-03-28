@@ -386,7 +386,7 @@
 
               <td>
                 <router-link :to="{ path: '/attachment/' + attachment[0].id }">
-                  {{ this.$t('edit.editMessage') }}: 
+                  {{ this.$t('edit.editMessage') }}:
                   <span v-if="attachment[0].original_filename">{{ attachment[0].original_filename }}</span>
                   <span v-else>{{ attachment[0].id }}</span>
                 </router-link>
@@ -517,7 +517,9 @@
 
 
     <bottom-options :success-button="$t('edit.buttons.save')"
-                    :danger-button="$t('edit.buttons.cancelWithoutSaving')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
+                    :danger-button="$t('edit.buttons.cancelWithoutSaving')"
+                    object="reference"
+                    v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
 </template>
@@ -666,9 +668,9 @@
 
     methods: {
 
-      hoverButtonClicked(choice) {
+      hoverButtonClicked(choice, object) {
         if (choice === "SAVE") this.sendData(false)
-        if (choice === "CANCEL") this.$router.push({ path: '/reference' })
+        if (choice === "CANCEL") this.$router.push({ path: '/' + object })
       },
 
       /******************
@@ -884,7 +886,17 @@
           if (field === 'attachment') {
             if (relatedData[data].attachment !== null) {
               // Checks that attachment doesn't go into related data part
-              if (relatedData[data].attachment !== this.attach[0].id) {
+              // TODO: Fast fix, should refactor later #142
+              if (this.attach.length > 0) {
+                if (relatedData[data].attachment !== this.attach[0].id) {
+                  attachmentLink.id = relatedData[data].attachment
+                  attachmentLink.uuid_filename = relatedData[data].attachment__uuid_filename
+                  attachmentLink.description = relatedData[data].attachment__description
+                  attachmentLink.description_en = relatedData[data].attachment__description_en
+                  attachmentLink.author__agent = relatedData[data].attachment__author__agent
+                  attachmentLinks.push(attachmentLink)
+                }
+              } else {
                 attachmentLink.id = relatedData[data].attachment
                 attachmentLink.uuid_filename = relatedData[data].attachment__uuid_filename
                 attachmentLink.description = relatedData[data].attachment__description
@@ -892,6 +904,7 @@
                 attachmentLink.author__agent = relatedData[data].attachment__author__agent
                 attachmentLinks.push(attachmentLink)
               }
+
             }
           }
 

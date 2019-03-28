@@ -17,9 +17,9 @@
      </div>
      <div class="col-sm-6 ralign">
      	<router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('add.new') }}</router-link>
-     </div>      
+     </div>
    </div>
-             
+
     <!-- SEARCH FIELDS START -->
     <div class="row mt-4">
       <div class="col">
@@ -113,7 +113,7 @@
           <!-- Removes search preferences like local storage and search parameters-->
           <div class="row mt-3">
             <div class="col">
-              <b-button variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+              <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
             </div>
           </div>
 

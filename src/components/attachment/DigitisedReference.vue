@@ -197,7 +197,9 @@
 
 
     <bottom-options :success-button="$t('add.buttons.add')"
-                    :danger-button="$t('add.buttons.clearFields')" v-on:button-clicked="hoverButtonClicked"></bottom-options>
+                    :danger-button="$t('add.buttons.clearFields')"
+                    object="attachment"
+                    v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
 </template>
@@ -283,7 +285,7 @@
 
     methods: {
 
-      hoverButtonClicked(choice) {
+      hoverButtonClicked(choice, object) {
         if (choice === "SAVE") this.add(false)
         if (choice === "CANCEL") this.reset()
       },

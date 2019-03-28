@@ -97,7 +97,7 @@
       <div class="col-sm-3 mb-2">
         <b-form-input id="longitude" v-model="locality.longitude" type="number"></b-form-input>
       </div>
-      
+
       <div class="col-sm-2">
         <label :for="`elevation`">{{ $t('locality.elevation') }}:</label>
       </div>
@@ -105,7 +105,7 @@
       <div class="col-sm-2 mb-2">
         <b-form-input id="elevation" v-model="locality.elevation" type="number" step="0.01"></b-form-input>
       </div>
-      
+
     </div>
 
     <!-- MAP -->
@@ -126,7 +126,7 @@
       </div>
     </div>
 
-    <!-- ALTITUDE AND VERTICAL 
+    <!-- ALTITUDE AND VERTICAL
     <div class="row">
 
     </div>-->
@@ -160,7 +160,7 @@
     <!-- COORDINATE Y AND COORD SYSTEM -->
     <!--
     <div class="row">
-    
+
       <div class="col-sm-2">
         <label :for="`coordx`">{{ $t('locality.coordx') }}:</label>
       </div>
@@ -168,7 +168,7 @@
       <div class="col-sm-4 mb-2">
         <b-form-input id="coordx" v-model="locality.coordx" type="number"></b-form-input>
       </div>
-    
+
       <div class="col-sm-2">
         <label :for="`coordy`">{{ $t('locality.coordy') }}:</label>
       </div>
@@ -413,6 +413,11 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
+
+    <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
+                    :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
+                    object="locality"
+                    v-on:button-clicked="hoverSaveOrCancelButtonClicked"></bottom-options>
   </div>
 </template>
 
@@ -445,10 +450,12 @@
   import LocalityAttachment from "./relatedTables/LocalityAttachment";
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
   import MapComponent from '@/components/partial/MapComponent'
+  import BottomOptions from "../partial/BottomOptions";
   library.add(faTimes, faChevronUp, faChevronDown)
   export default {
     name: "Locality",
     components: {
+      BottomOptions,
       LocalityStratigraphy,
       LocalityAttachment,
       LocalitySynonym,
