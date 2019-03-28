@@ -145,6 +145,7 @@
             this.fillAutocompleteFields(this.author)
             this.removeUnnecessaryFields();
             this.$emit('data-loaded', this.author)
+            this.$emit('set-object','library')
             this.sendingData = false;
           } else {
             this.sendingData = false;

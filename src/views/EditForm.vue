@@ -7,7 +7,11 @@
         <span class="float-right"><button class="btn btn-primary mb-2" @click="saveAsNew">{{ $t('add.saveAsNew') }}</button></span>
       </div>
     </div>
-    <router-view v-on:data-loaded="setData" v-on:related-data-info="setRelatedData"/>
+    <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData"/>
+
+    <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
+                    :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
+                    :object="object"/>
 
     <save-as-new-modal :title-extra="'Some title'" :related-data="relatedData"/>
     <confirmation-box :title-extra="'SOME TITLE'"
@@ -20,12 +24,14 @@
 </template>
 
 <script>
+  import BottomOptions from "@/components/partial/BottomOptionsOlesja";
   import Log from '@/components/partial/Log.vue'
   import ConfirmationBox from "../components/partial/ConfirmationBoxOlesja";
   import SaveAsNewModal from "../components/partial/SaveAsNewModal";
   export default {
     name: "EditForm",
     components: {
+      BottomOptions,
       SaveAsNewModal,
       ConfirmationBox,
       Log
@@ -33,11 +39,13 @@
     data(){
       return {
         data : null,
+        object : null,
         relatedData:[],
         formattedData:null,
         isConfirmation: false
       }
     },
+
     metaInfo () {
       return {
         title: this.$t(this.$route.meta.title) + ' ' + this.$route.params.id
@@ -51,6 +59,10 @@
         this.data = data
         if(this.data !== null) this.formattedData = data;
       },
+      setObject(object) {
+        this.object = object
+      },
+
       setRelatedData(data){
         this.relatedData = data
       }

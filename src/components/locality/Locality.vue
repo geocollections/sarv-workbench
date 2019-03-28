@@ -414,10 +414,6 @@
       </div>
     </div>
 
-    <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
-                    :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
-                    object="locality"
-                    v-on:button-clicked="hoverSaveOrCancelButtonClicked"></bottom-options>
   </div>
 </template>
 
@@ -450,12 +446,10 @@
   import LocalityAttachment from "./relatedTables/LocalityAttachment";
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
   import MapComponent from '@/components/partial/MapComponent'
-  import BottomOptions from "../partial/BottomOptions";
   library.add(faTimes, faChevronUp, faChevronDown)
   export default {
     name: "Locality",
     components: {
-      BottomOptions,
       LocalityStratigraphy,
       LocalityAttachment,
       LocalitySynonym,
@@ -519,6 +513,7 @@
             this.fillAutocompleteFields(this.locality)
             this.removeUnnecessaryFields(this.locality,this.copyFields);
             this.$emit('data-loaded',this.locality)
+            this.$emit('set-object','locality')
             this.sendingData = false;
           } else {
             this.sendingData = false;
@@ -614,9 +609,12 @@
           query = fetchLocalityStratigraphy(this.$route.params.id,this.relatedData.page.locality_stratigraphy)
         }
 
-        query.then(response => {
-          this.relatedData[type] = this.handleResponse(response);
-          this.relatedData.count[type] = response.body.count;
+        return new Promise(resolve => {
+          query.then(response => {
+            this.relatedData[type] = this.handleResponse(response);
+            this.relatedData.count[type] = response.body.count;
+            resolve(true)
+          });
         });
       },
       checkRequiredFields(type,obj){

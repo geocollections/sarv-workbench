@@ -27,6 +27,7 @@ const formManipulation = {
 
   mounted(){
     this.$root.$on('user-choice', this.handleUserChoice);
+    this.$parent.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
   },
 
   methods: {
@@ -250,7 +251,6 @@ const formManipulation = {
       let editableObject = this.removeUnnecessaryFields(object.new,this.relatedData.copyFields[type]);
       formData.append('data', this.formatRelatedData(editableObject));
       this.loadRelatedData(type).then(response => {
-        console.log(response);
         // this allows to set edit mode for multiple row
         this.$set(object, 'editMode', false)
         // it is required to edit only one record
@@ -308,7 +308,8 @@ const formManipulation = {
     /** RELATED DATA ENDS**/
 
     hoverSaveOrCancelButtonClicked(choice, object) {
-      if (choice === "SAVE") this.add(false, object)
+      console.log(object)
+      if (choice === "SAVE") this.add(true, object)
       if (choice === "CANCEL") this.$router.push({ path: '/' + object })
     }
 

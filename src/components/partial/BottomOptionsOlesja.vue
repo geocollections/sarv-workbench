@@ -3,7 +3,7 @@
 
     <div class="row">
       <div class="col-6 text-center">
-        <b-button class="hover-button" variant="outline-success" v-on:click="$emit('button-clicked', 'SAVE', object)">
+        <b-button class="hover-button" variant="outline-success" v-on:click="$parent.$emit('button-clicked', 'SAVE', object)">
           {{ successButton ? successButton : this.$t('edit.buttons.save') }}
         </b-button>
       </div>

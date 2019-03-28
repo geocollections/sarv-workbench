@@ -450,10 +450,6 @@
       </div>
     </div>
 
-    <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
-                    :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
-                    object="sample"
-                    v-on:button-clicked="hoverSaveOrCancelButtonClicked"></bottom-options>
   </div>
 </template>
 
@@ -485,11 +481,11 @@
   import SampleAnalysis from "./relatedTables/SampleAnalysis";
   import SamplePreparation from "./relatedTables/SamplePreparation";
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
-  import BottomOptions from "../partial/BottomOptions";
+
     export default {
       name: "Sample",
       components: {
-        BottomOptions,
+
         SampleTaxonList,
         SamplePreparation,
         SampleAnalysis,
@@ -552,6 +548,7 @@
               this.fillAutocompleteFields(this.sample)
               this.removeUnnecessaryFields(this.sample, this.copyFields);
               this.$emit('data-loaded',this.sample)
+              this.$emit('set-object','sample')
               this.sendingData = false;
             } else {
               this.sendingData = false;
@@ -584,7 +581,7 @@
               sample_reference:['reference','remarks'],
               attachment_link: ['attachment'],
               analysis: ['analysis_method','method_details','mass','date','date_end','date_free','agent','remarks','location','is_private'],
-              preparation:['taxon','storage','remarks','analysis'],
+              preparation:['taxon','storage','remarks','analysis','id_private'],
               taxon_list:['taxon','name','frequency','agent_identified','date_identified','extra','preparation','is_private','remarks']
             },
             insert: {sample_reference:{},attachment_link:{},analysis:{},preparation:{}, taxon_list:{}},
