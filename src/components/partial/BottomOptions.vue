@@ -8,7 +8,7 @@
         </b-button>
       </div>
       <div class="col-6 text-center">
-        <b-button class="hover-button" variant="outline-danger" v-on:click="$parent.$emit('button-clicked', 'CANCEL', object)">
+        <b-button class="hover-button" variant="outline-danger" v-on:click="$emit('button-clicked', 'CANCEL', object)">
           {{ dangerButton ? dangerButton : this.$t('buttons.cancel') }}
         </b-button>
       </div>

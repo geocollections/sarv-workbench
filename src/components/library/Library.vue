@@ -5,11 +5,18 @@
     <!-- AUTHOR AND YEAR -->
     <div class="row">
       <div class="col-sm-2">
-        <label :for="`author`">{{ $t('library.author') }}:</label>
+        <label :for="`author`">{{ $t('library.author_txt') }}:</label>
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="author" :state="isDefinedAndNotNull(author.author)" v-model="author.author" type="text"></b-form-input>
+        <vue-multiselect class="align-middle" v-model="library.agent" deselect-label="Can't remove this value"
+                         label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.agent"
+                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :open-direction="'bottom'">
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
       </div>
 
 
@@ -28,7 +35,7 @@
         <label :for="`title`">{{ $t('library.title') }}:</label>
       </div>
 
-      <div class="col-sm-10">
+      <div class="col-sm-10 mb-2">
         <b-form-input id="title" v-model="library.title" type="text"></b-form-input>
       </div>
     </div>
@@ -39,7 +46,7 @@
         <label :for="`title_en`">{{ $t('library.title_en') }}:</label>
       </div>
 
-      <div class="col-sm-10">
+      <div class="col-sm-10 mb-2">
         <b-form-input id="title_en" v-model="library.title_en" type="text"></b-form-input>
       </div>
     </div>
@@ -50,7 +57,7 @@
         <label :for="`keywords`">{{ $t('library.keywords') }}:</label>
       </div>
 
-      <div class="col-sm-10">
+      <div class="col-sm-10 mb-2">
         <b-form-input id="keywords" v-model="library.keywords" type="text"></b-form-input>
       </div>
     </div>
@@ -62,7 +69,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-textarea id="abstract" v-model="author.abstract" type="text" size="sm"
+        <b-form-textarea id="abstract" v-model="library.abstract" type="text" size="sm"
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
 
@@ -72,8 +79,19 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-textarea id="abstract_en" v-model="author.abstract_en" type="text" size="sm"
+        <b-form-textarea id="abstract_en" v-model="library.abstract_en" type="text" size="sm"
                          :rows="1" :max-rows="20"></b-form-textarea>
+      </div>
+    </div>
+
+    <div class="row mt-3 mb-3">
+      <div class="col">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'library')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('library')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
 
@@ -86,7 +104,7 @@
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
-  import { fetchLibrary } from "../../assets/js/api/apiCalls";
+  import { fetchLibrary, fetchLibraries } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import formManipulation  from './../mixins/formManipulation'
@@ -102,83 +120,96 @@
       Spinner,
     },
     mixins: [formManipulation,autocompleteFieldManipulation],
-    data() {
-      return {
-        autocomplete: {
-          loaders: {
-            locality:false,
-            stratigraphy_top:false,
-            stratigraphy_base:false,
-            agent:false,
-            reference:false,
-            synonym:false,
-            attachment:false,
-            stratigraphy:false
-          },
-          localityTypes: [],
-          locality: [],
-          extent: [],
-          coordPrecision: [],
-          coordMethod: [],
-          reference:[],
-          agent: [],
-          country: [],
-          county: [],
-          parish: [],
-          stratigraphy_top: [],
-          stratigraphy_base: [],
-          synonym:[],
-          attachment: [],
-          stratigraphy: []
+
+    data() { return this.setInitialData() },
+
+    created() { this.loadFullInfo() },
+
+    watch: {
+      '$route.params.id': {
+        handler: function (newval, oldval) {
+          this.reloadData()
         },
-        requiredFields: ['author'],
-        author: {}
+        deep: true
       }
     },
-    created() {
-      if (this.$route.meta.isEdit) {
-        this.sendingData = true
-        fetchLibrary(this.$route.params.id).then(response => {
-          let handledResponse = this.handleResponse(response)
-          if (handledResponse.length > 0) {
-            this.author = this.handleResponse(response)[0]
-            this.fillAutocompleteFields(this.author)
-            this.removeUnnecessaryFields();
-            this.$emit('data-loaded', this.author)
-            this.$emit('set-object','library')
-            this.sendingData = false;
-          } else {
-            this.sendingData = false;
-          }
-        })
-      }
-    },
+
     methods: {
-      removeUnnecessaryFields(){
-        // let copyFields = ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
-        //   'coordx','coordy','coord_system','stratigraphy_top_free','stratigraphy_base_free','maaamet_pa_id','eelis',
-        //   'remarks_location','remarks','is_private', 'type','parent','extent','coord_det_precision','coord_det_method',
-        //   'coord_det_agent','country','stratigraphy_top','stratigraphy_base']
-        //
-        // let vm = this;
-        // //copy only certain fields
-        // Object.entries(this.locality).forEach(entry => {
-        //   if (copyFields.indexOf(entry[0]) < 0) {
-        //     delete vm.locality[entry[0]]
-        //   }
-        // });
+
+      // setTab(type) { this.activeTab = type },
+
+      setInitialData() {
+        return {
+          searchHistory: 'librarySearchHistory',
+          copyFields: ['id', 'agent', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en'],
+          autocomplete: {
+            loaders: { agent: false },
+            agent: [],
+          },
+          requiredFields: [],
+          library: {},
+          previousRecord: {},
+          nextRecord: {},
+          searchParameters: this.setDefaultSearchParameters()
+        }
+      },
+
+      reloadData() {
+        Object.assign(this.$data, this.setInitialData());
+        this.loadFullInfo()
+      },
+
+      loadFullInfo() {
+        if(this.$route.meta.isEdit) {
+          this.sendingData = true;
+          fetchLibrary(this.$route.params.id).then(response => {
+            let handledResponse = this.handleResponse(response);
+            if(handledResponse.length > 0) {
+              this.library = this.handleResponse(response)[0];
+              this.fillAutocompleteFields(this.library)
+              this.removeUnnecessaryFields(this.library,this.copyFields);
+              this.$emit('data-loaded',this.library)
+              this.$emit('set-object','library')
+              this.sendingData = false;
+              this.getListRecords('library')
+            } else {
+              this.sendingData = false;
+            }
+          });
+        }
+      },
+
+      formatDataForUpload(objectToUpload) {
+        let uploadableObject = cloneDeep(objectToUpload)
+        if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
+
+        // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
+        return JSON.stringify(uploadableObject)
       },
 
       fillAutocompleteFields(obj){
-        // this.author.type = {value:obj.type__value,value_en:obj.type__value_en,id:obj.type__id}
-        // this.author.parent = {locality:obj.parent__locality,locality_en:obj.parent__locality_en,id:obj.parent__id}
-        // this.author.extent = {value:obj.extent__value,value_en:obj.extent__value_en,id:obj.extent__id}
-        // this.author.coord_det_precision = {value:obj.coord_det_precision__value,value_en:obj.coord_det_precision__value_en,id:obj.coord_det_precision__id}
-        // this.author.coord_det_method = {value:obj.coord_det_method__value,value_en:obj.coord_det_method__value_en,id:obj.coord_det_method__id}
-        // this.author.coord_det_agent = {agent:obj.coord_det_agent__agent,id:obj.coord_det_agent__id}
-        // this.author.country = {value:obj.country__value,value_en:obj.country__value_en,id:obj.country__id}
-        // this.author.stratigraphy_top = {stratigraphy:obj.stratigraphy_top__stratigraphy,stratigraphy_en:obj.stratigraphy_top__stratigraphy_en,id:obj.stratigraphy_top__id}
-        // this.author.stratigraphy_base = {stratigraphy:obj.stratigraphy_base__stratigraphy,stratigraphy_en:obj.stratigraphy_base__stratigraphy_en,id:obj.stratigraphy_base__id}
+        this.library.agent = {agent:obj.agent,id:obj.id}
+        },
+
+      fetchList(localStorageData) {
+        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+        console.log(localStorageData)
+        return new Promise((resolve) => {
+          resolve(fetchLibraries(params))
+        });
+      },
+
+      setDefaultSearchParameters() {
+        return {
+          author_txt: null,
+          year: null,
+          title: null,
+          reference: null,
+          id: null,
+          page: 1,
+          paginateBy: 50,
+          orderBy: '-id',
+        }
       },
     }
   }

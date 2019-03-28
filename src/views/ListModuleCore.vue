@@ -56,8 +56,8 @@
 
             <thead class="thead-light">
               <tr class="th-sort">
-                <th v-for="item in columns" v-if="item.onlySearch === undefined">
-                    <span @click="changeOrder(item.id)">
+                <th class="nowrap" v-for="item in columns">
+                    <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
                           <font-awesome-icon
                             v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
                             :icon="sort"/>
@@ -246,5 +246,9 @@
 
   .font-larger {
     font-size: larger;
+  }
+
+  .nowrap {
+    white-space: nowrap;
   }
 </style>

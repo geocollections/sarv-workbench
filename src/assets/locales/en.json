@@ -28,6 +28,7 @@
     "files": "Files",
     "references": "References",
     "localities": "Localities",
+    "libraries": "Libraries",
     "samples":"Samples",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
@@ -539,11 +540,15 @@
     "header": "My Libraries",
     "author_txt": "Author",
     "year": "Year",
-    "title": "Title",
+    "title": "Title (EST)",
+    "title_en": "Title",
     "reference": "Reference",
     "isPrivate": "Public",
     "id": "ID",
-    "addNew": "Add new Library"
+    "addNew": "Add new Library",
+    "keywords": "Keywords",
+    "abstract": "Abstract (EST)",
+    "abstract_en": "Abstract"
   },
   "messages": {
     "langChange": "Changed language!",
