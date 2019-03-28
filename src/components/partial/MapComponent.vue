@@ -66,11 +66,10 @@
         if (this.isValidLocation(newVal)) {
           this.marker = L.latLng(newVal)
           this.center = L.latLng(newVal)
-          //this.zoom = 9
+          this.zoom = 10
         } else {
           this.marker = null
           this.center = L.latLng(58.5, 25.5)
-          
         }
 
       }
