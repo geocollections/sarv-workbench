@@ -474,6 +474,7 @@
       setInitialData(){
         return {
           tabs:['locality_reference','locality_synonym','attachment_link','locality_stratigraphy'],
+          searchHistory:'localitySearchHistory',
           activeTab: 'locality_reference',
           relatedData: this.setDefaultRalatedData(),
           copyFields : ['id','locality','locality_en','number','code','latitude','longitude','elevation','depth',
@@ -651,6 +652,7 @@
       },
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+        console.log(localStorageData)
         return new Promise((resolve) => {
           resolve(fetchLocalities(params))
         });

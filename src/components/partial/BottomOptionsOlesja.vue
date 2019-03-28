@@ -5,7 +5,7 @@
       <div class="col-2">
         <b-button class="hover-button" v-if="isNavigationShown && !previousDisabled" variant="outline-info"
                   v-on:click="$parent.$emit('button-clicked', 'PREVIOUS', object)">
-          <font-awesome-icon icon="angle-double-left" :title="$t('buttons.previous')"/> {{ $t('buttons.previous') }}
+          <font-awesome-icon icon="angle-double-left" :title="$t('buttons.previous')"/> <span class="d-none d-md-inline d-lg-inline pl-2" >{{ $t('buttons.previous') }}</span>
         </b-button>
       </div>
         <div class="col-4 text-right">
@@ -20,7 +20,7 @@
       </div>
       <div class="col-2 text-right">
         <b-button class="hover-button" v-if="isNavigationShown && !nextDisabled" variant="outline-info" v-on:click="$parent.$emit('button-clicked', 'NEXT', object)">
-          {{ $t('buttons.next') }} <font-awesome-icon icon="angle-double-right" :title="$t('buttons.next')"/>
+          <span class="d-none d-md-inline d-lg-inline pr-2">{{ $t('buttons.next') }}</span> <font-awesome-icon icon="angle-double-right" :title="$t('buttons.next')"/>
         </b-button>
       </div>
     </div>

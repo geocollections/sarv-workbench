@@ -314,11 +314,8 @@ const formManipulation = {
     getListRecords(object) {
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
 
-      if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object) {
-
-      }
-
       this.listSearch(searchHistory).then( results => {
+        console.log(results)
         if(results.length === 0) {
           this.$root.$emit('disable-previous',true);
           this.$root.$emit('disable-next',true);
@@ -326,6 +323,15 @@ const formManipulation = {
         }
 
         let currentRecordId = this.findCurrentRecord(cloneDeep(results),this[object].id)
+
+        if(currentRecordId === -1){
+          this.previousRecord = this[object].id - 1;
+          this.nextRecord = this[object].id + 1;
+          this.$root.$emit('disable-previous',false);
+          this.$root.$emit('disable-next',false);
+          return
+        }
+
         if(currentRecordId === 0) {
           this.$root.$emit('disable-previous',true)
         } else {

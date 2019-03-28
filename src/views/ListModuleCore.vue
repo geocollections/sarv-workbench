@@ -181,7 +181,8 @@
     created: function () {
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue')
       // console.log(searchHistory)
-      if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object) {
+      if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object
+      && searchHistory !== '[object Object]' ) {
         this.$emit('search-params-changed',searchHistory);
       } else {
         this.search(this.searchParameters)

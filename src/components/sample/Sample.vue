@@ -499,6 +499,7 @@
         Spinner,
       },
       mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
+      computed: { getParentId(){return this.sample.id} },
       data() { return this.setInitialData() },
 
       created() { this.loadFullInfo() },
@@ -509,6 +510,7 @@
         setInitialData() {
           return {
             tabs:['analysis','preparation','taxon_list','attachment_link','sample_reference'],
+            searchHistory:'sampleSearchHistory',
             activeTab: 'analysis',
             relatedData: this.setDefaultRalatedData(),
             copyFields : ['id','number','number_additional','number_field','series','sample_purpose','sample_type',
@@ -734,7 +736,7 @@
           }
         },
         fetchList(localStorageData) {
-          let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+          let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
           return new Promise((resolve) => {
             resolve(fetchSamples(params, this.$parent.agent))
           });
