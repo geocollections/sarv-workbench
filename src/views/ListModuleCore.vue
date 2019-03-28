@@ -180,9 +180,8 @@
 
     created: function () {
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue')
-      // console.log(searchHistory)
-      if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object
-      && searchHistory !== '[object Object]' ) {
+      console.log(searchHistory.constructor === Object)
+      if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object) {
         this.$emit('search-params-changed',searchHistory);
       } else {
         this.search(this.searchParameters)
@@ -198,8 +197,6 @@
         //I don't know how to check if an object is serializable... at least i haven't found the solution
         //sample search returns [object Object] but locality object {locality:null,...}
         // if(this.searchHistory === 'sampleSearchHistory') searchParameters = JSON.stringify(searchParameters);
-        console.log(this.searchHistory)
-        console.log(searchParameters)
         this.$localStorage.set(this.searchHistory,  searchParameters)
         this.$emit('search-params-changed',searchParameters);
         this.apiCall().then(response => {
