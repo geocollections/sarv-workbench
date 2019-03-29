@@ -27,6 +27,7 @@
     "files": "Failid",
     "references": "Kirjandus",
     "localities": "Lokaliteedid",
+    "libraries": "Kogumikud",
     "samples":"Proovid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
@@ -542,10 +543,14 @@
     "author_txt": "Autor",
     "year": "Aasta",
     "title": "Pealkiri",
+    "title_en": "Pealkiri (ENG)",
     "reference": "Viide",
     "isPrivate": "Avalik",
     "id": "ID",
-    "addNew": "Lisage uus Kogumik"
+    "addNew": "Lisage uus Kogumik",
+    "keywords": "Keywords",
+    "abstract": "Abstrakt",
+    "abstract_en": "Abstrakt (ENG)"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

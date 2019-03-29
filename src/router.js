@@ -292,7 +292,7 @@ const router = new Router({
                 table:'library',
                 title:'titles.editLibrary',
                 heading:'editLibrary.heading',
-                isNavigationShow:false,
+                isNavigationShow:true,
                 requiresAuth: true
               },
             }

@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="row mt-4 page-title">
-    <div class="col-sm-6">
-      <p class="h2">{{ $t('header.localities') }}</p>
+      <div class="col-sm-6">
+        <p class="h2">{{ $t('header.localities') }}</p>
+      </div>
+      <div class="col-sm-6 ralign">
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/locality/add' }">{{ $t('add.new') }}</router-link>
+      </div>
     </div>
-    <div class="col-sm-6 ralign">
-    	<router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/locality/add' }">{{ $t('add.new') }}</router-link>
-    </div>      
-  </div>
     <!-- SEARCH FIELDS START -->
     <div class="row mt-4">
       <div class="col">
