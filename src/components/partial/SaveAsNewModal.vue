@@ -1,6 +1,6 @@
 <template>
   <div class="save-as-new-modal">
-    <spinner v-show="modalSendingData" class="loading-overlay" size="massive" :message="$t('add.overlay')"></spinner>
+    <spinner v-if="modalSendingData" class="loading-overlay" size="massive" :message="$t('add.overlay')"></spinner>
 
     <b-modal id="saveAsNewForm"
              header-bg-variant="dark"
@@ -25,7 +25,7 @@
           <label :for="`rock_en`">{{ $t('saveAsNewModal.text2') }}:</label>
           <div class="col-md-4 pr-0 float-right">
             <span  v-for="data in relatedData">
-              <b-form-checkbox v-model="relatedDataChoice[data]" :value="true" :unchecked-value="false">{{$t('sample.relatedTables.'+data)}}</b-form-checkbox>
+              <b-form-checkbox v-model="relatedDataChoice[data]" :value="true" :unchecked-value="false">{{$t(object+'.relatedTables.'+data)}}</b-form-checkbox>
             </span>
           </div>
         </div>
@@ -68,7 +68,7 @@
       <template slot="modal-footer">
         <b-button variant="outline-danger" @click="hideModal">{{ this.$t('saveAsNewModal.cancel') }}</b-button>
         <b-button variant="outline-success"
-                  @click="$root.$emit('save-object-as-new', { 'numberOfCopies': numberOfCopies, 'relatedData':relatedDataChoice }); modalSendingData = true"
+                  @click="$root.$emit('save-object-as-new', { object: object, numberOfCopies: numberOfCopies, relatedData:relatedDataChoice, preparations:preparations })"
         >{{ $t('saveAsNewModal.save') }}</b-button>
       </template>
 
@@ -135,6 +135,7 @@
       },
       hideModalAfterSaving(status){
         this.modalSendingData = false;
+
         if(status === 'SAVED') {
           this.hideModal();
         } else if(status === 'PROBLEM') {

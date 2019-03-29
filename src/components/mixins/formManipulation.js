@@ -64,12 +64,8 @@ const formManipulation = {
       return isValid
     },
 
-    add(addAnother, object, isCopy = false, copyOfRelatedData = []) {
+    add(addAnother, object) {
       if (this.validate(object) && !this.sendingData) {
-
-        if(isCopy === true) {
-          delete this[object]['id']
-        }
 
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
 
@@ -82,11 +78,7 @@ const formManipulation = {
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
-        this.saveData(object,formData,url, isCopy).then(savedObjectId => {
-          if(isCopy === true) { // && savedObjectId
-            this.addCopyOfRelatedData(copyOfRelatedData,savedObjectId);
-            return true;
-          } else if (isCopy === true && savedObjectId === undefined) return false;
+        this.saveData(object,formData,url).then(savedObjectId => {
           //before save object ID was removed
           this[object] = editableObject;
           if (savedObjectId === undefined || savedObjectId === false) return;
@@ -115,7 +107,8 @@ const formManipulation = {
     },
 
     request(object,formData,url,resolve, isCopy) {
-      this.sendingData = isCopy ? false : true;
+      console.log(isCopy)
+      if(!isCopy) this.sendingData = true;
       this.loadingPercent = 0;
 
       this.$http.post(this.apiUrl + url, formData, {

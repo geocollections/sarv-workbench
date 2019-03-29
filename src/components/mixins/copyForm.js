@@ -2,6 +2,7 @@ import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
 
 import cloneDeep from 'lodash/cloneDeep'
 import Vue from 'vue'
+import findIndex from "lodash/findIndex";
 
 const copyForm = {
   mounted(){
@@ -10,30 +11,44 @@ const copyForm = {
 
   methods: {
 
-    saveAsNew(){},
+    // waitUntilAllCopiesSaved(){
+    //   this.$root.$emit('copied-data-saved','PROBLEM')
+    // },
 
-    addCopy(object, isCopy = false, data = {}, numberOfSave = 0) {
+    saveAsNew(data) {
+      let numberOfSaves = 0;
+
+      for (let i = 1; i < data.numberOfCopies+1; i++ ){
+        numberOfSaves += this.addCopy(data.object, data, i) === true ? 1 : 0;
+        //stop loading after last data saved
+        console.log('Number of saves ' + numberOfSaves)
+        this.$root.$emit('copied-data-saved','SAVED')
+        // if(i === data.numberOfCopies && numberOfSaves === data.numberOfCopies) {
+        //
+        // } else if(i === data.numberOfCopies && numberOfSaves !== data.numberOfCopies) {
+        //   setTimeout(this.waitUntilAllCopiesSaved, 500)
+        // }
+      }
+    },
+
+    addCopy(object, data = {}, numberOfSave = 0) {
       if (this.validate(object) && !this.sendingData) {
 
-        if(isCopy === true) {
-          delete this[object]['id']
-        }
+        delete this[object]['id'];
 
         const dataToUpload = this.formatDataForUpload(this[object]);
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
-        this.saveData(object,formData,'add/'+object+'/', isCopy).then(savedObjectId => {
-          if(isCopy === true && savedObjectId) { //
-            this.addCopyOfRelatedData(data,savedObjectId,object,numberOfSave);
-            return true;
-          } else if (isCopy === true && savedObjectId === undefined) {
+        this.saveData(object,formData,'add/'+object+'/', true).then(savedObjectId => {
+           if(savedObjectId) {
+             this.addCopyOfRelatedData(data,savedObjectId,object,numberOfSave);
+             return true;
+          } else {
             return false;
-          }
+           }
 
-        }, errResponse => {
-          return false;
-        });
+        }, errResponse => { return false; });
 
       } else if (this.sendingData) {
         // This shouldn't run unless user deletes html elements and tries to press 'add' button again
@@ -44,11 +59,9 @@ const copyForm = {
 
     },
     handlePreparationDataBeforeSave(relatedData,data,numberOfSave) {
-      relatedData.forEach(entity => {
-        data.preparations.forEach(p => {
-          entity.preparation_number = p.preparation_number+'_'+numberOfSave;
-        });
-      });
+      let changedRecordIdx = findIndex(data.preparations, function(item) { return item.id === relatedData.id });
+      relatedData.preparation_number = data.preparations[changedRecordIdx].preparation_number+'_'+numberOfSave;
+      return relatedData
     },
     addCopyOfRelatedData(data, idOfCopy, object,numberOfSave){
       let type;
@@ -64,7 +77,7 @@ const copyForm = {
 
             let savedRelatedData = cloneDeep(entry);
 
-            if(type === 'preparations') {
+            if(type === 'preparation') {
               savedRelatedData = this.handlePreparationDataBeforeSave(savedRelatedData,data, numberOfSave)
             }
 
@@ -74,7 +87,7 @@ const copyForm = {
             let formData = new FormData();
             formData.append('data', JSON.stringify(copy));
             try {
-              this.saveData(type,formData,'add/'+type+'/');
+              this.saveData(type,formData,'add/'+type+'/',true);
             } catch (e) {
               console.log('Related data type: ' + type +' cannot not be created')
               console.log(e)

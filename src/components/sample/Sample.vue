@@ -697,7 +697,7 @@
 
         formatRelatedData(objectToUpload)  {
           let uploadableObject = cloneDeep(objectToUpload);
-          console.log(JSON.stringify(uploadableObject));
+          uploadableObject.sample = this.sample.id;
 
           if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
           if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
@@ -715,46 +715,8 @@
           // console.log(JSON.stringify(uploadableObject));
           return JSON.stringify(uploadableObject)
         },
-        waitUntilAllCopiesSaved(){
-          this.$root.$emit('copied-data-saved','PROBLEM')
-        },
-        // handlePreparationDataBeforeSave(preparations,numberOfCopy) {
-        //   preparations.forEach(entity => {
-        //     entity.preparation_number = entity.preparation_number+'_'+numberOfCopy;
-        //   });
-        // },
-        // saveAsNew(data) {
-        //   let numberOfSaves = 0, preparations = [];
-        //
-        //   for (let i = 0; i < parseInt(data.numberOfCopies); i++ ){
-        //     console.log('saving copy #' +(i+1));
-        //     //SPECIAL CASE. Preparation_number is unique and cannot be saved
-        //     if(i > 0 && this.relatedData.indexOf('preparation') > -1) {
-        //       preparations = this.handlePreparationDataBeforeSave(data.preparations, i);
-        //     }
-        //
-        //     numberOfSaves += this.addCopy(true, 'sample', true, data.relatedData) === true ? 1 : 0;
-        //     //stop loading after last data saved
-        //     if(i === data.numberOfCopies-1 && numberOfSaves === data.numberOfCopies) {
-        //       this.$root.$emit('copied-data-saved','SAVED')
-        //     } else if(i === data.numberOfCopies-1 && numberOfSaves !== data.numberOfCopies) {
-        //       setTimeout(this.waitUntilAllCopiesSaved, 500)
-        //     }
-        //   }
-        // },
-        saveAsNew(data) {
-          let numberOfSaves = 0;
 
-          for (let i = 0; i < parseInt(data.numberOfCopies); i++ ){
-            numberOfSaves += this.addCopy('sample', true, data) === true ? 1 : 0;
-            //stop loading after last data saved
-            if(i === data.numberOfCopies-1 && numberOfSaves === data.numberOfCopies) {
-              this.$root.$emit('copied-data-saved','SAVED')
-            } else if(i === data.numberOfCopies-1 && numberOfSaves !== data.numberOfCopies) {
-              setTimeout(this.waitUntilAllCopiesSaved, 500)
-            }
-          }
-        },
+
         fetchList(localStorageData) {
           let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
           return new Promise((resolve) => {

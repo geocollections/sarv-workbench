@@ -374,16 +374,16 @@
       <div class="col mt-5 mb-5">
         <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"  :class="{ active: activeTab === 'locality_reference' }">{{ $t('locality.relatedTables.reference') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"  :class="{ active: activeTab === 'locality_reference' }">{{ $t('locality.relatedTables.locality_reference') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_synonym')" class="nav-link"  :class="{ active: activeTab === 'locality_synonym' }">{{ $t('locality.relatedTables.synonym') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('locality_synonym')" class="nav-link"  :class="{ active: activeTab === 'locality_synonym' }">{{ $t('locality.relatedTables.locality_synonym') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('locality.relatedTables.attachment') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('locality.relatedTables.attachment_link') }}</a>
           </li>
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_stratigraphy')" class="nav-link"  :class="{ active: activeTab === 'locality_stratigraphy' }">{{ $t('locality.relatedTables.stratigraphy') }}</a>
+            <a href="#" v-on:click.prevent="setActiveTab('locality_stratigraphy')" class="nav-link"  :class="{ active: activeTab === 'locality_stratigraphy' }">{{ $t('locality.relatedTables.locality_stratigraphy') }}</a>
           </li>
         </ul>
         <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
@@ -425,6 +425,7 @@
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faTimes, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons'
   import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
+  import copyForm  from './../mixins/copyForm'
   import {
     fetchListLocalityTypes,
     fetchListLocalityExtent,
@@ -461,7 +462,7 @@
       Spinner,
       MapComponent
     },
-    mixins: [formManipulation,autocompleteFieldManipulation],
+    mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
 
     data() { return this.setInitialData() },
 
@@ -543,7 +544,7 @@
           this.$on('edit-row',this.editRow);
           this.$on('allow-remove-row',this.allowRemove);
 
-          // this.$emit('related-data-info',this.tabs);
+          this.$emit('related-data-info',this.tabs);
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
             this.loadRelatedData(entity);

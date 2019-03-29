@@ -460,10 +460,10 @@
     "remarks": "Lisainfo",
     "private": "Privaatne",
     "relatedTables": {
-      "reference": "Kirjandusviited",
-      "synonym": "Nime sünonüümid",
-      "attachment": "Manused",
-      "stratigraphy": "Strat. piirid"
+      "locality_reference": "Kirjandusviited",
+      "locality_synonym": "Nime sünonüümid",
+      "attachment_link": "Manused",
+      "locality_stratigraphy": "Strat. piirid"
     },
     "addNew": "Lisage uus Lokaliteet"
   },
