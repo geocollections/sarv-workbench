@@ -595,7 +595,7 @@
               sample_reference:['reference','remarks'],
               attachment_link: ['attachment'],
               analysis: ['analysis_method','method_details','mass','date','date_end','date_free','agent','remarks','location','is_private'],
-              preparation:['taxon','storage','remarks','analysis','id_private'],
+              preparation:['preparation_number','taxon','storage','remarks','analysis','is_private'],
               taxon_list:['taxon','name','frequency','agent_identified','date_identified','extra','preparation','is_private','remarks']
             },
             insert: {sample_reference:{},attachment_link:{},analysis:{},preparation:{}, taxon_list:{}},
@@ -695,10 +695,9 @@
           // if(type === 'taxon_list') return this.relatedData.insert[type].reference === undefined;
         },
 
-        formatRelatedData(objectToUpload, idOfCopy = false)  {
+        formatRelatedData(objectToUpload)  {
           let uploadableObject = cloneDeep(objectToUpload);
-
-          if(idOfCopy === false) uploadableObject.sample = this.sample.id;
+          console.log(JSON.stringify(uploadableObject));
 
           if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
           if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
@@ -713,20 +712,41 @@
           if (this.isDefinedAndNotNull(uploadableObject.analysis)) uploadableObject.analysis = uploadableObject.analysis.id;
           if (this.isDefinedAndNotNull(uploadableObject.preparation)) uploadableObject.preparation = uploadableObject.preparation.id;
 
-
-
+          // console.log(JSON.stringify(uploadableObject));
           return JSON.stringify(uploadableObject)
         },
         waitUntilAllCopiesSaved(){
           this.$root.$emit('copied-data-saved','PROBLEM')
         },
-
+        // handlePreparationDataBeforeSave(preparations,numberOfCopy) {
+        //   preparations.forEach(entity => {
+        //     entity.preparation_number = entity.preparation_number+'_'+numberOfCopy;
+        //   });
+        // },
+        // saveAsNew(data) {
+        //   let numberOfSaves = 0, preparations = [];
+        //
+        //   for (let i = 0; i < parseInt(data.numberOfCopies); i++ ){
+        //     console.log('saving copy #' +(i+1));
+        //     //SPECIAL CASE. Preparation_number is unique and cannot be saved
+        //     if(i > 0 && this.relatedData.indexOf('preparation') > -1) {
+        //       preparations = this.handlePreparationDataBeforeSave(data.preparations, i);
+        //     }
+        //
+        //     numberOfSaves += this.addCopy(true, 'sample', true, data.relatedData) === true ? 1 : 0;
+        //     //stop loading after last data saved
+        //     if(i === data.numberOfCopies-1 && numberOfSaves === data.numberOfCopies) {
+        //       this.$root.$emit('copied-data-saved','SAVED')
+        //     } else if(i === data.numberOfCopies-1 && numberOfSaves !== data.numberOfCopies) {
+        //       setTimeout(this.waitUntilAllCopiesSaved, 500)
+        //     }
+        //   }
+        // },
         saveAsNew(data) {
           let numberOfSaves = 0;
 
           for (let i = 0; i < parseInt(data.numberOfCopies); i++ ){
-            console.log('saving copy #' +(i+1));
-            numberOfSaves += this.add(true, 'sample', true, data.relatedData) === true ? 1 : 0;
+            numberOfSaves += this.addCopy('sample', true, data) === true ? 1 : 0;
             //stop loading after last data saved
             if(i === data.numberOfCopies-1 && numberOfSaves === data.numberOfCopies) {
               this.$root.$emit('copied-data-saved','SAVED')

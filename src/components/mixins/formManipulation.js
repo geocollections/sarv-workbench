@@ -83,7 +83,7 @@ const formManipulation = {
         formData.append('data', dataToUpload);
 
         this.saveData(object,formData,url, isCopy).then(savedObjectId => {
-          if(isCopy === true && savedObjectId) {
+          if(isCopy === true) { // && savedObjectId
             this.addCopyOfRelatedData(copyOfRelatedData,savedObjectId);
             return true;
           } else if (isCopy === true && savedObjectId === undefined) return false;
@@ -248,6 +248,7 @@ const formManipulation = {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
+
       let editableObject = this.removeUnnecessaryFields(object.new,this.relatedData.copyFields[type]);
       formData.append('data', this.formatRelatedData(editableObject));
       this.loadRelatedData(type).then(response => {
@@ -315,7 +316,6 @@ const formManipulation = {
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
 
       this.listSearch(searchHistory).then( results => {
-        console.log(results)
         if(results.length === 0) {
           this.$root.$emit('disable-previous',true);
           this.$root.$emit('disable-next',true);

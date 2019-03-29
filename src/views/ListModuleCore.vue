@@ -168,7 +168,6 @@
     watch: {
       'searchParameters': {
         handler: function () {
-          console.log('WATHCing')
           this.search(this.searchParameters)
         },
         deep: true

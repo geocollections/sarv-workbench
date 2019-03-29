@@ -610,6 +610,7 @@
   "saveAsNewModal": {
     "text":"Some text for user",
     "text2":"Some text for user about related data",
+    "text3":"Set new preparation number otherwise it wouldn't be saved. Additional number would be added to copies $preparation_number+'_'+$number_of_copy",
     "fieldLabel":"Set the number of copies",
     "cancel":"Cancel",
     "save":"Save"

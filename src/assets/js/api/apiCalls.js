@@ -339,8 +339,12 @@ export function fetchSamples(data, agent) {
 export function fetchSampleAnalysis(id,page = 1) {
   return fetch(`analysis/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
 }
-export function fetchSamplePreparation(id,page = 1) {
-  return fetch(`preparation/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchSamplePreparation(id,page = 1,allData = false) {
+  let paging = ''
+  if(allData === false) {
+    paging = '&page=${page}&paginate_by=10'
+  }
+  return fetch(`preparation/?sample__id=${id}${paging}&format=json`)
 }
 export function fetchTaxonList(id,page = 1) {
   return fetch(`taxon_list/?sample=${id}&page=${page}&paginate_by=10&format=json`)

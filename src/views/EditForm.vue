@@ -13,7 +13,8 @@
                     :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
                     :object="object" :is-navigation-shown="$route.meta.isNavigationShow"/>
 
-    <save-as-new-modal :title-extra="'Some title'" :related-data="relatedData"/>
+    <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
+                       :related-data="relatedData" :object="object" :object-id="data.id"/>
     <confirmation-box :title-extra="'SOME TITLE'"
                       custom-question="confirmation.relatedDataQuestion"
                       :table="$route.meta.table"/>
@@ -70,8 +71,9 @@
 
     methods: {
       saveAsNew(){
-        this.$root.$emit('show-save-as-new-modal',true)
+        this.$emit('show-save-as-new-modal',true)
       },
+
       setData(data) {
         this.data = data
         if(this.data !== null) this.formattedData = data;
