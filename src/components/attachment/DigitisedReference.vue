@@ -334,9 +334,12 @@
                 }
 
                 //create relation with locality
-                if(this.$parent.createRelationWith !== null ){
-                  this.addRelationBetweenAnyObjectAndAttachment(response.body.attachment_id,'attachment_link');
-                }
+                try {
+                  if(this.$parent.createRelationWith !== null ){
+                    this.addRelationBetweenAnyObjectAndAttachment(response.body.attachment_id,'attachment_link');
+                  }
+                } catch (e) { console.log(e)}
+
 
                 if (!addAnother) {
                   this.$router.push({ path: '/attachment' })
