@@ -555,7 +555,8 @@
     "addNew": "Lisage uus Kogumik",
     "keywords": "Keywords",
     "abstract": "Abstrakt",
-    "abstract_en": "Abstrakt (ENG)"
+    "abstract_en": "Abstrakt (ENG)",
+    "private": "Privaatne"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

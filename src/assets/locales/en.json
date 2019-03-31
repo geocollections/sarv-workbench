@@ -553,7 +553,8 @@
     "addNew": "Add new Library",
     "keywords": "Keywords",
     "abstract": "Abstract",
-    "abstract_en": "Abstract (ENG)"
+    "abstract_en": "Abstract (ENG)",
+    "private": "Private"
   },
   "messages": {
     "langChange": "Changed language!",

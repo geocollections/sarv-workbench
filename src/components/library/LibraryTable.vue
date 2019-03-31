@@ -16,14 +16,14 @@
       <b-form-checkbox
         id="is_private"
         v-model="entity.is_private"
-        :value="1"
-        :unchecked-value="0"
+        :value="0"
+        :unchecked-value="1"
         :disabled="true">
       </b-form-checkbox>
     </td>
 
     <td>
-      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'library', id: entity.id})"
+      <a href="javascript:void(0)" v-if="!entity.is_private" @click="openGeoInNewWindow({object: 'library', id: entity.id})"
          :title="$t('editLibrary.viewMessage')">{{ $t('edit.view') }}</a>
     </td>
 

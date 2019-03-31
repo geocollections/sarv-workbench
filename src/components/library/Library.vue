@@ -9,11 +9,18 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="library.agent" deselect-label="Can't remove this value"
-                         label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+        <vue-multiselect id="author" class="align-middle"
+                         v-model="library.agent"
+                         deselect-label="Can't remove this value"
+                         label="agent"
+                         track-by="id"
+                         :placeholder="$t('add.inputs.autocomplete')"
                          :loading="autocomplete.loaders.agent"
-                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
+                         :options="autocomplete.agent"
+                         @search-change="autcompleteAgentSearch"
+                         :internal-search="false"
+                         :preserve-search="true"
+                         :allow-empty="false"
                          :open-direction="'bottom'">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
@@ -84,6 +91,15 @@
       </div>
     </div>
 
+    <!-- CHECKBOXES -->
+    <div class="row">
+      <div class="col">
+        <b-form-checkbox id="is_private" v-model="library.is_private" :value="1" :unchecked-value="0">
+          {{ $t('library.private') }}
+        </b-form-checkbox>
+      </div>
+    </div>
+
     <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library')">
@@ -141,7 +157,7 @@
       setInitialData() {
         return {
           searchHistory: 'librarySearchHistory',
-          copyFields: ['id', 'agent', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en'],
+          copyFields: ['id', 'agent', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en', 'is_private'],
           autocomplete: {
             loaders: { agent: false },
             agent: [],
@@ -183,13 +199,14 @@
         let uploadableObject = cloneDeep(objectToUpload)
         if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
 
-        // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
+        console.log('This object is sent in string format:')
+        console.log(uploadableObject)
         return JSON.stringify(uploadableObject)
       },
 
       fillAutocompleteFields(obj){
-        this.library.agent = {agent:obj.agent,id:obj.id}
-        },
+        this.library.agent = { agent: obj.author__agent, id: obj.author }
+      },
 
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
