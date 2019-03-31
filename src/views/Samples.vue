@@ -4,7 +4,7 @@
       <div class="col-sm-6">
         <p class="h2">{{ $t('header.samples') }}</p>
       </div>
-      <div class="col-sm-6 ralign">
+      <div class="col-sm-6 text-right">
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/sample/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
@@ -126,7 +126,5 @@
 </script>
 
 <style scoped>
-.ralign {
-	text-align: right !important;
-  }
+
 </style>

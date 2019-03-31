@@ -193,6 +193,7 @@ const router = new Router({
               meta: {
                 isEdit:false,
                 title:'titles.addLocality',
+                addNew:'add.newLocality',
                 subForms:[
                   {path:'/locality/add',name:'add.locality'}
                 ],
@@ -252,6 +253,7 @@ const router = new Router({
               meta: {
                 isEdit:false,
                 title:'titles.addSample',
+                addNew:'add.newSample',
                 subForms:[
                   {path:'/sample/add',name:'add.sample'}
                 ],
@@ -311,6 +313,7 @@ const router = new Router({
               meta: {
                 isEdit:false,
                 title:'titles.addLibrary',
+                addNew:'add.newLibrary',
                 subForms:[
                   {path:'/library/add',name:'add.library'}
                 ],

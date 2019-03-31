@@ -15,7 +15,7 @@
      <div class="col-sm-6">
        <p class="h2">{{ $t('header.files') }}</p>
      </div>
-     <div class="col-sm-6 ralign">
+     <div class="col-sm-6 text-right">
      	<router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('add.new') }}</router-link>
      </div>
    </div>

@@ -7,12 +7,12 @@
       <div class="col-6">
         <p class="h2">{{ $t('editReference.heading') }}: <b>{{id}}</b></p>
       </div>
-      <div class="col-6 ralign">
+      <div class="col-6 text-right">
         <geocollection-link :attachment="attachment" :reference="reference" :formatted-data="formattedData"></geocollection-link>
       </div>
     </div>
 
-    
+
 
     <div v-if="reference !== null">
       <div v-if="isReference && isAttachment && isLocalityReference && isReferenceKeyword && isAttachmentLink">

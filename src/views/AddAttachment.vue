@@ -6,7 +6,7 @@
         <p class="h2">{{ $t('add.newAttachment') }}</p>
       </div>
 
-      <div class="col-sm-6 ralign">
+      <div class="col-sm-6 text-right">
         <ul class="nav nav-pills">
           <li class="nav-item">
             <router-link class="nav-link" :to="{ path: '/attachment/add/photo_archive' }">{{ $t('add.photoArchive') }}</router-link>

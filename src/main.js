@@ -45,7 +45,7 @@ Vue.use(VueI18n)
 Vue.use(VueMoment)
 Vue.use(VueCookie)
 
-// Vue.config.productionTip = false
+Vue.config.productionTip = false
 
 
 

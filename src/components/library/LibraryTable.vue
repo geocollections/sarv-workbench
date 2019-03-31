@@ -12,7 +12,15 @@
 
     <td v-translate="{ et: entity.title, en: entity.title_en }"></td>
 
-    <td>{{ entity.is_private }}</td>
+    <td>
+      <b-form-checkbox
+        id="is_private"
+        v-model="entity.is_private"
+        :value="1"
+        :unchecked-value="0"
+        :disabled="true">
+      </b-form-checkbox>
+    </td>
 
     <td>
       <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'library', id: entity.id})"
