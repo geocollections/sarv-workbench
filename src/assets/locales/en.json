@@ -555,7 +555,8 @@
     "abstract": "Abstract",
     "abstract_en": "Abstract (ENG)",
     "private": "Private",
-    "libraryReference": "References"
+    "libraryReference": "References",
+    "remove": "Remove"
   },
   "messages": {
     "langChange": "Changed language!",

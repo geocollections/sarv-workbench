@@ -557,7 +557,8 @@
     "abstract": "Abstrakt",
     "abstract_en": "Abstrakt (ENG)",
     "private": "Privaatne",
-    "libraryReference": "Kogumiku kirjandus"
+    "libraryReference": "Kogumiku kirjandus",
+    "remove": "Eemalda"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

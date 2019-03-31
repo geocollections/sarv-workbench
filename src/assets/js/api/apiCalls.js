@@ -398,6 +398,10 @@ export function fetchLibraries(data) {
   }
 }
 
+export function fetchLibraryReference(id) {
+  return fetch(`library_reference/?library=${id}&order_by=-sort&format=json`)
+}
+
 
 /***********************
  ***  LIBRARIES END  ***

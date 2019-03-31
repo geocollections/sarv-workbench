@@ -129,6 +129,8 @@
           <b-form-input id="add_reference" type="text"></b-form-input>
         </div>
       </div>
+
+      <library-reference :data="libraryReference" v-on:remove-reference-from-library="removeReference"></library-reference>
     </div>
 
   </div>
@@ -140,17 +142,19 @@
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
-  import { fetchLibrary, fetchLibraries } from "../../assets/js/api/apiCalls";
+  import { fetchLibrary, fetchLibraries, fetchLibraryReference } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
+  import LibraryReference from "./relatedTables/LibraryReference";
 
   library.add(faTimes)
 
   export default {
     name: "Library",
     components: {
+      LibraryReference,
       FontAwesomeIcon,
       VueMultiselect,
       Spinner,
@@ -184,6 +188,7 @@
           },
           requiredFields: [],
           library: {},
+          libraryReference: {},
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters()
@@ -210,6 +215,13 @@
               this.getListRecords('library')
             } else {
               this.sendingData = false;
+            }
+          });
+
+          fetchLibraryReference(this.$route.params.id).then(response => {
+            let handleResponse = this.handleResponse(response);
+            if (handleResponse.length > 0) {
+              this.libraryReference = this.handleResponse(response);
             }
           });
         }
@@ -248,6 +260,10 @@
           orderBy: '-id',
         }
       },
+
+      removeReference(reference) {
+        console.log('REMOVE: ' + reference)
+      }
     }
   }
 </script>
