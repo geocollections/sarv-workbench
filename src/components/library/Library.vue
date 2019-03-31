@@ -90,7 +90,7 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'library')">
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('library')">
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('library') : reset('library')">
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
