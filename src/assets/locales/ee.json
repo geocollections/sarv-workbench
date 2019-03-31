@@ -29,6 +29,7 @@
     "localities": "Lokaliteedid",
     "libraries": "Kogumikud",
     "samples":"Proovid",
+    "projects":"Projektid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -174,6 +175,10 @@
     "title": "Pealkiri",
     "bookJournal": "Raamat või ajakiri",
     "abstractKeywordsRemarks": "Abstrakt, märksõnad või lisainfo"
+  },
+  "editProject": {
+    "heading": "Projekt",
+    "editMessage": "Muuda projekti"
   },
   "editLocality": {
     "heading": "Lokaliteet",
@@ -394,6 +399,22 @@
       "taxon_list": "Taksonid"
     }
   },
+  "project":{
+    "header": "Minu projektid",
+    "id":"ID",
+    "name":"Nimetus (EST)",
+    "name_en":"Name",
+    "parent_project":"Parent",
+    "project_type":"Type",
+    "date":"Kuupäev",
+    "date_start":"Algus",
+    "date_end":"Lõpp",
+    "date_free":"Vaba tekst",
+    "description":"Kirjeldus",
+    "remarks":"Lisainfo",
+    "owner":"Owner",
+    "is_private":"Privaatne?"
+  },
   "taxon": {
     "taxon": "Takson",
     "taxon_free": "Takson, txt",
@@ -580,7 +601,9 @@
     "addLocality": "Geokogude andmehaldus: Lisa lokaliteet",
     "editLocality": "Geokogude andmehaldus: Muuda lokaliteet",
     "addSample": "Geokogude andmehaldus: Lisa proov",
+    "addProject": "Geokogude andmehaldus: Lisa projekt",
     "editSample": "Geokogude andmehaldus: Muuda proov",
+    "editProject": "Geokogude andmehaldus: Muuda projekt",
     "editLibrary": "Geokogude andmehaldus: Muuda kogumikke",
     "addLibrary": "Geokogude andmehaldus: Lisa kogumik",
     "settings": "Geokogude andmehaldus: Seaded"

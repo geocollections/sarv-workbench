@@ -260,7 +260,7 @@
 
         <vue-multiselect class="align-middle" v-model="sample.classification_rock" deselect-label="Can't remove this value"
                          :loading="autocomplete.loaders.rock"
-                         :label="rockLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                         :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                          :options="autocomplete.rock" :searchable="true" @search-change="autcompleteRockSearch"
                          :allow-empty="true"  :show-no-results="false" :max-height="600"
                          :open-direction="'bottom'">

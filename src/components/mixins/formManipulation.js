@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {faProjectDiagram,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
+library.add(faProjectDiagram,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
@@ -24,7 +24,20 @@ const formManipulation = {
     VueMultiselect,
     FontAwesomeIcon
   },
-
+  created: function () {
+    // Gets user data from session storage
+    if (this.$session.exists() && this.$session.get('authUser') !== null) {
+      const user = this.$session.get('authUser')
+      this.currentUser = {
+        id: user.agent_id,
+        agent: null,
+        forename: user.user,
+        surename: null,
+        user: user.user,
+      }
+      //console.log(this.agent);
+    }
+  },
   mounted(){
     this.$root.$on('user-choice', this.handleUserChoice);
     this.$parent.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);

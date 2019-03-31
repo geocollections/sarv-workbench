@@ -98,7 +98,6 @@
         });
       },
       searchParametersChanged(newParams) {
-        console.log(newParams)
         this.searchParameters = newParams
       },
       setDefaultSearchParameters() {

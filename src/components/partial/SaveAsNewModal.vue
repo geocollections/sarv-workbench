@@ -144,7 +144,7 @@
           console.log("SOMETHING ELSE")
         }
       },
-
+      //BETTER to USER $store... but here I need full list of preparations not ex. page 1
       handleSpecialCase(){
         if(this.relatedData.indexOf('preparation') > -1){
           //WHAT IF there is more than one page of

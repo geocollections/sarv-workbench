@@ -261,6 +261,65 @@ const router = new Router({
           ]
         },
         {
+          path: '/project',
+          component: () => import('./views/Projects.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/project/ProjectTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/project/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/project/Project.vue'),
+              meta: {
+                isEdit:true,
+                table:'project',
+                title:'titles.editProject',
+                heading:'editProject.heading',
+                isNavigationShow: true,
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/project/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/project/Project.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addProject',
+                subForms:[
+                  {path:'/project/add',name:'editProject.heading'}
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
           path: '/library',
           component: () => import('./views/Libraries.vue'),
           meta: {

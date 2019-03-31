@@ -30,6 +30,7 @@
     "localities": "Localities",
     "libraries": "Libraries",
     "samples":"Samples",
+    "projects":"Projects",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -391,6 +392,22 @@
       "preparation": "Preparations",
       "taxon_list": "Identified taxa"
     }
+  },
+  "project":{
+    "header": "My projects",
+    "id":"ID",
+    "name":"Name (EST)",
+    "name_en":"Name",
+    "parent_project":"Parent",
+    "project_type":"Type",
+    "date":"Date",
+    "date_start":"Start",
+    "date_end":"End",
+    "date_free":"Txt",
+    "description":"Description",
+    "remarks":"Remarks",
+    "owner":"Owner",
+    "is_private":"Is private?"
   },
   "sample_series": {
     "name": "Name"

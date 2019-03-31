@@ -62,7 +62,7 @@
                             v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
                             :icon="sort"/>
                           <font-awesome-icon v-else :icon="sortingDirection"/>
-                          {{ $t(item.title)}}
+                          {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
                       </span>
                 </th>
               </tr>
@@ -97,12 +97,10 @@
   import Spinner from 'vue-simple-spinner'
   import {library} from '@fortawesome/fontawesome-svg-core'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faSort} from '@fortawesome/free-solid-svg-icons'
-  import {faSortUp} from '@fortawesome/free-solid-svg-icons'
-  import {faSortDown} from '@fortawesome/free-solid-svg-icons'
+  import {faSortDown,faSortUp, faSort,faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
 
 
-  library.add(faSort, faSortUp, faSortDown)
+  library.add(faSort, faSortUp, faSortDown, faCalendarAlt)
 
   export default {
     components: {

@@ -10,7 +10,7 @@ const autocompleteFieldManipulation = {
     stratigraphyLabel() {
       return this.$i18n.locale === 'ee' ? 'stratigraphy' : 'stratigraphy_en'
     },
-    rockLabel() {
+    nameLabel() {
       return this.$i18n.locale === 'ee' ? 'name' : 'name_en'
     },
     analysisMethodLabel() {
@@ -72,6 +72,9 @@ const autocompleteFieldManipulation = {
         case 'taxon':
           query = `taxon/?multi_search=value:${val};fields:taxon;lookuptype:icontains&fields=id,taxon`;
           break;
+        case 'project':
+          query = `project/?multi_search=value:${val};fields:name;name_en;lookuptype:icontains&fields=id,name,name_en`;
+          break;
         default:
           break;
       }
@@ -82,6 +85,9 @@ const autocompleteFieldManipulation = {
     },
     autcompletePreparationSearch(value) {
       this.autocompliteSearch(value, 'preparation', 'preparation')
+    },
+    autcompleteProjectSearch(value) {
+      this.autocompliteSearch(value, 'parent_project', 'parent_project')
     },
     autcompleteLocalitySearch(value) {
       this.autocompliteSearch(value, 'locality', 'locality')

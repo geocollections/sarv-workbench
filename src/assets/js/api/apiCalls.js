@@ -402,3 +402,35 @@ export function fetchLibraries(data) {
 /***********************
  ***  LIBRARIES END  ***
  ***********************/
+
+/***********************
+ *** PROJECTS START ***
+ ***********************/
+export function fetchProject(id) {
+  return fetch(`project/?id=${id}&format=json`)
+}
+export function fetchProjectType() {
+  return fetch(`project_type/?order_by=name&format=json`)
+}
+export function fetchProjects(data) {
+  const fields = 'id,name, name_en,number,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end,' +
+    'date_free,description,remarks,owner,owner__agent,is_private';
+  let searchFields = ''
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`
+  }
+
+  if (data.owner !== null && data.owner.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.owner};fields:owner__agent;lookuptype:icontains`
+  }
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+  if (searchFields.length > 0) {
+    return fetch(`project/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`project/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
+/***********************
+ *** PROJECTS END ***
+ ***********************/
