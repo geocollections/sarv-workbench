@@ -33,7 +33,7 @@
       search-history="localitySearchHistory"
       view-type="localityViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="setDefaultSearchParameters"
+      v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
 
   </div>
@@ -89,6 +89,9 @@
           paginateBy: 50,
           orderBy: '-id',
         }
+      },
+      setDefaultSearchParametersFromDeleteButton() {
+        this.searchParameters = this.setDefaultSearchParameters()
       }
     }
   }

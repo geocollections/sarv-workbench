@@ -10,6 +10,13 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
+    <!-- Deletes search preferences -->
+    <div class="row mt-3">
+      <div class="col">
+        <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+      </div>
+    </div>
+
     <div class="row mt-4">
       <div class="col">
           <span>
