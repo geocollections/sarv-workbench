@@ -4,7 +4,7 @@
       <div class="col-sm-6">
         <p class="h2">{{ $t('header.libraries') }}</p>
       </div>
-      <div class="col-sm-6 ralign">
+      <div class="col-sm-6 text-right">
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/library/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
@@ -33,7 +33,7 @@
       search-history="librarySearchHistory"
       view-type="libraryViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="setDefaultSearchParameters"
+      v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
 
   </div>
@@ -87,6 +87,9 @@
           paginateBy: 50,
           orderBy: '-id',
         }
+      },
+      setDefaultSearchParametersFromDeleteButton() {
+        this.searchParameters = this.setDefaultSearchParameters()
       }
     }
   }

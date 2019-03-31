@@ -4,7 +4,7 @@
       <div class="col-sm-6">
         <p class="h2">{{ $t('header.samples') }}</p>
       </div>
-      <div class="col-sm-6 ralign">
+      <div class="col-sm-6 text-right">
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/sample/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
@@ -33,7 +33,7 @@
       search-history="sampleSearchHistory"
       view-type="sampleViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="setDefaultSearchParameters"
+      v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
   </div>
 
@@ -116,13 +116,14 @@
           paginateBy: 50,
           orderBy: '-id',
         }
+      },
+      setDefaultSearchParametersFromDeleteButton() {
+        this.searchParameters = this.setDefaultSearchParameters()
       }
     }
   }
 </script>
 
 <style scoped>
-.ralign {
-	text-align: right !important;  
-  }
+
 </style>

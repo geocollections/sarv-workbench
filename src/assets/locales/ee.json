@@ -91,9 +91,14 @@
     "reference": "Kirjandus",
     "newReference": "Lisa uus kirjandusallikas",
     "locality": "Lokaliteet",
+    "newLocality": "Lisa uus lokaliteet",
     "referenceCollection": "Kirjanduse kogumikud",
     "journal": "Ajakirjad",
+    "newJournal": "Lisa uus ajakiri",
     "library": "Kogumik",
+    "newLibrary": "Lisa uus kogumik",
+    "sample": "Proov",
+    "newSample": "Lisa uus proov",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -571,7 +576,10 @@
     "addNew": "Lisage uus Kogumik",
     "keywords": "Keywords",
     "abstract": "Abstrakt",
-    "abstract_en": "Abstrakt (ENG)"
+    "abstract_en": "Abstrakt (ENG)",
+    "private": "Privaatne",
+    "libraryReference": "Kogumiku kirjandus",
+    "remove": "Eemalda"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

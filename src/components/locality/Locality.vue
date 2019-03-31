@@ -409,7 +409,7 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'locality')">
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality')">
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('locality') : reset('locality')">
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>

@@ -185,6 +185,11 @@ const formManipulation = {
     reset(object) {
       this[object] = {}
     },
+
+    leaveFromEditView(object) {
+      this.$router.push({ path: '/' + object })
+    },
+
     windowOpenNewTab(name, path,query = {}, meta) {
       let routeData = this.$router.resolve({path: path, query: query, meta: meta});
       window.open(routeData.href, '_blank');

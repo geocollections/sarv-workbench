@@ -10,7 +10,7 @@ const api = {
 function fetch (child) {
   return new Promise((resolve, reject) => {
     Vue.http.get(api.url + child, {}).then(response => {
-      // console.log(response)
+      console.log(response)
       resolve(response);
     }, errResponse => {
       console.log('ERROR: ' + JSON.stringify(errResponse));
@@ -327,7 +327,7 @@ export function fetchSamples(data, agent) {
     searchFields += '&agent_collected__agent__icontains='+data.agent
   }
 
-  
+
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
   if (searchFields.length > 0) {
     return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
@@ -396,6 +396,10 @@ export function fetchLibraries(data) {
   } else {
     return fetch(`library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
+}
+
+export function fetchLibraryReference(id) {
+  return fetch(`library_reference/?library=${id}&order_by=-sort&format=json`)
 }
 
 

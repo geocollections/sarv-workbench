@@ -1,16 +1,19 @@
 <template>
   <div class="add-form">
 
-    <div class="row mt-3 mb-4">
-      <div class="col">
-
-        <ul class="nav nav-pills">
-          <li class="nav-item" v-for="item in $route.meta.subForms">
-            <router-link class="nav-link" :to="{ path: item.path }">{{ $t(item.name) }}</router-link>
-          </li>
-        </ul>
-
+    <div class="row mt-4 page-title">
+      <div class="col-sm-6">
+        <p class="h2">{{ $t($route.meta.addNew) }}</p>
       </div>
+
+      <!-- TODO: Enable if more than one subform -->
+      <!--<div class="col-sm-6 text-right">-->
+        <!--<ul class="nav nav-pills">-->
+          <!--<li class="nav-item" v-for="item in $route.meta.subForms">-->
+            <!--<router-link class="nav-link" :to="{ path: item.path }">{{ $t(item.name) }}</router-link>-->
+          <!--</li>-->
+        <!--</ul>-->
+      <!--</div>-->
     </div>
 
     <router-view/>

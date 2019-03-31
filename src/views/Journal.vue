@@ -4,6 +4,12 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
     <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 
+    <div class="row mt-4 page-title">
+      <div class="col-sm-6">
+        <p class="h2">{{ $t('add.newJournal') }}</p>
+      </div>
+    </div>
+
     <!-- JOURNAL NAME and JOURNAL SHORT -->
     <div class="row mt-4">
       <div class="col-sm-2">

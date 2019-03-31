@@ -15,11 +15,11 @@
       <div class="col-sm-6">
         <p class="h2">{{ $t('references.header') }}</p>
       </div>
-      <div class="col-sm-6 ralign">
+      <div class="col-sm-6 text-right">
       	<router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('add.new') }}</router-link>
-      </div>      
+      </div>
     </div>
-             
+
     <!-- SEARCH FIELDS START -->
     <div class="row mt-4">
       <div class="col">
@@ -91,12 +91,12 @@
             </div>
           </div>
 
-          
+
           <div class="row">
           <!-- Removes search preferences like local storage and search parameters-->
             <div class="col-sm-6 mt-3">
               <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
-            </div>          	
+            </div>
             <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
             <div class="col-sm-6 mt-3">
               <b-form-group>
