@@ -111,6 +111,26 @@
       </div>
     </div>
 
+    <div v-if="$route.meta.isEdit">
+      <hr>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <p class="h2">{{ $t('library.libraryReference') }}</p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`add_reference`">{{ $t('header.addReference') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="add_reference" type="text"></b-form-input>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 

@@ -556,7 +556,8 @@
     "keywords": "Keywords",
     "abstract": "Abstrakt",
     "abstract_en": "Abstrakt (ENG)",
-    "private": "Privaatne"
+    "private": "Privaatne",
+    "libraryReference": "Kogumiku kirjandus"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

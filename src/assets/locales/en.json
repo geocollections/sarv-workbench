@@ -554,7 +554,8 @@
     "keywords": "Keywords",
     "abstract": "Abstract",
     "abstract_en": "Abstract (ENG)",
-    "private": "Private"
+    "private": "Private",
+    "libraryReference": "References"
   },
   "messages": {
     "langChange": "Changed language!",
