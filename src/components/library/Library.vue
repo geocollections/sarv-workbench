@@ -10,7 +10,7 @@
 
       <div class="col-sm-4 mb-2">
         <vue-multiselect id="author" class="align-middle"
-                         v-model="library.agent"
+                         v-model="library.author"
                          deselect-label="Can't remove this value"
                          label="agent"
                          track-by="id"
@@ -210,7 +210,7 @@
           searchHistory: 'librarySearchHistory',
           activeTab: 'library_reference',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'agent', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en', 'is_private'],
+          copyFields: ['id', 'author', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en', 'is_private'],
           autocomplete: {
             loaders: {
               agent: false,
@@ -287,7 +287,7 @@
 
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
+        if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -295,7 +295,7 @@
       },
 
       fillAutocompleteFields(obj){
-        this.library.agent = { agent: obj.author__agent, id: obj.author }
+        this.library.author = { agent: obj.author__agent, id: obj.author }
       },
 
       fillRelatedDataAutocompleteFields(obj){
