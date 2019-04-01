@@ -572,8 +572,10 @@
     "abstract": "Abstract",
     "abstract_en": "Abstract (ENG)",
     "private": "Private",
-    "libraryReference": "References",
-    "remove": "Remove"
+    "remove": "Remove",
+    "relatedTables": {
+      "libraryReference": "References"
+    }
   },
   "messages": {
     "langChange": "Changed language!",

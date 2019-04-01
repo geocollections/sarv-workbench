@@ -398,8 +398,8 @@ export function fetchLibraries(data) {
   }
 }
 
-export function fetchLibraryReference(id) {
-  return fetch(`library_reference/?library=${id}&order_by=-sort&format=json`)
+export function fetchLibraryReference(id, page) {
+  return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=10&order_by=-sort&format=json`)
 }
 
 

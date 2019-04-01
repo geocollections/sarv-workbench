@@ -1,75 +1,106 @@
 <template>
-  <div class="library-reference">
+  <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'library_reference'}" role="tabpanel">
+    <div class="col-sm-12" v-if="activeTab === 'library_reference'">
+      <div class="table-responsive-sm">
 
-    <div class="row p-1" v-for="(entity, index) in data">
+        <table class="table table-hover table-bordered  related-table">
+          <thead class="thead-light">
+          <tr>
+            <th>{{ $t('reference.reference') }}<font-awesome-icon class="ml-2" icon="link"/></th>
+            <th>{{ $t('reference.keywords') }}</th>
+            <th>{{ $t('reference.remarks') }}</th>
+            <th  class="btn-th"></th>
+          </tr>
+          </thead>
 
-      <div class="col-sm-10 list-row">
-        <span>
-          <router-link :to="{ path: '/reference/' + entity.reference }">
-            <b>{{ index + 1 }}.</b>
-          </router-link>
-        </span>
+          <tbody>
+          <tr v-for="entity in relatedData.library_reference" :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+            <!-- VIEW MODE -->
+            <td v-if="!entity.editMode">
+              <router-link :to="{ path: '/reference/' + entity.reference }" target="_blank">
+                {{ entity.reference__reference }}
+              </router-link>
+            </td>
 
-        <span v-if="entity.reference__author">
-          {{ entity.reference__author }},
-        </span>
+            <td v-if="!entity.editMode">{{ entity.keywords }}</td>
 
-        <span v-if="entity.reference__year">
-          {{ entity.reference__year }}.
-        </span>
+            <td v-if="!entity.editMode">{{ entity.remarks }}</td>
 
-        <span v-if="entity.reference__title">
-          {{ entity.reference__title }}.
-        </span>
+            <!-- EDIT MODE -->
+            <td v-if="entity.editMode">
+              <vue-multiselect class="align-middle" v-model="entity.new.reference" deselect-label="Can't remove this value"
+                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.reference"  select-label=""
+                               :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
+                               :allow-empty="true"  :show-no-results="false"
+                               :open-direction="'top'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
 
-        <span v-if="entity.reference__book">
-          {{ entity.reference__book }},
-        </span>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.keywords" type="text"/>
+            </td>
 
-        <span v-if="entity.reference__publisher">
-         {{ entity.reference__publisher }}.
-        </span>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.remarks" type="text"/>
+            </td>
+            <td style="padding: 0.6em!important;">
+              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$parent.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
 
-        <span v-if="entity.reference__publisher_place">
-          {{ entity.reference__publisher_place }}.
-        </span>
-
-        <span v-if="entity.reference__journal__journal_name">
-          <i>{{ entity.reference__journal__journal_name }}</i>,
-        </span>
-
-        <span v-if="entity.reference__volume">
-          <b>{{ entity.reference__volume }}</b>,
-        </span>
-
-        <span v-if="entity.reference__number">
-          {{ entity.reference__number }},
-        </span>
-
-        <span v-if="entity.reference__pages">
-          {{ entity.reference__pages }}.
-        </span>
+              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$parent.$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$parent.$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+            </td>
+          </tr>
+          <tr class="related-input-data">
+            <td>
+              <vue-multiselect class="align-middle" v-model="relatedData.insert.library_reference.reference" deselect-label="Can't remove this value"
+                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.reference"  select-label=""
+                               :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
+                               :allow-empty="true"  :show-no-results="false"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </td>
+            <td>
+              <b-form-input v-model="relatedData.insert.library_reference.keywords" type="text"/>
+            </td>
+            <td>
+              <b-form-input v-model="relatedData.insert.library_reference.remarks" type="text"/>
+            </td>
+            <td style="padding: 0.6em!important;">
+              <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
+              <button class="float-left btn btn-sm btn-success" @click="$parent.$emit('related-data-added', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.library_reference = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
-
-      <div class="col-sm-2">
-        <b-button class="float-right" variant="danger" @click="$emit('remove-reference-from-library', entity.reference)">{{ $t('library.remove') }}</b-button>
-      </div>
-
     </div>
-
   </div>
 </template>
 
 <script>
+  import formManipulation  from './../../mixins/formManipulation';
+  import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
+
   export default {
-    props: ['data'],
     name: "LibraryReference",
+    props: {
+      relatedData: Object,
+      autocomplete: Object,
+      activeTab: String
+    },
+    mixins: [formManipulation,autocompleteFieldManipulation],
   }
 </script>
 
+<style src="../../../assets/css/relatedDataStyle.css"></style>
 <style scoped>
-  .list-row {
-    padding-left: 2rem;
-    text-indent: -2rem;
-  }
+
 </style>

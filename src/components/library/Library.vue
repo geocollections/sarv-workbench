@@ -100,6 +100,31 @@
       </div>
     </div>
 
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row" v-if="$route.meta.isEdit">
+      <div class="col mt-4">
+        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('library_reference')" class="nav-link" :class="{ active: activeTab === 'library_reference' }">
+              {{ $t('library.relatedTables.libraryReference') }}
+            </a>
+          </li>
+        </ul>
+        <library-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <div class="row mb-4 pt-1">
+          <!--<div class="col">-->
+          <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
+          <!--:disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>-->
+          <!--</div>-->
+          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+            </b-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library')">
@@ -111,27 +136,27 @@
       </div>
     </div>
 
-    <div v-if="$route.meta.isEdit">
-      <hr>
+    <!--<div v-if="$route.meta.isEdit">-->
+      <!--<hr>-->
 
-      <div class="row">
-        <div class="col-sm-6">
-          <p class="h2">{{ $t('library.libraryReference') }}</p>
-        </div>
-      </div>
+      <!--<div class="row">-->
+        <!--<div class="col-sm-6">-->
+          <!--<p class="h2">{{ $t('library.libraryReference') }}</p>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`add_reference`">{{ $t('header.addReference') }}:</label>
-        </div>
+      <!--<div class="row">-->
+        <!--<div class="col-sm-2">-->
+          <!--<label :for="`add_reference`">{{ $t('header.addReference') }}:</label>-->
+        <!--</div>-->
 
-        <div class="col-sm-4 mb-2">
-          <b-form-input id="add_reference" type="text"></b-form-input>
-        </div>
-      </div>
+        <!--<div class="col-sm-4 mb-2">-->
+          <!--<b-form-input id="add_reference" type="text"></b-form-input>-->
+        <!--</div>-->
+      <!--</div>-->
 
-      <library-reference :data="libraryReference" v-on:remove-reference-from-library="removeReference"></library-reference>
-    </div>
+      <!--<library-reference :data="libraryReference" v-on:remove-reference-from-library="removeReference"></library-reference>-->
+    <!--</div>-->
 
   </div>
 </template>
@@ -147,6 +172,7 @@
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
+  import copyForm  from './../mixins/copyForm'
   import LibraryReference from "./relatedTables/LibraryReference";
 
   library.add(faTimes)
@@ -159,7 +185,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation,autocompleteFieldManipulation],
+    mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
 
     data() { return this.setInitialData() },
 
@@ -171,24 +197,30 @@
           this.reloadData()
         },
         deep: true
-      }
+      },
     },
 
     methods: {
 
-      // setTab(type) { this.activeTab = type },
+      setTab(type) { this.activeTab = type },
 
       setInitialData() {
         return {
+          tabs: ['library_reference'],
           searchHistory: 'librarySearchHistory',
+          activeTab: 'library_reference',
+          relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'agent', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en', 'is_private'],
           autocomplete: {
-            loaders: { agent: false },
+            loaders: {
+              agent: false,
+              reference: false
+            },
             agent: [],
+            reference: [],
           },
           requiredFields: [],
           library: {},
-          libraryReference: {},
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters()
@@ -218,12 +250,38 @@
             }
           });
 
-          fetchLibraryReference(this.$route.params.id).then(response => {
-            let handleResponse = this.handleResponse(response);
-            if (handleResponse.length > 0) {
-              this.libraryReference = this.handleResponse(response);
-            }
+          // FETCH FIRST TAB RELATED DATA
+          this.tabs.forEach(entity => {
+            this.loadRelatedData(entity);
           });
+        }
+        this.$on('tab-changed',this.setTab);
+
+        this.$on('related-data-modified',this.editRelatedData);
+        this.$on('related-data-added',this.addRelatedData);
+        this.$on('edit-row',this.editRow);
+        this.$on('allow-remove-row',this.allowRemove);
+
+        this.$emit('related-data-info',this.tabs);
+
+        this.setActiveTab('library_reference')
+      },
+
+      setDefaultRelatedData(){
+        return {
+          library_reference:[],
+          copyFields: {
+            library_reference: ['reference__reference','keywords','remarks'],
+          },
+          insert: {
+            library_reference: {}
+          },
+          page : {
+            library_reference: 1
+          },
+          count: {
+            library_reference: 0
+          }
         }
       },
 
@@ -239,6 +297,44 @@
       fillAutocompleteFields(obj){
         this.library.agent = { agent: obj.author__agent, id: obj.author }
       },
+
+      fillRelatedDataAutocompleteFields(obj){
+        obj.reference = { reference:obj.reference__reference, id:obj.reference}
+        return obj
+      },
+
+      loadRelatedData(object){
+        let query;
+
+        if(object === 'library_reference') {
+          query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference)
+        }
+        return new Promise(resolve => {
+          query.then(response => {
+            this.relatedData[object] = this.handleResponse(response);
+            this.relatedData.count[object] = response.body.count;
+            resolve(true)
+          });
+        });
+      },
+
+      //check required fields for related data
+      checkRequiredFields(type){
+
+      },
+
+      formatRelatedData(objectToUpload)  {
+        let uploadableObject = cloneDeep(objectToUpload);
+        uploadableObject.library = this.library.id;
+
+        if (this.isDefinedAndNotNull(uploadableObject.reference)) {
+          uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
+        }
+
+        // console.log(JSON.stringify(uploadableObject));
+        return JSON.stringify(uploadableObject)
+      },
+
 
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
