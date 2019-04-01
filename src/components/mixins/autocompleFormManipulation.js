@@ -44,6 +44,7 @@ const autocompleteFieldManipulation = {
         case 'stratigraphy_base':
           query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
           break;
+        case 'projectagent':
         case 'agent':
         case 'owner':
           query = `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent`;
@@ -72,8 +73,8 @@ const autocompleteFieldManipulation = {
         case 'taxon':
           query = `taxon/?multi_search=value:${val};fields:taxon;lookuptype:icontains&fields=id,taxon`;
           break;
-        case 'project':
-          query = `project/?multi_search=value:${val};fields:name;name_en;lookuptype:icontains&fields=id,name,name_en`;
+        case 'parent_project':
+          query = `project/?multi_search=value:${val};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
           break;
         default:
           break;
@@ -118,6 +119,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteOwnerSearch(value) {
       this.autocompliteSearch(value, 'owner', 'agent')
+    },
+    autcompleteProjectAgentSearch(value) {
+      this.autocompliteSearch(value, 'projectagent', 'agent')
     },
     autcompleteRockSearch(value) {
       this.autocompliteSearch(value, 'rock', 'rock')

@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-md-6">
           <label class="p-0">{{ $t('project.name') }}:</label>
-          <b-form-input id="name" v-model="project.name" type="text" maxlength="100"></b-form-input>
+          <b-form-input id="name" v-model="project.name" :state="isDefinedAndNotNull(project.name)" type="text" maxlength="100"></b-form-input>
         </div>
 
         <div class="col-md-6">
@@ -21,9 +21,10 @@
 
         <div class="col-md-4">
           <label class="p-0">{{ $t('project.project_type') }}:</label>
-          <vue-multiselect v-model="project.project_type" v-if="isDefinedAndNotEmpty(autocomplete.project_type)"
+          <vue-multiselect v-model="project.project_type"
                            id="type"
                            :options="autocomplete.project_type"
+                           v-bind:class="{ valid: isDefinedAndNotNull(project.project_type), invalid: !isDefinedAndNotNull(project.project_type) }"
                            track-by="id"
                            :label="nameLabel"
                            :placeholder="$t('add.inputs.autocomplete')"
@@ -53,7 +54,7 @@
                            :allow-empty="true"  :show-no-results="false" :max-height="600"
                            :open-direction="'bottom'">
             <template slot="singleLabel" slot-scope="{ option }"><strong>
-              {{ $i18n.locale=== 'ee' ? option.parent_project__name :option.parent_project__name_en }}</strong> </template>
+              {{ $i18n.locale=== 'ee' ? option.name :option.name_en }}</strong> </template>
             <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
           </vue-multiselect>
         </div>
@@ -62,7 +63,8 @@
     </fieldset>
     <!-- DATE COLLECTED AND DATE COLLECTED FREE -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.date') }}</legend>
+      <legend class="w-auto" style="font-size: large;">{{ $t('project.date') }}
+        <font-awesome-icon icon="calendar-alt" title="Date identified"/></legend>
 
         <div class="row">
           <div class="col-sm-4">
@@ -120,7 +122,33 @@
       </div>
     </fieldset>
 
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">Restricted access to following users
+        <font-awesome-icon icon="user-friends"/></legend>
+      <div class="row">
 
+        <div class="col-11 mb-2 mr-0">
+          <vue-multiselect v-model="relatedData.projectagent"
+                           id="projectagent"
+                           :searchable="true" @search-change="autcompleteProjectAgentSearch"
+                           :options="autocomplete.agent"
+                           :loading="autocomplete.loaders.projectagent"
+                           :multiple="true"
+                           track-by="id"
+                           label="agent" :open-direction="'bottom'"
+                           :placeholder="$t('add.inputs.autocomplete')">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+        <div class="col-1 mb-2 ml-0 pl-0">
+          <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(relatedData.projectagent)"
+                  @click="relatedData.projectagent = []">
+            <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+          </button>
+        </div>
+      </div>
+    </fieldset>
 
     <!-- IS PRIVATE-->
     <div class="row mb-3 mt-3">
@@ -152,10 +180,12 @@
   import Datepicker from 'vue2-datepicker'
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
+  import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchProjects,
     fetchProject,
-    fetchProjectType
+    fetchProjectType,
+    fetchProjectAgent
   } from "../../assets/js/api/apiCalls";
     export default {
       name: "Project",
@@ -179,12 +209,12 @@
             searchHistory:'projectSearchHistory',
             relatedData: this.setDefaultRalatedData(),
             copyFields : ['id','name','name_en','project_type','parent_project','date_start','date_end','date_free',
-              'description','owner','remarks','is_private'
+              'description','owner','remarks','is_private','projectagent'
             ],
             autocomplete: {
-              loaders: { project_type:false,parent_project:false,owner:false
+              loaders: { project_type:false,parent_project:false,owner:false,projectagent:false
               },
-              project_type: [],parent_project:[],agent:[]
+              project_type: [],parent_project:[],agent:[],projectagent:[]
             },
             requiredFields: ['name'],
             project: {},
@@ -226,10 +256,19 @@
             this.project.owner = {agent:this.currentUser.user,id:this.currentUser.id}
           }
 
+          this.loadRelatedData('projectagent');
         },
 
         setDefaultRalatedData(){
-          return {}
+          return {
+            projectagent:[],
+            copyFields: {
+              projectagent:['id'],
+            },
+            insert: {projectagent:{}},
+            page : {locality_reference:1},
+            count: {locality_reference:0}
+          }
         },
 
         formatDataForUpload(objectToUpload) {
@@ -244,6 +283,12 @@
           if (this.isDefinedAndNotNull(objectToUpload.parent_project)) uploadableObject.parent_project = objectToUpload.parent_project.id
           if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
 
+          //add related data
+          if(this.isDefinedAndNotEmpty(this.relatedData.projectagent)) {
+            uploadableObject.related_data = {};
+            uploadableObject.related_data.agent = this.relatedData.projectagent
+          }
+          console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
         },
         fillAutocompleteFields(obj){
@@ -255,14 +300,38 @@
           this.project.owner = {agent:obj.owner__agent,id:obj.owner}
 
           this.project.parent_project = {name:obj.parent_project__name,name_en:obj.parent_project__name_en,id:obj.parent_project}
+
         },
 
-        fillRelatedDataAutocompleteFields(obj){
-          obj.agent = {agent:obj.agent__agent,id:obj.agent}
+        fillRelatedDataAutocompleteFields(obj,type){
+          if(type === 'projectagent') {
+            let projectagent = cloneDeep(obj)
+            obj = [];
+            projectagent.forEach(entity => {
+              obj.push( {agent:entity.projectagent__agent__agent, id:entity.projectagent__agent})
+            })
+          }
+
           return obj
         },
 
-        loadRelatedData(object){ },
+        loadRelatedData(object){
+          let query;
+
+          if(object === 'projectagent') {
+            query = fetchProjectAgent(this.$route.params.id,this.relatedData.page.projectagent)
+          }
+          return new Promise(resolve => {
+            query.then(response => {
+              //projectagent do not have count value
+              if (response.status === 200) this.relatedData[object] = response.body.results;
+
+              this.relatedData.count[object] = response.body.count;
+              if(object === 'projectagent') this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object)
+              resolve(true)
+            });
+          });
+        },
 
         //check required fields for related data
         checkRequiredFields(type){ },

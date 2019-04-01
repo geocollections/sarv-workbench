@@ -41,13 +41,14 @@
 
 <script>
 
-
+  import formManipulation  from './../components/mixins/formManipulation'
   import ListModuleCore from "./ListModuleCore";
   import {fetchProjects} from "@/assets/js/api/apiCalls";
   export default {
     components: {
       ListModuleCore
     },
+    mixins: [formManipulation],
     name: "Projects",
     data() {
       return {
@@ -77,7 +78,7 @@
     methods: {
       fetchProjects() {
         return new Promise((resolve) => {
-          resolve(fetchProjects(this.searchParameters, this.agent))
+          resolve(fetchProjects(this.searchParameters, this.currentUser.id))
         });
       },
       searchParametersChanged(newParams) {

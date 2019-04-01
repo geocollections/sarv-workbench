@@ -413,11 +413,14 @@ export function fetchLibraryReference(id) {
 export function fetchProject(id) {
   return fetch(`project/?id=${id}&format=json`)
 }
+export function fetchProjectAgent(id,agent) {
+  return fetch(`project/${id}?fields=id,projectagent__agent,projectagent__agent__agent&format=json`)
+}
 export function fetchProjectType() {
   return fetch(`project_type/?order_by=name&format=json`)
 }
-export function fetchProjects(data) {
-  const fields = 'id,name, name_en,number,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end,' +
+export function fetchProjects(data,agent) {
+  const fields = 'id,name, name_en,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end,' +
     'date_free,description,remarks,owner,owner__agent,is_private';
   let searchFields = ''
   if (data.id !== null && data.id.trim().length > 0) {
@@ -425,14 +428,14 @@ export function fetchProjects(data) {
   }
 
   if (data.owner !== null && data.owner.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.owner};fields:owner__agent;lookuptype:icontains`
+    searchFields += `&multi_search=value:${data.owner};fields:owner__agent;fields:owner__agent_surname;fields:owner__agent_firstname;lookuptype:icontains`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
   if (searchFields.length > 0) {
-    return fetch(`project/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`project/?projectagent__agent=${agent}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    return fetch(`project/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`project/?projectagent__agent=${agent}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 /***********************
