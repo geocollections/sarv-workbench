@@ -416,6 +416,9 @@ export function fetchProject(id) {
 export function fetchProjectAgent(id,agent) {
   return fetch(`project/${id}?fields=id,projectagent__agent,projectagent__agent__agent&format=json`)
 }
+export function fetchProjectAttachment(id,page=1) {
+  return fetch(`attachment/?attach_link__project__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename&format=json`)
+}
 export function fetchProjectType() {
   return fetch(`project_type/?order_by=name&format=json`)
 }

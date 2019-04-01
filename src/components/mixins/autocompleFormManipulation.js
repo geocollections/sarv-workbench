@@ -68,8 +68,11 @@ const autocompleteFieldManipulation = {
           query = `locality_synonym/?multi_search=value:${val};fields:synonym;lookuptype:icontains&fields=id,synonym,reference__reference,pages,remarks`;
           break;
         case 'attachment':
-          query = `attachment/?multi_search=value:${val};fields:original_filename;lookuptype:icontains&fields=id,original_filename,remarks`;
+          query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
           break;
+        // case 'attachment':
+        //   query = `attachment/?multi_search=value:${val};fields:original_filename;lookuptype:icontains&fields=id,original_filename,remarks`;
+        //   break;
         case 'taxon':
           query = `taxon/?multi_search=value:${val};fields:taxon;lookuptype:icontains&fields=id,taxon`;
           break;

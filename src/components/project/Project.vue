@@ -1,6 +1,12 @@
 <template>
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+    <div class="row mt-4">
+      <div class="col">
+        <span class="float-right">
+          <button class="btn btn-primary mb-2" @click="registerObservation">Register new observation / sampling site</button></span>
+      </div>
+    </div>
     <!-- STORAGE-->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">Üldinfo
@@ -123,7 +129,7 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">Restricted access to following users
+      <legend class="w-auto" style="font-size: large;">Project members
         <font-awesome-icon icon="user-friends"/></legend>
       <div class="row">
 
@@ -149,6 +155,50 @@
         </div>
       </div>
     </fieldset>
+
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">Project files
+        <font-awesome-icon icon="folder-open"/></legend>
+      <div class="row">
+
+        <div class="col-12 mb-2 mr-0">
+          <vue-multiselect
+                           id="attachment_link"
+                           :multiple="true"
+                           track-by="id"
+                           :options="autocomplete.attachment"
+                           :internal-search="false"
+                           @search-change="autcompleteAttachmentSearch"
+                           :custom-label="customLabelForAttachment"
+                           :reset-after="true"
+                           @select="addRelatedDataAttachment"
+                           :loading="autocomplete.loaders.attachment"
+                           :placeholder="$t('add.inputs.autocomplete')"
+                           :show-labels="false">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+      </div>
+      <div class="row p-3">
+        <div class="table-responsive-sm">
+          <table class="table table-hover table-bordered">
+            <tbody>
+              <tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #d4dcc7;"   :id="'tooltip-button-show-event'+idx" >
+                <b-tooltip class="custom-tooltip" :ref="'tooltip'" :target="'tooltip-button-show-event'+idx" variant="primary">
+                  <img style="height: 200px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>
+                  <font-awesome-icon :icon="getFormatIcon(file.original_filename)" v-if="isDefinedAndNotNull(file.original_filename)"/>
+                  {{customLabelForAttachment(file)}}
+                </b-tooltip>
+                <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)"><font-awesome-icon icon="eye"/></td>
+                <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">{{file.original_filename}}</td>
+                <td style="min-width: 60px;text-align:right" @click="relatedData.attachment_link.splice(index, 1)"><font-awesome-icon icon="times"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </fieldset>
+
 
     <!-- IS PRIVATE-->
     <div class="row mb-3 mt-3">
@@ -185,8 +235,10 @@
     fetchProjects,
     fetchProject,
     fetchProjectType,
-    fetchProjectAgent
+    fetchProjectAgent,
+    fetchProjectAttachment
   } from "../../assets/js/api/apiCalls";
+
     export default {
       name: "Project",
       components: {
@@ -199,7 +251,8 @@
       computed: { getParentId(){return this.sample.id} },
       data() { return this.setInitialData() },
 
-      created() { this.loadFullInfo() },
+      created() {
+        this.loadFullInfo() },
 
       methods: {
         setTab(type){ this.activeTab  = type },
@@ -212,9 +265,9 @@
               'description','owner','remarks','is_private','projectagent'
             ],
             autocomplete: {
-              loaders: { project_type:false,parent_project:false,owner:false,projectagent:false
+              loaders: { project_type:false,parent_project:false,owner:false,projectagent:false,attachment:false
               },
-              project_type: [],parent_project:[],agent:[],projectagent:[]
+              project_type: [],parent_project:[],agent:[],projectagent:[],attachment:[]
             },
             requiredFields: ['name'],
             project: {},
@@ -243,6 +296,7 @@
                 this.project = this.handleResponse(response)[0];
                 this.fillAutocompleteFields(this.project)
                 this.removeUnnecessaryFields(this.project, this.copyFields);
+                this.project.related_data = {};
                 this.$emit('data-loaded', this.project)
                 this.$emit('set-object','project');
                 this.sendingData = false;
@@ -251,23 +305,21 @@
                 this.sendingData = false;
               }
             });
+
+            this.loadRelatedData('projectagent');
+            this.loadRelatedData('attachment_link');
           } else {
             //set default user
             this.project.owner = {agent:this.currentUser.user,id:this.currentUser.id}
           }
 
-          this.loadRelatedData('projectagent');
         },
 
         setDefaultRalatedData(){
           return {
-            projectagent:[],
-            copyFields: {
-              projectagent:['id'],
-            },
-            insert: {projectagent:{}},
-            page : {locality_reference:1},
-            count: {locality_reference:0}
+            projectagent:[], attachment_link:[],
+            page : {locality_reference:1,attachment_link:1},
+            count: {locality_reference:0,attachment_link:0}
           }
         },
 
@@ -284,10 +336,10 @@
           if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
 
           //add related data
-          if(this.isDefinedAndNotEmpty(this.relatedData.projectagent)) {
-            uploadableObject.related_data = {};
-            uploadableObject.related_data.agent = this.relatedData.projectagent
-          }
+          uploadableObject.related_data = {}
+          if(this.isDefinedAndNotEmpty(this.relatedData.projectagent)) uploadableObject.related_data.agent = this.relatedData.projectagent
+          if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
+
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
         },
@@ -304,14 +356,12 @@
         },
 
         fillRelatedDataAutocompleteFields(obj,type){
-          if(type === 'projectagent') {
-            let projectagent = cloneDeep(obj)
-            obj = [];
-            projectagent.forEach(entity => {
-              obj.push( {agent:entity.projectagent__agent__agent, id:entity.projectagent__agent})
-            })
-          }
-
+          let relatedData = cloneDeep(obj)
+          obj = [];
+          relatedData.forEach(entity => {
+            if(type === 'projectagent') obj.push( {agent:entity.projectagent__agent__agent, id:entity.projectagent__agent})
+            if(type === 'attachment_link') obj.push(entity)
+          });
           return obj
         },
 
@@ -320,6 +370,8 @@
 
           if(object === 'projectagent') {
             query = fetchProjectAgent(this.$route.params.id,this.relatedData.page.projectagent)
+          } else if(object === 'attachment_link') {
+            query = fetchProjectAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
           }
           return new Promise(resolve => {
             query.then(response => {
@@ -327,7 +379,7 @@
               if (response.status === 200) this.relatedData[object] = response.body.results;
 
               this.relatedData.count[object] = response.body.count;
-              if(object === 'projectagent') this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object)
+              this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object);
               resolve(true)
             });
           });
@@ -366,6 +418,27 @@
             orderBy: '-id',
           }
         },
+
+        customLabelForAttachment(option) {
+          return this.$i18n.locale === 'ee' ? `${option.id} - (${option.description}) (${option.author__agent})` :
+            `${option.id} - (${option.description_en}) (${option.author__agent})`
+        },
+
+        addRelatedDataAttachment(option){
+          if(typeof this.relatedData.attachment_link === 'undefined') this.relatedData.attachment_link = [];
+          this.relatedData.attachment_link.push(option)
+        },
+
+        getFormatIcon(fileName){
+          let format = fileName.split('.')[1];
+          if(['xlsx','xls'].indexOf(format) > -1 ) return 'file-excel';
+          if(['jpg','png'].indexOf(format) > -1 ) return 'file-image';
+          else return 'file'
+        },
+
+        registerObservation(){
+          console.log('registerObservation')
+        }
       },
 
       watch: {
@@ -380,5 +453,11 @@
 </script>
 
 <style scoped>
+  /*.tooltip {*/
+    /*display:inline-block;*/
+    /*position:relative;*/
+    /*border-bottom:1px dotted #666;*/
+    /*text-align:left;*/
+  /*}*/
 
 </style>

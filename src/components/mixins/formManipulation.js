@@ -4,15 +4,16 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faProjectDiagram,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {faProjectDiagram,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faProjectDiagram,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
+library.add(faProjectDiagram,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
     return {
+      fileUrl:'https://files.geocollections.info',
       apiUrl: 'https://rwapi.geocollections.info/',
       loadingPercent: 0,
       sendingData: false,
@@ -380,10 +381,13 @@ const formManipulation = {
       if (choice === "CANCEL") this.$router.push({ path: '/' + object })
       if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });
       if (choice === "NEXT") this.$router.push({ path: '/' + object + '/' + this.nextRecord });
-    }
+    },
 
     /** SHOW NEXT OR PREVIOUS RECORD ENDS**/
 
+    composeFileUrl(file) {
+      return this.fileUrl + '/small/' + file.substring(0, 2) + '/' + file.substring(2, 4) + '/' + file
+    }
   },
   watch: {
 

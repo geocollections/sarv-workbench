@@ -175,6 +175,7 @@ const router = new Router({
                 title:'titles.editLocality',
                 heading:'editLocality.heading',
                 isNavigationShow: true,
+                isCopyFormShown: true,
                 requiresAuth: true
               },
             }
@@ -235,6 +236,7 @@ const router = new Router({
                 title:'titles.editSample',
                 heading:'editSample.heading',
                 isNavigationShow: true,
+                isCopyFormShown: true,
                 requiresAuth: true
               },
             }
@@ -294,7 +296,8 @@ const router = new Router({
                 table:'project',
                 title:'titles.editProject',
                 heading:'editProject.heading',
-                isNavigationShow: true,
+                isNavigationShow: false,
+                isCopyFormShown: false,
                 requiresAuth: true
               },
             }
@@ -354,6 +357,7 @@ const router = new Router({
                 title:'titles.editLibrary',
                 heading:'editLibrary.heading',
                 isNavigationShow:true,
+                isCopyFormShown: false,
                 requiresAuth: true
               },
             }

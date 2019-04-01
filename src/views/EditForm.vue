@@ -4,7 +4,8 @@
     <div class="row mt-4 page-title">
       <div class="col">
         <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
-        <span class="float-right"><button class="btn btn-primary mb-2" @click="saveAsNew">{{ $t('add.saveAsNew') }}</button></span>
+        <span class="float-right">
+          <button class="btn btn-primary mb-2" @click="saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button></span>
       </div>
     </div>
     <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData"/>
