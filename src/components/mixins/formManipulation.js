@@ -234,6 +234,9 @@ const formManipulation = {
     },
 
     setActiveTab(type, isWarning = true){
+      // If user clicks on currently active tab then do nothing
+      if (this.activeTab === type) return
+
       this.nextTab = type;
       if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
         this.$root.$emit('show-confirmation');
