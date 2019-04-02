@@ -183,14 +183,21 @@
         <div class="table-responsive-sm">
           <table class="table table-hover table-bordered">
             <tbody>
-              <tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #d4dcc7;"   :id="'tooltip-button-show-event'+idx" >
-                <b-tooltip class="custom-tooltip" :ref="'tooltip'" :target="'tooltip-button-show-event'+idx" variant="primary">
-                  <img style="height: 200px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>
-                  <font-awesome-icon :icon="getFormatIcon(file.original_filename)" v-if="isDefinedAndNotNull(file.original_filename)"/>
+              <tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #ccdcb9;" :id="'tooltip-button-show-event'+idx" >
+                <!--<b-tooltip class="custom-tooltip" :ref="'tooltip'" :target="'tooltip-button-show-event'+idx" variant="primary">-->
+                  <!--<img style="height: 200px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>-->
+                  <!--<font-awesome-icon :icon="getFormatIcon(file.original_filename)" v-if="isDefinedAndNotNull(file.original_filename)"/>-->
+                  <!--{{customLabelForAttachment(file)}}-->
+                <!--</b-tooltip>-->
+
+                <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)">
+                  <img style="height: 50px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>
+                  <font-awesome-icon class="fa-3x" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) === -1 && isDefinedAndNotNull(file.original_filename)" :icon="getFormatIcon(file.original_filename)"/>
+                </td>
+                <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">
+                  <font-awesome-icon icon="eye"/>&ensp;{{file.original_filename}}<br/>
                   {{customLabelForAttachment(file)}}
-                </b-tooltip>
-                <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)"><font-awesome-icon icon="eye"/></td>
-                <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">{{file.original_filename}}</td>
+                </td>
                 <td style="min-width: 60px;text-align:right" @click="relatedData.attachment_link.splice(index, 1)"><font-awesome-icon icon="times"/></td>
               </tr>
             </tbody>
