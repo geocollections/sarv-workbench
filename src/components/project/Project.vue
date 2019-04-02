@@ -66,11 +66,6 @@
         </div>
 
       </div>
-    </fieldset>
-    <!-- DATE COLLECTED AND DATE COLLECTED FREE -->
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.date') }}
-        <font-awesome-icon icon="calendar-alt" title="Date identified"/></legend>
 
         <div class="row">
           <div class="col-sm-4">
@@ -107,23 +102,18 @@
 
     <!-- DESCRIPTION -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.description') }}
+      <legend class="w-auto" style="font-size: large;">{{ $t('project.description') }} | {{ $t('project.remarks') }}
         <font-awesome-icon icon="pen-fancy"/></legend>
 
       <div class="row">
         <div class="col-sm-12 mb-2">
-          <b-form-textarea id="description" v-model="project.description" type="text" size="sm" :rows="2" :max-rows="20"/>
+          <b-form-textarea id="description" v-model="project.description" type="text" size="sm" :rows="1" :max-rows="20"/>
         </div>
       </div>
-    </fieldset>
-
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.remarks') }}
-        <font-awesome-icon icon="info"/></legend>
 
       <div class="row">
         <div class="col-sm-12 mb-2">
-          <b-form-textarea id="remarks" v-model="project.remarks" type="text" size="sm" :rows="2" :max-rows="20"/>
+          <b-form-textarea id="remarks" v-model="project.remarks" type="text" size="sm" :rows="1" :max-rows="20"/>
         </div>
       </div>
     </fieldset>
@@ -466,5 +456,10 @@
     /*border-bottom:1px dotted #666;*/
     /*text-align:left;*/
   /*}*/
-
+  label { 
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+    }
+    
 </style>

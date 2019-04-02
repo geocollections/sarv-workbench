@@ -19,6 +19,8 @@
           <!-- class="d-none d-lg-block" visible-lg and up  (hidden-md and down) -->
           <!-- class="d-lg-none d-xl-none" visible-md and down (hidden-lg and up) -->
 
+          <b-nav-item v-if="permissions.project" class="d-none d-lg-block" :to="{ path: '/project' }"exact>{{ $t('header.projects') }}</b-nav-item>
+          
           <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-nav-item>
           <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-nav-item>
 
