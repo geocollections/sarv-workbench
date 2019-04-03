@@ -68,11 +68,6 @@
         </div>
 
       </div>
-    </fieldset>
-    <!-- DATE COLLECTED AND DATE COLLECTED FREE -->
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.date') }}
-        <font-awesome-icon icon="calendar-alt" title="Date identified"/></legend>
 
         <div class="row">
           <div class="col-sm-4">
@@ -109,23 +104,18 @@
 
     <!-- DESCRIPTION -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.description') }}
+      <legend class="w-auto" style="font-size: large;">{{ $t('project.description') }} | {{ $t('project.remarks') }}
         <font-awesome-icon icon="pen-fancy"/></legend>
 
       <div class="row">
         <div class="col-sm-12 mb-2">
-          <b-form-textarea id="description" v-model="project.description" type="text" size="sm" :rows="2" :max-rows="20"/>
+          <b-form-textarea id="description" v-model="project.description" type="text" size="sm" :rows="1" :max-rows="20"/>
         </div>
       </div>
-    </fieldset>
-
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.remarks') }}
-        <font-awesome-icon icon="info"/></legend>
 
       <div class="row">
         <div class="col-sm-12 mb-2">
-          <b-form-textarea id="remarks" v-model="project.remarks" type="text" size="sm" :rows="2" :max-rows="20"/>
+          <b-form-textarea id="remarks" v-model="project.remarks" type="text" size="sm" :rows="1" :max-rows="20"/>
         </div>
       </div>
     </fieldset>
@@ -164,26 +154,34 @@
       <div class="row">
 
         <div class="col-12 mb-2 mr-0">
-          <vue-multiselect
-                           id="attachment_link"
-                           :multiple="true"
-                           track-by="id"
-                           :options="autocomplete.attachment"
-                           :internal-search="false"
-                           @search-change="autcompleteAttachmentSearch"
-                           :custom-label="customLabelForAttachment"
-                           :reset-after="true"
-                           @select="addRelatedDataAttachment"
-                           :loading="autocomplete.loaders.attachment"
-                           :placeholder="$t('add.inputs.autocomplete')"
-                           :show-labels="false">
-            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-          </vue-multiselect>
+
         </div>
       </div>
       <div class="row p-3">
-        <div class="table-responsive-sm">
+        <div class="table-responsive-sm col-12 p-0">
           <table class="table table-hover table-bordered">
+            <thead>
+              <tr>
+                <th colspan="3">
+                  <vue-multiselect
+                    id="attachment_link"
+                    :multiple="true"
+                    track-by="id"
+                    :options="autocomplete.attachment"
+                    :internal-search="false"
+                    @search-change="autcompleteAttachmentSearch"
+                    :custom-label="customLabelForAttachment"
+                    :reset-after="true"
+                    @select="addRelatedDataAttachment"
+                    :loading="autocomplete.loaders.attachment"
+                    :placeholder="$t('add.inputs.autocomplete')"
+                    :show-labels="false">
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </th>
+              </tr>
+
+            </thead>
             <tbody>
               <tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #ccdcb9;" :id="'tooltip-button-show-event'+idx" >
                 <!--<b-tooltip class="custom-tooltip" :ref="'tooltip'" :target="'tooltip-button-show-event'+idx" variant="primary">-->
@@ -461,7 +459,8 @@
         },
         checkIfProjectIsActive(){
           return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
-        }
+        },
+
       },
 
       watch: {
@@ -482,5 +481,11 @@
 </script>
 
 <style scoped>
+
+  label { 
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+    }
 
 </style>
