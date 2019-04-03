@@ -104,7 +104,7 @@
           name: null,
           id: null,
           page: 1,
-          paginateBy: 50,
+          paginateBy: 10,
           orderBy: '-id',
         }
       }
