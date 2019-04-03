@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="componentKey">
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
     <div class="row mt-4">
       <div class="col">
@@ -58,7 +58,7 @@
           <vue-multiselect class="align-middle" v-model="project.parent_project" select-label="" deselect-label="Can't remove this value"
                            :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                            :loading="autocomplete.loaders.parent_project"
-                           :options="autocomplete.parent_project" :searchable="true" @search-change="autcompleteProjectSearch"
+                           :options="autocomplete.parent_project" :searchable="true" @search-change="autcompleteParentProjectSearch"
                            :allow-empty="true"  :show-no-results="false" :max-height="600"
                            :open-direction="'bottom'">
             <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -296,7 +296,8 @@
               {id:"date_start",title:"site.date_start",type:"text",isDate:true},
               {id:"date_end",title:"site.date_end",type:"text",isDate:true},
               {id:"date_free",title:"site.date_free",type:"text",isDate:true},
-            ]
+            ],
+            componentKey: 0,
           }
         },
 
@@ -320,7 +321,8 @@
                 this.fillAutocompleteFields(this.project)
                 this.removeUnnecessaryFields(this.project, this.copyFields);
                 this.project.related_data = {};
-                this.$set(this,'isActiveProject', this.checkIfProjectIsActive())
+                this.$set(this,'isActiveProject', this.checkIfProjectIsActive());
+                this.forceRerender()
                 this.$emit('data-loaded', this.project)
                 this.$emit('set-object','project');
                 this.sendingData = false;
@@ -460,7 +462,9 @@
         checkIfProjectIsActive(){
           return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
         },
-
+        forceRerender() {
+          this.componentKey += 1;
+        }
       },
 
       watch: {

@@ -143,18 +143,14 @@
 
     </fieldset>
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('site.description') }}
+      <legend class="w-auto" style="font-size: large;">{{ $t('site.description') }} | {{ $t('site.remarks') }}
         <font-awesome-icon icon="pen-fancy"/></legend>
 
       <div class="row">
         <div class="col-sm-12 mb-2">
-          <b-form-textarea id="remarks" v-model="site.remarks" type="text" size="sm" :rows="2" :max-rows="20"/>
+          <b-form-textarea id="remarks" v-model="site.description" type="text" size="sm" :rows="2" :max-rows="20"/>
         </div>
       </div>
-    </fieldset>
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">{{ $t('site.remarks') }}
-        <font-awesome-icon icon="info"/></legend>
 
       <div class="row">
         <div class="col-sm-12 mb-2">
@@ -286,8 +282,8 @@
           if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
           if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
           //add related data
-          uploadableObject.related_data = {}
-          if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          // uploadableObject.related_data = {}
+          // if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
 
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)

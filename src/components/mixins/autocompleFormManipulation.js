@@ -76,6 +76,7 @@ const autocompleteFieldManipulation = {
         case 'taxon':
           query = `taxon/?multi_search=value:${val};fields:taxon;lookuptype:icontains&fields=id,taxon`;
           break;
+        case 'project':
         case 'parent_project':
           query = `project/?multi_search=value:${val};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
           break;
@@ -90,8 +91,11 @@ const autocompleteFieldManipulation = {
     autcompletePreparationSearch(value) {
       this.autocompliteSearch(value, 'preparation', 'preparation')
     },
-    autcompleteProjectSearch(value) {
+    autcompleteParentProjectSearch(value) {
       this.autocompliteSearch(value, 'parent_project', 'parent_project')
+    },
+    autcompleteProjectSearch(value) {
+      this.autocompliteSearch(value, 'project', 'project')
     },
     autcompleteLocalitySearch(value) {
       this.autocompliteSearch(value, 'locality', 'locality')
