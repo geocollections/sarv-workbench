@@ -76,7 +76,9 @@
       "message": "Removes all saved values, might help if something is not loading/working correctly (only in development)"
     },
     "added_date":"Added",
-    "changed_date":"Changed"
+    "changed_date":"Changed",
+    "active":"Active",
+    "non_active":"Inactive"
   },
   "add": {
     "new": "Add new",
@@ -196,6 +198,14 @@
     "heading": "Sample ID",
     "editMessage": "Edit sample",
     "viewMessage": "View sample in geocollections portal"
+  },
+  "editProject": {
+    "heading": "Project ID",
+    "editMessage": "Edit project"
+  },
+  "editSite": {
+    "heading": "Site ID",
+    "editMessage": "Edit site"
   },
   "editLibrary": {
     "heading": "Library ID",
@@ -414,6 +424,30 @@
     "owner":"Owner",
     "is_private":"Is private?"
   },
+
+  "site":{
+    "header": "Site",
+    "id":"ID",
+    "name":"Name (EST)",
+    "name_en":"Name",
+    "project":"Project",
+    "number":"Number",
+    "location":"Location",
+    "latitude":"Latitude",
+    "longitude": "Longitude",
+    "locality": "Locality",
+    "location_accuracy": "Location accuracy",
+    "remarks_location": "Location remarks",
+    "elevation": "Elevation",
+    "elevation_accuracy": "Elevation accuracy",
+    "depth": "Depth",
+    "extent": "Extent",
+    "coord_det_method": "Coord. det. method",
+    "date_start":"Date start",
+    "date_end":"Date end",
+    "description":"Description",
+    "remarks":"Remarks"
+  },
   "sample_series": {
     "name": "Name"
   },
@@ -605,6 +639,8 @@
     "editLocality": "Geocollections Data Management: Edit locality",
     "addSample": "Geocollections Data Management: Add sample",
     "editSample": "Geocollections Data Management: Edit sample",
+    "editProject": "Geocollections Data Management: Edit project",
+    "addProject": "Geocollections Data Management: Add project",
     "editLibrary": "Geocollections Data Management: Edit library",
     "addLibrary": "Geocollections Data Management: Add library",
     "settings": "Geocollections Data Management: Settings"

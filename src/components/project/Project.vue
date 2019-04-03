@@ -5,6 +5,8 @@
       <div class="col">
         <span class="float-right">
           <button class="btn btn-primary mb-2" @click="registerObservation">Register new observation / sampling site</button></span>
+          <span v-if="!isActiveProject" class="alert alert-danger">{{ $t('frontPage.non_active') }}</span>
+          <span v-if="isActiveProject" class="alert alert-success">{{ $t('frontPage.active') }}</span>
       </div>
     </div>
     <!-- STORAGE-->
@@ -206,6 +208,13 @@
       </div>
     </fieldset>
 
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">Sites <font-awesome-icon icon="link"/></legend>
+
+      <div class="row">
+        <sites class="p-4"/>
+      </div>
+    </fieldset>
 
     <!-- IS PRIVATE-->
     <div class="row mb-3 mt-3">
@@ -243,27 +252,27 @@
     fetchProject,
     fetchProjectType,
     fetchProjectAgent,
-    fetchProjectAttachment
+    fetchProjectAttachment,
+    fetchSites
   } from "../../assets/js/api/apiCalls";
-
+  import Sites from "../../views/Sites";
     export default {
       name: "Project",
       components: {
+        Sites,
         FontAwesomeIcon,
         Datepicker,
         VueMultiselect,
         Spinner,
       },
       mixins: [formManipulation,autocompleteFieldManipulation],
-      computed: { getParentId(){return this.sample.id} },
+
       data() { return this.setInitialData() },
 
       created() {
         this.loadFullInfo() },
 
       methods: {
-        setTab(type){ this.activeTab  = type },
-
         setInitialData() {
           return {
             searchHistory:'projectSearchHistory',
@@ -280,7 +289,16 @@
             project: {},
             previousRecord: {},
             nextRecord: {},
-            searchParameters: this.setDefaultSearchParameters()
+            searchParameters: this.setDefaultSearchParameters(),
+            isActiveProject:  false,
+            columns:[
+              {id:"id",title:"site.id",type:"number"},
+              {id:"name",title:"site.name",type:"text"},
+              {id:"project",title:"site.project",type:"text"},
+              {id:"date_start",title:"site.date_start",type:"text",isDate:true},
+              {id:"date_end",title:"site.date_end",type:"text",isDate:true},
+              {id:"date_free",title:"site.date_free",type:"text",isDate:true},
+            ]
           }
         },
 
@@ -293,17 +311,18 @@
           fetchProjectType().then(response => {
             this.autocomplete.project_type = this.handleResponse(response);
           });
-
-
+          console.log(this.$router)
           if(this.$route.meta.isEdit) {
             this.sendingData = true;
             fetchProject(this.$route.params.id).then(response => {
+
               let handledResponse = this.handleResponse(response);
               if(handledResponse.length > 0) {
                 this.project = this.handleResponse(response)[0];
                 this.fillAutocompleteFields(this.project)
                 this.removeUnnecessaryFields(this.project, this.copyFields);
                 this.project.related_data = {};
+                this.$set(this,'isActiveProject', this.checkIfProjectIsActive())
                 this.$emit('data-loaded', this.project)
                 this.$emit('set-object','project');
                 this.sendingData = false;
@@ -325,8 +344,8 @@
         setDefaultRalatedData(){
           return {
             projectagent:[], attachment_link:[],
-            page : {locality_reference:1,attachment_link:1},
-            count: {locality_reference:0,attachment_link:0}
+            page : {projectagent:1,attachment_link:1},
+            count: {projectagent:0,attachment_link:0}
           }
         },
 
@@ -436,15 +455,12 @@
           this.relatedData.attachment_link.push(option)
         },
 
-        getFormatIcon(fileName){
-          let format = fileName.split('.')[1];
-          if(['xlsx','xls'].indexOf(format) > -1 ) return 'file-excel';
-          if(['jpg','png'].indexOf(format) > -1 ) return 'file-image';
-          else return 'file'
-        },
 
         registerObservation(){
           console.log('registerObservation')
+        },
+        checkIfProjectIsActive(){
+          return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
         }
       },
 
@@ -454,17 +470,17 @@
             this.reloadData()
           },
           deep: true
+        },
+        'project.date_end': {
+          handler: function (newval, oldval) {
+            this.$set(this,'isActiveProject', this.checkIfProjectIsActive())
+          },
+          deep: true
         }
       }
     }
 </script>
 
 <style scoped>
-  /*.tooltip {*/
-    /*display:inline-block;*/
-    /*position:relative;*/
-    /*border-bottom:1px dotted #666;*/
-    /*text-align:left;*/
-  /*}*/
 
 </style>

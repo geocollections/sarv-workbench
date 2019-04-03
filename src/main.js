@@ -169,6 +169,9 @@ new Vue({
     projectSearchHistory: {
       type: Object
     },
+    siteSearchHistory: {
+      type: Object
+    },
     localityViewType: {
       type: Boolean,
       default: false

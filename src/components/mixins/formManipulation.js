@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faProjectDiagram,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {faProjectDiagram,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faProjectDiagram,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
+library.add(faProjectDiagram,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
@@ -390,7 +390,37 @@ const formManipulation = {
 
     composeFileUrl(file) {
       return this.fileUrl + '/small/' + file.substring(0, 2) + '/' + file.substring(2, 4) + '/' + file
-    }
+    },
+
+
+    getFormatIcon(fileName){
+      let format = fileName.split('.')[1];
+      if(['xlsx','xls'].indexOf(format) > -1 ) return 'file-excel';
+      if(['jpg','png'].indexOf(format) > -1 ) return 'file-image';
+      else return 'file'
+    },
+
+    // GET CURRENT LOCATION FROM GPS
+    getGPSLocation() {
+      let this_ = this;
+
+      if (navigator.geolocation) {
+        return new Promise(resolve => {
+          navigator.geolocation.getCurrentPosition(function (position) {
+
+            resolve( {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              accuracy: position.coords.accuracy
+            })
+          }, function (error) {
+            if (error.code == error.PERMISSION_DENIED)
+              this_.errorMessege = "Geolocation is not supported by this browser.";
+            resolve (null)
+          });
+        });
+      }
+    },
   },
   watch: {
 

@@ -276,7 +276,37 @@ const router = new Router({
               component: () => import('./components/project/ProjectTable.vue'),
               meta: {
                 requiresAuth: true
-              },
+              }
+            }
+          ]
+        },
+        {
+          path: '/project/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/project/Project.vue'),
+
+              children: [
+                {
+                  path: '',
+                  component: () => import('./components/site/SiteTable.vue'),
+
+                  //belongs to project
+                  meta: {
+                    isEdit:false,
+                    title:'titles.addProject',
+                    subForms:[
+                      {path:'/project/add',name:'editProject.heading'}
+                    ],
+                    requiresAuth: true
+                  },
+                }
+              ]
             }
           ]
         },
@@ -291,11 +321,79 @@ const router = new Router({
             {
               path: '',
               component: () => import('./components/project/Project.vue'),
+
+              children: [
+                {
+                  path: '',
+                  component: () => import('./components/site/SiteTable.vue'),
+                  //belongs to project
+                  meta: {
+                    isEdit:true,
+                    table:'project',
+                    title:'titles.editProject',
+                    heading:'editProject.heading',
+                    isNavigationShow: false,
+                    isCopyFormShown: false,
+                    requiresAuth: true
+                  },
+                }
+              ]
+            }
+          ]
+        },
+        {
+          path: '/site/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/site/Site.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addSite',
+                subForms:[
+                  {path:'/site/add',name:'editSite.heading'}
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        // {
+        //   path: '/site',
+        //   component: () => import('./views/Sites.vue'),
+        //   meta: {
+        //     requiresAuth: true
+        //   },
+        //   children: [
+        //     {
+        //       path: '',
+        //       component: () => import('./components/site/SiteTable.vue'),
+        //       meta: {
+        //         requiresAuth: true
+        //       },
+        //     }
+        //   ]
+        // },
+        {
+          path: '/site/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/site/Site.vue'),
               meta: {
                 isEdit:true,
-                table:'project',
-                title:'titles.editProject',
-                heading:'editProject.heading',
+                table:'site',
+                title:'titles.editSite',
+                heading:'editSite.heading',
                 isNavigationShow: false,
                 isCopyFormShown: false,
                 requiresAuth: true
@@ -304,7 +402,7 @@ const router = new Router({
           ]
         },
         {
-          path: '/project/add',
+          path: '/site/add',
           component: () => import('./views/AddForm.vue'),
           meta: {
             requiresAuth: true
@@ -312,12 +410,12 @@ const router = new Router({
           children: [
             {
               path: '',
-              component: () => import('./components/project/Project.vue'),
+              component: () => import('./components/site/Site.vue'),
               meta: {
                 isEdit:false,
-                title:'titles.addProject',
+                title:'titles.addSite',
                 subForms:[
-                  {path:'/project/add',name:'editProject.heading'}
+                  {path:'/site/add',name:'editSite.heading'}
                 ],
                 requiresAuth: true
               },

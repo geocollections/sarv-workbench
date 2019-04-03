@@ -70,9 +70,17 @@
                             :icon="sort"/>
                           <font-awesome-icon v-else :icon="sortingDirection"/>
                           {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
-                      </span>
+                      </span><br/>
                 </th>
               </tr>
+              <tr>
+                <th class="p-0" v-for="item in columns" v-if="showFilters">
+                  <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
+                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" min="0">
+                  </b-form-input>
+                </th>
+              </tr>
+
             </thead>
 
             <router-view :response="response"/>
@@ -140,7 +148,13 @@
       viewType: {
         type: String,
         default: null
-      }
+      },
+
+      showFilters: {
+        type: Boolean,
+        default: false
+      },
+
     },
     name: "ListModuleCore",
     data() {
@@ -203,8 +217,8 @@
         // if(this.searchHistory === 'sampleSearchHistory') searchParameters = JSON.stringify(searchParameters);
         this.$localStorage.set(this.searchHistory,  searchParameters)
         this.$emit('search-params-changed',searchParameters);
-        this.apiCall().then(response => {
 
+        this.apiCall().then(response => {
           if (response.status === 200) {
             if (response.body.count === 0) this.noResults = true
             if (response.body.count > 0) this.noResults = false
@@ -233,6 +247,7 @@
 
       // Deletes local storage value + resets search parameters to default
       deleteSearchPreferences() {
+        console.log()
         this.$localStorage.remove(this.searchHistory)
         this.$localStorage.remove(this.viewType)
         this.$emit('set-default-search-params',true);

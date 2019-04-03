@@ -444,3 +444,34 @@ export function fetchProjects(data,agent) {
 /***********************
  *** PROJECTS END ***
  ***********************/
+
+/***********************
+ *** SITE START ***
+ ***********************/
+export function fetchSites(data,agent) {
+
+  const fields = 'id, project, project__name, locality, locality__locality, name, name_en, number,' +
+    'latitude,longitude,location_accuracy,elevation,elevation_accuracy,' +
+    'coord_det_method__value,coord_det_method__value_en, date_start,date_end,date_free,remarks_location,' +
+    'description,remarks';
+  let searchFields = ''
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`
+  }
+
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+
+  if (searchFields.length > 0) {
+    return fetch(`site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
+
+export function fetchSite(id) {
+  return fetch(`site/?id=${id}&format=json`)
+}
+/***********************
+ *** SITE END ***
+ ***********************/

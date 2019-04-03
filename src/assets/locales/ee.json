@@ -29,6 +29,7 @@
     "localities": "Lokaliteedid",
     "libraries": "Kogumikud",
     "samples":"Proovid",
+    "sites":"Site",
     "projects":"Projektid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
@@ -76,7 +77,9 @@
       "message": "Kustutab kõik vaikimisi väärtused, võib aidata kui midagi ei lae/tööta korralikult (ainult arenduse käigus)"
     },
     "added_date":"Lisatud",
-    "changed_date":"Muudetud"
+    "changed_date":"Muudetud",
+    "active":"Aktiivne",
+    "non_active":"Mitte aktiivne"
   },
   "add": {
     "new": "Lisa uus",
@@ -184,6 +187,10 @@
   "editProject": {
     "heading": "Projekt",
     "editMessage": "Muuda projekti"
+  },
+  "editSite": {
+    "heading": "Site",
+    "editMessage": "Muuda site"
   },
   "editLocality": {
     "heading": "Lokaliteet",
@@ -420,6 +427,29 @@
     "owner":"Owner",
     "is_private":"Privaatne?"
   },
+  "site":{
+    "header": "Site",
+    "id":"ID",
+    "name":"Nimetus (EST)",
+    "name_en":"Name",
+    "project":"Project",
+    "number":"Number",
+    "location":"Asukoht",
+    "latitude":"Laiuskraad",
+    "longitude": "Pikkuskraad",
+    "locality": "Lokaliteet",
+    "location_accuracy": "Asukoha täpsus",
+    "remarks_location": "Asukoha lisainfo",
+    "elevation": "Kõrgus, m",
+    "elevation_accuracy": "Kõrguse täpsus",
+    "depth": "Vert. ulatus, m",
+    "extent": "Ulatus",
+    "coord_det_method": "Koord. meetod",
+    "date_start":"Algus",
+    "date_end":"Lõpp",
+    "description":"Kirjeldus",
+    "remarks":"Lisainfo"
+  },
   "taxon": {
     "taxon": "Takson",
     "taxon_free": "Takson, txt",
@@ -612,8 +642,10 @@
     "editLocality": "Geokogude andmehaldus: Muuda lokaliteet",
     "addSample": "Geokogude andmehaldus: Lisa proov",
     "addProject": "Geokogude andmehaldus: Lisa projekt",
+    "addSite": "Geokogude andmehaldus: Lisa projekt",
     "editSample": "Geokogude andmehaldus: Muuda proov",
-    "editProject": "Geokogude andmehaldus: Muuda projekt",
+    "editProject": "Geokogude andmehaldus: Muuda site",
+    "editSite": "Geokogude andmehaldus: Muuda site",
     "editLibrary": "Geokogude andmehaldus: Muuda kogumikke",
     "addLibrary": "Geokogude andmehaldus: Lisa kogumik",
     "settings": "Geokogude andmehaldus: Seaded"
