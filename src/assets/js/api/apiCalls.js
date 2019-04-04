@@ -4,12 +4,16 @@ import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
 const api = {
-  url: 'https://rwapi.geocollections.info/'
+  url: 'https://rwapi.geocollections.info/',
+  checkDoiUrl: 'https://api.crossref.org/works/'
 };
 
-function fetch (child) {
+function fetch (child, url = 0) {
+  let queryUrl = api.url
+  if (url !== 0) queryUrl = url
+
   return new Promise((resolve, reject) => {
-    Vue.http.get(api.url + child, {}).then(response => {
+    Vue.http.get(queryUrl + child, {}).then(response => {
       console.log(response)
       resolve(response);
     }, errResponse => {
@@ -402,10 +406,25 @@ export function fetchLibraryReference(id, page) {
   return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=10&order_by=-sort&format=json`)
 }
 
-
 /***********************
  ***  LIBRARIES END  ***
  ***********************/
+
+
+
+/*****************
+ *** DOI START ***
+ *****************/
+
+export function fetchDoiCheck(doi) {
+  return fetch(doi, api.checkDoiUrl)
+}
+
+/*****************
+ ***  DOI END  ***
+ *****************/
+
+
 
 /***********************
  *** PROJECTS START ***

@@ -548,6 +548,7 @@
     "book_editor": "Toimetaja(d)",
     "publisher": "Publisher",
     "publisherPlace": "Publisher place",
+    "checkDoi": "Check",
     "journal": "Journal",
     "journalAdditional": "Journal (Add'l)",
     "volume": "Volume",

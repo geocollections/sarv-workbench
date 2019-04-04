@@ -551,6 +551,7 @@
     "book_editor": "Toimetaja(d)",
     "publisher": "Kirjastus",
     "publisherPlace": "Kirjastuse asukoht",
+    "checkDoi": "Kontrolli",
     "journal": "Ajakiri",
     "journalAdditional": "Ajakirja lisainfo",
     "volume": "Köide",
