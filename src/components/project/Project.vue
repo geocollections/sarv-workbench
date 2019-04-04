@@ -211,7 +211,7 @@
       <legend class="w-auto" style="font-size: large;">Sites <font-awesome-icon icon="link"/></legend>
 
       <div class="row" v-if="project.id !== null">
-        <sites class="col p-4" :project="project.id" v-on:sites-changed="updateSites"/>
+        <sites class="col p-4" :project="project.id"/>
       </div>
     </fieldset>
 
@@ -368,7 +368,6 @@
           uploadableObject.related_data = {}
           if(this.isDefinedAndNotEmpty(this.relatedData.projectagent)) uploadableObject.related_data.agent = this.relatedData.projectagent
           if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
-          if(this.isDefinedAndNotEmpty(this.relatedData.site)) uploadableObject.related_data.site = this.relatedData.site
 
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
@@ -471,11 +470,6 @@
         forceRerender() {
           this.componentKey += 1;
         },
-
-        updateSites(sites) {
-          console.log('SITES UPDATED')
-          this.relatedData.site = sites;
-        }
 
       },
 

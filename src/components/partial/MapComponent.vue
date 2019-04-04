@@ -11,7 +11,7 @@
                   :url="tileProvider.url"
                   :attribution="tileProvider.attribution"
                   layer-type="base"/>
-    <l-marker v-if="marker !== null && markers === undefined" :lat-lng="marker">
+    <l-marker v-if="marker !== null" :lat-lng="marker">
     </l-marker>
 
     <!--@l-add="$event.target.openPopup()"-->

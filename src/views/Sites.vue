@@ -64,15 +64,17 @@
 <script>
   import cloneDeep from 'lodash/cloneDeep'
   import formManipulation  from './../components/mixins/formManipulation'
+  import Site  from './../components/site/Site'
   import ListModuleCore from "./ListModuleCore";
   import {fetchSites} from "@/assets/js/api/apiCalls";
   import MapComponent from "../components/partial/MapComponent";
   export default {
     components: {
       MapComponent,
-      ListModuleCore
+      ListModuleCore,
+      Site
     },
-    mixins: [formManipulation],
+    mixins: [formManipulation,Site],
     name: "Sites",
     props: {
       apiCall: {
@@ -140,9 +142,6 @@
           name: null,
           project: null,
           projectId: null,
-          // date_start: null,
-          // date_end: null,
-          // date_free: null,
           page: 1,
           paginateBy: 10,
           orderBy: '-id',
@@ -154,14 +153,28 @@
       },
       addSite(entity) {
         this.sites.push(entity)
-        this.$emit('sites-changed',this.sites)
-
+        entity.project = {id: this.project};
+        this.changeSiteData(entity)
       },
       removeSite(entity) {
         let idx = this.findCurrentRecord(this.sites, entity.id);
         if(idx > -1) this.sites.splice(idx,1)
-        this.$emit('sites-changed',this.sites)
+        entity.project.id = {id: null};
+        this.changeSiteData(entity)
+
       },
+      changeSiteData(object){
+        let objectToUpload = cloneDeep(object)
+        objectToUpload =  this.removeUnnecessaryFields(objectToUpload, this.copyFields);
+        delete objectToUpload['id'];
+
+        let formData = new FormData();
+        formData.append('data', this.formatDataForUpload(objectToUpload));
+
+        this.saveData(object,formData,'change/site/'+object.id, true).then(savedObjectId => {
+
+        }, errResponse => { return false; });
+      }
     },
     watch: {
 

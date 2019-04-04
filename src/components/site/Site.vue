@@ -360,8 +360,11 @@
         setDefaultSearchParameters() {
           return {
             id: null,
+            name: null,
+            project: null,
+            projectId: null,
             page: 1,
-            paginateBy: 50,
+            paginateBy: 10,
             orderBy: '-id',
           }
         },
