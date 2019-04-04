@@ -459,6 +459,26 @@ export function fetchSites(data,agent) {
     searchFields += `id__icontains=${data.id}`
   }
 
+  if (data.name !== null && data.name.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`
+  }
+
+  if (data.project !== null && data.project.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.project};fields:project__name,project__name_en;lookuptype:icontains`
+  }
+
+  // if (data.date_start !== null && data.date_start.trim().length > 0) {
+  //   searchFields += `&date_start__gt=${data.date_start}`
+  // }
+
+  if (data.coords_not_null === true) {
+    searchFields += `&latitude!=null&longitude!=null`
+  }
+
+
+
+  console.log(data)
+
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 

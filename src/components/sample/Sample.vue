@@ -482,10 +482,12 @@
   import SampleAnalysis from "./relatedTables/SampleAnalysis";
   import SamplePreparation from "./relatedTables/SamplePreparation";
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
+  import MapComponent from "../partial/MapComponent";
 
     export default {
       name: "Sample",
       components: {
+        MapComponent,
 
         SampleTaxonList,
         SamplePreparation,

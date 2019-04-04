@@ -448,10 +448,12 @@
   import LocalityAttachment from "./relatedTables/LocalityAttachment";
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
   import MapComponent from '@/components/partial/MapComponent'
+  import MapSearch2 from "../partial/MapSearch2";
   library.add(faTimes, faChevronUp, faChevronDown)
   export default {
     name: "Locality",
     components: {
+      MapSearch2,
       LocalityStratigraphy,
       LocalityAttachment,
       LocalitySynonym,

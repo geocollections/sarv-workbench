@@ -60,3 +60,7 @@ font-weight: light;
 .mx-calendar-icon {
 height: auto!important;
 }
+
+.mx-calendar .mx-calendar-panel-date {
+  z-index: 1000000!important;
+}

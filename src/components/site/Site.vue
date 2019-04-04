@@ -140,6 +140,21 @@
           <b-form-textarea id="remarks_location" v-model="site.remarks_location" type="text" size="sm" :rows="2" :max-rows="20"/>
         </div>
       </div>
+      <div class="row">
+        <div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"
+             :class="showCollapseMap ? 'collapsed' : null">
+          {{ $t('photoArchive.collapseMap') }}
+          <font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>
+          <font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <b-collapse v-model="showCollapseMap" id="collapseMap">
+            <map-component v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />
+          </b-collapse>
+        </div>
+      </div>
 
     </fieldset>
     <fieldset class="border p-2 mb-2">
@@ -158,6 +173,8 @@
         </div>
       </div>
     </fieldset>
+
+
     <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'site')">
@@ -186,11 +203,14 @@
     fetchListCoordinateMethod,
     fetchProjectAttachment
   } from "../../assets/js/api/apiCalls";
+  import MapComponent from "../partial/MapComponent";
+
 
 
     export default {
       name: "Site",
       components: {
+        MapComponent,
         FontAwesomeIcon,
         Datepicker,
         VueMultiselect,
@@ -222,7 +242,8 @@
             site: {},
             previousRecord: {},
             nextRecord: {},
-            searchParameters: this.setDefaultSearchParameters()
+            searchParameters: this.setDefaultSearchParameters(),
+            showCollapseMap: true
           }
         },
 
@@ -235,7 +256,6 @@
           fetchListCoordinateMethod().then(response => {
             this.autocomplete.coordMethod = this.handleResponse(response);
           });
-
 
           if(this.$route.meta.isEdit) {
             this.sendingData = true;
@@ -367,8 +387,12 @@
 
             this.site.coord_det_method = {id:6,value:'GPS',value_en:'GPS' };
           });
+        },
 
-        }
+        updateLocation(location) {
+          this.site.latitude = location.lat.toFixed(6)
+          this.site.longitude = location.lng.toFixed(6)
+        },
 
       },
 
@@ -385,4 +409,8 @@
 
 <style scoped>
 
+  /* Map height */
+  #collapseMap {
+    height: 50vh;
+  }
 </style>

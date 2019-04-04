@@ -55,7 +55,7 @@
     </div>
 
     <!-- REFERENCE TABLE -->
-    <div class="row" v-if="response.count > 0">
+    <div class="row">
       <div class="col">
 
         <div class="table-responsive">
@@ -76,14 +76,22 @@
               <tr>
                 <th class="p-0" v-for="item in columns" v-if="showFilters">
                   <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
-                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" min="0">
-                  </b-form-input>
+                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='text'"  min="0"></b-form-input>
+                  <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
+                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='number'" min="0"></b-form-input>
+                  <!--<datepicker style="display: inline !important;max-width: 100%; " :id="item.id"-->
+                              <!--v-model="searchParameters[item.id]"-->
+                              <!--use-utc="true "-->
+                              <!--lang="en"-->
+                              <!--:first-day-of-week="1"-->
+                              <!--format="DD MMM YYYY"-->
+                              <!--input-class="form-control" v-if="item.isDate"></datepicker>-->
                 </th>
               </tr>
 
             </thead>
 
-            <router-view :response="response"/>
+            <router-view :response="response"  v-if="response.count > 0"/>
 
           </table>
         </div>
@@ -113,7 +121,7 @@
   import {library} from '@fortawesome/fontawesome-svg-core'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import {faSortDown,faSortUp, faSort,faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
-
+  import Datepicker from 'vue2-datepicker'
 
   library.add(faSort, faSortUp, faSortDown, faCalendarAlt)
 
@@ -121,6 +129,7 @@
     components: {
       FontAwesomeIcon,
       Spinner,
+      Datepicker,
     },
     props: {
       apiCall: {
@@ -256,7 +265,7 @@
     }
   }
 </script>
-
+<style src="../assets/css/relatedDataStyle.css"></style>
 <style scoped>
   .badge-style > span {
     padding-left: 0.4em;
@@ -270,4 +279,5 @@
   .nowrap {
     white-space: nowrap;
   }
+
 </style>

@@ -447,6 +447,7 @@
     "coord_det_method": "Koord. meetod",
     "date_start":"Algus",
     "date_end":"Lõpp",
+    "date_free":"Txt",
     "description":"Kirjeldus",
     "remarks":"Lisainfo"
   },

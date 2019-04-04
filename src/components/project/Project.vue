@@ -1,5 +1,6 @@
 <template>
   <div :key="componentKey">
+
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
     <div class="row mt-4">
       <div class="col">
@@ -251,12 +252,13 @@
     fetchProjectType,
     fetchProjectAgent,
     fetchProjectAttachment,
-    fetchSites
   } from "../../assets/js/api/apiCalls";
   import Sites from "../../views/Sites";
+  import MapComponent from "../partial/MapComponent";
     export default {
       name: "Project",
       components: {
+        MapComponent,
         Sites,
         FontAwesomeIcon,
         Datepicker,
@@ -459,9 +461,11 @@
         registerObservation(){
           console.log('registerObservation')
         },
+
         checkIfProjectIsActive(){
           return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
         },
+
         forceRerender() {
           this.componentKey += 1;
         }

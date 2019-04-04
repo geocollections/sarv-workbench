@@ -1,8 +1,5 @@
 <template class="map-component">
-  <l-map ref="map" :zoom="zoom" :center="center" @click="addMarker">
-
-         <!--:maxBounds= "[[57.52, 20.37],[60.0, 28.2]]" -->
-
+  <l-map ref="map" :zoom="zoom" :center="center" @click="addMarker" :min-zoom="minZoom">
     <l-control-layers position="topright"></l-control-layers>
     <l-tile-layer v-for="tileProvider in tileProviders"
       :key="tileProvider.name"
@@ -18,19 +15,9 @@
 
 <script>
   import {LMap, LTileLayer, LControlLayers, LMarker } from 'vue2-leaflet';
-  import proj4 from 'proj4'
-  proj4.defs([
-    [
-      'EPSG:3301', '+proj=lcc +lat_1=59.33333333333334 +lat_2=58 +lat_0=57.51755393055556 +lon_0=24 +x_0=500000 +y_0=6375000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'],
-    [
-      'WGS84', "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-    ]
-  ]);
-  import 'proj4leaflet'
-
 
   export default {
-    name: "MapComponent",
+    name: "MapComponent2",
     props: {
       location: {
         type: Object,
@@ -48,20 +35,31 @@
     data() {
       return {
         map: null,
+        minZoom:1,
         zoom: 8,
-        crs: new L.Proj.CRS('EPSG:3301',
-          '+proj=lcc +lat_1=59.33333333333334 +lat_2=58 +lat_0=57.51755393055556 +lon_0=24 +x_0=500000 +y_0=6375000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-          {
-            resolutions: [
-              1024, 512, 256, 128,
-              64, 32, 16, 8, 4, 2, 1, 0.5
-            ],
-            transformation: new L.Transformation(1, -40500, -1, 7017000)
-          }),
-        proj1: '+proj=lcc +lat_1=59.33333333333334 +lat_2=58 +lat_0=57.51755393055556 +lon_0=24 +x_0=500000 +y_0=6375000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-        proj2:'+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs ',
         center: this.isValidLocation(this.location) ? L.latLng(this.location) : L.latLng(58.5, 25.5),
         marker: this.isValidLocation(this.location) ? L.latLng(this.location) : null,
+        tmshybriid: new L.TileLayer('https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{y}.png&ASUTUS=MAAAMET&KESKKOND=LIVE&IS=TMSNAIDE', {
+          continuousWorld: true,
+          attribution: "Map: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+          tms: true,
+          worldCopyJump: true,
+          maxZoom: 15,
+          minZoom: 6,
+          zIndex: 2,
+          updateWhenIdle: false
+
+        }),
+        tmsfoto: new L.TileLayer('https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{y}.jpg&ASUTUS=MAAAMET&KESKKOND=LIVE&IS=TMSNAIDE', {
+          continuousWorld: true,
+          attribution: "Map: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+          tms: true,
+          worldCopyJump: true,
+          maxZoom: 18,
+          minZoom: 6,
+          zIndex: 1,
+          updateWhenIdle: false
+        }),
         tileProviders: [
           {
             name: 'OpenStreetMap',
@@ -77,13 +75,13 @@
             url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
             attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
           },
-          // {
-          //   name: 'Maaamet',
-          //   visible: false,
-          //   continuousWorld: false,
-          //   url: 'http://tiles.maaamet.ee/tm/tms/1.0.0/foto/{z}/{x}/{-y}.png',
-          //   attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-          // }
+          {
+            name: 'Maaamet',
+            visible: false,
+            continuousWorld: true,
+            url: '',
+            attribution: 'Map: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>'
+          }
         ],
       }
     },
@@ -107,6 +105,7 @@
     mounted () {
       this.$nextTick(() => {
         this.map = this.$refs.map.mapObject;
+
         let vm = this
         this.map.on('baselayerchange', function (event) {
           if(event.name === 'Maaamet') {
@@ -132,28 +131,34 @@
       },
 
       addMarker(event) {
-        // console.log(event.latlng)
+        console.log(event.latlng)
         this.marker = L.latLng(event.latlng);
-        console.log(event.latlng)
-        console.log(event.latlng)
         this.$emit('get-location', event.latlng)
       },
-
-      transformCoordFromEPSG3301ToWSG(val){
-        return proj4(proj4('EPSG:3301'),proj4('WGS84'),[parseFloat(val.lat), parseFloat(val.lng)]);
-      },
-      transformCoordFromWSGToEPSG3301(val){
-        return proj4(proj4('WGS84'),proj4('EPSG:3301')[parseFloat(val.lng),parseFloat(val.lat)]);
-      },
-
       applyProjection(){
-        this.$emit('get-location', this.transformCoordFromEPSG3301ToWSG(this.location))
+        //Maa-ameti poolt pakutavad TMS teenused on kättesaadavad aadressil https://tiles.maaamet.ee/tm/tms/1.0.0/
+        //NB! Antud näide kasutab TMS@3857 (@GMC) projektsiooni!
 
-        this.zoom = 2
+        //Palume kasutada  URL-i, kus päringut on täiendatud lisaparameetritega, mille abil on võimalik vastava teenuse päringud statistika jaoks logidest välja filtreerida.
+        //NÄITEKS: &ASUTUS=MAAAMET&KESKKOND=LIVE&IS=TMSNAIDE
+
+        this.map.fitBounds([
+          [60.28165, 30.624],
+          [57.17855, 19.46739]
+        ]);
+
+        this.minZoom = 6;
+        this.zoom = 7;
+        this.map.addLayer(this.tmsfoto);
+        this.map.addLayer(this.tmshybriid);
+
+
       },
-
-      setDefaultProjection(){
-        this.zoom = 8
+      setDefault(){
+        this.minZoom = 1;
+        this.zoom = 8;
+        this.map.removeLayer(this.tmsfoto);
+        this.map.removeLayer(this.tmshybriid);
       }
 
     }

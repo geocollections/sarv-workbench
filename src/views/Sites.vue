@@ -4,7 +4,7 @@
 
       <div class="col">
          <span class="float-left">
-          <p class="h5">Pick some sites form a list or create new one</p>
+          <p class="h5">Pick some sites from a list or create new one</p>
            <span class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="isTableView">
             <label class="custom-control-label" for="customSwitch">{{isTableView ? 'Map enabled' : 'Map disabled'}}</label>
@@ -44,17 +44,24 @@
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
+    <!--<map-component-search :map-data="mapData" v-if="isDefinedAndNotEmpty(mapData)"></map-component-search>-->
   </div>
 
 </template>
 
 <script>
-
+  import cloneDeep from 'lodash/cloneDeep'
   import formManipulation  from './../components/mixins/formManipulation'
   import ListModuleCore from "./ListModuleCore";
   import {fetchSites} from "@/assets/js/api/apiCalls";
+  import MapComponentSearch from "../components/partial/MapComponentSearch";
+  import MapSearch2 from "../components/partial/MapSearch2";
+  import MapComponent from "../components/partial/MapComponent";
   export default {
     components: {
+      MapComponent,
+      MapSearch2,
+      MapComponentSearch,
       ListModuleCore
     },
     mixins: [formManipulation],
@@ -67,31 +74,44 @@
     data() {
       return {
         response: {},
+        mapData:[],
         isTableView:true,
         columns:[
           {id:"id",title:"site.id",type:"number"},
           {id:"name",title:"site.name",type:"text"},
           {id:"project",title:"site.project",type:"text"},
-          {id:"date_start",title:"site.date_start",type:"text",isDate:true},
-          {id:"date_end",title:"site.date_end",type:"text",isDate:true},
-          {id:"date_free",title:"site.date_free",type:"text",isDate:true},
+          // {id:"date_start",title:"site.date_start",type:"text",isDate:true},
+          // {id:"date_end",title:"site.date_end",type:"text",isDate:true},
+          // {id:"date_free",title:"site.date_free",type:"text",isDate:true},
         ],
         filters:[
           {id:"id",title:"site.id",type:"number"},
           {id:"name",title:"site.name",type:"text"},
           {id:"project",title:"site.project",type:"text"},
-          {id:"date_start",title:"site.date_start",type:"text",isDate:true},
-          {id:"date_end",title:"site.date_end",type:"text",isDate:true},
+          // {id:"date_start",title:"site.date_start",type:"text",isDate:true},
+          // {id:"date_end",title:"site.date_end",type:"text",isDate:true},
         ],
         searchParameters: this.setDefaultSearchParameters()
       }
     },
-
+    created(){
+      this.fetchSitesLimit1000()
+    },
     methods: {
       fetchSites() {
         return new Promise((resolve) => {
           resolve(fetchSites(this.searchParameters, this.currentUser.id))
         });
+      },
+      fetchSitesLimit1000() {
+        let data = cloneDeep(this.searchParameters);
+        data.paginateBy=1000;
+        data.coords_not_null = true;
+        console.log(data)
+        fetchSites(data, this.currentUser.id).then(response=>{
+          this.mapData = response.body.results
+        });
+
       },
       searchParametersChanged(newParams) {
         this.searchParameters = newParams
@@ -101,8 +121,12 @@
       },
       setDefaultSearchParameters() {
         return {
-          name: null,
           id: null,
+          name: null,
+          project: null,
+          // date_start: null,
+          // date_end: null,
+          // date_free: null,
           page: 1,
           paginateBy: 10,
           orderBy: '-id',
