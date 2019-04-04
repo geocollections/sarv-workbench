@@ -22,7 +22,7 @@
           <b-nav-item v-if="permissions.project" class="d-none d-lg-block" :to="{ path: '/project' }"exact>{{ $t('header.projects') }}</b-nav-item>
           
           <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-nav-item>
-          <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-nav-item>
+          <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment/add/other_file' }" exact>{{ $t('header.addAttachment') }}</b-nav-item>
 
           <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
           <!-- <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>-->

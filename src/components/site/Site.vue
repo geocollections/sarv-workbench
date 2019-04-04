@@ -83,7 +83,25 @@
           <b-form-input id="longitude" v-model="site.location_accuracy" type="number"></b-form-input>
         </div>
       </div>
-
+      <div class="row">
+        <!--<div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"-->
+        <!--:class="showCollapseMap ? 'collapsed' : null">-->
+        <!--{{ $t('photoArchive.collapseMap') }}-->
+        <!--<font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>-->
+        <!--<font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>-->
+        <!--</div>-->
+        <span class="col ml-3 mt-3 custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+            <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
+          </span>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <b-collapse v-model="showCollapseMap" id="collapseMap">
+            <map-component v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />
+          </b-collapse>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-4">
           <label class="p-0">{{ $t('site.elevation') }}:</label>
@@ -140,22 +158,6 @@
           <b-form-textarea id="remarks_location" v-model="site.remarks_location" type="text" size="sm" :rows="2" :max-rows="20"/>
         </div>
       </div>
-      <div class="row">
-        <div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"
-             :class="showCollapseMap ? 'collapsed' : null">
-          {{ $t('photoArchive.collapseMap') }}
-          <font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>
-          <font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>
-        </div>
-      </div>
-      <div class="row mb-2">
-        <div class="col">
-          <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <map-component v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />
-          </b-collapse>
-        </div>
-      </div>
-
     </fieldset>
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">{{ $t('site.description') }} | {{ $t('site.remarks') }}
