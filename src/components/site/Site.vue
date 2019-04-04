@@ -84,12 +84,6 @@
         </div>
       </div>
       <div class="row">
-        <!--<div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"-->
-        <!--:class="showCollapseMap ? 'collapsed' : null">-->
-        <!--{{ $t('photoArchive.collapseMap') }}-->
-        <!--<font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>-->
-        <!--<font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>-->
-        <!--</div>-->
         <span class="col ml-3 mt-3 custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
             <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
@@ -267,7 +261,9 @@
                 this.site = this.handleResponse(response)[0];
                 this.fillAutocompleteFields(this.site)
                 this.removeUnnecessaryFields(this.site, this.copyFields);
-
+                if(this.site.latitude !== null && this.site.longitude !== null) {
+                  this.setLocationDataIfExists();
+                }
                 this.site.related_data = {};
                 this.$emit('data-loaded', this.site)
                 this.$emit('set-object','site');

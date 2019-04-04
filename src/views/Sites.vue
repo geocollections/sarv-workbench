@@ -1,14 +1,25 @@
 <template>
   <div>
+    <div class="col p-0">
+           <span class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+            <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
+          </span>
+    </div>
+
+    <div class="col  p-0">
+      <b-collapse v-model="showCollapseMap" id="collapseMap">
+        <map-component style="width: 100%" v-bind:location="{ lat: null, lng: null }"
+                       v-bind:locations="sites" v-on:choose-locations="chooseLocations" />
+      </b-collapse>
+    </div>
+
     <div class="row mt-4 page-title">
 
       <div class="col">
          <span class="float-left">
           <p class="h5">Pick some sites from a list or create new one</p>
-           <span class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="isTableView">
-            <label class="custom-control-label" for="customSwitch">{{isTableView ? 'Map enabled' : 'Map disabled'}}</label>
-          </span>
+
 
         </span>
         <span class="float-right">
@@ -33,6 +44,7 @@
       <!--</div>-->
     <!--</div>-->
     <!-- SEARCH FIELDS END -->
+
     <list-module-core
       module="site"
       title="titles.editSite"
@@ -44,7 +56,7 @@
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
-    <!--<map-component-search :map-data="mapData" v-if="isDefinedAndNotEmpty(mapData)"></map-component-search>-->
+
   </div>
 
 </template>
@@ -54,14 +66,10 @@
   import formManipulation  from './../components/mixins/formManipulation'
   import ListModuleCore from "./ListModuleCore";
   import {fetchSites} from "@/assets/js/api/apiCalls";
-  import MapComponentSearch from "../components/partial/MapComponentSearch";
-  import MapSearch2 from "../components/partial/MapSearch2";
   import MapComponent from "../components/partial/MapComponent";
   export default {
     components: {
       MapComponent,
-      MapSearch2,
-      MapComponentSearch,
       ListModuleCore
     },
     mixins: [formManipulation],
@@ -70,12 +78,17 @@
       apiCall: {
         type: Function
       },
+
+      project: {
+        type: Number,
+        default: null
+      }
     },
     data() {
       return {
         response: {},
-        mapData:[],
-        isTableView:true,
+        sites:[],
+        showCollapseMap:true,
         columns:[
           {id:"id",title:"site.id",type:"number"},
           {id:"name",title:"site.name",type:"text"},
@@ -95,7 +108,9 @@
       }
     },
     created(){
-      this.fetchSitesLimit1000()
+      this.fetchMySites();
+      this.$root.$on('add-site',this.addSite);
+      this.$root.$on('remove-site',this.removeSite);
     },
     methods: {
       fetchSites() {
@@ -103,13 +118,13 @@
           resolve(fetchSites(this.searchParameters, this.currentUser.id))
         });
       },
-      fetchSitesLimit1000() {
+      fetchMySites() {
         let data = cloneDeep(this.searchParameters);
-        data.paginateBy=1000;
         data.coords_not_null = true;
-        console.log(data)
+        data.projectId = this.project;
+
         fetchSites(data, this.currentUser.id).then(response=>{
-          this.mapData = response.body.results
+          this.sites = response.body.results
         });
 
       },
@@ -124,6 +139,7 @@
           id: null,
           name: null,
           project: null,
+          projectId: null,
           // date_start: null,
           // date_end: null,
           // date_free: null,
@@ -131,7 +147,21 @@
           paginateBy: 10,
           orderBy: '-id',
         }
-      }
+      },
+
+      chooseLocations(locations) {
+        console.log(locations)
+      },
+      addSite(entity) {
+        this.sites.push(entity)
+        this.$emit('sites-changed',this.sites)
+
+      },
+      removeSite(entity) {
+        let idx = this.findCurrentRecord(this.sites, entity.id);
+        if(idx > -1) this.sites.splice(idx,1)
+        this.$emit('sites-changed',this.sites)
+      },
     },
     watch: {
 
@@ -149,4 +179,8 @@
 .ralign {
 	text-align: right !important;  
   }
+
+#collapseMap {
+  height: 50vh;
+}
 </style>

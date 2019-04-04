@@ -450,7 +450,7 @@ export function fetchProjects(data,agent) {
  ***********************/
 export function fetchSites(data,agent) {
 
-  const fields = 'id, project, project__name, locality, locality__locality, name, name_en, number,' +
+  let fields = 'id, project, project__name, locality, locality__locality, name, name_en, number,' +
     'latitude,longitude,location_accuracy,elevation,elevation_accuracy,' +
     'coord_det_method__value,coord_det_method__value_en, date_start,date_end,date_free,remarks_location,' +
     'description,remarks';
@@ -467,25 +467,27 @@ export function fetchSites(data,agent) {
     searchFields += `&multi_search=value:${data.project};fields:project__name,project__name_en;lookuptype:icontains`
   }
 
+  if (data.projectId && data.projectId !== null) {
+    searchFields += `project=${data.projectId}`
+  }
+
   // if (data.date_start !== null && data.date_start.trim().length > 0) {
   //   searchFields += `&date_start__gt=${data.date_start}`
   // }
 
   if (data.coords_not_null === true) {
-    searchFields += `&latitude!=null&longitude!=null`
+    searchFields += `&latitude__isnull=False&longitude__isnull=False`
   }
-
-
-
-  console.log(data)
-
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    return fetch(`site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // return data.coords_not_null === true ? fetch(`site/?${searchFields}&order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
+    return  fetch(`site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    return fetch(`site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // return data.coords_not_null === true ? fetch(`site/?order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
+
+    return  fetch(`site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 

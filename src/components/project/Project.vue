@@ -210,8 +210,8 @@
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">Sites <font-awesome-icon icon="link"/></legend>
 
-      <div class="row">
-        <sites class="p-4"/>
+      <div class="row" v-if="project.id !== null">
+        <sites class="col p-4" :project="project.id" v-on:sites-changed="updateSites"/>
       </div>
     </fieldset>
 
@@ -300,6 +300,7 @@
               {id:"date_free",title:"site.date_free",type:"text",isDate:true},
             ],
             componentKey: 0,
+            showCollapseMap: true
           }
         },
 
@@ -345,9 +346,9 @@
 
         setDefaultRalatedData(){
           return {
-            projectagent:[], attachment_link:[],
-            page : {projectagent:1,attachment_link:1},
-            count: {projectagent:0,attachment_link:0}
+            projectagent:[], attachment_link:[], site: [],
+            page : {projectagent:1,attachment_link:1,site:1},
+            count: {projectagent:0,attachment_link:0,site:0}
           }
         },
 
@@ -367,6 +368,7 @@
           uploadableObject.related_data = {}
           if(this.isDefinedAndNotEmpty(this.relatedData.projectagent)) uploadableObject.related_data.agent = this.relatedData.projectagent
           if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          if(this.isDefinedAndNotEmpty(this.relatedData.site)) uploadableObject.related_data.site = this.relatedData.site
 
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
@@ -468,7 +470,13 @@
 
         forceRerender() {
           this.componentKey += 1;
+        },
+
+        updateSites(sites) {
+          console.log('SITES UPDATED')
+          this.relatedData.site = sites;
         }
+
       },
 
       watch: {
@@ -496,4 +504,8 @@
     font-size: 0.8rem;
     }
 
+  /* Map height */
+  #collapseMap {
+    height: 50vh;
+  }
 </style>

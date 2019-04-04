@@ -76,7 +76,7 @@
               <tr>
                 <th class="p-0" v-for="item in columns" v-if="showFilters">
                   <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
-                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='text'"  min="0"></b-form-input>
+                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='text'"></b-form-input>
                   <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
                                 v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='number'" min="0"></b-form-input>
                   <!--<datepicker style="display: inline !important;max-width: 100%; " :id="item.id"-->

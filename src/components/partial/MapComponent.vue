@@ -11,13 +11,19 @@
                   :url="tileProvider.url"
                   :attribution="tileProvider.attribution"
                   layer-type="base"/>
-    <l-marker v-if="marker !== null" :lat-lng="marker">
+    <l-marker v-if="marker !== null && markers === undefined" :lat-lng="marker">
     </l-marker>
+
+    <!--@l-add="$event.target.openPopup()"-->
+    <l-marker v-if="marker !== null && markers" :lat-lng="marker" v-for="marker in markers" @click="openSite(marker.siteId)">
+      <!--<l-popup :content="'TEST'"></l-popup>-->
+    </l-marker>
+
   </l-map>
 </template>
 
 <script>
-  import {LMap, LTileLayer, LControlLayers, LMarker } from 'vue2-leaflet';
+  import {LMap, LTileLayer, LControlLayers, LMarker, LPopup } from 'vue2-leaflet';
   import proj4 from 'proj4'
   proj4.defs([
     [
@@ -27,6 +33,7 @@
     ]
   ]);
   import 'proj4leaflet'
+
   export default {
     name: "MapComponent",
     props: {
@@ -34,13 +41,18 @@
         type: Object,
         required: true,
         default: null,
+      },
+      locations: {
+        type: Array,
+        default: [],
       }
     },
     components: {
       LMap,
       LTileLayer,
       LControlLayers,
-      LMarker
+      LMarker,
+      LPopup
     },
     data() {
       return {
@@ -48,6 +60,7 @@
         zoom: 10,
         center: this.isValidLocation(this.location) ? L.latLng(this.location) : L.latLng(58.5, 25.5),
         marker: this.isValidLocation(this.location) ? L.latLng(this.location) : null,
+        markers:[],
         tileProviders: [
           {
             name: 'OpenStreetMap',
@@ -124,6 +137,16 @@
           this.zoom = 10
         }
       },
+      locations: function(newVal, oldVal){
+        if(newVal.length === 0) return;
+        this.markers = []
+        newVal.forEach(entity => {
+          this.markers.push({lat:entity.latitude, lng: entity.longitude, siteId: entity.id})
+        });
+        this.center = L.latLng(58.5, 25.5)
+        this.zoom = 6
+        console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+      },
     },
     // Map start
     mounted () {
@@ -131,7 +154,7 @@
         this.map = this.$refs.map.mapObject;
         let vm = this
         this.map.on('baselayerchange', function (event) {
-          console.log(event)
+
           if(event.name === 'Maaameti kaart'){}
           vm.setDefaultProjection()
         });
@@ -162,7 +185,10 @@
       },
       checkIfCoordsInEPSG3301Projection(location){
         console.log(location)
-      }
+      },
+      openSite(siteId){
+        window.open('https://edit2.geocollections.info/site/'+siteId, '', 'width=800,height=750')
+      },
     }
   }
 </script>
