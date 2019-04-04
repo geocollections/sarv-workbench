@@ -281,7 +281,7 @@
       </div>
     </div>
 
-    <!-- DOI and URL -->
+    <!-- DOI and URL-->
     <div class="row">
       <div class="col-sm-2 lbl-right">
         <label :for="`doi`">DOI:</label>
@@ -291,12 +291,16 @@
         <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
       </div>
 
+      <div class="col-sm-2 mb-2 text-center">
+        <b-button variant="info" :disabled="isDoiEmpty" @click="checkDoi">{{ $t('reference.checkDoi') }}</b-button>
+      </div>
 
-      <div class="col-sm-2 lbl-right">
+
+      <div class="col-sm-1 lbl-right">
         <label :for="`url`">URL:</label>
       </div>
 
-      <div class="col-sm-4 mb-2">
+      <div class="col-sm-3 mb-2">
         <b-form-input id="url" v-model="reference.url" type="text"></b-form-input>
       </div>
     </div>
@@ -561,6 +565,7 @@
   import VueMultiselect from 'vue-multiselect'
   import FilePreview from '@/components/partial/FilePreview.vue';
   import cloneDeep from 'lodash/cloneDeep'
+  import { fetchDoiCheck } from "../../assets/js/api/apiCalls";
 
   import {
     fetchListReferenceTypes,
@@ -571,11 +576,13 @@
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from "../partial/BottomOptions";
+  import BButton from "bootstrap-vue/src/components/button/button";
 
   library.add(faPlus, faTrashAlt, faTimes)
 
   export default {
     components: {
+      BButton,
       BottomOptions,
       FontAwesomeIcon,
       VueMultiselect,
@@ -609,6 +616,7 @@
           attachment: false,
         },
         relatedTable: null,
+        doiFromCrossrefApi: [],
         reference: {
           reference: null,
           author: null,
@@ -688,9 +696,41 @@
       removeReferenceKeyword() {
         return this.reference.related_data.keyword !== null && this.reference.related_data.keyword.length > 0
       },
+
+      isDoiEmpty() {
+        return this.reference.doi === null || this.reference.doi.length <= 0;
+      }
     },
 
     methods: {
+
+
+
+      /***********************
+       *** DOI CHECK START ***
+       ***********************/
+
+      checkDoi() {
+        fetchDoiCheck(this.reference.doi).then(response => {
+          if (response.status === 200) {
+            if (response.body.status === 'ok') {
+              this.updateFieldsUsingDoi(response.body.message)
+            }
+          }
+        }, errResponse => {})
+      },
+
+      updateFieldsUsingDoi(data) {
+        if (data.title.length > 0) this.reference.title = data.title[0]
+        if (data.page) this.reference.pages = data.page
+        if (data.volume) this.reference.volume = data.volume
+      },
+
+      /***********************
+       ***  DOI CHECK END  ***
+       ***********************/
+
+
 
       hoverButtonClicked(choice) {
         if (choice === "SAVE") this.add(false)
@@ -974,7 +1014,7 @@
       },
 
       /*************************
-       *** RELATED DATA END  ***
+       ***  RELATED DATA END ***
        *************************/
 
 

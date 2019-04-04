@@ -76,39 +76,43 @@ const i18n = new VueI18n({
 
 // This adds session id and csrf to request | MUST BE BEFORE new Vue()
 Vue.http.interceptors.push((request, next) => {
-  let csrftoken = Vue.cookie.get('csrftoken')
+  // Only our rwapi needs csrftoken
+  if (request.url.includes('rwapi')) {
 
-  request.credentials = true;
-  request.headers.set('X-CSRFTOKEN', csrftoken)
+    let csrftoken = Vue.cookie.get('csrftoken')
 
-  next(res => {
-    if (res.status === 200) {
+    request.credentials = true;
+    request.headers.set('X-CSRFTOKEN', csrftoken)
 
-      /**
-       * If user is not logged in then session is destroyed
-       * and user is redirected to login view.
-       */
-      if (res.body.error_not_logged_in) {
-        Vue.prototype.$session.remove('authUser')
-        Vue.prototype.$session.destroy()
-        Vue.prototype.$toast.error('Please log back in', 'Session expired', {
-          position: 'bottomRight',
-          timeout: 5000,
-          closeOnEscape: true,
-          pauseOnHover: false
-        })
-        router.push({path: '/'})
+    next(res => {
+      if (res.status === 200) {
+
+        /**
+         * If user is not logged in then session is destroyed
+         * and user is redirected to login view.
+         */
+        if (res.body.error_not_logged_in) {
+          Vue.prototype.$session.remove('authUser')
+          Vue.prototype.$session.destroy()
+          Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+            position: 'bottomRight',
+            timeout: 5000,
+            closeOnEscape: true,
+            pauseOnHover: false
+          })
+          router.push({path: '/'})
+        }
+
+        if (res.body.link_error) {
+          Vue.prototype.$toast.error(res.body.link_error, 'Error', {
+            position: 'bottomRight',
+            timeout: 99999999999,
+            pauseOnHover: false
+          })
+        }
       }
-
-      if (res.body.link_error) {
-        Vue.prototype.$toast.error(res.body.link_error, 'Error', {
-          position: 'bottomRight',
-          timeout: 99999999999,
-          pauseOnHover: false
-        })
-      }
-    }
-  });
+    });
+  }
 });
 
 Vue.directive('translate', function (el, binding) {
