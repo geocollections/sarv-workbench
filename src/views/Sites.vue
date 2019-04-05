@@ -72,7 +72,7 @@
     components: {
       MapComponent,
       ListModuleCore,
-      Site
+      Site //TODO:REMOVE and add save method otherwise all SITE data loaded
     },
     mixins: [formManipulation,Site],
     name: "Sites",

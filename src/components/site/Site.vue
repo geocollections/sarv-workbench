@@ -175,6 +175,28 @@
         <font-awesome-icon icon="folder-open"/></legend>
 
         <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
+
+      <table>
+        <tbody>
+          <tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #ccdcb9;" :id="'tooltip-button-show-event'+idx" >
+            <!--<b-tooltip class="custom-tooltip" :ref="'tooltip'" :target="'tooltip-button-show-event'+idx" variant="primary">-->
+            <!--<img style="height: 200px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>-->
+            <!--<font-awesome-icon :icon="getFormatIcon(file.original_filename)" v-if="isDefinedAndNotNull(file.original_filename)"/>-->
+            <!--{{customLabelForAttachment(file)}}-->
+            <!--</b-tooltip>-->
+
+            <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)">
+              <img style="height: 50px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>
+              <font-awesome-icon class="fa-3x" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) === -1 && isDefinedAndNotNull(file.original_filename)" :icon="getFormatIcon(file.original_filename)"/>
+            </td>
+            <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">
+              <font-awesome-icon icon="eye"/>&ensp;{{file.original_filename}}<br/>
+              {{customLabelForAttachment(file)}}
+            </td>
+            <td style="min-width: 60px;text-align:right" @click="relatedData.attachment_link.splice(index, 1)"><font-awesome-icon icon="times"/></td>
+          </tr>
+        </tbody>
+      </table>
     </fieldset>
 
 
@@ -204,11 +226,12 @@
     fetchSites,
     fetchSite,
     fetchListCoordinateMethod,
-    fetchProjectAttachment
+    fetchSiteAttachment
   } from "../../assets/js/api/apiCalls";
   import MapComponent from "../partial/MapComponent";
   import FileInputComponent from "../partial/MultimediaComponent";
   import MultimediaComponent from "../partial/MultimediaComponent";
+  import {toastError} from "../../assets/js/iziToast/iziToast";
 
 
 
@@ -285,7 +308,8 @@
                 this.sendingData = false;
               }
             });
-            // this.loadRelatedData('attachment_link');
+
+            this.loadRelatedData('attachment_link');
           } else{
             this.setLocationDataIfExists();
           }
@@ -312,8 +336,8 @@
           if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
           if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
           //add related data
-          // uploadableObject.related_data = {}
-          // if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          uploadableObject.related_data = {}
+          if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
 
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
@@ -324,6 +348,7 @@
         },
 
         fillRelatedDataAutocompleteFields(obj,type){
+          if(obj === undefined) return;
           let relatedData = cloneDeep(obj)
           obj = [];
           relatedData.forEach(entity => {
@@ -336,7 +361,7 @@
           let query;
 
           if(object === 'attachment_link') {
-            query = fetchProjectAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
+            query = fetchSiteAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
           }
           return new Promise(resolve => {
             query.then(response => {
@@ -406,9 +431,28 @@
           this.site.latitude = location.lat.toFixed(6)
           this.site.longitude = location.lng.toFixed(6)
         },
-        addFileAsRelatedData(file) {
-          console.log('file uploaded')
-          // this.relatedData.attachment_link
+        addFileAsRelatedData(files) {
+          console.log('file uploaded');
+          console.log(file)
+          this.relatedData.attachment_link = files
+          // this.addAttachment('attachment',{file:file}).then(savedObjectId => {
+          //   if(savedObjectId === undefined || savedObjectId === false) return
+          //   this.relatedData.attachment_link.push({id: savedObjectId})
+          // });
+
+        },
+
+        addAttachment(type,data) {
+          let copy = cloneDeep(data);
+          let formData = new FormData();
+          formData.append('data', JSON.stringify(copy));
+
+          try {
+            return this.saveData(type,formData,'add/'+type+'/',false);
+          } catch (e) {
+            console.log('Attachment cannot not be added')
+            console.log(e)
+          }
         }
       },
 

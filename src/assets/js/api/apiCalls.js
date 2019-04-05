@@ -513,6 +513,9 @@ export function fetchSites(data,agent) {
 export function fetchSite(id) {
   return fetch(`site/?id=${id}&format=json`)
 }
+export function fetchSiteAttachment(id,page=1) {
+  return fetch(`attachment/?attach_link__site__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename&format=json`)
+}
 /***********************
  *** SITE END ***
  ***********************/
