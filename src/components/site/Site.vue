@@ -92,7 +92,7 @@
       <div class="row mb-2">
         <div class="col">
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <map-component v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />
+            <map-component  v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />
           </b-collapse>
         </div>
       </div>
@@ -170,6 +170,13 @@
       </div>
     </fieldset>
 
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">Files
+        <font-awesome-icon icon="folder-open"/></legend>
+
+        <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
+    </fieldset>
+
 
     <div class="row mt-3 mb-3">
       <div class="col">
@@ -200,12 +207,16 @@
     fetchProjectAttachment
   } from "../../assets/js/api/apiCalls";
   import MapComponent from "../partial/MapComponent";
+  import FileInputComponent from "../partial/MultimediaComponent";
+  import MultimediaComponent from "../partial/MultimediaComponent";
 
 
 
     export default {
       name: "Site",
       components: {
+        MultimediaComponent,
+        FileInputComponent,
         MapComponent,
         FontAwesomeIcon,
         Datepicker,
@@ -239,7 +250,8 @@
             previousRecord: {},
             nextRecord: {},
             searchParameters: this.setDefaultSearchParameters(),
-            showCollapseMap: true
+            showCollapseMap: true,
+
           }
         },
 
@@ -394,7 +406,10 @@
           this.site.latitude = location.lat.toFixed(6)
           this.site.longitude = location.lng.toFixed(6)
         },
-
+        addFileAsRelatedData(file) {
+          console.log('file uploaded')
+          // this.relatedData.attachment_link
+        }
       },
 
       watch: {
