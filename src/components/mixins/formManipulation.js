@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faProjectDiagram,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {faProjectDiagram,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faProjectDiagram,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
+library.add(faProjectDiagram,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
@@ -145,7 +145,7 @@ const formManipulation = {
             } else {
               toastSuccess({text: response.body.message});
             }
-            resolve(response.body.id)
+            (object === 'attachment') ? resolve(response.body.attachment_id) : resolve(response.body.id)
           }
           if (typeof response.body.error !== 'undefined') {
 

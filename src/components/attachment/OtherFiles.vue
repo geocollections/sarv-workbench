@@ -1162,6 +1162,7 @@
           if (this.files !== null) {
             for (let file in this.files) {
               // TODO: Only append 10 first files
+              console.log(this.files[file])
               formData.append('file' + file, this.files[file])
             }
           }

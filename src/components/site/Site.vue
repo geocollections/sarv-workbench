@@ -179,32 +179,61 @@
       <table>
         <tbody>
           <tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #ccdcb9;" :id="'tooltip-button-show-event'+idx" >
-            <!--<b-tooltip class="custom-tooltip" :ref="'tooltip'" :target="'tooltip-button-show-event'+idx" variant="primary">-->
-            <!--<img style="height: 200px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>-->
-            <!--<font-awesome-icon :icon="getFormatIcon(file.original_filename)" v-if="isDefinedAndNotNull(file.original_filename)"/>-->
-            <!--{{customLabelForAttachment(file)}}-->
-            <!--</b-tooltip>-->
 
             <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)">
               <img style="height: 50px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>
               <font-awesome-icon class="fa-3x" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) === -1 && isDefinedAndNotNull(file.original_filename)" :icon="getFormatIcon(file.original_filename)"/>
             </td>
-            <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">
-              <font-awesome-icon icon="eye"/>&ensp;{{file.original_filename}}<br/>
-              {{customLabelForAttachment(file)}}
-            </td>
+            <!--<td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">-->
+              <!--<font-awesome-icon icon="eye"/>&ensp;{{file.original_filename}}<br/>-->
+              <!--{{customLabelForAttachment(file)}}-->
+            <!--</td>-->
             <td style="min-width: 60px;text-align:right" @click="relatedData.attachment_link.splice(index, 1)"><font-awesome-icon icon="times"/></td>
           </tr>
         </tbody>
       </table>
     </fieldset>
 
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">Related samples
+        <font-awesome-icon icon="vial"/></legend>
+
+      <div class="row">
+        <div class="col-sm-12 mb-2">
+          <span class="float-right">
+            <button class="btn btn-primary mb-2" @click="openSampleModal">{{ $t('add.new') }}</button>
+          </span>
+          <div class="table-responsive-sm">
+            <table class="table table-hover table-bordered">
+              <thead class="thead-light">
+                <tr>
+                  <th>ID</th>
+                  <th>{{ $t('sample.number') }}</th>
+                  <th>{{ $t('sample.locality') }}</th>
+                  <th>{{ $t('sample.agent_collected') }}</th>
+                </tr>
+              </thead>
+            <tbody>
+              <tr v-for="(sample,idx) in relatedData.sample">
+                <td @click="windowOpenNewTab('sample','/sample/'+sample.id)">
+                  <font-awesome-icon size="1x" icon="eye"/> {{sample.id}}
+                </td>
+                <td>{{sample.number}}</td>
+                <td v-translate="{et:sample.locality__locality,en:sample.locality__locality_en}"></td>
+                <td>{{sample.agent_collected__agent}}</td>
+              </tr>
+            </tbody>
+          </table>
+          </div>
+        </div>
+      </div>
+    </fieldset>
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'site')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="addSite(false)">
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'site')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="addSite(true)">
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site')">
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
@@ -226,13 +255,13 @@
     fetchSites,
     fetchSite,
     fetchListCoordinateMethod,
-    fetchSiteAttachment
+    fetchSiteAttachment,
+    fetchLinkedSamples
   } from "../../assets/js/api/apiCalls";
   import MapComponent from "../partial/MapComponent";
   import FileInputComponent from "../partial/MultimediaComponent";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import {toastError} from "../../assets/js/iziToast/iziToast";
-
 
 
     export default {
@@ -310,6 +339,7 @@
             });
 
             this.loadRelatedData('attachment_link');
+            this.loadRelatedData('sample');
           } else{
             this.setLocationDataIfExists();
           }
@@ -318,9 +348,10 @@
 
         setDefaultRalatedData(){
           return {
-            attachment_link:[],
-            page : {attachment_link:1},
-            count: {attachment_link:0}
+            new : {attachment_link:[]},
+            attachment_link:[], sample:[],
+            page : {attachment_link:1,sample:1},
+            count: {attachment_link:0,sample:0}
           }
         },
 
@@ -337,6 +368,10 @@
           if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
           //add related data
           uploadableObject.related_data = {}
+          // if(this.isDefinedAndNotEmpty(this.relatedData.new.attachment_link) && this.relatedData.attachment_link) {
+          //   console.log(this.relatedData)
+          //   this.relatedData.attachment_link = this.relatedData.attachment_link.concat(cloneDeep(this.relatedData.new.attachment_link))
+          // }
           if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
 
           console.log(uploadableObject)
@@ -352,7 +387,7 @@
           let relatedData = cloneDeep(obj)
           obj = [];
           relatedData.forEach(entity => {
-            if(type === 'attachment_link') obj.push(entity)
+            if(type === 'attachment_link' || type === 'sample') obj.push(entity)
           });
           return obj
         },
@@ -362,14 +397,17 @@
 
           if(object === 'attachment_link') {
             query = fetchSiteAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
+          } else if(object === 'sample') {
+              query = fetchLinkedSamples(this.$route.params.id,this.relatedData.page.sample)
           }
           return new Promise(resolve => {
             query.then(response => {
               //projectagent do not have count value
-              if (response.status === 200) this.relatedData[object] = response.body.results;
+              if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results: [];
 
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object);
+
               resolve(true)
             });
           });
@@ -433,8 +471,8 @@
         },
         addFileAsRelatedData(files) {
           console.log('file uploaded');
-          console.log(file)
-          this.relatedData.attachment_link = files
+
+          this.relatedData.new.attachment_link.push(files)
           // this.addAttachment('attachment',{file:file}).then(savedObjectId => {
           //   if(savedObjectId === undefined || savedObjectId === false) return
           //   this.relatedData.attachment_link.push({id: savedObjectId})
@@ -443,9 +481,6 @@
         },
 
         addAttachment(type,data) {
-          let copy = cloneDeep(data);
-          let formData = new FormData();
-          formData.append('data', JSON.stringify(copy));
 
           try {
             return this.saveData(type,formData,'add/'+type+'/',false);
@@ -453,6 +488,35 @@
             console.log('Attachment cannot not be added')
             console.log(e)
           }
+        },
+
+        addSite(addAnother) {
+          let formData = new FormData(), i = 0;
+          formData.append('data', JSON.stringify({
+            description:'Olesja TEST',
+            // attach_link__site: this.site.id ? this.site.id : null
+          }));
+
+          this.relatedData.new.attachment_link.forEach(entity => {
+            formData.append('file' + i, entity);
+            i++;
+          });
+
+          try {
+            this.saveData('attachment',formData,'add/attachment/',false).then(savedObjectId => {
+              console.log(savedObjectId)
+              if(savedObjectId === undefined || savedObjectId === false) return
+              //load attachment by id
+              this.add(addAnother, 'site');
+            });
+          } catch (e) {
+            console.log('Attachment cannot not be added')
+            console.log(e)
+          }
+        },
+
+        openSampleModal(){
+
         }
       },
 

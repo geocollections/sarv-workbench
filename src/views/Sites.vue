@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="col p-0">
-           <span class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
-            <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
-          </span>
+       <span class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+          <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
+        </span>
     </div>
 
     <div class="col  p-0">

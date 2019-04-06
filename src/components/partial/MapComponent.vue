@@ -184,7 +184,7 @@
         this.zoom = 10
       },
       checkIfCoordsInEPSG3301Projection(location){
-        console.log(location)
+        // console.log(location)
       },
       openSite(siteId){
         window.open('https://edit2.geocollections.info/site/'+siteId, '', 'width=800,height=750')

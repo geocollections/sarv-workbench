@@ -405,7 +405,7 @@
           return new Promise(resolve => {
             query.then(response => {
               //projectagent do not have count value
-              if (response.status === 200) this.relatedData[object] = response.body.results;
+              if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results: []
 
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object);

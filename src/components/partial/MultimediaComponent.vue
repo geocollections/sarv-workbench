@@ -8,33 +8,33 @@
         <font-awesome-icon icon="camera-retro"/> Add photo
       </label>
 
-      <b-form-file v-model="photo" accept="image/*;capture=camera"
+      <b-form-file v-model="recordedFile" accept="image/*;capture=camera"
                    id="photo-upload"
                    plain
                    style="display: none"
-                   ref="fileinputPhoto"
+                   ref="fileinput"
                    :placeholder="$t('add.inputs.fileInput')">
       </b-form-file>
 
       <label for="video-upload" class="btn btn-outline-primary  p-2 mr-2">
         <font-awesome-icon icon="video"/> Add video
       </label>
-      <b-form-file v-model="video" accept="video/*;capture=camcorder"
+      <b-form-file v-model="recordedFile" accept="video/*;capture=camcorder"
                    id="video-upload"
                    plain
                    style="display: none"
-                   ref="fileinputVideo"
+                   ref="fileinput"
                    :placeholder="$t('add.inputs.fileInput')">
       </b-form-file>
 
       <label for="audio-upload" class="btn btn-outline-primary  p-2 mr-2">
         <font-awesome-icon icon="microphone"/> Add audio
       </label>
-      <b-form-file v-model="audio" accept="audio/*;capture=microphone"
+      <b-form-file v-model="recordedFile" accept="audio/*;capture=microphone"
                    id="audio-upload"
                    plain
                    style="display: none"
-                   ref="fileinputAudio"
+                   ref="fileinput"
                    :placeholder="$t('add.inputs.fileInput')">
       </b-form-file>
 
@@ -84,9 +84,7 @@
           fileMetaData: null,
           isDragging: false,
           upload: {},
-          photo:null,
-          video:null,
-          audio:null
+          recordedFile:null
 
         }
       },
@@ -97,13 +95,7 @@
       },
 
       watch: {
-        'photo':function (newVal) {
-          this.files.push(newVal)
-        },
-        'video':function (newVal) {
-          this.files.push(newVal)
-        },
-        'audio':function (newVal) {
+        'recordedFile':function (newVal) {
           this.files.push(newVal)
         },
         'files': function (newVal) {
@@ -114,8 +106,8 @@
                 let reader = new FileReader();
 
                 reader.onload = (event) => {
-                  this.$emit('file-uploaded',this.files)
-                  console.log(event.target.result)
+                  this.$emit('file-uploaded',this.recordedFile);
+                  // console.log(event.target.result)
                   this.$refs['image' + parseInt(i)][0].src = event.target.result;
                 };
                 reader.readAsDataURL(this.files[i]);
@@ -125,7 +117,6 @@
 
           if (newVal.length === 1) {
             let fileReader = new FileReader()
-            console.log(newVal)
             fileReader.readAsArrayBuffer(newVal[0]);
             fileReader.onload = (event) => {
               // TODO: Get thumbnail
@@ -136,21 +127,9 @@
       },
       methods: {
         clearFile() {
-          this.$refs.fileinput.reset()
+          this.$refs.fileinput.reset();
+          this.files=[]
         },
-        //
-        // loadPhoto() {
-        //   this.$emit('file-uploaded',this.photo)
-        // },
-        // loadVideo() {
-        //   this.$emit('file-uploaded',this.video)
-        // },
-        // loadAudio() {
-        //   this.$emit('file-uploaded',this.audio)
-        // }
-
-
-
       }
     }
 </script>
