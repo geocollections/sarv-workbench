@@ -179,9 +179,10 @@
           <div class="d-flex flex-row  flex-wrap mt-2" v-if="relatedData.attachment_link.length > 0">
               <div class="mt-2" v-for="(file, key) in relatedData.attachment_link">
                 <div class="img-container p-1">
-                  <img v-if="file.uuid_filename !== null" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image" style="width:100%">
+                  <font-awesome-icon v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-audio"/>
+                  <font-awesome-icon v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-video"/>
+                  <img v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) === -1" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image" style="width:100%;margin-top: 3vh">
                   <font-awesome-icon v-if="file.uuid_filename === null"  style="height: 10rem" size="7x" icon="file"/>
-                  <font-awesome-icon v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="audio-file"/>
                   <div class="middle flex flex-inline">
                     <button class="btn btn-primary mb-2 mr-1 btn-sm" @click="openGeoInNewWindow({object:'attachment',id:file.id})"><font-awesome-icon icon="external-link-alt"/></button>
                     <button class="btn btn-danger mb-2 btn-sm" @click="relatedData.attachment_link.splice(key,1)"><font-awesome-icon icon="trash-alt"/></button>
@@ -190,8 +191,8 @@
                     </div>
 
                   </div>
-                  <div class="mt-1" style="background-color:#056384;color:white; width: 23.5vh">
-                    <span style="font-size: small">{{file.original_filename}}</span>
+                  <div class="mt-1" style="background-color:#056384;color:white; width: 23.5vh;min-height:10vh">
+                    <span class="p-1" style="font-size: small">{{file.original_filename}}</span>
                   </div>
                 </div>
               </div>
@@ -262,7 +263,8 @@
     fetchSite,
     fetchListCoordinateMethod,
     fetchSiteAttachment,
-    fetchLinkedSamples
+    fetchLinkedSamples,
+    fetchLastSiteName
   } from "../../assets/js/api/apiCalls";
   import MapComponent from "../partial/MapComponent";
   import FileInputComponent from "../partial/MultimediaComponent";
@@ -305,7 +307,7 @@
               },
               project: [],attachment:[],coordMethod:[],locality:[]
             },
-            requiredFields: ['name'],
+            requiredFields: [],
             site: {},
             previousRecord: {},
             nextRecord: {},
@@ -331,6 +333,7 @@
               let handledResponse = this.handleResponse(response);
               if(handledResponse.length > 0) {
                 this.site = this.handleResponse(response)[0];
+
                 this.fillAutocompleteFields(this.site)
                 this.removeUnnecessaryFields(this.site, this.copyFields);
                 if(this.site.latitude !== null && this.site.longitude !== null) {
@@ -355,6 +358,7 @@
             this.loadRelatedData('sample');
           } else{
             this.setLocationDataIfExists();
+            this.setSiteNameIfPreviousExists()
           }
 
         },
@@ -512,10 +516,18 @@
 
         openSampleModal(){
 
+        },
+
+        setSiteNameIfPreviousExists(){
+          fetchLastSiteName(this.$route.params.id).then(name => {
+            let tokenize = this.site.name.split(/[^0-9]/g);
+            if(!isNaN(tokenize[tokenize.length-1]))
+              this.site.name = parseInt(tokenize[tokenize.length-1])+1;
+          });
         }
       },
       beforeRouteLeave(to, from, next) {
-        this.$store.commit('REMOVE_RELATION_OBJECT')
+        this.$store.commit('REMOVE_RELATION_OBJECT');
         next()
       },
       watch: {

@@ -513,6 +513,9 @@ export function fetchSiteAttachment(id,page=1) {
 export function fetchLinkedSamples(id,page=1) {
   return fetch(`sample/?site__id=${id}&page=${page}&paginate_by=100&fields=id,number,locality__locality,locality__locality_en,agent_collected__agent&format=json`)
 }
+export function fetchLastSiteName(projectId) {
+  return fetch(`site/?project=${projectId}&fields=name&order_by=-id&paginate_by=1&format=json`)
+}
 /***********************
  *** SITE END ***
  ***********************/
