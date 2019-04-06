@@ -564,6 +564,10 @@
     "relatedFile": "Related file(s)",
     "is_oa": "OpenAccess",
     "keywords": "Author keywords",
+    "id": "ID",
+    "bookJournal": "Book or journal",
+    "abstractKeywordsRemarks": "Abstract, keywords or remarks",
+    "header": "Reference",
     "relatedTables": {
       "attachment": "Related data files",
       "locality": "Locality",

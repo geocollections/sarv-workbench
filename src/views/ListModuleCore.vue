@@ -280,4 +280,15 @@
     white-space: nowrap;
   }
 
+  .th-sort > th > span {
+    cursor: pointer;
+  }
+
+  .th-sort > th > span:hover {
+    color: #000;
+  }
+
+  .fa-sort-up, .fa-sort-down {
+    color: #007bff;
+  }
 </style>

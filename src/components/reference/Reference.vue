@@ -1,70 +1,6 @@
 <template>
   <div class="reference">
-
-    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
-
-    <div class="row mt-4 page-title">
-      <div class="col-sm-6">
-        <p class="h2">{{ $t('add.newReference') }}</p>
-      </div>
-    </div>
-
-    <!-- FILE -->
-    <div class="row">
-      <div class="col-sm-12 mb-2">
-        <label :for="`files`"
-               v-bind:class="{ dragging : isDragging }"
-               v-on:dragover.stop.prevent="isDragging = true"
-               v-on:dragleave.stop.prevent="isDragging = false"
-               v-on:drop.stop.prevent="dropFile"
-               class="btn btn-outline-primary btn-block">{{ $t('add.inputs.fileInput') }}
-        </label>
-
-        <div class="mt-2 alert alert-warning" v-if="files !== null && files.length >= 10">{{ $t('add.inputs.fileInputMaxError', { num: files.length }) }}</div>
-
-        <div class="mt-2" v-if="files !== null && files.length > 0">
-          <div v-if="files.length > 0" >
-
-            <ul class="list-unstyled">
-              <li class="mt-2" v-for="(file, key) in files">
-
-                <span>
-                  <font-awesome-icon icon="file"></font-awesome-icon>&nbsp;
-                </span>
-
-                <span><b>{{ file.name }}</b></span>
-
-              </li>
-            </ul>
-
-          </div>
-        </div>
-
-        <!-- TODO: https://github.com/bootstrap-vue/bootstrap-vue/issues/1526, If multiple then accept does not take multiple formats. BUG -->
-        <!-- TODO: BUG: If too many files or long filenames then breaks the input design -->
-        <b-form-file v-model="files"
-                     id="files"
-                     :state="filesState"
-                     multiple
-                     plain
-                     style="display: none"
-                     ref="fileinput"
-                     accept=".pdf"
-                     :placeholder="$t('add.inputs.fileInput')">
-        </b-form-file>
-
-        <b-form-text v-if="!filesState">{{ $t('add.errors.files') }}.</b-form-text>
-
-      </div>
-
-      <div class="col-sm-12 col-md-6 mb-2">
-        <button class="btn btn-outline-danger" v-if="filesState" :disabled="sendingData" @click="clearFile">
-          <span v-show="files.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
-          <span v-show="files.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
-        </button>
-      </div>
-
-    </div>
+    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- REFERENCE and YEAR -->
     <div class="row">
@@ -73,7 +9,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="reference" v-model="reference.reference" :state="referenceState" type="text"></b-form-input>
+        <b-form-input id="reference" v-model="reference.reference" :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
       </div>
 
 
@@ -82,7 +18,7 @@
       </div>
 
       <div class="col-sm-4 mb-2">
-        <b-form-input id="year" v-model="reference.year" :state="yearState" type="number"></b-form-input>
+        <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)" type="number"></b-form-input>
       </div>
     </div>
 
@@ -93,7 +29,7 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-input id="author" v-model="reference.author" :state="authorState" type="text"></b-form-input>
+        <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)" type="text"></b-form-input>
       </div>
     </div>
 
@@ -105,7 +41,7 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="title" v-model="reference.title" :state="titleState" type="text"
+        <b-form-textarea id="title" v-model="reference.title" :state="isDefinedAndNotNull(reference.title)" type="text"
                          :rows="1" :max-rows="4"></b-form-textarea>
       </div>
     </div>
@@ -132,10 +68,9 @@
         <vue-multiselect v-model="reference.type"
                          id="type"
                          :options="autocomplete.types"
-                         @open="maybeGetTypes"
                          track-by="id"
-                         :label="typeLabel"
-                         :loading="searchingTypes"
+                         :label="commonLabel"
+                         :loading="autocomplete.loaders.agent"
                          :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -151,10 +86,8 @@
         <vue-multiselect v-model="reference.language"
                          id="language"
                          :options="autocomplete.languages"
-                         @open="maybeGetLanguages"
                          track-by="id"
-                         :label="languageLabel"
-                         :loading="searchingLanguages"
+                         :label="commonLabel"
                          :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -174,22 +107,15 @@
                          :options="autocomplete.journals"
                          :internal-search="false"
                          :preserve-search="true"
-                         @search-change="getJournals"
+                         @search-change="autcompleteJournalSearch"
                          label="journal_name"
-                         :loading="searchingJournals"
+                         :loading="autocomplete.loaders.journals"
                          :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
 
-      <!--
-      <div class="col-sm-1 mb-2">
-        <a href="javascript:void(0)" @click="openInNewWindow({object: 'journal', height: 500})" class="btn btn-outline-info" :title="$t('add.inputs.newJournal')">
-          <font-awesome-icon icon="plus"></font-awesome-icon>
-        </a>
-      </div>
-      -->
 
       <div class="col-sm-2 lbl-right">
         <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
@@ -292,7 +218,7 @@
       </div>
 
       <div class="col-sm-2 mb-2 text-center">
-        <b-button variant="info" :disabled="isDoiEmpty" @click="checkDoi">{{ $t('reference.checkDoi') }}</b-button>
+        <b-button variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">{{ $t('reference.checkDoi') }}</b-button>
       </div>
 
 
@@ -378,11 +304,9 @@
       </div>
 
       <div class="col-9 mb-2">
-        <vue-multiselect v-model="reference.related_data.keyword"
+        <vue-multiselect v-model="reference.keyword"
                          id="keyword"
-                         @open="getReferenceKeywords"
                          :options="autocomplete.keyword"
-                         :loading="searchingReferenceKeywords"
                          :multiple="true"
                          :close-on-select="false"
                          track-by="id"
@@ -392,132 +316,12 @@
       </div>
 
       <div class="col-1 mb-2">
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeReferenceKeyword"
-                @click="reference.related_data.keyword = null">
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotNull(autocomplete.keyword)"
+                @click="autocomplete.keyword = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
     </div>
-
-    <!-- RELATED DATA -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`related_data`">{{ $t('otherFiles.relatedData') }}:</label>
-      </div>
-
-      <div class="col-sm-4">
-        <b-form-select id="related_data" v-model="relatedTable" class="mb-3">
-          <option :value="null">{{ this.$t('otherFiles.relatedDataDefault') }}</option>
-          <option value="attachment">{{ this.$t('reference.relatedTables.attachment') }}</option>
-          <option value="locality">{{ this.$t('reference.relatedTables.locality') }}</option>
-        </b-form-select>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right" v-if="relatedTable !== null">
-        <label :for="relatedTable">{{ this.$t('reference.relatedTables.' + relatedTable) }}:</label>
-      </div>
-
-      <div class="col-sm-4" v-if="relatedTable !== null">
-        <vue-multiselect v-model="reference.related_data[relatedTable]"
-                         :id="relatedTable"
-                         :multiple="true"
-                         track-by="id"
-                         :options="autocomplete.relatedData[relatedTable]"
-                         :internal-search="false"
-                         @search-change="getRelatedData"
-                         :custom-label="customLabelForRelatedData"
-                         :loading="searchingRelatedData[relatedTable]"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-    </div>
-
-    <!-- SHOWING RELATED_DATA -->
-    <div class="row">
-
-      <!-- ATTACHMENT -->
-      <div class="col-sm-6" v-if="reference.related_data.attachment !== null && reference.related_data.attachment.length > 0">
-
-        <p class="h4">{{ $t('reference.relatedTables.attachment') }}</p>
-
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>{{ $t('reference.relatedTables.attachment') }}</th>
-              <th></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr v-for="(entity, index) in reference.related_data.attachment">
-              <td>
-                <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'file', id: entity.id})">
-                  {{ entity.id }}
-                </a>
-              </td>
-
-              <td class="text-center">
-                <file-preview :data="entity" />
-              </td>
-
-              <td class="text-center delete-relation" @click="reference.related_data.attachment.splice(index, 1)">
-                <font-awesome-icon icon="times"></font-awesome-icon>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- LOCALITY -->
-      <div class="col-sm-6" v-if="reference.related_data.locality !== null && reference.related_data.locality.length > 0">
-
-        <p class="h4">{{ $t('reference.relatedTables.locality') }}</p>
-
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>{{ $t('locality.locality') }}</th>
-              <!--<th>Type</th>-->
-              <!--<th>Lk.</th>-->
-              <!--<th>Joon</th>-->
-              <!--<th>Lisainfo</th>-->
-              <th></th>
-            </tr>
-            </thead>
-
-            <tbody>
-            <tr v-for="(entity, index) in reference.related_data.locality">
-              <td>
-                <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'locality', id: entity.id})">
-                  {{ entity.id }}
-                </a>
-              </td>
-
-              <td>{{ $i18n.locale === 'ee' ? entity.locality : entity.locality_en }}</td>
-              <!--<td></td>-->
-              <!--<td></td>-->
-              <!--<td></td>-->
-              <!--<td></td>-->
-
-              <td class="text-center delete-relation" @click="reference.related_data.locality.splice(index, 1)">
-                <font-awesome-icon icon="times"></font-awesome-icon>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-
 
     <!-- CHECKBOXES -->
     <div class="row">
@@ -536,590 +340,270 @@
       </div>
     </div>
 
-
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false)">{{ $t('add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true)">{{ $t('add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset">{{ $t('add.buttons.clearFields') }}</button>
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row" v-if="$route.meta.isEdit">
+      <div class="col mt-4">
+        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link" :class="{ active: activeTab === 'locality_reference' }">
+              {{ $t('library.relatedTables.libraryReference') }}
+            </a>
+          </li>
+        </ul>
+        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <div class="row mb-4 pt-1">
+          <!--<div class="col">-->
+          <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
+          <!--:disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>-->
+          <!--</div>-->
+          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+            </b-pagination>
+          </div>
+        </div>
       </div>
     </div>
 
+    <div class="row mt-3 mb-3">
+      <div class="col">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'library')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('library') : reset('library')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+      </div>
+    </div>
 
-    <bottom-options :success-button="$t('add.buttons.add')"
-                    :danger-button="$t('add.buttons.clearFields')"
-                    object="reference"
-                    v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
 </template>
 
 <script>
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faPlus} from '@fortawesome/free-solid-svg-icons'
-  import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
-  import {faTimes} from '@fortawesome/free-solid-svg-icons'
-
   import Spinner from 'vue-simple-spinner'
+  import { library } from '@fortawesome/fontawesome-svg-core'
   import VueMultiselect from 'vue-multiselect'
-  import FilePreview from '@/components/partial/FilePreview.vue';
-  import cloneDeep from 'lodash/cloneDeep'
-  import { fetchDoiCheck } from "../../assets/js/api/apiCalls";
-
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import {faTimes} from '@fortawesome/free-solid-svg-icons'
   import {
+    fetchReference,
+    fetchReferences,
+    fetchLocalityReference,
     fetchListReferenceTypes,
     fetchListLanguages,
-    fetchJournals,
-    fetchReferenceKeywords
-  } from "@/assets/js/api/apiCalls";
-
+    fetchListKeywords,
+  } from "../../assets/js/api/apiCalls";
+  import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
-  import BottomOptions from "../partial/BottomOptions";
-  import BButton from "bootstrap-vue/src/components/button/button";
-
-  library.add(faPlus, faTrashAlt, faTimes)
+  import formManipulation  from './../mixins/formManipulation'
+  import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
+  import copyForm  from './../mixins/copyForm'
+  import LocalityReference from "./relatedTables/LocalityReference"
 
   export default {
+    name: "Reference",
     components: {
-      BButton,
-      BottomOptions,
       FontAwesomeIcon,
       VueMultiselect,
-      FilePreview,
       Spinner,
+      LocalityReference
     },
-    name: "Reference",
-    data() {
-      return {
-        apiUrl: 'https://rwapi.geocollections.info/',
-        loadingPercent: 0,
-        sendingData: false,
-        files: null,
-        isDragging: false,
-        searchingTypes: false,
-        searchingLanguages: false,
-        searchingJournals: false,
-        searchingReferenceKeywords: false,
-        autocomplete: {
-          types: [],
-          languages: [],
-          journals: [],
-          keyword: [],
-          relatedData: {
-            locality: [],
-            attachment: [],
-          }
+    mixins: [formManipulation, copyForm, autocompleteFieldManipulation],
+
+    data() { return this.setInitialData() },
+
+    created() { this.loadFullInfo() },
+
+    watch: {
+      '$route.params.id': {
+        handler: function (newval, oldval) {
+          this.reloadData()
         },
-        searchingRelatedData: {
-          locality: false,
-          attachment: false,
-        },
-        relatedTable: null,
-        doiFromCrossrefApi: [],
-        reference: {
-          reference: null,
-          author: null,
-          type: {
-            "id": 1,
-            "value": "artikkel ajakirjas",
-            "value_en": "article in journal"
-          },
-          language: {
-            "id": 1,
-            "value": "inglise",
-            "value_en": "English"
-          },
-          year: null,
-          title: null,
-          title_original: null,
-          book: null,
-          book_original: null,
-          publisher: null,
-          publisher_place: null,
-          journal: null,
-          journal_additional: null,
-          volume: null,
-          number: null,
-          pages: null,
-          figures: null,
-          doi: null,
-          url: null,
-          isbn: null,
-          issn: null,
-          abstract: null,
-          author_keywords: null,
-          tags: null,
-          remarks: null,
-          journal_txt: null,
-          is_oa: '0',
-          is_private: '0',
-          is_locked: '0',
-          related_data: {
-            locality: null,
-            attachment: null,
-            keyword: null,
-          }
-        },
-      }
-    },
-
-    computed: {
-      referenceState() {
-        return this.reference.reference !== null && this.reference.reference.length > 0
+        deep: true
       },
-
-      authorState() {
-        return this.reference.author !== null && this.reference.author.length > 0
-      },
-
-      yearState() {
-        return this.reference.year !== null && this.reference.year.length > 0
-      },
-
-      titleState() {
-        return this.reference.title !== null && this.reference.title.length > 0
-      },
-
-      filesState() {
-        return this.files !== null && this.files.length > 0
-      },
-
-      typeLabel() {
-        return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
-      },
-
-      languageLabel() {
-        return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
-      },
-
-      removeReferenceKeyword() {
-        return this.reference.related_data.keyword !== null && this.reference.related_data.keyword.length > 0
-      },
-
-      isDoiEmpty() {
-        return this.reference.doi === null || this.reference.doi.length <= 0;
-      }
     },
 
     methods: {
 
+      setTab(type) { this.activeTab = type },
 
-
-      /***********************
-       *** DOI CHECK START ***
-       ***********************/
-
-      checkDoi() {
-        fetchDoiCheck(this.reference.doi).then(response => {
-          if (response.status === 200) {
-            if (response.body.status === 'ok') {
-              this.updateFieldsUsingDoi(response.body.message)
-            }
-          }
-        }, errResponse => {})
-      },
-
-      updateFieldsUsingDoi(data) {
-        if (data.title.length > 0) this.reference.title = data.title[0]
-        if (data.page) this.reference.pages = data.page
-        if (data.volume) this.reference.volume = data.volume
-      },
-
-      /***********************
-       ***  DOI CHECK END  ***
-       ***********************/
-
-
-
-      hoverButtonClicked(choice) {
-        if (choice === "SAVE") this.add(false)
-        if (choice === "CANCEL") this.reset()
-      },
-
-      add(addAnother) {
-
-        if (this.referenceState && this.authorState && this.yearState && this.titleState && !this.sendingData) {
-
-          this.sendingData = true
-          this.loadingPercent = 0
-
-          let formData = new FormData()
-
-          const dataToUpload = this.formatDataForUpload(this.reference);
-          formData.append('data', dataToUpload)
-
-          this.$http.post(this.apiUrl + 'add/reference/', formData, {
-            before(request) {
-              this.previousRequest = request
+      setInitialData() {
+        return {
+          tabs: ['locality_reference'],
+          searchHistory: 'referenceSearchHistory',
+          activeTab: 'locality_reference',
+          relatedData: this.setDefaultRelatedData(),
+          copyFields: ['reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
+            'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url',
+            'isbn', 'issn', 'abstract', 'author_keywords', 'remarks', 'tags'],
+          autocomplete: {
+            loaders: {
+              types: false,
+              languages: false,
+              journals: false,
+              keyword: false,
             },
-            progress: (e) => {
-              if (e.lengthComputable) {
-                // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
-                this.loadingPercent = Math.round((e.loaded / e.total) * 100)
-              }
+            types: [],
+            languages: [],
+            journals: [],
+            keyword: [],
+          },
+          requiredFields: ['reference', 'year', 'author', 'title'],
+          reference: {},
+          previousRecord: {},
+          nextRecord: {},
+          searchParameters: this.setDefaultSearchParameters()
+        }
+      },
+
+      reloadData() {
+        Object.assign(this.$data, this.setInitialData());
+        this.loadFullInfo()
+      },
+
+      loadFullInfo() {
+        fetchListReferenceTypes().then(response => {
+          this.autocomplete.types = this.handleResponse(response);
+        });
+        fetchListLanguages().then(response => {
+          this.autocomplete.languages = this.handleResponse(response);
+        });
+        fetchListKeywords().then(response => {
+          this.autocomplete.keyword = this.handleResponse(response);
+        });
+
+        if(this.$route.meta.isEdit) {
+          this.sendingData = true;
+          fetchReference(this.$route.params.id).then(response => {
+            let handledResponse = this.handleResponse(response);
+            if(handledResponse.length > 0) {
+              this.reference = this.handleResponse(response)[0];
+              this.fillAutocompleteFields(this.reference)
+              this.removeUnnecessaryFields(this.reference, this.copyFields);
+              this.$emit('data-loaded',this.reference)
+              this.$emit('set-object','reference')
+              this.sendingData = false;
+              this.getListRecords('reference')
+            } else {
+              this.sendingData = false;
             }
-          }).then(response => {
-            console.log(response)
-            this.sendingData = false
-            if (response.status === 200) {
-              if (typeof response.body.message !== 'undefined') {
+          });
 
-                if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                  toastSuccess({text: response.body.message_et});
-                } else {
-                  toastSuccess({text: response.body.message});
-                }
+          // FETCH FIRST TAB RELATED DATA
+          this.tabs.forEach(entity => {
+            this.loadRelatedData(entity);
+          });
 
-                if (!addAnother) {
-                  this.$router.push({ path: '/reference' })
-                }
-              }
-              if (typeof response.body.error !== 'undefined') {
+          this.$on('tab-changed',this.setTab);
 
-                if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-                  toastError({text: response.body.error_et});
-                } else {
-                  toastError({text: response.body.error});
-                }
+          this.$on('related-data-modified',this.editRelatedData);
+          this.$on('related-data-added',this.addRelatedData);
+          this.$on('edit-row',this.editRow);
+          this.$on('allow-remove-row',this.allowRemove);
 
-              }
-            }
-          }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse))
-            this.sendingData = false
-            toastError({text: this.$t('messages.uploadError')})
-          })
+          this.$emit('related-data-info',this.tabs);
 
-        } else if (this.sendingData) {
-          // This shouldn't run unless user deletes html elements and tries to press 'add' button again
-          toastError({text: this.$t('messages.easterEggError')})
-        } else {
-          toastError({text: this.$t('messages.checkForm')})
+          this.setActiveTab('locality_reference')
         }
 
       },
 
-      cancelRequest() {
-        this.previousRequest.abort()
+      setDefaultRelatedData(){
+        return {
+          locality_reference:[],
+          copyFields: {
+            locality_reference: ['locality', 'type', 'pages', 'figures', 'remarks'],
+          },
+          insert: {
+            locality_reference: {}
+          },
+          page : {
+            locality_reference: 1
+          },
+          count: {
+            locality_reference: 0
+          }
+        }
       },
 
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
-
-        // Building correct fields
-        if (objectToUpload.type !== null) uploadableObject.type = objectToUpload.type.id
-        if (objectToUpload.language !== null) uploadableObject.language = objectToUpload.language.id
-        if (objectToUpload.journal !== null) uploadableObject.journal = objectToUpload.journal.id
-
-
-        /**************************
-         *** RELATED DATA START ***
-         **************************/
-
-        if (objectToUpload.locality !== null && typeof objectToUpload.locality !== 'undefined') {
-          if (objectToUpload.locality.length === 0) uploadableObject.locality = null
-        }
-        if (objectToUpload.attachment !== null && typeof objectToUpload.attachment !== 'undefined') {
-          if (objectToUpload.attachment.length === 0) uploadableObject.attachment = null
-        }
-
-        /************************
-         *** RELATED DATA END ***
-         ************************/
-
-
+        // if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
-
-        const uploadableObjectWithoutWhitespace = JSON.stringify(uploadableObject).replace(/"\s+|\s+"/g, '"')
-
-        return uploadableObjectWithoutWhitespace
+        return JSON.stringify(uploadableObject)
       },
 
-
-
-      /**************************
-       *** AUTOCOMPLETE START ***
-       **************************/
-
-      maybeGetTypes() {
-        return this.autocomplete.types.length <= 0 ? this.getTypes() : null
+      fillAutocompleteFields(obj){
+        // this.locality.author = { agent: obj.author__agent, id: obj.author }
       },
 
-      getTypes() {
-        this.searchingTypes = true;
-
-        fetchListReferenceTypes({value__isnull: 'false', value_en__isnull: 'false',}).then(response => {
-          if (response.status === 200) {
-            if (response.body.count > 0) {
-              this.autocomplete.types = response.body.results;
-            } else {
-              this.autocomplete.types = []
-            }
-          }
-          this.searchingTypes = false;
-        }, errResponse => {
-          this.searchingTypes = false;
-        })
+      fillRelatedDataAutocompleteFields(obj){
+        obj.locality = { locality: obj.locality__locality, locality_en: locality__locality_en, id: obj.locality }
+        return obj
       },
 
-      maybeGetLanguages() {
-        return this.autocomplete.languages.length <= 0 ? this.getLanguages() : null
-      },
+      loadRelatedData(object){
+        let query;
 
-      getLanguages() {
-        this.searchingLanguages = true;
-
-        fetchListLanguages({value__isnull: 'false', value_en__isnull: 'false'}).then(response => {
-          if (response.status === 200) {
-            if (response.body.count > 0) {
-              this.autocomplete.languages = response.body.results;
-            } else {
-              this.autocomplete.languages = []
-            }
-          }
-          this.searchingLanguages = false;
-        }, errResponse => {
-          this.searchingLanguages = false;
-        })
-      },
-
-      getJournals(query) {
-        if (query.length > 0) {
-          this.searchingJournals = true;
-
-          fetchJournals(query).then(response => {
-            if (response.status === 200) {
-              if (response.body.count > 0) this.autocomplete.journals = response.body.results;
-              else this.autocomplete.journals = []
-            }
-            this.searchingJournals = false;
-          }, errResponse => {
-            this.searchingJournals = false;
-          })
+        if(object === 'locality_reference') {
+          query = fetchLocalityReference(this.$route.params.id, this.relatedData.page.locality_reference)
         }
+        return new Promise(resolve => {
+          query.then(response => {
+            this.relatedData[object] = this.handleResponse(response);
+            this.relatedData.count[object] = response.body.count;
+            resolve(true)
+          });
+        });
       },
 
-      getReferenceKeywords() {
-        if (this.autocomplete.keyword.length <= 0) {
-          this.searchingReferenceKeywords = true
+      //check required fields for related data
+      checkRequiredFields(type){
 
-          fetchReferenceKeywords().then(response => {
-            if (response.status === 200) {
-              if (response.body.count > 0) this.autocomplete.keyword = response.body.results;
-              else this.autocomplete.keyword = []
-            }
-            this.searchingReferenceKeywords = false
-          }, errResponse => {
-            this.searchingReferenceKeywords = false
-          })
-        }
       },
 
-      /************************
-       *** AUTOCOMPLETE END ***
-       ************************/
+      formatRelatedData(objectToUpload)  {
+        let uploadableObject = cloneDeep(objectToUpload);
+        // uploadableObject.library = this.library.id;
 
+        // if (this.isDefinedAndNotNull(uploadableObject.reference)) {
+        //   uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
+        // }
 
-
-      /***************************
-       *** FILE DROPPING START ***
-       ***************************/
-
-      dropFile(event) {
-        let files = []
-        for (let i = 0; i < event.dataTransfer.files.length; i++) {
-          if (event.dataTransfer.files[i].type.includes('pdf')) {
-            files.push(event.dataTransfer.files[i])
-          } else {
-            toastError({text: this.$t('messages.validFileFormatPDF', { file: event.dataTransfer.files[i].name })})
-          }
-        }
-
-        if (files.length > 0) {
-          this.files = files
-        }
-
-        this.isDragging = false
+        console.log(uploadableObject);
+        return JSON.stringify(uploadableObject)
       },
 
-      /**************************
-       *** FILE DROPPING END  ***
-       **************************/
 
-
-
-      /***************************
-       *** RELATED DATA START  ***
-       ***************************/
-
-      getRelatedData(query, id) {
-        if (query.length > 0) {
-
-          let search = ''
-          let fields = 'id'
-          switch(id) {
-            case 'attachment':
-              search += 'multi_search=value:' + query + ';fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains'
-              fields += ',author__agent,description,description_en,uuid_filename'
-              break
-            case 'locality':
-              search += 'multi_search=value:' + query + ';fields:id,locality,locality_en;lookuptype:icontains'
-              fields += ',locality,locality_en'
-              break
-            default:
-              search += 'id__icontains=' + query
-              fields += ''
-          }
-
-          console.log(search)
-
-          let url = this.apiUrl
-          if (id === 'storage') url += 'location/?' + search + '&fields=' + fields + '&format=json'
-          else url += id + '/?' + search + '&fields=' + fields + '&format=json'
-
-          this.searchingRelatedData[id] = true;
-
-          this.$http.get(url).then(response => {
-            console.log(response)
-            if (response.status === 200) {
-              if (response.body.count > 0) {
-                this.autocomplete.relatedData[id] = response.body.results;
-              }
-              else {
-                this.autocomplete.relatedData[id] = [];
-              }
-            }
-            this.searchingRelatedData[id] = false;
-          }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse))
-            this.searchingRelatedData[id] = false;
-          })
-        }
+      fetchList(localStorageData) {
+        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+        console.log(localStorageData)
+        return new Promise((resolve) => {
+          resolve(fetchReferences(params))
+        });
       },
 
-      customLabelForRelatedData(option) {
-        switch(this.relatedTable) {
-          case 'attachment':
-            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.description}) (${option.author__agent})`
-            return `${option.id} - (${option.description_en}) (${option.author__agent})`
-          case 'locality':
-            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
-            return `${option.id} - (${option.locality_en})`
-          default:
-            return `${option.id}`
-        }
-      },
-
-      /*************************
-       ***  RELATED DATA END ***
-       *************************/
-
-
-
-      openGeoInNewWindow(params) {
-        let width = 600;
-        switch (params.object) {
-          case "specimen":
-            width = 1050;
-            break;
-          case "locality":
-            width = 1025;
-            break;
-          case "doi":
-            width = 1000;
-        }
-        window.open('http://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
-      },
-
-      openInNewWindow(params) {
-        if (typeof (params.width) === 'undefined') {
-          params.width = 800;
-        }
-        if (typeof (params.height) === 'undefined') {
-          params.height = 750;
-        }
-        window.open(location.origin + '/' + params.object + '/add', '', 'width=' + params.width + ',height=' + params.height)
-      },
-
-      reset() {
-        this.reference = {
-          reference: null,
+      setDefaultSearchParameters() {
+        return {
           author: null,
-          type: {
-            "id": 1,
-            "value": "artikkel ajakirjas",
-            "value_en": "article in journal"
-          },
-          language: {
-            "id": 1,
-            "value": "inglise",
-            "value_en": "English"
-          },
           year: null,
           title: null,
-          title_original: null,
-          book: null,
-          bookOriginal: null,
-          publisher: null,
-          publisher_place: null,
-          journal: null,
-          journal_additional: null,
-          volume: null,
-          number: null,
-          pages: null,
-          figures: null,
-          doi: null,
-          url: null,
-          isbn: null,
-          issn: null,
-          abstract: null,
-          author_keywords: null,
-          journal_txt: null,
-          remarks: null,
-          is_oa: '0',
-          is_private: '0',
-          is_locked: '0',
-          related_data: {
-            locality: null,
-            attachment: null,
-            keyword: null,
-          }
+          bookJournal: null,
+          abstractKeywordsRemarks: null,
+          id: null,
+          page: 1,
+          paginateBy: 50,
+          orderBy: '-id',
         }
       },
-
     }
 
   }
 </script>
 
 <style scoped>
-  label {
-	margin-bottom: 0.1rem;
-    font-size: 0.9rem;
-	color: #666;
-  }
 
-  .dragging {
-    color: #fff;
-    background-color: #007bff;
-  }
-
-  .delete-relation {
-    transition: background-color 500ms ease-in-out;
-    vertical-align: middle;
-  }
-
-  .delete-relation:hover {
-    cursor: pointer;
-    background-color: rgba(220,53,69, 0.7);
-  }
-
-  @media (min-width: 576px) {
-	  .lbl-right {
-		  text-align: right;
-	  }
-  }
 </style>

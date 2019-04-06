@@ -25,7 +25,7 @@
   "header": {
     "title": "SARV2",
     "files": "Failid",
-    "references": "Kirjandus",
+    "references": "Kirjandused",
     "localities": "Lokaliteedid",
     "libraries": "Kogumikud",
     "samples":"Proovid",
@@ -567,6 +567,10 @@
     "relatedFile": "Seotud fail(id)",
     "is_oa": "OpenAccess",
     "keywords": "Autori märksõnad",
+    "id": "ID",
+    "bookJournal": "Raamat või ajakiri",
+    "abstractKeywordsRemarks": "Abstrakt, märksõnad või lisainfo",
+    "header": "Kirjandus",
     "relatedTables": {
       "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",

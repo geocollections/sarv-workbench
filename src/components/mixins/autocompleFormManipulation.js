@@ -151,6 +151,9 @@ const autocompleteFieldManipulation = {
     autcompleteAttachmentSearch(value) {
       this.autocompliteSearch(value, 'attachment', 'attachment')
     },
+    autcompleteJournalSearch(value) {
+      this.autocompliteSearch(value, 'journals', 'journals', 1)
+    },
     autocompliteSearch(value, type, options, minLength = 3) {
       if (value.length < minLength) this.autocomplete[options] = [];
       if (value.length > minLength-1) {

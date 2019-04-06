@@ -254,17 +254,18 @@
           this.tabs.forEach(entity => {
             this.loadRelatedData(entity);
           });
+
+          this.$on('tab-changed',this.setTab);
+
+          this.$on('related-data-modified',this.editRelatedData);
+          this.$on('related-data-added',this.addRelatedData);
+          this.$on('edit-row',this.editRow);
+          this.$on('allow-remove-row',this.allowRemove);
+
+          this.$emit('related-data-info',this.tabs);
+
+          this.setActiveTab('library_reference')
         }
-        this.$on('tab-changed',this.setTab);
-
-        this.$on('related-data-modified',this.editRelatedData);
-        this.$on('related-data-added',this.addRelatedData);
-        this.$on('edit-row',this.editRow);
-        this.$on('allow-remove-row',this.allowRemove);
-
-        this.$emit('related-data-info',this.tabs);
-
-        this.setActiveTab('library_reference')
       },
 
       setDefaultRelatedData(){
@@ -356,10 +357,6 @@
           orderBy: '-id',
         }
       },
-
-      removeReference(reference) {
-        console.log('REMOVE: ' + reference)
-      }
     }
   }
 </script>
