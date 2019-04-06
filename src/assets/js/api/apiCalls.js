@@ -59,28 +59,6 @@ export function fetchLogout() {
 
 
 
-/***************************
- *** AUTOCOMPLETES START ***
- ***************************/
-
-export function fetchListReferenceTypes(data) {
-  return fetch(`list_reference_type/?value__isnull=${data.value__isnull}&value_en__isnull=${data.value_en__isnull}&format=json`)
-}
-
-export function fetchListLanguages(data) {
-  return fetch(`list_language/?value__isnull=${data.value__isnull}&value_en__isnull=${data.value_en__isnull}&format=json`)
-}
-
-export function fetchJournals(query) {
-  return fetch(`journal/?multi_search=value:${query};fields:id,journal_name,journal_short;lookuptype:icontains&format=json`)
-}
-
-/***************************
- *** AUTOCOMPLETES START ***
- ***************************/
-
-
-
 /*************************
  *** ATTACHMENTS START ***
  *************************/
@@ -130,6 +108,10 @@ export function fetchAttachments(data, author) {
  *** REFERENCES START ***
  ************************/
 
+export function fetchReference(id) {
+  return fetch(`reference/?id=${id}&format=json`)
+}
+
 export function fetchReferences(data) {
   const fields = 'id,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,book_editor,publisher,publisher_place,url'
   let searchFields = ''
@@ -161,12 +143,24 @@ export function fetchReferences(data) {
   }
 }
 
-export function fetchReferenceKeywords() {
-  return fetch(`keyword/`)
+export function fetchListKeywords() {
+  return fetch(`keyword/?format=json`)
 }
 
 export function fetchAttachmentLink(data) {
   return fetch(`attachment_link/?reference=${data.reference}&format=json`)
+}
+
+export function fetchListReferenceTypes() {
+  return fetch(`list_reference_type/?format=json`)
+}
+
+export function fetchListLanguages() {
+  return fetch(`list_language/?format=json`)
+}
+
+export function fetchJournals(query) {
+  return fetch(`journal/?multi_search=value:${query};fields:id,journal_name,journal_short;lookuptype:icontains&format=json`)
 }
 
 /************************
