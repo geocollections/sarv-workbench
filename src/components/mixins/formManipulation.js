@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faProjectDiagram,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {faProjectDiagram,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faProjectDiagram,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
+library.add(faProjectDiagram,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
@@ -145,7 +145,7 @@ const formManipulation = {
             } else {
               toastSuccess({text: response.body.message});
             }
-            (object === 'attachment') ? resolve(response.body.attachment_id) : resolve(response.body.id)
+            (object === 'attachment' && response.body.attachment_id) ? resolve(response.body.attachment_id) : resolve(response.body.id)
           }
           if (typeof response.body.error !== 'undefined') {
 
@@ -177,10 +177,12 @@ const formManipulation = {
       formData.append('data', dataToUpload)
 
       let url = 'add/'+object+'/';
-
-      this.saveData(object,formData,url).then(isSuccessfullySaved => {
-          console.log("Relation created with locality id: "+ this.$store.state['createRelationWith'].id)
-      });
+      return new Promise((resolve) => {
+        this.saveData(object, formData, url).then(isSuccessfullySaved => {
+          console.log("Relation created with locality id: " + this.$store.state['createRelationWith'].id)
+          resolve(true)
+        });
+      })
 
     },
 
@@ -199,6 +201,7 @@ const formManipulation = {
     openGeoInNewWindow(params) {
       let width = 600;
       switch (params.object) {
+        case "attachment":
         case "specimen":
           width = 1050;
           break;
@@ -207,6 +210,7 @@ const formManipulation = {
           break;
         case "doi":
           width = 1000;
+          break;
       }
       window.open('https://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
     },

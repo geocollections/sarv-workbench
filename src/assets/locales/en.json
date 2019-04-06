@@ -104,6 +104,7 @@
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
+      "downloadFile": "Download file | Download files",
       "add": "Save",
       "addAnother": "Save and add another",
       "clearFields": "Clear fields",

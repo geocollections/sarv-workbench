@@ -175,23 +175,29 @@
         <font-awesome-icon icon="folder-open"/></legend>
 
         <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
+        <div class="col-sm-12">
+          <div class="d-flex flex-row  flex-wrap mt-2" v-if="relatedData.attachment_link.length > 0">
+              <div class="mt-2" v-for="(file, key) in relatedData.attachment_link">
+                <div class="img-container p-1">
+                  <img v-if="file.uuid_filename !== null" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image" style="width:100%">
+                  <font-awesome-icon v-if="file.uuid_filename === null"  style="height: 10rem" size="7x" icon="file"/>
+                  <font-awesome-icon v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="audio-file"/>
+                  <div class="middle flex flex-inline">
+                    <button class="btn btn-primary mb-2 mr-1 btn-sm" @click="openGeoInNewWindow({object:'attachment',id:file.id})"><font-awesome-icon icon="external-link-alt"/></button>
+                    <button class="btn btn-danger mb-2 btn-sm" @click="relatedData.attachment_link.splice(key,1)"><font-awesome-icon icon="trash-alt"/></button>
+                    <div style="background-color:#5e676a;color:white; width: 20vh">
+                      <span style="font-size: small">{{file.date_created}}<br/>{{file.author__agent}}</span>
+                    </div>
 
-      <table>
-        <tbody>
-          <tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #ccdcb9;" :id="'tooltip-button-show-event'+idx" >
+                  </div>
+                  <div class="mt-1" style="background-color:#056384;color:white; width: 23.5vh">
+                    <span style="font-size: small">{{file.original_filename}}</span>
+                  </div>
+                </div>
+              </div>
 
-            <td @click="windowOpenNewTab('attachment','/attachment/'+file.id)">
-              <img style="height: 50px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>
-              <font-awesome-icon class="fa-3x" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) === -1 && isDefinedAndNotNull(file.original_filename)" :icon="getFormatIcon(file.original_filename)"/>
-            </td>
-            <!--<td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">-->
-              <!--<font-awesome-icon icon="eye"/>&ensp;{{file.original_filename}}<br/>-->
-              <!--{{customLabelForAttachment(file)}}-->
-            <!--</td>-->
-            <td style="min-width: 60px;text-align:right" @click="relatedData.attachment_link.splice(index, 1)"><font-awesome-icon icon="times"/></td>
-          </tr>
-        </tbody>
-      </table>
+          </div>
+        </div>
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
@@ -203,7 +209,7 @@
           <span class="float-right">
             <button class="btn btn-primary mb-2" @click="openSampleModal">{{ $t('add.new') }}</button>
           </span>
-          <div class="table-responsive-sm">
+          <div class="table-responsive-sm" v-if="relatedData.sample.length > 0">
             <table class="table table-hover table-bordered">
               <thead class="thead-light">
                 <tr>
@@ -231,9 +237,9 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="addSite(false)">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false,'site')">
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="addSite(true)">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true,'site')">
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site')">
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
@@ -262,11 +268,13 @@
   import FileInputComponent from "../partial/MultimediaComponent";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import {toastError} from "../../assets/js/iziToast/iziToast";
+  import GeocollectionsLink from "../partial/GeocollectionsLink";
 
 
     export default {
       name: "Site",
       components: {
+        GeocollectionsLink,
         MultimediaComponent,
         FileInputComponent,
         MapComponent,
@@ -333,6 +341,11 @@
                 this.$emit('set-object','site');
                 this.sendingData = false;
                 this.getListRecords('site')
+
+                //set relation object as site
+                let createRelationWith = { object: 'site', data: this.site };
+                this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith });
+
               } else {
                 this.sendingData = false;
               }
@@ -469,57 +482,42 @@
           this.site.latitude = location.lat.toFixed(6)
           this.site.longitude = location.lng.toFixed(6)
         },
-        addFileAsRelatedData(files) {
+        addFileAsRelatedData(data) {
           console.log('file uploaded');
 
-          this.relatedData.new.attachment_link.push(files)
-          // this.addAttachment('attachment',{file:file}).then(savedObjectId => {
-          //   if(savedObjectId === undefined || savedObjectId === false) return
-          //   this.relatedData.attachment_link.push({id: savedObjectId})
-          // });
-
-        },
-
-        addAttachment(type,data) {
-
-          try {
-            return this.saveData(type,formData,'add/'+type+'/',false);
-          } catch (e) {
-            console.log('Attachment cannot not be added')
-            console.log(e)
-          }
-        },
-
-        addSite(addAnother) {
-          let formData = new FormData(), i = 0;
+          let formData = new FormData();
           formData.append('data', JSON.stringify({
-            description:'Olesja TEST',
+            description:data.type +' for site: ' +this.site.id,
+            author:this.currentUser.id,
+            date_created:this.formatDateForUpload(new Date()),
             // attach_link__site: this.site.id ? this.site.id : null
           }));
 
-          this.relatedData.new.attachment_link.forEach(entity => {
-            formData.append('file' + i, entity);
-            i++;
-          });
+          formData.append('file0', data);
 
           try {
             this.saveData('attachment',formData,'add/attachment/',false).then(savedObjectId => {
-              console.log(savedObjectId)
-              if(savedObjectId === undefined || savedObjectId === false) return
-              //load attachment by id
-              this.add(addAnother, 'site');
+              if(savedObjectId === undefined || savedObjectId === false) return;
+              this.addRelationBetweenAnyObjectAndAttachment(savedObjectId,'attachment_link').then(response => {
+                this.$root.$emit('attachment-loading-status',true)
+                this.loadRelatedData('attachment_link')
+              });
             });
           } catch (e) {
             console.log('Attachment cannot not be added')
             console.log(e)
           }
+
         },
 
         openSampleModal(){
 
         }
       },
-
+      beforeRouteLeave(to, from, next) {
+        this.$store.commit('REMOVE_RELATION_OBJECT')
+        next()
+      },
       watch: {
         '$route.params.id': {
           handler: function (newval, oldval) {
@@ -536,5 +534,46 @@
   /* Map height */
   #collapseMap {
     height: 50vh;
+  }
+
+  .img-container {
+    position: relative;
+    width: 25vh;
+    text-align: center;
+  }
+
+  .image {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: .2s ease;
+    backface-visibility: hidden;
+  }
+
+  .middle {
+    transition: .2s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .img-container:hover .image {
+    opacity: 0.3;
+  }
+
+  .img-container:hover .middle {
+    opacity: 1;
+  }
+
+  .text {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    padding: 16px 32px;
   }
 </style>

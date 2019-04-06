@@ -59,9 +59,11 @@
     </div>
 
     <div class="col-sm-12 col-md-6 mb-2">
-      <button class="btn btn-outline-danger" v-if="filesState" :disabled="sendingData" @click="clearFile">
-        <span v-show="files.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
-        <span v-show="files.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
+      <button class="btn btn-outline-primary" v-if="filesState" :disabled="sendingData" @click="downloadFile" :title="$tc('add.buttons.downloadFile', 1)">
+        <font-awesome-icon icon="download"/>
+      </button>
+      <button class="btn btn-outline-danger ml-1" v-if="filesState" :disabled="sendingData" @click="clearFile" :title="$tc('add.buttons.resetFile', 1)">
+        <font-awesome-icon icon="trash-alt"/>
       </button>
     </div>
 
@@ -93,7 +95,9 @@
           return this.files !== null && this.files.length > 0
         },
       },
-
+      created(){
+        this.$root.$on('attachment-loading-status',this.clearFile)
+      },
       watch: {
         'recordedFile':function (newVal) {
           this.files.push(newVal)
@@ -130,6 +134,9 @@
           this.$refs.fileinput.reset();
           this.files=[]
         },
+        downloadFile(){
+
+        }
       }
     }
 </script>

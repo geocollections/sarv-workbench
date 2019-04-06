@@ -105,6 +105,7 @@
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
+      "downloadFile": "Lae alla fail | Lae alla failid",
       "add": "Salvesta",
       "addAnother": "Salvesta ja lisa teine",
       "clearFields": "Puhasta väljad",
