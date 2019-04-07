@@ -15,7 +15,7 @@
     </l-marker>
 
     <!--@l-add="$event.target.openPopup()"-->
-    <l-marker v-if="marker !== null && markers" :lat-lng="marker" v-for="marker in markers" @click="openSite(marker.siteId)">
+    <l-marker v-if="marker !== null && markers" :lat-lng="marker" v-for="(marker, index) in markers"  :key="index" @click="openSite(marker.siteId)">
       <!--<l-popup :content="'TEST'"></l-popup>-->
     </l-marker>
 

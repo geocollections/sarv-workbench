@@ -181,19 +181,20 @@
                 <div class="img-container p-1">
                   <font-awesome-icon v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-audio"/>
                   <font-awesome-icon v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-video"/>
-                  <img v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) === -1" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image" style="width:100%;margin-top: 3vh">
+                  <img v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) === -1" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image" style="width:100%">
                   <font-awesome-icon v-if="file.uuid_filename === null"  style="height: 10rem" size="7x" icon="file"/>
                   <div class="middle flex flex-inline">
-                    <button class="btn btn-primary mb-2 mr-1 btn-sm" @click="openGeoInNewWindow({object:'attachment',id:file.id})"><font-awesome-icon icon="external-link-alt"/></button>
+                    <button class="btn btn-primary mb-2 mr-1 btn-sm"  @click="windowOpenNewTab('attachment','/attachment/'+file.id)"><font-awesome-icon icon="external-link-alt"/></button>
                     <button class="btn btn-danger mb-2 btn-sm" @click="relatedData.attachment_link.splice(key,1)"><font-awesome-icon icon="trash-alt"/></button>
                     <div style="background-color:#5e676a;color:white; width: 20vh">
                       <span style="font-size: small">{{file.date_created}}<br/>{{file.author__agent}}</span>
                     </div>
 
                   </div>
-                  <div class="mt-1" style="background-color:#056384;color:white; width: 23.5vh;min-height:10vh">
-                    <span class="p-1" style="font-size: small">{{file.original_filename}}</span>
-                  </div>
+
+                </div>
+                <div class="mt-1" style="background-color:#056384;color:white; width: 23.5vh;min-height:10vh">
+                  <span class="p-1" style="font-size: small">{{file.original_filename}}</span>
                 </div>
               </div>
 
@@ -494,7 +495,7 @@
             description:data.type +' for site: ' +this.site.id,
             author:this.currentUser.id,
             date_created:this.formatDateForUpload(new Date()),
-            // attach_link__site: this.site.id ? this.site.id : null
+            is_private:1
           }));
 
           formData.append('file0', data);
