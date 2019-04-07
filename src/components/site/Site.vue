@@ -175,9 +175,10 @@
         <font-awesome-icon icon="folder-open"/></legend>
 
         <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
+
         <div class="col-sm-12">
-          <div class="d-flex flex-row  flex-wrap mt-2" v-if="relatedData.attachment_link.length > 0">
-              <div class="mt-2" v-for="(file, key) in relatedData.attachment_link">
+          <div class="d-flex flex-row flex-wrap mt-2" v-if="relatedData.attachment_link.length > 0">
+              <div class="mt-2 mr-1" v-for="(file, key) in relatedData.attachment_link"  style="align-self: flex-end;">
                 <div class="img-container p-1">
                   <font-awesome-icon v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-audio"/>
                   <font-awesome-icon v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-video"/>
@@ -193,8 +194,8 @@
                   </div>
 
                 </div>
-                <div class="mt-1" style="background-color:#056384;color:white; width: 23.5vh;min-height:10vh">
-                  <span class="p-1" style="font-size: small">{{file.original_filename}}</span>
+                <div class="mt-1 p-1" style="background-color:#056384;color:white; width: 25vh;min-height:10vh">
+                  <span style="font-size: small;word-wrap: break-word;">{{file.original_filename}}</span>
                 </div>
               </div>
 
