@@ -567,7 +567,10 @@
     "id": "ID",
     "bookJournal": "Book or journal",
     "abstractKeywordsRemarks": "Abstract, keywords or remarks",
+    "libraryAuthor": "Library author",
+    "libraryIdTitle": "Library ID or title",
     "header": "Reference",
+    "addNew": "Add new Reference",
     "relatedTables": {
       "attachment": "Related data files",
       "locality": "Locality",

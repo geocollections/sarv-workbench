@@ -434,50 +434,6 @@ const formManipulation = {
       }
     },
 
-    checkDoi() {
-      fetchDoiCheck(this.reference.doi).then(response => {
-        if (response.status === 200) {
-          if (response.body.status === 'ok') {
-            this.updateFieldsUsingDoi(response.body.message)
-          }
-        }
-      }, errResponse => {})
-    },
-
-    updateFieldsUsingDoi(data) {
-      if (data['published-print']) {
-        if (data['published-print']['date-parts'].length > 0) {
-          this.reference.year = data['published-print']['date-parts'][0][0] + ''
-        }
-      } else if (data.issued) {
-        if (data.issued['date-parts'].length > 0) {
-          this.reference.year = data['published-print']['date-parts'][0][0] + ''
-        }
-      }
-
-      if (data.author && data.author.length > 0) {
-        let author = ''
-        for (let item in data.author) {
-          author += data.author[item].family + ', ' + data.author[item].given.charAt(0) + '., '
-        }
-        this.reference.author = author.trim().slice(0, -1)
-      }
-
-      if (data['container-title'] && data['container-title'].length > 0) {
-        let journalAdditional = '';
-        for (let item in data['container-title']) {
-          journalAdditional += data['container-title'][item] + ', '
-        }
-        this.reference.journal_additional = journalAdditional.trim().slice(0, -1);
-      }
-
-      if (data.title && data.title.length > 0) this.reference.title = data.title[0]
-      if (data.volume) this.reference.volume = data.volume
-      if (data.issue) this.reference.number = data.issue
-      if (data.page) this.reference.pages = data.page
-      if (data.url) this.reference.url = data.url
-      if (data.publisher) this.reference.publisher = data.publisher
-    },
   },
   watch: {
 

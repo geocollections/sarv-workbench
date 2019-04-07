@@ -71,6 +71,8 @@
           {id:"bookJournal",title:"reference.bookJournal",type:"text"},
           {id:"abstractKeywordsRemarks",title:"reference.abstractKeywordsRemarks",type:"text"},
           {id:"id",title:"reference.id",type:"number"},
+          {id:"libraryAuthor",title:"reference.libraryAuthor",type:"text"},
+          {id:"libraryIdTitle",title:"reference.libraryIdTitle",type:"text"},
         ],
         searchParameters: this.setDefaultSearchParameters()
       }
@@ -93,6 +95,8 @@
           bookJournal: null,
           abstractKeywordsRemarks: null,
           id: null,
+          libraryAuthor: null,
+          libraryIdTitle: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',

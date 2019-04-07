@@ -19,7 +19,7 @@
     <confirmation-box :title-extra="'SOME TITLE'"
                       custom-question="confirmation.relatedDataQuestion"
                       :table="$route.meta.table"/>
-    
+
     <!-- LOGS -->
     <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData"></log>
   </div>

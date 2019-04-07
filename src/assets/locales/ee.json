@@ -570,7 +570,10 @@
     "id": "ID",
     "bookJournal": "Raamat või ajakiri",
     "abstractKeywordsRemarks": "Abstrakt, märksõnad või lisainfo",
+    "libraryAuthor": "Kogumiku autor",
+    "libraryIdTitle": "Kogumiku ID või pealkiri",
     "header": "Kirjandus",
+    "addNew": "Lisage uus Kirjandus",
     "relatedTables": {
       "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",
