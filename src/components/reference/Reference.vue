@@ -73,6 +73,9 @@
                          :loading="autocomplete.loaders.agent"
                          :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
+          <template slot="singleLabel" slot-scope="{ option }">
+            <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+          </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
@@ -90,6 +93,9 @@
                          :label="commonLabel"
                          :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
+          <template slot="singleLabel" slot-scope="{ option }">
+            <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+          </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
@@ -104,6 +110,7 @@
       <div class="col-sm-4 mb-2">
         <vue-multiselect v-model="reference.journal"
                          id="journal"
+                         track-by="id"
                          :options="autocomplete.journals"
                          :internal-search="false"
                          :preserve-search="true"
@@ -112,6 +119,7 @@
                          :loading="autocomplete.loaders.journals"
                          :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
+          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.journal_name }}</strong></template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
       </div>
@@ -316,8 +324,8 @@
       </div>
 
       <div class="col-1 mb-2">
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotNull(autocomplete.keyword)"
-                @click="autocomplete.keyword = null">
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(reference.keyword)"
+                @click="reference.keyword = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
       </div>
@@ -326,15 +334,15 @@
     <!-- CHECKBOXES -->
     <div class="row">
       <div class="col">
-        <b-form-checkbox id="is_oa" v-model="reference.is_oa" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_oa" v-model="reference.is_oa" :value="true" :unchecked-value="false">
           {{ $t('reference.is_oa') }}
         </b-form-checkbox>
 
-        <b-form-checkbox id="is_private" v-model="reference.is_private" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="reference.is_private" :value="true" :unchecked-value="false">
           {{ $t('otherFiles.private') }}
         </b-form-checkbox>
 
-        <b-form-checkbox id="is_locked" v-model="reference.is_locked" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_locked" v-model="reference.is_locked" :value="true" :unchecked-value="false">
           {{ $t('otherFiles.locked') }}
         </b-form-checkbox>
       </div>
@@ -352,10 +360,6 @@
         </ul>
         <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
-          <!--<div class="col">-->
-          <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
-          <!--:disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>-->
-          <!--</div>-->
           <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
@@ -367,12 +371,12 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'library')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('library') : reset('library')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference')">
+          {{ $t($route.meta.isEdit ? 'edit.buttons.save' : 'add.buttons.add') }}</button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'reference')">
+          {{ $t($route.meta.isEdit ? 'edit.buttons.saveAndContinue' : 'add.buttons.addAnother') }}</button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
+          {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}</button>
       </div>
     </div>
 
@@ -393,6 +397,7 @@
     fetchListReferenceTypes,
     fetchListLanguages,
     fetchListKeywords,
+    fetchDoiCheck
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
@@ -434,20 +439,23 @@
           searchHistory: 'referenceSearchHistory',
           activeTab: 'locality_reference',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
-            'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url',
-            'isbn', 'issn', 'abstract', 'author_keywords', 'remarks', 'tags'],
+          copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
+            'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
+            'issn', 'abstract', 'author_keywords', 'remarks', 'tags', 'attachment__filename', 'book_editor', 'figures', 'is_locked',
+            'is_oa', 'is_private', 'language'],
           autocomplete: {
             loaders: {
               types: false,
               languages: false,
               journals: false,
               keyword: false,
+              locality: false,
             },
             types: [],
             languages: [],
             journals: [],
             keyword: [],
+            locality: [],
           },
           requiredFields: ['reference', 'year', 'author', 'title'],
           reference: {},
@@ -514,22 +522,38 @@
           locality_reference:[],
           copyFields: {
             locality_reference: ['locality', 'type', 'pages', 'figures', 'remarks'],
+            locality: [],
+            attachment: [],
           },
           insert: {
-            locality_reference: {}
+            locality_reference: {},
+            locality: {},
+            attachment: {},
           },
           page : {
-            locality_reference: 1
+            locality_reference: 1,
+            locality: 1,
+            attachment: 1,
           },
           count: {
-            locality_reference: 0
+            locality_reference: 0,
+            locality: 0,
+            attachment: 0,
           }
         }
       },
 
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
-        // if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
+
+        if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
+        if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
+        if (this.isDefinedAndNotNull(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id
+        if (objectToUpload.is_private !== null) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+        if (objectToUpload.is_oa !== null) uploadableObject.is_oa = objectToUpload.is_oa === true ? '1' : '0';
+        if (objectToUpload.is_locked !== null) uploadableObject.is_locked = objectToUpload.is_locked === true ? '1' : '0';
+
+
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -537,7 +561,9 @@
       },
 
       fillAutocompleteFields(obj){
-        // this.locality.author = { agent: obj.author__agent, id: obj.author }
+        this.reference.type = { id: obj.type__id, value: obj.type__value, value_en: obj.type__value_en }
+        this.reference.language = { id: obj.language__id, value: obj.language__value, value_en: obj.language__value_en }
+        this.reference.journal = { id: obj.journal__id, journal_name: obj.journal__journal_name }
       },
 
       fillRelatedDataAutocompleteFields(obj){
@@ -594,13 +620,60 @@
           bookJournal: null,
           abstractKeywordsRemarks: null,
           id: null,
+          libraryAuthor: null,
+          libraryIdTitle: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',
         }
       },
-    }
 
+      checkDoi() {
+        fetchDoiCheck(this.reference.doi).then(response => {
+          if (response.status === 200) {
+            if (response.body.status === 'ok') {
+              this.updateFieldsUsingDoi(response.body.message)
+            }
+          }
+        }, errResponse => {})
+      },
+
+      updateFieldsUsingDoi(data) {
+        if (data['published-print']) {
+          if (data['published-print']['date-parts'].length > 0) {
+            this.reference.year = data['published-print']['date-parts'][0][0] + ''
+          }
+        } else if (data.issued) {
+          if (data.issued['date-parts'].length > 0) {
+            this.reference.year = data.issued['date-parts'][0][0] + ''
+          }
+        }
+
+        if (data.author && data.author.length > 0) {
+          let author = ''
+          for (let item in data.author) {
+            author += data.author[item].family + ', ' + data.author[item].given.charAt(0) + '., '
+          }
+          this.reference.author = author.trim().slice(0, -1)
+        }
+
+        if (data['container-title'] && data['container-title'].length > 0) {
+          let journalAdditional = '';
+          for (let item in data['container-title']) {
+            journalAdditional += data['container-title'][item] + ', '
+          }
+          this.reference.journal_additional = journalAdditional.trim().slice(0, -1);
+        }
+
+        if (data.title && data.title.length > 0) this.reference.title = data.title[0]
+        if (data.volume) this.reference.volume = data.volume
+        if (data.issue) this.reference.number = data.issue
+        if (data.page) this.reference.pages = data.page
+        if (data.url) this.reference.url = data.url
+        if (data.publisher) this.reference.publisher = data.publisher
+      },
+
+    },
   }
 </script>
 

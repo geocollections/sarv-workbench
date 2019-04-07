@@ -41,7 +41,7 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import Reference from '@/components/reference/edit/ReferenceOld.vue'
+  import Reference from '@/components/reference/edit/Reference.vue'
   import Log from '@/components/partial/Log.vue'
   import GeocollectionLink from '@/components/partial/GeocollectionsLink.vue'
   import ConfirmationBox from '@/components/partial/ConfirmationBox.vue'

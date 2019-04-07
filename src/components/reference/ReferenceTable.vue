@@ -21,7 +21,7 @@
     <td>{{ entity.pages }}</td>
 
     <td>
-      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})"
+      <a v-if="!entity.is_private" href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})"
          :title="$t('editReference.viewMessage')">{{ $t('edit.view') }}</a>
     </td>
 

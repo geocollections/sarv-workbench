@@ -42,11 +42,11 @@
   /*!*z-index: 9999!important;*!*/
 /*}*/
 
-input,.mx-input,.multiselect__input, .multiselect__tags, .multiselect__tag-icon:after, .multiselect__option:after, .multiselect__option--selected  {
-font-size: 0.9rem !important;
-font-weight: light;
-padding:0.25rem;
-}
+/*input,.mx-input,.multiselect__input, .multiselect__tags, .multiselect__tag-icon:after, .multiselect__option:after, .multiselect__option--selected  {*/
+/*font-size: 0.9rem !important;*/
+/*font-weight: light;*/
+/*padding:0.25rem;*/
+/*}*/
 input {
 border: none;
 }

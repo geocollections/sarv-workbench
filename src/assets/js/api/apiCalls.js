@@ -113,7 +113,7 @@ export function fetchReference(id) {
 }
 
 export function fetchReferences(data) {
-  const fields = 'id,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,book_editor,publisher,publisher_place,url'
+  const fields = 'id,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,book_editor,publisher,publisher_place,url,is_private'
   let searchFields = ''
 
   if (data.author !== null && data.author.trim().length > 0) {
@@ -133,6 +133,12 @@ export function fetchReferences(data) {
   }
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += '&id__icontains=' + data.id
+  }
+  if (data.libraryAuthor !== null && data.libraryAuthor.trim().length > 0) {
+  //  TODO
+  }
+  if (data.libraryIdTitle !== null && data.libraryIdTitle.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.libraryIdTitle + ';fields:libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains'
   }
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
