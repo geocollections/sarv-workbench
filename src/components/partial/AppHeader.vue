@@ -1,7 +1,7 @@
 <template>
   <div class="header">
 
-    <b-navbar type="dark" variant="dark" toggleable="lg" fixed="top">
+    <b-navbar type="dark" variant="dark" toggleable="lg" fixed="left">
 
       <!-- TODO: If small screen change header to icon -->
       <b-navbar-brand :to="{ path: '/dashboard' }">
@@ -22,8 +22,15 @@
           <b-nav-item v-if="permissions.project" class="d-none d-lg-block" :to="{ path: '/project' }"exact>{{ $t('header.projects') }}</b-nav-item>
           
           <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-nav-item>
-          <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment/add/other_file' }" exact>{{ $t('header.addAttachment') }}</b-nav-item>
+          <!-- <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment/add/other_file' }" exact>{{ $t('header.addAttachment') }}</b-nav-item> -->
 
+          <b-nav-item-dropdown v-if="permissions.attachment" variant="dark" class="d-none d-lg-block dark" :text="$t('header.addAttachment')">
+            <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('add.photoArchive') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment/add/specimen_image' }" exact>{{ $t('add.specimenImage') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment/add/other_file' }" exact>{{ $t('add.otherFiles') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment/add/digitised_reference' }" exact>{{ $t('add.digitisedReference') }}</b-dropdown-item>
+          </b-nav-item-dropdown>
+          
           <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
           <!-- <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>-->
 
@@ -32,6 +39,11 @@
 
           <b-nav-item v-if="permissions.sample" class="d-none d-lg-block" :to="{ path: '/sample' }" exact>{{ $t('header.samples') }}</b-nav-item>
 
+          <b-nav-item-dropdown v-if="permissions.project" class="d-lg-none d-xl-none" :text="$t('header.projects')">
+            <b-dropdown-item :to="{ path: '/project/add' }" exact>{{ $t('header.addProject') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/project' }"exact>{{ $t('header.editProject') }}</b-dropdown-item>
+          </b-nav-item-dropdown>
+          
           <b-nav-item-dropdown v-if="permissions.attachment" class="d-lg-none d-xl-none" :text="$t('header.files')">
             <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-dropdown-item>
             <b-dropdown-item :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-dropdown-item>

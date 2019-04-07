@@ -36,6 +36,17 @@
       </div>
     </div>
 
+    <!-- AUTHORS -->
+    <div class="row">
+      <div class="col-sm-2">
+        <label :for="`author_txt`">{{ $t('library.author_txt') }}:</label>
+      </div>
+
+      <div class="col-sm-10 mb-2">
+        <b-form-input id="author_txt" v-model="library.author_txt" type="text"></b-form-input>
+      </div>
+    </div>
+    
     <!-- TITLE -->
     <div class="row">
       <div class="col-sm-2">
@@ -118,7 +129,7 @@
           <!--</div>-->
           <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="100">
             </b-pagination>
           </div>
         </div>
@@ -210,7 +221,7 @@
           searchHistory: 'librarySearchHistory',
           activeTab: 'library_reference',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'author', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en', 'is_private'],
+          copyFields: ['id', 'author', 'author_txt', 'year', 'title', 'title_en', 'keywords', 'abstract', 'abstract_en', 'is_private'],
           autocomplete: {
             loaders: {
               agent: false,
@@ -353,7 +364,7 @@
           reference: null,
           id: null,
           page: 1,
-          paginateBy: 50,
+          paginateBy: 100,
           orderBy: '-id',
         }
       },
