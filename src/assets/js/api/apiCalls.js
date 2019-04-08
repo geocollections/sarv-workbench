@@ -403,7 +403,7 @@ export function fetchLibraries(data) {
 }
 
 export function fetchLibraryReference(id, page) {
-  return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=10&order_by=-sort&format=json`)
+  return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=100&order_by=-sort&format=json`)
 }
 
 /***********************

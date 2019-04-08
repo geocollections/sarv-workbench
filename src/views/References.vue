@@ -5,8 +5,8 @@
         <p class="h2">{{ $t('header.references') }}</p>
       </div>
       <div class="col-sm-6 text-right">
-        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('add.new') }}
-        </router-link>
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('add.new') }}</router-link>
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/library' }">{{ $t('header.libraries') }}</router-link>
       </div>
     </div>
     <!-- SEARCH FIELDS START -->

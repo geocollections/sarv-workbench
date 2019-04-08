@@ -63,13 +63,14 @@
           {id:"owner",title:"project.owner",type:"text"},
         ],
         filters:[
-          {id:"id",title:"project.id",type:"number"},
           {id:"name",title:"project.name",type:"text"},
-          {id:"project_type",title:"project.project_type",type:"text"},
-          {id:"date_start",title:"project.date_start",type:"text"},
-          {id:"date_end",title:"project.date_end",type:"text"},
-          {id:"date_free",title:"project.date_free",type:"text"},
-          {id:"owner",title:"project.owner",type:"text"},
+          {id:"id",title:"project.id",type:"number"},
+          
+          //{id:"project_type",title:"project.project_type",type:"text"},
+          //{id:"date_start",title:"project.date_start",type:"text"},
+          //{id:"date_end",title:"project.date_end",type:"text"},
+          //{id:"date_free",title:"project.date_free",type:"text"},
+          //{id:"owner",title:"project.owner",type:"text"},
         ],
         searchParameters: this.setDefaultSearchParameters()
       }

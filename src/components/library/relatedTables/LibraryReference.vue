@@ -9,6 +9,7 @@
             <th>{{ $t('reference.reference') }}<font-awesome-icon class="ml-2" icon="link"/></th>
             <th>{{ $t('reference.keywords') }}</th>
             <th>{{ $t('reference.remarks') }}</th>
+            <th>{{ $t('reference.sort') }}</th>
             <th  class="btn-th"></th>
           </tr>
           </thead>
@@ -25,6 +26,8 @@
             <td v-if="!entity.editMode">{{ entity.keywords }}</td>
 
             <td v-if="!entity.editMode">{{ entity.remarks }}</td>
+
+            <td v-if="!entity.editMode">{{ entity.sort}}</td>
 
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
@@ -45,6 +48,10 @@
 
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.remarks" type="text"/>
+            </td>
+            
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.sort" type="number"/>
             </td>
             <td style="padding: 0.6em!important;">
               <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$parent.$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
@@ -71,6 +78,9 @@
             </td>
             <td>
               <b-form-input v-model="relatedData.insert.library_reference.remarks" type="text"/>
+            </td>
+            <td>
+              <b-form-input v-model="relatedData.insert.library_reference.sort" type="number"/>
             </td>
             <td style="padding: 0.6em!important;">
               <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
