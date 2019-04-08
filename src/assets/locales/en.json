@@ -106,6 +106,8 @@
       "resetFile": "Reset file | Reset files",
       "downloadFile": "Download file | Download files",
       "add": "Save",
+      "mapEnabled": "Map enabled",
+      "mapDisabled": "Map disabled",
       "addAnother": "Save and add another",
       "clearFields": "Clear fields",
       "clearLocalStorage": "Remove defaults",

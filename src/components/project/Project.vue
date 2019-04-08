@@ -1,5 +1,5 @@
 <template>
-  <div :key="componentKey">
+  <div>
 
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
     <div class="row mt-4">
@@ -104,7 +104,7 @@
 
 
     <!-- DESCRIPTION -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2"  :key="componentKey">
       <legend class="w-auto" style="font-size: large;">{{ $t('project.description') }} | {{ $t('project.remarks') }}
         <font-awesome-icon icon="pen-fancy"/></legend>
 
@@ -152,12 +152,7 @@
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">Project files
         <font-awesome-icon icon="folder-open"/></legend>
-      <div class="row">
 
-        <div class="col-12 mb-2 mr-0">
-
-        </div>
-      </div>
       <div class="row p-3">
         <div class="table-responsive-sm col-12 p-0">
           <table class="table table-hover table-bordered">
@@ -208,10 +203,42 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">Sites <font-awesome-icon icon="link"/></legend>
+      <legend class="w-auto" style="font-size: large;">Linked Sites <font-awesome-icon icon="link"/></legend>
 
-      <div class="row" v-if="project.id !== null">
-        <sites class="col p-4" :project="project.id"/>
+      <div class="col p-0">
+       <span class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+          <label class="custom-control-label" for="customSwitch">{{ $t(showCollapseMap ? 'add.buttons.mapEnabled' : 'add.buttons.mapDisabled')}}</label>
+        </span>
+          <b-collapse v-model="showCollapseMap" id="collapseMap">
+            <map-component style="width: 100%" v-bind:location="{ lat: null, lng: null }"
+                           v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations" />
+          </b-collapse>
+      </div>
+
+      <div class="table-responsive-sm col-12 p-0">
+        <table class="table table-hover table-bordered">
+          <thead class="thead-light">
+          <tr>
+            <th>ID</th>
+            <th>{{ $t('site.name') }}</th>
+            <th>{{ $t('site.date_start') }}</th>
+            <th>{{ $t('site.date_end') }}</th>
+            <!--<th></th>-->
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(site,index) in relatedData.site">
+            <td @click="windowOpenNewTab('site','/site/'+site.id)">
+              <font-awesome-icon size="1x" icon="eye"/> {{site.id}}
+            </td>
+            <td v-translate="{et:site.name,en:site.name_en}"></td>
+            <td>{{site.date_start}}</td>
+            <td>{{site.date_end}}</td>
+            <!--<td style="min-width: 60px;text-align:right" @click="relatedData.site.splice(index, 1)"><font-awesome-icon icon="times"/></td>-->
+          </tr>
+          </tbody>
+        </table>
       </div>
     </fieldset>
 
@@ -252,14 +279,16 @@
     fetchProjectType,
     fetchProjectAgent,
     fetchProjectAttachment,
+    fetchLinkedSite
   } from "../../assets/js/api/apiCalls";
-  import Sites from "../../views/Sites";
+
   import MapComponent from "../partial/MapComponent";
+
     export default {
       name: "Project",
       components: {
         MapComponent,
-        Sites,
+
         FontAwesomeIcon,
         Datepicker,
         VueMultiselect,
@@ -270,7 +299,14 @@
       data() { return this.setInitialData() },
 
       created() {
-        this.loadFullInfo() },
+        this.loadFullInfo()
+
+      },
+
+      beforeMount(){
+        const showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
+        this.showCollapseMap = showCollapseMap ? showCollapseMap : false
+      },
 
       methods: {
         setInitialData() {
@@ -300,7 +336,8 @@
               {id:"date_free",title:"site.date_free",type:"text",isDate:true},
             ],
             componentKey: 0,
-            showCollapseMap: true
+            mapComponentKey: 0,
+            showCollapseMap:false,
           }
         },
 
@@ -337,6 +374,7 @@
 
             this.loadRelatedData('projectagent');
             this.loadRelatedData('attachment_link');
+            this.loadRelatedData('site');
           } else {
             //set default user
             this.project.owner = {agent:this.currentUser.user,id:this.currentUser.id}
@@ -368,6 +406,7 @@
           uploadableObject.related_data = {}
           if(this.isDefinedAndNotEmpty(this.relatedData.projectagent)) uploadableObject.related_data.agent = this.relatedData.projectagent
           if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          // if(this.isDefinedAndNotEmpty(this.relatedData.site)) uploadableObject.related_data.site = this.relatedData.site
 
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
@@ -389,7 +428,7 @@
           obj = [];
           relatedData.forEach(entity => {
             if(type === 'projectagent') obj.push( {agent:entity.projectagent__agent__agent, id:entity.projectagent__agent})
-            if(type === 'attachment_link') obj.push(entity)
+            else obj.push(entity)
           });
           return obj
         },
@@ -401,6 +440,8 @@
             query = fetchProjectAgent(this.$route.params.id,this.relatedData.page.projectagent)
           } else if(object === 'attachment_link') {
             query = fetchProjectAttachment(this.$route.params.id,this.relatedData.page.attachment_link)
+          } else if(object === 'site') {
+            query = fetchLinkedSite(this.$route.params.id,this.relatedData.page.site)
           }
           return new Promise(resolve => {
             query.then(response => {
@@ -409,6 +450,7 @@
 
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object);
+              if(object === 'site')
               resolve(true)
             });
           });
@@ -467,9 +509,13 @@
           return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
         },
 
-        forceRerender() {
-          this.componentKey += 1;
+        forceRerender() { this.componentKey += 1; },
+        forceMapRerender() { this.mapComponentKey += 1; },
+
+        chooseLocations(locations) {
+          console.log(locations)
         },
+
 
       },
 
@@ -485,6 +531,9 @@
             this.$set(this,'isActiveProject', this.checkIfProjectIsActive())
           },
           deep: true
+        },
+        'showCollapseMap'(newval, oldval){
+          // this.$localStorage.set('mapComponent',  newval)
         }
       }
     }

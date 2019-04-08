@@ -126,6 +126,10 @@ new Vue({
   store,
   router,
   localStorage: {
+    mapComponent:{
+      type: Boolean,
+      default: false
+    },
     photoArchive: {
       type: Object
     },

@@ -107,6 +107,8 @@
       "resetFile": "Eemalda fail | Eemalda failid",
       "downloadFile": "Lae alla fail | Lae alla failid",
       "add": "Salvesta",
+      "mapEnabled": "Näita kaart",
+      "mapDisabled": "Peida kaart",
       "addAnother": "Salvesta ja lisa teine",
       "clearFields": "Puhasta väljad",
       "clearLocalStorage": "Eemalda vaikimisi väärtused",

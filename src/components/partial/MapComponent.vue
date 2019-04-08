@@ -1,5 +1,5 @@
 <template class="map-component">
-  <l-map ref="map" :zoom="zoom" :center="center" @click="addMarker">
+  <l-map ref="map" :zoom="zoom" :center="center" @click="addMarker" >
 
     <!--:maxBounds= "[[57.52, 20.37],[60.0, 28.2]]" -->
 
@@ -11,11 +11,11 @@
                   :url="tileProvider.url"
                   :attribution="tileProvider.attribution"
                   layer-type="base"/>
-    <l-marker v-if="marker !== null" :lat-lng="marker">
+    <l-marker v-if="marker !== null" :lat-lng="marker" :draggable="true" :clickable="true" @dragend="updateCoordinates">
     </l-marker>
 
     <!--@l-add="$event.target.openPopup()"-->
-    <l-marker v-if="marker !== null && markers" :lat-lng="marker" v-for="(marker, index) in markers"  :key="index" @click="openSite(marker.siteId)">
+    <l-marker v-if="marker !== null && markers" :lat-lng="marker" v-for="(marker, index) in markers" :key="index" @click="openSite(marker.siteId)">
       <!--<l-popup :content="'TEST'"></l-popup>-->
     </l-marker>
 
@@ -54,6 +54,7 @@
       LMarker,
       LPopup
     },
+
     data() {
       return {
         map: null,
@@ -150,17 +151,21 @@
     },
     // Map start
     mounted () {
-      this.$nextTick(() => {
-        this.map = this.$refs.map.mapObject;
-        let vm = this
-        this.map.on('baselayerchange', function (event) {
-
-          if(event.name === 'Maaameti kaart'){}
-          vm.setDefaultProjection()
-        });
-      })
+      this.initializeMap()
     },
     methods: {
+      initializeMap() {
+        this.$nextTick(() => {
+          this.map = this.$refs.map.mapObject;
+          let vm = this
+          console.log(this.locations)
+          // this.map.on('baselayerchange', function (event) {
+          //
+          //   if(event.name === 'Maaameti kaart'){}
+          //   vm.setDefaultProjection()
+          // });
+        })
+      },
       // Validates if coordinates exist in correct form.
       isValidLocation(loc) {
         if (loc !== null)  {
@@ -172,9 +177,13 @@
         return false
       },
       addMarker(event) {
-        // console.log(event.latlng)
+        if(this.locations && this.locations.length > 0 || this.marker !== null) return
+
         this.marker = L.latLng(event.latlng);
         this.$emit('get-location', event.latlng)
+      },
+      updateCoordinates(event){
+        this.$emit('get-location', event.target.getLatLng())
       },
       setEPSG3301Projection(){
         this.minZoom = 6;
