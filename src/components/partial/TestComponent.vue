@@ -175,8 +175,7 @@
 
           let vm = this, location=[parseFloat(latlng.lat),parseFloat(latlng.lng)];
           this.marker = L.marker(location, {
-            draggable:true,
-            clickable:false
+            draggable:true, clickable:false, zIndexOffset: 100
           }).addTo(this.map).on('dragend', function(e) {
             vm.$emit('get-location', e.target._latlng)
           })
@@ -197,7 +196,8 @@
               popupAnchor: [1, -34],
               shadowSize: [41, 41]
             });
-            vm.currentLocation =  L.marker({lat:currentGPSLocation.latitude, lng: currentGPSLocation.longitude}, {icon: greenIcon})
+            vm.currentLocation =  L.marker({lat:currentGPSLocation.latitude, lng: currentGPSLocation.longitude},
+              {icon: greenIcon,zIndexOffset: 1})
               .addTo(vm.map)
           });
 

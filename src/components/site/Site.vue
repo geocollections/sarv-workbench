@@ -176,36 +176,10 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">Files
-        <font-awesome-icon icon="folder-open"/></legend>
+      <legend class="w-auto" style="font-size: large;">Files <font-awesome-icon icon="folder-open"/></legend>
 
-        <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
-
-        <div class="col-sm-12">
-          <div class="d-flex flex-row flex-wrap mt-2" v-if="relatedData.attachment_link.length > 0">
-              <div class="mt-2 mr-1" v-for="(file, key) in relatedData.attachment_link"  style="align-self: flex-end;">
-                <div class="img-container p-1">
-                  <font-awesome-icon v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-audio"/>
-                  <font-awesome-icon v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="height: 10rem" size="7x" icon="file-video"/>
-                  <img v-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) === -1" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image" style="width:100%">
-                  <font-awesome-icon v-if="file.uuid_filename === null"  style="height: 10rem" size="7x" icon="file"/>
-                  <div class="middle flex flex-inline">
-                    <button class="btn btn-primary mb-2 mr-1 btn-sm"  @click="windowOpenNewTab('attachment','/attachment/'+file.id)"><font-awesome-icon icon="external-link-alt"/></button>
-                    <button class="btn btn-danger mb-2 btn-sm" @click="relatedData.attachment_link.splice(key,1)"><font-awesome-icon icon="trash-alt"/></button>
-                    <div style="background-color:#5e676a;color:white; width: 20vh">
-                      <span style="font-size: small">{{file.date_created}}<br/>{{file.author__agent}}</span>
-                    </div>
-
-                  </div>
-
-                </div>
-                <div class="mt-1 p-1" style="background-color:#056384;color:white; width: 25vh;min-height:10vh">
-                  <span style="font-size: small;word-wrap: break-word;">{{file.original_filename}}</span>
-                </div>
-              </div>
-
-          </div>
-        </div>
+      <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
+      <file-table :attachments="relatedData.attachment_link" v-if="relatedData.attachment_link.length > 0"/>
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
@@ -279,11 +253,13 @@
   import {toastError} from "../../assets/js/iziToast/iziToast";
   import GeocollectionsLink from "../partial/GeocollectionsLink";
   import TestComponent from "../partial/TestComponent";
+  import FileTable from "../partial/FileTable";
 
 
     export default {
       name: "Site",
       components: {
+        FileTable,
         TestComponent,
         GeocollectionsLink,
         MultimediaComponent,
@@ -352,7 +328,6 @@
               let handledResponse = this.handleResponse(response);
               if(handledResponse.length > 0) {
                 this.site = this.handleResponse(response)[0];
-
                 this.fillAutocompleteFields(this.site)
                 this.removeUnnecessaryFields(this.site, this.copyFields);
                 if(this.site.latitude === null && this.site.longitude === null) {
@@ -397,18 +372,12 @@
           if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
           if (this.isDefinedAndNotNull(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start);
           if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
+          if (this.isDefinedAndNotNull(objectToUpload.location_accuracy)) uploadableObject.location_accuracy = objectToUpload.location_accuracy.toFixed(2);
 
           //autocomplete fields
           if (this.isDefinedAndNotNull(objectToUpload.project)) uploadableObject.project = objectToUpload.project.id
           if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
           if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
-          //add related data
-          uploadableObject.related_data = {}
-          // if(this.isDefinedAndNotEmpty(this.relatedData.new.attachment_link) && this.relatedData.attachment_link) {
-          //   console.log(this.relatedData)
-          //   this.relatedData.attachment_link = this.relatedData.attachment_link.concat(cloneDeep(this.relatedData.new.attachment_link))
-          // }
-          if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
 
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
@@ -557,14 +526,20 @@
           });
         },
         saveAndNavigateBack(){
-          this.add(false,'true')
-          this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+          this.add(true,'site')
+          if(this.createRelationWith.object === null)
+            this.$router.push({ path:'/project'});
+          else
+            this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
         },
         finishWork() {
           // set finish time
           this.site.date_end = new Date();
-          this.add(false,'true')
-          this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+          this.add(true,'site');
+          if(this.createRelationWith.object === null)
+            this.$router.push({ path:'/project'});
+          else
+            this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
         }
       },
       beforeRouteLeave(to, from, next) {
@@ -589,44 +564,4 @@
     height: 50vh;
   }
 
-  .img-container {
-    position: relative;
-    width: 25vh;
-    text-align: center;
-  }
-
-  .image {
-    opacity: 1;
-    display: block;
-    width: 100%;
-    height: auto;
-    transition: .2s ease;
-    backface-visibility: hidden;
-  }
-
-  .middle {
-    transition: .2s ease;
-    opacity: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    text-align: center;
-  }
-
-  .img-container:hover .image {
-    opacity: 0.3;
-  }
-
-  .img-container:hover .middle {
-    opacity: 1;
-  }
-
-  .text {
-    background-color: #4CAF50;
-    color: white;
-    font-size: 16px;
-    padding: 16px 32px;
-  }
 </style>

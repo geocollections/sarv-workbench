@@ -96,8 +96,8 @@ const formManipulation = {
         this.saveData(object,formData,url).then(savedObjectId => {
           //before save object ID was removed
           this[object] = editableObject;
-          if (savedObjectId === undefined || savedObjectId === false) return;
-
+          // if (savedObjectId === undefined || savedObjectId === false) return;
+          console.log(this)
           this.$emit('data-loaded',editableObject);
           if (!addAnother) {
             this.$router.push({ path: '/'+object })
@@ -166,6 +166,11 @@ const formManipulation = {
         resolve(undefined)
       })
     },
+
+    removeAttachmentRelation(attachment, object) {
+
+    },
+
     addRelationBetweenAnyObjectAndAttachment(attachmentId, object){
       let formData = new FormData()
       let uploadableObject = {

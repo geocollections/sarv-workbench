@@ -21,7 +21,7 @@
                       :table="$route.meta.table"/>
 
     <!-- LOGS -->
-    <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData"></log>
+    <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData" :key="logComponentKey"></log>
   </div>
 </template>
 
@@ -45,7 +45,8 @@
         object : null,
         relatedData:[],
         formattedData:null,
-        isConfirmation: false
+        isConfirmation: false,
+        logComponentKey: 0,
       }
     },
 
@@ -78,6 +79,7 @@
       setData(data) {
         this.data = data
         if(this.data !== null) this.formattedData = data;
+        this.forceRerender()
       },
       setObject(object) {
         this.object = object
@@ -85,7 +87,8 @@
 
       setRelatedData(data){
         this.relatedData = data
-      }
+      },
+      forceRerender() { this.logComponentKey += 1; },
     }
   }
 </script>
