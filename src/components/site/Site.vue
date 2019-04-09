@@ -179,7 +179,7 @@
       <legend class="w-auto" style="font-size: large;">Files <font-awesome-icon icon="folder-open"/></legend>
 
       <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
-      <file-table :attachments="relatedData.attachment_link" v-if="relatedData.attachment_link.length > 0"/>
+      <file-table :attachments="relatedData.attachment_link" :object="'site'" v-if="relatedData.attachment_link.length > 0"/>
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
@@ -366,7 +366,7 @@
           }
         },
 
-        formatDataForUpload(objectToUpload) {
+        formatDataForUpload(objectToUpload, saveRelatedData = false) {
           let uploadableObject = cloneDeep(objectToUpload)
 
           if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
@@ -379,7 +379,12 @@
           if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
           if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
 
-          console.log(uploadableObject)
+
+          if(saveRelatedData) {
+            uploadableObject.related_data = {}
+            uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          }
+
           return JSON.stringify(uploadableObject)
         },
         fillAutocompleteFields(obj){
@@ -540,7 +545,11 @@
             this.$router.push({ path:'/project'});
           else
             this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
-        }
+        },
+        removeAttachmentRelation(idx) {
+          this.relatedData.attachment_link.splice(idx, 1);
+          this.add(true,'site',true);
+        },
       },
       beforeRouteLeave(to, from, next) {
         this.$store.commit('REMOVE_RELATION_OBJECT');

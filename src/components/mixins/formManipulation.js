@@ -79,7 +79,7 @@ const formManipulation = {
       return isValid
     },
 
-    add(addAnother, object) {
+    add(addAnother, object, saveRelatedData = false) {
       if (this.validate(object) && !this.sendingData) {
 
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
@@ -89,7 +89,7 @@ const formManipulation = {
           delete this[object]['id']
         }
 
-        const dataToUpload = this.formatDataForUpload(this[object]);
+        const dataToUpload = this.formatDataForUpload(this[object],saveRelatedData);
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
@@ -165,10 +165,6 @@ const formManipulation = {
         toastError({text: this.$t('messages.uploadError')});
         resolve(undefined)
       })
-    },
-
-    removeAttachmentRelation(attachment, object) {
-
     },
 
     addRelationBetweenAnyObjectAndAttachment(attachmentId, object){

@@ -59,9 +59,9 @@
     </div>
 
     <div class="col-sm-12 col-md-6 mb-2">
-      <button class="btn btn-outline-primary" v-if="filesState" :disabled="sendingData" @click="downloadFile" :title="$tc('add.buttons.downloadFile', 1)">
-        <font-awesome-icon icon="download"/>
-      </button>
+      <!--<button class="btn btn-outline-primary" v-if="filesState" :disabled="sendingData" @click="downloadFile" :title="$tc('add.buttons.downloadFile', 1)">-->
+        <!--<font-awesome-icon icon="download"/>-->
+      <!--</button>-->
       <button class="btn btn-outline-danger ml-1" v-if="filesState" :disabled="sendingData" @click="clearFile" :title="$tc('add.buttons.resetFile', 1)">
         <font-awesome-icon icon="trash-alt"/>
       </button>
@@ -134,9 +134,9 @@
           this.$refs.fileinput.reset();
           this.files=[]
         },
-        downloadFile(){
-
-        }
+        // downloadFile(){
+        //
+        // }
       }
     }
 </script>

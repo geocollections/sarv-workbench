@@ -202,7 +202,7 @@
             <!--</tbody>-->
           </table>
         </div>
-        <file-table :attachments="relatedData.attachment_link" v-if="relatedData.attachment_link.length > 0"/>
+        <file-table :attachments="relatedData.attachment_link" :object="'project'" v-if="relatedData.attachment_link.length > 0"/>
       </div>
     </fieldset>
 
@@ -406,7 +406,7 @@
           }
         },
 
-        formatDataForUpload(objectToUpload) {
+        formatDataForUpload(objectToUpload,saveRelatedData = false) {
           let uploadableObject = cloneDeep(objectToUpload)
 
           if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
@@ -420,10 +420,11 @@
 
           //add related data
           uploadableObject.related_data = {}
-          if(this.isDefinedAndNotEmpty(this.relatedData.projectagent)) uploadableObject.related_data.agent = this.relatedData.projectagent
-          if(this.isDefinedAndNotEmpty(this.relatedData.attachment_link)) uploadableObject.related_data.attachment = this.relatedData.attachment_link
-          // if(this.isDefinedAndNotEmpty(this.relatedData.site)) uploadableObject.related_data.site = this.relatedData.site
-
+          uploadableObject.related_data.agent = this.relatedData.projectagent
+          if(saveRelatedData) {
+            uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+            // uploadableObject.related_data.site = this.relatedData.site;
+          }
           console.log(uploadableObject)
           return JSON.stringify(uploadableObject)
         },
@@ -536,7 +537,10 @@
         chooseLocations(locations) {
           console.log(locations)
         },
-
+        removeAttachmentRelation(idx) {
+          this.relatedData.attachment_link.splice(idx, 1);
+          this.add(true,'project',true);
+        },
 
       },
 

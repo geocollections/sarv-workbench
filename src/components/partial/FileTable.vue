@@ -9,7 +9,7 @@
           <font-awesome-icon v-else="file.uuid_filename === null"  style="max-height: 5rem" size="7x" icon="file"/>
           <div class="middle flex flex-inline">
             <button class="btn btn-primary mb-2 mr-1 btn-sm"  @click="windowOpenNewTab('attachment','/attachment/'+file.id)"><font-awesome-icon icon="external-link-alt"/></button>
-            <button class="btn btn-danger mb-2 btn-sm" @click="removeAttachmentRelation(file)"><font-awesome-icon icon="trash-alt"/></button>
+            <button class="btn btn-danger mb-2 btn-sm" @click="$parent.removeAttachmentRelation(key)"><font-awesome-icon icon="trash-alt"/></button>
             <div style="background-color:#5e676a;color:white; width: 20vh">
               <span style="font-size: small">{{file.date_created}}<br/>{{file.author__agent}}</span>
             </div>
@@ -32,6 +32,10 @@
       props: {
         attachments: {
           type: Array,
+          required: true
+        },
+        object: {
+          type: String,
           required: true
         }
       },
