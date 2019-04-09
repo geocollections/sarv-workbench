@@ -1,7 +1,6 @@
 <template>
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
-
     <!-- STORAGE-->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">Üldinfo
@@ -10,12 +9,12 @@
       <div class="row">
         <div class="col-md-6">
           <label class="p-0">{{ $t('site.name') }}:</label>
-          <b-form-input id="name" v-model="site.name" :state="isDefinedAndNotNull(site.name)" type="text" maxlength="100"></b-form-input>
+          <b-form-input id="name" v-model="site.name" type="text" maxlength="100"></b-form-input>
         </div>
 
         <div class="col-md-6">
-          <label class="p-0">{{ $t('site.name_en') }}:</label>
-          <b-form-input id="name_en" v-model="site.name_en" type="text" maxlength="100"></b-form-input>
+          <!--<label class="p-0">{{ $t('site.name_en') }}:</label>-->
+          <!--<b-form-input id="name_en" v-model="site.name_en" type="text" maxlength="100"></b-form-input>-->
         </div>
       </div>
       <div class="row">
@@ -43,10 +42,10 @@
           <label :for="`date_start`" class="p-0">{{ $t('site.date_start') }}:</label>
           <datepicker id="date_start"
                       v-model="site.date_start"
-                      use-utc="true "
+                      use-utc="true"
                       lang="en"
                       :first-day-of-week="1"
-                      format="DD MMM YYYY"
+                      type="datetime" format="DD MMM YYYY [at] HH:mm"
                       input-class="form-control"></datepicker>
         </div>
 
@@ -57,8 +56,12 @@
                       use-utc="true "
                       lang="en"
                       :first-day-of-week="1"
-                      format="DD MMM YYYY"
+                      type="datetime" format="DD MMM YYYY [at] HH:mm"
                       input-class="form-control"></datepicker>
+        </div>
+        <div class="col-sm-3">
+          <label class="p-0">&ensp;</label>
+          <button class="btn btn-primary form-control" @click="finishWork" v-if="site.date_end === undefined || site.date_end === null"> Finish </button>
         </div>
       </div>
     </fieldset>
@@ -70,12 +73,12 @@
       <div class="row">
         <div class="col-md-4">
           <label class="p-0">{{ $t('site.latitude') }}:</label>
-          <b-form-input id="latitude" v-model="site.latitude" type="number"></b-form-input>
+          <b-form-input id="latitude" v-model="site.latitude" :state="isDefinedAndNotNull(site.latitude)" type="number"></b-form-input>
         </div>
 
         <div class="col-md-4">
           <label class="p-0">{{ $t('site.longitude') }}:</label>
-          <b-form-input id="longitude" v-model="site.longitude" type="number"></b-form-input>
+          <b-form-input id="longitude" v-model="site.longitude" :state="isDefinedAndNotNull(site.longitude)" type="number"></b-form-input>
         </div>
 
         <div class="col-md-4">
@@ -92,7 +95,9 @@
       <div class="row mb-2">
         <div class="col">
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <map-component  v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />
+            <test-component v-if="showCollapseMap" v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation"></test-component>
+
+            <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
           </b-collapse>
         </div>
       </div>
@@ -240,7 +245,7 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false,'site')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack()">
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true,'site')">
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
@@ -273,11 +278,13 @@
   import MultimediaComponent from "../partial/MultimediaComponent";
   import {toastError} from "../../assets/js/iziToast/iziToast";
   import GeocollectionsLink from "../partial/GeocollectionsLink";
+  import TestComponent from "../partial/TestComponent";
 
 
     export default {
       name: "Site",
       components: {
+        TestComponent,
         GeocollectionsLink,
         MultimediaComponent,
         FileInputComponent,
@@ -290,7 +297,9 @@
       mixins: [formManipulation,autocompleteFieldManipulation],
 
       data() { return this.setInitialData() },
-
+      computed: {
+        createRelationWith () { return this.$store.state['createRelationWith'] }
+      },
       created() {
         this.loadFullInfo();
       },
@@ -309,12 +318,20 @@
               },
               project: [],attachment:[],coordMethod:[],locality:[]
             },
-            requiredFields: [],
+            requiredFields: ['latitude','longitude'],
             site: {},
             previousRecord: {},
             nextRecord: {},
             searchParameters: this.setDefaultSearchParameters(),
             showCollapseMap: true,
+            shortcuts: [
+              {
+                text: 'Today',
+                onClick: () => {
+                  this.time3 = [ new Date(), new Date() ]
+                }
+              }
+            ],
 
           }
         },
@@ -338,7 +355,7 @@
 
                 this.fillAutocompleteFields(this.site)
                 this.removeUnnecessaryFields(this.site, this.copyFields);
-                if(this.site.latitude !== null && this.site.longitude !== null) {
+                if(this.site.latitude === null && this.site.longitude === null) {
                   this.setLocationDataIfExists();
                 }
                 this.site.related_data = {};
@@ -348,8 +365,8 @@
                 this.getListRecords('site')
 
                 //set relation object as site
-                let createRelationWith = { object: 'site', data: this.site };
-                this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith });
+                // let createRelationWith = { object: 'site', data: this.site };
+                // this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith });
 
               } else {
                 this.sendingData = false;
@@ -360,7 +377,7 @@
             this.loadRelatedData('sample');
           } else{
             this.setLocationDataIfExists();
-            this.setSiteNameIfPreviousExists()
+            this.setSiteNameAndProjectIfPreviousExists()
           }
 
         },
@@ -476,8 +493,8 @@
         setLocationDataIfExists(){
           this.getGPSLocation().then(currentGPSLocation => {
             if(currentGPSLocation === null) return;
-            this.$set(this.site,'latitude', currentGPSLocation.latitude);
-            this.$set(this.site,'longitude', currentGPSLocation.longitude);
+            this.$set(this.site,'latitude', currentGPSLocation.latitude === null ? null : currentGPSLocation.latitude.toFixed(6));
+            this.$set(this.site,'longitude', currentGPSLocation.longitude === null ? null : currentGPSLocation.longitude.toFixed(6));
             this.$set(this.site,'location_accuracy', currentGPSLocation.accuracy);
 
             this.site.coord_det_method = {id:6,value:'GPS',value_en:'GPS' };
@@ -520,12 +537,34 @@
 
         },
 
-        setSiteNameIfPreviousExists(){
-          fetchLastSiteName(this.$route.params.id).then(name => {
-            let tokenize = this.site.name.split(/[^0-9]/g);
-            if(!isNaN(tokenize[tokenize.length-1]))
-              this.site.name = parseInt(tokenize[tokenize.length-1])+1;
+        setSiteNameAndProjectIfPreviousExists(){
+          if(this.createRelationWith.data === null) return
+          let project = this.createRelationWith.data
+          fetchLastSiteName(project.id).then(response => {
+            let resp = response.body.results
+            if(resp && resp.length > 0) {
+              let previousName = resp[0].name, newName = null;
+              let tokenize = previousName.split(/[^0-9]/g);
+              let lastToken = tokenize[tokenize.length-1]
+
+              if(isNaN(lastToken)) newName = previousName+' 1';
+              //last token is number
+              else newName = previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1);
+              this.$set(this.site,'name', newName);
+              this.$set(this.site,'date_start', new Date());
+              this.$set(this.site,'project', {name:project.name, name_en:project.name_en,id:project.id});
+            }
           });
+        },
+        saveAndNavigateBack(){
+          this.add(false,'true')
+          this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+        },
+        finishWork() {
+          // set finish time
+          this.site.date_end = new Date();
+          this.add(false,'true')
+          this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
         }
       },
       beforeRouteLeave(to, from, next) {

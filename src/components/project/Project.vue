@@ -5,7 +5,8 @@
     <div class="row mt-4">
       <div class="col">
         <span class="float-right">
-          <button class="btn btn-primary mb-2" @click="registerObservation">Register new observation / sampling site</button></span>
+          <button class="btn btn-primary mb-2" @click="registerObservation"> Register new observation / sampling site</button>
+        </span>
           <span v-if="!isActiveProject" class="alert alert-danger">{{ $t('frontPage.non_active') }}</span>
           <span v-if="isActiveProject" class="alert alert-success">{{ $t('frontPage.active') }}</span>
       </div>
@@ -205,41 +206,47 @@
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">Linked Sites <font-awesome-icon icon="link"/></legend>
 
-      <div class="col p-0">
-       <span class="custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
-          <label class="custom-control-label" for="customSwitch">{{ $t(showCollapseMap ? 'add.buttons.mapEnabled' : 'add.buttons.mapDisabled')}}</label>
-        </span>
+      <div v-if="relatedData.site.length > 0">
+        <div class="col p-0">
+         <span class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+            <label class="custom-control-label" for="customSwitch">{{ $t(showCollapseMap ? 'add.buttons.mapEnabled' : 'add.buttons.mapDisabled')}}</label>
+          </span>
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <map-component style="width: 100%" v-bind:location="{ lat: null, lng: null }"
-                           v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations" />
-          </b-collapse>
-      </div>
+            <test-component mode="multiple" v-if="showCollapseMap" v-bind:location="{ lat: null, lng: null }" :key="mapComponentKey"
+                            v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations"/>
+            <!--<map-component v-bind:location="{ lat: null, lng: null }"-->
+                           <!--v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations" />-->
 
-      <div class="table-responsive-sm col-12 p-0">
-        <table class="table table-hover table-bordered">
-          <thead class="thead-light">
-          <tr>
-            <th>ID</th>
-            <th>{{ $t('site.name') }}</th>
-            <th>{{ $t('site.date_start') }}</th>
-            <th>{{ $t('site.date_end') }}</th>
-            <!--<th></th>-->
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="(site,index) in relatedData.site">
-            <td @click="windowOpenNewTab('site','/site/'+site.id)">
-              <font-awesome-icon size="1x" icon="eye"/> {{site.id}}
-            </td>
-            <td v-translate="{et:site.name,en:site.name_en}"></td>
-            <td>{{site.date_start}}</td>
-            <td>{{site.date_end}}</td>
-            <!--<td style="min-width: 60px;text-align:right" @click="relatedData.site.splice(index, 1)"><font-awesome-icon icon="times"/></td>-->
-          </tr>
-          </tbody>
-        </table>
+          </b-collapse>
+        </div>
+
+        <div class="table-responsive-sm col-12 p-0">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('site.name') }}</th>
+              <th>{{ $t('site.date_start') }}</th>
+              <th>{{ $t('site.date_end') }}</th>
+              <!--<th></th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="(site,index) in relatedData.site">
+              <td @click="windowOpenNewTab('site','/site/'+site.id)">
+                <font-awesome-icon size="1x" icon="eye"/> {{site.id}}
+              </td>
+              <td v-translate="{et:site.name,en:site.name_en}"></td>
+              <td>{{site.date_start}}</td>
+              <td>{{site.date_end}}</td>
+              <!--<td style="min-width: 60px;text-align:right" @click="relatedData.site.splice(index, 1)"><font-awesome-icon icon="times"/></td>-->
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+      <div v-else>No linked sites</div>
     </fieldset>
 
     <!-- IS PRIVATE-->
@@ -283,10 +290,12 @@
   } from "../../assets/js/api/apiCalls";
 
   import MapComponent from "../partial/MapComponent";
+  import TestComponent from "../partial/TestComponent";
 
     export default {
       name: "Project",
       components: {
+        TestComponent,
         MapComponent,
 
         FontAwesomeIcon,
@@ -302,11 +311,11 @@
         this.loadFullInfo()
 
       },
-
-      beforeMount(){
-        const showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
-        this.showCollapseMap = showCollapseMap ? showCollapseMap : false
-      },
+      //
+      // beforeMount(){
+      //   const showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
+      //   this.showCollapseMap = showCollapseMap ? showCollapseMap : false
+      // },
 
       methods: {
         setInitialData() {
@@ -337,7 +346,7 @@
             ],
             componentKey: 0,
             mapComponentKey: 0,
-            showCollapseMap:false,
+            showCollapseMap:true,
           }
         },
 
@@ -350,7 +359,7 @@
           fetchProjectType().then(response => {
             this.autocomplete.project_type = this.handleResponse(response);
           });
-          console.log(this.$router)
+
           if(this.$route.meta.isEdit) {
             this.sendingData = true;
             fetchProject(this.$route.params.id).then(response => {
@@ -450,7 +459,8 @@
 
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object);
-              if(object === 'site')
+              if(object === 'site')  this.forceMapRerender()
+
               resolve(true)
             });
           });
@@ -502,7 +512,11 @@
 
 
         registerObservation(){
-          console.log('registerObservation')
+
+          //set relation object as site
+          let createRelationWith = { object: 'project', data: this.project };
+          this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith });
+          this.$router.push({ path:'/site/add'})
         },
 
         checkIfProjectIsActive(){

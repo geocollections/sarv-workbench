@@ -1,5 +1,5 @@
 <template class="map-component">
-  <l-map ref="map" :zoom="zoom" :center="center" @click="addMarker" >
+  <l-map ref="map" :zoom="zoom" :center="center" @click="addMarker">
 
     <!--:maxBounds= "[[57.52, 20.37],[60.0, 28.2]]" -->
 
@@ -18,11 +18,12 @@
     <l-marker v-if="marker !== null && markers" :lat-lng="marker" v-for="(marker, index) in markers" :key="index" @click="openSite(marker.siteId)">
       <!--<l-popup :content="'TEST'"></l-popup>-->
     </l-marker>
-
   </l-map>
+
 </template>
 
 <script>
+
   import {LMap, LTileLayer, LControlLayers, LMarker, LPopup } from 'vue2-leaflet';
   import proj4 from 'proj4'
   proj4.defs([
@@ -119,9 +120,10 @@
             updateWhenIdle: true,
             continuousWorld: true,
             url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>'
+            attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>',
           }
         ],
+        showMap:false
       }
     },
     watch: {
@@ -140,12 +142,7 @@
       },
       locations: function(newVal, oldVal){
         if(newVal.length === 0) return;
-        this.markers = []
-        newVal.forEach(entity => {
-          this.markers.push({lat:entity.latitude, lng: entity.longitude, siteId: entity.id})
-        });
-        this.center = L.latLng(58.5, 25.5)
-        this.zoom = 6
+        this.updateMarkers(newVal)
         console.log('Prop changed: ', newVal, ' | was: ', oldVal)
       },
     },
@@ -158,13 +155,22 @@
         this.$nextTick(() => {
           this.map = this.$refs.map.mapObject;
           let vm = this
-          console.log(this.locations)
+          this.updateMarkers([])
+
           // this.map.on('baselayerchange', function (event) {
           //
           //   if(event.name === 'Maaameti kaart'){}
           //   vm.setDefaultProjection()
           // });
         })
+      },
+      updateMarkers(newval){
+        this.markers = []
+        newval.forEach(entity => {
+          this.markers.push({lat:entity.latitude, lng: entity.longitude, siteId: entity.id})
+        });
+        this.center = L.latLng(58.5, 25.5)
+        this.zoom = 6
       },
       // Validates if coordinates exist in correct form.
       isValidLocation(loc) {

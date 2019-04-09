@@ -1,3 +1,0 @@
-const POINT_MARKER_ICON_CONFIG = 'test';
-
-export default POINT_MARKER_ICON_CONFIG
