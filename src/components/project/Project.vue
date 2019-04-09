@@ -7,8 +7,10 @@
         <span class="float-right">
           <button class="btn btn-primary mb-2" @click="registerObservation"> Register new observation / sampling site</button>
         </span>
-          <span v-if="!isActiveProject" class="alert alert-danger">{{ $t('frontPage.non_active') }}</span>
-          <span v-if="isActiveProject" class="alert alert-success">{{ $t('frontPage.active') }}</span>
+        <span class="float-left">
+          <button  v-if="!isActiveProject" class="btn alert-danger mb-2" @click="isActiveProject = true">{{ $t('frontPage.non_active') }}</button>
+          <button v-if="isActiveProject"  class="btn alert-success mb-2" @click="isActiveProject = false">{{ $t('frontPage.active') }}</button>
+        </span>
       </div>
     </div>
     <!-- STORAGE-->
@@ -293,7 +295,7 @@
   import MapComponent from "../partial/MapComponent";
   import TestComponent from "../partial/TestComponent";
   import FileTable from "../partial/FileTable";
-
+  import findIndex from 'lodash/findIndex';
     export default {
       name: "Project",
       components: {
@@ -314,11 +316,12 @@
         this.loadFullInfo()
 
       },
-      //
-      // beforeMount(){
-      //   const showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
-      //   this.showCollapseMap = showCollapseMap ? showCollapseMap : false
-      // },
+
+      beforeMount(){
+        let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
+        let currentProjectIdx = findIndex(currentActiveProjects, function(item) { return item === parseInt(vm.$route.params.id) });
+        this.isActiveProject = currentProjectIdx > -1
+      },
 
       methods: {
         setInitialData() {
@@ -350,6 +353,7 @@
             componentKey: 0,
             mapComponentKey: 0,
             showCollapseMap:true,
+            isActive: false
           }
         },
 
@@ -373,7 +377,7 @@
                 this.fillAutocompleteFields(this.project)
                 this.removeUnnecessaryFields(this.project, this.copyFields);
                 this.project.related_data = {};
-                this.$set(this,'isActiveProject', this.checkIfProjectIsActive());
+                // this.$set(this,'activeProject', this.checkIfProjectIsActive());
                 this.forceRerender()
                 this.$emit('data-loaded', this.project)
                 this.$emit('set-object','project');
@@ -522,9 +526,9 @@
           this.$router.push({ path:'/site/add'})
         },
 
-        checkIfProjectIsActive(){
-          return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
-        },
+        // checkIfProjectIsActive(){
+        //   return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
+        // },
 
         forceRerender() { this.componentKey += 1; },
         forceMapRerender() { this.mapComponentKey += 1; },
@@ -543,14 +547,29 @@
           },
           deep: true
         },
-        'project.date_end': {
-          handler: function (newval, oldval) {
-            this.$set(this,'isActiveProject', this.checkIfProjectIsActive())
-          },
-          deep: true
+        // 'project.date_end': {
+        //   handler: function (newval, oldval) {
+        //     this.$set(this,'isActiveProject', this.checkIfProjectIsActive())
+        //   },
+        //   deep: true
+        // },
+        'isActiveProject'(newval, oldval){
+          let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
+          if(currentActiveProjects === 'fallbackValue') currentActiveProjects = [];
+          if(!this.isDefinedAndNotNull(this.project.id)) return
+
+          if(newval) {
+            currentActiveProjects.push(this.project.id)
+          } else {
+            let removeIdx = findIndex(currentActiveProjects, function(item) { return item === vm.project.id });
+
+            currentActiveProjects.splice(removeIdx,1)
+          }
+
+          this.$localStorage.set('activeProject',  currentActiveProjects)
         },
         'showCollapseMap'(newval, oldval){
-          // this.$localStorage.set('mapComponent',  newval)
+          this.$localStorage.set('mapComponent',  newval)
         }
       }
     }

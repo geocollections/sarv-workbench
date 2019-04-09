@@ -130,6 +130,10 @@ new Vue({
       type: Boolean,
       default: false
     },
+    activeProject:{
+      type: Array,
+      default: []
+    },
     photoArchive: {
       type: Object
     },

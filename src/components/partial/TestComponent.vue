@@ -111,7 +111,7 @@
           baseLayers[this.tileProviders[3].name] = this.tileProviders[3].leafletObject
           L.control.layers(baseLayers,{}).addTo(this.map);
 
-          this.setCurrentGpsLocationIfExists();
+          if(this.mode === 'single') this.setCurrentGpsLocationIfExists();
 
           this.map.on('baselayerchange', function(e) {
             console.log(e)
