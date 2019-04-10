@@ -5,11 +5,17 @@
     <div class="row mt-4">
       <div class="col">
         <span class="float-right">
-          <button class="btn btn-primary mb-2" @click="registerObservation"> Register new observation / sampling site</button>
+          <button class="btn btn-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/> Register new observation / sampling site</button>
         </span>
         <span class="float-left">
-          <button  v-if="!isActiveProject" class="btn alert-danger mb-2" @click="isActiveProject = true">{{ $t('frontPage.non_active') }}</button>
-          <button v-if="isActiveProject"  class="btn alert-success mb-2" @click="isActiveProject = false">{{ $t('frontPage.active') }}</button>
+         <span class="custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch2" v-model="isActiveProject" >
+            <label class="custom-control-label rounded pr-4 pl-4" :class="isActiveProject ? 'alert-success ' : 'alert-danger'" for="customSwitch2">
+              <font-awesome-icon icon="tag"/>&ensp;{{ $t(isActiveProject ? 'frontPage.active' : 'frontPage.non_active')}}</label>
+          </span>
+
+          <!--<button  v-if="!isActiveProject" class="btn alert-danger mb-2" @click="isActiveProject = true">{{ $t('frontPage.non_active') }}</button>-->
+          <!--<button v-if="isActiveProject"  class="btn alert-success mb-2" @click="isActiveProject = false">{{ $t('frontPage.active') }}</button>-->
         </span>
       </div>
     </div>
@@ -207,7 +213,7 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">Linked Sites <font-awesome-icon icon="link"/></legend>
+      <legend class="w-auto" style="font-size: large;">Linked Sites <font-awesome-icon icon="globe-americas"/></legend>
 
       <div v-if="relatedData.site.length > 0">
         <div class="col p-0">
@@ -314,7 +320,6 @@
 
       created() {
         this.loadFullInfo()
-
       },
 
       beforeMount(){
@@ -352,7 +357,6 @@
             ],
             componentKey: 0,
             mapComponentKey: 0,
-            showCollapseMap:true,
             isActive: false
           }
         },
@@ -572,9 +576,6 @@
 
           this.$localStorage.set('activeProject',  currentActiveProjects)
         },
-        'showCollapseMap'(newval, oldval){
-          this.$localStorage.set('mapComponent',  newval)
-        }
       }
     }
 </script>

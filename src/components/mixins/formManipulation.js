@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faProjectDiagram,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faProjectDiagram,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
+library.add(faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
@@ -18,6 +18,7 @@ const formManipulation = {
       loadingPercent: 0,
       sendingData: false,
       editMode: false,
+      showCollapseMap:true,
     }
   },
   components: {
@@ -42,8 +43,14 @@ const formManipulation = {
   mounted(){
     this.$root.$on('user-choice', this.handleUserChoice);
     this.$parent.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
-  },
 
+  },
+  beforeMount(){
+    //localstorage settings
+    let showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
+    if (typeof showCollapseMap === 'undefined' || showCollapseMap === 'fallbackValue') return
+    this.showCollapseMap = showCollapseMap
+  },
   methods: {
     isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && value.trim().length > 0},
     isDefinedAndNotNull(value) {return !!value && value !== null},
@@ -443,6 +450,9 @@ const formManipulation = {
         this.setActiveTab(this.activeTab)
       },
       deep: true
+    },
+    'showCollapseMap'(newval, oldval){
+      this.$localStorage.set('mapComponent',  newval)
     }
   }
 };

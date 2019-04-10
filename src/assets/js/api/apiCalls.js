@@ -463,6 +463,10 @@ export function fetchProjects(data,agent) {
     return fetch(`project/?projectagent__agent=${agent}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
+export function fetchActiveProjects(projectIds) {
+  return fetch(`project/?id__in=${projectIds}&fields=id,name,name_en&format=json`)
+}
+
 /***********************
  *** PROJECTS END ***
  ***********************/

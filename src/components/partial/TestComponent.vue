@@ -197,7 +197,7 @@
               shadowSize: [41, 41]
             });
             vm.currentLocation =  L.marker({lat:currentGPSLocation.latitude, lng: currentGPSLocation.longitude},
-              {icon: greenIcon,zIndexOffset: 1})
+              {icon: greenIcon,zIndexOffset: 1,draggable:true})
               .addTo(vm.map)
           });
 

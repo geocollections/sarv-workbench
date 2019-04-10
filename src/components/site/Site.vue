@@ -95,9 +95,8 @@
       <div class="row mb-2">
         <div class="col">
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <test-component v-if="showCollapseMap" v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation"></test-component>
-
-            <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
+              <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
+              <test-component v-if="showCollapseMap " mode="single" v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation"></test-component>
           </b-collapse>
         </div>
       </div>
@@ -245,7 +244,8 @@
     fetchListCoordinateMethod,
     fetchSiteAttachment,
     fetchLinkedSamples,
-    fetchLastSiteName
+    fetchLastSiteName,
+    fetchActiveProjects
   } from "../../assets/js/api/apiCalls";
   import MapComponent from "../partial/MapComponent";
   import FileInputComponent from "../partial/MultimediaComponent";
@@ -299,7 +299,6 @@
             previousRecord: {},
             nextRecord: {},
             searchParameters: this.setDefaultSearchParameters(),
-            showCollapseMap: true,
             shortcuts: [
               {
                 text: 'Today',
@@ -311,7 +310,6 @@
 
           }
         },
-
         reloadData(){
           Object.assign(this.$data, this.setInitialData());
           this.loadFullInfo()
@@ -333,6 +331,7 @@
                 if(this.site.latitude === null && this.site.longitude === null) {
                   this.setLocationDataIfExists();
                 }
+
                 this.site.related_data = {};
                 this.$emit('data-loaded', this.site)
                 this.$emit('set-object','site');
@@ -352,7 +351,8 @@
             this.loadRelatedData('sample');
           } else{
             this.setLocationDataIfExists();
-            this.setSiteNameAndProjectIfPreviousExists()
+            this.setSiteNameAndProjectIfPreviousExists();
+            this.loadListOfExistingProjects();
           }
 
         },
@@ -512,22 +512,25 @@
         },
 
         setSiteNameAndProjectIfPreviousExists(){
-          if(this.createRelationWith.data === null) return
-          let project = this.createRelationWith.data
-          fetchLastSiteName(project.id).then(response => {
-            let resp = response.body.results
-            if(resp && resp.length > 0) {
-              let previousName = resp[0].name, newName = null;
-              let tokenize = previousName.split(/[^0-9]/g);
-              let lastToken = tokenize[tokenize.length-1]
+          return new Promise(resolve => {
+            if(this.createRelationWith.data === null) resolve(false)
+            let project = this.createRelationWith.data
+            fetchLastSiteName(project.id).then(response => {
+              let resp = response.body.results
+              if(resp && resp.length > 0) {
+                let previousName = resp[0].name, newName = null;
+                let tokenize = previousName.split(/[^0-9]/g);
+                let lastToken = tokenize[tokenize.length-1]
 
-              if(isNaN(lastToken)) newName = previousName+' 1';
-              //last token is number
-              else newName = previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1);
-              this.$set(this.site,'name', newName);
-              this.$set(this.site,'date_start', new Date());
-              this.$set(this.site,'project', {name:project.name, name_en:project.name_en,id:project.id});
-            }
+                if(isNaN(lastToken)) newName = previousName+' 1';
+                //last token is number
+                else newName = previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1);
+                this.$set(this.site,'name', newName);
+                this.$set(this.site,'date_start', new Date());
+                this.$set(this.site,'project', {name:project.name, name_en:project.name_en,id:project.id});
+                resolve(true)
+              } else resolve(false)
+            });
           });
         },
         saveAndNavigateBack(){
@@ -550,6 +553,16 @@
           this.relatedData.attachment_link.splice(idx, 1);
           this.add(true,'site',true);
         },
+        loadListOfExistingProjects(){
+          let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'));
+          if(currentActiveProjects && currentActiveProjects !== 'fallbackValue' && currentActiveProjects.length > 0){
+            fetchActiveProjects(currentActiveProjects.join(", ")).then(response => {
+              this.autocomplete.project = this.handleResponse(response)
+              this.$set(this.site,'project', {name:this.autocomplete.project[0].name, name_en:this.autocomplete.project[0].name_en,id:this.autocomplete.project[0].id});
+            })
+          }
+
+        }
       },
       beforeRouteLeave(to, from, next) {
         this.$store.commit('REMOVE_RELATION_OBJECT');
