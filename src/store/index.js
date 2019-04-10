@@ -9,6 +9,7 @@ export function createStore () {
 
   return new Vuex.Store({
     state: {
+      sampleView: true,
       createRelationWith: { object: null, data: null, info: null }
     },
     actions,

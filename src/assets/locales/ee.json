@@ -640,7 +640,8 @@
     "validFileFormatPDF": "See '{file}' ei ole .pdf fail!",
     "localityAttachmentInfo":"Vali link manusele või lisa uus",
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga {data}. Lõpetamiseks mine tagasi lokaliteedi vormile",
-    "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile"
+    "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
+    "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise SITE-ga {data}. Lõpetamiseks mine tagasi site vormile"
 
   },
   "titles": {

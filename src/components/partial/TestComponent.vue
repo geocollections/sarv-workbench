@@ -110,15 +110,10 @@
           baseLayers[this.tileProviders[2].name] = this.tileProviders[2].leafletObject
           baseLayers[this.tileProviders[3].name] = this.tileProviders[3].leafletObject
           L.control.layers(baseLayers,{}).addTo(this.map);
-
+          this.map.addLayer(vm.tileProviders[4].leafletObject)
           if(this.mode === 'single') this.setCurrentGpsLocationIfExists();
 
-          this.map.on('baselayerchange', function(e) {
-            console.log(e)
-            if(e.name === 'Maaameti fotokaart' || e.name === 'Maaameti kaart'){
-              vm.map.addLayer(vm.tileProviders[4].leafletObject)
-            }
-          });
+          this.map.on('baselayerchange', function(e) {});
 
           if(this.mode === 'multiple') {
             this.setMarkers(this.locations)

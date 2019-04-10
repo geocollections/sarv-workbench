@@ -188,7 +188,7 @@
       <div class="row">
         <div class="col-sm-12 mb-2">
           <span class="float-right">
-            <button class="btn btn-primary mb-2" @click="openSampleModal">{{ $t('add.new') }}</button>
+            <button class="btn btn-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
           </span>
           <div class="table-responsive-sm" v-if="relatedData.sample.length > 0">
             <table class="table table-hover table-bordered">
@@ -507,8 +507,14 @@
 
         },
 
-        openSampleModal(){
-
+        addSample(){
+          let isFull = false
+          this.$store.commit('SET_SAMPLE_VIEW', { isFull });
+          let createRelationWith = { object: 'site', data: this.site, relatedData: {samples: []},
+            info: this.$t('messages.siteSampleRelationInfo',
+              { data: `ID: ${this.site.id} (${this.site.name})` })};
+          this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith })
+          this.$router.push({ path:'/sample/add'});
         },
 
         setSiteNameAndProjectIfPreviousExists(){
@@ -558,14 +564,17 @@
           if(currentActiveProjects && currentActiveProjects !== 'fallbackValue' && currentActiveProjects.length > 0){
             fetchActiveProjects(currentActiveProjects.join(", ")).then(response => {
               this.autocomplete.project = this.handleResponse(response)
-              this.$set(this.site,'project', {name:this.autocomplete.project[0].name, name_en:this.autocomplete.project[0].name_en,id:this.autocomplete.project[0].id});
+              if(!this.isDefinedAndNotNull(this.site.project))
+                this.$set(this.site,'project', {name:this.autocomplete.project[0].name, name_en:this.autocomplete.project[0].name_en,id:this.autocomplete.project[0].id});
             })
           }
 
         }
       },
       beforeRouteLeave(to, from, next) {
-        this.$store.commit('REMOVE_RELATION_OBJECT');
+        //Do not remove relation object in case user created new relation object for simplified sample form
+        if (this.$store.state['sampleView'].isFull)
+          this.$store.commit('REMOVE_RELATION_OBJECT');
         next()
       },
       watch: {

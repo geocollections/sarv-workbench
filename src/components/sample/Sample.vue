@@ -1,456 +1,646 @@
 <template>
-  <div>
-    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+  <sample-wrapper :full-view="fullView">
+    <template slot="loader">
+      <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+    </template>
+    <template slot="basic-form">
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`number`">{{ $t('sample.number') }}:</label>
+        </div>
 
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`number`">{{ $t('sample.number') }}:</label>
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="number" v-model="sample.number" type="text"></b-form-input>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`number_additional`">{{ $t('sample.number_additional') }}:</label>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="number_additional" v-model="sample.number_additional" type="text"></b-form-input>
+        </div>
+
+        <div class="col-sm-2">
+          <label :for="`number_field`">{{ $t('sample.number_field') }}:</label>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="number_field" v-model="sample.number_field" type="text"></b-form-input>
+        </div>
+
       </div>
 
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="number" v-model="sample.number" type="text"></b-form-input>
+      <!-- FIELD NUMBER AND SERIES  -->
+      <div class="row">
+
+        <!-- SAMPLE PURPOSE AND TYPE  -->
+        <div class="col-sm-2">
+          <label :for="`sample_purpose`">{{ $t('sample.sample_purpose') }}:</label>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <vue-multiselect v-model="sample.sample_purpose" v-if="isDefinedAndNotEmpty(autocomplete.purpose)"
+                           id="type"
+                           :options="autocomplete.purpose"
+                           track-by="id"
+                           :label="commonLabel"
+                           :placeholder="$t('add.inputs.autocomplete')"
+                           :show-labels="false">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+
+        <div class="col-sm-1">
+          <label :for="`sample_type`">{{ $t('sample.sample_type') }}:</label>
+        </div>
+
+        <div class="col-sm-3 mb-2">
+          <b-form-input id="sample_type" v-model="sample.sample_type" type="text"></b-form-input>
+        </div>
+
+        <div class="col-sm-1">
+          <label :for="`series`">{{ $t('sample.series') }}:</label>
+        </div>
+
+        <div class="col-sm-3 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.series" deselect-label="Can't remove this value"
+                           label="name" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :loading="autocomplete.loaders.series"
+                           :options="autocomplete.series" :searchable="true" @search-change="autcompleteSampleSeriesSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name}}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
       </div>
 
+      <!-- LOCALITY AND LOCALITY FREE -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`locality`">{{ $t('sample.locality') }}:</label>
+        </div>
 
-      <div class="col-sm-2">
-        <label :for="`number_additional`">{{ $t('sample.number_additional') }}:</label>
+        <div class="col-sm-4 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.locality" deselect-label="Can't remove this value"
+                           :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :loading="autocomplete.loaders.locality"
+                           :options="autocomplete.locality" :searchable="true" @search-change="autcompleteLocalitySearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>
+              {{ $i18n.locale=== 'ee' ? option.locality :option.locality_en }}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+        <div class="col-sm-2">
+          <label :for="`depth`">{{ $t('sample.depth') }}:</label>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="depth" v-model="sample.depth" type="number"></b-form-input>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="depth_interval" v-model="sample.depth_interval" type="number"></b-form-input>
+        </div>
       </div>
 
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="number_additional" v-model="sample.number_additional" type="text"></b-form-input>
+      <!-- DEPTH AND DEPTH INTERVAL -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`locality_free`">{{ $t('sample.locality_free') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="locality_free" v-model="sample.locality_free" type="text"></b-form-input>
+        </div>
+
+        <!-- LATITUDE AND LONGITUDE -->
+        <div class="col-sm-2">
+          <label :for="`latitude`">Lat/Long:</label>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="latitude" v-model="sample.latitude1" type="number"></b-form-input>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="longitude" v-model="sample.longitude1" type="number"></b-form-input>
+        </div>
       </div>
 
-      <div class="col-sm-2">
-        <label :for="`number_field`">{{ $t('sample.number_field') }}:</label>
+      <!-- STRATIGRAPHY AND LITHOSTRATIGRAPHY -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`stratigraphy`">{{ $t('sample.stratigraphy') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.stratigraphy" deselect-label="Can't remove this value"
+                           :loading="autocomplete.loaders.stratigraphy"
+                           :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :options="autocomplete.stratigraphy" :searchable="true" @search-change="autcompleteStratigraphySearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>
+              {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`lithostratigraphy`">{{ $t('sample.lithostratigraphy') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.lithostratigraphy" deselect-label="Can't remove this value"
+                           :loading="autocomplete.loaders.lithostratigraphy"
+                           :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :options="autocomplete.lithostratigraphy" :searchable="true" @search-change="autcompleteLithostratigraphySearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>
+              {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
       </div>
 
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="number_field" v-model="sample.number_field" type="text"></b-form-input>
+      <!-- STRATIGRAPHY FREE AND STRATIGRAPHY_BED -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`stratigraphy_free`">{{ $t('sample.stratigraphy_free') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="stratigraphy_free" v-model="sample.stratigraphy_free" type="text"></b-form-input>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`stratigraphy_bed`">{{ $t('sample.stratigraphy_bed') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="stratigraphy_bed" v-model="sample.stratigraphy_bed" type="text"></b-form-input>
+        </div>
       </div>
 
-    </div>
+      <!-- AGENT COLLECTED AND AGENT COLLECTED FREE -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`agent_collected`">{{ $t('sample.agent_collected') }}:</label>
+        </div>
 
-    <!-- FIELD NUMBER AND SERIES  -->
-    <div class="row">
+        <div class="col-sm-3 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.agent_collected" deselect-label="Can't remove this value"
+                           label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :loading="autocomplete.loaders.agent"
+                           :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
 
-    <!-- SAMPLE PURPOSE AND TYPE  -->
-      <div class="col-sm-2">
-        <label :for="`sample_purpose`">{{ $t('sample.sample_purpose') }}:</label>
+        <div class="col-sm-3 mb-2">
+          <b-form-input id="agent_collected_free" v-model="sample.agent_collected_free" type="text" placeholder="coll. txt"></b-form-input>
+        </div>
+        <div class="col-sm-1">
+          <label :for="`owner`">{{ $t('sample.owner') }}:</label>
+        </div>
+
+        <div class="col-sm-3 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.owner" deselect-label="Can't remove this value"
+                           label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :loading="autocomplete.loaders.owner"
+                           :options="autocomplete.agent" :searchable="true" @search-change="autcompleteOwnerSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+      </div>
+      <!-- DATE COLLECTED AND DATE COLLECTED FREE -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`date_collected`">{{ $t('sample.date_collected') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <datepicker id="date_collected"
+                      v-model="sample.date_collected"
+                      use-utc="true "
+                      lang="en"
+                      :first-day-of-week="1"
+                      format="DD MMM YYYY"
+                      input-class="form-control"></datepicker>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`date_collected_free`">{{ $t('sample.date_collected_free') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="date_collected_free" v-model="sample.date_collected_free" type="text"></b-form-input>
+        </div>
+      </div>
+      <!-- CLASSIFICATION ROCK AND ROCK -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`classification_rock`">{{ $t('sample.classification_rock') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+
+          <vue-multiselect class="align-middle" v-model="sample.classification_rock" deselect-label="Can't remove this value"
+                           :loading="autocomplete.loaders.rock"
+                           :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :options="autocomplete.rock" :searchable="true" @search-change="autcompleteRockSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>
+              {{ $i18n.locale=== 'ee' ? option.name :option.name_en }}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`rock`">{{ $t('sample.rock') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="rock" v-model="sample.rock" type="text"></b-form-input>
+        </div>
+      </div>
+      <!-- ROCK EN AND FOSSILS -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`rock_en`">{{ $t('sample.rock_en') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="rock_en" v-model="sample.rock_en" type="text"></b-form-input>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`fossils`">{{ $t('sample.fossils') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="fossils" v-model="sample.fossils" type="text"></b-form-input>
+        </div>
+      </div>
+      <!-- STORAGE-->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`mass`">{{ $t('sample.mass') }}:</label>
+        </div>
+
+        <div class="col-sm-2 mb-2">
+          <b-form-input id="mass" v-model="sample.mass" type="number"></b-form-input>
+        </div>
+
+        <div class="col-sm-2">
+          <label :for="`storage`">{{ $t('sample.storage') }}:</label>
+        </div>
+
+        <div class="col-sm-3 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.storage" deselect-label="Can't remove this value"
+                           :loading="autocomplete.loaders.storage" id="storage"
+                           label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+        <div class="col-sm-3 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.storage_additional" deselect-label="Can't remove this value"
+                           :loading="autocomplete.loaders.additional_storage" id="storage_additional"
+                           label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :options="autocomplete.storage_additional" :searchable="true" @search-change="autcompleteAdditionalStorageSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
       </div>
 
-      <div class="col-sm-2 mb-2">
-        <vue-multiselect v-model="sample.sample_purpose" v-if="isDefinedAndNotEmpty(autocomplete.purpose)"
-                         id="type"
-                         :options="autocomplete.purpose"
-                         track-by="id"
-                         :label="commonLabel"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
+      <!-- SAMPLE PARENT AND SPECIMEN -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`parent_sample`">{{ $t('sample.parent_sample') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.parent_sample" deselect-label="Can't remove this value"
+                           label="number" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :loading="autocomplete.loaders.sample"
+                           :options="autocomplete.sample" :searchable="true" @search-change="autcompleteSampleSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.number}}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`parent_specimen`">{{ $t('sample.parent_specimen') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.parent_specimen" deselect-label="Can't remove this value"
+                           label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :loading="autocomplete.loaders.specimen"
+                           :options="autocomplete.specimen" :searchable="true" @search-change="autcompleteSpecimenSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
       </div>
 
+      <!-- DESCRIPTION -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`remarks_location`">{{ $t('locality.remarks') }}:</label>
+        </div>
 
-      <div class="col-sm-1">
-        <label :for="`sample_type`">{{ $t('sample.sample_type') }}:</label>
+        <div class="col-sm-10 mb-2">
+          <b-form-textarea id="remarks_location" v-model="sample.remarks" type="text" size="sm"
+                           :rows="1" :max-rows="20"></b-form-textarea>
+        </div>
       </div>
+    </template>
 
-      <div class="col-sm-3 mb-2">
-        <b-form-input id="sample_type" v-model="sample.sample_type" type="text"></b-form-input>
+    <template slot="simplified-form">{{createRelationWith}}
+      <b-alert show variant="warning" v-if="createRelationWith.data !== null">
+        {{ createRelationWith.info }}
+        <a class="small" href="javascript:void(0)" @click="navigateBack">
+          <font-awesome-icon icon="external-link-alt"/>
+        </a>
+      </b-alert>
+      <fieldset class="border p-2 mb-2 mt-3">
+        <legend class="w-auto" style="font-size: large;">Üldinfo
+          <font-awesome-icon icon="project-diagram"/></legend>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.number') }}:</label>
+            <b-form-input id="name" v-model="sample.number" type="text"></b-form-input>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.number_field') }}:</label>
+            <b-form-input id="name_en" v-model="sample.number_field" type="text"></b-form-input>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.sample_purpose') }}:</label>
+            <vue-multiselect v-model="sample.sample_purpose" v-if="isDefinedAndNotEmpty(autocomplete.purpose)"
+                             id="type_"
+                             :options="autocomplete.purpose"
+                             track-by="id"
+                             :label="commonLabel"
+                             :placeholder="$t('add.inputs.autocomplete')"
+                             :show-labels="false">
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.series') }}:</label>
+            <vue-multiselect class="align-middle" v-model="sample.series" deselect-label="Can't remove this value"
+                             label="name" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                             :loading="autocomplete.loaders.series"
+                             :options="autocomplete.series" :searchable="true" @search-change="autcompleteSampleSeriesSearch"
+                             :allow-empty="true"  :show-no-results="false" :max-height="600"
+                             :open-direction="'bottom'">
+              <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name}}</strong> </template>
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.locality') }}:</label>
+            <vue-multiselect class="align-middle" v-model="sample.locality" deselect-label="Can't remove this value"
+                             :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                             :loading="autocomplete.loaders.locality"
+                             :options="autocomplete.locality" :searchable="true" @search-change="autcompleteLocalitySearch"
+                             :allow-empty="true"  :show-no-results="false" :max-height="600"
+                             :open-direction="'bottom'">
+              <template slot="singleLabel" slot-scope="{ option }"><strong>
+                {{ $i18n.locale=== 'ee' ? option.locality :option.locality_en }}</strong> </template>
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.depth') }}:</label><br>
+            <b-form-input class="col-sm-6 p-0" id="depth" v-model="sample.depth" type="number" style="display: inline"></b-form-input>
+            <b-form-input class="col-sm-6 p-0" id="depth_interval" v-model="sample.depth_interval" type="number" style="display: inline"></b-form-input>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.stratigraphy') }}:</label>
+            <vue-multiselect class="align-middle" v-model="sample.stratigraphy" deselect-label="Can't remove this value"
+                             :loading="autocomplete.loaders.stratigraphy"
+                             :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                             :options="autocomplete.stratigraphy" :searchable="true" @search-change="autcompleteStratigraphySearch"
+                             :allow-empty="true"  :show-no-results="false" :max-height="600"
+                             :open-direction="'bottom'">
+              <template slot="singleLabel" slot-scope="{ option }"><strong>
+                {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.lithostratigraphy') }}:</label>
+            <vue-multiselect class="align-middle" v-model="sample.lithostratigraphy" deselect-label="Can't remove this value"
+                             :loading="autocomplete.loaders.lithostratigraphy"
+                             :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                             :options="autocomplete.lithostratigraphy" :searchable="true" @search-change="autcompleteLithostratigraphySearch"
+                             :allow-empty="true"  :show-no-results="false" :max-height="600"
+                             :open-direction="'bottom'">
+              <template slot="singleLabel" slot-scope="{ option }"><strong>
+                {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.stratigraphy_free') }}:</label>
+            <b-form-input id="stratigraphy_free" v-model="sample.stratigraphy_free" type="text"></b-form-input>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.agent_collected') }}:</label>
+            <vue-multiselect class="align-middle" v-model="sample.agent_collected" deselect-label="Can't remove this value"
+                             label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                             :loading="autocomplete.loaders.agent"
+                             :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                             :allow-empty="true"  :show-no-results="false" :max-height="600"
+                             :open-direction="'bottom'">
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.date_collected') }}:</label>
+            <datepicker id="date_collected_"
+                        v-model="sample.date_collected"
+                        use-utc="true "
+                        lang="en"
+                        :first-day-of-week="1"
+                        format="DD MMM YYYY"
+                        input-class="form-control"></datepicker>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.owner') }}:</label>
+            <vue-multiselect class="align-middle" v-model="sample.owner" deselect-label="Can't remove this value"
+                             label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                             :loading="autocomplete.loaders.owner"
+                             :options="autocomplete.agent" :searchable="true" @search-change="autcompleteOwnerSearch"
+                             :allow-empty="true"  :show-no-results="false" :max-height="600"
+                             :open-direction="'bottom'">
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.classification_rock') }}:</label>
+            <vue-multiselect class="align-middle" v-model="sample.classification_rock" deselect-label="Can't remove this value"
+                             :loading="autocomplete.loaders.rock"
+                             :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                             :options="autocomplete.rock" :searchable="true" @search-change="autcompleteRockSearch"
+                             :allow-empty="true"  :show-no-results="false" :max-height="600"
+                             :open-direction="'bottom'">
+              <template slot="singleLabel" slot-scope="{ option }"><strong>
+                {{ $i18n.locale=== 'ee' ? option.name :option.name_en }}</strong> </template>
+              <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+            </vue-multiselect>
+
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.rock') }}:</label>
+            <b-form-input id="rock" v-model="sample.rock" type="text"></b-form-input>
+          </div>
+
+          <div class="col-md-4">
+            <label class="p-0">{{ $t('sample.fossils') }}:</label>
+            <b-form-input id="fossils" v-model="sample.fossils" type="text"></b-form-input>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="border p-2 mb-2">
+        <legend class="w-auto" style="font-size: large;">{{ $t('locality.remarks') }}
+          <font-awesome-icon icon="pen-fancy"/></legend>
+
+        <div class="row">
+          <div class="col-sm-12 mb-2">
+            <b-form-textarea id="remarks" v-model="sample.remarks" type="text" size="sm" :rows="2" :max-rows="20"/>
+          </div>
+        </div>
+      </fieldset>
+    </template>
+    <template slot="privacy">
+      <!-- IS PRIVATE AND MASS-->
+      <div class="row mb-3 mt-3">
+        <div class="col">
+          <!--<b-form-checkbox id="palaeontology" v-model="sample.palaeontology" :value="true" :unchecked-value="false">
+            {{ $t('sample.palaeontology') }}
+          </b-form-checkbox>
+
+          <b-form-checkbox id="analysis" v-model="sample.analysis" :value="true" :unchecked-value="false">
+            {{ $t('sample.analysis') }}
+          </b-form-checkbox>-->
+
+          <b-form-checkbox id="is_private" v-model="sample.is_private" :value="true" :unchecked-value="false">
+            {{ $t('sample.is_private') }}
+          </b-form-checkbox>
+        </div>
       </div>
-
-      <div class="col-sm-1">
-        <label :for="`series`">{{ $t('sample.series') }}:</label>
-      </div>
-
-      <div class="col-sm-3 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.series" deselect-label="Can't remove this value"
-                         label="name" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.series"
-                         :options="autocomplete.series" :searchable="true" @search-change="autcompleteSampleSeriesSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name}}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-    </div>
-
-    <!-- LOCALITY AND LOCALITY FREE -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`locality`">{{ $t('sample.locality') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.locality" deselect-label="Can't remove this value"
-                         :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.locality"
-                         :options="autocomplete.locality" :searchable="true" @search-change="autcompleteLocalitySearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>
-            {{ $i18n.locale=== 'ee' ? option.locality :option.locality_en }}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-      <div class="col-sm-2">
-        <label :for="`depth`">{{ $t('sample.depth') }}:</label>
-      </div>
-
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="depth" v-model="sample.depth" type="number"></b-form-input>
-      </div>
-
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="depth_interval" v-model="sample.depth_interval" type="number"></b-form-input>
-      </div>
-    </div>
-
-    <!-- DEPTH AND DEPTH INTERVAL -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`locality_free`">{{ $t('sample.locality_free') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="locality_free" v-model="sample.locality_free" type="text"></b-form-input>
-      </div>
-
-    <!-- LATITUDE AND LONGITUDE -->
-      <div class="col-sm-2">
-        <label :for="`latitude`">Lat/Long:</label>
-      </div>
-
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="latitude" v-model="sample.latitude1" type="number"></b-form-input>
-      </div>
-
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="longitude" v-model="sample.longitude1" type="number"></b-form-input>
-      </div>
-    </div>
-
-    <!-- STRATIGRAPHY AND LITHOSTRATIGRAPHY -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`stratigraphy`">{{ $t('sample.stratigraphy') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.stratigraphy" deselect-label="Can't remove this value"
-                         :loading="autocomplete.loaders.stratigraphy"
-                         :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :options="autocomplete.stratigraphy" :searchable="true" @search-change="autcompleteStratigraphySearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>
-            {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`lithostratigraphy`">{{ $t('sample.lithostratigraphy') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.lithostratigraphy" deselect-label="Can't remove this value"
-                         :loading="autocomplete.loaders.lithostratigraphy"
-                         :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :options="autocomplete.lithostratigraphy" :searchable="true" @search-change="autcompleteLithostratigraphySearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>
-            {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-    </div>
-
-    <!-- STRATIGRAPHY FREE AND STRATIGRAPHY_BED -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`stratigraphy_free`">{{ $t('sample.stratigraphy_free') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="stratigraphy_free" v-model="sample.stratigraphy_free" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`stratigraphy_bed`">{{ $t('sample.stratigraphy_bed') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="stratigraphy_bed" v-model="sample.stratigraphy_bed" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- AGENT COLLECTED AND AGENT COLLECTED FREE -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`agent_collected`">{{ $t('sample.agent_collected') }}:</label>
-      </div>
-
-      <div class="col-sm-3 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.agent_collected" deselect-label="Can't remove this value"
-                         label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.agent"
-                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-      <div class="col-sm-3 mb-2">
-        <b-form-input id="agent_collected_free" v-model="sample.agent_collected_free" type="text" placeholder="coll. txt"></b-form-input>
-      </div>
-      <div class="col-sm-1">
-        <label :for="`owner`">{{ $t('sample.owner') }}:</label>
-      </div>
-
-      <div class="col-sm-3 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.owner" deselect-label="Can't remove this value"
-                         label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.owner"
-                         :options="autocomplete.agent" :searchable="true" @search-change="autcompleteOwnerSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-    </div>
-    <!-- DATE COLLECTED AND DATE COLLECTED FREE -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`date_collected`">{{ $t('sample.date_collected') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <datepicker id="date_collected"
-                    v-model="sample.date_collected"
-                    use-utc="true "
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    input-class="form-control"></datepicker>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`date_collected_free`">{{ $t('sample.date_collected_free') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="date_collected_free" v-model="sample.date_collected_free" type="text"></b-form-input>
-      </div>
-    </div>
-    <!-- CLASSIFICATION ROCK AND ROCK -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`classification_rock`">{{ $t('sample.classification_rock') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-
-        <vue-multiselect class="align-middle" v-model="sample.classification_rock" deselect-label="Can't remove this value"
-                         :loading="autocomplete.loaders.rock"
-                         :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :options="autocomplete.rock" :searchable="true" @search-change="autcompleteRockSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>
-            {{ $i18n.locale=== 'ee' ? option.name :option.name_en }}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`rock`">{{ $t('sample.rock') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="rock" v-model="sample.rock" type="text"></b-form-input>
-      </div>
-    </div>
-    <!-- ROCK EN AND FOSSILS -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`rock_en`">{{ $t('sample.rock_en') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="rock_en" v-model="sample.rock_en" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`fossils`">{{ $t('sample.fossils') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="fossils" v-model="sample.fossils" type="text"></b-form-input>
-      </div>
-    </div>
-    <!-- STORAGE-->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`mass`">{{ $t('sample.mass') }}:</label>
-      </div>
-
-      <div class="col-sm-2 mb-2">
-        <b-form-input id="mass" v-model="sample.mass" type="number"></b-form-input>
-      </div>
-
-      <div class="col-sm-2">
-        <label :for="`storage`">{{ $t('sample.storage') }}:</label>
-      </div>
-
-      <div class="col-sm-3 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.storage" deselect-label="Can't remove this value"
-                         :loading="autocomplete.loaders.storage" id="storage"
-                         label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-      <div class="col-sm-3 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.storage_additional" deselect-label="Can't remove this value"
-                         :loading="autocomplete.loaders.additional_storage" id="storage_additional"
-                         label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :options="autocomplete.storage_additional" :searchable="true" @search-change="autcompleteAdditionalStorageSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-    </div>
-
-    <!-- SAMPLE PARENT AND SPECIMEN -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`parent_sample`">{{ $t('sample.parent_sample') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.parent_sample" deselect-label="Can't remove this value"
-                         label="number" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.sample"
-                         :options="autocomplete.sample" :searchable="true" @search-change="autcompleteSampleSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.number}}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`parent_specimen`">{{ $t('sample.parent_specimen') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect class="align-middle" v-model="sample.parent_specimen" deselect-label="Can't remove this value"
-                         label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                         :loading="autocomplete.loaders.specimen"
-                         :options="autocomplete.specimen" :searchable="true" @search-change="autcompleteSpecimenSearch"
-                         :allow-empty="true"  :show-no-results="false" :max-height="600"
-                         :open-direction="'bottom'">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong> </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-    </div>
-
-    <!-- DESCRIPTION -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`remarks_location`">{{ $t('locality.remarks') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea id="remarks_location" v-model="sample.remarks" type="text" size="sm"
-                         :rows="1" :max-rows="20"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- IS PRIVATE AND MASS-->
-    <div class="row mb-3 mt-3">
-      <div class="col">
-        <!--<b-form-checkbox id="palaeontology" v-model="sample.palaeontology" :value="true" :unchecked-value="false">
-          {{ $t('sample.palaeontology') }}
-        </b-form-checkbox>
-
-        <b-form-checkbox id="analysis" v-model="sample.analysis" :value="true" :unchecked-value="false">
-          {{ $t('sample.analysis') }}
-        </b-form-checkbox>-->
-
-        <b-form-checkbox id="is_private" v-model="sample.is_private" :value="true" :unchecked-value="false">
-          {{ $t('sample.is_private') }}
-        </b-form-checkbox>
-      </div>
-    </div>
-    <!-- SHOWING RELATED_DATA -->
-    <div class="row">
-      <div class="col mt-5 mb-5">
-        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"  :class="{ active: activeTab === 'analysis' }">{{ $t('sample.relatedTables.analysis') }}</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"  :class="{ active: activeTab === 'preparation' }">{{ $t('sample.relatedTables.preparation') }}</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">{{ $t('sample.relatedTables.taxon_list') }}</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('sample.relatedTables.attachment_link') }}</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('sample.relatedTables.sample_reference') }}</a>
-          </li>
-        </ul>
-        <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-        <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
-        <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
-        <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-        <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-        <div class="row mb-4 pt-1">
-          <!--<div class="col">-->
+    </template>
+    <template slot="related-data">
+      <!-- SHOWING RELATED_DATA -->
+      <div class="row">
+        <div class="col mt-5 mb-5">
+          <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
+            <li class="nav-item">
+              <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"  :class="{ active: activeTab === 'analysis' }">{{ $t('sample.relatedTables.analysis') }}</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"  :class="{ active: activeTab === 'preparation' }">{{ $t('sample.relatedTables.preparation') }}</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">{{ $t('sample.relatedTables.taxon_list') }}</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('sample.relatedTables.attachment_link') }}</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('sample.relatedTables.sample_reference') }}</a>
+            </li>
+          </ul>
+          <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+          <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
+          <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
+          <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+          <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+          <div class="row mb-4 pt-1">
+            <!--<div class="col">-->
             <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
-                    <!--:disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>-->
-          <!--</div>-->
-          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
-            <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
-            </b-pagination>
+            <!--:disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>-->
+            <!--</div>-->
+            <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+              <b-pagination
+                size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+              </b-pagination>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'sample')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'sample')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('sample') : reset('sample')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+    </template>
+    <template slot="buttons">
+      <div class="row mt-3 mb-3">
+        <div class="col">
+          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'sample')">
+            {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
+          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'sample')">
+            {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+          <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('sample') : reset('sample')">
+            {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+        </div>
       </div>
-    </div>
-
-  </div>
+    </template>
+  </sample-wrapper>
 </template>
 
 <script>
@@ -483,10 +673,12 @@
   import SamplePreparation from "./relatedTables/SamplePreparation";
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
   import MapComponent from "../partial/MapComponent";
+  import SampleWrapper from "./SampleWrapper";
 
     export default {
       name: "Sample",
       components: {
+        SampleWrapper,
         MapComponent,
 
         SampleTaxonList,
@@ -501,10 +693,26 @@
         Spinner,
       },
       mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
-      computed: { getParentId(){return this.sample.id} },
+
+      computed: {
+        getParentId(){return this.sample.id},
+        fullView() { return this.$store.state['sampleView'].isFull},
+        createRelationWith () { return this.$store.state['createRelationWith'] }
+      },
       data() { return this.setInitialData() },
 
       created() { this.loadFullInfo() },
+      mounted() {
+        if (this.isDefinedAndNotNull(this.createRelationWith.data) && this.createRelationWith.data.hasOwnProperty('id')) {
+          this.sample = this.setPredefinedData()
+          // this.sample = Object.assign({},this.sample,this.setPredefinedData());
+          // console.log(this.sample)
+          // //
+          // // Object.keys(this.sample).forEach(function(key,index) {
+          // //
+          // // });
+        }
+      },
 
       methods: {
         setTab(type){ this.activeTab  = type },
@@ -718,7 +926,6 @@
           return JSON.stringify(uploadableObject)
         },
 
-
         fetchList(localStorageData) {
           let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
           return new Promise((resolve) => {
@@ -740,8 +947,24 @@
             orderBy: '-id',
           }
         },
-      },
 
+        navigateBack() {
+          this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+        },
+        setPredefinedData() {
+          return {
+            agent_collected: {agent: this.currentUser.user, id:this.currentUser.id },
+            date_collected: new Date(),
+            owner: {agent: this.currentUser.user, id:this.currentUser.id },
+          }
+        }
+      },
+      beforeRouteLeave(to, from, next) {
+        let isFull = true
+        this.$store.commit('SET_SAMPLE_VIEW',{ isFull });
+        this.$store.commit('REMOVE_RELATION_OBJECT');
+        next()
+      },
       watch: {
         '$route.params.id': {
           handler: function (newval, oldval) {

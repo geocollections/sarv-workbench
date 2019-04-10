@@ -212,10 +212,11 @@
       </div>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" v-if="relatedData.site.length > 0">
       <legend class="w-auto" style="font-size: large;">Linked Sites <font-awesome-icon icon="globe-americas"/></legend>
 
-      <div v-if="relatedData.site.length > 0">
+      <div v-if="relatedData.attachment_link.length > 0">
+        <!---->
         <div class="col p-0">
          <span class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
@@ -229,7 +230,6 @@
 
           </b-collapse>
         </div>
-
         <div class="table-responsive-sm col-12 p-0">
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
@@ -240,6 +240,21 @@
               <th>{{ $t('site.date_end') }}</th>
               <!--<th></th>-->
             </tr>
+            <!--<tr>-->
+              <!--<th class="p-0" v-for="item in columns" v-if="showFilters">-->
+                <!--<b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"-->
+                              <!--v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='text'"></b-form-input>-->
+                <!--<b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"-->
+                              <!--v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='number'" min="0"></b-form-input>-->
+                <!--&lt;!&ndash;<datepicker style="display: inline !important;max-width: 100%; " :id="item.id"&ndash;&gt;-->
+                <!--&lt;!&ndash;v-model="searchParameters[item.id]"&ndash;&gt;-->
+                <!--&lt;!&ndash;use-utc="true "&ndash;&gt;-->
+                <!--&lt;!&ndash;lang="en"&ndash;&gt;-->
+                <!--&lt;!&ndash;:first-day-of-week="1"&ndash;&gt;-->
+                <!--&lt;!&ndash;format="DD MMM YYYY"&ndash;&gt;-->
+                <!--&lt;!&ndash;input-class="form-control" v-if="item.isDate"></datepicker>&ndash;&gt;-->
+              <!--</th>-->
+            <!--</tr>-->
             </thead>
             <tbody>
             <tr v-for="(site,index) in relatedData.site">
@@ -300,6 +315,7 @@
 
   import MapComponent from "../partial/MapComponent";
   import TestComponent from "../partial/TestComponent";
+
   import FileTable from "../partial/FileTable";
   import findIndex from 'lodash/findIndex';
     export default {
@@ -456,7 +472,6 @@
 
         loadRelatedData(object){
           let query;
-
           if(object === 'projectagent') {
             query = fetchProjectAgent(this.$route.params.id,this.relatedData.page.projectagent)
           } else if(object === 'attachment_link') {
@@ -465,6 +480,9 @@
             query = fetchLinkedSite(this.$route.params.id,this.relatedData.page.site)
           }
           return new Promise(resolve => {
+            //resolve it for my sites table
+            // if(object === 'site') resolve(query);
+
             query.then(response => {
               //projectagent do not have count value
               if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results: []
@@ -473,7 +491,7 @@
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object);
               if(object === 'site')  this.forceMapRerender()
 
-              resolve(true)
+              // resolve(true)
             });
           });
         },

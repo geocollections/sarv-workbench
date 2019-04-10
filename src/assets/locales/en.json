@@ -637,7 +637,8 @@
     "validFileFormatPDF": "This '{file}' is not a .pdf file!",
     "localityAttachmentInfo":"Choose attachment link or add new",
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga '{ data }'. Lõpetamiseks mine tagasi lokaliteedi vormile",
-    "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile"
+    "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
+    "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise SITE-ga {data}. Lõpetamiseks mine tagasi proovi vormile"
   },
   "titles": {
     "main": "Geocollections Data Management",
