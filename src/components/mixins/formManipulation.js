@@ -442,6 +442,13 @@ const formManipulation = {
       }
     },
 
+    calculateNextName(previousName) {
+      let tokenize = previousName.split(/[^0-9]/g);
+      let lastToken = tokenize[tokenize.length-1]
+      //last token is number
+      return isNaN(lastToken) ? previousName+' 1' : previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1)
+    }
+
   },
   watch: {
 

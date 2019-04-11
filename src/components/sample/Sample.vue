@@ -387,7 +387,7 @@
       </div>
     </template>
 
-    <template slot="simplified-form">{{createRelationWith}}
+    <template slot="simplified-form">
       <b-alert show variant="warning" v-if="createRelationWith.data !== null">
         {{ createRelationWith.info }}
         <a class="small" href="javascript:void(0)" @click="navigateBack">
@@ -631,7 +631,7 @@
     <template slot="buttons">
       <div class="row mt-3 mb-3">
         <div class="col">
-          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'sample')">
+          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack">
             {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
           <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'sample')">
             {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
@@ -660,6 +660,7 @@
     fetchTaxonList,
     fetchSampleRelatedAnalysis,
     fetchSampleRelatedPreparation,
+    fetchLastSiteSample,
     fetchSamples
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
@@ -704,13 +705,9 @@
       created() { this.loadFullInfo() },
       mounted() {
         if (this.isDefinedAndNotNull(this.createRelationWith.data) && this.createRelationWith.data.hasOwnProperty('id')) {
-          this.sample = this.setPredefinedData()
-          // this.sample = Object.assign({},this.sample,this.setPredefinedData());
-          // console.log(this.sample)
-          // //
-          // // Object.keys(this.sample).forEach(function(key,index) {
-          // //
-          // // });
+          this.setPredefinedData().then(sample => {
+            this.sample =sample
+          })
         }
       },
 
@@ -727,8 +724,10 @@
               'parent_sample','parent_specimen','depth','depth_interval','latitude1','longitude1','stratigraphy','lithostratigraphy',
               'stratigraphy_free','stratigraphy_bed','agent_collected','agent_collected_free','date_collected','date_collected_free',
               'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
-              'palaeontology','analysis','locality','locality_free','remarks','is_private'
+              'palaeontology','analysis','locality','locality_free','remarks','is_private','site'
             ],
+            simplifiedFormCopyFields : ['number','number_field','sample_purpose','series','depth','locality','stratigraphy','lithostratigraphy',
+              'stratigraphy_free','classification_rock','rock','fossils','site','agent_collected','date_collected','owner','remarks','is_private'],
             autocomplete: {
               loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
                 lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
@@ -841,6 +840,7 @@
           if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
           if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
           if (this.isDefinedAndNotNull(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id
+          if (this.isDefinedAndNotNull(objectToUpload.site)) uploadableObject.site = objectToUpload.site.id
           // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
           return JSON.stringify(uploadableObject)
         },
@@ -857,6 +857,7 @@
           this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
           this.sample.storage = {location:obj.storage__location,id:obj.storage}
           this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
+          this.sample.site = {id:obj.site__id}
         },
 
         fillRelatedDataAutocompleteFields(obj){
@@ -952,12 +953,32 @@
           this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
         },
         setPredefinedData() {
-          return {
-            agent_collected: {agent: this.currentUser.user, id:this.currentUser.id },
-            date_collected: new Date(),
-            owner: {agent: this.currentUser.user, id:this.currentUser.id },
-          }
-        }
+          return new Promise(resolve => {
+            if(this.createRelationWith.relatedData.isLastSampleExists) {
+              fetchLastSiteSample(this.createRelationWith.data.id).then(response => {
+                let resp = this.handleResponse(response)
+                resp[0].number = this.calculateNextName(resp[0].number)
+                resolve(resp[0])
+              });
+
+            } else {
+              resolve({
+                site: {id: this.createRelationWith.data.id},
+                agent_collected: {agent: this.currentUser.user, id: this.currentUser.id},
+                date_collected: new Date(),
+                owner: {agent: this.currentUser.user, id: this.currentUser.id}
+              })
+
+            }
+          });
+        },
+        saveAndNavigateBack(){
+          this.add(true,'sample')
+          if(this.createRelationWith.object === null)
+            this.$router.push({ path:'/sample'});
+          else
+            this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+        },
       },
       beforeRouteLeave(to, from, next) {
         let isFull = true

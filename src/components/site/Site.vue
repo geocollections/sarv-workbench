@@ -510,7 +510,7 @@
         addSample(){
           let isFull = false
           this.$store.commit('SET_SAMPLE_VIEW', { isFull });
-          let createRelationWith = { object: 'site', data: this.site, relatedData: {samples: []},
+          let createRelationWith = { object: 'site', data: this.site, relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},
             info: this.$t('messages.siteSampleRelationInfo',
               { data: `ID: ${this.site.id} (${this.site.name})` })};
           this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith })
@@ -524,13 +524,7 @@
             fetchLastSiteName(project.id).then(response => {
               let resp = response.body.results
               if(resp && resp.length > 0) {
-                let previousName = resp[0].name, newName = null;
-                let tokenize = previousName.split(/[^0-9]/g);
-                let lastToken = tokenize[tokenize.length-1]
-
-                if(isNaN(lastToken)) newName = previousName+' 1';
-                //last token is number
-                else newName = previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1);
+                let newName = this.calculateNextName(resp[0].name)
                 this.$set(this.site,'name', newName);
                 this.$set(this.site,'date_start', new Date());
                 this.$set(this.site,'project', {name:project.name, name_en:project.name_en,id:project.id});

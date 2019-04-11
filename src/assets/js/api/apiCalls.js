@@ -359,6 +359,9 @@ export function fetchLSampleAttachment(id,page = 1) {
 export function fetchSampleReference(id,page = 1) {
   return fetch(`sample_reference/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
 }
+export function fetchLastSiteSample(id) {
+  return fetch(`sample/?site__id=${id}&order_by=-id&paginate_by=1&format=json`)
+}
 /************************
  ***  SAMPLES END  ***
  ************************/
