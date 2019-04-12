@@ -7,7 +7,11 @@
         entity.id }}
       </router-link>
     </td>
-    <td v-translate="{ et: entity.name, en: entity.name_en }"></td>
+    <td>
+      <router-link :to="{ path: '/project/' + entity.id }" :title="$t('editProject.editMessage')">{{
+        entity.name }}
+      </router-link>
+    </td>
     <td v-translate="{ et: entity.project_type__name, en: entity.project_type__name_en }"></td>
     <td>{{entity.date_start}}</td>
     <td>{{entity.date_end}}</td>
