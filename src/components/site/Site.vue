@@ -96,7 +96,7 @@
         <div class="col">
           <b-collapse v-model="showCollapseMap" id="collapseMap">
               <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
-              <test-component v-if="showCollapseMap " mode="single" v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation"></test-component>
+              <map-component-2  :gps-coords="true" v-if="showCollapseMap " mode="single" v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
           </b-collapse>
         </div>
       </div>
@@ -252,7 +252,7 @@
   import MultimediaComponent from "../partial/MultimediaComponent";
   import {toastError} from "../../assets/js/iziToast/iziToast";
   import GeocollectionsLink from "../partial/GeocollectionsLink";
-  import TestComponent from "../partial/TestComponent";
+  import MapComponent2 from "../partial/MapComponent2";
   import FileTable from "../partial/FileTable";
 
 
@@ -260,7 +260,7 @@
       name: "Site",
       components: {
         FileTable,
-        TestComponent,
+        MapComponent2,
         GeocollectionsLink,
         MultimediaComponent,
         FileInputComponent,

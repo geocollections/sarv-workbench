@@ -222,7 +222,7 @@
             <label class="custom-control-label" for="customSwitch">{{ $t(showCollapseMap ? 'add.buttons.mapEnabled' : 'add.buttons.mapDisabled')}}</label>
           </span>
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <test-component mode="multiple" v-if="showCollapseMap" v-bind:location="{ lat: null, lng: null }"
+            <map-component-2 :gps-coords="true" mode="multiple" v-if="showCollapseMap" v-bind:location="{ lat: null, lng: null }"
                             v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations"/>
             <!--<map-component v-bind:location="{ lat: null, lng: null }"-->
                            <!--v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations" />-->
@@ -313,7 +313,7 @@
   } from "../../assets/js/api/apiCalls";
 
   import MapComponent from "../partial/MapComponent";
-  import TestComponent from "../partial/TestComponent";
+  import MapComponent2 from "../partial/MapComponent2";
 
   import FileTable from "../partial/FileTable";
   import findIndex from 'lodash/findIndex';
@@ -321,7 +321,7 @@
       name: "Project",
       components: {
         FileTable,
-        TestComponent,
+        MapComponent2,
         MapComponent,
 
         FontAwesomeIcon,
