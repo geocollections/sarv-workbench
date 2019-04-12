@@ -637,6 +637,10 @@
             {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
           <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('sample') : reset('sample')">
             {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+          <span class="float-right">
+            <button class="btn btn-primary mb-2" @click="$parent.saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>
+          </span>
+
         </div>
       </div>
     </template>
