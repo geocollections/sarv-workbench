@@ -52,7 +52,7 @@ const formManipulation = {
     this.showCollapseMap = showCollapseMap
   },
   methods: {
-    isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && value.trim().length > 0},
+    isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && (value+'').trim().length > 0},
     isDefinedAndNotNull(value) {return !!value && value !== null},
     isDefinedAndNotEmpty(value) { return !!value && value.length > 0 },
     isEmptyObject(value) {
@@ -104,8 +104,8 @@ const formManipulation = {
           //before save object ID was removed
           this[object] = editableObject;
           // if (savedObjectId === undefined || savedObjectId === false) return;
-          console.log(this)
           this.$emit('data-loaded',editableObject);
+          this.$emit('data-saved',true);
           if (!addAnother) {
             this.$router.push({ path: '/'+object })
           }
@@ -446,7 +446,7 @@ const formManipulation = {
       let tokenize = previousName.split(/[^0-9]/g);
       let lastToken = tokenize[tokenize.length-1]
       //last token is number
-      return isNaN(lastToken) ? previousName+' 1' : previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1)
+      return isNaN(parseInt(lastToken)) ? previousName+' 1' : previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1)
     }
 
   },

@@ -703,14 +703,9 @@
       data() { return this.setInitialData() },
 
       created() { this.loadFullInfo() },
-      mounted() {
-        if (this.isDefinedAndNotNull(this.createRelationWith.data) && this.createRelationWith.data.hasOwnProperty('id')) {
-          this.setPredefinedData().then(sample => {
-            this.sample =sample
-          })
-        }
+      mounted(){
+        this.createRelatedSampleWithSiteIfExists()
       },
-
       methods: {
         setTab(type){ this.activeTab  = type },
 
@@ -726,8 +721,9 @@
               'classification_rock','rock','rock_en','fossils','mass','storage','storage_additional','owner',
               'palaeontology','analysis','locality','locality_free','remarks','is_private','site'
             ],
-            simplifiedFormCopyFields : ['number','number_field','sample_purpose','series','depth','locality','stratigraphy','lithostratigraphy',
-              'stratigraphy_free','classification_rock','rock','fossils','site','agent_collected','date_collected','owner','remarks','is_private'],
+            //'depth','stratigraphy','lithostratigraphy','stratigraphy_free','fossils','locality',
+            simplifiedFormCopyFields : ['number','number_field','sample_purpose','series','locality',
+              'classification_rock','rock','site','agent_collected','date_collected','owner','remarks','is_private'],
             autocomplete: {
               loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
                 lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
@@ -780,6 +776,12 @@
                 this.sendingData = false;
               }
             });
+
+            this.tabs.forEach(entity => {
+              this.loadRelatedData(entity);
+            });
+          } else {
+            this.$on('data-saved',this.createRelatedSampleWithSiteIfExists);
           }
           this.$on('tab-changed',this.setTab);
 
@@ -788,12 +790,8 @@
           this.$on('edit-row',this.editRow);
           this.$on('allow-remove-row',this.allowRemove);
 
-
           this.$emit('related-data-info',this.tabs);
-          // FETCH FIRST TAB RELATED DATA
-          this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
-          });
+
           this.setActiveTab('analysis')
         },
 
@@ -954,23 +952,43 @@
         },
         setPredefinedData() {
           return new Promise(resolve => {
-            if(this.createRelationWith.relatedData.isLastSampleExists) {
-              fetchLastSiteSample(this.createRelationWith.data.id).then(response => {
-                let resp = this.handleResponse(response)
-                resp[0].number = this.calculateNextName(resp[0].number)
-                resolve(resp[0])
-              });
+            if(!this.createRelationWith.relatedData.isLastSampleExists) {
+              console.log('WTF')
 
-            } else {
               resolve({
-                site: {id: this.createRelationWith.data.id},
-                agent_collected: {agent: this.currentUser.user, id: this.currentUser.id},
+                locality__id : this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.id :null,
+                locality__locality_en : this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality_en: null,
+                locality__locality : this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality:null,
+                site__id: this.createRelationWith.data.id,
+                agent_collected__agent: this.currentUser.user,
+                agent_collected__id: this.currentUser.id,
                 date_collected: new Date(),
-                owner: {agent: this.currentUser.user, id: this.currentUser.id}
+                owner__agent: this.currentUser.user,
+                owner__id: this.currentUser.id
               })
+            } else {
+              fetchLastSiteSample(this.createRelationWith.data.id).then(response => {
+                let resp = this.handleResponse(response)[0]
+                resp.number = this.calculateNextName(resp.number)
+                resp.number_field = this.calculateNextName(resp.number_field)
+                resp.locality__id = this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.id : null
+                resp.locality__locality_en = this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality_en :null
+                resp.locality__locality = this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality : null
+                resolve(resp)
+              });
 
             }
           });
+        },
+        createRelatedSampleWithSiteIfExists(){
+          if (this.isDefinedAndNotNull(this.createRelationWith.data) && this.createRelationWith.data.hasOwnProperty('id')) {
+            this.setPredefinedData().then(sample => {
+              this.sample = sample
+              console.log(sample)
+              this.fillAutocompleteFields(this.sample)
+              this.removeUnnecessaryFields(this.sample, this.simplifiedFormCopyFields);
+            })
+          }
         },
         saveAndNavigateBack(){
           this.add(true,'sample')

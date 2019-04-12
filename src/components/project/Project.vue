@@ -1,10 +1,9 @@
 <template>
   <div>
-
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
-    <div class="row mt-4">
+    <div class="row mb-4">
       <div class="col">
-        <span class="float-right">
+        <span class="float-right" v-if="$route.meta.isEdit">
           <button class="btn btn-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/> Register new observation / sampling site</button>
         </span>
         <span class="float-left">
@@ -20,7 +19,7 @@
       </div>
     </div>
     <!-- STORAGE-->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2">
       <legend class="w-auto" style="font-size: large;">Üldinfo
         <font-awesome-icon icon="project-diagram"/></legend>
 
@@ -212,10 +211,10 @@
       </div>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="relatedData.site.length > 0">
+    <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">Linked Sites <font-awesome-icon icon="globe-americas"/></legend>
 
-      <div v-if="relatedData.attachment_link.length > 0">
+      <div v-if="relatedData.site.length > 0">
         <!---->
         <div class="col p-0">
          <span class="custom-control custom-switch">
@@ -223,7 +222,7 @@
             <label class="custom-control-label" for="customSwitch">{{ $t(showCollapseMap ? 'add.buttons.mapEnabled' : 'add.buttons.mapDisabled')}}</label>
           </span>
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <test-component mode="multiple" v-if="showCollapseMap" v-bind:location="{ lat: null, lng: null }" :key="mapComponentKey"
+            <test-component mode="multiple" v-if="showCollapseMap" v-bind:location="{ lat: null, lng: null }"
                             v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations"/>
             <!--<map-component v-bind:location="{ lat: null, lng: null }"-->
                            <!--v-bind:locations="relatedData.site" v-on:choose-locations="chooseLocations" />-->
@@ -372,7 +371,6 @@
               {id:"date_free",title:"site.date_free",type:"text",isDate:true},
             ],
             componentKey: 0,
-            mapComponentKey: 0,
             isActive: false
           }
         },
@@ -489,7 +487,7 @@
 
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object],object);
-              if(object === 'site')  this.forceMapRerender()
+              // if(object === 'site')  this.forceMapRerender()
 
               // resolve(true)
             });
@@ -554,7 +552,6 @@
         // },
 
         forceRerender() { this.componentKey += 1; },
-        forceMapRerender() { this.mapComponentKey += 1; },
 
         chooseLocations(locations) {
           console.log(locations)

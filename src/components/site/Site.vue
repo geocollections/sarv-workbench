@@ -174,14 +174,14 @@
       </div>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
       <legend class="w-auto" style="font-size: large;">Files <font-awesome-icon icon="folder-open"/></legend>
 
       <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
       <file-table :attachments="relatedData.attachment_link" :object="'site'" v-if="relatedData.attachment_link.length > 0"/>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2"  v-if="$route.meta.isEdit">
       <legend class="w-auto" style="font-size: large;">Related samples
         <font-awesome-icon icon="vial"/></legend>
 
@@ -390,6 +390,7 @@
         fillAutocompleteFields(obj){
           this.site.project = {name:obj.project__name, name_en:obj.project__name_en,id:obj.project}
           this.site.coord_det_method = {value:obj.coord_det_method__value, value_en:obj.coord_det_method__value_en,id:obj.coord_det_method}
+          this.site.locality = {id:obj.locality__id, locality_en:obj.locality__locality_en,locality:obj.locality__locality}
         },
 
         fillRelatedDataAutocompleteFields(obj,type){
@@ -510,7 +511,9 @@
         addSample(){
           let isFull = false
           this.$store.commit('SET_SAMPLE_VIEW', { isFull });
-          let createRelationWith = { object: 'site', data: this.site, relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},
+          // relationObject.locality =
+          let createRelationWith = { object: 'site', data: cloneDeep(this.site),
+            relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},
             info: this.$t('messages.siteSampleRelationInfo',
               { data: `ID: ${this.site.id} (${this.site.name})` })};
           this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith })

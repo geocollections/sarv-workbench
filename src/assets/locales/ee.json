@@ -39,6 +39,8 @@
     "editLocality": "Lokaliteedid",
     "addSample": "Lisa proov",
     "editSample": "Proovid",
+    "addProject": "Lisa projekt",
+    "editProject": "Projektid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",

@@ -2,6 +2,10 @@
   <div id="app">
     <lang-buttons/>
     <router-view/>
+    <!--<div class="row p-5">-->
+      <!--<div id="logs"></div>-->
+    <!--</div>-->
+
   </div>
 </template>
 
@@ -9,7 +13,19 @@
   import LangButtons from '@/components/partial/LangButtons'
   export default {
     components: {LangButtons},
-    name: 'App'
+    name: 'App',
+
+    //show console info
+    // mounted(){
+    //   (function() {
+    //     var exLog = console.log;
+    //     console.log = function(msg) {
+    //       exLog.apply(console, arguments);
+    //       document.getElementById("logs").innerHTML += document.getElementById("logs").innerHTML +"<br><br><br>"+ JSON.stringify(msg);
+    //     }
+    //   })()
+    // },
+
   }
 </script>
 
