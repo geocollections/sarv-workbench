@@ -19,7 +19,7 @@
       </div>
     </div>
     <!-- STORAGE-->
-    <fieldset class="border p-2">
+    <fieldset class="border p-2" ref="info">
       <legend class="w-auto" style="font-size: large;">Üldinfo
         <font-awesome-icon icon="project-diagram"/></legend>
 
@@ -157,7 +157,7 @@
       </div>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" ref="files">
       <legend class="w-auto" style="font-size: large;">Project files
         <font-awesome-icon icon="folder-open"/></legend>
 
@@ -211,7 +211,7 @@
       </div>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" ref="sites">
       <legend class="w-auto" style="font-size: large;">Linked Sites <font-awesome-icon icon="globe-americas"/></legend>
 
       <div v-if="relatedData.site.length > 0">
@@ -335,18 +335,28 @@
 
       created() {
         this.loadFullInfo()
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize();
       },
-
+      mounted(){
+        this.$root.$on('sidebar-user-action', this.handleSidebarUserAction);
+      },
       beforeMount(){
         let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
         let currentProjectIdx = findIndex(currentActiveProjects, function(item) { return item === parseInt(vm.$route.params.id) });
         this.isActiveProject = currentProjectIdx > -1
       },
-
+      destroyed() {
+        window.removeEventListener('resize', this.handleResize)
+      },
       methods: {
         setInitialData() {
           return {
             searchHistory:'projectSearchHistory',
+            window: {
+              width: 0,
+              height: 0
+            },
             relatedData: this.setDefaultRalatedData(),
             copyFields : ['id','name','name_en','project_type','parent_project','date_start','date_end','date_free',
               'description','owner','remarks','is_private','projectagent'
@@ -560,7 +570,13 @@
           this.relatedData.attachment_link.splice(idx, 1);
           this.add(true,'project',true);
         },
-
+        handleSidebarUserAction(userAction) {
+          if(userAction.action === 'addSite') this.registerObservation()
+        },
+        handleResize() {
+          this.window.width = window.innerWidth;
+          this.window.height = window.innerHeight;
+        }
       },
 
       watch: {

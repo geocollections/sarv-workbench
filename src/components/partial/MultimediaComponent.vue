@@ -72,11 +72,11 @@
 </template>
 
 <script>
-  import formManipulation  from './../mixins/formManipulation'
+  import fontAwesomeLib  from './../mixins/fontAwasomeLib'
   import EXIF from 'exif-js'
     export default {
       name: "multimedia-component",
-      mixins: [formManipulation],
+      mixins:[fontAwesomeLib],
       data() {
         return {
           apiUrl: 'https://rwapi.geocollections.info/',

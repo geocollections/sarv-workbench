@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
-
     <app-header/>
+    <sidebar v-if="$route.meta.isSidebarShown"/>
 
     <div class="main container">
       <router-view/>
@@ -15,9 +15,11 @@
 <script>
   import AppHeader from '@/components/partial/AppHeader'
   import AppFooter from '@/components/partial/AppFooter'
+  import Sidebar from "../components/partial/Sidebar";
 
   export default {
     components: {
+      Sidebar,
       AppHeader,
       AppFooter
     },

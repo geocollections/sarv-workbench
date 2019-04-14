@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <lang-buttons/>
+
     <router-view/>
     <!--<div class="row p-5">-->
       <!--<div id="logs"></div>-->
@@ -28,7 +29,6 @@
 
   }
 </script>
-
 <style>
   #app {
     -webkit-font-smoothing: antialiased;

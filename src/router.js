@@ -371,6 +371,7 @@ const router = new Router({
                     heading:'editProject.heading',
                     isNavigationShow: false,
                     isCopyFormShown: false,
+                    isSidebarShown: true,
                     requiresAuth: true
                   },
                 }
@@ -433,6 +434,7 @@ const router = new Router({
                 heading:'editSite.heading',
                 isNavigationShow: false,
                 isCopyFormShown: false,
+                isSidebarShown: true,
                 requiresAuth: true
               },
             }

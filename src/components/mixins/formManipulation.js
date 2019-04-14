@@ -18,7 +18,7 @@ const formManipulation = {
       loadingPercent: 0,
       sendingData: false,
       editMode: false,
-      showCollapseMap:true,
+      showCollapseMap:true
     }
   },
   components: {
@@ -42,6 +42,8 @@ const formManipulation = {
   },
   mounted(){
     this.$root.$on('user-choice', this.handleUserChoice);
+    this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
+
     this.$parent.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
 
   },
@@ -252,6 +254,12 @@ const formManipulation = {
         this.setActiveTab(this.nextTab, false);
       }
     },
+    handleSidebarUserChoice(choice){
+      let element = this.$refs[choice];
+      if(element) window.scrollTo(0, element.offsetTop);
+    },
+
+    //handleSidebarUserAction(userAction){},
 
     setActiveTab(type, isWarning = true){
       // If user clicks on currently active tab then do nothing
@@ -447,7 +455,7 @@ const formManipulation = {
       let lastToken = tokenize[tokenize.length-1]
       //last token is number
       return isNaN(parseInt(lastToken)) ? previousName+' 1' : previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1)
-    }
+    },
 
   },
   watch: {

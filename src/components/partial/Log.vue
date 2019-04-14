@@ -1,14 +1,7 @@
 <template>
-  <div class="log" v-if="logs.length > 0">
-
-    <div class="row">
-
-      <div class="col">
-        <p class="h3">{{ $t('logs.title') }}:</p>
-      </div>
-
-    </div>
-
+  <fieldset class="log border p-2 mb-2" v-if="logs.length > 0">
+    <legend class="w-auto" style="font-size: large; font-weight: 600">{{ $t('logs.title') }}
+      <font-awesome-icon icon="history"/></legend>
 
     <div class="row">
       <div class="col">
@@ -41,11 +34,17 @@
     </div>
 
 
-  </div>
+  </fieldset>
 </template>
 
 <script>
   import { fetchSpecificLogs } from "@/assets/js/api/apiCalls";
+  import { library } from '@fortawesome/fontawesome-svg-core'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+  import { faHistory } from '@fortawesome/free-solid-svg-icons'
+
+  library.add(faHistory)
 
   export default {
     props: ['table', 'data', 'formattedData'],
@@ -54,6 +53,9 @@
       return {
         logs: []
       }
+    },
+    components: {
+      FontAwesomeIcon
     },
     watch: {
       'formattedData':{

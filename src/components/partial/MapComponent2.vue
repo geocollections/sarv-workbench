@@ -4,7 +4,6 @@
 
 <script>
   import 'leaflet'
-  import formManipulation  from './../mixins/formManipulation'
     export default {
       name: "map-component-2",
       props: {
@@ -26,7 +25,6 @@
           default: false
         }
       },
-      mixins: [formManipulation],
 
       data(){
         return {
@@ -212,6 +210,27 @@
             vm.currentLocation.bindPopup("GPS location").openPopup();
           });
 
+        },
+        // GET CURRENT LOCATION FROM GPS
+        getGPSLocation() {
+          let this_ = this;
+
+          if (navigator.geolocation) {
+            return new Promise(resolve => {
+              navigator.geolocation.getCurrentPosition(function (position) {
+
+                resolve( {
+                  latitude: position.coords.latitude,
+                  longitude: position.coords.longitude,
+                  accuracy: position.coords.accuracy
+                })
+              }, function (error) {
+                if (error.code == error.PERMISSION_DENIED)
+                  this_.errorMessege = "Geolocation is not supported by this browser.";
+                resolve (null)
+              });
+            });
+          }
         },
         setZoom() {
           let featureGroup = []

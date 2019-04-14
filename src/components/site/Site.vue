@@ -2,7 +2,7 @@
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
     <!-- STORAGE-->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" ref="info">
       <legend class="w-auto" style="font-size: large;">Üldinfo
         <font-awesome-icon icon="project-diagram"/></legend>
 
@@ -174,14 +174,14 @@
       </div>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit"  ref="files">
       <legend class="w-auto" style="font-size: large;">Files <font-awesome-icon icon="folder-open"/></legend>
 
       <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
       <file-table :attachments="relatedData.attachment_link" :object="'site'" v-if="relatedData.attachment_link.length > 0"/>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2"  v-if="$route.meta.isEdit">
+    <fieldset class="border p-2 mb-2"  v-if="$route.meta.isEdit" ref="samples">
       <legend class="w-auto" style="font-size: large;">Related samples
         <font-awesome-icon icon="vial"/></legend>
 
@@ -247,24 +247,24 @@
     fetchLastSiteName,
     fetchActiveProjects
   } from "../../assets/js/api/apiCalls";
-  import MapComponent from "../partial/MapComponent";
   import FileInputComponent from "../partial/MultimediaComponent";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import {toastError} from "../../assets/js/iziToast/iziToast";
   import GeocollectionsLink from "../partial/GeocollectionsLink";
   import MapComponent2 from "../partial/MapComponent2";
   import FileTable from "../partial/FileTable";
+  import Sidebar from "../partial/Sidebar";
 
 
     export default {
       name: "Site",
       components: {
+        Sidebar,
         FileTable,
         MapComponent2,
         GeocollectionsLink,
         MultimediaComponent,
         FileInputComponent,
-        MapComponent,
         FontAwesomeIcon,
         Datepicker,
         VueMultiselect,
@@ -279,7 +279,9 @@
       created() {
         this.loadFullInfo();
       },
-
+      mounted(){
+        this.$root.$on('sidebar-user-action', this.handleSidebarUserAction);
+      },
       methods: {
         setInitialData() {
           return {
@@ -565,8 +567,10 @@
                 this.$set(this.site,'project', {name:this.autocomplete.project[0].name, name_en:this.autocomplete.project[0].name_en,id:this.autocomplete.project[0].id});
             })
           }
-
-        }
+        },
+        handleSidebarUserAction(userAction) {
+          if(userAction.action === 'addSample') this.addSample()
+        },
       },
       beforeRouteLeave(to, from, next) {
         //Do not remove relation object in case user created new relation object for simplified sample form
@@ -574,6 +578,7 @@
           this.$store.commit('REMOVE_RELATION_OBJECT');
         next()
       },
+
       watch: {
         '$route.params.id': {
           handler: function (newval, oldval) {

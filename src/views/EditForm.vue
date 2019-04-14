@@ -1,6 +1,5 @@
 <template>
   <div class="edit-form">
-
     <div class="row mt-4 page-title">
       <div class="col">
         <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
@@ -28,9 +27,11 @@
   import Log from '@/components/partial/Log.vue'
   import ConfirmationBox from "../components/partial/ConfirmationBoxOlesja";
   import SaveAsNewModal from "../components/partial/SaveAsNewModal";
+  import Sidebar from "../components/partial/Sidebar";
   export default {
     name: "EditForm",
     components: {
+      Sidebar,
       BottomOptions,
       SaveAsNewModal,
       ConfirmationBox,
