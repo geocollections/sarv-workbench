@@ -618,6 +618,7 @@
     "abstract_en": "Abstract (ENG)",
     "private": "Private",
     "remove": "Remove",
+    "libraryAgent": "Library members",
     "relatedTables": {
       "libraryReference": "References"
     }

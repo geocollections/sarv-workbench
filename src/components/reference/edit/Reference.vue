@@ -535,7 +535,7 @@
   import FilePreview from '@/components/partial/FilePreview.vue'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastError } from "@/assets/js/iziToast/iziToast";
-  import { fetchReferenceKeywords } from "@/assets/js/api/apiCalls";
+  import { fetchListKeywords } from "@/assets/js/api/apiCalls";
   import BottomOptions from "../../partial/BottomOptions";
 
   library.add(faPlus, faTrashAlt, faTimes)
@@ -812,7 +812,7 @@
         if (this.autocomplete.keyword.length <= 0) {
           this.searchingReferenceKeywords = true
 
-          fetchReferenceKeywords().then(response => {
+          fetchListKeywords().then(response => {
             if (response.status === 200) {
               if (response.body.count > 0) this.autocomplete.keyword = response.body.results;
               else this.autocomplete.keyword = []

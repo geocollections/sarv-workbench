@@ -45,6 +45,7 @@ const autocompleteFieldManipulation = {
           query = `stratigraphy/?multi_search=value:${val};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
           break;
         case 'projectagent':
+        case 'library_agent':
         case 'agent':
         case 'owner':
           query = `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent`;
@@ -131,6 +132,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteProjectAgentSearch(value) {
       this.autocompliteSearch(value, 'projectagent', 'agent')
+    },
+    autcompleteLibraryAgentSearch(value) {
+      this.autocompliteSearch(value, 'library_agent', 'library_agent', 1)
     },
     autcompleteRockSearch(value) {
       this.autocompliteSearch(value, 'rock', 'rock')

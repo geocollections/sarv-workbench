@@ -571,7 +571,7 @@
     fetchListReferenceTypes,
     fetchListLanguages,
     fetchJournals,
-    fetchReferenceKeywords
+    fetchListKeywords
   } from "@/assets/js/api/apiCalls";
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
@@ -746,7 +746,7 @@
           }
           this.reference.journal_additional = journalAdditional.trim().slice(0, -1);
         }
-        
+
         if (data.title && data.title.length > 0) this.reference.title = data.title[0]
         if (data.volume) this.reference.volume = data.volume
         if (data.issue) this.reference.number = data.issue
@@ -935,7 +935,7 @@
         if (this.autocomplete.keyword.length <= 0) {
           this.searchingReferenceKeywords = true
 
-          fetchReferenceKeywords().then(response => {
+          fetchListKeywords().then(response => {
             if (response.status === 200) {
               if (response.body.count > 0) this.autocomplete.keyword = response.body.results;
               else this.autocomplete.keyword = []
