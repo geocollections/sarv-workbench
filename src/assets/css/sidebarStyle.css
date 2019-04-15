@@ -62,6 +62,10 @@ nav.sidebar, .main{
     margin-left: 200px;
   }
 
+  .main.container {
+    width: calc(100% - 200px)!important;
+  }
+
   /*Center Brand*/
   nav.sidebar.navbar.sidebar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
     margin-left: 0px;
