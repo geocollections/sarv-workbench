@@ -48,7 +48,7 @@ nav.sidebar.navbar {
   border-radius: 0px;
 }
 
-nav.sidebar, .main{
+nav.sidebar, .main.container{
   -webkit-transition: margin 300ms ease-out;
   -moz-transition: margin 300ms ease-out;
   -o-transition: margin 300ms ease-out;
@@ -60,10 +60,6 @@ nav.sidebar, .main{
   /*lets nav bar to be showed on mouseover*/
   nav.sidebar:hover + .main{
     margin-left: 200px;
-  }
-
-  .main.container {
-    width: calc(100% - 200px)!important;
   }
 
   /*Center Brand*/

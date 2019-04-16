@@ -425,7 +425,8 @@
     "description":"Description",
     "remarks":"Remarks",
     "owner":"Owner",
-    "is_private":"Is private?"
+    "is_private":"Is private?",
+    "newSite":"New site"
   },
 
   "site":{

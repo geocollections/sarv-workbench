@@ -430,7 +430,8 @@
     "description":"Kirjeldus",
     "remarks":"Lisainfo",
     "owner":"Owner",
-    "is_private":"Privaatne?"
+    "is_private":"Privaatne?",
+    "newSite": "Uus vaatluspunkt"
   },
   "site":{
     "header": "Site",

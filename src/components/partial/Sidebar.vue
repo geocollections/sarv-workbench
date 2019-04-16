@@ -1,6 +1,7 @@
 <template>
   <!--nav sidebar -->
-  <sidebar-wrapper ref="navbar">
+  <sidebar-wrapper ref="navbar" v-bind:class="{ active: sidebarOpen }"
+                   v-on:click="sidebarOpen = !sidebarOpen" :key="componentKey">
 
     <template v-if="$route.meta.table === 'site'">
       <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
@@ -64,8 +65,8 @@
           <li><a href="#" @click="setAction('addSite')" style="display: inline-block; ">Add site</a></li>
         </ul>
       </b-collapse>
-      <span @click="pinSidebar">
-        <font-awesome-icon  icon="thumbtack" class="pull-right mr-3 mt-3" style="margin-top: 10px;"/>
+      <span @click="pinSidebar" id="thumbtack-icon">
+        <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate down" style="margin-top: 10px;"/>
       </span>
     </template>
   </sidebar-wrapper>
@@ -84,7 +85,8 @@
         activeSection : 'info',
         showSampleMenu: false,
         showSiteMenu:false,
-        isActive:false
+        sidebarOpen:false,
+        componentKey: 0,
       }
     },
 
@@ -97,14 +99,28 @@
       setAction(action, object) {
         this.$root.$emit('sidebar-user-action',{action:action})
       },
-
+      forceRerender() { this.componentKey += 1; },
       pinSidebar(){
-        // console.log(this.$refs.navbar )
+
+        this.sidebarOpen = !this.sidebarOpen
+        // this.sidebarOpen ? document.getElementById('thumbtack-icon').classList.toggle("down") : document.getElementById('thumbtack-icon').classList.remove("down");
+        this.forceRerender()
       }
     }
   }
 </script>
 <style src="../../assets/css/sidebarStyle.css"></style>
 <style scoped>
+  .rotate{
+    -moz-transition: all 1s linear;
+    -webkit-transition: all 1s linear;
+    transition: all 1s linear;
+  }
 
+  .rotate.down{
+    -ms-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
 </style>

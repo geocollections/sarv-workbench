@@ -21,7 +21,6 @@
 <script>
     export default {
         name: "SidebarWrapper",
-      date(){return {isActive:true}}
     }
 </script>
 

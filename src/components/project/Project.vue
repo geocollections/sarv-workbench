@@ -4,7 +4,7 @@
     <div class="row mb-4">
       <div class="col">
         <span class="float-right" v-if="$route.meta.isEdit">
-          <button class="btn btn-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/> Register new observation / sampling site</button>
+          <button class="btn btn-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/>{{$t('project.newSite')}}</button>
         </span>
         <span class="float-left">
          <span class="custom-control custom-switch">
@@ -598,6 +598,7 @@
           if(!this.isDefinedAndNotNull(this.project.id)) return
 
           if(newval) {
+            currentActiveProjects = []; // only one project or none can be active!  Maybe this condition will be changed
             currentActiveProjects.push(this.project.id)
           } else {
             let removeIdx = findIndex(currentActiveProjects, function(item) { return item === vm.project.id });

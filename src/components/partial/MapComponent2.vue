@@ -151,7 +151,9 @@
             })
             vm.markers.push(marker)
           });
+
           this.map.fitBounds(new L.featureGroup(this.markers).getBounds());
+          this.map.setZoom(this.map.getBoundsZoom(new L.featureGroup(this.markers).getBounds())-2)
         },
 
         // Validates if coordinates exist in correct form.
@@ -237,6 +239,7 @@
           featureGroup.push(this.currentLocation);
           if(this.marker !== null) featureGroup.push(this.marker)
           this.map.fitBounds(new L.featureGroup(featureGroup).getBounds());
+          this.map.setZoom(this.map.getBoundsZoom(new L.featureGroup(featureGroup).getBounds())-2)
         },
 
       },
@@ -270,7 +273,10 @@
             let featureGroup = []
             featureGroup.push(this.currentLocation);
             if(this.marker !== null) featureGroup.push(this.marker)
-            if(featureGroup.length > 1) this.map.fitBounds(new L.featureGroup(featureGroup).getBounds());
+            if(featureGroup.length > 1) {
+              this.map.fitBounds(new L.featureGroup(featureGroup).getBounds());
+              this.map.setZoom(this.map.getBoundsZoom(new L.featureGroup(featureGroup).getBounds())-2)
+            }
           }
         },
       }
