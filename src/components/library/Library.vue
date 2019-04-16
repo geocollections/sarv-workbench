@@ -117,7 +117,8 @@
                            :loading="autocomplete.loaders.library_agent"
                            :multiple="true"
                            track-by="id"
-                           label="agent__agent" :open-direction="'bottom'"
+                           :custom-label="customLabelForLibraryMembers"
+                           :open-direction="'bottom'"
                            :placeholder="$t('add.inputs.autocomplete')">
             <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
           </vue-multiselect>
@@ -277,7 +278,7 @@
 
       loadFullInfo() {
         fetchLibraryAgent(this.$route.params.id).then(response => {
-          this.autocomplete.library_agent = this.handleResponse(response);
+          this.relatedData.library_agent = this.handleResponse(response);
         })
 
         if(this.$route.meta.isEdit) {
@@ -353,7 +354,7 @@
 
       fillRelatedDataAutocompleteFields(obj){
         obj.reference = { reference:obj.reference__reference, id:obj.reference}
-        obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
+        // obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
         return obj
       },
 
@@ -385,7 +386,8 @@
           uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
         }
 
-        // console.log(JSON.stringify(uploadableObject));
+        console.log('This object is sent in string format (related_data):')
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 
@@ -396,6 +398,10 @@
         return new Promise((resolve) => {
           resolve(fetchLibraries(params))
         });
+      },
+
+      customLabelForLibraryMembers(option) {
+        return this.isDefinedAndNotNull(option.agent__agent) ? `${option.agent__agent}` : `${option.agent}`
       },
 
       setDefaultSearchParameters() {
