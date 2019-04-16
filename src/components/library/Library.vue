@@ -46,7 +46,7 @@
         <b-form-input id="author_txt" v-model="library.author_txt" type="text"></b-form-input>
       </div>
     </div>
-    
+
     <!-- TITLE -->
     <div class="row">
       <div class="col-sm-2">
@@ -101,6 +101,36 @@
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
+
+    <!-- LIBRARY MEMBERS -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">
+        {{ $t('library.libraryAgent') }}
+        <font-awesome-icon icon="user-friends"/></legend>
+      <div class="row">
+
+        <div class="col-11 mb-2 mr-0">
+          <vue-multiselect v-model="relatedData.library_agent"
+                           id="library_agent"
+                           :searchable="true" @search-change="autcompleteLibraryAgentSearch"
+                           :options="autocomplete.library_agent"
+                           :loading="autocomplete.loaders.library_agent"
+                           :multiple="true"
+                           track-by="id"
+                           label="agent__agent" :open-direction="'bottom'"
+                           :placeholder="$t('add.inputs.autocomplete')">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+        <div class="col-1 mb-2 ml-0 pl-0">
+          <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(relatedData.library_agent)"
+                  @click="relatedData.library_agent = []">
+            <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+          </button>
+        </div>
+      </div>
+    </fieldset>
 
     <!-- CHECKBOXES -->
     <div class="row">
@@ -178,7 +208,7 @@
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
-  import { fetchLibrary, fetchLibraries, fetchLibraryReference } from "../../assets/js/api/apiCalls";
+  import { fetchLibrary, fetchLibraries, fetchLibraryReference, fetchLibraryAgent } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
   import formManipulation  from './../mixins/formManipulation'
@@ -225,10 +255,12 @@
           autocomplete: {
             loaders: {
               agent: false,
-              reference: false
+              reference: false,
+              library_agent: false,
             },
             agent: [],
             reference: [],
+            library_agent: [],
           },
           requiredFields: [],
           library: {},
@@ -244,6 +276,10 @@
       },
 
       loadFullInfo() {
+        fetchLibraryAgent(this.$route.params.id).then(response => {
+          this.autocomplete.library_agent = this.handleResponse(response);
+        })
+
         if(this.$route.meta.isEdit) {
           this.sendingData = true;
           fetchLibrary(this.$route.params.id).then(response => {
@@ -282,6 +318,7 @@
       setDefaultRelatedData(){
         return {
           library_reference:[],
+          library_agent: [],
           copyFields: {
             library_reference: ['reference__reference','keywords','remarks'],
           },
@@ -289,10 +326,12 @@
             library_reference: {}
           },
           page : {
-            library_reference: 1
+            library_reference: 1,
+            library_agent: 1,
           },
           count: {
-            library_reference: 0
+            library_reference: 0,
+            library_agent: 0,
           }
         }
       },
@@ -300,6 +339,8 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
         if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
+        if (objectToUpload.is_private !== null) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -312,6 +353,7 @@
 
       fillRelatedDataAutocompleteFields(obj){
         obj.reference = { reference:obj.reference__reference, id:obj.reference}
+        obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
         return obj
       },
 

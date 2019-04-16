@@ -14,7 +14,7 @@ function fetch (child, url = 0) {
 
   return new Promise((resolve, reject) => {
     Vue.http.get(queryUrl + child, {}).then(response => {
-      // console.log(response)
+      console.log(response)
       resolve(response);
     }, errResponse => {
       console.log('ERROR: ' + JSON.stringify(errResponse));
@@ -407,6 +407,10 @@ export function fetchLibraries(data) {
 
 export function fetchLibraryReference(id, page) {
   return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=100&order_by=-sort&format=json`)
+}
+
+export function fetchLibraryAgent(id) {
+  return fetch(`library_agent/?library=${id}&format=json`)
 }
 
 /***********************
