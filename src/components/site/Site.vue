@@ -220,7 +220,7 @@
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack()">
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true,'site')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true,'site',true)">
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site')">
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>

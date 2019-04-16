@@ -283,9 +283,9 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'project')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'project', true)">
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'project')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'project', true)">
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('project')">
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
