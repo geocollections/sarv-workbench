@@ -65,11 +65,13 @@ const formManipulation = {
       }
       return true;
     },
-    formatDateForUpload(date){
+    formatDateForUpload(date, onlyDate = true){
       date = new Date(date)
       let tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
       let localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, -1);
-      return typeof date === 'string' ? date.split('T')[0] : localISOTime.split('T')[0];
+
+      if(onlyDate) return typeof date === 'string' ? date.split('T')[0] : localISOTime.split('T')[0];
+     return localISOTime
     },
 
     cancelRequest() {this.previousRequest.abort()},
@@ -176,12 +178,15 @@ const formManipulation = {
       })
     },
 
-    addRelationBetweenAnyObjectAndAttachment(attachmentId, object){
+    addRelationBetweenAnyObjectAndAttachment(attachmentId, object, createRelationWith = null){
       let formData = new FormData()
       let uploadableObject = {
         attachment:attachmentId
       };
-      uploadableObject[this.$store.state['createRelationWith'].object] =  this.$store.state['createRelationWith'].data.id
+      if(createRelationWith !== null) {
+        uploadableObject[createRelationWith.object] = createRelationWith.id
+      } else
+        uploadableObject[this.$store.state['createRelationWith'].object] =  this.$store.state['createRelationWith'].data.id
 
       const dataToUpload = JSON.stringify(uploadableObject);
       formData.append('data', dataToUpload)
@@ -457,6 +462,11 @@ const formManipulation = {
       return isNaN(parseInt(lastToken)) ? previousName+' 1' : previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1)
     },
 
+    getActiveProject() {
+      let activeProject = this.$localStorage.get('activeProject', 'fallbackValue')
+      if(this.isDefinedAndNotNull(activeProject) && activeProject !== 'fallbackValue') return activeProject;
+      return null
+    }
   },
   watch: {
 

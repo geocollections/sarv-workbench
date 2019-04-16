@@ -181,17 +181,19 @@
           // console.log(location)
         },
         addMarker(latlng){
-          if(this.marker !== null) return;
-
+          if(this.marker !== null) {
+            this.map.removeLayer(this.marker)
+          }
           let vm = this, location=[parseFloat(latlng.lat),parseFloat(latlng.lng)];
           this.marker = L.marker(location, {
             draggable:true, clickable:false, zIndexOffset: 100
           }).addTo(this.map).on('dragend', function(e) {
+
             vm.$emit('get-location', e.target._latlng)
+            vm.map.setView(vm.marker._latlng,10);
+
           })
-
           vm.$emit('get-location', this.marker._latlng);
-
           this.map.setView(this.marker._latlng,10);
         },
         setCurrentGpsLocationIfExists(){
@@ -252,9 +254,12 @@
           if (this.mode === 'multiple') return;
           // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
           // Because if input from form fields is null then it gets reset to 0 and shows marker at 0:0, but I don't want that.
-          if (this.marker !== null && (newVal.lat === null || newVal.lng === null) && !(newVal.lat === null && newVal.lng === null)) {
-            this.map.removeLayer(this.marker)
-          }
+
+          // if (this.marker !== null && (newVal.lat === null || newVal.lng === null) && !(newVal.lat === null && newVal.lng === null)) {
+          //   console.log('REMOVE')
+          //   this.map.removeLayer(this.marker)
+          // }
+
           if (this.isValidLocation(newVal)) {
             this.addMarker(newVal)
           } else {

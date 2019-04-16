@@ -83,7 +83,7 @@
 
         <div class="col-md-4">
           <label class="p-0">{{ $t('site.location_accuracy') }}:</label>
-          <b-form-input id="longitude" v-model="site.location_accuracy" type="number"></b-form-input>
+          <b-form-input id="location_accuracy" v-model="site.location_accuracy" type="number" min="0"></b-form-input>
         </div>
       </div>
       <div class="row">
@@ -372,11 +372,12 @@
           let uploadableObject = cloneDeep(objectToUpload)
 
           if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
-          if (this.isDefinedAndNotNull(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start);
-          if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
-          if (this.isDefinedAndNotNull(objectToUpload.location_accuracy)) uploadableObject.location_accuracy = objectToUpload.location_accuracy.toFixed(2);
+          if (this.isDefinedAndNotNull(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start, false);
+          if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end, false);
 
-          //autocomplete fields
+          if (this.isDefinedAndNotNull(objectToUpload.location_accuracy)) uploadableObject.location_accuracy =
+            typeof uploadableObject.location_accuracy === 'string'? parseInt(objectToUpload.location_accuracy).toFixed(2) : objectToUpload.location_accuracy.toFixed(2);
+
           if (this.isDefinedAndNotNull(objectToUpload.project)) uploadableObject.project = objectToUpload.project.id
           if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
           if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
@@ -486,19 +487,21 @@
           console.log('file uploaded');
 
           let formData = new FormData();
+
           formData.append('data', JSON.stringify({
             description:data.type +' for site: ' +this.site.id,
             author:this.currentUser.id,
             date_created:this.formatDateForUpload(new Date()),
             is_private:1
           }));
-
+          console.log(formData.data)
           formData.append('file0', data);
 
           try {
             this.saveData('attachment',formData,'add/attachment/',false).then(savedObjectId => {
+              console.log(savedObjectId)
               if(savedObjectId === undefined || savedObjectId === false) return;
-              this.addRelationBetweenAnyObjectAndAttachment(savedObjectId,'attachment_link').then(response => {
+              this.addRelationBetweenAnyObjectAndAttachment(savedObjectId,'attachment_link', {object : 'site', id: this.site.id}).then(response => {
                 this.$root.$emit('attachment-loading-status',true)
                 this.loadRelatedData('attachment_link')
               });
@@ -540,9 +543,11 @@
         },
         saveAndNavigateBack(){
           this.add(true,'site')
-          if(this.createRelationWith.object === null)
-            this.$router.push({ path:'/project'});
-          else
+          if(this.createRelationWith.object === null) {
+            let activeProject = this.getActiveProject();
+            if(activeProject === null) this.$router.push({ path:'/project'});
+            this.$router.push({ path:'/project'+'/'+activeProject});
+          } else
             this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
         },
         finishWork() {
