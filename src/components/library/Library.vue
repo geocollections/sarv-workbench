@@ -119,15 +119,18 @@
       </legend>
       <div class="row">
 
+        <!-- Prop: internal-search must be false otherwise it also filters by label -->
         <div class="col-11 mb-2 mr-0">
           <vue-multiselect v-model="relatedData.library_agent"
                            id="library_agent"
-                           :searchable="true" @search-change="autcompleteLibraryAgentSearch"
+                           @search-change="autcompleteLibraryAgentSearch"
                            :options="autocomplete.library_agent"
                            :loading="autocomplete.loaders.library_agent"
                            :multiple="true"
                            track-by="id"
-                           :custom-label="customLabelForLibraryMembers"
+                           label="agent"
+                           :internal-search="false"
+                           :preserve-search="true"
                            :open-direction="'bottom'"
                            :placeholder="$t('add.inputs.autocomplete')">
             <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -302,7 +305,13 @@
 
       loadFullInfo() {
         fetchLibraryAgent(this.$route.params.id).then(response => {
-          this.relatedData.library_agent = this.handleResponse(response);
+          let libraryAgent = this.handleResponse(response);
+          this.relatedData.library_agent = libraryAgent.map(entity => {
+            return {
+              agent: entity.agent__agent,
+              id: entity.agent
+            }
+          })
         })
 
         if (this.$route.meta.isEdit) {
@@ -364,8 +373,11 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
         if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
-        if (objectToUpload.is_private !== null) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
 
+        // Adding related data
+        uploadableObject.related_data = {}
+        uploadableObject.related_data.agent = this.relatedData.library_agent
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -422,10 +434,6 @@
         return new Promise((resolve) => {
           resolve(fetchLibraries(params))
         });
-      },
-
-      customLabelForLibraryMembers(option) {
-        return this.isDefinedAndNotNull(option.agent__agent) ? `${option.agent__agent}` : `${option.agent}`
       },
 
       setDefaultSearchParameters() {

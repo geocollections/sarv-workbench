@@ -621,7 +621,7 @@
 
 <style scoped>
 
-  label { 
+  label {
     margin: 5px 0 0 0;
     color: #999;
     font-size: 0.8rem;
