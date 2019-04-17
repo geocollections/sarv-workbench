@@ -580,6 +580,7 @@
     "libraryIdTitle": "Kogumiku ID või pealkiri",
     "header": "Kirjandus",
     "addNew": "Lisage uus Kirjandus",
+    "sort": "Liik",
     "relatedTables": {
       "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",
@@ -626,6 +627,7 @@
     "private": "Privaatne",
     "remove": "Eemalda",
     "libraryAgent": "Kogumiku liikmed",
+    "showListView": "Loendivaade",
     "relatedTables": {
       "libraryReference": "Kogumiku kirjandus"
     }

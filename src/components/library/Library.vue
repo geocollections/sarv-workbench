@@ -117,7 +117,8 @@
                            :loading="autocomplete.loaders.library_agent"
                            :multiple="true"
                            track-by="id"
-                           label="agent__agent" :open-direction="'bottom'"
+                           :custom-label="customLabelForLibraryMembers"
+                           :open-direction="'bottom'"
                            :placeholder="$t('add.inputs.autocomplete')">
             <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
           </vue-multiselect>
@@ -132,14 +133,23 @@
       </div>
     </fieldset>
 
-    <!-- CHECKBOXES -->
-    <div class="row">
-      <div class="col">
-        <b-form-checkbox id="is_private" v-model="library.is_private" :value="1" :unchecked-value="0">
-          {{ $t('library.private') }}
-        </b-form-checkbox>
+    <!-- REFERENCE LIST VIEW -->
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
+      <legend class="w-auto" style="font-size: large;">
+        {{ $t('library.relatedTables.libraryReference') }}
+        <font-awesome-icon icon="list-ol" />
+      </legend>
+
+      <div class="row">
+        <div class="col">
+          <b-form-checkbox class="mb-2" v-model="showListView" name="check-button" switch>
+            {{ $t('library.showListView') }}
+          </b-form-checkbox>
+        </div>
       </div>
-    </div>
+
+      <library-reference-list-view v-if="showListView" :data="relatedData.library_reference"></library-reference-list-view>
+    </fieldset>
 
     <!-- SHOWING RELATED_DATA -->
     <div class="row" v-if="$route.meta.isEdit">
@@ -166,6 +176,15 @@
       </div>
     </div>
 
+    <!-- CHECKBOXES -->
+    <div class="row">
+      <div class="col">
+        <b-form-checkbox id="is_private" v-model="library.is_private" :value="1" :unchecked-value="0">
+          {{ $t('library.private') }}
+        </b-form-checkbox>
+      </div>
+    </div>
+
     <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library')">
@@ -176,28 +195,6 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
-
-    <!--<div v-if="$route.meta.isEdit">-->
-      <!--<hr>-->
-
-      <!--<div class="row">-->
-        <!--<div class="col-sm-6">-->
-          <!--<p class="h2">{{ $t('library.libraryReference') }}</p>-->
-        <!--</div>-->
-      <!--</div>-->
-
-      <!--<div class="row">-->
-        <!--<div class="col-sm-2">-->
-          <!--<label :for="`add_reference`">{{ $t('header.addReference') }}:</label>-->
-        <!--</div>-->
-
-        <!--<div class="col-sm-4 mb-2">-->
-          <!--<b-form-input id="add_reference" type="text"></b-form-input>-->
-        <!--</div>-->
-      <!--</div>-->
-
-      <!--<library-reference :data="libraryReference" v-on:remove-reference-from-library="removeReference"></library-reference>-->
-    <!--</div>-->
 
   </div>
 </template>
@@ -215,12 +212,14 @@
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
   import copyForm  from './../mixins/copyForm'
   import LibraryReference from "./relatedTables/LibraryReference";
+  import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
 
   library.add(faTimes)
 
   export default {
     name: "Library",
     components: {
+      LibraryReferenceListView,
       LibraryReference,
       FontAwesomeIcon,
       VueMultiselect,
@@ -266,7 +265,8 @@
           library: {},
           previousRecord: {},
           nextRecord: {},
-          searchParameters: this.setDefaultSearchParameters()
+          searchParameters: this.setDefaultSearchParameters(),
+          showListView: false,
         }
       },
 
@@ -277,7 +277,7 @@
 
       loadFullInfo() {
         fetchLibraryAgent(this.$route.params.id).then(response => {
-          this.autocomplete.library_agent = this.handleResponse(response);
+          this.relatedData.library_agent = this.handleResponse(response);
         })
 
         if(this.$route.meta.isEdit) {
@@ -353,7 +353,7 @@
 
       fillRelatedDataAutocompleteFields(obj){
         obj.reference = { reference:obj.reference__reference, id:obj.reference}
-        obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
+        // obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
         return obj
       },
 
@@ -385,7 +385,8 @@
           uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
         }
 
-        // console.log(JSON.stringify(uploadableObject));
+        console.log('This object is sent in string format (related_data):')
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 
@@ -396,6 +397,10 @@
         return new Promise((resolve) => {
           resolve(fetchLibraries(params))
         });
+      },
+
+      customLabelForLibraryMembers(option) {
+        return this.isDefinedAndNotNull(option.agent__agent) ? `${option.agent__agent}` : `${option.agent}`
       },
 
       setDefaultSearchParameters() {

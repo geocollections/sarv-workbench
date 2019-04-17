@@ -575,6 +575,7 @@
     "libraryIdTitle": "Library ID or title",
     "header": "Reference",
     "addNew": "Add new Reference",
+    "sort": "Sort",
     "relatedTables": {
       "attachment": "Related data files",
       "locality": "Locality",
@@ -621,6 +622,7 @@
     "private": "Private",
     "remove": "Remove",
     "libraryAgent": "Library members",
+    "showListView": "List view",
     "relatedTables": {
       "libraryReference": "References"
     }
