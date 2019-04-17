@@ -66,6 +66,7 @@ const lang = Vue.localStorage.get('geocollectionsFileUploadLang', 'ee')
 const i18n = new VueI18n({
   locale: lang,
   fallbackLocale: 'en',
+  silentTranslationWarn: process.env.NODE_ENV === 'production',
   messages
 })
 /******************************
