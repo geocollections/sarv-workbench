@@ -165,6 +165,7 @@
     "isLoading": "Please wait!, Searching...",
     "buttons": {
       "save": "Save",
+      "saveAndLeave": "Save and leave",
       "saveAndContinue": "Save and continue editing",
       "cancelWithoutSaving": "Cancel without saving",
       "cancel": "Cancel file change"

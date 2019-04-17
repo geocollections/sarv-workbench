@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
+import {faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
+library.add(faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt)
 
 const formManipulation = {
   data(){
@@ -201,8 +201,8 @@ const formManipulation = {
 
     },
 
-    reset(object) {
-      this[object] = {}
+    reset(object, isEdit) {
+      isEdit ? this.$router.push({ path:'/'+object}) : this[object] = {}
     },
 
     leaveFromEditView(object) {
@@ -412,9 +412,11 @@ const formManipulation = {
       });
     },
 
-    hoverSaveOrCancelButtonClicked(choice, object) {
-      if (choice === "SAVE") this.add(true, object)
-      if (choice === "CANCEL") this.$router.push({ path: '/' + object })
+    hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
+      if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
+      if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately)
+      if (choice === "CLEAR") console.log('TODO')
+      if (choice === "CANCEL") this.navigateBack(object)
       if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });
       if (choice === "NEXT") this.$router.push({ path: '/' + object + '/' + this.nextRecord });
     },
@@ -464,7 +466,8 @@ const formManipulation = {
 
     getActiveProject() {
       let activeProject = this.$localStorage.get('activeProject', 'fallbackValue')
-      if(this.isDefinedAndNotNull(activeProject) && activeProject !== 'fallbackValue') return activeProject;
+      console.log(activeProject)
+      if(this.isDefinedAndNotEmpty(activeProject) && activeProject !== 'fallbackValue') return activeProject[0];
       return null
     }
   },

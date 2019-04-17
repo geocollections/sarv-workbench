@@ -283,11 +283,16 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'project', true)">
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'project', true)">
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('project')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'project', true)" :title="$t('edit.buttons.saveAndLeave') ">
+          <font-awesome-icon icon="door-open"/>
+          {{ $t('edit.buttons.saveAndLeave') }}</button>
+        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'project', true)" :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') " >
+          <font-awesome-icon icon="save"/>
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
+          <!--{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}-->
+        </button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('project',$route.meta.isEdit)"  :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
+          <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
@@ -317,9 +322,11 @@
 
   import FileTable from "../partial/FileTable";
   import findIndex from 'lodash/findIndex';
+  import SaveButtons from "../partial/SaveButtons";
     export default {
       name: "Project",
       components: {
+        SaveButtons,
         FileTable,
         MapComponent2,
         MapComponent,

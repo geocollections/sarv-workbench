@@ -218,11 +218,16 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack()">
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true,'site',true)">
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')" :title="$t('edit.buttons.saveAndLeave') ">
+          <font-awesome-icon icon="door-open"/>
+          {{ $t('edit.buttons.saveAndLeave') }}</button>
+        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)" :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') " >
+          <font-awesome-icon icon="save"/>
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
+          <!--{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}-->
+        </button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="navigateBack('site')"  :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
+          <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
       </div>
     </div>
@@ -254,11 +259,13 @@
   import MapComponent2 from "../partial/MapComponent2";
   import FileTable from "../partial/FileTable";
   import Sidebar from "../partial/Sidebar";
+  import SaveButtons from "../partial/SaveButtons";
 
 
     export default {
       name: "Site",
       components: {
+        SaveButtons,
         Sidebar,
         FileTable,
         MapComponent2,
@@ -541,23 +548,11 @@
             });
           });
         },
-        saveAndNavigateBack(){
-          this.add(true,'site')
-          if(this.createRelationWith.object === null) {
-            let activeProject = this.getActiveProject();
-            if(activeProject === null) this.$router.push({ path:'/project'});
-            this.$router.push({ path:'/project'+'/'+activeProject});
-          } else
-            this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
-        },
+
         finishWork() {
           // set finish time
           this.site.date_end = new Date();
-          this.add(true,'site');
-          if(this.createRelationWith.object === null)
-            this.$router.push({ path:'/project'});
-          else
-            this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+          this.saveAndNavigateBack('site')
         },
         removeAttachmentRelation(idx) {
           this.relatedData.attachment_link.splice(idx, 1);
@@ -575,6 +570,24 @@
         },
         handleSidebarUserAction(userAction) {
           if(userAction.action === 'addSample') this.addSample()
+        },
+
+        saveAndNavigateBack(object){
+          this.add(true,object)
+          this.navigateBack(object)
+        },
+
+        navigateBack(object){
+          if(this.createRelationWith.object !== null) this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+
+          //special case (SITE do not have LIST view)
+          let activeProject = this.getActiveProject();
+          console.log(activeProject)
+          activeProject === null ?
+            this.$router.push({ path:'/project'}) :
+            this.$router.push({ path:'/project/'+activeProject})
+
+
         },
       },
       beforeRouteLeave(to, from, next) {

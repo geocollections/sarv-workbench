@@ -168,6 +168,7 @@
     "isLoading": "Palun oodake!, Otsin...",
     "buttons": {
       "save": "Salvesta",
+      "saveAndLeave": "Salvesta ja mine tagasi",
       "saveAndContinue": "Salvesta ja jätka muutmist",
       "cancelWithoutSaving": "Lahku salvestamata",
       "cancel": "Katkesta faili muutmine"
