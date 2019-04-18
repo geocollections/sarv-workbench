@@ -1,25 +1,29 @@
 <template>
-  <div class="edit-form">
-    <div class="row mt-4 page-title">
-      <div class="col">
-        <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
+
+    <div class="edit-form">
+
+      <div class="row mt-4 page-title">
+        <div class="col">
+          <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
+        </div>
       </div>
+
+      <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData"/>
+
+      <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
+                      :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
+                      :object="object" :is-navigation-shown="$route.meta.isNavigationShow"/>
+
+      <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
+                         :related-data="relatedData" :object="object" :object-id="data.id"/>
+      <confirmation-box :title-extra="'SOME TITLE'"
+                        custom-question="confirmation.relatedDataQuestion"
+                        :table="$route.meta.table"/>
+
+      <!-- LOGS -->
+      <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData" :key="logComponentKey"></log>
     </div>
-    <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData"/>
 
-    <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
-                    :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
-                    :object="object" :is-navigation-shown="$route.meta.isNavigationShow"/>
-
-    <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
-                       :related-data="relatedData" :object="object" :object-id="data.id"/>
-    <confirmation-box :title-extra="'SOME TITLE'"
-                      custom-question="confirmation.relatedDataQuestion"
-                      :table="$route.meta.table"/>
-
-    <!-- LOGS -->
-    <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData" :key="logComponentKey"></log>
-  </div>
 </template>
 
 <script>

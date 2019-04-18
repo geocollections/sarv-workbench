@@ -1,23 +1,23 @@
 <template>
   <fieldset class="log border p-2 mb-2" v-if="logs.length > 0">
-    <legend class="w-auto" style="font-size: large; font-weight: 600">{{ $t('logs.title') }}
-      <font-awesome-icon icon="history"/></legend>
+    <legend class="w-auto" style="font-size: large; font-weight: 600" :style="!block.logs ? {'color':'blue'} : ''">{{ $t('logs.title') }}
+      <font-awesome-icon icon="history" @click="block.logs = !block.logs" /></legend>
+    <transition name="fade">
+      <div class="row" v-if="block.logs">
+        <div class="col">
 
-    <div class="row">
-      <div class="col">
-
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered">
-            <thead class="thead-light">
+          <div class="table-responsive">
+            <table class="table table-hover table-bordered">
+              <thead class="thead-light">
               <tr>
                 <th>{{ $t('logs.user') }}</th>
                 <th>{{ $t('logs.time') }}</th>
                 <th>{{ $t('logs.command') }}</th>
                 <th>{{ $t('logs.changes') }}</th>
               </tr>
-            </thead>
+              </thead>
 
-            <tbody>
+              <tbody>
               <tr v-for="entity in logs">
                 <td><b>{{ entity.user }}</b></td>
                 <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
@@ -26,12 +26,14 @@
                   <div style="max-height: 5rem !important; overflow: auto;">{{ entity.changes }}</div>
                 </td>
               </tr>
-            </tbody>
-          </table>
-        </div>
+              </tbody>
+            </table>
+          </div>
 
+        </div>
       </div>
-    </div>
+    </transition>
+
 
 
   </fieldset>
@@ -51,6 +53,7 @@
     name: "Log",
     data() {
       return {
+        block: {logs:false},
         logs: []
       }
     },
@@ -95,4 +98,5 @@
 .log .table th, .table td {
 	padding: 0.3rem;
 }
+
 </style>
