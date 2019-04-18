@@ -633,7 +633,7 @@
         <div class="col">
           <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack">
             {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'sample')">
+          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'sample')">
             {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
           <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('sample') : reset('sample')">
             {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
@@ -708,7 +708,7 @@
 
       created() { this.loadFullInfo() },
       mounted(){
-        this.createRelatedSampleWithSiteIfExists()
+        this.createRelatedSampleWithSiteIfExists();
       },
       methods: {
         setTab(type){ this.activeTab  = type },
@@ -995,11 +995,16 @@
           }
         },
         saveAndNavigateBack(){
-          this.add(true,'sample')
-          if(this.createRelationWith.object === null)
-            this.$router.push({ path:'/sample'});
-          else
-            this.$router.push({ path:'/'+this.createRelationWith.object+'/'+this.createRelationWith.data.id})
+          let vm = this
+          this.add(true,'sample').then(function (status) {
+            if(vm.createRelationWith.object === null)
+              vm.$router.push({ path:'/sample'});
+            else {
+              vm.$router.push({ path:'/'+vm.createRelationWith.object+'/'+vm.createRelationWith.data.id})
+            }
+          })
+
+
         },
       },
       beforeRouteLeave(to, from, next) {

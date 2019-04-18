@@ -307,6 +307,7 @@
   import Datepicker from 'vue2-datepicker'
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
+  import localStorageMixin  from './../mixins/localStorageMixin'
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchProjects,
@@ -336,7 +337,7 @@
         VueMultiselect,
         Spinner,
       },
-      mixins: [formManipulation,autocompleteFieldManipulation],
+      mixins: [formManipulation,autocompleteFieldManipulation,localStorageMixin],
 
       data() { return this.setInitialData() },
 
@@ -559,14 +560,16 @@
         registerObservation(){
 
           //set relation object as site
-          let createRelationWith = { object: 'project', data: this.project };
+          let createRelationWith = { object: 'project', data: this.project,
+            info: this.$t('messages.projectSiteRelationInfo',
+              { data: `ID: ${this.project.id} (${this.project.name})` })};
           this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith });
           this.$router.push({ path:'/site/add'})
-        },
+          // this.lsPushCreateRelationWith(createRelationWith)
+          // let routeData = this.$router.resolve({ path:'/site/add'})
+          // window.open(routeData.href, '_blank', 'width=1000,height=750');
 
-        // checkIfProjectIsActive(){
-        //   return new Date(this.project.date_end) >= (new Date()).setHours(0,0,0,0)
-        // },
+        },
 
         forceRerender() { this.componentKey += 1; },
 
@@ -593,12 +596,7 @@
           },
           deep: true
         },
-        // 'project.date_end': {
-        //   handler: function (newval, oldval) {
-        //     this.$set(this,'isActiveProject', this.checkIfProjectIsActive())
-        //   },
-        //   deep: true
-        // },
+
         'isActiveProject'(newval, oldval){
           let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
           if(currentActiveProjects === 'fallbackValue') currentActiveProjects = [];

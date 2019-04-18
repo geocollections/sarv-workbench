@@ -48,10 +48,9 @@
   }
 
   nav.sidebar.active{
-  margin-left: 0px;
-  float: left;
+    margin-left: 0px;
+    float: left;
   }
-
 
 
 </style>

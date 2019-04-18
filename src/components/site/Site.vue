@@ -1,6 +1,12 @@
 <template>
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+    <b-alert show variant="warning" v-if="createRelationWith.data !== null">
+      {{ createRelationWith.info }}
+      <a class="small" href="javascript:void(0)" @click="navigateBack">
+        <font-awesome-icon icon="external-link-alt"/>
+      </a>
+    </b-alert>
     <!-- STORAGE-->
     <fieldset class="border p-2 mb-2" ref="info">
       <legend class="w-auto" style="font-size: large;">Üldinfo
@@ -61,7 +67,7 @@
         </div>
         <div class="col-sm-3">
           <label class="p-0">&ensp;</label>
-          <button class="btn btn-primary form-control" @click="finishWork" v-if="site.date_end === undefined || site.date_end === null"> Finish </button>
+          <button class="btn btn-primary form-control" @click="finishWork" v-if="site.date_end === undefined || site.date_end === null"> Finish and close</button>
         </div>
       </div>
     </fieldset>
@@ -93,7 +99,7 @@
           </span>
       </div>
       <div class="row mb-2">
-        <div class="col">
+        <div class="col-lg-12">
           <b-collapse v-model="showCollapseMap" id="collapseMap">
               <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
               <map-component-2  :gps-coords="true" v-if="showCollapseMap " mode="single" v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
@@ -188,29 +194,10 @@
       <div class="row">
         <div class="col-sm-12 mb-2">
           <span class="float-right">
-            <button class="btn btn-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
+            <button class="btn btn-outline-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
           </span>
-          <div class="table-responsive-sm" v-if="relatedData.sample.length > 0">
-            <table class="table table-hover table-bordered">
-              <thead class="thead-light">
-                <tr>
-                  <th>ID</th>
-                  <th>{{ $t('sample.number') }}</th>
-                  <th>{{ $t('sample.locality') }}</th>
-                  <th>{{ $t('sample.agent_collected') }}</th>
-                </tr>
-              </thead>
-            <tbody>
-              <tr v-for="(sample,idx) in relatedData.sample">
-                <td @click="windowOpenNewTab('sample','/sample/'+sample.id)">
-                  <font-awesome-icon size="1x" icon="eye"/> {{sample.id}}
-                </td>
-                <td>{{sample.number}}</td>
-                <td v-translate="{et:sample.locality__locality,en:sample.locality__locality_en}"></td>
-                <td>{{sample.agent_collected__agent}}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive-sm" >
+            <linked-sample-table :siteID="$route.params.id"></linked-sample-table>
           </div>
         </div>
       </div>
@@ -242,6 +229,7 @@
   import Datepicker from 'vue2-datepicker'
   import formManipulation  from './../mixins/formManipulation'
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
+  import localStorageMixin  from './../mixins/localStorageMixin'
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchSites,
@@ -260,11 +248,13 @@
   import FileTable from "../partial/FileTable";
   import Sidebar from "../partial/Sidebar";
   import SaveButtons from "../partial/SaveButtons";
+  import LinkedSampleTable from "../sample/LinkedSampleTable";
 
 
     export default {
       name: "Site",
       components: {
+        LinkedSampleTable,
         SaveButtons,
         Sidebar,
         FileTable,
@@ -277,7 +267,7 @@
         VueMultiselect,
         Spinner,
       },
-      mixins: [formManipulation,autocompleteFieldManipulation],
+      mixins: [formManipulation,autocompleteFieldManipulation,localStorageMixin],
 
       data() { return this.setInitialData() },
       computed: {
@@ -357,7 +347,7 @@
             });
 
             this.loadRelatedData('attachment_link');
-            this.loadRelatedData('sample');
+            // this.loadRelatedData('sample');
           } else{
             this.setLocationDataIfExists();
             this.setSiteNameAndProjectIfPreviousExists();
@@ -587,13 +577,13 @@
             this.$router.push({ path:'/project'}) :
             this.$router.push({ path:'/project/'+activeProject})
 
-
         },
       },
       beforeRouteLeave(to, from, next) {
         //Do not remove relation object in case user created new relation object for simplified sample form
         if (this.$store.state['sampleView'].isFull)
           this.$store.commit('REMOVE_RELATION_OBJECT');
+
         next()
       },
 
@@ -610,9 +600,5 @@
 
 <style scoped>
 
-  /* Map height */
-  #collapseMap {
-    height: 50vh;
-  }
 
 </style>

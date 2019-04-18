@@ -11,4 +11,5 @@ export default {
   SET_SAMPLE_VIEW: (state, isFull) => {
     Vue.set(state,'sampleView', isFull)
   },
+  
 }

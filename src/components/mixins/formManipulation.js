@@ -104,19 +104,24 @@ const formManipulation = {
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
-        this.saveData(object,formData,url).then(savedObjectId => {
-          //before save object ID was removed
-          this[object] = editableObject;
-          // if (savedObjectId === undefined || savedObjectId === false) return;
-          this.$emit('data-loaded',editableObject);
-          this.$emit('data-saved',true);
-          if (!addAnother) {
-            this.$router.push({ path: '/'+object })
-          }
-        }, errResponse => {
-          return false;
-        });
-
+        return new Promise(resolve => {
+          this.saveData(object,formData,url).then(savedObjectId => {
+            //before save object ID was removed
+            this[object] = editableObject;
+            // if (savedObjectId === undefined || savedObjectId === false) return;
+            this.$emit('data-loaded',editableObject);
+            this.$emit('data-saved',true);
+            if (!addAnother) {
+              this.$router.push({ path: '/'+object })
+            } else {
+              this.$router.push({ path: '/'+object+ savedObjectId })
+            }
+            resolve(true)
+          }, errResponse => {
+            resolve(false)
+            return false;
+          });
+        })
       } else if (this.sendingData) {
         // This shouldn't run unless user deletes html elements and tries to press 'add' button again
         toastError({text: this.$t('messages.easterEggError')})

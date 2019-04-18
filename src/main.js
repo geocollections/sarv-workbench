@@ -127,6 +127,9 @@ new Vue({
   store,
   router,
   localStorage: {
+    createRelationWith:{
+      type: Object
+    },
     mapComponent:{
       type: Boolean,
       default: false
