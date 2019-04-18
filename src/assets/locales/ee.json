@@ -628,6 +628,7 @@
     "remove": "Eemalda",
     "libraryAgent": "Kogumiku liikmed",
     "showListView": "Loendivaade",
+    "generalInfo": "Üldinfo",
     "relatedTables": {
       "libraryReference": "Kogumiku kirjandus"
     }

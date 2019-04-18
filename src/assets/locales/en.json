@@ -623,6 +623,7 @@
     "remove": "Remove",
     "libraryAgent": "Library members",
     "showListView": "List view",
+    "generalInfo": "General info",
     "relatedTables": {
       "libraryReference": "References"
     }
