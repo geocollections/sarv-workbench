@@ -3,19 +3,19 @@
   <tr v-for="entity in response.results">
 
     <td>
-      <router-link :to="{ path: '/library/' + entity.id }" :title="$t('editLibrary.editMessage')">
-        {{ entity.id }}
+      <router-link :to="{ path: '/library/' + entity.library }" :title="$t('editLibrary.editMessage')">
+        {{ entity.library }}
       </router-link>
     </td>
 
-    <td>{{ entity.author_txt }}</td>
+    <td>{{ entity.library__author_txt }}</td>
 
-    <td v-translate="{ et: entity.title, en: entity.title_en }"></td>
+    <td v-translate="{ et: entity.library__title, en: entity.library__title_en }"></td>
 
     <td>
       <b-form-checkbox
         id="is_private"
-        v-model="entity.is_private"
+        v-model="entity.library__is_private"
         :value="0"
         :unchecked-value="1"
         :disabled="true">
@@ -23,7 +23,7 @@
     </td>
 
     <td>
-      <a href="javascript:void(0)" v-if="!entity.is_private" @click="openGeoInNewWindow({object: 'library', id: entity.id})"
+      <a href="javascript:void(0)" v-if="!entity.library__is_private" @click="openGeoInNewWindow({object: 'library', id: entity.library})"
          :title="$t('editLibrary.viewMessage')">{{ $t('edit.view') }}</a>
     </td>
 

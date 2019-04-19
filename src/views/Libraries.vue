@@ -42,6 +42,7 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import { fetchLibraries } from "@/assets/js/api/apiCalls";
+  import {fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
 
   export default {
     components: {
@@ -67,10 +68,26 @@
         searchParameters: this.setDefaultSearchParameters()
       }
     },
+
+    created: function () {
+      // Gets user data from session storage
+      if (this.$session.exists() && this.$session.get('authUser') !== null) {
+        const user = this.$session.get('authUser')
+        this.agent = {
+          id: user.agent_id,
+          agent: null,
+          forename: user.user,
+          surename: null,
+          user: user.user,
+        }
+        //console.log(this.agent);
+      }
+    },
+
     methods: {
       fetchLibraries() {
         return new Promise((resolve) => {
-          resolve(fetchLibraries(this.searchParameters))
+          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.agent))
         });
       },
       searchParametersChanged(newParams) {
