@@ -541,7 +541,7 @@
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
             'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
-            'issn', 'abstract', 'author_keywords', 'remarks', 'tags', 'attachment__filename', 'book_editor', 'figures', 'is_locked',
+            'issn', 'abstract', 'author_keywords', 'remarks', 'tags', 'book_editor', 'figures', 'is_locked',
             'is_oa', 'is_private', 'language'],
           autocomplete: {
             loaders: {
