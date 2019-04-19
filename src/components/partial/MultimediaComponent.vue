@@ -4,6 +4,34 @@
 
   <div class="row">
     <div class="col-sm-12 mb-2">
+      <label :for="`files`"
+             v-bind:class="{ dragging : isDragging }"
+             v-on:dragover.stop.prevent="isDragging = true"
+             v-on:dragleave.stop.prevent="isDragging = false"
+             v-on:drop.stop.prevent="dropFile"
+             class="btn btn-outline-primary btn-block">{{ $t('add.inputs.fileInput') }}
+      </label>
+
+      <div class="mt-2 alert alert-warning" v-if="files !== null && files.length >= 10">{{ $t('add.inputs.fileInputMaxError', { num: files.length }) }}</div>
+
+      <!-- TODO: https://github.com/bootstrap-vue/bootstrap-vue/issues/1526, If multiple then accept does not take multiple formats. BUG -->
+      <!-- TODO: BUG: If too many files or long filenames then breaks the input design -->
+      <b-form-file v-model="files"
+                   id="files"
+                   :state="filesState"
+                   multiple
+                   plain
+                   style="display: none"
+                   ref="fileinput"
+                   accept="image/*"
+                   :placeholder="$t('add.inputs.fileInput')">
+      </b-form-file>
+
+      <b-form-text v-if="!filesState">{{ $t('add.errors.files') }}.</b-form-text>
+
+    </div>
+
+    <div class="col-sm-12 mb-2">
       <label for="photo-upload" class="btn btn-outline-primary p-2 mr-2">
         <font-awesome-icon icon="camera-retro"/> Add photo
       </label>
@@ -37,13 +65,14 @@
                    ref="fileinput"
                    :placeholder="$t('add.inputs.fileInput')">
       </b-form-file>
-
     </div>
 
     <div class="col-sm-12 mb-2">
+
       <div class="mt-2" v-if="files !== null && files.length > 0">
         <div class="d-flex flex-row  flex-wrap" v-if="files.length > 0" >
           <div class="mt-2" v-for="(file, key) in files">
+
             <span v-if="file.type.includes('image')">
               <img style="height: 10rem" onerror="this.style.display='none'" v-bind:ref="'image' + parseInt(key)" class="img-thumbnail thumbnail-preview responsive" alt="Image preview..." />
             </span>
@@ -59,14 +88,12 @@
     </div>
 
     <div class="col-sm-12 col-md-6 mb-2">
-      <!--<button class="btn btn-outline-primary" v-if="filesState" :disabled="sendingData" @click="downloadFile" :title="$tc('add.buttons.downloadFile', 1)">-->
-        <!--<font-awesome-icon icon="download"/>-->
-      <!--</button>-->
       <button class="btn btn-outline-danger ml-1" v-if="filesState" :disabled="sendingData" @click="clearFile" :title="$tc('add.buttons.resetFile', 1)">
-        <font-awesome-icon icon="trash-alt"/>
+        <!--<font-awesome-icon icon="trash-alt"/>-->
+        <span v-show="files.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
+        <span v-show="files.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
       </button>
     </div>
-
 
   </div>
 </template>
@@ -86,7 +113,7 @@
           fileMetaData: null,
           isDragging: false,
           upload: {},
-          recordedFile:null
+          recordedFile:[]
 
         }
       },
@@ -110,7 +137,8 @@
                 let reader = new FileReader();
 
                 reader.onload = (event) => {
-                  this.$emit('file-uploaded',this.recordedFile);
+                  this.$emit('file-uploaded',this.recordedFile.length > 0 ? this.recordedFile : this.files);
+
                   // console.log(event.target.result)
                   this.$refs['image' + parseInt(i)][0].src = event.target.result;
                 };
@@ -127,16 +155,14 @@
               this.fileMetaData = EXIF.readFromBinaryFile(event.target.result)
             }
           }
-        }
+        },
+
       },
       methods: {
         clearFile() {
           this.$refs.fileinput.reset();
           this.files=[]
         },
-        // downloadFile(){
-        //
-        // }
       }
     }
 </script>
