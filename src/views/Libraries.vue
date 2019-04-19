@@ -42,6 +42,7 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import { fetchLibraries } from "@/assets/js/api/apiCalls";
+  import {fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
 
   export default {
     components: {
@@ -52,10 +53,10 @@
       return {
         response: {},
         columns:[
-          {id:"id",title:"library.id",type:"number"},
-          {id:"author_txt",title:"library.author_txt",type:"text"},
-          {id:"title",title:"library.title",type:"text"},
-          {id:"is_private",title:"library.isPrivate",type:"text"},
+          {id:"library",title:"library.id",type:"number"},
+          {id:"agent__agent",title:"library.author_txt",type:"text"},
+          {id:"library__title",title:"library.title",type:"text"},
+          {id:"library__is_private",title:"library.isPrivate",type:"text"},
           {id:"reference",title:"library.reference",type:"text", orderBy: false},
         ],
         filters:[
@@ -67,10 +68,26 @@
         searchParameters: this.setDefaultSearchParameters()
       }
     },
+
+    created: function () {
+      // Gets user data from session storage
+      if (this.$session.exists() && this.$session.get('authUser') !== null) {
+        const user = this.$session.get('authUser')
+        this.agent = {
+          id: user.agent_id,
+          agent: null,
+          forename: user.user,
+          surename: null,
+          user: user.user,
+        }
+        //console.log(this.agent);
+      }
+    },
+
     methods: {
       fetchLibraries() {
         return new Promise((resolve) => {
-          resolve(fetchLibraries(this.searchParameters))
+          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.agent))
         });
       },
       searchParametersChanged(newParams) {
