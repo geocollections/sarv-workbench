@@ -1,5 +1,5 @@
 <template>
-  <table class="table table-hover table-bordered">
+  <table class="table table-hover table-bordered" v-if="samples.length > 0">
     <thead class="thead-light">
     <tr>
       <th>ID</th>

@@ -161,7 +161,11 @@ const formManipulation = {
             } else {
               toastSuccess({text: response.body.message});
             }
-            (object === 'attachment' && response.body.attachment_id) ? resolve(response.body.attachment_id) : resolve(response.body.id)
+            if(object === 'attachment' && response.body.attachments_ids) {
+              if(response.body.attachments_ids.length > 1) resolve(response.body.attachments_ids)
+              resolve(response.body.attachments_ids[0])
+            } else
+              resolve(response.body.id)
           }
           if (typeof response.body.error !== 'undefined') {
 
@@ -182,7 +186,25 @@ const formManipulation = {
         resolve(undefined)
       })
     },
+    addRelationForLinkedAttachments(attachmentIds, object, createRelationWith = null){
 
+      let formData = new FormData();
+      attachmentIds.forEach((file,index) => {
+        formData.append('data', JSON.stringify({
+          site:createRelationWith.id, attachment: file
+        }));
+
+        formData.append('attachment'+[index], file);
+      });
+
+      return new Promise((resolve) => {
+        this.saveData(object, formData, 'add/attachment_link/').then(isSuccessfullySaved => {
+          console.log("Relation created with locality id: " + this.$store.state['createRelationWith'].id)
+          resolve(true)
+        });
+      })
+
+    },
     addRelationBetweenAnyObjectAndAttachment(attachmentId, object, createRelationWith = null){
       let formData = new FormData()
       let uploadableObject = {

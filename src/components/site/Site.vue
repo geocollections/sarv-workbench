@@ -10,8 +10,8 @@
     </b-alert>
     <!-- STORAGE-->
     <fieldset class="border p-2 mb-2" ref="info">
-      <legend class="w-auto" style="font-size: large;" :style="!block.info ? {'color':'blue'} : ''">Üldinfo
-        <font-awesome-icon icon="project-diagram" @click="block.info = !block.info"/>
+      <legend class="w-auto"  @click="block.info = !block.info" :style="!block.info ? {'color':'blue'} : ''">Üldinfo
+        <font-awesome-icon icon="project-diagram"/>
       </legend>
       <transition name="fade">
         <div v-if="block.info">
@@ -73,7 +73,7 @@
             <div class="col-sm-3">
               <label class="p-0">&ensp;</label>
               <button class="btn btn-outline-primary form-control" @click="finishWork"
-                      v-if="site.date_end === undefined || site.date_end === null"> Finish and close
+                      v-if="site.date_end === undefined || site.date_end === null"> Finish
               </button>
             </div>
           </div>
@@ -82,9 +82,9 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;" :style="!block.location ? {'color':'blue'} : ''">{{
+      <legend class="w-auto" @click="block.location = !block.location" :style="!block.location ? {'color':'blue'} : ''">{{
         $t('site.location') }}
-        <font-awesome-icon icon="globe" @click="block.location = !block.location"/>
+        <font-awesome-icon icon="globe" />
       </legend>
       <transition name="fade">
         <div v-if="block.location">
@@ -187,9 +187,9 @@
       </transition>
     </fieldset>
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;" :style="!block.description ? {'color':'blue'} : ''">{{
+      <legend class="w-auto" @click="block.description = !block.description" :style="!block.description ? {'color':'blue'} : ''">{{
         $t('site.description') }} | {{ $t('site.remarks') }}
-        <font-awesome-icon icon="pen-fancy" @click="block.description = !block.description"/>
+        <font-awesome-icon icon="pen-fancy"/>
       </legend>
       <transition name="fade">
         <div v-if="block.description">
@@ -209,8 +209,8 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" ref="files">
-      <legend class="w-auto" style="font-size: large;" :style="!block.files ? {'color':'blue'} : ''">Files
-        <font-awesome-icon icon="folder-open" @click="block.files = !block.files"/>
+      <legend class="w-auto" @click="block.files = !block.files" :style="!block.files ? {'color':'blue'} : ''">Files
+        <font-awesome-icon icon="folder-open"/>
       </legend>
       <transition name="fade">
         <div v-if="block.files">
@@ -222,8 +222,8 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" ref="samples">
-      <legend class="w-auto" style="font-size: large;" :style="!block.samples ? {'color':'blue'} : ''">Related samples
-        <font-awesome-icon icon="vial" @click="block.samples = !block.samples"/>
+      <legend class="w-auto" @click="block.samples = !block.samples" :style="!block.samples ? {'color':'blue'} : ''">Related samples
+        <font-awesome-icon icon="vial"/>
       </legend>
       <transition name="fade">
         <div class="row" v-if="block.samples">
@@ -352,7 +352,8 @@
               }
             }
           ],
-          block: {info: true, location: true, description: true, files: true, samples: true}
+          attachmentLinkSaved : -1,
+          block: {info: !this.$route.meta.isEdit , location: false, description: false, files: true, samples: true}
 
         }
       },
@@ -540,27 +541,32 @@
         console.log('file uploaded');
 
         let formData = new FormData();
+        data.forEach((file,index) => {
+          formData.append('data', JSON.stringify({
+            description: file.type + ' for site: ' + this.site.id,
+            author: this.currentUser.id,
+            date_created: this.formatDateForUpload(new Date()),
+            is_private: 1
+          }));
 
-        formData.append('data', JSON.stringify({
-          description: data.type + ' for site: ' + this.site.id,
-          author: this.currentUser.id,
-          date_created: this.formatDateForUpload(new Date()),
-          is_private: 1
-        }));
-        console.log(formData.data)
-        formData.append('file0', data);
+          formData.append('file'+[index], file);
+        });
+
 
         try {
           this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
             console.log(savedObjectId)
-            if (savedObjectId === undefined || savedObjectId === false) return;
-            this.addRelationBetweenAnyObjectAndAttachment(savedObjectId, 'attachment_link', {
-              object: 'site',
-              id: this.site.id
-            }).then(response => {
-              this.$root.$emit('attachment-loading-status', true)
-              this.loadRelatedData('attachment_link')
-            });
+            if (savedObjectId === undefined || savedObjectId === false || savedObjectId.length === null) return;
+            let vm = this
+            this.attachmentLinkSaved = savedObjectId.length
+            savedObjectId.forEach(file => {
+              vm.addRelationBetweenAnyObjectAndAttachment(file, 'attachment_link', {
+                object: 'site',
+                id: vm.site.id
+              }).then(response => {
+                  vm.attachmentLinkSaved -= 1;
+              });
+            })
           });
         } catch (e) {
           console.log('Attachment cannot not be added')
@@ -656,6 +662,18 @@
       '$route.params.id': {
         handler: function (newval, oldval) {
           this.reloadData()
+        },
+        deep: true
+      },
+      'attachmentLinkSaved': {
+        handler: function(newval,oldval) {
+          console.log(newval)
+          if(newval === 0) {
+            this.$root.$emit('attachment-loading-status', true)
+            this.loadRelatedData('attachment_link')
+            this.attachmentLinkSaved = -1
+          }
+
         },
         deep: true
       }

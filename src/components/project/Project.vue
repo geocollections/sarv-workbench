@@ -22,9 +22,9 @@
     </div>
     <!-- STORAGE-->
     <fieldset class="border p-2" ref="info">
-      <legend class="w-auto" style="font-size: large;">Üldinfo
-        <font-awesome-icon icon="project-diagram" @click="block.info = !block.info"
-                           :style="!block.info ? {'color':'blue'} : ''"/>
+      <legend class="w-auto" @click="block.info = !block.info"
+              :style="!block.info ? {'color':'blue'} : ''">Üldinfo
+        <font-awesome-icon icon="project-diagram"/>
       </legend>
       <transition name="fade">
         <div v-if="block.info">
@@ -121,9 +121,9 @@
 
     <!-- DESCRIPTION -->
     <fieldset class="border p-2 mb-2" :key="componentKey">
-      <legend class="w-auto" style="font-size: large;">{{ $t('project.description') }} | {{ $t('project.remarks') }}
-        <font-awesome-icon icon="pen-fancy" @click="block.description = !block.description"
-                           :style="!block.description ? {'color':'blue'} : ''"/>
+      <legend class="w-auto" @click="block.description = !block.description"
+              :style="!block.description ? {'color':'blue'} : ''">{{ $t('project.description') }} | {{ $t('project.remarks') }}
+        <font-awesome-icon icon="pen-fancy" />
       </legend>
       <transition name="fade">
         <div  v-if="block.description">
@@ -145,9 +145,9 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">Project members
-        <font-awesome-icon icon="user-friends" @click="block.members = !block.members"
-                           :style="!block.members ? {'color':'blue'} : ''"/>
+      <legend class="w-auto" @click="block.members = !block.members"
+              :style="!block.members ? {'color':'blue'} : ''">Project members
+        <font-awesome-icon icon="user-friends" />
       </legend>
       <transition name="fade">
         <div class="row" v-if="block.members">
@@ -178,9 +178,9 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2" ref="files">
-      <legend class="w-auto" style="font-size: large;">Project files
-        <font-awesome-icon icon="folder-open" @click="block.files = !block.files"
-                           :style="!block.files ? {'color':'blue'} : ''"/>
+      <legend class="w-auto" @click="block.files = !block.files"
+              :style="!block.files ? {'color':'blue'} : ''">Project files
+        <font-awesome-icon icon="folder-open"/>
       </legend>
       <transition name="fade">
 
@@ -238,9 +238,9 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2" ref="sites">
-      <legend class="w-auto" style="font-size: large;">Linked Sites
-        <font-awesome-icon icon="globe-americas" @click="block.sites = !block.sites"
-                           :style="!block.sites ? {'color':'blue'} : ''"/>
+      <legend class="w-auto" @click="block.sites = !block.sites"
+              :style="!block.sites ? {'color':'blue'} : ''">Linked Sites
+        <font-awesome-icon icon="globe-americas" />
       </legend>
       <transition name="fade">
         <div v-if="block.sites">
@@ -401,6 +401,7 @@
     destroyed() {
       window.removeEventListener('resize', this.handleResize)
     },
+
     methods: {
       setInitialData() {
         return {
@@ -435,7 +436,7 @@
           ],
           componentKey: 0,
           isActive: false,
-          block: {info: true, members: true, description: true, files: true, sites: true}
+          block: {info: true , members: true , description: true , files: true , sites: true }
         }
       },
 
@@ -563,12 +564,16 @@
             this.relatedData.count[object] = response.body.count;
             this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
             // if(object === 'site')  this.forceMapRerender()
+            this.setBlockVisibility(object,this.relatedData[object].length)
 
-            // resolve(true)
           });
         });
       },
-
+      setBlockVisibility(object,count){
+        if(object === 'projectagent') this.block.members = count > 0
+        if(object === 'attachment_link') this.block.files = count > 0
+        if(object === 'site') this.block.sites = count > 0
+      },
       //check required fields for related data
       checkRequiredFields(type) {
       },

@@ -1,7 +1,7 @@
 <template>
   <fieldset class="log border p-2 mb-2" v-if="logs.length > 0">
-    <legend class="w-auto" style="font-size: large; font-weight: 600" :style="!block.logs ? {'color':'blue'} : ''">{{ $t('logs.title') }}
-      <font-awesome-icon icon="history" @click="block.logs = !block.logs" /></legend>
+    <legend class="w-auto" style="font-size: large; font-weight: 600" @click="block.logs = !block.logs" :style="!block.logs ? {'color':'blue'} : ''">{{ $t('logs.title') }}
+      <font-awesome-icon icon="history"/></legend>
     <transition name="fade">
       <div class="row" v-if="block.logs">
         <div class="col">
