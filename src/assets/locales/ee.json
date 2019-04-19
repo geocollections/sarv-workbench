@@ -582,9 +582,11 @@
     "addNew": "Lisage uus Kirjandus",
     "sort": "Liik",
     "relatedTables": {
+      "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",
-      "reference_keyword": "Kasutaja märksõnad"
+      "reference_keyword": "Kasutaja märksõnad",
+      "localityReference": "Kirjeldatud lokaliteedid"
     }
   },
   "synonym": {
@@ -613,7 +615,8 @@
   },
   "library": {
     "header": "Minu kogumikud",
-    "author_txt": "Autor",
+    "author": "Autor",
+    "author_txt": "Autor tekst",
     "year": "Aasta",
     "title": "Pealkiri",
     "title_en": "Pealkiri (ENG)",

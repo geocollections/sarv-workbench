@@ -312,7 +312,7 @@
       </div>
 
       <div class="col-9 mb-2">
-        <vue-multiselect v-model="reference.keyword"
+        <vue-multiselect v-model="relatedData.keyword"
                          id="keyword"
                          :options="autocomplete.keyword"
                          :multiple="true"
@@ -324,10 +324,123 @@
       </div>
 
       <div class="col-1 mb-2">
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(reference.keyword)"
-                @click="reference.keyword = null">
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
+                @click="relatedData.keyword = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
+      </div>
+    </div>
+
+    <!-- DIGITAL VERSION (PDF) -->
+    <fieldset class="border p-2 mb-2" v-if="this.attachment.length > 0">
+      <legend class="w-auto" style="font-size: large;">
+        {{ $t('reference.relatedTables.attachmentDigital') }}
+        <font-awesome-icon icon="file-pdf"/>
+      </legend>
+
+      <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
+    </fieldset>
+
+    <!-- RELATED FILES -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">
+        {{ $t('reference.relatedTables.attachment') }}
+        <font-awesome-icon icon="folder-open"/>
+      </legend>
+
+      <div class="row">
+        <div class="col">
+          <vue-multiselect v-model="relatedData.attachment"
+                           id="attachment"
+                           :multiple="true"
+                           track-by="id"
+                           :options="autocomplete.attachment"
+                           :internal-search="false"
+                           :preserve-search="true"
+                           :close-on-select="false"
+                           @search-change="autcompleteAttachmentSearch2"
+                           :custom-label="customLabelForAttachment"
+                           :loading="autocomplete.loaders.attachment"
+                           :placeholder="$t('add.inputs.autocomplete')"
+                           :show-labels="false">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+      </div>
+
+      <file-table :attachments="relatedData.attachment" object="reference" v-if="relatedData.attachment.length > 0"/>
+    </fieldset>
+
+    <!-- RELATED LOCALITIES -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">
+        {{ $t('reference.relatedTables.locality') }}
+        <font-awesome-icon icon="map-marked"/>
+      </legend>
+
+      <div class="row">
+        <div class="col">
+          <vue-multiselect v-model="relatedData.locality"
+                           id="locality"
+                           :multiple="true"
+                           track-by="id"
+                           :options="autocomplete.locality"
+                           :internal-search="false"
+                           :preserve-search="true"
+                           :close-on-select="false"
+                           @search-change="autcompleteLocalitySearch2"
+                           :custom-label="customLabelForLocality"
+                           :loading="autocomplete.loaders.locality"
+                           :placeholder="$t('add.inputs.autocomplete')"
+                           :show-labels="false">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+      </div>
+
+      <div class="row mt-2" v-if="relatedData.locality.length > 0">
+        <div class="table-responsive-sm col-12">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('reference.relatedTables.locality') }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="entity in relatedData.locality">
+              <td @click="windowOpenNewTab('locality', '/locality/' + entity.id)" class="link">
+                <font-awesome-icon size="1x" icon="eye" color="blue"/>
+                {{ entity.id }}
+              </td>
+
+              <td v-translate="{et:entity.locality,en:entity.localit_en}"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </fieldset>
+
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row">
+      <div class="col mt-4">
+        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link" :class="{ active: activeTab === 'locality_reference' }">
+              {{ $t('reference.relatedTables.localityReference') }}
+            </a>
+          </li>
+        </ul>
+        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <div class="row mb-4 pt-1">
+          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+            </b-pagination>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -348,32 +461,11 @@
       </div>
     </div>
 
-    <!-- SHOWING RELATED_DATA -->
-    <div class="row" v-if="$route.meta.isEdit">
-      <div class="col mt-4">
-        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link" :class="{ active: activeTab === 'locality_reference' }">
-              {{ $t('library.relatedTables.libraryReference') }}
-            </a>
-          </li>
-        </ul>
-        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-        <div class="row mb-4 pt-1">
-          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
-            <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
-            </b-pagination>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference', true)">
           {{ $t($route.meta.isEdit ? 'edit.buttons.save' : 'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'reference')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'reference', true)">
           {{ $t($route.meta.isEdit ? 'edit.buttons.saveAndContinue' : 'add.buttons.addAnother') }}</button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
           {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}</button>
@@ -393,11 +485,14 @@
   import {
     fetchReference,
     fetchReferences,
-    fetchLocalityReference,
     fetchListReferenceTypes,
     fetchListLanguages,
     fetchListKeywords,
-    fetchDoiCheck
+    fetchDoiCheck,
+    fetchReferenceKeyword,
+    fetchAttachmentLink,
+    fetchLocalityReferenceForReference,
+    fetchAttachmentForReference,
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
@@ -405,14 +500,18 @@
   import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
   import copyForm  from './../mixins/copyForm'
   import LocalityReference from "./relatedTables/LocalityReference"
+  import FileTable from "../partial/FileTable";
+  import LocalityTable from "../locality/LocalityTable";
 
   export default {
     name: "Reference",
     components: {
+      LocalityTable,
       FontAwesomeIcon,
       VueMultiselect,
       Spinner,
-      LocalityReference
+      LocalityReference,
+      FileTable
     },
     mixins: [formManipulation, copyForm, autocompleteFieldManipulation],
 
@@ -441,7 +540,7 @@
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
             'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
-            'issn', 'abstract', 'author_keywords', 'remarks', 'tags', 'attachment__filename', 'book_editor', 'figures', 'is_locked',
+            'issn', 'abstract', 'author_keywords', 'remarks', 'tags', 'book_editor', 'figures', 'is_locked',
             'is_oa', 'is_private', 'language'],
           autocomplete: {
             loaders: {
@@ -450,18 +549,21 @@
               journals: false,
               keyword: false,
               locality: false,
+              attachment: false,
             },
             types: [],
             languages: [],
             journals: [],
             keyword: [],
             locality: [],
+            attachment: [],
           },
           requiredFields: ['reference', 'year', 'author', 'title'],
           reference: {},
           previousRecord: {},
           nextRecord: {},
-          searchParameters: this.setDefaultSearchParameters()
+          searchParameters: this.setDefaultSearchParameters(),
+          attachment: {},
         }
       },
 
@@ -498,6 +600,48 @@
             }
           });
 
+          fetchReferenceKeyword(this.$route.params.id).then(response => {
+            let referenceKeyword = this.handleResponse(response);
+            this.relatedData.keyword = referenceKeyword.map(entity => {
+              return {
+                keyword: entity.keyword__keyword,
+                id: entity.keyword
+              }
+            })
+          })
+
+          fetchAttachmentLink(this.$route.params.id).then(response => {
+            let attachment = this.handleResponse(response);
+
+            this.relatedData.attachment = attachment.map(entity => {
+              return {
+                id: entity.attachment,
+                description: entity.attachment__description,
+                description_en: entity.attachment__description_en,
+                author__agent: entity.attachment__author__agent,
+                uuid_filename: entity.attachment__uuid_filename,
+                remarks: entity.attachment__remarks,
+                original_filename:entity.attachment__original_filename,
+              }
+            })
+          })
+
+          fetchLocalityReferenceForReference(this.$route.params.id).then(response => {
+            let localityReference = this.handleResponse(response)
+
+            this.relatedData.locality = localityReference.map(entity => {
+              return {
+                id: entity.locality,
+                locality: entity.locality__locality,
+                locality_en: entity.locality__locality_en,
+              }
+            })
+          })
+
+          fetchAttachmentForReference(this.$route.params.id).then(response => {
+            this.attachment = this.handleResponse(response)
+          })
+
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
             this.loadRelatedData(entity);
@@ -520,25 +664,26 @@
       setDefaultRelatedData(){
         return {
           locality_reference:[],
+          attachment: [],
+          keyword: [],
+          locality: [],
           copyFields: {
             locality_reference: ['locality', 'type', 'pages', 'figures', 'remarks'],
-            locality: [],
-            attachment: [],
           },
           insert: {
             locality_reference: {},
-            locality: {},
-            attachment: {},
           },
           page : {
             locality_reference: 1,
-            locality: 1,
             attachment: 1,
+            keyword: 1,
+            locality: 1,
           },
           count: {
             locality_reference: 0,
-            locality: 0,
             attachment: 0,
+            keyword: 0,
+            locality: 0,
           }
         }
       },
@@ -553,7 +698,11 @@
         if (objectToUpload.is_oa !== null) uploadableObject.is_oa = objectToUpload.is_oa === true ? '1' : '0';
         if (objectToUpload.is_locked !== null) uploadableObject.is_locked = objectToUpload.is_locked === true ? '1' : '0';
 
-
+        // Adding related data
+        uploadableObject.related_data = {}
+        uploadableObject.related_data.keyword = this.relatedData.keyword
+        uploadableObject.related_data.attachment = this.relatedData.attachment
+        uploadableObject.related_data.locality = this.relatedData.locality
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -567,7 +716,7 @@
       },
 
       fillRelatedDataAutocompleteFields(obj){
-        obj.locality = { locality: obj.locality__locality, locality_en: locality__locality_en, id: obj.locality }
+        obj.locality = { locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality }
         return obj
       },
 
@@ -575,7 +724,7 @@
         let query;
 
         if(object === 'locality_reference') {
-          query = fetchLocalityReference(this.$route.params.id, this.relatedData.page.locality_reference)
+          query = fetchLocalityReferenceForReference(this.$route.params.id, this.relatedData.page.locality_reference)
         }
         return new Promise(resolve => {
           query.then(response => {
@@ -593,12 +742,13 @@
 
       formatRelatedData(objectToUpload)  {
         let uploadableObject = cloneDeep(objectToUpload);
-        // uploadableObject.library = this.library.id;
 
-        // if (this.isDefinedAndNotNull(uploadableObject.reference)) {
-        //   uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
-        // }
+        if (this.isDefinedAndNotNull(uploadableObject.locality)) {
+          uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
+          uploadableObject.reference = parseInt(this.$route.params.id)
+        }
 
+        console.log('This object is sent in string format (related data):')
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
@@ -626,6 +776,16 @@
           paginateBy: 50,
           orderBy: '-id',
         }
+      },
+
+      customLabelForAttachment(option) {
+        if (this.$i18n.locale === 'ee') return `${option.id} - (${option.description}) (${option.author__agent})`
+        return `${option.id} - (${option.description_en}) (${option.author__agent})`
+      },
+
+      customLabelForLocality(option) {
+        if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
+        return `${option.id} - (${option.locality_en})`
       },
 
       checkDoi() {
@@ -678,5 +838,7 @@
 </script>
 
 <style scoped>
-
+  .link:hover {
+    cursor: pointer;
+  }
 </style>

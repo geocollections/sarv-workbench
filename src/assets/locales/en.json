@@ -577,9 +577,11 @@
     "addNew": "Add new Reference",
     "sort": "Sort",
     "relatedTables": {
+      "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",
       "locality": "Locality",
-      "reference_keyword": "User keywords"
+      "reference_keyword": "User keywords",
+      "localityReference": "Locality references"
     }
   },
   "stratigraphy": {
@@ -608,7 +610,8 @@
   },
   "library": {
     "header": "My Libraries",
-    "author_txt": "Author",
+    "author": "Author",
+    "author_txt": "Author txt",
     "year": "Year",
     "title": "Title",
     "title_en": "Title (ENG)",

@@ -116,32 +116,61 @@ const router = new Router({
         {
           path: '/reference/:id(\\d+)',
           props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/reference/Reference.vue'),
+              meta: {
+                isEdit: true,
+                table: 'reference',
+                title: 'titles.editReference',
+                heading: 'editReference.heading',
+                isNavigationShown: true,
+                isCopyFormShown: false,
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+        {
+          path: '/reference_old/:id(\\d+)',
+          props: true,
           // component: () => import('./views/EditForm.vue'),
           component: () => import('./views/EditReference.vue'),
           meta: {
             requiresAuth: true
           },
-          //TODO: Uncomment if reference update ready
-
-          // children: [
-          //   {
-          //     path: '',
-          //     component: () => import('./components/reference/Reference.vue'),
-          //     meta: {
-          //       isEdit: true,
-          //       table: 'reference',
-          //       title: 'titles.editReference',
-          //       heading: 'editReference.heading',
-          //       isNavigationShown: true,
-          //       isCopyFormShown: false,
-          //       requiresAuth: true
-          //     }
-          //   }
-          // ]
         },
         {
           path: '/reference/add',
-          // component: () => import('./views/AddForm.vue'),
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/reference/Reference.vue'),
+              meta: {
+                isEdit: false,
+                title: 'titles.addReference',
+                addNew: 'add.newReference',
+                subForms: [
+                  {
+                    path: '/reference/add', name: 'add.reference'
+                  }
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/reference_old/add',
           component: () => import('./views/AddReference.vue'),
           meta: {
             requiresAuth: true
@@ -151,15 +180,6 @@ const router = new Router({
               path: '',
               component: () => import('./components/reference/ReferenceOld.vue'),
               meta: {
-
-                // isEdit: false,
-                // title: 'titles.addReference',
-                // addNew: 'add.newReference',
-                // subForms: [
-                //   {
-                //     path: '/reference/add', name: 'add.reference'
-                //   }
-                // ],
                 requiresAuth: true
               },
             }

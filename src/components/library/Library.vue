@@ -12,7 +12,7 @@
       <!-- AUTHOR AND YEAR -->
       <div class="row">
         <div class="col-sm-2">
-          <label :for="`author`">{{ $t('library.author_txt') }}:</label>
+          <label :for="`author`">{{ $t('library.author') }}:</label>
         </div>
 
         <div class="col-sm-4 mb-2">

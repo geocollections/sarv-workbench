@@ -4,11 +4,11 @@ import VueMultiselect from 'vue-multiselect';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-import {faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt,faListOl} from '@fortawesome/free-solid-svg-icons'
+import {faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt,faListOl, faMapMarked, faFilePdf} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 
-library.add(faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt,faListOl)
+library.add(faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt,faListOl, faMapMarked, faFilePdf)
 
 const formManipulation = {
   data(){
@@ -281,6 +281,16 @@ const formManipulation = {
       window.open('https://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
     },
 
+    openUrlInNewWindow(params) {
+      if (typeof (params.width) === 'undefined') {
+        params.width = 800;
+      }
+      if (typeof (params.height) === 'undefined') {
+        params.height = 750;
+      }
+      window.open(params.url, '', 'width=' + params.width + ',height=' + params.height);
+    },
+
     openDOI(params) {
       window.open('https://doi.org/' + params.doi, '', 'width=1000,height=900')
     },
@@ -474,8 +484,12 @@ const formManipulation = {
 
     /** SHOW NEXT OR PREVIOUS RECORD ENDS**/
 
-    composeFileUrl(file) {
-      return this.fileUrl + '/small/' + file.substring(0, 2) + '/' + file.substring(2, 4) + '/' + file
+    composeFileUrl(file, size = 'small') {
+      if (size === 'small' || size === 'medium' || size === 'large') {
+        return this.fileUrl + '/' + size + '/' + file.substring(0, 2) + '/' + file.substring(2, 4) + '/' + file
+      } else {
+        return this.fileUrl + '/' + file.substring(0, 2) + '/' + file.substring(2, 4) + '/' + file
+      }
     },
 
 

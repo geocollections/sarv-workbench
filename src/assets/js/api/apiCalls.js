@@ -153,8 +153,16 @@ export function fetchListKeywords() {
   return fetch(`keyword/?format=json`)
 }
 
-export function fetchAttachmentLink(data) {
-  return fetch(`attachment_link/?reference=${data.reference}&format=json`)
+export function fetchReferenceKeyword(id) {
+  return fetch(`reference_keyword/?reference=${id}&format=json`)
+}
+
+export function fetchAttachmentLink(id) {
+  return fetch(`attachment_link/?reference=${id}&format=json`)
+}
+
+export function fetchLocalityReferenceForReference(id, page = 1) {
+  return fetch(`locality_reference/?reference=${id}&page=${page}&paginate_by=10&format=json`)
 }
 
 export function fetchListReferenceTypes() {
@@ -163,6 +171,10 @@ export function fetchListReferenceTypes() {
 
 export function fetchListLanguages() {
   return fetch(`list_language/?format=json`)
+}
+
+export function fetchAttachmentForReference(id) {
+  return fetch(`attachment/?reference=${id}&format=json`)
 }
 
 export function fetchJournals(query) {

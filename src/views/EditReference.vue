@@ -293,9 +293,7 @@
       },
 
       getAttachmentLink(params) {
-        fetchAttachmentLink({
-          reference: params.id
-        }).then(response => {
+        fetchAttachmentLink(params.id).then(response => {
           if (response.status === 200) {
             if (response.body.count > 0) this.attachment_link = response.body.results
             else this.attachment_link = []
