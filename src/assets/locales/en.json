@@ -608,7 +608,8 @@
   },
   "library": {
     "header": "My Libraries",
-    "author_txt": "Author",
+    "author": "Author",
+    "author_txt": "Author txt",
     "year": "Year",
     "title": "Title",
     "title_en": "Title (ENG)",
