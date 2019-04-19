@@ -53,10 +53,10 @@
       return {
         response: {},
         columns:[
-          {id:"id",title:"library.id",type:"number"},
-          {id:"author_txt",title:"library.author_txt",type:"text"},
-          {id:"title",title:"library.title",type:"text"},
-          {id:"is_private",title:"library.isPrivate",type:"text"},
+          {id:"library",title:"library.id",type:"number"},
+          {id:"agent__agent",title:"library.author_txt",type:"text"},
+          {id:"library__title",title:"library.title",type:"text"},
+          {id:"library__is_private",title:"library.isPrivate",type:"text"},
           {id:"reference",title:"library.reference",type:"text", orderBy: false},
         ],
         filters:[

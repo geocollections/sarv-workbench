@@ -8,7 +8,7 @@
       </router-link>
     </td>
 
-    <td>{{ entity.library__author_txt }}</td>
+    <td>{{ entity.agent__agent }}</td>
 
     <td v-translate="{ et: entity.library__title, en: entity.library__title_en }"></td>
 
