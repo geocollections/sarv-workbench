@@ -398,7 +398,7 @@
         </div>
       </div>
 
-      <div class="row mt-2">
+      <div class="row mt-2" v-if="relatedData.locality.length > 0">
         <div class="table-responsive-sm col-12">
           <table class="table table-hover table-bordered">
             <thead class="thead-light">
