@@ -185,51 +185,7 @@
       <transition name="fade">
 
         <div class="row p-3" v-if="block.files">
-          <div class="table-responsive-sm col-12 p-0">
-            <table class="table table-hover table-bordered">
-              <thead>
-              <tr>
-                <th colspan="3">
-                  <vue-multiselect
-                    id="attachment_link"
-                    :multiple="true"
-                    track-by="id"
-                    :options="autocomplete.attachment"
-                    :internal-search="false"
-                    @search-change="autcompleteAttachmentSearch"
-                    :custom-label="customLabelForAttachment"
-                    :reset-after="true"
-                    @select="addRelatedDataAttachment"
-                    :loading="autocomplete.loaders.attachment"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false">
-                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-                  </vue-multiselect>
-                </th>
-              </tr>
-
-              </thead>
-              <!--<tbody>-->
-              <!--<tr v-for="(file,idx) in relatedData.attachment_link" style="background-color: #ccdcb9;" :id="'tooltip-button-show-event'+idx" >-->
-              <!--&lt;!&ndash;<b-tooltip class="custom-tooltip" :ref="'tooltip'" :target="'tooltip-button-show-event'+idx" variant="primary">&ndash;&gt;-->
-              <!--&lt;!&ndash;<img style="height: 200px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>&ndash;&gt;-->
-              <!--&lt;!&ndash;<font-awesome-icon :icon="getFormatIcon(file.original_filename)" v-if="isDefinedAndNotNull(file.original_filename)"/>&ndash;&gt;-->
-              <!--&lt;!&ndash;{{customLabelForAttachment(file)}}&ndash;&gt;-->
-              <!--&lt;!&ndash;</b-tooltip>&ndash;&gt;-->
-
-              <!--<td @click="windowOpenNewTab('attachment','/attachment/'+file.id)">-->
-              <!--<img style="height: 50px;" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" onerror="this.style.display='none'"/>-->
-              <!--<font-awesome-icon class="fa-3x" v-if="['jpg','png'].indexOf(file.uuid_filename.split('.')[1]) === -1 && isDefinedAndNotNull(file.original_filename)" :icon="getFormatIcon(file.original_filename)"/>-->
-              <!--</td>-->
-              <!--<td @click="windowOpenNewTab('attachment','/attachment/'+file.id)" style="min-width: 400px">-->
-              <!--<font-awesome-icon icon="eye"/>&ensp;{{file.original_filename}}<br/>-->
-              <!--{{customLabelForAttachment(file)}}-->
-              <!--</td>-->
-              <!--<td style="min-width: 60px;text-align:right" @click="relatedData.attachment_link.splice(idx, 1)"><font-awesome-icon icon="times"/></td>-->
-              <!--</tr>-->
-              <!--</tbody>-->
-            </table>
-          </div>
+          <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="false"/>
           <file-table :attachments="relatedData.attachment_link" :object="'project'"
                       v-if="relatedData.attachment_link.length > 0"/>
         </div>
@@ -363,10 +319,12 @@
   import FileTable from "../partial/FileTable";
   import findIndex from 'lodash/findIndex';
   import SaveButtons from "../partial/SaveButtons";
+  import MultimediaComponent from "../partial/MultimediaComponent";
 
   export default {
     name: "Project",
     components: {
+      MultimediaComponent,
       SaveButtons,
       FileTable,
       MapComponent2,
@@ -436,6 +394,7 @@
           ],
           componentKey: 0,
           isActive: false,
+          attachmentLinkSaved : -1,
           block: {info: true , members: true , description: true , files: true , sites: true }
         }
       },
@@ -653,7 +612,10 @@
       handleResize() {
         this.window.width = window.innerWidth;
         this.window.height = window.innerHeight;
-      }
+      },
+      addFiles(data){
+        this.addFileAsRelatedData(data, 'project');
+      },
     },
 
     watch: {

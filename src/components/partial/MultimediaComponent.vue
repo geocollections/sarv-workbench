@@ -31,7 +31,7 @@
 
     </div>
 
-    <div class="col-sm-12 mb-2">
+    <div class="col-sm-12 mb-2" v-if="recordOptions">
       <label for="photo-upload" class="btn btn-outline-primary p-2 mr-2">
         <font-awesome-icon icon="camera-retro"/> Add photo
       </label>
@@ -104,6 +104,11 @@
     export default {
       name: "multimedia-component",
       mixins:[fontAwesomeLib],
+      props:{
+        recordOptions: {
+          type:Boolean
+        }
+      },
       data() {
         return {
           apiUrl: 'https://rwapi.geocollections.info/',

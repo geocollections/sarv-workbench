@@ -186,23 +186,47 @@ const formManipulation = {
         resolve(undefined)
       })
     },
-    addRelationForLinkedAttachments(attachmentIds, object, createRelationWith = null){
+
+    addFileAsRelatedData(data, object) {
+      console.log('file uploaded');
 
       let formData = new FormData();
-      attachmentIds.forEach((file,index) => {
+      data.forEach((file,index) => {
         formData.append('data', JSON.stringify({
-          site:createRelationWith.id, attachment: file
+          description: file.type + ' for '+object+': ' + this[object].id,
+          author: this.currentUser.id,
+          date_created: this.formatDateForUpload(new Date()),
+          is_private: 1
         }));
 
-        formData.append('attachment'+[index], file);
+        formData.append('file'+[index], file);
       });
 
-      return new Promise((resolve) => {
-        this.saveData(object, formData, 'add/attachment_link/').then(isSuccessfullySaved => {
-          console.log("Relation created with locality id: " + this.$store.state['createRelationWith'].id)
-          resolve(true)
+
+      try {
+        this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
+          console.log(savedObjectId)
+          if (savedObjectId === undefined || savedObjectId === false) return;
+          let vm = this
+          this.attachmentLinkSaved = savedObjectId.length > 0 ? savedObjectId.length : 1
+
+          function createRelation(vm,object, file) {
+            vm.addRelationBetweenAnyObjectAndAttachment(file, 'attachment_link', {
+              object: object,
+              id: vm[object].id
+            }).then(response => {
+              vm.attachmentLinkSaved -= 1;
+            });
+          }
+          if(this.attachmentLinkSaved === 1) createRelation(vm, object, savedObjectId)
+          savedObjectId.forEach(file => {
+            createRelation(vm, object, file)
+          })
         });
-      })
+      } catch (e) {
+        console.log('Attachment cannot not be added')
+        console.log(e)
+      }
 
     },
     addRelationBetweenAnyObjectAndAttachment(attachmentId, object, createRelationWith = null){
@@ -499,7 +523,6 @@ const formManipulation = {
     }
   },
   watch: {
-
     'relatedData.page': {
       handler: function (newVal) {
         this.setActiveTab(this.activeTab)
@@ -508,6 +531,18 @@ const formManipulation = {
     },
     'showCollapseMap'(newval, oldval){
       this.$localStorage.set('mapComponent',  newval)
+    },
+    'attachmentLinkSaved': {
+      handler: function(newval,oldval) {
+        console.log(newval)
+        if(newval === 0) {
+          this.$root.$emit('attachment-loading-status', true)
+          this.loadRelatedData('attachment_link')
+          this.attachmentLinkSaved = -1
+        }
+
+      },
+      deep: true
     }
   }
 };

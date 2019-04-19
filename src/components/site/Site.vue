@@ -214,7 +214,7 @@
       </legend>
       <transition name="fade">
         <div v-if="block.files">
-          <multimedia-component v-on:file-uploaded="addFileAsRelatedData"/>
+          <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="true"/>
           <file-table :attachments="relatedData.attachment_link" :object="'site'"
                       v-if="relatedData.attachment_link.length > 0"/>
         </div>
@@ -537,42 +537,8 @@
         this.site.latitude = location.lat.toFixed(6)
         this.site.longitude = location.lng.toFixed(6)
       },
-      addFileAsRelatedData(data) {
-        console.log('file uploaded');
-
-        let formData = new FormData();
-        data.forEach((file,index) => {
-          formData.append('data', JSON.stringify({
-            description: file.type + ' for site: ' + this.site.id,
-            author: this.currentUser.id,
-            date_created: this.formatDateForUpload(new Date()),
-            is_private: 1
-          }));
-
-          formData.append('file'+[index], file);
-        });
-
-
-        try {
-          this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
-            console.log(savedObjectId)
-            if (savedObjectId === undefined || savedObjectId === false || savedObjectId.length === null) return;
-            let vm = this
-            this.attachmentLinkSaved = savedObjectId.length
-            savedObjectId.forEach(file => {
-              vm.addRelationBetweenAnyObjectAndAttachment(file, 'attachment_link', {
-                object: 'site',
-                id: vm.site.id
-              }).then(response => {
-                  vm.attachmentLinkSaved -= 1;
-              });
-            })
-          });
-        } catch (e) {
-          console.log('Attachment cannot not be added')
-          console.log(e)
-        }
-
+      addFiles(data){
+        this.addFileAsRelatedData(data, 'site');
       },
 
       addSample() {
@@ -665,18 +631,7 @@
         },
         deep: true
       },
-      'attachmentLinkSaved': {
-        handler: function(newval,oldval) {
-          console.log(newval)
-          if(newval === 0) {
-            this.$root.$emit('attachment-loading-status', true)
-            this.loadRelatedData('attachment_link')
-            this.attachmentLinkSaved = -1
-          }
 
-        },
-        deep: true
-      }
     }
   }
 </script>
