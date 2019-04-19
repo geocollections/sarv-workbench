@@ -21,6 +21,7 @@
 <script>
     export default {
         name: "SidebarWrapper",
+
     }
 </script>
 
@@ -51,6 +52,8 @@
     margin-left: 0px;
     float: left;
   }
+
+
 
 
 </style>

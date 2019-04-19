@@ -3,7 +3,7 @@
     <app-header/>
     <sidebar v-if="$route.meta.isSidebarShown"/>
 
-    <div class="main container">
+    <div class="main container" v-bind:class="{ sidebarOpen: sidebarOpen }">
       <router-view/>
     </div>
 
@@ -24,6 +24,11 @@
       AppFooter
     },
     name: "Dashboard",
+    data() {
+      return {
+        sidebarOpen : false
+      }
+    },
     metaInfo () {
       return {
         title: this.$t('titles.dashboard')
@@ -44,7 +49,10 @@
     margin: 0 auto;
     flex: 1;
   }
-
+  .main.container.sidebarOpen {
+    width: calc(100% - 200px)!important;
+    margin-left: 200px !important;
+  }
   @media (min-width: 1200px) {
     .container {
       max-width: 1400px;

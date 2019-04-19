@@ -18,7 +18,8 @@ const formManipulation = {
       loadingPercent: 0,
       sendingData: false,
       editMode: false,
-      showCollapseMap:true
+      showCollapseMap:true,
+      activeObject: null
     }
   },
   components: {
@@ -474,10 +475,12 @@ const formManipulation = {
     },
 
     hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
+      if(this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
+        console.log(object)
       if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
       if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately)
       if (choice === "CLEAR") console.log('TODO')
-      if (choice === "CANCEL") this.navigateBack(object)
+      if (choice === "CANCEL") this.$router.push({ path: '/' + object });
       if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });
       if (choice === "NEXT") this.$router.push({ path: '/' + object + '/' + this.nextRecord });
     },

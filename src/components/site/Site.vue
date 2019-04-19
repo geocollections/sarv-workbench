@@ -319,9 +319,11 @@
       }
     },
     created() {
+      this.activeObject = 'site';
       this.loadFullInfo();
     },
     mounted() {
+      this.$root.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
       this.$root.$on('sidebar-user-action', this.handleSidebarUserAction);
     },
     methods: {

@@ -129,6 +129,7 @@ const router = new Router({
                 table: 'reference',
                 title: 'titles.editReference',
                 heading: 'editReference.heading',
+                isBottomOptionShown: true,
                 isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true
@@ -231,6 +232,7 @@ const router = new Router({
                 table:'locality',
                 title:'titles.editLocality',
                 heading:'editLocality.heading',
+                isBottomOptionShown: true,
                 isNavigationShow: true,
                 isCopyFormShown: true,
                 requiresAuth: true
@@ -292,6 +294,7 @@ const router = new Router({
                 table:'sample',
                 title:'titles.editSample',
                 heading:'editSample.heading',
+                isBottomOptionShown: true,
                 isNavigationShow: true,
                 isCopyFormShown: true,
                 requiresAuth: true
@@ -389,6 +392,7 @@ const router = new Router({
                     table:'project',
                     title:'titles.editProject',
                     heading:'editProject.heading',
+                    isBottomOptionShown: false,
                     isNavigationShow: false,
                     isCopyFormShown: false,
                     isSidebarShown: true,
@@ -452,6 +456,7 @@ const router = new Router({
                 table:'site',
                 title:'titles.editSite',
                 heading:'editSite.heading',
+                isBottomOptionShown: false,
                 isNavigationShow: false,
                 isCopyFormShown: false,
                 isSidebarShown: true,
@@ -513,6 +518,7 @@ const router = new Router({
                 table:'library',
                 title:'titles.editLibrary',
                 heading:'editLibrary.heading',
+                isBottomOptionShown: true,
                 isNavigationShow:true,
                 isCopyFormShown: false,
                 requiresAuth: true

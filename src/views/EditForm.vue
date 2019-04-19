@@ -12,7 +12,7 @@
 
       <bottom-options :success-button="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add')"
                       :danger-button="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields')"
-                      :object="object" :is-navigation-shown="$route.meta.isNavigationShow"/>
+                      :object="object" :is-navigation-shown="$route.meta.isNavigationShow" v-if="$route.meta.isBottomOptionShown"/>
 
       <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
                          :related-data="relatedData" :object="object" :object-id="data.id"/>

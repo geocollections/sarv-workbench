@@ -5,7 +5,7 @@
     <div class="row mb-4">
       <div class="col">
         <span class="float-right" v-if="$route.meta.isEdit">
-          <button class="btn btn-outline-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/>{{$t('project.newSite')}}</button>
+          <button class="btn btn-outline-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>
         </span>
         <span class="float-left">
          <span class="custom-control custom-switch">
@@ -342,11 +342,13 @@
     },
 
     created() {
+      this.activeObject = 'project';
       this.loadFullInfo()
       window.addEventListener('resize', this.handleResize)
       this.handleResize();
     },
     mounted() {
+      this.$root.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
       this.$root.$on('sidebar-user-action', this.handleSidebarUserAction);
     },
     beforeMount() {
