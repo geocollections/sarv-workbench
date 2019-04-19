@@ -103,6 +103,9 @@ const autocompleteFieldManipulation = {
     autcompleteLocalitySearch(value) {
       this.autocompliteSearch(value, 'locality', 'locality')
     },
+    autcompleteLocalitySearch2(value) {
+      this.autocompliteSearch(value, 'locality', 'locality', 3, false)
+    },
     autcompleteTaxonSearch(value) {
       this.autocompliteSearch(value, 'taxon', 'taxon')
     },
@@ -157,11 +160,16 @@ const autocompleteFieldManipulation = {
     autcompleteAttachmentSearch(value) {
       this.autocompliteSearch(value, 'attachment', 'attachment')
     },
+    autcompleteAttachmentSearch2(value) {
+      this.autocompliteSearch(value, 'attachment', 'attachment',3, false)
+    },
     autcompleteJournalSearch(value) {
       this.autocompliteSearch(value, 'journals', 'journals', 1)
     },
-    autocompliteSearch(value, type, options, minLength = 3) {
-      if (value.length < minLength) this.autocomplete[options] = [];
+    autocompliteSearch(value, type, options, minLength = 3, resetIfLessThanMinLength = true) {
+      if (value.length < minLength) {
+       if (resetIfLessThanMinLength) this.autocomplete[options] = [];
+      }
       if (value.length > minLength-1) {
         let query = this.getAutocompleteQueryParameters(type, value)
         if (query.length === 0) return

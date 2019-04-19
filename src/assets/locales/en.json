@@ -577,9 +577,11 @@
     "addNew": "Add new Reference",
     "sort": "Sort",
     "relatedTables": {
+      "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",
       "locality": "Locality",
-      "reference_keyword": "User keywords"
+      "reference_keyword": "User keywords",
+      "localityReference": "Locality references"
     }
   },
   "stratigraphy": {

@@ -2,7 +2,7 @@
   <div class="col-sm-12 p-0 ">
     <div class="d-flex flex-row flex-wrap mt-2">
       <div class="mt-2 mr-2" v-for="(file, key) in attachments"  style="align-self: flex-end;">
-        <div class="img-container p-1">
+        <div class="img-container p-1" @click="openUrlInNewWindow({url: composeFileUrl(file.uuid_filename, 'original')})" style="cursor: pointer;" :title="composeFileUrl(file.uuid_filename, 'original')">
           <font-awesome-icon v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="max-height: 5rem" size="7x" icon="file-audio"/>
           <font-awesome-icon v-else-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="max-height: 5rem" size="7x" icon="file-video"/>
           <img v-else-if="file.uuid_filename !== null && ['png','jpeg','jpg'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image">
