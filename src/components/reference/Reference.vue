@@ -324,7 +324,7 @@
       </div>
 
       <div class="col-1 mb-2">
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(reference.keyword)"
+        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
                 @click="relatedData.keyword = null">
           <font-awesome-icon icon="trash-alt"></font-awesome-icon>
         </button>
@@ -332,7 +332,7 @@
     </div>
 
     <!-- DIGITAL VERSION (PDF) -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" v-if="this.attachment.length > 0">
       <legend class="w-auto" style="font-size: large;">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <font-awesome-icon icon="file-pdf"/>
@@ -463,9 +463,9 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference', true)">
           {{ $t($route.meta.isEdit ? 'edit.buttons.save' : 'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'reference')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'reference', true)">
           {{ $t($route.meta.isEdit ? 'edit.buttons.saveAndContinue' : 'add.buttons.addAnother') }}</button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
           {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}</button>
@@ -485,7 +485,6 @@
   import {
     fetchReference,
     fetchReferences,
-    fetchLocalityReference,
     fetchListReferenceTypes,
     fetchListLanguages,
     fetchListKeywords,
@@ -717,7 +716,7 @@
       },
 
       fillRelatedDataAutocompleteFields(obj){
-        obj.locality = { locality: obj.locality__locality, locality_en: locality__locality_en, id: obj.locality }
+        obj.locality = { locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality }
         return obj
       },
 
@@ -725,7 +724,7 @@
         let query;
 
         if(object === 'locality_reference') {
-          query = fetchLocalityReference(this.$route.params.id, this.relatedData.page.locality_reference)
+          query = fetchLocalityReferenceForReference(this.$route.params.id, this.relatedData.page.locality_reference)
         }
         return new Promise(resolve => {
           query.then(response => {
@@ -743,12 +742,13 @@
 
       formatRelatedData(objectToUpload)  {
         let uploadableObject = cloneDeep(objectToUpload);
-        // uploadableObject.library = this.library.id;
 
-        // if (this.isDefinedAndNotNull(uploadableObject.reference)) {
-        //   uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
-        // }
+        if (this.isDefinedAndNotNull(uploadableObject.locality)) {
+          uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
+          uploadableObject.reference = parseInt(this.$route.params.id)
+        }
 
+        console.log('This object is sent in string format (related data):')
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },

@@ -161,8 +161,8 @@ export function fetchAttachmentLink(id) {
   return fetch(`attachment_link/?reference=${id}&format=json`)
 }
 
-export function fetchLocalityReferenceForReference(id) {
-  return fetch(`locality_reference/?reference=${id}&format=json`)
+export function fetchLocalityReferenceForReference(id, page = 1) {
+  return fetch(`locality_reference/?reference=${id}&page=${page}&paginate_by=10&format=json`)
 }
 
 export function fetchListReferenceTypes() {

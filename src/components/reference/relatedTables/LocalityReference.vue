@@ -42,6 +42,10 @@
             </td>
 
             <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.type" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.pages" type="text"/>
             </td>
 
