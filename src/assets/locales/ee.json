@@ -633,7 +633,8 @@
     "showListView": "Loendivaade",
     "generalInfo": "Üldinfo",
     "relatedTables": {
-      "libraryReference": "Kogumiku kirjandus"
+      "libraryReference": "Kogumiku kirjandus",
+      "libraryReferenceList": "Kogumiku kirjanduse listi vaade"
     }
   },
   "messages": {

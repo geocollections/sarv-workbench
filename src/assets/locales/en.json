@@ -628,7 +628,8 @@
     "showListView": "List view",
     "generalInfo": "General info",
     "relatedTables": {
-      "libraryReference": "References"
+      "libraryReference": "References",
+      "libraryReferenceList": "References list view"
     }
   },
   "messages": {

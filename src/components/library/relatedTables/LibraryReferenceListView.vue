@@ -1,56 +1,59 @@
 <template>
-  <div class="library-reference">
+  <div id="#tab-reference-list" class="tab-pane row" :class="{active: activeTab === 'library_reference_list'}"
+       role="tabpanel">
+    <div v-if="activeTab === 'library_reference_list'">
 
-    <div class="row p-1" v-for="(entity, index) in data">
+      <div class="row p-1" v-for="(entity, index) in data">
 
-      <div class="col-sm-10 list-row">
+        <div class="col-sm-10 list-row">
         <span>
           <router-link :to="{ path: '/reference/' + entity.reference }">
             <b>{{ index + 1 }}.</b>
           </router-link>
         </span>
 
-        <span v-if="entity.reference__author">
+          <span v-if="entity.reference__author">
           {{ entity.reference__author }},
         </span>
 
-        <span v-if="entity.reference__year">
+          <span v-if="entity.reference__year">
           {{ entity.reference__year }}.
         </span>
 
-        <span v-if="entity.reference__title">
+          <span v-if="entity.reference__title">
           {{ entity.reference__title }}.
         </span>
 
-        <span v-if="entity.reference__book">
+          <span v-if="entity.reference__book">
           {{ entity.reference__book }},
         </span>
 
-        <span v-if="entity.reference__publisher">
+          <span v-if="entity.reference__publisher">
          {{ entity.reference__publisher }}.
         </span>
 
-        <span v-if="entity.reference__publisher_place">
+          <span v-if="entity.reference__publisher_place">
           {{ entity.reference__publisher_place }}.
         </span>
 
-        <span v-if="entity.reference__journal__journal_name">
+          <span v-if="entity.reference__journal__journal_name">
           <i>{{ entity.reference__journal__journal_name }}</i>,
         </span>
 
-        <span v-if="entity.reference__volume">
+          <span v-if="entity.reference__volume">
           <b>{{ entity.reference__volume }}</b>,
         </span>
 
-        <span v-if="entity.reference__number">
+          <span v-if="entity.reference__number">
           {{ entity.reference__number }},
         </span>
 
-        <span v-if="entity.reference__pages">
+          <span v-if="entity.reference__pages">
           {{ entity.reference__pages }}.
         </span>
-      </div>
+        </div>
 
+      </div>
     </div>
 
   </div>
@@ -58,14 +61,17 @@
 
 <script>
   export default {
-    props: ['data'],
+    props: {
+      data: Array,
+      activeTab: String
+    },
     name: "LibraryReferenceListView"
   }
 </script>
 
 <style scoped>
   .list-row {
-    padding-left: 3rem;
+    padding-left: 4rem;
     text-indent: -2rem;
   }
 </style>

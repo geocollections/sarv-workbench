@@ -742,10 +742,11 @@
 
       formatRelatedData(objectToUpload)  {
         let uploadableObject = cloneDeep(objectToUpload);
+        uploadableObject.reference = this.reference.id
 
         if (this.isDefinedAndNotNull(uploadableObject.locality)) {
           uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
-          uploadableObject.reference = parseInt(this.$route.params.id)
+          // uploadableObject.reference = parseInt(this.$route.params.id)
         }
 
         console.log('This object is sent in string format (related data):')

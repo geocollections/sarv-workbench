@@ -147,37 +147,29 @@
       </div>
     </fieldset>
 
-    <!-- REFERENCE LIST VIEW -->
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
-      <legend class="w-auto" style="font-size: large;">
-        {{ $t('library.relatedTables.libraryReference') }}
-        <font-awesome-icon icon="list-ol"/>
-      </legend>
-
-      <div class="row">
-        <div class="col">
-          <b-form-checkbox class="mb-2" v-model="showListView" name="check-button" switch>
-            {{ $t('library.showListView') }}
-          </b-form-checkbox>
-        </div>
-      </div>
-
-      <library-reference-list-view v-if="showListView"
-                                   :data="relatedData.library_reference"></library-reference-list-view>
-    </fieldset>
-
     <!-- SHOWING RELATED_DATA -->
     <div class="row" v-if="$route.meta.isEdit">
       <div class="col mt-4">
         <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
+
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('library_reference')" class="nav-link"
                :class="{ active: activeTab === 'library_reference' }">
               {{ $t('library.relatedTables.libraryReference') }}
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('library_reference_list')" class="nav-link"
+               :class="{ active: activeTab === 'library_reference_list' }">
+              {{ $t('library.relatedTables.libraryReferenceList') }} <font-awesome-icon icon="list-ol"/>
+            </a>
+          </li>
+
         </ul>
+
         <library-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <library-reference-list-view :data="relatedData.library_reference" :active-tab="activeTab"></library-reference-list-view>
         <div class="row mb-4 pt-1">
           <!--<div class="col">-->
           <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
@@ -274,7 +266,7 @@
 
       setInitialData() {
         return {
-          tabs: ['library_reference'],
+          tabs: ['library_reference', 'library_reference_list'],
           searchHistory: 'librarySearchHistory',
           activeTab: 'library_reference',
           relatedData: this.setDefaultRelatedData(),
@@ -294,7 +286,6 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          showListView: false,
         }
       },
 
@@ -333,7 +324,11 @@
 
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
+            // Skips library_reference_list because it is static view
+            if (entity !== 'library_reference_list') {
+              console.log(entity)
+              this.loadRelatedData(entity);
+            }
           });
 
           this.$on('tab-changed', this.setTab);
@@ -352,12 +347,13 @@
       setDefaultRelatedData() {
         return {
           library_reference: [],
+          library_reference_list: [],
           library_agent: [],
           copyFields: {
             library_reference: ['reference__reference', 'keywords', 'remarks'],
           },
           insert: {
-            library_reference: {}
+            library_reference: {},
           },
           page: {
             library_reference: 1,
@@ -399,6 +395,10 @@
 
         if (object === 'library_reference') {
           query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference)
+        }
+        if (object === 'library_reference_list') {
+          // Do nothing
+          return
         }
         return new Promise(resolve => {
           query.then(response => {
