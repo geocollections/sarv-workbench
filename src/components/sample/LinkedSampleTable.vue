@@ -88,6 +88,7 @@
           fetchLinkedSamplesX(this.searchParameters, this.siteID).then(response=>{
             console.log(response)
             this.samples = response.body.results ? response.body.results : []
+            this.$parent.relatedData.sample = this.samples
           });
         },
       },

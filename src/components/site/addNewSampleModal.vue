@@ -7,7 +7,7 @@
            lazy
            scrollable
            ref="newSampleForm"
-           title="TEST">
+           :title="$t('header.addSample')">
     <sample></sample>
 
     <template slot="modal-footer">
@@ -18,7 +18,7 @@
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="$root.$emit('add-new-sample-from-modal','SAVE')">
           <font-awesome-icon icon="save"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$root.$emit('add-new-sample-from-modal','CANCEL')">
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="hideModal">
           <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
 
@@ -42,7 +42,7 @@
       },
       mounted(){
         this.$parent.$on('show-new-sample-modal', this.showModal);
-        this.$on('close-new-sample-modal', this.hideModal);
+        this.$root.$on('close-new-sample-modal', this.hideModal);
       },
       methods: {
         showModal(){
@@ -50,6 +50,7 @@
         },
         hideModal(){
           this.$refs.newSampleForm.hide()
+          this.$parent.loadRelatedData('sample')
         },
       }
     }

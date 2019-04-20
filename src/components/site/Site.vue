@@ -548,7 +548,7 @@
       addSample() {
         let isFull = false
         this.$store.commit('SET_SAMPLE_VIEW', {isFull});
-        // relationObject.locality =
+        console.log(this.relatedData)
         let createRelationWith = {
           object: 'site', data: cloneDeep(this.site),
           relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},

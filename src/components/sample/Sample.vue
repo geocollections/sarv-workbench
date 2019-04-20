@@ -764,7 +764,7 @@
             this.autocomplete.fossil_group = this.handleResponse(response);
           });
 
-          if(this.$route.meta.isEdit) {
+          if(this.$route.meta.isEdit && this.createRelationWith.data === null) {
             this.sendingData = true;
             fetchSample(this.$route.params.id).then(response => {
               let handledResponse = this.handleResponse(response);
@@ -957,7 +957,6 @@
         setPredefinedData() {
           return new Promise(resolve => {
             if(!this.createRelationWith.relatedData.isLastSampleExists) {
-              console.log('WTF')
 
               resolve({
                 locality__id : this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.id :null,
@@ -996,11 +995,12 @@
         },
         saveAndNavigateBack(){
           let vm = this, createRelationWith = this.createRelationWith
-          this.add(true,'sample').then(function (status) {
+          this.add(true,'sample', false, true).then(function (status) {
             if(createRelationWith.object === null)
               vm.$router.push({ path:'/sample'});
             else {
-              vm.$router.push({ path:'/'+createRelationWith.object+'/'+createRelationWith.data.id})
+              // vm.$router.push({ path:'/'+createRelationWith.object+'/'+createRelationWith.data.id})
+              vm.$root.$emit('close-new-sample-modal')
             }
           })
         },
@@ -1008,9 +1008,7 @@
           if(choice === 'LEAVE') {
             this.saveAndNavigateBack()
           } else if(choice === 'SAVE') {
-            this.add(false, 'sample')
-          } else if(choice === 'CANCEL') {
-            this.leaveFromEditView('sample')
+            this.add(false, 'sample', false, true)
           }
         }
       },

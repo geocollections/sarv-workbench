@@ -91,7 +91,7 @@ const formManipulation = {
       return isValid
     },
 
-    add(addAnother, object, saveRelatedData = false) {
+    add(addAnother, object, saveRelatedData = false, returnPromise = false) {
       if (this.validate(object) && !this.sendingData) {
 
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
@@ -112,12 +112,21 @@ const formManipulation = {
             // if (savedObjectId === undefined || savedObjectId === false) return;
             this.$emit('data-loaded',editableObject);
             this.$emit('data-saved',true);
-            if (!addAnother) {
-              this.$router.push({ path: '/'+object })
+
+            if(!returnPromise) {
+              if (!addAnother) {
+                this.$router.push({ path: '/'+object })
+              } else {
+                this.$router.push({ path: '/'+object +'/'+ savedObjectId })
+              }
+
             } else {
-              this.$router.push({ path: '/'+object +'/'+ savedObjectId })
+              resolve(true)
+
             }
-            resolve(true)
+
+
+
           }, errResponse => {
             resolve(false)
             return false;
