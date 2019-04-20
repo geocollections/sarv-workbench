@@ -168,7 +168,7 @@
 
         </ul>
 
-        <library-reference-list-view :data="relatedData.library_reference" :active-tab="activeTab"></library-reference-list-view>
+        <library-reference-list-view :data="relatedData.library_reference_list" :active-tab="activeTab"></library-reference-list-view>
 
         <div class="row" v-if="activeTab !== 'library_reference_list'">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
@@ -191,7 +191,7 @@
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="10">
+              v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
             </b-pagination>
           </div>
         </div>
@@ -270,6 +270,19 @@
         },
         deep: true
       },
+      'relatedData.paginateBy': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      },
+      'relatedData.page': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      }
+
     },
 
     methods: {
@@ -414,8 +427,13 @@
           query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, this.relatedData.paginateBy.library_reference)
         }
         if (object === 'library_reference_list') {
-          // Do nothing
-          return
+          if (this.relatedData.library_reference_list.length === 0) {
+            // Get all records, maybe in the future add pagination and stuff
+            query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, 1000)
+          } else {
+            // Do nothing
+            return
+          }
         }
         return new Promise(resolve => {
           query.then(response => {
