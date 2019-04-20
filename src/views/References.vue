@@ -33,6 +33,7 @@
       :api-call="fetchReferences"
       search-history="referenceSearchHistory"
       view-type="referenceViewType"
+      :multi-ordering="true"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
@@ -99,7 +100,8 @@
           libraryIdTitle: null,
           page: 1,
           paginateBy: 50,
-          orderBy: '-id',
+          orderBy: ['-id', '-year'],
+          // orderBy: '-id',
         }
       },
       setDefaultSearchParametersFromDeleteButton() {

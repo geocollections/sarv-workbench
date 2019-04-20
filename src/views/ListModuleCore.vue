@@ -63,7 +63,19 @@
 
             <thead class="thead-light">
               <tr class="th-sort">
-                <th class="nowrap" v-for="item in columns">
+                <!-- MULTI ORDERING -->
+                <th class="nowrap" v-if="multiOrdering" v-for="item in columns">
+                  <span @click="changeOrderMulti(item.id)" v-on:dblclick="removeOrder(item.id)" v-if="item.orderBy !== false">
+                    <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(item.id) === 0" />
+                    <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(item.id) === 1" />
+                    <font-awesome-icon icon="sort-down" v-if="isFieldInOrderBy(item.id) === -1" />
+                    {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
+                  </span>
+                  <br/>
+                </th>
+
+                <!-- REGULAR ORDERING -->
+                <th class="nowrap" v-else v-for="item in columns">
                     <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
                           <font-awesome-icon
                             v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
@@ -73,6 +85,7 @@
                       </span><br/>
                 </th>
               </tr>
+
               <tr>
                 <th class="p-0" v-for="item in columns" v-if="showFilters">
                   <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
@@ -164,6 +177,11 @@
         default: false
       },
 
+      multiOrdering: {
+        type: Boolean,
+        default: false
+      }
+
     },
     name: "ListModuleCore",
     data() {
@@ -252,6 +270,70 @@
         searchParametes.orderBy = orderValue;
         this.$emit('search-params-changed',searchParametes);
       },
+
+
+
+      /* MULTI ORDERING CODE START */
+
+      changeOrderMulti(field) {
+        let searchParametes = this.searchParameters;
+
+        if (searchParametes.orderBy.includes(field)) {
+          // Ascending
+          this.$set(searchParametes.orderBy, searchParametes.orderBy.indexOf(field), '-' + field);
+
+        } else if (searchParametes.orderBy.includes('-' + field)) {
+          // Descending
+          this.$set(searchParametes.orderBy, searchParametes.orderBy.indexOf('-' + field), field);
+
+        } else {
+
+          if (searchParametes.orderBy.length > 1) {
+            // Removes first and adds field
+            searchParametes.orderBy.shift();
+            searchParametes.orderBy.push(field);
+          } else {
+            // Just adds field
+            searchParametes.orderBy.push(field)
+          }
+        }
+
+        // Move it up if it starts to trigger multiple requests
+        searchParametes.page = 1;
+        this.$emit('search-params-changed',searchParametes);
+      },
+
+      // Returns 1 for ascending, -1 for descending and 0 if not in orderBy
+      isFieldInOrderBy(field) {
+        for (const i in this.searchParameters.orderBy) {
+          if (this.searchParameters.orderBy[i] === field) {
+            return 1;
+          }
+          if (this.searchParameters.orderBy[i] === '-' + field) {
+            return -1
+          }
+        }
+        return 0;
+      },
+
+      removeOrder(field) {
+        let searchParametes = this.searchParameters;
+
+        // Removing is not possible if there is only 1 field
+        if (searchParametes.orderBy.length > 1) {
+          if (searchParametes.orderBy.includes(field)) {
+            searchParametes.orderBy.splice(searchParametes.orderBy.indexOf(field), 1)
+            this.$emit('search-params-changed',searchParametes);
+          } else if (searchParametes.orderBy.includes('-' + field)) {
+            searchParametes.orderBy.splice(searchParametes.orderBy.indexOf('-' + field), 1)
+            this.$emit('search-params-changed',searchParametes);
+          }
+        }
+      },
+
+      /* MULTI ORDERING CODE END */
+
+
 
       // Deletes local storage value + resets search parameters to default
       deleteSearchPreferences() {
