@@ -41,9 +41,8 @@
         </b-form-select>
       </div>
 
-      <div class="col-sm-12 col-md-3 export-center">
-        <!-- Question: Add export? Answer: No currently not needed -->
-        <!--<export-buttons filename="dataSearch"></export-buttons>-->
+      <div class="col-sm-12 col-md-3 export-center" :class="{ 'mb-3': exportButtons }">
+        <export-buttons v-if="exportButtons" :filename="module"></export-buttons>
       </div>
 
       <div class="col-sm-12 col-md-6 pagination-center">
@@ -59,7 +58,7 @@
       <div class="col">
 
         <div class="table-responsive">
-          <table class="table table-hover table-bordered">
+          <table id="export-table" class="table table-hover table-bordered">
 
             <thead class="thead-light">
               <tr class="th-sort">
@@ -135,6 +134,7 @@
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import {faSortDown,faSortUp, faSort,faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
   import Datepicker from 'vue2-datepicker'
+  import ExportButtons from "../components/partial/ExportButtons";
 
   library.add(faSort, faSortUp, faSortDown, faCalendarAlt)
 
@@ -143,6 +143,7 @@
       FontAwesomeIcon,
       Spinner,
       Datepicker,
+      ExportButtons
     },
     props: {
       apiCall: {
@@ -180,6 +181,11 @@
       multiOrdering: {
         type: Boolean,
         default: false
+      },
+
+      exportButtons: {
+        type: Boolean,
+        default: false,
       }
 
     },

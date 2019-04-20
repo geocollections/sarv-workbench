@@ -34,6 +34,7 @@
       search-history="referenceSearchHistory"
       view-type="referenceViewType"
       :multi-ordering="true"
+      :export-buttons="true"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>

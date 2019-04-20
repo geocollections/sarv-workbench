@@ -180,3 +180,35 @@ legend {
   cursor:pointer;
   font-size: large;
 }
+
+
+
+/*********************************
+ *** PAGINATE AND EXPORT START ***
+ *********************************/
+
+@media (max-width: 767px) {
+  .t-paginate-by-center {
+    margin: 0 auto;
+    width: unset;
+  }
+
+  .export-center {
+    text-align: center;
+    width: 100%;
+  }
+
+  .b-paginate-by-center {
+    margin: 0 auto;
+  }
+
+  /* Overrides bootstrap rule */
+  .pagination-center > .justify-content-end {
+    justify-content: center !important;
+    width: 100%;
+  }
+}
+
+/*********************************
+ ***  PAGINATE AND EXPORT END  ***
+ *********************************/

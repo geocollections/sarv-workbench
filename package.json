@@ -21,6 +21,7 @@
     "npm": "^6.9.0",
     "proj4": "^2.5.0",
     "proj4leaflet": "^1.0.2",
+    "tableexport": "^5.2.0",
     "vue": "^2.6.7",
     "vue-cookie": "^1.1.4",
     "vue-i18n": "^8.8.2",
@@ -40,7 +41,7 @@
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.1",
-    "@vue/cli-service": "^3.4.1",
+    "@vue/cli-service": "^3.6.0",
     "vue-template-compiler": "^2.6.7"
   },
   "postcss": {
