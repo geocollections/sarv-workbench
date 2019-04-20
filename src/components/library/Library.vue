@@ -147,55 +147,61 @@
       </div>
     </fieldset>
 
-    <!-- REFERENCE LIST VIEW -->
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
-      <legend class="w-auto" style="font-size: large;">
-        {{ $t('library.relatedTables.libraryReference') }}
-        <font-awesome-icon icon="list-ol"/>
-      </legend>
-
-      <div class="row">
-        <div class="col">
-          <b-form-checkbox class="mb-2" v-model="showListView" name="check-button" switch>
-            {{ $t('library.showListView') }}
-          </b-form-checkbox>
-        </div>
-      </div>
-
-      <library-reference-list-view v-if="showListView"
-                                   :data="relatedData.library_reference"></library-reference-list-view>
-    </fieldset>
-
     <!-- SHOWING RELATED_DATA -->
     <div class="row" v-if="$route.meta.isEdit">
       <div class="col mt-4">
         <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
+
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('library_reference')" class="nav-link"
                :class="{ active: activeTab === 'library_reference' }">
               {{ $t('library.relatedTables.libraryReference') }}
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('library_reference_list')" class="nav-link"
+               :class="{ active: activeTab === 'library_reference_list' }">
+              {{ $t('library.relatedTables.libraryReferenceList') }} <font-awesome-icon icon="list-ol"/>
+            </a>
+          </li>
+
         </ul>
-        <library-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-        <div class="row mb-4 pt-1">
-          <!--<div class="col">-->
-          <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
-          <!--:disabled="sendingData" @click="addRelatedData(activeTab)">{{$t('add.newRelation')}}</button>-->
-          <!--</div>-->
-          <div class="col pagination-center"
+
+        <library-reference-list-view :data="relatedData.library_reference_list" :active-tab="activeTab"></library-reference-list-view>
+
+        <div class="row" v-if="activeTab !== 'library_reference_list'">
+          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
+            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+            </b-form-select>
+          </div>
+
+          <div class="col-sm-12 col-md-3 export-center">
+            <!-- EXPORT BUTTON? -->
+          </div>
+
+          <div class="col-sm-12 col-md-6 pagination-center"
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="100">
+              v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
             </b-pagination>
           </div>
         </div>
+
+        <library-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
       </div>
     </div>
 
     <!-- CHECKBOXES -->
-    <div class="row">
+    <div class="row mt-3">
       <div class="col">
         <b-form-checkbox id="is_private" v-model="library.is_private" :value="1" :unchecked-value="0">
           {{ $t('library.private') }}
@@ -264,6 +270,19 @@
         },
         deep: true
       },
+      'relatedData.paginateBy': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      },
+      'relatedData.page': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      }
+
     },
 
     methods: {
@@ -274,7 +293,7 @@
 
       setInitialData() {
         return {
-          tabs: ['library_reference'],
+          tabs: ['library_reference', 'library_reference_list'],
           searchHistory: 'librarySearchHistory',
           activeTab: 'library_reference',
           relatedData: this.setDefaultRelatedData(),
@@ -294,7 +313,6 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          showListView: false,
         }
       },
 
@@ -333,7 +351,11 @@
 
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
+            // Skips library_reference_list because it is static view
+            if (entity !== 'library_reference_list') {
+              console.log(entity)
+              this.loadRelatedData(entity);
+            }
           });
 
           this.$on('tab-changed', this.setTab);
@@ -352,16 +374,20 @@
       setDefaultRelatedData() {
         return {
           library_reference: [],
+          library_reference_list: [],
           library_agent: [],
           copyFields: {
-            library_reference: ['reference__reference', 'keywords', 'remarks'],
+            library_reference: ['reference', 'keywords', 'remarks', 'sort'],
           },
           insert: {
-            library_reference: {}
+            library_reference: {},
           },
           page: {
             library_reference: 1,
             library_agent: 1,
+          },
+          paginateBy: {
+            library_reference: 25,
           },
           count: {
             library_reference: 0,
@@ -398,7 +424,16 @@
         let query;
 
         if (object === 'library_reference') {
-          query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference)
+          query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, this.relatedData.paginateBy.library_reference)
+        }
+        if (object === 'library_reference_list') {
+          if (this.relatedData.library_reference_list.length === 0) {
+            // Get all records, maybe in the future add pagination and stuff
+            query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, 1000)
+          } else {
+            // Do nothing
+            return
+          }
         }
         return new Promise(resolve => {
           query.then(response => {
