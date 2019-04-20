@@ -2,7 +2,7 @@
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
-    <b-alert show variant="warning" v-if="createRelationWith.data !== null">
+    <b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">
       {{ createRelationWith.info }}
       <a class="small" href="javascript:void(0)" @click="navigateBack">
         <font-awesome-icon icon="external-link-alt"/>
@@ -227,6 +227,7 @@
       </legend>
       <transition name="fade">
         <div class="row" v-if="block.samples">
+          <add-new-sample :sendingData = "sendingData" ></add-new-sample>
           <div class="col-sm-12 mb-2">
           <span class="float-right">
             <button class="btn btn-outline-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
@@ -290,11 +291,13 @@
   import Sidebar from "../partial/Sidebar";
   import SaveButtons from "../partial/SaveButtons";
   import LinkedSampleTable from "../sample/LinkedSampleTable";
+  import AddNewSample from "./addNewSampleModal";
 
 
   export default {
     name: "Site",
     components: {
+      AddNewSample,
       LinkedSampleTable,
       SaveButtons,
       Sidebar,
@@ -368,7 +371,6 @@
         fetchListCoordinateMethod().then(response => {
           this.autocomplete.coordMethod = this.handleResponse(response);
         });
-
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
           fetchSite(this.$route.params.id).then(response => {
@@ -554,7 +556,8 @@
             {data: `ID: ${this.site.id} (${this.site.name})`})
         };
         this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith})
-        this.$router.push({path: '/sample/add'});
+        this.$emit('show-new-sample-modal')
+        // this.$router.push({path: '/sample/add'});
       },
 
       setSiteNameAndProjectIfPreviousExists() {

@@ -314,9 +314,9 @@ nav:hover .forAnimate{
   -ms-transition: all 1s ease;
   transition: all 1s ease;
 }
-.main.container {
-  width: calc(100% - 100px)!important;
-}
+/*.main.container {*/
+  /*width: calc(100% - 100px)!important;*/
+/*}*/
 @media (max-width: 768px) {
   /*.nav-side-menu {*/
     /*display: none;*/

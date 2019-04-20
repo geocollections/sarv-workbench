@@ -35,7 +35,7 @@
           <li><a href="#" @click="setAction('addSample')" style="display: inline-block; ">Add sample</a></li>
         </ul>
       </b-collapse>
-     
+
     </template>
     <template v-if="$route.meta.table === 'project'">
       <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
@@ -75,14 +75,15 @@
                            style="margin-top: 10px;"/>
       </span>
     <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
-
-         <span @click="$root.$emit('button-clicked', 'SAVE')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 9%; ">
-           {{ $t('edit.buttons.save')}}&ensp;<font-awesome-icon icon="save" class="pull-right mr-1" style="color:#28a745;margin-top: 10px; "/>
-         </span>
-      <span @click="$root.$emit('button-clicked', 'CANCEL')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 27%; ">
+      <span @click="$root.$emit('button-clicked', 'CANCEL')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; ">
           {{$t('buttons.cancel')}}&ensp;
           <font-awesome-icon icon="ban" class="pull-right mr-1" style="color:#dc3545;margin-top: 10px;"/>
         </span>
+      <span @click="$root.$emit('button-clicked', 'SAVE')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; ">
+           {{ $t('edit.buttons.save')}}&ensp;<font-awesome-icon icon="save" class="pull-right mr-1"
+                                                                style="color:#28a745;margin-top: 10px; "/>
+         </span>
+
     </div>
   </sidebar-wrapper>
 </template>
@@ -155,7 +156,10 @@
   }
 
   .actionBtn {
-    margin-right: -40px;right:0; position: absolute;letter-spacing: 2px;;
+    margin-right: -40px;
+    right: 0;
+    position: absolute;
+    letter-spacing: 2px;;
     text-transform: uppercase;
     transform: rotate(90deg);
     min-width: 113px;

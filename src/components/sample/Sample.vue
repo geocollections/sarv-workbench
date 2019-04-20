@@ -388,12 +388,12 @@
     </template>
 
     <template slot="simplified-form">
-      <b-alert show variant="warning" v-if="createRelationWith.data !== null">
-        {{ createRelationWith.info }}
-        <a class="small" href="javascript:void(0)" @click="navigateBack">
-          <font-awesome-icon icon="external-link-alt"/>
-        </a>
-      </b-alert>
+      <!--<b-alert show variant="warning" v-if="createRelationWith.data !== null">-->
+        <!--{{ createRelationWith.info }}-->
+        <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
+          <!--<font-awesome-icon icon="external-link-alt"/>-->
+        <!--</a>-->
+      <!--</b-alert>-->
       <fieldset class="border p-2 mb-2 mt-3">
         <legend class="w-auto" style="font-size: large;">Üldinfo
           <font-awesome-icon icon="project-diagram"/></legend>
@@ -793,7 +793,7 @@
           this.$on('related-data-added',this.addRelatedData);
           this.$on('edit-row',this.editRow);
           this.$on('allow-remove-row',this.allowRemove);
-
+          this.$root.$on('add-new-sample-from-modal', this.handleUserChoiceFromModal);
           this.$emit('related-data-info',this.tabs);
 
           this.setActiveTab('analysis')
@@ -995,17 +995,24 @@
           }
         },
         saveAndNavigateBack(){
-          let vm = this
+          let vm = this, createRelationWith = this.createRelationWith
           this.add(true,'sample').then(function (status) {
-            if(vm.createRelationWith.object === null)
+            if(createRelationWith.object === null)
               vm.$router.push({ path:'/sample'});
             else {
-              vm.$router.push({ path:'/'+vm.createRelationWith.object+'/'+vm.createRelationWith.data.id})
+              vm.$router.push({ path:'/'+createRelationWith.object+'/'+createRelationWith.data.id})
             }
           })
-
-
         },
+        handleUserChoiceFromModal(choice) {
+          if(choice === 'LEAVE') {
+            this.saveAndNavigateBack()
+          } else if(choice === 'SAVE') {
+            this.add(false, 'sample')
+          } else if(choice === 'CANCEL') {
+            this.leaveFromEditView('sample')
+          }
+        }
       },
       beforeRouteLeave(to, from, next) {
         let isFull = true

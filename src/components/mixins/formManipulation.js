@@ -115,7 +115,7 @@ const formManipulation = {
             if (!addAnother) {
               this.$router.push({ path: '/'+object })
             } else {
-              this.$router.push({ path: '/'+object+ savedObjectId })
+              this.$router.push({ path: '/'+object +'/'+ savedObjectId })
             }
             resolve(true)
           }, errResponse => {
@@ -169,14 +169,12 @@ const formManipulation = {
               resolve(response.body.id)
           }
           if (typeof response.body.error !== 'undefined') {
-
-            if (this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+            resolve(false)
+            if (this.$i18n && this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
               toastError({text: response.body.error_et});
             } else {
               toastError({text: response.body.error});
             }
-            resolve(false)
-
           }
         }
       }, errResponse => {

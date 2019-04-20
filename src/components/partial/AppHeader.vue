@@ -1,7 +1,7 @@
 <template>
   <div class="header">
 
-    <b-navbar type="dark" variant="dark" toggleable="lg" fixed="left" style="z-index: 10000">
+    <b-navbar type="dark" variant="dark" toggleable="lg" fixed="top" style="z-index: 10000">
 
       <!-- TODO: If small screen change header to icon -->
       <b-navbar-brand :to="{ path: '/dashboard' }">

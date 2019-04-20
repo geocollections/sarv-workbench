@@ -113,6 +113,7 @@ body {
         max-height: 500px;
         max-width: 100%;
     }
+
 }
 
 /********************************
@@ -171,4 +172,9 @@ label {
 legend {
   cursor:pointer;
   font-size: large;
+}
+
+
+.modal {
+  top:5% !important;
 }

@@ -5,7 +5,7 @@
     <slot name="simplified-form" v-if="!fullView"></slot>
     <slot name="privacy"></slot>
     <slot name="related-data" v-if="fullView"></slot>
-    <slot name="buttons"></slot>
+    <slot name="buttons"  v-if="fullView"></slot>
   </div>
 </template>
 
