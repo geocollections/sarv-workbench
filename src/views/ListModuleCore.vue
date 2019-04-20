@@ -64,7 +64,7 @@
             <thead class="thead-light">
               <tr class="th-sort">
                 <!-- MULTI ORDERING -->
-                <th class="nowrap" v-if="multiOrdering" v-for="item in columns">
+                <th class="nowrap" v-if="multiOrdering === true" v-for="item in columns">
                   <span @click="changeOrderMulti(item.id)" v-on:dblclick="removeOrder(item.id)" v-if="item.orderBy !== false">
                     <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(item.id) === 0" />
                     <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(item.id) === 1" />
@@ -75,7 +75,7 @@
                 </th>
 
                 <!-- REGULAR ORDERING -->
-                <th class="nowrap" v-else v-for="item in columns">
+                <th class="nowrap" v-if="multiOrdering === false" v-for="item in columns">
                     <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
                           <font-awesome-icon
                             v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
@@ -278,6 +278,9 @@
       changeOrderMulti(field) {
         let searchParametes = this.searchParameters;
 
+        // Change string to array
+        if (typeof searchParametes.orderBy === "string") searchParametes.orderBy = searchParametes.orderBy.split()
+
         if (searchParametes.orderBy.includes(field)) {
           // Ascending
           this.$set(searchParametes.orderBy, searchParametes.orderBy.indexOf(field), '-' + field);
@@ -305,11 +308,16 @@
 
       // Returns 1 for ascending, -1 for descending and 0 if not in orderBy
       isFieldInOrderBy(field) {
-        for (const i in this.searchParameters.orderBy) {
-          if (this.searchParameters.orderBy[i] === field) {
+        let searchParametes = this.searchParameters
+
+        // Change string to array
+        if (typeof searchParametes.orderBy === "string") searchParametes.orderBy = searchParametes.orderBy.split()
+
+        for (const i in searchParametes.orderBy) {
+          if (searchParametes.orderBy[i] === field) {
             return 1;
           }
-          if (this.searchParameters.orderBy[i] === '-' + field) {
+          if (searchParametes.orderBy[i] === '-' + field) {
             return -1
           }
         }
@@ -318,6 +326,9 @@
 
       removeOrder(field) {
         let searchParametes = this.searchParameters;
+
+        // Change string to array (this should already be array, but just in case)
+        if (typeof searchParametes.orderBy === "string") searchParametes.orderBy = searchParametes.orderBy.split()
 
         // Removing is not possible if there is only 1 field
         if (searchParametes.orderBy.length > 1) {
