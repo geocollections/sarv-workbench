@@ -1,7 +1,6 @@
 <template>
   <!--nav sidebar -->
   <sidebar-wrapper ref="navbar" v-bind:class="{ active: sidebarOpen }" :key="componentKey">
-
     <template v-if="$route.meta.table === 'site'">
       <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
         <a href="javascript:void(0)" @click="setActiveSection('info')" style="display: block;">
@@ -70,20 +69,34 @@
       </b-collapse>
 
     </template>
-    <span @click="pinSidebar" id="thumbtack-icon">
+    <div @click="pinSidebar" id="thumbtack-icon">
         <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
                            style="margin-top: 10px;"/>
-      </span>
+      </div>
+
+
     <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
-      <span @click="$root.$emit('button-clicked', 'CANCEL')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; ">
+      <span @click="$root.$emit('button-clicked', 'CANCEL')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
           {{$t('buttons.cancel')}}&ensp;
           <font-awesome-icon icon="ban" class="pull-right mr-1" style="color:#dc3545;margin-top: 10px;"/>
         </span>
-      <span @click="$root.$emit('button-clicked', 'SAVE')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; ">
+      <span @click="$root.$emit('button-clicked', 'SAVE')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; " v-if="!sidebarOpen">
            {{ $t('edit.buttons.save')}}&ensp;<font-awesome-icon icon="save" class="pull-right mr-1"
                                                                 style="color:#28a745;margin-top: 10px; "/>
          </span>
+      <span class="ml-2" v-if="sidebarOpen">
+        <br><span class="ml-2"  style="font-size: medium">{{$t(activeSearchParams.title)}}</span>
+        <li class="element-list" :class="{active : parseInt($route.params.id) === entity.id }" style="display: block;"
+            v-for="entity in sidebarList" v-if="sidebarList.length > 0">
+           <router-link :to="{ path: '/project/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity.name}}
+      </router-link>
 
+        </li>
+      </span>
+      <br>
+      <!--<span>-->
+        <!--<font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>-->
+      <!--</span>-->
     </div>
   </sidebar-wrapper>
 </template>
@@ -97,6 +110,7 @@
     name: "Sidebar",
     components: {SidebarWrapper},
     mixins: [fontAwesomeLib],
+
     data() {
       return {
         activeSection: 'info',
@@ -105,9 +119,19 @@
         sidebarOpen: false,
         isThumbtackDown: true,
         componentKey: 0,
-        navBarHeight: 300
+        navBarHeight: 300,
+        page:1
       }
     },
+    computed: {
+      activeSearchParams() {
+        return this.$store.state['activeSearchParams']
+      },
+      sidebarList() {
+        return this.$store.state['sidebarList']
+      }
+    },
+
     mounted() {
       this.navBarHeight = document.querySelector('.nav-side-menu').clientHeight - 200
     },
@@ -130,13 +154,26 @@
         // this.sidebarOpen ? document.getElementById('thumbtack-icon').classList.toggle("down") : document.getElementById('thumbtack-icon').classList.remove("down");
         this.forceRerender()
       },
-      close() {
 
+    },
+    watch: {
+      'activeSearchParams': {
+        handler: function (newval, oldval) {
+          // this.$store.dispatch('FETCH_SITES')
+          this.$store.dispatch(newval.request)
+          console.log(newval)
+        },
+        deep: true
+      },
+      'sidebarList': {
+        handler: function (newval, oldval) {
+
+          console.log(newval)
+        },
+        deep: true
       },
 
-      save() {
 
-      }
     }
   }
 </script>

@@ -350,6 +350,9 @@
       this.loadFullInfo()
       window.addEventListener('resize', this.handleResize)
       this.handleResize();
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'projectSearchHistory',
+        defaultSearch: this.setDefaultSearchParameters(), request : 'FETCH_PROJECTS', title : 'header.projects'})
+
     },
     mounted() {
       this.$root.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
@@ -561,16 +564,21 @@
 
       setDefaultSearchParameters() {
         return {
-          locality: null,
-          number: null,
-          depth: null,
-          stratigraphy: null,
-          agent: null,
-          storage: null,
+          // locality: null,
+          // number: null,
+          // depth: null,
+          // stratigraphy: null,
+          // agent: null,
+          // storage: null,
+          // id: null,
+          // page: 1,
+          // paginateBy: 50,
+          // orderBy: '-id',
           id: null,
+          orderBy: "-id",
+          owner: null,
           page: 1,
-          paginateBy: 50,
-          orderBy: '-id',
+          paginateBy: 50
         }
       },
 

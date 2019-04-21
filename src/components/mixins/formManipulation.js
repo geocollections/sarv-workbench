@@ -38,6 +38,7 @@ const formManipulation = {
         surename: null,
         user: user.user,
       }
+      this.$store.commit('SET_CURRENT_USER', this.currentUser)
       //console.log(this.agent);
     }
   },

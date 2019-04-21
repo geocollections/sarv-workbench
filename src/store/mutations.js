@@ -11,5 +11,18 @@ export default {
   SET_SAMPLE_VIEW: (state, isFull) => {
     Vue.set(state,'sampleView', isFull)
   },
-  
+
+  SET_CURRENT_USER: (state, object) => {
+    console.log(object)
+    Vue.set(state,'currentUser', object)
+  },
+
+  SET_ACTIVE_SEARCH_PARAMS: (state, params) => {
+    Vue.set(state,'activeSearchParams', params)
+  },
+
+  SET_SIDEBAR_LIST: (state, { resp }) => {
+    console.log(resp)
+    Vue.set(state, 'sidebarList', resp.body.results || false) /* false means page not found */
+  },
 }

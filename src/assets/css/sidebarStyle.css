@@ -305,6 +305,15 @@ nav:hover .forAnimate{
   -ms-transition: all 1s ease;
   transition: all 1s ease;
 }
+li.element-list {
+  line-height: 30px;
+}
+li.element-list:hover {
+  border-left: 3px solid #8cfaa1;
+}
+li.element-list.active {
+  border-left: 3px solid #8cfaa1;
+}
 .actionBtn:hover {
 
   background-color: #4f5b69;

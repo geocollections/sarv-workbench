@@ -10,7 +10,11 @@ export function createStore () {
   return new Vuex.Store({
     state: {
       sampleView: true,
-      createRelationWith: { object: null, data: null, info: null }
+      currentUser:null,
+      createRelationWith: { object: null, data: null, info: null },
+      activeObject: null,
+      sidebarList:[],
+      activeSearchParams: null
     },
     actions,
     mutations,
