@@ -184,7 +184,6 @@
         <font-awesome-icon icon="folder-open"/>
       </legend>
       <transition name="fade">
-
         <div class="row p-3" v-if="block.files">
           <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="false"/>
           <file-table :attachments="relatedData.attachment_link" :object="'project'"
@@ -322,10 +321,12 @@
   import SaveButtons from "../partial/SaveButtons";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import AddNewSite from "./addNewSiteModal";
+  import FilePreviewModal from "../partial/filePreviewModal";
 
   export default {
     name: "Project",
     components: {
+      FilePreviewModal,
       AddNewSite,
       MultimediaComponent,
       SaveButtons,

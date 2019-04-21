@@ -1,12 +1,22 @@
 <template>
   <div class="col-sm-12 p-0 ">
     <div class="d-flex flex-row flex-wrap mt-2">
-      <div class="mt-2 mr-2" v-for="(file, key) in attachments"  style="align-self: flex-end;">
-        <div class="img-container p-1" @click="openUrlInNewWindow({url: composeFileUrl(file.uuid_filename, 'original')})" style="cursor: pointer;" :title="composeFileUrl(file.uuid_filename, 'original')">
-          <font-awesome-icon v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="max-height: 5rem" size="7x" icon="file-audio"/>
-          <font-awesome-icon v-else-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"  style="max-height: 5rem" size="7x" icon="file-video"/>
-          <img v-else-if="file.uuid_filename !== null && ['png','jpeg','jpg'].indexOf(file.uuid_filename.split('.')[1]) > -1" :src="composeFileUrl(file.uuid_filename)" alt="Image preview..." class="img-thumbnail thumbnail-preview responsive image">
-          <font-awesome-icon v-else="file.uuid_filename === null"  style="max-height: 5rem" size="7x" icon="file"/>
+      <file-preview-modal :data="showFilePreview"></file-preview-modal>
+      <div class="mt-2 mr-2" v-for="(file, key) in attachments" style="align-self: flex-end;">
+        <div class="img-container p-1"
+             @click="openUrlInNewWindow({url: composeFileUrl(file.uuid_filename, 'original')})" style="cursor: pointer;"
+             :title="composeFileUrl(file.uuid_filename, 'original')">
+          <font-awesome-icon
+            v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"
+            style="max-height: 5rem" size="7x" icon="file-audio"/>
+          <font-awesome-icon
+            v-else-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"
+            style="max-height: 5rem" size="7x" icon="file-video"/>
+          <img
+            v-else-if="file.uuid_filename !== null && ['png','jpeg','jpg'].indexOf(file.uuid_filename.split('.')[1]) > -1"
+            :src="composeFileUrl(file.uuid_filename)" alt="Image preview..."
+            class="img-thumbnail thumbnail-preview responsive image">
+          <font-awesome-icon v-else="file.uuid_filename === null" style="max-height: 5rem" size="7x" icon="file"/>
           <div class="middle flex flex-inline">
             <!--<button class="btn btn-danger mb-2 btn-sm" @click="$parent.removeAttachmentRelation(key)"><font-awesome-icon icon="trash-alt"/></button>-->
             <div style="background-color:#5e676a;color:white; width: 20vh">
@@ -21,8 +31,13 @@
         <div class="mt-1 pb-1" style="width: 25vh;min-height:5vh"><!--background-color:#056384;color:white;-->
           <!--<div style="font-size: small;word-wrap: break-word;">{{file.original_filename}}</div>-->
           <div class="p-0 pt-1 pb-1" style="text-align: center;">
-            <button class="btn btn-info mr-1 p-0 pr-4 pl-4  btn-sm no-rounded-btn" @click="openGeoInNewWindow({object:'file',id:file.id})"><font-awesome-icon icon="eye"/></button>
-            <button class="btn btn-primary p-0 pr-4 pl-4 btn-sm no-rounded-btn"  @click="windowOpenNewTab('attachment','/attachment/'+file.id)"><font-awesome-icon icon="external-link-alt"/></button>
+            <button class="btn btn-info mr-1 p-0 pr-4 pl-4  btn-sm no-rounded-btn" @click="previewFile(file)">
+              <font-awesome-icon icon="eye"/>
+            </button>
+            <button class="btn btn-primary p-0 pr-4 pl-4 btn-sm no-rounded-btn"
+                    @click="windowOpenNewTab('attachment','/attachment/'+file.id)">
+              <font-awesome-icon icon="external-link-alt"/>
+            </button>
           </div>
         </div>
       </div>
@@ -31,22 +46,42 @@
 </template>
 
 <script>
-  import formManipulation  from './../mixins/formManipulation'
-    export default {
-      name: "FileTable",
-      props: {
-        attachments: {
-          type: Array,
-          required: true
-        },
-        object: {
-          type: String,
-          required: true
-        }
+  import formManipulation from './../mixins/formManipulation'
+  import FilePreviewModal from "./filePreviewModal";
+
+  export default {
+    name: "FileTable",
+    components: {FilePreviewModal},
+    props: {
+      attachments: {
+        type: Array,
+        required: true
       },
-      mixins: [formManipulation]
+      object: {
+        type: String,
+        required: true
+      }
+    },
+    mixins: [formManipulation],
+    data() {
+      return {
+        showFilePreview: null
+      }
+    },
+    methods: {
+      previewFile(file) {
+        if (['png', 'jpeg', 'jpg'].indexOf(file.uuid_filename.split('.')[1]) > -1)  {
+          this.showFilePreview = file;
+          this.$emit('show-file-preview-modal');
+        }  else this.openGeoInNewWindow({
+          object: 'file',
+          id: file.id
+        })
+      }
 
     }
+
+  }
 </script>
 
 <style scoped>
@@ -54,7 +89,7 @@
   .img-container {
     position: relative;
     width: 25vh;
-    text-align: center!important;
+    text-align: center !important;
   }
 
   .image {
@@ -86,7 +121,7 @@
     opacity: 1;
   }
 
-  .no-rounded-btn{
+  .no-rounded-btn {
     border-radius: 0 !important;
   }
 </style>

@@ -72,7 +72,7 @@
             </div>
             <div class="col-sm-3">
               <label class="p-0">&ensp;</label>
-              <button class="btn btn-outline-primary form-control" @click="finishWork"
+              <button class="btn btn-outline-primary form-control" @click="finishWork" v-b-tooltip.hover title="Finish and close"
                       v-if="site.date_end === undefined || site.date_end === null"> Finish
               </button>
             </div>
@@ -221,7 +221,7 @@
       </transition>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" ref="samples">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" ref="samples">
       <legend class="w-auto" @click="block.samples = !block.samples" :style="!block.samples ? {'color':'blue'} : ''">Related samples
         <font-awesome-icon icon="vial"/>
       </legend>
@@ -401,6 +401,7 @@
           this.loadRelatedData('attachment_link');
           // this.loadRelatedData('sample');
         } else {
+          this.block.info = true
           this.setLocationDataIfExists();
           this.setSiteNameAndProjectIfPreviousExists();
           this.loadListOfExistingProjects();
@@ -650,5 +651,7 @@
 
 <style scoped>
 
-
+.tooltip .fade{
+  background-color: red !important;
+}
 </style>
