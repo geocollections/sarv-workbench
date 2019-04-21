@@ -13,7 +13,6 @@ export default {
   },
 
   SET_CURRENT_USER: (state, object) => {
-    console.log(object)
     Vue.set(state,'currentUser', object)
   },
 
@@ -22,7 +21,6 @@ export default {
   },
 
   SET_SIDEBAR_LIST: (state, { resp }) => {
-    console.log(resp)
     Vue.set(state, 'sidebarList', resp.body.results || false) /* false means page not found */
   },
 }

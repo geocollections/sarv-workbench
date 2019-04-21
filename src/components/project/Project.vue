@@ -347,12 +347,15 @@
 
     created() {
       this.activeObject = 'project';
-      this.loadFullInfo()
+
+      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'projectSearchHistory',
+        defaultSearch: this.searchParameters, search: params, request : 'FETCH_PROJECTS', title : 'header.projects',
+        object:'project'})
+      // this.loadFullInfo()
       window.addEventListener('resize', this.handleResize)
       this.handleResize();
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'projectSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(), request : 'FETCH_PROJECTS', title : 'header.projects'})
-
     },
     mounted() {
       this.$root.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);

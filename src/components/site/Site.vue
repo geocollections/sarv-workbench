@@ -324,7 +324,8 @@
     created() {
       this.activeObject = 'site';
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'siteSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(), request : 'FETCH_SITES', title: 'header.sites'})
+        defaultSearch: this.setDefaultSearchParameters(), search: this.setDefaultSearchParameters(), request : 'FETCH_SITES', title: 'header.sites',
+        object:'site'})
       this.loadFullInfo();
 
     },

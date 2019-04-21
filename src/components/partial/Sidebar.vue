@@ -69,11 +69,15 @@
       </b-collapse>
 
     </template>
+
     <div @click="pinSidebar" id="thumbtack-icon">
         <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
                            style="margin-top: 10px;"/>
       </div>
-
+    <span class="ml-1"  v-if="sidebarOpen">
+          <button @click="$root.$emit('button-clicked', 'SAVE')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
+          <button @click="$root.$emit('button-clicked', 'CANCEL')" class="btn btn-xs btn-danger p-1 ml-2 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
+    </span>
 
     <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
       <span @click="$root.$emit('button-clicked', 'CANCEL')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
@@ -86,17 +90,18 @@
          </span>
       <span class="ml-2" v-if="sidebarOpen">
         <br><span class="ml-2"  style="font-size: medium">{{$t(activeSearchParams.title)}}</span>
+
+        <span class="ml-3">
+          <button @click="deleteSearchPreferences" class="btn btn-xs btn-warning p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">Default <font-awesome-icon icon="ban"/></button>
+        </span>
         <li class="element-list" :class="{active : parseInt($route.params.id) === entity.id }" style="display: block;"
             v-for="entity in sidebarList" v-if="sidebarList.length > 0">
-           <router-link :to="{ path: '/project/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity.name}}
+           <router-link :to="{ path: '/'+activeSearchParams.object+'/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity.name}}
       </router-link>
 
         </li>
       </span>
-      <br>
-      <!--<span>-->
-        <!--<font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>-->
-      <!--</span>-->
+
     </div>
   </sidebar-wrapper>
 </template>
@@ -120,7 +125,7 @@
         isThumbtackDown: true,
         componentKey: 0,
         navBarHeight: 300,
-        page:1
+        page:1,
       }
     },
     computed: {
@@ -131,7 +136,11 @@
         return this.$store.state['sidebarList']
       }
     },
-
+    created() {
+      if(this.$store.state['activeSearchParams'] !== null) {
+        this.$store.dispatch(this.$store.state['activeSearchParams'].request)
+      }
+    },
     mounted() {
       this.navBarHeight = document.querySelector('.nav-side-menu').clientHeight - 200
     },
@@ -154,7 +163,10 @@
         // this.sidebarOpen ? document.getElementById('thumbtack-icon').classList.toggle("down") : document.getElementById('thumbtack-icon').classList.remove("down");
         this.forceRerender()
       },
-
+      deleteSearchPreferences() {
+        this.$localStorage.remove(this.activeSearchParams.searchHistory)
+        this.$store.state.activeSearchParams.search = this.activeSearchParams.defaultSearch
+      }
     },
     watch: {
       'activeSearchParams': {
@@ -167,7 +179,6 @@
       },
       'sidebarList': {
         handler: function (newval, oldval) {
-
           console.log(newval)
         },
         deep: true
