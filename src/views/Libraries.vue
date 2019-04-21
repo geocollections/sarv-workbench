@@ -54,8 +54,9 @@
         response: {},
         columns:[
           {id:"library",title:"library.id",type:"number"},
-          {id:"agent__agent",title:"library.author_txt",type:"text"},
           {id:"library__title",title:"library.title",type:"text"},
+          {id:"agent__agent",title:"library.author_txt",type:"text"},
+
           {id:"library__is_private",title:"library.isPrivate",type:"text"},
           {id:"reference",title:"library.reference",type:"text", orderBy: false},
         ],

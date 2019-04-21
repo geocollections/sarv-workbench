@@ -445,7 +445,7 @@ export function fetchLibrariesFromLibraryAgent(data, agentId) {
 }
 
 export function fetchLibraryReference(id, page, paginateBy = 25) {
-  return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=${paginateBy}&order_by=-sort&format=json`)
+  return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=${paginateBy}&order_by=-sort,reference__author,-reference__year&format=json`)
 }
 
 export function fetchLibraryAgent(id) {

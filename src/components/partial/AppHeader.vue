@@ -34,6 +34,9 @@
           <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
           <!-- <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>-->
 
+          <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/library' }" exact>{{ $t('header.editLibrary') }}</b-nav-item>
+          <!-- <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>-->
+
           <b-nav-item v-if="permissions.locality" class="d-none d-lg-block" :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-nav-item>
           <!-- <b-nav-item v-if="permissions.locality" class="d-none d-lg-block" :to="{ path: '/locality/add' }" exact>{{ $t('header.addLocality') }}</b-nav-item> -->
 

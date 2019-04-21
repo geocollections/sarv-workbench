@@ -8,9 +8,13 @@
       </router-link>
     </td>
 
-    <td>{{ entity.agent__agent }}</td>
+    <td>
+      <router-link :to="{ path: '/library/' + entity.library }" :title="$t('editLibrary.editMessage')">
+        {{ entity.library__title }}
+      </router-link>
+    </td>
 
-    <td v-translate="{ et: entity.library__title, en: entity.library__title_en }"></td>
+    <td>{{ entity.agent__agent }}</td>
 
     <td>
       <b-form-checkbox
