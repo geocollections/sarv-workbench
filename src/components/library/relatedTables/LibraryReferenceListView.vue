@@ -5,12 +5,12 @@
 
       <div class="row p-1" v-for="(entity, index) in data">
 
-        <div class="col-sm-10 list-row">
-        <span>
+        <div class="col-sm-12 list-row">
+        <!--<span>
           <router-link :to="{ path: '/reference/' + entity.reference }">
             <b>{{ index + 1 }}.</b>
           </router-link>
-        </span>
+        </span>-->
 
           <span v-if="entity.reference__author">
           {{ entity.reference__author }},
@@ -51,6 +51,10 @@
           <span v-if="entity.reference__pages">
           {{ entity.reference__pages }}.
         </span>
+          
+          <span v-if="entity.reference__doi">
+            <a :href="'https://doi.org/' + entity.reference__doi">https://doi.org/ {{ entity.reference__doi }}</a>
+          </span>
         </div>
 
       </div>
@@ -71,7 +75,7 @@
 
 <style scoped>
   .list-row {
-    padding-left: 4rem;
-    text-indent: -2rem;
+    padding-left: 6rem;
+    text-indent: -4rem;
   }
 </style>
