@@ -4,6 +4,7 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
     <div class="row mb-4">
       <div class="col">
+        <add-new-site :sendingData = "sendingData"></add-new-site>
         <span class="float-right" v-if="$route.meta.isEdit">
           <button class="btn btn-outline-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>
         </span>
@@ -320,10 +321,12 @@
   import findIndex from 'lodash/findIndex';
   import SaveButtons from "../partial/SaveButtons";
   import MultimediaComponent from "../partial/MultimediaComponent";
+  import AddNewSite from "./addNewSiteModal";
 
   export default {
     name: "Project",
     components: {
+      AddNewSite,
       MultimediaComponent,
       SaveButtons,
       FileTable,
@@ -590,7 +593,8 @@
             {data: `ID: ${this.project.id} (${this.project.name})`})
         };
         this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith});
-        this.$router.push({path: '/site/add'})
+        this.$emit('show-new-site-modal')
+        // this.$router.push({path: '/site/add'})
         // this.lsPushCreateRelationWith(createRelationWith)
         // let routeData = this.$router.resolve({ path:'/site/add'})
         // window.open(routeData.href, '_blank', 'width=1000,height=750');

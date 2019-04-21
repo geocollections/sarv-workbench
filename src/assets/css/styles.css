@@ -215,3 +215,13 @@ legend {
 /*********************************
  ***  PAGINATE AND EXPORT END  ***
  *********************************/
+@media (max-width: 992px) {
+  .modal-dialog-scrollable .modal-content {
+    min-width: calc(110vh ) !important;
+  }
+}
+@media (max-width: 623px) {
+  .modal-dialog-scrollable .modal-content {
+    min-width: 100% !important;
+  }
+}

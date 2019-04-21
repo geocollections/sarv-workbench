@@ -2,12 +2,12 @@
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
-    <b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">
-      {{ createRelationWith.info }}
-      <a class="small" href="javascript:void(0)" @click="navigateBack">
-        <font-awesome-icon icon="external-link-alt"/>
-      </a>
-    </b-alert>
+    <!--<b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">-->
+      <!--{{ createRelationWith.info }}-->
+      <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
+        <!--<font-awesome-icon icon="external-link-alt"/>-->
+      <!--</a>-->
+    <!--</b-alert>-->
     <!-- STORAGE-->
     <fieldset class="border p-2 mb-2" ref="info">
       <legend class="w-auto"  @click="block.info = !block.info" :style="!block.info ? {'color':'blue'} : ''">Üldinfo
@@ -240,26 +240,26 @@
       </transition>
     </fieldset>
 
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')"
-                :title="$t('edit.buttons.saveAndLeave') ">
-          <font-awesome-icon icon="door-open"/>
-          {{ $t('edit.buttons.saveAndLeave') }}
-        </button>
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
-          <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
-          <!--{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}-->
-        </button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="navigateBack('site')"
-                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
-          <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
-        </button>
-      </div>
-    </div>
+    <!--<div class="row mt-3 mb-3">-->
+      <!--<div class="col">-->
+        <!--<button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')"-->
+                <!--:title="$t('edit.buttons.saveAndLeave') ">-->
+          <!--<font-awesome-icon icon="door-open"/>-->
+          <!--{{ $t('edit.buttons.saveAndLeave') }}-->
+        <!--</button>-->
+        <!--<button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)"-->
+                <!--:title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+          <!--<font-awesome-icon icon="save"/>-->
+          <!--{{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+          <!--&lt;!&ndash;{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}&ndash;&gt;-->
+        <!--</button>-->
+        <!--<button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="navigateBack('site')"-->
+                <!--:title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+          <!--<font-awesome-icon icon="ban"/>-->
+          <!--{{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+        <!--</button>-->
+      <!--</div>-->
+    <!--</div>-->
 
   </div>
 </template>
@@ -371,7 +371,7 @@
         fetchListCoordinateMethod().then(response => {
           this.autocomplete.coordMethod = this.handleResponse(response);
         });
-        if (this.$route.meta.isEdit) {
+        if (this.$route.meta.isEdit  && this.createRelationWith.data === null) {
           this.sendingData = true;
           fetchSite(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
@@ -405,7 +405,7 @@
           this.setSiteNameAndProjectIfPreviousExists();
           this.loadListOfExistingProjects();
         }
-
+        this.$root.$on('add-new-site-from-modal', this.handleUserChoiceFromModal);
       },
 
       setDefaultRalatedData() {
@@ -620,6 +620,13 @@
           this.$router.push({path: '/project/' + activeProject})
 
       },
+      handleUserChoiceFromModal(choice) {
+        if(choice === 'LEAVE') {
+          this.saveAndNavigateBack()
+        } else if(choice === 'SAVE') {
+          this.add(false, 'site', false, true)
+        }
+      }
     },
     beforeRouteLeave(to, from, next) {
       //Do not remove relation object in case user created new relation object for simplified sample form
