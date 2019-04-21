@@ -41,7 +41,7 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="title" v-model="reference.title" :state="isDefinedAndNotNull(reference.title)" type="text"
+        <b-form-textarea :key="componentKey" id="title" v-model="reference.title" :state="isDefinedAndNotNull(reference.title)" type="text"
                          :rows="1" :max-rows="4"></b-form-textarea>
       </div>
     </div>
@@ -53,7 +53,7 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="title_original" v-model="reference.title_original" type="text"
+        <b-form-textarea :key="componentKey" id="title_original" v-model="reference.title_original" type="text"
                          :rows="1" :max-rows="4"></b-form-textarea>
       </div>
     </div>
@@ -266,7 +266,7 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="abstract" v-model="reference.abstract" type="text" size="sm"
+        <b-form-textarea :key="componentKey" id="abstract" v-model="reference.abstract" type="text" size="sm"
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
@@ -289,7 +289,7 @@
       </div>
 
       <div class="col-sm-10 mb-2">
-        <b-form-textarea id="remarks" v-model="reference.remarks" type="text" size="sm"
+        <b-form-textarea :key="componentKey" id="remarks" v-model="reference.remarks" type="text" size="sm"
                          :rows="1" :max-rows="20"></b-form-textarea>
       </div>
     </div>
@@ -564,6 +564,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           attachment: {},
+          componentKey: 0,
         }
       },
 
@@ -591,6 +592,7 @@
               this.reference = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.reference)
               this.removeUnnecessaryFields(this.reference, this.copyFields);
+              this.forceRerender()
               this.$emit('data-loaded',this.reference)
               this.$emit('set-object','reference')
               this.sendingData = false;
@@ -659,6 +661,10 @@
           this.setActiveTab('locality_reference')
         }
 
+      },
+
+      forceRerender() {
+        this.componentKey += 1;
       },
 
       setDefaultRelatedData(){
