@@ -15,17 +15,15 @@
           <font-awesome-icon icon="folder-open" class="pull-right" style="margin-top: 10px"/>
         </a>
       </li>
-
       <li :class="activeSection === 'samples' ? ' collapsed active' : ''" class="pl-2">
-        <span class="toggle-collapse" @click="showSampleMenu = !showSampleMenu"
-              :class="showSampleMenu ? 'collapsed' : null"> Samples
+        <a href="javascript:void(0)" @click="setActiveSection('files')" style="display: block;">
+
+          <span class="toggle-collapse" @click="showSampleMenu = !showSampleMenu"
+          :class="showSampleMenu ? 'collapsed' : null"> Samples
           <font-awesome-icon v-if="showSampleMenu" icon="chevron-up" style="margin-top: 10px;"/>
           <font-awesome-icon v-else icon="chevron-down" style="margin-top: 10px;"/>
-        </span>
-
-        <a href="javascript:void(0)" @click="setActiveSection('samples')"
-           style="display: inline-block; margin-left:20px">
-          <font-awesome-icon icon="vial" class="pull-right" style="margin-top: 10px;"/>
+          </span>
+          <font-awesome-icon icon="vial" class="pull-right" style="margin-top: 10px"/>
         </a>
       </li>
 
@@ -70,15 +68,15 @@
 
     </template>
 
-    <div @click="pinSidebar" id="thumbtack-icon">
-        <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
-                           style="margin-top: 10px;"/>
-      </div>
-    <span class="ml-1"  v-if="sidebarOpen">
-          <button @click="$root.$emit('button-clicked', 'SAVE')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
-          <button @click="$root.$emit('button-clicked', 'CANCEL')" class="btn btn-xs btn-danger p-1 ml-2 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
-    </span>
 
+    <span class="ml-2"  v-if="sidebarOpen">
+      <button @click="$root.$emit('button-clicked', 'SAVE')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
+      <button @click="$root.$emit('button-clicked', 'CANCEL')" class="btn btn-xs btn-danger p-1 ml-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
+    </span>
+    <div @click="pinSidebar" id="thumbtack-icon">
+      <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
+                         style="margin-top: 10px;"/>
+    </div>
     <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
       <span @click="$root.$emit('button-clicked', 'CANCEL')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
           {{$t('buttons.cancel')}}&ensp;
@@ -101,7 +99,10 @@
 
         </li>
       </span>
-
+      <span class="ml-1"  v-if="sidebarOpen && sidebarList.length > 0">
+        <button @click="previousPage" v-if="activeSearchParams.search.page > 1" class="btn btn-xs btn-outline-info ml-1 mt-2 p-1 pull-left" style="font-size: xx-small; text-transform: uppercase; width: 5rem"><font-awesome-icon icon="angle-double-left"/> </button>
+        <button @click="nextPage" class="btn btn-xs btn-outline-info mr-1 mt-2 p-1 pull-right" style="font-size: xx-small; text-transform: uppercase;width: 5rem"> <font-awesome-icon icon="angle-double-right"/></button>
+      </span>
     </div>
   </sidebar-wrapper>
 </template>
@@ -166,6 +167,12 @@
       deleteSearchPreferences() {
         this.$localStorage.remove(this.activeSearchParams.searchHistory)
         this.$store.state.activeSearchParams.search = this.activeSearchParams.defaultSearch
+      },
+      previousPage() {
+        this.$store.state.activeSearchParams.search.page = this.$store.state.activeSearchParams.search.page-1
+      },
+      nextPage(){
+        this.$store.state.activeSearchParams.search.page = this.$store.state.activeSearchParams.search.page+1
       }
     },
     watch: {
