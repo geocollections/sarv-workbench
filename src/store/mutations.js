@@ -21,6 +21,10 @@ export default {
   },
 
   SET_SIDEBAR_LIST: (state, { resp }) => {
-    Vue.set(state, 'sidebarList', resp.body.results || false) /* false means page not found */
+    Vue.set(state, 'sidebarList', { results : resp.body.results || false, totalPages: resp.body.page ? resp.body.page.split(' of ')[1]: undefined}) /* false means page not found */
+  },
+
+  SET_SIDEBAR_USER_ACTION: (state, { userAction }) => {
+    Vue.set(state, 'sidebarUserAction', userAction || false) /* false means page not found */
   },
 }

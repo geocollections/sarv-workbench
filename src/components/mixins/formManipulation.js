@@ -44,7 +44,7 @@ const formManipulation = {
   },
   mounted(){
     this.$root.$on('user-choice', this.handleUserChoice);
-    this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
+    // this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
 
     this.$parent.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
 
@@ -328,12 +328,6 @@ const formManipulation = {
         this.setActiveTab(this.nextTab, false);
       }
     },
-    handleSidebarUserChoice(choice){
-      let element = this.$refs[choice];
-      if(element) window.scrollTo(0, element.offsetTop);
-    },
-
-    //handleSidebarUserAction(userAction){},
 
     setActiveTab(type, isWarning = true){
       // If user clicks on currently active tab then do nothing
@@ -482,16 +476,18 @@ const formManipulation = {
     },
 
     hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
+      console.log(choice)
       let vm = this;
       if(this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
-      console.log(object)
-      console.log(choice)
+
       if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
       if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately).then(resp => {
         vm.$router.push({ path: '/' + object })
       })
       if (choice === "CLEAR") console.log('TODO')
-      if (choice === "CANCEL") this.$router.push({ path: '/' + object });
+      if (choice === "CANCEL") {
+        this.$router.push({ path: '/' + object })
+      }
       if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });
       if (choice === "NEXT") this.$router.push({ path: '/' + object + '/' + this.nextRecord });
     },

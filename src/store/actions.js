@@ -9,8 +9,6 @@ export default {
   },
 
   FETCH_PROJECTS: ({ commit, state }) => {
-    console.log(state.activeSearchParams)
     return fetchProjects(state.activeSearchParams.search, state.currentUser.id).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
-  },
-
+  }
 }

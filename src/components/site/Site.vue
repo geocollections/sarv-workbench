@@ -319,20 +319,23 @@
     computed: {
       createRelationWith() {
         return this.$store.state['createRelationWith']
+      },
+      sidebarUserAction() {
+        return this.$store.state['sidebarUserAction']
       }
     },
     created() {
       this.activeObject = 'site';
+      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'siteSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(), search: this.setDefaultSearchParameters(), request : 'FETCH_SITES', title: 'header.sites',
-        object:'site'})
+        defaultSearch: this.setDefaultSearchParameters(), search: params, request : 'FETCH_SITES', title: 'header.sites',
+        object:this.activeObject})
+
       this.loadFullInfo();
 
     },
-    mounted() {
-      this.$root.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
-      this.$root.$on('sidebar-user-action', this.handleSidebarUserAction);
-    },
+
     methods: {
       setInitialData() {
         return {
@@ -517,7 +520,7 @@
           project: null,
           projectId: null,
           page: 1,
-          paginateBy: 10,
+          paginateBy: 8,
           orderBy: '-id',
         }
       },
@@ -606,21 +609,33 @@
           })
         }
       },
+
       handleSidebarUserAction(userAction) {
+        console.log(userAction)
         if (userAction.action === 'addSample') this.addSample()
+        else if(userAction.action === 'navigate') {
+          let element = this.$refs[userAction.choice];
+          if(element) window.scrollTo(0, element.offsetTop);
+        } else if(userAction.action === 'save') {
+          this.saveAndNavigateBack()
+        } else if(userAction.action === 'cancel') {
+          this.navigateBack()
+        }
       },
 
       saveAndNavigateBack(object) {
-        this.add(true, object)
-        this.navigateBack(object)
+        let vm = this
+        this.add(true, object).then(resp => {
+          vm.navigateBack(object)
+        })
+
       },
 
-      navigateBack(object) {
+      navigateBack() {
         if (this.createRelationWith.object !== null) this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
 
         //special case (SITE do not have LIST view)
         let activeProject = this.getActiveProject();
-        console.log(activeProject)
         activeProject === null ?
           this.$router.push({path: '/project'}) :
           this.$router.push({path: '/project/' + activeProject})
@@ -641,6 +656,7 @@
         this.$store.commit('REMOVE_RELATION_OBJECT');
 
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
+      this.$root.$emit('show-sidebar', false);
       next()
     },
 
@@ -651,7 +667,9 @@
         },
         deep: true
       },
-
+      'sidebarUserAction'(newval, oldval) {
+        this.handleSidebarUserAction(newval)
+      },
     }
   }
 </script>

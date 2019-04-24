@@ -14,7 +14,8 @@ export function createStore () {
       createRelationWith: { object: null, data: null, info: null },
       activeObject: null,
       sidebarList:[],
-      activeSearchParams: null
+      activeSearchParams: null,
+      sidebarUserAction: null
     },
     actions,
     mutations,

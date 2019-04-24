@@ -3,20 +3,20 @@
   <sidebar-wrapper ref="navbar" v-bind:class="{ active: sidebarOpen }" :key="componentKey">
     <template v-if="$route.meta.table === 'site'">
       <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setActiveSection('info')" style="display: block;">
+        <a href="javascript:void(0)" @click="setAction('navigate','info')" style="display: block;">
           Üldinfo
           <font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>
         </a>
       </li>
 
       <li :class="activeSection === 'files' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setActiveSection('files')" style="display: block;">
+        <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
           Files
           <font-awesome-icon icon="folder-open" class="pull-right" style="margin-top: 10px"/>
         </a>
       </li>
       <li :class="activeSection === 'samples' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setActiveSection('files')" style="display: block;">
+        <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
 
           <span class="toggle-collapse" @click="showSampleMenu = !showSampleMenu"
           :class="showSampleMenu ? 'collapsed' : null"> Samples
@@ -36,14 +36,14 @@
     </template>
     <template v-if="$route.meta.table === 'project'">
       <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setActiveSection('info')" style="display: block;">
+        <a href="javascript:void(0)" @click="setAction('navigate','info')" style="display: block;">
           Üldinfo
           <font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>
         </a>
       </li>
 
       <li :class="activeSection === 'files' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setActiveSection('files')" style="display: block;">
+        <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
           Files
           <font-awesome-icon icon="folder-open" class="pull-right" style="margin-top: 10px"/>
         </a>
@@ -55,7 +55,7 @@
           <font-awesome-icon v-else icon="chevron-down" style="margin-top: 10px;"/>
         </span>
 
-        <a href="javascript:void(0)" @click="setActiveSection('sites')" style="display: inline-block; margin-left:43px">
+        <a href="javascript:void(0)" @click="setAction('navigate','sites')" style="display: inline-block; margin-left:43px">
           <font-awesome-icon icon="globe-americas" class="pull-right" style="margin-top: 10px;"/>
         </a>
       </li>
@@ -70,19 +70,19 @@
 
 
     <span class="ml-2"  v-if="sidebarOpen">
-      <button @click="$root.$emit('button-clicked', 'SAVE_AND_LEAVE', true)" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
-      <button @click="$root.$emit('button-clicked', 'CANCEL')" class="btn btn-xs btn-danger p-1 ml-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
+      <button @click="setAction('save')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
+      <button @click="setAction('cancel')" class="btn btn-xs btn-danger p-1 ml-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
     </span>
     <div @click="pinSidebar" id="thumbtack-icon">
       <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
                          style="margin-top: 10px;"/>
     </div>
     <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
-      <span @click="$root.$emit('button-clicked', 'CANCEL')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
+      <span @click="setAction('cancel')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
           {{$t('buttons.cancel')}}&ensp;
           <font-awesome-icon icon="ban" class="pull-right mr-1" style="color:#dc3545;margin-top: 10px;"/>
         </span>
-      <span @click="$root.$emit('button-clicked', 'SAVE_AND_LEAVE', true)" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; " v-if="!sidebarOpen">
+      <span @click="setAction('save')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; " v-if="!sidebarOpen">
            {{ $t('edit.buttons.save')}}&ensp;<font-awesome-icon icon="save" class="pull-right mr-1"
                                                                 style="color:#28a745;margin-top: 10px; "/>
          </span>
@@ -93,15 +93,15 @@
           <button @click="deleteSearchPreferences" class="btn btn-xs btn-warning p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">Default <font-awesome-icon icon="ban"/></button>
         </span>
         <li class="element-list" :class="{active : parseInt($route.params.id) === entity.id }" style="display: block;"
-            v-for="entity in sidebarList" v-if="sidebarList.length > 0">
+            v-for="entity in sidebarList.results" v-if="sidebarList.results.length > 0">
            <router-link :to="{ path: '/'+activeSearchParams.object+'/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity.name}}
       </router-link>
 
         </li>
       </span>
-      <span class="ml-1"  v-if="sidebarOpen && sidebarList.length > 0">
-        <button @click="previousPage" v-if="activeSearchParams.search.page > 1" class="btn btn-xs btn-outline-info ml-1 mt-2 p-1 pull-left" style="font-size: xx-small; text-transform: uppercase; width: 5rem"><font-awesome-icon icon="angle-double-left"/> </button>
-        <button @click="nextPage" class="btn btn-xs btn-outline-info mr-1 mt-2 p-1 pull-right" style="font-size: xx-small; text-transform: uppercase;width: 5rem"> <font-awesome-icon icon="angle-double-right"/></button>
+      <span class="ml-1"  v-if="sidebarOpen && sidebarList.results.length > 0">
+        <button @click="previousPage" v-if="sidebarList.totalPages && activeSearchParams.search.page > 1" class="btn btn-xs btn-outline-info ml-1 mt-2 p-1 pull-left" style="font-size: xx-small; text-transform: uppercase; width: 5rem"><font-awesome-icon icon="angle-double-left"/> </button>
+        <button @click="nextPage" v-if="sidebarList.totalPages  && activeSearchParams.search.page < sidebarList.totalPages" class="btn btn-xs btn-outline-info mr-1 mt-2 p-1 pull-right" style="font-size: xx-small; text-transform: uppercase;width: 5rem"> <font-awesome-icon icon="angle-double-right"/></button>
       </span>
     </div>
   </sidebar-wrapper>
@@ -111,7 +111,7 @@
 
   import fontAwesomeLib from './../mixins/fontAwasomeLib'
   import SidebarWrapper from "./SidebarWrapper";
-
+  import cloneDeep from 'lodash/cloneDeep'
   export default {
     name: "Sidebar",
     components: {SidebarWrapper},
@@ -130,9 +130,7 @@
       }
     },
     computed: {
-      activeSearchParams() {
-        return this.$store.state['activeSearchParams']
-      },
+      activeSearchParams() { return this.$store.state['activeSearchParams'] },
       sidebarList() {
         return this.$store.state['sidebarList']
       }
@@ -147,12 +145,15 @@
     },
     methods: {
       setActiveSection(section) {
-        this.activeSection = section;
-        this.$root.$emit('sidebar-user-choice', section)
+
+        // this.$root.$emit('sidebar-user-action', {action: 'navigate',choice:section})
       },
 
-      setAction(action, object) {
-        this.$root.$emit('sidebar-user-action', {action: action})
+      setAction(action, choice) {
+        // this.$root.$emit('sidebar-user-action', {action: action})
+        if (action === 'navigate') this.activeSection = choice;
+
+        this.$store.commit("SET_SIDEBAR_USER_ACTION", {userAction: {action: action, choice:choice} })
       },
       forceRerender() {
         this.componentKey += 1;
@@ -160,13 +161,14 @@
       pinSidebar() {
         this.isThumbtackDown = !this.isThumbtackDown;
         this.sidebarOpen = !this.sidebarOpen;
-        this.$parent.sidebarOpen = !this.$parent.sidebarOpen;
+        this.$root.$emit('show-sidebar');
+        // this.$parent.sidebarOpen = !this.$parent.sidebarOpen;
         // this.sidebarOpen ? document.getElementById('thumbtack-icon').classList.toggle("down") : document.getElementById('thumbtack-icon').classList.remove("down");
         this.forceRerender()
       },
       deleteSearchPreferences() {
         this.$localStorage.remove(this.activeSearchParams.searchHistory)
-        this.$store.state.activeSearchParams.search = this.activeSearchParams.defaultSearch
+        this.$store.state.activeSearchParams.search = cloneDeep(this.activeSearchParams.defaultSearch)
       },
       previousPage() {
         this.$store.state.activeSearchParams.search.page = this.$store.state.activeSearchParams.search.page-1
@@ -178,15 +180,14 @@
     watch: {
       'activeSearchParams': {
         handler: function (newval, oldval) {
-          // this.$store.dispatch('FETCH_SITES')
+          if(newval === null) return
           this.$store.dispatch(newval.request)
-          console.log(newval)
         },
         deep: true
       },
       'sidebarList': {
         handler: function (newval, oldval) {
-          console.log(newval)
+
         },
         deep: true
       },

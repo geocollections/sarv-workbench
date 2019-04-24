@@ -296,6 +296,7 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
@@ -344,23 +345,27 @@
     data() {
       return this.setInitialData()
     },
-
+    computed:{
+      sidebarUserAction() {
+        return this.$store.state['sidebarUserAction']
+      }
+    },
     created() {
       this.activeObject = 'project';
 
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'projectSearchHistory',
         defaultSearch: this.searchParameters, search: params, request : 'FETCH_PROJECTS', title : 'header.projects',
-        object:'project'})
+        object:this.activeObject});
+
       this.loadFullInfo()
-      window.addEventListener('resize', this.handleResize)
+
+      //TODO:REMOVE handle resize logic I DONT remember why?
+      window.addEventListener('resize', this.handleResize);
       this.handleResize();
     },
-    mounted() {
-      this.$root.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
-      this.$root.$on('sidebar-user-action', this.handleSidebarUserAction);
-    },
+
     beforeMount() {
       let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
       let currentProjectIdx = findIndex(currentActiveProjects, function (item) {
@@ -626,7 +631,16 @@
       },
       handleSidebarUserAction(userAction) {
         if (userAction.action === 'addSite') this.registerObservation()
+        else if(userAction.action === 'navigate') {
+          let element = this.$refs[userAction.choice];
+          if(element) window.scrollTo(0, element.offsetTop);
+        } else if(userAction.action === 'save') {
+          this.hoverSaveOrCancelButtonClicked('SAVE_AND_LEAVE','project',true)
+        } else if(userAction.action === 'cancel') {
+          this.hoverSaveOrCancelButtonClicked('CANCEL','project',true)
+        }
       },
+
       handleResize() {
         this.window.width = window.innerWidth;
         this.window.height = window.innerHeight;
@@ -635,7 +649,11 @@
         this.addFileAsRelatedData(data, 'project');
       },
     },
-
+    beforeRouteLeave(to, from, next) {
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
+      this.$root.$emit('show-sidebar', false);
+      next()
+    },
     watch: {
       '$route.params.id': {
         handler: function (newval, oldval) {
@@ -661,6 +679,11 @@
         }
 
         this.$localStorage.set('activeProject', currentActiveProjects)
+      },
+      //Because of $root.$on triggering method 'handleSidebarUserAction' several times after each click. It was decided to
+      //store this action
+      'sidebarUserAction'(newval, oldval) {
+        this.handleSidebarUserAction(newval)
       },
     }
   }

@@ -7,7 +7,7 @@
            lazy
            scrollable
            ref="newSiteForm"
-           :title="$t('header.addSample')">
+           :title="$t('titles.addSite')">
     <site></site>
 
     <template slot="modal-footer">

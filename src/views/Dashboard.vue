@@ -29,6 +29,15 @@
         sidebarOpen : false
       }
     },
+    mounted() {
+      this.$root.$on('show-sidebar',this.setSitebarPosition)
+    },
+    methods: {
+      setSitebarPosition(constState) {
+        if(constState === false) this.sidebarOpen = constState;
+        else this.sidebarOpen = !this.sidebarOpen;
+      }
+    },
     metaInfo () {
       return {
         title: this.$t('titles.dashboard')
