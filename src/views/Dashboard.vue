@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <app-header/>
+
     <sidebar v-if="$route.meta.isSidebarShown"/>
 
     <div class="main container" v-bind:class="{ sidebarOpen: sidebarOpen }">

@@ -615,7 +615,8 @@
         if (userAction.action === 'addSample') this.addSample()
         else if(userAction.action === 'navigate') {
           let element = this.$refs[userAction.choice];
-          if(element) window.scrollTo(0, element.offsetTop);
+          let sizeOfHeader = 60;
+          if(element) window.scrollTo(0,  element.offsetTop-sizeOfHeader);
         } else if(userAction.action === 'save') {
           this.saveAndNavigateBack()
         } else if(userAction.action === 'cancel') {

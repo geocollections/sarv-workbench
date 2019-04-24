@@ -1,92 +1,93 @@
 <template>
   <!--nav sidebar -->
-  <sidebar-wrapper ref="navbar" v-bind:class="{ active: sidebarOpen }" :key="componentKey">
-    <template v-if="$route.meta.table === 'site'">
-      <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setAction('navigate','info')" style="display: block;">
-          Üldinfo
-          <font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>
-        </a>
-      </li>
+  <transition name="fade-sidebar">
+    <sidebar-wrapper ref="navbar" v-bind:class="{ active: sidebarOpen }" :key="componentKey">
+      <template v-if="$route.meta.table === 'site'">
+        <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
+          <a href="javascript:void(0)" @click="setAction('navigate','info')" style="display: block;">
+            Üldinfo
+            <font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>
+          </a>
+        </li>
 
-      <li :class="activeSection === 'files' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
-          Files
-          <font-awesome-icon icon="folder-open" class="pull-right" style="margin-top: 10px"/>
-        </a>
-      </li>
-      <li :class="activeSection === 'samples' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
+        <li :class="activeSection === 'files' ? ' collapsed active' : ''" class="pl-2">
+          <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
+            Files
+            <font-awesome-icon icon="folder-open" class="pull-right" style="margin-top: 10px"/>
+          </a>
+        </li>
+        <li :class="activeSection === 'samples' ? ' collapsed active' : ''" class="pl-2">
+          <a href="javascript:void(0)" @click="setAction('navigate','samples')" style="display: block;">
 
           <span class="toggle-collapse" @click="showSampleMenu = !showSampleMenu"
-          :class="showSampleMenu ? 'collapsed' : null"> Samples
+                :class="showSampleMenu ? 'collapsed' : null"> Samples
           <font-awesome-icon v-if="showSampleMenu" icon="chevron-up" style="margin-top: 10px;"/>
           <font-awesome-icon v-else icon="chevron-down" style="margin-top: 10px;"/>
           </span>
-          <font-awesome-icon icon="vial" class="pull-right" style="margin-top: 10px"/>
-        </a>
-      </li>
+            <font-awesome-icon icon="vial" class="pull-right" style="margin-top: 10px"/>
+          </a>
+        </li>
 
-      <b-collapse v-model="showSampleMenu" id="collapseSample">
-        <ul class="sub-menu">
-          <li><a href="#" @click="setAction('addSample')" style="display: inline-block; ">Add sample</a></li>
-        </ul>
-      </b-collapse>
+        <b-collapse v-model="showSampleMenu" id="collapseSample">
+          <ul class="sub-menu">
+            <li><a href="#" @click="setAction('addSample')" style="display: inline-block; ">Add sample</a></li>
+          </ul>
+        </b-collapse>
 
-    </template>
-    <template v-if="$route.meta.table === 'project'">
-      <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setAction('navigate','info')" style="display: block;">
-          Üldinfo
-          <font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>
-        </a>
-      </li>
+      </template>
+      <template v-if="$route.meta.table === 'project'">
+        <li :class="activeSection === 'info' ? ' collapsed active' : ''" class="pl-2">
+          <a href="javascript:void(0)" @click="setAction('navigate','info')" style="display: block;">
+            Üldinfo
+            <font-awesome-icon icon="project-diagram" class="pull-right" style="margin-top: 10px"/>
+          </a>
+        </li>
 
-      <li :class="activeSection === 'files' ? ' collapsed active' : ''" class="pl-2">
-        <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
-          Files
-          <font-awesome-icon icon="folder-open" class="pull-right" style="margin-top: 10px"/>
-        </a>
-      </li>
+        <li :class="activeSection === 'files' ? ' collapsed active' : ''" class="pl-2">
+          <a href="javascript:void(0)" @click="setAction('navigate','files')" style="display: block;">
+            Files
+            <font-awesome-icon icon="folder-open" class="pull-right" style="margin-top: 10px"/>
+          </a>
+        </li>
+        <li :class="activeSection === 'sites' ? ' collapsed active' : ''" class="pl-2">
+          <a href="javascript:void(0)" @click="setAction('navigate','sites')" style="display: block;">
 
-      <li :class="activeSection === 'samples' ? ' collapsed active' : ''" class="pl-2">
-        <span class="toggle-collapse" @click="showSiteMenu = !showSiteMenu" :class="showSiteMenu ? 'collapsed' : null"> Sites
+          <span class="toggle-collapse" @click="showSiteMenu = !showSiteMenu"
+                :class="showSiteMenu ? 'collapsed' : null"> Sites
           <font-awesome-icon v-if="showSiteMenu" icon="chevron-up" style="margin-top: 10px;"/>
           <font-awesome-icon v-else icon="chevron-down" style="margin-top: 10px;"/>
-        </span>
+          </span>
+            <font-awesome-icon icon="globe-americas" class="pull-right" style="margin-top: 10px"/>
+          </a>
+        </li>
 
-        <a href="javascript:void(0)" @click="setAction('navigate','sites')" style="display: inline-block; margin-left:43px">
-          <font-awesome-icon icon="globe-americas" class="pull-right" style="margin-top: 10px;"/>
-        </a>
-      </li>
+        <b-collapse v-model="showSiteMenu" id="collapseSample">
+          <ul class="sub-menu">
+            <li><a href="#" @click="setAction('addSite')" style="display: inline-block; ">Add site</a></li>
+          </ul>
+        </b-collapse>
 
-      <b-collapse v-model="showSiteMenu" id="collapseSample">
-        <ul class="sub-menu">
-          <li><a href="#" @click="setAction('addSite')" style="display: inline-block; ">Add site</a></li>
-        </ul>
-      </b-collapse>
-
-    </template>
+      </template>
 
 
-    <span class="ml-2"  v-if="sidebarOpen">
+      <span class="ml-2"  v-if="sidebarOpen">
       <button @click="setAction('save')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
       <button @click="setAction('cancel')" class="btn btn-xs btn-danger p-1 ml-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
     </span>
-    <div @click="pinSidebar" id="thumbtack-icon">
-      <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
-                         style="margin-top: 10px;"/>
-    </div>
-    <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
+      <div @click="pinSidebar" id="thumbtack-icon">
+        <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
+                           style="margin-top: 10px;"/>
+      </div>
+      <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
       <span @click="setAction('cancel')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
           {{$t('buttons.cancel')}}&ensp;
           <font-awesome-icon icon="ban" class="pull-right mr-1" style="color:#dc3545;margin-top: 10px;"/>
         </span>
-      <span @click="setAction('save')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; " v-if="!sidebarOpen">
+        <span @click="setAction('save')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; " v-if="!sidebarOpen">
            {{ $t('edit.buttons.save')}}&ensp;<font-awesome-icon icon="save" class="pull-right mr-1"
                                                                 style="color:#28a745;margin-top: 10px; "/>
          </span>
-      <span class="ml-2" v-if="sidebarOpen">
+        <span class="ml-2" v-if="sidebarOpen && activeSearchParams !== null">
         <br><span class="ml-2"  style="font-size: medium">{{$t(activeSearchParams.title)}}</span>
 
         <span class="ml-3">
@@ -99,12 +100,15 @@
 
         </li>
       </span>
-      <span class="ml-1"  v-if="sidebarOpen && sidebarList.results.length > 0">
+        <span class="ml-1"  v-if="sidebarOpen && sidebarList.results.length > 0">
         <button @click="previousPage" v-if="sidebarList.totalPages && activeSearchParams.search.page > 1" class="btn btn-xs btn-outline-info ml-1 mt-2 p-1 pull-left" style="font-size: xx-small; text-transform: uppercase; width: 5rem"><font-awesome-icon icon="angle-double-left"/> </button>
         <button @click="nextPage" v-if="sidebarList.totalPages  && activeSearchParams.search.page < sidebarList.totalPages" class="btn btn-xs btn-outline-info mr-1 mt-2 p-1 pull-right" style="font-size: xx-small; text-transform: uppercase;width: 5rem"> <font-awesome-icon icon="angle-double-right"/></button>
       </span>
-    </div>
-  </sidebar-wrapper>
+      </div>
+    </sidebar-wrapper>
+
+  </transition>
+
 </template>
 
 <script>
@@ -220,5 +224,14 @@
     transform: rotate(90deg);
     min-width: 113px;
 
+  }
+  .fade-sidebar-leave-active {
+    transition: opacity .2s;
+  }
+  .fade-sidebar-enter-active {
+    transition: opacity .7s;
+  }
+  .fade-sidebar-enter, .fade-sidebar-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0.1;
   }
 </style>

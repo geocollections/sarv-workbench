@@ -633,7 +633,8 @@
         if (userAction.action === 'addSite') this.registerObservation()
         else if(userAction.action === 'navigate') {
           let element = this.$refs[userAction.choice];
-          if(element) window.scrollTo(0, element.offsetTop);
+          let sizeOfHeader = 60;
+          if(element) window.scrollTo(0, element.offsetTop-sizeOfHeader);
         } else if(userAction.action === 'save') {
           this.hoverSaveOrCancelButtonClicked('SAVE_AND_LEAVE','project',true)
         } else if(userAction.action === 'cancel') {
