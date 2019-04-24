@@ -70,7 +70,7 @@
 
 
     <span class="ml-2"  v-if="sidebarOpen">
-      <button @click="$root.$emit('button-clicked', 'SAVE')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
+      <button @click="$root.$emit('button-clicked', 'SAVE_AND_LEAVE', true)" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
       <button @click="$root.$emit('button-clicked', 'CANCEL')" class="btn btn-xs btn-danger p-1 ml-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
     </span>
     <div @click="pinSidebar" id="thumbtack-icon">
@@ -82,7 +82,7 @@
           {{$t('buttons.cancel')}}&ensp;
           <font-awesome-icon icon="ban" class="pull-right mr-1" style="color:#dc3545;margin-top: 10px;"/>
         </span>
-      <span @click="$root.$emit('button-clicked', 'SAVE')" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; " v-if="!sidebarOpen">
+      <span @click="$root.$emit('button-clicked', 'SAVE_AND_LEAVE', true)" class="p-0 pr-2 pl-2 actionBtn" style="bottom: 27%; " v-if="!sidebarOpen">
            {{ $t('edit.buttons.save')}}&ensp;<font-awesome-icon icon="save" class="pull-right mr-1"
                                                                 style="color:#28a745;margin-top: 10px; "/>
          </span>

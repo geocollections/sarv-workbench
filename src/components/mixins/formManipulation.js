@@ -86,7 +86,7 @@ const formManipulation = {
     validate(object){
       let vm = this, isValid = true;
       this.requiredFields.forEach(function (el) {
-        console.log(vm[object][el])
+        // console.log(vm[object][el])
         isValid &= vm.isDefinedAndNotNullAndNotEmptyString(vm[object][el])
       });
       return isValid
@@ -149,7 +149,6 @@ const formManipulation = {
     },
 
     request(object,formData,url,resolve, isCopy) {
-      console.log(isCopy)
       if(!isCopy) this.sendingData = true;
       this.loadingPercent = 0;
 
@@ -483,10 +482,14 @@ const formManipulation = {
     },
 
     hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
+      let vm = this;
       if(this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
-        console.log(object)
+      console.log(object)
+      console.log(choice)
       if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
-      if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately)
+      if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately).then(resp => {
+        vm.$router.push({ path: '/' + object })
+      })
       if (choice === "CLEAR") console.log('TODO')
       if (choice === "CANCEL") this.$router.push({ path: '/' + object });
       if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });

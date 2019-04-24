@@ -353,7 +353,7 @@
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'projectSearchHistory',
         defaultSearch: this.searchParameters, search: params, request : 'FETCH_PROJECTS', title : 'header.projects',
         object:'project'})
-      // this.loadFullInfo()
+      this.loadFullInfo()
       window.addEventListener('resize', this.handleResize)
       this.handleResize();
     },
