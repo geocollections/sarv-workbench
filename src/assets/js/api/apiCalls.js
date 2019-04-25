@@ -498,6 +498,10 @@ export function fetchProjects(data,agent) {
     searchFields += `id__icontains=${data.id}`
   }
 
+  if (data.name !== null && data.name.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`
+  }
+
   if (data.owner !== null && data.owner.trim().length > 0) {
     searchFields += `&multi_search=value:${data.owner};fields:owner__agent;fields:owner__agent_surname;fields:owner__agent_firstname;lookuptype:icontains`
   }

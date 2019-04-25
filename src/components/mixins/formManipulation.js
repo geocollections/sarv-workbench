@@ -109,7 +109,6 @@ const formManipulation = {
         formData.append('data', dataToUpload);
 
         this.saveData(object, formData, url).then(savedObjectId => {
-          console.log('error')
           //before save object ID was removed
           this[object] = editableObject;
           // if (savedObjectId === undefined || savedObjectId === false) return;

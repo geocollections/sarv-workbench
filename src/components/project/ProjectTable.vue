@@ -17,7 +17,6 @@
     <td>{{entity.date_end}}</td>
     <td>{{entity.date_free}}</td>
     <td>{{entity.owner__agent}}</td>
-    <td></td>
   </tr>
 
   </tbody>
