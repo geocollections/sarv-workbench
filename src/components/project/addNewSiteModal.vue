@@ -7,7 +7,7 @@
            lazy
            scrollable
            ref="newSiteForm"
-           :title="setTitle()">
+           :title="title">
     <site :edit-site="site"></site>
 
     <template slot="modal-footer">
@@ -40,6 +40,13 @@
         this.$parent.$on('show-new-site-modal', this.showModal);
         this.$root.$on('close-new-site-modal', this.hideModal);
       },
+      computed: {
+          title() {
+            console.log(this.site)
+            if(this.site === null || typeof this.site === 'undefined' ) return this.$t('header.sites');
+            return this.$t('header.sites') + ' id:' + this.site.id
+          }
+      },
       methods: {
         showModal(){
           this.$refs.newSiteForm.show()
@@ -48,10 +55,11 @@
           this.$refs.newSiteForm.hide()
           this.$parent.loadRelatedData('site')
         },
-        setTitle() {
-          if(this.site === null) return this.$t('header.sites')
-          return this.$t('header.sites') + ' id:' + this.site.id
-        }
+        // setTitle() {
+        //   console.log(this.site || typeof this.site === 'undefined')
+        //   if(this.site === null || typeof this.site === 'undefined' ) return this.$t('header.sites')
+        //   return this.$t('header.sites') + ' id:' + this.site.id
+        // }
       }
     }
 </script>

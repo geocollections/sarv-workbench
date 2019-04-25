@@ -6,7 +6,7 @@
       <div class="col">
         <add-new-site :sendingData = "sendingData" :site="watchedSite"></add-new-site>
         <span class="float-right" v-if="$route.meta.isEdit">
-          <button class="btn btn-outline-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>
+          <button class="btn btn-outline-primary mb-2" @click="addOrEditSite()"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>
         </span>
         <span class="float-left">
          <span class="custom-control custom-switch">
@@ -244,7 +244,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(site,index) in relatedData.site">
-                  <td style="padding: 4px;cursor: pointer" @click="watchSite(site)"><!--@click="windowOpenNewTab('site','/site/'+site.id)"-->
+                  <td style="padding: 4px;cursor: pointer" @click="addOrEditSite(site)"><!--@click="windowOpenNewTab('site','/site/'+site.id)"-->
                     <font-awesome-icon size="1x" icon="eye"/>
                     {{site.id}}
                   </td>
@@ -584,6 +584,7 @@
           // paginateBy: 50,
           // orderBy: '-id',
           id: null,
+          name: null,
           orderBy: "-id",
           owner: null,
           page: 1,
@@ -601,13 +602,8 @@
         this.relatedData.attachment_link.push(option)
       },
 
-      watchSite(site) {
-        this.watchedSite = site
-        this.$emit('show-new-site-modal')
-      },
-
-      registerObservation() {
-
+      addOrEditSite(site) {
+        if(site) this.watchedSite = site
         //set relation object as site
         let createRelationWith = {
           object: 'project', data: this.project,
@@ -635,7 +631,7 @@
         this.add(true, 'project', true);
       },
       handleSidebarUserAction(userAction) {
-        if (userAction.action === 'addSite') this.registerObservation()
+        if (userAction.action === 'addSite') this.addOrEditSite()
         else if(userAction.action === 'navigate') {
           let element = this.$refs[userAction.choice];
           let sizeOfHeader = 60;

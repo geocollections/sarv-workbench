@@ -208,7 +208,7 @@
       </transition>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" ref="files">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" ref="files">
       <legend class="w-auto" @click="block.files = !block.files" :style="!block.files ? {'color':'blue'} : ''">Files
         <font-awesome-icon icon="folder-open"/>
       </legend>
@@ -232,8 +232,8 @@
           <span class="float-right">
             <button class="btn btn-outline-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
           </span>
-            <div class="table-responsive-sm">
-              <linked-sample-table :siteID="$route.params.id"></linked-sample-table>
+            <div class="table-responsive-sm" v-if="routeId">
+              <linked-sample-table :siteID="routeId+''"></linked-sample-table>
             </div>
           </div>
         </div>
@@ -322,7 +322,11 @@
       },
       sidebarUserAction() {
         return this.$store.state['sidebarUserAction']
+      },
+      routeId() {
+        return this.isDefinedAndNotNull(this.editSite) ? this.editSite.id : this.$route.params.id
       }
+
     },
     created() {
       this.activeObject = 'site';
@@ -356,19 +360,12 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          shortcuts: [
-            {
-              text: 'Today',
-              onClick: () => {
-                this.time3 = [new Date(), new Date()]
-              }
-            }
-          ],
           attachmentLinkSaved : -1,
           block: {info: !this.$route.meta.isEdit , location: false, description: false, files: true, samples: true}
 
         }
       },
+
       reloadData() {
         Object.assign(this.$data, this.setInitialData());
         this.loadFullInfo()
@@ -379,10 +376,10 @@
           this.autocomplete.coordMethod = this.handleResponse(response);
         });
 
-        if (this.$route.meta.isEdit  && this.createRelationWith.data === null) {
+        if (this.$route.meta.isEdit  && this.createRelationWith.data === null || this.isDefinedAndNotNull(this.editSite)) {
           this.sendingData = true;
-          let id = this.isDefinedAndNotNull(this.editSite) ? this.editSite.id : this.$route.params.id
-          fetchSite(id).then(response => {
+
+          fetchSite(this.routeId).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
               this.site = this.handleResponse(response)[0];
@@ -477,9 +474,9 @@
         let query;
 
         if (object === 'attachment_link') {
-          query = fetchSiteAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+          query = fetchSiteAttachment(this.routeId, this.relatedData.page.attachment_link)
         } else if (object === 'sample') {
-          query = fetchLinkedSamples(this.$route.params.id, this.relatedData.page.sample)
+          query = fetchLinkedSamples(this.routeId, this.relatedData.page.sample)
         }
         return new Promise(resolve => {
           query.then(response => {
@@ -596,6 +593,7 @@
         this.relatedData.attachment_link.splice(idx, 1);
         this.add(true, 'site', true);
       },
+
       loadListOfExistingProjects() {
         let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'));
         if (currentActiveProjects && currentActiveProjects !== 'fallbackValue' && currentActiveProjects.length > 0) {
@@ -665,7 +663,7 @@
     },
 
     watch: {
-      '$route.params.id': {
+      'routeId': {
         handler: function (newval, oldval) {
           this.reloadData()
         },
