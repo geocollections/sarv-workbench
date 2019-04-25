@@ -229,9 +229,15 @@
         <div class="row" v-if="block.samples">
           <add-new-sample :sendingData = "sendingData" ></add-new-sample>
           <div class="col-sm-12 mb-2">
-          <span class="float-right">
-            <button class="btn btn-outline-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
-          </span>
+            <b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)">
+              To add sample go to site page
+              <a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">
+                <font-awesome-icon icon="external-link-alt"/>
+              </a>
+            </b-alert>
+            <span class="float-right">
+              <button class="btn btn-outline-primary mb-2" v-if="!isDefinedAndNotNull(editSite)" @click="addSample">{{ $t('add.new') }}</button>
+            </span>
             <div class="table-responsive-sm" v-if="routeId">
               <linked-sample-table :siteID="routeId+''"></linked-sample-table>
             </div>
@@ -312,7 +318,7 @@
       Spinner,
     },
     mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
-    props: ['editSite'],
+    props:['editSite'],
     data() {
       return this.setInitialData()
     },
@@ -325,7 +331,10 @@
       },
       routeId() {
         return this.isDefinedAndNotNull(this.editSite) ? this.editSite.id : this.$route.params.id
-      }
+      },
+      // editSite() {
+      //   return null//this.$store.state['createRelationWith'].edit
+      // }
 
     },
     created() {
@@ -412,7 +421,7 @@
           this.setSiteNameAndProjectIfPreviousExists();
           this.loadListOfExistingProjects();
         }
-        this.$root.$on('add-new-site-from-modal', this.handleUserChoiceFromModal);
+        this.$root.$once('add-or-edit-site-from-modal', this.handleUserChoiceFromModal);
       },
 
       setDefaultRalatedData() {
@@ -555,7 +564,7 @@
       addSample() {
         let isFull = false
         this.$store.commit('SET_SAMPLE_VIEW', {isFull});
-        console.log(this.relatedData)
+        console.log(this.$store.state['createRelationWith'])
         let createRelationWith = {
           object: 'site', data: cloneDeep(this.site),
           relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},
@@ -625,8 +634,7 @@
 
       saveAndNavigateBack(object) {
         let vm = this
-        this.add(true, object,false,true).then(resp => {
-          console.log(resp)
+        this.add(false, object,false,true).then(resp => {
           vm.navigateBack()
         })
 
@@ -644,10 +652,13 @@
       },
       handleUserChoiceFromModal(choice) {
         console.log(choice)
-        if(choice === 'LEAVE') {
-          this.saveAndNavigateBack('site')
+        let vm = this
+        if(choice === 'SAVE_AND_LEAVE') {
+          this.add(false, 'site',false,true).then(resp => {
+            vm.$root.$emit('close-new-site-modal')
+          })
         } else if(choice === 'SAVE') {
-          this.add(false, 'site', false, true)
+          this.add(true, 'site',false,false)
         }
       }
     },

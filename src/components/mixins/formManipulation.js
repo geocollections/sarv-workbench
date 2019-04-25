@@ -228,10 +228,13 @@ const formManipulation = {
               vm.attachmentLinkSaved -= 1;
             });
           }
-          if(this.attachmentLinkSaved === 1) createRelation(vm, object, savedObjectId)
-          savedObjectId.forEach(file => {
-            createRelation(vm, object, file)
-          })
+          if(this.attachmentLinkSaved === 1)
+            createRelation(vm, object, savedObjectId)
+          else {
+            savedObjectId.forEach(file => {
+              createRelation(vm, object, file)
+            })
+          }
         });
       } catch (e) {
         console.log('Attachment cannot not be added')

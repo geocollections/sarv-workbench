@@ -86,7 +86,6 @@
         },
         loadLinkedSamples() {
           fetchLinkedSamplesX(this.searchParameters, this.siteID).then(response=>{
-            console.log(response)
             this.samples = response.body.results ? response.body.results : []
             this.$parent.relatedData.sample = this.samples
           });
@@ -95,7 +94,6 @@
       watch: {
         'searchParameters': {
           handler: function (newval, oldval) {
-            console.log(newval)
             this.loadLinkedSamples()
           },
           deep: true

@@ -321,7 +321,7 @@
   import findIndex from 'lodash/findIndex';
   import SaveButtons from "../partial/SaveButtons";
   import MultimediaComponent from "../partial/MultimediaComponent";
-  import AddNewSite from "./addNewSiteModal";
+  import AddNewSite from "./addOrEditSiteModal";
   import FilePreviewModal from "../partial/filePreviewModal";
 
   export default {
@@ -606,7 +606,7 @@
         if(site) this.watchedSite = site
         //set relation object as site
         let createRelationWith = {
-          object: 'project', data: this.project,
+          object: 'project', data: this.project, edit:site,
           info: this.$t('messages.projectSiteRelationInfo',
             {data: `ID: ${this.project.id} (${this.project.name})`})
         };

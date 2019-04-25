@@ -165,7 +165,8 @@
       },
       methods: {
         clearFile() {
-          this.$refs.fileinput.reset();
+          if(this.$refs.fileinput)
+            this.$refs.fileinput.reset();
           this.files=[]
         },
       }
