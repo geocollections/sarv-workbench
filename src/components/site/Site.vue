@@ -240,7 +240,7 @@
       </transition>
     </fieldset>
 
-    <div class="row mt-3 mb-3">
+    <div class="row mt-3 mb-3" v-if="createRelationWith.data === null">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')"
                 :title="$t('edit.buttons.saveAndLeave') ">
@@ -618,7 +618,7 @@
           let sizeOfHeader = 60;
           if(element) window.scrollTo(0,  element.offsetTop-sizeOfHeader);
         } else if(userAction.action === 'save') {
-          this.saveAndNavigateBack()
+          this.saveAndNavigateBack('site')
         } else if(userAction.action === 'cancel') {
           this.navigateBack()
         }
@@ -626,8 +626,9 @@
 
       saveAndNavigateBack(object) {
         let vm = this
-        this.add(true, object).then(resp => {
-          vm.navigateBack(object)
+        this.add(true, object,false,true).then(resp => {
+          console.log(resp)
+          vm.navigateBack()
         })
 
       },
@@ -643,6 +644,7 @@
 
       },
       handleUserChoiceFromModal(choice) {
+        console.log(choice)
         if(choice === 'LEAVE') {
           this.saveAndNavigateBack()
         } else if(choice === 'SAVE') {
