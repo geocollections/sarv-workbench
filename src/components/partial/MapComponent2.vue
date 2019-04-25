@@ -188,7 +188,7 @@
             .addTo(this.map)
             .on('dragend', function(e) {
             vm.$emit('get-location', e.target._latlng)
-         
+
             vm.map.setView(vm.marker._latlng,vm.zoom);
           });
           vm.$emit('get-location', this.marker._latlng);

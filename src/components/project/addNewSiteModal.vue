@@ -7,8 +7,8 @@
            lazy
            scrollable
            ref="newSiteForm"
-           :title="$t('titles.addSite')">
-    <site></site>
+           :title="setTitle()">
+    <site :edit-site="site"></site>
 
     <template slot="modal-footer">
       <div class="col">
@@ -35,11 +35,7 @@
         name: "addNewSite",
       components: {Site},
       mixins: [fontAwesomeLib],
-      props: {
-        sendingData: {
-          type: Boolean
-        }
-      },
+      props: ['sendingData','site'],
       mounted(){
         this.$parent.$on('show-new-site-modal', this.showModal);
         this.$root.$on('close-new-site-modal', this.hideModal);
@@ -52,6 +48,10 @@
           this.$refs.newSiteForm.hide()
           this.$parent.loadRelatedData('site')
         },
+        setTitle() {
+          if(this.site === null) return this.$t('header.sites')
+          return this.$t('header.sites') + ' id:' + this.site.id
+        }
       }
     }
 </script>

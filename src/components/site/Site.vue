@@ -240,7 +240,7 @@
       </transition>
     </fieldset>
 
-    <div class="row mt-3 mb-3" v-if="createRelationWith.data === null">
+    <div class="row mt-3 mb-3" v-if="createRelationWith.data === null && !isDefinedAndNotNull(editSite)">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')"
                 :title="$t('edit.buttons.saveAndLeave') ">
@@ -312,7 +312,7 @@
       Spinner,
     },
     mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
-
+    props: ['editSite'],
     data() {
       return this.setInitialData()
     },
@@ -381,7 +381,8 @@
 
         if (this.$route.meta.isEdit  && this.createRelationWith.data === null) {
           this.sendingData = true;
-          fetchSite(this.$route.params.id).then(response => {
+          let id = this.isDefinedAndNotNull(this.editSite) ? this.editSite.id : this.$route.params.id
+          fetchSite(id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
               this.site = this.handleResponse(response)[0];
@@ -646,7 +647,7 @@
       handleUserChoiceFromModal(choice) {
         console.log(choice)
         if(choice === 'LEAVE') {
-          this.saveAndNavigateBack()
+          this.saveAndNavigateBack('site')
         } else if(choice === 'SAVE') {
           this.add(false, 'site', false, true)
         }

@@ -4,7 +4,7 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
     <div class="row mb-4">
       <div class="col">
-        <add-new-site :sendingData = "sendingData"></add-new-site>
+        <add-new-site :sendingData = "sendingData" :site="watchedSite"></add-new-site>
         <span class="float-right" v-if="$route.meta.isEdit">
           <button class="btn btn-outline-primary mb-2" @click="registerObservation"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>
         </span>
@@ -244,13 +244,13 @@
                 </thead>
                 <tbody>
                 <tr v-for="(site,index) in relatedData.site">
-                  <td @click="windowOpenNewTab('site','/site/'+site.id)">
+                  <td style="padding: 4px;cursor: pointer" @click="watchSite(site)"><!--@click="windowOpenNewTab('site','/site/'+site.id)"-->
                     <font-awesome-icon size="1x" icon="eye"/>
                     {{site.id}}
                   </td>
                   <td v-translate="{et:site.name,en:site.name_en}"></td>
-                  <td>{{site.date_start}}</td>
-                  <td>{{site.date_end}}</td>
+                  <td>{{parseDate(site.date_start)}}</td>
+                  <td>{{parseDate(site.date_end)}}</td>
                   <!--<td style="min-width: 60px;text-align:right" @click="relatedData.site.splice(index, 1)"><font-awesome-icon icon="times"/></td>-->
                 </tr>
                 </tbody>
@@ -412,6 +412,7 @@
           componentKey: 0,
           isActive: false,
           attachmentLinkSaved : -1,
+          watchedSite: null,
           block: {info: true , members: true , description: true , files: true , sites: true }
         }
       },
@@ -600,6 +601,10 @@
         this.relatedData.attachment_link.push(option)
       },
 
+      watchSite(site) {
+        this.watchedSite = site
+        this.$emit('show-new-site-modal')
+      },
 
       registerObservation() {
 
