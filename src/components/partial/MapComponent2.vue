@@ -9,8 +9,7 @@
       props: {
         location: {
           type: Object,
-          required: true,
-          default: null,
+          required: true
         },
         locations: {
           type: Array,
@@ -31,8 +30,8 @@
           marker:null,
           markers:[],
           map:null,
-          center:[58.5,25.5],
-          currentLocation:null,
+          center: L.latLng(58.5, 25.5),
+          currentLocation:undefined,
           tileLayer: null,
           tileProviders: [
             {
@@ -93,24 +92,21 @@
             },
 
           ],
+          zoom : 11 //SET DEFAULT ZOOM LEVEL
         }
       },
       computed:{
-        mapMarkersLoaded () {
-          return this.currentLocation !== null && this.location !== null
-        }
+        mapMarkersLoaded () { return this.mode === 'single'  && this.gpsCoords === true
+          && this.currentLocation && this.location !== null }
       },
       mounted(){
-        let vm = this
-        this.$nextTick(() => {
-          vm.initMap();
-        })
-
+        let vm = this;
+        this.$nextTick(() => { vm.initMap(); })
       },
       methods:{
 
         initMap(){
-          this.map = L.map('map',{layers: [this.tileProviders[0].leafletObject]}).setView(this.center, 5);
+          this.map = L.map('map',{layers: [this.tileProviders[0].leafletObject]}).setView(this.center, this.zoom);
           let vm = this
           let  baseLayers = {}
           baseLayers[this.tileProviders[0].name] = this.tileProviders[0].leafletObject
@@ -119,10 +115,11 @@
           baseLayers[this.tileProviders[3].name] = this.tileProviders[3].leafletObject
           L.control.layers(baseLayers,{}).addTo(this.map);
           this.map.addLayer(vm.tileProviders[4].leafletObject)
-          if(this.mode === 'single' && this.gpsCoords) this.setCurrentGpsLocationIfExists();
+          if(this.mode === 'single' && this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
 
+
+          //LAYERS CHANGED
           this.map.on('baselayerchange', function(e) {
-
             vm.tileProviders.forEach(tile => {
               if(tile.name === e.name) {
                 vm.map.options.minZoom = tile.minZoom;
@@ -131,15 +128,26 @@
             })
           });
 
+          //ZOOM ACTIVATED
+          this.map.on('zoomend', function(e) {
+            // console.log(e.target._zoom)
+            vm.zoom = e.target._zoom
+          });
+
           if(this.mode === 'multiple') {
             this.setMarkers(this.locations)
           }
+
           if(this.mode === 'single') {
+            if (this.isValidLocation(this.location)) {
+              this.addMarker(this.location)
+            }
             this.map.on('click', function(e) {
               vm.addMarker(e.latlng)
             });
           }
         },
+        //SET GROUP OF MARKERS
         setMarkers(newval){
           this.markers = []
           let vm = this
@@ -170,37 +178,27 @@
         updateCoordinates(event){
           this.$emit('get-location', event.target.getLatLng())
         },
-        setEPSG3301Projection(){
-          this.minZoom = 6;
-          this.zoom = 7;
-        },
-        setDefaultProjection(){
-          this.zoom = 10
-        },
-        checkIfCoordsInEPSG3301Projection(location){
-          // console.log(location)
-        },
+
         addMarker(latlng){
-          if(this.marker !== null) {
-            this.map.removeLayer(this.marker)
-          }
+          if(this.marker !== null) this.map.removeLayer(this.marker)
+
           let vm = this, location=[parseFloat(latlng.lat),parseFloat(latlng.lng)];
           this.marker = L.marker(location, {
-            draggable:true, clickable:false, zIndexOffset: 100
-          }).addTo(this.map).on('dragend', function(e) {
-
+            draggable:true, clickable:false, zIndexOffset: 100})
+            .addTo(this.map)
+            .on('dragend', function(e) {
             vm.$emit('get-location', e.target._latlng)
-            vm.map.setView(vm.marker._latlng,10);
-
-          })
+         
+            vm.map.setView(vm.marker._latlng,vm.zoom);
+          });
           vm.$emit('get-location', this.marker._latlng);
-          this.map.setView(this.marker._latlng,10);
+          this.map.setView(this.marker._latlng,vm.zoom);
         },
         setCurrentGpsLocationIfExists(){
           let vm = this
           this.getGPSLocation().then(currentGPSLocation => {
             if(currentGPSLocation === null) return;
-            var greenIcon = new L.Icon({
+            var redIcon = new L.Icon({
               iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
               shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
               iconSize: [25, 41],
@@ -209,7 +207,7 @@
               shadowSize: [41, 41]
             });
             vm.currentLocation =  L.marker({lat:currentGPSLocation.latitude, lng: currentGPSLocation.longitude},
-              {icon: greenIcon,zIndexOffset: 1})
+              {icon: redIcon,zIndexOffset: -1})
               .addTo(vm.map)
             vm.currentLocation.bindPopup("GPS location").openPopup();
           });
@@ -252,6 +250,7 @@
       watch: {
         location: function (newVal, oldVal) {
           if (this.mode === 'multiple') return;
+          console.log(newVal)
           // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
           // Because if input from form fields is null then it gets reset to 0 and shows marker at 0:0, but I don't want that.
 
@@ -264,30 +263,30 @@
             this.addMarker(newVal)
           } else {
             this.marker = null
-            this.center = L.latLng(58.5, 25.5)
-            this.zoom = 10
           }
         },
 
         currentLocation: function (newVal, oldVal) {
-          if (newVal !== null && this.marker !== null) {
-            this.setZoom()
-          } else if (newVal === null && this.marker !== null) {
-            this.map.setView(this.marker._latlng, 10);
-          }
+          // if (newVal !== null && this.marker !== null) {
+          //   this.setZoom()
+          // } else if (newVal === null && this.marker !== null) {
+          //   this.map.setView(this.marker._latlng, this.zoom);
+          // }
         },
         mapMarkersLoaded: function (newVal, oldVal) {
-          if (this.gpsCoords && newVal) {
-            //zoom to fit all markers
-            let featureGroup = []
-            featureGroup.push(this.currentLocation);
-            if(this.marker !== null) featureGroup.push(this.marker)
-            if(featureGroup.length > 1) {
-              let bounds = new L.featureGroup(featureGroup).getBounds()
-              this.map.fitBounds(bounds);
-              this.map.setZoom(this.map.getBoundsZoom(bounds)-2)
-            }
-          }
+          console.log(newVal)
+          if(this.marker !== null) this.map.setView(this.marker._latlng, this.zoom);
+          // if (this.gpsCoords && newVal) {
+          //   //zoom to fit all markers
+          //   let featureGroup = []
+          //   featureGroup.push(this.currentLocation);
+          //   if(this.marker !== null) featureGroup.push(this.marker)
+          //   if(featureGroup.length > 1) {
+          //     let bounds = new L.featureGroup(featureGroup).getBounds()
+          //     this.map.fitBounds(bounds);
+          //     this.map.setZoom(this.map.getBoundsZoom(bounds)-2)
+          //   }
+          // }
         },
       }
     }
