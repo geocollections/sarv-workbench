@@ -93,6 +93,8 @@ const formManipulation = {
     },
 
     add(addAnother, object, saveRelatedData = false, returnPromise = false) {
+
+      return new Promise(resolve => {
       if (this.validate(object) && !this.sendingData) {
 
         let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
@@ -106,40 +108,41 @@ const formManipulation = {
         let formData = new FormData();
         formData.append('data', dataToUpload);
 
-        return new Promise(resolve => {
-          this.saveData(object,formData,url).then(savedObjectId => {
-            //before save object ID was removed
-            this[object] = editableObject;
-            // if (savedObjectId === undefined || savedObjectId === false) return;
-            this.$emit('data-loaded',editableObject);
-            this.$emit('data-saved',true);
+        this.saveData(object, formData, url).then(savedObjectId => {
+          console.log('error')
+          //before save object ID was removed
+          this[object] = editableObject;
+          // if (savedObjectId === undefined || savedObjectId === false) return;
+          this.$emit('data-loaded', editableObject);
+          this.$emit('data-saved', true);
 
-            if(!returnPromise) {
-              if (!addAnother) {
-                this.$router.push({ path: '/'+object })
-              } else {
-                this.$router.push({ path: '/'+object +'/'+ savedObjectId })
-              }
-
+          if (!returnPromise) {
+            if (!addAnother) {
+              this.$router.push({path: '/' + object})
+            } else if(savedObjectId && savedObjectId === true){
+              this.$router.push({path: '/' + object + '/' + savedObjectId})
             } else {
-              resolve(true)
-
+              resolve(false)
             }
 
+          } else {
+            resolve(true)
 
+          }
+        }, errResponse => {
+          resolve(false)
+          return false;
+        });
 
-          }, errResponse => {
-            resolve(false)
-            return false;
-          });
-        })
       } else if (this.sendingData) {
         // This shouldn't run unless user deletes html elements and tries to press 'add' button again
         toastError({text: this.$t('messages.easterEggError')})
+        resolve(false)
       } else {
         toastError({text: this.$t('messages.checkForm')})
+        resolve(false)
       }
-
+      });
     },
 
     saveData(type,formData,url, isCopy = false) {
@@ -548,7 +551,6 @@ const formManipulation = {
 
     parseDate(date) {
       if (date) {
-        console.log()
         return moment(String(date)).format('DD-MM-YYYY HH:mm')
       }
     }
