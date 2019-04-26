@@ -641,13 +641,20 @@
       },
 
       navigateBack() {
-        if (this.createRelationWith.object !== null) this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
+        if (this.createRelationWith.object !== null) {
+          if(this.createRelationWith.edit === null) {
+            this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
+          } else {
+            this.$root.$emit('close-new-site-modal')
+          }
+        } else {
+          //special case (SITE do not have LIST view)
+          let activeProject = this.getActiveProject();
+          activeProject === null ?
+            this.$router.push({path: '/project'}) :
+            this.$router.push({path: '/project/' + activeProject})
+        }
 
-        //special case (SITE do not have LIST view)
-        let activeProject = this.getActiveProject();
-        activeProject === null ?
-          this.$router.push({path: '/project'}) :
-          this.$router.push({path: '/project/' + activeProject})
 
       },
       handleUserChoiceFromModal(choice) {

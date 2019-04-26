@@ -6,7 +6,7 @@ export default {
     Vue.set(state,'createRelationWith', createRelationWith )
   },
   REMOVE_RELATION_OBJECT: (state) => {
-    Vue.set(state,'createRelationWith',  { object: null, data: null, info: null } )
+    Vue.set(state,'createRelationWith',  { object: null, data: null, info: null, edit: null } )
   },
   SET_SAMPLE_VIEW: (state, isFull) => {
     Vue.set(state,'sampleView', isFull)

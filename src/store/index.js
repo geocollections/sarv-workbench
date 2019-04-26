@@ -11,7 +11,7 @@ export function createStore () {
     state: {
       sampleView: true,
       currentUser:null,
-      createRelationWith: { object: null, data: null, info: null },
+      createRelationWith: { object: null, data: null, info: null, edit: null },
       activeObject: null,
       sidebarList:[],
       activeSearchParams: null,

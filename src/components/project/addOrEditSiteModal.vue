@@ -44,7 +44,7 @@
       computed: {
           title() {
             if(this.$store.state['createRelationWith'].edit === null || typeof this.$store.state['createRelationWith'].edit === 'undefined' ) return this.$t('header.sites');
-            return this.$t('header.sites') + ' id:' + this.site.id
+            return this.$t('header.sites') + ' id:' + this.$store.state['createRelationWith'].edit.id
           }
       },
       methods: {
