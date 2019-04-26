@@ -538,6 +538,7 @@ const formManipulation = {
     },
 
     calculateNextName(previousName) {
+      if(!this.isDefinedAndNotNull(previousName)) return
       let tokenize = previousName.split(/[^0-9]/g);
       let lastToken = tokenize[tokenize.length-1]
       //last token is number

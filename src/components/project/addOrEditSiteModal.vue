@@ -8,6 +8,7 @@
            scrollable
            ref="newSiteForm"
            :title="title" @hide="hideModal">
+
     <site :editSite = 'site'></site>
 
     <template slot="modal-footer">

@@ -8,6 +8,11 @@
         <!--<font-awesome-icon icon="external-link-alt"/>-->
       <!--</a>-->
     <!--</b-alert>-->
+    <b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)"> Ava vaatluspunkti eraldi tabil
+      <a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">
+      <font-awesome-icon icon="external-link-alt"/>
+      </a>
+    </b-alert>
     <!-- STORAGE-->
     <fieldset class="border p-2 mb-2" ref="info">
       <legend class="w-auto"  @click="block.info = !block.info" :style="!block.info ? {'color':'blue'} : ''">Üldinfo
@@ -229,14 +234,8 @@
         <div class="row" v-if="block.samples">
           <add-new-sample :sendingData = "sendingData" ></add-new-sample>
           <div class="col-sm-12 mb-2">
-            <b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)">
-              To add sample go to site page
-              <a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">
-                <font-awesome-icon icon="external-link-alt"/>
-              </a>
-            </b-alert>
-            <span class="float-right">
-              <button class="btn btn-outline-primary mb-2" v-if="!isDefinedAndNotNull(editSite)" @click="addSample">{{ $t('add.new') }}</button>
+            <span class="float-left">
+              <button class="btn btn-outline-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
             </span>
             <div class="table-responsive-sm" v-if="routeId">
               <linked-sample-table :siteID="routeId+''"></linked-sample-table>

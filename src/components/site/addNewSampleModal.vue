@@ -7,17 +7,17 @@
            lazy
            scrollable
            ref="newSampleForm"
-           :title="$t('header.samples')">
+           :title="$t('header.samples')" @hide="hideModal">
     <sample></sample>
 
     <template slot="modal-footer">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="$root.$emit('add-new-sample-from-modal','LEAVE')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="$root.$emit('add-new-sample-from-modal','SAVE_AND_LEAVE')">
           <font-awesome-icon icon="door-open"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="$root.$emit('add-new-sample-from-modal','SAVE')">
           <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+          {{ $t('add.buttons.addAnother') }}</button><!--$route.meta.isEdit? 'edit.buttons.saveAndContinue':-->
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="hideModal">
           <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
@@ -49,8 +49,9 @@
           this.$refs.newSampleForm.show()
         },
         hideModal(){
+          // this.$root.$off('add-new-sample-from-modal')
+          this.$root.$emit('reload-linked-samples')
           this.$refs.newSampleForm.hide()
-          this.$parent.loadRelatedData('sample')
         },
       }
     }

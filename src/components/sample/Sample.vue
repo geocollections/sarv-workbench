@@ -1005,10 +1005,14 @@
           })
         },
         handleUserChoiceFromModal(choice) {
-          if(choice === 'LEAVE') {
-            this.saveAndNavigateBack()
+          console.log(choice)
+          let vm = this
+          if(choice === 'SAVE_AND_LEAVE') {
+            this.add(false, 'sample',false,true).then(resp => {
+              vm.$root.$emit('close-new-sample-modal')
+            })
           } else if(choice === 'SAVE') {
-            this.add(false, 'sample', false, true)
+            this.add(true, 'sample',false,false)
           }
         }
       },
