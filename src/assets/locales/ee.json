@@ -133,6 +133,7 @@
     },
     "errors": {
       "files": "Lae üles vähemalt 1 fail (max 10). Nimi olgu lühem kui 100 märki ja ilma täpitähtedeta.",
+      "files2": "Lae üles 1 fail. Nimi olgu lühem kui 100 märki ja ilma täpitähtedeta.",
       "authorMultiple": "Vähemalt üks autori väli peab olema täidetud",
       "author": "See väli ei tohi olla tühi",
       "imagesetId": "See väli ei tohi olla tühi",
@@ -651,6 +652,9 @@
     "cancelRequest": "Katkesta",
     "validFileFormat": "See '{file}' ei ole pildifail!",
     "validFileFormatPDF": "See '{file}' ei ole .pdf fail!",
+    "validFileFormatUniversal": "See '{file}' ei ole õiges formaadis!",
+    "useCorrectFormat": "Palun kasuta järgnevat formeeringut: '{format}'",
+    "onlyOneFile": "Palun lisa ainult 1 fail!",
     "localityAttachmentInfo":"Vali link manusele või lisa uus",
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga {data}. Lõpetamiseks mine tagasi lokaliteedi vormile",
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",

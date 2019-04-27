@@ -332,12 +332,13 @@
     </div>
 
     <!-- DIGITAL VERSION (PDF) -->
-    <fieldset class="border p-2 mb-2" v-if="this.attachment.length > 0">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
       <legend class="w-auto" style="font-size: large;">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <font-awesome-icon icon="file-pdf"/>
       </legend>
 
+      <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false" acceptable-format="application/pdf" :accept-multiple="false"/>
       <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
     </fieldset>
 
@@ -503,10 +504,12 @@
   import LocalityReference from "./relatedTables/LocalityReference"
   import FileTable from "../partial/FileTable";
   import LocalityTable from "../locality/LocalityTable";
+  import MultimediaComponent from "../partial/MultimediaComponent";
 
   export default {
     name: "Reference",
     components: {
+      MultimediaComponent,
       LocalityTable,
       FontAwesomeIcon,
       VueMultiselect,
@@ -855,6 +858,10 @@
         if (data.page) this.reference.pages = data.page
         if (data.url) this.reference.url = data.url
         if (data.publisher) this.reference.publisher = data.publisher
+      },
+
+      addFiles(data){
+        this.addFileAsObject(data, 'reference', this.reference);
       },
 
     },
