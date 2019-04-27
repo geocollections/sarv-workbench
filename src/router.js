@@ -129,7 +129,8 @@ const router = new Router({
                 table: 'reference',
                 title: 'titles.editReference',
                 heading: 'editReference.heading',
-                isBottomOptionShown: true,
+                isBottomOptionShown: false,
+                isSidebarShown: true,
                 isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true

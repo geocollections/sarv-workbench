@@ -298,7 +298,7 @@
   import LinkedSampleTable from "../sample/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
 
-
+  import sidebarMixin from './../mixins/sidebarMixin'
   export default {
     name: "Site",
     components: {
@@ -316,7 +316,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin,sidebarMixin],
     props:['editSite'],
     data() {
       return this.setInitialData()
@@ -342,7 +342,7 @@
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'siteSearchHistory',
         defaultSearch: this.setDefaultSearchParameters(), search: params, request : 'FETCH_SITES', title: 'header.sites',
-        object:this.activeObject})
+        object:this.activeObject, field: 'name'})
 
       this.loadFullInfo();
 
@@ -420,7 +420,7 @@
           this.setSiteNameAndProjectIfPreviousExists();
           this.loadListOfExistingProjects();
         }
-        this.$root.$once('add-or-edit-site-from-modal', this.handleUserChoiceFromModal);
+        this.$root.$on('add-or-edit-site-from-modal', this.handleUserChoiceFromModal);
       },
 
       setDefaultRalatedData() {
@@ -617,26 +617,25 @@
         }
       },
 
-      handleSidebarUserAction(userAction) {
-        console.log(userAction)
-        if (userAction.action === 'addSample') this.addSample()
-        else if(userAction.action === 'navigate') {
-          let element = this.$refs[userAction.choice];
-          let sizeOfHeader = 60;
-          if(element) window.scrollTo(0,  element.offsetTop-sizeOfHeader);
-        } else if(userAction.action === 'save') {
-          this.saveAndNavigateBack('site')
-        } else if(userAction.action === 'cancel') {
-          this.navigateBack()
-        }
-      },
+      // handleSidebarUserAction(userAction) {
+      //   console.log(userAction)
+      //   if (userAction.action === 'addSample') this.addSample()
+      //   else if(userAction.action === 'navigate') {
+      //     let element = this.$refs[userAction.choice];
+      //     let sizeOfHeader = 60;
+      //     if(element) window.scrollTo(0,  element.offsetTop-sizeOfHeader);
+      //   } else if(userAction.action === 'save') {
+      //     this.saveAndNavigateBack('site')
+      //   } else if(userAction.action === 'cancel') {
+      //     this.navigateBack()
+      //   }
+      // },
 
       saveAndNavigateBack(object) {
         let vm = this
         this.add(false, object,false,true).then(resp => {
           vm.navigateBack()
         })
-
       },
 
       navigateBack() {
@@ -653,8 +652,6 @@
             this.$router.push({path: '/project'}) :
             this.$router.push({path: '/project/' + activeProject})
         }
-
-
       },
       handleUserChoiceFromModal(choice) {
         console.log(choice)
@@ -674,8 +671,6 @@
       if (this.$store.state['sampleView'].isFull)
         this.$store.commit('REMOVE_RELATION_OBJECT');
 
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
-      this.$root.$emit('show-sidebar', false);
       next()
     },
 
@@ -687,7 +682,7 @@
         deep: true
       },
       'sidebarUserAction'(newval, oldval) {
-        this.handleSidebarUserAction(newval)
+        this.handleSidebarUserAction(newval, 'site')
       },
     }
   }

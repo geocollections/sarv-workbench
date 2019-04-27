@@ -256,6 +256,12 @@
                 </tbody>
               </table>
             </div>
+            <div class="col-sm-12 col-md-6 p-0" v-if="relatedData.count.site > searchParameters.paginateBy">
+              <b-pagination
+                size="md" align="left" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count.site"
+                v-model="relatedData.page.site" :per-page="10">
+              </b-pagination>
+            </div>
           </div>
           <div v-else>No linked sites</div>
         </div>
@@ -302,6 +308,7 @@
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from './../mixins/formManipulation'
+  import sidebarMixin from './../mixins/sidebarMixin'
   import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
   import localStorageMixin from './../mixins/localStorageMixin'
   import cloneDeep from 'lodash/cloneDeep'
@@ -340,7 +347,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin,sidebarMixin],
 
     data() {
       return this.setInitialData()
@@ -357,7 +364,7 @@
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'projectSearchHistory',
         defaultSearch: this.searchParameters, search: params, request : 'FETCH_PROJECTS', title : 'header.projects',
-        object:this.activeObject});
+        object:this.activeObject, field: 'name'});
 
       this.loadFullInfo()
 
@@ -588,7 +595,7 @@
           orderBy: "-id",
           owner: null,
           page: 1,
-          paginateBy: 50
+          paginateBy: 5
         }
       },
 
@@ -630,18 +637,18 @@
         this.relatedData.attachment_link.splice(idx, 1);
         this.add(true, 'project', true);
       },
-      handleSidebarUserAction(userAction) {
-        if (userAction.action === 'addSite') this.addOrEditSite()
-        else if(userAction.action === 'navigate') {
-          let element = this.$refs[userAction.choice];
-          let sizeOfHeader = 60;
-          if(element) window.scrollTo(0, element.offsetTop-sizeOfHeader);
-        } else if(userAction.action === 'save') {
-          this.hoverSaveOrCancelButtonClicked('SAVE_AND_LEAVE','project',true)
-        } else if(userAction.action === 'cancel') {
-          this.hoverSaveOrCancelButtonClicked('CANCEL','project',true)
-        }
-      },
+      // handleSidebarUserAction(userAction) {
+      //   if (userAction.action === 'addSite') this.addOrEditSite()
+      //   else if(userAction.action === 'navigate') {
+      //     let element = this.$refs[userAction.choice];
+      //     let sizeOfHeader = 60;
+      //     if(element) window.scrollTo(0, element.offsetTop-sizeOfHeader);
+      //   } else if(userAction.action === 'save') {
+      //     this.hoverSaveOrCancelButtonClicked('SAVE_AND_LEAVE','project',true)
+      //   } else if(userAction.action === 'cancel') {
+      //     this.hoverSaveOrCancelButtonClicked('CANCEL','project',true)
+      //   }
+      // },
 
       handleResize() {
         this.window.width = window.innerWidth;
@@ -651,17 +658,16 @@
         this.addFileAsRelatedData(data, 'project');
       },
     },
-    beforeRouteLeave(to, from, next) {
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
-      this.$root.$emit('show-sidebar', false);
-      next()
-    },
+
     watch: {
       '$route.params.id': {
         handler: function (newval, oldval) {
           this.reloadData()
         },
         deep: true
+      },
+      'relatedData.page.site'(newval, oldval) {
+        this.loadRelatedData('site')
       },
 
       'isActiveProject'(newval, oldval) {
@@ -685,7 +691,7 @@
       //Because of $root.$on triggering method 'handleSidebarUserAction' several times after each click. It was decided to
       //store this action
       'sidebarUserAction'(newval, oldval) {
-        this.handleSidebarUserAction(newval)
+        this.handleSidebarUserAction(newval, 'project')
       },
     }
   }

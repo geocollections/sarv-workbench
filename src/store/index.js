@@ -15,7 +15,11 @@ export function createStore () {
       activeObject: null,
       sidebarList:[],
       activeSearchParams: null,
-      sidebarUserAction: null
+      sidebarUserAction: null,
+      analysisMethods:null,
+      samplePurposes:null,
+      fossilGroups:null
+
     },
     actions,
     mutations,

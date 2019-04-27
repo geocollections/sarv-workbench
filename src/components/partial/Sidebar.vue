@@ -74,11 +74,12 @@
       <button @click="setAction('save')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
       <button @click="setAction('cancel')" class="btn btn-xs btn-danger p-1 ml-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
     </span>
+
       <div @click="pinSidebar" id="thumbtack-icon">
         <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
                            style="margin-top: 10px;"/>
       </div>
-      <div v-bind:style="{height: navBarHeight +'px'}" class="p-0">
+      <div v-bind:style="{height: navBarHeight +'px'}" class="p-0"  v-if="activeSearchParams!==null">
       <span @click="setAction('cancel')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
           {{$t('buttons.cancel')}}&ensp;
           <font-awesome-icon icon="ban" class="pull-right mr-1" style="color:#dc3545;margin-top: 10px;"/>
@@ -95,7 +96,7 @@
         </span>
         <li class="element-list" :class="{active : parseInt($route.params.id) === entity.id }" style="display: block;"
             v-for="entity in sidebarList.results" v-if="sidebarList.results.length > 0">
-           <router-link :to="{ path: '/'+activeSearchParams.object+'/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity.name}}
+           <router-link :to="{ path: '/'+activeSearchParams.object+'/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity[activeSearchParams.field]}}
       </router-link>
 
         </li>

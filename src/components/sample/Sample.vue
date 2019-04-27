@@ -41,9 +41,9 @@
         </div>
 
         <div class="col-sm-2 mb-2">
-          <vue-multiselect v-model="sample.sample_purpose" v-if="isDefinedAndNotEmpty(autocomplete.purpose)"
+          <vue-multiselect v-model="sample.sample_purpose"
                            id="type"
-                           :options="autocomplete.purpose"
+                           :options="samplePurpose"
                            track-by="id"
                            :label="commonLabel"
                            :placeholder="$t('add.inputs.autocomplete')"
@@ -411,9 +411,9 @@
 
           <div class="col-md-4">
             <label class="p-0">{{ $t('sample.sample_purpose') }}:</label>
-            <vue-multiselect v-model="sample.sample_purpose" v-if="isDefinedAndNotEmpty(autocomplete.purpose)"
+            <vue-multiselect v-model="sample.sample_purpose"
                              id="type_"
-                             :options="autocomplete.purpose"
+                             :options="samplePurpose"
                              track-by="id"
                              :label="commonLabel"
                              :placeholder="$t('add.inputs.autocomplete')"
@@ -702,7 +702,8 @@
       computed: {
         getParentId(){return this.sample.id},
         fullView() { return this.$store.state['sampleView'].isFull},
-        createRelationWith () { return this.$store.state['createRelationWith'] }
+        createRelationWith () { return this.$store.state['createRelationWith'] },
+        samplePurpose() { return this.$store.state['samplePurposes']}
       },
       data() { return this.setInitialData() },
 
@@ -752,17 +753,17 @@
         },
 
         loadFullInfo() {
-          fetchAnalysisMethod().then(response => {
-            this.autocomplete.analysisMethod = this.handleResponse(response);
-          });
+          // fetchAnalysisMethod().then(response => {
+          //   this.autocomplete.analysisMethod = this.handleResponse(response);
+          // });
 
-          fetchSamplePurpose().then(response => {
-            this.autocomplete.purpose = this.handleResponse(response);
-          });
+          // fetchSamplePurpose().then(response => {
+          //   this.autocomplete.purpose = this.handleResponse(response);
+          // });
 
-          fetchFossilGroup().then(response => {
-            this.autocomplete.fossil_group = this.handleResponse(response);
-          });
+          // fetchFossilGroup().then(response => {
+          //   this.autocomplete.fossil_group = this.handleResponse(response);
+          // });
 
           if(this.$route.meta.isEdit && this.createRelationWith.data === null) {
             this.sendingData = true;

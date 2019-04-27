@@ -85,7 +85,8 @@ const formManipulation = {
 
     validate(object){
       let vm = this, isValid = true;
-
+      console.log()
+      console.log(vm[object])
       this.requiredFields.forEach(function (el) {
         isValid &= vm.isDefinedAndNotNullAndNotEmptyString(vm[object][el])
       });

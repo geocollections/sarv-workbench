@@ -17,8 +17,9 @@ const copyForm = {
 
     saveAsNew(data) {
       let numberOfSaves = 0;
+      console.log(data.numberOfCopies)
 
-      for (let i = 1; i < data.numberOfCopies+1; i++ ){
+      for (let i = 1; i < parseInt(data.numberOfCopies)+1; i++ ){
         numberOfSaves += this.addCopy(data.object, data, i) === true ? 1 : 0;
         //stop loading after last data saved
         console.log('Number of saves ' + numberOfSaves)

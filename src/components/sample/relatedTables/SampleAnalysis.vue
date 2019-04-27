@@ -26,7 +26,7 @@
             <td v-show="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.analysis_method"
-                               :options="autocomplete.analysisMethod"
+                               :options="analysisMethods"
                                track-by="id"
                                :label="analysisMethodLabel"  select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -82,8 +82,8 @@
           <tr class="related-input-data">
             <td></td>
             <td>
-              <vue-multiselect v-model="relatedData.insert.analysis.analysis_method" v-if="isDefinedAndNotEmpty(autocomplete.analysisMethod)"
-                               :options="autocomplete.analysisMethod"
+              <vue-multiselect v-model="relatedData.insert.analysis.analysis_method"
+                               :options="analysisMethods"
                                track-by="id"
                                :label="analysisMethodLabel"  select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -147,6 +147,10 @@
         relatedData: Object,
         autocomplete: Object,
         activeTab: String
+      },
+
+      computed: {
+        analysisMethods() { return this.$store.state['analysisMethods']}
       }
     }
 </script>

@@ -1,5 +1,11 @@
 import Vue from 'vue'
 
+function handleResponse(response){
+  if (response.status === 200) {
+    return (response.body.count > 0) ? response.body.results : false
+  }
+}
+
 export default {
 
   CREATE_RELATION_OBJECT: (state, { createRelationWith }) => {
@@ -25,6 +31,18 @@ export default {
   },
 
   SET_SIDEBAR_USER_ACTION: (state, { userAction }) => {
-    Vue.set(state, 'sidebarUserAction', userAction || false) /* false means page not found */
+    Vue.set(state, 'sidebarUserAction', userAction || false)
+  },
+
+  SET_ANALYSIS_METHODS: (state, { resp }) => {
+    Vue.set(state, 'analysisMethods', handleResponse(resp))
+  },
+
+  SET_SAMPLE_PURPOSES: (state, { resp }) => {
+    Vue.set(state, 'samplePurposes', handleResponse(resp))
+  },
+
+  SET_FOSSIL_GROUPS: (state, { resp }) => {
+    Vue.set(state, 'fossilGroups', handleResponse(resp))
   },
 }
