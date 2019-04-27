@@ -197,6 +197,43 @@ const formManipulation = {
       })
     },
 
+    addFileAsObject(data, object) {
+      console.log('file uploaded');
+
+      let formData = new FormData();
+      data.forEach((file,index) => {
+        formData.append('data', JSON.stringify({
+          description: file.type + ' for '+object+': ' + this[object].id,
+          author: this.currentUser.id,
+          date_created: this.formatDateForUpload(new Date()),
+          is_private: 1,
+          [object]: this[object].id
+        }));
+
+        formData.append('file'+[index], file);
+      });
+
+      try {
+        this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
+          console.log(savedObjectId)
+          if (savedObjectId === undefined || savedObjectId === false) return;
+          let vm = this
+          this.attachmentLinkSaved = savedObjectId.length > 0 ? savedObjectId.length : 1
+
+          if(this.attachmentLinkSaved === 1)
+            createRelation(vm, object, savedObjectId)
+          else {
+            savedObjectId.forEach(file => {
+              createRelation(vm, object, file)
+            })
+          }
+        });
+      } catch (e) {
+        console.log('Attachment cannot not be added')
+        console.log(e)
+      }
+    },
+
     addFileAsRelatedData(data, object) {
       console.log('file uploaded');
 

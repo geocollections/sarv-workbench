@@ -844,7 +844,7 @@
       },
 
       addFiles(data){
-        this.addFileAsRelatedData(data, 'reference');
+        this.addFileAsObject(data, 'reference');
       },
 
     },

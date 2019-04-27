@@ -196,6 +196,7 @@
           this.files=[]
         },
 
+        // TODO: Needs fixing for single upload and acceptable formats
         dropFile(event) {
           let files = []
           for (let i = 0; i < event.dataTransfer.files.length; i++) {
