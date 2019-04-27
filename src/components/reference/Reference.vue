@@ -338,7 +338,7 @@
         <font-awesome-icon icon="file-pdf"/>
       </legend>
 
-      <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false" acceptable-format=".pdf" :accept-multiple="false"/>
+      <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false" acceptable-format="application/pdf" :accept-multiple="false"/>
       <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
     </fieldset>
 

@@ -104,6 +104,7 @@
 <script>
   import fontAwesomeLib  from './../mixins/fontAwasomeLib'
   import EXIF from 'exif-js'
+  import {toastError, toastInfo} from "../../assets/js/iziToast/iziToast";
     export default {
       name: "multimedia-component",
       mixins:[fontAwesomeLib],
@@ -196,11 +197,35 @@
           this.files=[]
         },
 
-        // TODO: Needs fixing for single upload and acceptable formats
         dropFile(event) {
           let files = []
           for (let i = 0; i < event.dataTransfer.files.length; i++) {
-            files.push(event.dataTransfer.files[i])
+
+            if (this.acceptMultiple) {
+              // Type check
+              if (event.dataTransfer.files[i].type.includes(this.acceptableFormat)) {
+                files.push(event.dataTransfer.files[i])
+              } else {
+                toastError({text: this.$t('messages.validFileFormatUniversal', { file: event.dataTransfer.files[i].name })})
+                toastInfo({text: this.$t('messages.useCorrectFormat', { format: this.acceptableFormat }), timeout: 5000})
+                break;
+              }
+            } else {
+              // Length check
+              if (event.dataTransfer.files.length > 1) {
+                toastError({ text: this.$t('messages.onlyOneFile') })
+                break;
+              } else {
+                // Type check
+                if (event.dataTransfer.files[i].type.includes(this.acceptableFormat)) {
+                  files.push(event.dataTransfer.files[i])
+                } else {
+                  toastError({text: this.$t('messages.validFileFormatUniversal', { file: event.dataTransfer.files[i].name })})
+                  toastInfo({text: this.$t('messages.useCorrectFormat', { format: this.acceptableFormat }), timeout: 5000})
+                  break;
+                }
+              }
+            }
           }
 
           if (files.length > 0) {
