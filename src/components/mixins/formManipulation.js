@@ -216,17 +216,10 @@ const formManipulation = {
       try {
         this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
           console.log(savedObjectId)
-          if (savedObjectId === undefined || savedObjectId === false) return;
-          let vm = this
-          this.attachmentLinkSaved = savedObjectId.length > 0 ? savedObjectId.length : 1
+          // if (savedObjectId === undefined || savedObjectId === false) return;
+          // let vm = this
+          // this.attachmentLinkSaved = savedObjectId.length > 0 ? savedObjectId.length : 1
 
-          if(this.attachmentLinkSaved === 1)
-            createRelation(vm, object, savedObjectId)
-          else {
-            savedObjectId.forEach(file => {
-              createRelation(vm, object, file)
-            })
-          }
         });
       } catch (e) {
         console.log('Attachment cannot not be added')
