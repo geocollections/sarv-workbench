@@ -373,7 +373,8 @@
     },
 
     beforeDestroy() {
-      this.editor.destroy()
+      this.editorAbstract.destroy()
+      this.editorAbstractEn.destroy()
     },
 
     watch: {
