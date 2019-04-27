@@ -200,10 +200,12 @@
         dropFile(event) {
           let files = []
           for (let i = 0; i < event.dataTransfer.files.length; i++) {
+            // TODO: Make type checking more efficient, it's not perfect atm.
+            let fileType = event.dataTransfer.files[i].type.split('/')[0]
 
             if (this.acceptMultiple) {
               // Type check
-              if (event.dataTransfer.files[i].type.includes(this.acceptableFormat)) {
+              if (this.acceptableFormat.includes(fileType)) {
                 files.push(event.dataTransfer.files[i])
               } else {
                 toastError({text: this.$t('messages.validFileFormatUniversal', { file: event.dataTransfer.files[i].name })})
@@ -217,7 +219,7 @@
                 break;
               } else {
                 // Type check
-                if (event.dataTransfer.files[i].type.includes(this.acceptableFormat)) {
+                if (this.acceptableFormat.includes(fileType)) {
                   files.push(event.dataTransfer.files[i])
                 } else {
                   toastError({text: this.$t('messages.validFileFormatUniversal', { file: event.dataTransfer.files[i].name })})
