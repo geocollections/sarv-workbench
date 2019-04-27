@@ -10,10 +10,20 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
-    <!-- Deletes search preferences -->
     <div class="row mt-3">
-      <div class="col">
+      <!-- Deletes search preferences -->
+      <div class="col-sm-3 mt-3">
         <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+      </div>
+
+      <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
+      <div class="col-sm-6 mt-3" v-if="useListView">
+        <b-form-group>
+          <b-form-radio-group v-model="isListView">
+            <b-form-radio :value="false">{{ $t('references.tableView') }}</b-form-radio>
+            <b-form-radio :value="true">{{ $t('references.listView') }}</b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
       </div>
     </div>
 
@@ -27,6 +37,15 @@
           </span>
       </div>
     </div>
+
+    <!-- LIST VIEW -->
+    <!-- Currently List-View is only used by reference, but if in the future is need for other table types then it should be made universal -->
+    <list-view v-if="isListView && response.count > 0"
+               module='reference'
+               :data="response.results"
+               :page="searchParameters.page"
+               :paginate-by="searchParameters.paginateBy" />
+
 
     <div class="row mt-3" v-if="response.count > 0">
       <div class="col-sm-6 col-md-3 pl-3 pr-3 t-paginate-by-center">
@@ -54,7 +73,7 @@
     </div>
 
     <!-- REFERENCE TABLE -->
-    <div class="row">
+    <div class="row" v-if="!isListView">
       <div class="col">
 
         <div class="table-responsive">
@@ -135,6 +154,7 @@
   import {faSortDown,faSortUp, faSort,faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
   import Datepicker from 'vue2-datepicker'
   import ExportButtons from "../components/partial/ExportButtons";
+  import ListView from "../components/reference/ListView";
 
   library.add(faSort, faSortUp, faSortDown, faCalendarAlt)
 
@@ -143,7 +163,8 @@
       FontAwesomeIcon,
       Spinner,
       Datepicker,
-      ExportButtons
+      ExportButtons,
+      ListView
     },
     props: {
       apiCall: {
@@ -186,6 +207,11 @@
       exportButtons: {
         type: Boolean,
         default: false,
+      },
+
+      useListView: {
+        type: Boolean,
+        default: false,
       }
 
     },
@@ -198,6 +224,7 @@
           count: 0,
           results: []
         },
+        isListView: false,
       }
     },
 
