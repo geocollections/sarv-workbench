@@ -28,8 +28,8 @@
 
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.preparation_number" type="text"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect v-model="entity.new.taxon" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"
-                               :options="autocomplete.fossil_group"
+              <vue-multiselect v-model="entity.new.taxon"
+                               :options="fossilGroups"
                                track-by="id"
                                label="taxon"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -75,8 +75,8 @@
             <td></td>
             <td><b-form-input v-model="relatedData.insert.preparation.preparation_number" type="text"/></td>
             <td>
-              <vue-multiselect v-model="relatedData.insert.preparation.taxon" v-if="isDefinedAndNotEmpty(autocomplete.fossil_group)"
-                               :options="autocomplete.fossil_group"
+              <vue-multiselect v-model="relatedData.insert.preparation.taxon"
+                               :options="fossilGroups"
                                track-by="id"
                                label="taxon"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -141,6 +141,9 @@
       },
 
       mixins: [formManipulation,autocompleteFieldManipulation],
+      computed: {
+        fossilGroups() { return this.$store.state['fossilGroups']}
+      },
 
       methods: {
         customAnalysisLabel(item) {
