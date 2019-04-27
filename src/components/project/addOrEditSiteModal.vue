@@ -56,6 +56,7 @@
           if(this.$refs.newSiteForm)this.$refs.newSiteForm.hide()
           this.$root.$off('add-or-edit-site-from-modal')
           this.$parent.loadRelatedData('site')
+          this.$parent.watchedSite = null
         },
       }
     }
