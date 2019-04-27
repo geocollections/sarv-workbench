@@ -53,8 +53,8 @@
           this.$refs.newSiteForm.show()
         },
         hideModal(){
+          if(this.$refs.newSiteForm)this.$refs.newSiteForm.hide()
           this.$root.$off('add-or-edit-site-from-modal')
-          this.$refs.newSiteForm.hide()
           this.$parent.loadRelatedData('site')
         },
       }

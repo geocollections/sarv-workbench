@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="col-sm-12 p-0">
+    <div class="p-0">
       <table class="table table-hover table-bordered" v-if="samples.length > 0">
         <thead class="thead-light">
         <tr>
@@ -99,7 +99,6 @@
           window.open(routeData.href, '_blank');
         },
         loadLinkedSamples() {
-          console.log('LINKED')
           fetchLinkedSamplesX(this.searchParameters, this.siteID).then(response=>{
             this.count = response.body.count
             this.samples = response.body.results ? response.body.results : []

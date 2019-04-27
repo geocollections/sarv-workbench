@@ -92,7 +92,14 @@
         this.relatedData = data
       },
       forceRerender() { this.logComponentKey += 1; },
-    }
+    },
+    beforeRouteLeave(to, from, next) {
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
+      console.log()
+      if(from.meta.table && from.meta.table !== 'site')
+        this.$root.$emit('show-sidebar', false);
+      next()
+    },
   }
 </script>
 <style scoped>

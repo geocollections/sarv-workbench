@@ -482,6 +482,7 @@
   import VueMultiselect from 'vue-multiselect'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
+  import sidebarMixin from './../mixins/sidebarMixin'
   import {
     fetchReference,
     fetchReferences,
@@ -513,11 +514,24 @@
       LocalityReference,
       FileTable
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation],
+    mixins: [formManipulation, copyForm, autocompleteFieldManipulation,sidebarMixin],
 
     data() { return this.setInitialData() },
+    computed: {
+      sidebarUserAction() {
+        return this.$store.state['sidebarUserAction']
+      }
+    },
+    created() {
+      // USED BY SIDEBAR
+      this.activeObject = 'reference';
+      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'referenceSearchHistory',
+        defaultSearch: this.setDefaultSearchParameters(), search: params, request : 'FETCH_REFERENCES', title: 'header.references',
+        object:this.activeObject, field:'reference'});
 
-    created() { this.loadFullInfo() },
+      this.loadFullInfo() },
 
     watch: {
       '$route.params.id': {
@@ -525,6 +539,9 @@
           this.reloadData()
         },
         deep: true
+      },
+      'sidebarUserAction'(newval, oldval) {
+        this.handleSidebarUserAction(newval,'reference')
       },
     },
 
