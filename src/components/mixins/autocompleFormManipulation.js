@@ -17,6 +17,20 @@ const autocompleteFieldManipulation = {
       return this.$i18n.locale === 'ee' ? 'analysis_method' : 'method_en'
     }
   },
+  created: function () {
+    // Gets user data from session storage
+    if (this.$session.exists() && this.$session.get('authUser') !== null) {
+      const user = this.$session.get('authUser')
+      this.currentUser = {
+        id: user.agent_id,
+        agent: null,
+        forename: user.user,
+        surename: null,
+        user: user.user,
+      }
+      // console.log(this.currentUser);
+    }
+  },
   methods: {
     getAutocompleteQueryParameters(type, val) {
       let query = '';
@@ -70,6 +84,9 @@ const autocompleteFieldManipulation = {
           break;
         case 'attachment':
           query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
+          break;
+        case 'attachment3':
+          query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${this.currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
           break;
         // case 'attachment':
         //   query = `attachment/?multi_search=value:${val};fields:original_filename;lookuptype:icontains&fields=id,original_filename,remarks`;
@@ -162,6 +179,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteAttachmentSearch2(value) {
       this.autocompliteSearch(value, 'attachment', 'attachment',3, false)
+    },
+    autcompleteAttachmentSearch3(value) {
+      this.autocompliteSearch(value, 'attachment3', 'attachment',3, false)
     },
     autcompleteJournalSearch(value) {
       this.autocompliteSearch(value, 'journals', 'journals', 1)

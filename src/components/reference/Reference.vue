@@ -351,6 +351,7 @@
 
       <div class="row">
         <div class="col">
+          <!-- loader is 'attachment3' because of #158, regarding p-2 -->
           <vue-multiselect v-model="relatedData.attachment"
                            id="attachment"
                            :multiple="true"
@@ -359,9 +360,9 @@
                            :internal-search="false"
                            :preserve-search="true"
                            :close-on-select="false"
-                           @search-change="autcompleteAttachmentSearch2"
+                           @search-change="autcompleteAttachmentSearch3"
                            :custom-label="customLabelForAttachment"
-                           :loading="autocomplete.loaders.attachment"
+                           :loading="autocomplete.loaders.attachment3"
                            :placeholder="$t('add.inputs.autocomplete')"
                            :show-labels="false">
             <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -570,6 +571,7 @@
               keyword: false,
               locality: false,
               attachment: false,
+              attachment3: false, // For #158, regarding p-2
             },
             types: [],
             languages: [],
