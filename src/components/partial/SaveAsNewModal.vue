@@ -132,6 +132,7 @@
       },
       hideModal(){
         this.$refs.saveAsNewForm.hide()
+        this.$root.$off('copied-data-saved');
       },
       hideModalAfterSaving(status){
         this.modalSendingData = false;
