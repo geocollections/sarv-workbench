@@ -19,15 +19,18 @@
       <b-form-file v-model="files"
                    id="files"
                    :state="filesState"
-                   multiple
+                   :multiple="acceptMultiple"
                    plain
                    style="display: none"
                    ref="fileinput"
-                   accept="image/*"
+                   :accept="acceptableFormat"
                    :placeholder="$t('add.inputs.fileInput')">
       </b-form-file>
 
-      <b-form-text v-if="!filesState">{{ $t('add.errors.files') }}.</b-form-text>
+      <b-form-text v-if="!filesState">
+        <div v-if="acceptMultiple">{{ $t('add.errors.files') }}.</div>
+        <div v-else>{{ $t('add.errors.files2') }}.</div>
+      </b-form-text>
 
     </div>
 
@@ -69,9 +72,9 @@
 
     <div class="col-sm-12 mb-2">
 
-      <div class="mt-2" v-if="files !== null && files.length > 0">
-        <div class="d-flex flex-row  flex-wrap" v-if="files.length > 0" >
-          <div class="mt-2" v-for="(file, key) in files">
+      <div class="mt-2" v-if="files !== null && arrayOfFiles.length > 0">
+        <div class="d-flex flex-row  flex-wrap" v-if="arrayOfFiles.length > 0" >
+          <div class="mt-2" v-for="(file, key) in arrayOfFiles">
 
             <span v-if="file.type.includes('image')">
               <img style="height: 10rem" onerror="this.style.display='none'" v-bind:ref="'image' + parseInt(key)" class="img-thumbnail thumbnail-preview responsive" alt="Image preview..." />
@@ -90,8 +93,8 @@
     <div class="col-sm-12 col-md-6 mb-2">
       <button class="btn btn-outline-danger ml-1" v-if="filesState" :disabled="sendingData" @click="clearFile" :title="$tc('add.buttons.resetFile', 1)">
         <!--<font-awesome-icon icon="trash-alt"/>-->
-        <span v-show="files.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
-        <span v-show="files.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
+        <span v-show="arrayOfFiles.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
+        <span v-show="arrayOfFiles.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
       </button>
     </div>
 
@@ -107,6 +110,14 @@
       props:{
         recordOptions: {
           type:Boolean
+        },
+        acceptableFormat: {
+          type: String,
+          default: 'image/*'
+        },
+        acceptMultiple: {
+          type: Boolean,
+          default: true
         }
       },
       data() {
@@ -118,13 +129,14 @@
           fileMetaData: null,
           isDragging: false,
           upload: {},
-          recordedFile:[]
+          recordedFile:[],
+          arrayOfFiles: []
 
         }
       },
       computed: {
         filesState() {
-          return this.files !== null && this.files.length > 0
+          return this.files !== null && this.arrayOfFiles.length > 0
         },
       },
       created(){
@@ -136,25 +148,39 @@
         },
         'files': function (newVal) {
 
-          if (newVal.length > 0) {
-            for (let i = 0; i < newVal.length; i++){
-              if (newVal[i].type.includes('image') || newVal[i].type.includes('video') || newVal[i].type.includes('audio')) {
+          this.arrayOfFiles = []
+          if (Array.isArray(newVal)) {
+            this.arrayOfFiles = newVal
+          } else {
+            // Adding File object to array
+            // because for single file upload only File object is returned
+            if (newVal !== null) { // null check because 'cancel' returns null for single upload
+              this.arrayOfFiles.push(newVal)
+            }
+          }
+
+          if (this.arrayOfFiles.length > 0) {
+            for (let i = 0; i < this.arrayOfFiles.length; i++){
+              console.log(this.arrayOfFiles[i])
+              if (this.arrayOfFiles[i].type.includes('image') || this.arrayOfFiles[i].type.includes('video') || this.arrayOfFiles[i].type.includes('audio')) {
                 let reader = new FileReader();
 
                 reader.onload = (event) => {
-                  this.$emit('file-uploaded',this.recordedFile.length > 0 ? this.recordedFile : this.files);
+                  this.$emit('file-uploaded',this.recordedFile.length > 0 ? this.recordedFile : this.arrayOfFiles);
 
                   // console.log(event.target.result)
                   this.$refs['image' + parseInt(i)][0].src = event.target.result;
                 };
                 reader.readAsDataURL(this.files[i]);
+              } else if (this.arrayOfFiles[i].type.includes('pdf')) {
+                this.$emit('file-uploaded',this.recordedFile.length > 0 ? this.recordedFile : this.arrayOfFiles);
               }
             }
           }
 
-          if (newVal.length === 1) {
+          if (this.arrayOfFiles.length === 1) {
             let fileReader = new FileReader()
-            fileReader.readAsArrayBuffer(newVal[0]);
+            fileReader.readAsArrayBuffer(this.arrayOfFiles[0]);
             fileReader.onload = (event) => {
               // TODO: Get thumbnail
               this.fileMetaData = EXIF.readFromBinaryFile(event.target.result)
@@ -168,6 +194,19 @@
           if(this.$refs.fileinput)
             this.$refs.fileinput.reset();
           this.files=[]
+        },
+
+        dropFile(event) {
+          let files = []
+          for (let i = 0; i < event.dataTransfer.files.length; i++) {
+            files.push(event.dataTransfer.files[i])
+          }
+
+          if (files.length > 0) {
+            this.files = files
+          }
+
+          this.isDragging = false
         },
       }
     }

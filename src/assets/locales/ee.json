@@ -133,6 +133,7 @@
     },
     "errors": {
       "files": "Lae üles vähemalt 1 fail (max 10). Nimi olgu lühem kui 100 märki ja ilma täpitähtedeta.",
+      "files2": "Lae üles 1 fail. Nimi olgu lühem kui 100 märki ja ilma täpitähtedeta.",
       "authorMultiple": "Vähemalt üks autori väli peab olema täidetud",
       "author": "See väli ei tohi olla tühi",
       "imagesetId": "See väli ei tohi olla tühi",

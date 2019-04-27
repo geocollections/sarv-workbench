@@ -130,6 +130,7 @@
     },
     "errors": {
       "files": "Upload at least 1 file (max 10). File name should be less than 100 chars and without õ,ä,ö,ü etc.",
+      "files2": "Upload 1 file. File name should be less than 100 chars and without õ,ä,ö,ü etc.",
       "authorMultiple": "At least one author field must be filled",
       "author": "This field can't be empty",
       "imagesetId": "This field can't be empty",
