@@ -656,7 +656,8 @@
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga '{ data }'. Lõpetamiseks mine tagasi lokaliteedi vormile",
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
     "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise SITE-ga {data}. Lõpetamiseks mine tagasi proovi vormile",
-    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}. Lõpetamiseks mine tagasi proovi vormile"
+    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}. Lõpetamiseks mine tagasi proovi vormile",
+    "solrSearchInfo": "Using this field will not use other fields"
   },
   "titles": {
     "main": "Geocollections Data Management",

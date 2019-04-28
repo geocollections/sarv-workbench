@@ -15,10 +15,19 @@
         <div class="search-fields">
           <div class="d-flex flex-row flex-wrap">
             <div class="col-sm-6" v-for="field,idx in filters">
-              <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
-              <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                            v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-              </b-form-input>
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <label :for="field.id">{{ $t(field.title) }}:</label>
+                </div>
+
+                <div class="col-sm-8 mb-2">
+                  <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+
+                  <b-form-text v-if="field.id === 'solrSearch'">{{ $t('messages.solrSearchInfo') }}.</b-form-text>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>

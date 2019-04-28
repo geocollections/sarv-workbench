@@ -14,7 +14,10 @@
 
     <td>{{ entity.title }}</td>
 
-    <td>{{ entity.journal__journal_name }}</td>
+    <td>
+      <div v-if="entity.journal__journal_name">{{ entity.journal__journal_name }}</div>
+      <div v-else-if="entity.journal_name">{{ entity.journal_name }}</div>
+    </td>
 
     <td>{{ entity.volume }}</td>
 
@@ -27,6 +30,7 @@
 
     <td>
       <a v-if="entity.doi" href="javascript:void(0)" @click="openDOI({doi: entity.doi})">DOI</a>
+      <a v-else-if="entity.doi_urll" href="javascript:void(0)" @click="openDOI({doi: entity.doi_url})">DOI</a>
     </td>
 
     <td>
