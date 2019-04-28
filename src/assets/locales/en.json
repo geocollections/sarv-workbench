@@ -578,6 +578,7 @@
     "header": "Reference",
     "addNew": "Add new Reference",
     "sort": "Sort",
+    "solrSearch": "Fast search",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

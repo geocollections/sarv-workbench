@@ -583,6 +583,7 @@
     "header": "Kirjandus",
     "addNew": "Lisage uus Kirjandus",
     "sort": "Liik",
+    "solrSearch": "Kiire otsing",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",

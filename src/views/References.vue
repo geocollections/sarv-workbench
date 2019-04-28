@@ -76,6 +76,7 @@
           {id:"id",title:"reference.id",type:"number"},
           {id:"libraryAuthor",title:"reference.libraryAuthor",type:"text"},
           {id:"libraryIdTitle",title:"reference.libraryIdTitle",type:"text"},
+          {id:"solrSearch",title:"reference.solrSearch",type:"text"},
         ],
         searchParameters: this.setDefaultSearchParameters()
       }
@@ -100,6 +101,7 @@
           id: null,
           libraryAuthor: null,
           libraryIdTitle: null,
+          solrSearch: null,
           page: 1,
           paginateBy: 50,
           orderBy: ['-id', '-year'],
