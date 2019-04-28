@@ -373,6 +373,42 @@
       <file-table :attachments="relatedData.attachment" object="reference" v-if="relatedData.attachment.length > 0"/>
     </fieldset>
 
+    <!-- RELATED LIBRARIES -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" style="font-size: large;">
+        {{ $t('reference.relatedTables.library') }}
+        <font-awesome-icon icon="book"/>
+      </legend>
+
+      <div class="row">
+        <div class="col-10 col-md-11">
+          <vue-multiselect v-model="relatedData.library"
+                           id="library"
+                           :multiple="true"
+                           track-by="id"
+                           :options="autocomplete.library"
+                           :internal-search="false"
+                           :preserve-search="true"
+                           :close-on-select="false"
+                           @search-change="autcompleteLibrarySearch"
+                           :custom-label="customLabelForLibrary"
+                           :loading="autocomplete.loaders.library"
+                           :placeholder="$t('add.inputs.autocomplete')"
+                           :show-labels="false">
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+
+        <div class="col-2 col-md-1 pl-0">
+          <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+                  :disabled="!isDefinedAndNotEmpty(relatedData.library)"
+                  @click="relatedData.library = []">
+            <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+          </button>
+        </div>
+      </div>
+    </fieldset>
+
     <!-- RELATED LOCALITIES -->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" style="font-size: large;">
@@ -495,7 +531,7 @@
     fetchReferenceKeyword,
     fetchAttachmentLink,
     fetchLocalityReferenceForReference,
-    fetchAttachmentForReference,
+    fetchAttachmentForReference, fetchLibrariesForReference,
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
@@ -506,6 +542,7 @@
   import FileTable from "../partial/FileTable";
   import LocalityTable from "../locality/LocalityTable";
   import MultimediaComponent from "../partial/MultimediaComponent";
+  import fontAwesomeLib from "../mixins/fontAwasomeLib";
 
   export default {
     name: "Reference",
@@ -518,7 +555,7 @@
       LocalityReference,
       FileTable
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation,sidebarMixin],
+    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, sidebarMixin, fontAwesomeLib],
 
     data() { return this.setInitialData() },
     computed: {
@@ -572,6 +609,7 @@
               locality: false,
               attachment: false,
               attachment3: false, // For #158, regarding p-2
+              library: false,
             },
             types: [],
             languages: [],
@@ -579,6 +617,7 @@
             keyword: [],
             locality: [],
             attachment: [],
+            library: [],
           },
           requiredFields: ['reference', 'year', 'author', 'title'],
           reference: {},
@@ -666,6 +705,18 @@
             this.attachment = this.handleResponse(response)
           })
 
+          fetchLibrariesForReference(this.$route.params.id).then(response => {
+            let library = this.handleResponse(response)
+
+            this.relatedData.library = library.map(entity => {
+              return {
+                id: entity.library,
+                title: entity.library__title,
+                title_en: entity.library__title_en,
+              }
+            })
+          })
+
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
             this.loadRelatedData(entity);
@@ -695,6 +746,7 @@
           attachment: [],
           keyword: [],
           locality: [],
+          library: [],
           copyFields: {
             locality_reference: ['locality', 'type', 'pages', 'figures', 'remarks'],
           },
@@ -731,6 +783,7 @@
         uploadableObject.related_data.keyword = this.relatedData.keyword
         uploadableObject.related_data.attachment = this.relatedData.attachment
         uploadableObject.related_data.locality = this.relatedData.locality
+        uploadableObject.related_data.library = this.relatedData.library
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -815,6 +868,11 @@
       customLabelForLocality(option) {
         if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
         return `${option.id} - (${option.locality_en})`
+      },
+
+      customLabelForLibrary(option) {
+        if (this.$i18n.locale === 'ee') return `${option.id} - (${option.title})`
+        return `${option.id} - (${option.title_en})`
       },
 
       checkDoi() {

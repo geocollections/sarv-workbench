@@ -220,7 +220,7 @@
       <div class="row">
 
         <!-- Prop: internal-search must be false otherwise it also filters by label -->
-        <div class="col-11 mb-2 mr-0">
+        <div class="col-10 col-md-11">
           <vue-multiselect v-model="relatedData.library_agent"
                            id="library_agent"
                            @search-change="autcompleteLibraryAgentSearch"
@@ -237,7 +237,7 @@
           </vue-multiselect>
         </div>
 
-        <div class="col-1 mb-2 ml-0 pl-0">
+        <div class="col-2 col-md-1 pl-0">
           <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
                   :disabled="!isDefinedAndNotEmpty(relatedData.library_agent)"
                   @click="relatedData.library_agent = []">
@@ -442,16 +442,6 @@
       },
 
       loadFullInfo() {
-        fetchLibraryAgent(this.$route.params.id).then(response => {
-          let libraryAgent = this.handleResponse(response);
-          this.relatedData.library_agent = libraryAgent.map(entity => {
-            return {
-              agent: entity.agent__agent,
-              id: entity.agent
-            }
-          })
-        })
-
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
           fetchLibrary(this.$route.params.id).then(response => {
@@ -469,6 +459,16 @@
               this.sendingData = false;
             }
           });
+
+          fetchLibraryAgent(this.$route.params.id).then(response => {
+            let libraryAgent = this.handleResponse(response);
+            this.relatedData.library_agent = libraryAgent.map(entity => {
+              return {
+                agent: entity.agent__agent,
+                id: entity.agent
+              }
+            })
+          })
 
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {

@@ -588,7 +588,8 @@
       "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad",
-      "localityReference": "Kirjeldatud lokaliteedid"
+      "localityReference": "Kirjeldatud lokaliteedid",
+      "library": "Seotud kogumikud"
     }
   },
   "synonym": {

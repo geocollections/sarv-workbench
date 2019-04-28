@@ -583,7 +583,8 @@
       "attachment": "Related data files",
       "locality": "Locality",
       "reference_keyword": "User keywords",
-      "localityReference": "Locality references"
+      "localityReference": "Locality references",
+      "library": "Related libraries"
     }
   },
   "stratigraphy": {

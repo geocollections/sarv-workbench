@@ -98,6 +98,9 @@ const autocompleteFieldManipulation = {
         case 'parent_project':
           query = `project/?multi_search=value:${val};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
           break;
+        case 'library':
+          query = `library/?multi_search=value:${val};fields:id,title,title_en;lookuptype:icontains&author=${this.currentUser.id}&fields=id,title,title_en`;
+          break;
         case 'journals':
           query = `journal/?multi_search=value:${val};fields:id,journal_name,journal_short;lookuptype:icontains`
         default:
@@ -185,6 +188,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteJournalSearch(value) {
       this.autocompliteSearch(value, 'journals', 'journals', 1)
+    },
+    autcompleteLibrarySearch(value) {
+      this.autocompliteSearch(value, 'library', 'library', 1, false)
     },
     autocompliteSearch(value, type, options, minLength = 3, resetIfLessThanMinLength = true) {
       if (value.length < minLength) {

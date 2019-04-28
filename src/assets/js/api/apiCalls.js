@@ -181,6 +181,10 @@ export function fetchJournals(query) {
   return fetch(`journal/?multi_search=value:${query};fields:id,journal_name,journal_short;lookuptype:icontains&format=json`)
 }
 
+export function fetchLibrariesForReference(id) {
+  return fetch(`library_reference/?reference=${id}&fields=library,library__title,library__title_en&format=json`)
+}
+
 /************************
  ***  REFERENCES END  ***
  ************************/
