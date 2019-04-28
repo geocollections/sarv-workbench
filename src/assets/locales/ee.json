@@ -259,7 +259,12 @@
     },
     "toggleViewLabel": "Vaheta tabeli ja listi vaate vahel",
     "tableView": "Tabeli vaade",
-    "listView": "Listi vaade"
+    "listView": "Listi vaade",
+    "alternativeTableView": "Alternatiivne tabeli vaade",
+    "alternativeTableHeight": "Pikkus",
+    "alternativeTableWidth": "Laius",
+    "alternativeTableSize": "Suurus",
+    "alternativeTableResetButton": "Taasta sätted"
   },
   "photoArchive": {
     "author": "Autor",

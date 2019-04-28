@@ -256,7 +256,12 @@
     },
     "toggleViewLabel": "Toggle between table and list view",
     "tableView": "Table view",
-    "listView": "List view"
+    "listView": "List view",
+    "alternativeTableView": "Alternative table view",
+    "alternativeTableHeight": "Height",
+    "alternativeTableWidth": "Width",
+    "alternativeTableSize": "Size",
+    "alternativeTableResetButton": "Reset controls"
   },
   "photoArchive": {
     "author": "Author",
