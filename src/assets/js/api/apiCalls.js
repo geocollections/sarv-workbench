@@ -114,9 +114,8 @@ export function fetchReference(id) {
 }
 
 export function fetchReferences(data) {
-
   // This (solr search) overrides regular search fields
-  if (data.solrSearch !== null && data.solrSearch.trim().length > 0) {
+  if (data.solrSearch && data.solrSearch !== null && data.solrSearch.trim().length > 0) {
     // TODO: Add order by
     let start = (data.page - 1) * data.paginateBy
     return fetch(`reference/?q=${data.solrSearch}&rows=${data.paginateBy}&start=${start}&format=json`, api.solrUrl)

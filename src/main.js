@@ -130,6 +130,9 @@ new Vue({
     createRelationWith:{
       type: Object
     },
+    sidebar:{
+      type: Boolean
+    },
     mapComponent:{
       type: Boolean,
       default: false

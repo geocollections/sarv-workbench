@@ -77,7 +77,7 @@
       <button @click="setAction('save')" class="btn btn-success p-1 pl-4 pr-4" style="font-size: x-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
       <button @click="setAction('cancel')" class="btn btn-danger p-1 ml-2 pl-4 pr-4" style="font-size: x-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
     </span>
-      <a  @click="pinSidebar" class="pull-right " style="display: block;  padding-left: 10px; width: 50px; padding-right: 20px;" v-bind:style=" {marginTop: isThumbtackDown ? '0px' : '-30px' }">&ensp;
+      <a  @click="pinSidebar" class="pull-right " style="display: block;  padding-left: 10px; width: 50px; padding-right: 15px;" v-bind:style=" {marginTop: isThumbtackDown ? '0px' : '-30px' }">&ensp;
         <font-awesome-icon icon="thumbtack" class="pull-right rotate" style="margin-top: 10px;" v-bind:class=" {down : isThumbtackDown}"/>
       </a>
     </div>
@@ -98,13 +98,13 @@
           <button @click="deleteSearchPreferences" class="btn btn-xs btn-warning p-1 pl-2 pr-2" style="font-size: x-small; text-transform: uppercase">Default <font-awesome-icon icon="ban"/></button>
         </span>
         <li class="element-list" :class="{active : parseInt($route.params.id) === entity.id }" style="display: block;"
-            v-for="entity in sidebarList.results" v-if="sidebarList.results.length > 0">
+            v-for="entity in sidebarList.results" v-if="sidebarList.results && sidebarList.results.length > 0">
            <router-link :to="{ path: '/'+activeSearchParams.object+'/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity[activeSearchParams.field]}}
       </router-link>
 
         </li>
       </span>
-        <span class="ml-1"  v-if="sidebarOpen && sidebarList.results.length > 0">
+        <span class="ml-1"  v-if="sidebarOpen && sidebarList.results &&  sidebarList.results.length > 0">
         <button @click="previousPage" v-if="sidebarList.totalPages && activeSearchParams.search.page > 1" class="btn btn-xs btn-outline-info ml-1 mt-2 p-1 pull-left" style="font-size: xx-small; text-transform: uppercase; width: 5rem"><font-awesome-icon icon="angle-double-left"/> </button>
         <button @click="nextPage" v-if="sidebarList.totalPages  && activeSearchParams.search.page < sidebarList.totalPages" class="btn btn-xs btn-outline-info mr-1 mt-2 p-1 pull-right" style="font-size: xx-small; text-transform: uppercase;width: 5rem"> <font-awesome-icon icon="angle-double-right"/></button>
       </span>
@@ -131,7 +131,7 @@
         showSampleMenu: false,
         showSiteMenu: false,
         sidebarOpen: false,
-        isThumbtackDown: true,
+        isThumbtackDown: false,
         componentKey: 0,
         navBarHeight: 300,
         page:1,
@@ -147,9 +147,19 @@
       if(this.$store.state['activeSearchParams'] !== null) {
         this.$store.dispatch(this.$store.state['activeSearchParams'].request)
       }
+
     },
+
     mounted() {
       this.navBarHeight = document.querySelector('.nav-side-menu').clientHeight - 200
+
+      if (this.$localStorage.get('sidebar') !== null) {
+        this.isThumbtackDown = !this.$localStorage.get('sidebar');
+        this.sidebarOpen = this.$localStorage.get('sidebar');
+        this.$root.$emit('show-sidebar', this.$localStorage.get('sidebar'))
+        this.forceRerender()
+        ;
+      }
     },
     methods: {
       setActiveSection(section) {
@@ -169,7 +179,8 @@
       pinSidebar() {
         this.isThumbtackDown = !this.isThumbtackDown;
         this.sidebarOpen = !this.sidebarOpen;
-        this.$root.$emit('show-sidebar');
+        this.$root.$emit('show-sidebar',this.sidebarOpen);
+        this.$localStorage.set('sidebar',this.sidebarOpen)
         // this.$parent.sidebarOpen = !this.$parent.sidebarOpen;
         // this.sidebarOpen ? document.getElementById('thumbtack-icon').classList.toggle("down") : document.getElementById('thumbtack-icon').classList.remove("down");
         this.forceRerender()
