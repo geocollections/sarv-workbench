@@ -115,7 +115,10 @@
       "addAnother": "Salvesta ja lisa teine",
       "clearFields": "Puhasta väljad",
       "clearLocalStorage": "Eemalda vaikimisi väärtused",
-      "cancel": "Katkesta faili üleslaadimine"
+      "cancel": "Katkesta faili üleslaadimine",
+      "combinedViewEnabled": "Kombineeritud vaade",
+      "combinedViewDisabled": "Näita kombineeritud vaadet",
+      "openIframe": "Ava link"
     },
     "inputs": {
       "fileInput": "Vali või lohista fail...",
