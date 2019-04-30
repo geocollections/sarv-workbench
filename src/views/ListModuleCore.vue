@@ -325,8 +325,8 @@
       }
 
       let viewingType = this.$localStorage.get(this.viewType, 'table')
-      // Changes old boolean value to string (maybe make the storage value into object or something?)
-      if (typeof viewingType === 'boolean') this.currentView = 'table'
+      // Changes old boolean value to correct string (maybe make the storage value into object or something?)
+      if (viewingType === 'false' || 'true') this.currentView = 'table'
       else this.currentView = viewingType
     },
 
