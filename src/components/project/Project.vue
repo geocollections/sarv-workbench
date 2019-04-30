@@ -373,13 +373,6 @@
       this.handleResize();
     },
 
-    beforeMount() {
-      let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
-      let currentProjectIdx = findIndex(currentActiveProjects, function (item) {
-        return item === parseInt(vm.$route.params.id)
-      });
-      this.isActiveProject = currentProjectIdx > -1
-    },
     destroyed() {
       window.removeEventListener('resize', this.handleResize)
     },
@@ -430,6 +423,7 @@
       },
 
       loadFullInfo() {
+
         fetchProjectType().then(response => {
           this.autocomplete.project_type = this.handleResponse(response);
         });
@@ -454,7 +448,7 @@
               this.sendingData = false;
             }
           });
-
+          this.setProjectStatus();
           this.loadRelatedData('projectagent');
           this.loadRelatedData('attachment_link');
           this.loadRelatedData('site');
@@ -657,6 +651,13 @@
       addFiles(data){
         this.addFileAsRelatedData(data, 'project');
       },
+      setProjectStatus() {
+        let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
+        let currentProjectIdx = findIndex(currentActiveProjects, function (item) {
+          return item === parseInt(vm.$route.params.id)
+        });
+        this.isActiveProject = currentProjectIdx > -1
+      }
     },
 
     watch: {
