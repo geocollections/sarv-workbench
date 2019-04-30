@@ -70,15 +70,18 @@
       </template>
 
 
-      <span class="ml-2"  v-if="sidebarOpen">
-      <button @click="setAction('save')" class="btn btn-xs btn-success p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
-      <button @click="setAction('cancel')" class="btn btn-xs btn-danger p-1 ml-2 pr-2" style="font-size: xx-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
-    </span>
 
-      <div @click="pinSidebar" id="thumbtack-icon">
-        <font-awesome-icon icon="thumbtack" class="pull-right mr-3 mt-3 rotate" v-bind:class=" {down : isThumbtackDown}"
-                           style="margin-top: 10px;"/>
-      </div>
+
+    <div id="thumbtack-icon"  class="element-list" >
+    <span class="ml-2"  v-if="sidebarOpen">
+      <button @click="setAction('save')" class="btn btn-success p-1 pl-4 pr-4" style="font-size: x-small; text-transform: uppercase">{{ $t('edit.buttons.save')}} <font-awesome-icon icon="save"/></button>
+      <button @click="setAction('cancel')" class="btn btn-danger p-1 ml-2 pl-4 pr-4" style="font-size: x-small; text-transform: uppercase">{{$t('buttons.cancel')}} <font-awesome-icon icon="ban"/></button>
+    </span>
+      <a  @click="pinSidebar" class="pull-right " style="display: block;  padding-left: 10px; width: 50px; padding-right: 20px;" v-bind:style=" {marginTop: isThumbtackDown ? '0px' : '-30px' }">&ensp;
+        <font-awesome-icon icon="thumbtack" class="pull-right rotate" style="margin-top: 10px;" v-bind:class=" {down : isThumbtackDown}"/>
+      </a>
+    </div>
+
       <div v-bind:style="{height: navBarHeight +'px'}" class="p-0"  v-if="activeSearchParams!==null">
       <span @click="setAction('cancel')" class="p-0 pl-2 pr-2 actionBtn" style="bottom: 9%; " v-if="!sidebarOpen">
           {{$t('buttons.cancel')}}&ensp;
@@ -92,7 +95,7 @@
         <br><span class="ml-2"  style="font-size: medium">{{$t(activeSearchParams.title)}}</span>
 
         <span class="ml-3">
-          <button @click="deleteSearchPreferences" class="btn btn-xs btn-warning p-1 pl-2 pr-2" style="font-size: xx-small; text-transform: uppercase">Default <font-awesome-icon icon="ban"/></button>
+          <button @click="deleteSearchPreferences" class="btn btn-xs btn-warning p-1 pl-2 pr-2" style="font-size: x-small; text-transform: uppercase">Default <font-awesome-icon icon="ban"/></button>
         </span>
         <li class="element-list" :class="{active : parseInt($route.params.id) === entity.id }" style="display: block;"
             v-for="entity in sidebarList.results" v-if="sidebarList.results.length > 0">

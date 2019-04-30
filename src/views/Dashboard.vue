@@ -60,8 +60,8 @@
     flex: 1;
   }
   .main.container.sidebarOpen {
-    width: calc(100% - 200px)!important;
-    margin-left: 200px !important;
+    width: calc(100% - 300px)!important;
+    margin-left: 300px !important;
   }
   @media (min-width: 1200px) {
     .container {
