@@ -291,7 +291,9 @@
       },
 
       isTableView() {
-        return this.currentView === 'table'
+        // true and false checks are put just in case, because of migrating from old viewType value page didn't show table.
+        // Clear filtering button fixes it but just in case
+        return this.currentView === 'table' || this.currentView === 'false' || this.currentView === 'true' || typeof this.currentView === 'boolean'
       },
 
       isListView() {
@@ -326,7 +328,7 @@
 
       let viewingType = this.$localStorage.get(this.viewType, 'table')
       // Changes old boolean value to correct string (maybe make the storage value into object or something?)
-      if (viewingType === 'false' || 'true') this.currentView = 'table'
+      if (viewingType === 'false' || viewingType === 'true' || typeof viewingType === 'boolean') this.currentView = 'table'
       else this.currentView = viewingType
     },
 
