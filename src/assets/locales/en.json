@@ -112,7 +112,10 @@
       "addAnother": "Save and add another",
       "clearFields": "Clear fields",
       "clearLocalStorage": "Remove defaults",
-      "cancel": "Cancel file upload"
+      "cancel": "Cancel file upload",
+      "combinedViewEnabled": "Combined view",
+      "combinedViewDisabled": "Show combined view",
+      "openIframe": "Open link"
     },
     "inputs": {
       "fileInput": "Choose or drop a file...",
