@@ -103,7 +103,7 @@
           id: null,
           page: 1,
           paginateBy: 50,
-          orderBy: '-id',
+          orderBy: '-library',
         }
       },
       setDefaultSearchParametersFromDeleteButton() {

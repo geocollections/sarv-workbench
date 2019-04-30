@@ -5,7 +5,8 @@ Vue.use(VueResource);
 
 const api = {
   url: 'https://rwapi.geocollections.info/',
-  checkDoiUrl: 'https://api.crossref.org/works/'
+  checkDoiUrl: 'https://api.crossref.org/works/',
+  solrUrl: 'https://api.geocollections.info/solr/'
 };
 
 function fetch (child, url = 0) {
@@ -113,6 +114,14 @@ export function fetchReference(id) {
 }
 
 export function fetchReferences(data) {
+
+  // This (solr search) overrides regular search fields
+  if (data.solrSearch !== null && data.solrSearch.trim().length > 0) {
+    // TODO: Add order by
+    let start = (data.page - 1) * data.paginateBy
+    return fetch(`reference/?q=${data.solrSearch}&rows=${data.paginateBy}&start=${start}&format=json`, api.solrUrl)
+  }
+
   const fields = 'id,reference,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,book_editor,publisher,publisher_place,url,is_private'
   let searchFields = ''
 
@@ -135,7 +144,7 @@ export function fetchReferences(data) {
     searchFields += '&id__icontains=' + data.id
   }
   if (data.libraryAuthor !== null && data.libraryAuthor.trim().length > 0) {
-  //  TODO
+    searchFields += '&multi_search=value:' + data.libraryAuthor + ';fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt;lookuptype:icontains&distinct=true'
   }
   if (data.libraryIdTitle !== null && data.libraryIdTitle.trim().length > 0) {
     searchFields += '&multi_search=value:' + data.libraryIdTitle + ';fields:libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains'
@@ -143,9 +152,13 @@ export function fetchReferences(data) {
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    return fetch(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // Not using fields because of alternative table
+    // return fetch(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&format=json`)
   } else {
-    return fetch(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // Not using fields because of alternative table
+    // return fetch(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&format=json`)
   }
 }
 
@@ -179,6 +192,10 @@ export function fetchAttachmentForReference(id) {
 
 export function fetchJournals(query) {
   return fetch(`journal/?multi_search=value:${query};fields:id,journal_name,journal_short;lookuptype:icontains&format=json`)
+}
+
+export function fetchLibrariesForReference(id) {
+  return fetch(`library_reference/?reference=${id}&fields=library,library__title,library__title_en&format=json`)
 }
 
 /************************

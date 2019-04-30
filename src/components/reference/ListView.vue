@@ -11,8 +11,8 @@
                 <b>{{(page - 1) * paginateBy + index + 1}}.</b>
               </router-link>
             </span>-->
-            
-            
+
+
             <span v-if="entity.author" class="ablack">
               <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')">
                 {{ entity.author }},
@@ -28,15 +28,15 @@
             </span>
 
             <span v-if="entity.book_editor || entity.book">
-              <i>In: </i> 
+              <i>In: </i>
             </span>
-              
+
             <span v-if="entity.book_editor">
-              {{ entity.book_editor }} (ed.), 
+              {{ entity.book_editor }} (ed.),
             </span>
-              
+
             <span v-if="entity.book">
-              <i>{{ entity.book }}</i>. 
+              <i>{{ entity.book }}</i>.
             </span>
 
             <span v-if="entity.publisher">
@@ -48,7 +48,7 @@
             </span>
 
             <span v-if="entity.journal__journal_name">
-              <i>{{ entity.journal__journal_name }}</i> 
+              <i>{{ entity.journal__journal_name }}</i>
             </span>
 
             <span v-if="entity.volume">
@@ -62,15 +62,15 @@
             <span v-if="entity.pages && entity.journal__journal_name">
               {{ entity.pages }}.
             </span>
-            
+
             <span v-else-if="entity.pages">
               pp. {{ entity.pages }}.
             </span>
-              
+
             <!-- TODO: DOI LINK -->
             <span v-if="entity.doi">
               <a href="javascript:void(0)" @click="openDOI({doi: entity.doi})">
-                 https://doi.org/{{ entity.doi }} 
+                 https://doi.org/{{ entity.doi }}
               </a>
             </span>
 
@@ -107,7 +107,7 @@
 
 <script>
   export default {
-    props: ['data', 'page', 'paginateBy'],
+    props: ['module','data', 'page', 'paginateBy'],
     name: "ListView",
     methods: {
       openDOI(params) {
@@ -126,7 +126,7 @@
   .list/*:not(:first-child)*/ {
     /*border-top: dotted 1.2pt #ccc;*/
     padding: 0.2em 0 0 4em;
-    text-indent: -4em;  
+    text-indent: -4em;
   }
 
   .list-row {
@@ -140,7 +140,7 @@
   .red-link {
     color: #B43900;
   }
-  
+
   .ablack a:link, .ablack a:visited {
 	  color: #000;
   }

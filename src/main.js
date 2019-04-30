@@ -173,8 +173,8 @@ new Vue({
       type: Object
     },
     referenceViewType: {
-      type: Boolean,
-      default: false
+      type: String,
+      default: 'table'
     },
     localitySearchHistory: {
       type: Object
@@ -189,15 +189,15 @@ new Vue({
       type: Object
     },
     localityViewType: {
-      type: Boolean,
-      default: false
+      type: String,
+      default: 'table'
     },
     librarySearchHistory: {
       type: Object
     },
     libraryViewType: {
-      type: Boolean,
-      default: false
+      type: String,
+      default: 'table'
     }
   },
   render: h => h(App)

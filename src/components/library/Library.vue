@@ -87,25 +87,125 @@
         </div>
       </div>
 
-      <!-- ABSTRACT AND ABSTRACT_EN -->
+      <!-- ABSTRACT -->
       <div class="row">
         <div class="col-sm-2">
           <label :for="`abstract`">{{ $t('library.abstract') }}:</label>
         </div>
 
-        <div class="col-sm-4 mb-2">
-          <b-form-textarea id="abstract" v-model="library.abstract" type="text" size="sm"
-                           :rows="1" :max-rows="20"></b-form-textarea>
+        <div class="col-sm-10 mb-2">
+<!--          <b-form-textarea id="abstract" v-model="library.abstract" type="text" size="sm"-->
+<!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
+
+          <editor-menu-bar :editor="editorAbstract">
+            <div slot-scope="{ commands, isActive, getMarkAttrs }">
+
+              <form class="mb-1" v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
+                <div class="row">
+                  <div class="col-9 pr-0">
+                    <input class="form-control form-control-sm" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu('editorAbstract')"/>
+                  </div>
+
+                  <span>
+                    <button class="btn btn-outline-success btn-sm ml-1 mr-1" @click="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
+                      <font-awesome-icon icon="check" />
+                    </button>
+                  </span>
+
+                  <span>
+                    <button class="btn btn-outline-danger btn-sm" @click="setLinkUrl(commands.link, null, 'editorAbstract')">
+                      <font-awesome-icon icon="times" />
+                    </button>
+                  </span>
+                </div>
+              </form>
+
+              <button
+                class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                :class="{ 'active': isActive.bold() }"
+                @click="commands.bold">
+                <strong>Bold</strong>
+              </button>
+
+              <button
+                class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                :class="{ 'active': isActive.italic() }"
+                @click="commands.italic">
+                <strong><em>Italic</em></strong>
+              </button>
+
+              <button
+                class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                :class="{ 'active': isActive.link() }"
+                @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstract')">
+                <strong><u>Link</u></strong>
+              </button>
+
+            </div>
+          </editor-menu-bar>
+
+          <editor-content class="editor editor-sm" :editor="editorAbstract" />
         </div>
+      </div>
 
-
+      <!-- ABSTRACT_EN -->
+      <div class="row">
         <div class="col-sm-2">
           <label :for="`abstract_en`">{{ $t('library.abstract_en') }}:</label>
         </div>
 
-        <div class="col-sm-4 mb-2">
-          <b-form-textarea id="abstract_en" v-model="library.abstract_en" type="text" size="sm"
-                           :rows="1" :max-rows="20"></b-form-textarea>
+        <div class="col-sm-10 mb-2">
+<!--          <b-form-textarea id="abstract_en" v-model="library.abstract_en" type="text" size="sm"-->
+<!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
+
+          <editor-menu-bar :editor="editorAbstractEn">
+            <div slot-scope="{ commands, isActive, getMarkAttrs }">
+
+              <form class="mb-1" v-if="linkMenuIsActiveAbstractEn" @submit.prevent="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
+                <div class="row">
+                  <div class="col-9 pr-0">
+                    <input class="form-control form-control-sm" type="text" v-model="linkUrlAbstractEn" placeholder="https://" ref="linkInputAbstractEn" @keydown.esc="hideLinkMenu('editorAbstractEn')"/>
+                  </div>
+
+                  <span>
+                    <button class="btn btn-outline-success btn-sm ml-1 mr-1" @click="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
+                      <font-awesome-icon icon="check" />
+                    </button>
+                  </span>
+
+                  <span>
+                    <button class="btn btn-outline-danger btn-sm" @click="setLinkUrl(commands.link, null, 'editorAbstractEn')">
+                      <font-awesome-icon icon="times" />
+                    </button>
+                  </span>
+                </div>
+              </form>
+
+              <button
+                class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                :class="{ 'active': isActive.bold() }"
+                @click="commands.bold">
+                <strong>Bold</strong>
+              </button>
+
+              <button
+                class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                :class="{ 'active': isActive.italic() }"
+                @click="commands.italic">
+                <strong><em>Italic</em></strong>
+              </button>
+
+              <button
+                class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                :class="{ 'active': isActive.link() }"
+                @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstractEn')">
+                <strong><u>Link</u></strong>
+              </button>
+
+            </div>
+          </editor-menu-bar>
+
+          <editor-content class="editor editor-sm" :editor="editorAbstractEn" />
         </div>
       </div>
 
@@ -120,7 +220,7 @@
       <div class="row">
 
         <!-- Prop: internal-search must be false otherwise it also filters by label -->
-        <div class="col-11 mb-2 mr-0">
+        <div class="col-10 col-md-11">
           <vue-multiselect v-model="relatedData.library_agent"
                            id="library_agent"
                            @search-change="autcompleteLibraryAgentSearch"
@@ -137,7 +237,7 @@
           </vue-multiselect>
         </div>
 
-        <div class="col-1 mb-2 ml-0 pl-0">
+        <div class="col-2 col-md-1 pl-0">
           <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
                   :disabled="!isDefinedAndNotEmpty(relatedData.library_agent)"
                   @click="relatedData.library_agent = []">
@@ -241,6 +341,12 @@
   import copyForm from './../mixins/copyForm'
   import LibraryReference from "./relatedTables/LibraryReference";
   import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
+  import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap'
+  import {
+    Bold,
+    Italic,
+    Link,
+  } from 'tiptap-extensions'
 
   library.add(faTimes)
 
@@ -252,6 +358,9 @@
       FontAwesomeIcon,
       VueMultiselect,
       Spinner,
+      EditorContent,
+      EditorMenuBar,
+      EditorMenuBubble
     },
     mixins: [formManipulation, copyForm, autocompleteFieldManipulation],
 
@@ -261,6 +370,11 @@
 
     created() {
       this.loadFullInfo()
+    },
+
+    beforeDestroy() {
+      this.editorAbstract.destroy()
+      this.editorAbstractEn.destroy()
     },
 
     watch: {
@@ -281,7 +395,7 @@
           this.loadRelatedData(this.activeTab)
         },
         deep: true
-      }
+      },
 
     },
 
@@ -313,6 +427,12 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
+          editorAbstract: this.setDefaultEditorData('abstract'),
+          editorAbstractEn: this.setDefaultEditorData('abstract_en'),
+          linkUrl: null,
+          linkMenuIsActive: false,
+          linkUrlAbstractEn: null,
+          linkMenuIsActiveAbstractEn: false,
         }
       },
 
@@ -322,16 +442,6 @@
       },
 
       loadFullInfo() {
-        fetchLibraryAgent(this.$route.params.id).then(response => {
-          let libraryAgent = this.handleResponse(response);
-          this.relatedData.library_agent = libraryAgent.map(entity => {
-            return {
-              agent: entity.agent__agent,
-              id: entity.agent
-            }
-          })
-        })
-
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
           fetchLibrary(this.$route.params.id).then(response => {
@@ -344,10 +454,21 @@
               this.$emit('set-object', 'library')
               this.sendingData = false;
               this.getListRecords('library')
+              this.updateEditorContent()
             } else {
               this.sendingData = false;
             }
           });
+
+          fetchLibraryAgent(this.$route.params.id).then(response => {
+            let libraryAgent = this.handleResponse(response);
+            this.relatedData.library_agent = libraryAgent.map(entity => {
+              return {
+                agent: entity.agent__agent,
+                id: entity.agent
+              }
+            })
+          })
 
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
@@ -483,10 +604,91 @@
           orderBy: '-id',
         }
       },
+
+      setDefaultEditorData(field) {
+        return new Editor({
+          extensions: [
+            new Bold(),
+            new Italic(),
+            new Link(),
+          ],
+          onUpdate: ({ getHTML }) => {
+            this.library[field] = getHTML()
+          },
+        })
+      },
+
+      updateEditorContent() {
+        this.editorAbstract.setContent(this.library.abstract)
+        this.editorAbstractEn.setContent(this.library.abstract_en)
+      },
+
+      showLinkMenu(attrs, field) {
+        if (field === 'editorAbstract') {
+          this.linkUrl = attrs.href
+          this.linkMenuIsActive = true
+          this.$nextTick(() => {
+            this.$refs.linkInput.focus()
+          })
+        } else {
+          this.linkUrlAbstractEn = attrs.href
+          this.linkMenuIsActiveAbstractEn = true
+          this.$nextTick(() => {
+            this.$refs.linkInputAbstractEn.focus()
+          })
+        }
+      },
+
+      hideLinkMenu(field) {
+        if (field === 'editorAbstract') {
+          this.linkUrl = null
+          this.linkMenuIsActive = false
+        } else {
+          this.linkUrlAbstractEn = null
+          this.linkMenuIsActiveAbstractEn = false
+        }
+      },
+
+      setLinkUrl(command, url, field) {
+        command({ href: url })
+        this.hideLinkMenu(field)
+        this[field].focus()
+      },
     }
   }
 </script>
 
-<style scoped>
+<style>
+  .editor {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
+    resize: none;
+    overflow-y: scroll;
+    height: auto;
+    max-height: 430px;
+  }
 
+  .editor-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+  }
+
+  .ProseMirror {
+    padding: 0.25rem 0.5rem;
+  }
 </style>

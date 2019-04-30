@@ -15,10 +15,19 @@
         <div class="search-fields">
           <div class="d-flex flex-row flex-wrap">
             <div class="col-sm-6" v-for="field,idx in filters">
-              <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
-              <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                            v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-              </b-form-input>
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <label :for="field.id">{{ $t(field.title) }}:</label>
+                </div>
+
+                <div class="col-sm-8 mb-2">
+                  <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+
+                  <b-form-text v-if="field.id === 'solrSearch'">{{ $t('messages.solrSearchInfo') }}.</b-form-text>
+                </div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -35,6 +44,8 @@
       view-type="referenceViewType"
       :multi-ordering="true"
       :export-buttons="true"
+      :use-list-view="true"
+      :use-alternative-table-view="true"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
@@ -75,6 +86,7 @@
           {id:"id",title:"reference.id",type:"number"},
           {id:"libraryAuthor",title:"reference.libraryAuthor",type:"text"},
           {id:"libraryIdTitle",title:"reference.libraryIdTitle",type:"text"},
+          {id:"solrSearch",title:"reference.solrSearch",type:"text"},
         ],
         searchParameters: this.setDefaultSearchParameters()
       }
@@ -89,7 +101,7 @@
       searchParametersChanged(newParams) {
         this.searchParameters = newParams
       },
-      setDefaultSearchParameters() {
+      setDefaultSearchParameters(isMultiOrdering) {
         return {
           author: null,
           year: null,
@@ -99,15 +111,15 @@
           id: null,
           libraryAuthor: null,
           libraryIdTitle: null,
+          solrSearch: null,
           page: 1,
           paginateBy: 50,
-          orderBy: ['-id', '-year'],
-          // orderBy: '-id',
+          orderBy: isMultiOrdering ? ['-id', '-year'] : '-id',
         }
       },
-      setDefaultSearchParametersFromDeleteButton() {
-        this.searchParameters = this.setDefaultSearchParameters()
-      }
+      setDefaultSearchParametersFromDeleteButton(arg1, isMultiOrdering) {
+        this.searchParameters = this.setDefaultSearchParameters(isMultiOrdering)
+    }
     }
   }
 </script>

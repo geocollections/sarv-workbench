@@ -256,7 +256,12 @@
     },
     "toggleViewLabel": "Toggle between table and list view",
     "tableView": "Table view",
-    "listView": "List view"
+    "listView": "List view",
+    "alternativeTableView": "Alternative table view",
+    "alternativeTableHeight": "Height",
+    "alternativeTableWidth": "Width",
+    "alternativeTableSize": "Size",
+    "alternativeTableResetButton": "Reset controls"
   },
   "photoArchive": {
     "author": "Author",
@@ -578,12 +583,14 @@
     "header": "Reference",
     "addNew": "Add new Reference",
     "sort": "Sort",
+    "solrSearch": "Fast search",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",
       "locality": "Locality",
       "reference_keyword": "User keywords",
-      "localityReference": "Locality references"
+      "localityReference": "Locality references",
+      "library": "Related libraries"
     }
   },
   "stratigraphy": {
@@ -654,7 +661,8 @@
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga '{ data }'. Lõpetamiseks mine tagasi lokaliteedi vormile",
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
     "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise SITE-ga {data}. Lõpetamiseks mine tagasi proovi vormile",
-    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}. Lõpetamiseks mine tagasi proovi vormile"
+    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}. Lõpetamiseks mine tagasi proovi vormile",
+    "solrSearchInfo": "Using this field will not use other fields"
   },
   "titles": {
     "main": "Geocollections Data Management",

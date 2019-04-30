@@ -10,12 +10,29 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
-    <!-- Deletes search preferences -->
     <div class="row mt-3">
-      <div class="col">
+      <!-- Deletes search preferences -->
+      <div class="col-sm-3 mt-3">
         <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
       </div>
+
+      <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
+      <div class="col-sm-6 mt-3" v-if="useListView || useAlternativeTableView">
+        <b-form-group>
+          <b-form-radio-group v-model="currentView">
+            <b-form-radio value="table">{{ $t('references.tableView') }}</b-form-radio>
+            <b-form-radio v-if="useListView" value="list">{{ $t('references.listView') }}</b-form-radio>
+            <b-form-radio v-if="useAlternativeTableView" value="alternativeTable">{{ $t('references.alternativeTableView') }}</b-form-radio>
+          </b-form-radio-group>
+        </b-form-group>
+      </div>
     </div>
+
+    <!-- ALTERNATIVE TABLE CONTROLS -->
+    <alternative-table-controls class="mt-3" v-if="isAlternativeTable"
+                                :alternativeTableControls="alternativeTableControls"
+                                v-on:set-default-controls="setDefaultAlternativeTableControlsFromResetButton"
+                                v-on:controls-changed="alternativeTableControlsChanged" />
 
     <div class="row mt-4">
       <div class="col">
@@ -53,17 +70,25 @@
       </div>
     </div>
 
+    <!-- LIST VIEW -->
+    <!-- Currently List-View is only used by reference, but if in the future is need for other table types then it should be made universal -->
+    <list-view v-if="isListView && response.count > 0"
+               module='reference'
+               :data="response.results"
+               :page="searchParameters.page"
+               :paginate-by="searchParameters.paginateBy" />
+
     <!-- REFERENCE TABLE -->
-    <div class="row">
+    <div class="row" v-if="(isTableView || isAlternativeTable) && response.count > 0">
       <div class="col">
 
-        <div class="table-responsive">
-          <table id="export-table" class="table table-hover table-bordered">
+        <div class="table-responsive" :class="{ 'fixed-table': isAlternativeTable }">
+          <table id="export-table" class="table table-hover table-bordered b-table-fixed">
 
-            <thead class="thead-light">
+            <thead class="thead-light" :class="{ 'sticky-header': isAlternativeTable }">
               <tr class="th-sort">
                 <!-- MULTI ORDERING -->
-                <th class="nowrap" v-if="multiOrdering === true" v-for="item in columns">
+                <th class="nowrap" v-if="multiOrdering === true && isTableView" v-for="item in columns">
                   <span @click="changeOrderMulti(item.id)" v-on:dblclick="removeOrder(item.id)" v-if="item.orderBy !== false">
                     <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(item.id) === 0" />
                     <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(item.id) === 1" />
@@ -74,15 +99,40 @@
                 </th>
 
                 <!-- REGULAR ORDERING -->
-                <th class="nowrap" v-if="multiOrdering === false" v-for="item in columns">
-                    <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
-                          <font-awesome-icon
-                            v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
-                            :icon="sort"/>
-                          <font-awesome-icon v-else :icon="sortingDirection"/>
-                          {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
-                      </span><br/>
+                <th class="nowrap" v-if="multiOrdering === false && isTableView" v-for="item in columns">
+                  <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
+                      <font-awesome-icon v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
+                        :icon="sort"/>
+                      <font-awesome-icon v-else :icon="sortingDirection"/>
+                      {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
+                    </span><br/>
                 </th>
+
+                <!-- ALTERNATIVE TABLE TH START -->
+                <!-- MULTI ORDERING for alternativeTable -->
+                <th class="break-all-words" :style="'font-size:' + alternativeTableControls.size + 'px;'"
+                    v-if="multiOrdering === true && isAlternativeTable" v-for="(value, key) in response.results[0]">
+                  <span @click="changeOrderMulti(key)" v-on:dblclick="removeOrder(key)">
+                    <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(key) === 0" />
+                    <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(key) === 1" />
+                    <font-awesome-icon icon="sort-down" v-if="isFieldInOrderBy(key) === -1" />
+                    {{ key }}
+                  </span>
+                  <br/>
+                </th>
+
+                <!-- REGULAR ORDERING for alternativeTable -->
+                <th class="break-all-words" :style="'font-size:' + alternativeTableControls.size + 'px;'"
+                    v-if="multiOrdering === false && isAlternativeTable" v-for="(value, key) in response.results[0]">
+                  <span @click="changeOrder(key)">
+                    <font-awesome-icon
+                      v-if="searchParameters.orderBy !== key && searchParameters.orderBy !== '-'+key"
+                      :icon="sort"/>
+                    <font-awesome-icon v-else :icon="sortingDirection"/>
+                    {{ key }}
+                  </span><br/>
+                </th>
+                <!-- ALTERNATIVE TABLE TH END -->
               </tr>
 
               <tr>
@@ -103,7 +153,13 @@
 
             </thead>
 
-            <router-view :response="response"  v-if="response.count > 0"/>
+            <router-view :response="response"  v-if="response.count > 0 && isTableView"/>
+
+            <!-- ALTERNATIVE TABLE VIEW -->
+            <alternative-table-view v-if="isAlternativeTable"
+                                    module='reference'
+                                    :data="response.results"
+                                    :controls="alternativeTableControls"/>
 
           </table>
         </div>
@@ -135,15 +191,21 @@
   import {faSortDown,faSortUp, faSort,faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
   import Datepicker from 'vue2-datepicker'
   import ExportButtons from "../components/partial/ExportButtons";
+  import ListView from "../components/reference/ListView";
+  import AlternativeTableView from "../components/reference/AlternativeTableView";
+  import AlternativeTableControls from "../components/reference/AlternativeTableControls";
 
   library.add(faSort, faSortUp, faSortDown, faCalendarAlt)
 
   export default {
     components: {
+      AlternativeTableControls,
+      AlternativeTableView,
       FontAwesomeIcon,
       Spinner,
       Datepicker,
-      ExportButtons
+      ExportButtons,
+      ListView
     },
     props: {
       apiCall: {
@@ -186,6 +248,16 @@
       exportButtons: {
         type: Boolean,
         default: false,
+      },
+
+      useListView: {
+        type: Boolean,
+        default: false,
+      },
+
+      useAlternativeTableView: {
+        type: Boolean,
+        default: false,
       }
 
     },
@@ -198,6 +270,8 @@
           count: 0,
           results: []
         },
+        currentView: 'table',
+        alternativeTableControls: this.setDefaultAlternativeTableControls(),
       }
     },
 
@@ -216,6 +290,20 @@
         return this.searchParameters.orderBy.includes('-') ? faSortDown : faSortUp
       },
 
+      isTableView() {
+        // true and false checks are put just in case, because of migrating from old viewType value page didn't show table.
+        // Clear filtering button fixes it but just in case
+        return this.currentView === 'table' || this.currentView === 'false' || this.currentView === 'true' || typeof this.currentView === 'boolean'
+      },
+
+      isListView() {
+        return this.currentView === 'list'
+      },
+
+      isAlternativeTable() {
+        return this.currentView === 'alternativeTable'
+      },
+
     },
     watch: {
       'searchParameters': {
@@ -224,7 +312,7 @@
         },
         deep: true
       },
-      'isListView'(newVal, oldVal) {
+      'currentView'(newVal, oldVal) {
         this.$localStorage.set(this.viewType, newVal)
       }
     },
@@ -238,7 +326,10 @@
         this.search(this.searchParameters)
       }
 
-      this.isListView = this.$localStorage.get(this.viewType, false)
+      let viewingType = this.$localStorage.get(this.viewType, 'table')
+      // Changes old boolean value to correct string (maybe make the storage value into object or something?)
+      if (viewingType === 'false' || viewingType === 'true' || typeof viewingType === 'boolean') this.currentView = 'table'
+      else this.currentView = viewingType
     },
 
     methods: {
@@ -352,13 +443,28 @@
 
 
 
+      alternativeTableControlsChanged(newControls) {
+        this.alternativeTableControls = newControls
+      },
+
+      setDefaultAlternativeTableControls() {
+        return {
+          height: '4',
+          width: '8',
+          size: '14'
+        }
+      },
+
+      setDefaultAlternativeTableControlsFromResetButton() {
+        this.alternativeTableControls = this.setDefaultAlternativeTableControls()
+      },
+
       // Deletes local storage value + resets search parameters to default
       deleteSearchPreferences() {
-        console.log()
         this.$localStorage.remove(this.searchHistory)
         this.$localStorage.remove(this.viewType)
-        this.$emit('set-default-search-params',true);
-        this.isListView = false
+        this.$emit('set-default-search-params', true, this.multiOrdering);
+        this.currentView = 'table'
       }
     }
   }
@@ -378,6 +484,10 @@
     white-space: nowrap;
   }
 
+  .break-all-words {
+    word-break: break-all;
+  }
+
   .th-sort > th > span {
     cursor: pointer;
   }
@@ -388,5 +498,20 @@
 
   .fa-sort-up, .fa-sort-down {
     color: #007bff;
+  }
+
+  /* Fixes table so scrolling happens inside table */
+  .fixed-table {
+    max-height: 65vh;
+  }
+
+  /* Sticky header for responsive table */
+  .sticky-header th {
+    position: sticky;
+    position: -webkit-sticky;
+    top:0;
+    outline: 1px solid #dee2e6;
+    outline-offset: -1px;
+    box-shadow: 0 2px 0 #cfd5db;
   }
 </style>

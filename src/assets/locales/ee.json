@@ -259,7 +259,12 @@
     },
     "toggleViewLabel": "Vaheta tabeli ja listi vaate vahel",
     "tableView": "Tabeli vaade",
-    "listView": "Listi vaade"
+    "listView": "Listi vaade",
+    "alternativeTableView": "Alternatiivne tabeli vaade",
+    "alternativeTableHeight": "Pikkus",
+    "alternativeTableWidth": "Laius",
+    "alternativeTableSize": "Suurus",
+    "alternativeTableResetButton": "Taasta sätted"
   },
   "photoArchive": {
     "author": "Autor",
@@ -583,12 +588,14 @@
     "header": "Kirjandus",
     "addNew": "Lisage uus Kirjandus",
     "sort": "Liik",
+    "solrSearch": "Kiire otsing",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad",
-      "localityReference": "Kirjeldatud lokaliteedid"
+      "localityReference": "Kirjeldatud lokaliteedid",
+      "library": "Seotud kogumikud"
     }
   },
   "synonym": {
@@ -659,8 +666,8 @@
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga {data}. Lõpetamiseks mine tagasi lokaliteedi vormile",
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
     "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise vaatluspunktiga {data}. Lõpetamiseks mine tagasi site vormile",
-    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}. Lõpetamiseks mine tagasi site vormile"
-
+    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}. Lõpetamiseks mine tagasi site vormile",
+    "solrSearchInfo": "Seda välja kasutades teisi välju ei kasutata"
   },
   "titles": {
     "main": "Geokogude andmehaldus",
