@@ -5,11 +5,11 @@
         Export <font-awesome-icon icon="file-export" />
       </template>
 
-      <b-dropdown-item @click="exportTableByType('xlsx')">Export to XLSX &nbsp;<font-awesome-icon icon="file-excel" /></b-dropdown-item>
+      <b-dropdown-item @click="exportTableByType('xlsx')">Export to XLSX &nbsp;<font-awesome-icon :icon="['far', 'file-excel']" /></b-dropdown-item>
 
-      <b-dropdown-item @click="exportTableByType('csv')">Export to CSV &nbsp;<font-awesome-icon icon="file" /></b-dropdown-item>
+      <b-dropdown-item @click="exportTableByType('csv')">Export to CSV &nbsp;<font-awesome-icon :icon="['far', 'file']" /></b-dropdown-item>
 
-      <b-dropdown-item @click="copyToClipboard()" >Copy to Clipboard &nbsp;<font-awesome-icon icon="copy" /></b-dropdown-item>
+      <b-dropdown-item @click="copyToClipboard()" >Copy to Clipboard &nbsp;<font-awesome-icon :icon="['far', 'copy']" /></b-dropdown-item>
 
     </b-dropdown>
   </div>
@@ -18,18 +18,12 @@
 <script>
   import { toastSuccess } from "@/assets/js/iziToast/iziToast";
   import TableExport from 'tableexport'
-
-  import {library} from '@fortawesome/fontawesome-svg-core'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faFileExport, faFileExcel, faFile, faCopy} from '@fortawesome/free-solid-svg-icons'
-
-  library.add(faFileExport, faFileExcel, faFile, faCopy)
-
+  import fontAwesomeLib from "../mixins/fontAwasomeLib";
 
   export default {
-    components: {
-      FontAwesomeIcon,
-    },
+    // components: {
+    //   FontAwesomeIcon,
+    // },
     props: {
       filename: {
         type: String,
@@ -41,6 +35,7 @@
       }
     },
     name: "ExportButtons",
+    mixins: [fontAwesomeLib],
 
     data() {
       return {

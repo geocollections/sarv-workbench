@@ -101,7 +101,7 @@
       searchParametersChanged(newParams) {
         this.searchParameters = newParams
       },
-      setDefaultSearchParameters() {
+      setDefaultSearchParameters(isMultiOrdering) {
         return {
           author: null,
           year: null,
@@ -114,13 +114,12 @@
           solrSearch: null,
           page: 1,
           paginateBy: 50,
-          orderBy: ['-id', '-year'],
-          // orderBy: '-id',
+          orderBy: isMultiOrdering ? ['-id', '-year'] : '-id',
         }
       },
-      setDefaultSearchParametersFromDeleteButton() {
-        this.searchParameters = this.setDefaultSearchParameters()
-      }
+      setDefaultSearchParametersFromDeleteButton(arg1, isMultiOrdering) {
+        this.searchParameters = this.setDefaultSearchParameters(isMultiOrdering)
+    }
     }
   }
 </script>
