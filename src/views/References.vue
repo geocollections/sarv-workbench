@@ -49,6 +49,8 @@
         </div>
 
         <!-- SEARCH FIELDS END -->
+        
+        <!-- TODO: Combined view list-module-core needs some design changes (pagination and stuff needs resizing cause they are breaking out) -->
         <list-module-core
           module="reference"
           title="titles.editReference"
@@ -232,20 +234,22 @@
 
   .left-side {
     border-right: 2px solid #6c757d;
+    /*border-left: 2px solid #6c757d;*/
   }
 
   .right-side {
     border-left: 2px solid #6c757d;
+    /*border-right: 2px solid #6c757d;*/
   }
 
   .embed-responsive {
-    /* 100% goes on top of footer a little bit */
-    height: 99%;
+    height: 100vw;
   }
 
   .break-out {
-    width: 99vw;
-    left: calc(-1 * (100vw - 103.5%) / 2);
+    /* Source: https://medium.com/@simonlidesign/an-elegant-way-to-break-the-bootstrap-container-2912628e4829 */
+    width: 98vw;
+    left: calc(-1 * (100vw - 104.5%) / 2);
     position: relative;
   }
 </style>
