@@ -49,7 +49,7 @@
         </div>
 
         <!-- SEARCH FIELDS END -->
-        
+
         <!-- TODO: Combined view list-module-core needs some design changes (pagination and stuff needs resizing cause they are breaking out) -->
         <list-module-core
           module="reference"
