@@ -20,7 +20,8 @@
       </div>
     </div>
 
-    <div class="row" v-if="isCombinedView">
+    <!-- COMBINED VIEW -->
+    <div class="row" :class="{ 'break-out': isCombinedView }" v-if="isCombinedView">
       <div class="col-6 left-side">
         <!-- SEARCH FIELDS START -->
         <div class="row mt-4">
@@ -67,11 +68,11 @@
 
       <div class="col-6 right-side">
         <div class="row">
-          <div class="col-sm-9">
+          <div class="col-xl-9 mb-2">
             <b-form-input v-model="inputUrl" @keyup.enter="openIframe" placeholder="https://"></b-form-input>
           </div>
 
-          <div class="col-sm-3">
+          <div class="col-xl-3 mb-3">
             <b-button variant="primary" @click="openIframe">
               <font-awesome-icon icon="external-link-alt" />
               {{ $t('add.buttons.openIframe') }}
@@ -80,7 +81,6 @@
         </div>
 
         <b-embed
-          class="mt-3"
           type="iframe"
           :src="iframeUrl"
           allowfullscreen
@@ -231,14 +231,21 @@
   }
 
   .left-side {
-    border-right: 1.5px solid #6c757d;
+    border-right: 2px solid #6c757d;
   }
 
   .right-side {
-    border-left: 1.5px solid #6c757d;
+    border-left: 2px solid #6c757d;
   }
 
   .embed-responsive {
-    height: 100%;
+    /* 100% goes on top of footer a little bit */
+    height: 99%;
+  }
+
+  .break-out {
+    width: 99vw;
+    left: calc(-1 * (100vw - 103.5%) / 2);
+    position: relative;
   }
 </style>
