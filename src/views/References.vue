@@ -63,6 +63,7 @@
           :export-buttons="true"
           :use-list-view="true"
           :use-alternative-table-view="true"
+          :combined-view="isCombinedView"
           v-on:search-params-changed="searchParametersChanged"
           v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
         ></list-module-core>
@@ -213,8 +214,10 @@
         if (url !== null) {
           url = url.toLowerCase()
           if (url.startsWith('https://') || url.startsWith('http://')) {
+            this.iframeUrl = null
             this.iframeUrl = url
           } else {
+            this.iframeUrl = null
             this.iframeUrl = 'http://' + url
           }
         }
