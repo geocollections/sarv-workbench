@@ -65,7 +65,7 @@ export function fetchLogout() {
  *************************/
 
 export function fetchAttachments(data, author) {
-  const fields = 'id,uuid_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment'
+  const fields = 'id,uuid_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment,is_private'
   let searchFields = ''
 
   if (data.image_number !== null && data.image_number.trim().length > 0) {
@@ -93,9 +93,9 @@ export function fetchAttachments(data, author) {
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    return fetch(`attachment/?${searchFields}&or_search=author_id:${author.agent_id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`attachment/?${searchFields}&or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    return fetch(`attachment/?or_search=author_id:${author.agent_id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`attachment/?or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 
@@ -432,7 +432,7 @@ export function fetchLibraries(data) {
   }
 }
 
-export function fetchLibrariesFromLibraryAgent(data, agentId) {
+export function fetchLibrariesFromLibraryAgent(data, agent) {
   const fields = 'id,library,library__author_txt,library__title,library__title_en,agent,agent__agent,agent__surename,agent__forename,library__is_private'
   let searchFields = ''
   if (data.author_txt !== null && data.author_txt.trim().length > 0) {
@@ -454,9 +454,9 @@ export function fetchLibrariesFromLibraryAgent(data, agentId) {
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    return fetch(`library_agent/?agent=${agentId.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`library_agent/?agent=${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    return fetch(`library_agent/?agent=${agentId.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`library_agent/?agent=${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 

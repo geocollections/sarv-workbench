@@ -180,6 +180,10 @@ new Vue({
     attachmentSearchHistory: {
       type: Object
     },
+    attachmentViewType: {
+      type: String,
+      default: 'table'
+    },
     referenceSearchHistory: {
       type: Object
     },

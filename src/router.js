@@ -42,6 +42,22 @@ const router = new Router({
           meta: {
             requiresAuth: true
           },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/attachment/AttachmentTable.vue'),
+              meta: {
+                requiresAuth: true
+              }
+            }
+          ]
+        },
+        {
+          path: '/attachment_old',
+          component: () => import('./views/AttachmentsOld.vue'),
+          meta: {
+            requiresAuth: true
+          },
         },
         {
           path: '/attachment/:id(\\d+)',

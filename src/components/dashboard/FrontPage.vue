@@ -175,7 +175,7 @@
 </template>
 
 <script>
-  import Attachments from '@/views/Attachments.vue'
+  import Attachments from '@/views/AttachmentsOld.vue'
   import RecentActivity from "./RecentActivity";
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
