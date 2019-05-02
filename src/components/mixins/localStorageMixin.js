@@ -6,13 +6,26 @@ const localStorageMixin = {
       vue.localStorage.set('createRelationWith',  msg)
     },
     lsPullCreateRelationWith () {
-      return vue.localStorage.get('createRelationWith')
+      const relation = vue.localStorage.get('createRelationWith');
+      this.lsPushCreateRelationWith({ object: null, data: null, info: null, edit: null });
+      return relation
     },
     lsPushSampleView (state) {
       vue.localStorage.set('sampleView',  state)
     },
     lsPullSampleView () {
-      return vue.localStorage.get('sampleView')
+      const state = vue.localStorage.get('sampleView');
+      this.lsPushSampleView(true);
+      return state
+    },
+
+    lsRefreshParentForm (state) {
+      vue.localStorage.set('refreshForm', state)
+    },
+    lsIsRefreshedParentForm () {
+      const state = vue.localStorage.get('refreshForm');
+      this.lsRefreshParentForm(false);
+      return state
     },
     //can be used to get data change in store
     // lsAttachListener (callback) {

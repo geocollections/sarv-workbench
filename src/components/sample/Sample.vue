@@ -390,9 +390,9 @@
     <template slot="simplified-form">
       <b-alert show variant="warning" v-if="createRelationWith.data !== null">
         {{ createRelationWith.info }}
-        <a class="small" href="javascript:void(0)" @click="navigateBack">
-          <font-awesome-icon icon="external-link-alt"/>
-        </a>
+        <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
+          <!--<font-awesome-icon icon="external-link-alt"/>-->
+        <!--</a>-->
       </b-alert>
       <fieldset class="border p-2 mb-2 mt-3">
         <legend class="w-auto" style="font-size: large;">Üldinfo
@@ -633,7 +633,7 @@
         <div class="col">
           <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack">
             {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'sample')">
+          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'sample', false, true)">
             {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
           <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('sample') : reset('sample')">
             {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>

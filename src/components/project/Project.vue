@@ -353,9 +353,7 @@
       return this.setInitialData()
     },
     computed:{
-      sidebarUserAction() {
-        return this.$store.state['sidebarUserAction']
-      }
+      sidebarUserAction() { return this.$store.state['sidebarUserAction'] }
     },
     created() {
       this.activeObject = 'project';
@@ -367,14 +365,15 @@
         object:this.activeObject, field: 'name'});
 
       this.loadFullInfo()
-
       //TODO:REMOVE handle resize logic I DONT remember why?
       window.addEventListener('resize', this.handleResize);
+      window.addEventListener('visibilitychange', this.handleVisibilityChange);
       this.handleResize();
     },
 
     destroyed() {
       window.removeEventListener('resize', this.handleResize)
+      window.removeEventListener('visibilitychange', this.handleVisibilityChange)
     },
 
     methods: {
@@ -413,7 +412,7 @@
           isActive: false,
           attachmentLinkSaved : -1,
           watchedSite: null,
-          block: {info: true , members: true , description: true , files: true , sites: true }
+          block: {info: true , members: true , description: true , files: true , sites: true },
         }
       },
 
@@ -620,12 +619,15 @@
         if(site && site.id) {
           createRelationWith.data = null;
           this.lsPushCreateRelationWith(createRelationWith);
-          routeData = this.$router.resolve({ path:'/site/'+ site.id});
+          this.windowOpenNewTab('site','/site/'+ site.id)
+          // routeData = this.$router.resolve({ path:'/site/'+ site.id});
         } else {
           this.lsPushCreateRelationWith(createRelationWith);
-          routeData = this.$router.resolve({ path:'/site/add'});
+          this.windowOpenNewTab('site','/site/add')
+          // routeData = this.$router.resolve({ path:'/site/add'});
         }
-        window.open(routeData.href, '_blank', 'width=750,height=750');
+
+        // window.open(routeData.href, '_blank', 'width=750,height=750');
 
       },
 
@@ -652,7 +654,9 @@
       //     this.hoverSaveOrCancelButtonClicked('CANCEL','project',true)
       //   }
       // },
-
+      handleVisibilityChange(event) {
+        this.loadRelatedData('site')
+      },
       handleResize() {
         this.window.width = window.innerWidth;
         this.window.height = window.innerHeight;

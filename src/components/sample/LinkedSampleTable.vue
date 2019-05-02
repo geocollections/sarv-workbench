@@ -92,6 +92,10 @@
           //CREATE EVENT LOAD LINKED SAMLES ON PAGE CLOSE!!! CONTINUE
         this.$root.$on('reload-linked-samples',this.loadLinkedSamples)
         this.loadLinkedSamples();
+        window.addEventListener('visibilitychange', this.handleVisibilityChange);
+      },
+      destroyed() {
+        window.removeEventListener('visibilitychange', this.handleVisibilityChange)
       },
       methods: {
         windowOpenNewTab(name, path,query = {}, meta) {
@@ -104,6 +108,9 @@
             this.samples = response.body.results ? response.body.results : []
             this.$parent.relatedData.sample = this.samples
           });
+        },
+        handleVisibilityChange() {
+          this.loadLinkedSamples()
         },
       },
       watch: {

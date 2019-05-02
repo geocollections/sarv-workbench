@@ -5,9 +5,9 @@
 
     <b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">
       {{ createRelationWith.info }}
-      <a class="small" href="javascript:void(0)" @click="navigateBack">
-        <font-awesome-icon icon="external-link-alt"/>
-      </a>
+      <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
+        <!--<font-awesome-icon icon="external-link-alt"/>-->
+      <!--</a>-->
     </b-alert>
     <!--<b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)"> Ava vaatluspunkti eraldi tabil-->
       <!--<a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">-->
@@ -323,9 +323,7 @@
     },
     computed: {
       createRelationWith() {
-        const relation = this.lsPullCreateRelationWith();
-        this.lsPushCreateRelationWith({ object: null, data: null, info: null, edit: null })
-        return relation
+        return this.lsPullCreateRelationWith();
         // return this.$store.state['createRelationWith']
       },
       sidebarUserAction() {
@@ -579,8 +577,9 @@
         // this.$router.push({path: '/sample/add'});
 
         this.lsPushCreateRelationWith(createRelationWith);
-        let routeData = this.$router.resolve({ path:'/sample/add'});
-        window.open(routeData.href, '_blank', 'width=750,height=750');
+        this.windowOpenNewTab('sample','/sample/add')
+        // let routeData = this.$router.resolve({ path:'/sample/add'});
+        // window.open(routeData.href, '_blank', 'width=750,height=750');
       },
 
       setSiteNameAndProjectIfPreviousExists() {
@@ -649,7 +648,9 @@
       navigateBack() {
         if (this.createRelationWith.object !== null) {
 
-          if(this.createRelationWith.data === null) window.close()
+          if(this.createRelationWith.data === null) {
+            window.close();
+          }
 
           if(this.createRelationWith.edit === null) {
             this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
@@ -674,14 +675,13 @@
         } else if(choice === 'SAVE') {
           this.add(true, 'site',false,false)
         }
-      }
+      },
     },
 
     beforeRouteLeave(to, from, next) {
       //Do not remove relation object in case user created new relation object for simplified sample form
       if (this.$store.state['sampleView'].isFull)
         this.$store.commit('REMOVE_RELATION_OBJECT');
-
       next()
     },
 

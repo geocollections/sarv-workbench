@@ -668,8 +668,8 @@
     "localityAttachmentInfo":"Vali link manusele või lisa uus",
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga {data}. Lõpetamiseks mine tagasi lokaliteedi vormile",
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
-    "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise vaatluspunktiga {data}. Lõpetamiseks mine tagasi site vormile",
-    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}. Lõpetamiseks mine tagasi site vormile",
+    "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise vaatluspunktiga {data}.",
+    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}.",
     "solrSearchInfo": "Seda välja kasutades teisi välju ei kasutata"
   },
   "titles": {

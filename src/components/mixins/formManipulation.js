@@ -293,12 +293,12 @@ const formManipulation = {
     },
 
     reset(object, isEdit) {
-      console.log(this.createRelationWith)
+
       if (this.createRelationWith.object !== null) {
         window.close()
         console.log('WINDOW CLOSE')
-      }
-      isEdit ? this.$router.push({ path:'/'+object}) : this[object] = {}
+      } else
+        isEdit ? this.$router.push({ path:'/'+object}) : this[object] = {}
     },
 
     leaveFromEditView(object) {

@@ -134,6 +134,10 @@ new Vue({
       type: Boolean,
       dafault: true
     },
+    refreshForm:{
+      type: Boolean,
+      dafault: false
+    },
     sidebar:{
       type: Boolean
     },
