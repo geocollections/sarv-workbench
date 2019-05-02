@@ -604,6 +604,7 @@
       },
 
       addOrEditSite(site) {
+
         if(site) this.watchedSite = site
         //set relation object as site
         let createRelationWith = {
@@ -612,11 +613,19 @@
             {data: `ID: ${this.project.id} (${this.project.name})`})
         };
         this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith});
-        this.$emit('show-new-site-modal')
+        //MODAL OPTION IS COMMENTED BUT NOT REMOVED
+        // this.$emit('show-new-site-modal')
         // this.$router.push({path: '/site/add'})
-        // this.lsPushCreateRelationWith(createRelationWith)
-        // let routeData = this.$router.resolve({ path:'/site/add'})
-        // window.open(routeData.href, '_blank', 'width=1000,height=750');
+        let routeData = '';
+        if(site && site.id) {
+          createRelationWith.data = null;
+          this.lsPushCreateRelationWith(createRelationWith);
+          routeData = this.$router.resolve({ path:'/site/'+ site.id});
+        } else {
+          this.lsPushCreateRelationWith(createRelationWith);
+          routeData = this.$router.resolve({ path:'/site/add'});
+        }
+        window.open(routeData.href, '_blank', 'width=750,height=750');
 
       },
 

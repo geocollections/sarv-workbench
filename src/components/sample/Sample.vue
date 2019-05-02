@@ -388,12 +388,12 @@
     </template>
 
     <template slot="simplified-form">
-      <!--<b-alert show variant="warning" v-if="createRelationWith.data !== null">-->
-        <!--{{ createRelationWith.info }}-->
-        <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
-          <!--<font-awesome-icon icon="external-link-alt"/>-->
-        <!--</a>-->
-      <!--</b-alert>-->
+      <b-alert show variant="warning" v-if="createRelationWith.data !== null">
+        {{ createRelationWith.info }}
+        <a class="small" href="javascript:void(0)" @click="navigateBack">
+          <font-awesome-icon icon="external-link-alt"/>
+        </a>
+      </b-alert>
       <fieldset class="border p-2 mb-2 mt-3">
         <legend class="w-auto" style="font-size: large;">Üldinfo
           <font-awesome-icon icon="project-diagram"/></legend>
@@ -679,7 +679,7 @@
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
   import MapComponent from "../partial/MapComponent";
   import SampleWrapper from "./SampleWrapper";
-
+  import localStorageMixin from './../mixins/localStorageMixin'
     export default {
       name: "Sample",
       components: {
@@ -697,12 +697,22 @@
         VueMultiselect,
         Spinner,
       },
-      mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
+      mixins: [formManipulation,copyForm,autocompleteFieldManipulation,localStorageMixin],
 
       computed: {
         getParentId(){return this.sample.id},
-        fullView() { return this.$store.state['sampleView'].isFull},
-        createRelationWith () { return this.$store.state['createRelationWith'] },
+        fullView() {
+          return this.lsPullSampleView();
+          //return this.$store.state['sampleView'].isFull
+        },
+        createRelationWith () {
+          const relation = this.lsPullCreateRelationWith();
+          console.log(relation)
+          this.lsPushCreateRelationWith({ object: null, data: null, info: null, edit: null })
+
+          return relation
+          // return this.$store.state['createRelationWith']
+        },
         samplePurpose() { return this.$store.state['samplePurposes']}
       },
       data() { return this.setInitialData() },
@@ -1001,7 +1011,8 @@
               vm.$router.push({ path:'/sample'});
             else {
               // vm.$router.push({ path:'/'+createRelationWith.object+'/'+createRelationWith.data.id})
-              vm.$root.$emit('close-new-sample-modal')
+              // vm.$root.$emit('close-new-sample-modal')
+              window.close()
             }
           })
         },
