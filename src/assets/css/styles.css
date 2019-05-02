@@ -191,7 +191,7 @@ legend {
  *********************************/
 
 @media (max-width: 767px) {
-  .t-paginate-by-center {
+  .top-select-center {
     margin: 0 auto;
     width: unset;
   }
@@ -201,7 +201,7 @@ legend {
     width: 100%;
   }
 
-  .b-paginate-by-center {
+  .bottom-select-center {
     margin: 0 auto;
   }
 
@@ -212,9 +212,32 @@ legend {
   }
 }
 
+@media (max-width: 1199px) {
+  .top-select-center-xl {
+    margin: 0 auto;
+    width: unset;
+  }
+
+  .export-center-xl {
+    text-align: center;
+    width: 100%;
+  }
+
+  .bottom-select-center-xl {
+    margin: 0 auto;
+  }
+
+  /* Overrides bootstrap rule */
+  .pagination-center-xl > .justify-content-end {
+    justify-content: center !important;
+    width: 100%;
+  }
+}
+
 /*********************************
  ***  PAGINATE AND EXPORT END  ***
  *********************************/
+
 @media (max-width: 992px) {
   .modal-dialog-scrollable .modal-content {
     min-width: calc(110vh ) !important;

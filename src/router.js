@@ -139,15 +139,6 @@ const router = new Router({
           ]
         },
         {
-          path: '/reference_old/:id(\\d+)',
-          props: true,
-          // component: () => import('./views/EditForm.vue'),
-          component: () => import('./views/EditReference.vue'),
-          meta: {
-            requiresAuth: true
-          },
-        },
-        {
           path: '/reference/add',
           component: () => import('./views/AddForm.vue'),
           meta: {
@@ -166,22 +157,6 @@ const router = new Router({
                     path: '/reference/add', name: 'add.reference'
                   }
                 ],
-                requiresAuth: true
-              },
-            }
-          ]
-        },
-        {
-          path: '/reference_old/add',
-          component: () => import('./views/AddReference.vue'),
-          meta: {
-            requiresAuth: true
-          },
-          children: [
-            {
-              path: '',
-              component: () => import('./components/reference/ReferenceOld.vue'),
-              meta: {
                 requiresAuth: true
               },
             }

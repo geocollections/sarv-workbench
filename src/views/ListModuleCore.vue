@@ -12,7 +12,7 @@
 
     <div class="row mt-3">
       <!-- Deletes search preferences -->
-      <div class="col-sm-3 mt-3">
+      <div class="mt-3" :class="{ 'col-sm-6': combinedView, 'col-sm-3': !combinedView }">
         <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
       </div>
 
@@ -46,8 +46,8 @@
     </div>
 
     <div class="row mt-3" v-if="response.count > 0">
-      <div class="col-sm-6 col-md-3 pl-3 pr-3 t-paginate-by-center">
-        <b-form-select v-model="searchParameters.paginateBy" class="mb-3">
+      <div class="pl-3 pr-3" :class="{ 'col-lg-6 col-xl-3 top-select-center-xl': combinedView, 'col-sm-6 col-md-3 top-select-center': !combinedView }">
+        <b-form-select v-model="searchParameters.paginateBy" class="mb-3" >
           <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
           <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
           <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -58,11 +58,11 @@
         </b-form-select>
       </div>
 
-      <div class="col-sm-12 col-md-3 export-center" :class="{ 'mb-3': exportButtons }">
+      <div :class="{ 'mb-3': exportButtons, 'col-lg-12 col-xl-3 export-center-xl': combinedView, 'col-sm-12 col-md-3 export-center': !combinedView  }">
         <export-buttons v-if="exportButtons" :filename="module"></export-buttons>
       </div>
 
-      <div class="col-sm-12 col-md-6 pagination-center">
+      <div :class="{ 'col-lg-12 col-xl-6 pagination-center-xl': combinedView, 'col-sm-12 col-md-6 pagination-center': !combinedView }">
         <b-pagination
           size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count"
           v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
@@ -78,7 +78,7 @@
                :page="searchParameters.page"
                :paginate-by="searchParameters.paginateBy" />
 
-    <!-- REFERENCE TABLE -->
+    <!-- TABLE -->
     <div class="row" v-if="(isTableView || isAlternativeTable) && response.count > 0">
       <div class="col">
 
@@ -256,6 +256,11 @@
       },
 
       useAlternativeTableView: {
+        type: Boolean,
+        default: false,
+      },
+
+      combinedView: {
         type: Boolean,
         default: false,
       }
