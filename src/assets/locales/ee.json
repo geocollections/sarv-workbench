@@ -24,6 +24,7 @@
   },
   "header": {
     "title": "SARV2",
+    "attachments": "Failid",
     "files": "Failid",
     "references": "Kirjandus",
     "localities": "Lokaliteedid",
@@ -362,6 +363,32 @@
       "storage": "Hoidla",
       "attachment": "Fail"
     }
+  },
+  "attachment": {
+    "header": "Minu failid",
+    "imageNumber": "Pildi number",
+    "filename": "Failinimi",
+    "specimen": "Eksemplar",
+    "imageInfo": "Pildi info",
+    "locality": "Lokaliteet",
+    "file": "Fail",
+    "id": "ID",
+    "format": "Formaat",
+    "number": "Number",
+    "author": "Autor",
+    "date": "Aeg",
+    "reference": "Kirjandus",
+    "specimenImageAttachment": "Tüüp",
+    "photoArchiveFile": "Foto",
+    "specimenFile": "Eksemplar",
+    "digitisedReferenceFile": "Kirjandus",
+    "otherFile": "Fail",
+    "photoArchive": "Fotoarhiiv",
+    "specimenImage": "Eksemplari pildid",
+    "otherFiles": "Muud failid",
+    "digitisedReference": "Digiteeritud kirjandus",
+    "edit": "Muuda",
+    "addNew": "Lisage uus fail"
   },
   "digitisedReference": {
     "reference": "Kirjandus",

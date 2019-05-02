@@ -25,6 +25,7 @@
   },
   "header": {
     "title": "SARV2",
+    "attachments": "Files",
     "files": "Files",
     "references": "References",
     "localities": "Localities",
@@ -359,6 +360,32 @@
       "storage": "Storage",
       "attachment": "Attachment"
     }
+  },
+  "attachment": {
+    "header": "My attachments",
+    "imageNumber": "Image number",
+    "filename": "Filename",
+    "specimen": "Specimen",
+    "imageInfo": "Image info",
+    "locality": "Locality",
+    "file": "File",
+    "id": "ID",
+    "format": "Format",
+    "number": "Number",
+    "author": "Author",
+    "date": "Date",
+    "reference": "Reference",
+    "specimenImageAttachment": "Type",
+    "photoArchiveFile": "Photo",
+    "specimenFile": "Specimen",
+    "digitisedReferenceFile": "Reference",
+    "otherFile": "File",
+    "photoArchive": "Photo archive",
+    "specimenImage": "Specimen images",
+    "otherFiles": "Other files",
+    "digitisedReference": "Digitised reference",
+    "edit": "Edit",
+    "addNew": "Add new file"
   },
   "digitisedReference": {
     "reference": "Reference",

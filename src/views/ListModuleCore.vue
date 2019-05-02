@@ -73,10 +73,8 @@
     <!-- LIST VIEW -->
     <!-- Currently List-View is only used by reference, but if in the future is need for other table types then it should be made universal -->
     <list-view v-if="isListView && response.count > 0"
-               module='reference'
-               :data="response.results"
-               :page="searchParameters.page"
-               :paginate-by="searchParameters.paginateBy" />
+               :module="module"
+               :data="response.results"/>
 
     <!-- TABLE -->
     <div class="row" v-if="(isTableView || isAlternativeTable) && response.count > 0">
@@ -95,6 +93,7 @@
                     <font-awesome-icon icon="sort-down" v-if="isFieldInOrderBy(item.id) === -1" />
                     {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
                   </span>
+                  <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
                   <br/>
                 </th>
 
@@ -105,7 +104,9 @@
                         :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection"/>
                       {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
-                    </span><br/>
+                    </span>
+                  <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
+                  <br/>
                 </th>
 
                 <!-- ALTERNATIVE TABLE TH START -->
@@ -191,7 +192,7 @@
   import {faSortDown,faSortUp, faSort,faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
   import Datepicker from 'vue2-datepicker'
   import ExportButtons from "../components/partial/ExportButtons";
-  import ListView from "../components/reference/ListView";
+  import ListView from "../components/partial/ListView";
   import AlternativeTableView from "../components/reference/AlternativeTableView";
   import AlternativeTableControls from "../components/reference/AlternativeTableControls";
 
