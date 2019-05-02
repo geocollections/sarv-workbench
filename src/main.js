@@ -130,6 +130,10 @@ new Vue({
     createRelationWith:{
       type: Object
     },
+    sampleView:{
+      type: Boolean,
+      dafault: true
+    },
     sidebar:{
       type: Boolean
     },

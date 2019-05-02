@@ -2,17 +2,18 @@
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
-    <!--<b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">-->
-      <!--{{ createRelationWith.info }}-->
-      <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
-        <!--<font-awesome-icon icon="external-link-alt"/>-->
-      <!--</a>-->
-    <!--</b-alert>-->
-    <b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)"> Ava vaatluspunkti eraldi tabil
-      <a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">
-      <font-awesome-icon icon="external-link-alt"/>
+
+    <b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">
+      {{ createRelationWith.info }}
+      <a class="small" href="javascript:void(0)" @click="navigateBack">
+        <font-awesome-icon icon="external-link-alt"/>
       </a>
     </b-alert>
+    <!--<b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)"> Ava vaatluspunkti eraldi tabil-->
+      <!--<a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">-->
+      <!--<font-awesome-icon icon="external-link-alt"/>-->
+      <!--</a>-->
+    <!--</b-alert>-->
     <!-- STORAGE-->
     <fieldset class="border p-2 mb-2" ref="info">
       <legend class="w-auto"  @click="block.info = !block.info" :style="!block.info ? {'color':'blue'} : ''">Üldinfo
@@ -244,8 +245,7 @@
         </div>
       </transition>
     </fieldset>
-
-    <div class="row mt-3 mb-3" v-if="createRelationWith.data === null && !isDefinedAndNotNull(editSite)">
+    <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')"
                 :title="$t('edit.buttons.saveAndLeave') ">
@@ -317,13 +317,16 @@
       Spinner,
     },
     mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin,sidebarMixin],
-    props:['editSite'],
+    // props:['editSite'], USED FOR MODAL
     data() {
       return this.setInitialData()
     },
     computed: {
       createRelationWith() {
-        return this.$store.state['createRelationWith']
+        const relation = this.lsPullCreateRelationWith();
+        this.lsPushCreateRelationWith({ object: null, data: null, info: null, edit: null })
+        return relation
+        // return this.$store.state['createRelationWith']
       },
       sidebarUserAction() {
         return this.$store.state['sidebarUserAction']
@@ -332,7 +335,7 @@
         return this.isDefinedAndNotNull(this.editSite) ? this.editSite.id : this.$route.params.id
       },
       // editSite() {
-      //   return null//this.$store.state['createRelationWith'].edit
+      //   return this.$store.state['createRelationWith'].edit
       // }
 
     },
@@ -369,7 +372,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           attachmentLinkSaved : -1,
-          block: {info: !this.$route.meta.isEdit , location: false, description: false, files: true, samples: true}
+          block: {info: !this.$route.meta.isEdit , location: this.$route.meta.isEdit, description: false, files: true, samples: true}
 
         }
       },
@@ -384,7 +387,7 @@
           this.autocomplete.coordMethod = this.handleResponse(response);
         });
 
-        if (this.$route.meta.isEdit  && this.createRelationWith.data === null || this.isDefinedAndNotNull(this.editSite)) {
+        if (this.$route.meta.isEdit  && this.createRelationWith.data === null || this.isDefinedAndNotNull(this.createRelationWith.edit)) {
           this.sendingData = true;
 
           fetchSite(this.routeId).then(response => {
@@ -561,9 +564,10 @@
       },
 
       addSample() {
-        let isFull = false
-        this.$store.commit('SET_SAMPLE_VIEW', {isFull});
-        console.log(this.$store.state['createRelationWith'])
+        //Because we open sample in separate window it has clean default storage. In this case store values in LocalStorage
+        // let isFull = false
+        // this.$store.commit('SET_SAMPLE_VIEW', {isFull});
+        this.lsPushSampleView(false);
         let createRelationWith = {
           object: 'site', data: cloneDeep(this.site),
           relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},
@@ -571,8 +575,12 @@
             {data: `ID: ${this.site.id} (${this.site.name})`})
         };
         this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith})
-        this.$emit('show-new-sample-modal')
+        // this.$emit('show-new-sample-modal')
         // this.$router.push({path: '/sample/add'});
+
+        this.lsPushCreateRelationWith(createRelationWith);
+        let routeData = this.$router.resolve({ path:'/sample/add'});
+        window.open(routeData.href, '_blank', 'width=750,height=750');
       },
 
       setSiteNameAndProjectIfPreviousExists() {
@@ -640,6 +648,9 @@
 
       navigateBack() {
         if (this.createRelationWith.object !== null) {
+
+          if(this.createRelationWith.data === null) window.close()
+
           if(this.createRelationWith.edit === null) {
             this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
           } else {
