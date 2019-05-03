@@ -32,7 +32,7 @@
         </thead>
         <tbody>
         <tr v-for="(sample,idx) in samples">
-          <td style="padding: 4px;cursor: pointer" @click="windowOpenNewTab('sample','/sample/'+sample.id)">
+          <td style="padding: 4px;cursor: pointer" @click="setRelation();windowOpenNewTab('sample','/sample/'+sample.id)">
             <font-awesome-icon size="1x" icon="eye"/> {{sample.id}}
           </td>
           <td>{{sample.number}}</td>
@@ -60,9 +60,10 @@
   import {
     fetchLinkedSamplesX
   } from "../../assets/js/api/apiCalls";
+  import localStorageMixin from './../mixins/localStorageMixin'
     export default {
         name: "LinkedSampleTable",
-      mixins: [fontAwasomeLib],
+      mixins: [fontAwasomeLib,localStorageMixin],
       data(){
           return {
             samples: [],
@@ -81,6 +82,7 @@
             }
           }
       },
+
       props: {
 
         siteID: {
@@ -109,7 +111,10 @@
             this.$parent.relatedData.sample = this.samples
           });
         },
-        handleVisibilityChange() {
+        setRelation(){
+          this.lsPushCreateRelationWith({ object: 'site', data: this.$parent.site, relatedData: {isLastSampleExists: this.$parent.relatedData.sample.length > 0}});
+        }
+,        handleVisibilityChange() {
           this.loadLinkedSamples()
         },
       },

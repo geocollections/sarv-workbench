@@ -416,6 +416,7 @@
     "sample_type": "Tüüp",
     "parent_sample": "Seotud proov",
     "parent_specimen": "Seotud eksemplar",
+    "parent_site": "Seotud vaatluspunkt",
     "locality": "Loc.",
     "locality_free": "Loc. txt",
     "depth": "Sügavus (m)",

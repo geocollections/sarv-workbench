@@ -373,6 +373,25 @@
           </vue-multiselect>
         </div>
       </div>
+      <!-- SITE -->
+      <div class="row">
+
+        <div class="col-sm-2">
+          <label :for="`parent_specimen`">{{ $t('sample.parent_site') }}:</label>
+        </div>
+
+        <div class="col-sm-6 mb-2">
+          <vue-multiselect class="align-middle" v-model="sample.site" deselect-label="Can't remove this value"
+                           :custom-label="siteLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                           :loading="autocomplete.loaders.site"
+                           :options="autocomplete.site" :searchable="true" @search-change="autcompleteSiteSearch"
+                           :allow-empty="true"  :show-no-results="false" :max-height="600"
+                           :open-direction="'bottom'">
+            <template slot="singleLabel" slot-scope="{ option }"><strong>id: {{ option.id}} - {{option.name}}</strong> </template>
+            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+          </vue-multiselect>
+        </div>
+      </div>
 
       <!-- DESCRIPTION -->
       <div class="row">
@@ -743,11 +762,11 @@
               loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
                 lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
                 reference:false,  attachment:false, analysis_method: false,fossil_group:false, analysis:false, taxon:false,
-                preparation:false
+                preparation:false, site: false
               },
               series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
               rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
-              fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[]
+              fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[], site:[]
             },
             requiredFields: ['number'],
             sample: {},
@@ -775,7 +794,7 @@
           //   this.autocomplete.fossil_group = this.handleResponse(response);
           // });
 
-          if(this.$route.meta.isEdit && this.createRelationWith.data === null) {
+          if(this.$route.meta.isEdit && this.$router.currentRoute.params.hasOwnProperty('id')) {
             this.sendingData = true;
             fetchSample(this.$route.params.id).then(response => {
               let handledResponse = this.handleResponse(response);
@@ -870,7 +889,7 @@
           this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
           this.sample.storage = {location:obj.storage__location,id:obj.storage}
           this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
-          this.sample.site = {id:obj.site__id}
+          this.sample.site = {id:obj.site__id, name: obj.site__name}
         },
 
         fillRelatedDataAutocompleteFields(obj){
@@ -995,7 +1014,8 @@
           });
         },
         createRelatedSampleWithSiteIfExists(){
-          if (this.isDefinedAndNotNull(this.createRelationWith.data) && this.createRelationWith.data.hasOwnProperty('id')) {
+          if (this.isDefinedAndNotNull(this.createRelationWith.data) && this.createRelationWith.data.hasOwnProperty('id')
+          && !this.$router.currentRoute.params.hasOwnProperty('id')) {
             this.setPredefinedData().then(sample => {
               this.sample = sample
               console.log(sample)
@@ -1026,7 +1046,11 @@
           } else if(choice === 'SAVE') {
             this.add(true, 'sample',false,false)
           }
-        }
+        },
+        siteLabel(option) {
+          if(option.id === null) return
+          return `id: ${option.id} - ${option.name}`
+        },
       },
       beforeRouteLeave(to, from, next) {
         let isFull = true

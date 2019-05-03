@@ -411,6 +411,7 @@
     "sample_type": "Type",
     "parent_sample": "Related sample",
     "parent_specimen": "Specimen",
+    "parent_site": "Site",
     "locality": "Locality",
     "locality_free": "Loc. txt",
     "depth": "Depth (m)",
