@@ -20,9 +20,16 @@
       </div>
     </div>
 
-    <!-- COMBINED VIEW -->
-    <div class="row" :class="{ 'break-out': isCombinedView }" v-if="isCombinedView">
-      <div class="col-6 left-side">
+    <div v-if="isCombinedView" class="row mb-1" :class="{ 'break-out': isCombinedView }">
+      <div class="col">
+        <label for="combinedViewRangeInput" class="m-0">{{ $t('messages.combinedViewChangeSize') }}</label>
+      </div>
+      <b-form-input id="combinedViewRangeInput" v-model="combinedViewSize" type="range" min="0" max="12"></b-form-input>
+    </div>
+
+    <!-- COMBINED VIEW START -->
+    <div class="row fluid-movement" :class="{ 'break-out': isCombinedView }" v-if="isCombinedView">
+      <div class="left-side" :class="'col-' + combinedViewLeftColSize">
         <!-- SEARCH FIELDS START -->
         <div class="row mt-4">
           <div class="col">
@@ -49,8 +56,6 @@
         </div>
 
         <!-- SEARCH FIELDS END -->
-
-        <!-- TODO: Combined view list-module-core needs some design changes (pagination and stuff needs resizing cause they are breaking out) -->
         <list-module-core
           module="reference"
           title="titles.editReference"
@@ -69,7 +74,7 @@
         ></list-module-core>
       </div>
 
-      <div class="col-6 right-side">
+      <div class="right-side" :class="'col-' + combinedViewRightColSize">
         <div class="row">
           <div class="col-xl-9 mb-2">
             <b-form-input v-model="inputUrl" @keyup.enter="openIframe" placeholder="https://"></b-form-input>
@@ -90,6 +95,7 @@
         ></b-embed>
       </div>
     </div>
+    <!-- COMBINED VIEW END -->
 
     <!-- SEARCH FIELDS START -->
     <div class="row mt-4" v-if="!isCombinedView">
@@ -177,6 +183,21 @@
         isCombinedView: false,
         inputUrl: null,
         iframeUrl: null,
+        combinedViewSize: 6,
+      }
+    },
+
+    computed: {
+      combinedViewLeftColSize() {
+        if (this.combinedViewSize > 0 && this.combinedViewSize < 12) return this.combinedViewSize
+        else if (this.combinedViewSize == 0) return 1
+        else if (this.combinedViewSize == 12) return 11
+      },
+
+      combinedViewRightColSize() {
+        if (this.combinedViewSize > 0 && this.combinedViewSize < 12) return 12 - this.combinedViewSize
+        else if (this.combinedViewSize == 0) return 11
+        else if (this.combinedViewSize == 12) return 1
       }
     },
 
@@ -235,6 +256,10 @@
     cursor: pointer;
   }
 
+  .custom-range {
+    transition: all .5s linear;
+  }
+
   .left-side {
     border-right: 2px solid #6c757d;
     /*border-left: 2px solid #6c757d;*/
@@ -255,4 +280,10 @@
     left: calc(-1 * (100vw - 104.5%) / 2);
     position: relative;
   }
+
+  .fluid-movement div {
+    -webkit-transition: all 300ms linear;
+    transition: all 300ms linear;
+  }
+
 </style>

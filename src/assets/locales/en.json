@@ -693,7 +693,8 @@
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
     "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise SITE-ga {data}.",
     "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}.",
-    "solrSearchInfo": "Using this field will not use other fields"
+    "solrSearchInfo": "Using this field will not use other fields",
+    "combinedViewChangeSize": "Change combined view size using this slider"
   },
   "titles": {
     "main": "Geocollections Data Management",

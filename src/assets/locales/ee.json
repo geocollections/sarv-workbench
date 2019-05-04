@@ -698,7 +698,8 @@
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
     "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise vaatluspunktiga {data}.",
     "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}.",
-    "solrSearchInfo": "Seda välja kasutades teisi välju ei kasutata"
+    "solrSearchInfo": "Seda välja kasutades teisi välju ei kasutata",
+    "combinedViewChangeSize": "Muutke kombineeritud vaate suurust kasutades seda liugurit"
   },
   "titles": {
     "main": "Geokogude andmehaldus",
