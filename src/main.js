@@ -213,6 +213,13 @@ new Vue({
     libraryViewType: {
       type: String,
       default: 'table'
+    },
+    doiSearchHistory: {
+      type: Object
+    },
+    doiViewType: {
+      type: String,
+      default: 'table'
     }
   },
   render: h => h(App)

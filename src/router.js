@@ -540,6 +540,22 @@ const router = new Router({
             }
           ]
         },
+        {
+          path: '/doi',
+          component: () => import('./views/Dois.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/doi/DoiTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
       ]
     },
   ],

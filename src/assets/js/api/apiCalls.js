@@ -478,6 +478,11 @@ export function fetchLibraryAgent(id) {
  *** DOI START ***
  *****************/
 
+export function fetchDois(data) {
+  const fields = 'id,identifier,creators,publication_year,title,resource_type__value';
+  return fetch(`doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+}
+
 export function fetchDoiCheck(doi) {
   return fetch(doi, api.checkDoiUrl)
 }

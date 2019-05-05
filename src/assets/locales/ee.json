@@ -32,6 +32,7 @@
     "samples":"Proovid",
     "sites":"Vaatluspunkt",
     "projects":"Projektid",
+    "dois": "DOIs",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -43,6 +44,8 @@
     "editSample": "Proovid",
     "addProject": "Lisa projekt",
     "editProject": "Projektid",
+    "addDoi": "Lisa DOI",
+    "editDoi": "DOI-d",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -224,6 +227,11 @@
     "heading": "Kogumik",
     "editMessage": "Muuda kogumikku",
     "viewMessage": "Vaata kogumikku geokogude portaalis"
+  },
+  "editDoi": {
+    "heading": "DOI",
+    "viewMessage": "Vaata DOI-d geokogude portaalis",
+    "editMessage": "Muuda DOI-d"
   },
   "attachments": {
     "header": "Minu failid",
@@ -527,7 +535,13 @@
     "name": "Nimi"
   },
   "doi": {
-    "identifier": "DOI"
+    "header": "DOI-d",
+    "identifier": "DOI",
+    "creators": "Autor",
+    "year": "Aasta",
+    "title": "Pealkiri",
+    "resource_type": "Tüüp",
+    "datacite_created": "DataCite registreerimine"
   },
   "locality": {
     "header": "Minu lokaliteedid",

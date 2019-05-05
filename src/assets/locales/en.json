@@ -12,7 +12,6 @@
     "rating-3": "-3 - poor",
     "rating-4": "-4 - very poor",
     "rating-5": "-5 - useless"
-
   },
   "login": {
     "password": "Password",
@@ -31,7 +30,9 @@
     "localities": "Localities",
     "libraries": "Libraries",
     "samples":"Samples",
+    "sites":"Site",
     "projects":"Projects",
+    "dois": "DOIs",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -39,11 +40,16 @@
     "editLibrary":"Libraries",
     "addLocality": "Add new locality",
     "editLocality": "Localities",
-    "addSample": "Lisa proov",
-    "editSample": "Proovid",
+    "addSample": "Add new sample",
+    "editSample": "Samples",
+    "addProject": "Add new project",
+    "editProject": "Projects",
+    "addDoi": "Add new DOI",
+    "editDoi": "DOIs",
     "lang": "{lang}",
     "settings": "Settings",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "view": "View"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -221,6 +227,11 @@
     "heading": "Library ID",
     "editMessage": "Edit library",
     "viewMessage": "View library in geocollections portal"
+  },
+  "editDoi": {
+    "heading": "Doi ID",
+    "viewMessage": "View DOi in geocollections portal",
+    "editMessage": "Edit DOI"
   },
   "attachments": {
     "header": "My attachments",
@@ -522,7 +533,13 @@
     "name": "Name"
   },
   "doi": {
-    "identifier": "DOI"
+    "header": "DOIs",
+    "identifier": "DOI",
+    "creators": "Author",
+    "year": "Year",
+    "title": "Title",
+    "resource_type": "Type",
+    "datacite_created": "DataCite registration"
   },
   "locality": {
     "header": "My localities",
