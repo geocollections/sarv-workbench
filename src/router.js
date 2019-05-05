@@ -556,6 +556,52 @@ const router = new Router({
             }
           ]
         },
+        {
+          path: '/doi/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/doi/Doi.vue'),
+              meta: {
+                isEdit:true,
+                table:'doi',
+                title:'titles.editDoi',
+                heading:'editDoi.heading',
+                isBottomOptionShown: true,
+                isNavigationShow:true,
+                isCopyFormShown: false,
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/doi/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/doi/Doi.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addDoi',
+                addNew:'add.newDoi',
+                subForms:[
+                  {path:'/doi/add',name:'add.doi'}
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
       ]
     },
   ],

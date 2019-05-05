@@ -480,7 +480,30 @@ export function fetchLibraryAgent(id) {
 
 export function fetchDois(data) {
   const fields = 'id,identifier,creators,publication_year,title,resource_type__value';
-  return fetch(`doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  let searchFields = '';
+  if (data.identifier !== null && data.identifier.trim().length > 0) {
+    searchFields += `&identifier__icontains=${data.identifier}`
+  }
+
+  if (data.creators !== null && data.creators.trim().length > 0) {
+    searchFields += `&creators__icontains=${data.creators}`
+  }
+
+  if (data.publication_year !== null && data.publication_year.trim().length > 0) {
+    searchFields += `&publication_year__icontains=${data.publication_year}`
+  }
+
+  if (data.title !== null && data.title.trim().length > 0) {
+    searchFields += `&title__icontains=${data.title}`
+  }
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+
+  if (searchFields.length > 0) {
+    return fetch(`doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
 }
 
 export function fetchDoiCheck(doi) {

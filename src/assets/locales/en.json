@@ -539,7 +539,8 @@
     "year": "Year",
     "title": "Title",
     "resource_type": "Type",
-    "datacite_created": "DataCite registration"
+    "datacite_created": "DataCite registration",
+    "addNew": "Add new DOI"
   },
   "locality": {
     "header": "My localities",

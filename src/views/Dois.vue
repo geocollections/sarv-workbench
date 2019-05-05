@@ -62,7 +62,12 @@
           {id:"id",title:"",type:"text", orderBy: false},
           // {id:"identifier",title:"",type:"text", orderBy: false},
         ],
-        filters:[],
+        filters:[
+          {id:"identifier",title:"doi.identifier",type:"text"},
+          {id:"creators",title:"doi.creators",type:"text"},
+          {id:"publication_year",title:"doi.year",type:"number"},
+          {id:"title",title:"doi.title",type:"text"},
+        ],
         searchParameters: this.setDefaultSearchParameters()
       }
     },
@@ -93,6 +98,10 @@
       },
       setDefaultSearchParameters() {
         return {
+          identifier: null,
+          creators: null,
+          publication_year: null,
+          title: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',

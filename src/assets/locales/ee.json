@@ -32,7 +32,7 @@
     "samples":"Proovid",
     "sites":"Vaatluspunkt",
     "projects":"Projektid",
-    "dois": "DOIs",
+    "dois": "DOI-d",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -541,7 +541,8 @@
     "year": "Aasta",
     "title": "Pealkiri",
     "resource_type": "Tüüp",
-    "datacite_created": "DataCite registreerimine"
+    "datacite_created": "DataCite registreerimine",
+    "addNew": "Lisage uus DOI"
   },
   "locality": {
     "header": "Minu lokaliteedid",
