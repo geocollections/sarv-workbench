@@ -1,14 +1,13 @@
 <template>
   <div class="row" v-if="data.length > 0">
-    <div class="col-6 col-md-4 col-lg-4 col-xl-3 text-center mt-2 center" v-for="(entity, index) in data">
+    <div class="preview" v-for="(entity, index) in data">
 
-      <div :id="'icon-' + index">
+      <div :id="'icon-' + index" class="">
         <router-link v-if="entity.uuid_filename !== null" :title="$t('edit.editMessage')" :to="{ path: '/attachment/' + entity.id }">
           <img class="image-preview"
                v-if="entity.uuid_filename.endsWith('jpg') || entity.uuid_filename.endsWith('jpeg') || entity.uuid_filename.endsWith('png')"
                :src="composeFileUrl(entity.uuid_filename)"/>
-
-          <font-awesome-icon v-else class="text-center"  size="5x" icon="file"/>
+          <font-awesome-icon v-else class="ico"  size="6x" icon="file"/>
         </router-link>
 
         <router-link :title="$t('edit.editMessage')" :to="{ path: '/attachment/' + entity.id }">
@@ -16,10 +15,11 @@
         </router-link>
       </div>
 
-      <b-tooltip :target="'icon-' + index" placement="bottom">
-        <b>ID:</b> {{ entity.id }}
+      <b-tooltip :target="'icon-' + index" placement="auto">
+        <b>ID:</b> {{ entity.id }}<br />
+        <b>Date:</b> {{ entity.date_created }} | {{ entity.date_created_free }}<br />
+        <span v-if="entity.image_number"><b>Photo:</b> {{ entity.image_number }}<br /></span>
       </b-tooltip>
-
     </div>
   </div>
 </template>
@@ -58,6 +58,9 @@
     background-color: #fff;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
+	padding: 0.2rem;
+    margin: 0.2rem 0.4rem;
+	max-height: 120px;
   }
 
   .center {
@@ -73,5 +76,11 @@
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
+  }
+  .preview .ico {
+    padding: 0.2rem;
+    margin: 0.2rem 0.4rem;
+    max-height: 120px;
+    color: #999;
   }
 </style>
