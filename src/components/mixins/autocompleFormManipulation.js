@@ -103,6 +103,7 @@ const autocompleteFieldManipulation = {
           break;
         case 'journals':
           query = `journal/?multi_search=value:${val};fields:id,journal_name,journal_short;lookuptype:icontains`;
+          break;
         case 'site':
           query = `site/?multi_search=value:${val};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
           break;

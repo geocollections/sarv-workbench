@@ -209,8 +209,8 @@ nav:hover .forAnimate{
 
 .nav-side-menu {
   overflow: auto;
-  font-family: verdana;
-  font-size: 12px;
+  /*font-family: verdana;*/
+  font-size: 0.9em;
   font-weight: 200;
   background-color: #2e353d;
   position: fixed;
