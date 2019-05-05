@@ -21,7 +21,7 @@
             <tr v-for="entity in recentlyInserted">
               <td>
                 <router-link :to="{ path: '/' + entity.table_name + '/' + entity.row_id }">
-                  <b>{{ entity.row_id }} ({{ entity.table_name }})</b>
+                  <b>{{ entity.table_name }}: {{ entity.row_id }}</b>
                 </router-link>
               </td>
               <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
@@ -44,7 +44,7 @@
             <tr>
               <th>ID</th>
               <th>{{ $t('logs.time') }}</th>
-              <th>{{ $t('logs.changes') }}</th>
+              <!--<th>{{ $t('logs.changes') }}</th>-->
             </tr>
             </thead>
 
@@ -52,15 +52,15 @@
             <tr v-for="entity in recentlyUpdated">
               <td>
                 <router-link :to="{ path: '/' + entity.table_name + '/' + entity.row_id }">
-                  <b>{{ entity.row_id }} ({{ entity.table_name }})</b>
+                  <b>{{ entity.table_name }}: {{ entity.row_id }}</b>
                 </router-link>
               </td>
               <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
-              <td style="max-width: 25rem; padding:0.3rem; margin: 0;">
+              <!--<td style="max-width: 25rem; padding:0.3rem; margin: 0;">
                 <div style="height: 3rem !important; overflow: auto;">
                   {{ entity.changes }}
                 </div>
-              </td>
+              </td>-->
             </tr>
             </tbody>
           </table>
