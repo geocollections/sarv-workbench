@@ -109,6 +109,8 @@
     "newLibrary": "Lisa uus kogumik",
     "sample": "Proov",
     "newSample": "Lisa uus proov",
+    "doi": "DOI",
+    "newDoi": "Lisa uus DOI",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",

@@ -109,6 +109,8 @@
     "newLibrary": "Add new library",
     "sample": "Sample",
     "newSample": "Add new sample",
+    "doi": "DOI",
+    "newDoi": "Add new DOI",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
