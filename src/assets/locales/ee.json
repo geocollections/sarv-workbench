@@ -561,7 +561,14 @@
     "remarks": "Lisainfo",
     "private": "Privaatne",
     "generalInfo": "Üldinfo",
-    "description": "Kirjeldus"
+    "description": "Kirjeldus",
+    "primaryReference": "Peamine kirjandus",
+    "reference": "Kirjandus",
+    "primaryDataset": "Peamine Andmekogum",
+    "dataset": "Andmekogum",
+    "datacite": "Datacite",
+    "dataciteCreated": "Datacite reg.",
+    "dataciteUpdated": "Datacite uuendatud"
   },
   "locality": {
     "header": "Minu lokaliteedid",

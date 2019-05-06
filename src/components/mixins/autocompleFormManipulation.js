@@ -15,6 +15,9 @@ const autocompleteFieldManipulation = {
     },
     analysisMethodLabel() {
       return this.$i18n.locale === 'ee' ? 'analysis_method' : 'method_en'
+    },
+    licenceLabel() {
+      return this.$i18n.locale === 'ee' ? 'licence' : 'licence_en'
     }
   },
   created: function () {
@@ -62,6 +65,7 @@ const autocompleteFieldManipulation = {
         case 'library_agent':
         case 'agent':
         case 'owner':
+        case 'copyright_agent':
           query = `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent`;
           break;
         case 'rock':
@@ -156,6 +160,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteOwnerSearch(value) {
       this.autocompliteSearch(value, 'owner', 'agent')
+    },
+    autcompleteCopyrightAgentSearch(value) {
+      this.autocompliteSearch(value, 'copyright_agent', 'copyright_agent')
     },
     autcompleteProjectAgentSearch(value) {
       this.autocompliteSearch(value, 'projectagent', 'agent')

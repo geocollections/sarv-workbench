@@ -514,6 +514,10 @@ export function fetchDoiResourceType() {
   return fetch(`doi_resource_type/?format=json`)
 }
 
+export function fetchListLicences() {
+  return fetch(`list_licence/?format=json`)
+}
+
 export function fetchDoiCheck(doi) {
   return fetch(doi, api.checkDoiUrl)
 }

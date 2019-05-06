@@ -168,11 +168,14 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.copyright_agent"
                                :options="autocomplete.copyright_agent"
-                               @search-change="autcompleteAgentSearch"
+                               @search-change="autcompleteCopyrightAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :allow-empty="false"
                                :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -183,11 +186,11 @@
                                id="licence"
                                :options="autocomplete.licence"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="licenceLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+                  <strong>{{ $i18n.locale=== 'ee' ? option.licence : option.licence_en }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -199,26 +202,44 @@
     </fieldset>
 
     <!-- TODO: PRIMARY REFERENCE -->
-    <fieldset>
-      <legend>
-
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" @click="block.reference = !block.reference"
+              :style="!block.reference ? {'color':'blue'} : ''">
+        {{ $t('doi.primaryReference') }}
+        <font-awesome-icon icon="book"/>
       </legend>
 
       <transition name="fade">
-        <div>
+        <div v-if="block.reference">
+
+          <div class="row">
+            <div class="col-sm-12 mb-2">
+              <label :for="`reference`">{{ $t('doi.reference') }}:</label>
+              TODO: Reference input
+            </div>
+          </div>
 
         </div>
       </transition>
     </fieldset>
 
     <!-- TODO: PRIMARY DATASET -->
-    <fieldset>
-      <legend>
-
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" @click="block.dataset = !block.dataset"
+              :style="!block.dataset ? {'color':'blue'} : ''">
+        {{ $t('doi.primaryDataset') }}
+        <font-awesome-icon icon="database"/>
       </legend>
 
       <transition name="fade">
-        <div>
+        <div v-if="block.dataset">
+
+          <div class="row">
+            <div class="col-sm-12 mb-2">
+              <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>
+              TODO: Dataset input
+            </div>
+          </div>
 
         </div>
       </transition>
@@ -247,11 +268,27 @@
     </fieldset>
 
     <!-- TODO: DATACITE CREATED and UPDATED -->
-    <fieldset>
-      <legend></legend>
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" @click="block.datacite = !block.datacite"
+              :style="!block.datacite ? {'color':'blue'} : ''">
+        {{ $t('doi.datacite') }}
+        <font-awesome-icon icon="sitemap"/>
+      </legend>
 
       <transition name="fade">
-        <div>
+        <div v-if="block.datacite">
+
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`dataset_created`">{{ $t('doi.dataciteCreated') }}:</label>
+              TODO: Dataset created input
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`dataset_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
+              TODO: Dataset updated input
+            </div>
+          </div>
 
         </div>
       </transition>
@@ -266,6 +303,28 @@
       </div>
     </div>
 
+<!--    <div class="row mt-3 mb-3">-->
+<!--      <div class="col">-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"-->
+<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
+<!--          <font-awesome-icon icon="door-open"/>-->
+<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
+<!--        </button>-->
+
+<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'doi', true)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+<!--          <font-awesome-icon icon="save"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+<!--        </button>-->
+
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('doi', $route.meta.isEdit)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+<!--          <font-awesome-icon icon="ban"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+
   </div>
 </template>
 
@@ -276,7 +335,12 @@
   import formManipulation from "../mixins/formManipulation";
   import autocompleteFieldManipulation from "../mixins/autocompleFormManipulation";
   import cloneDeep from 'lodash/cloneDeep'
-  import {fetchDoi, fetchDoiResourceType} from "../../assets/js/api/apiCalls";
+  import {
+    fetchDoi,
+    fetchDoiResourceType,
+    fetchListLanguages,
+    fetchListLicences
+  } from "../../assets/js/api/apiCalls";
 
   export default {
     components: {
@@ -339,7 +403,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
-          block: {info: true, description: true}
+          block: {info: true, description: true, reference: false, dataset: false, datacite: true}
         }
       },
 
@@ -349,10 +413,17 @@
       },
 
       loadFullInfo() {
-
-        // TODO: Fetch autocompletes?
+        // fetching autocompletes
         fetchDoiResourceType().then(response => {
           this.autocomplete.resource_type = this.handleResponse(response);
+        })
+
+        fetchListLanguages().then(response => {
+          this.autocomplete.language = this.handleResponse(response)
+        })
+
+        fetchListLicences().then(response => {
+          this.autocomplete.licence = this.handleResponse(response)
         })
 
         if (this.$route.meta.isEdit) {
@@ -375,10 +446,9 @@
               this.sendingData = false;
             }
           });
-          // TODO
-          // this.loadRelatedData('projectagent');
-          // this.loadRelatedData('attachment_link');
-          // this.loadRelatedData('site');
+          // TODO: fetch primary reference and dataset
+          // this.loadRelatedData('reference');
+          // this.loadRelatedData('dataset');
         }
       },
 
@@ -400,7 +470,8 @@
 
         // Adding related data
         uploadableObject.related_data = {}
-        // uploadableObject.related_data.agent = this.relatedData.library_agent
+        // uploadableObject.related_data.reference = this.relatedData.reference
+        // uploadableObject.related_data.dataset = this.relatedData.dataset
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -412,32 +483,30 @@
         this.doi.owner = { id: obj.owner, agent: obj.owner__agent }
         this.doi.language = { id: obj.language, value: obj.language__value, value_en: obj.language__value_en}
         this.doi.copyright_agent = { id: obj.copyright_agent, agent: obj.copyright_agent__agent }
-        this.doi.licence = { id: obj.licence, value: obj.licence__value, value_en: obj.licence__value_en}
+        this.doi.licence = { id: obj.licence, licence: obj.licence__licence, licence_en: obj.licence__licence_en}
       },
 
-      // TODO
+      // TODO: primary reference and dataset
       fillRelatedDataAutocompleteFields(obj, type) {
         let relatedData = cloneDeep(obj)
         obj = [];
         relatedData.forEach(entity => {
-          if (type === 'projectagent') obj.push({
-            agent: entity.projectagent__agent__agent,
-            id: entity.projectagent__agent
-          })
-          else obj.push(entity)
+          // if (type === 'projectagent') obj.push({
+          //   agent: entity.projectagent__agent__agent,
+          //   id: entity.projectagent__agent
+          // })
+          // else obj.push(entity)
         });
         return obj
       },
 
-      // TODO
+      // TODO: primary reference and dataset
       loadRelatedData(object) {
         let query;
-        if (object === 'projectagent') {
-          query = fetchProjectAgent(this.$route.params.id, this.relatedData.page.projectagent)
-        } else if (object === 'attachment_link') {
-          query = fetchProjectAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
-        } else if (object === 'site') {
-          query = fetchLinkedSite(this.$route.params.id, this.relatedData.page.site)
+        if (object === 'reference') {
+          // query = fetchProjectAgent(this.$route.params.id, this.relatedData.page.projectagent)
+        } else if (object === 'dataset') {
+          // query = fetchProjectAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
         }
         return new Promise(resolve => {
           query.then(response => {
@@ -450,11 +519,10 @@
         });
       },
 
-      // TODO
+      // TODO: primary reference and dataset
       setBlockVisibility(object,count){
-        if(object === 'projectagent') this.block.members = count > 0
-        if(object === 'attachment_link') this.block.files = count > 0
-        if(object === 'site') this.block.sites = count > 0
+        if(object === 'projectagent') this.block.reference = count > 0
+        if(object === 'attachment_link') this.block.dataset = count > 0
       },
 
       //check required fields for related data

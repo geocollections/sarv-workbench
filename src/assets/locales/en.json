@@ -559,7 +559,14 @@
     "remarks": "Remarks",
     "private": "Private",
     "generalInfo": "General info",
-    "description": "Description"
+    "description": "Description",
+    "primaryReference": "Primary reference",
+    "reference": "Reference",
+    "primaryDataset": "Primary dataset",
+    "dataset": "Dataset",
+    "datacite": "Datacite",
+    "dataciteCreated": "Datacite reg.",
+    "dataciteUpdated": "Datacite updated"
   },
   "locality": {
     "header": "My localities",
