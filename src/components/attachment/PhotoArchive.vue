@@ -224,20 +224,31 @@
         <!--</b-collapse>-->
       <!--</div>-->
     <!--</div>-->
-    <div class="row">
+
+    <!-- MAP -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto">
+        {{ $t('photoArchive.collapseMap') }}
+        <font-awesome-icon icon="globe-americas"/>
+      </legend>
+
+      <div class="row">
         <span class="col ml-3 mt-3 custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
             <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
           </span>
-    </div>
-    <div class="row mb-2">
-      <div class="col">
-        <b-collapse v-model="showCollapseMap" id="collapseMap">
-          <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
-          <map-component-2 v-if="showCollapseMap " mode="single" v-bind:locations="[]" v-bind:location="{ lat: photo_archive.image_latitude ? (photo_archive.image_latitude).toString() : null, lng: photo_archive.image_longitude ? (photo_archive.image_longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
-        </b-collapse>
       </div>
-    </div>
+
+      <div class="row mb-2">
+        <div class="col">
+          <b-collapse v-model="showCollapseMap" id="collapseMap">
+            <map-component-2 v-if="showCollapseMap" mode="single" v-bind:locations="[]"
+                             v-bind:location="{ lat: photo_archive.image_latitude ? (photo_archive.image_latitude).toString() : null, lng: photo_archive.image_longitude ? (photo_archive.image_longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
+          </b-collapse>
+        </div>
+      </div>
+    </fieldset>
+
     <!-- OBJECT and PEOPLE -->
     <div class="row">
       <div class="col-sm-2">
@@ -490,6 +501,7 @@
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from '@/components/partial/BottomOptions.vue'
   import MapComponent2 from "../partial/MapComponent2";
+  import fontAwesomeLib from "../mixins/fontAwasomeLib";
 
   library.add(faPlus, faChevronUp, faChevronDown, faTrashAlt)
 
@@ -505,7 +517,7 @@
     },
     name: "PhotoArchive",
 
-    mixins: [formManipulation],
+    mixins: [formManipulation, fontAwesomeLib],
     metaInfo: {
       link: [
         { rel: 'stylesheet', href: '/css/index.css' },

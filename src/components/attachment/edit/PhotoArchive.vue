@@ -133,22 +133,46 @@
     </div>
 
     <!-- MAP -->
-    <div class="row">
-      <div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"
-           :class="showCollapseMap ? 'collapsed' : null">
-        {{ $t('photoArchive.collapseMap') }}
-        <font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>
-        <font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>
-      </div>
-    </div>
+<!--    <div class="row">-->
+<!--      <div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"-->
+<!--           :class="showCollapseMap ? 'collapsed' : null">-->
+<!--        {{ $t('photoArchive.collapseMap') }}-->
+<!--        <font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>-->
+<!--        <font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>-->
+<!--      </div>-->
+<!--    </div>-->
 
-    <div class="row mb-2">
-      <div class="col-md-6 offset-md-3">
-        <b-collapse v-model="showCollapseMap" id="collapseMap">
-          <map-component v-bind:location="{ lat: edit.image_latitude, lng: edit.image_longitude }" v-on:get-location="updateLocation" />
-        </b-collapse>
+<!--    <div class="row mb-2">-->
+<!--      <div class="col-md-6 offset-md-3">-->
+<!--        <b-collapse v-model="showCollapseMap" id="collapseMap">-->
+<!--          <map-component v-bind:location="{ lat: edit.image_latitude, lng: edit.image_longitude }" v-on:get-location="updateLocation" />-->
+<!--        </b-collapse>-->
+<!--      </div>-->
+<!--    </div>-->
+
+    <!-- MAP -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto">
+        {{ $t('photoArchive.collapseMap') }}
+        <font-awesome-icon icon="globe-americas"/>
+      </legend>
+
+      <div class="row">
+        <span class="col ml-3 mt-3 custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+            <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
+          </span>
       </div>
-    </div>
+
+      <div class="row mb-2">
+        <div class="col">
+          <b-collapse v-model="showCollapseMap" id="collapseMap">
+            <map-component-2 v-if="showCollapseMap" mode="single" v-bind:locations="[]"
+                             v-bind:location="{ lat: edit.image_latitude ? (edit.image_latitude).toString() : null, lng: edit.image_longitude ? (edit.image_longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
+          </b-collapse>
+        </div>
+      </div>
+    </fieldset>
 
     <!-- OBJECT and PEOPLE -->
     <div class="row">
@@ -421,6 +445,7 @@
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
   import MapComponent from '@/components/partial/MapComponent'
+  import MapComponent2 from "../../partial/MapComponent2";
   import { toastError } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from "../../partial/BottomOptions";
 
@@ -435,6 +460,7 @@
       VueMultiselect,
       Datepicker,
       MapComponent,
+      MapComponent2,
     },
     props:['data'],
     name: "PhotoArchive",
