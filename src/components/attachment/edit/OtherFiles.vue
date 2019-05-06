@@ -140,6 +140,50 @@
       </div>
     </div>
 
+    <!-- MAP -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto">
+        {{ $t('photoArchive.collapseMap') }}
+        <font-awesome-icon icon="globe-americas"/>
+      </legend>
+
+      <!-- LOCATION -->
+      <div class="row">
+        <div class="col-sm-2">
+          <label :for="`latitude`">{{ $t('otherFiles.latitude') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="latitude" v-model="edit.image_latitude" type="number" step="0.000001"></b-form-input>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`longitude`">{{ $t('otherFiles.longitude') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="longitude" v-model="edit.image_longitude" type="number" step="0.000001"></b-form-input>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="col ml-3 mt-3 custom-control custom-switch">
+            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+            <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
+          </span>
+      </div>
+
+      <div class="row mb-2">
+        <div class="col">
+          <b-collapse v-model="showCollapseMap" id="collapseMap">
+            <map-component-2 v-if="showCollapseMap" mode="single" v-bind:locations="[]"
+                             v-bind:location="{ lat: edit.image_latitude ? (edit.image_latitude).toString() : null, lng: edit.image_longitude ? (edit.image_longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
+          </b-collapse>
+        </div>
+      </div>
+    </fieldset>
+
     <!-- KEYWORDS -->
     <div class="row">
       <div class="col-sm-2">
@@ -163,7 +207,8 @@
       <div class="col-1 mb-2">
         <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeKeywords"
                 @click="edit.tags = null">
-          <i class="fas fa-trash-alt"></i>
+          <font-awesome-icon icon="trash-alt" />
+<!--          <i class="fas fa-trash-alt"></i>-->
         </button>
       </div>
     </div>
@@ -842,6 +887,8 @@
   import FilePreview from "@/components/partial/FilePreview.vue";
   import { toastError } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from "../../partial/BottomOptions";
+  import MapComponent2 from "../../partial/MapComponent2";
+  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
 
   export default {
     components: {
@@ -850,8 +897,10 @@
       FilePreview,
       VueMultiselect,
       Datepicker,
+      MapComponent2
     },
     props:['data', 'attachLink'],
+    mixins: [fontAwesomeLib],
     name: "OtherFiles",
     data() {
       return {
@@ -861,6 +910,7 @@
         isFileLocked: this.data.is_locked,
         isChanged: false,
         showModal: false,
+        showCollapseMap: true,
         autocomplete: {
           authors: [],
           types: [],
@@ -919,6 +969,8 @@
           description_en: this.data.description_en,
           type: this.buildType(),
           remarks: this.data.remarks,
+          image_latitude: this.data.image_latitude,
+          image_longitude: this.data.image_longitude,
           tags: this.buildTags(),
           licence: this.buildLicence(),
           copyright_agent: this.buildCopyrightAgent(),
@@ -1715,6 +1767,11 @@
             width = 1000;
         }
         window.open('http://geocollections.info/' + params.object + '/' + params.id, '', 'width=' + width + ',height=750')
+      },
+
+      updateLocation(location) {
+        this.edit.image_latitude = location.lat.toFixed(6)
+        this.edit.image_longitude = location.lng.toFixed(6)
       },
 
       /*********************

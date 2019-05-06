@@ -355,6 +355,8 @@
     "private": "Privaatne",
     "locked": "Lukustatud",
     "remarks": "Lisainfo",
+    "latitude": "Laiuskraad",
+    "longitude": "Pikkuskraad",
     "relatedData": "Seotud andmed",
     "relatedDataDefault": "Vali seotud tabel",
     "relatedTables": {

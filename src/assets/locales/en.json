@@ -355,6 +355,8 @@
     "private": "Private",
     "locked": "Locked",
     "remarks": "Remarks",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
     "relatedData": "Related data",
     "relatedDataDefault": "Choose related table",
     "relatedTables": {
