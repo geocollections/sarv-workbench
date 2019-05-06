@@ -65,7 +65,7 @@ export function fetchLogout() {
  *************************/
 
 export function fetchAttachments(data, author) {
-  const fields = 'id,uuid_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment,is_private'
+  const fields = 'id,uuid_filename,original_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment,is_private'
   let searchFields = ''
 
   if (data.image_number !== null && data.image_number.trim().length > 0) {

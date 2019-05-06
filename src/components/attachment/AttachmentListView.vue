@@ -17,8 +17,10 @@
 
       <b-tooltip :target="'icon-' + index" placement="auto">
         <b>ID:</b> {{ entity.id }}<br />
-        <b>Date:</b> {{ entity.date_created }} | {{ entity.date_created_free }}<br />
+        <span v-if="entity.date_created || entity.date_created_free"><b>Date:</b> {{ entity.date_created }} | {{ entity.date_created_free }}<br /></span>
+        <span v-if="entity.author__agent"><b>Author:</b> {{ entity.author__agent }}<br /></span>
         <span v-if="entity.image_number"><b>Photo:</b> {{ entity.image_number }}<br /></span>
+        <span v-if="entity.original_filename"><b>Filename:</b> {{ entity.original_filename }}<br /></span>
       </b-tooltip>
     </div>
   </div>
