@@ -856,7 +856,8 @@
           libraryIdTitle: null,
           page: 1,
           paginateBy: 50,
-          orderBy: '-id',
+          orderBy: this.multiOrdering ? ['-id', '-year'] : '-id',
+          // orderBy: '-id',
         }
       },
 

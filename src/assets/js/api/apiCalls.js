@@ -506,6 +506,14 @@ export function fetchDois(data) {
   }
 }
 
+export function fetchDoi(id) {
+  return fetch(`doi/?id=${id}&format=json`)
+}
+
+export function fetchDoiResourceType() {
+  return fetch(`doi_resource_type/?format=json`)
+}
+
 export function fetchDoiCheck(doi) {
   return fetch(doi, api.checkDoiUrl)
 }
