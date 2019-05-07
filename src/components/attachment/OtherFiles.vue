@@ -387,6 +387,8 @@
           <option value="preparation">{{ this.$t('otherFiles.relatedTables.preparation') }}</option>
           <option value="reference">{{ this.$t('otherFiles.relatedTables.reference') }}</option>
           <option value="storage">{{ this.$t('otherFiles.relatedTables.storage') }}</option>
+          <option value="project">{{ this.$t('otherFiles.relatedTables.project') }}</option>
+          <option value="site">{{ this.$t('otherFiles.relatedTables.site') }}</option>
         </b-form-select>
       </div>
 
@@ -870,6 +872,72 @@
         </div>
 
       </div>
+
+      <!-- PROJECT -->
+      <div class="col-sm-6" v-if="upload.related_data.attach_link__project !== null && upload.related_data.attach_link__project.length > 0">
+
+        <p class="h4">{{ $t('otherFiles.relatedTables.project') }}</p>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('project.name') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="(entity, index) in upload.related_data.attach_link__project">
+              <td>
+                <router-link :to="{ path: '/project/' + entity.id }">{{ entity.id }}</router-link>
+              </td>
+
+              <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+              <td class="text-center delete-relation" @click="upload.related_data.attach_link__project.splice(index, 1)">
+                <i class="fas fa-times"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- SITE -->
+      <div class="col-sm-6" v-if="upload.related_data.attach_link__site !== null && upload.related_data.attach_link__site.length > 0">
+
+        <p class="h4">{{ $t('otherFiles.relatedTables.site') }}</p>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('site.name') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="(entity, index) in upload.related_data.attach_link__site">
+              <td>
+                <router-link :to="{ path: '/site/' + entity.id }">{{ entity.id }}</router-link>
+              </td>
+
+              <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+              <td class="text-center delete-relation" @click="upload.related_data.attach_link__site.splice(index, 1)">
+                <i class="fas fa-times"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
     </div>
 
     <!-- CHECKBOXES -->
@@ -966,6 +1034,8 @@
             preparation: [],
             reference: [],
             storage: [],
+            project: [],
+            site: [],
           },
         },
         searchingAuthors: false,
@@ -986,6 +1056,8 @@
           preparation: false,
           reference: false,
           storage: false,
+          project: false,
+          site: false,
         },
         myKeywords: [],
         relatedTable: null,
@@ -1039,6 +1111,8 @@
             attach_link__preparation: null,
             attach_link__reference: null,
             attach_link__storage: null,
+            attach_link__project: null,
+            attach_link__site: null,
           }
           // user_added: null,
           // date_added: null,
@@ -1364,6 +1438,12 @@
         if (objectToUpload.attach_link__storage !== null && typeof objectToUpload.attach_link__storage !== 'undefined') {
           if (objectToUpload.attach_link__storage.length === 0) uploadableObject.attach_link__storage = null
         }
+        if (objectToUpload.attach_link__project !== null && typeof objectToUpload.attach_link__project !== 'undefined') {
+          if (objectToUpload.attach_link__project.length === 0) uploadableObject.attach_link__project = null
+        }
+        if (objectToUpload.attach_link__site !== null && typeof objectToUpload.attach_link__site !== 'undefined') {
+          if (objectToUpload.attach_link__site.length === 0) uploadableObject.attach_link__site = null
+        }
 
         /**************************
          ***  RELATED DATA END  ***
@@ -1406,6 +1486,8 @@
         copyOfData.related_data.attach_link__preparation = null
         copyOfData.related_data.attach_link__reference = null
         copyOfData.related_data.attach_link__storage = null
+        copyOfData.related_data.attach_link__project = null
+        copyOfData.related_data.attach_link__site = null
 
         return copyOfData
       },
@@ -1579,12 +1661,21 @@
               fields += ',reference'
               break
             case 'storage':
-              search += 'multi_search=value:' + query + ';fields:id,location,contents;lookuptype:icontains'
-              fields += ',location,contents'
-              break
+              search += 'multi_search=value:' + query + ';fields:id,location,contents;lookuptype:icontains';
+              fields += ',location,contents';
+              break;
+            case 'project':
+              search += 'multi_search=value:' + query + ';fields:id,name,name_en;lookuptype:icontains';
+              fields += ',name,name_en';
+              break;
+            case 'site':
+              search += 'multi_search=value:' + query + ';fields:id,name,name_en;lookuptype:icontains';
+              fields += ',name,name_en';
+              break;
             default:
-              search += 'id__icontains=' + query
-              fields += ''
+              search += 'id__icontains=' + query;
+              fields += '';
+              break;
           }
 
           console.log(search)
@@ -1696,7 +1787,13 @@
             return `${option.id} - (${option.reference})`
           case 'storage':
             if (option.contents === null) return `${option.id} - (${option.location})`
-            else return `${option.id} - (${option.location} - ${option.contents})`
+            else return `${option.id} - (${option.location} - ${option.contents})`;
+          case 'project':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
+            return `${option.id} - (${option.name_en})`;
+          case 'site':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
+            return `${option.id} - (${option.name_en})`;
           default:
             return `${option.id}`
         }
@@ -1762,6 +1859,8 @@
             attach_link__preparation: null,
             attach_link__reference: null,
             attach_link__storage: null,
+            attach_link__project: null,
+            attach_link__site: null,
           }
           // user_added: null,
           // date_added: null,

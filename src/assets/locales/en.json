@@ -373,7 +373,9 @@
       "preparation": "Preparation",
       "reference": "Reference",
       "storage": "Storage",
-      "attachment": "Attachment"
+      "attachment": "Attachment",
+      "project": "Project",
+      "site": "Site"
     }
   },
   "attachment": {

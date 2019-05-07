@@ -373,7 +373,9 @@
       "preparation": "Preparaat",
       "reference": "Kirjandus",
       "storage": "Hoidla",
-      "attachment": "Fail"
+      "attachment": "Fail",
+      "project": "Projekt",
+      "site": "Vaatluspunkt"
     }
   },
   "attachment": {
