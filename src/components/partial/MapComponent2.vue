@@ -97,7 +97,20 @@
       },
       computed:{
         mapMarkersLoaded () { return this.mode === 'single'  && this.gpsCoords === true
-          && this.currentLocation && this.location !== null }
+          && this.currentLocation && this.location !== null },
+
+        areLocationsSet() {
+          return this.locations !== null && this.locations.length > 0
+        },
+
+        isLocationSet() {
+          return this.location.lat !== null && this.location.lng !== null
+        }
+      },
+      created() {
+        // SETTING DEFAULT ZOOM LEVEL
+        if (this.isLocationSet || this.areLocationsSet) this.zoom = 15
+        else this.zoom = 6
       },
       mounted(){
         let vm = this;
