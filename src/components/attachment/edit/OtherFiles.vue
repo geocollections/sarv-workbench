@@ -358,6 +358,8 @@
           <option value="preparation">{{ this.$t('otherFiles.relatedTables.preparation') }}</option>
           <option value="reference">{{ this.$t('otherFiles.relatedTables.reference') }}</option>
           <option value="storage">{{ this.$t('otherFiles.relatedTables.storage') }}</option>
+          <option value="project">{{ this.$t('otherFiles.relatedTables.project') }}</option>
+          <option value="site">{{ this.$t('otherFiles.relatedTables.site') }}</option>
         </b-form-select>
       </div>
 
@@ -841,6 +843,72 @@
         </div>
 
       </div>
+
+      <!-- PROJECT -->
+      <div class="col-sm-6" v-if="edit.related_data.attach_link__project !== null && edit.related_data.attach_link__project.length > 0">
+
+        <p class="h4">{{ $t('otherFiles.relatedTables.project') }}</p>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('project.name') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="(entity, index) in edit.related_data.attach_link__project">
+              <td>
+                <router-link :to="{ path: '/project/' + entity.id }">{{ entity.id }}</router-link>
+              </td>
+
+              <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+              <td class="text-center delete-relation" @click="edit.related_data.attach_link__project.splice(index, 1)">
+                <i class="fas fa-times"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- SITE -->
+      <div class="col-sm-6" v-if="edit.related_data.attach_link__site !== null && edit.related_data.attach_link__site.length > 0">
+
+        <p class="h4">{{ $t('otherFiles.relatedTables.site') }}</p>
+
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered">
+            <thead class="thead-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('site.name') }}</th>
+              <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr v-for="(entity, index) in edit.related_data.attach_link__site">
+              <td>
+                <router-link :to="{ path: '/site/' + entity.id }">{{ entity.id }}</router-link>
+              </td>
+
+              <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+              <td class="text-center delete-relation" @click="edit.related_data.attach_link__site.splice(index, 1)">
+                <i class="fas fa-times"></i>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
     </div>
 
     <!-- CHECKBOXES -->
@@ -934,6 +1002,8 @@
             preparation: [],
             reference: [],
             storage: [],
+            project: [],
+            site: [],
           },
         },
         searchingAuthors: false,
@@ -957,6 +1027,8 @@
           preparation: false,
           reference: false,
           storage: false,
+          project: false,
+          site: false,
         },
         myKeywords: [],
         relatedTable: null,
@@ -998,6 +1070,8 @@
             attach_link__preparation: this.buildRelatedData(this.attachLink, 'preparation'),
             attach_link__reference: this.buildRelatedData(this.attachLink, 'reference'),
             attach_link__storage: this.buildRelatedData(this.attachLink, 'storage'),
+            attach_link__project: this.buildRelatedData(this.attachLink, 'project'),
+            attach_link__site: this.buildRelatedData(this.attachLink, 'site'),
           }
         },
       }
@@ -1168,6 +1242,12 @@
         }
         if (unformattedData.related_data.attach_link__storage !== null && typeof unformattedData.related_data.attach_link__storage !== 'undefined') {
           if (unformattedData.related_data.attach_link__storage.length === 0) uploadableData.related_data.attach_link__storage = null
+        }
+        if (unformattedData.attach_link__project !== null && typeof unformattedData.attach_link__project !== 'undefined') {
+          if (unformattedData.attach_link__project.length === 0) uploadableData.attach_link__project = null
+        }
+        if (unformattedData.attach_link__site !== null && typeof unformattedData.attach_link__site !== 'undefined') {
+          if (unformattedData.attach_link__site.length === 0) uploadableData.attach_link__site = null
         }
 
         /**************************
@@ -1382,7 +1462,15 @@
             case 'storage':
               search += 'multi_search=value:' + query + ';fields:id,location,contents;lookuptype:icontains'
               fields += ',location,contents'
-              break
+              break;
+            case 'project':
+              search += 'multi_search=value:' + query + ';fields:id,name,name_en;lookuptype:icontains';
+              fields += ',name,name_en';
+              break;
+            case 'site':
+              search += 'multi_search=value:' + query + ';fields:id,name,name_en;lookuptype:icontains';
+              fields += ',name,name_en';
+              break;
             default:
               search += 'id__icontains=' + query
               fields += ''
@@ -1550,6 +1638,8 @@
         let preparations = []
         let references = []
         let storages = []
+        let projects = []
+        let sites = []
 
         for (const data in relatedData) {
           let collection = {}
@@ -1565,6 +1655,8 @@
           let preparation = {}
           let reference = {}
           let storage = {}
+          let project = {}
+          let site = {}
 
           if (field === 'collection') {
             if (relatedData[data].collection !== null) {
@@ -1679,6 +1771,24 @@
             }
           }
 
+          if (field === 'project') {
+            if (relatedData[data].project !== null) {
+              project.id = relatedData[data].project
+              project.name = relatedData[data].project__name
+              project.name_en = relatedData[data].project__name_en
+              projects.push(project)
+            }
+          }
+
+          if (field === 'site') {
+            if (relatedData[data].site !== null) {
+              site.id = relatedData[data].site
+              site.name = relatedData[data].site__name
+              site.name_en = relatedData[data].site__name_en
+              sites.push(site)
+            }
+          }
+
         }
 
         if (field === 'collection' && collections.length > 0) return collections
@@ -1694,6 +1804,8 @@
         if (field === 'preparation' && preparations.length > 0) return preparations
         if (field === 'reference' && references.length > 0) return references
         if (field === 'storage' && storages.length > 0) return storages
+        if (field === 'project' && projects.length > 0) return projects
+        if (field === 'site' && sites.length > 0) return sites
 
         return null
       },
@@ -1759,6 +1871,12 @@
           case 'storage':
             if (option.contents === null) return `${option.id} - (${option.location})`
             else return `${option.id} - (${option.location} - ${option.contents})`
+          case 'project':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
+            return `${option.id} - (${option.name_en})`;
+          case 'site':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
+            return `${option.id} - (${option.name_en})`;
           default:
             return `${option.id}`
         }
