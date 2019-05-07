@@ -524,7 +524,10 @@
           this.isChanged = true
         },
         deep: true
-      }
+      },
+      'showCollapseMap'(newval, oldval){
+        this.$localStorage.set('mapComponent',  newval)
+      },
     },
 
     computed: {
@@ -560,6 +563,13 @@
       // Gets keywords from local storage
       const photoArchiveKeywords = this.$localStorage.get('photoArchiveKeywords', 'fallbackValue')
       if (photoArchiveKeywords !== 'fallbackValue' && photoArchiveKeywords.length > 0) this.myKeywords = photoArchiveKeywords
+    },
+
+    beforeMount(){
+      //localstorage settings
+      let showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
+      if (typeof showCollapseMap === 'undefined' || showCollapseMap === 'fallbackValue') return
+      this.showCollapseMap = showCollapseMap
     },
 
     methods: {

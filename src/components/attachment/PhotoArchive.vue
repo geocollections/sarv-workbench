@@ -682,7 +682,10 @@
             this.photo_archive.image_longitude = null
           }
         }
-      }
+      },
+      'showCollapseMap'(newval, oldval){
+        this.$localStorage.set('mapComponent',  newval)
+      },
     },
 
     computed: {
@@ -750,6 +753,14 @@
         }
       }
     },
+
+    beforeMount(){
+      //localstorage settings
+      let showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
+      if (typeof showCollapseMap === 'undefined' || showCollapseMap === 'fallbackValue') return
+      this.showCollapseMap = showCollapseMap
+    },
+
     methods: {
 
       hoverButtonClicked(choice, object) {
