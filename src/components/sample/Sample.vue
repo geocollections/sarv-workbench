@@ -740,6 +740,9 @@
       mounted(){
         this.createRelatedSampleWithSiteIfExists();
       },
+      updated(){
+        this.$localStorage.set('activeSample', this.$data.sample.id);
+      },
       methods: {
         setTab(type){ this.activeTab  = type },
 

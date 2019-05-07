@@ -36,28 +36,34 @@
         <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('frontPage.buttons.reference') }} </router-link>
         <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/library' }">{{ $t('frontPage.buttons.libraries') }} </router-link>
         <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/library/add' }">{{ $t('frontPage.buttons.library') }} </router-link>
+        
         <br />
         
-        <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/doi' }"> DOI </router-link>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/doi/add' }">Add DOI </router-link>
-        <br />
+        <div v-if="permissions.attachment" >
+          <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/doi' }"> DOI </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/doi/add' }">Add DOI </router-link>
+          <br />
+        </div>
         </b-card>
       </div>
       <div class="col-6">
         <b-card class="p-3 border border-warning larger">
         <!-- PROJECT -->
         <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/project' }"> Projects </router-link>
-        <span v-if="activeProject>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/project/' + activeProject }">My active project </router-link></span>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/site/5644' }">Last visited site</router-link>
+        <span v-if="activeProject>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/project/' + activeProject }">My active project: {{ activeProject }} </router-link></span>
+        <span v-if="activeSite>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/site/' + activeSite }">Last visited site: {{ activeSite }}</router-link></span>
         </br >
         
         <!-- LOCALITY -->
-        <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/locality' }">{{ $t('frontPage.buttons.localities') }} </router-link>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/locality/add' }">{{ $t('frontPage.buttons.locality') }} </router-link>
+        <div v-if="permissions.locality" >
+          <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/locality' }">{{ $t('frontPage.buttons.localities') }} </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/locality/add' }">{{ $t('frontPage.buttons.locality') }} </router-link>
         </br >
+        </div>
 
         <!-- SAMPLE -->
         <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/sample' }">{{ $t('frontPage.buttons.samples') }} </router-link>
+        <span v-if="activeSample>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/' + activeSample }"> My last sample: {{ activeSample }} </router-link></span>
         <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/add' }">{{ $t('frontPage.buttons.sample') }}</router-link>
         <br />
         </b-card>
@@ -101,6 +107,7 @@
         showCollapseLocality: false,
         showCollapseSample: false,
         showCollapseLibrary: false,
+        permissions: '',
       }
     },
 
@@ -118,6 +125,9 @@
         this.surname = this.$session.get('authUser').surname;
       }
       this.activeProject = this.$localStorage.get('activeProject')[0];
+      this.activeSite = this.$localStorage.get('activeSite');
+      this.activeSample = this.$localStorage.get('activeSample');
+      this.permissions = this.$session.get('authUser').permissions
     },
   }
 </script>

@@ -346,9 +346,11 @@
         object:this.activeObject, field: 'name'})
 
       this.loadFullInfo();
-
+      
     },
-
+    updated(){
+      this.$localStorage.set('activeSite', this.$data.site.id);
+    },
     methods: {
       setInitialData() {
         return {
