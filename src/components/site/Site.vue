@@ -124,7 +124,7 @@
             <div class="col-lg-12">
               <b-collapse v-model="showCollapseMap" id="collapseMap">
                 <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
-                <map-component-2 :gps-coords="true" v-if="showCollapseMap " mode="single" v-bind:locations="[]"
+                <map-component-2 :gps-coords="true" v-if="showCollapseMap && !isLatitudeUndefinedInEditView" mode="single" v-bind:locations="[]"
                                  v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }"
                                  v-on:get-location="updateLocation"></map-component-2>
               </b-collapse>
@@ -332,6 +332,12 @@
       routeId() {
         return this.isDefinedAndNotNull(this.editSite) ? this.editSite.id : this.$route.params.id
       },
+
+      // Checks if site object has latitude key and is edit view, using this check while rendering mapComponent,
+      // because I don't want mapComponent to render if site object is still empty (haven't got data from API yet)
+      isLatitudeUndefinedInEditView() {
+        return typeof this.site.latitude === 'undefined' && this.$route.meta.isEdit
+      },
       // editSite() {
       //   return this.$store.state['createRelationWith'].edit
       // }
@@ -346,7 +352,7 @@
         object:this.activeObject, field: 'name'})
 
       this.loadFullInfo();
-      
+
     },
     updated(){
       this.$localStorage.set('activeSite', this.$data.site.id);
@@ -373,7 +379,6 @@
           searchParameters: this.setDefaultSearchParameters(),
           attachmentLinkSaved : -1,
           block: {info: !this.$route.meta.isEdit , location: this.$route.meta.isEdit, description: false, files: true, samples: true}
-
         }
       },
 

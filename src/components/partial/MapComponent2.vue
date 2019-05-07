@@ -1,5 +1,12 @@
 <template>
-  <div id="map" style="height: 50vh"></div>
+  <div>
+    Zoom: {{zoom}}
+    <br>
+    isLocationSet: {{this.isLocationSet}}
+    <br>
+    areLocationsSet: {{this.areLocationsSet}}
+    <div id="map" style="height: 50vh"></div>
+  </div>
 </template>
 
 <script>
