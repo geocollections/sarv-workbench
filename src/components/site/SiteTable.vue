@@ -1,6 +1,7 @@
 <template>
   <tbody>
-  <tr v-for="entity in response.results" @click="addOrRemoveSite(entity)" :style="{ backgroundColor : findCurrentRecord(selectedSites, entity.id) > -1 ? '#8cfaa1' : 'white'  }">
+  <tr v-for="entity in response.results">
+  <!--<tr v-for="entity in response.results" @click="addOrRemoveSite(entity)" :style="{ backgroundColor : findCurrentRecord(selectedSites, entity.id) > -1 ? '#8cfaa1' : 'white'  }">-->
 
     <td>
       <router-link :to="{ path: '/site/' + entity.id }" :title="$t('editSite.editMessage')">{{
@@ -8,16 +9,17 @@
       </router-link>
     </td>
     <td v-translate="{ et: entity.name, en: entity.name_en }"></td>
-    <!--<td v-translate="{ et: entity.project__name, en: entity.project__name_en }"></td>-->
-    <!--<td>{{entity.date_start}}</td>-->
-    <!--<td>{{entity.date_end}}</td>-->
-    <!--<td>{{entity.date_free}}</td>-->
+    <td>{{entity.number}}</td>
+    <td v-translate="{ et: entity.project__name, en: entity.project__name_en }"></td>
+    <td>{{parseDate(entity.date_start)}}</td>
+    <td>{{parseDate(entity.date_end)}}</td>
   </tr>
   </tbody>
 </template>
 
 <script>
   import findIndex from 'lodash/findIndex';
+  import moment from 'moment'
     export default {
       name: "SiteTable",
       props: {
@@ -30,6 +32,8 @@
       },
 
       methods:{
+
+        //UNUSED SELECT ROW LOGIC
         addOrRemoveSite(entity) {
           let indexOfRecordInSelectedList = this.findCurrentRecord(this.selectedSites, entity.id);
 
@@ -48,6 +52,11 @@
             return item.id === id
           })
         },
+        parseDate(date) {
+          if (date) {
+            return moment(String(date)).format('DD-MM-YYYY HH:mm')
+          }
+        }
       }
     }
 </script>

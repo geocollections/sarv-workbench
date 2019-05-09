@@ -347,6 +347,7 @@
         // if(this.searchHistory === 'sampleSearchHistory') searchParameters = JSON.stringify(searchParameters);
         this.$localStorage.set(this.searchHistory,  searchParameters)
         this.$emit('search-params-changed',searchParameters);
+
         this.apiCall().then(response => {
           if (response.status === 200) {
             if (response.body.count === 0) this.noResults = true

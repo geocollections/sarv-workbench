@@ -416,22 +416,22 @@ const router = new Router({
             }
           ]
         },
-        // {
-        //   path: '/site',
-        //   component: () => import('./views/Sites.vue'),
-        //   meta: {
-        //     requiresAuth: true
-        //   },
-        //   children: [
-        //     {
-        //       path: '',
-        //       component: () => import('./components/site/SiteTable.vue'),
-        //       meta: {
-        //         requiresAuth: true
-        //       },
-        //     }
-        //   ]
-        // },
+        {
+          path: '/site',
+          component: () => import('./views/Sites.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/site/SiteTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
         {
           path: '/site/:id(\\d+)',
           props: true,

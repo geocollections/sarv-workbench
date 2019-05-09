@@ -19,7 +19,7 @@
 
   import formManipulation  from './../components/mixins/formManipulation'
   import ListModuleCore from "./ListModuleCore";
-  import {fetchLinkedSites} from "@/assets/js/api/apiCalls";
+  import {fetchLinkedSites, fetchSites} from "@/assets/js/api/apiCalls";
   export default {
     components: {
       ListModuleCore
@@ -46,7 +46,8 @@
         columns:[
           {id:"id",title:"site.id",type:"number"},
           {id:"name",title:"site.name",type:"text"},
-          // {id:"project",title:"site.project",type:"text"},
+          {id:"number",title:"site.number",type:"text"},
+          {id:"project",title:"site.project",type:"text"},
           {id:"date_start",title:"site.date_start",type:"text",isDate:true},
           {id:"date_end",title:"site.date_end",type:"text",isDate:true},
           // {id:"date_free",title:"site.date_free",type:"text",isDate:true},
@@ -64,10 +65,9 @@
 
     methods: {
       fetchSites() {
-        console.log('FETCH')
         let vm = this
         return new Promise((resolve) => {
-          resolve(fetchLinkedSites(vm.project, vm.page))
+          resolve(fetchSites(vm.searchParameters))
         });
       },
       searchParametersChanged(newParams) {
@@ -80,7 +80,10 @@
         return {
           id: null,
           name: null,
+          number:null,
           project: null,
+          date_start: null,
+          date_end: null,
           page: 1,
           paginateBy: 10,
           orderBy: '-id',

@@ -595,6 +595,10 @@ export function fetchSites(data,agent) {
     searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`
   }
 
+  if (data.number !== null && data.number.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.number};fields:number;lookuptype:icontains`
+  }
+
   if (data.project !== null && data.project.trim().length > 0) {
     searchFields += `&multi_search=value:${data.project};fields:project__name,project__name_en;lookuptype:icontains`
   }
