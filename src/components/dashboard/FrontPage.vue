@@ -24,22 +24,25 @@
       <div class="col-6">
         <b-card class="p-3 border border-warning larger">
         <!-- FILES -->
-        <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('frontPage.buttons.myFiles') }} </router-link>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/photo_archive' }">{{ $t('frontPage.buttons.photoArchive') }} </router-link>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/specimen_image' }">{{ $t('frontPage.buttons.specimenImage') }} </router-link>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('frontPage.buttons.otherFiles') }} </router-link> 
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/digitised_reference' }">{{ $t('frontPage.buttons.digitisedReference') }} </router-link>
-        <br />
+        <div v-if="permissions.attachment" >
+          <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('frontPage.buttons.myFiles') }} </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/photo_archive' }">{{ $t('frontPage.buttons.photoArchive') }} </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/specimen_image' }">{{ $t('frontPage.buttons.specimenImage') }} </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('frontPage.buttons.otherFiles') }} </router-link> 
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/digitised_reference' }">{{ $t('frontPage.buttons.digitisedReference') }} </router-link>
+          <br />
+        </div>
         
         <!-- REFERENCE -->
-        <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('frontPage.buttons.myReferences') }} </router-link>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('frontPage.buttons.reference') }} </router-link>
-        <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/library' }">{{ $t('frontPage.buttons.libraries') }} </router-link>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/library/add' }">{{ $t('frontPage.buttons.library') }} </router-link>
+        <div v-if="permissions.reference" >
+          <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('frontPage.buttons.myReferences') }} </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('frontPage.buttons.reference') }} </router-link>
+          <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/library' }">{{ $t('frontPage.buttons.libraries') }} </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/library/add' }">{{ $t('frontPage.buttons.library') }} </router-link>
+          <br />
+        </div>
         
-        <br />
-        
-        <div v-if="permissions.attachment" >
+        <div v-if="permissions.doi" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/doi' }"> DOI </router-link>
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/doi/add' }">Add DOI </router-link>
           <br />
@@ -49,28 +52,32 @@
       <div class="col-6">
         <b-card class="p-3 border border-warning larger">
         <!-- PROJECT -->
-        <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/project' }"> Projects </router-link>
-        <span v-if="activeProject>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/project/' + activeProject }">My active project: {{ activeProject }} </router-link></span>
-        <span v-if="activeSite>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/site/' + activeSite }">Last visited site: {{ activeSite }}</router-link></span>
-        </br >
+        <div v-if="permissions.project" >
+          <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/project' }"> Projects </router-link>
+          <span v-if="activeProject>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/project/' + activeProject }">My active project: {{ activeProject }} </router-link></span>
+          <span v-if="activeSite>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/site/' + activeSite }">Last visited site: {{ activeSite }}</router-link></span>
+          <br />
+        </div>
         
         <!-- LOCALITY -->
         <div v-if="permissions.locality" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/locality' }">{{ $t('frontPage.buttons.localities') }} </router-link>
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/locality/add' }">{{ $t('frontPage.buttons.locality') }} </router-link>
-        </br >
+        <br />
         </div>
 
         <!-- SAMPLE -->
-        <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/sample' }">{{ $t('frontPage.buttons.samples') }} </router-link>
-        <span v-if="activeSample>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/' + activeSample }"> My last sample: {{ activeSample }} </router-link></span>
-        <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/add' }">{{ $t('frontPage.buttons.sample') }}</router-link>
-        <br />
+        <div v-if="permissions.sample" >
+          <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/sample' }">{{ $t('frontPage.buttons.samples') }} </router-link>
+          <span v-if="activeSample>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/' + activeSample }"> My last sample: {{ activeSample }} </router-link></span>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/add' }">{{ $t('frontPage.buttons.sample') }}</router-link>
+          <br />
+        </div>
         </b-card>
       </div>
       
     </div>
-    </br >
+    <br />
 
     <recent-activity class="mt-2" :user="user"></recent-activity>
 
