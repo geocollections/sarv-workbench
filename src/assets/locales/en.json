@@ -570,7 +570,8 @@
     "dataset": "Dataset",
     "datacite": "Datacite",
     "dataciteCreated": "Datacite reg.",
-    "dataciteUpdated": "Datacite updated"
+    "dataciteUpdated": "Datacite updated",
+    "name": "Name"
   },
   "locality": {
     "header": "My localities",

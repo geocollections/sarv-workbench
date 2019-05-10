@@ -572,7 +572,8 @@
     "dataset": "Andmekogum",
     "datacite": "Datacite",
     "dataciteCreated": "Datacite reg.",
-    "dataciteUpdated": "Datacite uuendatud"
+    "dataciteUpdated": "Datacite uuendatud",
+    "name": "Nimi"
   },
   "locality": {
     "header": "Minu lokaliteedid",

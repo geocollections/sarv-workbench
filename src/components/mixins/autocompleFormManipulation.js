@@ -81,7 +81,7 @@ const autocompleteFieldManipulation = {
           query = `specimen/?multi_search=value:${val};fields:specimen_id;lookuptype:icontains&fields=id,specimen_id`;
           break;
         case 'reference':
-          query = `reference/?multi_search=value:${val};fields:reference;lookuptype:icontains&fields=id,reference,pages,figures,remarks`;
+          query = `reference/?multi_search=value:${val};fields:reference,id;lookuptype:icontains&fields=id,reference,pages,figures,remarks`;
           break;
         case 'synonym':
           query = `locality_synonym/?multi_search=value:${val};fields:synonym;lookuptype:icontains&fields=id,synonym,reference__reference,pages,remarks`;
@@ -110,6 +110,9 @@ const autocompleteFieldManipulation = {
           break;
         case 'site':
           query = `site/?multi_search=value:${val};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+          break;
+        case 'dataset':
+          query += `dataset/?multi_search=value:${val};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
           break;
         default:
           break;
@@ -205,6 +208,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteLibrarySearch(value) {
       this.autocompliteSearch(value, 'library', 'library', 1, false)
+    },
+    autcompleteDatasetSearch(value) {
+      this.autocompliteSearch(value, 'dataset', 'dataset', 1, false)
     },
     autocompliteSearch(value, type, options, minLength = 3, resetIfLessThanMinLength = true) {
       if (value.length < minLength) {

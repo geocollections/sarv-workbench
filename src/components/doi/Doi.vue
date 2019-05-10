@@ -4,7 +4,7 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2" ref="info">
+    <fieldset class="border p-2 mb-2" ref="info">
       <legend class="w-auto" @click="block.info = !block.info"
               :style="!block.info ? {'color':'blue'} : ''">
         {{ $t('doi.generalInfo') }}
@@ -215,7 +215,47 @@
           <div class="row">
             <div class="col-sm-12 mb-2">
               <label :for="`reference`">{{ $t('doi.reference') }}:</label>
-              TODO: Reference input
+              <vue-multiselect v-model="relatedData.reference"
+                               id="reference"
+                               :multiple="false"
+                               track-by="id"
+                               :options="autocomplete.reference"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :close-on-select="true"
+                               @search-change="autcompleteReferenceSearch"
+                               :custom-label="customLabelForReference"
+                               :loading="autocomplete.loaders.reference"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.id + ' - (' + option.reference + ')' }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+          </div>
+
+          <div class="row" v-if="relatedData.reference !== null">
+            <div class="table-responsive-sm col-12">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                  <th>ID</th>
+                  <th>{{ $t('doi.reference') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td @click="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)" class="link">
+                    <font-awesome-icon size="1x" icon="eye" color="blue"/>
+                    {{ relatedData.reference.id }}
+                  </td>
+
+                  <td>{{ relatedData.reference.reference }}</td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -237,7 +277,49 @@
           <div class="row">
             <div class="col-sm-12 mb-2">
               <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>
-              TODO: Dataset input
+              <vue-multiselect v-model="relatedData.dataset"
+                               id="dataset"
+                               :multiple="false"
+                               track-by="id"
+                               :options="autocomplete.dataset"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :close-on-select="true"
+                               @search-change="autcompleteDatasetSearch"
+                               :custom-label="customLabelForDataset"
+                               :loading="autocomplete.loaders.dataset"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.id }} - (</strong>
+                  <strong v-translate="{ et: option.name, en: option.name_en }"></strong>
+                  <strong>)</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+          </div>
+
+          <div class="row" v-if="relatedData.dataset !== null">
+            <div class="table-responsive-sm col-12">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                  <th>ID</th>
+                  <th>{{ $t('doi.name') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td @click="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})" class="link">
+                    <font-awesome-icon size="1x" icon="eye" color="blue"/>
+                    {{ relatedData.dataset.id }}
+                  </td>
+
+                  <td v-translate="{et: relatedData.dataset.name, en: relatedData.dataset.name_en}"></td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -303,27 +385,27 @@
       </div>
     </div>
 
-<!--    <div class="row mt-3 mb-3">-->
-<!--      <div class="col">-->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
+    <div class="row mt-3 mb-3">
+      <div class="col">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"
+                :title="$t('edit.buttons.saveAndLeave') ">
+          <font-awesome-icon icon="door-open"/>
+          {{ $t('edit.buttons.saveAndLeave') }}
+        </button>
 
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'doi', true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--        </button>-->
+        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'doi', true)"
+                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
+          <font-awesome-icon icon="save"/>
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
+        </button>
 
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('doi', $route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('doi', $route.meta.isEdit)"
+                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
+          <font-awesome-icon icon="ban"/>
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
+        </button>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -390,12 +472,16 @@
               language: false,
               copyright_agent: false,
               licence: false,
+              reference: false,
+              dataset: false,
             },
             resource_type: [],
             agent: [],
             language: [],
             copyright_agent: [],
             licence: [],
+            reference: [],
+            dataset: [],
           },
           requiredFields: ['identifier'],
           doi: {},
@@ -434,6 +520,11 @@
             if (handledResponse.length > 0) {
               this.doi = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.doi)
+
+              // Loading REFERENCE and DATASET here because they don't need api request
+              this.loadRelatedData('reference', this.doi)
+              this.loadRelatedData('dataset', this.doi)
+
               this.removeUnnecessaryFields(this.doi, this.copyFields);
               this.doi.related_data = {};
 
@@ -446,14 +537,20 @@
               this.sendingData = false;
             }
           });
-          // TODO: fetch primary reference and dataset
           // this.loadRelatedData('reference');
           // this.loadRelatedData('dataset');
         }
       },
 
       setDefaultRelatedData() {
-        return {}
+        return {
+          reference: [],
+          dataset: [],
+          count: {
+            reference: 0,
+            dataset: 0,
+          }
+        }
       },
 
       formatDataForUpload(objectToUpload) {
@@ -470,8 +567,8 @@
 
         // Adding related data
         uploadableObject.related_data = {}
-        // uploadableObject.related_data.reference = this.relatedData.reference
-        // uploadableObject.related_data.dataset = this.relatedData.dataset
+        uploadableObject.related_data.reference = this.relatedData.reference
+        uploadableObject.related_data.dataset = this.relatedData.dataset
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -484,45 +581,47 @@
         this.doi.language = { id: obj.language, value: obj.language__value, value_en: obj.language__value_en}
         this.doi.copyright_agent = { id: obj.copyright_agent, agent: obj.copyright_agent__agent }
         this.doi.licence = { id: obj.licence, licence: obj.licence__licence, licence_en: obj.licence__licence_en}
+
+        // Filling related data, doing it here because there is only 1 reference and 1 dataset
+        this.relatedData.reference = { id: obj.reference, reference: obj.reference__reference }
+        this.relatedData.dataset = { id: obj.dataset, name: obj.dataset__name, name_en: obj.dataset__name_en}
       },
 
-      // TODO: primary reference and dataset
-      fillRelatedDataAutocompleteFields(obj, type) {
-        let relatedData = cloneDeep(obj)
-        obj = [];
-        relatedData.forEach(entity => {
-          // if (type === 'projectagent') obj.push({
-          //   agent: entity.projectagent__agent__agent,
-          //   id: entity.projectagent__agent
-          // })
-          // else obj.push(entity)
-        });
-        return obj
-      },
+      // fillRelatedDataAutocompleteFields(obj, type) {
+      //   let relatedData = cloneDeep(obj)
+      //   obj = [];
+      //   relatedData.forEach(entity => {
+      //     if (type === 'projectagent') obj.push({
+      //       agent: entity.projectagent__agent__agent,
+      //       id: entity.projectagent__agent
+      //     })
+      //     else obj.push(entity)
+      //   });
+      //   return obj
+      // },
 
-      // TODO: primary reference and dataset
-      loadRelatedData(object) {
-        let query;
-        if (object === 'reference') {
-          // query = fetchProjectAgent(this.$route.params.id, this.relatedData.page.projectagent)
-        } else if (object === 'dataset') {
-          // query = fetchProjectAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+      loadRelatedData(object, doi = null) {
+        if (object === 'reference' && doi !== null && doi.reference !== null) {
+          this.relatedData.count[object] = 1;
+          this.relatedData[object] = {
+            id: doi.reference,
+            reference: doi.reference__reference
+          }
+          this.setBlockVisibility(object, this.relatedData.count[object])
+        } else if (object === 'dataset' && doi !== null && doi.dataset !== null) {
+          this.relatedData.count[object] = 1;
+          this.relatedData[object] = {
+            id: doi.dataset,
+            name: doi.dataset__name,
+            name_en: doi.dataset__name_en
+          }
+          this.setBlockVisibility(object, this.relatedData.count[object])
         }
-        return new Promise(resolve => {
-          query.then(response => {
-            if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results : []
-
-            this.relatedData.count[object] = response.body.count;
-            this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
-            this.setBlockVisibility(object, this.relatedData[object].length)
-          });
-        });
       },
 
-      // TODO: primary reference and dataset
       setBlockVisibility(object,count){
-        if(object === 'projectagent') this.block.reference = count > 0
-        if(object === 'attachment_link') this.block.dataset = count > 0
+        if(object === 'reference') this.block.reference = count > 0
+        if(object === 'dataset') this.block.dataset = count > 0
       },
 
       //check required fields for related data
@@ -532,9 +631,12 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.doi = this.doi.id;
 
-        // if (this.isDefinedAndNotNull(uploadableObject.reference)) {
-        //   uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
-        // }
+        if (this.isDefinedAndNotNull(uploadableObject.reference)) {
+          uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.dataset)) {
+          uploadableObject.dataset = uploadableObject.dataset.id ? uploadableObject.dataset.id : uploadableObject.dataset;
+        }
 
         console.log('This object is sent in string format (related_data):')
         console.log(uploadableObject);
@@ -546,6 +648,15 @@
         return new Promise((resolve) => {
           resolve(fetchProjects(params))
         });
+      },
+
+      customLabelForReference(option) {
+        return `${option.id} - (${option.reference})`
+      },
+
+      customLabelForDataset(option) {
+        if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
+        return `${option.id} - (${option.name_en})`
       },
 
       setDefaultSearchParameters() {
@@ -569,5 +680,9 @@
     margin: 5px 0 0 0;
     color: #999;
     font-size: 0.8rem;
+  }
+
+  .link:hover {
+    cursor: pointer;
   }
 </style>
