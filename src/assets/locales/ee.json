@@ -666,6 +666,8 @@
     "addNew": "Lisage uus Kirjandus",
     "sort": "Liik",
     "solrSearch": "Kiire otsing",
+    "info": "Üldinfo",
+    "description": "Lisainfo ja märksõnad",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",

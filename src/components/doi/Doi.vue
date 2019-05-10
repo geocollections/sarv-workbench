@@ -214,7 +214,7 @@
 
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <label :for="`reference`">{{ $t('doi.reference') }}:</label>
+<!--              <label :for="`reference`">{{ $t('doi.reference') }}:</label>-->
               <vue-multiselect v-model="relatedData.reference"
                                id="reference"
                                :multiple="false"
@@ -276,7 +276,7 @@
 
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>
+<!--              <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>-->
               <vue-multiselect v-model="relatedData.dataset"
                                id="dataset"
                                :multiple="false"
@@ -350,7 +350,7 @@
     </fieldset>
 
     <!-- TODO: DATACITE CREATED and UPDATED -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
       <legend class="w-auto" @click="block.datacite = !block.datacite"
               :style="!block.datacite ? {'color':'blue'} : ''">
         {{ $t('doi.datacite') }}
@@ -608,6 +608,7 @@
             reference: doi.reference__reference
           }
           this.setBlockVisibility(object, this.relatedData.count[object])
+          return;
         } else if (object === 'dataset' && doi !== null && doi.dataset !== null) {
           this.relatedData.count[object] = 1;
           this.relatedData[object] = {
@@ -616,7 +617,16 @@
             name_en: doi.dataset__name_en
           }
           this.setBlockVisibility(object, this.relatedData.count[object])
+          return;
         }
+
+        return new Promise(resolve => {
+          query.then(response => {
+            this.relatedData[object] = this.handleResponse(response);
+            this.relatedData.count[object] = response.body.count;
+            resolve(true)
+          });
+        });
       },
 
       setBlockVisibility(object,count){

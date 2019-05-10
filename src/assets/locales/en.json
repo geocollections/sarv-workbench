@@ -664,6 +664,8 @@
     "addNew": "Add new Reference",
     "sort": "Sort",
     "solrSearch": "Fast search",
+    "info": "General info",
+    "description": "Remarks and keywords",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

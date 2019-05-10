@@ -2,462 +2,453 @@
   <div class="reference">
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <!-- REFERENCE and YEAR -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`reference`">{{ $t('reference.reference') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="reference" v-model="reference.reference" :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`year`">{{ $t('reference.year') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)" type="number"></b-form-input>
-      </div>
-    </div>
-
-    <!-- AUTHOR -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`author`">{{ $t('reference.author') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)" type="text"></b-form-input>
-      </div>
-    </div>
-
-
-    <!-- TITLE -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`title`">{{ $t('reference.title') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea :key="componentKey" id="title" v-model="reference.title" :state="isDefinedAndNotNull(reference.title)" type="text"
-                         :rows="1" :max-rows="4"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- TITLE ORIGINAL -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea :key="componentKey" id="title_original" v-model="reference.title_original" type="text"
-                         :rows="1" :max-rows="4"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- TYPE, LANGUAGE -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`type`">{{ $t('reference.type') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="reference.type"
-                         id="type"
-                         :options="autocomplete.types"
-                         track-by="id"
-                         :label="commonLabel"
-                         :loading="autocomplete.loaders.agent"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="singleLabel" slot-scope="{ option }">
-            <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
-          </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`language`">{{ $t('reference.language') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="reference.language"
-                         id="language"
-                         :options="autocomplete.languages"
-                         track-by="id"
-                         :label="commonLabel"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="singleLabel" slot-scope="{ option }">
-            <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
-          </template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-    </div>
-
-    <!-- JOURNAL -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`journal`">{{ $t('reference.journal') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <vue-multiselect v-model="reference.journal"
-                         id="journal"
-                         track-by="id"
-                         :options="autocomplete.journals"
-                         :internal-search="false"
-                         :preserve-search="true"
-                         @search-change="autcompleteJournalSearch"
-                         label="journal_name"
-                         :loading="autocomplete.loaders.journals"
-                         :placeholder="$t('add.inputs.autocomplete')"
-                         :show-labels="false">
-          <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.journal_name }}</strong></template>
-          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-        </vue-multiselect>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="journal_additional" v-model="reference.journal_additional" type="text"></b-form-input>
-      </div>
-
-    </div>
-
-    <!-- VOLUME and NUMBER -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`volume`">{{ $t('reference.volume') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`number`">{{ $t('reference.number') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- PAGES and BOOK EDITOR -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`pages`">{{ $t('reference.pages') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="pages" v-model="reference.pages" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`book_editor`">{{ $t('reference.book_editor') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="book_editor" v-model="reference.book_editor" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- BOOK and BOOK ORIGINAL -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`book`">{{ $t('reference.book') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="book" v-model="reference.book" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="book_original" v-model="reference.book_original" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- PUBLISHER and PUBLISHER PLACE -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`publisher`">{{ $t('reference.publisher') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="publisher" v-model="reference.publisher" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`publisher_place`">{{ $t('reference.publisherPlace') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="publisher_place" v-model="reference.publisher_place" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- DOI and URL-->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`doi`">DOI:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
-      </div>
-
-      <div class="col-sm-2 mb-2 text-center">
-        <b-button variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">{{ $t('reference.checkDoi') }}</b-button>
-      </div>
-
-
-      <div class="col-sm-1 lbl-right">
-        <label :for="`url`">URL:</label>
-      </div>
-
-      <div class="col-sm-3 mb-2">
-        <b-form-input id="url" v-model="reference.url" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- ISBN and ISSN -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`isbn`">ISBN:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="isbn" v-model="reference.isbn" type="text"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2 lbl-right">
-        <label :for="`issn`">ISSN:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="issn" v-model="reference.issn" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- ABSTRACT -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea :key="componentKey" id="abstract" v-model="reference.abstract" type="text" size="sm"
-                         :rows="1" :max-rows="20"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- AUTHOR KEYWORDS -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- REMARKS -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-textarea :key="componentKey" id="remarks" v-model="reference.remarks" type="text" size="sm"
-                         :rows="1" :max-rows="20"></b-form-textarea>
-      </div>
-    </div>
-
-    <!-- ALLOW TEMPORARILY USER TAGS -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`tags`">Kasutaja märksõnad (ajutine lahendus):</label>
-      </div>
-
-      <div class="col-sm-10 mb-2">
-        <b-form-input id="tags" v-model="reference.tags" type="text"></b-form-input>
-      </div>
-    </div>
-
-    <!-- REFERENCE KEYWORDS -->
-    <div class="row">
-      <div class="col-sm-2 lbl-right">
-        <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
-      </div>
-
-      <div class="col-9 mb-2">
-        <vue-multiselect v-model="relatedData.keyword"
-                         id="keyword"
-                         :options="autocomplete.keyword"
-                         :multiple="true"
-                         :close-on-select="false"
-                         track-by="id"
-                         label="keyword"
-                         :tag-placeholder="$t('add.inputs.keywordsAdd')"
-                         :placeholder="$t('add.inputs.keywords')"></vue-multiselect>
-      </div>
-
-      <div class="col-1 mb-2">
-        <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
-                @click="relatedData.keyword = null">
-          <font-awesome-icon icon="trash-alt"></font-awesome-icon>
-        </button>
-      </div>
-    </div>
+    <!-- GENERAL INFO -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" @click="block.info = !block.info"
+              :style="!block.info ? {'color':'blue'} : ''">
+        {{ $t('reference.info') }}
+        <font-awesome-icon icon="project-diagram"/>
+      </legend>
+
+      <transition name="fade">
+        <div v-if="block.info">
+
+          <!-- REFERENCE and YEAR -->
+          <div class="row">
+            <div class="col-md-9 mb-2">
+              <label :for="`reference`">{{ $t('reference.reference') }}:</label>
+              <b-form-input id="reference" v-model="reference.reference" :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-3 mb-2">
+              <label :for="`year`">{{ $t('reference.year') }}:</label>
+              <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)" type="number"></b-form-input>
+            </div>
+          </div>
+
+          <!-- AUTHOR -->
+          <div class="row">
+            <div class="col-sm-12 mb-2">
+              <label :for="`author`">{{ $t('reference.author') }}:</label>
+              <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)" type="text"></b-form-input>
+            </div>
+          </div>
+
+
+          <!-- TITLE -->
+          <div class="row">
+            <div class="col-sm-12 mb-2">
+              <label :for="`title`">{{ $t('reference.title') }}:</label>
+              <b-form-textarea :key="componentKey" id="title" v-model="reference.title" :state="isDefinedAndNotNull(reference.title)" type="text"
+                               :rows="1" :max-rows="4"></b-form-textarea>
+            </div>
+          </div>
+
+          <!-- TITLE ORIGINAL -->
+          <div class="row">
+            <div class="col-sm-12 mb-2">
+              <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
+              <b-form-textarea :key="componentKey" id="title_original" v-model="reference.title_original" type="text"
+                               :rows="1" :max-rows="4"></b-form-textarea>
+            </div>
+          </div>
+
+          <!-- TYPE, LANGUAGE -->
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`type`">{{ $t('reference.type') }}:</label>
+              <vue-multiselect v-model="reference.type"
+                               id="type"
+                               :options="autocomplete.types"
+                               track-by="id"
+                               :label="commonLabel"
+                               :loading="autocomplete.loaders.agent"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`language`">{{ $t('reference.language') }}:</label>
+              <vue-multiselect v-model="reference.language"
+                               id="language"
+                               :options="autocomplete.languages"
+                               track-by="id"
+                               :label="commonLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+          </div>
+
+          <!-- JOURNAL -->
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`journal`">{{ $t('reference.journal') }}:</label>
+              <vue-multiselect v-model="reference.journal"
+                               id="journal"
+                               track-by="id"
+                               :options="autocomplete.journals"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               @search-change="autcompleteJournalSearch"
+                               label="journal_name"
+                               :loading="autocomplete.loaders.journals"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.journal_name }}</strong></template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
+              <b-form-input id="journal_additional" v-model="reference.journal_additional" type="text"></b-form-input>
+            </div>
+
+          </div>
+
+          <!-- VOLUME and NUMBER -->
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`volume`">{{ $t('reference.volume') }}:</label>
+              <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`number`">{{ $t('reference.number') }}:</label>
+              <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- PAGES and BOOK EDITOR -->
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`pages`">{{ $t('reference.pages') }}:</label>
+              <b-form-input id="pages" v-model="reference.pages" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`book_editor`">{{ $t('reference.book_editor') }}:</label>
+              <b-form-input id="book_editor" v-model="reference.book_editor" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- BOOK and BOOK ORIGINAL -->
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`book`">{{ $t('reference.book') }}:</label>
+              <b-form-input id="book" v-model="reference.book" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
+              <b-form-input id="book_original" v-model="reference.book_original" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- PUBLISHER and PUBLISHER PLACE -->
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`publisher`">{{ $t('reference.publisher') }}:</label>
+              <b-form-input id="publisher" v-model="reference.publisher" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`publisher_place`">{{ $t('reference.publisherPlace') }}:</label>
+              <b-form-input id="publisher_place" v-model="reference.publisher_place" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- DOI and URL-->
+          <div class="row">
+            <div class="col-7 col-md-5 mb-2">
+              <label :for="`doi`">DOI:</label>
+              <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
+
+            </div>
+
+            <div class="col-5 col-md-2">
+              <label :for="`check-doi`" style="visibility: hidden; display: block;">DOI:</label>
+              <b-button id="check-doi" variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">{{ $t('reference.checkDoi') }}</b-button>
+            </div>
+
+            <div class="col-sm-12 col-md-5 mb-2">
+              <label :for="`url`">URL:</label>
+              <b-form-input id="url" v-model="reference.url" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- ISBN and ISSN -->
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`isbn`">ISBN:</label>
+              <b-form-input id="isbn" v-model="reference.isbn" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`issn`">ISSN:</label>
+              <b-form-input id="issn" v-model="reference.issn" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- ABSTRACT -->
+          <div class="row">
+            <div class="col-sm-12 mb-2">
+              <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
+              <b-form-textarea :key="componentKey" id="abstract" v-model="reference.abstract" type="text" size="sm"
+                               :rows="1" :max-rows="20"></b-form-textarea>
+            </div>
+          </div>
+
+        </div>
+      </transition>
+
+
+    </fieldset>
+
+    <!-- REMARKS and KEYWORDS -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" @click="block.description = !block.description"
+      :style="!block.description ? {'color':'blue'} : ''" >
+        {{ $t('reference.description') }}
+        <font-awesome-icon icon="pen-fancy" />
+      </legend>
+
+      <transition name="fade">
+        <div v-if="block.description">
+
+          <!-- AUTHOR KEYWORDS -->
+          <div class="row">
+            <div class="col-sm-2 lbl-right">
+              <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
+            </div>
+
+            <div class="col-sm-10 mb-2">
+              <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- REMARKS -->
+          <div class="row">
+            <div class="col-sm-2 lbl-right">
+              <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
+            </div>
+
+            <div class="col-sm-10 mb-2">
+              <b-form-textarea :key="componentKey" id="remarks" v-model="reference.remarks" type="text" size="sm"
+                               :rows="1" :max-rows="20"></b-form-textarea>
+            </div>
+          </div>
+
+          <!-- ALLOW TEMPORARILY USER TAGS -->
+          <div class="row">
+            <div class="col-sm-2 lbl-right">
+              <label :for="`tags`">Kasutaja märksõnad (ajutine lahendus):</label>
+            </div>
+
+            <div class="col-sm-10 mb-2">
+              <b-form-input id="tags" v-model="reference.tags" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- REFERENCE KEYWORDS -->
+          <div class="row">
+            <div class="col-sm-2 lbl-right">
+              <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
+            </div>
+
+            <div class="col-9 mb-2">
+              <vue-multiselect v-model="relatedData.keyword"
+                               id="keyword"
+                               :options="autocomplete.keyword"
+                               :multiple="true"
+                               :close-on-select="false"
+                               track-by="id"
+                               label="keyword"
+                               :tag-placeholder="$t('add.inputs.keywordsAdd')"
+                               :placeholder="$t('add.inputs.keywords')"></vue-multiselect>
+            </div>
+
+            <div class="col-1 mb-2">
+              <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
+                      @click="relatedData.keyword = null">
+                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </transition>
+
+    </fieldset>
 
     <!-- DIGITAL VERSION (PDF) -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
-      <legend class="w-auto" style="font-size: large;">
+      <legend class="w-auto" @click="block.digital = !block.digital"
+              :style="!block.digital ? {'color':'blue'} : ''">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <font-awesome-icon icon="file-pdf"/>
       </legend>
 
-      <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false" acceptable-format="application/pdf" :accept-multiple="false"/>
-      <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
+      <transition name="fade">
+        <div v-if="block.digital">
+
+          <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false" acceptable-format="application/pdf" :accept-multiple="false"/>
+          <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
+
+        </div>
+      </transition>
+
     </fieldset>
 
     <!-- RELATED FILES -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">
+      <legend class="w-auto" @click="block.files = !block.files"
+              :style="!block.files ? {'color':'blue'} : ''">
         {{ $t('reference.relatedTables.attachment') }}
         <font-awesome-icon icon="folder-open"/>
       </legend>
 
-      <div class="row">
-        <div class="col">
-          <!-- loader is 'attachment3' because of #158, regarding p-2 -->
-          <vue-multiselect v-model="relatedData.attachment"
-                           id="attachment"
-                           :multiple="true"
-                           track-by="id"
-                           :options="autocomplete.attachment"
-                           :internal-search="false"
-                           :preserve-search="true"
-                           :close-on-select="false"
-                           @search-change="autcompleteAttachmentSearch3"
-                           :custom-label="customLabelForAttachment"
-                           :loading="autocomplete.loaders.attachment3"
-                           :placeholder="$t('add.inputs.autocomplete')"
-                           :show-labels="false">
-            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-          </vue-multiselect>
-        </div>
-      </div>
+      <transition name="fade">
+        <div v-if="block.files">
 
-      <file-table :attachments="relatedData.attachment" object="reference" v-if="relatedData.attachment.length > 0"/>
+          <div class="row">
+            <div class="col">
+              <!-- loader is 'attachment3' because of #158, regarding p-2 -->
+              <vue-multiselect v-model="relatedData.attachment"
+                               id="attachment"
+                               :multiple="true"
+                               track-by="id"
+                               :options="autocomplete.attachment"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :close-on-select="false"
+                               @search-change="autcompleteAttachmentSearch3"
+                               :custom-label="customLabelForAttachment"
+                               :loading="autocomplete.loaders.attachment3"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+          </div>
+
+          <file-table :attachments="relatedData.attachment" object="reference" v-if="relatedData.attachment.length > 0"/>
+
+        </div>
+      </transition>
+
     </fieldset>
 
     <!-- RELATED LIBRARIES -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">
+      <legend class="w-auto" @click="block.libraries = !block.libraries"
+              :style="!block.libraries ? {'color':'blue'} : ''">
         {{ $t('reference.relatedTables.library') }}
         <font-awesome-icon icon="book"/>
       </legend>
 
-      <div class="row">
-        <div class="col-10 col-md-11">
-          <vue-multiselect v-model="relatedData.library"
-                           id="library"
-                           :multiple="true"
-                           track-by="id"
-                           :options="autocomplete.library"
-                           :internal-search="false"
-                           :preserve-search="true"
-                           :close-on-select="false"
-                           @search-change="autcompleteLibrarySearch"
-                           :custom-label="customLabelForLibrary"
-                           :loading="autocomplete.loaders.library"
-                           :placeholder="$t('add.inputs.autocomplete')"
-                           :show-labels="false">
-            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-          </vue-multiselect>
-        </div>
+      <transition name="fade">
+        <div v-if="block.libraries">
 
-        <div class="col-2 col-md-1 pl-0">
-          <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
-                  :disabled="!isDefinedAndNotEmpty(relatedData.library)"
-                  @click="relatedData.library = []">
-            <font-awesome-icon icon="trash-alt"></font-awesome-icon>
-          </button>
+          <div class="row">
+            <div class="col-10 col-md-11">
+              <vue-multiselect v-model="relatedData.library"
+                               id="library"
+                               :multiple="true"
+                               track-by="id"
+                               :options="autocomplete.library"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :close-on-select="false"
+                               @search-change="autcompleteLibrarySearch"
+                               :custom-label="customLabelForLibrary"
+                               :loading="autocomplete.loaders.library"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-2 col-md-1 pl-0">
+              <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+                      :disabled="!isDefinedAndNotEmpty(relatedData.library)"
+                      @click="relatedData.library = []">
+                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+              </button>
+            </div>
+          </div>
+
         </div>
-      </div>
+      </transition>
+
     </fieldset>
 
     <!-- RELATED LOCALITIES -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">
+      <legend class="w-auto" @click="block.localities = !block.localities"
+              :style="!block.localities ? {'color':'blue'} : ''">
         {{ $t('reference.relatedTables.locality') }}
         <font-awesome-icon icon="map-marked"/>
       </legend>
 
-      <div class="row">
-        <div class="col">
-          <vue-multiselect v-model="relatedData.locality"
-                           id="locality"
-                           :multiple="true"
-                           track-by="id"
-                           :options="autocomplete.locality"
-                           :internal-search="false"
-                           :preserve-search="true"
-                           :close-on-select="false"
-                           @search-change="autcompleteLocalitySearch2"
-                           :custom-label="customLabelForLocality"
-                           :loading="autocomplete.loaders.locality"
-                           :placeholder="$t('add.inputs.autocomplete')"
-                           :show-labels="false">
-            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-          </vue-multiselect>
-        </div>
-      </div>
+      <transition name="fade">
+        <div v-if="block.localities">
 
-      <div class="row mt-2" v-if="relatedData.locality.length > 0">
-        <div class="table-responsive-sm col-12">
-          <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>{{ $t('reference.relatedTables.locality') }}</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="entity in relatedData.locality">
-              <td @click="windowOpenNewTab('locality', '/locality/' + entity.id)" class="link">
-                <font-awesome-icon size="1x" icon="eye" color="blue"/>
-                {{ entity.id }}
-              </td>
+          <div class="row">
+            <div class="col">
+              <vue-multiselect v-model="relatedData.locality"
+                               id="locality"
+                               :multiple="true"
+                               track-by="id"
+                               :options="autocomplete.locality"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :close-on-select="false"
+                               @search-change="autcompleteLocalitySearch2"
+                               :custom-label="customLabelForLocality"
+                               :loading="autocomplete.loaders.locality"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+          </div>
 
-              <td v-translate="{et:entity.locality,en:entity.localit_en}"></td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="row mt-2" v-if="relatedData.locality.length > 0">
+            <div class="table-responsive-sm col-12">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
+                <tr>
+                  <th>ID</th>
+                  <th>{{ $t('reference.relatedTables.locality') }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="entity in relatedData.locality">
+                  <td @click="windowOpenNewTab('locality', '/locality/' + entity.id)" class="link">
+                    <font-awesome-icon size="1x" icon="eye" color="blue"/>
+                    {{ entity.id }}
+                  </td>
+
+                  <td v-translate="{et:entity.locality,en:entity.localit_en}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
-      </div>
+      </transition>
 
     </fieldset>
 
@@ -626,6 +617,7 @@
           searchParameters: this.setDefaultSearchParameters(),
           attachment: {},
           componentKey: 0,
+          block: {info: true, description: true, digital: true, files: true, libraries: true, localities: true}
         }
       },
 
@@ -801,6 +793,7 @@
         return obj
       },
 
+      // TODO: Put request here, which are currently in loadFullInfo method + blockVisibility
       loadRelatedData(object){
         let query;
 
