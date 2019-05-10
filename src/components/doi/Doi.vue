@@ -201,7 +201,7 @@
       </transition>
     </fieldset>
 
-    <!-- TODO: PRIMARY REFERENCE -->
+    <!-- REFERENCE -->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" @click="block.reference = !block.reference"
               :style="!block.reference ? {'color':'blue'} : ''">
@@ -263,7 +263,7 @@
       </transition>
     </fieldset>
 
-    <!-- TODO: PRIMARY DATASET -->
+    <!-- DATASET -->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" @click="block.dataset = !block.dataset"
               :style="!block.dataset ? {'color':'blue'} : ''">
@@ -544,8 +544,8 @@
 
       setDefaultRelatedData() {
         return {
-          reference: [],
-          dataset: [],
+          reference: null,
+          dataset: null,
           count: {
             reference: 0,
             dataset: 0,
