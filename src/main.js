@@ -220,6 +220,9 @@ new Vue({
     doiViewType: {
       type: String,
       default: 'table'
+    },
+    formBlocks: {
+      type: Object
     }
   },
   render: h => h(App)
