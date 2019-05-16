@@ -13,10 +13,20 @@
         </div>
 
         <div class="row ml-0 mr-0 sample-card-body">
-          <div class="col-12 pr-0 text-right" style="font-size: larger; font-weight: bold; border-bottom: 1px dashed">{{ entity.number }}</div>
-          <div class="col-12 pl-0"><b>Loc.</b> TODO: Location</div>
-          <div class="col-12 pl-0"><b>Strat.</b> TODO: Strat</div>
-          <div class="col-12 pl-0"><b>Coll.</b> TODO: Coll + Time + Barcode</div>
+          <div class="col-12 pl-1 pr-1 text-right" style="font-size: 18px; font-weight: bold; border-bottom: 1px dashed">{{ entity.number }} </div>
+          <div class="col-12 pl-1 pr-1" style="border-bottom: 1px dashed"><b>Loc.</b> <span v-translate="{et: entity.locality__locality, en: entity.locality__locality_en}"></span></div>
+          <div class="col-12 pl-1 pr-1" style="border-bottom: 1px dashed"><b>Strat.</b> <span v-translate="{et: entity.stratigraphy__stratigraphy, en: entity.stratigraphy__stratigraphy_en}"></span></div>
+          <div class="col-12 pl-1">
+            <div class="row">
+              <div class="col"><b>Coll.</b> {{ entity.agent_collected__agent }}</div>
+              <div class="col text-right">{{ entity.date_collected }}</div>
+              <div class="col p-1" style="border-top: 1px solid black; border-left: 1px solid black; max-width: 50px">
+                <vue-q-r-code-component :text="'http://geocollections.info/sample/' + entity.id"
+                                        :size="40"
+                                        error-level="L"></vue-q-r-code-component>
+              </div>
+            </div>
+          </div>
         </div>
       </b-card>
 
@@ -26,11 +36,16 @@
 </template>
 
 <script>
+  import VueQRCodeComponent from 'vue-qrcode-component'
+
   export default {
     props: {
       data: {
         type: Array
       }
+    },
+    components: {
+      VueQRCodeComponent
     },
     name: "SampleListView"
   }
@@ -53,7 +68,8 @@
   }
 
   .card-body {
-    padding: 0 0.5rem;
+    padding: 0;
+    /*padding: 0 0.5rem;*/
   }
 
   .sample-card-body {
