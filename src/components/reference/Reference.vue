@@ -440,7 +440,7 @@
                     {{ entity.id }}
                   </td>
 
-                  <td v-translate="{et:entity.locality,en:entity.localit_en}"></td>
+                  <td v-translate="{et:entity.locality,en:entity.locality_en}"></td>
                 </tr>
                 </tbody>
               </table>

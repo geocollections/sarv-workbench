@@ -30,6 +30,7 @@
       :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchSamples"
+      :use-list-view="true"
       search-history="sampleSearchHistory"
       view-type="sampleViewType"
       v-on:search-params-changed="searchParametersChanged"

@@ -7,6 +7,8 @@
 
         <attachment-list-view v-if="module === 'attachment'" :data="data" />
 
+        <sample-list-view v-if="module === 'sample'" :data="data" />
+
       </div>
     </div>
   </div>
@@ -15,11 +17,13 @@
 <script>
   import AttachmentListView from "../attachment/AttachmentListView";
   import ReferenceListView from "../reference/ReferenceListView";
+  import SampleListView from "../sample/SampleListView";
 
   export default {
     components: {
       ReferenceListView,
-      AttachmentListView
+      AttachmentListView,
+      SampleListView
     },
     props: ['module', 'data'],
     name: "ListView",
