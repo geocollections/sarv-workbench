@@ -4,247 +4,263 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">
+      <legend class="w-auto" @click="block.info = !block.info"
+              :style="!block.info ? {'color':'blue'} : ''">
         {{ $t('library.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
 
-      <!-- AUTHOR AND YEAR -->
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`author`">{{ $t('library.author') }}:</label>
-        </div>
+      <transition name="fade">
+        <div v-if="block.info">
 
-        <div class="col-sm-4 mb-2">
-          <vue-multiselect id="author" class="align-middle"
-                           v-model="library.author"
-                           deselect-label="Can't remove this value"
-                           label="agent"
-                           track-by="id"
-                           :placeholder="$t('add.inputs.autocomplete')"
-                           :loading="autocomplete.loaders.agent"
-                           :options="autocomplete.agent"
-                           @search-change="autcompleteAgentSearch"
-                           :internal-search="false"
-                           :preserve-search="true"
-                           :allow-empty="false"
-                           :open-direction="'bottom'">
-            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-          </vue-multiselect>
-        </div>
+          <!-- AUTHOR AND YEAR -->
+          <div class="row">
+            <div class="col-sm-2">
+              <label :for="`author`">{{ $t('library.author') }}:</label>
+            </div>
+
+            <div class="col-sm-4 mb-2">
+              <vue-multiselect id="author" class="align-middle"
+                               v-model="library.author"
+                               deselect-label="Can't remove this value"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autcompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :allow-empty="false"
+                               :open-direction="'bottom'">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
 
 
-        <div class="col-sm-2">
-          <label :for="`year`">{{ $t('library.year') }}:</label>
-        </div>
+            <div class="col-sm-2">
+              <label :for="`year`">{{ $t('library.year') }}:</label>
+            </div>
 
-        <div class="col-sm-4 mb-2">
-          <b-form-input id="year" v-model="library.year" type="number"></b-form-input>
-        </div>
-      </div>
+            <div class="col-sm-4 mb-2">
+              <b-form-input id="year" v-model="library.year" type="number"></b-form-input>
+            </div>
+          </div>
 
-      <!-- AUTHORS -->
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`author_txt`">{{ $t('library.author_txt') }}:</label>
-        </div>
+          <!-- AUTHORS -->
+          <div class="row">
+            <div class="col-sm-2">
+              <label :for="`author_txt`">{{ $t('library.author_txt') }}:</label>
+            </div>
 
-        <div class="col-sm-10 mb-2">
-          <b-form-input id="author_txt" v-model="library.author_txt" type="text"></b-form-input>
-        </div>
-      </div>
+            <div class="col-sm-10 mb-2">
+              <b-form-input id="author_txt" v-model="library.author_txt" type="text"></b-form-input>
+            </div>
+          </div>
 
-      <!-- TITLE -->
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`title`">{{ $t('library.title') }}:</label>
-        </div>
+          <!-- TITLE -->
+          <div class="row">
+            <div class="col-sm-2">
+              <label :for="`title`">{{ $t('library.title') }}:</label>
+            </div>
 
-        <div class="col-sm-10 mb-2">
-          <b-form-input id="title" v-model="library.title" type="text"></b-form-input>
-        </div>
-      </div>
+            <div class="col-sm-10 mb-2">
+              <b-form-input id="title" v-model="library.title" type="text"></b-form-input>
+            </div>
+          </div>
 
-      <!-- TITLE_EN -->
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`title_en`">{{ $t('library.title_en') }}:</label>
-        </div>
+          <!-- TITLE_EN -->
+          <div class="row">
+            <div class="col-sm-2">
+              <label :for="`title_en`">{{ $t('library.title_en') }}:</label>
+            </div>
 
-        <div class="col-sm-10 mb-2">
-          <b-form-input id="title_en" v-model="library.title_en" type="text"></b-form-input>
-        </div>
-      </div>
+            <div class="col-sm-10 mb-2">
+              <b-form-input id="title_en" v-model="library.title_en" type="text"></b-form-input>
+            </div>
+          </div>
 
-      <!-- KEYWORDS -->
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`keywords`">{{ $t('library.keywords') }}:</label>
-        </div>
+          <!-- KEYWORDS -->
+          <div class="row">
+            <div class="col-sm-2">
+              <label :for="`keywords`">{{ $t('library.keywords') }}:</label>
+            </div>
 
-        <div class="col-sm-10 mb-2">
-          <b-form-input id="keywords" v-model="library.keywords" type="text"></b-form-input>
-        </div>
-      </div>
+            <div class="col-sm-10 mb-2">
+              <b-form-input id="keywords" v-model="library.keywords" type="text"></b-form-input>
+            </div>
+          </div>
 
-      <!-- ABSTRACT -->
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`abstract`">{{ $t('library.abstract') }}:</label>
-        </div>
+          <!-- ABSTRACT -->
+          <div class="row">
+            <div class="col-sm-2">
+              <label :for="`abstract`">{{ $t('library.abstract') }}:</label>
+            </div>
 
-        <div class="col-sm-10 mb-2">
-<!--          <b-form-textarea id="abstract" v-model="library.abstract" type="text" size="sm"-->
-<!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
+            <div class="col-sm-10 mb-2">
+              <!--          <b-form-textarea id="abstract" v-model="library.abstract" type="text" size="sm"-->
+              <!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
 
-          <editor-menu-bar :editor="editorAbstract">
-            <div slot-scope="{ commands, isActive, getMarkAttrs }">
+              <editor-menu-bar :editor="editorAbstract">
+                <div slot-scope="{ commands, isActive, getMarkAttrs }">
 
-              <form class="mb-1" v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
-                <div class="row">
-                  <div class="col-9 pr-0">
-                    <input class="form-control form-control-sm" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu('editorAbstract')"/>
-                  </div>
+                  <form class="mb-1" v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
+                    <div class="row">
+                      <div class="col-9 pr-0">
+                        <input class="form-control form-control-sm" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu('editorAbstract')"/>
+                      </div>
 
-                  <span>
+                      <span>
                     <button class="btn btn-outline-success btn-sm ml-1 mr-1" @click="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
                       <font-awesome-icon icon="check" />
                     </button>
                   </span>
 
-                  <span>
+                      <span>
                     <button class="btn btn-outline-danger btn-sm" @click="setLinkUrl(commands.link, null, 'editorAbstract')">
                       <font-awesome-icon icon="times" />
                     </button>
                   </span>
+                    </div>
+                  </form>
+
+                  <button
+                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                    :class="{ 'active': isActive.bold() }"
+                    @click="commands.bold">
+                    <strong>Bold</strong>
+                  </button>
+
+                  <button
+                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                    :class="{ 'active': isActive.italic() }"
+                    @click="commands.italic">
+                    <strong><em>Italic</em></strong>
+                  </button>
+
+                  <button
+                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                    :class="{ 'active': isActive.link() }"
+                    @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstract')">
+                    <strong><u>Link</u></strong>
+                  </button>
+
                 </div>
-              </form>
+              </editor-menu-bar>
 
-              <button
-                class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                :class="{ 'active': isActive.bold() }"
-                @click="commands.bold">
-                <strong>Bold</strong>
-              </button>
-
-              <button
-                class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                :class="{ 'active': isActive.italic() }"
-                @click="commands.italic">
-                <strong><em>Italic</em></strong>
-              </button>
-
-              <button
-                class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                :class="{ 'active': isActive.link() }"
-                @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstract')">
-                <strong><u>Link</u></strong>
-              </button>
-
+              <editor-content class="editor editor-sm" :editor="editorAbstract" />
             </div>
-          </editor-menu-bar>
+          </div>
 
-          <editor-content class="editor editor-sm" :editor="editorAbstract" />
-        </div>
-      </div>
+          <!-- ABSTRACT_EN -->
+          <div class="row">
+            <div class="col-sm-2">
+              <label :for="`abstract_en`">{{ $t('library.abstract_en') }}:</label>
+            </div>
 
-      <!-- ABSTRACT_EN -->
-      <div class="row">
-        <div class="col-sm-2">
-          <label :for="`abstract_en`">{{ $t('library.abstract_en') }}:</label>
-        </div>
+            <div class="col-sm-10 mb-2">
+              <!--          <b-form-textarea id="abstract_en" v-model="library.abstract_en" type="text" size="sm"-->
+              <!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
 
-        <div class="col-sm-10 mb-2">
-<!--          <b-form-textarea id="abstract_en" v-model="library.abstract_en" type="text" size="sm"-->
-<!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
+              <editor-menu-bar :editor="editorAbstractEn">
+                <div slot-scope="{ commands, isActive, getMarkAttrs }">
 
-          <editor-menu-bar :editor="editorAbstractEn">
-            <div slot-scope="{ commands, isActive, getMarkAttrs }">
+                  <form class="mb-1" v-if="linkMenuIsActiveAbstractEn" @submit.prevent="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
+                    <div class="row">
+                      <div class="col-9 pr-0">
+                        <input class="form-control form-control-sm" type="text" v-model="linkUrlAbstractEn" placeholder="https://" ref="linkInputAbstractEn" @keydown.esc="hideLinkMenu('editorAbstractEn')"/>
+                      </div>
 
-              <form class="mb-1" v-if="linkMenuIsActiveAbstractEn" @submit.prevent="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
-                <div class="row">
-                  <div class="col-9 pr-0">
-                    <input class="form-control form-control-sm" type="text" v-model="linkUrlAbstractEn" placeholder="https://" ref="linkInputAbstractEn" @keydown.esc="hideLinkMenu('editorAbstractEn')"/>
-                  </div>
-
-                  <span>
+                      <span>
                     <button class="btn btn-outline-success btn-sm ml-1 mr-1" @click="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
                       <font-awesome-icon icon="check" />
                     </button>
                   </span>
 
-                  <span>
+                      <span>
                     <button class="btn btn-outline-danger btn-sm" @click="setLinkUrl(commands.link, null, 'editorAbstractEn')">
                       <font-awesome-icon icon="times" />
                     </button>
                   </span>
+                    </div>
+                  </form>
+
+                  <button
+                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                    :class="{ 'active': isActive.bold() }"
+                    @click="commands.bold">
+                    <strong>Bold</strong>
+                  </button>
+
+                  <button
+                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                    :class="{ 'active': isActive.italic() }"
+                    @click="commands.italic">
+                    <strong><em>Italic</em></strong>
+                  </button>
+
+                  <button
+                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                    :class="{ 'active': isActive.link() }"
+                    @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstractEn')">
+                    <strong><u>Link</u></strong>
+                  </button>
+
                 </div>
-              </form>
+              </editor-menu-bar>
 
-              <button
-                class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                :class="{ 'active': isActive.bold() }"
-                @click="commands.bold">
-                <strong>Bold</strong>
-              </button>
-
-              <button
-                class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                :class="{ 'active': isActive.italic() }"
-                @click="commands.italic">
-                <strong><em>Italic</em></strong>
-              </button>
-
-              <button
-                class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                :class="{ 'active': isActive.link() }"
-                @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstractEn')">
-                <strong><u>Link</u></strong>
-              </button>
-
+              <editor-content class="editor editor-sm" :editor="editorAbstractEn" />
             </div>
-          </editor-menu-bar>
+          </div>
 
-          <editor-content class="editor editor-sm" :editor="editorAbstractEn" />
         </div>
-      </div>
+      </transition>
 
     </fieldset>
 
     <!-- LIBRARY MEMBERS -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" style="font-size: large;">
+      <legend class="w-auto" @click="block.members = !block.members"
+              :style="!block.members ? {'color':'blue'} : ''">
         {{ $t('library.libraryAgent') }}
         <font-awesome-icon icon="user-friends"/>
       </legend>
-      <div class="row">
 
-        <!-- Prop: internal-search must be false otherwise it also filters by label -->
-        <div class="col-10 col-md-11">
-          <vue-multiselect v-model="relatedData.library_agent"
-                           id="library_agent"
-                           @search-change="autcompleteLibraryAgentSearch"
-                           :options="autocomplete.library_agent"
-                           :loading="autocomplete.loaders.library_agent"
-                           :multiple="true"
-                           track-by="id"
-                           label="agent"
-                           :internal-search="false"
-                           :preserve-search="true"
-                           :open-direction="'bottom'"
-                           :placeholder="$t('add.inputs.autocomplete')">
-            <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-          </vue-multiselect>
-        </div>
+      <transition name="fade">
+        <div v-if="block.members">
 
-        <div class="col-2 col-md-1 pl-0">
-          <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
-                  :disabled="!isDefinedAndNotEmpty(relatedData.library_agent)"
-                  @click="relatedData.library_agent = []">
-            <font-awesome-icon icon="trash-alt"></font-awesome-icon>
-          </button>
+          <div class="row">
+
+            <!-- Prop: internal-search must be false otherwise it also filters by label -->
+            <div class="col-10 col-md-11">
+              <vue-multiselect v-model="relatedData.library_agent"
+                               id="library_agent"
+                               @search-change="autcompleteLibraryAgentSearch"
+                               :options="autocomplete.library_agent"
+                               :loading="autocomplete.loaders.library_agent"
+                               :multiple="true"
+                               track-by="id"
+                               label="agent"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :open-direction="'bottom'"
+                               :placeholder="$t('add.inputs.autocomplete')">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-2 col-md-1 pl-0">
+              <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+                      :disabled="!isDefinedAndNotEmpty(relatedData.library_agent)"
+                      @click="relatedData.library_agent = []">
+                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+              </button>
+            </div>
+          </div>
+
         </div>
-      </div>
+      </transition>
+
     </fieldset>
 
     <!-- SHOWING RELATED_DATA -->
@@ -433,6 +449,7 @@
           linkMenuIsActive: false,
           linkUrlAbstractEn: null,
           linkMenuIsActiveAbstractEn: false,
+          block: {info: true, members: true}
         }
       },
 
