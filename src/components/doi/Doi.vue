@@ -59,6 +59,38 @@
             </div>
           </div>
 
+          <!-- TITLE ALTERNATIVE -->
+          <div class="row">
+            <div class="col-sm-12">
+              <label class="p-0" :for="`title_alternative`">{{ $t('doi.title_alternative') }}:</label>
+              <b-form-input id="title_alternative" v-model="doi.title_alternative" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- TITLE TRANSLATED and TITLE TRANSLATED LANGUAGE -->
+          <div class="row">
+            <div class="col-md-6">
+              <label class="p-0" :for="`title_translated`">{{ $t('doi.title_translated') }}:</label>
+              <b-form-input id="title_translated" v-model="doi.title_translated" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6">
+              <label class="p-0" :for="`title_translated_language`">{{ $t('doi.title_translated_language') }}:</label>
+              <vue-multiselect v-model="doi.title_translated_language"
+                               id="title_translated_language"
+                               :options="autocomplete.language"
+                               track-by="id"
+                               :label="commonLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+          </div>
+
           <!-- CREATORS -->
           <div class="row">
             <div class="col-sm-12">
@@ -462,9 +494,10 @@
           tabs: [],
           searchHistory: 'doiSearchHistory',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'abstract',
-            'resource_type', 'resource', 'methods', 'version', 'sizes', 'formats', 'language', 'subjects',
-            'copyright_agent', 'licence', 'date_added', 'date_changed', 'remarks', 'owner'],
+          copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'title_alternative',
+            'title_translated', 'title_translated_language', 'abstract', 'resource_type', 'resource', 'methods',
+            'version', 'sizes', 'formats', 'language', 'subjects', 'copyright_agent', 'licence', 'date_added',
+            'date_changed', 'remarks', 'owner'],
           autocomplete: {
             loaders: {
               resource_type: false,
@@ -502,15 +535,15 @@
         // fetching autocompletes
         fetchDoiResourceType().then(response => {
           this.autocomplete.resource_type = this.handleResponse(response);
-        })
+        });
 
         fetchListLanguages().then(response => {
           this.autocomplete.language = this.handleResponse(response)
-        })
+        });
 
         fetchListLicences().then(response => {
           this.autocomplete.licence = this.handleResponse(response)
-        })
+        });
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
@@ -560,6 +593,7 @@
 
         // Autocomplete fields
         if (this.isDefinedAndNotNull(objectToUpload.resource_type)) uploadableObject.resource_type = objectToUpload.resource_type.id
+        if (this.isDefinedAndNotNull(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id
         if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
         if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
         if (this.isDefinedAndNotNull(objectToUpload.copyright_agent)) uploadableObject.copyright_agent = objectToUpload.copyright_agent.id
@@ -579,6 +613,7 @@
 
       fillAutocompleteFields(obj) {
         this.doi.resource_type = { id: obj.resource_type, value: obj.resource_type__value }
+        this.doi.title_translated_language = { id: obj.title_translated_language, value: obj.title_translated_language__value, value_en: obj.title_translated_language__value_en }
         this.doi.owner = { id: obj.owner, agent: obj.owner__agent }
         this.doi.language = { id: obj.language, value: obj.language__value, value_en: obj.language__value_en}
         this.doi.copyright_agent = { id: obj.copyright_agent, agent: obj.copyright_agent__agent }
@@ -624,7 +659,7 @@
           return;
         }
 
-        // Dataset and Reference are direct links and do not need extra request. 
+        // Dataset and Reference are direct links and do not need extra request.
         if (object !== 'dataset' && 'reference') {
           return new Promise(resolve => {
             query.then(response => {
