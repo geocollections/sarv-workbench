@@ -553,6 +553,7 @@
       },
 
       fillRelatedDataAutocompleteFields(obj) {
+        console.log(obj)
         obj.reference = {reference: obj.reference__reference, id: obj.reference}
         // obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
         return obj

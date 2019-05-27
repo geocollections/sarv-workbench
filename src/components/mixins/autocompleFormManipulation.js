@@ -114,6 +114,9 @@ const autocompleteFieldManipulation = {
         case 'dataset':
           query += `dataset/?multi_search=value:${val};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
           break;
+        case 'doi_agent':
+          query += `doi_agent/?multi_search=value:${val};fields:name,agent__agent,agent__forename,agent__surename;lookuptype:icontains&fields=id,name,affiliation,agent_type,agent_type__value,agent`;
+          break;
         default:
           break;
       }
@@ -214,6 +217,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteDatasetSearch(value) {
       this.autocompliteSearch(value, 'dataset', 'dataset', 1, false)
+    },
+    autcompleteDoiAgentSearch(value) {
+      this.autocompliteSearch(value, 'doi_agent', 'doi_agent', 3, false)
     },
     autocompliteSearch(value, type, options, minLength = 3, resetIfLessThanMinLength = true) {
       if (value.length < minLength) {

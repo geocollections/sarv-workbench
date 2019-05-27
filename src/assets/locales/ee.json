@@ -576,7 +576,13 @@
     "datacite": "Datacite",
     "dataciteCreated": "Datacite reg.",
     "dataciteUpdated": "Datacite uuendatud",
-    "name": "Nimi"
+    "name": "Nimi",
+    "affiliation": "Kuuluvus",
+    "agent_type": "Kasutaja tüüp",
+    "agent": "Kasutaja andmebaasis",
+    "relatedTables": {
+      "doi_agent": "Seotud inimesed ja institutsioonid"
+    }
   },
   "locality": {
     "header": "Minu lokaliteedid",

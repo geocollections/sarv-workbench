@@ -574,7 +574,13 @@
     "datacite": "Datacite",
     "dataciteCreated": "Datacite reg.",
     "dataciteUpdated": "Datacite updated",
-    "name": "Name"
+    "name": "Name",
+    "affiliation": "Affiliation",
+    "agent_type": "Agent type",
+    "agent": "Agent in database",
+    "relatedTables": {
+      "doi_agent": "Related persons and institutions"
+    }
   },
   "locality": {
     "header": "My localities",

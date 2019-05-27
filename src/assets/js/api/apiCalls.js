@@ -531,6 +531,14 @@ export function fetchDoiAttachment(id,page=1) {
   return fetch(`attachment/?attach_link__doi__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`)
 }
 
+export function fetchDoiAgent(id, page, paginateBy = 25) {
+  return fetch(`doi_agent/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+}
+
+export function fetchDoiAgentType(id) {
+  return fetch(`doi_agent_type/?format=json`)
+}
+
 /*****************
  ***  DOI END  ***
  *****************/

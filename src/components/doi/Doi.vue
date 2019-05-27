@@ -422,6 +422,50 @@
       </transition>
     </fieldset>
 
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row">
+      <div class="col mt-2">
+        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('doi_agent')" class="nav-link"
+               :class="{ active: activeTab === 'doi_agent' }">
+              {{ $t('doi.relatedTables.doi_agent') }} <font-awesome-icon icon="user-friends"/>
+            </a>
+          </li>
+
+        <!-- TODO: Add files to tabs? -->
+        </ul>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
+            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+            </b-form-select>
+          </div>
+
+          <div class="col-sm-12 col-md-3 export-center">
+            <!-- EXPORT BUTTON? -->
+          </div>
+
+          <div class="col-sm-12 col-md-6 pagination-center"
+               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
+              v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
+            </b-pagination>
+          </div>
+        </div>
+
+        <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+      </div>
+    </div>
+
     <!-- IS PRIVATE -->
     <div class="row mt-3">
       <div class="col">
@@ -464,18 +508,23 @@
   import autocompleteFieldManipulation from "../mixins/autocompleFormManipulation";
   import cloneDeep from 'lodash/cloneDeep'
   import {
+    fetchDois,
     fetchDoi,
     fetchDoiResourceType,
     fetchListLanguages,
     fetchListLicences,
-    fetchDoiAttachment
+    fetchDoiAttachment,
+    fetchDoiAgent,
+    fetchDoiAgentType
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import FileTable from "../partial/FileTable";
+  import DoiAgent from "./relatedTables/DoiAgent";
 
   export default {
     components: {
+      DoiAgent,
       Datepicker,
       VueMultiselect,
       Spinner,
@@ -503,6 +552,18 @@
         },
         deep: true
       },
+      'relatedData.paginateBy': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      },
+      'relatedData.page': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      },
     },
 
     methods: {
@@ -512,8 +573,9 @@
 
       setInitialData() {
         return {
-          tabs: [],
+          tabs:['doi_agent'],
           searchHistory: 'doiSearchHistory',
+          activeTab: 'doi_agent',
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'title_alternative',
             'title_translated', 'title_translated_language', 'abstract', 'resource_type', 'resource', 'methods',
@@ -528,6 +590,8 @@
               licence: false,
               reference: false,
               dataset: false,
+              doi_agent_type: false,
+              doi_agent: false,
             },
             resource_type: [],
             agent: [],
@@ -536,6 +600,8 @@
             licence: [],
             reference: [],
             dataset: [],
+            doi_agent_type: [],
+            doi_agent: [],
           },
           requiredFields: ['publication_year', 'resource_type', 'title'],
           doi: {},
@@ -591,7 +657,29 @@
               this.sendingData = false;
             }
           });
+
+          fetchDoiAgentType(this.$route.params.id).then(response => {
+            this.autocomplete.doi_agent_type = this.handleResponse(response)
+          })
+
+          // Load Related Data which is not in tabs
           this.loadRelatedData('attachment_link');
+
+          // Load Related Data which is in tabs
+          this.tabs.forEach(entity => {
+            this.loadRelatedData(entity);
+          });
+
+          this.$on('tab-changed', this.setTab);
+
+          this.$on('related-data-modified', this.editRelatedData);
+          this.$on('related-data-added', this.addRelatedData);
+          this.$on('edit-row', this.editRow);
+          this.$on('allow-remove-row', this.allowRemove);
+
+          this.$emit('related-data-info', this.tabs);
+
+          this.setActiveTab('doi_agent')
         }
       },
 
@@ -600,16 +688,28 @@
           reference: null,
           dataset: null,
           attachment_link: [],
+          doi_agent: [],
           new: {
             attachment_link: []
           },
+          copyFields: {
+            doi_agent: ['name', 'affiliation', 'agent_type', 'agent'],
+          },
+          insert: {
+            doi_agent: {}
+          },
           page: {
-            attachment_link: 1
+            attachment_link: 1,
+            doi_agent: 1,
+          },
+          paginateBy: {
+            doi_agent: 10,
           },
           count: {
             reference: 0,
             dataset: 0,
             attachment_link: 0,
+            doi_agent: 0
           }
         }
       },
@@ -655,11 +755,21 @@
       },
 
       fillRelatedDataAutocompleteFields(obj, type) {
+        console.log(obj)
         if (obj === undefined) return;
+
+        // This goes for related data in tabs
+        if (type === undefined) {
+          obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
+          obj.agent = { id: obj.agent, name: obj.name }
+
+          return obj;
+        }
+
         let relatedData = cloneDeep(obj)
         obj = [];
         relatedData.forEach(entity => {
-          if (type === 'attachment_link') obj.push(entity)
+          if (type === 'attachment_link' || 'doi_agent') obj.push(entity)
         });
         return obj
       },
@@ -676,7 +786,6 @@
           this.setBlockVisibility(object, this.relatedData.count[object])
           return;
         } else if (object === 'dataset' && doi !== null && doi.dataset !== null && doi.dataset.id !== null) {
-          console.log(doi.dataset)
           this.relatedData.count[object] = 1;
           this.relatedData[object] = {
             id: doi.dataset__id,
@@ -687,6 +796,8 @@
           return;
         } else if (object === 'attachment_link') {
           query = fetchDoiAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+        } else if (object === 'doi_agent') {
+          query = fetchDoiAgent(this.$route.params.id, this.relatedData.page.doi_agent, this.relatedData.paginateBy.doi_agent)
         }
 
         // Dataset and Reference are direct links and do not need extra request.
@@ -718,11 +829,13 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.doi = this.doi.id;
 
-        if (this.isDefinedAndNotNull(uploadableObject.reference)) {
-          uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
+        // DOI AGENT FIELDS
+        console.log(uploadableObject)
+        if (this.isDefinedAndNotNull(uploadableObject.agent_type)) {
+          uploadableObject.agent_type = uploadableObject.agent_type.id ? uploadableObject.agent_type.id : uploadableObject.agent_type;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.dataset)) {
-          uploadableObject.dataset = uploadableObject.dataset.id ? uploadableObject.dataset.id : uploadableObject.dataset;
+        if (this.isDefinedAndNotNull(uploadableObject.agent)) {
+          uploadableObject.agent = uploadableObject.agent.id ? uploadableObject.agent.id : uploadableObject.agent;
         }
 
         console.log('This object is sent in string format (related_data):')
@@ -733,7 +846,7 @@
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
-          resolve(fetchProjects(params))
+          resolve(fetchDois(params))
         });
       },
 
