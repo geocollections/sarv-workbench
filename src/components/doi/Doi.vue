@@ -381,6 +381,20 @@
       </transition>
     </fieldset>
 
+    <!-- FILES -->
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && doi.id" ref="files">
+      <legend class="w-auto" @click="block.files = !block.files" :style="!block.files ? {'color':'blue'} : ''">Files
+        <font-awesome-icon icon="folder-open"/>
+      </legend>
+      <transition name="fade">
+        <div v-if="block.files">
+          <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="true"/>
+          <file-table :attachments="relatedData.attachment_link" :object="'doi'"
+                      v-if="relatedData.attachment_link.length > 0"/>
+        </div>
+      </transition>
+    </fieldset>
+
     <!-- TODO: DATACITE CREATED and UPDATED -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
       <legend class="w-auto" @click="block.datacite = !block.datacite"
@@ -453,14 +467,21 @@
     fetchDoi,
     fetchDoiResourceType,
     fetchListLanguages,
-    fetchListLicences
+    fetchListLicences,
+    fetchDoiAttachment
   } from "../../assets/js/api/apiCalls";
+  import FileInputComponent from "../partial/MultimediaComponent";
+  import MultimediaComponent from "../partial/MultimediaComponent";
+  import FileTable from "../partial/FileTable";
 
   export default {
     components: {
       Datepicker,
       VueMultiselect,
       Spinner,
+      FileInputComponent,
+      MultimediaComponent,
+      FileTable
     },
 
     mixins: [formManipulation, autocompleteFieldManipulation],
@@ -522,7 +543,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
-          block: {info: true, description: true, reference: false, dataset: false, datacite: true}
+          block: {info: true, description: true, reference: false, dataset: false, files: false, datacite: true}
         }
       },
 
@@ -570,8 +591,7 @@
               this.sendingData = false;
             }
           });
-          // this.loadRelatedData('reference');
-          // this.loadRelatedData('dataset');
+          this.loadRelatedData('attachment_link');
         }
       },
 
@@ -579,14 +599,22 @@
         return {
           reference: null,
           dataset: null,
+          attachment_link: [],
+          new: {
+            attachment_link: []
+          },
+          page: {
+            attachment_link: 1
+          },
           count: {
             reference: 0,
             dataset: 0,
+            attachment_link: 0,
           }
         }
       },
 
-      formatDataForUpload(objectToUpload) {
+      formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload)
         // if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
@@ -602,9 +630,10 @@
         if (this.isDefinedAndNotNull(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
 
         // Adding related data
-        uploadableObject.related_data = {}
-        // uploadableObject.reference = this.relatedData.reference
-        // uploadableObject.dataset = this.relatedData.dataset
+        if (saveRelatedData) {
+          uploadableObject.related_data = {}
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link
+        }
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -625,20 +654,19 @@
         this.doi.dataset = { id: obj.dataset, name: obj.dataset__name, name_en: obj.dataset__name_en}
       },
 
-      // fillRelatedDataAutocompleteFields(obj, type) {
-      //   let relatedData = cloneDeep(obj)
-      //   obj = [];
-      //   relatedData.forEach(entity => {
-      //     if (type === 'projectagent') obj.push({
-      //       agent: entity.projectagent__agent__agent,
-      //       id: entity.projectagent__agent
-      //     })
-      //     else obj.push(entity)
-      //   });
-      //   return obj
-      // },
+      fillRelatedDataAutocompleteFields(obj, type) {
+        if (obj === undefined) return;
+        let relatedData = cloneDeep(obj)
+        obj = [];
+        relatedData.forEach(entity => {
+          if (type === 'attachment_link') obj.push(entity)
+        });
+        return obj
+      },
 
       loadRelatedData(object, doi = null) {
+        let query;
+
         if (object === 'reference' && doi !== null && doi.reference !== null && doi.reference.id !== null) {
           this.relatedData.count[object] = 1;
           this.relatedData[object] = {
@@ -657,14 +685,20 @@
           }
           this.setBlockVisibility(object, this.relatedData.count[object])
           return;
+        } else if (object === 'attachment_link') {
+          query = fetchDoiAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
         }
 
         // Dataset and Reference are direct links and do not need extra request.
         if (object !== 'dataset' && 'reference') {
           return new Promise(resolve => {
             query.then(response => {
-              this.relatedData[object] = this.handleResponse(response);
+              if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results : [];
+
               this.relatedData.count[object] = response.body.count;
+              this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
+              this.setBlockVisibility(object, this.relatedData.count[object])
+
               resolve(true)
             });
           });
@@ -674,6 +708,7 @@
       setBlockVisibility(object,count){
         if(object === 'reference') this.block.reference = count > 0
         if(object === 'dataset') this.block.dataset = count > 0
+        if(object === 'attachment_link') this.block.files = count > 0
       },
 
       //check required fields for related data
@@ -721,6 +756,20 @@
           paginateBy: 50,
           orderBy: '-id',
         }
+      },
+
+      addFiles(data){
+        this.addFileAsRelatedData(data, 'doi');
+      },
+
+      addRelatedDataAttachment(option) {
+        if (typeof this.relatedData.attachment_link === 'undefined') this.relatedData.attachment_link = [];
+        this.relatedData.attachment_link.push(option)
+      },
+
+      removeAttachmentRelation(idx) {
+        this.relatedData.attachment_link.splice(idx, 1);
+        this.add(true, 'doi', true);
       },
     }
 
