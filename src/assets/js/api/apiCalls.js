@@ -146,7 +146,7 @@ export function fetchReferences(data) {
     searchFields += '&multi_search=value:' + data.libraryAuthor + ';fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt;lookuptype:icontains&distinct=true'
   }
   if (data.libraryIdTitle !== null && data.libraryIdTitle.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.libraryIdTitle + ';fields:libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.libraryIdTitle + ';fields:libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains&distinct=true'
   }
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 

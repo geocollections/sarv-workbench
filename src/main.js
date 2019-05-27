@@ -99,7 +99,8 @@ Vue.http.interceptors.push((request, next) => {
             position: 'bottomRight',
             timeout: 5000,
             closeOnEscape: true,
-            pauseOnHover: false
+            pauseOnHover: false,
+            displayMode: 'replace'
           })
           router.push({path: '/'})
         }
@@ -108,7 +109,8 @@ Vue.http.interceptors.push((request, next) => {
           Vue.prototype.$toast.error(res.body.link_error, 'Error', {
             position: 'bottomRight',
             timeout: 99999999999,
-            pauseOnHover: false
+            pauseOnHover: false,
+            displayMode: 'replace'
           })
         }
       }

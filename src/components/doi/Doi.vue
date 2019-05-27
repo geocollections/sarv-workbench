@@ -755,7 +755,6 @@
       },
 
       fillRelatedDataAutocompleteFields(obj, type) {
-        console.log(obj)
         if (obj === undefined) return;
 
         // This goes for related data in tabs

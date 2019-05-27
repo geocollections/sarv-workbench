@@ -20,7 +20,7 @@
       <div class="col-12">
         <h4>{{ $t('frontPage.collapseFindFast') }}:</h4>
       </div>
-      
+
       <div class="col-6">
         <b-card class="p-3 border border-warning larger">
         <!-- FILES -->
@@ -28,11 +28,11 @@
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('frontPage.buttons.myFiles') }} </router-link>
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/photo_archive' }">{{ $t('frontPage.buttons.photoArchive') }} </router-link>
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/specimen_image' }">{{ $t('frontPage.buttons.specimenImage') }} </router-link>
-          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('frontPage.buttons.otherFiles') }} </router-link> 
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('frontPage.buttons.otherFiles') }} </router-link>
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/attachment/add/digitised_reference' }">{{ $t('frontPage.buttons.digitisedReference') }} </router-link>
           <br />
         </div>
-        
+
         <!-- REFERENCE -->
         <div v-if="permissions.reference" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/reference' }">{{ $t('frontPage.buttons.myReferences') }} </router-link>
@@ -41,7 +41,7 @@
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/library/add' }">{{ $t('frontPage.buttons.library') }} </router-link>
           <br />
         </div>
-        
+
         <div v-if="permissions.doi" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/doi' }"> DOI </router-link>
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/doi/add' }">Add DOI </router-link>
@@ -58,7 +58,7 @@
           <span v-if="activeSite>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/site/' + activeSite }">Last visited site: {{ activeSite }}</router-link></span>
           <br />
         </div>
-        
+
         <!-- LOCALITY -->
         <div v-if="permissions.locality" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/locality' }">{{ $t('frontPage.buttons.localities') }} </router-link>
@@ -75,7 +75,7 @@
         </div>
         </b-card>
       </div>
-      
+
     </div>
     <br />
 
