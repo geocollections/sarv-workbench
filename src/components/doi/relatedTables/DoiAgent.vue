@@ -3,14 +3,6 @@
     <div class="col-sm-12" v-if="activeTab === 'doi_agent'">
       <div class="table-responsive-sm">
 
-        {{  relatedData.insert.doi_agent.name  }}
-        <br>
-        {{  relatedData.insert.doi_agent.affiliation  }}
-        <br>
-        {{  relatedData.insert.doi_agent.agent_type  }}
-        <br>
-        {{  relatedData.insert.doi_agent.agent  }}
-
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
