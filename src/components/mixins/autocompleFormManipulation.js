@@ -209,6 +209,9 @@ const autocompleteFieldManipulation = {
     autcompleteLibrarySearch(value) {
       this.autocompliteSearch(value, 'library', 'library', 1, false)
     },
+    autcompleteDoiReferenceSearch(value) {
+      this.autocompliteSearch(value, 'reference', 'reference', 3, false)
+    },
     autcompleteDatasetSearch(value) {
       this.autocompliteSearch(value, 'dataset', 'dataset', 1, false)
     },

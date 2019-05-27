@@ -223,7 +223,7 @@
                                :internal-search="false"
                                :preserve-search="true"
                                :close-on-select="true"
-                               @search-change="autcompleteReferenceSearch"
+                               @search-change="autcompleteDoiReferenceSearch"
                                :custom-label="customLabelForReference"
                                :loading="autocomplete.loaders.reference"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -604,18 +604,19 @@
       // },
 
       loadRelatedData(object, doi = null) {
-        if (object === 'reference' && doi !== null && doi.reference !== null) {
+        if (object === 'reference' && doi !== null && doi.reference !== null && doi.reference.id !== null) {
           this.relatedData.count[object] = 1;
           this.relatedData[object] = {
-            id: doi.reference,
+            id: doi.reference__id,
             reference: doi.reference__reference
           }
           this.setBlockVisibility(object, this.relatedData.count[object])
           return;
-        } else if (object === 'dataset' && doi !== null && doi.dataset !== null) {
+        } else if (object === 'dataset' && doi !== null && doi.dataset !== null && doi.dataset.id !== null) {
+          console.log(doi.dataset)
           this.relatedData.count[object] = 1;
           this.relatedData[object] = {
-            id: doi.dataset,
+            id: doi.dataset__id,
             name: doi.dataset__name,
             name_en: doi.dataset__name_en
           }
@@ -623,13 +624,16 @@
           return;
         }
 
-        return new Promise(resolve => {
-          query.then(response => {
-            this.relatedData[object] = this.handleResponse(response);
-            this.relatedData.count[object] = response.body.count;
-            resolve(true)
+        // Dataset and Reference are direct links and do not need extra request. 
+        if (object !== 'dataset' && 'reference') {
+          return new Promise(resolve => {
+            query.then(response => {
+              this.relatedData[object] = this.handleResponse(response);
+              this.relatedData.count[object] = response.body.count;
+              resolve(true)
+            });
           });
-        });
+        }
       },
 
       setBlockVisibility(object,count){
