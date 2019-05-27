@@ -483,7 +483,7 @@
             reference: [],
             dataset: [],
           },
-          requiredFields: ['identifier'],
+          requiredFields: ['identifier', 'publication_year', 'resource_type', 'title'],
           doi: {},
           previousRecord: {},
           nextRecord: {},
@@ -564,11 +564,13 @@
         if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
         if (this.isDefinedAndNotNull(objectToUpload.copyright_agent)) uploadableObject.copyright_agent = objectToUpload.copyright_agent.id
         if (this.isDefinedAndNotNull(objectToUpload.licence)) uploadableObject.licence = objectToUpload.licence.id
+        if (this.isDefinedAndNotNull(this.relatedData.reference)) uploadableObject.reference = this.relatedData.reference.id
+        if (this.isDefinedAndNotNull(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
 
         // Adding related data
         uploadableObject.related_data = {}
-        uploadableObject.related_data.reference = this.relatedData.reference
-        uploadableObject.related_data.dataset = this.relatedData.dataset
+        // uploadableObject.reference = this.relatedData.reference
+        // uploadableObject.dataset = this.relatedData.dataset
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -583,8 +585,9 @@
         this.doi.licence = { id: obj.licence, licence: obj.licence__licence, licence_en: obj.licence__licence_en}
 
         // Filling related data, doing it here because there is only 1 reference and 1 dataset
-        this.relatedData.reference = { id: obj.reference, reference: obj.reference__reference }
-        this.relatedData.dataset = { id: obj.dataset, name: obj.dataset__name, name_en: obj.dataset__name_en}
+        // Reference and Dataset are direct links and should be added without relatedData object.
+        this.doi.reference = { id: obj.reference, reference: obj.reference__reference }
+        this.doi.dataset = { id: obj.dataset, name: obj.dataset__name, name_en: obj.dataset__name_en}
       },
 
       // fillRelatedDataAutocompleteFields(obj, type) {
