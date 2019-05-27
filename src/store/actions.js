@@ -21,6 +21,7 @@ export default {
     return fetchReferences(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
 
+  // TODO: Following 3 requests should be fixed, currently they run after each page refresh
   FETCH_ANALYSIS_METHODS: ({ commit, state }) => {
     return state.analysisMethods !== null
       ? Promise.resolve(state.analysisMethods)
