@@ -15,18 +15,18 @@
 
           <!-- DOI, YEAR and RESOURCE TYPE -->
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-4" v-if="$route.meta.isEdit">
               <label class="p-0" :for="`identifier`">{{ $t('doi.identifier') }}:</label>
-              <b-form-input id="identifier" v-model="doi.identifier" type="text"></b-form-input>
+              <b-form-input id="identifier" v-model="doi.identifier" type="text" :disabled="$route.meta.isEdit"></b-form-input>
             </div>
 
-            <div class="col-md-4">
+            <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
               <label class="p-0" :for="`publication_year`">{{ $t('doi.year') }}:</label>
               <b-form-input id="publication_year" v-model="doi.publication_year" type="number"></b-form-input>
             </div>
 
 
-            <div class="col-md-4">
+            <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
               <label class="p-0" :for="`resource_type`">{{ $t('doi.resourceTypeGeneral') }}:</label>
               <vue-multiselect v-model="doi.resource_type"
                                id="resource_type"
@@ -516,7 +516,7 @@
             reference: [],
             dataset: [],
           },
-          requiredFields: ['identifier', 'publication_year', 'resource_type', 'title'],
+          requiredFields: ['publication_year', 'resource_type', 'title'],
           doi: {},
           previousRecord: {},
           nextRecord: {},

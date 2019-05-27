@@ -460,6 +460,8 @@
           uploadableObject.related_data.attachment = this.relatedData.attachment_link
         }
 
+        console.log('This object is sent in string format:')
+        console.log(uploadableObject)
         return JSON.stringify(uploadableObject)
       },
       fillAutocompleteFields(obj) {
