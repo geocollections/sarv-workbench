@@ -535,8 +535,28 @@ export function fetchDoiAgent(id, page, paginateBy = 25) {
   return fetch(`doi_agent/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
 }
 
-export function fetchDoiAgentType(id) {
+export function fetchDoiAgentType() {
   return fetch(`doi_agent_type/?format=json`)
+}
+
+export function fetchDoiRelatedIdentifier(id, page, paginateBy = 25) {
+  return fetch(`doi_related_identifier/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+}
+
+export function fetchDoiGeolocation(id, page, paginateBy = 25) {
+  return fetch(`doi_geolocation/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+}
+
+export function fetchDoiDate(id, page, paginateBy = 25) {
+  return fetch(`doi_date/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+}
+
+export function fetchDoiRelatedIdentifierType() {
+  return fetch(`doi_related_identifier_type/?format=json`)
+}
+
+export function fetchDoiRelationType() {
+  return fetch(`doi_relation_type/?format=json`)
 }
 
 /*****************

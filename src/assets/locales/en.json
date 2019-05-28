@@ -582,9 +582,21 @@
     "affiliation": "Affiliation",
     "agent_type": "Agent type",
     "agent": "Agent in database",
+    "relatedType": "Relation type",
+    "identifierType": "Ident. type",
+    "value": "Value",
+    "point": "Point (lat long)",
+    "box": "Bounding box (lat long lat long)",
+    "place": "Place name",
+    "locality": "Locality from database",
+    "primaryRefAndDat": "Reference and Dataset",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
-      "files": "Files"
+      "files": "Files",
+      "doi_related_identifier": "Related identifiers",
+      "doi_geolocation": "Localities",
+      "doi_date": "Linked dates",
+      "attachment_link": ""
     }
   },
   "locality": {

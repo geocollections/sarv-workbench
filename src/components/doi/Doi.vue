@@ -233,19 +233,20 @@
       </transition>
     </fieldset>
 
-    <!-- REFERENCE -->
+    <!-- REFERENCE and DATASET -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.reference = !block.reference"
-              :style="!block.reference ? {'color':'blue'} : ''">
-        {{ $t('doi.primaryReference') }}
+      <legend class="w-auto" @click="block.referenceAndDataset = !block.referenceAndDataset"
+              :style="!block.referenceAndDataset ? {'color':'blue'} : ''">
+        {{ $t('doi.primaryRefAndDat') }}
         <font-awesome-icon icon="book"/>
       </legend>
 
       <transition name="fade">
-        <div v-if="block.reference">
+        <div v-if="block.referenceAndDataset">
 
           <div class="row">
-            <div class="col-sm-12 mb-2">
+            <!-- REFERENCE -->
+            <div class="col-sm-10 col-md-4 mb-2">
 <!--              <label :for="`reference`">{{ $t('doi.reference') }}:</label>-->
               <vue-multiselect v-model="relatedData.reference"
                                id="reference"
@@ -259,59 +260,31 @@
                                :custom-label="customLabelForReference"
                                :loading="autocomplete.loaders.reference"
                                :placeholder="$t('add.inputs.autocomplete')"
+                               placeholder="reference search..."
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.id + ' - (' + option.reference + ')' }}</strong>
+                  <strong>{{ option.id + ' - (' + option.reference + ')' }} </strong>
+                  <!-- TODO: How can I put links here, so they would work -->
+<!--                  <a href="" @click.prevent="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)">-->
+<!--                    <font-awesome-icon icon="link"  style=""/>-->
+<!--                  </a>-->
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
-          </div>
 
-          <div class="row" v-if="relatedData.reference !== null">
-            <div class="table-responsive-sm col-12">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                <tr>
-                  <th>ID</th>
-                  <th>{{ $t('doi.reference') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td @click="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)" class="link">
-                    <font-awesome-icon size="1x" icon="eye" color="blue"/>
-                    {{ relatedData.reference.id }}
-                  </td>
-
-                  <td>{{ relatedData.reference.reference }}</td>
-                </tr>
-                </tbody>
-              </table>
+            <div class="col-sm-2 mb-2" v-if="relatedData.reference !== null">
+              <vs-button radius @click="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)"
+                         color="primary" type="line" icon="link"></vs-button>
             </div>
-          </div>
 
-        </div>
-      </transition>
-    </fieldset>
-
-    <!-- DATASET -->
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.dataset = !block.dataset"
-              :style="!block.dataset ? {'color':'blue'} : ''">
-        {{ $t('doi.primaryDataset') }}
-        <font-awesome-icon icon="database"/>
-      </legend>
-
-      <transition name="fade">
-        <div v-if="block.dataset">
-
-          <div class="row">
-            <div class="col-sm-12 mb-2">
+            <!-- DATASET -->
+            <div class="col-sm-10 col-md-4 mb-2">
 <!--              <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>-->
               <vue-multiselect v-model="relatedData.dataset"
                                id="dataset"
                                :multiple="false"
+                               label="name"
                                track-by="id"
                                :options="autocomplete.dataset"
                                :internal-search="false"
@@ -321,37 +294,24 @@
                                :custom-label="customLabelForDataset"
                                :loading="autocomplete.loaders.dataset"
                                :placeholder="$t('add.inputs.autocomplete')"
+                               placeholder="dataset search..."
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.id }} - (</strong>
                   <strong v-translate="{ et: option.name, en: option.name_en }"></strong>
-                  <strong>)</strong>
+                  <strong>) </strong>
+                  <!-- TODO: How can I put links here, so they would work -->
+<!--                  <a href="" @click.prevent="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})">-->
+<!--                    <font-awesome-icon icon="eye"  style="" class="link"/>-->
+<!--                  </a>-->
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
-          </div>
 
-          <div class="row" v-if="relatedData.dataset !== null">
-            <div class="table-responsive-sm col-12">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                <tr>
-                  <th>ID</th>
-                  <th>{{ $t('doi.name') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td @click="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})" class="link">
-                    <font-awesome-icon size="1x" icon="eye" color="blue"/>
-                    {{ relatedData.dataset.id }}
-                  </td>
-
-                  <td v-translate="{et: relatedData.dataset.name, en: relatedData.dataset.name_en}"></td>
-                </tr>
-                </tbody>
-              </table>
+            <div class="col-sm-2 mb-2" v-if="relatedData.dataset !== null">
+              <vs-button radius @click="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})"
+                         color="primary" type="line" icon="remove_red_eye"></vs-button>
             </div>
           </div>
 
@@ -381,51 +341,31 @@
       </transition>
     </fieldset>
 
-    <!-- FILES -->
-<!--    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && doi.id" ref="files">-->
-<!--      <legend class="w-auto" @click="block.files = !block.files" :style="!block.files ? {'color':'blue'} : ''">Files-->
-<!--        <font-awesome-icon icon="folder-open"/>-->
-<!--      </legend>-->
-<!--      <transition name="fade">-->
-<!--        <div v-if="block.files">-->
-<!--          <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="true"/>-->
-<!--          <file-table :attachments="relatedData.attachment_link" :object="'doi'"-->
-<!--                      v-if="relatedData.attachment_link.length > 0"/>-->
-<!--        </div>-->
-<!--      </transition>-->
-<!--    </fieldset>-->
-
-    <!-- TODO: DATACITE CREATED and UPDATED -->
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
-      <legend class="w-auto" @click="block.datacite = !block.datacite"
-              :style="!block.datacite ? {'color':'blue'} : ''">
-        {{ $t('doi.datacite') }}
-        <font-awesome-icon icon="sitemap"/>
-      </legend>
-
-      <transition name="fade">
-        <div v-if="block.datacite">
-
-          <div class="row">
-            <div class="col-md-6 mb-2">
-              <label :for="`dataset_created`">{{ $t('doi.dataciteCreated') }}:</label>
-              TODO: Dataset created input
-            </div>
-
-            <div class="col-md-6 mb-2">
-              <label :for="`dataset_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
-              TODO: Dataset updated input
-            </div>
-          </div>
-
-        </div>
-      </transition>
-    </fieldset>
-
     <!-- SHOWING RELATED_DATA -->
-    <div class="row">
+    <div class="row mb-2">
       <div class="col mt-2">
         <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
+               :class="{ active: activeTab === 'attachment_link' }">
+              {{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('doi_related_identifier')" class="nav-link"
+               :class="{ active: activeTab === 'doi_related_identifier' }">
+              {{ $t('doi.relatedTables.doi_related_identifier') }} <font-awesome-icon icon="project-diagram"/>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('doi_geolocation')" class="nav-link"
+               :class="{ active: activeTab === 'doi_geolocation' }">
+              {{ $t('doi.relatedTables.doi_geolocation') }} <font-awesome-icon icon="globe-americas"/>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('doi_agent')" class="nav-link"
                :class="{ active: activeTab === 'doi_agent' }">
@@ -434,9 +374,9 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
-               :class="{ active: activeTab === 'attachment_link' }">
-              {{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>
+            <a href="#" v-on:click.prevent="setActiveTab('doi_date')" class="nav-link"
+               :class="{ active: activeTab === 'doi_date' }">
+              {{ $t('doi.relatedTables.doi_date') }} <font-awesome-icon icon="calendar-alt"/>
             </a>
           </li>
         </ul>
@@ -467,12 +407,43 @@
           </div>
         </div>
 
-        <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-
         <doi-files :related-data="relatedData" :active-tab="activeTab" />
+
+        <doi-related-identifier :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+
+        <doi-geolocation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+
+        <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
 
       </div>
     </div>
+
+    <!-- TODO: DATACITE CREATED and UPDATED -->
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
+      <legend class="w-auto" @click="block.datacite = !block.datacite"
+              :style="!block.datacite ? {'color':'blue'} : ''">
+        {{ $t('doi.datacite') }}
+        <font-awesome-icon icon="sitemap"/>
+      </legend>
+
+      <transition name="fade">
+        <div v-if="block.datacite">
+
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label :for="`dataset_created`">{{ $t('doi.dataciteCreated') }}:</label>
+              TODO: Dataset created input
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label :for="`dataset_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
+              TODO: Dataset updated input
+            </div>
+          </div>
+
+        </div>
+      </transition>
+    </fieldset>
 
     <!-- IS PRIVATE -->
     <div class="row mt-3">
@@ -523,24 +494,29 @@
     fetchListLicences,
     fetchDoiAttachment,
     fetchDoiAgent,
-    fetchDoiAgentType
+    fetchDoiAgentType,
+    fetchDoiRelatedIdentifier,
+    fetchDoiGeolocation,
+    fetchDoiDate,
+    fetchDoiRelatedIdentifierType,
+    fetchDoiRelationType
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
-  // import MultimediaComponent from "../partial/MultimediaComponent";
-  // import FileTable from "../partial/FileTable";
   import DoiAgent from "./relatedTables/DoiAgent";
   import DoiFiles from "./relatedTables/DoiFiles";
+  import DoiRelatedIdentifier from "./relatedTables/DoiRelatedIdentifier";
+  import DoiGeolocation from "./relatedTables/DoiGeolocation";
 
   export default {
     components: {
+      DoiGeolocation,
+      DoiRelatedIdentifier,
       DoiFiles,
       DoiAgent,
       Datepicker,
       VueMultiselect,
       Spinner,
       FileInputComponent,
-      // MultimediaComponent,
-      // FileTable
     },
 
     mixins: [formManipulation, autocompleteFieldManipulation],
@@ -583,13 +559,13 @@
 
       setInitialData() {
         return {
-          tabs:['doi_agent', 'attachment_link'],
+          tabs:['attachment_link', 'doi_related_identifier', 'doi_geolocation', 'doi_agent', 'doi_date'],
           searchHistory: 'doiSearchHistory',
-          activeTab: 'doi_agent',
+          activeTab: 'attachment_link',
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'title_alternative',
             'title_translated', 'title_translated_language', 'abstract', 'resource_type', 'resource', 'methods',
-            'version', 'sizes', 'formats', 'language', 'subjects', 'copyright_agent', 'licence', 'remarks', 'owner'],
+            'version', 'sizes', 'formats', 'language', 'subjects', 'copyright_agent', 'licence', 'remarks', 'owner', 'is_private'],
           autocomplete: {
             loaders: {
               resource_type: false,
@@ -600,7 +576,10 @@
               reference: false,
               dataset: false,
               doi_agent_type: false,
+              doi_related_identifier_type: false,
+              doi_relation_type: false,
               doi_agent: false,
+              locality: false,
             },
             resource_type: [],
             agent: [],
@@ -610,7 +589,10 @@
             reference: [],
             dataset: [],
             doi_agent_type: [],
+            doi_related_identifier_type: [],
+            doi_relation_type: [],
             doi_agent: [],
+            locality: [],
           },
           requiredFields: ['publication_year', 'resource_type', 'title'],
           doi: {},
@@ -618,7 +600,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
-          block: {info: true, description: true, reference: false, dataset: false, files: false, datacite: true}
+          block: {info: true, description: true, referenceAndDataset: false, datacite: true}
         }
       },
 
@@ -667,9 +649,16 @@
             }
           });
 
-          fetchDoiAgentType(this.$route.params.id).then(response => {
+          // Fetching autocomplete fields for related data
+          fetchDoiAgentType().then(response => {
             this.autocomplete.doi_agent_type = this.handleResponse(response)
-          })
+          });
+          fetchDoiRelatedIdentifierType().then(response => {
+            this.autocomplete.doi_related_identifier_type = this.handleResponse(response)
+          });
+          fetchDoiRelationType().then(response => {
+            this.autocomplete.doi_relation_type = this.handleResponse(response)
+          });
 
           // Load Related Data which is not in tabs
           this.loadRelatedData('attachment_link');
@@ -688,7 +677,7 @@
 
           this.$emit('related-data-info', this.tabs);
 
-          this.setActiveTab('doi_agent')
+          this.setActiveTab('attachment_link')
         }
       },
 
@@ -698,27 +687,48 @@
           dataset: null,
           attachment_link: [],
           doi_agent: [],
+          doi_related_identifier: [],
+          doi_geolocation: [],
+          doi_date: [],
           new: {
-            attachment_link: []
+            attachment_link: [],
+            agent_type: [],
+            identifier_type: [],
+            relation_type: [],
+            locality: [],
           },
           copyFields: {
-            doi_agent: ['name', 'affiliation', 'agent_type', 'agent'],
+            doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
+            doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
+            doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
           },
           insert: {
-            doi_agent: {}
+            doi_related_identifier: {},
+            doi_geolocation: {},
+            doi_agent: {},
+            doi_date: {}
           },
           page: {
             attachment_link: 1,
+            doi_related_identifier: 1,
+            doi_geolocation: 1,
             doi_agent: 1,
+            doi_date: 1
           },
           paginateBy: {
+            doi_related_identifier: 10,
+            doi_geolocation: 10,
             doi_agent: 10,
+            doi_date: 10
           },
           count: {
             reference: 0,
             dataset: 0,
             attachment_link: 0,
-            doi_agent: 0
+            doi_related_identifier: 0,
+            doi_geolocation: 0,
+            doi_agent: 0,
+            doi_date: 0
           }
         }
       },
@@ -768,8 +778,13 @@
 
         // This goes for related data in tabs
         if (type === undefined) {
-          obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
-          obj.agent = { id: obj.agent, agent: obj.agent__agent }
+          console.log(obj)
+
+          if (this.isDefinedAndNotNull(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
+          if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
+          if (this.isDefinedAndNotNull(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
+          if (this.isDefinedAndNotNull(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value }
+          if (this.isDefinedAndNotNull(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en }
 
           return obj;
         }
@@ -804,8 +819,14 @@
           return;
         } else if (object === 'attachment_link') {
           query = fetchDoiAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+        } else if (object === 'doi_related_identifier') {
+          query = fetchDoiRelatedIdentifier(this.$route.params.id, this.relatedData.page.doi_related_identifier, this.relatedData.paginateBy.doi_related_identifier)
+        } else if (object === 'doi_geolocation') {
+          query = fetchDoiGeolocation(this.$route.params.id, this.relatedData.page.doi_geolocation, this.relatedData.paginateBy.doi_geolocation)
         } else if (object === 'doi_agent') {
           query = fetchDoiAgent(this.$route.params.id, this.relatedData.page.doi_agent, this.relatedData.paginateBy.doi_agent)
+        } else if (object === 'doi_date') {
+          query = fetchDoiDate(this.$route.params.id, this.relatedData.page.doi_date, this.relatedData.paginateBy.doi_date)
         }
 
         // Dataset and Reference are direct links and do not need extra request.
@@ -816,7 +837,6 @@
 
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
-              this.setBlockVisibility(object, this.relatedData.count[object])
 
               resolve(true)
             });
@@ -827,7 +847,6 @@
       setBlockVisibility(object,count){
         if(object === 'reference') this.block.reference = count > 0
         if(object === 'dataset') this.block.dataset = count > 0
-        if(object === 'attachment_link') this.block.files = count > 0
       },
 
       //check required fields for related data
@@ -844,6 +863,15 @@
         }
         if (this.isDefinedAndNotNull(uploadableObject.agent)) {
           uploadableObject.agent = uploadableObject.agent.id ? uploadableObject.agent.id : uploadableObject.agent;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.identifier_type)) {
+          uploadableObject.identifier_type = uploadableObject.identifier_type.id ? uploadableObject.identifier_type.id : uploadableObject.identifier_type;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.relation_type)) {
+          uploadableObject.relation_type = uploadableObject.relation_type.id ? uploadableObject.relation_type.id : uploadableObject.relation_type;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.locality)) {
+          uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
         }
 
         console.log('This object is sent in string format (related_data):')

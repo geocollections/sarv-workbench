@@ -584,9 +584,21 @@
     "affiliation": "Kuuluvus",
     "agent_type": "Kasutaja tüüp",
     "agent": "Kasutaja andmebaasis",
+    "relatedType": "Seose tüüp",
+    "identifierType": "Identifikaatori tüüp",
+    "value": "Väärtus",
+    "point": "Punkt (lat long)",
+    "box": "Bounding box (lat long lat long)",
+    "place": "Kohanimi",
+    "locality": "Lokaliteet andmebaasist",
+    "primaryRefAndDat": "Kirjandus ja Andmekogum",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
-      "files": "Failid"
+      "files": "Failid",
+      "doi_related_identifier": "Seotus identifikaatorid",
+      "doi_geolocation": "Lokaliteedid",
+      "doi_date": "Seotud kuupäevad",
+      "attachment_link": ""
     }
   },
   "locality": {

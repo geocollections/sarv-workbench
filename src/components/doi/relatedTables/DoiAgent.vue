@@ -9,6 +9,7 @@
             <th>{{ $t('doi.name') }}</th>
             <th>{{ $t('doi.affiliation') }}</th>
             <th>{{ $t('doi.agent_type') }}</th>
+            <th>ORCID</th>
             <th>{{ $t('doi.agent') }}</th>
             <th class="btn-th"></th>
           </tr>
@@ -22,6 +23,8 @@
             <td v-if="!entity.editMode">{{ entity.affiliation }}</td>
 
             <td v-if="!entity.editMode">{{ entity.agent_type__value }}</td>
+
+            <td v-if="!entity.editMode">{{ entity.orcid }}</td>
 
             <td v-if="!entity.editMode">{{ entity.agent__agent }}</td>
 
@@ -49,6 +52,9 @@
               </vue-multiselect>
             </td>
 
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.orcid" type="text"/>
+            </td>
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle"
                                v-model="entity.new.agent"
@@ -100,6 +106,10 @@
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.doi_agent.orcid" type="text"/>
             </td>
 
             <td>
