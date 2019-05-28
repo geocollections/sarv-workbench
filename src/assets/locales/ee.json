@@ -585,7 +585,8 @@
     "agent_type": "Kasutaja tüüp",
     "agent": "Kasutaja andmebaasis",
     "relatedTables": {
-      "doi_agent": "Seotud inimesed ja institutsioonid"
+      "doi_agent": "Seotud inimesed ja institutsioonid",
+      "files": "Failid"
     }
   },
   "locality": {

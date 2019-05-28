@@ -56,7 +56,7 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-    margin-left: 54px;
+    /*margin-left: 54px;*/
   }
 
   .main {

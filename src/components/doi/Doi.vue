@@ -382,18 +382,18 @@
     </fieldset>
 
     <!-- FILES -->
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && doi.id" ref="files">
-      <legend class="w-auto" @click="block.files = !block.files" :style="!block.files ? {'color':'blue'} : ''">Files
-        <font-awesome-icon icon="folder-open"/>
-      </legend>
-      <transition name="fade">
-        <div v-if="block.files">
-          <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="true"/>
-          <file-table :attachments="relatedData.attachment_link" :object="'doi'"
-                      v-if="relatedData.attachment_link.length > 0"/>
-        </div>
-      </transition>
-    </fieldset>
+<!--    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && doi.id" ref="files">-->
+<!--      <legend class="w-auto" @click="block.files = !block.files" :style="!block.files ? {'color':'blue'} : ''">Files-->
+<!--        <font-awesome-icon icon="folder-open"/>-->
+<!--      </legend>-->
+<!--      <transition name="fade">-->
+<!--        <div v-if="block.files">-->
+<!--          <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="true"/>-->
+<!--          <file-table :attachments="relatedData.attachment_link" :object="'doi'"-->
+<!--                      v-if="relatedData.attachment_link.length > 0"/>-->
+<!--        </div>-->
+<!--      </transition>-->
+<!--    </fieldset>-->
 
     <!-- TODO: DATACITE CREATED and UPDATED -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
@@ -433,10 +433,15 @@
             </a>
           </li>
 
-        <!-- TODO: Add files to tabs? -->
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
+               :class="{ active: activeTab === 'attachment_link' }">
+              {{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>
+            </a>
+          </li>
         </ul>
 
-        <div class="row">
+        <div class="row" v-if="activeTab !== 'attachment_link'">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
             <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
               <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
@@ -463,6 +468,9 @@
         </div>
 
         <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+
+        <doi-files :related-data="relatedData" :active-tab="activeTab" />
+
       </div>
     </div>
 
@@ -518,19 +526,21 @@
     fetchDoiAgentType
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
-  import MultimediaComponent from "../partial/MultimediaComponent";
-  import FileTable from "../partial/FileTable";
+  // import MultimediaComponent from "../partial/MultimediaComponent";
+  // import FileTable from "../partial/FileTable";
   import DoiAgent from "./relatedTables/DoiAgent";
+  import DoiFiles from "./relatedTables/DoiFiles";
 
   export default {
     components: {
+      DoiFiles,
       DoiAgent,
       Datepicker,
       VueMultiselect,
       Spinner,
       FileInputComponent,
-      MultimediaComponent,
-      FileTable
+      // MultimediaComponent,
+      // FileTable
     },
 
     mixins: [formManipulation, autocompleteFieldManipulation],
@@ -573,7 +583,7 @@
 
       setInitialData() {
         return {
-          tabs:['doi_agent'],
+          tabs:['doi_agent', 'attachment_link'],
           searchHistory: 'doiSearchHistory',
           activeTab: 'doi_agent',
           relatedData: this.setDefaultRelatedData(),
@@ -759,7 +769,7 @@
         // This goes for related data in tabs
         if (type === undefined) {
           obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
-          obj.agent = { id: obj.agent, name: obj.name }
+          obj.agent = { id: obj.agent, agent: obj.agent__agent }
 
           return obj;
         }

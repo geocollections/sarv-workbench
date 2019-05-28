@@ -583,7 +583,8 @@
     "agent_type": "Agent type",
     "agent": "Agent in database",
     "relatedTables": {
-      "doi_agent": "Related persons and institutions"
+      "doi_agent": "Related persons and institutions",
+      "files": "Files"
     }
   },
   "locality": {

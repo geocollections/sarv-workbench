@@ -53,7 +53,7 @@
               <vue-multiselect class="align-middle"
                                v-model="entity.new.agent"
                                deselect-label="Can't remove this value"
-                               label="name"
+                               label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.doi_agent"
@@ -65,7 +65,7 @@
                                :allow-empty="true"
                                :show-no-results="false"
                                :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong> </template>
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.agent }}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -106,7 +106,7 @@
               <vue-multiselect class="align-middle"
                                v-model="relatedData.insert.doi_agent.agent"
                                deselect-label="Can't remove this value"
-                               label="name"
+                               label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.doi_agent"
@@ -118,7 +118,7 @@
                                :allow-empty="true"
                                :show-no-results="false"
                                :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name }}</strong> </template>
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.agent }}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -153,9 +153,10 @@
         handler: function (newVal, oldVal) {
           if (newVal !== null && !this.isEmptyObject(newVal)) {
             //  Adding NAME, AFFILIATION and AGENT_TYPE__VALUE
-            this.relatedData.insert.doi_agent.name = newVal.name
-            this.relatedData.insert.doi_agent.affiliation = newVal.affiliation
-            this.$set(this.relatedData.insert.doi_agent, 'agent_type', { id: newVal.agent_type, value: newVal.agent_type__value })
+            console.log(newVal)
+            this.relatedData.insert.doi_agent.name = newVal.agent
+            this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en
+            this.$set(this.relatedData.insert.doi_agent, 'agent_type', { id: 1, value: 'Creator' })
           }
         },
         deep: true

@@ -115,7 +115,7 @@ const autocompleteFieldManipulation = {
           query += `dataset/?multi_search=value:${val};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
           break;
         case 'doi_agent':
-          query += `doi_agent/?multi_search=value:${val};fields:name,agent__agent,agent__forename,agent__surename;lookuptype:icontains&fields=id,name,affiliation,agent_type,agent_type__value,agent`;
+          query += `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,institution__institution_name_en`;
           break;
         default:
           break;

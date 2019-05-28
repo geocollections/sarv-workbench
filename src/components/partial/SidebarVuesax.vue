@@ -1,7 +1,7 @@
 <template>
 <!-- TODO: Drop Material Icons and get font awesome icons working -->
-  <vs-sidebar :parent="$refs.parentSidebar" default-index="1" color="primary" class="sidebarx"
-              :reduce="true"
+  <vs-sidebar v-if="false" :parent="$refs.parentSidebar" default-index="1" color="primary" class="sidebarx"
+              :reduce="false"
               :hidden-background="true"
               spacer v-model="active">
 
