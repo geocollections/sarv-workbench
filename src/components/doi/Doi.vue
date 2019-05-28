@@ -579,8 +579,7 @@
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'title_alternative',
             'title_translated', 'title_translated_language', 'abstract', 'resource_type', 'resource', 'methods',
-            'version', 'sizes', 'formats', 'language', 'subjects', 'copyright_agent', 'licence', 'date_added',
-            'date_changed', 'remarks', 'owner'],
+            'version', 'sizes', 'formats', 'language', 'subjects', 'copyright_agent', 'licence', 'remarks', 'owner'],
           autocomplete: {
             loaders: {
               resource_type: false,

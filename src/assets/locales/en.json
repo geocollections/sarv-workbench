@@ -77,7 +77,11 @@
       "sample": "Add sample",
       "samples": "Samples",
       "library": "Add library",
-      "libraries": "Libraries"
+      "libraries": "Libraries",
+      "doi": "Add DOI",
+      "activeProject": "My active project",
+      "activeSite": "Last visited site",
+      "activeSample": "My last sample"
     },
     "developmentSettings": {
       "button": "Remove all default settings",
@@ -787,7 +791,8 @@
     "deletePreferences": "Clear filters and ordering",
     "cancel": "Cancel",
     "next": "Järgmine",
-    "previous": "Eelmine"
+    "previous": "Eelmine",
+    "homePage": "Home page"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",

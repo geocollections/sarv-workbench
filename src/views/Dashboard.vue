@@ -1,8 +1,9 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard" ref="parentSidebar" id="parentx">
     <app-header/>
 
     <sidebar v-if="$route.meta.isSidebarShown"/>
+    <sidebar-vuesax/>
 
     <div class="main container" v-bind:class="{ sidebarOpen: sidebarOpen }">
       <router-view/>
@@ -17,12 +18,14 @@
   import AppHeader from '@/components/partial/AppHeader'
   import AppFooter from '@/components/partial/AppFooter'
   import Sidebar from "../components/partial/Sidebar";
+  import SidebarVuesax from '../components/partial/SidebarVuesax'
 
   export default {
     components: {
       Sidebar,
       AppHeader,
-      AppFooter
+      AppFooter,
+      SidebarVuesax
     },
     name: "Dashboard",
     data() {
@@ -53,6 +56,7 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
+    margin-left: 54px;
   }
 
   .main {
@@ -60,6 +64,7 @@
     margin: 0 auto;
     flex: 1;
   }
+
   @media (max-width: 768px) {
     .main.container {
       width: 100%!important;
@@ -78,5 +83,4 @@
       max-width: 1400px;
     }
   }
-
 </style>

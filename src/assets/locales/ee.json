@@ -77,7 +77,11 @@
       "sample": "Lisa proov",
       "samples": "Proovid",
       "library": "Lisa kogumik",
-      "libraries": "Kogumikud"
+      "libraries": "Kogumikud",
+      "doi": "Lisa DOI",
+      "activeProject": "Minu aktiivne projekt",
+      "activeSite": "Viimati külastatud vaatluspunkt",
+      "activeSample": "Minu viimane proov"
     },
     "developmentSettings": {
       "button": "Kustuta kõik vaikimisi väärtused",
@@ -790,7 +794,8 @@
     "deletePreferences": "Tühista filtrid ja sorteerimine",
     "cancel": "Katkesta",
     "next": "Järgmine",
-    "previous": "Eelmine"
+    "previous": "Eelmine",
+    "homePage": "Pealeht"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",

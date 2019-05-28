@@ -44,7 +44,7 @@
 
         <div v-if="permissions.doi" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/doi' }"> DOI </router-link>
-          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/doi/add' }">Add DOI </router-link>
+          <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/doi/add' }">{{ $t('frontPage.buttons.doi') }}</router-link>
           <br />
         </div>
         </b-card>
@@ -54,8 +54,8 @@
         <!-- PROJECT -->
         <div v-if="permissions.project" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/project' }"> Projects </router-link>
-          <span v-if="activeProject>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/project/' + activeProject }">My active project: {{ activeProject }} </router-link></span>
-          <span v-if="activeSite>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/site/' + activeSite }">Last visited site: {{ activeSite }}</router-link></span>
+          <span v-if="activeProject>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/project/' + activeProject }">{{ $t('frontPage.buttons.activeProject') }}: {{ activeProject }} </router-link></span>
+          <span v-if="activeSite>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/site/' + activeSite }">{{ $t('frontPage.buttons.activeSite') }}: {{ activeSite }}</router-link></span>
           <br />
         </div>
 
@@ -69,7 +69,7 @@
         <!-- SAMPLE -->
         <div v-if="permissions.sample" >
           <router-link class="btn btn-dark mr-2 mb-2" :to="{ path: '/sample' }">{{ $t('frontPage.buttons.samples') }} </router-link>
-          <span v-if="activeSample>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/' + activeSample }"> My last sample: {{ activeSample }} </router-link></span>
+          <span v-if="activeSample>0"><router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/' + activeSample }">{{ $t('frontPage.buttons.activeSample') }}: {{ activeSample }} </router-link></span>
           <router-link class="btn btn-outline-dark mr-2 mb-2" :to="{ path: '/sample/add' }">{{ $t('frontPage.buttons.sample') }}</router-link>
           <br />
         </div>

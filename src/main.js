@@ -11,6 +11,7 @@ import VueMoment from 'vue-moment'
 import VueCookie from 'vue-cookie'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
+import Vuesax from 'vuesax'
 
 // Leaflet START
 import { L } from 'vue2-leaflet'
@@ -33,6 +34,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import 'izitoast/dist/css/iziToast.min.css' // Pop-up messages style
 import 'vue-multiselect/dist/vue-multiselect.min.css' // Select input
+import 'vuesax/dist/vuesax.css'
+import 'material-icons/iconfont/material-icons.css';
 // Custom css
 import '@/assets/css/styles.css'
 
@@ -44,6 +47,7 @@ Vue.use(VueIziToast)
 Vue.use(VueI18n)
 Vue.use(VueMoment)
 Vue.use(VueCookie)
+Vue.use(Vuesax)
 
 Vue.config.productionTip = false
 
