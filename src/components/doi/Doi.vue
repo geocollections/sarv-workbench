@@ -710,7 +710,7 @@
             date_type: []
           },
           copyFields: {
-            attachment_link: ['attachment', 'remarks'],
+            attachment_link: ['attachment', 'attachment__remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
             doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
@@ -798,7 +798,7 @@
         if (type === undefined) {
           console.log(obj)
 
-          if (this.isDefinedAndNotNull(obj.id)) obj.attachment = { id: obj.id, original_filename: obj.original_filename }
+          if (this.isDefinedAndNotNull(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
           if (this.isDefinedAndNotNull(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
           if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
           if (this.isDefinedAndNotNull(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
@@ -930,20 +930,6 @@
           paginateBy: 50,
           orderBy: '-id',
         }
-      },
-
-      addFiles(data){
-        this.addFileAsRelatedData(data, 'doi');
-      },
-
-      addRelatedDataAttachment(option) {
-        if (typeof this.relatedData.attachment_link === 'undefined') this.relatedData.attachment_link = [];
-        this.relatedData.attachment_link.push(option)
-      },
-
-      removeAttachmentRelation(idx) {
-        this.relatedData.attachment_link.splice(idx, 1);
-        this.add(true, 'doi', true);
       },
     }
 

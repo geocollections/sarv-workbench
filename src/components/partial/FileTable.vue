@@ -4,23 +4,23 @@
       <file-preview-modal :data="showFilePreview"></file-preview-modal>
       <div class="mt-2 mr-2" v-for="(file, key) in attachments" style="align-self: flex-end;">
         <div class="img-container p-1"
-             @click="openUrlInNewWindow({url: composeFileUrl(file.uuid_filename, 'original')})" style="cursor: pointer;"
-             :title="composeFileUrl(file.uuid_filename, 'original')">
+             @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})" style="cursor: pointer;"
+             :title="composeFileUrl(file[prefix + 'uuid_filename'], 'original')">
           <font-awesome-icon
-            v-if="file.uuid_filename !== null && ['mp3','wav'].indexOf(file.uuid_filename.split('.')[1]) > -1"
+            v-if="file[prefix + 'uuid_filename'] !== null && ['mp3','wav'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1"
             style="max-height: 5rem" size="7x" icon="file-audio"/>
           <font-awesome-icon
-            v-else-if="file.uuid_filename !== null && ['mp4'].indexOf(file.uuid_filename.split('.')[1]) > -1"
+            v-else-if="file[prefix + 'uuid_filename'] !== null && ['mp4'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1"
             style="max-height: 5rem" size="7x" icon="file-video"/>
           <img
-            v-else-if="file.uuid_filename !== null && ['png','jpeg','jpg'].indexOf(file.uuid_filename.split('.')[1]) > -1"
-            :src="composeFileUrl(file.uuid_filename)" alt="Image preview..."
+            v-else-if="file[prefix + 'uuid_filename'] !== null && ['png','jpeg','jpg'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1"
+            :src="composeFileUrl(file[prefix + 'uuid_filename'])" alt="Image preview..."
             class="img-thumbnail thumbnail-preview responsive image">
-          <font-awesome-icon v-else="file.uuid_filename === null" style="max-height: 5rem" size="7x" icon="file"/>
+          <font-awesome-icon v-else="file[prefix + 'uuid_filename'] === null" style="max-height: 5rem" size="7x" icon="file"/>
           <div class="middle flex flex-inline">
             <!--<button class="btn btn-danger mb-2 btn-sm" @click="$parent.removeAttachmentRelation(key)"><font-awesome-icon icon="trash-alt"/></button>-->
             <div style="background-color:#5e676a;color:white; width: 20vh">
-              <span style="font-size: small;word-wrap: break-word;">{{file.original_filename}}
+              <span style="font-size: small;word-wrap: break-word;">{{file[prefix + 'original_filename']}}
                 <!--{{file.date_created}}<br/>{{file.author__agent}}-->
               </span>
             </div>
@@ -31,11 +31,17 @@
         <div class="mt-1 pb-1" style="width: 25vh;min-height:5vh"><!--background-color:#056384;color:white;-->
           <!--<div style="font-size: small;word-wrap: break-word;">{{file.original_filename}}</div>-->
           <div class="p-0 pt-1 pb-1" style="text-align: center;">
-            <button class="btn btn-info mr-1 p-0 pr-4 pl-4  btn-sm no-rounded-btn" @click="previewFile(file)">
+
+            <!-- MODAL Commented 29.05.2019 -->
+<!--            <button class="btn btn-info mr-1 p-0 pr-4 pl-4  btn-sm no-rounded-btn" @click="previewFile(file)">-->
+<!--              <font-awesome-icon icon="eye"/>-->
+<!--            </button>-->
+
+            <button class="btn btn-info mr-1 p-0 pr-4 pl-4  btn-sm no-rounded-btn" @click="openGeoInNewWindow({ object: 'file', id: file[tableId] })">
               <font-awesome-icon icon="eye"/>
             </button>
             <button class="btn btn-primary p-0 pr-4 pl-4 btn-sm no-rounded-btn"
-                    @click="windowOpenNewTab('attachment','/attachment/'+file.id)">
+                    @click="windowOpenNewTab('attachment','/attachment/'+file[tableId])">
               <font-awesome-icon icon="external-link-alt"/>
             </button>
           </div>
@@ -60,6 +66,14 @@
       object: {
         type: String,
         required: true
+      },
+      prefix: {
+        type: String,
+        default: ''
+      },
+      tableId: {
+        type: String,
+        default: 'id'
       }
     },
     mixins: [formManipulation],
@@ -70,12 +84,12 @@
     },
     methods: {
       previewFile(file) {
-        if (['png', 'jpeg', 'jpg'].indexOf(file.uuid_filename.split('.')[1]) > -1)  {
+        if (['png', 'jpeg', 'jpg'].indexOf(file[this.prefix + 'uuid_filename'].split('.')[1]) > -1)  {
           this.showFilePreview = file;
           this.$emit('show-file-preview-modal');
         }  else this.openGeoInNewWindow({
           object: 'file',
-          id: file.id
+          id: file[tableId]
         })
       }
 

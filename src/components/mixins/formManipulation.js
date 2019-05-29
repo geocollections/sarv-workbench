@@ -412,15 +412,7 @@ const formManipulation = {
         // it is required to edit only one record
         this.editMode = false;
       });
-
-      // ATTACHMENT_LINK USE CASE START
-      let id = object.id;
-      if (typeof object.attach_link__id !== 'undefined' && object.attach_link__id !== null) {
-        id = object.attach_link__id
-      }
-      // ATTACHMENT_LINK USE CASE END
-
-      this.saveData(type,formData,'change/'+type+'/'+ id).then(isSuccessfullySaved => {
+      this.saveData(type,formData,'change/' + type + '/' + object.id).then(isSuccessfullySaved => {
         //  UPDATE ROW DATA
         // object = cloneDeep(object.new)
         // this.$set(object, 'new', {});

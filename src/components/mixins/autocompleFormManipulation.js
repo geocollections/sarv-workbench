@@ -90,7 +90,7 @@ const autocompleteFieldManipulation = {
           query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
           break;
         case 'attachment_public':
-          query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=${isPrivate}&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename,attach_link__id`;
+          query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=${isPrivate}&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
           break;
         case 'attachment3':
           query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${this.currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;

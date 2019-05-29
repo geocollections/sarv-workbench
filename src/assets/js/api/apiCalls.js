@@ -528,7 +528,7 @@ export function fetchDoiCheck(doi) {
 }
 
 export function fetchDoiAttachment(id, page, paginateBy = 25) {
-  return fetch(`attachment/?attach_link__doi__id=${id}&page=${page}&paginate_by=${paginateBy}&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created,remarks,attach_link__id&distinct=true&format=json`)
+  return fetch(`attachment_link/?doi=${id}&page=${page}&paginate_by=${paginateBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,attachment__remarks&format=json`)
 }
 
 export function fetchDoiAgent(id, page, paginateBy = 25) {

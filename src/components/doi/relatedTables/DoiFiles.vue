@@ -17,9 +17,9 @@
           <tr v-for="entity in relatedData.attachment_link"
               :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
             <!-- VIEW MODE -->
-            <td v-if="!entity.editMode">{{ entity.original_filename }}</td>
+            <td v-if="!entity.editMode">{{ entity.attachment__original_filename }}</td>
 
-            <td v-if="!entity.editMode">{{ entity.remarks }}</td>
+            <td v-if="!entity.editMode">{{ entity.attachment__remarks }}</td>
 
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
@@ -46,7 +46,7 @@
             </td>
 
             <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.remarks" type="text"/>
+              <b-form-input v-model="entity.new.attachment__remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
@@ -96,7 +96,7 @@
             </td>
 
             <td>
-              <b-form-input v-model="relatedData.insert.attachment_link.remarks" type="text"/>
+              <b-form-input v-model="relatedData.insert.attachment_link.attachment__remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
@@ -105,7 +105,7 @@
                       :disabled="sendingData">
                 <font-awesome-icon icon="pencil-alt"/>
               </button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.doi_date = {}"
+              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.attachment_link = {}"
                       :disabled="sendingData">
                 <font-awesome-icon icon="times"/>
               </button>
@@ -118,6 +118,8 @@
 
     <div class="col-md-6" v-if="activeTab === 'attachment_link'">
       <file-table :attachments="relatedData.attachment_link" :object="'doi'"
+                  prefix="attachment__"
+                  table-id="attachment"
                   v-if="relatedData.attachment_link.length > 0"/>
     </div>
   </div>
