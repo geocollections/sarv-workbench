@@ -227,9 +227,6 @@ new Vue({
       type: String,
       default: 'table'
     },
-    formBlocks: {
-      type: Object
-    }
   },
   render: h => h(App)
 }).$mount('#app')

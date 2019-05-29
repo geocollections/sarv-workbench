@@ -5,8 +5,7 @@
 
     <!-- GENERAL INFO -->
     <fieldset class="border p-2 mb-2" ref="info">
-      <legend class="w-auto" @click="block.info = !block.info"
-              :style="!block.info ? {'color':'blue'} : ''">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('doi.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
@@ -93,6 +92,7 @@
             </div>
           </div>
 
+          <!-- TODO: Connect with related persons -->
           <!-- CREATORS -->
           <div class="row">
             <div class="col-sm-12">
@@ -237,8 +237,7 @@
 
     <!-- REFERENCE and DATASET -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.referenceAndDataset = !block.referenceAndDataset"
-              :style="!block.referenceAndDataset ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{ 'text-primary': !block.referenceAndDataset }" @click="block.referenceAndDataset = !block.referenceAndDataset">
         {{ $t('doi.primaryRefAndDat') }}
         <font-awesome-icon icon="book"/>
       </legend>
@@ -323,8 +322,7 @@
 
     <!-- REMARKS -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.description = !block.description"
-              :style="!block.description ? {'color':'blue'} : ''">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('doi.remarks') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
@@ -333,8 +331,8 @@
         <div v-if="block.description">
 
           <div class="row">
-            <div class="col-sm-12 mb-2">
-              <label :for="`remarks`">{{ $t('doi.remarks') }}:</label>
+            <div class="col-sm-12">
+              <label class="mt-0" :for="`remarks`">{{ $t('doi.remarks') }}:</label>
               <b-form-textarea id="remarks" v-model="doi.remarks" type="text" :rows="1" :max-rows="20"></b-form-textarea>
             </div>
           </div>
@@ -346,7 +344,7 @@
     <!-- SHOWING RELATED_DATA -->
     <div class="row mb-2">
       <div class="col mt-2">
-        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
+        <ul class="nav nav-tabs nav-fill mb-3">
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
                :class="{ active: activeTab === 'attachment_link' }">
@@ -422,10 +420,9 @@
       </div>
     </div>
 
-    <!-- TODO: DATACITE CREATED and UPDATED -->
+    <!-- DATACITE CREATED and UPDATED -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
-      <legend class="w-auto" @click="block.datacite = !block.datacite"
-              :style="!block.datacite ? {'color':'blue'} : ''">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.datacite }" @click="block.datacite = !block.datacite">
         {{ $t('doi.datacite') }}
         <font-awesome-icon icon="sitemap"/>
       </legend>
@@ -435,13 +432,13 @@
 
           <div class="row">
             <div class="col-md-6 mb-2">
-              <label :for="`dataset_created`">{{ $t('doi.dataciteCreated') }}:</label>
-              TODO: Dataset created input
+              <label class="mt-0" :for="`dataset_created`">{{ $t('doi.dataciteCreated') }}:</label>
+              <b-form-input size="sm" id="dataset_created" v-model="doi.dataset_created" type="text" disabled></b-form-input>
             </div>
 
             <div class="col-md-6 mb-2">
-              <label :for="`dataset_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
-              TODO: Dataset updated input
+              <label class="mt-0" :for="`dataset_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
+              <b-form-input size="sm" id="dataset_updated" v-model="doi.dataset_updated" type="text" disabled></b-form-input>
             </div>
           </div>
 

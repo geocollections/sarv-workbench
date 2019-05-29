@@ -83,9 +83,13 @@ const formManipulation = {
       }
     },
 
+    /**
+     * Checks if required fields are okay to upload (not empty, null etc.)
+     * @param object, String value of, e.g., 'doi', 'reference'.
+     * @returns {boolean}
+     */
     validate(object){
       let vm = this, isValid = true;
-      console.log()
       console.log(vm[object])
       this.requiredFields.forEach(function (el) {
         isValid &= vm.isDefinedAndNotNullAndNotEmptyString(vm[object][el])
@@ -135,7 +139,7 @@ const formManipulation = {
         });
 
       } else if (this.sendingData) {
-        // This shouldn't run unless user deletes html elements and tries to press 'add' button again
+        // This runs only if user deletes html elements and tries to press 'add' button again
         toastError({text: this.$t('messages.easterEggError')})
         resolve(false)
       } else {
@@ -294,10 +298,9 @@ const formManipulation = {
 
     reset(object, isEdit) {
       console.log('reset')
-      if (this.createRelationWith.object !== null) {
-        window.close()
-      } else
-        isEdit ? this.$router.push({ path:'/'+object}) : this[object] = {}
+      // TODO: When exactly is this.createRelationWith used? (adding record in new window or something?)
+      if (typeof this.createRelationWith !== 'undefined' && this.createRelationWith.object !== null) window.close();
+      else isEdit ? this.$router.push({ path: '/' + object }) : this[object] = {};
     },
 
     leaveFromEditView(object) {

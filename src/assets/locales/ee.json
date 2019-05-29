@@ -597,7 +597,7 @@
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",
-      "doi_related_identifier": "Seotus identifikaatorid",
+      "doi_related_identifier": "Seotud identifikaatorid",
       "doi_geolocation": "Lokaliteedid",
       "doi_date": "Seotud kuupäevad",
       "attachment_link": ""
