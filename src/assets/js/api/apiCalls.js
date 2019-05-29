@@ -27,7 +27,7 @@ function fetch (child, url = 0) {
 function fetchPost (child, postData, config) {
   return new Promise((resolve, reject) => {
     Vue.http.post(api.url + child, postData, config).then(response => {
-      console.log(response)
+      // console.log(response)
       resolve(response);
     }, errResponse => {
       console.log('ERROR: ' + JSON.stringify(errResponse));
@@ -561,6 +561,10 @@ export function fetchDoiRelationType() {
 
 export function fetchDoiDateType() {
   return fetch(`doi_date_type/?format=json`)
+}
+
+export function fetchAddDoi(data) {
+  return fetchPost(`add/doi/`, data)
 }
 
 /*****************

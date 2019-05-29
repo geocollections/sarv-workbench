@@ -499,10 +499,11 @@
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
           {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}</button>
 
-        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2" :disabled="sendingData || !validate('reference')"
-                @click="addNewDoiFromReference('doi', 'reference', 'relatedData')">
-          {{ $t('edit.buttons.saveNewDoi') }}
-        </button>
+<!--        TODO: Enable if ready-->
+<!--        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2" :disabled="sendingData || !validate('reference')"-->
+<!--                @click="addNewDoiFromReference('doi', 'reference', 'relatedData')">-->
+<!--          {{ $t('edit.buttons.saveNewDoi') }}-->
+<!--        </button>-->
 
       </div>
     </div>

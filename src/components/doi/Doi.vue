@@ -348,16 +348,16 @@
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
-               :class="{ active: activeTab === 'attachment_link' }">
-              {{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>
+            <a href="#" v-on:click.prevent="setActiveTab('doi_agent')" class="nav-link"
+               :class="{ active: activeTab === 'doi_agent' }">
+              {{ $t('doi.relatedTables.doi_agent') }} <font-awesome-icon icon="user-friends"/>
             </a>
           </li>
 
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('doi_related_identifier')" class="nav-link"
-               :class="{ active: activeTab === 'doi_related_identifier' }">
-              {{ $t('doi.relatedTables.doi_related_identifier') }} <font-awesome-icon icon="project-diagram"/>
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
+               :class="{ active: activeTab === 'attachment_link' }">
+              {{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>
             </a>
           </li>
 
@@ -369,9 +369,9 @@
           </li>
 
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('doi_agent')" class="nav-link"
-               :class="{ active: activeTab === 'doi_agent' }">
-              {{ $t('doi.relatedTables.doi_agent') }} <font-awesome-icon icon="user-friends"/>
+            <a href="#" v-on:click.prevent="setActiveTab('doi_related_identifier')" class="nav-link"
+               :class="{ active: activeTab === 'doi_related_identifier' }">
+              {{ $t('doi.relatedTables.doi_related_identifier') }} <font-awesome-icon icon="project-diagram"/>
             </a>
           </li>
 
@@ -567,7 +567,7 @@
         return {
           tabs:['attachment_link', 'doi_related_identifier', 'doi_geolocation', 'doi_agent', 'doi_date'],
           searchHistory: 'doiSearchHistory',
-          activeTab: 'attachment_link',
+          activeTab: 'doi_agent',
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'title_alternative',
             'title_translated', 'title_translated_language', 'abstract', 'resource_type', 'resource', 'methods',
@@ -688,7 +688,7 @@
 
           this.$emit('related-data-info', this.tabs);
 
-          this.setActiveTab('attachment_link')
+          this.setActiveTab('doi_agent')
         }
       },
 

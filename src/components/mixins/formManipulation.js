@@ -8,6 +8,8 @@ import {faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVid
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 import moment from 'moment'
+import {fetchAddDoi} from "../../assets/js/api/apiCalls";
+
 library.add(faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt,faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
 
 const formManipulation = {
@@ -149,8 +151,9 @@ const formManipulation = {
       });
     },
 
-    // TODO: In the future if more these kinds of connections, then should make it universal.
+    // TODO: Should put that to Reference.vue
     addNewDoiFromReference(doi, reference, relatedData) {
+
       if (!this.validate(reference)) return;
 
       let formData = new FormData();
@@ -159,7 +162,7 @@ const formManipulation = {
         publication_year: this[reference].year,
         title: this[reference].title,
         title_alternative: this[reference].title_original,
-        language: this[reference].language,
+        language: this[reference].language.id,
         publisher: this[reference].publisher,
         abstract: this[reference].abstract,
         reference: this[reference].id,
@@ -170,17 +173,9 @@ const formManipulation = {
       }))
 
       let newlyAddedDoiId;
-      this.saveData(doi, formData, 'add/doi/').then(savedObjectId => {
-        if (savedObjectId && savedObjectId === true) {
-          newlyAddedDoiId = savedObjectId;
-          resolve(true)
-        } else {
-          resolve(false)
-        }
-      }, errResponse => {
-        resolve(false)
-        return false;
-      });
+      fetchAddDoi(formData).then(response => {
+        console.log(response.body.id)
+      }, errResponse => {})
 
       if (typeof newlyAddedDoiId !== 'undefined' && newlyAddedDoiId !== null) {
         let attachment;
