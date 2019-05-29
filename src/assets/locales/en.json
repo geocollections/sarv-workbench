@@ -592,6 +592,7 @@
     "primaryRefAndDat": "Reference and Dataset",
     "date": "Date / range",
     "dateType": "Date type",
+    "link": "Link",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "files": "Files",

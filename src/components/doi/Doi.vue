@@ -3,6 +3,8 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
+    <!-- TODO: REQUIRED FIELDS -->
+
     <!-- GENERAL INFO -->
     <fieldset class="border p-2 mb-2" ref="info">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
@@ -407,7 +409,7 @@
           </div>
         </div>
 
-        <doi-files :related-data="relatedData" :active-tab="activeTab" />
+        <doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab" />
 
         <doi-related-identifier :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
 
@@ -585,6 +587,7 @@
               doi_agent: false,
               locality: false,
               doi_date_type: false,
+              attachment_public: false,
             },
             resource_type: [],
             agent: [],
@@ -599,6 +602,7 @@
             doi_agent: [],
             locality: [],
             doi_date_type: [],
+            attachment: []
           },
           requiredFields: ['publication_year', 'resource_type', 'title'],
           doi: {},
@@ -670,9 +674,6 @@
             this.autocomplete.doi_date_type = this.handleResponse(response)
           });
 
-          // Load Related Data which is not in tabs
-          this.loadRelatedData('attachment_link');
-
           // Load Related Data which is in tabs
           this.tabs.forEach(entity => {
             this.loadRelatedData(entity);
@@ -701,7 +702,7 @@
           doi_geolocation: [],
           doi_date: [],
           new: {
-            attachment_link: [],
+            attachment: [],
             agent_type: [],
             identifier_type: [],
             relation_type: [],
@@ -709,12 +710,14 @@
             date_type: []
           },
           copyFields: {
-            doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
+            attachment_link: ['attachment', 'remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
+            doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
             doi_date: ['date', 'date_type', 'remarks']
           },
           insert: {
+            attachment_link: {},
             doi_related_identifier: {},
             doi_geolocation: {},
             doi_agent: {},
@@ -728,6 +731,7 @@
             doi_date: 1
           },
           paginateBy: {
+            attachment_link: 10,
             doi_related_identifier: 10,
             doi_geolocation: 10,
             doi_agent: 10,
@@ -763,7 +767,7 @@
         // Adding related data
         if (saveRelatedData) {
           uploadableObject.related_data = {}
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          // uploadableObject.related_data.attachment = this.relatedData.attachment_link
         }
 
         console.log('This object is sent in string format:')
@@ -787,11 +791,14 @@
 
       fillRelatedDataAutocompleteFields(obj, type) {
         if (obj === undefined) return;
+        // console.log(obj)
+        // console.log(type)
 
         // This goes for related data in tabs
         if (type === undefined) {
           console.log(obj)
 
+          if (this.isDefinedAndNotNull(obj.original_filename)) obj.attachment = { id: obj.id, original_filename: obj.original_filename }
           if (this.isDefinedAndNotNull(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
           if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
           if (this.isDefinedAndNotNull(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
@@ -805,7 +812,7 @@
         let relatedData = cloneDeep(obj)
         obj = [];
         relatedData.forEach(entity => {
-          if (type === 'attachment_link' || 'doi_agent') obj.push(entity)
+          if (type === 'attachment_link' || 'doi_agent' || 'doi_related_identifier' || 'doi_geolocation' || 'doi_date') obj.push(entity)
         });
         return obj
       },
@@ -831,7 +838,7 @@
           this.setBlockVisibility(object, this.relatedData.count[object])
           return;
         } else if (object === 'attachment_link') {
-          query = fetchDoiAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+          query = fetchDoiAttachment(this.$route.params.id, this.relatedData.page.attachment_link, this.relatedData.paginateBy.attachment_link)
         } else if (object === 'doi_related_identifier') {
           query = fetchDoiRelatedIdentifier(this.$route.params.id, this.relatedData.page.doi_related_identifier, this.relatedData.paginateBy.doi_related_identifier)
         } else if (object === 'doi_geolocation') {
@@ -869,7 +876,9 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.doi = this.doi.id;
 
-        // DOI AGENT FIELDS
+        if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
+          uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
+        }
         if (this.isDefinedAndNotNull(uploadableObject.agent_type)) {
           uploadableObject.agent_type = uploadableObject.agent_type.id ? uploadableObject.agent_type.id : uploadableObject.agent_type;
         }

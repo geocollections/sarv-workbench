@@ -35,7 +35,7 @@ const autocompleteFieldManipulation = {
     }
   },
   methods: {
-    getAutocompleteQueryParameters(type, val) {
+    getAutocompleteQueryParameters(type, val, isPrivate = 0) {
       let query = '';
       switch (type) {
         case 'analysis':
@@ -88,6 +88,9 @@ const autocompleteFieldManipulation = {
           break;
         case 'attachment':
           query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
+          break;
+        case 'attachment_public':
+          query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=${isPrivate}&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
           break;
         case 'attachment3':
           query = `attachment/?multi_search=value:${val};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${this.currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
@@ -205,6 +208,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteAttachmentSearch3(value) {
       this.autocompliteSearch(value, 'attachment3', 'attachment',3, false)
+    },
+    autcompletePublicAttachmentSearch(value) {
+      this.autocompliteSearch(value, 'attachment_public', 'attachment',3, false)
     },
     autcompleteJournalSearch(value) {
       this.autocompliteSearch(value, 'journals', 'journals', 1)

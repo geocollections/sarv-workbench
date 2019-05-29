@@ -594,6 +594,7 @@
     "primaryRefAndDat": "Kirjandus ja Andmekogum",
     "date": "Kuupäev / vahemik",
     "dateType": "Kuupäeva tüüp",
+    "link": "Link",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",
