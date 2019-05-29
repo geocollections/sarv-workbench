@@ -90,7 +90,7 @@ const formManipulation = {
      */
     validate(object){
       let vm = this, isValid = true;
-      console.log(vm[object])
+      // console.log(vm[object])
       this.requiredFields.forEach(function (el) {
         isValid &= vm.isDefinedAndNotNullAndNotEmptyString(vm[object][el])
       });
@@ -149,6 +149,69 @@ const formManipulation = {
       });
     },
 
+    // TODO: In the future if more these kinds of connections, then should make it universal.
+    addNewDoiFromReference(doi, reference, relatedData) {
+      if (!this.validate(reference)) return;
+
+      let formData = new FormData();
+      formData.append('data', JSON.stringify({
+        creators: this[reference].author,
+        publication_year: this[reference].year,
+        title: this[reference].title,
+        title_alternative: this[reference].title_original,
+        language: this[reference].language,
+        publisher: this[reference].publisher,
+        abstract: this[reference].abstract,
+        reference: this[reference].id,
+        subjects: this[reference].author_keywords + this[reference].tags,
+        resource_type: 12,
+        version: 1.0,
+        formats: 'pdf',
+      }))
+
+      let newlyAddedDoiId;
+      this.saveData(doi, formData, 'add/doi/').then(savedObjectId => {
+        if (savedObjectId && savedObjectId === true) {
+          newlyAddedDoiId = savedObjectId;
+          resolve(true)
+        } else {
+          resolve(false)
+        }
+      }, errResponse => {
+        resolve(false)
+        return false;
+      });
+
+      if (typeof newlyAddedDoiId !== 'undefined' && newlyAddedDoiId !== null) {
+        let attachment;
+        let locality;
+        // Getting digitised pdf from reference (there is only one)
+        if (doi === 'doi' && reference === 'reference') attachment = this['attachment']
+        if (doi === 'doi' && reference === 'reference') locality = this[relatedData].locality
+
+        if (typeof attachment !== 'undefined' && attachment !== null && attachment.length > 0) {
+          let attachmentLinkFormData = new FormData();
+          attachmentLinkFormData.append('data', JSON.stringify({
+            doi: newlyAddedDoiId,
+            attachment: attachment[0].id,
+          }));
+          this.request('attachment_link', attachmentLinkFormData, 'add/attachment_link/')
+        }
+        if (typeof locality !== 'undefined' && locality !== null && locality.length > 0) {
+          let doiGeolocationFormData = new FormData();
+          locality.forEach((entity) => {
+            doiGeolocationFormData.append('data', JSON.stringify({
+              doi: newlyAddedDoiId,
+              locality: entity.id
+            }))
+          })
+          this.request('doi_geolocation', doiGeolocationFormData, 'add/doi_geolocation/')
+        }
+
+        this.$router.push({ path: '/doi/' + newlyAddedDoiId })
+      }
+    },
+
     saveData(type,formData,url, isCopy = false) {
       return new Promise(resolve => {
         this.request(type,formData,url,resolve, isCopy)
@@ -194,10 +257,10 @@ const formManipulation = {
           }
         }
       }, errResponse => {
-        console.log(this.$t('messages.uploadError'))
+        // console.log(this.$t('messages.uploadError'))
         console.log('ERROR: ' + JSON.stringify(errResponse));
         this.sendingData = false
-        toastError({text: this.$t('messages.uploadError')});
+        // toastError({text: this.$t('messages.uploadError')});
         resolve(undefined)
       })
     },

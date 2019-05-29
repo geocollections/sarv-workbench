@@ -186,7 +186,8 @@
       "saveAndLeave": "Salvesta ja mine tagasi",
       "saveAndContinue": "Salvesta ja jätka muutmist",
       "cancelWithoutSaving": "Lahku salvestamata",
-      "cancel": "Katkesta faili muutmine"
+      "cancel": "Katkesta faili muutmine",
+      "saveNewDoi": "Salvesta uus DOI"
     },
     "locked": "Seda faili ei saa muuta, sest see on lukus",
     "photoArchive": "Fotoarhiiv",
@@ -702,7 +703,7 @@
       "attachment": "Seotud andmefailid",
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad",
-      "localityReference": "Kirjeldatud lokaliteedid",
+      "locality_reference": "Kirjeldatud lokaliteedid",
       "library": "Seotud kogumikud"
     }
   },

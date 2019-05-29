@@ -458,7 +458,7 @@
         <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link" :class="{ active: activeTab === 'locality_reference' }">
-              {{ $t('reference.relatedTables.localityReference') }}
+              {{ $t('reference.relatedTables.locality_reference') }}
             </a>
           </li>
         </ul>
@@ -498,6 +498,12 @@
           {{ $t($route.meta.isEdit ? 'edit.buttons.saveAndContinue' : 'add.buttons.addAnother') }}</button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
           {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}</button>
+
+        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2" :disabled="sendingData || !validate('reference')"
+                @click="addNewDoiFromReference('doi', 'reference', 'relatedData')">
+          {{ $t('edit.buttons.saveNewDoi') }}
+        </button>
+
       </div>
     </div>
 

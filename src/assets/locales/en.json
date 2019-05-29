@@ -186,7 +186,8 @@
       "saveAndLeave": "Save and leave",
       "saveAndContinue": "Save and continue editing",
       "cancelWithoutSaving": "Cancel without saving",
-      "cancel": "Cancel file change"
+      "cancel": "Cancel file change",
+      "saveNewDoi": "Save new DOI"
     },
     "locked": "This file is locked and can't be changed",
     "photoArchive": "Photo archive",
@@ -700,7 +701,7 @@
       "attachment": "Related data files",
       "locality": "Locality",
       "reference_keyword": "User keywords",
-      "localityReference": "Locality references",
+      "locality_reference": "Locality references",
       "library": "Related libraries"
     }
   },
