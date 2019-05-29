@@ -798,7 +798,7 @@
         if (type === undefined) {
           console.log(obj)
 
-          if (this.isDefinedAndNotNull(obj.original_filename)) obj.attachment = { id: obj.id, original_filename: obj.original_filename }
+          if (this.isDefinedAndNotNull(obj.attach_link__id)) obj.attachment = { id: obj.attach_link__id, original_filename: obj.original_filename }
           if (this.isDefinedAndNotNull(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
           if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
           if (this.isDefinedAndNotNull(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
@@ -875,9 +875,10 @@
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.doi = this.doi.id;
+        console.log(uploadableObject.attachment)
 
         if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
-          uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
+          uploadableObject.attachment = uploadableObject.attachment.attach_link__id ? uploadableObject.attachment.attach_link__id : uploadableObject.attachment;
         }
         if (this.isDefinedAndNotNull(uploadableObject.agent_type)) {
           uploadableObject.agent_type = uploadableObject.agent_type.id ? uploadableObject.agent_type.id : uploadableObject.agent_type;

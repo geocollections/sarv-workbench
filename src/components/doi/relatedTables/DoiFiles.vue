@@ -96,7 +96,7 @@
             </td>
 
             <td>
-              <b-form-input v-model="relatedData.insert.doi_date.remarks" type="text"/>
+              <b-form-input v-model="relatedData.insert.attachment_link.remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
