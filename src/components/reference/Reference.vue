@@ -499,11 +499,10 @@
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
           {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}</button>
 
-<!--        TODO: Enable if ready-->
-<!--        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2" :disabled="sendingData || !validate('reference')"-->
-<!--                @click="addNewDoiFromReference('doi', 'reference', 'relatedData')">-->
-<!--          {{ $t('edit.buttons.saveNewDoi') }}-->
-<!--        </button>-->
+        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2" :disabled="sendingData || !validate('reference')"
+                @click="addNewDoi()">
+          {{ $t('edit.buttons.saveNewDoi') }}
+        </button>
 
       </div>
     </div>
@@ -529,7 +528,11 @@
     fetchReferenceKeyword,
     fetchAttachmentLink,
     fetchLocalityReferenceForReference,
-    fetchAttachmentForReference, fetchLibrariesForReference,
+    fetchAttachmentForReference,
+    fetchLibrariesForReference,
+    fetchAddDoi,
+    fetchAddAttachmentLink,
+    fetchAddDoiGeolocation
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
@@ -623,6 +626,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           attachment: {},
+          doi: {},
           componentKey: 0,
           block: {info: true, description: true, digital: true, files: true, libraries: true, localities: true}
         }
@@ -923,6 +927,74 @@
 
       addFiles(data){
         this.addFileAsObject(data, 'reference', this.reference);
+      },
+
+      addNewDoi() {
+        if (this.validate('reference')) {
+          this.sendingData = true
+
+          let doiFormData = new FormData();
+          doiFormData.append('data', JSON.stringify({
+            creators: this.reference.author,
+            publication_year: this.reference.year,
+            title: this.reference.title,
+            title_alternative: this.reference.title_original,
+            language: this.reference.language.id,
+            publisher: this.reference.publisher,
+            abstract: this.reference.abstract,
+            reference: this.reference.id,
+            subjects: this.reference.author_keywords + this.reference.tags,
+            resource_type: 12,
+            version: 1.0,
+            formats: 'pdf',
+          }))
+
+          let newlyAddedDoiId;
+          fetchAddDoi(doiFormData).then(response => {
+            if (response.status === 200) {
+              newlyAddedDoiId = response.body.id
+              this.sendingData = false
+              this.toastResponseMessages(response)
+            }
+          }, errResponse => {
+            this.sendingData = false
+            toastError({text: 'DOI upload failed!'});
+          });
+
+          if (typeof newlyAddedDoiId !== 'undefined' && newlyAddedDoiId !== null) {
+            let attachment = this.attachment;
+            let locality = this.relatedData.locality;
+
+            if (typeof attachment !== 'undefined' && attachment !== null && attachment.length > 0) {
+              let attachmentLinkFormData = new FormData();
+              attachmentLinkFormData.append('data', JSON.stringify({
+                doi: newlyAddedDoiId,
+                attachment: attachment[0].id,
+              }));
+              fetchAddAttachmentLink(attachmentLinkFormData).then(response => {
+                if (response.status === 200) this.toastResponseMessages(response)
+              }, errResponse => {
+                toastError({text: 'Attachment Link upload failed!'});
+              });
+            }
+            if (typeof locality !== 'undefined' && locality !== null && locality.length > 0) {
+              let doiGeolocationFormData = new FormData();
+              locality.forEach((entity) => {
+                doiGeolocationFormData.append('data', JSON.stringify({
+                  doi: newlyAddedDoiId,
+                  locality: entity.id
+                }))
+              })
+              fetchAddDoiGeolocation(doiGeolocationFormData).then(response => {
+                if (response.status === 200) this.toastResponseMessages(response)
+              }, errResponse => {
+                toastError({text: 'Doi Geolocation upload failed!'});
+              });
+            }
+
+            this.$router.push({ path: '/doi/' + newlyAddedDoiId })
+          }
+        } else toastError({text: this.$t('messages.checkForm')})
       },
 
     },

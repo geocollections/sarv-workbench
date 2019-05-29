@@ -567,9 +567,27 @@ export function fetchAddDoi(data) {
   return fetchPost(`add/doi/`, data)
 }
 
+export function fetchAddDoiGeolocation(data) {
+  return fetchPost(`add/doi_geolocation/`, data)
+}
+
 /*****************
  ***  DOI END  ***
  *****************/
+
+
+
+/*****************************
+ *** ATTACHMENT LINK START ***
+ *****************************/
+
+export function fetchAddAttachmentLink(data) {
+  return fetchPost(`add/attachment_link/`, data)
+}
+
+/*****************************
+ ***  ATTACHMENT LINK END  ***
+ *****************************/
 
 
 
