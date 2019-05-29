@@ -26,9 +26,11 @@
             </div>
 
 
+            <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
             <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
               <label class="p-0" :for="`resource_type`">{{ $t('doi.resourceTypeGeneral') }}:</label>
               <vue-multiselect v-model="doi.resource_type"
+                               input-class="custom"
                                id="resource_type"
                                :options="autocomplete.resource_type"
                                track-by="id"
@@ -415,6 +417,8 @@
 
         <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
 
+        <doi-date :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+
       </div>
     </div>
 
@@ -499,16 +503,19 @@
     fetchDoiGeolocation,
     fetchDoiDate,
     fetchDoiRelatedIdentifierType,
-    fetchDoiRelationType
+    fetchDoiRelationType,
+    fetchDoiDateType
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import DoiAgent from "./relatedTables/DoiAgent";
   import DoiFiles from "./relatedTables/DoiFiles";
   import DoiRelatedIdentifier from "./relatedTables/DoiRelatedIdentifier";
   import DoiGeolocation from "./relatedTables/DoiGeolocation";
+  import DoiDate from "./relatedTables/DoiDate";
 
   export default {
     components: {
+      DoiDate,
       DoiGeolocation,
       DoiRelatedIdentifier,
       DoiFiles,
@@ -580,6 +587,7 @@
               doi_relation_type: false,
               doi_agent: false,
               locality: false,
+              doi_date_type: false,
             },
             resource_type: [],
             agent: [],
@@ -593,6 +601,7 @@
             doi_relation_type: [],
             doi_agent: [],
             locality: [],
+            doi_date_type: [],
           },
           requiredFields: ['publication_year', 'resource_type', 'title'],
           doi: {},
@@ -649,6 +658,7 @@
             }
           });
 
+          // TODO: Optimization possible, i.e., fetch requests only if user has clicked certain related data TAB.
           // Fetching autocomplete fields for related data
           fetchDoiAgentType().then(response => {
             this.autocomplete.doi_agent_type = this.handleResponse(response)
@@ -658,6 +668,9 @@
           });
           fetchDoiRelationType().then(response => {
             this.autocomplete.doi_relation_type = this.handleResponse(response)
+          });
+          fetchDoiDateType().then(response => {
+            this.autocomplete.doi_date_type = this.handleResponse(response)
           });
 
           // Load Related Data which is not in tabs
@@ -696,11 +709,13 @@
             identifier_type: [],
             relation_type: [],
             locality: [],
+            date_type: []
           },
           copyFields: {
             doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
+            doi_date: ['date', 'date_type', 'remarks']
           },
           insert: {
             doi_related_identifier: {},
@@ -785,6 +800,7 @@
           if (this.isDefinedAndNotNull(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
           if (this.isDefinedAndNotNull(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value }
           if (this.isDefinedAndNotNull(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en }
+          if (this.isDefinedAndNotNull(obj.date_type)) obj.date_type = { id: obj.date_type, value: obj.date_type__value }
 
           return obj;
         }
@@ -857,7 +873,6 @@
         uploadableObject.doi = this.doi.id;
 
         // DOI AGENT FIELDS
-        console.log(uploadableObject)
         if (this.isDefinedAndNotNull(uploadableObject.agent_type)) {
           uploadableObject.agent_type = uploadableObject.agent_type.id ? uploadableObject.agent_type.id : uploadableObject.agent_type;
         }
@@ -872,6 +887,9 @@
         }
         if (this.isDefinedAndNotNull(uploadableObject.locality)) {
           uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.date_type)) {
+          uploadableObject.date_type = uploadableObject.date_type.id ? uploadableObject.date_type.id : uploadableObject.date_type;
         }
 
         console.log('This object is sent in string format (related_data):')

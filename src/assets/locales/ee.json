@@ -592,6 +592,8 @@
     "place": "Kohanimi",
     "locality": "Lokaliteet andmebaasist",
     "primaryRefAndDat": "Kirjandus ja Andmekogum",
+    "date": "Kuupäev / vahemik",
+    "dateType": "Kuupäeva tüüp",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",

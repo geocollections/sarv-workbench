@@ -559,6 +559,10 @@ export function fetchDoiRelationType() {
   return fetch(`doi_relation_type/?format=json`)
 }
 
+export function fetchDoiDateType() {
+  return fetch(`doi_date_type/?format=json`)
+}
+
 /*****************
  ***  DOI END  ***
  *****************/
