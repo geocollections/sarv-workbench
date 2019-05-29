@@ -710,7 +710,7 @@
             date_type: []
           },
           copyFields: {
-            attachment_link: ['attachment', 'attachment__remarks'],
+            attachment_link: ['attachment', 'remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
             doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],

@@ -19,7 +19,7 @@
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">{{ entity.attachment__original_filename }}</td>
 
-            <td v-if="!entity.editMode">{{ entity.attachment__remarks }}</td>
+            <td v-if="!entity.editMode">{{ entity.remarks }}</td>
 
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
@@ -46,7 +46,7 @@
             </td>
 
             <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.attachment__remarks" type="text"/>
+              <b-form-input v-model="entity.new.remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
@@ -96,7 +96,7 @@
             </td>
 
             <td>
-              <b-form-input v-model="relatedData.insert.attachment_link.attachment__remarks" type="text"/>
+              <b-form-input v-model="relatedData.insert.attachment_link.remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
