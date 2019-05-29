@@ -480,7 +480,7 @@ export function fetchLibraryAgent(id) {
  *****************/
 
 export function fetchDois(data) {
-  const fields = 'id,identifier,creators,publication_year,title,resource_type__value';
+  const fields = 'id,identifier,creators,publication_year,title,resource_type__value,is_private';
   let searchFields = '';
   if (data.identifier !== null && data.identifier.trim().length > 0) {
     searchFields += `&identifier__icontains=${data.identifier}`

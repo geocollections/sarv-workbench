@@ -599,18 +599,10 @@ const formManipulation = {
 
     toastResponseMessages(response) {
       if (typeof response.body.message !== 'undefined') {
-        if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-          toastSuccess({text: response.body.message_et});
-        } else {
-          toastSuccess({text: response.body.message});
-        }
+        toastSuccess({text: response.body.message});
       }
       if (typeof response.body.error !== 'undefined') {
-        if (this.$i18n && this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-          toastError({text: response.body.error_et});
-        } else {
-          toastError({text: response.body.error});
-        }
+        toastError({text: response.body.error});
       }
     }
   },

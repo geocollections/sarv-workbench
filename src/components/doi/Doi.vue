@@ -4,28 +4,21 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- TODO: REQUIRED FIELDS -->
-
-    <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" ref="info">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
-        {{ $t('doi.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields }" @click="block.requiredFields = !block.requiredFields">
+        {{ $t('doi.requiredFields') }}
+        <font-awesome-icon color="#dc3545" icon="asterisk"/>
       </legend>
-      <transition name="fade">
-        <div v-if="block.info">
 
-          <!-- DOI, YEAR and RESOURCE TYPE -->
+      <transition name="fade">
+        <div v-if="block.requiredFields">
+
+          <!-- DOI, RESOURCE TYPE and RESOURCE -->
           <div class="row">
             <div class="col-md-4" v-if="$route.meta.isEdit">
               <label class="p-0" :for="`identifier`">{{ $t('doi.identifier') }}:</label>
               <b-form-input id="identifier" v-model="doi.identifier" type="text" :disabled="$route.meta.isEdit"></b-form-input>
             </div>
-
-            <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
-              <label class="p-0" :for="`publication_year`">{{ $t('doi.year') }}:</label>
-              <b-form-input id="publication_year" v-model="doi.publication_year" type="number"></b-form-input>
-            </div>
-
 
             <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
             <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
@@ -44,23 +37,43 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
-          </div>
 
-          <!-- RESOURCE -->
-          <div class="row">
-            <div class="col-sm-12">
+            <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
               <label class="p-0" :for="`resource`">{{ $t('doi.resource') }}:</label>
               <b-form-input id="resource" v-model="doi.resource" type="text"></b-form-input>
             </div>
           </div>
 
-          <!-- TITLE -->
+          <!-- TITLE, YEAR and PUBLISHER -->
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-md-4">
               <label class="p-0" :for="`title`">{{ $t('doi.title') }}:</label>
               <b-form-input id="title" v-model="doi.title" type="text"></b-form-input>
             </div>
+
+            <div class="col-md-4">
+              <label class="p-0" :for="`publication_year`">{{ $t('doi.year') }}:</label>
+              <b-form-input id="publication_year" v-model="doi.publication_year" type="number"></b-form-input>
+            </div>
+
+            <div class="col-md-4">
+              <label :for="`publisher`">{{ $t('doi.publisher') }}:</label>
+              <b-form-input id="publisher" v-model="doi.publisher" type="text"></b-form-input>
+            </div>
           </div>
+
+        </div>
+      </transition>
+    </fieldset>
+
+    <!-- GENERAL INFO -->
+    <fieldset class="border p-2 mb-2" ref="info">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+        {{ $t('doi.generalInfo') }}
+        <font-awesome-icon icon="project-diagram"/>
+      </legend>
+      <transition name="fade">
+        <div v-if="block.info">
 
           <!-- TITLE ALTERNATIVE -->
           <div class="row">
@@ -94,25 +107,17 @@
             </div>
           </div>
 
-          <!-- TODO: Connect with related persons -->
-          <!-- CREATORS -->
+          <!-- CREATORS and OWNER (agent) -->
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-md-6">
               <label class="p-0" :for="`creators`">{{ $t('doi.creators') }}:</label>
+              <!-- TODO: Connect with related persons -->
               <b-form-input id="creators" v-model="doi.creators" type="text"></b-form-input>
             </div>
-          </div>
-
-          <!-- PUBLISHER and OWNER (agent) -->
-          <div class="row">
-            <div class="col-md-6">
-              <label :for="`publisher`">{{ $t('doi.publisher') }}:</label>
-              <b-form-input id="publisher" v-model="doi.publisher" type="text"></b-form-input>
-            </div>
 
 
             <div class="col-md-6">
-              <label :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
+              <label class="p-0" :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
               <vue-multiselect id="agent" class="align-middle"
                                v-model="doi.owner"
                                deselect-label="Can't remove this value"
@@ -610,7 +615,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
-          block: {info: true, description: true, referenceAndDataset: false, datacite: true}
+          block: {requiredFields: true, info: true, description: true, referenceAndDataset: false, datacite: true}
         }
       },
 
@@ -812,7 +817,7 @@
         let relatedData = cloneDeep(obj)
         obj = [];
         relatedData.forEach(entity => {
-          if (type === 'attachment_link' || 'doi_agent' || 'doi_related_identifier' || 'doi_geolocation' || 'doi_date') obj.push(entity)
+          if (type === 'attachment_link' || type === 'doi_agent' || type === 'doi_related_identifier' || type === 'doi_geolocation' || type === 'doi_date') obj.push(entity)
         });
         return obj
       },
@@ -850,7 +855,7 @@
         }
 
         // Dataset and Reference are direct links and do not need extra request.
-        if (object !== 'dataset' && 'reference') {
+        if (object !== 'dataset' && object !== 'reference') {
           return new Promise(resolve => {
             query.then(response => {
               if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results : [];

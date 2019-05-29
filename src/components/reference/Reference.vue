@@ -618,9 +618,6 @@
           let attachment = this.attachment;
           let locality = this.relatedData.locality;
 
-          console.log(attachment)
-          console.log(locality)
-
           if (typeof attachment !== 'undefined' && attachment !== null && attachment.length > 0) {
             let attachmentLinkFormData = new FormData();
             attachmentLinkFormData.append('data', JSON.stringify({
