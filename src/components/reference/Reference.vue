@@ -1,6 +1,7 @@
 <template>
   <div class="reference">
-    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+    <spinner v-show="sendingData" class="loading-overlay" size="massive"
+             :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- GENERAL INFO -->
     <fieldset class="border p-2 mb-2">
@@ -17,12 +18,14 @@
           <div class="row">
             <div class="col-md-9 mb-2">
               <label :for="`reference`">{{ $t('reference.reference') }}:</label>
-              <b-form-input id="reference" v-model="reference.reference" :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
+              <b-form-input id="reference" v-model="reference.reference"
+                            :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3 mb-2">
               <label :for="`year`">{{ $t('reference.year') }}:</label>
-              <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)" type="number"></b-form-input>
+              <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)"
+                            type="number"></b-form-input>
             </div>
           </div>
 
@@ -30,7 +33,8 @@
           <div class="row">
             <div class="col-sm-12 mb-2">
               <label :for="`author`">{{ $t('reference.author') }}:</label>
-              <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)" type="text"></b-form-input>
+              <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)"
+                            type="text"></b-form-input>
             </div>
           </div>
 
@@ -39,7 +43,8 @@
           <div class="row">
             <div class="col-sm-12 mb-2">
               <label :for="`title`">{{ $t('reference.title') }}:</label>
-              <b-form-textarea :key="componentKey" id="title" v-model="reference.title" :state="isDefinedAndNotNull(reference.title)" type="text"
+              <b-form-textarea :key="componentKey" id="title" v-model="reference.title"
+                               :state="isDefinedAndNotNull(reference.title)" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
           </div>
@@ -104,7 +109,8 @@
                                :loading="autocomplete.loaders.journals"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.journal_name }}</strong></template>
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.journal_name }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -178,7 +184,9 @@
 
             <div class="col-5 col-md-2">
               <label :for="`check-doi`" style="visibility: hidden; display: block;">DOI:</label>
-              <b-button id="check-doi" variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">{{ $t('reference.checkDoi') }}</b-button>
+              <b-button id="check-doi" variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">
+                {{ $t('reference.checkDoi') }}
+              </b-button>
             </div>
 
             <div class="col-sm-12 col-md-5 mb-2">
@@ -218,9 +226,9 @@
     <!-- REMARKS and KEYWORDS -->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto" @click="block.description = !block.description"
-      :style="!block.description ? {'color':'blue'} : ''" >
+              :style="!block.description ? {'color':'blue'} : ''">
         {{ $t('reference.description') }}
-        <font-awesome-icon icon="pen-fancy" />
+        <font-awesome-icon icon="pen-fancy"/>
       </legend>
 
       <transition name="fade">
@@ -279,7 +287,8 @@
             </div>
 
             <div class="col-1 mb-2">
-              <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
+              <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+                      :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
                       @click="relatedData.keyword = null">
                 <font-awesome-icon icon="trash-alt"></font-awesome-icon>
               </button>
@@ -302,7 +311,8 @@
       <transition name="fade">
         <div v-if="block.digital">
 
-          <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false" acceptable-format="application/pdf" :accept-multiple="false"/>
+          <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false"
+                                acceptable-format="application/pdf" :accept-multiple="false"/>
           <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
 
         </div>
@@ -342,7 +352,8 @@
             </div>
           </div>
 
-          <file-table :attachments="relatedData.attachment" object="reference" v-if="relatedData.attachment.length > 0"/>
+          <file-table :attachments="relatedData.attachment" object="reference"
+                      v-if="relatedData.attachment.length > 0"/>
 
         </div>
       </transition>
@@ -457,16 +468,19 @@
       <div class="col mt-4">
         <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link" :class="{ active: activeTab === 'locality_reference' }">
+            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"
+               :class="{ active: activeTab === 'locality_reference' }">
               {{ $t('reference.relatedTables.locality_reference') }}
             </a>
           </li>
         </ul>
         <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
         <div class="row mb-4 pt-1">
-          <div class="col pagination-center" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+          <div class="col pagination-center"
+               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]" v-model="relatedData.page[activeTab]" :per-page="10">
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
+              v-model="relatedData.page[activeTab]" :per-page="10">
             </b-pagination>
           </div>
         </div>
@@ -493,13 +507,18 @@
     <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference', true)">
-          {{ $t($route.meta.isEdit ? 'edit.buttons.save' : 'add.buttons.add') }}</button>
+          {{ $t($route.meta.isEdit ? 'edit.buttons.save' : 'add.buttons.add') }}
+        </button>
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'reference', true)">
-          {{ $t($route.meta.isEdit ? 'edit.buttons.saveAndContinue' : 'add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
-          {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}</button>
+          {{ $t($route.meta.isEdit ? 'edit.buttons.saveAndContinue' : 'add.buttons.addAnother') }}
+        </button>
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData"
+                @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
+          {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}
+        </button>
 
-        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2" :disabled="sendingData || !validate('reference')"
+        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2"
+                :disabled="sendingData || !validate('reference')"
                 @click="addNewDoi()">
           {{ $t('edit.buttons.saveNewDoi') }}
         </button>
@@ -513,9 +532,9 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import { library } from '@fortawesome/fontawesome-svg-core'
+  import {library} from '@fortawesome/fontawesome-svg-core'
   import VueMultiselect from 'vue-multiselect'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
   import sidebarMixin from './../mixins/sidebarMixin'
   import {
@@ -535,10 +554,10 @@
     fetchAddDoiGeolocation
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
-  import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
-  import formManipulation  from './../mixins/formManipulation'
-  import autocompleteFieldManipulation  from './../mixins/autocompleFormManipulation'
-  import copyForm  from './../mixins/copyForm'
+  import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
+  import formManipulation from './../mixins/formManipulation'
+  import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
+  import copyForm from './../mixins/copyForm'
   import LocalityReference from "./relatedTables/LocalityReference"
   import FileTable from "../partial/FileTable";
   import LocalityTable from "../locality/LocalityTable";
@@ -558,7 +577,9 @@
     },
     mixins: [formManipulation, copyForm, autocompleteFieldManipulation, sidebarMixin, fontAwesomeLib],
 
-    data() { return this.setInitialData() },
+    data() {
+      return this.setInitialData()
+    },
     computed: {
       sidebarUserAction() {
         return this.$store.state['sidebarUserAction']
@@ -569,11 +590,18 @@
       this.activeObject = 'reference';
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'referenceSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(), search: params, request : 'FETCH_REFERENCES', title: 'header.references',
-        object:this.activeObject, field:'reference'});
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+        searchHistory: 'referenceSearchHistory',
+        defaultSearch: this.setDefaultSearchParameters(),
+        search: params,
+        request: 'FETCH_REFERENCES',
+        title: 'header.references',
+        object: this.activeObject,
+        field: 'reference'
+      });
 
-      this.loadFullInfo() },
+      this.loadFullInfo()
+    },
 
     watch: {
       '$route.params.id': {
@@ -583,13 +611,53 @@
         deep: true
       },
       'sidebarUserAction'(newval, oldval) {
-        this.handleSidebarUserAction(newval,'reference')
+        this.handleSidebarUserAction(newval, 'reference')
       },
+      'newlyAddedDoiId'(newval, oldval) {
+        if (typeof newval !== 'undefined' && newval !== null) {
+          let attachment = this.attachment;
+          let locality = this.relatedData.locality;
+
+          console.log(attachment)
+          console.log(locality)
+
+          if (typeof attachment !== 'undefined' && attachment !== null && attachment.length > 0) {
+            let attachmentLinkFormData = new FormData();
+            attachmentLinkFormData.append('data', JSON.stringify({
+              doi: newval,
+              attachment: attachment[0].id,
+            }));
+            fetchAddAttachmentLink(attachmentLinkFormData).then(response => {
+              if (response.status === 200) this.toastResponseMessages(response)
+            }, errResponse => {
+              toastError({text: 'Attachment Link upload failed!'});
+            });
+          }
+          if (typeof locality !== 'undefined' && locality !== null && locality.length > 0) {
+            let doiGeolocationFormData = new FormData();
+            locality.forEach((entity) => {
+              doiGeolocationFormData.append('data', JSON.stringify({
+                doi: newval,
+                locality: entity.id
+              }))
+            })
+            fetchAddDoiGeolocation(doiGeolocationFormData).then(response => {
+              if (response.status === 200) this.toastResponseMessages(response)
+            }, errResponse => {
+              toastError({text: 'Doi Geolocation upload failed!'});
+            });
+          }
+
+          this.$router.push({path: '/doi/' + newval})
+        }
+      }
     },
 
     methods: {
 
-      setTab(type) { this.activeTab = type },
+      setTab(type) {
+        this.activeTab = type
+      },
 
       setInitialData() {
         return {
@@ -627,6 +695,7 @@
           searchParameters: this.setDefaultSearchParameters(),
           attachment: {},
           doi: {},
+          newlyAddedDoiId: null,
           componentKey: 0,
           block: {info: true, description: true, digital: true, files: true, libraries: true, localities: true}
         }
@@ -648,17 +717,17 @@
           this.autocomplete.keyword = this.handleResponse(response);
         });
 
-        if(this.$route.meta.isEdit) {
+        if (this.$route.meta.isEdit) {
           this.sendingData = true;
           fetchReference(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
-            if(handledResponse.length > 0) {
+            if (handledResponse.length > 0) {
               this.reference = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.reference)
               this.removeUnnecessaryFields(this.reference, this.copyFields);
               this.forceRerender()
-              this.$emit('data-loaded',this.reference)
-              this.$emit('set-object','reference')
+              this.$emit('data-loaded', this.reference)
+              this.$emit('set-object', 'reference')
               this.sendingData = false;
               this.getListRecords('reference')
             } else {
@@ -687,7 +756,7 @@
                 author__agent: entity.attachment__author__agent,
                 uuid_filename: entity.attachment__uuid_filename,
                 remarks: entity.attachment__remarks,
-                original_filename:entity.attachment__original_filename,
+                original_filename: entity.attachment__original_filename,
               }
             })
           })
@@ -725,14 +794,14 @@
             this.loadRelatedData(entity);
           });
 
-          this.$on('tab-changed',this.setTab);
+          this.$on('tab-changed', this.setTab);
 
-          this.$on('related-data-modified',this.editRelatedData);
-          this.$on('related-data-added',this.addRelatedData);
-          this.$on('edit-row',this.editRow);
-          this.$on('allow-remove-row',this.allowRemove);
+          this.$on('related-data-modified', this.editRelatedData);
+          this.$on('related-data-added', this.addRelatedData);
+          this.$on('edit-row', this.editRow);
+          this.$on('allow-remove-row', this.allowRemove);
 
-          this.$emit('related-data-info',this.tabs);
+          this.$emit('related-data-info', this.tabs);
 
           this.setActiveTab('locality_reference')
         }
@@ -743,9 +812,9 @@
         this.componentKey += 1;
       },
 
-      setDefaultRelatedData(){
+      setDefaultRelatedData() {
         return {
-          locality_reference:[],
+          locality_reference: [],
           attachment: [],
           keyword: [],
           locality: [],
@@ -756,7 +825,7 @@
           insert: {
             locality_reference: {},
           },
-          page : {
+          page: {
             locality_reference: 1,
             attachment: 1,
             keyword: 1,
@@ -793,22 +862,22 @@
         return JSON.stringify(uploadableObject)
       },
 
-      fillAutocompleteFields(obj){
-        this.reference.type = { id: obj.type__id, value: obj.type__value, value_en: obj.type__value_en }
-        this.reference.language = { id: obj.language__id, value: obj.language__value, value_en: obj.language__value_en }
-        this.reference.journal = { id: obj.journal__id, journal_name: obj.journal__journal_name }
+      fillAutocompleteFields(obj) {
+        this.reference.type = {id: obj.type__id, value: obj.type__value, value_en: obj.type__value_en}
+        this.reference.language = {id: obj.language__id, value: obj.language__value, value_en: obj.language__value_en}
+        this.reference.journal = {id: obj.journal__id, journal_name: obj.journal__journal_name}
       },
 
-      fillRelatedDataAutocompleteFields(obj){
-        obj.locality = { locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality }
+      fillRelatedDataAutocompleteFields(obj) {
+        obj.locality = {locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality}
         return obj
       },
 
       // TODO: Put request here, which are currently in loadFullInfo method + blockVisibility
-      loadRelatedData(object){
+      loadRelatedData(object) {
         let query;
 
-        if(object === 'locality_reference') {
+        if (object === 'locality_reference') {
           query = fetchLocalityReferenceForReference(this.$route.params.id, this.relatedData.page.locality_reference)
         }
         return new Promise(resolve => {
@@ -821,11 +890,11 @@
       },
 
       //check required fields for related data
-      checkRequiredFields(type){
+      checkRequiredFields(type) {
 
       },
 
-      formatRelatedData(objectToUpload)  {
+      formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.reference = this.reference.id
 
@@ -887,7 +956,8 @@
               this.updateFieldsUsingDoi(response.body.message)
             }
           }
-        }, errResponse => {})
+        }, errResponse => {
+        })
       },
 
       updateFieldsUsingDoi(data) {
@@ -925,13 +995,13 @@
         if (data.publisher) this.reference.publisher = data.publisher
       },
 
-      addFiles(data){
+      addFiles(data) {
         this.addFileAsObject(data, 'reference', this.reference);
       },
 
       addNewDoi() {
         if (this.validate('reference')) {
-          this.sendingData = true
+          this.sendingData = true;
 
           let doiFormData = new FormData();
           doiFormData.append('data', JSON.stringify({
@@ -947,12 +1017,12 @@
             resource_type: 12,
             version: 1.0,
             formats: 'pdf',
-          }))
+          }));
 
-          let newlyAddedDoiId;
           fetchAddDoi(doiFormData).then(response => {
             if (response.status === 200) {
-              newlyAddedDoiId = response.body.id
+              // Watcher triggers DOI related data requests
+              this.newlyAddedDoiId = response.body.id
               this.sendingData = false
               this.toastResponseMessages(response)
             }
@@ -960,40 +1030,6 @@
             this.sendingData = false
             toastError({text: 'DOI upload failed!'});
           });
-
-          if (typeof newlyAddedDoiId !== 'undefined' && newlyAddedDoiId !== null) {
-            let attachment = this.attachment;
-            let locality = this.relatedData.locality;
-
-            if (typeof attachment !== 'undefined' && attachment !== null && attachment.length > 0) {
-              let attachmentLinkFormData = new FormData();
-              attachmentLinkFormData.append('data', JSON.stringify({
-                doi: newlyAddedDoiId,
-                attachment: attachment[0].id,
-              }));
-              fetchAddAttachmentLink(attachmentLinkFormData).then(response => {
-                if (response.status === 200) this.toastResponseMessages(response)
-              }, errResponse => {
-                toastError({text: 'Attachment Link upload failed!'});
-              });
-            }
-            if (typeof locality !== 'undefined' && locality !== null && locality.length > 0) {
-              let doiGeolocationFormData = new FormData();
-              locality.forEach((entity) => {
-                doiGeolocationFormData.append('data', JSON.stringify({
-                  doi: newlyAddedDoiId,
-                  locality: entity.id
-                }))
-              })
-              fetchAddDoiGeolocation(doiGeolocationFormData).then(response => {
-                if (response.status === 200) this.toastResponseMessages(response)
-              }, errResponse => {
-                toastError({text: 'Doi Geolocation upload failed!'});
-              });
-            }
-
-            this.$router.push({ path: '/doi/' + newlyAddedDoiId })
-          }
         } else toastError({text: this.$t('messages.checkForm')})
       },
 
