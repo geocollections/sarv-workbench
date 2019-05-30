@@ -195,10 +195,10 @@ const formManipulation = {
           }
         }
       }, errResponse => {
-        // console.log(this.$t('messages.uploadError'))
+        console.log(this.$t('messages.uploadError'))
         console.log('ERROR: ' + JSON.stringify(errResponse));
         this.sendingData = false
-        // toastError({text: this.$t('messages.uploadError')});
+        toastError({text: this.$t('messages.uploadError')});
         resolve(undefined)
       })
     },
