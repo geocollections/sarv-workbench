@@ -607,10 +607,11 @@
         if(site) this.watchedSite = site
         //set relation object as site
         let createRelationWith = {
-          object: 'project', data: this.project, edit:site,
+          object: 'project', edit:site, data: this.project,
           info: this.$t('messages.projectSiteRelationInfo',
             {data: `ID: ${this.project.id} (${this.project.name})`})
         };
+
         this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith});
         //MODAL OPTION IS COMMENTED BUT NOT REMOVED
         // this.$emit('show-new-site-modal')
