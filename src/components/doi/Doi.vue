@@ -4,10 +4,11 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- TODO: REQUIRED FIELDS -->
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields }" @click="block.requiredFields = !block.requiredFields">
+    <fieldset class="border p-2 mb-2" :style="!validate('doi') ? 'border-color: #dc3545!important;' : ''">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('doi') }" @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
-        <font-awesome-icon color="#dc3545" icon="asterisk"/>
+        <font-awesome-icon v-if="validate('doi')" color="#28a745" icon="check"/>
+        <font-awesome-icon v-if="!validate('doi')" color="#dc3545" icon="exclamation-triangle"/>
       </legend>
 
       <transition name="fade">
@@ -609,7 +610,7 @@
             doi_date_type: [],
             attachment: []
           },
-          requiredFields: ['publication_year', 'resource_type', 'title'],
+          requiredFields: ['resource_type', 'resource', 'title', 'publication_year', 'publisher'],
           doi: {},
           previousRecord: {},
           nextRecord: {},
