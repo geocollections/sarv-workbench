@@ -975,7 +975,17 @@
         if (data.author && data.author.length > 0) {
           let author = ''
           for (let item in data.author) {
-            author += data.author[item].family + ', ' + data.author[item].given.charAt(0) + '., '
+            if (typeof data.author[item].given !== 'undefined' && data.author[item].given.includes(' ')) {
+              let given = data.author[item].given.split(' ');
+              author += data.author[item].family.charAt(0).toUpperCase()
+                + data.author[item].family.substring(1).toLowerCase() + ', '
+                + given[0].charAt(0) + '.'
+                + given[1] + ', '
+            } else {
+              author += data.author[item].family.charAt(0).toUpperCase()
+                + data.author[item].family.substring(1).toLowerCase() + ', '
+                + data.author[item].given.charAt(0) + '., '
+            }
           }
           this.reference.author = author.trim().slice(0, -1)
         }
