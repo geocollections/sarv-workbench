@@ -6,24 +6,28 @@
     <b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">
       {{ createRelationWith.info }}
       <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
-        <!--<font-awesome-icon icon="external-link-alt"/>-->
+      <!--<font-awesome-icon icon="external-link-alt"/>-->
       <!--</a>-->
     </b-alert>
     <!--<b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)"> Ava vaatluspunkti eraldi tabil-->
-      <!--<a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">-->
-      <!--<font-awesome-icon icon="external-link-alt"/>-->
-      <!--</a>-->
+    <!--<a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">-->
+    <!--<font-awesome-icon icon="external-link-alt"/>-->
+    <!--</a>-->
     <!--</b-alert>-->
     <!-- STORAGE-->
+
+    <!-- GENERAL INFO -->
     <fieldset class="border p-2 mb-2" ref="info">
-      <legend class="w-auto"  @click="block.info = !block.info" :style="!block.info ? {'color':'blue'} : ''">Üldinfo
+      <legend class="w-auto" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
+        {{ $t('site.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
+
       <transition name="fade">
         <div v-if="block.info">
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0">{{ $t('site.name') }}:</label>
+              <label :for="`name`">{{ $t('site.name') }}:</label>
               <b-form-input id="name" v-model="site.name" type="text" maxlength="100"></b-form-input>
             </div>
 
@@ -32,15 +36,17 @@
               <!--<b-form-input id="name_en" v-model="site.name_en" type="text" maxlength="100"></b-form-input>-->
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0">{{ $t('site.number') }}:</label>
-              <b-form-input id="name" v-model="site.number" type="text" maxlength="20"></b-form-input>
+              <label :for="`number`">{{ $t('site.number') }}:</label>
+              <b-form-input id="number" v-model="site.number" type="text" maxlength="20"></b-form-input>
             </div>
 
             <div class="col-sm-6">
-              <label class="p-0">{{ $t('site.project') }}:</label>
+              <label :for="`project`">{{ $t('site.project') }}:</label>
               <vue-multiselect class="align-middle" v-model="site.project" select-label=""
+                               id="project"
                                deselect-label="Can't remove this value"
                                :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.project"
@@ -54,9 +60,10 @@
               </vue-multiselect>
             </div>
           </div>
+
           <div class="row">
             <div class="col-sm-4">
-              <label :for="`date_start`" class="p-0">{{ $t('site.date_start') }}:</label>
+              <label :for="`date_start`">{{ $t('site.date_start') }}:</label>
               <datepicker id="date_start"
                           v-model="site.date_start"
                           use-utc="true"
@@ -67,7 +74,7 @@
             </div>
 
             <div class="col-sm-4">
-              <label :for="`date_end`" class="p-0">{{ $t('site.date_end') }}:</label>
+              <label :for="`date_end`">{{ $t('site.date_end') }}:</label>
               <datepicker id="date_end"
                           v-model="site.date_end"
                           use-utc="true "
@@ -77,8 +84,9 @@
                           input-class="form-control"></datepicker>
             </div>
             <div class="col-sm-3">
-              <label class="p-0">&ensp;</label>
-              <button class="btn btn-outline-primary form-control" @click="finishWork" v-b-tooltip.hover title="Finish and close"
+              <label>&ensp;</label>
+              <button class="btn btn-outline-primary form-control" @click="finishWork" v-b-tooltip.hover
+                      title="Finish and close"
                       v-if="site.date_end === undefined || site.date_end === null"> Finish
               </button>
             </div>
@@ -87,62 +95,69 @@
       </transition>
     </fieldset>
 
+    <!-- LOCATION -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.location = !block.location" :style="!block.location ? {'color':'blue'} : ''">{{
-        $t('site.location') }}
-        <font-awesome-icon icon="globe" />
+      <legend class="w-auto" :class="{'text-primary': !block.location}" @click="block.location = !block.location">
+        {{ $t('site.location') }}
+        <font-awesome-icon icon="globe"/>
       </legend>
+
       <transition name="fade">
         <div v-if="block.location">
+
           <div class="row">
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.latitude') }}:</label>
+              <label :for="`latitude`">{{ $t('site.latitude') }}:</label>
               <b-form-input id="latitude" v-model="site.latitude" :state="isDefinedAndNotNull(site.latitude)"
                             type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.longitude') }}:</label>
+              <label :for="`longitude`">{{ $t('site.longitude') }}:</label>
               <b-form-input id="longitude" v-model="site.longitude" :state="isDefinedAndNotNull(site.longitude)"
                             type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.location_accuracy') }}:</label>
+              <label :for="`location_accuracy`">{{ $t('site.location_accuracy') }}:</label>
               <b-form-input id="location_accuracy" v-model="site.location_accuracy" type="number"
                             min="0"></b-form-input>
             </div>
           </div>
+
           <div class="row">
-        <span class="col ml-3 mt-3 custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
-            <label class="custom-control-label"
-                   for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
-          </span>
+            <span class="col ml-3 mt-3 custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
+              <label class="custom-control-label"
+                     for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
+            </span>
           </div>
+
           <div class="row mb-2">
             <div class="col-lg-12">
               <b-collapse v-model="showCollapseMap" id="collapseMap">
                 <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
-                <map-component-2 :gps-coords="true" v-if="showCollapseMap && !isLatitudeUndefinedInEditView" mode="single" v-bind:locations="[]"
+                <map-component-2 :gps-coords="true" v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
+                                 mode="single" v-bind:locations="[]"
                                  v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }"
                                  v-on:get-location="updateLocation"></map-component-2>
               </b-collapse>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.elevation') }}:</label>
+              <label :for="`elevation`">{{ $t('site.elevation') }}:</label>
               <b-form-input id="elevation" v-model="site.elevation" type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.elevation_accuracy') }}:</label>
+              <label :for="`elevation_accuracy`">{{ $t('site.elevation_accuracy') }}:</label>
               <b-form-input id="elevation_accuracy" v-model="site.elevation_accuracy" type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.coord_det_method') }}:</label>
+              <label :for="`coord_det_method`">{{ $t('site.coord_det_method') }}:</label>
               <vue-multiselect v-model="site.coord_det_method"
                                id="coord_det_method"
                                :options="autocomplete.coordMethod"
@@ -154,20 +169,22 @@
               </vue-multiselect>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.extent') }}:</label>
+              <label :for="`extent`">{{ $t('site.extent') }}:</label>
               <b-form-input id="extent" v-model="site.extent" type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.depth') }}:</label>
+              <label :for="`depth`">{{ $t('site.depth') }}:</label>
               <b-form-input id="depth" v-model="site.depth" type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('site.locality') }}:</label>
+              <label :for="`locality`">{{ $t('site.locality') }}:</label>
               <vue-multiselect class="align-middle" v-model="site.locality" select-label=""
+                               id="locality"
                                deselect-label="Can't remove this value"
                                :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
@@ -184,7 +201,7 @@
 
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <label class="p-0">{{ $t('site.remarks_location') }}:</label>
+              <label :for="`remarks_location`">{{ $t('site.remarks_location') }}:</label>
               <b-form-textarea id="remarks_location" v-model="site.remarks_location" type="text" size="sm" :rows="2"
                                :max-rows="20"/>
             </div>
@@ -192,16 +209,18 @@
         </div>
       </transition>
     </fieldset>
+
+    <!-- DESCRIPTION -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.description = !block.description" :style="!block.description ? {'color':'blue'} : ''">{{
-        $t('site.description') }} | {{ $t('site.remarks') }}
+      <legend class="w-auto" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
+        {{ $t('site.description') }} | {{ $t('site.remarks') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
       <transition name="fade">
         <div v-if="block.description">
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <b-form-textarea id="remarks" v-model="site.description" type="text" size="sm" :rows="2" :max-rows="20"/>
+              <b-form-textarea id="description" v-model="site.description" type="text" size="sm" :rows="2" :max-rows="20"/>
             </div>
           </div>
 
@@ -215,9 +234,11 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" ref="files">
-      <legend class="w-auto" @click="block.files = !block.files" :style="!block.files ? {'color':'blue'} : ''">Files
+      <legend class="w-auto" @click="block.files = !block.files" :class="{'text-primary': !block.files}">
+        {{ $t('site.files') }}
         <font-awesome-icon icon="folder-open"/>
       </legend>
+
       <transition name="fade">
         <div v-if="block.files">
           <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="true"/>
@@ -228,12 +249,13 @@
     </fieldset>
 
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" ref="samples">
-      <legend class="w-auto" @click="block.samples = !block.samples" :style="!block.samples ? {'color':'blue'} : ''">Related samples
+      <legend class="w-auto" @click="block.samples = !block.samples" :class="{'text-primary': !block.samples}">
+        {{ $t('site.relatedSamples') }}
         <font-awesome-icon icon="vial"/>
       </legend>
       <transition name="fade">
         <div class="row" v-if="block.samples">
-          <add-new-sample :sendingData = "sendingData" ></add-new-sample>
+          <add-new-sample :sendingData="sendingData"></add-new-sample>
           <div class="col-sm-12 mb-2">
             <span class="float-left">
               <button class="btn btn-outline-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
@@ -245,6 +267,7 @@
         </div>
       </transition>
     </fieldset>
+
     <div class="row mt-3 mb-3">
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')"
@@ -252,12 +275,14 @@
           <font-awesome-icon icon="door-open"/>
           {{ $t('edit.buttons.saveAndLeave') }}
         </button>
+
         <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)"
                 :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
           <font-awesome-icon icon="save"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
           <!--{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}-->
         </button>
+
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="navigateBack('site')"
                 :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
           <font-awesome-icon icon="ban"/>
@@ -299,6 +324,7 @@
   import AddNewSample from "./addNewSampleModal";
 
   import sidebarMixin from './../mixins/sidebarMixin'
+
   export default {
     name: "Site",
     components: {
@@ -316,7 +342,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin,sidebarMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, sidebarMixin],
     // props:['editSite'], USED FOR MODAL
     data() {
       return this.setInitialData()
@@ -347,14 +373,16 @@
       this.activeObject = 'site';
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'siteSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(), search: params, request : 'FETCH_SITES', title: 'header.sites',
-        object:this.activeObject, field: 'name'})
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+        searchHistory: 'siteSearchHistory',
+        defaultSearch: this.setDefaultSearchParameters(), search: params, request: 'FETCH_SITES', title: 'header.sites',
+        object: this.activeObject, field: 'name'
+      })
 
       this.loadFullInfo();
 
     },
-    updated(){
+    updated() {
       this.$localStorage.set('activeSite', this.$data.site.id);
     },
     methods: {
@@ -377,8 +405,14 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          attachmentLinkSaved : -1,
-          block: {info: !this.$route.meta.isEdit , location: this.$route.meta.isEdit, description: false, files: true, samples: true}
+          attachmentLinkSaved: -1,
+          block: {
+            info: !this.$route.meta.isEdit,
+            location: this.$route.meta.isEdit,
+            description: false,
+            files: true,
+            samples: true
+          }
         }
       },
 
@@ -392,7 +426,7 @@
           this.autocomplete.coordMethod = this.handleResponse(response);
         });
 
-        if (this.$route.meta.isEdit  && this.createRelationWith.data === null || this.isDefinedAndNotNull(this.createRelationWith.edit)) {
+        if (this.$route.meta.isEdit && this.createRelationWith.data === null || this.isDefinedAndNotNull(this.createRelationWith.edit)) {
           this.sendingData = true;
 
           fetchSite(this.routeId).then(response => {
@@ -566,7 +600,7 @@
         this.site.latitude = location.lat.toFixed(6)
         this.site.longitude = location.lng.toFixed(6)
       },
-      addFiles(data){
+      addFiles(data) {
         this.addFileAsRelatedData(data, 'site');
       },
 
@@ -586,7 +620,7 @@
         // this.$router.push({path: '/sample/add'});
 
         this.lsPushCreateRelationWith(createRelationWith);
-        this.windowOpenNewTab('sample','/sample/add')
+        this.windowOpenNewTab('sample', '/sample/add')
         // let routeData = this.$router.resolve({ path:'/sample/add'});
         // window.open(routeData.href, '_blank', 'width=750,height=750');
       },
@@ -649,7 +683,7 @@
 
       saveAndNavigateBack(object) {
         let vm = this
-        this.add(false, object,false,true).then(resp => {
+        this.add(false, object, false, true).then(resp => {
           vm.navigateBack()
         })
       },
@@ -657,11 +691,11 @@
       navigateBack() {
         if (this.createRelationWith.object !== null) {
 
-          if(this.createRelationWith.data === null) {
+          if (this.createRelationWith.data === null) {
             window.close();
           }
 
-          if(this.createRelationWith.edit === null) {
+          if (this.createRelationWith.edit === null) {
             this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
           } else {
             this.$root.$emit('close-new-site-modal')
@@ -677,12 +711,12 @@
       handleUserChoiceFromModal(choice) {
         console.log(choice)
         let vm = this
-        if(choice === 'SAVE_AND_LEAVE') {
-          this.add(false, 'site',false,true).then(resp => {
+        if (choice === 'SAVE_AND_LEAVE') {
+          this.add(false, 'site', false, true).then(resp => {
             vm.$root.$emit('close-new-site-modal')
           })
-        } else if(choice === 'SAVE') {
-          this.add(true, 'site',false,false)
+        } else if (choice === 'SAVE') {
+          this.add(true, 'site', false, false)
         }
       },
     },
@@ -710,7 +744,13 @@
 
 <style scoped>
 
-.tooltip .fade{
-  background-color: red !important;
-}
+  .tooltip .fade {
+    background-color: red !important;
+  }
+
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+  }
 </style>

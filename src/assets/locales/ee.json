@@ -521,7 +521,10 @@
     "date_end":"Lõpp",
     "date_free":"Txt",
     "description":"Kirjeldus",
-    "remarks":"Lisainfo"
+    "remarks":"Lisainfo",
+    "generalInfo": "Üldinfo",
+    "files": "Failid",
+    "relatedSamples": "Seotud proovid"
   },
   "taxon": {
     "taxon": "Takson",

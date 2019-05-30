@@ -520,7 +520,10 @@
     "date_start":"Date start",
     "date_end":"Date end",
     "description":"Description",
-    "remarks":"Remarks"
+    "remarks":"Remarks",
+    "generalInfo": "General info",
+    "files": "Files",
+    "relatedSamples": "Related samples"
   },
   "sample_series": {
     "name": "Name"
