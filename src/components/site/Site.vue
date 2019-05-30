@@ -252,8 +252,7 @@
           <font-awesome-icon icon="door-open"/>
           {{ $t('edit.buttons.saveAndLeave') }}
         </button>
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData"
-                @click="addOrEditSite"
+        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)"
                 :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
           <font-awesome-icon icon="save"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
@@ -686,13 +685,6 @@
           this.add(true, 'site',false,false)
         }
       },
-
-      addOrEditSite(){
-        if(this.createRelationWith && this.createRelationWith.edit)
-          this.add(false,'site',true)
-        else
-          this.add(true,'site',true)
-      }
     },
 
     beforeRouteLeave(to, from, next) {
