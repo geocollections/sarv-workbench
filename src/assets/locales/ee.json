@@ -255,6 +255,9 @@
     "digitisedReferenceFile": "Kirjandus",
     "otherFile": "Fail",
     "edit": "Muuda",
+    "fancyView": "Uus vaade",
+    "regularView": "Vana vaade",
+    "toggleFancyImageList": "Muuda piltide kuvamist",
     "errors": {
       "noFiles1": "Kahjuks ei leitud mitte ühtegi faili. Minge",
       "noFiles2": "ja alustage üleslaadimist."

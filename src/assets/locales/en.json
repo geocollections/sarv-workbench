@@ -255,6 +255,8 @@
     "digitisedReferenceFile": "Reference",
     "otherFile": "File",
     "edit": "Edit",
+    "fancyView": "Fancy view",
+    "regularView": "Old view",
     "errors": {
       "noFiles1": "Unfortunately we didn't find any files. Go to",
       "noFiles2": "and start uploading."
