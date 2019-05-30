@@ -686,7 +686,9 @@
             library: [],
           },
           requiredFields: ['reference', 'year', 'author', 'title'],
-          reference: {},
+          reference: {
+            year: '' // Adding it because of reactivity issue
+          },
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
@@ -988,7 +990,7 @@
         if (data.volume) this.reference.volume = data.volume
         if (data.issue) this.reference.number = data.issue
         if (data.page) this.reference.pages = data.page
-        if (data.url) this.reference.url = data.url
+        if (data.URL) this.reference.url = data.URL
         if (data.publisher) this.reference.publisher = data.publisher
       },
 
