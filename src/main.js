@@ -227,6 +227,13 @@ new Vue({
       type: String,
       default: 'table'
     },
+    analysisSearchHistory: {
+      type: Object
+    },
+    analysisViewType: {
+      type: String,
+      default: 'table'
+    },
   },
   render: h => h(App)
 }).$mount('#app')

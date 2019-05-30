@@ -24,6 +24,7 @@
   },
   "header": {
     "title": "SARV2",
+    "analysis": "Analüüs",
     "attachments": "Failid",
     "files": "Failid",
     "references": "Kirjandus",
@@ -205,6 +206,10 @@
     "title": "Pealkiri",
     "bookJournal": "Raamat või ajakiri",
     "abstractKeywordsRemarks": "Abstrakt, märksõnad või lisainfo"
+  },
+  "editAnalysis": {
+    "heading": "Analüüs",
+    "editMessage": "Muuda analüüsi"
   },
   "editProject": {
     "heading": "Projekt",
@@ -533,6 +538,8 @@
     "name": "Nimi"
   },
   "analysis": {
+    "header":"Analüüs",
+    "generalInfo":"Üldinfo",
     "sample": "Proov #",
     "method": "Metoodika",
     "method_specification": "Met. täpsustus",

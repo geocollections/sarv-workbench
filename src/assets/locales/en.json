@@ -24,6 +24,7 @@
   },
   "header": {
     "title": "SARV2",
+    "analysis": "Analysis",
     "attachments": "Files",
     "files": "Files",
     "references": "References",
@@ -221,6 +222,10 @@
     "heading": "Sample ID",
     "editMessage": "Edit sample",
     "viewMessage": "View sample in geocollections portal"
+  },
+  "editAnalysis": {
+    "heading": "Analysis",
+    "editMessage": "Edit analysis"
   },
   "editProject": {
     "heading": "Project ID",
@@ -519,6 +524,8 @@
     "name": "Name"
   },
   "analysis": {
+    "header":"Analysis",
+    "generalInfo":"Info",
     "sample": "Sample #",
     "method": "Methodology",
     "method_specification": "Met. specification",
