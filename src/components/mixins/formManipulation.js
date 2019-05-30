@@ -115,6 +115,7 @@ const formManipulation = {
         formData.append('data', dataToUpload);
 
         this.saveData(object, formData, url).then(savedObjectId => {
+          savedObjectId = 5665
           //before save object ID was removed
           this[object] = editableObject;
           // if (savedObjectId === undefined || savedObjectId === false) return;
@@ -124,7 +125,7 @@ const formManipulation = {
           if (!returnPromise) {
             if (!addAnother) {
               this.$router.push({path: '/' + object})
-            } else if(savedObjectId && savedObjectId === true){
+            } else if(savedObjectId || savedObjectId === true){
               this.$router.push({path: '/' + object + '/' + savedObjectId})
             } else {
               resolve(false)
