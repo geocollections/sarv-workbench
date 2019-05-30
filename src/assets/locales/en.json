@@ -697,6 +697,7 @@
     "solrSearch": "Fast search",
     "info": "General info",
     "description": "Remarks and keywords",
+    "doiConfirmation": "Are you sure you want to register a new DOI for this reference? DOI-s cannot be deleted.",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

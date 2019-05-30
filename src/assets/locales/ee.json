@@ -699,6 +699,7 @@
     "solrSearch": "Kiire otsing",
     "info": "Üldinfo",
     "description": "Lisainfo ja märksõnad",
+    "doiConfirmation": "Kas oled kindel, et soovid kirjandusallikale registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik.",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",
