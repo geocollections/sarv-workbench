@@ -2,16 +2,19 @@
   <div id="#tab-geolocation" class="tab-geolocation row" :class="{active: activeTab === 'doi_geolocation'}"
        role="tabpanel">
     <div class="col-sm-12" v-if="activeTab === 'doi_geolocation'">
-      <div class="table-responsive-sm">
+      <div class="table-responsive-md">
 
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
-            <th>{{ $t('doi.point') }}</th>
-            <th>{{ $t('doi.box') }}</th>
-            <th>{{ $t('doi.place') }}</th>
             <th>{{ $t('doi.locality') }}</th>
-            <th>{{ $t('doi.remarks') }}</th>
+            <th>{{ $t('doi.place') }}</th>
+            <th>{{ $t('doi.pointLongitude') }}</th>
+            <th>{{ $t('doi.pointLatitude') }}</th>
+            <th>{{ $t('doi.boxWLongitude') }}</th>
+            <th>{{ $t('doi.boxELongitude') }}</th>
+            <th>{{ $t('doi.boxSLatitude') }}</th>
+            <th>{{ $t('doi.boxNLatitude') }}</th>
             <th class="btn-th"></th>
           </tr>
           </thead>
@@ -20,29 +23,23 @@
           <tr v-for="entity in relatedData.doi_geolocation"
               :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
             <!-- VIEW MODE -->
-            <td v-if="!entity.editMode">{{ entity.point }}</td>
-
-            <td v-if="!entity.editMode">{{ entity.box }}</td>
+            <td v-if="!entity.editMode" v-translate="{ et: entity.locality__locality, en: entity.locality__locality_en }"></td>
 
             <td v-if="!entity.editMode">{{ entity.place }}</td>
 
-            <td v-if="!entity.editMode" v-translate="{ et: entity.locality__locality, en: entity.locality__locality_en }"></td>
+            <td v-if="!entity.editMode">{{ entity.point_longitude }}</td>
 
-            <td v-if="!entity.editMode">{{ entity.remarks }}</td>
+            <td v-if="!entity.editMode">{{ entity.point_latitude }}</td>
+
+            <td v-if="!entity.editMode">{{ entity.box_w_longitude }}</td>
+
+            <td v-if="!entity.editMode">{{ entity.box_e_longitude }}</td>
+
+            <td v-if="!entity.editMode">{{ entity.box_s_latitude }}</td>
+
+            <td v-if="!entity.editMode">{{ entity.box_n_latitude }}</td>
 
             <!-- EDIT MODE -->
-            <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.point" type="text"/>
-            </td>
-
-            <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.box" type="text"/>
-            </td>
-
-            <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.place" type="text"/>
-            </td>
-
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle"
                                v-model="entity.new.locality"
@@ -67,7 +64,31 @@
             </td>
 
             <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.remarks" type="text"/>
+              <b-form-input v-model="entity.new.place" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.point_longitude" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.point_latitude" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.box_w_longitude" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.box_e_longitude" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.box_s_latitude" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.box_n_latitude" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
@@ -93,18 +114,6 @@
 
           <tr class="related-input-data">
             <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.point" type="text"/>
-            </td>
-
-            <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.box" type="text"/>
-            </td>
-
-            <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.place" type="text"/>
-            </td>
-
-            <td>
               <vue-multiselect class="align-middle"
                                v-model="relatedData.insert.doi_geolocation.locality"
                                deselect-label="Can't remove this value"
@@ -128,7 +137,31 @@
             </td>
 
             <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.remarks" type="text"/>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.place" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.point_longitude" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.point_latitude" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.box_w_longitude" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.box_e_longitude" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.box_s_latitude" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.box_n_latitude" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
