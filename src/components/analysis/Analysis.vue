@@ -2,11 +2,54 @@
   <div class="analysis">
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+    <!-- GENERAL INFO -->
+    <fieldset class="border p-2 mb-2" ref="info">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+        {{ $t('analysis.generalInfo') }}
+        <font-awesome-icon icon="project-diagram"/>
+      </legend>
+      <transition name="fade">
+        <div v-if="block.info">
+
+          <!-- SAMPLE and OWNER (agent) -->
+          <div class="row">
+            <!--<div class="col-md-6">-->
+              <!--<label class="p-0" :for="`creators`">{{ $t('doi.creators') }}:</label>-->
+              <!--&lt;!&ndash; TODO: Connect with related persons &ndash;&gt;-->
+              <!--<b-form-input id="creators" v-model="doi.creators" type="text"></b-form-input>-->
+            <!--</div>-->
+
+            <div class="col-md-6">
+              <label class="p-0" :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
+              <vue-multiselect id="agent" class="align-middle"
+                               v-model="analysis.agent"
+                               deselect-label="Can't remove this value"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autcompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :allow-empty="false"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+          </div>
+
+        </div>
+      </transition>
+    </fieldset>
 
     <!-- REMARKS -->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
-        {{ $t('doi.remarks') }}
+        {{ $t('analysis.remarks') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
 
@@ -15,7 +58,7 @@
 
           <div class="row">
             <div class="col-sm-12">
-              <label class="mt-0" :for="`remarks`">{{ $t('doi.remarks') }}:</label>
+              <label class="mt-0" :for="`remarks`">{{ $t('analysis.remarks') }}:</label>
               <b-form-textarea id="remarks" v-model="analysis.remarks" type="text" :rows="1" :max-rows="20"></b-form-textarea>
             </div>
           </div>
@@ -24,86 +67,86 @@
       </transition>
     </fieldset>
 
-    <!-- SHOWING RELATED_DATA -->
-    <div class="row mb-2">
-      <div class="col mt-2">
-        <ul class="nav nav-tabs nav-fill mb-3">
-          <!--<li class="nav-item">-->
-            <!--<a href="#" v-on:click.prevent="setActiveTab('analysis_result')" class="nav-link"-->
-               <!--:class="{ active: activeTab === 'analysis_result' }">-->
-              <!--{{ $t('analysis.relatedTables.analysis_result') }} <font-awesome-icon icon="user-friends"/>-->
-            <!--</a>-->
-          <!--</li>-->
+    <!--&lt;!&ndash; SHOWING RELATED_DATA &ndash;&gt;-->
+    <!--<div class="row mb-2">-->
+      <!--<div class="col mt-2">-->
+        <!--<ul class="nav nav-tabs nav-fill mb-3">-->
+          <!--&lt;!&ndash;<li class="nav-item">&ndash;&gt;-->
+            <!--&lt;!&ndash;<a href="#" v-on:click.prevent="setActiveTab('analysis_result')" class="nav-link"&ndash;&gt;-->
+               <!--&lt;!&ndash;:class="{ active: activeTab === 'analysis_result' }">&ndash;&gt;-->
+              <!--&lt;!&ndash;{{ $t('analysis.relatedTables.analysis_result') }} <font-awesome-icon icon="user-friends"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;</a>&ndash;&gt;-->
+          <!--&lt;!&ndash;</li>&ndash;&gt;-->
 
-          <!--<li class="nav-item">-->
-            <!--<a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"-->
-               <!--:class="{ active: activeTab === 'attachment_link' }">-->
-              <!--{{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>-->
-            <!--</a>-->
-          <!--</li>-->
-        </ul>
+          <!--&lt;!&ndash;<li class="nav-item">&ndash;&gt;-->
+            <!--&lt;!&ndash;<a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"&ndash;&gt;-->
+               <!--&lt;!&ndash;:class="{ active: activeTab === 'attachment_link' }">&ndash;&gt;-->
+              <!--&lt;!&ndash;{{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;</a>&ndash;&gt;-->
+          <!--&lt;!&ndash;</li>&ndash;&gt;-->
+        <!--</ul>-->
 
-        <div class="row" v-if="activeTab !== 'attachment_link'">
-          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
-              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
-              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
-              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
-              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
-              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
-              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
-              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
-            </b-form-select>
-          </div>
+        <!--<div class="row" v-if="activeTab !== 'attachment_link'">-->
+          <!--<div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">-->
+            <!--<b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">-->
+              <!--<option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>-->
+              <!--<option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>-->
+              <!--<option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>-->
+              <!--<option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>-->
+              <!--<option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>-->
+              <!--<option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>-->
+              <!--<option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>-->
+            <!--</b-form-select>-->
+          <!--</div>-->
 
-          <div class="col-sm-12 col-md-3 export-center">
-            <!-- EXPORT BUTTON? -->
-          </div>
+          <!--<div class="col-sm-12 col-md-3 export-center">-->
+            <!--&lt;!&ndash; EXPORT BUTTON? &ndash;&gt;-->
+          <!--</div>-->
 
-          <div class="col-sm-12 col-md-6 pagination-center"
-               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
-            <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
-            </b-pagination>
-          </div>
-        </div>
+          <!--<div class="col-sm-12 col-md-6 pagination-center"-->
+               <!--v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">-->
+            <!--<b-pagination-->
+              <!--size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"-->
+              <!--v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">-->
+            <!--</b-pagination>-->
+          <!--</div>-->
+        <!--</div>-->
 
-        <!--<doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab" />-->
+        <!--&lt;!&ndash;<doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab" />&ndash;&gt;-->
 
-      </div>
-    </div>
+      <!--</div>-->
+    <!--</div>-->
 
-    <!-- IS PRIVATE -->
-    <div class="row mt-3">
-      <div class="col">
-        <b-form-checkbox id="is_private" v-model="analysis.is_private" :value="1" :unchecked-value="0">
-          {{ $t('doi.private') }}?
-        </b-form-checkbox>
-      </div>
-    </div>
+    <!--&lt;!&ndash; IS PRIVATE &ndash;&gt;-->
+    <!--<div class="row mt-3">-->
+      <!--<div class="col">-->
+        <!--<b-form-checkbox id="is_private" v-model="analysis.is_private" :value="1" :unchecked-value="0">-->
+          <!--{{ $t('doi.private') }}?-->
+        <!--</b-form-checkbox>-->
+      <!--</div>-->
+    <!--</div>-->
 
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'analysis', true)"
-                :title="$t('edit.buttons.saveAndLeave') ">
-          <font-awesome-icon icon="door-open"/>
-          {{ $t('edit.buttons.saveAndLeave') }}
-        </button>
+    <!--<div class="row mt-3 mb-3">-->
+      <!--<div class="col">-->
+        <!--<button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'analysis', true)"-->
+                <!--:title="$t('edit.buttons.saveAndLeave') ">-->
+          <!--<font-awesome-icon icon="door-open"/>-->
+          <!--{{ $t('edit.buttons.saveAndLeave') }}-->
+        <!--</button>-->
 
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'analysis', true)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
-          <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
-        </button>
+        <!--<button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'analysis', true)"-->
+                <!--:title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+          <!--<font-awesome-icon icon="save"/>-->
+          <!--{{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+        <!--</button>-->
 
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('analysis', $route.meta.isEdit)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
-          <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
-        </button>
-      </div>
-    </div>
+        <!--<button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('analysis', $route.meta.isEdit)"-->
+                <!--:title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+          <!--<font-awesome-icon icon="ban"/>-->
+          <!--{{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+        <!--</button>-->
+      <!--</div>-->
+    <!--</div>-->
 
   </div>
 </template>
@@ -178,8 +221,10 @@
           copyFields: ['id', 'is_private'],
           autocomplete: {
             loaders: {
+              agent: false,
               analysis_methods: false,
             },
+            agent: [],
             analysis_methods: []
           },
           requiredFields: [],
