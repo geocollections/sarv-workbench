@@ -125,7 +125,7 @@ const formManipulation = {
           if (!returnPromise) {
             if (!addAnother) {
               this.$router.push({path: '/' + object})
-            } else if(savedObjectId && savedObjectId !== undefined){
+            } else if(savedObjectId && ( savedObjectId === true || savedObjectId !== undefined)){
               this.$router.push({path: '/' + object + '/' + savedObjectId})
             } else {
               resolve(false)
