@@ -13,17 +13,18 @@
             <router-link v-if="entity.uuid_filename !== null" :to="{ path: '/attachment/' + entity.id }">
               <div class="vs-image--img" :style="'background-image: url(' + composeFileUrl(entity.uuid_filename) + ')'"
                    v-if="entity.uuid_filename.endsWith('jpg') || entity.uuid_filename.endsWith('jpeg') || entity.uuid_filename.endsWith('png')"></div>
-              <font-awesome-icon v-else class="vs-image--img" size="6x" icon="file"/>
-
-              <div v-else class="vs-image--img"></div>
+              <!-- TODO: Get icon working -->
+              <!-- <font-awesome-icon v-else class="vs-image&#45;&#45;img" size="6x" icon="file"/>-->
+              <div v-else class="vs-image--img no-image"></div>
             </router-link>
 
             <router-link :to="{ path: '/attachment/' + entity.id }">
-              <font-awesome-icon v-if="entity.uuid_filename === null" size="6x" icon="file"/>
+              <div class="vs-image--img no-image" v-if="entity.uuid_filename === null"></div>
+              <!-- font-awesome-icon v-if="entity.uuid_filename === null" size="6x" icon="file"/>-->
             </router-link>
           </div>
 
-          <b-tooltip :target="'icon-' + index" placement="bottom">
+          <b-tooltip :target="'icon-' + index" placement="auto">
             <b>ID:</b> {{ entity.id }}<br/>
             <span v-if="entity.date_created || entity.date_created_free"><b>Date:</b> {{ entity.date_created }} | {{ entity.date_created_free }}<br/></span>
             <span v-if="entity.author__agent"><b>Author:</b> {{ entity.author__agent }}<br/></span>
@@ -137,5 +138,18 @@
     margin: 0.2rem 0.4rem;
     max-height: 120px;
     color: #999;
+  }
+
+  .no-image {
+    position: relative;
+  }
+
+  .no-image:before {
+    content: "Preview Image";
+    position: absolute;
+    font-weight: 900;
+    font-size: large;
+    top: 43%;
+    left: 18%;
   }
 </style>
