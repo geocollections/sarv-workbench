@@ -93,11 +93,11 @@ export function fetchAttachments(data, author) {
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    // return fetch(`attachment/?${searchFields}&or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return fetch(`attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`attachment/?${searchFields}&or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // return fetch(`attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    // return fetch(`attachment/?or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return fetch(`attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return fetch(`attachment/?or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // return fetch(`attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 
