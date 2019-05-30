@@ -721,6 +721,7 @@
     "info": "Üldinfo",
     "description": "Lisainfo ja märksõnad",
     "doiConfirmation": "Kas oled kindel, et soovid kirjandusallikale registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik.",
+    "doiCheckSuccessful": "DOI kontrollimine edukas, väljad uuendatud",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",

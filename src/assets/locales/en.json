@@ -719,6 +719,7 @@
     "info": "General info",
     "description": "Remarks and keywords",
     "doiConfirmation": "Are you sure you want to register a new DOI for this reference? DOI-s cannot be deleted.",
+    "doiCheckSuccessful": "DOI check successful, fields updated",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

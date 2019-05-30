@@ -566,6 +566,7 @@
   import MultimediaComponent from "../partial/MultimediaComponent";
   import fontAwesomeLib from "../mixins/fontAwasomeLib";
   import permissionsMixin from "../mixins/permissionsMixin";
+  import {toastInfo} from "../../assets/js/iziToast/iziToast";
 
   export default {
     name: "Reference",
@@ -951,13 +952,14 @@
       },
 
       checkDoi() {
-        fetchDoiCheck(this.reference.doi).then(response => {
+        fetchDoiCheck('as').then(response => {
           if (response.status === 200) {
             if (response.body.status === 'ok') {
               this.updateFieldsUsingDoi(response.body.message)
             }
           }
         }, errResponse => {
+          toastError({text: this.$t('')})
         })
       },
 
@@ -1004,6 +1006,8 @@
         if (data.page) this.reference.pages = data.page
         if (data.URL) this.reference.url = data.URL
         if (data.publisher) this.reference.publisher = data.publisher
+
+        toastInfo({text: this.$t('reference.doiCheckSuccessful')})
       },
 
       addFiles(data) {
