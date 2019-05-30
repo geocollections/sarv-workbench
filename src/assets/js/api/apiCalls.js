@@ -745,3 +745,33 @@ export function fetchLastSiteName(projectId) {
 /***********************
  *** SITE END ***
  ***********************/
+
+
+
+/*****************************
+ *** ANALYSIS LINK START ***
+ *****************************/
+
+export function fetchAnalysis(id) {
+  return fetch(`analysis/?id=${id}&format=json`);
+}
+
+export function fetchAnalyses(data) {
+  const fields = 'id,is_private';
+  let searchFields = '';
+
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`
+  }
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+
+  if (searchFields.length > 0) {
+    return fetch(`analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
+/*****************************
+ ***  ANALYSIS LINK END  ***
+ *****************************/

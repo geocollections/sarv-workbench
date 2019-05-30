@@ -602,6 +602,68 @@ const router = new Router({
             }
           ]
         },
+        {
+          path: '/analysis',
+          component: () => import('./views/Analyses.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/analysis/AnalysisTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/analysis/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/analysis/Analysis.vue'),
+              meta: {
+                isEdit:true,
+                table:'analysis',
+                title:'titles.editAnalysis',
+                heading:'editAnalysis.heading',
+                isBottomOptionShown: true,
+                isNavigationShow:true,
+                isCopyFormShown: false,
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/analysis/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/analysis/Analysis.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addAnalysis',
+                addNew:'add.newAnalysis',
+                subForms:[
+                  {path:'/analysis/add',name:'add.analysis'}
+                ],
+                requiresAuth: true
+              },
+            }
+          ]
+        },
       ]
     },
   ],
