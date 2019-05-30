@@ -401,9 +401,9 @@
               this.site = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.site)
               this.removeUnnecessaryFields(this.site, this.copyFields);
-              if (this.site.latitude === null && this.site.longitude === null) {
-                this.setLocationDataIfExists();
-              }
+              // if (this.site.latitude === null && this.site.longitude === null) {
+              //   this.setLocationDataIfExists();
+              // }
 
               this.site.related_data = {};
               this.$emit('data-loaded', this.site)
