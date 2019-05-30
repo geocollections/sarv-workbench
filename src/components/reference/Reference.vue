@@ -517,12 +517,11 @@
           {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}
         </button>
 
-        <button v-if="$route.meta.isEdit" class="float-right btn btn-primary mb-2"
-                :disabled="sendingData || !validate('reference')"
+        <button v-if="$route.meta.isEdit && showDoiButton()" class="float-right btn btn-primary mb-2"
+                :disabled="sendingData"
                 @click="addNewDoi()">
           {{ $t('edit.buttons.saveNewDoi') }}
         </button>
-
       </div>
     </div>
 
@@ -563,6 +562,7 @@
   import LocalityTable from "../locality/LocalityTable";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import fontAwesomeLib from "../mixins/fontAwasomeLib";
+  import permissionsMixin from "../mixins/permissionsMixin";
 
   export default {
     name: "Reference",
@@ -575,7 +575,7 @@
       LocalityReference,
       FileTable
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, sidebarMixin, fontAwesomeLib],
+    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, sidebarMixin, fontAwesomeLib, permissionsMixin],
 
     data() {
       return this.setInitialData()
@@ -996,37 +996,58 @@
         this.addFileAsObject(data, 'reference', this.reference);
       },
 
+      /**
+       * Returns boolean value wether to show DOI button or not.
+       *
+       * (this.isDefinedAndNotNull(this.reference.type) && this.reference.type.id > 3) --> Checks if type exists and id is higher than 3
+       * this.isDefinedAndNotNullAndNotEmptyString(this.reference.doi) --> Checks if DOI exists
+       * this.isUserAllowedTo('add', 'doi') --> Checks if user has rights to add to doi table
+       * (this.validate('reference') === 1) --> Checks if reference required fields are filled
+       */
+      showDoiButton() {
+        return this.isDefinedAndNotNull(this.reference.type) && this.reference.type.id > 3
+          && this.isDefinedAndNotNullAndNotEmptyString(this.reference.doi)
+          && this.isUserAllowedTo('add', 'doi') && this.validate('reference') === 1
+      },
+
+      // newlyAddedDoiID watcher triggers DOI related data requests + route push
       addNewDoi() {
         if (this.validate('reference')) {
-          this.sendingData = true;
+          // TODO: Should make into nicer modal or something
+          // Asking for user confirmation
+          if (confirm(this.$t('reference.doiConfirmation'))) {
+            this.sendingData = true;
 
-          let doiFormData = new FormData();
-          doiFormData.append('data', JSON.stringify({
-            creators: this.reference.author,
-            publication_year: this.reference.year,
-            title: this.reference.title,
-            title_alternative: this.reference.title_original,
-            language: this.reference.language.id,
-            publisher: this.reference.publisher,
-            abstract: this.reference.abstract,
-            reference: this.reference.id,
-            subjects: this.reference.author_keywords + this.reference.tags,
-            resource_type: 12,
-            version: 1.0,
-            formats: 'pdf',
-          }));
+            let doiFormData = new FormData();
+            doiFormData.append('data', JSON.stringify({
+              creators: this.reference.author,
+              publication_year: this.reference.year,
+              title: this.reference.title,
+              title_alternative: this.reference.title_original,
+              language: this.reference.language.id,
+              publisher: this.reference.publisher,
+              abstract: this.reference.abstract,
+              reference: this.reference.id,
+              subjects: this.reference.author_keywords + this.reference.tags,
+              resource_type: 12,
+              version: 1.0,
+              formats: 'pdf',
+            }));
 
-          fetchAddDoi(doiFormData).then(response => {
-            if (response.status === 200) {
-              // Watcher triggers DOI related data requests
-              this.newlyAddedDoiId = response.body.id
+            fetchAddDoi(doiFormData).then(response => {
+              if (response.status === 200) {
+                // Watcher triggers DOI related data requests + route push
+                this.newlyAddedDoiId = response.body.id
+                this.sendingData = false
+                this.toastResponseMessages(response)
+              }
+            }, errResponse => {
               this.sendingData = false
-              this.toastResponseMessages(response)
-            }
-          }, errResponse => {
-            this.sendingData = false
-            toastError({text: 'DOI upload failed!'});
-          });
+              toastError({text: 'DOI upload failed!'});
+            });
+          } else {
+            console.log('user cancelled')
+          }
         } else toastError({text: this.$t('messages.checkForm')})
       },
 
