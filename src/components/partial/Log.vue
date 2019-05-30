@@ -1,6 +1,6 @@
 <template>
   <fieldset class="log border p-2 mb-2" v-if="logs.length > 0">
-    <legend class="w-auto" :class="{'text-primary': !block.logs}" style="font-size: large; font-weight: 600" @click="block.logs = !block.logs">
+    <legend class="w-auto" :class="{'text-primary': !block.logs}" @click="block.logs = !block.logs">
       {{ $t('logs.title') }}
       <font-awesome-icon icon="history"/>
     </legend>

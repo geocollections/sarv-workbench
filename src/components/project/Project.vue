@@ -2,14 +2,17 @@
   <div>
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+
     <div class="row mb-4">
       <div class="col">
         <add-new-site :sendingData = "sendingData" :site="watchedSite"></add-new-site>
+
         <span class="float-right" v-if="$route.meta.isEdit">
           <button class="btn btn-outline-primary mb-2" @click="addOrEditSite()"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>
         </span>
+
         <span class="float-left">
-         <span class="custom-control custom-switch">
+          <span class="custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitch2" v-model="isActiveProject">
             <label class="custom-control-label rounded pr-4 pl-4"
                    :class="isActiveProject ? 'alert-success ' : 'alert-danger'" for="customSwitch2">
@@ -21,30 +24,32 @@
         </span>
       </div>
     </div>
-    <!-- STORAGE-->
+
+    <!-- STORAGE -->
     <fieldset class="border p-2" ref="info">
-      <legend class="w-auto" @click="block.info = !block.info"
-              :style="!block.info ? {'color':'blue'} : ''">Üldinfo
+      <legend class="w-auto" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
+        {{ $t('project.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
+
       <transition name="fade">
         <div v-if="block.info">
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0">{{ $t('project.name') }}:</label>
+              <label :for="`name`">{{ $t('project.name') }}:</label>
               <b-form-input id="name" v-model="project.name" :state="isDefinedAndNotNull(project.name)" type="text"
                             maxlength="100"></b-form-input>
             </div>
 
             <div class="col-md-6">
-              <label class="p-0">{{ $t('project.name_en') }}:</label>
+              <label :for="`name_en`">{{ $t('project.name_en') }}:</label>
               <b-form-input id="name_en" v-model="project.name_en" type="text" maxlength="100"></b-form-input>
             </div>
           </div>
           <div class="row">
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('project.project_type') }}:</label>
+              <label :for="`type`">{{ $t('project.project_type') }}:</label>
               <vue-multiselect v-model="project.project_type"
                                id="type"
                                :options="autocomplete.project_type"
@@ -58,8 +63,9 @@
             </div>
 
             <div class="col-md-4">
-              <label class="p-0">{{ $t('project.owner') }}:</label>
+              <label :for="`owner`">{{ $t('project.owner') }}:</label>
               <vue-multiselect class="align-middle" v-model="project.owner" select-label=""
+                               id="owner"
                                deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.owner"
@@ -71,8 +77,9 @@
             </div>
 
             <div class="col-sm-4">
-              <label class="p-0">{{ $t('project.parent_project') }}:</label>
+              <label :for="`parent_project`">{{ $t('project.parent_project') }}:</label>
               <vue-multiselect class="align-middle" v-model="project.parent_project" select-label=""
+                               id="parent_project"
                                deselect-label="Can't remove this value"
                                :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.parent_project"
@@ -119,11 +126,10 @@
       </transition>
     </fieldset>
 
-
     <!-- DESCRIPTION -->
     <fieldset class="border p-2 mb-2" :key="componentKey">
-      <legend class="w-auto" @click="block.description = !block.description"
-              :style="!block.description ? {'color':'blue'} : ''">{{ $t('project.description') }} | {{ $t('project.remarks') }}
+      <legend class="w-auto" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
+        {{ $t('project.description') }} | {{ $t('project.remarks') }}
         <font-awesome-icon icon="pen-fancy" />
       </legend>
       <transition name="fade">
@@ -145,9 +151,10 @@
       </transition>
     </fieldset>
 
+    <!-- PROJECT MEMBERS -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.members = !block.members"
-              :style="!block.members ? {'color':'blue'} : ''">Project members
+      <legend class="w-auto" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
+        {{ $t('project.members') }}
         <font-awesome-icon icon="user-friends" />
       </legend>
       <transition name="fade">
@@ -178,9 +185,10 @@
       </transition>
     </fieldset>
 
+    <!-- FILES -->
     <fieldset class="border p-2 mb-2" ref="files">
-      <legend class="w-auto" @click="block.files = !block.files"
-              :style="!block.files ? {'color':'blue'} : ''">Project files
+      <legend class="w-auto" :class="{'text-primary': !block.files}" @click="block.files = !block.files">
+        {{ $t('project.files') }}
         <font-awesome-icon icon="folder-open"/>
       </legend>
       <transition name="fade">
@@ -193,9 +201,10 @@
       </transition>
     </fieldset>
 
+    <!-- SITES -->
     <fieldset class="border p-2 mb-2" ref="sites">
-      <legend class="w-auto" @click="block.sites = !block.sites"
-              :style="!block.sites ? {'color':'blue'} : ''">Linked Sites
+      <legend class="w-auto" :class="{'text-primary': !block.sites}" @click="block.sites = !block.sites">
+        {{ $t('project.sites') }}
         <font-awesome-icon icon="globe-americas" />
       </legend>
       <transition name="fade">
@@ -272,7 +281,7 @@
     <div class="row mb-3 mt-3">
       <div class="col">
         <b-form-checkbox id="is_private" v-model="project.is_private" :value="true" :unchecked-value="false">
-          {{ $t('sample.is_private') }}
+          {{ $t('project.is_private') }}?
         </b-form-checkbox>
       </div>
     </div>
