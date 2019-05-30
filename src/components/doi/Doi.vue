@@ -718,7 +718,8 @@
           copyFields: {
             attachment_link: ['attachment', 'remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
-            doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
+            // doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
+            doi_geolocation: ['locality', 'place', 'point_longitude', 'point_latitude', 'box_w_longitude','box_e_longitude', 'box_s_latitude', 'box_n_latitude'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
             doi_date: ['date', 'date_type', 'remarks']
           },
