@@ -3,26 +3,26 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.info = !block.info"
-              :style="!block.info ? {'color':'blue'} : ''">
-        {{ $t('reference.info') }}
-        <font-awesome-icon icon="project-diagram"/>
+    <!-- REQUIRED INFO -->
+    <fieldset class="border p-2 mb-2" :style="!validate('reference') ? 'border-color: #dc3545!important;' : ''">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('reference') }" @click="block.requiredFields = !block.requiredFields">
+        {{ $t('doi.requiredFields') }}
+        <font-awesome-icon v-if="validate('reference')" color="#28a745" icon="check"/>
+        <font-awesome-icon v-if="!validate('reference')" color="#dc3545" icon="exclamation-triangle"/>
       </legend>
 
       <transition name="fade">
-        <div v-if="block.info">
+        <div v-if="block.requiredFields">
 
           <!-- REFERENCE and YEAR -->
           <div class="row">
-            <div class="col-md-9 mb-2">
+            <div class="col-md-9">
               <label :for="`reference`">{{ $t('reference.reference') }}:</label>
               <b-form-input id="reference" v-model="reference.reference"
                             :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-3 mb-2">
+            <div class="col-md-3">
               <label :for="`year`">{{ $t('reference.year') }}:</label>
               <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)"
                             type="number"></b-form-input>
@@ -31,7 +31,7 @@
 
           <!-- AUTHOR -->
           <div class="row">
-            <div class="col-sm-12 mb-2">
+            <div class="col-sm-12">
               <label :for="`author`">{{ $t('reference.author') }}:</label>
               <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)"
                             type="text"></b-form-input>
@@ -41,7 +41,7 @@
 
           <!-- TITLE -->
           <div class="row">
-            <div class="col-sm-12 mb-2">
+            <div class="col-sm-12">
               <label :for="`title`">{{ $t('reference.title') }}:</label>
               <b-form-textarea :key="componentKey" id="title" v-model="reference.title"
                                :state="isDefinedAndNotNull(reference.title)" type="text"
@@ -49,9 +49,23 @@
             </div>
           </div>
 
+        </div>
+      </transition>
+    </fieldset>
+
+    <!-- GENERAL INFO -->
+    <fieldset class="border p-2 mb-2">
+      <legend class="w-auto" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+        {{ $t('reference.info') }}
+        <font-awesome-icon icon="project-diagram"/>
+      </legend>
+
+      <transition name="fade">
+        <div v-if="block.info">
+
           <!-- TITLE ORIGINAL -->
           <div class="row">
-            <div class="col-sm-12 mb-2">
+            <div class="col-sm-12">
               <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
               <b-form-textarea :key="componentKey" id="title_original" v-model="reference.title_original" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
@@ -60,7 +74,7 @@
 
           <!-- TYPE, LANGUAGE -->
           <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`type`">{{ $t('reference.type') }}:</label>
               <vue-multiselect v-model="reference.type"
                                id="type"
@@ -77,7 +91,7 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`language`">{{ $t('reference.language') }}:</label>
               <vue-multiselect v-model="reference.language"
                                id="language"
@@ -96,7 +110,7 @@
 
           <!-- JOURNAL -->
           <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`journal`">{{ $t('reference.journal') }}:</label>
               <vue-multiselect v-model="reference.journal"
                                id="journal"
@@ -115,7 +129,7 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
               <b-form-input id="journal_additional" v-model="reference.journal_additional" type="text"></b-form-input>
             </div>
@@ -124,12 +138,12 @@
 
           <!-- VOLUME and NUMBER -->
           <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`volume`">{{ $t('reference.volume') }}:</label>
               <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`number`">{{ $t('reference.number') }}:</label>
               <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
             </div>
@@ -137,12 +151,12 @@
 
           <!-- PAGES and BOOK EDITOR -->
           <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`pages`">{{ $t('reference.pages') }}:</label>
               <b-form-input id="pages" v-model="reference.pages" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`book_editor`">{{ $t('reference.book_editor') }}:</label>
               <b-form-input id="book_editor" v-model="reference.book_editor" type="text"></b-form-input>
             </div>
@@ -150,12 +164,12 @@
 
           <!-- BOOK and BOOK ORIGINAL -->
           <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`book`">{{ $t('reference.book') }}:</label>
               <b-form-input id="book" v-model="reference.book" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
               <b-form-input id="book_original" v-model="reference.book_original" type="text"></b-form-input>
             </div>
@@ -163,12 +177,12 @@
 
           <!-- PUBLISHER and PUBLISHER PLACE -->
           <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`publisher`">{{ $t('reference.publisher') }}:</label>
               <b-form-input id="publisher" v-model="reference.publisher" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`publisher_place`">{{ $t('reference.publisherPlace') }}:</label>
               <b-form-input id="publisher_place" v-model="reference.publisher_place" type="text"></b-form-input>
             </div>
@@ -176,7 +190,7 @@
 
           <!-- DOI and URL-->
           <div class="row">
-            <div class="col-7 col-md-5 mb-2">
+            <div class="col-7 col-md-5">
               <label :for="`doi`">DOI:</label>
               <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
 
@@ -189,7 +203,7 @@
               </b-button>
             </div>
 
-            <div class="col-sm-12 col-md-5 mb-2">
+            <div class="col-sm-12 col-md-5">
               <label :for="`url`">URL:</label>
               <b-form-input id="url" v-model="reference.url" type="text"></b-form-input>
             </div>
@@ -197,12 +211,12 @@
 
           <!-- ISBN and ISSN -->
           <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`isbn`">ISBN:</label>
               <b-form-input id="isbn" v-model="reference.isbn" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-6 mb-2">
+            <div class="col-md-6">
               <label :for="`issn`">ISSN:</label>
               <b-form-input id="issn" v-model="reference.issn" type="text"></b-form-input>
             </div>
@@ -210,7 +224,7 @@
 
           <!-- ABSTRACT -->
           <div class="row">
-            <div class="col-sm-12 mb-2">
+            <div class="col-sm-12">
               <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
               <b-form-textarea :key="componentKey" id="abstract" v-model="reference.abstract" type="text" size="sm"
                                :rows="1" :max-rows="20"></b-form-textarea>
@@ -225,8 +239,7 @@
 
     <!-- REMARKS and KEYWORDS -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.description = !block.description"
-              :style="!block.description ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('reference.description') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
@@ -236,22 +249,16 @@
 
           <!-- AUTHOR KEYWORDS -->
           <div class="row">
-            <div class="col-sm-2 lbl-right">
+            <div class="col-sm-12">
               <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
             </div>
           </div>
 
           <!-- REMARKS -->
           <div class="row">
-            <div class="col-sm-2 lbl-right">
+            <div class="col-sm-12">
               <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <b-form-textarea :key="componentKey" id="remarks" v-model="reference.remarks" type="text" size="sm"
                                :rows="1" :max-rows="20"></b-form-textarea>
             </div>
@@ -259,22 +266,16 @@
 
           <!-- ALLOW TEMPORARILY USER TAGS -->
           <div class="row">
-            <div class="col-sm-2 lbl-right">
+            <div class="col-sm-12">
               <label :for="`tags`">Kasutaja märksõnad (ajutine lahendus):</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <b-form-input id="tags" v-model="reference.tags" type="text"></b-form-input>
             </div>
           </div>
 
           <!-- REFERENCE KEYWORDS -->
           <div class="row">
-            <div class="col-sm-2 lbl-right">
+            <div class="col-10 col-md-11">
               <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
-            </div>
-
-            <div class="col-9 mb-2">
               <vue-multiselect v-model="relatedData.keyword"
                                id="keyword"
                                :options="autocomplete.keyword"
@@ -286,7 +287,8 @@
                                :placeholder="$t('add.inputs.keywords')"></vue-multiselect>
             </div>
 
-            <div class="col-1 mb-2">
+            <div class="col-2 col-md-1 pl-0">
+              <label style="visibility: hidden; display: block;">Empty</label>
               <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
                       :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
                       @click="relatedData.keyword = null">
@@ -302,8 +304,7 @@
 
     <!-- DIGITAL VERSION (PDF) -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
-      <legend class="w-auto" @click="block.digital = !block.digital"
-              :style="!block.digital ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <font-awesome-icon icon="file-pdf"/>
       </legend>
@@ -322,8 +323,7 @@
 
     <!-- RELATED FILES -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.files = !block.files"
-              :style="!block.files ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{ 'text-primary': !block.files }" @click="block.files = !block.files">
         {{ $t('reference.relatedTables.attachment') }}
         <font-awesome-icon icon="folder-open"/>
       </legend>
@@ -333,7 +333,7 @@
 
           <div class="row">
             <div class="col">
-              <!-- loader is 'attachment3' because of #158, regarding p-2 -->
+              <!-- loader is 'attachment3' because of #158, regarding problem 2 -->
               <vue-multiselect v-model="relatedData.attachment"
                                id="attachment"
                                :multiple="true"
@@ -362,8 +362,7 @@
 
     <!-- RELATED LIBRARIES -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.libraries = !block.libraries"
-              :style="!block.libraries ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{ 'text-primary': !block.libraries }" @click="block.libraries = !block.libraries">
         {{ $t('reference.relatedTables.library') }}
         <font-awesome-icon icon="book"/>
       </legend>
@@ -406,8 +405,7 @@
 
     <!-- RELATED LOCALITIES -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.localities = !block.localities"
-              :style="!block.localities ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{ 'text-primary': !block.localities }" @click="block.localities = !block.localities">
         {{ $t('reference.relatedTables.locality') }}
         <font-awesome-icon icon="map-marked"/>
       </legend>
@@ -506,20 +504,28 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference', true)">
-          {{ $t($route.meta.isEdit ? 'edit.buttons.save' : 'add.buttons.add') }}
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"
+                :title="$t('edit.buttons.saveAndLeave') ">
+          <font-awesome-icon icon="door-open"/>
+          {{ $t('edit.buttons.saveAndLeave') }}
         </button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'reference', true)">
-          {{ $t($route.meta.isEdit ? 'edit.buttons.saveAndContinue' : 'add.buttons.addAnother') }}
+
+        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'doi', true)"
+                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
+          <font-awesome-icon icon="save"/>
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
         </button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData"
-                @click="$route.meta.isEdit ? leaveFromEditView('reference') : reset('reference')">
-          {{ $t($route.meta.isEdit ? 'edit.buttons.cancelWithoutSaving' : 'add.buttons.clearFields') }}
+
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('doi', $route.meta.isEdit)"
+                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
+          <font-awesome-icon icon="ban"/>
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
 
         <button v-if="$route.meta.isEdit && showDoiButton()" class="float-right btn btn-primary mb-2"
                 :disabled="sendingData"
                 @click="addNewDoi()">
+          <font-awesome-icon :icon="['far', 'plus-square']"/>
           {{ $t('edit.buttons.saveNewDoi') }}
         </button>
       </div>
@@ -531,10 +537,7 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import {library} from '@fortawesome/fontawesome-svg-core'
   import VueMultiselect from 'vue-multiselect'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faTimes} from '@fortawesome/free-solid-svg-icons'
   import sidebarMixin from './../mixins/sidebarMixin'
   import {
     fetchReference,
@@ -569,7 +572,6 @@
     components: {
       MultimediaComponent,
       LocalityTable,
-      FontAwesomeIcon,
       VueMultiselect,
       Spinner,
       LocalityReference,
@@ -696,7 +698,7 @@
           doi: {},
           newlyAddedDoiId: null,
           componentKey: 0,
-          block: {info: true, description: true, digital: true, files: true, libraries: true, localities: true}
+          block: {requiredFields: true, info: true, description: true, digital: true, files: true, libraries: true, localities: true}
         }
       },
 
@@ -1058,6 +1060,13 @@
 </script>
 
 <style scoped>
+  label {
+    margin: 5px 0 0 0;
+    /*padding: 0;*/
+    color: #999;
+    font-size: 0.8rem;
+  }
+
   .link:hover {
     cursor: pointer;
   }

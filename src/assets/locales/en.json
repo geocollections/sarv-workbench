@@ -758,7 +758,9 @@
     "generalInfo": "General info",
     "relatedTables": {
       "libraryReference": "References",
-      "libraryReferenceList": "References list view"
+      "libraryReferenceList": "References list view",
+      "library_reference": "References",
+      "library_reference_list": "References list view"
     }
   },
   "messages": {

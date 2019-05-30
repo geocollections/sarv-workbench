@@ -4,8 +4,7 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.info = !block.info"
-              :style="!block.info ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('library.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
@@ -220,8 +219,7 @@
 
     <!-- LIBRARY MEMBERS -->
     <fieldset class="border p-2 mb-2">
-      <legend class="w-auto" @click="block.members = !block.members"
-              :style="!block.members ? {'color':'blue'} : ''">
+      <legend class="w-auto" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
         {{ $t('library.libraryAgent') }}
         <font-awesome-icon icon="user-friends"/>
       </legend>
@@ -320,21 +318,28 @@
     <div class="row mt-3">
       <div class="col">
         <b-form-checkbox id="is_private" v-model="library.is_private" :value="1" :unchecked-value="0">
-          {{ $t('library.private') }}
+          {{ $t('library.private') }}?
         </b-form-checkbox>
       </div>
     </div>
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library', true)"
+                :title="$t('edit.buttons.saveAndLeave') ">
+          <font-awesome-icon icon="door-open"/>
+          {{ $t('edit.buttons.saveAndLeave') }}
+        </button>
+
+        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'library', true)"
+                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
+          <font-awesome-icon icon="save"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
         </button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'library')">
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}
-        </button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData"
-                @click="$route.meta.isEdit ? leaveFromEditView('library') : reset('library')">
+
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('library', $route.meta.isEdit)"
+                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
+          <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
       </div>
@@ -491,7 +496,6 @@
           this.tabs.forEach(entity => {
             // Skips library_reference_list because it is static view
             if (entity !== 'library_reference_list') {
-              console.log(entity)
               this.loadRelatedData(entity);
             }
           });
@@ -708,5 +712,12 @@
 
   .ProseMirror {
     padding: 0.25rem 0.5rem;
+  }
+
+  label {
+    margin: 5px 0 0 0;
+    /*padding: 0;*/
+    color: #999;
+    font-size: 0.8rem;
   }
 </style>

@@ -3,7 +3,7 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <!-- TODO: REQUIRED FIELDS -->
+    <!-- REQUIRED INFO -->
     <fieldset class="border p-2 mb-2" :style="!validate('doi') ? 'border-color: #dc3545!important;' : ''">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('doi') }" @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
@@ -17,19 +17,20 @@
           <!-- DOI, RESOURCE TYPE and RESOURCE -->
           <div class="row">
             <div class="col-md-4" v-if="$route.meta.isEdit">
-              <label class="p-0" :for="`identifier`">{{ $t('doi.identifier') }}:</label>
+              <label :for="`identifier`">{{ $t('doi.identifier') }}:</label>
               <b-form-input id="identifier" v-model="doi.identifier" type="text" :disabled="$route.meta.isEdit"></b-form-input>
             </div>
 
             <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
             <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
-              <label class="p-0" :for="`resource_type`">{{ $t('doi.resourceTypeGeneral') }}:</label>
+              <label :for="`resource_type`">{{ $t('doi.resourceTypeGeneral') }}:</label>
               <vue-multiselect v-model="doi.resource_type"
                                input-class="custom"
                                id="resource_type"
                                :options="autocomplete.resource_type"
                                track-by="id"
                                label="value"
+                               :class="isDefinedAndNotNull(doi.resource_type) ? 'valid' : 'invalid'"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -40,26 +41,26 @@
             </div>
 
             <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
-              <label class="p-0" :for="`resource`">{{ $t('doi.resource') }}:</label>
-              <b-form-input id="resource" v-model="doi.resource" type="text"></b-form-input>
+              <label :for="`resource`">{{ $t('doi.resource') }}:</label>
+              <b-form-input id="resource" :state="isDefinedAndNotNull(doi.resource)" v-model="doi.resource" type="text"></b-form-input>
             </div>
           </div>
 
           <!-- TITLE, YEAR and PUBLISHER -->
           <div class="row">
             <div class="col-md-4">
-              <label class="p-0" :for="`title`">{{ $t('doi.title') }}:</label>
-              <b-form-input id="title" v-model="doi.title" type="text"></b-form-input>
+              <label :for="`title`">{{ $t('doi.title') }}:</label>
+              <b-form-input id="title" :state="isDefinedAndNotNull(doi.title)" v-model="doi.title" type="text"></b-form-input>
             </div>
 
             <div class="col-md-4">
-              <label class="p-0" :for="`publication_year`">{{ $t('doi.year') }}:</label>
-              <b-form-input id="publication_year" v-model="doi.publication_year" type="number"></b-form-input>
+              <label :for="`publication_year`">{{ $t('doi.year') }}:</label>
+              <b-form-input id="publication_year" :state="isDefinedAndNotNull(doi.publication_year)" v-model="doi.publication_year" type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
               <label :for="`publisher`">{{ $t('doi.publisher') }}:</label>
-              <b-form-input id="publisher" v-model="doi.publisher" type="text"></b-form-input>
+              <b-form-input id="publisher" :state="isDefinedAndNotNull(doi.publisher)" v-model="doi.publisher" type="text"></b-form-input>
             </div>
           </div>
 
@@ -79,7 +80,7 @@
           <!-- TITLE ALTERNATIVE -->
           <div class="row">
             <div class="col-sm-12">
-              <label class="p-0" :for="`title_alternative`">{{ $t('doi.title_alternative') }}:</label>
+              <label :for="`title_alternative`">{{ $t('doi.title_alternative') }}:</label>
               <b-form-input id="title_alternative" v-model="doi.title_alternative" type="text"></b-form-input>
             </div>
           </div>
@@ -87,12 +88,12 @@
           <!-- TITLE TRANSLATED and TITLE TRANSLATED LANGUAGE -->
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0" :for="`title_translated`">{{ $t('doi.title_translated') }}:</label>
+              <label :for="`title_translated`">{{ $t('doi.title_translated') }}:</label>
               <b-form-input id="title_translated" v-model="doi.title_translated" type="text"></b-form-input>
             </div>
 
             <div class="col-md-6">
-              <label class="p-0" :for="`title_translated_language`">{{ $t('doi.title_translated_language') }}:</label>
+              <label :for="`title_translated_language`">{{ $t('doi.title_translated_language') }}:</label>
               <vue-multiselect v-model="doi.title_translated_language"
                                id="title_translated_language"
                                :options="autocomplete.language"
@@ -111,14 +112,14 @@
           <!-- CREATORS and OWNER (agent) -->
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0" :for="`creators`">{{ $t('doi.creators') }}:</label>
+              <label :for="`creators`">{{ $t('doi.creators') }}:</label>
               <!-- TODO: Connect with related persons -->
               <b-form-input id="creators" v-model="doi.creators" type="text"></b-form-input>
             </div>
 
 
             <div class="col-md-6">
-              <label class="p-0" :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
+              <label :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
               <vue-multiselect id="agent" class="align-middle"
                                v-model="doi.owner"
                                deselect-label="Can't remove this value"
@@ -142,8 +143,8 @@
 
           <!-- LANGUAGE, VERSION, FORMATS and SIZES -->
           <div class="row">
-            <div class="col-md-3 mb-2">
-              <label class="p-0" :for="`language`">{{ $t('doi.language') }}:</label>
+            <div class="col-md-3">
+              <label :for="`language`">{{ $t('doi.language') }}:</label>
               <vue-multiselect v-model="doi.language"
                                id="language"
                                :options="autocomplete.language"
@@ -158,42 +159,42 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-md-3 mb-2">
-              <label class="p-0" :for="`version`">{{ $t('doi.version') }}:</label>
+            <div class="col-md-3">
+              <label :for="`version`">{{ $t('doi.version') }}:</label>
               <b-form-input id="version" v-model="doi.version" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-3 mb-2">
-              <label class="p-0" :for="`formats`">{{ $t('doi.formats') }}:</label>
+            <div class="col-md-3">
+              <label :for="`formats`">{{ $t('doi.formats') }}:</label>
               <b-form-input id="formats" v-model="doi.formats" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-3 mb-2">
-              <label class="p-0" :for="`sizes`">{{ $t('doi.sizes') }}:</label>
+            <div class="col-md-3">
+              <label :for="`sizes`">{{ $t('doi.sizes') }}:</label>
               <b-form-input id="sizes" v-model="doi.sizes" type="text"></b-form-input>
             </div>
           </div>
 
           <!-- SUBJECTS -->
           <div class="row">
-            <div class="col-sm-12 mb-2">
-              <label class="p-0" :for="`subjects`">{{ $t('doi.subjects') }}:</label>
+            <div class="col-sm-12">
+              <label :for="`subjects`">{{ $t('doi.subjects') }}:</label>
               <b-form-input id="subjects" v-model="doi.subjects" type="text"></b-form-input>
             </div>
           </div>
 
           <!-- ABSTRACT -->
           <div class="row">
-            <div class="col-sm-12 mb-2">
-              <label class="p-0" :for="`abstract`">{{ $t('doi.abstract') }}:</label>
+            <div class="col-sm-12">
+              <label :for="`abstract`">{{ $t('doi.abstract') }}:</label>
               <b-form-textarea id="abstract" v-model="doi.abstract" type="text" :rows="1" :max-rows="20"></b-form-textarea>
             </div>
           </div>
 
           <!-- METHODS -->
           <div class="row">
-            <div class="col-sm-12 mb-2">
-              <label class="p-0" :for="`methods`">{{ $t('doi.methods') }}:</label>
+            <div class="col-sm-12">
+              <label :for="`methods`">{{ $t('doi.methods') }}:</label>
               <b-form-textarea id="methods" v-model="doi.methods" type="text" :rows="1" :max-rows="20"></b-form-textarea>
             </div>
           </div>
@@ -201,7 +202,7 @@
           <!-- COPYRIGHT_AGENT (copyright) and LICENCE -->
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0" :for="`copyright_agent`">{{ $t('doi.copyright') }}:</label>
+              <label :for="`copyright_agent`">{{ $t('doi.copyright') }}:</label>
               <vue-multiselect id="copyright_agent" class="align-middle"
                                v-model="doi.copyright_agent"
                                deselect-label="Can't remove this value"
@@ -223,7 +224,7 @@
             </div>
 
             <div class="col-md-6">
-              <label class="p-0" :for="`licence`">{{ $t('doi.licence') }}:</label>
+              <label :for="`licence`">{{ $t('doi.licence') }}:</label>
               <vue-multiselect v-model="doi.licence"
                                id="licence"
                                :options="autocomplete.licence"
@@ -282,8 +283,8 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-sm-2 mb-2" v-if="relatedData.reference !== null">
-              <vs-button radius @click="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)"
+            <div class="col-sm-2 mb-2">
+              <vs-button v-if="relatedData.reference !== null" radius @click="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)"
                          color="primary" type="line" icon="link"></vs-button>
             </div>
 
@@ -318,8 +319,8 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-sm-2 mb-2" v-if="relatedData.dataset !== null">
-              <vs-button radius @click="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})"
+            <div class="col-sm-2 mb-2">
+              <vs-button v-if="relatedData.dataset !== null" radius @click="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})"
                          color="primary" type="line" icon="remove_red_eye"></vs-button>
             </div>
           </div>
@@ -340,7 +341,7 @@
 
           <div class="row">
             <div class="col-sm-12">
-              <label class="mt-0" :for="`remarks`">{{ $t('doi.remarks') }}:</label>
+              <label :for="`remarks`">{{ $t('doi.remarks') }}:</label>
               <b-form-textarea id="remarks" v-model="doi.remarks" type="text" :rows="1" :max-rows="20"></b-form-textarea>
             </div>
           </div>

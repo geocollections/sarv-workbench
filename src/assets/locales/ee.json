@@ -761,7 +761,9 @@
     "generalInfo": "Üldinfo",
     "relatedTables": {
       "libraryReference": "Kogumiku kirjandus",
-      "libraryReferenceList": "Kogumiku kirjanduse listi vaade"
+      "libraryReferenceList": "Kogumiku kirjanduse listi vaade",
+      "library_reference": "Kogumiku kirjandus",
+      "library_reference_list": "Kogumiku kirjanduse listi vaade"
     }
   },
   "messages": {

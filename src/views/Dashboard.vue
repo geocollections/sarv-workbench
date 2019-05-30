@@ -3,7 +3,7 @@
     <app-header/>
 
     <sidebar v-if="$route.meta.isSidebarShown"/>
-    <sidebar-vuesax/>
+<!--    <sidebar-vuesax/>-->
 
     <div class="main container" v-bind:class="{ sidebarOpen: sidebarOpen }">
       <router-view/>
