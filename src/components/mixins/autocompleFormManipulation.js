@@ -16,6 +16,12 @@ const autocompleteFieldManipulation = {
     analysisMethodLabel() {
       return this.$i18n.locale === 'ee' ? 'analysis_method' : 'method_en'
     },
+    instrumentLabel() {
+      return this.$i18n.locale === 'ee' ? 'instrument' : 'instrument_en'
+    },
+    labLabel() {
+      return this.$i18n.locale === 'ee' ? 'lab' : 'lab_en'
+    },
     licenceLabel() {
       return this.$i18n.locale === 'ee' ? 'licence' : 'licence_en'
     }
@@ -223,6 +229,12 @@ const autocompleteFieldManipulation = {
     },
     autcompleteDatasetSearch(value) {
       this.autocompliteSearch(value, 'dataset', 'dataset', 1, false)
+    },
+    autcompleteLabSearch(value) {
+      this.autocompliteSearch(value, 'lab', 'lab', 1, false)
+    },
+    autcompleteInstrumentSearch(value) {
+      this.autocompliteSearch(value, 'instrument', 'instrument', 1, false)
     },
     autcompleteDoiAgentSearch(value) {
       this.autocompliteSearch(value, 'doi_agent', 'doi_agent', 3, false)

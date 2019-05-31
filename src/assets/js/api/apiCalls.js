@@ -758,6 +758,13 @@ export function fetchAnalysis(id) {
   return fetch(`analysis/?id=${id}&format=json`);
 }
 
+export function fetchLabs() {
+  return fetch(`lab/?format=json`);
+}
+export function fetchInstruments() {
+  return fetch(`instrument/?format=json`);
+}
+
 export function fetchAnalyses(data) {
   const fields = 'id,is_private';
   let searchFields = '';

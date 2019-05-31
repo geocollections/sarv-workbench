@@ -36,22 +36,13 @@
 
             <div class="col-md-6">
               <label class="p-0" :for="`agent`">{{ $t('analysis.specimen') }}:</label>
-              <vue-multiselect id="specimen" class="align-middle" :disabled="true"
-                               v-model="analysis.specimen"
-                               deselect-label="Can't remove this value"
-                               label="number"
-                               track-by="id"
-                               :placeholder="$t('add.inputs.autocomplete')"
+              <vue-multiselect class="align-middle" v-model="analysis.parent_specimen" deselect-label="Can't remove this value"
+                               label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.specimen"
-                               :options="autocomplete.specimen"
-                               @search-change="autcompleteSpecimenSearch"
-                               :internal-search="false"
-                               :preserve-search="true"
-                               :allow-empty="false"
+                               :options="autocomplete.specimen" :searchable="true" @search-change="autcompleteSpecimenSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.number }}</strong>
-                </template>
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong> </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -152,12 +143,12 @@
           <div class="row">
             <div class="col-md-6">
               <label class="p-0" :for="`labor_sample`">{{ $t('analysis.labor_sample') }}:</label>
-              <b-form-input v-model="analysis.labor_sample" type="text" :disabled="true"/>
+              <b-form-input v-model="analysis.lab_sample_number" type="text"/>
             </div>
 
             <div class="col-md-6">
               <label class="p-0" :for="`labor_number`">{{ $t('analysis.labor_number') }}:</label>
-              <b-form-input v-model="analysis.labor_number" type="text" :disabled="true"/>
+              <b-form-input v-model="analysis.lab_analysis_number" type="text"/>
             </div>
           </div>
 
@@ -165,10 +156,10 @@
           <div class="row">
             <div class="col-md-6">
               <label class="p-0" :for="`tool`">{{ $t('analysis.tool') }}:</label>
-              <vue-multiselect v-model="analysis.instrument" :disabled="true"
-                               :options="analysisMethods"
+              <vue-multiselect v-model="analysis.instrument"
+                               :options="autocomplete.instruments"
                                track-by="id"
-                               :label="analysisMethodLabel"  select-label=""
+                               :label="instrumentLabel"  select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -181,7 +172,7 @@
             </div>
           </div>
 
-          <!-- SAMPLE and OWNER (agent) -->
+          <!-- ANALYZER and ANALYZER_TXT -->
           <div class="row">
 
             <div class="col-md-6">
@@ -211,6 +202,98 @@
             </div>
           </div>
 
+          <!-- DATASET and ANALYZER_TXT -->
+          <div class="row">
+            <div class="col-md-4">
+              <label class="p-0" :for="`dataset`">{{ $t('analysis.first_dataset') }}:</label>
+              <vue-multiselect v-model="analysis.dataset"
+                               id="dataset"
+                               :multiple="false"
+                               label="name"
+                               track-by="id"
+                               :options="autocomplete.dataset"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :close-on-select="true"
+                               @search-change="autcompleteDatasetSearch"
+                               :custom-label="customLabelForDataset"
+                               :loading="autocomplete.loaders.dataset"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               placeholder="dataset search..."
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.id }} - (</strong>
+                  <strong v-translate="{ et: option.name, en: option.name_en }"></strong>
+                  <strong>) </strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+            <div class="col-md-4">
+              <label class="p-0" :for="`analyzer`">{{ $t('analysis.publication') }}:</label>
+              <vue-multiselect id="owner" class="align-middle" :disabled="true"
+                               v-model="analysis.publication"
+                               deselect-label="Can't remove this value"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autcompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :allow-empty="false"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+            <div class="col-md-4">
+              <label class="p-0" :for="`analyzer`">{{ $t('analysis.owner') }}:</label>
+              <vue-multiselect id="owner" class="align-middle"
+                               v-model="analysis.owner"
+                               deselect-label="Can't remove this value"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.owner"
+                               :options="autocomplete.agent"
+                               @search-change="autcompleteOwnerSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :allow-empty="false"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+          </div>
+
+          <!-- STORAGE and LOCATION -->
+          <div class="row">
+            <div class="col-md-6">
+              <label class="p-0" :for="`labor_sample`">{{ $t('analysis.storage') }}:</label>
+              <vue-multiselect class="align-middle" v-model="analysis.storage" deselect-label="Can't remove this value"
+                               :loading="autocomplete.loaders.storage" id="storage"
+                               label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-md-6">
+              <label class="p-0" :for="`labor_number`">{{ $t('analysis.location') }}:</label>
+              <b-form-input v-model="analysis.location" type="text"/>
+            </div>
+          </div>
         </div>
       </transition>
     </fieldset>
@@ -331,6 +414,8 @@
     fetchAnalysisMethod,
     fetchAnalyses,
     fetchAnalysis,
+    fetchLabs,
+    fetchInstruments
 
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
@@ -392,17 +477,29 @@
           activeTab: 'analysis_results',
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'sample', 'specimen', 'analysis_method', 'mass', 'method_details', 'method_details_en',
-            'meterial', 'date', 'date_end', 'date_free', 'lab', 'lab_txt', 'agent', 'is_private'],
+            'material','lab_analysis_number', 'lab_sample_number','owner','date', 'date_end', 'date_free', 'lab',
+            'lab_txt', 'agent', 'dataset','instrument','storage','location','is_private'],
           autocomplete: {
             loaders: {
               agent: false,
-              sample:false,
-              specimen:false,
+              owner: false,
+              sample: false,
+              specimen: false,
+              storage: false,
               analysis_methods: false,
+              dataset:false,
+              labs:false,
+              instruments:false,
+
             },
             agent: [],
+            owner: [],
             sample: [],
             specimen: [],
+            storage: [],
+            dataset: [],
+            labs: [],
+            instruments: [],
             analysis_methods: []
           },
           requiredFields: [],
@@ -422,8 +519,13 @@
 
       loadFullInfo() {
         // fetching autocompletes
-        fetchAnalysisMethod().then(response => {
-          this.autocomplete.analysis_methods = this.handleResponse(response);
+
+        fetchLabs().then(response => {
+          this.autocomplete.labs = this.handleResponse(response);
+        });
+
+        fetchInstruments().then(response => {
+          this.autocomplete.instruments = this.handleResponse(response);
         });
 
         if (this.$route.meta.isEdit) {
@@ -505,6 +607,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id
         if (this.isDefinedAndNotNull(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id
         if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
+        if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
 
         // if (this.isDefinedAndNotNull(this.relatedData.reference)) uploadableObject.reference = this.relatedData.reference.id
         // if (this.isDefinedAndNotNull(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
@@ -523,7 +626,10 @@
       fillAutocompleteFields(obj) {
          this.analysis.sample = { id: obj.sample, number: obj.sample__number }
          this.analysis.agent = { id: obj.agent, agent: obj.agent__agent}
+         this.analysis.owner = { id: obj.owner, agent: obj.owner__agent}
          this.analysis.analysis_method = { id: obj.analysis_method, analysis_method: obj.analysis_method__analysis_method}
+         this.analysis.dataset = { id: obj.dataset, name: obj.dataset__name,name_en: obj.dataset__name_en,}
+        if (this.isDefinedAndNotNull(obj.specimen)) obj.specimen = { id: obj.id, specimen: obj.number }
       },
 
       fillRelatedDataAutocompleteFields(obj, type) {
@@ -536,9 +642,8 @@
           console.log(obj)
 
           if (this.isDefinedAndNotNull(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
-          if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
-          if (this.isDefinedAndNotNull(obj.sample)) obj.sample = { id: obj.id, sample: obj.number }
-          if (this.isDefinedAndNotNull(obj.specimen)) obj.specimen = { id: obj.id, specimen: obj.number }
+
+
 
           return obj;
         }
@@ -613,6 +718,11 @@
           paginateBy: 50,
           orderBy: '-id',
         }
+      },
+
+      customLabelForDataset(option) {
+        if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
+        return `${option.id} - (${option.name_en})`
       },
     }
 
