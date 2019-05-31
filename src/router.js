@@ -634,8 +634,8 @@ const router = new Router({
                 table:'analysis',
                 title:'titles.editAnalysis',
                 heading:'editAnalysis.heading',
-                isBottomOptionShown: true,
-                isNavigationShow:true,
+                isBottomOptionShown: false,
+                isNavigationShow:false,
                 isCopyFormShown: false,
                 requiresAuth: true
               },
