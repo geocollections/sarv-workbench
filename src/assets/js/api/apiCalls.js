@@ -766,20 +766,29 @@ export function fetchInstruments() {
 }
 
 export function fetchAnalyses(data) {
-  const fields = 'id,is_private';
+  const fields = 'id,sample__id,sample__number,sample__locality__locality,sample__depth,analysis_method__analysis_method,' +
+    'date,lab_txt,agent__agent,is_private';
   let searchFields = '';
 
-  if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`
-  }
+  // if (data.id !== null && data.id.trim().length > 0) {
+  //   searchFields += `id__icontains=${data.id}`
+  // }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
-
+  console.log('searching')
   if (searchFields.length > 0) {
     return fetch(`analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
     return fetch(`analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
+}
+
+export function fetchAnalysisAttachment(id,page=1) {
+  return fetch(`attachment/?attach_link__analysis__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`)
+}
+
+export function fetchAnalysisResults(id,page=1) {
+  return fetch(`analysis_results/?analysis=${id}&page=${page}&paginate_by=100&format=json`)
 }
 /*****************************
  ***  ANALYSIS LINK END  ***

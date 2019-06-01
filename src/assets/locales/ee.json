@@ -563,6 +563,12 @@
     "publication": "Esmanepublikatsioon",
     "owner": "Omanik",
     "storage": "Hoiukoht",
+    "sample__id": "Proovi #",
+    "sample__number": "Proovi nr",
+    "sample__locality__locality": "Proovi loc.",
+    "sample__depth": "Proovi sügavus",
+    "analysis_method__analysis_method": "Meetod",
+    "date_": "Kuupäev",
 
     "method": "Metoodika",
     "method_specification": "Met. täpsustus",
@@ -573,7 +579,11 @@
     "agent": "Analüüsija",
     "remarks": "Lisainfo",
     "location": "Asukoht",
-    "is_locked": "Kinnine?"
+    "is_locked": "Kinnine?",
+    "relatedTables": {
+      "analysis_results": "Analüüsi tulemused",
+      "attachment_link": "Failid"
+    }
   },
   "dataset": {
     "name": "Nimi"

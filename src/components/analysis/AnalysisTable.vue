@@ -4,24 +4,18 @@
 
     <td>
       <router-link :to="{ path: '/analysis/' + entity.id }" :title="$t('editDoi.editMessage')">{{
-        entity.identifier }}
+        entity.id }}
       </router-link>
     </td>
 
-
-    <td>
-      <!-- Api returns server error 500 for this field, maybe not in models? -->
-      <!--      {{ entity.datacite_created }}-->
-    </td>
-
-    <td>
-      <a v-if="!entity.is_private" href="javascript:void(0)" @click="openGeoInNewWindow({object: 'analysis', id: entity.id})"
-         :title="$t('editDoi.viewMessage')">{{ $t('edit.view') }}</a>
-    </td>
-
-<!--    <td>-->
-<!--      <a v-if="entity.identifier" href="javascript:void(0)" @click="openDOI({doi: entity.identifier})">DOI</a>-->
-<!--    </td>-->
+    <td>{{entity.sample__id}}</td>
+    <td>{{entity.sample__number}}</td>
+    <td>{{entity.sample__locality__locality}}</td>
+    <td>{{entity.sample__depth}}</td>
+    <td>{{entity.analysis_method__analysis_method}}</td>
+    <td>{{entity.date}}</td>
+    <td>{{entity.lab_txt}}</td>
+    <td>{{entity.agent__agent}}</td>
 
   </tr>
   </tbody>

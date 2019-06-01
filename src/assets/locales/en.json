@@ -560,7 +560,11 @@
     "agent": "Analized by",
     "remarks": "Remarks",
     "location": "Location",
-    "is_locked": "Is locked?"
+    "is_locked": "Is locked?",
+    "relatedTables": {
+      "analysis_results": "Analüüsi tulemused",
+      "attachment_link": "Failid"
+    }
   },
   "taxon": {
     "taxon": "Taxon",

@@ -310,41 +310,42 @@
       </transition>
     </fieldset>
 
-    <!--&lt;!&ndash; SHOWING RELATED_DATA &ndash;&gt;-->
-    <!--<div class="row mb-2">-->
-      <!--<div class="col mt-2">-->
-        <!--<ul class="nav nav-tabs nav-fill mb-3">-->
-          <!--&lt;!&ndash;<li class="nav-item">&ndash;&gt;-->
-            <!--&lt;!&ndash;<a href="#" v-on:click.prevent="setActiveTab('analysis_result')" class="nav-link"&ndash;&gt;-->
-               <!--&lt;!&ndash;:class="{ active: activeTab === 'analysis_result' }">&ndash;&gt;-->
-              <!--&lt;!&ndash;{{ $t('analysis.relatedTables.analysis_result') }} <font-awesome-icon icon="user-friends"/>&ndash;&gt;-->
-            <!--&lt;!&ndash;</a>&ndash;&gt;-->
-          <!--&lt;!&ndash;</li>&ndash;&gt;-->
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row mb-2">
+      <div class="col mt-2">
+        <ul class="nav nav-tabs nav-fill mb-3">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('analysis_results')" class="nav-link"
+               :class="{ active: activeTab === 'analysis_results' }">
+              {{ $t('analysis.relatedTables.analysis_results') }}
+              <!--<font-awesome-icon icon="file-contract"/>-->
+            </a>
+          </li>
 
-          <!--&lt;!&ndash;<li class="nav-item">&ndash;&gt;-->
-            <!--&lt;!&ndash;<a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"&ndash;&gt;-->
-               <!--&lt;!&ndash;:class="{ active: activeTab === 'attachment_link' }">&ndash;&gt;-->
-              <!--&lt;!&ndash;{{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>&ndash;&gt;-->
-            <!--&lt;!&ndash;</a>&ndash;&gt;-->
-          <!--&lt;!&ndash;</li>&ndash;&gt;-->
-        <!--</ul>-->
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
+               :class="{ active: activeTab === 'attachment_link' }">
+              {{ $t('analysis.relatedTables.attachment_link') }} <font-awesome-icon icon="folder-open"/>
+            </a>
+          </li>
+        </ul>
 
-        <!--<div class="row" v-if="activeTab !== 'attachment_link'">-->
-          <!--<div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">-->
-            <!--<b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">-->
-              <!--<option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>-->
-              <!--<option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>-->
-              <!--<option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>-->
-              <!--<option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>-->
-              <!--<option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>-->
-              <!--<option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>-->
-              <!--<option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>-->
-            <!--</b-form-select>-->
-          <!--</div>-->
+        <div class="row" v-if="activeTab !== 'attachment_link'">
+          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
+            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+            </b-form-select>
+          </div>
 
-          <!--<div class="col-sm-12 col-md-3 export-center">-->
-            <!--&lt;!&ndash; EXPORT BUTTON? &ndash;&gt;-->
-          <!--</div>-->
+          <div class="col-sm-12 col-md-3 export-center">
+            <!-- EXPORT BUTTON? -->
+          </div>
 
           <!--<div class="col-sm-12 col-md-6 pagination-center"-->
                <!--v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">-->
@@ -353,12 +354,12 @@
               <!--v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">-->
             <!--</b-pagination>-->
           <!--</div>-->
-        <!--</div>-->
+        </div>
+        <analysis-results :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab" />
+        <analysis-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab" />
 
-        <!--&lt;!&ndash;<doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab" />&ndash;&gt;-->
-
-      <!--</div>-->
-    <!--</div>-->
+      </div>
+    </div>
 
     <!-- IS PRIVATE -->
     <div class="row mt-3">
@@ -405,13 +406,19 @@
     fetchAnalyses,
     fetchAnalysis,
     fetchLabs,
-    fetchInstruments
+    fetchInstruments,
+    fetchAnalysisAttachment,
+    fetchAnalysisResults
 
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
+  import AnalysisFiles from "./relatedTables/AnalysisFiles";
+  import AnalysisResults from "./relatedTables/AnalysisResults";
 
   export default {
     components: {
+      AnalysisResults,
+      AnalysisFiles,
       Datepicker,
       VueMultiselect,
       Spinner,
@@ -482,6 +489,7 @@
               labs:false,
               instruments:false,
               reference:false,
+              attachment:false,
 
             },
             agent: [],
@@ -493,7 +501,8 @@
             labs: [],
             instruments: [],
             reference: [],
-            analysis_methods: []
+            analysis_methods: [],
+            attachment: []
           },
           requiredFields: [],
           analysis: {},
@@ -528,12 +537,12 @@
 
             if (handledResponse.length > 0) {
               this.analysis = this.handleResponse(response)[0];
-              console.log(this.analysis )
+
               this.fillAutocompleteFields(this.analysis)
 
               // Loading RESULTS and ATTACHMENTS here because they don't need api request
               // this.loadRelatedData('analysis_results', this.analysis)
-              // this.loadRelatedData('attachment_ling', this.analysis)
+              // this.loadRelatedData('attachment_link', this.analysis)
 
               this.removeUnnecessaryFields(this.analysis, this.copyFields);
               this.analysis.related_data = {};
@@ -562,30 +571,33 @@
 
           this.$emit('related-data-info', this.tabs);
 
-          this.setActiveTab('analysis_result')
+          this.setActiveTab('analysis_results')
         }
       },
 
       setDefaultRelatedData() {
         return {
           attachment_link: [],
+          analysis_results: [],
           new: {
             attachment: [],
+            analysis_results: [],
           },
           copyFields: {
             attachment_link: ['attachment', 'remarks'],
+            analysis_results: ['analysis_id', 'name'],
           },
           insert: {
-            attachment_link: {},
+            attachment_link: {},analysis_results: {},
           },
           page: {
-            attachment_link: 1,
+            attachment_link: 1, analysis_results: 1,
           },
           paginateBy: {
-            attachment_link: 10,
+            attachment_link: 10,  analysis_results: 10,
           },
           count: {
-            attachment_link: 0,
+            attachment_link: 0, analysis_results: 0,
           }
         }
       },
@@ -604,14 +616,14 @@
         if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
         if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
 
-        if (this.isDefinedAndNotNull(objectToUpload.reference)) uploadableObject.reference = this.relatedData.reference.id
-        if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
-        // if (this.isDefinedAndNotNull(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
+        if (this.isDefinedAndNotNull(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
+        if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
 
         // Adding related data
         if (saveRelatedData) {
           uploadableObject.related_data = {}
-          // uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          uploadableObject.related_data.analysis_results = this.relatedData.analysis_results
         }
 
         console.log('This object is sent in string format:')
@@ -645,7 +657,6 @@
           if (this.isDefinedAndNotNull(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
 
 
-
           return obj;
         }
 
@@ -660,33 +671,19 @@
       loadRelatedData(object, analysis = null) {
         let query;
 
-        // if (object === 'reference' && doi !== null && doi.reference !== null && doi.reference.id !== null) {
-        //   this.relatedData.count[object] = 1;
-        //   this.relatedData[object] = {
-        //     id: doi.reference__id,
-        //     reference: doi.reference__reference
-        //   }
-        //   this.setBlockVisibility(object, this.relatedData.count[object])
-        //   return;
-        // }
+        if (object === 'attachment_link') {
+          query = fetchAnalysisAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+        } else if (object === 'analysis_results') {
+          query = fetchAnalysisResults(this.$route.params.id, this.relatedData.page.analysis_results)
+        }
 
-        // Dataset and Reference are direct links and do not need extra request.
-        // if (object !== 'dataset' && object !== 'reference') {
-        //   return new Promise(resolve => {
-        //     query.then(response => {
-        //       if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results : [];
-        //
-        //       this.relatedData.count[object] = response.body.count;
-        //       this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
-        //
-        //       resolve(true)
-        //     });
-        //   });
-        // }
-      },
-
-      setBlockVisibility(object,count){
-
+        return new Promise(resolve => {
+          query.then(response => {
+            this.relatedData[object] = this.handleResponse(response);
+            this.relatedData.count[object] = response.body.count;
+            resolve(true)
+          });
+        });
       },
 
       //check required fields for related data
@@ -696,13 +693,7 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.analysis = this.analysis.id;
         console.log(uploadableObject.analysis)
-
-        if (this.isDefinedAndNotNull(uploadableObject.agent)) {
-          uploadableObject.agent = uploadableObject.agent.id ? uploadableObject.agent.id : uploadableObject.agent;
-        }
-
-        console.log('This object is sent in string format (related_data):')
-        console.log(uploadableObject);
+        
         return JSON.stringify(uploadableObject)
       },
 
