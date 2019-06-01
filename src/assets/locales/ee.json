@@ -582,7 +582,13 @@
     "is_locked": "Kinnine?",
     "relatedTables": {
       "analysis_results": "Analüüsi tulemused",
-      "attachment_link": "Failid"
+      "attachment_link": "Failid",
+      "result_name": "Nimi",
+      "result_value": "Väärtus",
+      "result_txt": "Txt",
+      "result_bin": "Bin",
+      "result_max": "Max",
+      "result_min": "Min"
     }
   },
   "dataset": {

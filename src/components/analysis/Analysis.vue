@@ -693,7 +693,7 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.analysis = this.analysis.id;
         console.log(uploadableObject.analysis)
-        
+
         return JSON.stringify(uploadableObject)
       },
 

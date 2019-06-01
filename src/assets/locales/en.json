@@ -563,7 +563,13 @@
     "is_locked": "Is locked?",
     "relatedTables": {
       "analysis_results": "Analüüsi tulemused",
-      "attachment_link": "Failid"
+      "attachment_link": "Failid",
+      "result_name": "Name",
+      "result_value": "Value",
+      "result_txt": "Txt",
+      "result_bin": "Bin",
+      "result_max": "Max",
+      "result_min": "Min"
     }
   },
   "taxon": {

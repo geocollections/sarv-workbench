@@ -9,11 +9,12 @@
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
-            <th>{{ $t('doi.name') }}</th>
-            <th>{{ $t('doi.affiliation') }}</th>
-            <th>{{ $t('doi.agent_type') }}</th>
-            <th>ORCID</th>
-            <th>{{ $t('doi.agent') }}</th>
+            <th>{{ $t('analysis.relatedTables.result_name') }}</th>
+            <th>{{ $t('analysis.relatedTables.result_value') }}</th>
+            <th>{{ $t('analysis.relatedTables.result_max') }}</th>
+            <th>{{ $t('analysis.relatedTables.result_min') }}</th>
+            <th>{{ $t('analysis.relatedTables.result_bin') }}</th>
+            <th>{{ $t('analysis.relatedTables.result_txt') }}</th>
             <th class="btn-th"></th>
           </tr>
           </thead>
@@ -21,21 +22,18 @@
           <tbody>
           <tr v-for="entity in relatedData.analysis_results" :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
             <!-- VIEW MODE -->
-            <td v-if="!entity.editMode">{{ entity.analysis_id }}</td>
 
             <td v-if="!entity.editMode">{{ entity.name }}</td>
 
             <td v-if="!entity.editMode">{{ entity.value }}</td>
 
+            <td v-if="!entity.editMode">{{ entity.value_max }}</td>
+            <td v-if="!entity.editMode">{{ entity.value_min }}</td>
             <td v-if="!entity.editMode">{{ entity.value_bin }}</td>
 
             <td v-if="!entity.editMode">{{ entity.value_txt }}</td>
 
             <!-- EDIT MODE -->
-            <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.analysis_id" type="text"/>
-
-            </td>
 
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.name" type="text"/>
@@ -43,6 +41,14 @@
 
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.value" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.value_max" type="text"/>
+            </td>
+
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.value_min" type="text"/>
             </td>
 
             <td v-if="entity.editMode">
@@ -63,9 +69,6 @@
           </tr>
 
           <tr class="related-input-data">
-            <td>
-              <b-form-input v-model="relatedData.insert.analysis_results.analysis_id" type="text"/>
-            </td>
 
             <td>
               <b-form-input v-model="relatedData.insert.analysis_results.name" type="text"/>
@@ -73,6 +76,14 @@
 
             <td>
               <b-form-input v-model="relatedData.insert.analysis_results.value" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.analysis_results.value_max" type="text"/>
+            </td>
+
+            <td>
+              <b-form-input v-model="relatedData.insert.analysis_results.value_min" type="text"/>
             </td>
 
             <td>
