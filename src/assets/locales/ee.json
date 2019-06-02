@@ -650,6 +650,7 @@
     "date": "Kuupäev / vahemik",
     "dateType": "Kuupäeva tüüp",
     "link": "Link",
+    "identifierPlaceholder": "See väli täidetakse automaatselt",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",

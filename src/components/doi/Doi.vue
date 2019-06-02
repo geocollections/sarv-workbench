@@ -16,13 +16,13 @@
 
           <!-- DOI, RESOURCE TYPE and RESOURCE -->
           <div class="row">
-            <div class="col-md-4" v-if="$route.meta.isEdit">
+            <div class="col-md-4">
               <label :for="`identifier`">{{ $t('doi.identifier') }}:</label>
-              <b-form-input id="identifier" v-model="doi.identifier" type="text" :disabled="$route.meta.isEdit"></b-form-input>
+              <b-form-input id="identifier" v-model="doi.identifier" type="text" :placeholder="$route.meta.isEdit ? '' : $t('doi.identifierPlaceholder')" :disabled="true"></b-form-input>
             </div>
 
             <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
-            <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
+            <div class="col-md-4">
               <label :for="`resource_type`">{{ $t('doi.resourceTypeGeneral') }}:</label>
               <vue-multiselect v-model="doi.resource_type"
                                input-class="custom"
@@ -40,7 +40,7 @@
               </vue-multiselect>
             </div>
 
-            <div :class="{'col-md-4': $route.meta.isEdit, 'col-md-6': !$route.meta.isEdit }">
+            <div class="col-md-4">
               <label :for="`resource`">{{ $t('doi.resource') }}:</label>
               <b-form-input id="resource" :state="isDefinedAndNotNull(doi.resource)" v-model="doi.resource" type="text"></b-form-input>
             </div>

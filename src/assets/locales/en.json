@@ -642,6 +642,7 @@
     "date": "Date / range",
     "dateType": "Date type",
     "link": "Link",
+    "identifierPlaceholder": "This field is filled automatically",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "files": "Files",
