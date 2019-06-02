@@ -46,11 +46,12 @@
             </div>
           </div>
 
-          <!-- TITLE, YEAR and PUBLISHER -->
+          <!-- CREATORS, YEAR and PUBLISHER -->
           <div class="row">
             <div class="col-md-4">
-              <label :for="`title`">{{ $t('doi.title') }}:</label>
-              <b-form-input id="title" :state="isDefinedAndNotNull(doi.title)" v-model="doi.title" type="text"></b-form-input>
+              <label :for="`creators`">{{ $t('doi.creators') }}:</label>
+              <!-- TODO: Connect with related persons -->
+              <b-form-input id="creators" :state="isDefinedAndNotNull(doi.creators)" v-model="doi.creators" type="text"></b-form-input>
             </div>
 
             <div class="col-md-4">
@@ -61,6 +62,14 @@
             <div class="col-md-4">
               <label :for="`publisher`">{{ $t('doi.publisher') }}:</label>
               <b-form-input id="publisher" :state="isDefinedAndNotNull(doi.publisher)" v-model="doi.publisher" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- TITLE -->
+          <div class="row">
+            <div class="col-sm-12">
+              <label :for="`title`">{{ $t('doi.title') }}:</label>
+              <b-form-input id="title" :state="isDefinedAndNotNull(doi.title)" v-model="doi.title" type="text"></b-form-input>
             </div>
           </div>
 
@@ -109,38 +118,6 @@
             </div>
           </div>
 
-          <!-- CREATORS and OWNER (agent) -->
-          <div class="row">
-            <div class="col-md-6">
-              <label :for="`creators`">{{ $t('doi.creators') }}:</label>
-              <!-- TODO: Connect with related persons -->
-              <b-form-input id="creators" v-model="doi.creators" type="text"></b-form-input>
-            </div>
-
-
-            <div class="col-md-6">
-              <label :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
-              <vue-multiselect id="agent" class="align-middle"
-                               v-model="doi.owner"
-                               deselect-label="Can't remove this value"
-                               label="agent"
-                               track-by="id"
-                               :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent"
-                               :options="autocomplete.agent"
-                               @search-change="autcompleteAgentSearch"
-                               :internal-search="false"
-                               :preserve-search="true"
-                               :allow-empty="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-              </vue-multiselect>
-            </div>
-          </div>
-
           <!-- LANGUAGE, VERSION, FORMATS and SIZES -->
           <div class="row">
             <div class="col-md-3">
@@ -175,11 +152,33 @@
             </div>
           </div>
 
-          <!-- SUBJECTS -->
+          <!-- SUBJECTS and OWNER (agent)-->
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-md-6">
               <label :for="`subjects`">{{ $t('doi.subjects') }}:</label>
               <b-form-input id="subjects" v-model="doi.subjects" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6">
+              <label :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
+              <vue-multiselect id="agent" class="align-middle"
+                               v-model="doi.owner"
+                               deselect-label="Can't remove this value"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autcompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :allow-empty="false"
+                               :open-direction="'bottom'">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </div>
           </div>
 
@@ -612,7 +611,7 @@
             doi_date_type: [],
             attachment: []
           },
-          requiredFields: ['resource_type', 'resource', 'title', 'publication_year', 'publisher'],
+          requiredFields: ['resource_type', 'resource', 'creators', 'publication_year', 'publisher', 'title'],
           doi: {},
           previousRecord: {},
           nextRecord: {},
