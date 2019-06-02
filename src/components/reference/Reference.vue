@@ -952,7 +952,7 @@
       },
 
       checkDoi() {
-        fetchDoiCheck('as').then(response => {
+        fetchDoiCheck(this.reference.doi).then(response => {
           if (response.status === 200) {
             if (response.body.status === 'ok') {
               this.updateFieldsUsingDoi(response.body.message)
