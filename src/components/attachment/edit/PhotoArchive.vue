@@ -447,7 +447,7 @@
   import MapComponent from '@/components/partial/MapComponent'
   import MapComponent2 from "../../partial/MapComponent2";
   import { toastError } from "@/assets/js/iziToast/iziToast";
-  import BottomOptions from "../../partial/BottomOptions";
+  import BottomOptions from "../../partial/BottomOptionsOld";
 
   library.add(faChevronUp, faChevronDown, faTrashAlt)
 

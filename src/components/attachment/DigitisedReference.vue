@@ -215,7 +215,7 @@
   import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
-  import BottomOptions from "../partial/BottomOptions";
+  import BottomOptions from "../partial/BottomOptionsOld";
 
   library.add(faFile)
 

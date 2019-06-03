@@ -860,8 +860,8 @@
   "buttons": {
     "deletePreferences": "Clear filters and ordering",
     "cancel": "Cancel",
-    "next": "Järgmine",
-    "previous": "Eelmine",
+    "next": "Next",
+    "previous": "Previous",
     "homePage": "Home page"
   },
   "confirmation": {
