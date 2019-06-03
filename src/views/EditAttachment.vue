@@ -28,6 +28,9 @@
         <digitised-reference :data="attachment" v-on:edit-data="change"/>
       </div>
 
+      <!-- TODO: Enable if attachment components are updated -->
+<!--      <bottom-options object="attachment" :is-navigation-shown="$route.meta.isNavigationShow" v-if="$route.meta.isBottomOptionShown"/>-->
+
       <!-- LOGS -->
       <log table="attachment" :data="attachment" :formatted-data="formattedData"></log>
     </div>
@@ -40,6 +43,7 @@
   import SpecimenImage from '@/components/attachment/edit/SpecimenImage.vue'
   import OtherFiles from '@/components/attachment/edit/OtherFiles.vue'
   import DigitisedReference from '@/components/attachment/edit/DigitisedReference.vue'
+  import BottomOptions from "@/components/partial/BottomOptions";
   import Spinner from 'vue-simple-spinner'
   import Log from '@/components/partial/Log.vue'
 
@@ -53,6 +57,7 @@
       DigitisedReference,
       Spinner,
       Log,
+      BottomOptions
     },
     props: ['id'],
     name: "EditAttachment",

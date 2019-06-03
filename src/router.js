@@ -64,7 +64,9 @@ const router = new Router({
           props: true,
           component: () => import('./views/EditAttachment.vue'),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            isBottomOptionShown: true,
+            isNavigationShow: true,
           },
         },
         {
