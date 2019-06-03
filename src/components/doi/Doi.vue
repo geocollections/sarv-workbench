@@ -562,11 +562,17 @@
         },
         deep: true
       },
+      // Watching creators because sometimes fetchDoi takes more time than fetchDoiAgent
+      // and overwrites updated doi. Basically this here is fallback just in case.
+      'doi.creators': {
+        handler: function (newVal, oldVal) {
+          this.updateDoiCreatorsField(this.relatedData.doi_agent)
+        }
+      }
     },
 
     methods: {
       setTab(type) {
-        console.log(type)
         this.activeTab = type
       },
 
@@ -866,6 +872,10 @@
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
 
+              if (object === 'doi_agent') {
+                this.updateDoiCreatorsField(this.relatedData.doi_agent)
+              }
+
               resolve(true)
             });
           });
@@ -939,6 +949,28 @@
           orderBy: '-id',
         }
       },
+
+      /**
+       * Updates DOI creators field using persons (Creators) in doi_agent
+       * Always overwrites creators field, because doi_agent is more reliable than user entered creators field!
+       * @param doiAgent
+       */
+      updateDoiCreatorsField(doiAgent) {
+        if (doiAgent.length > 0) {
+          let creators = '';
+
+          doiAgent.forEach(agent => {
+            // Only Creators are added (agent_type 1 === Creator)
+            if (agent.agent_type === 1) {
+              creators += agent.agent__surename + ', ' + agent.agent__forename + '; '
+            }
+          })
+
+          creators = creators.trim().slice(0, -1)
+          this.doi.creators = creators;
+        }
+
+      }
     }
 
   }
