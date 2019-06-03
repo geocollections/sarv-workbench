@@ -7,23 +7,27 @@
       </div>
 
       <!-- TODO: Enable if more than one subform -->
-      <!--<div class="col-sm-6 text-right">-->
-        <!--<ul class="nav nav-pills">-->
-          <!--<li class="nav-item" v-for="item in $route.meta.subForms">-->
-            <!--<router-link class="nav-link" :to="{ path: item.path }">{{ $t(item.name) }}</router-link>-->
-          <!--</li>-->
-        <!--</ul>-->
-      <!--</div>-->
+      <div class="col-sm-6 text-right" v-if="$route.meta.object === 'attachment'">
+        <ul class="nav nav-pills">
+          <li class="nav-item" v-for="item in $route.meta.subForms">
+            <router-link class="nav-link" :to="{ path: item.path }">{{ $t(item.name) }}</router-link>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <router-view/>
+
+    <bottom-options :object="$route.meta.object" :is-navigation-shown="$route.meta.isNavigationShow" v-if="$route.meta.isBottomOptionShown"/>
+
   </div>
 </template>
 
 <script>
+  import BottomOptions from "../components/partial/BottomOptions";
   export default {
     name: "AddForm",
-
+    components: {BottomOptions},
     metaInfo () {
       return {
         title: this.$t(this.$route.meta.title)

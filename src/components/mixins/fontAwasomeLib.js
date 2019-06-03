@@ -14,14 +14,14 @@
  */
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import {faThumbtack,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faBook, faUndo, faFilePdf, faFileExport, faAsterisk, faCheck, faExclamationTriangle, faAngleDoubleLeft, faAngleDoubleRight, faSave, faBan } from '@fortawesome/free-solid-svg-icons'
+import {faThumbtack,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faBook, faUndo, faFilePdf, faFileExport, faAsterisk, faCheck, faExclamationTriangle, faAngleDoubleLeft, faAngleDoubleRight, faSave, faBan, faServer } from '@fortawesome/free-solid-svg-icons'
 import {
   faFilePdf as farFilePdf, faFileExcel as farFileExcel,
   faCopy as farCopy, faFile as farFile,
   faPlusSquare as farPlusSquare} from '@fortawesome/free-regular-svg-icons'
 
 library.add(
-  faThumbtack,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt, faBook, faUndo, faFilePdf, faFileExport, faAsterisk, faCheck, faExclamationTriangle, faAngleDoubleLeft, faAngleDoubleRight, faSave, faBan,
+  faThumbtack,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt, faBook, faUndo, faFilePdf, faFileExport, faAsterisk, faCheck, faExclamationTriangle, faAngleDoubleLeft, faAngleDoubleRight, faSave, faBan, faServer,
   farFilePdf, farFileExcel, farCopy, farFile, farPlusSquare
 )
 

@@ -482,6 +482,12 @@
           <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
+
+        <button v-if="$route.meta.isEdit" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerDoi"
+                :title="$t('edit.buttons.registerDoi')">
+          <font-awesome-icon icon="server"/>
+          {{ $t('edit.buttons.registerDoi') }}
+        </button>
       </div>
     </div>
 
@@ -517,6 +523,7 @@
   import DoiRelatedIdentifier from "./relatedTables/DoiRelatedIdentifier";
   import DoiGeolocation from "./relatedTables/DoiGeolocation";
   import DoiDate from "./relatedTables/DoiDate";
+  import { toastSuccess, toastError, toastInfo } from "../../assets/js/iziToast/iziToast";
 
   export default {
     components: {
@@ -686,6 +693,11 @@
           fetchDoiDateType().then(response => {
             this.autocomplete.doi_date_type = this.handleResponse(response)
           });
+
+          // TODO: Fetch info if DOI should be updated in DataCite server
+          // fetchDoiUpdateState().then(respones => {
+          //  TODO: ToastInfo if DOI should be updated (DataCite server has older data than our database)
+          // })
 
           // Load Related Data which is in tabs
           this.tabs.forEach(entity => {
@@ -969,7 +981,19 @@
           creators = creators.trim().slice(0, -1)
           this.doi.creators = creators;
         }
+      },
 
+      /**
+       * Register DOI to DataCite server
+       */
+      registerDoi() {
+        if (this.validate('doi')) {
+          if (confirm(this.$t('doi.doiDataCiteConfirmation'))) {
+
+            console.log('TODO')
+
+          } else toastInfo({text: this.$t('messages.userCancelled')})
+        } else toastError({text: this.$t('messages.checkForm')})
       }
     }
 

@@ -188,7 +188,8 @@
       "saveAndContinue": "Salvesta ja jätka muutmist",
       "cancelWithoutSaving": "Lahku salvestamata",
       "cancel": "Katkesta faili muutmine",
-      "saveNewDoi": "Salvesta uus DOI"
+      "saveNewDoi": "Salvesta uus DOI",
+      "registerDoi": "Registreeri DOI"
     },
     "locked": "Seda faili ei saa muuta, sest see on lukus",
     "photoArchive": "Fotoarhiiv",
@@ -244,6 +245,11 @@
     "heading": "DOI",
     "viewMessage": "Vaata DOI-d geokogude portaalis",
     "editMessage": "Muuda DOI-d"
+  },
+  "editAttachment": {
+    "heading": "Fail",
+    "viewMessage": "Vaata faili geokogude portaalis",
+    "editMessage": "Muuda faili"
   },
   "attachments": {
     "header": "Minu failid",
@@ -651,6 +657,7 @@
     "dateType": "Kuupäeva tüüp",
     "link": "Link",
     "identifierPlaceholder": "See väli täidetakse automaatselt",
+    "doiDataCiteConfirmation": "Kas olete kindel, et soovite registreerida DOI DataCite serverisse?",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",
@@ -836,7 +843,9 @@
     "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise vaatluspunktiga {data}.",
     "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}.",
     "solrSearchInfo": "Seda välja kasutades teisi välju ei kasutata",
-    "combinedViewChangeSize": "Muutke kombineeritud vaate suurust kasutades seda liugurit"
+    "combinedViewChangeSize": "Muutke kombineeritud vaate suurust kasutades seda liugurit",
+    "userCancelled": "Tegevus katkestati",
+    "fieldsCleared": "Väljad puhastatud!"
   },
   "titles": {
     "main": "Geokogude andmehaldus",
@@ -871,6 +880,7 @@
     "cancel": "Katkesta",
     "next": "Järgmine",
     "previous": "Eelmine",
+    "clear": "Puhasta",
     "homePage": "Pealeht"
   },
   "confirmation": {

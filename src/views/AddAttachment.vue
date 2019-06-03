@@ -7,7 +7,7 @@
       </div>
 
       <div class="col-sm-8 text-right">
-        <ul class="nav nav-pills">
+        <ul class="nav nav-pills nav-fill">
           <li class="nav-item">
             <router-link class="nav-link" :to="{ path: '/attachment/add/photo_archive' }">{{ $t('add.photoArchive') }}</router-link>
           </li>

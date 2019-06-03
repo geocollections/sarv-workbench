@@ -8,6 +8,7 @@ import {faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVid
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 import moment from 'moment'
+import {toastInfo} from "../../assets/js/iziToast/iziToast";
 
 library.add(faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt,faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
 
@@ -300,9 +301,13 @@ const formManipulation = {
 
     reset(object, isEdit) {
       console.log('reset')
-      // TODO: When exactly is this.createRelationWith used? (adding record in new window or something?)
       if (typeof this.createRelationWith !== 'undefined' && this.createRelationWith.object !== null) window.close();
-      else isEdit ? this.$router.push({ path: '/' + object }) : this[object] = {};
+      else if (isEdit) this.$router.push({path: '/' + object})
+      else {
+        this[object] = {}
+        toastInfo({text: this.$t('messages.fieldsCleared')})
+      }
+      // isEdit ? this.$router.push({ path: '/' + object }) : this[object] = {};
     },
 
     leaveFromEditView(object) {
@@ -482,10 +487,16 @@ const formManipulation = {
         let currentRecordId = this.findCurrentRecord(cloneDeep(results),this[object].id)
 
         if(currentRecordId === -1){
-          this.previousRecord = this[object].id - 1;
-          this.nextRecord = this[object].id + 1;
-          this.$root.$emit('disable-previous',false);
-          this.$root.$emit('disable-next',false);
+          if (this[object].id === 1) {
+            this.nextRecord = this[object].id + 1;
+            this.$root.$emit('disable-previous', true);
+            this.$root.$emit('disable-next', false);
+          } else {
+            this.previousRecord = this[object].id - 1;
+            this.nextRecord = this[object].id + 1;
+            this.$root.$emit('disable-previous',false);
+            this.$root.$emit('disable-next',false);
+          }
           return
         }
 
@@ -529,10 +540,13 @@ const formManipulation = {
       if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately).then(resp => {
         vm.$router.push({ path: '/' + object })
       })
-      if (choice === "CLEAR") console.log('TODO')
-      if (choice === "CANCEL") {
-        this.$router.push({ path: '/' + object })
+
+      if (choice === "CLEAR") {
+        this[object] = {}
+        toastInfo({text: this.$t('messages.fieldsCleared')})
       }
+      if (choice === "CANCEL") this.$router.push({ path: '/' + object })
+
       if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });
       if (choice === "NEXT") this.$router.push({ path: '/' + object + '/' + this.nextRecord });
     },

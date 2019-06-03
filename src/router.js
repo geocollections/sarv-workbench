@@ -52,6 +52,137 @@ const router = new Router({
             }
           ]
         },
+        // NEW ATTACHMENT START
+        {
+          path: '/attachment_new/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/attachment/AttachmentNew.vue'),
+              meta: {
+                isEdit: true,
+                table: 'attachment',
+                title: 'titles.editAttachment',
+                heading: 'editAttachment.heading',
+                isBottomOptionShown: true,
+                isSidebarShown: false,
+                isNavigationShown: true,
+                isCopyFormShown: false,
+                requiresAuth: true
+              }
+            },
+          ]
+        },
+        {
+          path: '/attachment_new/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/attachment/PhotoArchiveNew.vue'),
+              meta: {
+                isEdit: false,
+                title: 'titles.addAttachment',
+                addNew: 'add.newAttachment',
+                subForms: [
+                  { path: '/attachment_new/add/photo_archive', name: 'add.photoArchive' },
+                  { path: '/attachment_new/add/specimen_image', name: 'add.specimenImage' },
+                  { path: '/attachment_new/add/other_file', name: 'add.otherFiles' },
+                  { path: '/attachment_new/add/digitised_reference', name: 'add.digitisedReference' }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment',
+              },
+            },
+            {
+              path: 'photo_archive',
+              component: () => import('./components/attachment/PhotoArchiveNew.vue'),
+              meta: {
+                isEdit: false,
+                title: 'titles.addAttachment',
+                addNew: 'add.newAttachment',
+                subForms: [
+                  { path: '/attachment_new/add/photo_archive', name: 'add.photoArchive' },
+                  { path: '/attachment_new/add/specimen_image', name: 'add.specimenImage' },
+                  { path: '/attachment_new/add/other_file', name: 'add.otherFiles' },
+                  { path: '/attachment_new/add/digitised_reference', name: 'add.digitisedReference' }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
+              }
+            },
+            {
+              path: 'specimen_image',
+              component: () => import('./components/attachment/SpecimenImageNew.vue'),
+              meta: {
+                isEdit: false,
+                title: 'titles.addAttachment',
+                addNew: 'add.newAttachment',
+                subForms: [
+                  { path: '/attachment_new/add/photo_archive', name: 'add.photoArchive' },
+                  { path: '/attachment_new/add/specimen_image', name: 'add.specimenImage' },
+                  { path: '/attachment_new/add/other_file', name: 'add.otherFiles' },
+                  { path: '/attachment_new/add/digitised_reference', name: 'add.digitisedReference' }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
+              }
+            },
+            {
+              path: 'other_file',
+              component: () => import('./components/attachment/OtherFilesNew.vue'),
+              meta: {
+                isEdit: false,
+                title: 'titles.addAttachment',
+                addNew: 'add.newAttachment',
+                subForms: [
+                  { path: '/attachment_new/add/photo_archive', name: 'add.photoArchive' },
+                  { path: '/attachment_new/add/specimen_image', name: 'add.specimenImage' },
+                  { path: '/attachment_new/add/other_file', name: 'add.otherFiles' },
+                  { path: '/attachment_new/add/digitised_reference', name: 'add.digitisedReference' }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
+              }
+            },
+            {
+              path: 'digitised_reference',
+              component: () => import('./components/attachment/DigitisedReferenceNew.vue'),
+              meta: {
+                isEdit: false,
+                title: 'titles.addAttachment',
+                addNew: 'add.newAttachment',
+                subForms: [
+                  { path: '/attachment_new/add/photo_archive', name: 'add.photoArchive' },
+                  { path: '/attachment_new/add/specimen_image', name: 'add.specimenImage' },
+                  { path: '/attachment_new/add/other_file', name: 'add.otherFiles' },
+                  { path: '/attachment_new/add/digitised_reference', name: 'add.digitisedReference' }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
+              }
+            }
+          ]
+        },
+        // NEW ATTACHMENT END
         {
           path: '/attachment_old',
           component: () => import('./views/AttachmentsOld.vue'),
@@ -175,7 +306,10 @@ const router = new Router({
                     path: '/reference/add', name: 'add.reference'
                   }
                 ],
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'reference'
               },
             }
           ]
@@ -251,7 +385,10 @@ const router = new Router({
                 subForms:[
                   {path:'/locality/add',name:'add.locality'}
                 ],
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'locality'
               },
             }
           ]
@@ -313,7 +450,10 @@ const router = new Router({
                 subForms:[
                   {path:'/sample/add',name:'add.sample'}
                 ],
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'sample'
               },
             }
           ]
@@ -357,7 +497,10 @@ const router = new Router({
                     subForms:[
                       {path:'/project/add',name:'editProject.heading'}
                     ],
-                    requiresAuth: true
+                    requiresAuth: true,
+                    isBottomOptionShown: true,
+                    isNavigationShown: false,
+                    object: 'project'
                   },
                 }
               ]
@@ -394,27 +537,6 @@ const router = new Router({
                   },
                 }
               ]
-            }
-          ]
-        },
-        {
-          path: '/site/add',
-          component: () => import('./views/AddForm.vue'),
-          meta: {
-            requiresAuth: true
-          },
-          children: [
-            {
-              path: '',
-              component: () => import('./components/site/Site.vue'),
-              meta: {
-                isEdit:false,
-                title:'titles.addSite',
-                subForms:[
-                  {path:'/site/add',name:'editSite.heading'}
-                ],
-                requiresAuth: true
-              },
             }
           ]
         },
@@ -475,7 +597,10 @@ const router = new Router({
                 subForms:[
                   {path:'/site/add',name:'editSite.heading'}
                 ],
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'site'
               },
             }
           ]
@@ -537,7 +662,10 @@ const router = new Router({
                 subForms:[
                   {path:'/library/add',name:'add.library'}
                 ],
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'library'
               },
             }
           ]
@@ -599,7 +727,10 @@ const router = new Router({
                 subForms:[
                   {path:'/doi/add',name:'add.doi'}
                 ],
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'doi'
               },
             }
           ]
@@ -661,7 +792,10 @@ const router = new Router({
                 subForms:[
                   {path:'/analysis/add',name:'add.analysis'}
                 ],
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'analysis'
               },
             }
           ]

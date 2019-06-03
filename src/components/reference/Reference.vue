@@ -1064,7 +1064,7 @@
               toastError({text: 'DOI upload failed!'});
             });
           } else {
-            console.log('user cancelled')
+            toastInfo({text: this.$t('messages.userCancelled')})
           }
         } else toastError({text: this.$t('messages.checkForm')})
       },

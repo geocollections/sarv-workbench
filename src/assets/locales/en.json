@@ -188,7 +188,8 @@
       "saveAndContinue": "Save and continue editing",
       "cancelWithoutSaving": "Cancel without saving",
       "cancel": "Cancel file change",
-      "saveNewDoi": "Save new DOI"
+      "saveNewDoi": "Save new DOI",
+      "registerDoi": "Register DOI"
     },
     "locked": "This file is locked and can't be changed",
     "photoArchive": "Photo archive",
@@ -244,6 +245,11 @@
     "heading": "Doi ID",
     "viewMessage": "View DOi in geocollections portal",
     "editMessage": "Edit DOI"
+  },
+  "editAttachment": {
+    "heading": "File",
+    "viewMessage": "View file in geocollections portal",
+    "editMessage": "Edit file"
   },
   "attachments": {
     "header": "My attachments",
@@ -643,6 +649,7 @@
     "dateType": "Date type",
     "link": "Link",
     "identifierPlaceholder": "This field is filled automatically",
+    "doiDataCiteConfirmation": "Are you sure, you would like to register DOI to DataCite server?",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "files": "Files",
@@ -828,7 +835,9 @@
     "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise SITE-ga {data}.",
     "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}.",
     "solrSearchInfo": "Using this field will not use other fields",
-    "combinedViewChangeSize": "Change combined view size using this slider"
+    "combinedViewChangeSize": "Change combined view size using this slider",
+    "userCancelled": "Action cancelled",
+    "fieldsCleared": "Fields cleared!"
   },
   "titles": {
     "main": "Geocollections Data Management",
@@ -862,6 +871,7 @@
     "cancel": "Cancel",
     "next": "Next",
     "previous": "Previous",
+    "clear": "Clear",
     "homePage": "Home page"
   },
   "confirmation": {

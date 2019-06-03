@@ -911,6 +911,14 @@
       </div>
     </div>
 
+
+    <!-- CHANGE TYPE -->
+    <div class="row">
+      <div class="col">
+        {{isImageFile}}
+      </div>
+    </div>
+
     <!-- CHECKBOXES -->
     <div class="row">
       <div class="col">
@@ -1033,6 +1041,7 @@
         myKeywords: [],
         relatedTable: null,
         edit: {
+          specimen_image_attachment: this.data.specimen_image_attachment,
           author: this.buildAuthor(),
           author_free: this.data.author_free,
           date_created: this.data.date_created,
@@ -1130,6 +1139,14 @@
         }
         return false
       },
+
+      isImageFile() {
+        console.log(this.data.attachment_format__value)
+        if (this.data.attachment_format__value !== null) {
+          return this.data.attachment_format__value.includes('image');
+        }
+        return false;
+      }
     },
 
     created: function () {
