@@ -390,6 +390,19 @@
     },
 
     created() {
+      // USED BY SIDEBAR
+      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+        searchHistory: 'librarySearchHistory',
+        defaultSearch: this.setDefaultSearchParameters(),
+        search: params,
+        request: 'FETCH_LIBRARIES',
+        title: 'header.libraries',
+        object: 'library',
+        field: 'title'
+      });
+
       this.loadFullInfo()
     },
 

@@ -11,9 +11,11 @@ export default {
   CREATE_RELATION_OBJECT: (state, { createRelationWith }) => {
     Vue.set(state,'createRelationWith', createRelationWith )
   },
+
   REMOVE_RELATION_OBJECT: (state) => {
     Vue.set(state,'createRelationWith',  { object: null, data: null, info: null, edit: null } )
   },
+
   SET_SAMPLE_VIEW: (state, isFull) => {
     Vue.set(state,'sampleView', isFull)
   },
@@ -27,7 +29,12 @@ export default {
   },
 
   SET_SIDEBAR_LIST: (state, { resp }) => {
-    Vue.set(state, 'sidebarList', { results : resp.body.results || false, totalPages: resp.body.page ? resp.body.page.split(' of ')[1]: undefined}) /* false means page not found */
+    /* false means page not found */
+    Vue.set(state, 'sidebarList', {
+      results : resp.body.results || false,
+      page: resp.body.page,
+      totalPages: resp.body.page ? resp.body.page.split(' of ')[1]: undefined
+    })
   },
 
   SET_SIDEBAR_USER_ACTION: (state, { userAction }) => {

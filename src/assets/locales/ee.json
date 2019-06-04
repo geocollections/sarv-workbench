@@ -93,6 +93,9 @@
     "active":"Aktiivne",
     "non_active":"Mitte aktiivne"
   },
+  "settings": {
+    "permissions": "Minu õigused"
+  },
   "add": {
     "new": "Lisa uus",
     "saveAsNew": "Salvesta uue kirjena",

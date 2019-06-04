@@ -2,9 +2,6 @@ import { toastSuccess, toastError } from "../../assets/js/iziToast/iziToast";
 import { fetchLogin, fetchLoginId, fetchLogout } from "../../assets/js/api/apiCalls";
 
 const authenticate = {
-  created: function () {
-
-  },
 
   methods: {
 

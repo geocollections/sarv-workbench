@@ -10,7 +10,7 @@
       <h6>{{ name }} {{ surname }}</h6>
     </div>
 
-    <vs-sidebar-group open :title="$t('header.title')">
+    <vs-sidebar-group :open="!$route.meta.isEdit" :title="$t('header.title')">
       <vs-sidebar-item index="1" icon="fa-home" icon-pack="fas" :to="{ path: '/dashboard' }">
         {{ $t('buttons.homePage') }}
       </vs-sidebar-item>
@@ -98,6 +98,38 @@
 
     </vs-sidebar-group>
 
+    <vs-sidebar-group v-if="$route.meta.isEdit && activeSearchParams !== null" :open="$route.meta.isEdit" :title="$t(activeSearchParams.title).toUpperCase()">
+      <vs-list-item v-for="entity in sidebarList.results"
+                    v-if="sidebarList.results && sidebarList.results.length > 0"
+                    :subtitle="entity.id + ' - ' + entity[activeSearchParams.field]"
+                    @click="">
+        <router-link :to="{ path: '/' + $route.meta.table + '/' + entity.id }">
+          <i class="fas fa-link"></i>
+        </router-link>
+      </vs-list-item>
+
+      <vs-row class="sidebar-pagination">
+        <vs-col vs-type="flex" vs-justify="center" vs-w="2">
+          <vs-button radius class="mt-1" icon="fa-angle-double-left" icon-pack="fas" color="primary" type="line"
+                     @click="previousPage"
+                     v-if="sidebarList.totalPages && activeSearchParams.search.page > 1"></vs-button>
+        </vs-col>
+
+        <vs-col vs-type="flex" vs-justify="center" vs-w="8">
+          <span class="page-info">
+            {{ sidebarList.page }}
+          </span>
+        </vs-col>
+
+        <vs-col vs-type="flex" vs-justify="center" vs-w="2">
+          <vs-button radius class="mt-1" icon="fa-angle-double-right" icon-pack="fas" color="primary" type="line"
+                     @click="nextPage"
+                     v-if="sidebarList.totalPages  && activeSearchParams.search.page < sidebarList.totalPages"></vs-button>
+        </vs-col>
+      </vs-row>
+
+    </vs-sidebar-group>
+
 
     <vs-divider icon="fa-user" icon-pack="fas" position="left"></vs-divider>
 
@@ -131,6 +163,16 @@
       }
     },
 
+    computed: {
+      activeSearchParams() {
+        return this.$store.state['activeSearchParams']
+      },
+
+      sidebarList() {
+        return this.$store.state['sidebarList']
+      }
+    },
+
     created: function () {
       // Gets user's named
       if (this.$session.exists() && this.$session.get('authUser') != null) {
@@ -139,10 +181,45 @@
         this.surname = this.$session.get('authUser').surname;
         this.permissions = this.$session.get('authUser').permissions
       }
+
+      if(this.$store.state['activeSearchParams'] !== null) {
+        this.$store.dispatch(this.$store.state['activeSearchParams'].request)
+      }
+
       this.activeProject = this.$localStorage.get('activeProject')[0];
       this.activeSite = this.$localStorage.get('activeSite');
       this.activeSample = this.$localStorage.get('activeSample');
     },
+
+    watch: {
+      'activeSearchParams': {
+        handler: function (newval, oldval) {
+          if(newval === null) return
+          this.$store.dispatch(newval.request)
+        },
+        deep: true
+      },
+      'sidebarList': {
+        handler: function (newval, oldval) {
+
+        },
+        deep: true
+      },
+
+
+    },
+
+    methods: {
+      nextPage() {
+        this.$store.state.activeSearchParams.search.page += 1
+      },
+
+      previousPage() {
+        this.$store.state.activeSearchParams.search.page -= 1
+      },
+
+    },
+
   }
 </script>
 
@@ -166,5 +243,13 @@
     border: 0 solid rgba(0, 0, 0, 0) !important;
     border-left: 1px solid rgba(0, 0, 0, .07) !important;
     border-radius: 0 !important;
+  }
+
+  .sidebar-pagination {
+    padding-right: 10px;
+  }
+
+  .page-info {
+    padding-top: 10px;
   }
 </style>

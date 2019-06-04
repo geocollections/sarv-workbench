@@ -97,7 +97,8 @@
 
         <li class="element-list" :class="{active : parseInt($route.params.id) === entity.id }" style="display: block;"
             v-for="entity in sidebarList.results" v-if="sidebarList.results && sidebarList.results.length > 0">
-           <router-link :to="{ path: '/'+activeSearchParams.object+'/' + entity.id }" :title="$t('editSite.editMessage')">&ensp;{{entity.id}} - {{entity[activeSearchParams.field]}}
+           <router-link :to="{ path: '/'+activeSearchParams.object+'/' + entity.id }" :title="$t('editSite.editMessage')">
+             &ensp;{{entity.id}} - {{entity[activeSearchParams.field]}}
       </router-link>
 
         </li>

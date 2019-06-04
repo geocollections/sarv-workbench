@@ -736,7 +736,23 @@
       },
       data() { return this.setInitialData() },
 
-      created() { this.loadFullInfo() },
+      created() {
+        // USED BY SIDEBAR
+        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+          searchHistory: 'sampleSearchHistory',
+          defaultSearch: this.setDefaultSearchParameters(),
+          search: params,
+          request: 'FETCH_SAMPLES',
+          title: 'header.samples',
+          object: 'sample',
+          field: 'number'
+        });
+
+        this.loadFullInfo()
+      },
+
       mounted(){
         this.createRelatedSampleWithSiteIfExists();
       },

@@ -93,6 +93,9 @@
     "active":"Active",
     "non_active":"Inactive"
   },
+  "settings": {
+    "permissions": "My permissions"
+  },
   "add": {
     "new": "Add new",
     "saveAsNew": "Save as new",

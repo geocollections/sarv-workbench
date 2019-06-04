@@ -590,7 +590,6 @@
     },
     created() {
       // USED BY SIDEBAR
-      this.activeObject = 'reference';
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
@@ -599,7 +598,7 @@
         search: params,
         request: 'FETCH_REFERENCES',
         title: 'header.references',
-        object: this.activeObject,
+        object: 'reference',
         field: 'reference'
       });
 
