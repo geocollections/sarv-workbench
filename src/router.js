@@ -16,7 +16,10 @@ const router = new Router({
     {
       path: '/',
       name: 'Geocollections Data Management',
-      component: Login
+      component: Login,
+      meta: {
+        isLogin: true
+      }
     },
     {
       path: '/dashboard',

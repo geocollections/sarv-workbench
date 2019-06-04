@@ -8,7 +8,7 @@
       <b>{{message}}</b>
     </div>
 
-    <b-form @submit="logIn">
+    <b-form @submit.prevent="authenticate('password', {user: user.username, pwd: user.password})">
       <b-form-group label-for="username">
         <b-form-input
           id="username"
@@ -43,9 +43,7 @@
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faSignInAlt} from '@fortawesome/free-solid-svg-icons'
 
-  import { fetchLogin } from "@/assets/js/api/apiCalls";
-
-  import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+  import authenticate from "../mixins/authenticate";
 
   library.add(faSignInAlt)
 
@@ -55,6 +53,7 @@
       FontAwesomeIcon
     },
     name: "login-pass",
+    mixins: [authenticate],
     data() {
       return {
         user: {
@@ -78,55 +77,6 @@
         }
       }
     },
-    methods: {
-
-      logIn(evt) {
-        evt.preventDefault()
-
-        if (!this.loggingIn) {
-          this.loggingIn = true;
-
-          fetchLogin({user: this.user.username, pwd: this.user.password}).then(response => {
-            if (response.status === 200) {
-              if (response.body.user != null) {
-                this.$session.start()
-                this.$session.set('authUser', response.body)
-                this.$router.push({ path: '/dashboard' })
-
-                if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                  toastSuccess({text: response.body.message_et})
-                } else {
-                  toastSuccess({text: response.body.message})
-                }
-
-              } else {
-
-                if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                  this.message = response.body.message_et;
-                  toastError({text: response.body.message_et})
-                } else {
-                  this.message = response.body.message;
-                  toastError({text: response.body.message})
-                }
-
-                this.error = true;
-              }
-              this.loggingIn = false;
-            }
-
-          }, errResponse => {
-            this.message = this.$t('messages.loginError');
-            toastError({text: this.$t('messages.loginError')})
-            this.error = true;
-            this.loggingIn = false;
-          })
-
-        } else {
-          console.log('What are you trying to do?')
-        }
-      },
-
-    }
   }
 </script>
 
@@ -142,7 +92,7 @@
     padding: 200% 0;
   }
 
-  /* This overlays the component but other one whole page */
+  /* This overlays the component but other one the whole page */
   /*.loading-overlay {*/
   /*position: fixed;*/
   /*margin-left: auto;*/

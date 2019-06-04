@@ -19,6 +19,8 @@
           <!-- class="d-none d-lg-block" visible-lg and up  (hidden-md and down) -->
           <!-- class="d-lg-none d-xl-none" visible-md and down (hidden-lg and up) -->
 
+
+          <!-- NAVBAR ITEMS -->
           <b-nav-item v-if="permissions.project" class="d-none d-lg-block" :to="{ path: '/project' }"exact>{{ $t('header.projects') }}</b-nav-item>
 
           <b-nav-item v-if="permissions.attachment" class="d-none d-lg-block" :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-nav-item>
@@ -32,39 +34,107 @@
           </b-nav-item-dropdown>
 
           <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
-          <!-- <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>-->
 
           <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/library' }" exact>{{ $t('header.editLibrary') }}</b-nav-item>
-          <!-- <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-nav-item>-->
 
           <b-nav-item v-if="permissions.locality" class="d-none d-lg-block" :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-nav-item>
-          <!-- <b-nav-item v-if="permissions.locality" class="d-none d-lg-block" :to="{ path: '/locality/add' }" exact>{{ $t('header.addLocality') }}</b-nav-item> -->
 
           <b-nav-item v-if="permissions.sample" class="d-none d-lg-block" :to="{ path: '/sample' }" exact>{{ $t('header.samples') }}</b-nav-item>
 
+<!--          <b-nav-item v-if="permissions.doi" class="d-none d-lg-block" :to="{ path: '/doi' }" exact>{{ $t('header.dois') }}</b-nav-item>-->
+
+
+          <!-- DROPDOWN START -->
           <b-nav-item-dropdown v-if="permissions.project" class="d-lg-none d-xl-none" :text="$t('header.projects')">
-            <b-dropdown-item :to="{ path: '/project/add' }" exact>{{ $t('header.addProject') }}</b-dropdown-item>
-            <b-dropdown-item :to="{ path: '/project' }"exact>{{ $t('header.editProject') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/project' }" exact>
+              <font-awesome-icon icon="table" />
+              {{ $t('header.editProject') }}
+            </b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/project/add' }"exact>
+              <font-awesome-icon icon="plus-square" />
+              {{ $t('header.addProject') }}
+            </b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown v-if="permissions.attachment" class="d-lg-none d-xl-none" :text="$t('header.files')">
-            <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>{{ $t('header.addAttachment') }}</b-dropdown-item>
-            <b-dropdown-item :to="{ path: '/attachment' }"exact>{{ $t('header.editAttachment') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment' }"exact>
+              <font-awesome-icon :icon="['far', 'folder']" />
+              {{ $t('frontPage.buttons.myFiles') }}
+            </b-dropdown-item>
+            <b-dropdown-divider></b-dropdown-divider>
+            <b-dropdown-item :to="{ path: '/attachment/add/photo_archive' }" exact>
+              <font-awesome-icon :icon="['far', 'file-image']" />
+              {{ $t('frontPage.buttons.photoArchive') }}
+            </b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment/add/specimen_image' }" exact>
+              <font-awesome-icon icon="file-image" />
+              {{ $t('frontPage.buttons.specimenImage') }}
+            </b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment/add/other_file' }" exact>
+              <font-awesome-icon :icon="['far', 'file']" />
+              {{ $t('frontPage.buttons.otherFiles') }}
+            </b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/attachment/add/digitised_reference' }" exact>
+              <font-awesome-icon :icon="['far', 'file-pdf']" />
+              {{ $t('frontPage.buttons.digitisedReference') }}
+            </b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown v-if="permissions.reference" class="d-lg-none d-xl-none" :text="$t('header.references')">
-            <b-dropdown-item :to="{ path: '/reference/add' }" exact>{{ $t('header.addReference') }}</b-dropdown-item>
-            <b-dropdown-item :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/reference' }" exact>
+              <font-awesome-icon icon="book" />
+              {{ $t('frontPage.buttons.myReferences') }}
+            </b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/reference/add' }" exact>
+              <font-awesome-icon icon="book-open" />
+              {{ $t('frontPage.buttons.reference') }}
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <b-nav-item-dropdown v-if="permissions.library" class="d-lg-none d-xl-none" :text="$t('header.libraries')">
+            <b-dropdown-item :to="{ path: '/library' }" exact>
+              <font-awesome-icon :icon="['far', 'list-alt']" />
+              {{ $t('frontPage.buttons.libraries') }}
+            </b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/library/add' }" exact>
+              <font-awesome-icon :icon="['far', 'edit']" />
+              {{ $t('frontPage.buttons.library') }}
+            </b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown v-if="permissions.locality" class="d-lg-none d-xl-none" :text="$t('header.localities')">
-            <b-dropdown-item :to="{ path: '/locality/add' }" exact>{{ $t('header.addLocality') }}</b-dropdown-item>
-            <b-dropdown-item :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/locality' }" exact>
+              <font-awesome-icon icon="map-marked-alt" />
+              {{ $t('frontPage.buttons.localities') }}
+            </b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/locality/add' }" exact>
+              <font-awesome-icon icon="map-marker-alt" />
+              {{ $t('frontPage.buttons.locality') }}
+            </b-dropdown-item>
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown v-if="permissions.sample" class="d-lg-none d-xl-none" :text="$t('header.samples')">
-            <b-dropdown-item :to="{ path: '/sample/add' }" exact>{{ $t('header.addSample') }}</b-dropdown-item>
-            <b-dropdown-item :to="{ path: '/sample' }" exact>{{ $t('header.editSample') }}</b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/sample/' }" exact>
+              <font-awesome-icon icon="vials" />
+              {{ $t('frontPage.buttons.samples') }}
+            </b-dropdown-item>
+
+            <b-dropdown-item :to="{ path: '/sample/add' }" exact>
+              <font-awesome-icon icon="vial" />
+              {{ $t('frontPage.buttons.sample') }}
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <b-nav-item-dropdown v-if="permissions.doi" class="d-lg-none d-xl-none" :text="$t('header.dois')">
+            <b-dropdown-item :to="{ path: '/doi' }" exact>
+              <font-awesome-icon icon="database" />
+              {{ $t('header.dois') }}
+            </b-dropdown-item>
+
+            <b-dropdown-item :to="{ path: '/doi/add' }" exact>
+              <font-awesome-icon icon="plus-circle" />
+              {{ $t('frontPage.buttons.doi') }}
+            </b-dropdown-item>
           </b-nav-item-dropdown>
 
         </b-navbar-nav>
@@ -79,9 +149,14 @@
           </b-nav-item-dropdown>
 
           <b-nav-item-dropdown :text="userFirstLetterUpperCase" right>
-            <b-dropdown-item :to="{ path: '/settings' }">{{ $t('header.settings') }} &nbsp;<font-awesome-icon icon="cog"/></b-dropdown-item>
+            <b-dropdown-item :to="{ path: '/settings' }">
+              <font-awesome-icon icon="cog"/>
+              {{ $t('header.settings') }}
+            </b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="logOut()">{{ $t('header.logOut') }} &nbsp;<font-awesome-icon icon="sign-out-alt"></font-awesome-icon>
+            <b-dropdown-item @click="logOut()">
+              <font-awesome-icon icon="sign-out-alt"/>
+              {{ $t('header.logOut') }}
             </b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
@@ -93,22 +168,13 @@
 </template>
 
 <script>
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faSignOutAlt} from '@fortawesome/free-solid-svg-icons'
-  import {faHome} from '@fortawesome/free-solid-svg-icons'
-  import {faCog} from '@fortawesome/free-solid-svg-icons'
-
-  import { toastSuccess, toastInfo } from "@/assets/js/iziToast/iziToast";
-  import { fetchLogout } from "@/assets/js/api/apiCalls";
-
-  library.add(faSignOutAlt, faHome, faCog)
+  import { toastInfo } from "@/assets/js/iziToast/iziToast";
+  import fontAwesomeLib from "../mixins/fontAwasomeLib";
+  import authenticate from "../mixins/authenticate";
 
   export default {
-    components: {
-      FontAwesomeIcon
-    },
     name: "app-header",
+    mixins: [fontAwesomeLib, authenticate],
     data() {
       return {
         user: '',
@@ -128,28 +194,6 @@
       }
     },
     methods: {
-
-      logOut() {
-        // Deleting data from Session Storage...
-        if (this.$session.exists() && this.$session.get('authUser') != null) {
-          this.$session.remove('authUser');
-          this.$session.destroy();
-        }
-
-        // Initiates a logout request to api
-        fetchLogout().then(response => {
-          if (response.status === 200) {
-            this.$router.push({path: '/'})
-
-            if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-              toastSuccess({text: response.body.message_et});
-            } else {
-              toastSuccess({text: response.body.message});
-            }
-
-          }
-        }, errResponse => {})
-      },
 
       // Changes application's language
       changeLang(lang) {

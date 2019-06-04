@@ -1,9 +1,9 @@
 <template>
   <div class="bottom-options">
 
-    <div class="row text-center">
+    <div class="row text-center bottom-options-lg">
 
-      <div class="col-3 col-md-2 offset-md-2 col-lg-1 offset-lg-4 p-0" v-if="isNavigationShown">
+      <div class="col-3 col-md-2 offset-md-2  p-0" v-if="isNavigationShown">
         <div class="bottom-nav nav-button" v-if="!previousDisabled"
              v-on:click="$parent.$emit('button-clicked', 'PREVIOUS', object)">
 
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div :class="isNavigationShown ? 'col-3 col-md-2 col-lg-1 p-0' : 'col-6 col-md-3 offset-md-3 col-lg-2 offset-lg-4 p-0'">
+      <div :class="isNavigationShown ? 'col-3 col-md-2  p-0' : 'col-6 col-md-3 offset-md-3 p-0'">
         <div class="bottom-nav save-button"
              v-on:click="$parent.$emit('button-clicked', 'SAVE', object)">
 
@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <div :class="isNavigationShown ? 'col-3 col-md-2 col-lg-1 p-0' : 'col-6 col-md-3 col-lg-2 p-0'"
+      <div :class="isNavigationShown ? 'col-3 col-md-2 p-0' : 'col-6 col-md-3  p-0'"
            v-on:click="$route.meta.isEdit ? $parent.$emit('button-clicked', 'CANCEL', object) : $parent.$emit('button-clicked', 'CLEAR', object)">
         <div class="bottom-nav cancel-button">
 
@@ -38,7 +38,7 @@
       </div>
 
       <div
-        class="col-3 col-md-2 col-lg-1 p-0" v-if="isNavigationShown">
+        class="col-3 col-md-2  p-0" v-if="isNavigationShown">
         <div class="bottom-nav nav-button" v-if="!nextDisabled"
              v-on:click="$parent.$emit('button-clicked', 'NEXT', object)">
 
@@ -127,6 +127,14 @@
     box-shadow: 0 4px 10px #000;
     z-index: 1000;
     height: 56px;
+  }
+
+
+  @media (min-width: 992px) {
+    .bottom-options-lg {
+      /* Sidebar width */
+      margin-left: 260px;
+    }
   }
 
   .bottom-nav {

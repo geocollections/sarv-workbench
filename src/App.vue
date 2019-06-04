@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <lang-buttons/>
+    <lang-buttons v-if="$route.meta.isLogin"/>
 
     <router-view/>
     <!--<div class="row p-5">-->

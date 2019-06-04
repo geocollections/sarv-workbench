@@ -10,13 +10,56 @@ body {
     background-color: #f8f9fa;
 }
 
-/* TODO: Custom minimalistic overflow for sidebar */
-/* SIDEBAR */
+
+
+/*********************
+ *** SIDEBAR START ***
+ *********************/
 .vs-sidebar.vs-sidebar-parent {
   position: fixed;
   height: 94vh !important;
   top: 56px;
 }
+
+/* Overflow START */
+/* width */
+.vs-sidebar--items::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.vs-sidebar--items::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+.vs-sidebar--items::-webkit-scrollbar-thumb {
+  /*background: #888;*/
+  background: #bfc0bf;
+}
+
+/* Handle on hover */
+.vs-sidebar--items::-webkit-scrollbar-thumb:hover {
+  background: darkgrey;
+}
+
+/* Handle on active */
+.vs-sidebar--items::-webkit-scrollbar-thumb:active {
+  background: #747374;
+}
+/* Overflow END */
+
+/* Sidebar icon style */
+.vs-sidebar--item > a > i {
+  margin-right: 8px;
+  font-size: 1rem;
+}
+
+/*********************
+ ***  SIDEBAR END  ***
+ *********************/
+
+
 
 .custom > .multislelect__input {
   height: calc(1.5em + 0.5rem + 2px);

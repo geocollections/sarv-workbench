@@ -915,7 +915,7 @@
     <!-- CHANGE TYPE -->
     <div class="row">
       <div class="col">
-        {{isImageFile}}
+<!--        {{isImageFile}}-->
       </div>
     </div>
 

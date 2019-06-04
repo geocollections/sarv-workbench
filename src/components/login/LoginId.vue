@@ -9,7 +9,7 @@
     </div>
 
     <div class="idcard-wrapper text-center">
-      <button class="btn btn-primary" @click="logInId()" v-bind:disabled="loggingIn">
+      <button class="btn btn-primary" @click="authenticate('id')" v-bind:disabled="loggingIn">
         {{ $t('login.loginButton') }} &nbsp;<font-awesome-icon icon="id-card"></font-awesome-icon>
       </button>
     </div>
@@ -22,10 +22,7 @@
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faIdCard} from '@fortawesome/free-solid-svg-icons'
-
-  import { fetchLoginId } from "@/assets/js/api/apiCalls";
-
-  import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+  import authenticate from "../mixins/authenticate";
 
   library.add(faIdCard)
 
@@ -35,6 +32,7 @@
       FontAwesomeIcon
     },
     name: "login-id",
+    mixins: [authenticate],
     data() {
       return {
         loggingIn: false,
@@ -47,52 +45,6 @@
         return faIdCard
       }
     },
-    methods: {
-
-      logInId() {
-
-        if (!this.loggingIn) {
-          this.loggingIn = true;
-
-          fetchLoginId().then(response => {
-            if (response.status === 200) {
-              if (response.body.user != null) {
-                this.$session.start()
-                this.$session.set('authUser', response.body)
-                this.$router.push({ path: '/dashboard' })
-
-                if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                  toastSuccess({text: response.body.message_et})
-                } else {
-                  toastSuccess({text: response.body.message})
-                }
-
-              } else {
-
-                if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-                  this.message = response.body.message_et;
-                  toastError({text: response.body.message_et})
-                } else {
-                  this.message = response.body.message;
-                  toastError({text: response.body.message})
-                }
-
-                this.error = true;
-              }
-              this.loggingIn = false;
-            }
-          }, errResponse => {
-            this.message = this.$t('messages.loginIdError')
-            toastError({text: this.$t('messages.loginIdError')})
-            this.error = true;
-            this.loggingIn = false;
-          })
-
-        } else {
-          console.log('What are you trying to do?')
-        }
-      },
-    }
   }
 </script>
 

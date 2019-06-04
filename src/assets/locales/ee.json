@@ -881,7 +881,9 @@
     "next": "Järgmine",
     "previous": "Eelmine",
     "clear": "Puhasta",
-    "homePage": "Pealeht"
+    "homePage": "Pealeht",
+    "lockSidebar": "Lukusta külgriba",
+    "unlockSidebar": "Ava külgriba"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",

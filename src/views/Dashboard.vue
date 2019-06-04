@@ -3,7 +3,7 @@
     <app-header/>
 
     <sidebar v-if="$route.meta.isSidebarShown"/>
-<!--    <sidebar-vuesax/>-->
+    <sidebar-vuesax class="d-none d-lg-block"/>
 
     <div class="main container" v-bind:class="{ sidebarOpen: sidebarOpen }">
       <router-view/>
@@ -56,13 +56,19 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-    /*margin-left: 54px;*/
   }
 
   .main {
     padding: 56px 15px 0;
     margin: 0 auto;
     flex: 1;
+  }
+
+  @media (min-width: 992px) {
+    .dashboard {
+      /* Sidebar width */
+      margin-left: 260px;
+    }
   }
 
   @media (max-width: 768px) {
