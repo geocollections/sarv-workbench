@@ -17,8 +17,7 @@ body {
  *********************/
 .vs-sidebar.vs-sidebar-parent {
   position: fixed;
-  height: 94vh !important;
-  top: 56px;
+  padding-top: 56px;
 }
 
 /* Overflow START */
@@ -53,6 +52,31 @@ body {
 .vs-sidebar--item > a > i {
   margin-right: 8px;
   font-size: 1rem;
+}
+
+/* Override sidebar static router link */
+#sidebar-navigation-links .vs-sidebar--item > a {
+  color: unset !important;
+  opacity: unset !important;
+}
+
+#sidebar-navigation-links .vs-sidebar-item-active {
+  font-weight: unset !important;
+  background: unset !important;
+  border-right: unset !important;
+}
+
+/* Override sidebar static active router link */
+#sidebar-navigation-links a.router-link-exact-active {
+  /* Styles from .vs-sidebar-item-active class */
+  font-weight: 700;
+  background: -webkit-gradient(linear,left top, right top,from(transparent),to(rgba(0,0,0,.01)));
+  background: linear-gradient(90deg,transparent,rgba(0,0,0,.01));
+  border-right: 3px solid rgba(var(--vs-primary),1)!important;
+
+  /* Styles from .vs-sidebar-item-active a tag */
+  color: rgba(var(--vs-primary),1)!important;
+  opacity: 1!important;
 }
 
 /*********************

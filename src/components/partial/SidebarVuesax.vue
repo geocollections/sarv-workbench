@@ -10,7 +10,7 @@
       <h6>{{ name }} {{ surname }}</h6>
     </div>
 
-    <vs-sidebar-group :open="!$route.meta.isEdit" :title="$t('header.title')">
+    <vs-sidebar-group :open="!$route.meta.isEdit" :title="$t('header.title')" id="sidebar-navigation-links">
       <vs-sidebar-item index="1" icon="fa-home" icon-pack="fas" :to="{ path: '/dashboard' }">
         {{ $t('buttons.homePage') }}
       </vs-sidebar-item>
@@ -99,15 +99,20 @@
     </vs-sidebar-group>
 
     <vs-sidebar-group v-if="$route.meta.isEdit && activeSearchParams !== null" :open="$route.meta.isEdit" :title="$t(activeSearchParams.title).toUpperCase()">
+
+      <!-- ROUTER LINKS -->
       <vs-list-item v-for="entity in sidebarList.results"
                     v-if="sidebarList.results && sidebarList.results.length > 0"
-                    :subtitle="entity.id + ' - ' + entity[activeSearchParams.field]"
-                    @click="">
+                    class="router-list-link"
+                    :class="{ active: $route.params.id == entity.id }"
+                    :subtitle="entity.id + ' - ' + entity[activeSearchParams.field]">
         <router-link :to="{ path: '/' + $route.meta.table + '/' + entity.id }">
-          <i class="fas fa-link"></i>
+          <vs-button icon="fa-long-arrow-alt-right" icon-pack="fas" color="dark" size="small" type="line"></vs-button>
         </router-link>
       </vs-list-item>
 
+
+      <!-- PAGINATION BUTTONS -->
       <vs-row class="sidebar-pagination">
         <vs-col vs-type="flex" vs-justify="center" vs-w="2">
           <vs-button radius class="mt-1" icon="fa-angle-double-left" icon-pack="fas" color="primary" type="line"
@@ -127,7 +132,6 @@
                      v-if="sidebarList.totalPages  && activeSearchParams.search.page < sidebarList.totalPages"></vs-button>
         </vs-col>
       </vs-row>
-
     </vs-sidebar-group>
 
 
@@ -174,6 +178,7 @@
     },
 
     created: function () {
+      console.log(this.$route)
       // Gets user's named
       if (this.$session.exists() && this.$session.get('authUser') != null) {
         this.user = this.$session.get('authUser').user;
@@ -252,4 +257,25 @@
   .page-info {
     padding-top: 10px;
   }
+
+  .router-list-link {
+    -webkit-transition: color 200ms ease-out, font-weight 200ms ease-out;
+    -moz-transition: color 200ms ease-out, font-weight 200ms ease-out;
+    -o-transition: color 200ms ease-out, font-weight 200ms ease-out;
+    -ms-transition: color 200ms ease-out, font-weight 200ms ease-out;
+    transition: color 200ms ease-out, font-weight 200ms ease-out;
+  }
+
+  .router-list-link.active {
+    box-shadow: -5px 0 #007bff;
+    color: #1F74FF;
+    font-weight: bold;
+    -webkit-transition: color 200ms ease-in, font-weight 200ms ease-in;
+    -moz-transition: color 200ms ease-in, font-weight 200ms ease-in;
+    -o-transition: color 200ms ease-in, font-weight 200ms ease-in;
+    -ms-transition: color 200ms ease-in, font-weight 200ms ease-in;
+    transition: color 200ms ease-in, font-weight 200ms ease-in;
+  }
+
+
 </style>

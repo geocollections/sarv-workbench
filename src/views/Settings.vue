@@ -7,10 +7,10 @@
       </div>
     </div>
 
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mt-4">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.permissions }"  @click="block.permissions = !block.permissions">
         {{ $t('settings.permissions') }}
-        <i class="far fa-thumbs-up"></i>
+        <i class="fas fa-user-lock"></i>
       </legend>
 
       <transition name="fade">
@@ -20,9 +20,16 @@
             <vs-list>
               <vs-list-header icon="fa-table" icon-pack="fas" :title="index.charAt(0).toUpperCase() + index.substring(1)" color="dark"></vs-list-header>
 
+
+              <!-- TODO: Buttons to paths -->
               <div v-for="entity in key">
-                <vs-list-item v-if="entity === 'add'" icon="fa-plus-square" icon-pack="far" :subtitle="entity"></vs-list-item>
+                <vs-list-item v-if="entity === 'add'" icon="fa-plus-square" icon-pack="far" :subtitle="entity">
+
+<!--                  <i class="fas fa-arrow-right test" @click="goTo(index, '/add')"></i>-->
+                </vs-list-item>
+
                 <vs-list-item v-if="entity === 'change'" icon="fa-edit" icon-pack="far" :subtitle="entity"></vs-list-item>
+
                 <vs-list-item v-if="entity === 'delete'" icon="fa-minus-square" icon-pack="far" :subtitle="entity"></vs-list-item>
               </div>
             </vs-list>
@@ -64,9 +71,23 @@
         //console.log(this.permissions['reference'].includes('add'))
       }
     },
+
+    methods: {
+      goTo(table, path = '') {
+        this.$router.push({ path: '/' + table + path })
+      }
+    }
   }
 </script>
 
 <style scoped>
+  legend:hover {
+    color: #007bff;
+  }
+
+  .test:hover {
+    cursor: pointer;
+    color: #007bff;
+  }
 
 </style>
