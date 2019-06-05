@@ -4,7 +4,7 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- REQUIRED INFO -->
-    <fieldset class="border p-2 mb-2" :style="!validate('reference') ? 'border-color: #dc3545!important;' : ''">
+    <fieldset class="border p-2 mb-2" id="block-requiredFields" :style="!validate('reference') ? 'border-color: #dc3545!important;' : ''">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('reference') }" @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
         <font-awesome-icon v-if="validate('reference')" color="#28a745" icon="check"/>
@@ -54,7 +54,7 @@
     </fieldset>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-info">
       <legend class="w-auto" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('reference.info') }}
         <font-awesome-icon icon="project-diagram"/>
@@ -238,7 +238,7 @@
     </fieldset>
 
     <!-- REMARKS and KEYWORDS -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('reference.description') }}
         <font-awesome-icon icon="pen-fancy"/>
@@ -303,7 +303,7 @@
     </fieldset>
 
     <!-- DIGITAL VERSION (PDF) -->
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
       <legend class="w-auto" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <font-awesome-icon icon="file-pdf"/>
@@ -322,7 +322,7 @@
     </fieldset>
 
     <!-- RELATED FILES -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-files">
       <legend class="w-auto" :class="{ 'text-primary': !block.files }" @click="block.files = !block.files">
         {{ $t('reference.relatedTables.attachment') }}
         <font-awesome-icon icon="folder-open"/>
@@ -361,7 +361,7 @@
     </fieldset>
 
     <!-- RELATED LIBRARIES -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-libraries">
       <legend class="w-auto" :class="{ 'text-primary': !block.libraries }" @click="block.libraries = !block.libraries">
         {{ $t('reference.relatedTables.library') }}
         <font-awesome-icon icon="book"/>
@@ -404,7 +404,7 @@
     </fieldset>
 
     <!-- RELATED LOCALITIES -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-localities">
       <legend class="w-auto" :class="{ 'text-primary': !block.localities }" @click="block.localities = !block.localities">
         {{ $t('reference.relatedTables.locality') }}
         <font-awesome-icon icon="map-marked"/>
@@ -599,7 +599,8 @@
         request: 'FETCH_REFERENCES',
         title: 'header.references',
         object: 'reference',
-        field: 'reference'
+        field: 'reference',
+        block: this.block
       });
 
       this.loadFullInfo()

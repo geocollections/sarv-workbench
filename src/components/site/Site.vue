@@ -17,7 +17,7 @@
     <!-- STORAGE-->
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" ref="info">
+    <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
         {{ $t('site.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
@@ -96,7 +96,7 @@
     </fieldset>
 
     <!-- LOCATION -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-location">
       <legend class="w-auto" :class="{'text-primary': !block.location}" @click="block.location = !block.location">
         {{ $t('site.location') }}
         <font-awesome-icon icon="globe"/>
@@ -211,7 +211,7 @@
     </fieldset>
 
     <!-- DESCRIPTION -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
         {{ $t('site.description') }} | {{ $t('site.remarks') }}
         <font-awesome-icon icon="pen-fancy"/>
@@ -233,7 +233,7 @@
       </transition>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" ref="files">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-files" ref="files">
       <legend class="w-auto" @click="block.files = !block.files" :class="{'text-primary': !block.files}">
         {{ $t('site.files') }}
         <font-awesome-icon icon="folder-open"/>
@@ -248,7 +248,7 @@
       </transition>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" ref="samples">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-samples" ref="samples">
       <legend class="w-auto" @click="block.samples = !block.samples" :class="{'text-primary': !block.samples}">
         {{ $t('site.relatedSamples') }}
         <font-awesome-icon icon="vial"/>
@@ -375,8 +375,13 @@
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
         searchHistory: 'siteSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(), search: params, request: 'FETCH_SITES', title: 'header.sites',
-        object: this.activeObject, field: 'name'
+        defaultSearch: this.setDefaultSearchParameters(),
+        search: params,
+        request: 'FETCH_SITES',
+        title: 'header.sites',
+        object: this.activeObject,
+        field: 'name',
+        block: this.block
       })
 
       this.loadFullInfo();

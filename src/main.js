@@ -12,6 +12,7 @@ import VueCookie from 'vue-cookie'
 import { createStore } from './store'
 import { sync } from 'vuex-router-sync'
 import Vuesax from 'vuesax'
+import VueScrollTo from 'vue-scrollto'
 
 // Leaflet START
 import { L } from 'vue2-leaflet'
@@ -48,6 +49,19 @@ Vue.use(VueI18n)
 Vue.use(VueMoment)
 Vue.use(VueCookie)
 Vue.use(Vuesax)
+Vue.use(VueScrollTo, {
+  container: "body",
+  duration: 500,
+  easing: "ease",
+  offset: -76,
+  force: true,
+  cancelable: true,
+  onStart: false,
+  onDone: false,
+  onCancel: false,
+  x: false,
+  y: true
+})
 
 Vue.config.productionTip = false
 

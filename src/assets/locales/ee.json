@@ -24,14 +24,14 @@
   },
   "header": {
     "title": "SARV2",
-    "analysis": "Analüüs",
     "attachments": "Failid",
     "files": "Failid",
     "references": "Kirjandus",
     "localities": "Lokaliteedid",
     "libraries": "Kogumikud",
     "samples":"Proovid",
-    "sites":"Vaatluspunkt",
+    "analyses": "Analüüsid",
+    "sites":"Vaatluspunktid",
     "projects":"Projektid",
     "dois": "DOI-d",
     "addAttachment": "Lisa uus fail",
@@ -43,6 +43,10 @@
     "editLocality": "Lokaliteedid",
     "addSample": "Lisa proov",
     "editSample": "Proovid",
+    "addAnalysis": "lisa uus analüüs",
+    "editAnalysis": "Analüüsid",
+    "addSite": "Lisa vaatluspunkt",
+    "editSite": "Vaatluspunktid",
     "addProject": "Lisa projekt",
     "editProject": "Projektid",
     "addDoi": "Lisa DOI",
@@ -95,6 +99,31 @@
   },
   "settings": {
     "permissions": "Minu õigused"
+  },
+  "sidebar": {
+    "project": {
+      "info": "Üldinfo",
+      "description": "Kirjeldus | Lisainfo",
+      "members": "Projekti liikmed",
+      "files": "Projekti failid",
+      "sites": "Vaatluspunktid"
+    },
+    "site": {
+      "info": "Üldinfo",
+      "location": "Asukoht",
+      "description": "Kirjeldus | Lisainfo",
+      "files": "Failid",
+      "samples": "Seotud proovid"
+    },
+    "reference": {
+      "requiredFields": "Kohustuslikud väljad",
+      "info": "Üldinfo",
+      "description": "Lisainfo ja märksõnad",
+      "digital": "Digitaalne versioon (pdf)",
+      "files": "Seotud andmefailid",
+      "libraries": "Seotud kogumikud",
+      "localities": "Lokaliteet"
+    }
   },
   "add": {
     "new": "Lisa uus",

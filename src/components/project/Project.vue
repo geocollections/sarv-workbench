@@ -26,7 +26,7 @@
     </div>
 
     <!-- STORAGE -->
-    <fieldset class="border p-2" ref="info">
+    <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
         {{ $t('project.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
@@ -127,7 +127,7 @@
     </fieldset>
 
     <!-- DESCRIPTION -->
-    <fieldset class="border p-2 mb-2" :key="componentKey">
+    <fieldset class="border p-2 mb-2" id="block-description" :key="componentKey">
       <legend class="w-auto" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
         {{ $t('project.description') }} | {{ $t('project.remarks') }}
         <font-awesome-icon icon="pen-fancy" />
@@ -152,7 +152,7 @@
     </fieldset>
 
     <!-- PROJECT MEMBERS -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-members">
       <legend class="w-auto" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
         {{ $t('project.members') }}
         <font-awesome-icon icon="user-friends" />
@@ -186,7 +186,7 @@
     </fieldset>
 
     <!-- FILES -->
-    <fieldset class="border p-2 mb-2" ref="files">
+    <fieldset class="border p-2 mb-2" id="block-files" ref="files">
       <legend class="w-auto" :class="{'text-primary': !block.files}" @click="block.files = !block.files">
         {{ $t('project.files') }}
         <font-awesome-icon icon="folder-open"/>
@@ -202,7 +202,7 @@
     </fieldset>
 
     <!-- SITES -->
-    <fieldset class="border p-2 mb-2" ref="sites">
+    <fieldset class="border p-2 mb-2" id="block-sites" ref="sites">
       <legend class="w-auto" :class="{'text-primary': !block.sites}" @click="block.sites = !block.sites">
         {{ $t('project.sites') }}
         <font-awesome-icon icon="globe-americas" />
@@ -369,9 +369,16 @@
 
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {searchHistory : 'projectSearchHistory',
-        defaultSearch: this.searchParameters, search: params, request : 'FETCH_PROJECTS', title : 'header.projects',
-        object:this.activeObject, field: 'name'});
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+        searchHistory: 'projectSearchHistory',
+        defaultSearch: this.searchParameters,
+        search: params,
+        request: 'FETCH_PROJECTS',
+        title: 'header.projects',
+        object: this.activeObject,
+        field: 'name',
+        block: this.block
+      });
 
       this.loadFullInfo()
       //TODO:REMOVE handle resize logic I DONT remember why?
@@ -421,7 +428,7 @@
           isActive: false,
           attachmentLinkSaved : -1,
           watchedSite: null,
-          block: {info: true , members: true , description: true , files: true , sites: true },
+          block: {info: true, description: true, members: true, files: true, sites: true },
         }
       },
 

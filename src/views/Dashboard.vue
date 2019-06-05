@@ -2,9 +2,9 @@
   <div class="dashboard" ref="parentSidebar" id="parentx">
     <app-header/>
 
-<!--    <sidebar v-if="$route.meta.isSidebarShown"/>-->
+    <sidebar v-if="$route.meta.isSidebarShown"/>
     <!-- TODO: Add transition -->
-    <sidebar-vuesax class="d-none d-lg-block"/>
+    <sidebar-vuesax class="d-none d-lg-block active"/>
 
     <div class="main container" v-bind:class="{ sidebarOpen: sidebarOpen }">
       <router-view/>
@@ -89,15 +89,5 @@
     .container {
       max-width: 1400px;
     }
-  }
-
-  .fade-sidebar-leave-active {
-    transition: opacity .2s;
-  }
-  .fade-sidebar-enter-active {
-    transition: opacity .7s;
-  }
-  .fade-sidebar-enter, .fade-sidebar-leave-to /* .fade-leave-active below version 2.1.8 */ {
-    opacity: 0.1;
   }
 </style>

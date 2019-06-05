@@ -79,6 +79,11 @@ body {
   opacity: 1!important;
 }
 
+/* Overriding sidebar-group ul tag's margin bottom */
+.vs-sidebar--group-items {
+  margin-bottom: 0;
+}
+
 /*********************
  ***  SIDEBAR END  ***
  *********************/

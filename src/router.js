@@ -73,7 +73,7 @@ const router = new Router({
                 title: 'titles.editAttachment',
                 heading: 'editAttachment.heading',
                 isBottomOptionShown: true,
-                isSidebarShown: false,
+                // isSidebarShown: false,
                 isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true
@@ -282,7 +282,7 @@ const router = new Router({
                 title: 'titles.editReference',
                 heading: 'editReference.heading',
                 isBottomOptionShown: true,
-                isSidebarShown: true,
+                // isSidebarShown: true,
                 isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true
@@ -535,7 +535,7 @@ const router = new Router({
                     isBottomOptionShown: true,
                     isNavigationShow: false,
                     isCopyFormShown: false,
-                    isSidebarShown: true,
+                    // isSidebarShown: true,
                     requiresAuth: true
                   },
                 }
@@ -578,7 +578,7 @@ const router = new Router({
                 isBottomOptionShown: true,
                 isNavigationShow: false,
                 isCopyFormShown: false,
-                isSidebarShown: true,
+                // isSidebarShown: true,
                 requiresAuth: true
               },
             }

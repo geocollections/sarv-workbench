@@ -10,6 +10,7 @@
       <h6>{{ name }} {{ surname }}</h6>
     </div>
 
+    <!-- STATIC LINKS -->
     <vs-sidebar-group :open="!$route.meta.isEdit" :title="$t('header.title')" id="sidebar-navigation-links">
       <vs-sidebar-item index="1" icon="fa-home" icon-pack="fas" :to="{ path: '/dashboard' }">
         {{ $t('buttons.homePage') }}
@@ -19,7 +20,7 @@
         <vs-sidebar-item index="2.1" icon="fa-table" icon-pack="fas" :to="{ path: '/project' }">
           {{ $t('header.editProject') }}
         </vs-sidebar-item>
-        <vs-sidebar-item index="2.2" icon="fa-plus-square" icon-pack="fas" :to="{ path: '/project/add' }">
+        <vs-sidebar-item index="2.2" icon="fa-plus-square" icon-pack="far" :to="{ path: '/project/add' }">
           {{ $t('header.addProject') }}
         </vs-sidebar-item>
         <vs-sidebar-item v-if="activeProject > 0" index="2.3" icon="fa-globe-americas" icon-pack="fas" :to="{ path: '/project/' + activeProject }">
@@ -27,6 +28,17 @@
         </vs-sidebar-item>
         <vs-sidebar-item v-if="activeSite > 0" index="2.4" icon="fa-map-marker-alt" icon-pack="fas" :to="{ path: '/site/' + activeSite }">
           {{ $t('frontPage.buttons.activeSite') }}: {{ activeSite }}
+        </vs-sidebar-item>
+      </vs-sidebar-group>
+
+      <!-- TODO: Site not in permissions atm -->
+<!--      <vs-sidebar-group v-if="permissions.site" :title="$t('header.sites')">-->
+      <vs-sidebar-group :title="$t('header.sites')">
+        <vs-sidebar-item index="2.1" icon="fa-globe" icon-pack="fas" :to="{ path: '/site' }">
+          {{ $t('header.editSite') }}
+        </vs-sidebar-item>
+        <vs-sidebar-item index="2.2" icon="fa-map-pin" icon-pack="fas" :to="{ path: '/site/add' }">
+          {{ $t('header.addSite') }}
         </vs-sidebar-item>
       </vs-sidebar-group>
 
@@ -87,6 +99,17 @@
         </vs-sidebar-item>
       </vs-sidebar-group>
 
+      <!-- TODO: Analysis not in permissions atm -->
+<!--      <vs-sidebar-group v-if="permissions.analysis" :title="$t('header.analyses')">-->
+      <vs-sidebar-group :title="$t('header.analyses')">
+        <vs-sidebar-item index="2.1" icon="fa-chart-bar" icon-pack="far" :to="{ path: '/analysis' }">
+          {{ $t('header.editAnalysis') }}
+        </vs-sidebar-item>
+        <vs-sidebar-item index="2.2" icon="fa-chart-pie" icon-pack="fas" :to="{ path: '/analysis/add' }">
+          {{ $t('header.addAnalysis') }}
+        </vs-sidebar-item>
+      </vs-sidebar-group>
+
       <vs-sidebar-group v-if="permissions.doi" :title="$t('header.dois')">
         <vs-sidebar-item index="8.1" icon="fa-database" icon-pack="fas" :to="{ path: '/doi' }">
           {{ $t('header.dois') }}
@@ -98,6 +121,36 @@
 
     </vs-sidebar-group>
 
+
+    <!-- SCROLL TO LINKS -->
+    <div class="sidebar-scroll-to" v-if="$route.meta.isEdit && activeSearchParams !== null && typeof activeSearchParams.block !== 'undefined' && activeSearchParams.block !== null">
+      <vs-divider></vs-divider>
+
+      <vs-sidebar-item v-for="(value, name, index) in activeSearchParams.block"
+                       :index="'9' + index" v-scroll-to="'#block-' + name"
+                       :icon="getIcon(name)"
+                       :icon-pack="getIconPack(name)">
+        {{ $t('sidebar.' + $route.meta.table + '.' + name) }}
+      </vs-sidebar-item>
+
+      <vs-divider></vs-divider>
+    </div>
+
+    <!-- SITES only for Project -->
+    <vs-sidebar-group v-if="$route.meta.isEdit && $route.meta.table === 'project'" :title="$t('header.sites').toUpperCase()">
+      <vs-sidebar-item icon="fa-plus-square" icon-pack="far" @click="setAction('addSite')">
+        {{ $t('header.addSite') }}
+      </vs-sidebar-item>
+    </vs-sidebar-group>
+
+    <!-- SAMPLES only for Site -->
+    <vs-sidebar-group v-if="$route.meta.isEdit && $route.meta.table === 'site'" :title="$t('header.samples').toUpperCase()">
+      <vs-sidebar-item icon="fa-plus-square" icon-pack="far" @click="setAction('addSample')">
+        {{ $t('header.addSample') }}
+      </vs-sidebar-item>
+    </vs-sidebar-group>
+
+    <!-- DYNAMIC DATA -->
     <vs-sidebar-group v-if="$route.meta.isEdit && activeSearchParams !== null" :open="$route.meta.isEdit" :title="$t(activeSearchParams.title).toUpperCase()">
 
       <!-- ROUTER LINKS -->
@@ -107,7 +160,7 @@
                     :class="{ active: $route.params.id == entity.id }"
                     :subtitle="entity.id + ' - ' + entity[activeSearchParams.field]">
         <router-link :to="{ path: '/' + $route.meta.table + '/' + entity.id }">
-          <vs-button icon="fa-long-arrow-alt-right" icon-pack="fas" color="dark" size="small" type="line"></vs-button>
+          <vs-button radius icon="fa-long-arrow-alt-right" icon-pack="fas" color="dark" size="small" type="line"></vs-button>
         </router-link>
       </vs-list-item>
 
@@ -135,12 +188,12 @@
     </vs-sidebar-group>
 
 
-    <vs-divider icon="fa-user" icon-pack="fas" position="left"></vs-divider>
+<!--    <vs-divider icon="fa-user" icon-pack="fas" position="left"></vs-divider>-->
 
 
     <div class="footer-sidebar" slot="footer">
       <vs-button icon="fa-sign-out-alt" icon-pack="fas" color="danger" type="border" @click="logOut()">{{ $t('header.logOut') }}</vs-button>
-      <vs-button icon="fa-cog" icon-pack="fas" color="primary" type="border" :to="{ path: '/settings' }"></vs-button>
+      <vs-button icon="fa-cog" icon-pack="fas" color="primary" type="border" :title="$t('header.settings')" :to="{ path: '/settings' }"></vs-button>
     </div>
 
   </vs-sidebar>
@@ -178,8 +231,7 @@
     },
 
     created: function () {
-      console.log(this.$route)
-      // Gets user's named
+      // Gets user's data
       if (this.$session.exists() && this.$session.get('authUser') != null) {
         this.user = this.$session.get('authUser').user;
         this.name = this.$session.get('authUser').name;
@@ -221,6 +273,30 @@
 
       previousPage() {
         this.$store.state.activeSearchParams.search.page -= 1
+      },
+
+      getIcon(name) {
+        if (name === 'info') return 'fa-project-diagram'
+        if (name === 'description') return 'fa-pen-fancy'
+        if (name === 'members') return 'fa-user-friends'
+        if (name === 'files') return 'fa-folder-open'
+        if (name === 'sites') return 'fa-globe-americas'
+        if (name === 'location') return 'fa-globe'
+        if (name === 'samples') return 'fa-vial'
+        if (name === 'digital') return 'fa-file-pdf'
+        if (name === 'libraries') return 'fa-book'
+        if (name === 'localities') return 'fa-map-marked'
+        if (name === 'requiredFields') return 'fa-check'
+      },
+
+      getIconPack(name) {
+        return 'fas'
+      },
+
+      setAction(action, choice) {
+        // Look sidebarMixin.js for more info
+        // Todo: Should update it
+        this.$store.commit("SET_SIDEBAR_USER_ACTION", {userAction: {action: action, choice:choice} })
       },
 
     },
@@ -267,7 +343,7 @@
   }
 
   .router-list-link.active {
-    box-shadow: -5px 0 #007bff;
+    box-shadow: -3px 0 #007bff;
     color: #1F74FF;
     font-weight: bold;
     -webkit-transition: color 200ms ease-in, font-weight 200ms ease-in;
@@ -276,6 +352,4 @@
     -ms-transition: color 200ms ease-in, font-weight 200ms ease-in;
     transition: color 200ms ease-in, font-weight 200ms ease-in;
   }
-
-
 </style>

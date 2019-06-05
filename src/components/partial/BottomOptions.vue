@@ -1,6 +1,7 @@
 <template>
   <div class="bottom-options">
 
+    <!-- Todo: Should make Previous and Next button available only when sidebar is hidden -->
     <div class="row text-center bottom-options-lg">
 
       <div class="col-3 col-md-2 offset-md-2  p-0" v-if="isNavigationShown">

@@ -24,14 +24,14 @@
   },
   "header": {
     "title": "SARV2",
-    "analysis": "Analysis",
     "attachments": "Files",
     "files": "Files",
     "references": "References",
     "localities": "Localities",
     "libraries": "Libraries",
     "samples":"Samples",
-    "sites":"Site",
+    "analyses": "Analyses",
+    "sites":"Sites",
     "projects":"Projects",
     "dois": "DOIs",
     "addAttachment": "Add new file",
@@ -43,6 +43,10 @@
     "editLocality": "Localities",
     "addSample": "Add new sample",
     "editSample": "Samples",
+    "addAnalysis": "Add new analysis",
+    "editAnalysis": "Analyses",
+    "addSite": "Add site",
+    "editSite": "Sites",
     "addProject": "Add new project",
     "editProject": "Projects",
     "addDoi": "Add new DOI",
@@ -95,6 +99,31 @@
   },
   "settings": {
     "permissions": "My permissions"
+  },
+  "sidebar": {
+    "project": {
+      "info": "General info",
+      "description": "Description | Remarks",
+      "members": "Project members",
+      "files": "Project files",
+      "sites": "Linked sites"
+    },
+    "site": {
+      "info": "General info",
+      "location": "Location",
+      "description": "Description | Remarks",
+      "files": "Files",
+      "samples": "Linked samples"
+    },
+    "reference": {
+      "requiredFields": "Mandatory fields",
+      "info": "General info",
+      "description": "Remarks and keywords",
+      "digital": "Digital version (pdf)",
+      "files": "Related data files",
+      "libraries": "Related libraries",
+      "localities": "Locality"
+    }
   },
   "add": {
     "new": "Add new",
