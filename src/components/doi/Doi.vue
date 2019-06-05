@@ -4,7 +4,7 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- REQUIRED INFO -->
-    <fieldset class="border p-2 mb-2" :style="!validate('doi') ? 'border-color: #dc3545!important;' : ''">
+    <fieldset class="border p-2 mb-2" :style="!validate('doi') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('doi') }" @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
         <font-awesome-icon v-if="validate('doi')" color="#28a745" icon="check"/>
@@ -78,7 +78,7 @@
     </fieldset>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" ref="info">
+    <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('doi.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
@@ -244,7 +244,7 @@
     </fieldset>
 
     <!-- REFERENCE and DATASET -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-referenceAndDataset">
       <legend class="w-auto" :class="{ 'text-primary': !block.referenceAndDataset }" @click="block.referenceAndDataset = !block.referenceAndDataset">
         {{ $t('doi.primaryRefAndDat') }}
         <font-awesome-icon icon="book"/>
@@ -329,7 +329,7 @@
     </fieldset>
 
     <!-- REMARKS -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('doi.remarks') }}
         <font-awesome-icon icon="pen-fancy"/>
@@ -429,7 +429,7 @@
     </div>
 
     <!-- DATACITE CREATED and UPDATED -->
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit">
+    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" id="block-datacite">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.datacite }" @click="block.datacite = !block.datacite">
         {{ $t('doi.datacite') }}
         <font-awesome-icon icon="sitemap"/>
@@ -557,7 +557,8 @@
         request: 'FETCH_DOIS',
         title: 'header.dois',
         object: 'doi',
-        field: 'identifier'
+        field: 'title',
+        block: this.block
       });
 
       this.loadFullInfo()
@@ -643,7 +644,7 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
-          block: {requiredFields: true, info: true, description: true, referenceAndDataset: false, datacite: true}
+          block: {requiredFields: true, info: true, referenceAndDataset: false, description: true,  datacite: true}
         }
       },
 
@@ -908,8 +909,7 @@
       },
 
       setBlockVisibility(object,count){
-        if(object === 'reference') this.block.reference = count > 0
-        if(object === 'dataset') this.block.dataset = count > 0
+        if(object === 'reference' || object === 'dataset') this.block.referenceAndDataset = count > 0
       },
 
       //check required fields for related data

@@ -123,6 +123,17 @@
       "files": "Seotud andmefailid",
       "libraries": "Seotud kogumikud",
       "localities": "Lokaliteet"
+    },
+    "library": {
+      "info": "Üldinfo",
+      "members": "Kogumiku liikmed"
+    },
+    "doi": {
+      "requiredFields": "Kohustuslikud väljad",
+      "info": "Täiendavad metaandmed",
+      "referenceAndDataset": "Kirjandus ja Andmekogum",
+      "description": "Lisainfo ja märksõnad",
+      "datacite": "Datacite"
     }
   },
   "add": {

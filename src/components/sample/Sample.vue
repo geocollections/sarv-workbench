@@ -747,7 +747,8 @@
           request: 'FETCH_SAMPLES',
           title: 'header.samples',
           object: 'sample',
-          field: 'number'
+          field: 'number',
+          agent: this.$parent.agent
         });
 
         this.loadFullInfo()

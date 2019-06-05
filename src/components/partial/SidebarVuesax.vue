@@ -157,9 +157,9 @@
       <vs-list-item v-for="entity in sidebarList.results"
                     v-if="sidebarList.results && sidebarList.results.length > 0"
                     class="router-list-link"
-                    :class="{ active: $route.params.id == entity.id }"
-                    :subtitle="entity.id + ' - ' + entity[activeSearchParams.field]">
-        <router-link :to="{ path: '/' + $route.meta.table + '/' + entity.id }">
+                    :class="$route.meta.table !== 'library' ? { active: $route.params.id == entity.id } : { active: $route.params.id == entity.library }"
+                    :subtitle="$route.meta.table !== 'library' ? entity.id + ' - ' + entity[activeSearchParams.field] : entity.library + ' - ' + entity[activeSearchParams.field]">
+        <router-link :to="$route.meta.table !== 'library' ? { path: '/' + $route.meta.table + '/' + entity.id } : { path: '/' + $route.meta.table + '/' + entity.library }">
           <vs-button radius icon="fa-long-arrow-alt-right" icon-pack="fas" color="dark" size="small" type="line"></vs-button>
         </router-link>
       </vs-list-item>
@@ -287,6 +287,8 @@
         if (name === 'libraries') return 'fa-book'
         if (name === 'localities') return 'fa-map-marked'
         if (name === 'requiredFields') return 'fa-check'
+        if (name === 'referenceAndDataset') return 'fa-book'
+        if (name === 'datacite') return 'fa-sitemap'
       },
 
       getIconPack(name) {

@@ -3,7 +3,7 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-info">
       <legend class="w-auto" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('library.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
@@ -90,6 +90,7 @@
             </div>
           </div>
 
+          <!-- Todo: Fix editors, not destroying or something correctly -->
           <!-- ABSTRACT -->
           <div class="row">
             <div class="col-sm-2">
@@ -218,7 +219,7 @@
     </fieldset>
 
     <!-- LIBRARY MEMBERS -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-members">
       <legend class="w-auto" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
         {{ $t('library.libraryAgent') }}
         <font-awesome-icon icon="user-friends"/>
@@ -354,7 +355,13 @@
   import VueMultiselect from 'vue-multiselect'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
-  import {fetchLibrary, fetchLibraries, fetchLibraryReference, fetchLibraryAgent} from "../../assets/js/api/apiCalls";
+  import {
+    fetchLibrary,
+    fetchLibraries,
+    fetchLibraryReference,
+    fetchLibraryAgent,
+    fetchLibrariesFromLibraryAgent
+  } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
   import formManipulation from './../mixins/formManipulation'
@@ -400,7 +407,9 @@
         request: 'FETCH_LIBRARIES',
         title: 'header.libraries',
         object: 'library',
-        field: 'title'
+        field: 'library__title_en',
+        block: this.block,
+        agent: this.$parent.agent
       });
 
       this.loadFullInfo()
@@ -623,7 +632,7 @@
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
         console.log(localStorageData)
         return new Promise((resolve) => {
-          resolve(fetchLibraries(params))
+          resolve(fetchLibrariesFromLibraryAgent(params, this.$parent.agent))
         });
       },
 

@@ -123,6 +123,17 @@
       "files": "Related data files",
       "libraries": "Related libraries",
       "localities": "Locality"
+    },
+    "library": {
+      "info": "General info",
+      "members": "Library members"
+    },
+    "doi": {
+      "requiredFields": "Mandatory fields",
+      "info": "Additional metadata",
+      "referenceAndDataset": "Reference ja Dataset",
+      "description": "Remarks",
+      "datacite": "Datacite"
     }
   },
   "add": {

@@ -319,6 +319,7 @@ export function fetchAnalysisMethod() {
 }
 
 export function fetchSamples(data, agent) {
+  console.log(agent)
   const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
     'number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,database__name,database__name_en,date_collected'
   let searchFields = ''
