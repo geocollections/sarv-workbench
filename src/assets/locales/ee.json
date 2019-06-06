@@ -242,7 +242,8 @@
     "photoArchive": "Fotoarhiiv",
     "specimenImage": "Eksemplari pildid",
     "otherFiles": "Muud failid",
-    "digitisedReference": "Digiteeritud kirjandus"
+    "digitisedReference": "Digiteeritud kirjandus",
+    "search": "Otsing"
   },
   "editReference": {
     "heading": "Kirjandusallikas",
@@ -559,9 +560,10 @@
   "site":{
     "header": "Vaatluspunktid",
     "id":"ID",
-    "name":"Nimetus (EST)",
+    "name":"Nimetus",
     "name_en":"Name",
-    "project":"Project",
+    "project":"Projekt",
+    "relatedProject":"Seotud projekt",
     "number":"Number",
     "location":"Asukoht",
     "latitude":"Laiuskraad",
@@ -582,7 +584,8 @@
     "generalInfo": "Üldinfo",
     "files": "Failid",
     "relatedSamples": "Seotud proovid",
-    "addNew": "Lisage uus vaatluspunkt"
+    "addNew": "Lisage uus vaatluspunkt",
+    "date": "Kuupäev"
   },
   "taxon": {
     "taxon": "Takson",
@@ -804,7 +807,7 @@
     "libraryIdTitle": "Kogumiku ID või pealkiri",
     "header": "Kirjandus",
     "addNew": "Lisage uus Kirjandus",
-    "sort": "Liik",
+    "sort": "Sort",
     "solrSearch": "Kiire otsing",
     "info": "Üldinfo",
     "description": "Lisainfo ja märksõnad",

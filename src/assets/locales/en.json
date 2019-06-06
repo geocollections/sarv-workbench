@@ -242,7 +242,8 @@
     "photoArchive": "Photo archive",
     "specimenImage": "Specimen images",
     "otherFiles": "Other files",
-    "digitisedReference": "Digitised reference"
+    "digitisedReference": "Digitised reference",
+    "search": "Search"
   },
   "editReference": {
     "heading": "Reference ID",
@@ -558,9 +559,10 @@
   "site":{
     "header": "Sites",
     "id":"ID",
-    "name":"Name (EST)",
+    "name":"Name",
     "name_en":"Name",
     "project":"Project",
+    "relatedProject":"Related project",
     "number":"Number",
     "location":"Location",
     "latitude":"Latitude",
@@ -580,7 +582,8 @@
     "generalInfo": "General info",
     "files": "Files",
     "relatedSamples": "Related samples",
-    "addNew": "Add new Site"
+    "addNew": "Add new Site",
+    "date": "Date"
   },
   "sample_series": {
     "name": "Name"

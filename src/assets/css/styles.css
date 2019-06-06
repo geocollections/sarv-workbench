@@ -264,8 +264,13 @@ label {
 }
 
 legend {
-  cursor:pointer;
   font-size: large;
+}
+
+/* legend is used in headings where data is divided into blocks */
+legend:hover {
+  color: #007bff;
+  cursor:pointer;
 }
 
 .modal {

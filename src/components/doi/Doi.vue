@@ -5,7 +5,8 @@
 
     <!-- REQUIRED INFO -->
     <fieldset class="border p-2 mb-2" :style="!validate('doi') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('doi') }" @click="block.requiredFields = !block.requiredFields">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('doi') }"
+              @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
         <font-awesome-icon v-if="validate('doi')" color="#28a745" icon="check"/>
         <font-awesome-icon v-if="!validate('doi')" color="#dc3545" icon="exclamation-triangle"/>

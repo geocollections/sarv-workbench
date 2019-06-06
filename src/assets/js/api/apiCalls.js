@@ -647,12 +647,13 @@ export function fetchActiveProjects(projectIds) {
  *** SITE START ***
  ***********************/
 export function fetchSites(data,agent) {
-
+  console.log(data)
   let fields = 'id, project, project__name, locality, locality__locality, name, name_en, number,' +
     'latitude,longitude,location_accuracy,elevation,elevation_accuracy,' +
     'coord_det_method__value,coord_det_method__value_en, date_start,date_end,date_free,remarks_location,' +
     'description,remarks';
   let searchFields = ''
+
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`
   }
@@ -662,15 +663,33 @@ export function fetchSites(data,agent) {
   }
 
   if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.number};fields:number;lookuptype:icontains`
+    searchFields += `&number__icontains=${data.number}`
   }
 
   if (data.project !== null && data.project.trim().length > 0) {
     searchFields += `&multi_search=value:${data.project};fields:project__name,project__name_en;lookuptype:icontains`
   }
 
-  if (data.projectId && data.projectId !== null) {
-    searchFields += `project=${data.projectId}`
+  if (data.date_start !== null) {
+    let dateStart = data.date_start
+
+    if (typeof dateStart === 'string') dateStart = dateStart.split('T')[0]
+    else  {
+      dateStart.setHours(0, -dateStart.getTimezoneOffset(), 0, 0);
+      dateStart = dateStart.toISOString().split('T')[0]
+    }
+    searchFields += `&date_start__gte=${dateStart}`
+  }
+
+  if (data.date_end !== null) {
+    let dateEnd = data.date_end
+    if (typeof dateEnd === 'string') dateEnd = dateEnd.split('T')[0]
+    else {
+      dateEnd.setHours(0, -dateEnd.getTimezoneOffset(), 0, 0);
+      dateEnd = dateEnd.toISOString().split('T')[0]
+    }
+
+    searchFields += `&date_end__lte=${dateEnd}`
   }
 
   // if (data.date_start !== null && data.date_start.trim().length > 0) {
