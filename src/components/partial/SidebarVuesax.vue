@@ -337,21 +337,35 @@
   }
 
   .router-list-link {
-    -webkit-transition: color 200ms ease-out, font-weight 200ms ease-out;
-    -moz-transition: color 200ms ease-out, font-weight 200ms ease-out;
-    -o-transition: color 200ms ease-out, font-weight 200ms ease-out;
-    -ms-transition: color 200ms ease-out, font-weight 200ms ease-out;
-    transition: color 200ms ease-out, font-weight 200ms ease-out;
+    /*-webkit-transition: color 200ms ease-out, font-weight 200ms ease-out;*/
+    /*-moz-transition: color 200ms ease-out, font-weight 200ms ease-out;*/
+    /*-o-transition: color 200ms ease-out, font-weight 200ms ease-out;*/
+    /*-ms-transition: color 200ms ease-out, font-weight 200ms ease-out;*/
+    /*transition: color 200ms ease-out, font-weight 200ms ease-out;*/
   }
 
   .router-list-link.active {
     box-shadow: -3px 0 #007bff;
     color: #1F74FF;
     font-weight: bold;
-    -webkit-transition: color 200ms ease-in, font-weight 200ms ease-in;
-    -moz-transition: color 200ms ease-in, font-weight 200ms ease-in;
-    -o-transition: color 200ms ease-in, font-weight 200ms ease-in;
-    -ms-transition: color 200ms ease-in, font-weight 200ms ease-in;
-    transition: color 200ms ease-in, font-weight 200ms ease-in;
+    /*-webkit-transition: color 200ms ease-in, font-weight 200ms ease-in;*/
+    /*-moz-transition: color 200ms ease-in, font-weight 200ms ease-in;*/
+    /*-o-transition: color 200ms ease-in, font-weight 200ms ease-in;*/
+    /*-ms-transition: color 200ms ease-in, font-weight 200ms ease-in;*/
+    /*transition: color 200ms ease-in, font-weight 200ms ease-in;*/
+  }
+
+  .vs-sidebar--item {
+    transition: unset;
+    -webkit-transition: unset;
+  }
+
+  .vs-sidebar-item-active > a {
+    transition: unset;
+    -webkit-transition: unset;
+  }
+
+  .vs-sidebar--item:hover {
+    color: #1F74FF;
   }
 </style>

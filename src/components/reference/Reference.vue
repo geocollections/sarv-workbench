@@ -913,7 +913,6 @@
 
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
-        console.log(localStorageData)
         return new Promise((resolve) => {
           resolve(fetchReferences(params))
         });

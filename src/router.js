@@ -8,7 +8,18 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
-  // TODO: SCROL BEHAVIOUR SHOULD BE SAVED
+  scrollBehavior (to, from, savedPosition) {
+    // savedPosition is only available for popstate navigations https://developer.mozilla.org/en-US/docs/Web/API/Window/popstate_event, for example forward and back buttons.
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      const position = {}
+
+      console.log(to.hash)
+
+      return { x: 0, y: 0 }
+    }
+  },
   routes: [
     {
       path: '*',
@@ -807,7 +818,6 @@ const router = new Router({
       ]
     },
   ],
-  scrollBehavior() { return { x: 0, y: 0 };}
 })
 
 router.beforeEach((to, from, next) => {
