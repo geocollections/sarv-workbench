@@ -3,7 +3,7 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" ref="info">
+    <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('analysis.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
@@ -290,7 +290,7 @@
     </fieldset>
 
     <!-- REMARKS -->
-    <fieldset class="border p-2 mb-2">
+    <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('analysis.remarks') }}
         <font-awesome-icon icon="pen-fancy"/>
@@ -441,10 +441,11 @@
         searchHistory: 'analysisSearchHistory',
         defaultSearch: this.setDefaultSearchParameters(),
         search: params,
-        request: 'FETCH_ANALYSIS',
-        title: 'header.analysis',
+        request: 'FETCH_ANALYSES',
+        title: 'header.analyses',
         object: 'analysis',
-        field: 'sample'
+        field: 'sample__number',
+        block: this.block
       });
 
       this.loadFullInfo()

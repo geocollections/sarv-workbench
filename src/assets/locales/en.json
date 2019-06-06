@@ -134,6 +134,10 @@
       "referenceAndDataset": "Reference ja Dataset",
       "description": "Remarks",
       "datacite": "Datacite"
+    },
+    "analysis": {
+      "info": "General info",
+      "description": "Remarks"
     }
   },
   "add": {

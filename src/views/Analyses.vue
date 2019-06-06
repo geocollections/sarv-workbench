@@ -2,7 +2,7 @@
   <div>
     <div class="row mt-4 page-title">
       <div class="col-sm-6">
-        <p class="h2">{{ $t('header.analysis') }}</p>
+        <p class="h2">{{ $t('header.analyses') }}</p>
       </div>
       <div class="col-sm-6 text-right">
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/analysis/add' }">{{ $t('add.new') }}</router-link>

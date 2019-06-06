@@ -35,7 +35,7 @@
 
           <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/reference' }" exact>{{ $t('header.editReference') }}</b-nav-item>
 
-          <b-nav-item v-if="permissions.reference" class="d-none d-lg-block" :to="{ path: '/library' }" exact>{{ $t('header.editLibrary') }}</b-nav-item>
+          <b-nav-item v-if="permissions.library" class="d-none d-lg-block" :to="{ path: '/library' }" exact>{{ $t('header.editLibrary') }}</b-nav-item>
 
           <b-nav-item v-if="permissions.locality" class="d-none d-lg-block" :to="{ path: '/locality' }" exact>{{ $t('header.editLocality') }}</b-nav-item>
 
@@ -53,6 +53,20 @@
             <b-dropdown-item :to="{ path: '/project/add' }"exact>
               <font-awesome-icon icon="plus-square" />
               {{ $t('header.addProject') }}
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <!-- TODO: Site not in permissions atm -->
+          <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.sites')">
+            <!--          <b-nav-item-dropdown v-if="permissions.sites" class="d-lg-none d-xl-none" :text="$t('header.sites')">-->
+            <b-dropdown-item :to="{ path: '/site/' }" exact>
+              <font-awesome-icon icon="globe" />
+              {{ $t('header.editSite') }}
+            </b-dropdown-item>
+
+            <b-dropdown-item :to="{ path: '/site/add' }" exact>
+              <font-awesome-icon icon="map-pin" />
+              {{ $t('header.addSite') }}
             </b-dropdown-item>
           </b-nav-item-dropdown>
 
@@ -122,6 +136,20 @@
             <b-dropdown-item :to="{ path: '/sample/add' }" exact>
               <font-awesome-icon icon="vial" />
               {{ $t('frontPage.buttons.sample') }}
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <!-- TODO: Analysis not in permissions atm -->
+          <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.analyses')">
+<!--          <b-nav-item-dropdown v-if="permissions.analysis" class="d-lg-none d-xl-none" :text="$t('header.analysis')">-->
+            <b-dropdown-item :to="{ path: '/analysis/' }" exact>
+              <font-awesome-icon :icon="['far', 'chart-bar']" />
+              {{ $t('header.editAnalysis') }}
+            </b-dropdown-item>
+
+            <b-dropdown-item :to="{ path: '/analysis/add' }" exact>
+              <font-awesome-icon icon="chart-pie" />
+              {{ $t('header.addAnalysis') }}
             </b-dropdown-item>
           </b-nav-item-dropdown>
 

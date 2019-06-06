@@ -134,6 +134,10 @@
       "referenceAndDataset": "Kirjandus ja Andmekogum",
       "description": "Lisainfo ja märksõnad",
       "datacite": "Datacite"
+    },
+    "analysis": {
+      "info": "Üldinfo",
+      "description": "Lisainfo"
     }
   },
   "add": {

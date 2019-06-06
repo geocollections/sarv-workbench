@@ -13,6 +13,7 @@ const router = new Router({
     if (savedPosition) {
       return savedPosition
     } else {
+      // Todo: Get
       const position = {}
 
       console.log(to.hash)
