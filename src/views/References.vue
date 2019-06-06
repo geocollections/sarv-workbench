@@ -8,6 +8,7 @@
         </p>
       </div>
       <div class="col-sm-6 text-right">
+        <!-- Combined view button available only on very large screens -->
         <span class="custom-control custom-switch pr-2">
             <input type="checkbox" class="custom-control-input" id="combinedSwitch" v-model="isCombinedView">
             <label class="custom-control-label pl-0" for="combinedSwitch">
@@ -20,7 +21,7 @@
       </div>
     </div>
 
-    <div v-if="isCombinedView" class="row mb-1" :class="{ 'break-out': isCombinedView }">
+    <div v-if="isCombinedView" class="row mb-1" :class="{ 'break-out': isCombinedView }" :style="'width:' + freeSpacePercentage + 'vw;'">
       <div class="col">
         <label for="combinedViewRangeInput" class="m-0">{{ $t('messages.combinedViewChangeSize') }}</label>
       </div>
@@ -28,7 +29,7 @@
     </div>
 
     <!-- COMBINED VIEW START -->
-    <div class="row fluid-movement" :class="{ 'break-out': isCombinedView }" v-if="isCombinedView">
+    <div v-if="isCombinedView" class="row fluid-movement" :class="{ 'break-out': isCombinedView }" :style="'width:' + freeSpacePercentage + 'vw;'">
       <div class="left-side" :class="'col-' + combinedViewLeftColSize">
         <!-- SEARCH FIELDS START -->
         <div class="row mt-4">
@@ -184,6 +185,7 @@
         inputUrl: null,
         iframeUrl: null,
         combinedViewSize: 6,
+        freeSpacePercentage: 73.3,
       }
     },
 
@@ -199,6 +201,14 @@
         else if (this.combinedViewSize == 0) return 11
         else if (this.combinedViewSize == 12) return 1
       }
+    },
+
+    mounted() {
+      window.addEventListener('resize', this.handleResize);
+    },
+
+    beforeDestroy() {
+      window.removeEventListener('resize', this.handleResize);
     },
 
     methods: {
@@ -242,14 +252,35 @@
             this.iframeUrl = 'http://' + url
           }
         }
+      },
+
+      handleResize() {
+        // If window width goes under 1600 then remove combined view because combined view is only for very large screens
+        if (window.innerWidth < 1600) {
+          // Calculates percent of how much space is available
+          this.isCombinedView = false
+        } else {
+          // Calculates free space percentage
+          // sidebar = 260
+          // margin-left = 177
+          this.freeSpacePercentage = (100 * (window.innerWidth - 427)) / window.innerWidth
+        }
       }
     }
   }
 </script>
 
 <style scoped>
+
   .custom-control {
-    display: inline;
+    display: none;
+  }
+
+  /* Show combined view button only on very large screen */
+  @media (min-width: 1600px) {
+    .custom-control {
+      display: inline;
+    }
   }
 
   .custom-control-label:hover {
@@ -270,13 +301,22 @@
     /*border-right: 2px solid #6c757d;*/
   }
 
+  /* iframe */
   .embed-responsive {
     height: 100vw;
   }
 
+  @media (min-width: 992px) {
+    .break-out {
+      /* less than sidebar width, because otherwise there is too much margin. */
+      /* Combined view is possible only on 1600px and up, so actually no need to use media query */
+      margin-left: 177px;
+    }
+  }
+
   .break-out {
     /* Source: https://medium.com/@simonlidesign/an-elegant-way-to-break-the-bootstrap-container-2912628e4829 */
-    width: 98vw;
+    /*width: 98vw; Width is changed inline and calculated by resize event */
     left: calc(-1 * (100vw - 104.5%) / 2);
     position: relative;
   }

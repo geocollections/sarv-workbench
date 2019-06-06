@@ -2,6 +2,8 @@
   <div class="row" v-if="data.length > 0">
 
 
+    <!-- TODO: https://getbootstrap.com/docs/4.0/utilities/display/, can use d-print-block class to hide on print -->
+
 <!--    SHOULD USE THIS (from the old app)-->
 <!--    <div class="label2" v-for="(entity, index) in data">-->
 <!--      <div class="label2_head">-->
