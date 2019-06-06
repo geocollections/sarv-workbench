@@ -51,7 +51,7 @@ Vue.use(VueCookie)
 Vue.use(Vuesax)
 Vue.use(VueScrollTo, {
   container: "body",
-  duration: 500,
+  duration: 100,
   easing: "ease",
   offset: -76,
   force: true,

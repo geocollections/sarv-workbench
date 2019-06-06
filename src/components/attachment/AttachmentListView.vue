@@ -7,10 +7,19 @@
     </vs-switch>
 
     <div v-if="isFancyImageList" class="vs-component vs-images vs-images-hover-default">
+
       <ul class="vs-ul-images vs-images--ul">
         <li class="vs-image custom-size" v-for="(entity, index) in data">
+
           <div class="con-vs-image" :id="'icon-' + index">
+
             <router-link v-if="entity.uuid_filename !== null" :to="{ path: '/attachment/' + entity.id }">
+
+<!--              /* TODO: Makes image nicer, does not zoom in (Eurocore uses that) */-->
+<!--              .vs-image&#45;&#45;img {-->
+<!--              background-size: cover;-->
+<!--              }-->
+
               <div class="vs-image--img" :style="'background-image: url(' + composeFileUrl(entity.uuid_filename) + ')'"
                    v-if="entity.uuid_filename.endsWith('jpg') || entity.uuid_filename.endsWith('jpeg') || entity.uuid_filename.endsWith('png')"></div>
               <!-- TODO: Get icon working -->
@@ -33,6 +42,7 @@
           </b-tooltip>
         </li>
       </ul>
+
     </div>
 
     <div v-if="!isFancyImageList" class="row">
@@ -84,6 +94,10 @@
 </script>
 
 <style scoped>
+  .vs-image--img {
+    background-size: cover;
+  }
+
   @media (max-width: 575.98px) {
     .image-preview {
       max-height: 150px;

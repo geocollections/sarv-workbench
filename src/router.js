@@ -8,6 +8,7 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
+  // TODO: SCROL BEHAVIOUR SHOULD BE SAVED
   routes: [
     {
       path: '*',
