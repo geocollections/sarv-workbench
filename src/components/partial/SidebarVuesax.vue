@@ -4,11 +4,14 @@
               :hidden-background="true"
               spacer v-model="active">
 
-    <div class="header-sidebar" slot="header">
+<!--    <div class="header-sidebar" slot="header"> This makes it fixed  -->
+    <div class="header-sidebar">
       <vs-avatar/>
 
       <h6>{{ name }} {{ surname }}</h6>
     </div>
+
+    <vs-divider class="mt-0 mb-1"></vs-divider>
 
     <!-- STATIC LINKS -->
     <vs-sidebar-group :open="!$route.meta.isEdit" :title="$t('header.title')" id="sidebar-navigation-links">
@@ -124,16 +127,17 @@
 
     <!-- SCROLL TO LINKS -->
     <div class="sidebar-scroll-to" v-if="$route.meta.isEdit && activeSearchParams !== null && typeof activeSearchParams.block !== 'undefined' && activeSearchParams.block !== null">
-      <vs-divider></vs-divider>
+      <vs-divider class="mt-0 mb-1"></vs-divider>
 
       <vs-sidebar-item v-for="(value, name, index) in activeSearchParams.block"
+                       :key="name"
                        :index="'9' + index" v-scroll-to="'#block-' + name"
                        :icon="getIcon(name)"
                        :icon-pack="getIconPack(name)">
         {{ $t('sidebar.' + $route.meta.table + '.' + name) }}
       </vs-sidebar-item>
 
-      <vs-divider></vs-divider>
+      <vs-divider class="mt-1 mb-1"></vs-divider>
     </div>
 
     <!-- SITES only for Project -->
@@ -155,7 +159,9 @@
 
       <!-- ROUTER LINKS -->
       <vs-list-item v-for="entity in sidebarList.results"
+                    :key="$route.meta.table !== 'library' ? entity.id : entity.library"
                     v-if="sidebarList.results && sidebarList.results.length > 0"
+                    @click="test"
                     class="router-list-link"
                     :class="$route.meta.table !== 'library' ? { active: $route.params.id == entity.id } : { active: $route.params.id == entity.library }"
                     :subtitle="$route.meta.table !== 'library' ? entity.id + ' - ' + entity[activeSearchParams.field] : entity.library + ' - ' + entity[activeSearchParams.field]">
@@ -191,10 +197,10 @@
 <!--    <vs-divider icon="fa-user" icon-pack="fas" position="left"></vs-divider>-->
 
 
-    <div class="footer-sidebar" slot="footer">
-      <vs-button icon="fa-sign-out-alt" icon-pack="fas" color="danger" type="border" @click="logOut()">{{ $t('header.logOut') }}</vs-button>
-      <vs-button icon="fa-cog" icon-pack="fas" color="primary" type="border" :title="$t('header.settings')" :to="{ path: '/settings' }"></vs-button>
-    </div>
+<!--    <div class="footer-sidebar" slot="footer">-->
+<!--      <vs-button icon="fa-sign-out-alt" icon-pack="fas" color="danger" type="border" @click="logOut()">{{ $t('header.logOut') }}</vs-button>-->
+<!--      <vs-button icon="fa-cog" icon-pack="fas" color="primary" type="border" :title="$t('header.settings')" :to="{ path: '/settings' }"></vs-button>-->
+<!--    </div>-->
 
   </vs-sidebar>
 </template>
@@ -267,6 +273,10 @@
     },
 
     methods: {
+      test() {
+        console.log('test')
+      },
+
       nextPage() {
         this.$store.state.activeSearchParams.search.page += 1
       },

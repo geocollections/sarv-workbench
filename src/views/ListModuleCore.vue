@@ -12,12 +12,15 @@
 
     <div class="row mt-3">
       <!-- Deletes search preferences -->
-      <div class="mt-3" :class="{ 'col-sm-6': combinedView, 'col-sm-3': !combinedView }">
-        <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">{{ $t('buttons.deletePreferences') }}</b-button>
+      <div class="mt-3 col-sm-6 col-md-5 col-xl-4" style="white-space: nowrap">
+        <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">
+          <font-awesome-icon icon="filter" />
+          {{ $t('buttons.deletePreferences') }}
+        </b-button>
       </div>
 
       <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
-      <div class="col-sm-6 mt-3" v-if="useListView || useAlternativeTableView">
+      <div class="mt-3 col-sm-6 col-md-7 col-xl-8" v-if="useListView || useAlternativeTableView">
         <b-form-group>
           <b-form-radio-group v-model="currentView">
             <b-form-radio value="table">{{ $t('references.tableView') }}</b-form-radio>
