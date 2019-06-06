@@ -978,14 +978,19 @@
           for (let item in data.author) {
             if (typeof data.author[item].given !== 'undefined' && data.author[item].given.includes(' ')) {
               let given = data.author[item].given.split(' ');
-              author += data.author[item].family.charAt(0).toUpperCase()
-                + data.author[item].family.substring(1).toLowerCase() + ', '
-                + given[0].charAt(0) + '.'
-                + given[1] + ', '
+              // author += data.author[item].family.charAt(0).toUpperCase()
+              //   + data.author[item].family.substring(1).toLowerCase() + ', '
+              //   + given[0].charAt(0) + '.'
+              //   + given[1] + ', '
+
+              author += data.author[item].family.charAt(0).toUpperCase() + data.author[item].family.substring(1) + ', ' + data.author[item].given + ', '
             } else {
+              // author += data.author[item].family.charAt(0).toUpperCase()
+              //   + data.author[item].family.substring(1).toLowerCase() + ', '
+              //   + data.author[item].given.charAt(0) + '., '
+
               author += data.author[item].family.charAt(0).toUpperCase()
-                + data.author[item].family.substring(1).toLowerCase() + ', '
-                + data.author[item].given.charAt(0) + '., '
+                + data.author[item].family.substring(1) + ', ' + data.author[item].given + ', '
             }
           }
           this.reference.author = author.trim().slice(0, -1)

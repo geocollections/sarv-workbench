@@ -556,7 +556,7 @@
     "sites": "Linked sites"
   },
   "site":{
-    "header": "Site",
+    "header": "Sites",
     "id":"ID",
     "name":"Name (EST)",
     "name_en":"Name",
@@ -579,7 +579,8 @@
     "remarks":"Remarks",
     "generalInfo": "General info",
     "files": "Files",
-    "relatedSamples": "Related samples"
+    "relatedSamples": "Related samples",
+    "addNew": "Add new Site"
   },
   "sample_series": {
     "name": "Name"

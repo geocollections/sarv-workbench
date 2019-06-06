@@ -557,7 +557,7 @@
     "sites": "Vaatluspunktid"
   },
   "site":{
-    "header": "Site",
+    "header": "Vaatluspunktid",
     "id":"ID",
     "name":"Nimetus (EST)",
     "name_en":"Name",
@@ -581,7 +581,8 @@
     "remarks":"Lisainfo",
     "generalInfo": "Üldinfo",
     "files": "Failid",
-    "relatedSamples": "Seotud proovid"
+    "relatedSamples": "Seotud proovid",
+    "addNew": "Lisage uus vaatluspunkt"
   },
   "taxon": {
     "taxon": "Takson",
