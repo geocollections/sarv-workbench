@@ -98,7 +98,8 @@
     "non_active":"Inactive"
   },
   "settings": {
-    "permissions": "My permissions"
+    "permissions": "My permissions",
+    "shortcuts": "My shortcuts"
   },
   "sidebar": {
     "project": {
@@ -915,7 +916,9 @@
     "user": "User",
     "time": "Time",
     "command": "Command",
-    "changes": "Changes"
+    "changes": "Changes",
+    "newValue": "New value",
+    "oldValue": "Old value"
   },
   "buttons": {
     "deletePreferences": "Clear filters and ordering",

@@ -98,7 +98,8 @@
     "non_active":"Mitte aktiivne"
   },
   "settings": {
-    "permissions": "Minu õigused"
+    "permissions": "Minu õigused",
+    "shortcuts": "Minu otseteed"
   },
   "sidebar": {
     "project": {
@@ -924,7 +925,9 @@
     "user": "Kasutaja",
     "time": "Aeg",
     "command": "Tegevus",
-    "changes": "Muutused"
+    "changes": "Muutused",
+    "newValue": "Uus väärtus",
+    "oldValue": "Vana väärtus"
   },
   "buttons": {
     "deletePreferences": "Tühista filtrid ja sorteerimine",

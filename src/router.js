@@ -13,11 +13,7 @@ const router = new Router({
     if (savedPosition) {
       return savedPosition
     } else {
-      // Todo: Get
-      const position = {}
-
-      console.log(to.hash)
-
+      // Todo: if same route like /doi or /reference and only id changes then get scrollbar location
       return { x: 0, y: 0 }
     }
   },
