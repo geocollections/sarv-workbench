@@ -94,7 +94,7 @@
                     <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(item.id) === 0" />
                     <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(item.id) === 1" />
                     <font-awesome-icon icon="sort-down" v-if="isFieldInOrderBy(item.id) === -1" />
-                    {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
+                    {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
                   </span>
                   <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
                   <br/>
@@ -106,7 +106,7 @@
                       <font-awesome-icon v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
                         :icon="sort"/>
                       <font-awesome-icon v-else :icon="sortingDirection"/>
-                      {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" icon="calendar-alt"/>
+                      {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
                     </span>
                   <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
                   <br/>
@@ -192,14 +192,15 @@
   import Spinner from 'vue-simple-spinner'
   import {library} from '@fortawesome/fontawesome-svg-core'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faSortDown,faSortUp, faSort,faCalendarAlt} from '@fortawesome/free-solid-svg-icons'
+  import {faSortDown,faSortUp, faSort } from '@fortawesome/free-solid-svg-icons'
+  import { faCalendarAlt as farCalendarAlt } from '@fortawesome/free-regular-svg-icons'
   import Datepicker from 'vue2-datepicker'
   import ExportButtons from "../components/partial/ExportButtons";
   import ListView from "../components/partial/ListView";
   import AlternativeTableView from "../components/reference/AlternativeTableView";
   import AlternativeTableControls from "../components/reference/AlternativeTableControls";
 
-  library.add(faSort, faSortUp, faSortDown, faCalendarAlt)
+  library.add(faSort, faSortUp, faSortDown, farCalendarAlt)
 
   export default {
     components: {
