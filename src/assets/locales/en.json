@@ -127,7 +127,11 @@
     },
     "library": {
       "info": "General info",
-      "members": "Library members"
+      "members": "Library members",
+      "isActive": "ACTIVE",
+      "active": "Active library",
+      "activeTitle": "Make library active",
+      "inactiveTitle": "Make library inactive"
     },
     "doi": {
       "requiredFields": "Mandatory fields",

@@ -262,14 +262,16 @@ const router = new Router({
           path: '/reference',
           component: () => import('./views/References.vue'),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
           },
           children: [
             {
               path: '',
               component: () => import('./components/reference/ReferenceTable.vue'),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                table: 'reference',
+                isTableView: true
               }
             }
           ]

@@ -127,7 +127,11 @@
     },
     "library": {
       "info": "Üldinfo",
-      "members": "Kogumiku liikmed"
+      "members": "Kogumiku liikmed",
+      "isActive": "AKTIIVNE",
+      "active": "Aktiivne kogumik",
+      "activeTitle": "Tee kogumik aktiivseks",
+      "inactiveTitle": "Tee kogumik mitteaktiivseks"
     },
     "doi": {
       "requiredFields": "Kohustuslikud väljad",

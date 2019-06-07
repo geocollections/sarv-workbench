@@ -154,21 +154,76 @@
       </vs-sidebar-item>
     </vs-sidebar-group>
 
+    <!-- LIBRARIES only for Reference table view -->
+    <vs-sidebar-group v-if="$route.meta.isTableView && $route.meta.table === 'reference'" :title="$t('sidebar.library.active').toUpperCase()"
+                      :open="$route.meta.isTableView && $route.meta.table === 'reference'">
+      <div class="vs-list--item router-list-link"
+           :class="{ active: activeLibrary.library === entity.library }"
+           :title=" activeLibrary.library === entity.library ? $t('sidebar.library.inactiveTitle') : $t('sidebar.library.activeTitle')"
+           v-for="entity in sidebarList.results"
+           @click="makeActive(entity)">
+
+        <div class="list-titles">
+          <div class="vs-list--subtitle">
+            {{ entity.library  + ' - ' + entity[activeSearchParams.field] }}
+            {{ entity.library === activeLibrary.library ? '(' + $t('sidebar.library.isActive') + ')' : '' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGINATION BUTTONS -->
+      <vs-row class="sidebar-pagination">
+        <vs-col vs-type="flex" vs-justify="center" vs-w="2">
+          <vs-button radius class="mt-1" icon="fa-angle-double-left" icon-pack="fas" color="primary" type="line"
+                     @click="previousPage"
+                     v-if="sidebarList.totalPages && activeSearchParams.search.page > 1"></vs-button>
+        </vs-col>
+
+        <vs-col vs-type="flex" vs-justify="center" vs-w="8">
+          <span class="page-info">
+            {{ sidebarList.page }}
+          </span>
+        </vs-col>
+
+        <vs-col vs-type="flex" vs-justify="center" vs-w="2">
+          <vs-button radius class="mt-1" icon="fa-angle-double-right" icon-pack="fas" color="primary" type="line"
+                     @click="nextPage"
+                     v-if="sidebarList.totalPages  && activeSearchParams.search.page < sidebarList.totalPages"></vs-button>
+        </vs-col>
+      </vs-row>
+    </vs-sidebar-group>
+
     <!-- DYNAMIC DATA -->
-    <vs-sidebar-group v-if="$route.meta.isEdit && activeSearchParams !== null" :open="$route.meta.isEdit" :title="$t(activeSearchParams.title).toUpperCase()">
+    <vs-sidebar-group v-if="$route.meta.isEdit && activeSearchParams !== null"
+                      :open="$route.meta.isEdit"
+                      :title="$t(activeSearchParams.title).toUpperCase()">
 
       <!-- ROUTER LINKS -->
-      <vs-list-item v-for="entity in sidebarList.results"
-                    :key="$route.meta.table !== 'library' ? entity.id : entity.library"
-                    v-if="sidebarList.results && sidebarList.results.length > 0"
-                    @click="test"
-                    class="router-list-link"
-                    :class="$route.meta.table !== 'library' ? { active: $route.params.id == entity.id } : { active: $route.params.id == entity.library }"
-                    :subtitle="$route.meta.table !== 'library' ? entity.id + ' - ' + entity[activeSearchParams.field] : entity.library + ' - ' + entity[activeSearchParams.field]">
-        <router-link :to="$route.meta.table !== 'library' ? { path: '/' + $route.meta.table + '/' + entity.id } : { path: '/' + $route.meta.table + '/' + entity.library }">
-          <vs-button radius icon="fa-long-arrow-alt-right" icon-pack="fas" color="dark" type="line"></vs-button>
-        </router-link>
-      </vs-list-item>
+      <div class="vs-list--item router-list-link"
+           v-for="entity in sidebarList.results"
+           :key="$route.meta.table !== 'library' ? entity.id : entity.library"
+           v-if="sidebarList.results && sidebarList.results.length > 0"
+           @click="$route.meta.table !== 'library' ? $router.push({ path: '/' + $route.meta.table + '/' + entity.id }) : $router.psuh({ path: '/' + $route.meta.table + '/' + entity.library })"
+           :class="$route.meta.table !== 'library' ? { active: $route.params.id == entity.id } : { active: $route.params.id == entity.library }">
+        <div class="list-titles">
+          <div class="vs-list--subtitle">
+            {{ $route.meta.table !== 'library' ? entity.id + ' - ' + entity[activeSearchParams.field] : entity.library + ' - ' + entity[activeSearchParams.field] }}
+          </div>
+        </div>
+      </div>
+
+
+      <!-- OLD VERSION, couldn't make whole list item clickable -->
+<!--      <vs-list-item v-for="entity in sidebarList.results"-->
+<!--                    :key="$route.meta.table !== 'library' ? entity.id : entity.library"-->
+<!--                    v-if="sidebarList.results && sidebarList.results.length > 0"-->
+<!--                    class="router-list-link"-->
+<!--                    :class="$route.meta.table !== 'library' ? { active: $route.params.id == entity.id } : { active: $route.params.id == entity.library }"-->
+<!--                    :subtitle="$route.meta.table !== 'library' ? entity.id + ' - ' + entity[activeSearchParams.field] : entity.library + ' - ' + entity[activeSearchParams.field]">-->
+<!--        <router-link :to="$route.meta.table !== 'library' ? { path: '/' + $route.meta.table + '/' + entity.id } : { path: '/' + $route.meta.table + '/' + entity.library }">-->
+<!--          <vs-button radius icon="fa-long-arrow-alt-right" icon-pack="fas" color="dark" type="line"></vs-button>-->
+<!--        </router-link>-->
+<!--      </vs-list-item>-->
 
 
       <!-- PAGINATION BUTTONS -->
@@ -207,11 +262,9 @@
 
 <script>
   import '@fortawesome/fontawesome-free/css/all.min.css'
-  import authenticate from "../mixins/authenticate";
 
   export default {
     name: "SidebarVuesax",
-    mixins: [authenticate],
     data() {
       return {
         user: '',
@@ -220,6 +273,7 @@
         activeProject:'',
         activeSite:'',
         activeSample:'',
+        activeLibrary:'',
         permissions: '',
         active: true,
         isReduced: false,
@@ -257,7 +311,7 @@
     watch: {
       'activeSearchParams': {
         handler: function (newval, oldval) {
-          if(newval === null) return
+          if(newval === null) return;
           this.$store.dispatch(newval.request)
         },
         deep: true
@@ -286,18 +340,18 @@
       },
 
       getIcon(name) {
-        if (name === 'info') return 'fa-project-diagram'
-        if (name === 'description') return 'fa-pen-fancy'
-        if (name === 'members') return 'fa-user-friends'
-        if (name === 'files') return 'fa-folder-open'
-        if (name === 'sites') return 'fa-globe-americas'
-        if (name === 'location') return 'fa-globe'
-        if (name === 'samples') return 'fa-vial'
-        if (name === 'digital') return 'fa-file-pdf'
-        if (name === 'libraries') return 'fa-book'
-        if (name === 'localities') return 'fa-map-marked'
-        if (name === 'requiredFields') return 'fa-check'
-        if (name === 'referenceAndDataset') return 'fa-book'
+        if (name === 'info') return 'fa-project-diagram';
+        if (name === 'description') return 'fa-pen-fancy';
+        if (name === 'members') return 'fa-user-friends';
+        if (name === 'files') return 'fa-folder-open';
+        if (name === 'sites') return 'fa-globe-americas';
+        if (name === 'location') return 'fa-globe';
+        if (name === 'samples') return 'fa-vial';
+        if (name === 'digital') return 'fa-file-pdf';
+        if (name === 'libraries') return 'fa-book';
+        if (name === 'localities') return 'fa-map-marked';
+        if (name === 'requiredFields') return 'fa-check';
+        if (name === 'referenceAndDataset') return 'fa-book';
         if (name === 'datacite') return 'fa-sitemap'
       },
 
@@ -310,6 +364,11 @@
         // Todo: Should update it
         this.$store.commit("SET_SIDEBAR_USER_ACTION", {userAction: {action: action, choice:choice} })
       },
+
+      makeActive(library) {
+        if (this.activeLibrary === library) this.activeLibrary = '';
+        else this.activeLibrary = library
+      }
 
     },
 
@@ -363,6 +422,12 @@
     /*-o-transition: color 200ms ease-in, font-weight 200ms ease-in;*/
     /*-ms-transition: color 200ms ease-in, font-weight 200ms ease-in;*/
     /*transition: color 200ms ease-in, font-weight 200ms ease-in;*/
+  }
+
+  .router-list-link:hover {
+    color: #1F74FF;
+    /*font-weight: bold;*/
+    cursor: pointer;
   }
 
   .vs-sidebar--item {

@@ -186,6 +186,7 @@
         iframeUrl: null,
         combinedViewSize: 6,
         freeSpacePercentage: 73.3,
+        agent: null
       }
     },
 
@@ -203,6 +204,34 @@
       }
     },
 
+    created() {
+      // Gets user data from session storage
+      if (this.$session.exists() && this.$session.get('authUser') !== null) {
+        const user = this.$session.get('authUser')
+        this.agent = {
+          id: user.agent_id,
+          agent: null,
+          forename: user.user,
+          surename: null,
+          user: user.user,
+        }
+        //console.log(this.agent);
+      }
+
+      // Used by sidebar
+      const searchHistory = this.$localStorage.get('librarySearchHistory', 'fallbackValue');
+      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+        searchHistory: 'librarySearchHistory',
+        search: params,
+        request: 'FETCH_LIBRARIES',
+        title: 'header.libraries',
+        object: 'library',
+        field: 'library__title_en',
+        agent: this.agent
+      });
+    },
+
     mounted() {
       window.addEventListener('resize', this.handleResize);
     },
@@ -212,6 +241,8 @@
     },
 
     methods: {
+      isDefinedAndNotNull(value) {return !!value && value !== null},
+
       fetchReferences() {
         return new Promise((resolve) => {
           resolve(fetchReferences(this.searchParameters))
@@ -265,7 +296,8 @@
           // margin-left = 177
           this.freeSpacePercentage = (100 * (window.innerWidth - 427)) / window.innerWidth
         }
-      }
+      },
+
     }
   }
 </script>
