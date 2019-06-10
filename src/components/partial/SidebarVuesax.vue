@@ -273,7 +273,6 @@
         activeProject:'',
         activeSite:'',
         activeSample:'',
-        activeLibrary:'',
         permissions: '',
         active: true,
         isReduced: false,
@@ -287,6 +286,11 @@
 
       sidebarList() {
         return this.$store.state['sidebarList']
+      },
+
+      activeLibrary() {
+        if (this.$store.state['activeLibrary'] !== null) return this.$store.state['activeLibrary']
+        else return ''
       }
     },
 
@@ -365,11 +369,9 @@
 
       makeActive(library) {
         if (this.activeLibrary === library) {
-          this.activeLibrary = '';
           this.$store.commit('SET_ACTIVE_LIBRARY', null)
         }
         else {
-          this.activeLibrary = library
           this.$store.commit('SET_ACTIVE_LIBRARY', library)
         }
       }

@@ -65,6 +65,10 @@
         <export-buttons v-if="exportButtons" :filename="module"></export-buttons>
       </div>
 
+      <div v-if="$route.meta.table = 'reference'" class="d-lg-none d-xl-none mb-3 col-sm-6 col-md-6" style="margin: 0 auto;">
+        <choose-active-library/>
+      </div>
+
       <div :class="{ 'col-lg-12 col-xl-6 pagination-center-xl': combinedView, 'col-sm-12 col-md-6 pagination-center': !combinedView }">
         <b-pagination
           size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count"
@@ -199,11 +203,13 @@
   import ListView from "../components/partial/ListView";
   import AlternativeTableView from "../components/reference/AlternativeTableView";
   import AlternativeTableControls from "../components/reference/AlternativeTableControls";
+  import ChooseActiveLibrary from "../components/partial/chooseActiveLibrary";
 
   library.add(faSort, faSortUp, faSortDown, farCalendarAlt)
 
   export default {
     components: {
+      ChooseActiveLibrary,
       AlternativeTableControls,
       AlternativeTableView,
       FontAwesomeIcon,

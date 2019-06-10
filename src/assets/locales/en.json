@@ -814,6 +814,7 @@
     "doi": "DOI",
     "pdf": "PDF",
     "addReferenceToLibrary": "Add reference to library",
+    "chooseActiveLibrary": "Choose active library",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

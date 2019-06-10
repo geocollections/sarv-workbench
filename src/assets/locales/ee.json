@@ -822,6 +822,7 @@
     "doi": "DOI",
     "pdf": "PDF",
     "addReferenceToLibrary": "Lisa kirjandus kogumikku",
+    "chooseActiveLibrary": "Vali aktiivne kirjandus",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",
