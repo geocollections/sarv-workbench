@@ -418,7 +418,8 @@ const router = new Router({
               path: '',
               component: () => import('./components/sample/SampleTable.vue'),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                table: 'sample'
               },
             }
           ]

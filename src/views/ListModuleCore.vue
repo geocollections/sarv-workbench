@@ -10,7 +10,7 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
-    <div class="row mt-3">
+    <div class="row mt-3" :class="{'d-print-none': $route.meta.table === 'sample'}">
       <!-- Deletes search preferences -->
       <div class="mt-3 col-sm-6 col-md-5 col-xl-4" style="white-space: nowrap">
         <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">
@@ -37,7 +37,7 @@
                                 v-on:set-default-controls="setDefaultAlternativeTableControlsFromResetButton"
                                 v-on:controls-changed="alternativeTableControlsChanged" />
 
-    <div class="row mt-4">
+    <div class="row mt-4" :class="{'d-print-none': $route.meta.table === 'sample'}">
       <div class="col">
           <span>
             <b>{{ $t(module+'.header') }}</b>
@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <div class="row mt-3" v-if="response.count > 0">
+    <div class="row mt-3" v-if="response.count > 0" :class="{'d-print-none': $route.meta.table === 'sample'}">
       <div class="pl-3 pr-3" :class="{ 'col-lg-6 col-xl-3 top-select-center-xl': combinedView, 'col-sm-6 col-md-3 top-select-center': !combinedView }">
         <b-form-select v-model="searchParameters.paginateBy" class="mb-3" >
           <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
@@ -65,7 +65,7 @@
         <export-buttons v-if="exportButtons" :filename="module"></export-buttons>
       </div>
 
-      <div v-if="$route.meta.table = 'reference'" class="d-lg-none d-xl-none mb-3 col-sm-6 col-md-6" style="margin: 0 auto;">
+      <div v-if="$route.meta.table === 'reference'" class="d-lg-none d-xl-none mb-3 col-sm-6 col-md-6" style="margin: 0 auto;">
         <choose-active-library/>
       </div>
 

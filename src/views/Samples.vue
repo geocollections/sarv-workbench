@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="row mt-4 page-title">
+    <div class="row mt-4 page-title d-print-none">
       <div class="col-sm-6">
         <p class="h2">{{ $t('header.samples') }}</p>
       </div>
@@ -9,7 +9,7 @@
       </div>
     </div>
     <!-- SEARCH FIELDS START -->
-    <div class="row mt-4">
+    <div class="row mt-4 d-print-none">
       <div class="col">
         <div class="search-fields">
           <div class="d-flex flex-row flex-wrap">
