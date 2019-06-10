@@ -203,7 +203,7 @@
            v-for="entity in sidebarList.results"
            :key="$route.meta.table !== 'library' ? entity.id : entity.library"
            v-if="sidebarList.results && sidebarList.results.length > 0"
-           @click="$route.meta.table !== 'library' ? $router.push({ path: '/' + $route.meta.table + '/' + entity.id }) : $router.psuh({ path: '/' + $route.meta.table + '/' + entity.library })"
+           @click="$route.meta.table !== 'library' ? $router.push({ path: '/' + $route.meta.table + '/' + entity.id }) : $router.push({ path: '/' + $route.meta.table + '/' + entity.library })"
            :class="$route.meta.table !== 'library' ? { active: $route.params.id == entity.id } : { active: $route.params.id == entity.library }">
         <div class="list-titles">
           <div class="vs-list--subtitle">
@@ -327,10 +327,6 @@
     },
 
     methods: {
-      test() {
-        console.log('test')
-      },
-
       nextPage() {
         this.$store.state.activeSearchParams.search.page += 1
       },
@@ -360,16 +356,23 @@
       },
 
       setAction(action, choice) {
+        console.log(action)
+        console.log(choice)
         // Look sidebarMixin.js for more info
         // Todo: Should update it
         this.$store.commit("SET_SIDEBAR_USER_ACTION", {userAction: {action: action, choice:choice} })
       },
 
       makeActive(library) {
-        if (this.activeLibrary === library) this.activeLibrary = '';
-        else this.activeLibrary = library
+        if (this.activeLibrary === library) {
+          this.activeLibrary = '';
+          this.$store.commit('SET_ACTIVE_LIBRARY', null)
+        }
+        else {
+          this.activeLibrary = library
+          this.$store.commit('SET_ACTIVE_LIBRARY', library)
+        }
       }
-
     },
 
   }

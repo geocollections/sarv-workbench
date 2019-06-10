@@ -72,6 +72,7 @@
           :combined-view="isCombinedView"
           v-on:search-params-changed="searchParametersChanged"
           v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
+          v-on:add-reference-to-active-library="addReferenceToActiveLibrary"
         ></list-module-core>
       </div>
 
@@ -136,8 +137,10 @@
       :export-buttons="true"
       :use-list-view="true"
       :use-alternative-table-view="true"
+      :is-library-active="isLibraryActive"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
+      v-on:add-reference-to-active-library="addReferenceToActiveLibrary"
     ></list-module-core>
 
   </div>
@@ -147,13 +150,16 @@
   import ListModuleCore from "./ListModuleCore";
   import {fetchReferences} from "@/assets/js/api/apiCalls";
   import fontAwesomeLib from "../components/mixins/fontAwasomeLib";
+  import sidebarMixin from "../components/mixins/sidebarMixin";
+  import {fetchAddReferenceToLibrary} from "../assets/js/api/apiCalls";
+  import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "References",
-    mixins: [fontAwesomeLib],
+    mixins: [fontAwesomeLib, sidebarMixin],
     data() {
       return {
         response: {},
@@ -166,8 +172,9 @@
           {id:"volume",title:"reference.volume",type:"text"},
           {id:"pages",title:"reference.pages",type:"text"},
           {id:"id",title:"",type:"text", orderBy: false},
-          {id:"doi",title:"",type:"text", orderBy: false},
-          {id:"attachment__filename",title:"",type:"text", orderBy: false},
+          {id:"doi",title:"reference.doi",type:"text"},
+          {id:"attachment__filename",title:"reference.pdf",type:"text"},
+          {id:"",title:"reference.library",type:"ACTIVE_LIBRARY_HEADER", orderBy: false, showHeader: true},
         ],
         filters:[
           {id:"author",title:"reference.author",type:"text"},
@@ -186,7 +193,7 @@
         iframeUrl: null,
         combinedViewSize: 6,
         freeSpacePercentage: 73.3,
-        agent: null
+        agent: null,
       }
     },
 
@@ -201,6 +208,18 @@
         if (this.combinedViewSize > 0 && this.combinedViewSize < 12) return 12 - this.combinedViewSize
         else if (this.combinedViewSize == 0) return 11
         else if (this.combinedViewSize == 12) return 1
+      },
+
+      sidebarUserAction() {
+        return this.$store.state['sidebarUserAction']
+      },
+
+      activeLibrary() {
+        return this.$store.state['activeLibrary']
+      },
+
+      isLibraryActive() {
+        return this.$store.state['activeLibrary'] !== null;
       }
     },
 
@@ -238,6 +257,14 @@
 
     beforeDestroy() {
       window.removeEventListener('resize', this.handleResize);
+    },
+
+    watch: {
+      'sidebarUserAction' (newVal, oldVal) {
+        console.log(newVal)
+        console.log(oldVal)
+        this.handleSidebarUserAction(newVal, 'reference')
+      },
     },
 
     methods: {
@@ -297,6 +324,32 @@
           this.freeSpacePercentage = (100 * (window.innerWidth - 427)) / window.innerWidth
         }
       },
+
+      addReferenceToActiveLibrary(id) {
+        let formData = new FormData()
+        formData.append('data', JSON.stringify({reference: id, library: this.activeLibrary.library}))
+
+        fetchAddReferenceToLibrary(formData).then(response => {
+          if (typeof response.body.message !== 'undefined') {
+            if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+              toastSuccess({text: response.body.message_et});
+            } else {
+              toastSuccess({text: response.body.message});
+            }
+          }
+          if (typeof response.body.error !== 'undefined') {
+            if (this.$i18n && this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+              toastError({text: response.body.error_et});
+            } else {
+              toastError({text: response.body.error});
+            }
+          }
+        }, errResponse => {
+          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error})
+          toastError({text: this.$t('messages.uploadError')})
+        })
+
+      }
 
     }
   }

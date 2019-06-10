@@ -199,6 +199,11 @@ export function fetchLibrariesForReference(id) {
   return fetch(`library_reference/?reference=${id}&fields=library,library__title,library__title_en&format=json`)
 }
 
+export function fetchAddReferenceToLibrary(data) {
+  return fetchPost(`add/library_reference/`, data)
+}
+
+
 /************************
  ***  REFERENCES END  ***
  ************************/

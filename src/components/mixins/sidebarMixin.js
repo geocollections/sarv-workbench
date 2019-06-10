@@ -3,6 +3,7 @@ const sidebarMixin = {
   methods: {
     handleSidebarUserAction(userAction, object) {
       console.log(userAction)
+      console.log(object)
       if (userAction.action === 'addSample') this.addSample()
       else if (userAction.action === 'addSite') this.addOrEditSite()
       else if(userAction.action === 'navigate') {
@@ -16,6 +17,8 @@ const sidebarMixin = {
         })
       } else if(userAction.action === 'cancel') {
         this.back(object)
+      } else if (userAction.action === 'addReferenceToLibrary') {
+        console.log('Todo: Add reference to library')
       }
     },
 

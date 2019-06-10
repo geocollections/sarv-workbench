@@ -810,6 +810,10 @@
     "description": "Remarks and keywords",
     "doiConfirmation": "Are you sure you want to register a new DOI for this reference? DOI-s cannot be deleted.",
     "doiCheckSuccessful": "DOI check successful, fields updated",
+    "library": "Library",
+    "doi": "DOI",
+    "pdf": "PDF",
+    "addReferenceToLibrary": "Add reference to library",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

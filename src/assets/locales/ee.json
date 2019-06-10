@@ -818,6 +818,10 @@
     "description": "Lisainfo ja märksõnad",
     "doiConfirmation": "Kas oled kindel, et soovid kirjandusallikale registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik.",
     "doiCheckSuccessful": "DOI kontrollimine edukas, väljad uuendatud",
+    "library": "Kogumik",
+    "doi": "DOI",
+    "pdf": "PDF",
+    "addReferenceToLibrary": "Lisa kirjandus kogumikku",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",

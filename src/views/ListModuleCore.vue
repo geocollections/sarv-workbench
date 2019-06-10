@@ -89,7 +89,7 @@
             <thead class="thead-light" :class="{ 'sticky-header': isAlternativeTable }">
               <tr class="th-sort">
                 <!-- MULTI ORDERING -->
-                <th class="nowrap" v-if="multiOrdering === true && isTableView" v-for="item in columns">
+                <th class="nowrap" v-if="multiOrdering === true && isTableView" v-for="item in activeColumns">
                   <span @click="changeOrderMulti(item.id)" v-on:dblclick="removeOrder(item.id)" v-if="item.orderBy !== false">
                     <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(item.id) === 0" />
                     <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(item.id) === 1" />
@@ -101,7 +101,7 @@
                 </th>
 
                 <!-- REGULAR ORDERING -->
-                <th class="nowrap" v-if="multiOrdering === false && isTableView" v-for="item in columns">
+                <th class="nowrap" v-if="multiOrdering === false && isTableView" v-for="item in activeColumns">
                   <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
                       <font-awesome-icon v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
                         :icon="sort"/>
@@ -157,7 +157,7 @@
 
             </thead>
 
-            <router-view :response="response"  v-if="response.count > 0 && isTableView"/>
+            <router-view :response="response" :is-library-active="isLibraryActive"  v-if="response.count > 0 && isTableView"/>
 
             <!-- ALTERNATIVE TABLE VIEW -->
             <alternative-table-view v-if="isAlternativeTable"
@@ -268,6 +268,10 @@
       combinedView: {
         type: Boolean,
         default: false,
+      },
+
+      isLibraryActive: {
+        type: Boolean,
       }
 
     },
@@ -313,6 +317,17 @@
       isAlternativeTable() {
         return this.currentView === 'alternativeTable'
       },
+
+      // Special use case for references (choosing reference to active library).
+      activeColumns() {
+        return this.columns.filter(column => {
+          if (column.type !== 'ACTIVE_LIBRARY_HEADER') {
+            return column
+          } else if (column.type === 'ACTIVE_LIBRARY_HEADER' && this.isLibraryActive) {
+            return column
+          }
+        })
+      }
 
     },
     watch: {

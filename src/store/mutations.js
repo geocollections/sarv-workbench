@@ -38,6 +38,8 @@ export default {
   },
 
   SET_SIDEBAR_USER_ACTION: (state, { userAction }) => {
+    console.log(state)
+    console.log(userAction)
     Vue.set(state, 'sidebarUserAction', userAction || false)
   },
 
@@ -52,4 +54,10 @@ export default {
   SET_FOSSIL_GROUPS: (state, { resp }) => {
     Vue.set(state, 'fossilGroups', handleResponse(resp))
   },
+
+  SET_ACTIVE_LIBRARY: (state, object) => {
+    Vue.set(state, 'activeLibrary', object)
+  }
+
+
 }

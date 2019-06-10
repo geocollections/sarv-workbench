@@ -18,7 +18,8 @@ export function createStore () {
       sidebarUserAction: null,
       analysisMethods:null,
       samplePurposes:null,
-      fossilGroups:null
+      fossilGroups:null,
+      activeLibrary: null,
 
     },
     actions,
