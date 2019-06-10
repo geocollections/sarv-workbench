@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="sidebarList.results && sidebarList.results.length > 0">
     <vue-multiselect v-model="activeLibrary"
                      id="active_library"
                      :options="sidebarList.results"

@@ -650,12 +650,33 @@
     <template slot="buttons">
       <div class="row mt-3 mb-3">
         <div class="col">
-          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack">
-            {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'sample', false, true)">
-            {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
-          <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('sample') : reset('sample')">
-            {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'sample', true)"
+                  :title="$t('edit.buttons.saveAndLeave') ">
+            <font-awesome-icon icon="door-open"/>
+            {{ $t('edit.buttons.saveAndLeave') }}
+          </button>
+<!--          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack">-->
+<!--            {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>-->
+
+          <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'sample', true)"
+                  :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
+            <font-awesome-icon icon="save"/>
+            {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
+          </button>
+
+<!--          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true, 'sample', false, true)">-->
+<!--            {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>-->
+
+          <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('sample', $route.meta.isEdit)"
+                  :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
+            <font-awesome-icon icon="ban"/>
+            {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
+          </button>
+
+<!--          <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="$route.meta.isEdit ? leaveFromEditView('sample') : reset('sample')">-->
+<!--            {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>-->
+
+
           <span class="float-right">
             <button class="btn btn-primary mb-2" @click="$parent.saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>
           </span>
@@ -738,18 +759,20 @@
 
       created() {
         // USED BY SIDEBAR
-        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
-          searchHistory: 'sampleSearchHistory',
-          defaultSearch: this.setDefaultSearchParameters(),
-          search: params,
-          request: 'FETCH_SAMPLES',
-          title: 'header.samples',
-          object: 'sample',
-          field: 'number',
-          agent: this.$parent.agent
-        });
+        if (this.$route.meta.isEdit) {
+          const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+          let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+          this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+            searchHistory: 'sampleSearchHistory',
+            defaultSearch: this.setDefaultSearchParameters(),
+            search: params,
+            request: 'FETCH_SAMPLES',
+            title: 'header.samples',
+            object: 'sample',
+            field: 'number',
+            agent: this.$parent.agent
+          });
+        }
 
         this.loadFullInfo()
       },
@@ -788,7 +811,7 @@
               rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
               fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[], site:[]
             },
-            requiredFields: ['number'],
+            requiredFields: [],
             sample: {},
             previousRecord: {},
             nextRecord: {},
