@@ -84,7 +84,7 @@
 
           <div class="col-xl-3 mb-3">
             <b-button variant="primary" @click="openIframe">
-              <font-awesome-icon icon="external-link-alt" />
+              <i class="fas fa-external-link-alt"></i>
               {{ $t('add.buttons.openIframe') }}
             </b-button>
           </div>
@@ -149,8 +149,6 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchReferences} from "@/assets/js/api/apiCalls";
-  import fontAwesomeLib from "../components/mixins/fontAwasomeLib";
-  import sidebarMixin from "../components/mixins/sidebarMixin";
   import {fetchAddReferenceToLibrary} from "../assets/js/api/apiCalls";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
@@ -159,7 +157,6 @@
       ListModuleCore
     },
     name: "References",
-    mixins: [fontAwesomeLib, sidebarMixin],
     data() {
       return {
         response: {},
@@ -210,10 +207,6 @@
         else if (this.combinedViewSize == 12) return 1
       },
 
-      sidebarUserAction() {
-        return this.$store.state['sidebarUserAction']
-      },
-
       activeLibrary() {
         return this.$store.state['activeLibrary']
       },
@@ -257,14 +250,6 @@
 
     beforeDestroy() {
       window.removeEventListener('resize', this.handleResize);
-    },
-
-    watch: {
-      'sidebarUserAction' (newVal, oldVal) {
-        console.log(newVal)
-        console.log(oldVal)
-        this.handleSidebarUserAction(newVal, 'reference')
-      },
     },
 
     methods: {

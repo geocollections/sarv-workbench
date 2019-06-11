@@ -15,6 +15,7 @@ body {
 /*********************
  *** SIDEBAR START ***
  *********************/
+
 .vs-sidebar.vs-sidebar-parent {
   position: fixed;
   padding-top: 56px;
@@ -87,6 +88,48 @@ body {
 /*********************
  ***  SIDEBAR END  ***
  *********************/
+
+
+/**************************
+ *** RELATED DATA START ***
+ **************************/
+
+.related-table {
+  font-size: 0.9rem !important;
+}
+.related-table td, .related-table th {
+  padding: 0.25rem 0.4rem !important;
+}
+
+.related-table th.date-th {
+  min-width: 100px!important;
+}
+
+.related-table th.btn-th {
+  min-width: 5.7em!important;
+  width: 5.7em!important;
+}
+
+.related-input-data td{
+  padding: 0.2em!important;
+}
+
+.related-input-data .mx-datepicker{
+  font-size: 0.9rem !important;
+  font-weight: lighter;
+}
+
+.related-input-data .mx-calendar-icon {
+  height: auto!important;
+}
+
+.related-input-data .mx-calendar .mx-calendar-panel-date {
+  z-index: 1000000!important;
+}
+
+/**************************
+ ***  RELATED DATA END  ***
+ **************************/
 
 
 

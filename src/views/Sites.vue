@@ -13,7 +13,7 @@
     <!-- SEARCH FIELDS -->
     <fieldset class="border p-2" id="block-search">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
-        <font-awesome-icon icon="search" />
+        <i class="fas fa-search"></i>
         {{ $t('edit.search') }}
       </legend>
 
@@ -60,10 +60,8 @@
 
 <script>
 
-  import formManipulation  from './../components/mixins/formManipulation'
   import ListModuleCore from "./ListModuleCore";
-  import {fetchLinkedSites, fetchSites} from "@/assets/js/api/apiCalls";
-  import fontAwesomeLib from "../components/mixins/fontAwasomeLib";
+  import {fetchSites} from "@/assets/js/api/apiCalls";
   import Datepicker from 'vue2-datepicker'
 
   export default {
@@ -71,7 +69,6 @@
       ListModuleCore,
       Datepicker
     },
-    mixins: [formManipulation, fontAwesomeLib],
     name: "Sites",
     props: {
 

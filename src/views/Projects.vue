@@ -40,15 +40,13 @@
 </template>
 
 <script>
-
-  import formManipulation  from './../components/mixins/formManipulation'
   import ListModuleCore from "./ListModuleCore";
   import {fetchProjects} from "@/assets/js/api/apiCalls";
+
   export default {
     components: {
       ListModuleCore
     },
-    mixins: [formManipulation],
     name: "Projects",
     data() {
       return {
@@ -65,7 +63,7 @@
         filters:[
           {id:"name",title:"project.name",type:"text"},
           {id:"id",title:"project.id",type:"number"},
-          
+
           //{id:"project_type",title:"project.project_type",type:"text"},
           //{id:"date_start",title:"project.date_start",type:"text"},
           //{id:"date_end",title:"project.date_end",type:"text"},
@@ -100,6 +98,6 @@
 
 <style scoped>
 .ralign {
-	text-align: right !important;  
+	text-align: right !important;
   }
 </style>

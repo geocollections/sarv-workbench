@@ -2,11 +2,10 @@
   <div class="dashboard" ref="parentSidebar" id="parentx">
     <app-header/>
 
-    <sidebar v-if="$route.meta.isSidebarShown"/>
     <!-- TODO: Add transition -->
     <sidebar-vuesax class="d-none d-lg-block active"/>
 
-    <div class="main container" v-bind:class="{ sidebarOpen: sidebarOpen }">
+    <div class="main container">
       <router-view/>
     </div>
 
@@ -18,32 +17,15 @@
 <script>
   import AppHeader from '@/components/partial/AppHeader'
   import AppFooter from '@/components/partial/AppFooter'
-  import Sidebar from "../components/partial/Sidebar";
   import SidebarVuesax from '../components/partial/SidebarVuesax'
 
   export default {
     components: {
-      Sidebar,
       AppHeader,
       AppFooter,
       SidebarVuesax
     },
     name: "Dashboard",
-    data() {
-      return {
-        sidebarOpen : false
-      }
-    },
-
-    created() {
-      this.$root.$on('show-sidebar',this.setSitebarPosition)
-    },
-    methods: {
-      setSitebarPosition(state) {
-        this.sidebarOpen = state;
-
-      }
-    },
     metaInfo () {
       return {
         title: this.$t('titles.dashboard')
@@ -76,12 +58,6 @@
     .main.container {
       width: 100%!important;
       margin-left: auto !important;
-    }
-  }
-  @media (min-width: 768px) {
-    .main.container.sidebarOpen {
-      width: calc(100% - 300px)!important;
-      margin-left: 300px !important;
     }
   }
 

@@ -72,7 +72,7 @@ const autocompleteFieldManipulation = {
         case 'agent':
         case 'owner':
         case 'copyright_agent':
-          query = `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent`;
+          query = `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,forename,surename`;
           break;
         case 'rock':
           query = `rock/?multi_search=value:${val};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;

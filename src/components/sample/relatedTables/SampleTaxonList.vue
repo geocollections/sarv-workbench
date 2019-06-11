@@ -166,7 +166,6 @@
       }
     }
 </script>
-<style src="../../../assets/css/relatedDataStyle.css"></style>
 <style scoped>
 
 </style>

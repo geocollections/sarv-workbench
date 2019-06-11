@@ -600,9 +600,10 @@ export function fetchAddAttachmentLink(data) {
 
 
 
-/***********************
+/**********************
  *** PROJECTS START ***
- ***********************/
+ **********************/
+
 export function fetchProject(id) {
   return fetch(`project/?id=${id}&format=json`)
 }
@@ -645,13 +646,16 @@ export function fetchActiveProjects(projectIds) {
   return fetch(`project/?id__in=${projectIds}&fields=id,name,name_en&format=json`)
 }
 
-/***********************
- *** PROJECTS END ***
- ***********************/
+/**********************
+ ***  PROJECTS END  ***
+ **********************/
 
-/***********************
+
+
+/******************
  *** SITE START ***
- ***********************/
+ ******************/
+
 export function fetchSites(data,agent) {
   console.log(data)
   let fields = 'id, project, project__name, locality, locality__locality, name, name_en, number,' +
@@ -770,15 +774,15 @@ export function fetchLinkedSamplesX(data,siteID) {
 export function fetchLastSiteName(projectId) {
   return fetch(`site/?project=${projectId}&fields=name&order_by=-id&paginate_by=1&format=json`)
 }
-/***********************
- *** SITE END ***
- ***********************/
+/******************
+ ***  SITE END  ***
+ ******************/
 
 
 
-/*****************************
+/***************************
  *** ANALYSIS LINK START ***
- *****************************/
+ ***************************/
 
 export function fetchAnalysis(id) {
   return fetch(`analysis/?id=${id}&format=json`);
@@ -816,6 +820,38 @@ export function fetchAnalysisAttachment(id,page=1) {
 export function fetchAnalysisResults(id,page=1) {
   return fetch(`analysis_results/?analysis=${id}&page=${page}&paginate_by=100&format=json`)
 }
-/*****************************
+/***************************
  ***  ANALYSIS LINK END  ***
- *****************************/
+ ***************************/
+
+
+
+/*********************
+ *** JOURNAL START ***
+ *********************/
+
+export function fetchAddJournal(data) {
+  return fetchPost(`add/journal/`, data)
+}
+
+/*********************
+ ***  JOURNAL END  ***
+ *********************/
+
+
+
+/**********************
+ *** IMAGESET START ***
+ **********************/
+
+export function fetchAddImageset(data) {
+  return fetchPost(`add/imageset/`, data)
+}
+
+export function fetchIsImagesetNumberInImageset(imagesetNumber) {
+  return fetch(`imageset/?imageset_number=${imagesetNumber}&format=json`)
+}
+
+/**********************
+ ***  IMAGESET END  ***
+ **********************/

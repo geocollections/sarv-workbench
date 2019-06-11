@@ -42,7 +42,7 @@
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import {fetchSamples, fetchLibrary} from "@/assets/js/api/apiCalls";
+  import {fetchSamples} from "@/assets/js/api/apiCalls";
   export default {
     components: {
       ListModuleCore

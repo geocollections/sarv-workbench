@@ -49,7 +49,7 @@
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.remarks" type="text"/>
             </td>
-            
+
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.sort" type="number"/>
             </td>
@@ -110,7 +110,6 @@
   }
 </script>
 
-<style src="../../../assets/css/relatedDataStyle.css"></style>
 <style scoped>
 
 </style>

@@ -332,14 +332,16 @@ const router = new Router({
           path: '/imageset/add',
           component: () => import('./views/Imageset.vue'),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            addNew: 'add.newImageset'
           }
         },
         {
           path: '/journal/add',
           component: () => import('./views/Journal.vue'),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            addNew: 'add.newJournal'
           }
         },
         {

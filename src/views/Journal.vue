@@ -1,8 +1,7 @@
 <template>
   <div class="journal">
 
-    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
-    <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
+    <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay')"></spinner>
 
     <div class="row mt-4 page-title">
       <div class="col-sm-6">
@@ -64,6 +63,7 @@
 <script>
   import Spinner from 'vue-simple-spinner'
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+  import {fetchAddJournal} from "../assets/js/api/apiCalls";
 
   export default {
     components: {
@@ -72,7 +72,6 @@
     name: "Journal",
     data() {
       return {
-        apiUrl: 'https://rwapi.geocollections.info/',
         loadingPercent: 0,
         sendingData: false,
         journal: {
@@ -94,27 +93,14 @@
 
       add(addAnother) {
         if (this.journalNameState && !this.sendingData) {
-
           this.sendingData = true
           this.loadingPercent = 0
 
           let formData = new FormData()
+          formData.append('data', JSON.stringify(this.journal))
 
-          // const dataToUpload = this.formatDataForUpload(this.journal);
-          formData.append('data', this.journal)
-
-          this.$http.post(this.apiUrl + 'add/journal/', formData, {
-            before(request) {
-              this.previousRequest = request
-            },
-            progress: (e) => {
-              if (e.lengthComputable) {
-                // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
-                this.loadingPercent = Math.round((e.loaded / e.total) * 100)
-              }
-            }
-          }).then(response => {
-            console.log(response)
+          fetchAddJournal(formData).then(response => {
+            // console.log(response)
             this.sendingData = false
             if (response.status === 200) {
               if (typeof response.body.message !== 'undefined') {
@@ -142,7 +128,7 @@
               }
             }
           }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse))
+            // console.log('ERROR: ' + JSON.stringify(errResponse))
             this.sendingData = false
             toastError({text: this.$t('messages.uploadError')})
           })
@@ -153,10 +139,6 @@
         } else {
           toastError({text: this.$t('messages.checkForm')})
         }
-      },
-
-      cancelRequest() {
-        this.previousRequest.abort()
       },
 
       reset() {

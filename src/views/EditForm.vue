@@ -29,11 +29,9 @@
   import Log from '@/components/partial/Log.vue'
   import ConfirmationBox from "../components/partial/ConfirmationBoxOlesja";
   import SaveAsNewModal from "../components/partial/SaveAsNewModal";
-  import Sidebar from "../components/partial/Sidebar";
   export default {
     name: "EditForm",
     components: {
-      Sidebar,
       BottomOptions,
       SaveAsNewModal,
       ConfirmationBox,
@@ -93,9 +91,6 @@
     },
     beforeRouteLeave(to, from, next) {
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
-      console.log()
-      if(from.meta.table && from.meta.table !== 'site')
-        this.$root.$emit('show-sidebar', false);
       next()
     },
   }

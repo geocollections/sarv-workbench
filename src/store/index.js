@@ -20,7 +20,6 @@ export function createStore () {
       samplePurposes:null,
       fossilGroups:null,
       activeLibrary: null,
-
     },
     actions,
     mutations,

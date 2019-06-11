@@ -22,11 +22,6 @@ const permissionsMixin = {
   },
 
   methods: {
-    showMyPermissions() {
-      // TODO: Should put that to settings view
-      console.log(this.permissions)
-    },
-
     isUserAllowedTo(action, table) {
       if (typeof this.permissions[table] !== 'undefined') {
         return this.permissions[table].includes(action)

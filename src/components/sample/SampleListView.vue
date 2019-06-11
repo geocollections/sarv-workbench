@@ -1,6 +1,6 @@
 <template>
   <div class="row no-gutters" v-if="data.length > 0">
-    
+
     <div class="label2" v-for="(entity, index) in data">
       <div class="label2_head">
         <div style="float: left;" v-translate="{et: entity.database__name, en: entity.database__name_en}"></div>

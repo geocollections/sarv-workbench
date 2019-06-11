@@ -41,7 +41,6 @@
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import { fetchLibraries } from "@/assets/js/api/apiCalls";
   import {fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
 
   export default {

@@ -43,6 +43,7 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchLocalities} from "@/assets/js/api/apiCalls";
+
   export default {
     components: {
       ListModuleCore

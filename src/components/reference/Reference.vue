@@ -81,7 +81,7 @@
                                :options="autocomplete.types"
                                track-by="id"
                                :label="commonLabel"
-                               :loading="autocomplete.loaders.agent"
+                               :loading="autocomplete.loaders.types"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">

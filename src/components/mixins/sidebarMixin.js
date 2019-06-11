@@ -17,8 +17,6 @@ const sidebarMixin = {
         })
       } else if(userAction.action === 'cancel') {
         this.back(object)
-      } else if (userAction.action === 'addReferenceToLibrary') {
-        console.log('Todo: Add reference to library')
       }
     },
 

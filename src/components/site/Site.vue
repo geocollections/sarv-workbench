@@ -314,11 +314,9 @@
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import MultimediaComponent from "../partial/MultimediaComponent";
-  import {toastError} from "../../assets/js/iziToast/iziToast";
   import GeocollectionsLink from "../partial/GeocollectionsLink";
   import MapComponent2 from "../partial/MapComponent2";
   import FileTable from "../partial/FileTable";
-  import Sidebar from "../partial/Sidebar";
   import SaveButtons from "../partial/SaveButtons";
   import LinkedSampleTable from "../sample/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
@@ -331,7 +329,6 @@
       AddNewSample,
       LinkedSampleTable,
       SaveButtons,
-      Sidebar,
       FileTable,
       MapComponent2,
       GeocollectionsLink,

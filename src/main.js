@@ -10,7 +10,6 @@ import VueI18n from 'vue-i18n' // Translations
 import VueMoment from 'vue-moment'
 import VueCookie from 'vue-cookie'
 import { createStore } from './store'
-import { sync } from 'vuex-router-sync'
 import Vuesax from 'vuesax'
 import VueScrollTo from 'vue-scrollto'
 

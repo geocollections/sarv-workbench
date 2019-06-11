@@ -168,6 +168,8 @@
     "newSample": "Add new sample",
     "doi": "DOI",
     "newDoi": "Add new DOI",
+    "imageset": "Imageset",
+    "newImageset": "Add new imageset",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",

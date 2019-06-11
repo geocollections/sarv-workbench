@@ -4,6 +4,12 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
     <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 
+    <div class="row mt-4 page-title">
+      <div class="col-sm-6">
+        <p class="h2">{{ $t($route.meta.addNew) }}</p>
+      </div>
+    </div>
+
     <!-- NUMBER and AUTHOR -->
     <div class="row mt-4">
       <div class="col-sm-2">
@@ -29,13 +35,13 @@
       <div class="col-sm-4 mb-2">
         <vue-multiselect v-model="imageset.author"
                          id="author"
-                         :options="autocomplete.authors"
+                         :options="autocomplete.agent"
                          :internal-search="false"
                          :preserve-search="true"
                          v-bind:class="{ valid: authorState, invalid: !authorState }"
-                         @search-change="getAuthors"
+                         @search-change="autcompleteAgentSearch"
                          :custom-label="customLabelForAuthor"
-                         :loading="searchingAuthors"
+                         :loading="autocomplete.loaders.agent"
                          :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -78,7 +84,8 @@
   import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
-
+  import {fetchAddImageset, fetchIsImagesetNumberInImageset} from "../assets/js/api/apiCalls";
+  import autocompleteFieldManipulation from "../components/mixins/autocompleFormManipulation";
 
   export default {
     components: {
@@ -86,14 +93,17 @@
       Spinner,
     },
     name: "Imageset",
+    mixins: [autocompleteFieldManipulation],
     data () {
       return {
-        apiUrl: 'https://rwapi.geocollections.info/',
         loadingPercent: 0,
         sendingData: false,
         imagesetNumberExists: false,
         autocomplete: {
-          authors: [],
+          loaders: {
+            agent: false,
+          },
+          agent: [],
         },
         searchingAuthors: false,
         imageset: {
@@ -105,7 +115,7 @@
     },
 
     watch: {
-      'upload.imageset_number': function (newVal) {
+      'imageset.imageset_number': function (newVal) {
         if (newVal !== null) {
           if (newVal.trim().length > 0) {
             this.isInImagesetTable(newVal)
@@ -156,17 +166,7 @@
 
           this.$localStorage.set('imageset', this.imageset)
 
-          this.$http.post(this.apiUrl + 'add/imageset/', formData, {
-            before(request) {
-              this.previousRequest = request
-            },
-            progress: (e) => {
-              if (e.lengthComputable) {
-                // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
-                this.loadingPercent = Math.round((e.loaded / e.total) * 100)
-              }
-            }
-          }).then(response => {
+          fetchAddImageset(formData).then(response => {
             console.log(response)
             this.sendingData = false
             if (response.status === 200) {
@@ -191,11 +191,10 @@
                 } else {
                   toastError({text: response.body.error});
                 }
-
               }
             }
           }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse))
+            // console.log('ERROR: ' + JSON.stringify(errResponse))
             this.sendingData = false
             toastError({text: this.$t('messages.uploadError')})
           })
@@ -225,37 +224,16 @@
       },
 
       isInImagesetTable(query) {
-        this.$http.get(this.apiUrl + 'imageset/', { params: {imageset_number: query} }).then(response => {
-          console.log(response)
+        fetchIsImagesetNumberInImageset(query).then(response => {
+          // console.log(response)
           if (response.status === 200) {
             this.imagesetNumberExists = response.body.count > 0
           }
         }, errResponse => {
-          console.log('ERROR: ' + JSON.stringify(errResponse))
+          // console.log('ERROR: ' + JSON.stringify(errResponse))
         })
       },
 
-      getAuthors(query) {
-        if (query.length > 0) {
-
-          // Building url like that because otherwise it encodes spaces with plusses or something weird
-          let url = this.apiUrl + 'agent/?multi_search=value:' + query + ';fields:agent,forename,surename;lookuptype:icontains&format=json'
-
-          this.searchingAuthors = true;
-
-          this.$http.get(url).then(response => {
-            console.log(response)
-            if (response.status === 200) {
-              if (response.body.count > 0) this.autocomplete.authors = response.body.results;
-              else this.autocomplete.authors = [];
-            }
-            this.searchingAuthors = false;
-          }, errResponse => {
-            console.log('ERROR: ' + JSON.stringify(errResponse))
-            this.searchingAuthors = false;
-          })
-        }
-      },
 
       customLabelForAuthor(option) {
         if (option.agent === null && option.forename !== null && option.surename === null) return `${option.forename}`

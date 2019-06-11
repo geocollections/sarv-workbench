@@ -192,7 +192,6 @@
 </template>
 
 <script>
-  import _ from 'lodash'
   import Spinner from 'vue-simple-spinner'
   import {library} from '@fortawesome/fontawesome-svg-core'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
@@ -501,7 +500,6 @@
     }
   }
 </script>
-<style src="../assets/css/relatedDataStyle.css"></style>
 <style scoped>
   .badge-style > span {
     padding-left: 0.4em;

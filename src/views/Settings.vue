@@ -91,13 +91,13 @@
 
 <script>
   import '@fortawesome/fontawesome-free/css/all.min.css'
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     name: "Settings",
+    mixins: [permissionsMixin],
     data() {
       return {
-        user: '',
-        permissions: '',
         // Max 7
         shortcuts: {
           0: {
@@ -133,11 +133,6 @@
     },
 
     created: function () {
-      if (this.$session.exists() && this.$session.get('authUser') != null) {
-        this.user = this.$session.get('authUser').user
-        this.permissions = this.$session.get('authUser').permissions
-      }
-
       console.log(this.shortcuts)
     },
 

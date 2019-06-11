@@ -168,6 +168,8 @@
     "newSample": "Lisa uus proov",
     "doi": "DOI",
     "newDoi": "Lisa uus DOI",
+    "imageset": "Pildiseeria",
+    "newImageset": "Lisa uus pildiseeria",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
