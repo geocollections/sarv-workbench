@@ -8,13 +8,24 @@
              lazy
              scrollable
              ref="confirmation"
-             :title="titleExtra ? titleExtra : $t(title)">
+             :title="title">
       <p class="my-2 h5">{{ this.$t(customQuestion ? customQuestion : 'confirmation.question') }}</p>
 
       <template slot="modal-footer">
-        <b-button variant="outline-danger" @click="$root.$emit('user-choice', 'LEAVE')">{{ this.$t('confirmation.leave') }}</b-button>
-        <b-button variant="outline-success" @click="$root.$emit('user-choice', 'CONTINUE')">{{ this.$t('confirmation.continue') }}</b-button>
-        <b-button variant="outline-success" @click="$root.$emit('user-choice', 'SAVE')">{{ this.$t('confirmation.save') }}</b-button>
+        <b-button variant="outline-success" @click="$root.$emit('user-choice', 'CONTINUE')">
+          <i class="far fa-edit"></i>
+          {{ this.$t('confirmation.continue') }}
+        </b-button>
+
+        <b-button variant="outline-success" @click="$root.$emit('user-choice', 'SAVE')">
+          <i class="far fa-save"></i>
+          {{ this.$t('confirmation.save') }}
+        </b-button>
+
+        <b-button variant="outline-danger" @click="$root.$emit('user-choice', 'LEAVE')">
+          <i class="fas fa-ban"></i>
+          {{ this.$t('confirmation.leave') }}
+        </b-button>
       </template>
 
     </b-modal>
@@ -26,10 +37,6 @@
   export default {
     props: {
       title: {
-        type: String,
-        default: null
-      },
-      titleExtra: {
         type: String,
         default: null
       },
@@ -63,6 +70,9 @@
   }
 </script>
 
-<style scoped>
+<style>
+  #confirmation___BV_modal_outer_ {
+    z-index: 40000 !important; /* Overlays everything, because sidebar is ar 39999 */
+  }
 
 </style>

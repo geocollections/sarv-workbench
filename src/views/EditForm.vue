@@ -14,7 +14,7 @@
 
       <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
                          :related-data="relatedData" :object="object" :object-id="data.id"/>
-      <confirmation-box :title-extra="'SOME TITLE'"
+      <confirmation-box :title="$t($route.meta.heading) + ': '  + $route.params.id"
                         custom-question="confirmation.relatedDataQuestion"
                         :table="$route.meta.table"/>
 
@@ -89,6 +89,11 @@
       },
       forceRerender() { this.logComponentKey += 1; },
     },
+    // TODO: Trigger modal here
+    beforeRouteUpdate(to, from, next) {
+      next()
+    },
+    // TODO: Trigger modal also here
     beforeRouteLeave(to, from, next) {
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
       next()
