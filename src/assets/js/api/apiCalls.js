@@ -804,7 +804,6 @@ export function fetchAnalyses(data) {
   // }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
-  console.log('searching')
   if (searchFields.length > 0) {
     return fetch(`analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {

@@ -41,17 +41,6 @@ const localStorageMixin = {
     next()
   },
 
-  watch: {
-    '$route'(to, from) {
-      console.log(this.block)
-      if (typeof this.formSections[this.$route.meta.object] !== 'undefined' && this.formSections !== null && typeof this.block !== 'undefined') {
-        if (Object.keys(this.formSections[this.$route.meta.object]).length >= Object.keys(this.block).length && this.compareObjectKeys(this.formSections[this.$route.meta.object], this.block)) {
-          // this.block = this.formSections[this.$route.meta.object]
-        }
-      }
-    }
-  },
-
   methods: {
     lsPushCreateRelationWith (msg) {
       Vue.localStorage.set('createRelationWith',  msg)

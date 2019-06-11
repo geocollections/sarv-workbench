@@ -168,8 +168,9 @@
             let marker = L.marker({lat:parseFloat(entity.latitude), lng: parseFloat(entity.longitude)})
               .addTo(vm.map)
               .on('click', function(){
-              window.open('https://edit2.geocollections.info/site/'+entity.id, '', 'width=800,height=750')
+              window.open(location.origin + '/site/' + entity.id, '', 'width=800,height=750')
             })
+            marker.bindTooltip(entity.name, {permanent: true, direction: 'right'})
             vm.markers.push(marker)
           });
           let bounds = new L.featureGroup(this.markers).getBounds();
