@@ -459,7 +459,7 @@
           this.loadRelatedData('attachment_link');
           // this.loadRelatedData('sample');
         } else {
-          this.block.info = true
+          // this.block.info = true
           this.setLocationDataIfExists();
           this.setSiteNameAndProjectIfPreviousExists();
           this.loadListOfExistingProjects();

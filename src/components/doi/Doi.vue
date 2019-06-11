@@ -525,6 +525,7 @@
   import DoiGeolocation from "./relatedTables/DoiGeolocation";
   import DoiDate from "./relatedTables/DoiDate";
   import { toastSuccess, toastError, toastInfo } from "../../assets/js/iziToast/iziToast";
+  import localStorageMixin from "../mixins/localStorageMixin";
 
   export default {
     components: {
@@ -539,7 +540,7 @@
       FileInputComponent,
     },
 
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
 
     name: "Doi",
 

@@ -567,6 +567,7 @@
   import fontAwesomeLib from "../mixins/fontAwasomeLib";
   import permissionsMixin from "../mixins/permissionsMixin";
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
+  import localStorageMixin from "../mixins/localStorageMixin";
 
   export default {
     name: "Reference",
@@ -578,7 +579,7 @@
       LocalityReference,
       FileTable
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, sidebarMixin, fontAwesomeLib, permissionsMixin],
+    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, sidebarMixin, fontAwesomeLib, permissionsMixin, localStorageMixin],
 
     data() {
       return this.setInitialData()

@@ -414,6 +414,7 @@
   import FileInputComponent from "../partial/MultimediaComponent";
   import AnalysisFiles from "./relatedTables/AnalysisFiles";
   import AnalysisResults from "./relatedTables/AnalysisResults";
+  import localStorageMixin from "../mixins/localStorageMixin";
 
   export default {
     components: {
@@ -425,7 +426,7 @@
       FileInputComponent,
     },
 
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
 
     name: "Analysis",
 

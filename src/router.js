@@ -38,14 +38,16 @@ const router = new Router({
           path: '',
           component: () => import('./components/dashboard/FrontPage.vue'),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            object: 'dashboard'
           }
         },
         {
           path: '/settings',
           component: () => import('./views/Settings.vue'),
           meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            object: 'settings'
           }
         },
         {
@@ -296,7 +298,8 @@ const router = new Router({
                 // isSidebarShown: true,
                 isNavigationShown: true,
                 isCopyFormShown: false,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'reference'
               }
             }
           ]
@@ -333,7 +336,8 @@ const router = new Router({
           component: () => import('./views/Imageset.vue'),
           meta: {
             requiresAuth: true,
-            addNew: 'add.newImageset'
+            addNew: 'add.newImageset',
+            object: 'imageset'
           }
         },
         {
@@ -341,7 +345,8 @@ const router = new Router({
           component: () => import('./views/Journal.vue'),
           meta: {
             requiresAuth: true,
-            addNew: 'add.newJournal'
+            addNew: 'add.newJournal',
+            object: 'journal'
           }
         },
         {
@@ -379,7 +384,8 @@ const router = new Router({
                 isBottomOptionShown: true,
                 isNavigationShow: true,
                 isCopyFormShown: true,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'locality'
               },
             }
           ]
@@ -445,7 +451,8 @@ const router = new Router({
                 isBottomOptionShown: true,
                 isNavigationShow: true,
                 isCopyFormShown: true,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'sample'
               },
             }
           ]
@@ -550,7 +557,8 @@ const router = new Router({
                     isNavigationShow: false,
                     isCopyFormShown: false,
                     // isSidebarShown: true,
-                    requiresAuth: true
+                    requiresAuth: true,
+                    object: 'project'
                   },
                 }
               ]
@@ -593,7 +601,8 @@ const router = new Router({
                 isNavigationShow: false,
                 isCopyFormShown: false,
                 // isSidebarShown: true,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'site'
               },
             }
           ]
@@ -657,7 +666,8 @@ const router = new Router({
                 isBottomOptionShown: true,
                 isNavigationShow:true,
                 isCopyFormShown: false,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'library'
               },
             }
           ]
@@ -722,7 +732,8 @@ const router = new Router({
                 isBottomOptionShown: true,
                 isNavigationShow:true,
                 isCopyFormShown: false,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'doi'
               },
             }
           ]
@@ -787,7 +798,8 @@ const router = new Router({
                 isBottomOptionShown: true,
                 isNavigationShow:false,
                 isCopyFormShown: false,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'analysis'
               },
             }
           ]

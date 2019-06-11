@@ -247,6 +247,9 @@ new Vue({
       type: String,
       default: 'table'
     },
+    formSections: {
+      type: Object
+    }
   },
   render: h => h(App)
 }).$mount('#app')

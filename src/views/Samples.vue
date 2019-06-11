@@ -14,10 +14,10 @@
         <div class="search-fields">
           <div class="d-flex flex-row flex-wrap">
             <div class="col-sm-6" v-for="field,idx in filters">
-                <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
-                <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                              v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-                </b-form-input>
+              <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
+              <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
+                            v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
+              </b-form-input>
             </div>
           </div>
         </div>
@@ -43,59 +43,48 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchSamples} from "@/assets/js/api/apiCalls";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
+
   export default {
     components: {
       ListModuleCore
     },
     name: "Samples",
+    mixins: [permissionsMixin],
     data() {
       return {
         response: {},
-        columns:[
-          {id:"number",title:"sample.number",type:"text"},
+        columns: [
+          {id: "number", title: "sample.number", type: "text"},
           //{id:"number_additional",title:"sample.number_additional",type:"text", onlySearch:true},
           //{id:"number_field",title:"sample.number_field",type:"text", onlySearch:true},
-          {id:"id",title:"sample.id",type:"number"},
-          {id:"locality",title:"sample.locality",type:"text"},
+          {id: "id", title: "sample.id", type: "number"},
+          {id: "locality", title: "sample.locality", type: "text"},
           //{id:"locality_free",title:"sample.locality_free",type:"text", onlySearch:true},
-          {id:"depth",title:"sample.depth",type:"text"},
-          {id:"stratigraphy",title:"sample.stratigraphy",type:"text"},
+          {id: "depth", title: "sample.depth", type: "text"},
+          {id: "stratigraphy", title: "sample.stratigraphy", type: "text"},
           //{id:"lithostratigraphy",title:"sample.lithostratigraphy",type:"text", onlySearch:true},
-          {id:"agent",title:"sample.agent_collected",type:"text"},
+          {id: "agent", title: "sample.agent_collected", type: "text"},
           //{id:"rock",title:"sample.rock",type:"text", onlySearch:true},
           //{id:"date_collected",title:"sample.date_collected",type:"text", onlySearch:true},
-          {id:"storage",title:"sample.storage",type:"text"}
+          {id: "storage", title: "sample.storage", type: "text"}
         ],
-        filters:[
-          {id:"number",title:"sample.number",type:"text"},
-          {id:"id",title:"sample.id",type:"number"},
-          {id:"locality",title:"sample.locality",type:"text"},
-          {id:"depth",title:"sample.depth",type:"text"},
-          {id:"stratigraphy",title:"sample.stratigraphy",type:"text"},
-          {id:"agent",title:"sample.agent_collected",type:"text"},
-          {id:"storage",title:"sample.storage",type:"text"}
+        filters: [
+          {id: "number", title: "sample.number", type: "text"},
+          {id: "id", title: "sample.id", type: "number"},
+          {id: "locality", title: "sample.locality", type: "text"},
+          {id: "depth", title: "sample.depth", type: "text"},
+          {id: "stratigraphy", title: "sample.stratigraphy", type: "text"},
+          {id: "agent", title: "sample.agent_collected", type: "text"},
+          {id: "storage", title: "sample.storage", type: "text"}
         ],
         searchParameters: this.setDefaultSearchParameters()
       }
     },
-    created: function () {
-        // Gets user data from session storage
-        if (this.$session.exists() && this.$session.get('authUser') !== null) {
-          const user = this.$session.get('authUser')
-          this.agent = {
-            id: user.agent_id,
-            agent: null,
-            forename: user.user,
-            surename: null,
-            user: user.user,
-          }
-          //console.log(this.agent);
-        }
-      },
     methods: {
       fetchSamples() {
         return new Promise((resolve) => {
-          resolve(fetchSamples(this.searchParameters, this.agent))
+          resolve(fetchSamples(this.searchParameters, this.currentUser))
         });
       },
       searchParametersChanged(newParams) {

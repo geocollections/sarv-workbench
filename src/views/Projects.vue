@@ -42,12 +42,14 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchProjects} from "@/assets/js/api/apiCalls";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Projects",
+    mixins: [permissionsMixin],
     data() {
       return {
         response: {},

@@ -450,6 +450,7 @@
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
   import MapComponent from '@/components/partial/MapComponent'
   import MapComponent2 from "../partial/MapComponent2";
+  import localStorageMixin from "../mixins/localStorageMixin";
   library.add(faTimes, faChevronUp, faChevronDown)
   export default {
     name: "Locality",
@@ -465,7 +466,7 @@
       Spinner,
       MapComponent
     },
-    mixins: [formManipulation,copyForm,autocompleteFieldManipulation],
+    mixins: [formManipulation,copyForm,autocompleteFieldManipulation, localStorageMixin],
 
     data() { return this.setInitialData() },
 

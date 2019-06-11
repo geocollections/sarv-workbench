@@ -770,7 +770,7 @@
             title: 'header.samples',
             object: 'sample',
             field: 'number',
-            agent: this.$parent.agent
+            agent: this.$parent.currentUser
           });
         }
 
@@ -1005,7 +1005,7 @@
         fetchList(localStorageData) {
           let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
           return new Promise((resolve) => {
-            resolve(fetchSamples(params, this.$parent.agent))
+            resolve(fetchSamples(params, this.$parent.currentUser))
           });
         },
 

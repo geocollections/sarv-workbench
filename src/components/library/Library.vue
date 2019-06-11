@@ -375,6 +375,7 @@
     Italic,
     Link,
   } from 'tiptap-extensions'
+  import localStorageMixin from "../mixins/localStorageMixin";
 
   library.add(faTimes)
 
@@ -390,7 +391,7 @@
       EditorMenuBar,
       EditorMenuBubble
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation],
+    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, localStorageMixin],
 
     data() {
       return this.setInitialData()
