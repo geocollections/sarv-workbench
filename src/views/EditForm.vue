@@ -14,9 +14,8 @@
 
       <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
                          :related-data="relatedData" :object="object" :object-id="data.id"/>
-      <confirmation-box :title="$t($route.meta.heading) + ': '  + $route.params.id"
-                        custom-question="confirmation.relatedDataQuestion"
-                        :table="$route.meta.table"/>
+      <confirm-tab-close title="TAB"/>
+      <confirm-page-close :title="$t($route.meta.heading) + ': '  + $route.params.id"/>
 
       <!-- LOGS -->
       <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData" :key="logComponentKey"></log>
@@ -27,14 +26,17 @@
 <script>
   import BottomOptions from "@/components/partial/BottomOptions";
   import Log from '@/components/partial/Log.vue'
-  import ConfirmationBox from "../components/partial/ConfirmationBoxOlesja";
   import SaveAsNewModal from "../components/partial/SaveAsNewModal";
+  import ConfirmTabClose from "../components/partial/modals/ConfirmTabClose";
+  import ConfirmPageClose from "../components/partial/modals/ConfirmPageClose";
+
   export default {
     name: "EditForm",
     components: {
+      ConfirmPageClose,
+      ConfirmTabClose,
       BottomOptions,
       SaveAsNewModal,
-      ConfirmationBox,
       Log
     },
     data(){
@@ -89,11 +91,12 @@
       },
       forceRerender() { this.logComponentKey += 1; },
     },
-    // TODO: Trigger modal here
+    // TODO: Trigger modal here only if user has unsaved data
     beforeRouteUpdate(to, from, next) {
+      // console.log(this.$bvModal.show('confirm-page-close'))
       next()
     },
-    // TODO: Trigger modal also here
+    // TODO: Trigger modal also here only if user has unsaved data
     beforeRouteLeave(to, from, next) {
       this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', null)
       next()

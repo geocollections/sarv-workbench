@@ -202,7 +202,7 @@
   import ListView from "../components/partial/ListView";
   import AlternativeTableView from "../components/reference/AlternativeTableView";
   import AlternativeTableControls from "../components/reference/AlternativeTableControls";
-  import ChooseActiveLibrary from "../components/partial/chooseActiveLibrary";
+  import ChooseActiveLibrary from "../components/partial/ChooseActiveLibrary";
 
   library.add(faSort, faSortUp, faSortDown, farCalendarAlt)
 

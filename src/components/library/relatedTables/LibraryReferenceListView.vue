@@ -1,5 +1,5 @@
 <template>
-  <div id="#tab-reference-list" class="tab-pane row" :class="{active: activeTab === 'library_reference_list'}"
+  <div id="#tab-reference-list" class="tab-pane row no-gutters" :class="{active: activeTab === 'library_reference_list'}"
        role="tabpanel">
     <div v-if="activeTab === 'library_reference_list'">
 
@@ -51,7 +51,7 @@
           <span v-if="entity.reference__pages">
           {{ entity.reference__pages }}.
         </span>
-          
+
           <span v-if="entity.reference__doi">
             <a :href="'https://doi.org/' + entity.reference__doi">https://doi.org/ {{ entity.reference__doi }}</a>
           </span>

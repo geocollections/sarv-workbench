@@ -945,8 +945,11 @@
     "question": "Are you sure you want to leave without saving the edits?",
     "relatedDataQuestion": "Are you sure you want to leave tab without saving?",
     "leave": "Yes, leave",
+    "leaveTab": "Yes, leave",
     "continue": "Continue editing",
-    "save": "Save the record"
+    "continueTab": "Continue editing",
+    "save": "Save the record",
+    "saveTab": "Save the tab"
   },
   "saveAsNewModal": {
     "text":"Some text for user",

@@ -1,26 +1,68 @@
-import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
 import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
 import VueMultiselect from 'vue-multiselect';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
-import {faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes,faExternalLinkAlt, faUserLock, faLock, faCalendarAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt,faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap} from '@fortawesome/free-solid-svg-icons'
+import {
+  faBan,
+  faSave,
+  faDoorOpen,
+  faProjectDiagram,
+  faTag,
+  faGlobeAmericas,
+  faFileVideo,
+  faFileAudio,
+  faDownload,
+  faVial,
+  faVideo,
+  faMicrophone,
+  faCameraRetro,
+  faChevronDown,
+  faChevronUp,
+  faGlobe,
+  faFile,
+  faFileExcel,
+  faFileImage,
+  faEye,
+  faFolderOpen,
+  faUserFriends,
+  faFileContract,
+  faInfo,
+  faPenFancy,
+  faTimes,
+  faExternalLinkAlt,
+  faUserLock,
+  faLock,
+  faCalendarAlt,
+  faCommentAlt,
+  faLink,
+  faPencilAlt,
+  faTrashAlt,
+  faListOl,
+  faMapMarked,
+  faFilePdf,
+  faCheck,
+  faTimesCircle,
+  faDatabase,
+  faSitemap
+} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 import moment from 'moment'
 import {toastInfo} from "../../assets/js/iziToast/iziToast";
 
-library.add(faBan,faSave,faDoorOpen,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt,faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
+library.add(faBan, faSave, faDoorOpen, faProjectDiagram, faTag, faGlobeAmericas, faFileVideo, faFileAudio, faDownload, faVial, faVideo, faMicrophone, faCameraRetro, faChevronDown, faChevronUp, faGlobe, faFile, faFileExcel, faFileImage, faEye, faFolderOpen, faUserFriends, faFileContract, faInfo, faPenFancy, faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
 
 const formManipulation = {
-  data(){
+  data() {
     return {
-      fileUrl:'https://files.geocollections.info',
+      fileUrl: 'https://files.geocollections.info',
       apiUrl: 'https://rwapi.geocollections.info/',
       loadingPercent: 0,
       sendingData: false,
       editMode: false,
-      showCollapseMap:true,
+      showCollapseMap: true,
       activeObject: null
     }
   },
@@ -44,42 +86,51 @@ const formManipulation = {
       //console.log(this.agent);
     }
   },
-  mounted(){
+  mounted() {
+    // Root event for confirmation modal which is emitted when user tries to leave the TAB without saving.
     this.$root.$on('user-choice', this.handleUserChoice);
     // this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
 
     this.$parent.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
 
   },
-  beforeMount(){
+  beforeMount() {
     //localstorage settings
     let showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
     if (typeof showCollapseMap === 'undefined' || showCollapseMap === 'fallbackValue') return
     this.showCollapseMap = showCollapseMap
   },
   methods: {
-    isDefinedAndNotNullAndNotEmptyString(value) {return !!value && value !== null && (value+'').trim().length > 0},
-    isDefinedAndNotNull(value) {return !!value && value !== null},
-    isDefinedAndNotEmpty(value) { return !!value && value.length > 0 },
+    isDefinedAndNotNullAndNotEmptyString(value) {
+      return !!value && value !== null && (value + '').trim().length > 0
+    },
+    isDefinedAndNotNull(value) {
+      return !!value && value !== null
+    },
+    isDefinedAndNotEmpty(value) {
+      return !!value && value.length > 0
+    },
     isEmptyObject(value) {
-      for(var prop in value) {
+      for (var prop in value) {
         if (Object.prototype.hasOwnProperty.call(value, prop)) {
           return false;
         }
       }
       return true;
     },
-    formatDateForUpload(date, onlyDate = true){
+    formatDateForUpload(date, onlyDate = true) {
       date = new Date(date)
       let tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
       let localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, -1);
 
-      if(onlyDate) return typeof date === 'string' ? date.split('T')[0] : localISOTime.split('T')[0];
-     return localISOTime
+      if (onlyDate) return typeof date === 'string' ? date.split('T')[0] : localISOTime.split('T')[0];
+      return localISOTime
     },
 
-    cancelRequest() {this.previousRequest.abort()},
-    handleResponse(response){
+    cancelRequest() {
+      this.previousRequest.abort()
+    },
+    handleResponse(response) {
       if (response.status === 200) {
         return (response.body.count > 0) ? response.body.results : []
       }
@@ -90,7 +141,7 @@ const formManipulation = {
      * @param object, String value of, e.g., 'doi', 'reference'.
      * @returns {boolean}
      */
-    validate(object){
+    validate(object) {
       let vm = this, isValid = true;
       // console.log(vm[object])
       this.requiredFields.forEach(function (el) {
@@ -102,64 +153,64 @@ const formManipulation = {
     add(addAnother, object, saveRelatedData = false, returnPromise = false) {
 
       return new Promise(resolve => {
-      if (this.validate(object) && !this.sendingData) {
+        if (this.validate(object) && !this.sendingData) {
 
-        let url = this[object].id === undefined ? 'add/'+object+'/' : 'change/'+object+'/'+ this[object].id;
+          let url = this[object].id === undefined ? 'add/' + object + '/' : 'change/' + object + '/' + this[object].id;
 
-        let editableObject = cloneDeep(this[object]);
-        if(this[object].id !== undefined){
-          delete this[object]['id']
-        }
-
-        const dataToUpload = this.formatDataForUpload(this[object],saveRelatedData);
-        let formData = new FormData();
-        formData.append('data', dataToUpload);
-
-        this.saveData(object, formData, url).then(savedObjectId => {
-          console.log(savedObjectId)
-          //before save object ID was removed
-          this[object] = editableObject;
-          // if (savedObjectId === undefined || savedObjectId === false) return;
-          this.$emit('data-loaded', editableObject);
-          this.$emit('data-saved', true);
-
-          if (!returnPromise) {
-            if (!addAnother) {
-              this.$router.push({path: '/' + object})
-            } else if(savedObjectId && ( savedObjectId === true || savedObjectId !== undefined)){
-              this.$router.push({path: '/' + object + '/' + savedObjectId})
-            } else {
-              resolve(false)
-            }
-
-          } else {
-            resolve(true)
-
+          let editableObject = cloneDeep(this[object]);
+          if (this[object].id !== undefined) {
+            delete this[object]['id']
           }
-        }, errResponse => {
-          resolve(false)
-          return false;
-        });
 
-      } else if (this.sendingData) {
-        // This runs only if user deletes html elements and tries to press 'add' button again
-        toastError({text: this.$t('messages.easterEggError')})
-        resolve(false)
-      } else {
-        toastError({text: this.$t('messages.checkForm')})
-        resolve(false)
-      }
+          const dataToUpload = this.formatDataForUpload(this[object], saveRelatedData);
+          let formData = new FormData();
+          formData.append('data', dataToUpload);
+
+          this.saveData(object, formData, url).then(savedObjectId => {
+            console.log(savedObjectId)
+            //before save object ID was removed
+            this[object] = editableObject;
+            // if (savedObjectId === undefined || savedObjectId === false) return;
+            this.$emit('data-loaded', editableObject);
+            this.$emit('data-saved', true);
+
+            if (!returnPromise) {
+              if (!addAnother) {
+                this.$router.push({path: '/' + object})
+              } else if (savedObjectId && (savedObjectId === true || savedObjectId !== undefined)) {
+                this.$router.push({path: '/' + object + '/' + savedObjectId})
+              } else {
+                resolve(false)
+              }
+
+            } else {
+              resolve(true)
+
+            }
+          }, errResponse => {
+            resolve(false)
+            return false;
+          });
+
+        } else if (this.sendingData) {
+          // This runs only if user deletes html elements and tries to press 'add' button again
+          toastError({text: this.$t('messages.easterEggError')})
+          resolve(false)
+        } else {
+          toastError({text: this.$t('messages.checkForm')})
+          resolve(false)
+        }
       });
     },
 
-    saveData(type,formData,url, isCopy = false) {
+    saveData(type, formData, url, isCopy = false) {
       return new Promise(resolve => {
-        this.request(type,formData,url,resolve, isCopy)
+        this.request(type, formData, url, resolve, isCopy)
       })
     },
 
-    request(object,formData,url,resolve, isCopy) {
-      if(!isCopy) this.sendingData = true;
+    request(object, formData, url, resolve, isCopy) {
+      if (!isCopy) this.sendingData = true;
       this.loadingPercent = 0;
 
       this.$http.post(this.apiUrl + url, formData, {
@@ -181,8 +232,8 @@ const formManipulation = {
             } else {
               toastSuccess({text: response.body.message});
             }
-            if(object === 'attachment' && response.body.attachments_ids) {
-              if(response.body.attachments_ids.length > 1) resolve(response.body.attachments_ids)
+            if (object === 'attachment' && response.body.attachments_ids) {
+              if (response.body.attachments_ids.length > 1) resolve(response.body.attachments_ids)
               resolve(response.body.attachments_ids[0])
             } else
               resolve(response.body.id)
@@ -209,16 +260,16 @@ const formManipulation = {
       console.log('file uploaded');
 
       let formData = new FormData();
-      data.forEach((file,index) => {
+      data.forEach((file, index) => {
         formData.append('data', JSON.stringify({
-          description: file.type + ' for '+object+': ' + this[object].id,
+          description: file.type + ' for ' + object + ': ' + this[object].id,
           author: this.currentUser.id,
           date_created: this.formatDateForUpload(new Date()),
           is_private: objectToBeRelatedWith.is_oa === true ? 0 : 1,
           [object]: this[object].id
         }));
 
-        formData.append('file'+[index], file);
+        formData.append('file' + [index], file);
       });
 
       try {
@@ -235,15 +286,15 @@ const formManipulation = {
       console.log('file uploaded');
 
       let formData = new FormData();
-      data.forEach((file,index) => {
+      data.forEach((file, index) => {
         formData.append('data', JSON.stringify({
-          description: file.type + ' for '+object+': ' + this[object].id,
+          description: file.type + ' for ' + object + ': ' + this[object].id,
           author: this.currentUser.id,
           date_created: this.formatDateForUpload(new Date()),
           is_private: 1
         }));
 
-        formData.append('file'+[index], file);
+        formData.append('file' + [index], file);
       });
 
 
@@ -254,7 +305,7 @@ const formManipulation = {
           let vm = this
           this.attachmentLinkSaved = savedObjectId.length > 0 ? savedObjectId.length : 1
 
-          function createRelation(vm,object, file) {
+          function createRelation(vm, object, file) {
             vm.addRelationBetweenAnyObjectAndAttachment(file, 'attachment_link', {
               object: object,
               id: vm[object].id
@@ -262,7 +313,8 @@ const formManipulation = {
               vm.attachmentLinkSaved -= 1;
             });
           }
-          if(this.attachmentLinkSaved === 1)
+
+          if (this.attachmentLinkSaved === 1)
             createRelation(vm, object, savedObjectId)
           else {
             savedObjectId.forEach(file => {
@@ -276,20 +328,20 @@ const formManipulation = {
       }
 
     },
-    addRelationBetweenAnyObjectAndAttachment(attachmentId, object, createRelationWith = null){
+    addRelationBetweenAnyObjectAndAttachment(attachmentId, object, createRelationWith = null) {
       let formData = new FormData()
       let uploadableObject = {
-        attachment:attachmentId
+        attachment: attachmentId
       };
-      if(createRelationWith !== null) {
+      if (createRelationWith !== null) {
         uploadableObject[createRelationWith.object] = createRelationWith.id
       } else
-        uploadableObject[this.$store.state['createRelationWith'].object] =  this.$store.state['createRelationWith'].data.id
+        uploadableObject[this.$store.state['createRelationWith'].object] = this.$store.state['createRelationWith'].data.id
 
       const dataToUpload = JSON.stringify(uploadableObject);
       formData.append('data', dataToUpload)
 
-      let url = 'add/'+object+'/';
+      let url = 'add/' + object + '/';
       return new Promise((resolve) => {
         this.saveData(object, formData, url).then(isSuccessfullySaved => {
           console.log("Relation created with locality id: " + this.$store.state['createRelationWith'].id)
@@ -315,10 +367,10 @@ const formManipulation = {
       if (this.createRelationWith.object !== null) {
         window.close()
       }
-      this.$router.push({ path: '/' + object })
+      this.$router.push({path: '/' + object})
     },
 
-    windowOpenNewTab(name, path,query = {}, meta) {
+    windowOpenNewTab(name, path, query = {}, meta) {
       let routeData = this.$router.resolve({path: path, query: query, meta: meta});
       window.open(routeData.href, '_blank');
     },
@@ -357,7 +409,7 @@ const formManipulation = {
       window.open('https://files.geocollections.info/' + params.pdf.substring(0, 2) + '/' + params.pdf.substring(2, 4) + '/' + params.pdf, '', 'width=1000,height=900')
     },
 
-    removeUnnecessaryFields(object,copyFields){
+    removeUnnecessaryFields(object, copyFields) {
       //copy only certain fields
       Object.entries(object).forEach(entry => {
         if (copyFields.indexOf(entry[0]) < 0) {
@@ -367,30 +419,30 @@ const formManipulation = {
       return object;
     },
 
-    handleUserChoice(choice){
-      this.$root.$emit('close-confirmation');
-      if(choice === 'LEAVE') {
+    handleUserChoice(choice) {
+      this.$bvModal.hide('confirm-tab-close')
+
+      if (choice === 'LEAVE') {
         this.setActiveTab(this.nextTab, false)
-      } else if(choice === 'CONTINUE') {
-        // NOTHING TO DO
-      } else if(choice === 'SAVE') {
-        this.addRelatedData(this.activeTab);
+      } else if (choice === 'SAVE') {
+        console.log(this)
+        this.addRelatedData(this.activeTab, true);
         this.setActiveTab(this.nextTab, false);
       }
     },
 
-    setActiveTab(type, isWarning = true){
+    setActiveTab(type, isWarning = true) {
       // If user clicks on currently active tab then do nothing
       if (this.activeTab === type) return
 
       this.nextTab = type;
-      if(isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
-        this.$root.$emit('show-confirmation');
+      if (isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
+        this.$bvModal.show('confirm-tab-close')
       } else {
         // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
-        this.relatedData.insert[this.activeTab]={};
+        this.relatedData.insert[this.activeTab] = {};
         // this.activeTab = type;
-        this.$emit('tab-changed',type);
+        this.$emit('tab-changed', type);
         this.loadRelatedData(type);
       }
     },
@@ -401,17 +453,17 @@ const formManipulation = {
      * should be called as $parent but you can listen event in parent classes ex. this.$root.$on('related-data-added',this.addRelatedData);**/
 
     editRelatedData(object) {
-      if(this.isEmptyObject(object.new)) return;
+      if (this.isEmptyObject(object.new)) return;
       let formData = new FormData();
 
       //CHECK REQUIRED FIELDS !!!
       let type = this.activeTab;
-      if(this.checkRequiredFields(type,object.new)) {
+      if (this.checkRequiredFields(type, object.new)) {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
 
-      let editableObject = this.removeUnnecessaryFields(object.new,this.relatedData.copyFields[type]);
+      let editableObject = this.removeUnnecessaryFields(object.new, this.relatedData.copyFields[type]);
       formData.append('data', this.formatRelatedData(editableObject));
       this.loadRelatedData(type).then(response => {
         // this allows to set edit mode for multiple row
@@ -419,7 +471,7 @@ const formManipulation = {
         // it is required to edit only one record
         this.editMode = false;
       });
-      this.saveData(type,formData,'change/' + type + '/' + object.id).then(isSuccessfullySaved => {
+      this.saveData(type, formData, 'change/' + type + '/' + object.id).then(isSuccessfullySaved => {
         //  UPDATE ROW DATA
         // object = cloneDeep(object.new)
         // this.$set(object, 'new', {});
@@ -431,62 +483,68 @@ const formManipulation = {
       });
     },
 
-    addRelatedData(type) {
-      if(this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
+    addRelatedData(type, isTab = false) {
+      if (this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
       let formData = new FormData();
-      if(type === undefined) type = this.activeTab;
+      if (type === undefined) type = this.activeTab;
 
-      if(this.checkRequiredFields(type,this.relatedData.insert[type])) {
+      // TypeError on TAB modal emit (because it gets triggered multiple times (shouldn't use root emitting and stuff, better use vuex for theese kinds of events))
+      if (this.checkRequiredFields(type, this.relatedData.insert[type])) {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
+      console.log('hi')
 
       formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
-      this.saveData(type,formData,'add/'+type+'/').then(isSuccessfullySaved => {
+      this.saveData(type, formData, 'add/' + type + '/').then(isSuccessfullySaved => {
         // RELOAD RELATED DATA IN CURRENT TAB
         this.loadRelatedData(type);
         // CLEAR PREVIOUS INSERT DATA
-        this.relatedData.insert[this.activeTab]={};
+        this.relatedData.insert[this.activeTab] = {};
       });
     },
 
 
     // ?
-    loadRelatedData(){},
-    fillRelatedDataAutocompleteFields(){},
-    editRow(entity){
-      if(this.editMode === true) return;
+    loadRelatedData() {
+    },
+    fillRelatedDataAutocompleteFields() {
+    },
+    editRow(entity) {
+      if (this.editMode === true) return;
       // console.log("EDIT RECORD" + JSON.stringify(entity));
       this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
       this.$set(entity, 'editMode', !entity.editMode)
       this.editMode = true;
     },
-    allowRemove(entity){
+    allowRemove(entity) {
       this.$set(entity, 'allowRemove', true)
     },
-    removeRow(entity){
+    removeRow(entity) {
       console.log("DELETE RECORD" + JSON.stringify(entity))
     },
 
     /** RELATED DATA ENDS**/
 
     /** SHOW NEXT OR PREVIOUS RECORD STARTS**/
-    findCurrentRecord(list,id) {
-      return findIndex(list, function(item) { return item.id === id })
+    findCurrentRecord(list, id) {
+      return findIndex(list, function (item) {
+        return item.id === id
+      })
     },
     getListRecords(object) {
       const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
 
-      this.listSearch(searchHistory).then( results => {
-        if(results.length === 0) {
-          this.$root.$emit('disable-previous',true);
-          this.$root.$emit('disable-next',true);
+      this.listSearch(searchHistory).then(results => {
+        if (results.length === 0) {
+          this.$root.$emit('disable-previous', true);
+          this.$root.$emit('disable-next', true);
           return
         }
 
-        let currentRecordId = this.findCurrentRecord(cloneDeep(results),this[object].id)
+        let currentRecordId = this.findCurrentRecord(cloneDeep(results), this[object].id)
 
-        if(currentRecordId === -1){
+        if (currentRecordId === -1) {
           if (this[object].id === 1) {
             this.nextRecord = this[object].id + 1;
             this.$root.$emit('disable-previous', true);
@@ -494,23 +552,23 @@ const formManipulation = {
           } else {
             this.previousRecord = this[object].id - 1;
             this.nextRecord = this[object].id + 1;
-            this.$root.$emit('disable-previous',false);
-            this.$root.$emit('disable-next',false);
+            this.$root.$emit('disable-previous', false);
+            this.$root.$emit('disable-next', false);
           }
           return
         }
 
-        if(currentRecordId === 0) {
-          this.$root.$emit('disable-previous',true)
+        if (currentRecordId === 0) {
+          this.$root.$emit('disable-previous', true)
         } else {
-          this.previousRecord = results[currentRecordId-1].id;
-          this.$root.$emit('disable-previous',false)
+          this.previousRecord = results[currentRecordId - 1].id;
+          this.$root.$emit('disable-previous', false)
         }
-        if(currentRecordId === results.length-1) {
-          this.$root.$emit('disable-next',true)
+        if (currentRecordId === results.length - 1) {
+          this.$root.$emit('disable-next', true)
         } else {
-          this.nextRecord = results[currentRecordId+1].id;
-          this.$root.$emit('disable-next',false)
+          this.nextRecord = results[currentRecordId + 1].id;
+          this.$root.$emit('disable-next', false)
         }
 
       })
@@ -519,12 +577,12 @@ const formManipulation = {
     listSearch(searchParams) {
       this.sendingData = true;
       return new Promise((resolve) => {
-      this.fetchList(searchParams).then(response => {
-        if (response.status === 200) {
-          if (response.body.count === 0) resolve([]);
-          if (response.body.count > 0)  resolve(response.body.results)
-        }
-        this.sendingData = false
+        this.fetchList(searchParams).then(response => {
+          if (response.status === 200) {
+            if (response.body.count === 0) resolve([]);
+            if (response.body.count > 0) resolve(response.body.results)
+          }
+          this.sendingData = false
         }, errResponse => {
           this.sendingData = false
         })
@@ -534,21 +592,21 @@ const formManipulation = {
     hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
       console.log(choice)
       let vm = this;
-      if(this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
+      if (this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
 
       if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
       if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately).then(resp => {
-        vm.$router.push({ path: '/' + object })
+        vm.$router.push({path: '/' + object})
       })
 
       if (choice === "CLEAR") {
         this[object] = {}
         toastInfo({text: this.$t('messages.fieldsCleared')})
       }
-      if (choice === "CANCEL") this.$router.push({ path: '/' + object })
+      if (choice === "CANCEL") this.$router.push({path: '/' + object})
 
-      if (choice === "PREVIOUS") this.$router.push({ path: '/' + object + '/' + this.previousRecord });
-      if (choice === "NEXT") this.$router.push({ path: '/' + object + '/' + this.nextRecord });
+      if (choice === "PREVIOUS") this.$router.push({path: '/' + object + '/' + this.previousRecord});
+      if (choice === "NEXT") this.$router.push({path: '/' + object + '/' + this.nextRecord});
     },
 
     /** SHOW NEXT OR PREVIOUS RECORD ENDS**/
@@ -562,10 +620,10 @@ const formManipulation = {
     },
 
 
-    getFormatIcon(fileName){
+    getFormatIcon(fileName) {
       let format = fileName.split('.')[1];
-      if(['xlsx','xls'].indexOf(format) > -1 ) return 'file-excel';
-      if(['jpg','png'].indexOf(format) > -1 ) return 'file-image';
+      if (['xlsx', 'xls'].indexOf(format) > -1) return 'file-excel';
+      if (['jpg', 'png'].indexOf(format) > -1) return 'file-image';
       else return 'file'
     },
 
@@ -577,7 +635,7 @@ const formManipulation = {
         return new Promise(resolve => {
           navigator.geolocation.getCurrentPosition(function (position) {
 
-            resolve( {
+            resolve({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
               accuracy: position.coords.accuracy
@@ -585,24 +643,24 @@ const formManipulation = {
           }, function (error) {
             if (error.code == error.PERMISSION_DENIED)
               this_.errorMessege = "Geolocation is not supported by this browser.";
-            resolve (null)
+            resolve(null)
           });
         });
       }
     },
 
     calculateNextName(previousName) {
-      if(!this.isDefinedAndNotNull(previousName)) return
+      if (!this.isDefinedAndNotNull(previousName)) return
       let tokenize = previousName.split(/[^0-9]/g);
-      let lastToken = tokenize[tokenize.length-1]
+      let lastToken = tokenize[tokenize.length - 1]
       //last token is number
-      return isNaN(parseInt(lastToken)) ? previousName+' 1' : previousName.substring(0,(previousName.length - lastToken.length))+(parseInt(lastToken)+1)
+      return isNaN(parseInt(lastToken)) ? previousName + ' 1' : previousName.substring(0, (previousName.length - lastToken.length)) + (parseInt(lastToken) + 1)
     },
 
     getActiveProject() {
       let activeProject = this.$localStorage.get('activeProject', 'fallbackValue')
       console.log(activeProject)
-      if(this.isDefinedAndNotEmpty(activeProject) && activeProject !== 'fallbackValue') return activeProject[0];
+      if (this.isDefinedAndNotEmpty(activeProject) && activeProject !== 'fallbackValue') return activeProject[0];
       return null
     },
 
@@ -628,13 +686,13 @@ const formManipulation = {
       },
       deep: true
     },
-    'showCollapseMap'(newval, oldval){
-      this.$localStorage.set('mapComponent',  newval)
+    'showCollapseMap'(newval, oldval) {
+      this.$localStorage.set('mapComponent', newval)
     },
     'attachmentLinkSaved': {
-      handler: function(newval,oldval) {
+      handler: function (newval, oldval) {
         console.log(newval)
-        if(newval === 0) {
+        if (newval === 0) {
           this.$root.$emit('attachment-loading-status', true)
           this.loadRelatedData('attachment_link')
           this.attachmentLinkSaved = -1

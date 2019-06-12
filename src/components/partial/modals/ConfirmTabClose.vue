@@ -1,25 +1,24 @@
 <template>
-  <div class="confirmation-box">
+  <div class="confirmation-tab">
 
-    <b-modal id="confirmation"
+    <b-modal id="confirm-tab-close"
              header-bg-variant="dark"
              header-text-variant="light"
              centered
              lazy
              scrollable
-             ref="confirmation"
              :title="title">
-      <p class="my-2 h5">{{ this.$t(customQuestion ? customQuestion : 'confirmation.question') }}</p>
+      <p class="my-2 h5">{{ $t('confirmation.relatedDataQuestion') }}</p>
 
       <template slot="modal-footer">
-        <b-button variant="outline-success" @click="$root.$emit('user-choice', 'CONTINUE')">
+        <b-button variant="outline-success" @click="$bvModal.hide('confirm-tab-close')">
           <i class="far fa-edit"></i>
           {{ this.$t('confirmation.continue') }}
         </b-button>
 
         <b-button variant="outline-success" @click="$root.$emit('user-choice', 'SAVE')">
           <i class="far fa-save"></i>
-          {{ this.$t('confirmation.save') }}
+          {{ this.$t('confirmation.saveTab') }}
         </b-button>
 
         <b-button variant="outline-danger" @click="$root.$emit('user-choice', 'LEAVE')">
@@ -35,44 +34,18 @@
 
 <script>
   export default {
+    name: "ConfirmTabClose",
     props: {
       title: {
         type: String,
         default: null
       },
-      customQuestion: {
-        type: String,
-        default: null
-      },
-      table: {
-        type: String,
-        default: 'attachment'
-      }
     },
-    name: "ConfirmationBox",
-    data() {
-      return {
-        show: true
-      }
-    },
-    mounted(){
-      this.$root.$on('show-confirmation', this.showModal);
-      this.$root.$on('close-confirmation', this.hideModal);
-    },
-    methods: {
-      showModal(){
-        this.$refs.confirmation.show();
-      },
-      hideModal(){
-        this.$refs.confirmation.hide()
-      }
-    }
   }
 </script>
 
 <style>
-  #confirmation___BV_modal_outer_ {
+  #confirm-tab-close___BV_modal_outer_ {
     z-index: 40000 !important; /* Overlays everything, because sidebar is ar 39999 */
   }
-
 </style>
