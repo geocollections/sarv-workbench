@@ -138,6 +138,10 @@
       handleChanges(changes) {
         if (changes !== null && changes.trim().length > 0) {
           let validJsonString = changes.replace(/'/g, '"')
+
+          // Exception 1
+          if (validJsonString.includes('None')) validJsonString = validJsonString.replace(/None/g, '"None"')
+
           return JSON.parse(validJsonString)
         } else return {}
       },
