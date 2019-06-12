@@ -94,6 +94,22 @@
             </b-dropdown-item>
           </b-nav-item-dropdown>
 
+          <!--      <vs-sidebar-group v-if="permissions.imageset" :title="$t('header.imagesets')">-->
+          <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.imagesets')">
+            <b-dropdown-item :to="{ path: '/imageset/add' }">
+              <i class="far fa-images"></i>
+              {{ $t('frontPage.buttons.imageset') }}
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
+          <!--      <vs-sidebar-group v-if="permissions.journal" :title="$t('header.journals')">-->
+          <b-nav-item-dropdown class="d-lg-none d-xl-none" :text="$t('header.journals')">
+            <b-dropdown-item :to="{ path: '/journal/add' }">
+              <i class="far fa-newspaper"></i>
+              {{ $t('frontPage.buttons.journal') }}
+            </b-dropdown-item>
+          </b-nav-item-dropdown>
+
           <b-nav-item-dropdown v-if="permissions.reference" class="d-lg-none d-xl-none" :text="$t('header.references')">
             <b-dropdown-item :to="{ path: '/reference' }" exact>
               <font-awesome-icon icon="book" />

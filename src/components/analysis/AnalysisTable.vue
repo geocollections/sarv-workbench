@@ -8,7 +8,11 @@
       </router-link>
     </td>
 
-    <td>{{entity.sample__id}}</td>
+    <td>
+      <router-link :to="{ path: '/sample/' + entity.sample__id }" :title="$t('editDoi.editMessage')">
+        {{entity.sample__id}}
+      </router-link>
+    </td>
     <td>{{entity.sample__number}}</td>
     <td>{{entity.sample__locality__locality}}</td>
     <td>{{entity.sample__depth}}</td>

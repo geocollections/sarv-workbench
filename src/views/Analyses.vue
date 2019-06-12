@@ -8,21 +8,27 @@
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/analysis/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
+
     <!-- SEARCH FIELDS START -->
-    <!--<div class="row mt-4" v-if="filters.length > 0">-->
-      <!--<div class="col">-->
-        <!--<div class="search-fields">-->
-          <!--<div class="d-flex flex-row flex-wrap">-->
-            <!--<div class="col-sm-6" v-for="field,idx in filters">-->
-              <!--<label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>-->
-              <!--<b-form-input style="display: inline !important; " class="col-sm-8 mb-2"-->
-                            <!--v-model="searchParameters[field.id]" :id="field.id" :type="field.type">-->
-              <!--</b-form-input>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
+    <fieldset class="border p-2" id="block-search">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
+        <i class="fas fa-search"></i>
+        {{ $t('edit.search') }}
+      </legend>
+
+      <transition name="fade">
+        <div class="row" v-if="filters.length > 0 && block.search">
+          <div class="col-md-4" v-for="field,idx in filters">
+
+            <label :for="field.id">{{ $t(field.title) }}:</label>
+
+            <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+
+          </div>
+        </div>
+      </transition>
+    </fieldset>
+
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="analysis"
@@ -41,7 +47,7 @@
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import { fetchAnalyses } from "../assets/js/api/apiCalls";
+  import {fetchAnalyses} from "../assets/js/api/apiCalls";
 
   export default {
     components: {
@@ -52,21 +58,24 @@
     data() {
       return {
         response: {},
-        columns:[
-          {id:"id",title:"analysis.id",type:"number"},
-          {id:"sample__id",title:"analysis.sample__id",type:"text"},
-          {id:"sample__number",title:"analysis.sample__number",type:"text"},
-          {id:"sample__locality__locality",title:"analysis.sample__locality__locality",type:"text"},
-          {id:"sample__depth",title:"analysis.sample__depth",type:"text"},
-          {id:"analysis_method__analysis_method",title:"analysis.analysis_method__analysis_method",type:"text"},
-          {id:"date",title:"analysis.date_",type:"date"},
-          {id:"lab_txt",title:"analysis.labor_txt",type:"text"},
-          {id:"agent",title:"analysis.agent",type:"text"}
+        columns: [
+          {id: "id", title: "analysis.id", type: "number"},
+          {id: "sample__id", title: "analysis.sample__id", type: "text"},
+          {id: "sample__number", title: "analysis.sample__number", type: "text"},
+          {id: "sample__locality__locality", title: "analysis.sample__locality", type: "text"},
+          {id: "sample__depth", title: "analysis.sample__depth", type: "text"},
+          {id: "analysis_method__analysis_method", title: "analysis.analysis_method", type: "text"},
+          {id: "date", title: "analysis.date_", type: "date"},
+          {id: "lab_txt", title: "analysis.labor_txt", type: "text"},
+          {id: "agent__agent", title: "analysis.agent", type: "text"}
         ],
-        filters:[
-          {id:"owner",title:"doi.owner",type:"text"},
+        filters: [
+          {id: "id", title: "analysis.id", type: "number"},
+          {id: "analysis_method", title: "analysis.analysis_method", type: "text"},
+          {id: "agentAndLab", title: "analysis.agentAndLab", type: "text"},
         ],
-        searchParameters: this.setDefaultSearchParameters()
+        searchParameters: this.setDefaultSearchParameters(),
+        block: {search: true}
       }
     },
 
@@ -96,8 +105,9 @@
       },
       setDefaultSearchParameters() {
         return {
-          id:null,
-          owner: null,
+          id: null,
+          analysis_method: null,
+          agentAndLab: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',
@@ -111,5 +121,9 @@
 </script>
 
 <style scoped>
-
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+  }
 </style>

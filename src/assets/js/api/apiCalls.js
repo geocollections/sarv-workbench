@@ -799,9 +799,19 @@ export function fetchAnalyses(data) {
     'date,lab_txt,agent__agent,is_private';
   let searchFields = '';
 
-  // if (data.id !== null && data.id.trim().length > 0) {
-  //   searchFields += `id__icontains=${data.id}`
-  // }
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`
+  }
+
+  if (data.analysis_method !== null && data.analysis_method.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.analysis_method};fields:analysis_method__analysis_method,analysis_method__method_en;lookuptype:icontains`
+
+  }
+
+  if (data.agentAndLab !== null && data.agentAndLab.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.agentAndLab};fields:agent__agent,lab_txt;lookuptype:icontains`
+
+  }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
   if (searchFields.length > 0) {

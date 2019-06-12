@@ -9,20 +9,29 @@
       </div>
     </div>
     <!-- SEARCH FIELDS START -->
-    <div class="row mt-4">
-      <div class="col">
-        <div class="search-fields">
-          <div class="d-flex flex-row flex-wrap">
-            <div class="col-sm-6" v-for="field,idx in filters">
-              <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
-              <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                            v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-              </b-form-input>
+    <fieldset class="border p-2" id="block-search">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
+        <i class="fas fa-search"></i>
+        {{ $t('edit.search') }}
+      </legend>
+
+      <transition name="fade">
+        <div class="row" v-if="filters.length > 0 && block.search">
+          <div class="col">
+            <div class="search-fields">
+              <div class="d-flex flex-row flex-wrap">
+                <div class="col-sm-6" v-for="field,idx in filters">
+                  <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
+                  <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
+                                v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
+                  </b-form-input>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </transition>
+    </fieldset>
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="library"
@@ -51,21 +60,22 @@
     data() {
       return {
         response: {},
-        columns:[
-          {id:"library",title:"library.id",type:"number"},
-          {id:"library__title",title:"library.title",type:"text"},
-          {id:"agent__agent",title:"library.author_txt",type:"text"},
+        columns: [
+          {id: "library", title: "library.id", type: "number"},
+          {id: "library__title", title: "library.title", type: "text"},
+          {id: "agent__agent", title: "library.author_txt", type: "text"},
 
-          {id:"library__is_private",title:"library.isPrivate",type:"text"},
-          {id:"reference",title:"library.reference",type:"text", orderBy: false},
+          {id: "library__is_private", title: "library.isPrivate", type: "text"},
+          {id: "reference", title: "library.reference", type: "text", orderBy: false},
         ],
-        filters:[
-          {id:"author_txt",title:"library.author_txt",type:"text"},
-          {id:"year",title:"library.year",type:"number"},
-          {id:"title",title:"library.title",type:"text"},
-          {id:"reference",title:"library.reference",type:"text"},
+        filters: [
+          {id: "author_txt", title: "library.author_txt", type: "text"},
+          {id: "year", title: "library.year", type: "number"},
+          {id: "title", title: "library.title", type: "text"},
+          {id: "reference", title: "library.reference", type: "text"},
         ],
-        searchParameters: this.setDefaultSearchParameters()
+        searchParameters: this.setDefaultSearchParameters(),
+        block: {search: true}
       }
     },
 

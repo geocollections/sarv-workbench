@@ -16,12 +16,15 @@
             </label>
         </span>
 
-        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('add.new') }}</router-link>
-        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/library' }">{{ $t('header.libraries') }}</router-link>
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('add.new') }}
+        </router-link>
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/library' }">{{ $t('header.libraries') }}
+        </router-link>
       </div>
     </div>
 
-    <div v-if="isCombinedView" class="row mb-1" :class="{ 'break-out': isCombinedView }" :style="'width:' + freeSpacePercentage + 'vw;'">
+    <div v-if="isCombinedView" class="row mb-1" :class="{ 'break-out': isCombinedView }"
+         :style="'width:' + freeSpacePercentage + 'vw;'">
       <div class="col">
         <label for="combinedViewRangeInput" class="m-0">{{ $t('messages.combinedViewChangeSize') }}</label>
       </div>
@@ -29,32 +32,30 @@
     </div>
 
     <!-- COMBINED VIEW START -->
-    <div v-if="isCombinedView" class="row fluid-movement" :class="{ 'break-out': isCombinedView }" :style="'width:' + freeSpacePercentage + 'vw;'">
+    <div v-if="isCombinedView" class="row fluid-movement" :class="{ 'break-out': isCombinedView }"
+         :style="'width:' + freeSpacePercentage + 'vw;'">
       <div class="left-side" :class="'col-' + combinedViewLeftColSize">
         <!-- SEARCH FIELDS START -->
-        <div class="row mt-4">
-          <div class="col">
-            <div class="search-fields">
-              <div class="d-flex flex-row flex-wrap">
-                <div class="col-sm-6" v-for="field,idx in filters">
+        <fieldset class="border p-2" id="block-search">
+          <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
+            <i class="fas fa-search"></i>
+            {{ $t('edit.search') }}
+          </legend>
 
-                  <div class="row">
-                    <div class="col-sm-4">
-                      <label :for="field.id">{{ $t(field.title) }}:</label>
-                    </div>
+          <transition name="fade">
+            <div class="row" v-if="filters.length > 0 && block.search">
+              <div class="col-sm-6" v-for="field,idx in filters">
 
-                    <div class="col-sm-8 mb-2">
-                      <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+                <label :for="field.id">{{ $t(field.title) }}:</label>
 
-                      <b-form-text v-if="field.id === 'solrSearch'">{{ $t('messages.solrSearchInfo') }}.</b-form-text>
-                    </div>
-                  </div>
+                <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
 
-                </div>
+                <b-form-text v-if="field.id === 'solrSearch'">{{ $t('messages.solrSearchInfo') }}.</b-form-text>
+
               </div>
             </div>
-          </div>
-        </div>
+          </transition>
+        </fieldset>
 
         <!-- SEARCH FIELDS END -->
         <list-module-core
@@ -100,29 +101,27 @@
     <!-- COMBINED VIEW END -->
 
     <!-- SEARCH FIELDS START -->
-    <div class="row mt-4" v-if="!isCombinedView">
-      <div class="col">
-        <div class="search-fields">
-          <div class="d-flex flex-row flex-wrap">
-            <div class="col-sm-6" v-for="field,idx in filters">
+    <fieldset class="border p-2" id="block-search" v-if="!isCombinedView">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
+        <i class="fas fa-search"></i>
+        {{ $t('edit.search') }}
+      </legend>
 
-              <div class="row">
-                <div class="col-sm-4">
-                  <label :for="field.id">{{ $t(field.title) }}:</label>
-                </div>
+      <transition name="fade">
+        <div class="row" v-if="filters.length > 0 && block.search">
+          <div class="col-md-4" v-for="field,idx in filters">
 
-                <div class="col-sm-8 mb-2">
-                  <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+            <label :for="field.id">{{ $t(field.title) }}:</label>
 
-                  <b-form-text v-if="field.id === 'solrSearch'">{{ $t('messages.solrSearchInfo') }}.</b-form-text>
-                </div>
-              </div>
+            <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
 
-            </div>
+            <b-form-text class="text-muted" v-if="field.id === 'solrSearch'">{{ $t('messages.solrSearchInfo') }}.
+            </b-form-text>
+
           </div>
         </div>
-      </div>
-    </div>
+      </transition>
+    </fieldset>
     <!-- SEARCH FIELDS END -->
     <list-module-core
       v-if="!isCombinedView"
@@ -160,29 +159,29 @@
     data() {
       return {
         response: {},
-        columns:[
-          {id:"id",title:"reference.id",type:"number"},
-          {id:"author",title:"reference.author",type:"text"},
-          {id:"year",title:"reference.year",type:"number"},
-          {id:"title",title:"reference.title",type:"text"},
-          {id:"journal",title:"reference.journal",type:"text"},
-          {id:"volume",title:"reference.volume",type:"text"},
-          {id:"pages",title:"reference.pages",type:"text"},
-          {id:"id",title:"",type:"text", orderBy: false},
-          {id:"doi",title:"reference.doi",type:"text"},
-          {id:"attachment__filename",title:"reference.pdf",type:"text"},
-          {id:"",title:"reference.library",type:"ACTIVE_LIBRARY_HEADER", orderBy: false, showHeader: true},
+        columns: [
+          {id: "id", title: "reference.id", type: "number"},
+          {id: "author", title: "reference.author", type: "text"},
+          {id: "year", title: "reference.year", type: "number"},
+          {id: "title", title: "reference.title", type: "text"},
+          {id: "journal", title: "reference.journal", type: "text"},
+          {id: "volume", title: "reference.volume", type: "text"},
+          {id: "pages", title: "reference.pages", type: "text"},
+          {id: "id", title: "", type: "text", orderBy: false},
+          {id: "doi", title: "reference.doi", type: "text"},
+          {id: "attachment__filename", title: "reference.pdf", type: "text"},
+          {id: "", title: "reference.library", type: "ACTIVE_LIBRARY_HEADER", orderBy: false, showHeader: true},
         ],
-        filters:[
-          {id:"author",title:"reference.author",type:"text"},
-          {id:"year",title:"reference.year",type:"number"},
-          {id:"title",title:"reference.title",type:"text"},
-          {id:"bookJournal",title:"reference.bookJournal",type:"text"},
-          {id:"abstractKeywordsRemarks",title:"reference.abstractKeywordsRemarks",type:"text"},
-          {id:"id",title:"reference.id",type:"number"},
-          {id:"libraryAuthor",title:"reference.libraryAuthor",type:"text"},
-          {id:"libraryIdTitle",title:"reference.libraryIdTitle",type:"text"},
-          {id:"solrSearch",title:"reference.solrSearch",type:"text"},
+        filters: [
+          {id: "author", title: "reference.author", type: "text"},
+          {id: "year", title: "reference.year", type: "number"},
+          {id: "title", title: "reference.title", type: "text"},
+          {id: "bookJournal", title: "reference.bookJournal", type: "text"},
+          {id: "abstractKeywordsRemarks", title: "reference.abstractKeywordsRemarks", type: "text"},
+          {id: "id", title: "reference.id", type: "number"},
+          {id: "libraryAuthor", title: "reference.libraryAuthor", type: "text"},
+          {id: "libraryIdTitle", title: "reference.libraryIdTitle", type: "text"},
+          {id: "solrSearch", title: "reference.solrSearch", type: "text"},
         ],
         searchParameters: this.setDefaultSearchParameters(),
         isCombinedView: false,
@@ -191,6 +190,7 @@
         combinedViewSize: 6,
         freeSpacePercentage: 73.3,
         agent: null,
+        block: {search: true}
       }
     },
 
@@ -253,7 +253,9 @@
     },
 
     methods: {
-      isDefinedAndNotNull(value) {return !!value && value !== null},
+      isDefinedAndNotNull(value) {
+        return !!value && value !== null
+      },
 
       fetchReferences() {
         return new Promise((resolve) => {
@@ -341,6 +343,11 @@
 </script>
 
 <style scoped>
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+  }
 
   .custom-control {
     display: none;

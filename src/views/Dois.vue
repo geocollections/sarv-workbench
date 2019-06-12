@@ -8,21 +8,27 @@
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/doi/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
+
     <!-- SEARCH FIELDS START -->
-    <div class="row mt-4" v-if="filters.length > 0">
-      <div class="col">
-        <div class="search-fields">
-          <div class="d-flex flex-row flex-wrap">
-            <div class="col-sm-6" v-for="field,idx in filters">
-              <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
-              <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                            v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-              </b-form-input>
-            </div>
+    <fieldset class="border p-2" id="block-search">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
+        <i class="fas fa-search"></i>
+        {{ $t('edit.search') }}
+      </legend>
+
+      <transition name="fade">
+        <div class="row" v-if="filters.length > 0 && block.search">
+          <div class="col-md-4" v-for="field,idx in filters">
+
+            <label :for="field.id">{{ $t(field.title) }}:</label>
+
+            <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+
           </div>
         </div>
-      </div>
-    </div>
+      </transition>
+    </fieldset>
+
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="doi"
@@ -52,23 +58,24 @@
     data() {
       return {
         response: {},
-        columns:[
-          {id:"id",title:"doi.identifier",type:"number"},
-          {id:"creators",title:"doi.creators",type:"text"},
-          {id:"publication_year",title:"doi.year",type:"text"},
-          {id:"title",title:"doi.title",type:"text"},
-          {id:"resource_type__value",title:"doi.resource_type",type:"text"},
-          {id:"datacite_created",title:"doi.datacite_created",type:"text", orderBy: false, showHeader: true},
-          {id:"id",title:"",type:"text", orderBy: false},
+        columns: [
+          {id: "id", title: "doi.identifier", type: "number"},
+          {id: "creators", title: "doi.creators", type: "text"},
+          {id: "publication_year", title: "doi.year", type: "text"},
+          {id: "title", title: "doi.title", type: "text"},
+          {id: "resource_type__value", title: "doi.resource_type", type: "text"},
+          {id: "datacite_created", title: "doi.datacite_created", type: "text", orderBy: false, showHeader: true},
+          {id: "id", title: "", type: "text", orderBy: false},
           // {id:"identifier",title:"",type:"text", orderBy: false},
         ],
-        filters:[
-          {id:"identifier",title:"doi.identifier",type:"text"},
-          {id:"creators",title:"doi.creators",type:"text"},
-          {id:"publication_year",title:"doi.year",type:"number"},
-          {id:"title",title:"doi.title",type:"text"},
+        filters: [
+          {id: "identifier", title: "doi.identifier", type: "text"},
+          {id: "creators", title: "doi.creators", type: "text"},
+          {id: "publication_year", title: "doi.year", type: "number"},
+          {id: "title", title: "doi.title", type: "text"},
         ],
-        searchParameters: this.setDefaultSearchParameters()
+        searchParameters: this.setDefaultSearchParameters(),
+        block: {search: true}
       }
     },
 
@@ -115,5 +122,9 @@
 </script>
 
 <style scoped>
-
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+  }
 </style>

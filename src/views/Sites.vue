@@ -19,26 +19,20 @@
 
       <transition name="fade">
         <div class="row" v-if="filters.length > 0 && block.search">
-          <div class="col">
-            <div class="search-fields">
-              <div class="d-flex flex-row flex-wrap">
-                <div class="col-md-4" v-for="field,idx in filters">
+          <div class="col-md-4" v-for="field,idx in filters">
 
-                  <label :for="field.id">{{ $t(field.title) }}:</label>
+            <label :for="field.id">{{ $t(field.title) }}:</label>
 
-                  <datepicker :id="field.id"
-                              v-if="field.isDate"
-                              v-model="searchParameters[field.id]"
-                              lang="en"
-                              :first-day-of-week="1"
-                              format="DD MMM YYYY"
-                              input-class="form-control"></datepicker>
+            <datepicker :id="field.id"
+                        v-if="field.isDate"
+                        v-model="searchParameters[field.id]"
+                        lang="en"
+                        :first-day-of-week="1"
+                        format="DD MMM YYYY"
+                        input-class="form-control"></datepicker>
 
-                  <b-form-input v-else v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+            <b-form-input v-else v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
 
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </transition>
@@ -85,24 +79,24 @@
     data() {
       return {
         response: {},
-        sites:[],
+        sites: [],
 
-        columns:[
-          {id:"id",title:"site.id",type:"number"},
-          {id:"name",title:"site.name",type:"text"},
-          {id:"number",title:"site.number",type:"text"},
-          {id:"project",title:"site.project",type:"text"},
-          {id:"date_start",title:"site.date_start",type:"text",isDate:true},
-          {id:"date_end",title:"site.date_end",type:"text",isDate:true},
+        columns: [
+          {id: "id", title: "site.id", type: "number"},
+          {id: "name", title: "site.name", type: "text"},
+          {id: "number", title: "site.number", type: "text"},
+          {id: "project", title: "site.project", type: "text"},
+          {id: "date_start", title: "site.date_start", type: "text", isDate: true},
+          {id: "date_end", title: "site.date_end", type: "text", isDate: true},
           // {id:"date_free",title:"site.date_free",type:"text",isDate:true},
         ],
-        filters:[
-          {id:"id",title:"site.id",type:"number"},
-          {id:"name",title:"site.name",type:"text"},
-          {id:"number",title:"site.number",type:"text"},
-          {id:"project",title:"site.relatedProject",type:"text"},
-          {id:"date_start",title:"site.date_start",type:"text", isDate:true},
-          {id:"date_end",title:"site.date_end",type:"text", isDate:true},
+        filters: [
+          {id: "id", title: "site.id", type: "number"},
+          {id: "name", title: "site.name", type: "text"},
+          {id: "number", title: "site.number", type: "text"},
+          {id: "project", title: "site.relatedProject", type: "text"},
+          {id: "date_start", title: "site.date_start", type: "text", isDate: true},
+          {id: "date_end", title: "site.date_end", type: "text", isDate: true},
         ],
         searchParameters: this.setDefaultSearchParameters(),
         block: {search: true}
@@ -126,7 +120,7 @@
         return {
           id: null,
           name: null,
-          number:null,
+          number: null,
           project: null,
           date_start: null,
           date_end: null,

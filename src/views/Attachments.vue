@@ -6,49 +6,58 @@
         <p class="h2">{{ $t('header.attachments') }}</p>
       </div>
       <div class="col-sm-6 text-right">
-        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('add.new') }}</router-link>
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/attachment/add/other_file' }">{{ $t('add.new')
+          }}
+        </router-link>
       </div>
     </div>
 
     <!-- SEARCH FIELDS START -->
-    <div class="row mt-4">
-      <div class="col">
-        <div class="search-fields">
-          <div class="d-flex flex-row flex-wrap">
-            <div class="col-sm-6" v-for="field,idx in filters">
-              <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
-              <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                            v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-              </b-form-input>
-            </div>
+    <fieldset class="border p-2" id="block-search">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
+        <i class="fas fa-search"></i>
+        {{ $t('edit.search') }}
+      </legend>
 
-            <!-- CHECKBOXES -->
-            <div class="col-6">
-              <b-form-checkbox-group v-model="searchParameters.specimen_image_attachment">
+      <transition name="fade">
+        <div class="row" v-if="filters.length > 0 && block.search">
+                <div class="col-sm-6" v-for="field,idx in filters">
 
-                <b-form-checkbox value="2">
-                  {{ $t('attachment.photoArchive') }}
-                </b-form-checkbox>
+                  <label :for="field.id">{{ $t(field.title) }}:</label>
 
-                <b-form-checkbox value="1">
-                  {{ $t('attachment.specimenImage') }}
-                </b-form-checkbox>
+                  <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
 
-                <b-form-checkbox value="3">
-                  {{ $t('attachment.otherFiles') }}
-                </b-form-checkbox>
+                </div>
 
-                <b-form-checkbox value="4">
-                  {{ $t('attachment.digitisedReference') }}
-                </b-form-checkbox>
+                <!-- CHECKBOXES -->
+                <div class="col-6">
+                  <label class="invisible">Checkbox:</label>
 
-              </b-form-checkbox-group>
-            </div>
+                  <b-form-checkbox-group v-model="searchParameters.specimen_image_attachment">
 
-          </div>
+                    <b-form-checkbox value="2">
+                      {{ $t('attachment.photoArchive') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox value="1">
+                      {{ $t('attachment.specimenImage') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox value="3">
+                      {{ $t('attachment.otherFiles') }}
+                    </b-form-checkbox>
+
+                    <b-form-checkbox value="4">
+                      {{ $t('attachment.digitisedReference') }}
+                    </b-form-checkbox>
+
+                  </b-form-checkbox-group>
+                </div>
+
+
         </div>
-      </div>
-    </div>
+      </transition>
+    </fieldset>
     <!-- SEARCH FIELDS END -->
 
     <list-module-core
@@ -80,7 +89,7 @@
     data() {
       return {
         response: {},
-        columns:[
+        columns: [
           {id: "file", title: "attachment.file", type: "number", orderBy: false, showHeader: true},
           {id: "id", title: "attachment.id", type: "text"},
           {id: "format", title: "attachment.format", type: "text", orderBy: false, showHeader: true},
@@ -92,14 +101,15 @@
           {id: "specimen_image_attachment", title: "attachment.specimenImageAttachment", type: "text"},
           {id: "attachment__filename", title: "", type: "text", orderBy: false},
         ],
-        filters:[
-          {id:"image_number",title:"attachment.imageNumber",type:"text"},
-          {id:"filename",title:"attachment.filename",type:"text"},
-          {id:"specimen",title:"attachment.specimen",type:"text"},
-          {id:"imageInfo",title:"attachment.imageInfo",type:"text"},
-          {id:"locality",title:"attachment.locality",type:"text"},
+        filters: [
+          {id: "image_number", title: "attachment.imageNumber", type: "text"},
+          {id: "filename", title: "attachment.filename", type: "text"},
+          {id: "specimen", title: "attachment.specimen", type: "text"},
+          {id: "imageInfo", title: "attachment.imageInfo", type: "text"},
+          {id: "locality", title: "attachment.locality", type: "text"},
         ],
-        searchParameters: this.setDefaultSearchParameters()
+        searchParameters: this.setDefaultSearchParameters(),
+        block: {search: true}
       }
     },
 
@@ -148,5 +158,9 @@
 </script>
 
 <style scoped>
-
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+  }
 </style>

@@ -4,25 +4,30 @@
       <div class="col-sm-6">
         <p class="h2">{{ $t('header.projects') }}</p>
       </div>
-      <div class="col-sm-6 ralign">
+      <div class="col-sm-6 text-right">
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/project/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
+
     <!-- SEARCH FIELDS START -->
-    <div class="row mt-4">
-      <div class="col">
-        <div class="search-fields">
-          <div class="d-flex flex-row flex-wrap">
-            <div class="col-sm-6" v-for="field,idx in filters">
-                <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }} :</label>
-                <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                              v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-                </b-form-input>
-            </div>
+    <fieldset class="border p-2" id="block-search">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
+        <i class="fas fa-search"></i>
+        {{ $t('edit.search') }}
+      </legend>
+
+      <transition name="fade">
+        <div class="row" v-if="filters.length > 0 && block.search">
+          <div class="col-md-4" :class="{ 'col-md-6' : filters.length < 3 }" v-for="field,idx in filters">
+
+            <label :for="field.id">{{ $t(field.title) }} :</label>
+
+            <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
           </div>
         </div>
-      </div>
-    </div>
+      </transition>
+    </fieldset>
+
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="project"
@@ -53,18 +58,18 @@
     data() {
       return {
         response: {},
-        columns:[
-          {id:"id",title:"project.id",type:"number"},
-          {id:"name",title:"project.name",type:"text"},
-          {id:"project_type",title:"project.project_type",type:"text"},
-          {id:"date_start",title:"project.date_start",type:"text",isDate:true},
-          {id:"date_end",title:"project.date_end",type:"text",isDate:true},
-          {id:"date_free",title:"project.date_free",type:"text",isDate:true},
-          {id:"owner",title:"project.owner",type:"text"},
+        columns: [
+          {id: "id", title: "project.id", type: "number"},
+          {id: "name", title: "project.name", type: "text"},
+          {id: "project_type", title: "project.project_type", type: "text"},
+          {id: "date_start", title: "project.date_start", type: "text", isDate: true},
+          {id: "date_end", title: "project.date_end", type: "text", isDate: true},
+          {id: "date_free", title: "project.date_free", type: "text", isDate: true},
+          {id: "owner", title: "project.owner", type: "text"},
         ],
-        filters:[
-          {id:"name",title:"project.name",type:"text"},
-          {id:"id",title:"project.id",type:"number"},
+        filters: [
+          {id: "name", title: "project.name", type: "text"},
+          {id: "id", title: "project.id", type: "number"},
 
           //{id:"project_type",title:"project.project_type",type:"text"},
           //{id:"date_start",title:"project.date_start",type:"text"},
@@ -72,7 +77,8 @@
           //{id:"date_free",title:"project.date_free",type:"text"},
           //{id:"owner",title:"project.owner",type:"text"},
         ],
-        searchParameters: this.setDefaultSearchParameters()
+        searchParameters: this.setDefaultSearchParameters(),
+        block: {search: true}
       }
     },
 
@@ -99,7 +105,9 @@
 </script>
 
 <style scoped>
-.ralign {
-	text-align: right !important;
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
   }
 </style>
