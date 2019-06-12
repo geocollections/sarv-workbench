@@ -270,7 +270,7 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="saveAndNavigateBack('site')"
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false,'site',true)"
                 :title="$t('edit.buttons.saveAndLeave') ">
           <font-awesome-icon icon="door-open"/>
           {{ $t('edit.buttons.saveAndLeave') }}
@@ -283,7 +283,7 @@
           <!--{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}-->
         </button>
 
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="navigateBack('site')"
+        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site', $route.meta.isEdit)"
                 :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
           <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}

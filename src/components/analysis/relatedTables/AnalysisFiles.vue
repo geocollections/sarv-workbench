@@ -100,7 +100,6 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
               <button class="float-left btn btn-sm btn-success" @click="$parent.$emit('related-data-added', activeTab)"
                       :disabled="sendingData">
                 <font-awesome-icon icon="pencil-alt"/>

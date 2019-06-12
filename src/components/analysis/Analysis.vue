@@ -315,7 +315,7 @@
     </fieldset>
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row mb-2">
+    <div class="row mb-2" v-if="$route.meta.isEdit">
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
           <li class="nav-item">

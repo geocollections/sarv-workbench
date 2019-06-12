@@ -493,7 +493,6 @@ const formManipulation = {
         toastError({text: this.$t('messages.checkForm')});
         return
       }
-      console.log('hi')
 
       formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
       this.saveData(type, formData, 'add/' + type + '/').then(isSuccessfullySaved => {
