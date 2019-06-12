@@ -36,24 +36,24 @@
           tileProviders: [
             {
               name: 'OpenStreetMap',
-              maxZoom: 8,
-              minZoom: 2,
+              // maxZoom: 8,
+              // minZoom: 2,
               leafletObject: L.tileLayer(
                 'https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3V1dG9iaW5lIiwiYSI6ImNpZWlxdXAzcjAwM2Nzd204enJvN2NieXYifQ.tp6-mmPsr95hfIWu3ASz2w', {
                   attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>', minZoom: 1,})
             },
             {
               name: 'OpenTopoMap',
-              maxZoom: 8,
-              minZoom: 1,
+              // maxZoom: 8,
+              // minZoom: 1,
               leafletObject: L.tileLayer(
                 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
                   attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)', minZoom: 1,})
             },
             {
               name: 'Maaameti fotokaart',
-              maxZoom: 18,
-              minZoom: 6,
+              // maxZoom: 18,
+              // minZoom: 6,
               leafletObject: L.tileLayer(
                 'https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV', {
                   attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>',
@@ -66,8 +66,8 @@
             },
             {
               name: 'Maaameti kaart',
-              maxZoom: 18,
-              minZoom: 6,
+              // maxZoom: 18,
+              // minZoom: 6,
               leafletObject: L.tileLayer(
                 'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV', {
                   attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>',      tms: true,
