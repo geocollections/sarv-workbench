@@ -12,11 +12,6 @@
   export default {
     components: {LangButtons},
     name: 'App',
-    created() {
-      this.$store.dispatch("FETCH_ANALYSIS_METHODS");
-      this.$store.dispatch("FETCH_SAMPLE_PURPOSES")
-      this.$store.dispatch("FETCH_FOSSIL_GROUPS")
-    }
   }
 </script>
 <style>

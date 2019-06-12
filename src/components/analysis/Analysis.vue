@@ -1,15 +1,19 @@
 <template>
   <div class="analysis">
+
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
+
     <!-- GENERAL INFO -->
     <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('analysis.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
+
       <transition name="fade">
         <div v-if="block.info">
+
           <!-- SAMPLE and SPECIMEN -->
           <div class="row">
             <div class="col-md-6">
@@ -53,7 +57,7 @@
             <div class="col-md-6">
               <label class="p-0" :for="`agent`">{{ $t('analysis.method') }}:</label>
               <vue-multiselect v-model="analysis.analysis_method"
-                               :options="analysisMethods"
+                               :options="autocomplete.analysis_methods"
                                track-by="id"
                                :label="analysisMethodLabel"  select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -408,8 +412,8 @@
     fetchLabs,
     fetchInstruments,
     fetchAnalysisAttachment,
-    fetchAnalysisResults
-
+    fetchAnalysisResults,
+    fetchAnalysisMethod,
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import AnalysisFiles from "./relatedTables/AnalysisFiles";
@@ -471,10 +475,6 @@
         },
         deep: true
       },
-    },
-
-    computed: {
-      analysisMethods() { return this.$store.state['analysisMethods']}
     },
 
     methods: {
@@ -544,6 +544,10 @@
         fetchInstruments().then(response => {
           this.autocomplete.instruments = this.handleResponse(response);
         });
+
+        fetchAnalysisMethod().then(response => {
+          this.autocomplete.analysis_methods = this.handleResponse(response)
+        })
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
@@ -651,7 +655,9 @@
          this.analysis.agent = { id: obj.agent, agent: obj.agent__agent}
          this.analysis.owner = { id: obj.owner, agent: obj.owner__agent}
          this.analysis.analysis_method = { id: obj.analysis_method, analysis_method: obj.analysis_method__analysis_method}
-         this.analysis.dataset = { id: obj.dataset, name: obj.dataset__name,name_en: obj.dataset__name_en,}
+         if (typeof obj.dataset !== 'undefined' && obj.dataset !== null) {
+           this.analysis.dataset = { id: obj.dataset, name: obj.dataset__name,name_en: obj.dataset__name_en,}
+         }
          this.analysis.lab = { id: obj.lab, lab: obj.lab__lab,lab_en: obj.lab__lab_en,}
          this.analysis.instrument = { id: obj.instrument, instrument: obj.instrument__instrument,instrument_en: obj.instrument__instrumenten,}
          this.analysis.specimen = { id: obj.specimen, specimen_id: obj.specimen__specimen_id}

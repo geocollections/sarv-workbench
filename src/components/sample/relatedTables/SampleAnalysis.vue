@@ -26,7 +26,7 @@
             <td v-show="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.analysis_method"
-                               :options="analysisMethods"
+                               :options="autocomplete.analysis_method"
                                track-by="id"
                                :label="analysisMethodLabel"  select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -82,7 +82,7 @@
             <td></td>
             <td>
               <vue-multiselect v-model="relatedData.insert.analysis.analysis_method"
-                               :options="analysisMethods"
+                               :options="autocomplete.analysis_method"
                                track-by="id"
                                :label="analysisMethodLabel"  select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"

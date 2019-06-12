@@ -57,27 +57,4 @@ export default {
     state.activeSearchParams.search.paginateBy = 10
     return fetchDois(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
-
-  // TODO: Following 3 requests should be fixed, currently they run after each page refresh
-  FETCH_ANALYSIS_METHODS: ({ commit, state }) => {
-    return state.analysisMethods !== null
-      ? Promise.resolve(state.analysisMethods)
-      : fetchAnalysisMethod().then(resp => commit('SET_ANALYSIS_METHODS', {resp}))
-  },
-
-  FETCH_SAMPLE_PURPOSES: ({ commit, state }) => {
-    return state.samplePurposes !== null
-      ? Promise.resolve(state.samplePurposes)
-      : fetchSamplePurpose().then(resp => commit('SET_SAMPLE_PURPOSES', {resp}))
-  },
-
-  FETCH_FOSSIL_GROUPS: ({ commit, state }) => {
-    return state.fossilGroups !== null
-      ? Promise.resolve(state.fossilGroups)
-      : fetchFossilGroup().then(resp => commit('SET_FOSSIL_GROUPS', {resp}))
-  }
-
-
-
-
 }

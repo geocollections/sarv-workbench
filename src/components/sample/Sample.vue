@@ -43,7 +43,7 @@
         <div class="col-sm-2 mb-2">
           <vue-multiselect v-model="sample.sample_purpose"
                            id="type"
-                           :options="samplePurpose"
+                           :options="autocomplete.purpose"
                            track-by="id"
                            :label="commonLabel"
                            :placeholder="$t('add.inputs.autocomplete')"
@@ -432,7 +432,7 @@
             <label class="p-0">{{ $t('sample.sample_purpose') }}:</label>
             <vue-multiselect v-model="sample.sample_purpose"
                              id="type_"
-                             :options="samplePurpose"
+                             :options="autocomplete.purpose"
                              track-by="id"
                              :label="commonLabel"
                              :placeholder="$t('add.inputs.autocomplete')"
@@ -608,31 +608,38 @@
       </div>
     </template>
     <template slot="related-data">
+
       <!-- SHOWING RELATED_DATA -->
-      <div class="row">
+      <div class="row" v-if="$route.meta.isEdit">
         <div class="col mt-5 mb-5">
           <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
             <li class="nav-item">
               <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"  :class="{ active: activeTab === 'analysis' }">{{ $t('sample.relatedTables.analysis') }}</a>
             </li>
+
             <li class="nav-item">
               <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"  :class="{ active: activeTab === 'preparation' }">{{ $t('sample.relatedTables.preparation') }}</a>
             </li>
+
             <li class="nav-item">
               <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"  :class="{ active: activeTab === 'taxon_list' }">{{ $t('sample.relatedTables.taxon_list') }}</a>
             </li>
+
             <li class="nav-item">
               <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"  :class="{ active: activeTab === 'attachment_link' }">{{ $t('sample.relatedTables.attachment_link') }}</a>
             </li>
+
             <li class="nav-item">
               <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"  :class="{ active: activeTab === 'sample_reference' }">{{ $t('sample.relatedTables.sample_reference') }}</a>
             </li>
           </ul>
+
           <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
           <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
           <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"  :parentId="getParentId"/>
           <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
           <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+
           <div class="row mb-4 pt-1">
             <!--<div class="col">-->
             <!--<button class="btn float-left btn-sm btn-outline-success mr-2 mb-2 pl-4 pr-4"-->
@@ -753,7 +760,6 @@
           return relation
           // return this.$store.state['createRelationWith']
         },
-        samplePurpose() { return this.$store.state['samplePurposes']}
       },
       data() { return this.setInitialData() },
 
@@ -802,14 +808,31 @@
             simplifiedFormCopyFields : ['number','number_field','sample_purpose','series','locality',
               'classification_rock','rock','site','agent_collected','date_collected','owner','remarks','is_private'],
             autocomplete: {
-              loaders: { series:false, sample:false,specimen:false, locality:false, stratigraphy:false,
-                lithostratigraphy:false, agent:false, rock:false, storage:false, additional_storage:false, owner:false,
-                reference:false,  attachment:false, analysis_method: false,fossil_group:false, analysis:false, taxon:false,
-                preparation:false, site: false
+              loaders: {
+                series:false,
+                sample:false,
+                specimen:false,
+                locality:false,
+                stratigraphy:false,
+                lithostratigraphy:false,
+                agent:false,
+                rock:false,
+                storage:false,
+                additional_storage:false,
+                owner:false,
+                reference:false,
+                attachment:false,
+                analysis_method: false,
+                fossil_group:false,
+                analysis:false,
+                taxon:false,
+                preparation:false,
+                site: false,
+                purpose: false
               },
               series: [],purpose: [],sample:[],specimen:[],locality:[],stratigraphy:[],lithostratigraphy:[],agent:[],
               rock:[],storage:[],storage_additional:[],owner:[], reference: [], attachment: [], analysis_method: [],
-              fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[], site:[]
+              fossil_group:[], analysis: [],taxon:[],preparation:[],sampleAnalysis:[],samplePreparation:[], site:[],
             },
             requiredFields: [],
             sample: {},
@@ -825,17 +848,10 @@
         },
 
         loadFullInfo() {
-          // fetchAnalysisMethod().then(response => {
-          //   this.autocomplete.analysisMethod = this.handleResponse(response);
-          // });
 
-          // fetchSamplePurpose().then(response => {
-          //   this.autocomplete.purpose = this.handleResponse(response);
-          // });
-
-          // fetchFossilGroup().then(response => {
-          //   this.autocomplete.fossil_group = this.handleResponse(response);
-          // });
+          fetchSamplePurpose().then(response => {
+            this.autocomplete.purpose = this.handleResponse(response);
+          });
 
           if(this.$route.meta.isEdit && this.$router.currentRoute.params.hasOwnProperty('id')) {
             this.sendingData = true;
@@ -854,22 +870,34 @@
               }
             });
 
+            fetchAnalysisMethod().then(response => {
+              this.autocomplete.analysis_method = this.handleResponse(response);
+            });
+
+            fetchFossilGroup().then(response => {
+              this.autocomplete.fossil_group = this.handleResponse(response);
+            });
+
             this.tabs.forEach(entity => {
               this.loadRelatedData(entity);
             });
+
+            this.$on('tab-changed',this.setTab);
+            this.$on('related-data-modified',this.editRelatedData);
+            this.$on('related-data-added',this.addRelatedData);
+            this.$on('edit-row',this.editRow);
+            this.$on('allow-remove-row',this.allowRemove);
+
+            this.$emit('related-data-info',this.tabs);
+
+            this.setActiveTab('analysis')
           } else {
             this.$on('data-saved',this.createRelatedSampleWithSiteIfExists);
           }
-          this.$on('tab-changed',this.setTab);
 
-          this.$on('related-data-modified',this.editRelatedData);
-          this.$on('related-data-added',this.addRelatedData);
-          this.$on('edit-row',this.editRow);
-          this.$on('allow-remove-row',this.allowRemove);
+
           this.$root.$on('add-new-sample-from-modal', this.handleUserChoiceFromModal);
-          this.$emit('related-data-info',this.tabs);
 
-          this.setActiveTab('analysis')
         },
 
         setDefaultRalatedData(){
@@ -932,7 +960,9 @@
           this.sample.owner = {agent:obj.owner__agent,id:obj.owner__id}
           this.sample.storage = {location:obj.storage__location,id:obj.storage}
           this.sample.storage_additional = {location:obj.storage_additional__location,id:obj.storage_additional}
-          this.sample.site = {id:obj.site__id, name: obj.site__name}
+          if (typeof obj.site__id !== 'undefined' && obj.site !== null) {
+            this.sample.site = {id:obj.site__id, name: obj.site__name}
+          }
         },
 
         fillRelatedDataAutocompleteFields(obj){

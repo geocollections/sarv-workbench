@@ -441,13 +441,13 @@
 
           <div class="row">
             <div class="col-md-6 mb-2">
-              <label class="mt-0" :for="`dataset_created`">{{ $t('doi.dataciteCreated') }}:</label>
-              <b-form-input size="sm" id="dataset_created" v-model="doi.dataset_created" type="text" disabled></b-form-input>
+              <label class="mt-0" :for="`datacite_created`">{{ $t('doi.dataciteCreated') }}:</label>
+              <b-form-input size="sm" id="datacite_created" v-model="doi.datacite_created" type="text" disabled></b-form-input>
             </div>
 
             <div class="col-md-6 mb-2">
-              <label class="mt-0" :for="`dataset_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
-              <b-form-input size="sm" id="dataset_updated" v-model="doi.dataset_updated" type="text" disabled></b-form-input>
+              <label class="mt-0" :for="`datacite_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
+              <b-form-input size="sm" id="datacite_updated" v-model="doi.datacite_updated" type="text" disabled></b-form-input>
             </div>
           </div>
 

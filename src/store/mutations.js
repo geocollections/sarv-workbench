@@ -43,21 +43,7 @@ export default {
     Vue.set(state, 'sidebarUserAction', userAction || false)
   },
 
-  SET_ANALYSIS_METHODS: (state, { resp }) => {
-    Vue.set(state, 'analysisMethods', handleResponse(resp))
-  },
-
-  SET_SAMPLE_PURPOSES: (state, { resp }) => {
-    Vue.set(state, 'samplePurposes', handleResponse(resp))
-  },
-
-  SET_FOSSIL_GROUPS: (state, { resp }) => {
-    Vue.set(state, 'fossilGroups', handleResponse(resp))
-  },
-
   SET_ACTIVE_LIBRARY: (state, object) => {
     Vue.set(state, 'activeLibrary', object)
   }
-
-
 }
