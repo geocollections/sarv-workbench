@@ -984,14 +984,14 @@
               //   + given[0].charAt(0) + '.'
               //   + given[1] + ', '
 
-              author += data.author[item].family.charAt(0).toUpperCase() + data.author[item].family.substring(1) + ', ' + data.author[item].given + ', '
+              author += data.author[item].family.charAt(0).toUpperCase() + data.author[item].family.substring(1) + ', ' + data.author[item].given + '., '
             } else {
               // author += data.author[item].family.charAt(0).toUpperCase()
               //   + data.author[item].family.substring(1).toLowerCase() + ', '
               //   + data.author[item].given.charAt(0) + '., '
 
               author += data.author[item].family.charAt(0).toUpperCase()
-                + data.author[item].family.substring(1) + ', ' + data.author[item].given + ', '
+                + data.author[item].family.substring(1) + ', ' + data.author[item].given + '., '
             }
           }
           this.reference.author = author.trim().slice(0, -1)
@@ -1008,7 +1008,14 @@
         if (data.title && data.title.length > 0) this.reference.title = data.title[0]
         if (data.volume) this.reference.volume = data.volume
         if (data.issue) this.reference.number = data.issue
-        if (data.page) this.reference.pages = data.page
+        if (data.page) {
+          if (typeof this.reference.pages !== 'undefined' && this.reference.pages !== null) {
+            if (!this.reference.pages.includes('-')) this.reference.pages = data.page
+            else if (this.reference.pages.includes('-') && data.page.includes('-')) this.reference.pages = data.page
+          } else {
+            this.reference.pages = data.page
+          }
+        }
         if (data.URL) this.reference.url = data.URL
         if (data.publisher) this.reference.publisher = data.publisher
 
