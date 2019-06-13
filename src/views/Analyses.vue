@@ -48,12 +48,14 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchAnalyses} from "../assets/js/api/apiCalls";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Analyses",
+    mixins: [permissionsMixin],
 
     data() {
       return {
@@ -79,25 +81,10 @@
       }
     },
 
-    created: function () {
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.agent = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null,
-          user: user.user,
-        }
-        //console.log(this.agent);
-      }
-    },
-
     methods: {
       fetchAnalyses_() {
         return new Promise((resolve) => {
-          resolve(fetchAnalyses(this.searchParameters))
+          resolve(fetchAnalyses(this.searchParameters, this.currentUser, this.databaseId))
         });
       },
       searchParametersChanged(newParams) {

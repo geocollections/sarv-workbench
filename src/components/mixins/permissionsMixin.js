@@ -2,7 +2,8 @@ const permissionsMixin = {
   data() {
     return {
       currentUser: null,
-      permissions: null
+      permissions: null,
+      databaseId: null,
     }
   },
   created() {
@@ -17,6 +18,7 @@ const permissionsMixin = {
         user: user.user,
       }
       this.permissions = user.permissions
+      this.databaseId = user.database_id
       // console.log(this.currentUser);
     }
   },

@@ -91,7 +91,7 @@
     methods: {
       fetchSamples() {
         return new Promise((resolve) => {
-          resolve(fetchSamples(this.searchParameters, this.currentUser))
+          resolve(fetchSamples(this.searchParameters, this.currentUser, this.databaseId))
         });
       },
       searchParametersChanged(newParams) {

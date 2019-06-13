@@ -323,7 +323,9 @@ export function fetchAnalysisMethod() {
   return fetch(`analysis_method/?order_by=analysis_method&format=json`)
 }
 
-export function fetchSamples(data, agent) {
+export function fetchSamples(data, agent, databaseId) {
+  console.log(databaseId)
+  console.log(agent)
   const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
     'number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,database__name,database__name_en,date_collected'
   let searchFields = ''
@@ -794,7 +796,10 @@ export function fetchInstruments() {
   return fetch(`instrument/?format=json`);
 }
 
-export function fetchAnalyses(data) {
+export function fetchAnalyses(data, agent, databaseId) {
+  console.log('Database id: ' + databaseId)
+  console.log(agent)
+
   const fields = 'id,sample__id,sample__number,sample__locality__locality,sample__depth,analysis_method__analysis_method,' +
     'date,lab_txt,agent__agent,is_private';
   let searchFields = '';

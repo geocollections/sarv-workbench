@@ -727,6 +727,7 @@
   import MapComponent from "../partial/MapComponent";
   import SampleWrapper from "./SampleWrapper";
   import localStorageMixin from './../mixins/localStorageMixin'
+  import permissionsMixin from "../mixins/permissionsMixin";
     export default {
       name: "Sample",
       components: {
@@ -744,7 +745,7 @@
         VueMultiselect,
         Spinner,
       },
-      mixins: [formManipulation,copyForm,autocompleteFieldManipulation,localStorageMixin],
+      mixins: [formManipulation,copyForm,autocompleteFieldManipulation,localStorageMixin, permissionsMixin],
 
       computed: {
         getParentId(){return this.sample.id},
@@ -776,7 +777,8 @@
             title: 'header.samples',
             object: 'sample',
             field: 'number',
-            agent: this.$parent.currentUser
+            agent: this.currentUser,
+            databaseId: this.databaseId
           });
         }
 
@@ -944,6 +946,9 @@
           if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
           if (this.isDefinedAndNotNull(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id
           if (this.isDefinedAndNotNull(objectToUpload.site)) uploadableObject.site = objectToUpload.site.id
+          if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
+            uploadableObject.database_id = this.databaseId
+          }
           // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
           return JSON.stringify(uploadableObject)
         },
@@ -1035,7 +1040,7 @@
         fetchList(localStorageData) {
           let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
           return new Promise((resolve) => {
-            resolve(fetchSamples(params, this.$parent.currentUser))
+            resolve(fetchSamples(params, this.currentUser, this.databaseId))
           });
         },
 

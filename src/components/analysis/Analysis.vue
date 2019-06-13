@@ -419,6 +419,7 @@
   import AnalysisFiles from "./relatedTables/AnalysisFiles";
   import AnalysisResults from "./relatedTables/AnalysisResults";
   import localStorageMixin from "../mixins/localStorageMixin";
+  import permissionsMixin from "../mixins/permissionsMixin";
 
   export default {
     components: {
@@ -430,7 +431,7 @@
       FileInputComponent,
     },
 
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, permissionsMixin],
 
     name: "Analysis",
 
@@ -450,7 +451,9 @@
         title: 'header.analyses',
         object: 'analysis',
         field: 'sample__number',
-        block: this.block
+        block: this.block,
+        agent: this.currentUser,
+        databaseId: this.databaseId
       });
 
       this.loadFullInfo()
@@ -638,6 +641,10 @@
         if (this.isDefinedAndNotNull(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
         if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
 
+        if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
+          uploadableObject.database_id = this.databaseId
+        }
+
         // Adding related data
         if (saveRelatedData) {
           uploadableObject.related_data = {}
@@ -721,7 +728,7 @@
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
-          resolve(fetchAnalyses(params))
+          resolve(fetchAnalyses(params, this.currentUser, this.databaseId))
         });
       },
 
