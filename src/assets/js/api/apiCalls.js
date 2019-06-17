@@ -324,7 +324,9 @@ export function fetchAnalysisMethod() {
 }
 
 export function fetchSamples(data, agent, databaseId) {
+  console.log('--- DATABASE ID ---')
   console.log(databaseId)
+  console.log('--- AGENT ---')
   console.log(agent)
   const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
     'number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,database__name,database__name_en,date_collected'
@@ -365,17 +367,21 @@ export function fetchSamples(data, agent, databaseId) {
 //    searchFields += `&multi_search=value:${data.rock};fields:rock_en,rock,classification_rock__name,classification_rock__name_en;lookuptype:icontains`
 //  }
   if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += '&agent_collected__agent__icontains='+data.agent
+    searchFields += `&agent_collected__agent__icontains=${data.agent}`
   }
 
+  if (typeof agent !== 'undefined' && agent !== null) {
+    searchFields += `&or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`
+  }
+
+  if (typeof databaseId !== 'undefined' && databaseId !== null) {
+    searchFields += `&database__id=${databaseId}`
+  }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
   if (searchFields.length > 0) {
-    // return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
     return fetch(`sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-	  // console.log(agent);
-    // return fetch(`sample/?or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
     return fetch(`sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
@@ -797,7 +803,9 @@ export function fetchInstruments() {
 }
 
 export function fetchAnalyses(data, agent, databaseId) {
-  console.log('Database id: ' + databaseId)
+  console.log('--- DATABASE ID ---')
+  console.log(databaseId)
+  console.log('--- AGENT ---')
   console.log(agent)
 
   const fields = 'id,sample__id,sample__number,sample__locality__locality,sample__depth,analysis_method__analysis_method,' +
@@ -815,7 +823,14 @@ export function fetchAnalyses(data, agent, databaseId) {
 
   if (data.agentAndLab !== null && data.agentAndLab.trim().length > 0) {
     searchFields += `&multi_search=value:${data.agentAndLab};fields:agent__agent,lab_txt;lookuptype:icontains`
+  }
 
+  if (typeof agent !== 'undefined' && agent !== null) {
+    searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`
+  }
+
+  if (typeof databaseId !== 'undefined' && databaseId !== null) {
+    searchFields += `&database__id=${databaseId}`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
