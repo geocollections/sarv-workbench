@@ -152,6 +152,12 @@
       "info": "General info",
       "relatedInfo": "Relations",
       "description": "Description"
+    },
+    "locality": {
+      "info": "General info",
+      "map": "Map",
+      "additionalInfo": "Additional info",
+      "description": "Description"
     }
   },
   "add": {
@@ -771,6 +777,10 @@
     "remarks_location": "Locality description",
     "remarks": "Additional information",
     "private": "Private",
+    "generalInfo": "General info",
+    "map": "Map",
+    "additionalInfo": "Additional info",
+    "description": "Description",
     "relatedTables": {
       "locality_reference": "Reference",
       "locality_synonym": "Synonyms",

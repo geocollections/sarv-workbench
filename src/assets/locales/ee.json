@@ -152,6 +152,12 @@
       "info": "Üldinfo",
       "relatedInfo": "Seosed",
       "description": "Lisainfo"
+    },
+    "locality": {
+      "info": "Üldinfo",
+      "map": "Kaart",
+      "additionalInfo": "Lisainfo",
+      "description": "Kirjeldus"
     }
   },
   "add": {
@@ -772,6 +778,10 @@
     "remarks_location": "Asukoha kirjeldus",
     "remarks": "Lisainfo",
     "private": "Privaatne",
+    "generalInfo": "Üldinfo",
+    "map": "Kaart",
+    "additionalInfo": "Lisainfo",
+    "description": "Kirjeldus",
     "relatedTables": {
       "locality_reference": "Kirjandusviited",
       "locality_synonym": "Nime sünonüümid",
