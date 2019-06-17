@@ -147,6 +147,11 @@
     "analysis": {
       "info": "General info",
       "description": "Remarks"
+    },
+    "sample": {
+      "info": "General info",
+      "relatedInfo": "Relations",
+      "description": "Description"
     }
   },
   "add": {
@@ -532,13 +537,16 @@
     "is_private": "Is private?",
     "mass": "Weight (g)",
     "storage": "Storage",
-    "storage_additional": "Storage",
+    "storage_additional": "Storage 2",
     "owner": "Owner",
     "user_added": "Added by",
     "date_added": "Added",
     "user_changed": "Changed by",
     "date_changed": "Changed",
     "addNew": "Add new Sample",
+    "generalInfo": "General info",
+    "relatedInfo": "Relations",
+    "description": "Description",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",

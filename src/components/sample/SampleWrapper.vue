@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sample-wrapper">
     <slot name="loader"></slot>
     <slot name="basic-form" v-if="fullView"></slot>
     <slot name="simplified-form" v-if="!fullView"></slot>

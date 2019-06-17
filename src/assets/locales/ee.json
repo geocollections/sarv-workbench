@@ -147,6 +147,11 @@
     "analysis": {
       "info": "Üldinfo",
       "description": "Lisainfo"
+    },
+    "sample": {
+      "info": "Üldinfo",
+      "relatedInfo": "Seosed",
+      "description": "Lisainfo"
     }
   },
   "add": {
@@ -540,6 +545,9 @@
     "user_changed": "Changed by",
     "date_changed": "Changed",
     "addNew": "Lisage uus Proov",
+    "generalInfo": "Üldinfo",
+    "relatedInfo": "Seosed",
+    "description": "Lisainfo",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",

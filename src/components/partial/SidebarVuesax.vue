@@ -367,6 +367,7 @@
         if (name === 'requiredFields') return 'fa-check';
         if (name === 'referenceAndDataset') return 'fa-book';
         if (name === 'datacite') return 'fa-sitemap'
+        if (name === 'relatedInfo') return 'fa-project-diagram'
       },
 
       getIconPack(name) {
