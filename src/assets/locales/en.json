@@ -553,6 +553,9 @@
     "generalInfo": "General info",
     "relatedInfo": "Relations",
     "description": "Description",
+    "simpleForm": "Simple view",
+    "basicForm": "Full view",
+    "addAnalysis": "Add analysis",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",

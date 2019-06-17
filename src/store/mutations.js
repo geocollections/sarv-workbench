@@ -16,10 +16,6 @@ export default {
     Vue.set(state,'createRelationWith',  { object: null, data: null, info: null, edit: null } )
   },
 
-  SET_SAMPLE_VIEW: (state, isFull) => {
-    Vue.set(state,'sampleView', isFull)
-  },
-
   SET_CURRENT_USER: (state, object) => {
     Vue.set(state,'currentUser', object)
   },

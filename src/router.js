@@ -813,6 +813,7 @@ const router = new Router({
           children: [
             {
               path: '',
+              name: 'Analysis add',
               component: () => import('./components/analysis/Analysis.vue'),
               meta: {
                 isEdit:false,

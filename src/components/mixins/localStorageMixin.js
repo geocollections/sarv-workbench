@@ -50,14 +50,14 @@ const localStorageMixin = {
       this.lsPushCreateRelationWith({ object: null, data: null, info: null, edit: null });
       return relation
     },
-    lsPushSampleView (state) {
-      Vue.localStorage.set('sampleView',  state)
-    },
-    lsPullSampleView () {
-      const state = Vue.localStorage.get('sampleView');
-      this.lsPushSampleView(true);
-      return state
-    },
+    // lsPushSampleView (state) {
+    //   Vue.localStorage.set('sampleView',  state)
+    // },
+    // lsPullSampleView () {
+    //   const state = Vue.localStorage.get('sampleView');
+    //   this.lsPushSampleView(true);
+    //   return state
+    // },
 
     lsRefreshParentForm (state) {
       Vue.localStorage.set('refreshForm', state)

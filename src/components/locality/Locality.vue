@@ -431,7 +431,7 @@
           <font-awesome-icon icon="ban"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
-        
+
         <span class="float-right">
             <button class="btn btn-primary mb-2" @click="$parent.saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>
           </span>

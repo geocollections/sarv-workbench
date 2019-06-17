@@ -9,7 +9,6 @@ export function createStore () {
 
   return new Vuex.Store({
     state: {
-      sampleView: true,
       currentUser:null,
       createRelationWith: { object: null, data: null, info: null, edit: null },
       activeObject: null,

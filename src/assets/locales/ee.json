@@ -554,6 +554,9 @@
     "generalInfo": "Üldinfo",
     "relatedInfo": "Seosed",
     "description": "Lisainfo",
+    "simpleForm": "Lihtne vaade",
+    "basicForm": "Täisvaade",
+    "addAnalysis": "Lisa analüüs",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",

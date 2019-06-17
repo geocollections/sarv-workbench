@@ -610,7 +610,7 @@
         //Because we open sample in separate window it has clean default storage. In this case store values in LocalStorage
         // let isFull = false
         // this.$store.commit('SET_SAMPLE_VIEW', {isFull});
-        this.lsPushSampleView(false);
+        // this.lsPushSampleView(false);
         let createRelationWith = {
           object: 'site', data: cloneDeep(this.site),
           relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},
@@ -723,12 +723,12 @@
       },
     },
 
-    beforeRouteLeave(to, from, next) {
-      //Do not remove relation object in case user created new relation object for simplified sample form
-      if (this.$store.state['sampleView'].isFull)
-        this.$store.commit('REMOVE_RELATION_OBJECT');
-      next()
-    },
+    // beforeRouteLeave(to, from, next) {
+    //   //Do not remove relation object in case user created new relation object for simplified sample form
+    //   if (this.$store.state['sampleView'].isFull)
+    //     this.$store.commit('REMOVE_RELATION_OBJECT');
+    //   next()
+    // },
 
     watch: {
       'routeId': {

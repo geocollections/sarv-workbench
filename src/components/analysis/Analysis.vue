@@ -456,6 +456,11 @@
         databaseId: this.databaseId
       });
 
+      // Getting sample (only from sample view when user presses 'add analysis button')
+      if (typeof this.$route.params.sample !== 'undefined' && this.$route.params.sample !== null) {
+        this.analysis.sample = this.$route.params.sample
+      }
+
       this.loadFullInfo()
     },
 
