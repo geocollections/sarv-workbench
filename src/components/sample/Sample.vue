@@ -1111,7 +1111,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id
         if (this.isDefinedAndNotNull(objectToUpload.site)) uploadableObject.site = objectToUpload.site.id
         if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
-          uploadableObject.database_id = this.databaseId
+          uploadableObject.database = this.databaseId
         }
         // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)

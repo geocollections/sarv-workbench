@@ -637,6 +637,7 @@
 
         // Autocomplete fields
         if (this.isDefinedAndNotNull(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id
+        if (this.isDefinedAndNotNull(objectToUpload.analysis_method)) uploadableObject.analysis_method = objectToUpload.analysis_method.id
         if (this.isDefinedAndNotNull(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id
         if (this.isDefinedAndNotNull(objectToUpload.lab)) uploadableObject.lab = objectToUpload.lab.id
         if (this.isDefinedAndNotNull(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id
@@ -647,7 +648,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
 
         if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
-          uploadableObject.database_id = this.databaseId
+          uploadableObject.database = this.databaseId
         }
 
         // Adding related data
