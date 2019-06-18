@@ -952,14 +952,18 @@
       },
 
       checkDoi() {
+        this.sendingData = true;
         fetchDoiCheck(this.reference.doi).then(response => {
+          this.sendingData = false;
           if (response.status === 200) {
             if (response.body.status === 'ok') {
               this.updateFieldsUsingDoi(response.body.message)
             }
           }
         }, errResponse => {
-          toastError({text: this.$t('')})
+          console.log(errResponse)
+          this.sendingData = false;
+          toastError({text: this.$t('reference.doiCheckUnsuccessful')})
         })
       },
 

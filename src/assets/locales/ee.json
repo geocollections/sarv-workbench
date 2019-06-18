@@ -848,6 +848,7 @@
     "description": "Lisainfo ja märksõnad",
     "doiConfirmation": "Kas oled kindel, et soovid kirjandusallikale registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik.",
     "doiCheckSuccessful": "DOI kontrollimine edukas, väljad uuendatud",
+    "doiCheckUnsuccessful": "DOI kontrollimine ebaõnnestus!",
     "library": "Kogumik",
     "doi": "DOI",
     "pdf": "PDF",

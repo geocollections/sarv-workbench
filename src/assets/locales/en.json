@@ -847,6 +847,7 @@
     "description": "Remarks and keywords",
     "doiConfirmation": "Are you sure you want to register a new DOI for this reference? DOI-s cannot be deleted.",
     "doiCheckSuccessful": "DOI check successful, fields updated",
+    "doiCheckUnsuccessful": "DOI check failed!",
     "library": "Library",
     "doi": "DOI",
     "pdf": "PDF",
