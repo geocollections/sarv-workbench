@@ -423,6 +423,12 @@
       this.editorAbstractEn.destroy()
     },
 
+    beforeRouteUpdate(to, from, next) {
+      this.editorAbstract.destroy()
+      this.editorAbstractEn.destroy()
+      next()
+    },
+
     watch: {
       '$route.params.id': {
         handler: function (newval, oldval) {
