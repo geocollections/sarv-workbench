@@ -512,6 +512,7 @@
     "header": "My samples",
     "id": "ID",
     "number": "Number",
+    "numberSlashId": "Number / ID",
     "number_additional": "Old number",
     "number_field": "Field number",
     "series": "Series",

@@ -513,6 +513,7 @@
     "header": "Minu proovid",
     "id": "ID",
     "number": "Number",
+    "numberSlashId": "Number / ID",
     "number_additional": "Vana number",
     "number_field": "Välinumber",
     "series": "Seeria",

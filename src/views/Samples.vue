@@ -61,7 +61,7 @@
       return {
         response: {},
         columns: [
-          {id: "number", title: "sample.number", type: "text"},
+          {id: "number", title: "sample.numberSlashId", type: "text"},
           //{id:"number_additional",title:"sample.number_additional",type:"text", onlySearch:true},
           //{id:"number_field",title:"sample.number_field",type:"text", onlySearch:true},
           {id: "id", title: "sample.id", type: "number"},

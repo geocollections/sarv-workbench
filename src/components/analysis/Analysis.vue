@@ -645,6 +645,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id
         if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
         if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
+        if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
 
         if (this.isDefinedAndNotNull(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
         if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
@@ -654,11 +655,12 @@
         }
 
         // Adding related data
-        if (saveRelatedData) {
-          uploadableObject.related_data = {}
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link
-          uploadableObject.related_data.analysis_results = this.relatedData.analysis_results
-        }
+        // Related data is only added on edit view, no need to send empty fields because on add user can't add related data.
+        // if (saveRelatedData && this.$route.meta.isEdit) {
+        //   uploadableObject.related_data = {}
+        //   uploadableObject.related_data.attachment = this.relatedData.attachment_link
+        //   uploadableObject.related_data.analysis_results = this.relatedData.analysis_results
+        // }
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -674,7 +676,7 @@
            this.analysis.dataset = { id: obj.dataset, name: obj.dataset__name,name_en: obj.dataset__name_en,}
          }
          this.analysis.lab = { id: obj.lab, lab: obj.lab__lab,lab_en: obj.lab__lab_en,}
-         this.analysis.instrument = { id: obj.instrument, instrument: obj.instrument__instrument,instrument_en: obj.instrument__instrumenten,}
+         this.analysis.instrument = { id: obj.instrument, instrument: obj.instrument__instrument,instrument_en: obj.instrument__instrument_en,}
          this.analysis.specimen = { id: obj.specimen, specimen_id: obj.specimen__specimen_id}
          this.analysis.reference = { id: obj.reference, reference: obj.reference__reference}
          this.analysis.storage = {location:obj.storage__location,id:obj.storage}
