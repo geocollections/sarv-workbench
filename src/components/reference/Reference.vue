@@ -4,8 +4,11 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- REQUIRED INFO -->
-    <fieldset class="border p-2 mb-2" id="block-requiredFields" :style="!validate('reference') ? 'border-color: #dc3545!important;' : ''">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('reference') }" @click="block.requiredFields = !block.requiredFields">
+    <fieldset class="border p-2 mb-2" id="block-requiredFields"
+              :style="!validate('reference') ? 'border-color: #dc3545!important;' : ''">
+      <legend class="w-auto mb-0"
+              :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('reference') }"
+              @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
         <font-awesome-icon v-if="validate('reference')" color="#28a745" icon="check"/>
         <font-awesome-icon v-if="!validate('reference')" color="#dc3545" icon="exclamation-triangle"/>
@@ -239,7 +242,8 @@
 
     <!-- REMARKS and KEYWORDS -->
     <fieldset class="border p-2 mb-2" id="block-description">
-      <legend class="w-auto" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
+      <legend class="w-auto" :class="{ 'text-primary': !block.description }"
+              @click="block.description = !block.description">
         {{ $t('reference.description') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
@@ -405,7 +409,8 @@
 
     <!-- RELATED LOCALITIES -->
     <fieldset class="border p-2 mb-2" id="block-localities">
-      <legend class="w-auto" :class="{ 'text-primary': !block.localities }" @click="block.localities = !block.localities">
+      <legend class="w-auto" :class="{ 'text-primary': !block.localities }"
+              @click="block.localities = !block.localities">
         {{ $t('reference.relatedTables.locality') }}
         <font-awesome-icon icon="map-marked"/>
       </legend>
@@ -510,7 +515,8 @@
           {{ $t('edit.buttons.saveAndLeave') }}
         </button>
 
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'reference', true)"
+        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData"
+                @click="add(true, 'reference', true)"
                 :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
           <font-awesome-icon icon="save"/>
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
@@ -591,18 +597,20 @@
     },
     created() {
       // USED BY SIDEBAR
-      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
-        searchHistory: 'referenceSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
-        request: 'FETCH_REFERENCES',
-        title: 'header.references',
-        object: 'reference',
-        field: 'reference',
-        block: this.block
-      });
+      if (this.$route.meta.isEdit) {
+        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+          searchHistory: 'referenceSearchHistory',
+          defaultSearch: this.setDefaultSearchParameters(),
+          search: params,
+          request: 'FETCH_REFERENCES',
+          title: 'header.references',
+          object: 'reference',
+          field: 'reference',
+          block: this.block
+        });
+      }
 
       this.loadFullInfo()
     },
@@ -700,7 +708,15 @@
           doi: {},
           newlyAddedDoiId: null,
           componentKey: 0,
-          block: {requiredFields: true, info: true, description: true, digital: true, files: true, libraries: true, localities: true}
+          block: {
+            requiredFields: true,
+            info: true,
+            description: true,
+            digital: true,
+            files: true,
+            libraries: true,
+            localities: true
+          }
         }
       },
 

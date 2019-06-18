@@ -550,18 +550,20 @@
 
     created() {
       // USED BY SIDEBAR
-      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
-        searchHistory: 'doiSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
-        request: 'FETCH_DOIS',
-        title: 'header.dois',
-        object: 'doi',
-        field: 'title',
-        block: this.block
-      });
+      if (this.$route.meta.isEdit) {
+        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+          searchHistory: 'doiSearchHistory',
+          defaultSearch: this.setDefaultSearchParameters(),
+          search: params,
+          request: 'FETCH_DOIS',
+          title: 'header.dois',
+          object: 'doi',
+          field: 'title',
+          block: this.block
+        });
+      }
 
       this.loadFullInfo()
     },

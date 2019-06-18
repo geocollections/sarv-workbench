@@ -441,20 +441,22 @@
 
     created() {
       // USED BY SIDEBAR
-      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
-        searchHistory: 'analysisSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
-        request: 'FETCH_ANALYSES',
-        title: 'header.analyses',
-        object: 'analysis',
-        field: 'sample__number',
-        block: this.block,
-        agent: this.currentUser,
-        databaseId: this.databaseId
-      });
+      if (this.$route.meta.isEdit) {
+        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+          searchHistory: 'analysisSearchHistory',
+          defaultSearch: this.setDefaultSearchParameters(),
+          search: params,
+          request: 'FETCH_ANALYSES',
+          title: 'header.analyses',
+          object: 'analysis',
+          field: 'sample__number',
+          block: this.block,
+          agent: this.currentUser,
+          databaseId: this.databaseId
+        });
+      }
 
       // Getting sample (only from sample view when user presses 'add analysis button')
       if (typeof this.$route.params.sample !== 'undefined' && this.$route.params.sample !== null) {
@@ -557,7 +559,7 @@
           this.autocomplete.analysis_methods = this.handleResponse(response)
         })
 
-        if (this.$route.meta.isEdit) {
+        if (this.$route.meta.isEdit && this.$router.currentRoute.params.hasOwnProperty('id')) {
           this.sendingData = true;
           fetchAnalysis(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);

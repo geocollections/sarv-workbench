@@ -368,18 +368,21 @@
     },
     created() {
       this.activeObject = 'site';
-      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
-        searchHistory: 'siteSearchHistory',
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
-        request: 'FETCH_SITES',
-        title: 'header.sites',
-        object: this.activeObject,
-        field: 'name',
-        block: this.block
-      })
+
+      if (this.$route.meta.isEdit) {
+        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+          searchHistory: 'siteSearchHistory',
+          defaultSearch: this.setDefaultSearchParameters(),
+          search: params,
+          request: 'FETCH_SITES',
+          title: 'header.sites',
+          object: this.activeObject,
+          field: 'name',
+          block: this.block
+        })
+      }
 
       this.loadFullInfo();
 

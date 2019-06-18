@@ -367,18 +367,20 @@
     created() {
       this.activeObject = 'project';
 
-      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-      let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
-        searchHistory: 'projectSearchHistory',
-        defaultSearch: this.searchParameters,
-        search: params,
-        request: 'FETCH_PROJECTS',
-        title: 'header.projects',
-        object: this.activeObject,
-        field: 'name',
-        block: this.block
-      });
+      if (this.$route.meta.isEdit) {
+        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+          searchHistory: 'projectSearchHistory',
+          defaultSearch: this.searchParameters,
+          search: params,
+          request: 'FETCH_PROJECTS',
+          title: 'header.projects',
+          object: this.activeObject,
+          field: 'name',
+          block: this.block
+        });
+      }
 
       this.loadFullInfo()
       //TODO:REMOVE handle resize logic I DONT remember why?
