@@ -429,6 +429,7 @@
       </div>
     </div>
 
+    <!-- Todo: Format dates -->
     <!-- DATACITE CREATED and UPDATED -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" id="block-datacite">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.datacite }" @click="block.datacite = !block.datacite">
@@ -484,10 +485,10 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
 
-        <button v-if="$route.meta.isEdit" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerDoi"
-                :title="$t('edit.buttons.registerDoi')">
+        <button v-if="$route.meta.isEdit && showDataCiteButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerOrUpdateDoi"
+                :title="showUpdateMessage ? $t('edit.buttons.updateDoi') : $t('edit.buttons.registerDoi')">
           <font-awesome-icon icon="server"/>
-          {{ $t('edit.buttons.registerDoi') }}
+          {{ showUpdateMessage ? $t('edit.buttons.updateDoi') : $t('edit.buttons.registerDoi') }}
         </button>
       </div>
     </div>
@@ -516,7 +517,7 @@
     fetchDoiDate,
     fetchDoiRelatedIdentifierType,
     fetchDoiRelationType,
-    fetchDoiDateType
+    fetchDoiDateType, fetchCheckDoiInDataCite
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import DoiAgent from "./relatedTables/DoiAgent";
@@ -607,9 +608,9 @@
           searchHistory: 'doiSearchHistory',
           activeTab: 'doi_agent',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'title_alternative',
-            'title_translated', 'title_translated_language', 'abstract', 'resource_type', 'resource', 'methods',
-            'version', 'sizes', 'formats', 'language', 'subjects', 'copyright_agent', 'licence', 'remarks', 'owner', 'is_private'],
+          copyFields: ['id', 'identifier', 'creators', 'publisher', 'publication_year', 'title', 'title_alternative', 'title_translated',
+            'title_translated_language', 'abstract', 'resource_type', 'resource', 'methods', 'version', 'sizes', 'formats', 'language',
+            'subjects', 'copyright_agent', 'licence', 'remarks', 'owner', 'is_private', 'datacite_created', 'datacite_updated'],
           autocomplete: {
             loaders: {
               resource_type: false,
@@ -648,7 +649,9 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
-          block: {requiredFields: true, info: true, referenceAndDataset: false, description: true,  datacite: true}
+          block: {requiredFields: true, info: true, referenceAndDataset: false, description: true,  datacite: true},
+          showDataCiteButton: false,
+          showUpdateMessage: false
         }
       },
 
@@ -713,9 +716,34 @@
           });
 
           // TODO: Fetch info if DOI should be updated in DataCite server
-          // fetchDoiUpdateState().then(respones => {
-          //  TODO: ToastInfo if DOI should be updated (DataCite server has older data than our database)
-          // })
+          fetchCheckDoiInDataCite(this.$route.params.id).then(response => {
+            if (response.status === 200) {
+              let dataCiteResponse = response.body.results
+              if (typeof dataCiteResponse !== 'undefined' && dataCiteResponse.length > 0) {
+                if (dataCiteResponse[0].success) {
+                  if (typeof dataCiteResponse[0].update_datacite !== 'undefined') {
+                    if (dataCiteResponse[0].update_datacite) {
+                      this.showDataCiteButton = true
+                      this.showUpdateMessage = true
+                      toastInfo({text: this.$t('doi.dataCiteNeedsUpdate'), timeout: 5000})
+                    }
+                  }
+                } else if (dataCiteResponse[0].is_in_sarv) {
+                  if (!dataCiteResponse[0].is_in_datacite) {
+                    this.showDataCiteButton = true
+                    this.showUpdateMessage = false
+                    if (this.$i18n.locale === 'ee') toastInfo({text: dataCiteResponse[0].error_et, timeout: 5000})
+                    else toastInfo({text: dataCiteResponse[0].error, timeout: 5000})
+                  }
+                } else {
+                  if (this.$i18n.locale === 'ee') toastInfo({text: dataCiteResponse[0].error_et, timeout: 5000})
+                  else toastInfo({text: dataCiteResponse[0].error, timeout: 5000})
+                }
+              }
+            }
+          }, errResponse => {
+            console.log(errResponse)
+          })
 
           // Load Related Data which is in tabs
           this.tabs.forEach(entity => {
@@ -1001,11 +1029,11 @@
       },
 
       /**
-       * Register DOI to DataCite server
+       * Register/Update DOI to/in DataCite server
        */
-      registerDoi() {
+      registerOrUpdateDoi() {
         if (this.validate('doi')) {
-          if (confirm(this.$t('doi.doiDataCiteConfirmation'))) {
+          if (confirm( this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
 
             console.log('TODO')
 

@@ -259,6 +259,7 @@
       "cancelWithoutSaving": "Cancel without saving",
       "cancel": "Cancel file change",
       "saveNewDoi": "Save new DOI",
+      "updateDoi": "Update DOI",
       "registerDoi": "Register DOI"
     },
     "locked": "This file is locked and can't be changed",
@@ -739,7 +740,9 @@
     "dateType": "Date type",
     "link": "Link",
     "identifierPlaceholder": "This field is filled automatically",
-    "doiDataCiteConfirmation": "Are you sure, you would like to register DOI to DataCite server?",
+    "doiDataCiteRegisterConfirmation": "Are you sure, you would like to register DOI to DataCite server?",
+    "doiDataCiteUpdateConfirmation": "Are you sure, you would like to update DOI in DataCite server?",
+    "dataCiteNeedsUpdate": "Metadata on the DataCite server can be updated!",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "files": "Files",

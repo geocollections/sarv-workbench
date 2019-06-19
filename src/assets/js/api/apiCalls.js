@@ -6,7 +6,8 @@ Vue.use(VueResource);
 const api = {
   url: 'https://rwapi.geocollections.info/',
   checkDoiUrl: 'https://api.crossref.org/works/',
-  solrUrl: 'https://api.geocollections.info/solr/'
+  solrUrl: 'https://api.geocollections.info/solr/',
+  dataciteTestUrl: 'https://api18rw.geocollections.info/'
 };
 
 function fetch (child, url = 0) {
@@ -581,6 +582,14 @@ export function fetchAddDoi(data) {
 
 export function fetchAddDoiGeolocation(data) {
   return fetchPost(`add/doi_geolocation/`, data)
+}
+
+export function fetchCheckDoiInDataCite(id) {
+  return fetch(`datacite/check/${id}`, api.dataciteTestUrl)
+}
+
+export function fetchRegisterDoiToDataCite(id) {
+  return fetch(`datacite/register/${id}`, api.dataciteTestUrl)
 }
 
 /*****************
