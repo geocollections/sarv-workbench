@@ -467,6 +467,7 @@
 
     <div class="row mt-3 mb-3">
       <div class="col">
+        <!-- Todo: Remove 3 buttons and add them do footer -->
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"
                 :title="$t('edit.buttons.saveAndLeave') ">
           <font-awesome-icon icon="door-open"/>
@@ -485,10 +486,16 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
 
-        <button v-if="$route.meta.isEdit && showDataCiteButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerOrUpdateDoi"
+        <button v-if="$route.meta.isEdit && showRegisterButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
                 :title="showUpdateMessage ? $t('edit.buttons.updateDoi') : $t('edit.buttons.registerDoi')">
           <font-awesome-icon icon="server"/>
-          {{ showUpdateMessage ? $t('edit.buttons.updateDoi') : $t('edit.buttons.registerDoi') }}
+          {{ showRegisterMessage ? $t('edit.buttons.registerMetadata') : $t('edit.buttons.updateMetadata') }}
+        </button>
+
+        <button v-if="$route.meta.isEdit && showRegisterUrlButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerDoiUrl"
+                :title="showUpdateMessage ? $t('edit.buttons.updateDoi') : $t('edit.buttons.registerDoi')">
+          <font-awesome-icon icon="server"/>
+          {{ showRegisterUrlMessage ? $t('edit.buttons.registerDoiUrl') : $t('edit.buttons.updateDoiUrl') }}
         </button>
       </div>
     </div>
@@ -517,7 +524,11 @@
     fetchDoiDate,
     fetchDoiRelatedIdentifierType,
     fetchDoiRelationType,
-    fetchDoiDateType, fetchCheckDoiInDataCite
+    fetchDoiDateType,
+    fetchCheckDoiInDataCite,
+    fetchCheckMetadataInDataCite,
+    fetchCheckDoiUrlInDataCite,
+    fetchRegisterMetadataToDataCite, fetchRegisterDoiUrlToDataCite
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import DoiAgent from "./relatedTables/DoiAgent";
@@ -650,8 +661,10 @@
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
           block: {requiredFields: true, info: true, referenceAndDataset: false, description: true,  datacite: true},
-          showDataCiteButton: false,
-          showUpdateMessage: false
+          showRegisterButton: false,
+          showRegisterUrlButton: false,
+          showRegisterMessage: false,
+          showRegisterUrlMessage: false
         }
       },
 
@@ -715,35 +728,13 @@
             this.autocomplete.doi_date_type = this.handleResponse(response)
           });
 
-          // TODO: Fetch info if DOI should be updated in DataCite server
-          fetchCheckDoiInDataCite(this.$route.params.id).then(response => {
-            if (response.status === 200) {
-              let dataCiteResponse = response.body.results
-              if (typeof dataCiteResponse !== 'undefined' && dataCiteResponse.length > 0) {
-                if (dataCiteResponse[0].success) {
-                  if (typeof dataCiteResponse[0].update_datacite !== 'undefined') {
-                    if (dataCiteResponse[0].update_datacite) {
-                      this.showDataCiteButton = true
-                      this.showUpdateMessage = true
-                      toastInfo({text: this.$t('doi.dataCiteNeedsUpdate'), timeout: 5000})
-                    }
-                  }
-                } else if (dataCiteResponse[0].is_in_sarv) {
-                  if (!dataCiteResponse[0].is_in_datacite) {
-                    this.showDataCiteButton = true
-                    this.showUpdateMessage = false
-                    if (this.$i18n.locale === 'ee') toastInfo({text: dataCiteResponse[0].error_et, timeout: 5000})
-                    else toastInfo({text: dataCiteResponse[0].error, timeout: 5000})
-                  }
-                } else {
-                  if (this.$i18n.locale === 'ee') toastInfo({text: dataCiteResponse[0].error_et, timeout: 5000})
-                  else toastInfo({text: dataCiteResponse[0].error, timeout: 5000})
-                }
-              }
-            }
-          }, errResponse => {
-            console.log(errResponse)
-          })
+          fetchCheckMetadataInDataCite(this.$route.params.id).then(response => {
+
+          });
+
+          fetchCheckDoiUrlInDataCite(this.$route.params.id).then(response => {
+
+          });
 
           // Load Related Data which is in tabs
           this.tabs.forEach(entity => {
@@ -1019,21 +1010,92 @@
           doiAgent.forEach(agent => {
             // Only Creators are added (agent_type 1 === Creator)
             if (agent.agent_type === 1) {
-              creators += agent.agent__surename + ', ' + agent.agent__forename + '; '
+              if (typeof agent.agent !== 'undefined' && agent.agent !== null) {
+                creators += agent.agent__surename + ', ' + agent.agent__forename + '; '
+              }
             }
           })
 
-          creators = creators.trim().slice(0, -1)
-          this.doi.creators = creators;
+          if (creators.length > 0) {
+            creators = creators.trim().slice(0, -1)
+            this.doi.creators = creators;
+          }
         }
       },
 
       /**
-       * Register/Update DOI to/in DataCite server
+       *
        */
-      registerOrUpdateDoi() {
+      handleCheckDoiResponse(response) {
+        if (response.status === 200) {
+          let dataCiteResponse = response.body.results
+
+          if (typeof dataCiteResponse !== 'undefined' && dataCiteResponse.length > 0) {
+
+            // SUCCESSFUL RESPONSE
+            if (dataCiteResponse[0].success) {
+
+              // Checking if metadata needs an update
+              if (typeof dataCiteResponse[0].update_datacite_metadata !== 'undefined') {
+                if (dataCiteResponse[0].update_datacite_metadata) {
+                  this.showDataCiteButton = true
+                  this.showUpdateMessage = true
+                  toastInfo({text: this.$t('doi.dataCiteNeedsUpdate'), timeout: 7000})
+                }
+              }
+
+              // Checking if url needs an update
+              if (typeof dataCiteResponse[0].update_datacite_url !== 'undefined') {
+                if (dataCiteResponse[0].update_datacite_url) {
+                  this.showDataCiteUrlButton = true
+                  toastInfo({text: this.$t('doi.dataCiteUrlNeedsUpdate'), timeout: 7000})
+                }
+              }
+              // UNSUCCESSFUL RESPONSE, but DOI is in SARV database
+            } else if (dataCiteResponse[0].is_in_sarv) {
+
+              // Checking if DOI is not in DataCite database (can be registered)
+              if (!dataCiteResponse[0].is_in_datacite) {
+                this.showDataCiteButton = true
+                this.showUpdateMessage = false
+                if (this.$i18n.locale === 'ee') toastInfo({text: dataCiteResponse[0].error_et, timeout: 7000})
+                else toastInfo({text: dataCiteResponse[0].error, timeout: 7000})
+              }
+            } else {
+              // Unsuccessful response and doi doesn't exist in sarv database (if not in sarv then it can't be in datacite)
+              if (this.$i18n.locale === 'ee') toastInfo({text: dataCiteResponse[0].error_et, timeout: 7000})
+              else toastInfo({text: dataCiteResponse[0].error, timeout: 7000})
+            }
+
+          }
+
+        }
+      },
+
+      /**
+       * Register/Update metadata to/in DataCite server. Basically just send 'register' function to API and then API updates or registers DOI
+       */
+      registerMetadata() {
         if (this.validate('doi')) {
           if (confirm( this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
+
+            fetchRegisterMetadataToDataCite(this.$route.params.id).then(response => {
+
+            })
+
+            console.log('TODO')
+
+          } else toastInfo({text: this.$t('messages.userCancelled')})
+        } else toastError({text: this.$t('messages.checkForm')})
+      },
+
+      registerDoiUrl() {
+        if (this.validate('doi')) {
+          if (confirm( this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
+
+            fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(response => {
+
+            })
 
             console.log('TODO')
 

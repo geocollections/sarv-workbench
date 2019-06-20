@@ -259,8 +259,10 @@
       "cancelWithoutSaving": "Lahku salvestamata",
       "cancel": "Katkesta faili muutmine",
       "saveNewDoi": "Salvesta uus DOI",
-      "updateDoi": "Uuenda DOId",
-      "registerDoi": "Registreeri DOI"
+      "updateMetadata": "Uuenda DOI metaandmed",
+      "registerMetadata": "Registreeri DOI metaandmed",
+      "updateUrl": "Uuenda DOI URL",
+      "registerUrl": "Registreeri DOI URL"
     },
     "locked": "Seda faili ei saa muuta, sest see on lukus",
     "photoArchive": "Fotoarhiiv",
@@ -744,6 +746,7 @@
     "doiDataCiteConfirmation": "Kas olete kindel, et soovite registreerida DOI DataCite serverisse?",
     "doiDataCiteUpdateConfirmation": "Kas olete kindel, et soovite uuendada DOId DataCite serveris?",
     "dataCiteNeedsUpdate": "DataCite serveris olevaid metaandmeid on võimalik uuendada!",
+    "dataCiteUrlNeedsUpdate": "DataCite serveris olev DOI link vajab uuendamist!",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",

@@ -584,12 +584,20 @@ export function fetchAddDoiGeolocation(data) {
   return fetchPost(`add/doi_geolocation/`, data)
 }
 
-export function fetchCheckDoiInDataCite(id) {
-  return fetch(`datacite/check/${id}`, api.dataciteTestUrl)
+export function fetchCheckMetadataInDataCite(id) {
+  return fetch(`datacite/check_metadata/${id}`, api.dataciteTestUrl)
 }
 
-export function fetchRegisterDoiToDataCite(id) {
-  return fetch(`datacite/register/${id}`, api.dataciteTestUrl)
+export function fetchCheckDoiUrlInDataCite(id) {
+  return fetch(`datacite/check_doi/${id}`, api.dataciteTestUrl)
+}
+
+export function fetchRegisterMetadataToDataCite(id) {
+  return fetch(`datacite/register_metadata/${id}`, api.dataciteTestUrl)
+}
+
+export function fetchRegisterDoiUrlToDataCite(id) {
+  return fetch(`datacite/register_doi/${id}`, api.dataciteTestUrl)
 }
 
 /*****************

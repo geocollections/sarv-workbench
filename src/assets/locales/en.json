@@ -259,8 +259,10 @@
       "cancelWithoutSaving": "Cancel without saving",
       "cancel": "Cancel file change",
       "saveNewDoi": "Save new DOI",
-      "updateDoi": "Update DOI",
-      "registerDoi": "Register DOI"
+      "updateMetadata": "Update DOI metadata",
+      "registerMetadata": "Register DOI metadata",
+      "updateUrl": "Update DOI URL",
+      "registerUrl": "Register DOI URL"
     },
     "locked": "This file is locked and can't be changed",
     "photoArchive": "Photo archive",
@@ -743,6 +745,7 @@
     "doiDataCiteRegisterConfirmation": "Are you sure, you would like to register DOI to DataCite server?",
     "doiDataCiteUpdateConfirmation": "Are you sure, you would like to update DOI in DataCite server?",
     "dataCiteNeedsUpdate": "Metadata on the DataCite server can be updated!",
+    "dataCiteUrlNeedsUpdate": "DOI link in DataCite server needs and update!",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "files": "Files",

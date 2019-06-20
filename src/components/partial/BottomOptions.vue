@@ -83,10 +83,11 @@
       this.$root.$on('disable-previous', this.disablePrevious);
       this.$root.$on('disable-next', this.disableNext);
 
-      document.addEventListener('keyup', this.handleKeyup)
+      // TODO: Fix when user is using inputs
+      // document.addEventListener('keyup', this.handleKeyup)
     },
     beforeDestroy() {
-      document.removeEventListener('keyup', this.handleKeyup)
+      // document.removeEventListener('keyup', this.handleKeyup)
     },
     methods: {
       disableNext(data) {
