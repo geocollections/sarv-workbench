@@ -422,7 +422,10 @@
 
         <doi-geolocation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
 
-        <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <doi-agent :related-data="relatedData" :autocomplete="autocomplete"
+                   :active-tab="activeTab"  v-on:related-data-added="addRelatedData"
+                   v-on:related-data-modified="editRelatedData" v-on:edit-row="editRow"
+                   v-on:allow-remove-row="allowRemove"/>
 
         <doi-date :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
 
@@ -583,6 +586,7 @@
     watch: {
       '$route.params.id': {
         handler: function (newval, oldval) {
+          this.setInitialData()
           this.reloadData()
         },
         deep: true
@@ -941,7 +945,6 @@
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.doi = this.doi.id;
-        console.log(uploadableObject.attachment)
 
         if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
           uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
