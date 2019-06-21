@@ -400,13 +400,29 @@
           </div>
         </div>
 
-        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                            v-on:related-data-added="addRelatedData"
+                            v-on:related-data-modified="editRelatedData"
+                            v-on:edit-row="editRow"
+                            v-on:allow-remove-row="allowRemove"/>
 
-        <locality-synonym :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <locality-synonym :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                          v-on:related-data-added="addRelatedData"
+                          v-on:related-data-modified="editRelatedData"
+                          v-on:edit-row="editRow"
+                          v-on:allow-remove-row="allowRemove"/>
 
-        <locality-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <locality-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                             v-on:related-data-added="addRelatedData"
+                             v-on:related-data-modified="editRelatedData"
+                             v-on:edit-row="editRow"
+                             v-on:allow-remove-row="allowRemove"/>
 
-        <locality-stratigraphy :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <locality-stratigraphy :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                               v-on:related-data-added="addRelatedData"
+                               v-on:related-data-modified="editRelatedData"
+                               v-on:edit-row="editRow"
+                               v-on:allow-remove-row="allowRemove"/>
 
       </div>
     </div>
@@ -590,11 +606,6 @@
           });
           //Manipulation with data itself should be done in class
           this.$on('tab-changed', this.setTab);
-
-          this.$on('related-data-modified', this.editRelatedData);
-          this.$on('related-data-added', this.addRelatedData);
-          this.$on('edit-row', this.editRow);
-          this.$on('allow-remove-row', this.allowRemove);
 
           this.$emit('related-data-info', this.tabs);
           // FETCH FIRST TAB RELATED DATA

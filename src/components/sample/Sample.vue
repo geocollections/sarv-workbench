@@ -761,13 +761,37 @@
             </div>
           </div>
 
-          <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+          <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                           v-on:related-data-added="addRelatedData"
+                           v-on:related-data-modified="editRelatedData"
+                           v-on:edit-row="editRow"
+                           v-on:allow-remove-row="allowRemove"/>
+
           <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                              :parentId="getParentId"/>
+                              :parentId="getParentId"
+                              v-on:related-data-added="addRelatedData"
+                              v-on:related-data-modified="editRelatedData"
+                              v-on:edit-row="editRow"
+                              v-on:allow-remove-row="allowRemove"/>
+
           <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                             :parentId="getParentId"/>
-          <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
-          <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+                             :parentId="getParentId"
+                             v-on:related-data-added="addRelatedData"
+                             v-on:related-data-modified="editRelatedData"
+                             v-on:edit-row="editRow"
+                             v-on:allow-remove-row="allowRemove"/>
+
+          <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                             v-on:related-data-added="addRelatedData"
+                             v-on:related-data-modified="editRelatedData"
+                             v-on:edit-row="editRow"
+                             v-on:allow-remove-row="allowRemove"/>
+
+          <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                            v-on:related-data-added="addRelatedData"
+                            v-on:related-data-modified="editRelatedData"
+                            v-on:edit-row="editRow"
+                            v-on:allow-remove-row="allowRemove"/>
 
         </div>
       </div>

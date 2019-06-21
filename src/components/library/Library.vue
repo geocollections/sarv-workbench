@@ -311,7 +311,11 @@
           </div>
         </div>
 
-        <library-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"/>
+        <library-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                           v-on:related-data-added="addRelatedData"
+                           v-on:related-data-modified="editRelatedData"
+                           v-on:edit-row="editRow"
+                           v-on:allow-remove-row="allowRemove"/>
       </div>
     </div>
 
@@ -532,11 +536,6 @@
           });
 
           this.$on('tab-changed', this.setTab);
-
-          this.$on('related-data-modified', this.editRelatedData);
-          this.$on('related-data-added', this.addRelatedData);
-          this.$on('edit-row', this.editRow);
-          this.$on('allow-remove-row', this.allowRemove);
 
           this.$emit('related-data-info', this.tabs);
 
