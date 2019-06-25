@@ -17,7 +17,7 @@
 <script>
   import AppHeader from '@/components/partial/AppHeader'
   import AppFooter from '@/components/partial/AppFooter'
-  import SidebarVuesax from '../components/partial/SidebarVuesax'
+  import SidebarVuesax from '../components/partial/sidebar/SidebarVuesax'
 
   export default {
     components: {
