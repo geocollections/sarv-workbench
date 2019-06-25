@@ -746,6 +746,10 @@
     "doiDataCiteUpdateConfirmation": "Are you sure, you would like to update DOI in DataCite server?",
     "dataciteMetadataNeedsUpdate": "Metadata on the DataCite server can be updated!",
     "dataciteUrlNeedsUpdate": "DOI link in DataCite server needs and update!",
+    "dataciteUrlUpdated": "DataCite DOI URL updated!",
+    "dataciteUrlUpdateFailed": "DataCite DOI URL update failed!",
+    "dataciteMetadataUpdated": "DataCite metadata updated!",
+    "dataciteMetadataUpdateFailed": "DataCite metadata update failed!",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "files": "Files",

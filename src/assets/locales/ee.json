@@ -747,6 +747,10 @@
     "doiDataCiteUpdateConfirmation": "Kas olete kindel, et soovite uuendada DOId DataCite serveris?",
     "dataciteMetadataNeedsUpdate": "DataCite serveris olevaid metaandmeid on võimalik uuendada!",
     "dataciteUrlNeedsUpdate": "DataCite serveris olev DOI link vajab uuendamist!",
+    "dataciteUrlUpdated": "DataCite DOI URL uuendatud!",
+    "dataciteUrlUpdateFailed": "DataCite DOI URL uuendus ebaõnnestus!",
+    "dataciteMetadataUpdated": "DataCite metadata uuendatud!",
+    "dataciteMetadataUpdateFailed": "DataCite metadata uuendus ebaõnnestus!",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",
