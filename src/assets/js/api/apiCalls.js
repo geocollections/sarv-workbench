@@ -585,19 +585,19 @@ export function fetchAddDoiGeolocation(data) {
 }
 
 export function fetchCheckMetadataInDataCite(id) {
-  return fetch(`datacite/check_metadata/${id}`, api.dataciteTestUrl)
+  return fetch(`datacite/check_metadata/${id}`)
 }
 
 export function fetchCheckDoiUrlInDataCite(id) {
-  return fetch(`datacite/check_doi/${id}`, api.dataciteTestUrl)
+  return fetch(`datacite/check_doi/${id}`)
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
-  return fetch(`datacite/register_metadata/${id}`, api.dataciteTestUrl)
+  return fetch(`datacite/register_metadata/${id}`)
 }
 
 export function fetchRegisterDoiUrlToDataCite(id) {
-  return fetch(`datacite/register_doi/${id}`, api.dataciteTestUrl)
+  return fetch(`datacite/register_doi/${id}`)
 }
 
 /*****************

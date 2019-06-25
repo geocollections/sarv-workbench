@@ -506,16 +506,16 @@
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
 
-        <button v-if="$route.meta.isEdit && showRegisterButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
-                :title="showUpdateMessage ? $t('edit.buttons.updateDoi') : $t('edit.buttons.registerDoi')">
+        <button v-if="$route.meta.isEdit && showMetadataButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
+                :title="showMetadataUpdateMessage ? $t('edit.buttons.registerMetadata') : $t('edit.buttons.updateMetadata')">
           <font-awesome-icon icon="server"/>
-          {{ showRegisterMessage ? $t('edit.buttons.registerMetadata') : $t('edit.buttons.updateMetadata') }}
+          {{ showMetadataUpdateMessage ? $t('edit.buttons.registerMetadata') : $t('edit.buttons.updateMetadata') }}
         </button>
 
-        <button v-if="$route.meta.isEdit && showRegisterUrlButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerDoiUrl"
-                :title="showUpdateMessage ? $t('edit.buttons.updateDoi') : $t('edit.buttons.registerDoi')">
+        <button v-if="$route.meta.isEdit && showDoiUrlButton" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerDoiUrl"
+                :title="showDoiUrlUpdateMessage ? $t('edit.buttons.registerDoiUrl') : $t('edit.buttons.updateDoiUrl')">
           <font-awesome-icon icon="server"/>
-          {{ showRegisterUrlMessage ? $t('edit.buttons.registerDoiUrl') : $t('edit.buttons.updateDoiUrl') }}
+          {{ showDoiUrlUpdateMessage ? $t('edit.buttons.registerDoiUrl') : $t('edit.buttons.updateDoiUrl') }}
         </button>
       </div>
     </div>
@@ -682,10 +682,12 @@
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
           block: {requiredFields: true, info: true, referenceAndDataset: false, description: true,  datacite: true},
-          showRegisterButton: false,
-          showRegisterUrlButton: false,
-          showRegisterMessage: false,
-          showRegisterUrlMessage: false
+          showMetadataButton: false,
+          showDoiUrlButton: false,
+          showMetadataUpdateMessage: false,
+          showDoiUrlUpdateMessage: false,
+          sarvXML: null,
+          dataciteXML: null
         }
       },
 
@@ -750,11 +752,40 @@
           });
 
           fetchCheckMetadataInDataCite(this.$route.params.id).then(response => {
+            if (response.status === 200) {
+              if (typeof response.body.results !== 'undefiend' && response.body.results.length > 0) {
+                if (response.body.results[0].success) {
+                  if (response.body.results[0].doi_metadata_needs_update) {
+                    this.showMetadataButton = true
+                    this.showMetadataUpdateMessage = true
+                    this.sarvXML = response.body.results[0].sarv_xml
+                    this.dataciteXML = response.body.results[0].datacite_xml
+                    toastInfo({text: this.$t('doi.dataciteMetadataNeedsUpdate')})
+                  } else {
+                    this.showMetadataButton = false
+                    this.showMetadataUpdateMessage = false
+                    this.sarvXML = response.body.results[0].sarv_xml
+                    this.dataciteXML = response.body.results[0].datacite_xml
+                    if (typeof response.body.results[0].error !== 'undefined' && response.body.results[0].error_et !== 'undefined') {
+                      if (this.$i18n.locale === 'ee')toastInfo({text: response.body.results[0].error_et})
+                      else toastInfo({text: response.body.results[0].error})
+                    }
 
+                  }
+                } else if (response.body.results[0].error_code === 404) {
+                  this.showMetadataButton = true
+                  this.showMetadataUpdateMessage = false
+                } else {
+                  this.showMetadataButton = false
+                  this.showMetadataUpdateMessage = false
+                }
+              }
+            }
+            console.log(response)
           });
 
           fetchCheckDoiUrlInDataCite(this.$route.params.id).then(response => {
-
+            console.log(response)
           });
 
           // Load Related Data which is in tabs
@@ -1095,10 +1126,8 @@
           if (confirm( this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
 
             fetchRegisterMetadataToDataCite(this.$route.params.id).then(response => {
-
+              console.log(response)
             })
-
-            console.log('TODO')
 
           } else toastInfo({text: this.$t('messages.userCancelled')})
         } else toastError({text: this.$t('messages.checkForm')})
@@ -1109,10 +1138,8 @@
           if (confirm( this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
 
             fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(response => {
-
+              console.log(response)
             })
-
-            console.log('TODO')
 
           } else toastInfo({text: this.$t('messages.userCancelled')})
         } else toastError({text: this.$t('messages.checkForm')})

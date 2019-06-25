@@ -744,8 +744,8 @@
     "identifierPlaceholder": "This field is filled automatically",
     "doiDataCiteRegisterConfirmation": "Are you sure, you would like to register DOI to DataCite server?",
     "doiDataCiteUpdateConfirmation": "Are you sure, you would like to update DOI in DataCite server?",
-    "dataCiteNeedsUpdate": "Metadata on the DataCite server can be updated!",
-    "dataCiteUrlNeedsUpdate": "DOI link in DataCite server needs and update!",
+    "dataciteMetadataNeedsUpdate": "Metadata on the DataCite server can be updated!",
+    "dataciteUrlNeedsUpdate": "DOI link in DataCite server needs and update!",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "files": "Files",

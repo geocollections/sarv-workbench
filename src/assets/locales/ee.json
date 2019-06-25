@@ -743,10 +743,10 @@
     "dateType": "Kuupäeva tüüp",
     "link": "Link",
     "identifierPlaceholder": "See väli täidetakse automaatselt",
-    "doiDataCiteConfirmation": "Kas olete kindel, et soovite registreerida DOI DataCite serverisse?",
+    "doiDataCiteRegisterConfirmation": "Kas olete kindel, et soovite registreerida DOI DataCite serverisse?",
     "doiDataCiteUpdateConfirmation": "Kas olete kindel, et soovite uuendada DOId DataCite serveris?",
-    "dataCiteNeedsUpdate": "DataCite serveris olevaid metaandmeid on võimalik uuendada!",
-    "dataCiteUrlNeedsUpdate": "DataCite serveris olev DOI link vajab uuendamist!",
+    "dataciteMetadataNeedsUpdate": "DataCite serveris olevaid metaandmeid on võimalik uuendada!",
+    "dataciteUrlNeedsUpdate": "DataCite serveris olev DOI link vajab uuendamist!",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "files": "Failid",
