@@ -192,7 +192,7 @@
             <b-dropdown-item @click="changeLang('en')">ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span></b-dropdown-item>
           </b-nav-item-dropdown>
 
-          <b-nav-item-dropdown :text="currentUser.name" right>
+          <b-nav-item-dropdown :text="currentUser.forename" right>
             <b-dropdown-item :to="{ path: '/settings' }">
               <font-awesome-icon icon="cog"/>
               {{ $t('header.settings') }}

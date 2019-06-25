@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './views/Login.vue'
 import Dashboard from './views/Dashboard.vue'
+import {fetchLogout} from "./assets/js/api/apiCalls";
 
 Vue.use(Router)
 
@@ -867,13 +868,22 @@ router.beforeEach((to, from, next) => {
       }
     } else {
       // If token or user info doesn't exist then user is redirected to login screen
-      Vue.prototype.$toast.error('Please log back in', 'Session expired', {
-        position: 'bottomRight',
-        timeout: 5000,
-        closeOnEscape: true,
-        pauseOnHover: false,
-        displayMode: 'replace'
-      })
+
+      // Removing cookies and storage
+      Vue.cookies.remove('csrftokenLocalhost', null, 'localhost')
+      Vue.cookies.remove('csrftoken', null, 'geocollections.info')
+      Vue.localStorage.remove('authUser')
+
+      // Sending logout to rwapi
+      fetchLogout().then(response => {
+        Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+          position: 'bottomRight',
+          timeout: 5000,
+          closeOnEscape: true,
+          pauseOnHover: false,
+          displayMode: 'replace'
+        })
+      }, errResponse => {})
 
       next({ path: '/' })
     }
