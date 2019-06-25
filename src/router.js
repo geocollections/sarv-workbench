@@ -27,7 +27,8 @@ const router = new Router({
       name: 'Geocollections Data Management',
       component: Login,
       meta: {
-        isLogin: true
+        isLogin: true,
+        requiresAuth: false
       }
     },
     {
@@ -836,33 +837,55 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  // console.log(to)
+  // console.log('--- FROM ---')
   // console.log(from)
+  // console.log('--- TO ---')
+  // console.log(to)
+
+  let csrftoken = Vue.cookies.get('csrftoken')
+  let csrftokenLocalhost = Vue.cookies.get('csrftokenLocalhost')
+  // console.log('--- CSRF TOKEN ---')
+  // console.log(csrftoken)
+  // console.log('--- CSRF TOKEN LOCALHOST ---')
+  // console.log(csrftokenLocalhost)
+  let authUser = Vue.localStorage.get('authUser')
+  // console.log('--- AUTH USER ---')
+  // console.log(authUser)
+
+
   if (to.meta.requiresAuth) {
-    if (router.app.$session.exists() && router.app.$session.get('authUser') != null) {
-      const authUser = router.app.$session.get('authUser')
-      // console.log(authUser)
-      // TODO: Can do some extra checks from agent table or sth like that
-      // TODO: Currently if user just enters random session id and name then route is available
-      // TODO: Should implement some extra security or maybe block /dashboard from server side
-      if (authUser) {
-        next()
+    // REQUIRES AUTHENTICATION
+    if ((csrftoken !== null || csrftokenLocalhost !== null) && (typeof authUser !== 'undefined' && authUser !== null)) {
+      // This code will be executed only if token and authUser exist
+
+      if (to.name === 'Geocollections Data Management') {
+        // If user is logged in and tries to go to login screen then user is redirected to main page
+        next({ path: '/dashboard' })
       } else {
-        next({ path: '/' })
+        // Redirect user where user wants to go
+        next()
       }
     } else {
+      // If token or user info doesn't exist then user is redirected to login screen
+      Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+        position: 'bottomRight',
+        timeout: 5000,
+        closeOnEscape: true,
+        pauseOnHover: false,
+        displayMode: 'replace'
+      })
+
       next({ path: '/' })
     }
   } else {
+    // DOES NOT REQUIRE AUTHENTICATION
     if (to.name === 'Geocollections Data Management') {
-      if (router.app.$session.exists() && router.app.$session.get('authUser') != null) {
+      if ((csrftoken !== null || csrftokenLocalhost !== null) && (typeof authUser !== 'undefined' && authUser !== null)) {
+        // If user goes to login page but token and user info already exist then redirect user to main page
         next({ path: '/dashboard' })
-      } else {
-        next()
-      }
-    } else {
-      next()
+      } else next()
     }
+    else next()
   }
 })
 

@@ -150,12 +150,14 @@
   import {fetchReferences} from "@/assets/js/api/apiCalls";
   import {fetchAddReferenceToLibrary} from "../assets/js/api/apiCalls";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "References",
+    mixins: [permissionsMixin],
     data() {
       return {
         response: {},
@@ -217,19 +219,6 @@
     },
 
     created() {
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.agent = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null,
-          user: user.user,
-        }
-        //console.log(this.agent);
-      }
-
       // Used by sidebar
       const searchHistory = this.$localStorage.get('librarySearchHistory', 'fallbackValue');
       let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
@@ -240,7 +229,7 @@
         title: 'header.libraries',
         object: 'library',
         field: 'library__title_en',
-        agent: this.agent
+        agent: this.currentUser
       });
     },
 

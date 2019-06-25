@@ -742,15 +742,11 @@
       const photoArchiveKeywords = this.$localStorage.get('photoArchiveKeywords', 'fallbackValue')
       if (photoArchiveKeywords !== 'fallbackValue' && photoArchiveKeywords.length > 0) this.myKeywords = photoArchiveKeywords
 
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.photo_archive.author = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null
-        }
+      this.photo_archive.author = {
+        id: this.currentUser.id,
+        agent: this.currentUser.agent,
+        forename: this.currentUser.forename,
+        surename: this.currentUser.surename
       }
     },
 

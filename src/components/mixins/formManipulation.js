@@ -51,10 +51,12 @@ import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 import moment from 'moment'
 import {toastInfo} from "../../assets/js/iziToast/iziToast";
+import permissionsMixin from "./permissionsMixin";
 
 library.add(faBan, faSave, faDoorOpen, faProjectDiagram, faTag, faGlobeAmericas, faFileVideo, faFileAudio, faDownload, faVial, faVideo, faMicrophone, faCameraRetro, faChevronDown, faChevronUp, faGlobe, faFile, faFileExcel, faFileImage, faEye, faFolderOpen, faUserFriends, faFileContract, faInfo, faPenFancy, faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
 
 const formManipulation = {
+  mixins: [permissionsMixin],
   data() {
     return {
       fileUrl: 'https://files.geocollections.info',
@@ -72,19 +74,7 @@ const formManipulation = {
     FontAwesomeIcon
   },
   created: function () {
-    // Gets user data from session storage
-    if (this.$session.exists() && this.$session.get('authUser') !== null) {
-      const user = this.$session.get('authUser')
-      this.currentUser = {
-        id: user.agent_id,
-        agent: null,
-        forename: user.user,
-        surename: null,
-        user: user.user,
-      }
-      this.$store.commit('SET_CURRENT_USER', this.currentUser)
-      //console.log(this.agent);
-    }
+    this.$store.commit('SET_CURRENT_USER', this.currentUser)
   },
   mounted() {
     // Root event for confirmation modal which is emitted when user tries to leave the TAB without saving.

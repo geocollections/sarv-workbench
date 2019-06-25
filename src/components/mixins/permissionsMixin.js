@@ -8,17 +8,17 @@ const permissionsMixin = {
   },
   created() {
     // Gets user data from session storage
-    if (this.$session.exists() && this.$session.get('authUser') !== null) {
-      const user = this.$session.get('authUser')
+    const authUser = this.$localStorage.get('authUser', null)
+    if (typeof authUser !== 'undefined' && authUser !== null) {
       this.currentUser = {
-        id: user.agent_id,
+        id: authUser.agent_id,
         agent: null,
-        forename: user.user,
-        surename: null,
-        user: user.user,
+        forename: authUser.name,
+        surename: authUser.surname,
+        user: authUser.user,
       }
-      this.permissions = user.permissions
-      this.databaseId = user.database_id
+      this.permissions = authUser.permissions
+      this.databaseId = authUser.database_id
       // console.log(this.currentUser);
     }
   },
@@ -28,7 +28,7 @@ const permissionsMixin = {
       if (typeof this.permissions[table] !== 'undefined') {
         return this.permissions[table].includes(action)
       } else {
-        console.log('This table: ' + table + ' does not exist! (in permissions)')
+        // console.log('This table: ' + table + ' does not exist! (in permissions)')
         return false
       }
     }

@@ -86,6 +86,7 @@
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
   import {fetchAddImageset, fetchIsImagesetNumberInImageset} from "../assets/js/api/apiCalls";
   import autocompleteFieldManipulation from "../components/mixins/autocompleFormManipulation";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     components: {
@@ -93,7 +94,7 @@
       Spinner,
     },
     name: "Imageset",
-    mixins: [autocompleteFieldManipulation],
+    mixins: [autocompleteFieldManipulation, permissionsMixin],
     data () {
       return {
         loadingPercent: 0,
@@ -108,7 +109,7 @@
         searchingAuthors: false,
         imageset: {
           imageset_number: null,
-          author: null,
+          author: this.currentUser,
           description: null,
         }
       }
@@ -139,16 +140,15 @@
       const imageset = this.$localStorage.get('imageset', 'fallbackValue')
       if (imageset !== 'fallbackValue' && Object.keys(imageset).length !== 0 && imageset.constructor === Object) this.imageset = imageset
 
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.imageset.author = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null
-        }
+
+      this.currentUser
+      this.imageset.author = {
+        id: this.currentUser.id,
+        agent: this.currentUser.agent,
+        forename: this.currentUser.forename,
+        surename: this.currentUser.surename
       }
+
     },
 
     methods: {

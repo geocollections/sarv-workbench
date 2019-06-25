@@ -51,12 +51,14 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Libraries",
+    mixins: [permissionsMixin],
     data() {
       return {
         response: {},
@@ -79,25 +81,10 @@
       }
     },
 
-    created: function () {
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.agent = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null,
-          user: user.user,
-        }
-        //console.log(this.agent);
-      }
-    },
-
     methods: {
       fetchLibraries() {
         return new Promise((resolve) => {
-          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.agent))
+          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.currentUser))
         });
       },
       searchParametersChanged(newParams) {

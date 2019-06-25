@@ -38,14 +38,13 @@ const authenticate = {
     /**
      * Log out method, which logs user out of database.
      *
-     * First of all user session is deleted using $session
+     * First of all user cookies and localStorage is deleted
      * and then log out request is initiated.
      */
     logOut() {
-      if (this.$session.exists() && this.$session.get('authUser') != null) {
-        this.$session.remove('authUser');
-        this.$session.destroy();
-      }
+      this.$cookies.remove('csrftokenLocalhost', null, 'localhost')
+      this.$cookies.remove('csrftoken', null, 'geocollections.info')
+      this.$localStorage.remove('authUser')
 
       fetchLogout().then(response => {
         if (response.status === 200) {
@@ -58,7 +57,7 @@ const authenticate = {
 
     /**
      * Handles successful authentication response. If login is successful then session
-     * is created using $session and user is routed to home page using $router.
+     * is created using localStorage and cookie (for localhost) and user is routed to home page using $router.
      *
      * @value message, String which is used in login components to show user a message what went wrong.
      * @value error, Boolean which is used in login components to show error element.
@@ -69,8 +68,14 @@ const authenticate = {
     handleSuccessfulAuthentication(response) {
       if (response.status === 200) {
         if (response.body.user != null) {
-          this.$session.start()
-          this.$session.set('authUser', response.body)
+
+          let date = new Date()
+          response.body.expires = date.setDate(date.getDate() + 7)
+
+          // Cookie for localhost
+          this.$cookies.set('csrftokenLocalhost', 'test token', '1d', null, 'localhost')
+          this.$localStorage.set('authUser', response.body)
+
           this.$router.push({ path: '/dashboard' })
           this.showSuccessToast(response)
 

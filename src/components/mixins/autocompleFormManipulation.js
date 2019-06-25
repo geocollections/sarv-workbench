@@ -1,5 +1,7 @@
 import {autocompleSearch} from "@/assets/js/api/apiCalls";
+import permissionsMixin from "./permissionsMixin";
 const autocompleteFieldManipulation = {
+  mixins: [permissionsMixin],
   computed: {
     commonLabel() {
       return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
@@ -24,20 +26,6 @@ const autocompleteFieldManipulation = {
     },
     licenceLabel() {
       return this.$i18n.locale === 'ee' ? 'licence' : 'licence_en'
-    }
-  },
-  created: function () {
-    // Gets user data from session storage
-    if (this.$session.exists() && this.$session.get('authUser') !== null) {
-      const user = this.$session.get('authUser')
-      this.currentUser = {
-        id: user.agent_id,
-        agent: null,
-        forename: user.user,
-        surename: null,
-        user: user.user,
-      }
-      // console.log(this.currentUser);
     }
   },
   methods: {

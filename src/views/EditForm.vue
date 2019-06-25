@@ -57,21 +57,6 @@
       }
     },
 
-    created: function () {
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.agent = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null,
-          user: user.user,
-        }
-        //console.log(this.agent);
-      }
-    },
-
     methods: {
       saveAsNew(){
         this.$emit('show-save-as-new-modal',true)

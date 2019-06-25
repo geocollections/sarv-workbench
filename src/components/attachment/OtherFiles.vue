@@ -993,6 +993,7 @@
   library.add(faFile)
   import Vue from 'vue'
   import fontAwesomeLib from "../mixins/fontAwasomeLib";
+  import permissionsMixin from "../mixins/permissionsMixin";
   export default {
     components: {
       FontAwesomeIcon,
@@ -1003,7 +1004,7 @@
       MapComponent2
     },
     name: "OtherFiles",
-    mixins: [formManipulation, fontAwesomeLib],
+    mixins: [formManipulation, fontAwesomeLib, permissionsMixin],
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',
@@ -1259,15 +1260,11 @@
       const otherFilesKeywords = this.$localStorage.get('otherFilesKeywords', 'fallbackValue')
       if (otherFilesKeywords !== 'fallbackValue' && otherFilesKeywords.length > 0) this.myKeywords = otherFilesKeywords
 
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.upload.author = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null
-        }
+      this.upload.author = {
+        id: this.currentUser.id,
+        agent: this.currentUser.agent,
+        forename: this.currentUser.forename,
+        surename: this.currentUser.surename
       }
     },
     beforeMount(){

@@ -577,15 +577,11 @@
       const specimenImageKeywords = this.$localStorage.get('specimenImageKeywords', 'fallbackValue')
       if (specimenImageKeywords !== 'fallbackValue' && specimenImageKeywords.length > 0) this.myKeywords = specimenImageKeywords
 
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.upload.author = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null
-        }
+      this.upload.author = {
+        id: this.currentUser.id,
+        agent: this.currentUser.agent,
+        forename: this.currentUser.forename,
+        surename: this.currentUser.surename
       }
     },
     methods: {

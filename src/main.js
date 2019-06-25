@@ -2,13 +2,12 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import VueResource from 'vue-resource' // VueResource for HTTP requests
-import VueSession from 'vue-session' // VueSession for using session storage
 import VueLocalStorage from 'vue-localstorage' // VueLocalStorage for using local storage
 import BootstrapVue from 'bootstrap-vue' // Bootstrap
 import VueIziToast from 'vue-izitoast' // Pop-up messages
 import VueI18n from 'vue-i18n' // Translations
 import VueMoment from 'vue-moment'
-import VueCookie from 'vue-cookie'
+import VueCookies from 'vue-cookies'
 import { createStore } from './store'
 import Vuesax from 'vuesax'
 import VueScrollTo from 'vue-scrollto'
@@ -40,13 +39,12 @@ import 'material-icons/iconfont/material-icons.css';
 import '@/assets/css/styles.css'
 
 Vue.use(VueResource)
-Vue.use(VueSession)
 Vue.use(VueLocalStorage)
 Vue.use(BootstrapVue)
 Vue.use(VueIziToast)
 Vue.use(VueI18n)
 Vue.use(VueMoment)
-Vue.use(VueCookie)
+Vue.use(VueCookies)
 Vue.use(Vuesax)
 Vue.use(VueScrollTo, {
   container: "body",
@@ -92,12 +90,12 @@ const i18n = new VueI18n({
 
 
 
-// This adds session id and csrf to request | MUST BE BEFORE new Vue()
+// This adds csrf token to request | MUST BE BEFORE new Vue()
 Vue.http.interceptors.push((request, next) => {
   // Only our rwapi needs csrftoken
   if (request.url.includes('rwapi')) {
 
-    let csrftoken = Vue.cookie.get('csrftoken')
+    let csrftoken = Vue.cookies.get('csrftoken')
 
     request.credentials = true;
     request.headers.set('X-CSRFTOKEN', csrftoken)
@@ -110,8 +108,9 @@ Vue.http.interceptors.push((request, next) => {
          * and user is redirected to login view.
          */
         if (res.body.error_not_logged_in) {
-          Vue.prototype.$session.remove('authUser')
-          Vue.prototype.$session.destroy()
+          Vue.cookies.remove('csrftokenLocalhost', null , 'localhost');
+          Vue.cookies.remove('csrftoken', null, 'geocollections.info');
+          Vue.localStorage.remove('authUser')
           Vue.prototype.$toast.error('Please log back in', 'Session expired', {
             position: 'bottomRight',
             timeout: 5000,
@@ -248,6 +247,9 @@ new Vue({
       default: 'table'
     },
     formSections: {
+      type: Object
+    },
+    authUser: {
       type: Object
     }
   },

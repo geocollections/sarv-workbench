@@ -79,12 +79,14 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchAttachments} from "../assets/js/api/apiCalls";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Attachments",
+    mixins: [permissionsMixin],
 
     data() {
       return {
@@ -113,25 +115,10 @@
       }
     },
 
-    created: function () {
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        const user = this.$session.get('authUser')
-        this.agent = {
-          id: user.agent_id,
-          agent: null,
-          forename: user.user,
-          surename: null,
-          user: user.user,
-        }
-        //console.log(this.agent);
-      }
-    },
-
     methods: {
       fetchAttachments() {
         return new Promise((resolve) => {
-          resolve(fetchAttachments(this.searchParameters, this.agent))
+          resolve(fetchAttachments(this.searchParameters, this.currentUser))
         });
       },
       searchParametersChanged(newParams) {
