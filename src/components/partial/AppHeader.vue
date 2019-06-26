@@ -5,8 +5,9 @@
 
       <!-- TODO: If small screen change header to icon -->
       <b-navbar-brand :to="{ path: '/dashboard' }">
-        <span class="only-big-screen">{{ $t('header.title') }}</span>
-        <span class="only-small-screen"><font-awesome-icon icon="home"/></span>
+        <span>{{ $t('header.title') }}</span>
+<!--        <span class="only-big-screen">{{ $t('header.title') }}</span>-->
+<!--        <span class="only-small-screen"><font-awesome-icon icon="home"/></span>-->
       </b-navbar-brand>
 
       <b-navbar-toggle target="nav_dropdown_collapse"></b-navbar-toggle>
