@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar-toggle-button">
-    <div v-if="!buttonOpen" class="swipe-right-button" v-touch:swipe.right="toggleButton" ></div>
+    <div v-if="!buttonOpen" class="swipe-right-button" v-touch:swipe="handleSwipe" ></div>
 
     <div class="toggle-button" :class="{ 'button-close': buttonOpen }" @click="toggleButton">
       <font-awesome-icon class="chevron" :class="{ 'chevron-close': buttonOpen }" :icon="chevron"/>
     </div>
 
-    <div v-if="buttonOpen" class="background-close-button" @click="toggleButton" v-touch:swipe.left="toggleButton"></div>
+    <div v-if="buttonOpen" class="background-close-button" @click="toggleButton" v-touch:swipe="handleSwipe"></div>
   </div>
 </template>
 
@@ -35,6 +35,18 @@
       toggleButton() {
         this.buttonOpen = !this.buttonOpen
         this.$emit('toggle-sidebar', 'BUTTON CLICKED')
+      },
+
+      handleSwipe(direction) {
+        if (direction === 'right') {
+          this.buttonOpen = true
+          this.$emit('toggle-sidebar', 'BUTTON CLICKED')
+        }
+
+        if (direction === 'left') {
+          this.buttonOpen = false
+          this.$emit('toggle-sidebar', 'BUTTON CLICKED')
+        }
       }
     }
   }
