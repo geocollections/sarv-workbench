@@ -1,10 +1,12 @@
 <template>
   <div class="sidebar-toggle-button">
+    <div v-if="!buttonOpen" class="swipe-right-button" v-touch:swipe.right="toggleButton" ></div>
+
     <div class="toggle-button" :class="{ 'button-close': buttonOpen }" @click="toggleButton">
       <font-awesome-icon class="chevron" :class="{ 'chevron-close': buttonOpen }" :icon="chevron"/>
     </div>
 
-    <div v-if="buttonOpen" class="background-close-button" @click="toggleButton"></div>
+    <div v-if="buttonOpen" class="background-close-button" @click="toggleButton" v-touch:swipe.left="toggleButton"></div>
   </div>
 </template>
 
@@ -39,13 +41,20 @@
 </script>
 
 <style scoped>
+  .swipe-right-button {
+    height: 100%;
+    width: 24px;
+    position: fixed;
+    z-index: 44000;
+  }
+
   .toggle-button {
     height: 3em;
     width: 1.5em;
     border-bottom-right-radius: 3em;
     border-top-right-radius: 3em;
 
-    z-index: 45000;
+    z-index: 46000;
     background-color: #dee2e6;
     position: fixed;
     top: 50%;

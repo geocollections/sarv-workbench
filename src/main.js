@@ -11,6 +11,7 @@ import VueCookies from 'vue-cookies'
 import { createStore } from './store'
 import Vuesax from 'vuesax'
 import VueScrollTo from 'vue-scrollto'
+import Vue2TocuhEvents from 'vue2-touch-events'
 
 // Leaflet START
 import { L } from 'vue2-leaflet'
@@ -59,6 +60,7 @@ Vue.use(VueScrollTo, {
   x: false,
   y: true
 })
+Vue.use(Vue2TocuhEvents)
 
 Vue.config.productionTip = false
 
