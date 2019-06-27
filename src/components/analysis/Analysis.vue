@@ -377,7 +377,7 @@
     <!-- IS PRIVATE -->
     <div class="row mt-3">
       <div class="col">
-        <b-form-checkbox id="is_private" v-model="analysis.is_private" :value="1" :unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="analysis.is_private" :value="true || 1" :unchecked-value="false || 0">
           {{ $t('doi.private') }}?
         </b-form-checkbox>
       </div>
