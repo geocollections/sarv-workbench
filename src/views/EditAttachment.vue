@@ -48,6 +48,7 @@
   import Log from '@/components/partial/Log.vue'
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+  import permissionsMixin from "../components/mixins/permissionsMixin";
 
   export default {
     components: {
@@ -61,6 +62,7 @@
     },
     props: ['id'],
     name: "EditAttachment",
+    mixins: [permissionsMixin],
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',
@@ -114,12 +116,9 @@
     },
 
     created: function () {
-      // Gets user data from session storage
-      if (this.$session.exists() && this.$session.get('authUser') !== null) {
-        this.searchParameters.author = this.$session.get('authUser')
+        this.searchParameters.author = this.currentUser
         this.getAttachment(this.searchParameters)
         this.getAttachmentLink(this.id)
-      }
     },
 
     methods: {
@@ -182,7 +181,7 @@
       getAttachment(params) {
         this.$http.get(this.apiUrl + 'attachment/' + params.id, {
           params: {
-            or_search: 'author_id:' + params.author.agent_id + ';user_added:' + params.author.user + ';user_changed:' + params.author.user,
+            or_search: 'author_id:' + params.author.id + ';user_added:' + params.author.user + ';user_changed:' + params.author.user,
             format: 'json',
           }
         }).then(response => {
