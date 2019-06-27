@@ -463,12 +463,14 @@
           <div class="row">
             <div class="col-md-6 mb-2">
               <label class="mt-0" :for="`datacite_created`">{{ $t('doi.dataciteCreated') }}:</label>
-              <b-form-input size="sm" id="datacite_created" v-model="doi.datacite_created" type="text" disabled></b-form-input>
+              <b-form-input v-if="doi.datacite_created" size="sm" id="datacite_created" :value="doi.datacite_created | moment('ddd, MMM Do YYYY, HH:mm:ss')" type="text" disabled></b-form-input>
+              <b-form-input v-else size="sm" v-model="doi.datacite_created" type="text" disabled></b-form-input>
             </div>
 
             <div class="col-md-6 mb-2">
               <label class="mt-0" :for="`datacite_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
-              <b-form-input size="sm" id="datacite_updated" v-model="doi.datacite_updated" type="text" disabled></b-form-input>
+              <b-form-input v-if="doi.datacite_updated" size="sm" id="datacite_updated" :value="doi.datacite_updated | moment('ddd, MMM Do YYYY, HH:mm:ss')" type="text" disabled></b-form-input>
+              <b-form-input v-else size="sm" v-model="doi.datacite_updated" type="text" disabled></b-form-input>
             </div>
           </div>
 
