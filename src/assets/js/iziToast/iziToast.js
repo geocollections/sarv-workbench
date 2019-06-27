@@ -11,7 +11,6 @@ export function toastSuccess(data) {
     position: 'bottomRight',
     timeout: data.timeout,
     pauseOnHover: false,
-    displayMode: 'replace'
   })
 }
 
