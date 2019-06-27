@@ -290,4 +290,8 @@
   .flag-circle {
     border-radius: 100%;
   }
+
+  .navbar-brand:hover {
+    opacity: 0.75;
+  }
 </style>

@@ -443,6 +443,7 @@ const formManipulation = {
      * should be called as $parent but you can listen event in parent classes ex. this.$root.$on('related-data-added',this.addRelatedData);**/
 
     editRelatedData(object) {
+      console.log(object)
       if (this.isEmptyObject(object.new)) return;
       let formData = new FormData();
 

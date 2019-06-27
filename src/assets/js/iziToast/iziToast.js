@@ -10,7 +10,8 @@ export function toastSuccess(data) {
   Vue.prototype.$toast.success(data.text, 'OK', {
     position: 'bottomRight',
     timeout: data.timeout,
-    pauseOnHover: false
+    pauseOnHover: false,
+    displayMode: 'replace'
   })
 }
 
@@ -21,7 +22,8 @@ export function toastError(data) {
     position: 'bottomRight',
     timeout: data.timeout,
     closeOnEscape: true,
-    pauseOnHover: false
+    pauseOnHover: false,
+    displayMode: 'replace'
   })
 }
 

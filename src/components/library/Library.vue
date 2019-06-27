@@ -380,6 +380,7 @@
     Link,
   } from 'tiptap-extensions'
   import localStorageMixin from "../mixins/localStorageMixin";
+  import permissionsMixin from "../mixins/permissionsMixin";
 
   library.add(faTimes)
 
@@ -395,7 +396,7 @@
       EditorMenuBar,
       EditorMenuBubble
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, localStorageMixin, permissionsMixin],
 
     data() {
       return this.setInitialData()
@@ -415,7 +416,7 @@
           object: 'library',
           field: 'library__title_en',
           block: this.block,
-          agent: this.$parent.agent
+          agent: this.currentUser
         });
       }
 
@@ -638,7 +639,6 @@
 
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
-        console.log(localStorageData)
         return new Promise((resolve) => {
           resolve(fetchLibrariesFromLibraryAgent(params, this.$parent.agent))
         });
