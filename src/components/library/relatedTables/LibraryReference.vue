@@ -156,24 +156,6 @@
         };
       }
     },
-    watch: {
-      // Todo: Might need to optimise it (otherwise too many requests are sent?) so there is a separate button to update references after sorting (only when user drags).
-      'relatedData.library_reference': {
-        handler: function (newVal, oldVal) {
-          newVal.forEach(reference => {
-            if (typeof reference.new !== 'undefined') {
-              if (reference.sort !== reference.new.sort ) {
-                // Reference has changed!!!
-                this.$emit('related-data-modified', reference)
-              } else {
-                // No changes!!!
-              }
-            }
-          })
-        },
-        deep: true
-      }
-    },
     methods: {
       // There are total of 3 events: 'added', 'removed' and 'moved'
       handleElementChange(event) {
@@ -185,9 +167,13 @@
       handleMovedEvent(movedEvent) {
         this.relatedData.library_reference.forEach((reference, index) => {
           // Every index has a certain sort number corresponding to amount of references in library i.e. 43 references then sort is from 0 - 43
-          // Changes are emitted in watcher otherwise it would send requests even if reference didn't change
           this.$set(reference, 'new', cloneDeep(reference));
           reference.new.sort = this.relatedData.count.library_reference - index
+
+          // Updating only if sort changed
+          if (reference.sort !== reference.new.sort) {
+            this.$emit('related-data-modified', reference)
+          }
         })
 
       }
