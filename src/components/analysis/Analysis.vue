@@ -68,7 +68,7 @@
 
             <div class="col-md-6">
               <label class="p-0" :for="`mass`">{{ $t('analysis.mass') }}:</label>
-              <b-form-input id="mass" v-model="analysis.mass" type="number"></b-form-input>
+              <b-form-input id="mass" v-model="analysis.mass" type="text"></b-form-input>
             </div>
           </div>
 

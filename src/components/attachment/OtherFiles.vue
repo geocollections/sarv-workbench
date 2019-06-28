@@ -1351,7 +1351,7 @@
           }, errResponse => {
             console.log('ERROR: ' + JSON.stringify(errResponse))
             this.sendingData = false
-            this.toastError(this.$t('messages.uploadError'))
+            toastError(this.$t('messages.uploadError'))
           })
 
         } else if (this.sendingData) {
