@@ -649,7 +649,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.analysis_method)) uploadableObject.analysis_method = objectToUpload.analysis_method.id
         if (this.isDefinedAndNotNull(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id
         if (this.isDefinedAndNotNull(objectToUpload.lab)) uploadableObject.lab = objectToUpload.lab.id
-        if (this.isDefinedAndNotNull(objectToUpload.instrument)) uploadableObject.lab_instrument = objectToUpload.instrument.id
+        if (this.isDefinedAndNotNull(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id
         if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
         if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
         if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
