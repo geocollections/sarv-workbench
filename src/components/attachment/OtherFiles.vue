@@ -1262,7 +1262,8 @@
 
       this.upload.author = {
         id: this.currentUser.id,
-        agent: this.currentUser.agent,
+        // agent: this.currentUser.agent,
+        agent: this.currentUser.surename + ', ' + this.currentUser.forename,
         forename: this.currentUser.forename,
         surename: this.currentUser.surename
       }
