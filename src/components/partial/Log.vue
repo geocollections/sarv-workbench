@@ -30,7 +30,7 @@
                     <div v-for="(changes, field) in handleChanges(entity.changes)">
 
                       <vs-list>
-                        <vs-list-header :title="field" color="primary"></vs-list-header>
+                        <vs-list-header class="mb-0" :title="field" color="primary"></vs-list-header>
 
                         <div v-for="(item, index) in changes">
 
@@ -139,8 +139,16 @@
         if (changes !== null && changes.trim().length > 0) {
           let validJsonString = changes.replace(/'/g, '"')
 
-          // Exception 1
+          // Exceptions
+          // Todo: Combine these regular expressions!!!
+          if (validJsonString.includes('"None"')) validJsonString = validJsonString.replace(/"None"/g, 'None')
           if (validJsonString.includes('None')) validJsonString = validJsonString.replace(/None/g, '"None"')
+
+          if (validJsonString.includes('"True"')) validJsonString = validJsonString.replace(/"True"/g, 'True')
+          if (validJsonString.includes('True')) validJsonString = validJsonString.replace(/True/g, '"True"')
+
+          if (validJsonString.includes('"False"')) validJsonString = validJsonString.replace(/"False"/g, 'False')
+          if (validJsonString.includes('False')) validJsonString = validJsonString.replace(/False/g, '"False"')
 
           return JSON.parse(validJsonString)
         } else return {}

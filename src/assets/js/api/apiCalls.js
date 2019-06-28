@@ -812,7 +812,7 @@ export function fetchLabs() {
   return fetch(`lab/?format=json`);
 }
 export function fetchInstruments() {
-  return fetch(`instrument/?format=json`);
+  return fetch(`lab_instrument/?format=json`);
 }
 
 export function fetchAnalyses(data, agent, databaseId) {

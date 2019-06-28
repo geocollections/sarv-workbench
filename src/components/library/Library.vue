@@ -90,7 +90,6 @@
             </div>
           </div>
 
-          <!-- Todo: Fix editors, not destroying or something correctly -->
           <!-- ABSTRACT -->
           <div class="row">
             <div class="col-sm-2">

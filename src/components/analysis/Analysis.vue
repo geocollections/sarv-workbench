@@ -166,6 +166,9 @@
                                :label="instrumentLabel"  select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[instrumentLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -637,7 +640,7 @@
 
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
+        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private == 1 ? '1' : '0';
         if (this.isDefinedAndNotNull(objectToUpload.date)) uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
         if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
 
@@ -646,10 +649,11 @@
         if (this.isDefinedAndNotNull(objectToUpload.analysis_method)) uploadableObject.analysis_method = objectToUpload.analysis_method.id
         if (this.isDefinedAndNotNull(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id
         if (this.isDefinedAndNotNull(objectToUpload.lab)) uploadableObject.lab = objectToUpload.lab.id
-        if (this.isDefinedAndNotNull(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id
+        if (this.isDefinedAndNotNull(objectToUpload.instrument)) uploadableObject.lab_instrument = objectToUpload.instrument.id
         if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
         if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
         if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
+        if (this.isDefinedAndNotNull(objectToUpload.mass)) uploadableObject.mass = objectToUpload.mass.substring(0, objectToUpload.mass.indexOf('.'))
 
         if (this.isDefinedAndNotNull(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
         if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
@@ -680,7 +684,7 @@
            this.analysis.dataset = { id: obj.dataset, name: obj.dataset__name,name_en: obj.dataset__name_en,}
          }
          this.analysis.lab = { id: obj.lab, lab: obj.lab__lab,lab_en: obj.lab__lab_en,}
-         this.analysis.instrument = { id: obj.instrument, instrument: obj.instrument__instrument,instrument_en: obj.instrument__instrument_en,}
+         this.analysis.instrument = { id: obj.instrument, instrument: obj.instrument__instrument, instrument_en: obj.instrument__instrument_en,}
          this.analysis.specimen = { id: obj.specimen, specimen_id: obj.specimen__specimen_id}
          this.analysis.reference = { id: obj.reference, reference: obj.reference__reference}
          this.analysis.storage = {location:obj.storage__location,id:obj.storage}
