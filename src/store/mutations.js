@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import isEmpty from 'lodash/isEmpty'
 
 function handleResponse(response){
   if (response.status === 200) {
@@ -41,5 +42,20 @@ export default {
 
   SET_ACTIVE_LIBRARY: (state, object) => {
     Vue.set(state, 'activeLibrary', object)
+  },
+
+  SET_SHORTCUTS: (state, { shortcuts }) => {
+    Vue.localStorage.set('shortcuts', JSON.stringify(shortcuts))
+    Vue.set(state, 'shortcuts', shortcuts)
+  },
+
+  GET_SHORTCUTS: (state) => {
+    const shortcuts = Vue.localStorage.get('shortcuts', null)
+
+    if (typeof shortcuts !== 'undefined' && shortcuts !== null && !isEmpty(shortcuts)) {
+      Vue.set(state, 'shortcuts', JSON.parse(shortcuts))
+    } else {
+      Vue.set(state, 'shortcuts', [])
+    }
   }
 }

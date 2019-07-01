@@ -57,4 +57,12 @@ export default {
     state.activeSearchParams.search.paginateBy = 10
     return fetchDois(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
+
+  SAVE_SHORTCUTS: ({ commit, state }, shortcuts) => {
+    commit('SET_SHORTCUTS', { shortcuts })
+  },
+
+  GET_SHORTCUTS: ({ commit, state }) => {
+    commit('GET_SHORTCUTS')
+  }
 }

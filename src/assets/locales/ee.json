@@ -103,7 +103,18 @@
   },
   "settings": {
     "permissions": "Minu õigused",
-    "shortcuts": "Minu otseteed"
+    "shortcuts": "Minu otseteed",
+    "addShortcut": "Lisa otsetee",
+    "removeShortcut": "Eemalda otsetee",
+    "title": "Otsetee nimi",
+    "path": "Otsetee",
+    "remove": "Eemalda",
+    "saveShortcuts": "Salvesta otseteed",
+    "shortcutsSaved": "Otseteed salvestatud",
+    "pathInfo1": "Shortcut tee on kõik peale",
+    "pathInfo2": "näiteks",
+    "pathInfo3": ", kus",
+    "pathInfo4": "on tee"
   },
   "sidebar": {
     "project": {

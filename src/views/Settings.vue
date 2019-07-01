@@ -15,7 +15,7 @@
 
       <transition name="fade">
         <div v-if="block.shortcuts">
-          Todo
+          <shortcuts/>
         </div>
       </transition>
     </fieldset>
@@ -92,33 +92,15 @@
 <script>
   import '@fortawesome/fontawesome-free/css/all.min.css'
   import permissionsMixin from "../components/mixins/permissionsMixin";
+  import VueMultiselect from "vue-multiselect/src/Multiselect";
+  import Shortcuts from "../components/partial/settings/Shortcuts";
 
   export default {
     name: "Settings",
+    components: {Shortcuts, VueMultiselect},
     mixins: [permissionsMixin],
     data() {
       return {
-        // Max 7
-        shortcuts: {
-          0: {
-            title: '',
-            path: '',
-          },
-          1: {
-            title: '',
-            path: '',
-            dropdown: {
-              0: {
-                title: '',
-                path: '',
-              },
-              1: {
-                title: '',
-                path: '',
-              },
-            }
-          }
-        },
         // Todo: Update lists according to routes
         addList: ['attachment', 'reference', 'imageset', 'journal', 'locality', 'sample', 'project', 'site', 'library', 'doi', 'analysis'],
         changeList: ['attachment', 'reference', 'locality', 'sample', 'project', 'site', 'library', 'doi', 'analysis'],
@@ -132,9 +114,7 @@
       }
     },
 
-    created: function () {
-      console.log(this.shortcuts)
-    },
+
 
     methods: {
 

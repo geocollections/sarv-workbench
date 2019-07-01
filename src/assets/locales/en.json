@@ -103,7 +103,18 @@
   },
   "settings": {
     "permissions": "My permissions",
-    "shortcuts": "My shortcuts"
+    "shortcuts": "My shortcuts",
+    "addShortcut": "Add shortcut",
+    "removeShortcut": "Remove shortcut",
+    "title": "Shortcut name",
+    "path": "Shortcut path",
+    "remove": "Remove",
+    "saveShortcuts": "Save shortcuts",
+    "shortcutsSaved": "Shortcuts saved",
+    "pathInfo1": "Shortcut path is everything after",
+    "pathInfo2": "for example",
+    "pathInfo3": " where",
+    "pathInfo4": "is path"
   },
   "sidebar": {
     "project": {

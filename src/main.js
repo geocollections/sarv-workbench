@@ -253,6 +253,9 @@ new Vue({
     },
     authUser: {
       type: Object
+    },
+    shortcuts: {
+      type: Object
     }
   },
   render: h => h(App)
