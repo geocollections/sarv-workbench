@@ -8,6 +8,8 @@
         </div>
       </div>
 
+      <scroll-to-links/>
+
       <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData"/>
 
       <bottom-options :object="object" :is-navigation-shown="$route.meta.isNavigationShow" v-if="$route.meta.isBottomOptionShown"/>
@@ -29,10 +31,12 @@
   import SaveAsNewModal from "../components/partial/SaveAsNewModal";
   import ConfirmTabClose from "../components/partial/modals/ConfirmTabClose";
   import ConfirmPageClose from "../components/partial/modals/ConfirmPageClose";
+  import ScrollToLinks from "../components/partial/ScrollToLinks";
 
   export default {
     name: "EditForm",
     components: {
+      ScrollToLinks,
       ConfirmPageClose,
       ConfirmTabClose,
       BottomOptions,

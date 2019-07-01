@@ -3,7 +3,7 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <div class="row mb-4">
+    <div class="row mb-2">
       <div class="col">
         <add-new-site :sendingData = "sendingData" :site="watchedSite"></add-new-site>
 
