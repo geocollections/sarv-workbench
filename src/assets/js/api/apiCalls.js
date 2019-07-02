@@ -449,19 +449,21 @@ export function fetchLibraries(data) {
 export function fetchLibrariesFromLibraryAgent(data, agent) {
   const fields = 'id,library,library__author_txt,library__title,library__title_en,agent,agent__agent,agent__surename,agent__forename,library__is_private'
   let searchFields = ''
-  if (data.author_txt !== null && data.author_txt.trim().length > 0) {
+
+  // Using typeof check because for active libraries (reference view uses active libraries but search data will be related to referneces)
+  if (typeof data.author_txt !== 'undefined' && data.author_txt !== null && data.author_txt.trim().length > 0) {
     searchFields += `&library__author_txt__icontains=${data.author_txt}`
   }
 
-  if (data.year !== null && data.year.trim().length > 0) {
+  if (typeof data.year !== 'undefined' && data.year !== null && data.year.trim().length > 0) {
     searchFields += `&library__year__icontains=${data.year}`
   }
 
-  if (data.title !== null && data.title.trim().length > 0) {
+  if (typeof data.title !== 'undefined' && data.title !== null && data.title.trim().length > 0) {
     searchFields += `&multi_search=value:${data.title};fields:library__title,library__title_en;lookuptype:icontains`
   }
 
-  if (data.reference !== null && data.reference.trim().length > 0) {
+  if (typeof data.reference !== 'undefined' && data.reference !== null && data.reference.trim().length > 0) {
     searchFields += `&library__libraryreference__reference__reference__icontains=${data.reference}&distinct=true`
   }
 

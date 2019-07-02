@@ -624,11 +624,11 @@
       },
       // Watching creators because sometimes fetchDoi takes more time than fetchDoiAgent
       // and overwrites updated doi. Basically this here is fallback just in case.
-      'doi.creators': {
-        handler: function (newVal, oldVal) {
-          this.updateDoiCreatorsField(this.relatedData.doi_agent)
-        }
-      }
+      // 'doi.creators': {
+      //   handler: function (newVal, oldVal) {
+      //     this.updateDoiCreatorsField(this.relatedData.doi_agent)
+      //   }
+      // }
     },
 
     methods: {
@@ -938,9 +938,9 @@
               this.relatedData.count[object] = response.body.count;
               this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
 
-              if (object === 'doi_agent') {
-                this.updateDoiCreatorsField(this.relatedData.doi_agent)
-              }
+              // if (object === 'doi_agent') {
+              //   this.updateDoiCreatorsField(this.relatedData.doi_agent)
+              // }
 
               resolve(true)
             });

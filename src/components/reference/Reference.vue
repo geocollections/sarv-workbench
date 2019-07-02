@@ -999,20 +999,28 @@
           let author = ''
           for (let item in data.author) {
             if (typeof data.author[item].given !== 'undefined' && data.author[item].given.includes(' ')) {
-              let given = data.author[item].given.split(' ');
-              // author += data.author[item].family.charAt(0).toUpperCase()
-              //   + data.author[item].family.substring(1).toLowerCase() + ', '
-              //   + given[0].charAt(0) + '.'
-              //   + given[1] + ', '
+              let given = data.author[item].given.split(' ')
+              let givenFormatted = given.map((name, index) => given[index].charAt(0).toUpperCase()) // ['Test', 'hello'] --> ['T', 'H']
 
-              author += data.author[item].family.charAt(0).toUpperCase() + data.author[item].family.substring(1) + ', ' + data.author[item].given + '., '
+              // If family is all caps then change it
+              if (data.author[item].family === data.author[item].family.toUpperCase()) {
+                // Todo: If caps contains '-' then add use case
+                // First name is abbreviated
+                author += data.author[item].family.charAt(0).toUpperCase()
+                  + data.author[item].family.substring(1).toLowerCase() + ', '
+                  + givenFormatted.join('. ') + '., '
+              } else {
+                // First name is abbreviated
+                author += data.author[item].family + ', ' + givenFormatted.join('. ') + '., '
+              }
             } else {
-              // author += data.author[item].family.charAt(0).toUpperCase()
-              //   + data.author[item].family.substring(1).toLowerCase() + ', '
-              //   + data.author[item].given.charAt(0) + '., '
-
-              author += data.author[item].family.charAt(0).toUpperCase()
-                + data.author[item].family.substring(1) + ', ' + data.author[item].given + '., '
+              if (data.author[item].family === data.author[item].family.toUpperCase()) {
+                author += data.author[item].family.charAt(0).toUpperCase()
+                  + data.author[item].family.substring(1).toLowerCase() + ', '
+                  + data.author[item].given.charAt(0).toUpperCase() + '., '
+              } else {
+                author += data.author[item].family + ', ' + data.author[item].given.charAt(0).toUpperCase() + '., '
+              }
             }
           }
           this.reference.author = author.trim().slice(0, -1)
