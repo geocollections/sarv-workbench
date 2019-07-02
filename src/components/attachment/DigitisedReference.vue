@@ -383,7 +383,12 @@
         if (objectToUpload.agent_digitised !== null) uploadableObject.agent_digitised = objectToUpload.agent_digitised.id
         if (objectToUpload.date_digitised !== null) {
           if (typeof objectToUpload.date_digitised === 'string') uploadableObject.date_digitised = objectToUpload.date_digitised.split('T')[0]
-          else uploadableObject.date_digitised = objectToUpload.date_digitised.toISOString().split('T')[0]
+          else {
+            uploadableObject.date_digitised = objectToUpload.date_digitised
+            uploadableObject.date_digitised.setHours(0, -uploadableObject.date_digitised.getTimezoneOffset(), 0, 0)
+
+            uploadableObject.date_digitised = objectToUpload.date_digitised.toISOString().split('T')[0]
+          }
         }
 
         console.log('This object is sent in string format:')

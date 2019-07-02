@@ -697,11 +697,21 @@
         }
         if (objectToUpload.date_created !== null) {
           if (typeof objectToUpload.date_created === 'string') uploadableObject.date_created = objectToUpload.date_created.split('T')[0]
-          else uploadableObject.date_created = objectToUpload.date_created.toISOString().split('T')[0]
+          else {
+            uploadableObject.date_created = objectToUpload.date_created
+            uploadableObject.date_created.setHours(0, -uploadableObject.date_created.getTimezoneOffset(), 0, 0)
+
+            uploadableObject.date_created = objectToUpload.date_created.toISOString().split('T')[0]
+          }
         }
         if (objectToUpload.date_digitised !== null) {
           if (typeof objectToUpload.date_digitised === 'string') uploadableObject.date_digitised = objectToUpload.date_digitised.split('T')[0]
-          else uploadableObject.date_digitised = objectToUpload.date_digitised.toISOString().split('T')[0]
+          else {
+            uploadableObject.date_digitised = objectToUpload.date_digitised
+            uploadableObject.date_digitised.setHours(0, -uploadableObject.date_digitised.getTimezoneOffset(), 0, 0)
+
+            uploadableObject.date_digitised = objectToUpload.date_digitised.toISOString().split('T')[0]
+          }
         }
 
         console.log('This object is sent in string format:')
