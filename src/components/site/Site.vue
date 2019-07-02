@@ -3,19 +3,6 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <b-alert show variant="warning" v-if="createRelationWith.data !== null && createRelationWith.object === 'project'">
-      {{ createRelationWith.info }}
-      <!--<a class="small" href="javascript:void(0)" @click="navigateBack">-->
-      <!--<font-awesome-icon icon="external-link-alt"/>-->
-      <!--</a>-->
-    </b-alert>
-    <!--<b-alert show variant="warning" v-if="isDefinedAndNotNull(editSite)"> Ava vaatluspunkti eraldi tabil-->
-    <!--<a class="small" href="javascript:void(0)" @click="windowOpenNewTab('site','/site/'+site.id)">-->
-    <!--<font-awesome-icon icon="external-link-alt"/>-->
-    <!--</a>-->
-    <!--</b-alert>-->
-    <!-- STORAGE-->
-
     <!-- GENERAL INFO -->
     <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
@@ -50,12 +37,11 @@
                                deselect-label="Can't remove this value"
                                :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.project"
-                               :options="autocomplete.project" :searchable="true"
+                               :options="autocomplete.project"
                                @search-change="autcompleteProjectSearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>
-                  {{ $i18n.locale=== 'ee' ? option.name :option.name_en }}</strong></template>
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option[nameLabel]}}</strong></template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -384,6 +370,16 @@
         })
       }
 
+      // Getting project (only from project view when user presses 'add site button')
+      if (typeof this.$route.params.project !== 'undefined' && this.$route.params.project !== null) {
+        const dataFromProject = this.$route.params.project
+
+        this.site.project = { id: dataFromProject.id, name: dataFromProject.name, name_en: dataFromProject.name_en }
+        this.site.date_start = dataFromProject.date_start
+        this.site.date_end = dataFromProject.date_end
+        this.setSiteName(dataFromProject.id)
+      }
+
       this.loadFullInfo();
 
     },
@@ -628,6 +624,15 @@
         this.windowOpenNewTab('sample', '/sample/add')
         // let routeData = this.$router.resolve({ path:'/sample/add'});
         // window.open(routeData.href, '_blank', 'width=750,height=750');
+      },
+
+      setSiteName(projectId) {
+        fetchLastSiteName(projectId).then(response => {
+          if (response.body.results && response.body.results.length > 0) {
+            let newName = this.calculateNextName(response.body.results[0].name)
+            this.$set(this.site, 'name', newName);
+          }
+        })
       },
 
       setSiteNameAndProjectIfPreviousExists() {

@@ -7,9 +7,10 @@
       <div class="col">
         <add-new-site :sendingData = "sendingData" :site="watchedSite"></add-new-site>
 
-        <span class="float-right" v-if="$route.meta.isEdit">
-          <button class="btn btn-outline-primary mb-2" @click="addOrEditSite()"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>
-        </span>
+        <!-- Old create relation with site -->
+<!--        <span class="float-right" v-if="$route.meta.isEdit">-->
+<!--          <button class="btn btn-outline-primary mb-2" @click="addOrEditSite()"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>-->
+<!--        </span>-->
 
         <span class="float-left">
           <span class="custom-control custom-switch">
@@ -22,6 +23,11 @@
           <!--<button  v-if="!isActiveProject" class="btn alert-danger mb-2" @click="isActiveProject = true">{{ $t('frontPage.non_active') }}</button>-->
           <!--<button v-if="isActiveProject"  class="btn alert-success mb-2" @click="isActiveProject = false">{{ $t('frontPage.active') }}</button>-->
         </span>
+      </div>
+
+      <div class="col-6" v-if="$route.meta.isEdit">
+        <vs-button color="primary" type="line" icon="fa-globe-americas" icon-pack="fas" style="float: right;"
+                   :to="{ name: 'Site add', params: { project: project } }">{{ this.$t('project.newSite') }}</vs-button>
       </div>
     </div>
 

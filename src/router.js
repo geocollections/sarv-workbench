@@ -520,6 +520,7 @@ const router = new Router({
                   meta: {
                     isEdit:false,
                     title:'titles.addProject',
+                    addNew:'add.newProject',
                     subForms:[
                       {path:'/project/add',name:'editProject.heading'}
                     ],
@@ -618,10 +619,12 @@ const router = new Router({
           children: [
             {
               path: '',
+              name: 'Site add',
               component: () => import('./components/site/Site.vue'),
               meta: {
                 isEdit:false,
                 title:'titles.addSite',
+                addNew:'add.newSite',
                 subForms:[
                   {path:'/site/add',name:'editSite.heading'}
                 ],
