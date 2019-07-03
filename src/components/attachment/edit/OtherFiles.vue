@@ -978,7 +978,11 @@
 
         <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
 
-        <new-doi-button :data="data" :form-data="edit" object="attachment" class="mb-2 float-right"/>
+        <new-doi-button v-if="authorState && descriptionState && descriptionEnState && imagesetState"
+                        :data="data"
+                        :form-data="edit"
+                        object="attachment"
+                        class="mb-2 float-right"/>
       </div>
       <div class="col-sm-6" v-else>
         <div class="alert alert-info">{{ $t('edit.locked') }}</div>
