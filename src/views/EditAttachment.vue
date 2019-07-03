@@ -185,7 +185,7 @@
             format: 'json',
           }
         }).then(response => {
-          console.log(response)
+          // console.log(response)
           if (response.status === 200) {
             if (typeof response.body.results === 'undefined') this.attachment = []
             else this.attachment = response.body.results[0]
@@ -203,7 +203,7 @@
             format: 'json'
           }
         }).then(response => {
-          console.log(response)
+          // console.log(response)
           if (response.status === 200) {
             if (response.body.count > 0) this.attachment_link = response.body.results
             else this.attachment_link = []

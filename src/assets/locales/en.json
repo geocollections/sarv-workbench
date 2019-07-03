@@ -510,7 +510,8 @@
     "digitisedReference": "Digitised reference",
     "edit": "Edit",
     "addNew": "Add new file",
-    "changeType": "Change type"
+    "changeType": "Change type",
+    "doiConfirmation": "Are you sure you want to register a new DOI for this attachment? DOI-s cannot be deleted."
   },
   "digitisedReference": {
     "reference": "Reference",

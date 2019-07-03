@@ -1056,7 +1056,7 @@
       },
 
       /**
-       * Returns boolean value wether to show DOI button or not.
+       * Returns boolean value whether to show DOI button or not.
        *
        * (this.isDefinedAndNotNull(this.reference.type) && this.reference.type.id > 3) --> Checks if type exists and id is higher than 3
        * this.isDefinedAndNotNullAndNotEmptyString(this.reference.doi) --> Checks if DOI exists

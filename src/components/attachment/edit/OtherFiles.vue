@@ -976,8 +976,9 @@
         <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
         <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
 
-        <button v-if="isChanged" @click="showModal = !showModal" class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>
-        <router-link v-else class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
+        <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
+
+        <new-doi-button :data="data" :form-data="edit" object="attachment" class="mb-2 float-right"/>
       </div>
       <div class="col-sm-6" v-else>
         <div class="alert alert-info">{{ $t('edit.locked') }}</div>
@@ -1003,9 +1004,11 @@
   import BottomOptions from "../../partial/BottomOptionsOld";
   import MapComponent2 from "../../partial/MapComponent2";
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
+  import NewDoiButton from "../../partial/NewDoiButton";
 
   export default {
     components: {
+      NewDoiButton,
       BottomOptions,
       FileInformation,
       FilePreview,

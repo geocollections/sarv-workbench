@@ -511,7 +511,8 @@
     "digitisedReference": "Digiteeritud kirjandus",
     "edit": "Muuda",
     "addNew": "Lisage uus fail",
-    "changeType": "Muuda tüüpi"
+    "changeType": "Muuda tüüpi",
+    "doiConfirmation": "Kas oled kindel, et soovid failile registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik."
   },
   "digitisedReference": {
     "reference": "Kirjandus",
