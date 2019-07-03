@@ -978,7 +978,7 @@
 
         <router-link class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
 
-        <new-doi-button v-if="authorState && descriptionState && descriptionEnState && imagesetState"
+        <new-doi-button v-if="isValidForDoiUpload()"
                         :data="data"
                         :form-data="edit"
                         object="attachment"
@@ -2036,6 +2036,11 @@
         }
         window.open(location.origin + '/' + params.object + '/add', '', 'width=' + params.width + ',height=' + params.height)
       },
+
+      isValidForDoiUpload() {
+        if (this.edit.specimen_image_attachment === 2) return this.authorState && this.descriptionState && this.descriptionEnState && this.imagesetState;
+        else return this.authorState && this.descriptionState && this.descriptionEnState;
+      }
 
       /*********************
        *** HELPERS END ***
