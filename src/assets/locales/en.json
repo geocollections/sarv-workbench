@@ -509,7 +509,8 @@
     "otherFiles": "Other files",
     "digitisedReference": "Digitised reference",
     "edit": "Edit",
-    "addNew": "Add new file"
+    "addNew": "Add new file",
+    "changeType": "Change type"
   },
   "digitisedReference": {
     "reference": "Reference",

@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-options">
 
-    <div class="row">
+    <div class="row bottom-options-lg">
       <div class="col-6 text-center">
         <b-button class="hover-button" variant="outline-success" v-on:click="$emit('button-clicked', 'SAVE', object)">
           {{ successButton ? successButton : this.$t('edit.buttons.save') }}
@@ -59,5 +59,12 @@
   /* Adds margin-bottom to footer so that it won't get caught behind buttons */
   .footer {
     margin-bottom: 54px;
+  }
+
+  @media (min-width: 992px) {
+    .bottom-options-lg {
+      /* Sidebar width */
+      margin-left: 260px;
+    }
   }
 </style>

@@ -510,7 +510,8 @@
     "otherFiles": "Muud failid",
     "digitisedReference": "Digiteeritud kirjandus",
     "edit": "Muuda",
-    "addNew": "Lisage uus fail"
+    "addNew": "Lisage uus fail",
+    "changeType": "Muuda tüüpi"
   },
   "digitisedReference": {
     "reference": "Kirjandus",

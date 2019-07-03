@@ -124,8 +124,8 @@
     methods: {
 
       change(data, continueEditing) {
-        console.log(data)
-        console.log(continueEditing)
+        // console.log(data)
+        // console.log(continueEditing)
 
         if (!this.sendingData) {
           this.sendingData = true;

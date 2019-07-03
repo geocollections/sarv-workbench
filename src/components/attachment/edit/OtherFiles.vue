@@ -914,8 +914,46 @@
 
     <!-- CHANGE TYPE -->
     <div class="row">
-      <div class="col">
-<!--        {{isImageFile}}-->
+      <div class="col-sm-2">
+        <label :for="`specimen_image_attachment`">{{ $t('attachment.changeType') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <b-form-select id="specimen_image_attachment" v-model="edit.specimen_image_attachment" class="mb-3">
+          <option :value="1" :disabled="!isValidToChangeTo('specimenImage')">{{ this.$t('attachment.specimenImage') }}</option>
+          <option :value="2" :disabled="!isValidToChangeTo('photoArchive')">{{ this.$t('attachment.photoArchive') }}</option>
+          <option :value="3" :disabled="!isValidToChangeTo('otherFile')">{{ this.$t('attachment.otherFiles') }}</option>
+          <option :value="4" :disabled="!isValidToChangeTo('digitisedReference')">{{ this.$t('attachment.digitisedReference') }}</option>
+        </b-form-select>
+      </div>
+    </div>
+
+    <!-- IMAGESET -->
+    <div class="row" v-if="edit.specimen_image_attachment === 2">
+      <div class="col-sm-2" >
+        <label :for="`imageset`">{{ $t('photoArchive.imagesetId') }}:</label>
+      </div>
+
+      <div class="col-sm-4 mb-2">
+        <vue-multiselect v-model="edit.imageset"
+                         id="imageset"
+                         :options="autocomplete.imagesets"
+                         :internal-search="false"
+                         v-bind:class="{ valid: imagesetState, invalid: !imagesetState }"
+                         @search-change="getImagesets"
+                         label="imageset_number"
+                         :loading="searchingImagesets"
+                         :placeholder="$t('add.inputs.autocomplete')"
+                         :show-labels="false">
+          <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+        </vue-multiselect>
+        <b-form-text v-if="!imagesetState">{{ $t('add.errors.imagesetId') }}.</b-form-text>
+      </div>
+
+      <div class="col-sm-1 mb-2">
+        <a href="javascript:void(0)" @click="openInNewWindow({object: 'imageset', height: 500})" class="btn btn-outline-info" :title="$t('add.inputs.newImageset')">
+          <font-awesome-icon icon="plus"></font-awesome-icon>
+        </a>
       </div>
     </div>
 
@@ -996,6 +1034,7 @@
           // devices: [],
           localities: [],
           licences: [],
+          imagesets: [],
           relatedData: {
             collection: [],
             specimen: [],
@@ -1052,6 +1091,7 @@
           remarks: this.data.remarks,
           image_latitude: this.data.image_latitude,
           image_longitude: this.data.image_longitude,
+          imageset: null,
           tags: this.buildTags(),
           licence: this.buildLicence(),
           copyright_agent: this.buildCopyrightAgent(),
@@ -1140,13 +1180,9 @@
         return false
       },
 
-      isImageFile() {
-        console.log(this.data.attachment_format__value)
-        if (this.data.attachment_format__value !== null) {
-          return this.data.attachment_format__value.includes('image');
-        }
-        return false;
-      }
+      imagesetState() {
+        return this.edit.imageset !== null
+      },
     },
 
     created: function () {
@@ -1176,11 +1212,20 @@
        ******************/
 
       sendData(continueEditing) {
-        if (this.authorState && this.descriptionState && this.descriptionEnState) {
-          const formattedData = this.formatDataForEdit(this.edit)
-          this.$emit('edit-data', formattedData, continueEditing)
+        if (this.edit.specimen_image_attachment === 2) {
+          if (this.authorState && this.descriptionState && this.descriptionEnState && this.imagesetState) {
+            const formattedData = this.formatDataForEdit(this.edit)
+            this.$emit('edit-data', formattedData, continueEditing)
+          } else {
+            toastError({text: this.$t('messages.checkForm')})
+          }
         } else {
-          toastError({text: this.$t('messages.checkForm')})
+          if (this.authorState && this.descriptionState && this.descriptionEnState) {
+            const formattedData = this.formatDataForEdit(this.edit)
+            this.$emit('edit-data', formattedData, continueEditing)
+          } else {
+            toastError({text: this.$t('messages.checkForm')})
+          }
         }
       },
 
@@ -1223,6 +1268,12 @@
 
             uploadableData.date_digitised = unformattedData.date_digitised.toISOString().split('T')[0]
           }
+        }
+
+        if (unformattedData.specimen_image_attachment === 2) {
+          if (unformattedData.imageset !== null && typeof unformattedData.imageset !== 'undefined') uploadableData.imageset = unformattedData.imageset.id
+        } else {
+          uploadableData.imageset = null
         }
 
 
@@ -1433,6 +1484,32 @@
           console.log('ERROR: ' + JSON.stringify(errResponse))
           this.searchingImageTypes = false;
         })
+      },
+
+      getImagesets(query) {
+        if (query.length > 0) {
+          // Building url like that because otherwise it encodes spaces with plusses or something weird
+          let url = this.apiUrl + 'imageset/'
+          if (this.edit.author !== null) {
+            url += '?or_search=user_added:' + this.edit.author.forename + ';author__id:' + this.edit.author.id + '&imageset_number__icontains=' + query + '&format=json'
+          } else {
+            url += '?imageset_number__icontains=' + query + '&format=json'
+          }
+
+          this.searchingImagesets = true;
+
+          this.$http.get(url).then(response => {
+            console.log(response)
+            if (response.status === 200) {
+              if (response.body.count > 0) this.autocomplete.imagesets = response.body.results;
+              else this.autocomplete.imagesets = []
+            }
+            this.searchingImagesets = false;
+          }, errResponse => {
+            console.log('ERROR: ' + JSON.stringify(errResponse))
+            this.searchingImagesets = false;
+          })
+        }
       },
 
       getRelatedData(query, id) {
@@ -1927,6 +2004,30 @@
       updateLocation(location) {
         this.edit.image_latitude = location.lat.toFixed(6)
         this.edit.image_longitude = location.lng.toFixed(6)
+      },
+
+      isValidToChangeTo(changeTo) {
+        if (changeTo === 'specimenImage') {
+          // Todo
+          return false
+        } else if(changeTo === 'photoArchive') {
+          return this.data.attachment_format__value.includes('image') || this.specimen_image_attachment === 2
+        } else if (changeTo === 'otherFile') {
+          return true
+        } else if (changeTo === 'digitisedReference') {
+          // Todo
+          return false
+        }
+      },
+
+      openInNewWindow(params) {
+        if (typeof (params.width) === 'undefined') {
+          params.width = 800;
+        }
+        if (typeof (params.height) === 'undefined') {
+          params.height = 750;
+        }
+        window.open(location.origin + '/' + params.object + '/add', '', 'width=' + params.width + ',height=' + params.height)
       },
 
       /*********************

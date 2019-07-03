@@ -140,11 +140,9 @@
       const imageset = this.$localStorage.get('imageset', 'fallbackValue')
       if (imageset !== 'fallbackValue' && Object.keys(imageset).length !== 0 && imageset.constructor === Object) this.imageset = imageset
 
-
-      this.currentUser
       this.imageset.author = {
         id: this.currentUser.id,
-        agent: this.currentUser.agent,
+        agent: this.currentUser.surename + ', ' + this.currentUser.forename,
         forename: this.currentUser.forename,
         surename: this.currentUser.surename
       }
