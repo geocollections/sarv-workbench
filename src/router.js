@@ -842,12 +842,10 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  console.log('--- FROM ---')
-  console.log(from)
-  console.log('--- TO ---')
-  console.log(to)
-
-
+  // console.log('--- FROM ---')
+  // console.log(from)
+  // console.log('--- TO ---')
+  // console.log(to)
 
   const loginStateResponse = await fetchIsLoggedIn().then(response => response, errResponse => errResponse);
 

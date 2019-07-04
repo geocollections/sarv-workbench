@@ -588,6 +588,10 @@ export function fetchAddDoiGeolocation(data) {
   return fetchPost(`add/doi_geolocation/`, data)
 }
 
+export function fetchAddDoiAgent(data) {
+  return fetchPost(`add/doi_agent/`, data)
+}
+
 export function fetchCheckMetadataInDataCite(id) {
   return fetch(`datacite/check_metadata/${id}`)
 }

@@ -981,7 +981,7 @@
         <new-doi-button v-if="isValidForDoiUpload()"
                         :data="data"
                         :form-data="edit"
-                        object="attachment"
+                        object="otherFiles"
                         class="mb-2 float-right"/>
       </div>
       <div class="col-sm-6" v-else>
