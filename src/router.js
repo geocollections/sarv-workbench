@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from './views/Login.vue'
 import Dashboard from './views/Dashboard.vue'
-import {fetchLogout} from "./assets/js/api/apiCalls";
+import {fetchIsLoggedIn, fetchLogout} from "./assets/js/api/apiCalls";
 
-Vue.use(Router)
+Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
@@ -839,68 +839,94 @@ const router = new Router({
       ]
     },
   ],
-})
+});
 
-router.beforeEach((to, from, next) => {
-  // console.log('--- FROM ---')
-  // console.log(from)
-  // console.log('--- TO ---')
-  // console.log(to)
-
-  let csrftoken = Vue.cookies.get('csrftoken')
-  let csrftokenLocalhost = Vue.cookies.get('csrftokenLocalhost')
-  // console.log('--- CSRF TOKEN ---')
-  // console.log(csrftoken)
-  // console.log('--- CSRF TOKEN LOCALHOST ---')
-  // console.log(csrftokenLocalhost)
-  let authUser = Vue.localStorage.get('authUser')
-  // console.log('--- AUTH USER ---')
-  // console.log(authUser)
+router.beforeEach(async (to, from, next) => {
+  console.log('--- FROM ---')
+  console.log(from)
+  console.log('--- TO ---')
+  console.log(to)
 
 
-  if (to.meta.requiresAuth) {
-    // REQUIRES AUTHENTICATION
-    if ((csrftoken !== null || csrftokenLocalhost !== null) && (typeof authUser !== 'undefined' && authUser !== null)) {
-      // This code will be executed only if token and authUser exist
 
-      if (to.name === 'Geocollections Data Management') {
-        // If user is logged in and tries to go to login screen then user is redirected to main page
-        next({ path: '/dashboard' })
-      } else {
-        // Redirect user where user wants to go
-        next()
+  const loginStateResponse = await fetchIsLoggedIn().then(response => response, errResponse => errResponse);
+
+  const isLoggedIn = handleResponse(loginStateResponse);
+
+  if (isLoggedIn) {
+    const loggedInUser = getLoggedInUser(loginStateResponse);
+
+    if (checkCookiesAndStorage(loggedInUser)) {
+      if (to.meta.requiresAuth) next();
+      else {
+        if (to.name === 'Geocollections Data Management') next({ path: '/dashboard' });
+        else next()
       }
     } else {
-      // If token or user info doesn't exist then user is redirected to login screen
-
-      // Removing cookies and storage
-      Vue.cookies.remove('csrftokenLocalhost', null, 'localhost')
-      Vue.cookies.remove('csrftoken', null, 'geocollections.info')
-      Vue.localStorage.remove('authUser')
-
-      // Sending logout to rwapi
-      fetchLogout().then(response => {
-        Vue.prototype.$toast.error('Please log back in', 'Session expired', {
-          position: 'bottomRight',
-          timeout: 5000,
-          closeOnEscape: true,
-          pauseOnHover: false,
-          displayMode: 'replace'
-        })
-      }, errResponse => {})
-
+      removeBrowserDataAndLogout();
       next({ path: '/' })
     }
+
   } else {
-    // DOES NOT REQUIRE AUTHENTICATION
-    if (to.name === 'Geocollections Data Management') {
-      if ((csrftoken !== null || csrftokenLocalhost !== null) && (typeof authUser !== 'undefined' && authUser !== null)) {
-        // If user goes to login page but token and user info already exist then redirect user to main page
-        next({ path: '/dashboard' })
-      } else next()
+
+    if (from.fullPath !== '/') {
+      Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+        position: 'bottomRight',
+        timeout: 5000,
+        closeOnEscape: true,
+        pauseOnHover: false,
+        displayMode: 'replace'
+      })
     }
+
+    if (to.meta.requiresAuth) next({ path: '/' });
     else next()
   }
-})
+});
+
+function checkCookiesAndStorage(user) {
+  if (user.length > 0) {
+    // Getting user data from cookies and storage
+    let csrftoken = Vue.cookies.get('csrftoken');
+    let csrftokenLocalhost = Vue.cookies.get('csrftokenLocalhost');
+    let authUser = Vue.localStorage.get('authUser');
+
+    if ((csrftoken || csrftokenLocalhost) && (authUser)) {
+      if (authUser.user) return authUser.user === user;
+      else return false // User field does not exist in authUser
+    } return false // Some user data is missing or it has been tampered
+  } else return false // User is empty
+}
+
+function removeBrowserDataAndLogout() {
+  // Deleting cookies and local storage
+  Vue.cookies.remove('csrftokenLocalhost', null, 'localhost');
+  Vue.cookies.remove('csrftoken', null, 'geocollections.info');
+  Vue.localStorage.remove('authUser');
+
+  // Sending logout request to API
+  fetchLogout().then(response => {
+    Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+      position: 'bottomRight',
+      timeout: 5000,
+      closeOnEscape: true,
+      pauseOnHover: false,
+      displayMode: 'replace'
+    })
+  }, errResponse => console.log('LOGOUT ERROR: ' + JSON.stringify(errResponse)))
+}
+
+function handleResponse(response) {
+  if (response.status === 200) {
+    if (response.body && response.body.results && response.body.results.success) {
+      return response.body.results.success
+    } else return false
+  } else return false
+}
+
+function getLoggedInUser(response) {
+  if (handleResponse(response)) return response.body.results.user;
+  else return ''
+}
 
 export default router

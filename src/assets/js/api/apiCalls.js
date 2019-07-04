@@ -53,6 +53,10 @@ export function fetchLogout() {
   return fetch(`logout/`)
 }
 
+export function fetchIsLoggedIn() {
+  return fetch('is_logged_in/login_state')
+}
+
 /*******************
  ***  LOGIN END  ***
  *******************/
