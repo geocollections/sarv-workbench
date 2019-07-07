@@ -71,6 +71,7 @@
     "collapseSample": "Sample",
     "collapseLibrary": "Library",
     "collapseFindFast":"Find fast",
+    "help": "Help",
     "buttons": {
       "photoArchive": "Add photo",
       "specimenImage": "Add specimen image",

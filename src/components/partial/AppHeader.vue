@@ -5,10 +5,17 @@
 
       <b-navbar-brand :to="{ path: '/dashboard' }">
         <!-- <span>{{ $t('header.title') }}</span>-->
-        <span class="only-big-screen">{{ $t('header.title') }}</span>
-        <span class="only-small-screen"><font-awesome-icon icon="home"/></span>
-      </b-navbar-brand>
+        <span class="only-big-screen">
+          <span>{{ $t('header.title') }}</span>
+          <span v-if="isBeta">-beta</span>
+          <span v-else-if="isLocal">-development</span>
+        </span>
+        <span class="only-small-screen">
+          <span><font-awesome-icon icon="home"/></span>
+          <span v-if="isBeta"> - beta</span>
+          <span v-else-if="isLocal"> - development</span></span>
 
+      </b-navbar-brand>
 
       <!-- Always visible navigation links -->
       <b-navbar-nav class="always-visible">
@@ -71,6 +78,15 @@
   export default {
     name: "app-header",
     mixins: [fontAwesomeLib, authenticate, permissionsMixin],
+    computed: {
+      isBeta() {
+        return document.location.origin.includes('edit2')
+      },
+
+      isLocal() {
+        return document.location.origin.includes('localhost')
+      }
+    },
     beforeCreate: function() {
       this.$store.dispatch('GET_SHORTCUTS')
     },
