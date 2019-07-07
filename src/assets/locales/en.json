@@ -109,12 +109,14 @@
     "title": "Shortcut name",
     "path": "Shortcut path",
     "remove": "Remove",
+    "isAlwaysVisible": "Always visible",
     "saveShortcuts": "Save shortcuts",
     "shortcutsSaved": "Shortcuts saved",
     "pathInfo1": "Shortcut path is everything after",
     "pathInfo2": "for example",
     "pathInfo3": " where",
-    "pathInfo4": "is path"
+    "pathInfo4": "is path",
+    "isAlwaysVisibleInfo": "option enables you to see link even on smaller screens"
   },
   "sidebar": {
     "project": {

@@ -32,38 +32,49 @@
             {{origin}}<b class="text-info">/attachment</b>{{ $t('settings.pathInfo3') }}
             <b class="text-info">/attachment</b> {{ $t('settings.pathInfo4') }}.
           </p>
+
+          <p><b class="text-info">{{ $t('settings.isAlwaysVisible') }}</b> {{ $t('settings.isAlwaysVisibleInfo') }}.</p>
         </div>
       </div>
 
-      <table class="vs-table vs-table--tbody-table">
-        <thead class="vs-table--thead">
-        <tr>
-          <th style="width: 41.66%;">{{ $t('settings.title') }}</th>
-          <th style="width: 41.66%;">{{ $t('settings.path') }}</th>
-          <th style="width: 16.66%;">{{ $t('settings.remove') }}</th>
-        </tr>
-        </thead>
+      <div class="table-responsive">
 
-        <draggable :list="shortcuts" tag="tbody">
-
-          <tr class="tr-values vs-table--tr tr-table-state-null" v-for="(entity, index) in shortcuts">
-            <td class="td vs-table--td">
-              <vs-input :label-placeholder="$t('settings.title')" v-model="entity.title"/>
-            </td>
-
-            <td class="td vs-table--td">
-              <vs-input :label-placeholder="$t('settings.path')" v-model="entity.path"/>
-            </td>
-
-            <td class="td vs-table--td text-center">
-              <i class="fa fa-times fa-lg remove p-2"
-                 :title="$t('settings.removeShortcut')"
-                 @click="removeShortcut(index)"></i>
-            </td>
-
+        <table class="vs-table vs-table--tbody-table">
+          <thead class="vs-table--thead">
+          <tr>
+            <th style="width: 33.34%;">{{ $t('settings.title') }}</th>
+            <th style="width: 33.34%;">{{ $t('settings.path') }}</th>
+            <th style="width: 16.66%;">{{ $t('settings.isAlwaysVisible') }}</th>
+            <th style="width: 16.66%;">{{ $t('settings.remove') }}</th>
           </tr>
-        </draggable>
-      </table>
+          </thead>
+
+          <draggable :list="shortcuts" tag="tbody">
+
+            <tr class="tr-values vs-table--tr tr-table-state-null" v-for="(entity, index) in shortcuts">
+              <td class="td vs-table--td">
+                <vs-input :label-placeholder="$t('settings.title')" v-model="entity.title"/>
+              </td>
+
+              <td class="td vs-table--td">
+                <vs-input :label-placeholder="$t('settings.path')" v-model="entity.path"/>
+              </td>
+
+              <td class="td vs-table--td text-center">
+                <vs-checkbox icon="fa-eye" icon-pack="far" color="primary" v-model="entity.isAlwaysVisible"></vs-checkbox>
+              </td>
+
+              <td class="td vs-table--td text-center">
+                <i class="fa fa-times fa-lg remove p-2"
+                   :title="$t('settings.removeShortcut')"
+                   @click="removeShortcut(index)"></i>
+              </td>
+
+            </tr>
+          </draggable>
+        </table>
+
+      </div>
 
     </div>
 
@@ -99,7 +110,7 @@
     },
     methods: {
       addShortcut() {
-        this.shortcuts.push({title: '', path: ''})
+        this.shortcuts.push({title: '', path: '', isAlwaysVisible: false})
       },
 
       removeShortcut(index) {
@@ -118,6 +129,11 @@
   .vs-table--tbody-table {
     min-width: unset;
     background: unset;
+  }
+
+  .vs-table--thead th {
+    text-align: center;
+    white-space: nowrap;
   }
 
   .remove:hover {
