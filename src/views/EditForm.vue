@@ -12,7 +12,7 @@
 
       <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData"/>
 
-      <bottom-options :object="object" :is-navigation-shown="$route.meta.isNavigationShow" v-if="$route.meta.isBottomOptionShown"/>
+      <bottom-options :object="object" :is-navigation-shown="$route.meta.isNavigationShown" v-if="$route.meta.isBottomOptionShown"/>
 
       <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
                          :related-data="relatedData" :object="object" :object-id="data.id"/>

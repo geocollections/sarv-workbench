@@ -214,7 +214,7 @@ const router = new Router({
             isEdit: true,
             requiresAuth: true,
             isBottomOptionShown: true,
-            isNavigationShow: true,
+            isNavigationShown: true,
           },
         },
         {
@@ -299,7 +299,8 @@ const router = new Router({
                 heading: 'editReference.heading',
                 isBottomOptionShown: true,
                 // isSidebarShown: true,
-                isNavigationShown: true,
+                isNavigationShown:true,
+
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: 'reference'
@@ -328,7 +329,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 object: 'reference'
               },
             }
@@ -385,7 +386,7 @@ const router = new Router({
                 title:'titles.editLocality',
                 heading:'editLocality.heading',
                 isBottomOptionShown: true,
-                isNavigationShow: true,
+                isNavigationShown: true,
                 isCopyFormShown: true,
                 requiresAuth: true,
                 object: 'locality'
@@ -412,7 +413,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 object: 'locality'
               },
             }
@@ -452,7 +453,7 @@ const router = new Router({
                 title:'titles.editSample',
                 heading:'editSample.heading',
                 isBottomOptionShown: true,
-                isNavigationShow: true,
+                isNavigationShown: true,
                 isCopyFormShown: true,
                 requiresAuth: true,
                 object: 'sample'
@@ -479,7 +480,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 object: 'sample'
               },
             }
@@ -527,7 +528,7 @@ const router = new Router({
                     ],
                     requiresAuth: true,
                     isBottomOptionShown: true,
-                    isNavigationShown: false,
+                    isNavigationShown: true,
                     object: 'project'
                   },
                 }
@@ -558,7 +559,7 @@ const router = new Router({
                     title:'titles.editProject',
                     heading:'editProject.heading',
                     isBottomOptionShown: true,
-                    isNavigationShow: false,
+                    isNavigationShown: true,
                     isCopyFormShown: false,
                     // isSidebarShown: true,
                     requiresAuth: true,
@@ -602,7 +603,7 @@ const router = new Router({
                 title:'titles.editSite',
                 heading:'editSite.heading',
                 isBottomOptionShown: true,
-                isNavigationShow: false,
+                isNavigationShown: true,
                 isCopyFormShown: false,
                 // isSidebarShown: true,
                 requiresAuth: true,
@@ -631,7 +632,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 object: 'site'
               },
             }
@@ -670,7 +671,7 @@ const router = new Router({
                 title:'titles.editLibrary',
                 heading:'editLibrary.heading',
                 isBottomOptionShown: true,
-                isNavigationShow:true,
+                isNavigationShown:true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: 'library'
@@ -736,7 +737,7 @@ const router = new Router({
                 title:'titles.editDoi',
                 heading:'editDoi.heading',
                 isBottomOptionShown: true,
-                isNavigationShow:true,
+                isNavigationShown:true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: 'doi'
@@ -763,7 +764,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 object: 'doi'
               },
             }
@@ -802,7 +803,7 @@ const router = new Router({
                 title:'titles.editAnalysis',
                 heading:'editAnalysis.heading',
                 isBottomOptionShown: true,
-                isNavigationShow:false,
+                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: 'analysis'
@@ -830,7 +831,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 object: 'analysis'
               },
             }

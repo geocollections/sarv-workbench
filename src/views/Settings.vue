@@ -94,11 +94,12 @@
   import permissionsMixin from "../components/mixins/permissionsMixin";
   import VueMultiselect from "vue-multiselect/src/Multiselect";
   import Shortcuts from "../components/partial/settings/Shortcuts";
+  import localStorageMixin from "../components/mixins/localStorageMixin";
 
   export default {
     name: "Settings",
     components: {Shortcuts, VueMultiselect},
-    mixins: [permissionsMixin],
+    mixins: [permissionsMixin, localStorageMixin],
     data() {
       return {
         // Todo: Update lists according to routes

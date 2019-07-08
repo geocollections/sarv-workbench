@@ -18,7 +18,7 @@
 
     <router-view/>
 
-    <bottom-options :object="$route.meta.object" :is-navigation-shown="$route.meta.isNavigationShow" v-if="$route.meta.isBottomOptionShown"/>
+    <bottom-options :object="$route.meta.object" :is-navigation-shown="$route.meta.isNavigationShown" v-if="$route.meta.isBottomOptionShown"/>
 
   </div>
 </template>

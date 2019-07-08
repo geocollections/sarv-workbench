@@ -1,57 +1,64 @@
 <template>
   <div class="bottom-options">
 
-    <!-- Todo: Should make Previous and Next button available only when sidebar is hidden -->
-    <div class="row text-center bottom-options-lg">
+    <div class="d-flex justify-content-around align-items-center bottom-options-lg">
 
-      <div class="col-3 col-md-2 offset-md-2  p-0" v-if="isNavigationShown">
-        <div class="bottom-nav nav-button" v-if="!previousDisabled"
-             v-on:click="$parent.$emit('button-clicked', 'PREVIOUS', object)">
 
-          <div class="col-12"><font-awesome-icon icon="angle-double-left" size="lg"/></div>
-          <div class="col-12 bottom-nav-text">{{ $t('buttons.previous') }}</div>
+      <div class="bottom-item p-2 text-center bottom-nav"
+           :class="{ 'bottom-item-disabled': previousDisabled }"
+           @click="!previousDisabled ? $parent.$emit('button-clicked', 'PREVIOUS', object) : ''"
+           v-if="isNavigationShown">
+        <span class="bottom-nav-icon">
+          <font-awesome-icon icon="angle-double-left" size="sm"/>
+        </span>
+        <span class="bottom-text"> {{ $t('buttons.previous') }}</span>
+      </div>
+
+
+      <div class="bottom-item p-2 text-center bottom-save"
+           @click="$parent.$emit('button-clicked', 'SAVE_AND_LEAVE', object)">
+        <div class="d-lg-inline-block bottom-icon">
+          <font-awesome-icon icon="door-open" size="3x"/>
         </div>
-
-        <div v-else class="bottom-nav-disabled">
-          <div class="col-12"><font-awesome-icon icon="angle-double-left" size="lg"/></div>
-          <div class="col-12 bottom-nav-text">{{ $t('buttons.previous') }}</div>
+        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+          {{ $t('edit.buttons.save') }}
         </div>
       </div>
 
-      <div :class="isNavigationShown ? 'col-3 col-md-2  p-0' : 'col-6 col-md-3 offset-md-3 p-0'">
-        <div class="bottom-nav save-button"
-             v-on:click="$parent.$emit('button-clicked', 'SAVE', object)">
 
-          <div class="col-12"><font-awesome-icon icon="save" size="lg"/></div>
-          <div class="col-12 bottom-nav-text">{{ $t('edit.buttons.save') }}</div>
-
+      <div class="bottom-item p-2 text-center bottom-save"
+           @click="$parent.$emit('button-clicked', 'SAVE', object)">
+        <div class="d-lg-inline-block bottom-icon">
+          <font-awesome-icon icon="save" size="3x"/>
+        </div>
+        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+          {{ $t('edit.buttons.save') }}
         </div>
       </div>
 
-      <div :class="isNavigationShown ? 'col-3 col-md-2 p-0' : 'col-6 col-md-3  p-0'"
-           v-on:click="$route.meta.isEdit ? $parent.$emit('button-clicked', 'CANCEL', object) : $parent.$emit('button-clicked', 'CLEAR', object)">
-        <div class="bottom-nav cancel-button">
 
-          <div class="col-12"><font-awesome-icon icon="ban" size="lg"/></div>
-          <div class="col-12 bottom-nav-text">{{ $route.meta.isEdit ? $t('buttons.cancel') : $t('buttons.clear') }}</div>
-
+      <div class="bottom-item p-2 text-center bottom-cancel"
+           @click="$route.meta.isEdit ? $parent.$emit('button-clicked', 'CANCEL', object) : $parent.$emit('button-clicked', 'CLEAR', object)">
+        <div class="d-lg-inline-block bottom-icon">
+          <font-awesome-icon icon="ban" size="3x"/>
+        </div>
+        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+          {{ $route.meta.isEdit ? $t('buttons.cancel') : $t('buttons.clear') }}
         </div>
       </div>
 
-      <div
-        class="col-3 col-md-2  p-0" v-if="isNavigationShown">
-        <div class="bottom-nav nav-button" v-if="!nextDisabled"
-             v-on:click="$parent.$emit('button-clicked', 'NEXT', object)">
 
-          <div class="col-12"><font-awesome-icon icon="angle-double-right" size="lg"/></div>
-          <div class="col-12 bottom-nav-text">{{ $t('buttons.next') }}</div>
-        </div>
-
-        <div v-else class="bottom-nav-disabled">
-          <div class="col-12"><font-awesome-icon icon="angle-double-right" size="lg"/></div>
-          <div class="col-12 bottom-nav-text">{{ $t('buttons.next') }}</div>
-        </div>
+      <div class="bottom-item p-2 text-center bottom-nav"
+           :class="{ 'bottom-item-disabled': nextDisabled }"
+           @click="!nextDisabled ? $parent.$emit('button-clicked', 'NEXT', object) : ''"
+           v-if="isNavigationShown">
+        <span class="bottom-text">{{ $t('buttons.next') }} </span>
+        <span class="bottom-nav-icon">
+          <font-awesome-icon icon="angle-double-right" size="sm"/>
+        </span>
       </div>
+
+
     </div>
 
   </div>
@@ -119,7 +126,8 @@
 <!-- Styles are not scoped because now it is possible to add margin-bottom to footer easily -->
 <style>
   .bottom-options {
-    background-color: #f8f9fa!important;
+    background-color: #343a40!important;
+    color: #fff;
     overflow: hidden;
     position: fixed;
     right: 0;
@@ -131,49 +139,73 @@
     height: 56px;
   }
 
-
   @media (min-width: 992px) {
     .bottom-options-lg {
       /* Sidebar width */
       margin-left: 260px;
     }
+
+    .d-lg-inline-block {
+      display: inline-block !important;
+    }
+
+    .bottom-text-lg {
+      vertical-align: 0.25rem;
+      margin-left: 1rem;
+      font-size: 15px !important;
+    }
+
+    .bottom-text {
+      font-size: 15px !important;
+    }
   }
 
-  .bottom-nav {
-    padding: 7px 0;
-    color: rgba(102, 102, 102, 1);
+  .bottom-options > div {
+    height: 56px;
+  }
+
+  .bottom-item:hover {
+    cursor: pointer;
+  }
+
+  .bottom-item-disabled {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .bottom-item-disabled:hover {
+    cursor: not-allowed;
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  .bottom-icon {
+    font-size: 0.5rem;
+  }
+
+  .bottom-text {
+    font-size: 12px;
+    margin-top: -0.1rem;
   }
 
   .bottom-nav:hover {
-    cursor: pointer;
-    /*background-color: rgba(102, 102, 102, 1);*/
-    color: #f8f9fa;
+    color: #007bff;
   }
 
-  .bottom-nav-disabled {
-    padding: 7px 0;
-    color: rgba(102, 102, 102, 0.4);
-    background-color: #e9ecef;
+  .bottom-nav:hover > .bottom-nav-icon {
+    opacity: 1;
+    transition: opacity 0.5s;
   }
 
-  .bottom-nav-disabled:hover {
-    cursor: not-allowed;
+  .bottom-nav > .bottom-nav-icon {
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  
+  .bottom-save:hover {
+    color: #28a745;
   }
 
-  .bottom-nav-text {
-    font-size: 12px;
-  }
-
-  .nav-button:hover {
-    background-color: rgba(91, 192, 222, 1)
-  }
-
-  .save-button:hover {
-    background-color: rgba(92, 184, 92, 1)
-  }
-
-  .cancel-button:hover {
-    background-color: rgba(217, 83, 79, 1)
+  .bottom-cancel:hover {
+    color: #dc3545;
   }
 
   /* Adds margin-bottom to footer so that it won't get caught behind buttons */
