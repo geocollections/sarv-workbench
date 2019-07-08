@@ -150,6 +150,8 @@
           if (validJsonString.includes('"False"')) validJsonString = validJsonString.replace(/"False"/g, 'False')
           if (validJsonString.includes('False')) validJsonString = validJsonString.replace(/False/g, '"False"')
 
+          if (validJsonString.includes('datetime.datetime')) validJsonString = validJsonString.replace(/datetime.datetime\((.*?)\)/g, '"$&"')
+
           return JSON.parse(validJsonString)
         } else return {}
       },

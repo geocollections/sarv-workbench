@@ -869,13 +869,15 @@ router.beforeEach(async (to, from, next) => {
   } else {
 
     if (from.fullPath !== '/') {
-      Vue.prototype.$toast.error('Please log back in', 'Session expired', {
-        position: 'bottomRight',
-        timeout: 5000,
-        closeOnEscape: true,
-        pauseOnHover: false,
-        displayMode: 'replace'
-      })
+      if (!to.params.dontShowSessionExpired) {
+        Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+          position: 'bottomRight',
+          timeout: 5000,
+          closeOnEscape: true,
+          pauseOnHover: false,
+          displayMode: 'replace'
+        })
+      }
     }
 
     if (to.meta.requiresAuth) next({ path: '/' });

@@ -48,7 +48,7 @@ const authenticate = {
 
       fetchLogout().then(response => {
         if (response.status === 200) {
-          this.$router.push({path: '/'});
+          this.$router.push({ name: 'Geocollections Data Management', params: { dontShowSessionExpired: true } });
           this.showSuccessToast(response);
         } else this.showErrorToast(response)
 

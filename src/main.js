@@ -166,8 +166,10 @@ new Vue({
       default: false
     },
     activeProject:{
-      type: Array,
-      default: []
+      type: Object
+    },
+    activeLibrary:{
+      type: Object
     },
     photoArchive: {
       type: Object

@@ -45,6 +45,10 @@
       }
     },
 
+    beforeCreate() {
+      this.$store.dispatch('INITIALISE_ACTIVE_OBJECTS');
+    },
+
     created() {
       this.sidebarState = window.innerWidth >= 992
     },

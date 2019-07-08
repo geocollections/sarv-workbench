@@ -26,9 +26,9 @@
         <vs-sidebar-item index="2.2" icon="fa-plus-square" icon-pack="far" :to="{ path: '/project/add' }">
           {{ $t('header.addProject') }}
         </vs-sidebar-item>
-        <vs-sidebar-item v-if="activeProject > 0" index="2.3" icon="fa-globe-americas" icon-pack="fas"
-                         :to="{ path: '/project/' + activeProject }">
-          {{ $t('frontPage.buttons.activeProject') }}: {{ activeProject }}
+        <vs-sidebar-item v-if="activeProject" index="2.3" icon="fa-globe-americas" icon-pack="fas"
+                         :to="{ path: '/project/' + activeProject.id }">
+          {{ $t('frontPage.buttons.activeProject') }}: {{ activeProject.id }}
         </vs-sidebar-item>
       </vs-sidebar-group>
 
@@ -314,7 +314,6 @@
         user: '',
         name: '',
         surname: '',
-        activeProject: '',
         activeSite: '',
         activeSample: '',
         permissions: '',
@@ -336,6 +335,11 @@
       activeLibrary() {
         if (this.$store.state['activeLibrary'] !== null) return this.$store.state['activeLibrary']
         else return ''
+      },
+
+      activeProject() {
+        if (this.$store.state['activeProject'] !== null) return this.$store.state['activeProject']
+        else return ''
       }
     },
 
@@ -352,7 +356,6 @@
         this.$store.dispatch(this.$store.state['activeSearchParams'].request)
       }
 
-      this.activeProject = this.$localStorage.get('activeProject')[0];
       this.activeSite = this.$localStorage.get('activeSite');
       this.activeSample = this.$localStorage.get('activeSample');
     },
@@ -384,29 +387,6 @@
         this.$store.state.activeSearchParams.search.page -= 1
       },
 
-      // getIcon(name) {
-      //   if (name === 'info') return 'fa-project-diagram';
-      //   if (name === 'description') return 'fa-pen-fancy';
-      //   if (name === 'members') return 'fa-user-friends';
-      //   if (name === 'files') return 'fa-folder-open';
-      //   if (name === 'sites') return 'fa-globe-americas';
-      //   if (name === 'location') return 'fa-globe';
-      //   if (name === 'samples') return 'fa-vial';
-      //   if (name === 'digital') return 'fa-file-pdf';
-      //   if (name === 'libraries') return 'fa-book';
-      //   if (name === 'localities') return 'fa-map-marked';
-      //   if (name === 'requiredFields') return 'fa-check';
-      //   if (name === 'referenceAndDataset') return 'fa-book';
-      //   if (name === 'datacite') return 'fa-sitemap'
-      //   if (name === 'relatedInfo') return 'fa-project-diagram'
-      //   if (name === 'map') return 'fa-map'
-      //   if (name === 'additionalInfo') return 'fa-project-diagram'
-      // },
-
-      // getIconPack(name) {
-      //   return 'fas'
-      // },
-
       setAction(action, choice) {
         console.log(action)
         console.log(choice)
@@ -416,10 +396,10 @@
       },
 
       makeActive(library) {
-        if (this.activeLibrary === library) {
-          this.$store.commit('SET_ACTIVE_LIBRARY', null)
+        if (this.activeLibrary.id === library.id) {
+          this.$store.dispatch('ACTIVE_LIBRARY', null)
         } else {
-          this.$store.commit('SET_ACTIVE_LIBRARY', library)
+          this.$store.dispatch('ACTIVE_LIBRARY', library)
         }
       }
     },

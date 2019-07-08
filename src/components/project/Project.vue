@@ -3,14 +3,9 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <div class="row mb-2">
+    <div class="row mb-2" v-if="$route.meta.isEdit">
       <div class="col">
-        <add-new-site :sendingData = "sendingData" :site="watchedSite"></add-new-site>
-
-        <!-- Old create relation with site -->
-<!--        <span class="float-right" v-if="$route.meta.isEdit">-->
-<!--          <button class="btn btn-outline-primary mb-2" @click="addOrEditSite()"><font-awesome-icon icon="globe-americas"/>&ensp;{{$t('project.newSite')}}</button>-->
-<!--        </span>-->
+        <add-new-site :sendingData="sendingData" :site="watchedSite"></add-new-site>
 
         <span class="float-left">
           <span class="custom-control custom-switch">
@@ -19,9 +14,6 @@
                    :class="isActiveProject ? 'alert-success ' : 'alert-danger'" for="customSwitch2">
               <font-awesome-icon icon="tag"/>&ensp;{{ $t(isActiveProject ? 'frontPage.active' : 'frontPage.non_active')}}</label>
           </span>
-
-          <!--<button  v-if="!isActiveProject" class="btn alert-danger mb-2" @click="isActiveProject = true">{{ $t('frontPage.non_active') }}</button>-->
-          <!--<button v-if="isActiveProject"  class="btn alert-success mb-2" @click="isActiveProject = false">{{ $t('frontPage.active') }}</button>-->
         </span>
       </div>
 
@@ -368,7 +360,20 @@
       return this.setInitialData()
     },
     computed:{
-      sidebarUserAction() { return this.$store.state['sidebarUserAction'] }
+      sidebarUserAction() { return this.$store.state['sidebarUserAction'] },
+
+      isActiveProject: {
+        get() {
+          if (this.$store.state['activeProject'] !== null) return this.$store.state['activeProject'].id == this.$route.params.id
+          else return ''
+        },
+
+        set(newVal) {
+          if (newVal) this.$store.dispatch('ACTIVE_PROJECT', this.project)
+          else this.$store.dispatch('ACTIVE_PROJECT', null)
+        }
+
+      }
     },
     created() {
       this.activeObject = 'project';
@@ -423,7 +428,6 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          isActiveProject: false,
           columns: [
             {id: "id", title: "site.id", type: "number"},
             {id: "name", title: "site.name", type: "text"},
@@ -471,7 +475,6 @@
               this.sendingData = false;
             }
           });
-          this.setProjectStatus();
           this.loadRelatedData('projectagent');
           this.loadRelatedData('attachment_link');
           this.loadRelatedData('site');
@@ -689,13 +692,6 @@
       addFiles(data){
         this.addFileAsRelatedData(data, 'project');
       },
-      setProjectStatus() {
-        let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
-        let currentProjectIdx = findIndex(currentActiveProjects, function (item) {
-          return item === parseInt(vm.$route.params.id)
-        });
-        this.isActiveProject = currentProjectIdx > -1
-      }
     },
 
     watch: {
@@ -707,25 +703,6 @@
       },
       'relatedData.page.site'(newval, oldval) {
         this.loadRelatedData('site')
-      },
-
-      'isActiveProject'(newval, oldval) {
-        let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'))
-        if (currentActiveProjects === 'fallbackValue') currentActiveProjects = [];
-        if (!this.isDefinedAndNotNull(this.project.id)) return
-
-        if (newval) {
-          currentActiveProjects = []; // only one project or none can be active!  Maybe this condition will be changed
-          currentActiveProjects.push(this.project.id)
-        } else {
-          let removeIdx = findIndex(currentActiveProjects, function (item) {
-            return item === vm.project.id
-          });
-
-          currentActiveProjects.splice(removeIdx, 1)
-        }
-
-        this.$localStorage.set('activeProject', currentActiveProjects)
       },
       //Because of $root.$on triggering method 'handleSidebarUserAction' several times after each click. It was decided to
       //store this action

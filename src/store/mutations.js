@@ -9,6 +9,14 @@ function handleResponse(response){
 
 export default {
 
+  SET_ACTIVE_OBJECTS: (state) => {
+    const activeLibrary = Vue.localStorage.get('activeLibrary', null);
+    const activeProject = Vue.localStorage.get('activeProject', null);
+
+    if (activeLibrary && !isEmpty(activeLibrary)) Vue.set(state, 'activeLibrary', activeLibrary);
+    if (activeProject && !isEmpty(activeProject)) Vue.set(state, 'activeProject', activeProject);
+  },
+
   CREATE_RELATION_OBJECT: (state, { createRelationWith }) => {
     Vue.set(state,'createRelationWith', createRelationWith )
   },
@@ -35,22 +43,26 @@ export default {
   },
 
   SET_SIDEBAR_USER_ACTION: (state, { userAction }) => {
-    console.log(state)
-    console.log(userAction)
     Vue.set(state, 'sidebarUserAction', userAction || false)
   },
 
   SET_ACTIVE_LIBRARY: (state, object) => {
+    Vue.localStorage.set('activeLibrary', object);
     Vue.set(state, 'activeLibrary', object)
   },
 
+  SET_ACTIVE_PROJECT: (state, object) => {
+    Vue.localStorage.set('activeProject', object);
+    Vue.set(state, 'activeProject', object)
+  },
+
   SET_SHORTCUTS: (state, { shortcuts }) => {
-    Vue.localStorage.set('shortcuts', JSON.stringify(shortcuts))
+    Vue.localStorage.set('shortcuts', JSON.stringify(shortcuts));
     Vue.set(state, 'shortcuts', shortcuts)
   },
 
   GET_SHORTCUTS: (state) => {
-    const shortcuts = Vue.localStorage.get('shortcuts', null)
+    const shortcuts = Vue.localStorage.get('shortcuts', null);
 
     if (typeof shortcuts !== 'undefined' && shortcuts !== null && !isEmpty(shortcuts)) {
       Vue.set(state, 'shortcuts', JSON.parse(shortcuts))

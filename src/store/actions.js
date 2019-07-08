@@ -64,5 +64,17 @@ export default {
 
   GET_SHORTCUTS: ({ commit, state }) => {
     commit('GET_SHORTCUTS')
+  },
+
+  ACTIVE_LIBRARY: ({commit, state}, library) => {
+    commit('SET_ACTIVE_LIBRARY', library)
+  },
+
+  ACTIVE_PROJECT: ({commit, state}, project) => {
+    commit('SET_ACTIVE_PROJECT', project)
+  },
+
+  INITIALISE_ACTIVE_OBJECTS: ({commit}) => {
+    commit('SET_ACTIVE_OBJECTS')
   }
 }

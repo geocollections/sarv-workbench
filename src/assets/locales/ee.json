@@ -592,8 +592,8 @@
   "project":{
     "header": "Minu projektid",
     "id":"ID",
-    "name":"Nimetus (EST)",
-    "name_en":"Name",
+    "name":"Nimi",
+    "name_en":"Nimi (ENG)",
     "parent_project":"Parent",
     "project_type":"Type",
     "date":"Kuupäev",

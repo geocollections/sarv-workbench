@@ -33,7 +33,7 @@
         },
 
         set: function (newValue) {
-          this.$store.commit('SET_ACTIVE_LIBRARY', newValue)
+          this.$store.dispatch('ACTIVE_LIBRARY', newValue)
         }
 
       }

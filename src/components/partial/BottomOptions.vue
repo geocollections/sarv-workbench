@@ -199,7 +199,7 @@
     opacity: 0;
     transition: opacity 0.5s;
   }
-  
+
   .bottom-save:hover {
     color: #28a745;
   }

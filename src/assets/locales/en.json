@@ -591,8 +591,8 @@
   "project":{
     "header": "My projects",
     "id":"ID",
-    "name":"Name (EST)",
-    "name_en":"Name",
+    "name":"Name",
+    "name_en":"Name (ENG)",
     "parent_project":"Parent",
     "project_type":"Type",
     "date":"Date",

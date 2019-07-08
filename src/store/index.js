@@ -16,6 +16,7 @@ export function createStore () {
       activeSearchParams: null,
       sidebarUserAction: null,
       activeLibrary: null,
+      activeProject: null,
       shortcuts: []
     },
     actions,

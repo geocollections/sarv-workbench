@@ -21,16 +21,6 @@
             <div class="col-md-6">
               <!--<label class="p-0">{{ $t('site.name_en') }}:</label>-->
               <!--<b-form-input id="name_en" v-model="site.name_en" type="text" maxlength="100"></b-form-input>-->
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-6">
-              <label :for="`number`">{{ $t('site.number') }}:</label>
-              <b-form-input id="number" v-model="site.number" type="text" maxlength="20"></b-form-input>
-            </div>
-
-            <div class="col-sm-6">
               <label :for="`project`">{{ $t('site.project') }}:</label>
               <vue-multiselect class="align-middle" v-model="site.project" select-label=""
                                id="project"
@@ -254,28 +244,28 @@
       </transition>
     </fieldset>
 
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false,'site',true)"
-                :title="$t('edit.buttons.saveAndLeave') ">
-          <font-awesome-icon icon="door-open"/>
-          {{ $t('edit.buttons.saveAndLeave') }}
-        </button>
+<!--    <div class="row mt-3 mb-3">-->
+<!--      <div class="col">-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false,'site',true)"-->
+<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
+<!--          <font-awesome-icon icon="door-open"/>-->
+<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
-          <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
-          <!--{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}-->
-        </button>
+<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+<!--          <font-awesome-icon icon="save"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+<!--          &lt;!&ndash;{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}&ndash;&gt;-->
+<!--        </button>-->
 
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site', $route.meta.isEdit)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
-          <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
-        </button>
-      </div>
-    </div>
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site', $route.meta.isEdit)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+<!--          <font-awesome-icon icon="ban"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 </template>
@@ -347,6 +337,10 @@
       isLatitudeUndefinedInEditView() {
         return typeof this.site.latitude === 'undefined' && this.$route.meta.isEdit
       },
+
+      activeProject() {
+        return this.$store.state['activeProject']
+      }
       // editSite() {
       //   return this.$store.state['createRelationWith'].edit
       // }
@@ -368,6 +362,13 @@
           field: 'name',
           block: this.block
         })
+      } else {
+        // Add view
+        this.site.date_start = new Date()
+
+        if (this.activeProject) {
+          this.site.project = { id: this.activeProject.id, name: this.activeProject.name, name_en: this.activeProject.name_en }
+        }
       }
 
       // Getting project (only from project view when user presses 'add site button')
@@ -375,10 +376,10 @@
         const dataFromProject = this.$route.params.project
 
         this.site.project = { id: dataFromProject.id, name: dataFromProject.name, name_en: dataFromProject.name_en }
-        this.site.date_start = dataFromProject.date_start
-        this.site.date_end = dataFromProject.date_end
         this.setSiteName(dataFromProject.id)
       }
+
+      console.log(this.site)
 
       this.loadFullInfo();
 
@@ -391,7 +392,7 @@
         return {
           searchHistory: 'siteSearchHistory',
           relatedData: this.setDefaultRalatedData(),
-          copyFields: ['id', 'name', 'name_en', 'number', 'project', 'date_start', 'date_end', 'coord_det_method',
+          copyFields: ['id', 'name', 'name_en', 'project', 'date_start', 'date_end', 'coord_det_method',
             'locality', 'latitude', 'longitude', 'location_accuracy', 'elevation', 'elevation_accuracy', 'extent', 'depth',
             'remarks_location', 'description', 'remarks'
           ],
