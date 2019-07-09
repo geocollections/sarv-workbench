@@ -93,7 +93,8 @@
           },
 
         ],
-        zoom: 11 //SET DEFAULT ZOOM LEVEL
+        zoom: 11, //SET DEFAULT ZOOM LEVEL,
+        gpsID: null
       }
     },
 
@@ -123,6 +124,11 @@
       //   this.initMap();
       // })
     },
+
+    beforeDestroy() {
+      navigator.geolocation.clearWatch(this.gpsID)
+    },
+
     methods: {
 
       initMap() {
@@ -228,7 +234,8 @@
       getGPSLocation() {
         if (navigator.geolocation) {
           return new Promise(resolve => {
-            navigator.geolocation.watchPosition(position => {
+            this.gpsID = navigator.geolocation.watchPosition(position => {
+              console.log(position)
               resolve({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
