@@ -42,16 +42,21 @@
         <table class="vs-table vs-table--tbody-table">
           <thead class="vs-table--thead">
           <tr>
-            <th style="width: 33.34%;">{{ $t('settings.title') }}</th>
-            <th style="width: 33.34%;">{{ $t('settings.path') }}</th>
-            <th style="width: 16.66%;">{{ $t('settings.isAlwaysVisible') }}</th>
-            <th style="width: 16.66%;">{{ $t('settings.remove') }}</th>
+            <th style="width: 10%;">{{ $t('settings.handle') }}</th>
+            <th style="width: 30%;">{{ $t('settings.title') }}</th>
+            <th style="width: 30%;">{{ $t('settings.path') }}</th>
+            <th style="width: 15%;">{{ $t('settings.isAlwaysVisible') }}</th>
+            <th style="width: 15%;">{{ $t('settings.remove') }}</th>
           </tr>
           </thead>
 
-          <draggable :list="shortcuts" tag="tbody">
+          <draggable :list="shortcuts" tag="tbody" handle=".handle">
 
             <tr class="tr-values vs-table--tr tr-table-state-null" v-for="(entity, index) in shortcuts">
+              <td class="td vs-table--td handle text-center">
+                <i class="fas fa-align-justify"></i>
+              </td>
+
               <td class="td vs-table--td">
                 <vs-input :label-placeholder="$t('settings.title')" v-model="entity.title"/>
               </td>
@@ -143,6 +148,14 @@
 
   .vs-con-input-label {
     width: unset;
+  }
+
+  .handle:hover {
+    cursor: grab;
+  }
+
+  .handle:active {
+    cursor: grabbing;
   }
 
 </style>

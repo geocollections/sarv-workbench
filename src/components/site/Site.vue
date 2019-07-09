@@ -103,20 +103,34 @@
             </div>
           </div>
 
-          <div class="row">
-            <span class="col ml-3 mt-3 custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
-              <label class="custom-control-label"
-                     for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
-            </span>
+<!--          <div class="row">-->
+<!--            <span class="col ml-3 mt-3 custom-control custom-switch">-->
+<!--              <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">-->
+<!--              <label class="custom-control-label"-->
+<!--                     for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>-->
+<!--            </span>-->
+<!--          </div>-->
+
+          <div class="d-flex justify-content-start mt-3">
+            <div class="align-self-center">
+              <vs-switch id="map-switch" v-model="showCollapseMap">
+              <span slot="on">ON</span>
+              <span slot="off">OFF</span>
+            </vs-switch>
+            </div>
+            <div class="align-self-center">
+              <label class="m-0" :for="`map-switch`"><i class="far fa-map"></i> {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}</label>
+            </div>
           </div>
 
-          <div class="row mb-2">
+          <div class="row my-2" v-if="showCollapseMap">
             <div class="col-lg-12">
               <b-collapse v-model="showCollapseMap" id="collapseMap">
                 <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
-                <map-component-2 :gps-coords="true" v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
-                                 mode="single" v-bind:locations="[]"
+                <map-component-2 v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
+                                 :gps-coords="true"
+                                 mode="single"
+                                 v-bind:locations="[]"
                                  v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }"
                                  v-on:get-location="updateLocation"></map-component-2>
               </b-collapse>
@@ -143,6 +157,7 @@
                                :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option[commonLabel] }}</strong></template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -246,29 +261,6 @@
       </transition>
     </fieldset>
 
-<!--    <div class="row mt-3 mb-3">-->
-<!--      <div class="col">-->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false,'site',true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true,'site',true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--          &lt;!&ndash;{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}&ndash;&gt;-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('site', $route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
-
   </div>
 </template>
 
@@ -299,8 +291,6 @@
   import LinkedSampleTable from "../sample/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
 
-  import sidebarMixin from './../mixins/sidebarMixin'
-
   export default {
     name: "Site",
     components: {
@@ -317,7 +307,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, sidebarMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
     // props:['editSite'], USED FOR MODAL
     data() {
       return this.setInitialData()
@@ -381,7 +371,7 @@
         this.site.project = { id: dataFromProject.id, name: dataFromProject.name, name_en: dataFromProject.name_en }
         this.setSiteName(dataFromProject.id)
       }
-      
+
       this.loadFullInfo();
 
     },
@@ -502,12 +492,12 @@
         return JSON.stringify(uploadableObject)
       },
       fillAutocompleteFields(obj) {
-        this.site.project = {name: obj.project__name, name_en: obj.project__name_en, id: obj.project}
+        this.site.project = {name: obj.project__name, name_en: obj.project__name_en, id: obj.project};
         this.site.coord_det_method = {
           value: obj.coord_det_method__value,
           value_en: obj.coord_det_method__value_en,
           id: obj.coord_det_method
-        }
+        };
         this.site.locality = {
           id: obj.locality__id,
           locality_en: obj.locality__locality_en,
@@ -595,7 +585,7 @@
           this.$set(this.site, 'longitude', currentGPSLocation.longitude === null ? null : currentGPSLocation.longitude.toFixed(6));
           this.$set(this.site, 'location_accuracy', currentGPSLocation.accuracy);
 
-          this.site.coord_det_method = {id: 6, value: 'GPS', value_en: 'GPS'};
+          this.site.coord_det_method = {id: 6, value: 'GPS', value_en: 'GPS'};jh
         });
       },
 
@@ -603,6 +593,7 @@
         this.site.latitude = location.lat.toFixed(6)
         this.site.longitude = location.lng.toFixed(6)
       },
+
       addFiles(data) {
         this.addFileAsRelatedData(data, 'site');
       },

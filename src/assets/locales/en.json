@@ -113,6 +113,7 @@
     "isAlwaysVisible": "Always visible",
     "saveShortcuts": "Save shortcuts",
     "shortcutsSaved": "Shortcuts saved",
+    "handle": "Drag",
     "pathInfo1": "Shortcut path is everything after",
     "pathInfo2": "for example",
     "pathInfo3": " where",
@@ -636,7 +637,9 @@
     "files": "Files",
     "relatedSamples": "Related samples",
     "addNew": "Add new Site",
-    "date": "Date"
+    "date": "Date",
+    "mapEnabled": "Map enabled",
+    "mapDisabled": "Map disabled"
   },
   "sample_series": {
     "name": "Name"

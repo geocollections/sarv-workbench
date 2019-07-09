@@ -113,6 +113,7 @@
     "isAlwaysVisible": "Alati nähtav",
     "saveShortcuts": "Salvesta otseteed",
     "shortcutsSaved": "Otseteed salvestatud",
+    "handle": "Lohista",
     "pathInfo1": "Shortcut tee on kõik peale",
     "pathInfo2": "näiteks",
     "pathInfo3": ", kus",
@@ -209,7 +210,7 @@
       "resetFile": "Eemalda fail | Eemalda failid",
       "downloadFile": "Lae alla fail | Lae alla failid",
       "add": "Salvesta",
-      "mapEnabled": "Näita kaart",
+      "mapEnabled": "Näita kaarti",
       "mapDisabled": "Peida kaart",
       "addAnother": "Salvesta ja lisa teine",
       "clearFields": "Puhasta väljad",
@@ -638,7 +639,9 @@
     "files": "Failid",
     "relatedSamples": "Seotud proovid",
     "addNew": "Lisage uus vaatluspunkt",
-    "date": "Kuupäev"
+    "date": "Kuupäev",
+    "mapEnabled": "Kaart nähtaval",
+    "mapDisabled": "Kaart peidetud"
   },
   "taxon": {
     "taxon": "Takson",
