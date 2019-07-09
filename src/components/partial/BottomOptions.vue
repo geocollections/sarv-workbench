@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-options">
+  <div class="bottom-options-new">
 
     <div class="d-flex justify-content-around align-items-center bottom-options-lg">
 
@@ -125,7 +125,7 @@
 
 <!-- Styles are not scoped because now it is possible to add margin-bottom to footer easily -->
 <style>
-  .bottom-options {
+  .bottom-options-new {
     background-color: #343a40!important;
     color: #fff;
     overflow: hidden;
@@ -133,7 +133,6 @@
     right: 0;
     bottom: 0;
     width: 100%;
-    /*padding: 8px 16px;*/
     box-shadow: 0 4px 10px #000;
     z-index: 1000;
     height: 56px;
@@ -160,7 +159,7 @@
     }
   }
 
-  .bottom-options > div {
+  .bottom-options-new > div {
     height: 56px;
   }
 

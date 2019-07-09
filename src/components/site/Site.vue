@@ -154,6 +154,7 @@
                                id="coord_det_method"
                                :options="autocomplete.coordMethod"
                                track-by="id"
+                               class="high-z-index"
                                :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
@@ -584,8 +585,9 @@
           this.$set(this.site, 'latitude', currentGPSLocation.latitude === null ? null : currentGPSLocation.latitude.toFixed(6));
           this.$set(this.site, 'longitude', currentGPSLocation.longitude === null ? null : currentGPSLocation.longitude.toFixed(6));
           this.$set(this.site, 'location_accuracy', currentGPSLocation.accuracy);
+          this.$set(this.site, 'coord_det_method', {id: 6, value: 'GPS', value_en: 'GPS'});
 
-          this.site.coord_det_method = {id: 6, value: 'GPS', value_en: 'GPS'};jh
+          // this.site.coord_det_method = {id: 6, value: 'GPS', value_en: 'GPS'};
         });
       },
 

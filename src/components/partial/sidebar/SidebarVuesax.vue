@@ -463,13 +463,18 @@
   }
 
   .vs-sidebar--item {
-    transition: unset;
-    -webkit-transition: unset;
+    transition: unset !important;
+    -webkit-transition: unset !important;
   }
 
-  .vs-sidebar-item-active > a {
-    transition: unset;
-    -webkit-transition: unset;
+  .vs-sidebar--item > a {
+    transition: unset !important;
+    -webkit-transition: unset !important;
+  }
+
+  .vs-sidebar--item-active > a {
+    transition: unset !important;
+    -webkit-transition: unset !important;
   }
 
   .vs-sidebar--item:hover {

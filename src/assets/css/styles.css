@@ -204,6 +204,11 @@ body {
     z-index: 10;
 }
 
+/* Giving this class to multiselects so they wouldn't get stuck behind some items i.e., maps */
+.high-z-index {
+  z-index: 5000;
+}
+
 /***************************************
  ***  MULTISELECT CUSTOM STYLES END  ***
  ***************************************/
