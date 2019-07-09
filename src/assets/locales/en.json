@@ -281,7 +281,8 @@
       "updateMetadata": "Update DOI metadata",
       "registerMetadata": "Register DOI metadata",
       "updateUrl": "Update DOI URL",
-      "registerUrl": "Register DOI URL"
+      "registerUrl": "Register DOI URL",
+      "finish": "Finish"
     },
     "locked": "This file is locked and can't be changed",
     "photoArchive": "Photo archive",

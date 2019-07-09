@@ -581,13 +581,21 @@ const formManipulation = {
 
     hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
       console.log(choice)
-      let vm = this;
       if (this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
 
       if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
+
+      if (choice === "FINISH") {
+        this[object].date_end = new Date()
+
+        this.add(false, object, isRelationSavedSeparately).then(resp => {
+          this.$router.push({path: '/' + object})
+        });
+      }
+
       if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately).then(resp => {
-        vm.$router.push({path: '/' + object})
-      })
+        this.$router.push({path: '/' + object})
+      });
 
       if (choice === "CLEAR") {
         this[object] = {}

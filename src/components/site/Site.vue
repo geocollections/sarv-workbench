@@ -61,14 +61,8 @@
                           :typeable="true"
                           input-class="form-control"></datepicker>
             </div>
-            <div class="col-sm-3">
-              <label>&ensp;</label>
-              <button class="btn btn-outline-primary form-control" @click="finishWork" v-b-tooltip.hover
-                      title="Finish and close"
-                      v-if="site.date_end === undefined || site.date_end === null"> Finish
-              </button>
-            </div>
           </div>
+
         </div>
       </transition>
     </fieldset>
@@ -291,6 +285,7 @@
   import SaveButtons from "../partial/SaveButtons";
   import LinkedSampleTable from "../sample/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
+  import sidebarMixin from "../mixins/sidebarMixin";
 
   export default {
     name: "Site",
@@ -308,7 +303,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, sidebarMixin],
     // props:['editSite'], USED FOR MODAL
     data() {
       return this.setInitialData()
@@ -360,16 +355,16 @@
         this.$set(this.site, 'date_start', new Date());
 
         if (this.activeProject) {
-          this.site.project = { id: this.activeProject.id, name: this.activeProject.name, name_en: this.activeProject.name_en }
+          this.site.project = { id: this.activeProject.id, name: this.activeProject.name, name_en: this.activeProject.name_en };
           this.setSiteName(this.site.project.id)
         }
       }
 
       // Getting project (only from project view when user presses 'add site button')
       if (typeof this.$route.params.project !== 'undefined' && this.$route.params.project !== null) {
-        const dataFromProject = this.$route.params.project
+        const dataFromProject = this.$route.params.project;
 
-        this.site.project = { id: dataFromProject.id, name: dataFromProject.name, name_en: dataFromProject.name_en }
+        this.site.project = { id: dataFromProject.id, name: dataFromProject.name, name_en: dataFromProject.name_en };
         this.setSiteName(dataFromProject.id)
       }
 
@@ -427,14 +422,14 @@
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
               this.site = this.handleResponse(response)[0];
-              this.fillAutocompleteFields(this.site)
+              this.fillAutocompleteFields(this.site);
               this.removeUnnecessaryFields(this.site, this.copyFields);
               // if (this.site.latitude === null && this.site.longitude === null) {
               //   this.setLocationDataIfExists();
               // }
 
               this.site.related_data = {};
-              this.$emit('data-loaded', this.site)
+              this.$emit('data-loaded', this.site);
               this.$emit('set-object', 'site');
               this.sendingData = false;
               this.getListRecords('site')
@@ -469,7 +464,7 @@
       },
 
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
-        let uploadableObject = cloneDeep(objectToUpload)
+        let uploadableObject = cloneDeep(objectToUpload);
 
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (this.isDefinedAndNotNull(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start, false);
@@ -486,12 +481,12 @@
 
 
         if (saveRelatedData) {
-          uploadableObject.related_data = {}
+          uploadableObject.related_data = {};
           uploadableObject.related_data.attachment = this.relatedData.attachment_link
         }
 
-        console.log('This object is sent in string format:')
-        console.log(uploadableObject)
+        console.log('This object is sent in string format:');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
       fillAutocompleteFields(obj) {
@@ -510,7 +505,7 @@
 
       fillRelatedDataAutocompleteFields(obj, type) {
         if (obj === undefined) return;
-        let relatedData = cloneDeep(obj)
+        let relatedData = cloneDeep(obj);
         obj = [];
         relatedData.forEach(entity => {
           if (type === 'attachment_link' || type === 'sample') obj.push(entity)
@@ -617,7 +612,7 @@
           info: this.$t('messages.siteSampleRelationInfo',
             {data: `ID: ${this.site.id} (${this.site.name})`})
         };
-        this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith})
+        this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith});
         // this.$emit('show-new-sample-modal')
         // this.$router.push({path: '/sample/add'});
 
@@ -630,7 +625,7 @@
       setSiteName(projectId) {
         fetchLastSiteName(projectId).then(response => {
           if (response.body.results && response.body.results.length > 0) {
-            let newName = this.calculateNextName(response.body.results[0].name)
+            let newName = this.calculateNextName(response.body.results[0].name);
             this.$set(this.site, 'name', newName);
           }
         })
@@ -638,12 +633,12 @@
 
       setSiteNameAndProjectIfPreviousExists() {
         return new Promise(resolve => {
-          if (this.createRelationWith.data === null) resolve(false)
-          let project = this.createRelationWith.data
+          if (this.createRelationWith.data === null) resolve(false);
+          let project = this.createRelationWith.data;
           fetchLastSiteName(project.id).then(response => {
-            let resp = response.body.results
+            let resp = response.body.results;
             if (resp && resp.length > 0) {
-              let newName = this.calculateNextName(resp[0].name)
+              let newName = this.calculateNextName(resp[0].name);
               this.$set(this.site, 'name', newName);
               this.$set(this.site, 'date_start', new Date());
               this.$set(this.site, 'project', {name: project.name, name_en: project.name_en, id: project.id});
@@ -658,6 +653,7 @@
         this.site.date_end = new Date();
         this.saveAndNavigateBack('site')
       },
+
       removeAttachmentRelation(idx) {
         this.relatedData.attachment_link.splice(idx, 1);
         this.add(true, 'site', true);
@@ -667,7 +663,7 @@
         let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'));
         if (currentActiveProjects && currentActiveProjects !== 'fallbackValue' && currentActiveProjects.length > 0) {
           fetchActiveProjects(currentActiveProjects.join(", ")).then(response => {
-            this.autocomplete.project = this.handleResponse(response)
+            this.autocomplete.project = this.handleResponse(response);
             if (!this.isDefinedAndNotNull(this.site.project))
               this.$set(this.site, 'project', {
                 name: this.autocomplete.project[0].name,
@@ -693,7 +689,7 @@
       // },
 
       saveAndNavigateBack(object) {
-        let vm = this
+        let vm = this;
         this.add(false, object, false, true).then(resp => {
           vm.navigateBack()
         })
@@ -720,8 +716,8 @@
         }
       },
       handleUserChoiceFromModal(choice) {
-        console.log(choice)
-        let vm = this
+        console.log(choice);
+        let vm = this;
         if (choice === 'SAVE_AND_LEAVE') {
           this.add(false, 'site', false, true).then(resp => {
             vm.$root.$emit('close-new-site-modal')

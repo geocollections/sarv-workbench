@@ -257,16 +257,16 @@
     },
     watch: {
       location: function (newVal, oldVal) {
-        if (this.mode === 'multiple') return;
-        console.log(newVal)
-        console.log(this.isLocationSet)
+        if ((newVal.lat !== oldVal.lat) || (newVal.lng !== oldVal.lng)) {
+          if (this.mode === 'multiple') return;
 
-        if (this.isLocationSet) {
-          this.addMarker(newVal)
-        } else {
-          if (this.marker) this.map.removeLayer(this.marker)
-          this.marker = null
+          if (this.isLocationSet) {
+            this.addMarker(newVal)
+          } else {
+            if (this.marker) this.map.removeLayer(this.marker)
+            this.marker = null
 
+          }
         }
       },
 

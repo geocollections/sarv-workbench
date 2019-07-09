@@ -281,7 +281,8 @@
       "updateMetadata": "Uuenda DOI metaandmed",
       "registerMetadata": "Registreeri DOI metaandmed",
       "updateUrl": "Uuenda DOI URL",
-      "registerUrl": "Registreeri DOI URL"
+      "registerUrl": "Registreeri DOI URL",
+      "finish": "Lõpeta"
     },
     "locked": "Seda faili ei saa muuta, sest see on lukus",
     "photoArchive": "Fotoarhiiv",

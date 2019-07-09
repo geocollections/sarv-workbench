@@ -15,7 +15,19 @@
       </div>
 
 
+      <div class="bottom-item p-2 text-center bottom-finish"
+           v-if="object === 'site' && !$route.meta.isEdit"
+           @click="$parent.$emit('button-clicked', 'FINISH', object)">
+        <div class="d-lg-inline-block bottom-icon">
+          <i class="fas fa-check-double fa-3x"></i>
+        </div>
+        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+          {{ $t('edit.buttons.finish') }}
+        </div>
+      </div>
+
       <div class="bottom-item p-2 text-center bottom-save"
+           v-else
            @click="$parent.$emit('button-clicked', 'SAVE_AND_LEAVE', object)">
         <div class="d-lg-inline-block bottom-icon">
           <font-awesome-icon icon="door-open" size="3x"/>
@@ -197,6 +209,10 @@
   .bottom-nav > .bottom-nav-icon {
     opacity: 0;
     transition: opacity 0.5s;
+  }
+
+  .bottom-finish:hover {
+    color: #007bff;
   }
 
   .bottom-save:hover {
