@@ -39,24 +39,26 @@
 
           <div class="row">
             <div class="col-sm-4">
-              <label :for="`date_start`">{{ $t('site.date_start') }}:</label>
+              <label :for="`date_start`">{{ $t('site.date_start') }} (yyyy-mm-dd):</label>
               <datepicker id="date_start"
                           v-model="site.date_start"
-                          use-utc="true"
+                          :use-utc="true"
                           lang="en"
                           :first-day-of-week="1"
-                          type="datetime" format="DD MMM YYYY [at] HH:mm"
+                          format="YYYY-MM-DD"
+                          :typeable="true"
                           input-class="form-control"></datepicker>
             </div>
 
             <div class="col-sm-4">
-              <label :for="`date_end`">{{ $t('site.date_end') }}:</label>
+              <label :for="`date_end`">{{ $t('site.date_end') }} (yyyy-mm-dd):</label>
               <datepicker id="date_end"
                           v-model="site.date_end"
-                          use-utc="true "
+                          :use-utc="true"
                           lang="en"
                           :first-day-of-week="1"
-                          type="datetime" format="DD MMM YYYY [at] HH:mm"
+                          format="YYYY-MM-DD"
+                          :typeable="true"
                           input-class="form-control"></datepicker>
             </div>
             <div class="col-sm-3">
@@ -364,10 +366,11 @@
         })
       } else {
         // Add view
-        this.site.date_start = new Date()
+        this.$set(this.site, 'date_start', new Date());
 
         if (this.activeProject) {
           this.site.project = { id: this.activeProject.id, name: this.activeProject.name, name_en: this.activeProject.name_en }
+          this.setSiteName(this.site.project.id)
         }
       }
 
@@ -378,9 +381,7 @@
         this.site.project = { id: dataFromProject.id, name: dataFromProject.name, name_en: dataFromProject.name_en }
         this.setSiteName(dataFromProject.id)
       }
-
-      console.log(this.site)
-
+      
       this.loadFullInfo();
 
     },
@@ -461,8 +462,8 @@
         } else {
           // this.block.info = true
           this.setLocationDataIfExists();
-          this.setSiteNameAndProjectIfPreviousExists();
-          this.loadListOfExistingProjects();
+          // this.setSiteNameAndProjectIfPreviousExists();
+          // this.loadListOfExistingProjects();
         }
         this.$root.$on('add-or-edit-site-from-modal', this.handleUserChoiceFromModal);
       },
