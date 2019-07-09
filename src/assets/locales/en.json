@@ -971,7 +971,8 @@
     "solrSearchInfo": "Using this field will not use other fields",
     "combinedViewChangeSize": "Change combined view size using this slider",
     "userCancelled": "Action cancelled",
-    "fieldsCleared": "Fields cleared!"
+    "fieldsCleared": "Fields cleared!",
+    "mapUsingGPS": "GPS is enabled!"
   },
   "titles": {
     "main": "Geocollections Data Management",

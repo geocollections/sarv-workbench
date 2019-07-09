@@ -4,6 +4,7 @@
 
 <script>
   import * as L from "leaflet";
+  import {toastError, toastSuccess} from "../../assets/js/iziToast/iziToast";
 
   export default {
     name: "map-component-2",
@@ -227,19 +228,32 @@
       getGPSLocation() {
         if (navigator.geolocation) {
           return new Promise(resolve => {
-            navigator.geolocation.getCurrentPosition((position) => {
-
+            navigator.geolocation.watchPosition(position => {
               resolve({
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 accuracy: position.coords.accuracy
-              })
-            }, function (error) {
-              if (error.code == error.PERMISSION_DENIED)
-                this.errorMessege = "Geolocation is not supported by this browser.";
+              });
+            }, error => {
+              toastError({text: error.message})
               resolve(null)
-            });
+            })
           });
+
+          // return new Promise(resolve => {
+          //   navigator.geolocation.getCurrentPosition((position) => {
+          //
+          //     resolve({
+          //       latitude: position.coords.latitude,
+          //       longitude: position.coords.longitude,
+          //       accuracy: position.coords.accuracy
+          //     })
+          //   }, function (error) {
+          //     if (error.code == error.PERMISSION_DENIED)
+          //       this.errorMessege = "Geolocation is not supported by this browser.";
+          //     resolve(null)
+          //   });
+          // });
         }
       },
       setZoom() {
@@ -278,7 +292,6 @@
         // }
       },
       mapMarkersLoaded: function (newVal) {
-        console.log(newVal);
         if (this.marker !== null) this.map.setView(this.marker._latlng, this.zoom);
         // if (this.gpsCoords && newVal) {
         //   //zoom to fit all markers

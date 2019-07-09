@@ -972,7 +972,8 @@
     "solrSearchInfo": "Seda välja kasutades teisi välju ei kasutata",
     "combinedViewChangeSize": "Muutke kombineeritud vaate suurust kasutades seda liugurit",
     "userCancelled": "Tegevus katkestati",
-    "fieldsCleared": "Väljad puhastatud!"
+    "fieldsCleared": "Väljad puhastatud!",
+    "mapUsingGPS": "GPS kasutamine lubatud!"
   },
   "titles": {
     "main": "Geokogude andmehaldus",
