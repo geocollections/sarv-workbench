@@ -87,13 +87,13 @@
             <div class="col-md-4">
               <label :for="`latitude`">{{ $t('site.latitude') }}:</label>
               <b-form-input id="latitude" v-model="site.latitude" :state="isDefinedAndNotNull(site.latitude)"
-                            type="number"></b-form-input>
+                            type="number" step="0.000001" @input="handleCoordinateChange"></b-form-input>
             </div>
 
             <div class="col-md-4">
               <label :for="`longitude`">{{ $t('site.longitude') }}:</label>
               <b-form-input id="longitude" v-model="site.longitude" :state="isDefinedAndNotNull(site.longitude)"
-                            type="number"></b-form-input>
+                            type="number" step="0.000001" @input="handleCoordinateChange"></b-form-input>
             </div>
 
             <div class="col-md-4">
@@ -132,7 +132,7 @@
                                  mode="single"
                                  v-bind:locations="[]"
                                  v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }"
-                                 v-on:get-location="updateLocation"></map-component-2>
+                                 v-on:update-coordinates="updateLocation"></map-component-2>
               </b-collapse>
             </div>
           </div>
@@ -476,11 +476,13 @@
         if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end, false);
 
         if (this.isDefinedAndNotNull(objectToUpload.location_accuracy)) uploadableObject.location_accuracy =
-          typeof uploadableObject.location_accuracy === 'string' ? parseInt(objectToUpload.location_accuracy).toFixed(2) : objectToUpload.location_accuracy.toFixed(2);
+          typeof uploadableObject.location_accuracy === 'string' ? parseFloat(objectToUpload.location_accuracy).toFixed(2) : objectToUpload.location_accuracy.toFixed(2);
 
-        if (this.isDefinedAndNotNull(objectToUpload.project)) uploadableObject.project = objectToUpload.project.id
-        if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
-        if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
+        if (this.isDefinedAndNotNull(objectToUpload.project)) uploadableObject.project = objectToUpload.project.id;
+        if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id;
+        if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id;
+        if (this.isDefinedAndNotNull(objectToUpload.latitude)) uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(6);
+        if (this.isDefinedAndNotNull(objectToUpload.longitude)) uploadableObject.longitude = parseFloat(objectToUpload.longitude).toFixed(6);
 
 
         if (saveRelatedData) {
@@ -592,8 +594,12 @@
       },
 
       updateLocation(location) {
-        this.site.latitude = location.lat.toFixed(6)
-        this.site.longitude = location.lng.toFixed(6)
+        this.site.latitude = location.lat.toFixed(6);
+        this.site.longitude = location.lng.toFixed(6);
+
+        // If user chooses coordinates from map by clicking or dragging the marker then reset gps accuracy and coord_det_method
+        this.site.location_accuracy = null;
+        this.site.coord_det_method = null;
       },
 
       addFiles(data) {
@@ -724,6 +730,12 @@
           this.add(true, 'site', false, false)
         }
       },
+
+      // Resetting accuracy and coord det method becuase user changed coordinates manually
+      handleCoordinateChange(event) {
+        this.site.location_accuracy = null;
+        this.site.coord_det_method = null;
+      }
     },
 
     // beforeRouteLeave(to, from, next) {

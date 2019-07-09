@@ -106,7 +106,7 @@
       },
 
       isLocationSet() {
-        return this.location.lat !== null && this.location.lng !== null
+        return this.location !== null && this.location.lat !== null && this.location.lng !== null
       }
     },
 
@@ -131,7 +131,7 @@
         let baseLayers = {};
         this.tileProviders.forEach(provider => {
           baseLayers[provider.name] = provider.leafletObject
-        })
+        });
 
         L.control.layers(baseLayers).addTo(this.map);
 
@@ -150,11 +150,11 @@
         //ZOOM ACTIVATED
         this.map.on('zoomend', (event) => this.zoom = event.target._zoom);
 
-        if (this.mode === 'multiple') this.setMarkers(this.locations)
+        if (this.mode === 'multiple') this.setMarkers(this.locations);
 
         if (this.mode === 'single') {
-          if (this.isLocationSet) this.addMarker(this.location)
-          this.map.on('click', (event) => this.addMarker(event.latlng));
+          if (this.isLocationSet) this.addMarker(this.location);
+          this.map.on('click', (event) => this.updateCoordinates(event.latlng));
         }
       },
 
@@ -185,9 +185,9 @@
       //   return false
       // },
 
-      // updateCoordinates(event) {
-      //   this.$emit('get-location', event.target.getLatLng())
-      // },
+      updateCoordinates(coordinates) {
+        this.$emit('update-coordinates', coordinates)
+      },
 
       addMarker(latlng) {
         if (this.marker !== null) this.map.removeLayer(this.marker);
@@ -201,13 +201,9 @@
             zIndexOffset: 100
           })
           .addTo(this.map)
-          .on('dragend', (event) => {
-            this.map.setView(this.marker._latlng, this.zoom);
-            this.$emit('get-location', event.target._latlng);
-          });
+          .on('dragend', (event) => this.updateCoordinates(event.target._latlng));
 
         this.map.setView(this.marker._latlng, this.zoom);
-        this.$emit('get-location', this.marker._latlng);
       },
 
       setCurrentGpsLocationIfExists() {
@@ -221,8 +217,7 @@
             popupAnchor: [1, -34],
             shadowSize: [41, 41]
           });
-          this.currentLocation = L.marker({lat: currentGPSLocation.latitude, lng: currentGPSLocation.longitude},
-            {icon: redIcon, zIndexOffset: -1})
+          this.currentLocation = L.marker({lat: currentGPSLocation.latitude, lng: currentGPSLocation.longitude}, {icon: redIcon, zIndexOffset: -1})
             .addTo(this.map);
           this.currentLocation.bindPopup("GPS location").openPopup();
         });
@@ -263,21 +258,15 @@
     watch: {
       location: function (newVal, oldVal) {
         if (this.mode === 'multiple') return;
-        console.log(oldVal);
-        console.log(newVal);
-        // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-        // Because if input from form fields is null then it gets reset to 0 and shows marker at 0:0, but I don't want that.
+        console.log(newVal)
+        console.log(this.isLocationSet)
 
-        // if (this.marker !== null && (newVal.lat === null || newVal.lng === null) && !(newVal.lat === null && newVal.lng === null)) {
-        //   console.log('REMOVE')
-        //   this.map.removeLayer(this.marker)
-        // }
-
-        // if (this.isValidLocation(newVal)) {
         if (this.isLocationSet) {
           this.addMarker(newVal)
         } else {
+          if (this.marker) this.map.removeLayer(this.marker)
           this.marker = null
+
         }
       },
 
