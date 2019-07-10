@@ -39,25 +39,29 @@
 
           <div class="row">
             <div class="col-sm-4">
-              <label :for="`date_start`">{{ $t('site.date_start') }} (yyyy-mm-dd):</label>
+              <label :for="`date_start`">{{ $t('site.date_start') }} (yyyy-mm-dd hh:mm):</label>
               <datepicker id="date_start"
                           v-model="site.date_start"
                           :use-utc="true"
                           lang="en"
                           :first-day-of-week="1"
-                          format="YYYY-MM-DD"
+                          format="YYYY-MM-DD HH:mm"
+                          confirm
+                          type="datetime"
                           :typeable="true"
                           input-class="form-control"></datepicker>
             </div>
 
             <div class="col-sm-4">
-              <label :for="`date_end`">{{ $t('site.date_end') }} (yyyy-mm-dd):</label>
+              <label :for="`date_end`">{{ $t('site.date_end') }} (yyyy-mm-dd hh:mm):</label>
               <datepicker id="date_end"
                           v-model="site.date_end"
                           :use-utc="true"
                           lang="en"
                           :first-day-of-week="1"
-                          format="YYYY-MM-DD"
+                          format="YYYY-MM-DD HH:mm"
+                          confirm
+                          type="datetime"
                           :typeable="true"
                           input-class="form-control"></datepicker>
             </div>
@@ -731,7 +735,7 @@
       handleCoordinateChange(event) {
         this.site.location_accuracy = null;
         this.site.coord_det_method = null;
-      }
+      },
     },
 
     // beforeRouteLeave(to, from, next) {

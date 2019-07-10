@@ -146,7 +146,7 @@
     bottom: 0;
     width: 100%;
     box-shadow: 0 4px 10px #000;
-    z-index: 1000;
+    z-index: 10000;
     height: 56px;
   }
 
