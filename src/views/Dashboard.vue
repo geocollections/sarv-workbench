@@ -23,6 +23,7 @@
   import AppFooter from '@/components/partial/AppFooter'
   import SidebarVuesax from '../components/partial/sidebar/SidebarVuesax'
   import SidebarToggleButton from "../components/partial/sidebar/SidebarToggleButton";
+  import {fetchTest} from "../assets/js/api/apiCalls";
 
   export default {
     components: {
