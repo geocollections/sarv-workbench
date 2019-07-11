@@ -130,6 +130,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.bold() }"
+                    title="bold"
                     @click="commands.bold"
                   >
                     <i class="fas fa-bold"></i>
@@ -138,6 +139,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.italic() }"
+                    title="italic"
                     @click="commands.italic"
                   >
                     <i class="fas fa-italic"></i>
@@ -146,6 +148,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.strike() }"
+                    title="striketrough"
                     @click="commands.strike"
                   >
                     <i class="fas fa-strikethrough"></i>
@@ -154,6 +157,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.underline() }"
+                    title="underline"
                     @click="commands.underline"
                   >
                     <i class="fas fa-underline"></i>
@@ -162,6 +166,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.code() }"
+                    title="code"
                     @click="commands.code"
                   >
                     <i class="fas fa-code"></i>
@@ -170,6 +175,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.paragraph() }"
+                    title="paragraph"
                     @click="commands.paragraph"
                   >
                     <i class="fas fa-paragraph"></i>
@@ -178,6 +184,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                    title="heading 1"
                     @click="commands.heading({ level: 1 })"
                   >
                     H1
@@ -186,6 +193,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                    title="heading 2"
                     @click="commands.heading({ level: 2 })"
                   >
                     H2
@@ -194,6 +202,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                    title="heading 3"
                     @click="commands.heading({ level: 3 })"
                   >
                     H3
@@ -202,6 +211,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.bullet_list() }"
+                    title="bullet list"
                     @click="commands.bullet_list"
                   >
                     <i class="fas fa-list-ul"></i>
@@ -210,6 +220,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.ordered_list() }"
+                    title="ordered list"
                     @click="commands.ordered_list"
                   >
                     <i class="fas fa-list-ol"></i>
@@ -218,6 +229,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.blockquote() }"
+                    title="blockquote"
                     @click="commands.blockquote"
                   >
                     <i class="fas fa-quote-right"></i>
@@ -226,6 +238,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'is-active': isActive.code_block() }"
+                    title="code block"
                     @click="commands.code_block"
                   >
                     <i class="fas fa-code"></i>
@@ -234,6 +247,7 @@
                   <button
                     class="menubar__button"
                     :class="{ 'active': isActive.link() }"
+                    title="link"
                     @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstract')"
                   >
                     <i class="fas fa-link"></i>
@@ -241,6 +255,7 @@
 
                   <button
                     class="menubar__button"
+                    title="horizontal bar"
                     @click="commands.horizontal_rule"
                   >
                     ―
@@ -248,6 +263,7 @@
 
                   <button
                     class="menubar__button"
+                    title="undo"
                     @click="commands.undo"
                   >
                     <i class="fas fa-undo"></i>
@@ -255,6 +271,7 @@
 
                   <button
                     class="menubar__button"
+                    title="redo"
                     @click="commands.redo"
                   >
                     <i class="fas fa-redo"></i>
