@@ -103,51 +103,167 @@
               <editor-menu-bar :editor="editorAbstract">
                 <div slot-scope="{ commands, isActive, getMarkAttrs }">
 
-                  <form class="mb-1" v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
+                  <form class="mb-1" v-if="linkMenuIsActive"
+                        @submit.prevent="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
                     <div class="row">
                       <div class="col-9 pr-0">
-                        <input class="form-control form-control-sm" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu('editorAbstract')"/>
+                        <input class="form-control form-control-sm" type="text" v-model="linkUrl" placeholder="https://"
+                               ref="linkInput" @keydown.esc="hideLinkMenu('editorAbstract')"/>
                       </div>
 
                       <span>
-                    <button class="btn btn-outline-success btn-sm ml-1 mr-1" @click="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
-                      <font-awesome-icon icon="check" />
-                    </button>
-                  </span>
+                        <button class="btn btn-outline-success btn-sm ml-1 mr-1"
+                                @click="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
+                          <font-awesome-icon icon="check"/>
+                        </button>
+                      </span>
 
                       <span>
-                    <button class="btn btn-outline-danger btn-sm" @click="setLinkUrl(commands.link, null, 'editorAbstract')">
-                      <font-awesome-icon icon="times" />
-                    </button>
-                  </span>
+                        <button class="btn btn-outline-danger btn-sm"
+                                @click="setLinkUrl(commands.link, null, 'editorAbstract')">
+                          <font-awesome-icon icon="times"/>
+                        </button>
+                      </span>
                     </div>
                   </form>
 
                   <button
-                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                    :class="{ 'active': isActive.bold() }"
-                    @click="commands.bold">
-                    <strong>Bold</strong>
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.bold() }"
+                    @click="commands.bold"
+                  >
+                    <i class="fas fa-bold"></i>
                   </button>
 
                   <button
-                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                    :class="{ 'active': isActive.italic() }"
-                    @click="commands.italic">
-                    <strong><em>Italic</em></strong>
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.italic() }"
+                    @click="commands.italic"
+                  >
+                    <i class="fas fa-italic"></i>
                   </button>
 
                   <button
-                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.strike() }"
+                    @click="commands.strike"
+                  >
+                    <i class="fas fa-strikethrough"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.underline() }"
+                    @click="commands.underline"
+                  >
+                    <i class="fas fa-underline"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.code() }"
+                    @click="commands.code"
+                  >
+                    <i class="fas fa-code"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.paragraph() }"
+                    @click="commands.paragraph"
+                  >
+                    <i class="fas fa-paragraph"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+                    @click="commands.heading({ level: 1 })"
+                  >
+                    H1
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+                    @click="commands.heading({ level: 2 })"
+                  >
+                    H2
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+                    @click="commands.heading({ level: 3 })"
+                  >
+                    H3
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.bullet_list() }"
+                    @click="commands.bullet_list"
+                  >
+                    <i class="fas fa-list-ul"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.ordered_list() }"
+                    @click="commands.ordered_list"
+                  >
+                    <i class="fas fa-list-ol"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.blockquote() }"
+                    @click="commands.blockquote"
+                  >
+                    <i class="fas fa-quote-right"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    :class="{ 'is-active': isActive.code_block() }"
+                    @click="commands.code_block"
+                  >
+                    <i class="fas fa-code"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
                     :class="{ 'active': isActive.link() }"
-                    @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstract')">
-                    <strong><u>Link</u></strong>
+                    @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstract')"
+                  >
+                    <i class="fas fa-link"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    @click="commands.horizontal_rule"
+                  >
+                    ―
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    @click="commands.undo"
+                  >
+                    <i class="fas fa-undo"></i>
+                  </button>
+
+                  <button
+                    class="menubar__button"
+                    @click="commands.redo"
+                  >
+                    <i class="fas fa-redo"></i>
                   </button>
 
                 </div>
               </editor-menu-bar>
 
-              <editor-content class="editor editor-sm" :editor="editorAbstract" />
+              <editor-content class="editor editor-sm" :editor="editorAbstract"/>
             </div>
           </div>
 
@@ -164,21 +280,26 @@
               <editor-menu-bar :editor="editorAbstractEn">
                 <div slot-scope="{ commands, isActive, getMarkAttrs }">
 
-                  <form class="mb-1" v-if="linkMenuIsActiveAbstractEn" @submit.prevent="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
+                  <form class="mb-1" v-if="linkMenuIsActiveAbstractEn"
+                        @submit.prevent="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
                     <div class="row">
                       <div class="col-9 pr-0">
-                        <input class="form-control form-control-sm" type="text" v-model="linkUrlAbstractEn" placeholder="https://" ref="linkInputAbstractEn" @keydown.esc="hideLinkMenu('editorAbstractEn')"/>
+                        <input class="form-control form-control-sm" type="text" v-model="linkUrlAbstractEn"
+                               placeholder="https://" ref="linkInputAbstractEn"
+                               @keydown.esc="hideLinkMenu('editorAbstractEn')"/>
                       </div>
 
                       <span>
-                    <button class="btn btn-outline-success btn-sm ml-1 mr-1" @click="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
-                      <font-awesome-icon icon="check" />
+                    <button class="btn btn-outline-success btn-sm ml-1 mr-1"
+                            @click="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
+                      <font-awesome-icon icon="check"/>
                     </button>
                   </span>
 
                       <span>
-                    <button class="btn btn-outline-danger btn-sm" @click="setLinkUrl(commands.link, null, 'editorAbstractEn')">
-                      <font-awesome-icon icon="times" />
+                    <button class="btn btn-outline-danger btn-sm"
+                            @click="setLinkUrl(commands.link, null, 'editorAbstractEn')">
+                      <font-awesome-icon icon="times"/>
                     </button>
                   </span>
                     </div>
@@ -208,7 +329,7 @@
                 </div>
               </editor-menu-bar>
 
-              <editor-content class="editor editor-sm" :editor="editorAbstractEn" />
+              <editor-content class="editor editor-sm" :editor="editorAbstractEn"/>
             </div>
           </div>
 
@@ -276,13 +397,15 @@
           <li class="nav-item">
             <a href="#" v-on:click.prevent="setActiveTab('library_reference_list')" class="nav-link"
                :class="{ active: activeTab === 'library_reference_list' }">
-              {{ $t('library.relatedTables.libraryReferenceList') }} <font-awesome-icon icon="list-ol"/>
+              {{ $t('library.relatedTables.libraryReferenceList') }}
+              <font-awesome-icon icon="list-ol"/>
             </a>
           </li>
 
         </ul>
 
-        <library-reference-list-view :data="relatedData.library_reference_list" :active-tab="activeTab"></library-reference-list-view>
+        <library-reference-list-view :data="relatedData.library_reference_list"
+                                     :active-tab="activeTab"></library-reference-list-view>
 
         <div class="row" v-if="activeTab !== 'library_reference_list'">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
@@ -372,11 +495,25 @@
   import copyForm from './../mixins/copyForm'
   import LibraryReference from "./relatedTables/LibraryReference";
   import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
-  import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble } from 'tiptap'
+  import {Editor, EditorContent, EditorMenuBar, EditorMenuBubble} from 'tiptap'
   import {
+    Blockquote,
+    CodeBlock,
+    HardBreak,
+    Heading,
+    HorizontalRule,
+    OrderedList,
+    BulletList,
+    ListItem,
+    TodoItem,
+    TodoList,
     Bold,
+    Code,
     Italic,
     Link,
+    Strike,
+    Underline,
+    History,
   } from 'tiptap-extensions'
   import localStorageMixin from "../mixins/localStorageMixin";
   import permissionsMixin from "../mixins/permissionsMixin";
@@ -659,11 +796,25 @@
       setDefaultEditorData(field) {
         return new Editor({
           extensions: [
-            new Bold(),
-            new Italic(),
+            new Blockquote(),
+            new BulletList(),
+            new CodeBlock(),
+            new HardBreak(),
+            new Heading({ levels: [1, 2, 3] }),
+            new HorizontalRule(),
+            new ListItem(),
+            new OrderedList(),
+            new TodoItem(),
+            new TodoList(),
             new Link(),
+            new Bold(),
+            new Code(),
+            new Italic(),
+            new Strike(),
+            new Underline(),
+            new History(),
           ],
-          onUpdate: ({ getHTML }) => {
+          onUpdate: ({getHTML}) => {
             this.library[field] = getHTML()
           },
         })
@@ -701,7 +852,7 @@
       },
 
       setLinkUrl(command, url, field) {
-        command({ href: url })
+        command({href: url})
         this.hideLinkMenu(field)
         this[field].focus()
       },
@@ -748,5 +899,111 @@
     /*padding: 0;*/
     color: #999;
     font-size: 0.8rem;
+  }
+
+  .menubar__button {
+    margin: 2px;
+    width: 40px;
+    background-color: transparent;
+    border: none;
+    font-weight: 800;
+    border-radius: 10%;
+    padding: 2px 0px;
+  }
+
+  .menubar__button:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+
+  .menubar__button.is-active {
+    background-color: rgba(0, 123, 255, 0.2);
+  }
+
+  .editor {
+    position: relative;
+  }
+
+  .editor s {
+    text-decoration: line-through;
+  }
+
+  .editor u {
+    text-decoration: underline;
+  }
+
+  .editor pre {
+    padding: 0.7rem 1rem;
+    border-radius: 5px;
+    background: #000000;
+    color: #ffffff;
+    font-size: 0.8rem;
+    overflow-x: auto;
+  }
+
+  .editor code {
+    display: block;
+  }
+
+  .editor p code {
+    display: inline-block;
+    padding: 0 0.4rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .editor ul,
+  .editor ol {
+    padding-left: 1rem;
+  }
+
+  .editor li > p,
+  .editor li > ol,
+  .editor li > ul {
+    margin: 0;
+  }
+
+  .editor a {
+    color: inherit;
+  }
+
+  .editor blockquote {
+    border-left: 3px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.8);
+    padding-left: 0.8rem;
+    font-style: italic;
+  }
+
+  .editor p {
+    margin: 0;
+  }
+
+  .editor img {
+    max-width: 100%;
+    border-radius: 3px;
+  }
+
+  .editor table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  .editor td, .editor  th {
+    min-width: 1em;
+    border: 2px solid grey;
+    padding: 3px 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  .editor th {
+    font-weight: bold;
+    text-align: left;
   }
 </style>
