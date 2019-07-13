@@ -105,13 +105,12 @@ Vue.http.interceptors.push((request, next) => {
     next(res => {
       if (res.status === 200) {
 
-        if (res.body.results.error_permissions) {
+        if (res.body.error_permissions) {
           Vue.prototype.$toast.error(res.body.results.error_permissions, 'Missing permissions', {
             position: 'bottomRight',
             timeout: 5000,
             closeOnEscape: true,
             pauseOnHover: false,
-            displayMode: 'replace'
           })
         }
 
