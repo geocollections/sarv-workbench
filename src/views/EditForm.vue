@@ -10,7 +10,7 @@
 
       <scroll-to-links/>
 
-      <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData"/>
+      <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData" v-on:save-as-new="saveAsNew"/>
 
       <bottom-options :object="object" :is-navigation-shown="$route.meta.isNavigationShown" v-if="$route.meta.isBottomOptionShown"/>
 

@@ -820,7 +820,7 @@
 <!--          </button>-->
 
           <span>
-            <button class="btn btn-primary mb-2" @click="$parent.saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>
+            <button class="btn btn-primary mb-2" @click="$emit('save-as-new')" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>
           </span>
 
         </div>
