@@ -107,12 +107,12 @@
 
               <div class="col-6 col-sm-3">
                 <label :for="`depth`">{{ $t('sample.depth') }}:</label>
-                <b-form-input id="depth" v-model="sample.depth" type="number"></b-form-input>
+                <b-form-input id="depth" v-model="sample.depth" type="number" step="0.01"></b-form-input>
               </div>
 
               <div class="col-6 col-sm-3">
                 <label :for="`depth_interval`">{{ $t('sample.depth_interval') }}:</label>
-                <b-form-input id="depth_interval" v-model="sample.depth_interval" type="number"></b-form-input>
+                <b-form-input id="depth_interval" v-model="sample.depth_interval" type="number" step="0.01"></b-form-input>
               </div>
             </div>
 
@@ -470,12 +470,12 @@
 
               <div class="col-6 col-md-2">
                 <label style="white-space: nowrap;" :for="`depth_simple`">{{ $t('sample.depth') }}:</label>
-                <b-form-input id="depth_simple" v-model="sample.depth" type="number"></b-form-input>
+                <b-form-input id="depth_simple" v-model="sample.depth" type="number" step="0.01"></b-form-input>
               </div>
 
               <div class="col-6 col-md-2">
                 <label style="white-space: nowrap;" :for="`depth_interval_simple`">{{ $t('sample.depth') }}:</label>
-                <b-form-input id="depth_interval_simple" v-model="sample.depth_interval" type="number"></b-form-input>
+                <b-form-input id="depth_interval_simple" v-model="sample.depth_interval" type="number" step="0.01"></b-form-input>
               </div>
             </div>
 
@@ -1118,6 +1118,14 @@
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
 
         if (this.isDefinedAndNotNull(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
+        if (this.isDefinedAndNotNull(objectToUpload.depth)) {
+          if (objectToUpload.depth.toString().length > 0) uploadableObject.depth = parseFloat(objectToUpload.depth);
+          else uploadableObject.depth = null;
+        } else uploadableObject.depth = null;
+        if (this.isDefinedAndNotNull(objectToUpload.depth_interval)) {
+          if (objectToUpload.depth_interval.toString().length > 0) uploadableObject.depth_interval = parseFloat(objectToUpload.depth_interval);
+          else uploadableObject.depth_interval = null;
+        } else uploadableObject.depth_interval = null;
 
         //autocomplete fields
 
@@ -1137,7 +1145,8 @@
         if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
           uploadableObject.database = this.databaseId
         }
-        console.log('This object is sent in string format:\n' + JSON.stringify(uploadableObject))
+        console.log('This object is sent in string format:')
+        console.log(uploadableObject)
         return JSON.stringify(uploadableObject)
       },
       fillAutocompleteFields(obj) {
