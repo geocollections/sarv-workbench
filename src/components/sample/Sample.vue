@@ -1137,7 +1137,7 @@
         if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
           uploadableObject.database = this.databaseId
         }
-        // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
+        console.log('This object is sent in string format:\n' + JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)
       },
       fillAutocompleteFields(obj) {
