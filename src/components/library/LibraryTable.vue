@@ -16,14 +16,21 @@
 
     <td>{{ entity.agent__agent }}</td>
 
-    <td>
-      <b-form-checkbox
-        id="is_private"
-        v-model="entity.library__is_private"
-        :value="0"
-        :unchecked-value="1"
-        :disabled="true">
-      </b-form-checkbox>
+    <td class="text-center">
+<!--      <b-form-checkbox-->
+<!--        id="is_private"-->
+<!--        v-model="entity.library__is_private"-->
+<!--        @change="handlePrivateState"-->
+<!--        :value="0"-->
+<!--        :unchecked-value="1">-->
+<!--      </b-form-checkbox>-->
+
+      <vs-checkbox id="is_private"
+                   v-model="entity.library__is_private"
+                   @input="$parent.$emit('toggle-library-state', entity.library__is_private, entity.id)"
+                   icon="fa-check"
+                   icon-pack="fas">
+      </vs-checkbox>
     </td>
 
     <td>
@@ -47,6 +54,12 @@
     props: {
       response: {
         type: Object
+      },
+    },
+    methods: {
+      handlePrivateState(state, libraryID) {
+        console.log(state)
+        console.log(libraryID)
       },
     }
   }

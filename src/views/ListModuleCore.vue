@@ -98,7 +98,9 @@
                     <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(item.id) === 0" />
                     <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(item.id) === 1" />
                     <font-awesome-icon icon="sort-down" v-if="isFieldInOrderBy(item.id) === -1" />
-                    {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
+                    {{ $t(item.title)}}
+                    <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
+                    <i v-if="item.isPrivate" class="fas fa-lock"></i>
                   </span>
                   <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
                   <br/>
@@ -107,11 +109,12 @@
                 <!-- REGULAR ORDERING -->
                 <th class="nowrap" v-if="multiOrdering === false && isTableView" v-for="item in activeColumns">
                   <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
-                      <font-awesome-icon v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"
-                        :icon="sort"/>
-                      <font-awesome-icon v-else :icon="sortingDirection"/>
-                      {{ $t(item.title)}} <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
-                    </span>
+                    <font-awesome-icon v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id" :icon="sort"/>
+                    <font-awesome-icon v-else :icon="sortingDirection"/>
+                    {{ $t(item.title)}}
+                    <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
+                    <i v-if="item.isPrivate" class="fas fa-lock"></i>
+                  </span>
                   <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
                   <br/>
                 </th>

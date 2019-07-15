@@ -43,6 +43,7 @@
       view-type="libraryViewType"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
+      v-on:toggle-library-state="changeLibraryState"
     ></list-module-core>
 
   </div>
@@ -50,8 +51,9 @@
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import {fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
+  import {fetchChangeLibraryState, fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
   import permissionsMixin from "../components/mixins/permissionsMixin";
+  import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
   export default {
     components: {
@@ -67,7 +69,7 @@
           {id: "library__title", title: "library.title", type: "text"},
           {id: "agent__agent", title: "library.author_txt", type: "text"},
 
-          {id: "library__is_private", title: "library.isPrivate", type: "text"},
+          {id: "library__is_private", title: "library.private", type: "text", isPrivate: true},
           {id: "reference", title: "library.reference", type: "text", orderBy: false},
         ],
         filters: [
@@ -104,6 +106,31 @@
       },
       setDefaultSearchParametersFromDeleteButton() {
         this.searchParameters = this.setDefaultSearchParameters()
+      },
+
+      changeLibraryState(state, libraryID) {
+        let formData = new FormData()
+        formData.append('data', JSON.stringify({library: libraryID, is_private: state}))
+
+        fetchChangeLibraryState(formData).then(response => {
+          if (typeof response.body.message !== 'undefined') {
+            if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+              toastSuccess({text: response.body.message_et});
+            } else {
+              toastSuccess({text: response.body.message});
+            }
+          }
+          if (typeof response.body.error !== 'undefined') {
+            if (this.$i18n && this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+              toastError({text: response.body.error_et});
+            } else {
+              toastError({text: response.body.error});
+            }
+          }
+        }, errResponse => {
+          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error})
+          toastError({text: this.$t('messages.uploadError')})
+        })
       }
     }
   }
