@@ -379,12 +379,9 @@
               <vue-multiselect v-model="relatedData.library"
                                id="library"
                                :multiple="true"
-                               track-by="id"
+                               track-by="library"
                                :options="autocomplete.library"
-                               :internal-search="false"
-                               :preserve-search="true"
                                :close-on-select="false"
-                               @search-change="autcompleteLibrarySearch"
                                :custom-label="customLabelForLibrary"
                                :loading="autocomplete.loaders.library"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -565,7 +562,7 @@
     fetchLibrariesForReference,
     fetchAddDoi,
     fetchAddAttachmentLink,
-    fetchAddDoiGeolocation
+    fetchAddDoiGeolocation, fetchLibrariesFromLibraryAgent, fetchListLibraries
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
@@ -732,15 +729,10 @@
       },
 
       loadFullInfo() {
-        fetchListReferenceTypes().then(response => {
-          this.autocomplete.types = this.handleResponse(response);
-        });
-        fetchListLanguages().then(response => {
-          this.autocomplete.languages = this.handleResponse(response);
-        });
-        fetchListKeywords().then(response => {
-          this.autocomplete.keyword = this.handleResponse(response);
-        });
+        fetchListReferenceTypes().then(response => this.autocomplete.types = this.handleResponse(response));
+        fetchListLanguages().then(response => this.autocomplete.languages = this.handleResponse(response));
+        fetchListKeywords().then(response => this.autocomplete.keyword = this.handleResponse(response));
+        fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
@@ -798,21 +790,9 @@
             })
           })
 
-          fetchAttachmentForReference(this.$route.params.id).then(response => {
-            this.attachment = this.handleResponse(response)
-          })
+          fetchAttachmentForReference(this.$route.params.id).then(response => this.attachment = this.handleResponse(response));
 
-          fetchLibrariesForReference(this.$route.params.id).then(response => {
-            let library = this.handleResponse(response)
-
-            this.relatedData.library = library.map(entity => {
-              return {
-                id: entity.library,
-                title: entity.library__title,
-                title_en: entity.library__title_en,
-              }
-            })
-          })
+          fetchLibrariesForReference(this.$route.params.id).then(response => this.relatedData.library = this.handleResponse(response));
 
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
@@ -964,8 +944,8 @@
       },
 
       customLabelForLibrary(option) {
-        if (this.$i18n.locale === 'ee') return `${option.id} - (${option.title})`
-        return `${option.id} - (${option.title_en})`
+        if (this.$i18n.locale === 'ee') return `${option.library} - (${option.library__title})`
+        return `${option.library} - (${option.library__title_en})`
       },
 
       checkDoi() {

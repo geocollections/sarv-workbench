@@ -486,6 +486,10 @@ export function fetchLibraryAgent(id) {
   return fetch(`library_agent/?library=${id}&format=json`)
 }
 
+export function fetchListLibraries(id) {
+  return fetch(`library_agent/?agent=${id}&format=json`)
+}
+
 /***********************
  ***  LIBRARIES END  ***
  ***********************/
