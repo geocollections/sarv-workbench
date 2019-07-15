@@ -132,7 +132,10 @@
     methods: {
 
       initMap() {
-        this.map = L.map('map', {layers: [this.tileProviders[0].leafletObject]}).setView(this.center, this.zoom);
+        this.map = L.map('map', {
+          layers: [this.tileProviders[0].leafletObject],
+          scrollWheelZoom: false
+        }).setView(this.center, this.zoom);
 
         let vm = this;
         let baseLayers = {};

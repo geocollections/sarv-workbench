@@ -886,6 +886,10 @@ export function fetchAddJournal(data) {
   return fetchPost(`add/journal/`, data)
 }
 
+export function fetchJournal(name) {
+  return fetch(`journal/?multi_search=value:${name};fields:journal_name,journal_short,journal_long,journal_original,journal_abbr;lookuptype:iexact`,)
+}
+
 /*********************
  ***  JOURNAL END  ***
  *********************/

@@ -562,7 +562,7 @@
     fetchLibrariesForReference,
     fetchAddDoi,
     fetchAddAttachmentLink,
-    fetchAddDoiGeolocation, fetchLibrariesFromLibraryAgent, fetchListLibraries
+    fetchAddDoiGeolocation, fetchLibrariesFromLibraryAgent, fetchListLibraries, fetchJournal
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
@@ -965,22 +965,35 @@
       },
 
       updateFieldsUsingDoi(data) {
+        let reference = ''
+
+        /* YEAR */
         if (data['published-print']) {
           if (data['published-print']['date-parts'].length > 0) {
             this.reference.year = data['published-print']['date-parts'][0][0] + ''
+            reference = this.reference.year
           }
         } else if (data.issued) {
           if (data.issued['date-parts'].length > 0) {
             this.reference.year = data.issued['date-parts'][0][0] + ''
+            reference = this.reference.year
           }
         }
 
+        /* AUTHOR */
         if (data.author && data.author.length > 0) {
-          let author = ''
+          let author = '';
+          let authorForReferenceField = '';
+
+          // Author for reference field
+          if (data.author.length === 1) authorForReferenceField = data.author[0].family + ', ';
+          else if (data.author.length === 2) authorForReferenceField = data.author[0].family + ' & ' + data.author[1].family + ', ';
+          else if (data.author.length > 2) authorForReferenceField = data.author[0].family + ' et al., ';
+
           for (let item in data.author) {
             if (typeof data.author[item].given !== 'undefined' && data.author[item].given.includes(' ')) {
-              let given = data.author[item].given.split(' ')
-              let givenFormatted = given.map((name, index) => given[index].charAt(0).toUpperCase()) // ['Test', 'hello'] --> ['T', 'H']
+              let given = data.author[item].given.split(' ');
+              let givenFormatted = given.map((name, index) => given[index].charAt(0).toUpperCase()); // ['Test', 'hello'] --> ['T', 'H']
 
               // If family is all caps then change it
               if (data.author[item].family === data.author[item].family.toUpperCase()) {
@@ -1003,15 +1016,18 @@
               }
             }
           }
-          this.reference.author = author.trim().slice(0, -1)
+          this.reference.author = author.trim().slice(0, -1);
+          reference = authorForReferenceField + reference
         }
 
+        this.reference.reference = reference;
+
         if (data['container-title'] && data['container-title'].length > 0) {
-          let journalAdditional = '';
-          for (let item in data['container-title']) {
-            journalAdditional += data['container-title'][item] + ', '
-          }
-          this.reference.journal_additional = journalAdditional.trim().slice(0, -1);
+          let journalName = data['container-title'][0]
+          fetchJournal(journalName).then(response => {
+            let journal = this.handleResponse(response)
+            if (journal.length === 1) this.reference.journal = { id: journal[0].id, journal_name: journal[0].journal_name }
+          })
         }
 
         if (data.title && data.title.length > 0) this.reference.title = data.title[0]
@@ -1025,8 +1041,17 @@
             this.reference.pages = data.page
           }
         }
-        if (data.URL) this.reference.url = data.URL
-        if (data.publisher) this.reference.publisher = data.publisher
+        // if (data.URL) this.reference.url = data.URL
+        if (data.publisher) {
+          if (data.type !== 'journal-article') this.reference.publisher = data.publisher
+        }
+        if (data.type === 'journal-article') {
+          this.type = {
+            id: 1,
+            value: 'artikkel ajakirjas',
+            value_en: 'article in journal'
+          }
+        }
 
         toastInfo({text: this.$t('reference.doiCheckSuccessful')})
       },

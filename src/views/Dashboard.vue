@@ -2,10 +2,11 @@
   <div class="dashboard" ref="parentSidebar" id="parentx">
     <app-header/>
 
-    <sidebar-toggle-button class="d-lg-none" v-on:toggle-sidebar="handleToggleSidebar"/>
+    <sidebar-toggle-button class="d-lg-none d-print-none" v-on:toggle-sidebar="handleToggleSidebar"/>
 
     <!-- TODO: Add transition -->
     <sidebar-vuesax :class="sidebarState ? 'd-block' : 'd-none d-lg-block'"
+                    class="d-print-none"
                     :sidebar-state="sidebarState"
                     :hide-background="hideBackground"/>
 

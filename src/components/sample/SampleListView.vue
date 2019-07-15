@@ -35,9 +35,8 @@
 
         <div style="float: right;">{{ entity.date_collected }}</div>
 
-        <div style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 1mm;">
+        <div class="small-image" style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 1mm;">
           <vue-q-r-code-component :text="'http://geocollections.info/sample/' + entity.id"
-                                  :size="40"
                                   error-level="L"></vue-q-r-code-component>
         </div>
       </div>
@@ -116,5 +115,7 @@
     height: 7mm;
   }
 
-
+  .small-image >>> img {
+    width: 40px !important;
+  }
 </style>
