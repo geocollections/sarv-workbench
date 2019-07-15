@@ -97,190 +97,7 @@
             </div>
 
             <div class="col-sm-10 mb-2">
-              <!--          <b-form-textarea id="abstract" v-model="library.abstract" type="text" size="sm"-->
-              <!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
-
-              <editor-menu-bar :editor="editorAbstract">
-                <div slot-scope="{ commands, isActive, getMarkAttrs }">
-
-                  <form class="mb-1" v-if="linkMenuIsActive"
-                        @submit.prevent="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
-                    <div class="row">
-                      <div class="col-9 pr-0">
-                        <input class="form-control form-control-sm" type="text" v-model="linkUrl" placeholder="https://"
-                               ref="linkInput" @keydown.esc="hideLinkMenu('editorAbstract')"/>
-                      </div>
-
-                      <span>
-                        <button class="btn btn-outline-success btn-sm ml-1 mr-1"
-                                @click="setLinkUrl(commands.link, linkUrl, 'editorAbstract')">
-                          <font-awesome-icon icon="check"/>
-                        </button>
-                      </span>
-
-                      <span>
-                        <button class="btn btn-outline-danger btn-sm"
-                                @click="setLinkUrl(commands.link, null, 'editorAbstract')">
-                          <font-awesome-icon icon="times"/>
-                        </button>
-                      </span>
-                    </div>
-                  </form>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.bold() }"
-                    title="bold"
-                    @click="commands.bold"
-                  >
-                    <i class="fas fa-bold"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.italic() }"
-                    title="italic"
-                    @click="commands.italic"
-                  >
-                    <i class="fas fa-italic"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.strike() }"
-                    title="striketrough"
-                    @click="commands.strike"
-                  >
-                    <i class="fas fa-strikethrough"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.underline() }"
-                    title="underline"
-                    @click="commands.underline"
-                  >
-                    <i class="fas fa-underline"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.code() }"
-                    title="code"
-                    @click="commands.code"
-                  >
-                    <i class="fas fa-code"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.paragraph() }"
-                    title="paragraph"
-                    @click="commands.paragraph"
-                  >
-                    <i class="fas fa-paragraph"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.heading({ level: 1 }) }"
-                    title="heading 1"
-                    @click="commands.heading({ level: 1 })"
-                  >
-                    H1
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.heading({ level: 2 }) }"
-                    title="heading 2"
-                    @click="commands.heading({ level: 2 })"
-                  >
-                    H2
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.heading({ level: 3 }) }"
-                    title="heading 3"
-                    @click="commands.heading({ level: 3 })"
-                  >
-                    H3
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.bullet_list() }"
-                    title="bullet list"
-                    @click="commands.bullet_list"
-                  >
-                    <i class="fas fa-list-ul"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.ordered_list() }"
-                    title="ordered list"
-                    @click="commands.ordered_list"
-                  >
-                    <i class="fas fa-list-ol"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.blockquote() }"
-                    title="blockquote"
-                    @click="commands.blockquote"
-                  >
-                    <i class="fas fa-quote-right"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'is-active': isActive.code_block() }"
-                    title="code block"
-                    @click="commands.code_block"
-                  >
-                    <i class="fas fa-code"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    :class="{ 'active': isActive.link() }"
-                    title="link"
-                    @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstract')"
-                  >
-                    <i class="fas fa-link"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    title="horizontal bar"
-                    @click="commands.horizontal_rule"
-                  >
-                    ―
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    title="undo"
-                    @click="commands.undo"
-                  >
-                    <i class="fas fa-undo"></i>
-                  </button>
-
-                  <button
-                    class="menubar__button"
-                    title="redo"
-                    @click="commands.redo"
-                  >
-                    <i class="fas fa-redo"></i>
-                  </button>
-
-                </div>
-              </editor-menu-bar>
-
-              <editor-content class="editor editor-sm" :editor="editorAbstract"/>
+              <ckeditor :editor="editor" v-model="library.abstract" :config="editorConfig"></ckeditor>
             </div>
           </div>
 
@@ -291,62 +108,7 @@
             </div>
 
             <div class="col-sm-10 mb-2">
-              <!--          <b-form-textarea id="abstract_en" v-model="library.abstract_en" type="text" size="sm"-->
-              <!--                           :rows="1" :max-rows="20"></b-form-textarea>-->
-
-              <editor-menu-bar :editor="editorAbstractEn">
-                <div slot-scope="{ commands, isActive, getMarkAttrs }">
-
-                  <form class="mb-1" v-if="linkMenuIsActiveAbstractEn"
-                        @submit.prevent="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
-                    <div class="row">
-                      <div class="col-9 pr-0">
-                        <input class="form-control form-control-sm" type="text" v-model="linkUrlAbstractEn"
-                               placeholder="https://" ref="linkInputAbstractEn"
-                               @keydown.esc="hideLinkMenu('editorAbstractEn')"/>
-                      </div>
-
-                      <span>
-                    <button class="btn btn-outline-success btn-sm ml-1 mr-1"
-                            @click="setLinkUrl(commands.link, linkUrlAbstractEn, 'editorAbstractEn')">
-                      <font-awesome-icon icon="check"/>
-                    </button>
-                  </span>
-
-                      <span>
-                    <button class="btn btn-outline-danger btn-sm"
-                            @click="setLinkUrl(commands.link, null, 'editorAbstractEn')">
-                      <font-awesome-icon icon="times"/>
-                    </button>
-                  </span>
-                    </div>
-                  </form>
-
-                  <button
-                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                    :class="{ 'active': isActive.bold() }"
-                    @click="commands.bold">
-                    <strong>Bold</strong>
-                  </button>
-
-                  <button
-                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                    :class="{ 'active': isActive.italic() }"
-                    @click="commands.italic">
-                    <strong><em>Italic</em></strong>
-                  </button>
-
-                  <button
-                    class="btn btn-outline-dark btn-sm mr-1 mb-1"
-                    :class="{ 'active': isActive.link() }"
-                    @click="showLinkMenu(getMarkAttrs('link'), 'editorAbstractEn')">
-                    <strong><u>Link</u></strong>
-                  </button>
-
-                </div>
-              </editor-menu-bar>
-
-              <editor-content class="editor editor-sm" :editor="editorAbstractEn"/>
+              <ckeditor :editor="editor" v-model="library.abstract_en" :config="editorConfig"></ckeditor>
             </div>
           </div>
 
@@ -500,42 +262,21 @@
   import {faTimes} from '@fortawesome/free-solid-svg-icons'
   import {
     fetchLibrary,
-    fetchLibraries,
     fetchLibraryReference,
     fetchLibraryAgent,
     fetchLibrariesFromLibraryAgent
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
-  import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
   import formManipulation from './../mixins/formManipulation'
   import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
   import copyForm from './../mixins/copyForm'
   import LibraryReference from "./relatedTables/LibraryReference";
   import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
-  import {Editor, EditorContent, EditorMenuBar, EditorMenuBubble} from 'tiptap'
-  import {
-    Blockquote,
-    CodeBlock,
-    HardBreak,
-    Heading,
-    HorizontalRule,
-    OrderedList,
-    BulletList,
-    ListItem,
-    TodoItem,
-    TodoList,
-    Bold,
-    Code,
-    Italic,
-    Link,
-    Strike,
-    Underline,
-    History,
-  } from 'tiptap-extensions'
   import localStorageMixin from "../mixins/localStorageMixin";
   import permissionsMixin from "../mixins/permissionsMixin";
+  import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-  library.add(faTimes)
+  library.add(faTimes);
 
   export default {
     name: "Library",
@@ -545,9 +286,6 @@
       FontAwesomeIcon,
       VueMultiselect,
       Spinner,
-      EditorContent,
-      EditorMenuBar,
-      EditorMenuBubble
     },
     mixins: [formManipulation, copyForm, autocompleteFieldManipulation, localStorageMixin, permissionsMixin],
 
@@ -574,17 +312,6 @@
       }
 
       this.loadFullInfo()
-    },
-
-    beforeDestroy() {
-      this.editorAbstract.destroy()
-      this.editorAbstractEn.destroy()
-    },
-
-    beforeRouteUpdate(to, from, next) {
-      this.editorAbstract.destroy()
-      this.editorAbstractEn.destroy()
-      next()
     },
 
     watch: {
@@ -637,13 +364,9 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          editorAbstract: this.setDefaultEditorData('abstract'),
-          editorAbstractEn: this.setDefaultEditorData('abstract_en'),
-          linkUrl: null,
-          linkMenuIsActive: false,
-          linkUrlAbstractEn: null,
-          linkMenuIsActiveAbstractEn: false,
-          block: {info: true, members: true}
+          block: {info: true, members: true},
+          editor: ClassicEditor,
+          editorConfig: {}
         }
       },
 
@@ -659,13 +382,14 @@
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
               this.library = this.handleResponse(response)[0];
+              if (this.library.abstract === null || typeof this.library.abstract === 'undefined') this.library.abstract = '';
+              if (this.library.abstract_en === null || typeof this.library.abstract_en === 'undefined') this.library.abstract_en = '';
               this.fillAutocompleteFields(this.library)
               this.removeUnnecessaryFields(this.library, this.copyFields);
               this.$emit('data-loaded', this.library)
               this.$emit('set-object', 'library')
               this.sendingData = false;
               this.getListRecords('library')
-              this.updateEditorContent()
             } else {
               this.sendingData = false;
             }
@@ -679,7 +403,7 @@
                 id: entity.agent
               }
             })
-          })
+          });
 
           // FETCH FIRST TAB RELATED DATA
           this.tabs.forEach(entity => {
@@ -809,218 +533,14 @@
           orderBy: '-id',
         }
       },
-
-      setDefaultEditorData(field) {
-        return new Editor({
-          extensions: [
-            new Blockquote(),
-            new BulletList(),
-            new CodeBlock(),
-            new HardBreak(),
-            new Heading({ levels: [1, 2, 3] }),
-            new HorizontalRule(),
-            new ListItem(),
-            new OrderedList(),
-            new TodoItem(),
-            new TodoList(),
-            new Link(),
-            new Bold(),
-            new Code(),
-            new Italic(),
-            new Strike(),
-            new Underline(),
-            new History(),
-          ],
-          onUpdate: ({getHTML}) => {
-            this.library[field] = getHTML()
-          },
-        })
-      },
-
-      updateEditorContent() {
-        this.editorAbstract.setContent(this.library.abstract)
-        this.editorAbstractEn.setContent(this.library.abstract_en)
-      },
-
-      showLinkMenu(attrs, field) {
-        if (field === 'editorAbstract') {
-          this.linkUrl = attrs.href
-          this.linkMenuIsActive = true
-          this.$nextTick(() => {
-            this.$refs.linkInput.focus()
-          })
-        } else {
-          this.linkUrlAbstractEn = attrs.href
-          this.linkMenuIsActiveAbstractEn = true
-          this.$nextTick(() => {
-            this.$refs.linkInputAbstractEn.focus()
-          })
-        }
-      },
-
-      hideLinkMenu(field) {
-        if (field === 'editorAbstract') {
-          this.linkUrl = null
-          this.linkMenuIsActive = false
-        } else {
-          this.linkUrlAbstractEn = null
-          this.linkMenuIsActiveAbstractEn = false
-        }
-      },
-
-      setLinkUrl(command, url, field) {
-        command({href: url})
-        this.hideLinkMenu(field)
-        this[field].focus()
-      },
     }
   }
 </script>
 
 <style>
-  .editor {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
-    color: #495057;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    -webkit-transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    transition: border-color 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, -webkit-box-shadow 0.15s ease-in-out;
-    resize: none;
-    overflow-y: scroll;
-    height: auto;
-    max-height: 430px;
-  }
-
-  .editor-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    border-radius: 0.2rem;
-  }
-
-  .ProseMirror {
-    padding: 0.25rem 0.5rem;
-  }
-
   label {
     margin: 5px 0 0 0;
-    /*padding: 0;*/
     color: #999;
     font-size: 0.8rem;
-  }
-
-  .menubar__button {
-    margin: 2px;
-    width: 40px;
-    background-color: transparent;
-    border: none;
-    font-weight: 800;
-    border-radius: 10%;
-    padding: 2px 0px;
-  }
-
-  .menubar__button:hover {
-    background-color: rgba(0, 123, 255, 0.1);
-  }
-
-  .menubar__button.is-active {
-    background-color: rgba(0, 123, 255, 0.2);
-  }
-
-  .editor {
-    position: relative;
-  }
-
-  .editor s {
-    text-decoration: line-through;
-  }
-
-  .editor u {
-    text-decoration: underline;
-  }
-
-  .editor pre {
-    padding: 0.7rem 1rem;
-    border-radius: 5px;
-    background: #000000;
-    color: #ffffff;
-    font-size: 0.8rem;
-    overflow-x: auto;
-  }
-
-  .editor code {
-    display: block;
-  }
-
-  .editor p code {
-    display: inline-block;
-    padding: 0 0.4rem;
-    border-radius: 5px;
-    font-size: 0.8rem;
-    font-weight: bold;
-    background: rgba(0, 0, 0, 0.1);
-    color: rgba(0, 0, 0, 0.8);
-  }
-
-  .editor ul,
-  .editor ol {
-    padding-left: 1rem;
-  }
-
-  .editor li > p,
-  .editor li > ol,
-  .editor li > ul {
-    margin: 0;
-  }
-
-  .editor a {
-    color: inherit;
-  }
-
-  .editor blockquote {
-    border-left: 3px solid rgba(0, 0, 0, 0.1);
-    color: rgba(0, 0, 0, 0.8);
-    padding-left: 0.8rem;
-    font-style: italic;
-  }
-
-  .editor p {
-    margin: 0;
-  }
-
-  .editor img {
-    max-width: 100%;
-    border-radius: 3px;
-  }
-
-  .editor table {
-    border-collapse: collapse;
-    table-layout: fixed;
-    width: 100%;
-    margin: 0;
-    overflow: hidden;
-  }
-
-  .editor td, .editor  th {
-    min-width: 1em;
-    border: 2px solid grey;
-    padding: 3px 5px;
-    vertical-align: top;
-    box-sizing: border-box;
-    position: relative;
-  }
-
-  .editor th {
-    font-weight: bold;
-    text-align: left;
   }
 </style>

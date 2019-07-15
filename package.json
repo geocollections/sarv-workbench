@@ -8,6 +8,8 @@
     "report": "vue-cli-service build --report"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^12.3.1",
+    "@ckeditor/ckeditor5-editor-balloon": "^12.2.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-brands-svg-icons": "^5.9.0",
     "@fortawesome/free-regular-svg-icons": "^5.9.0",
@@ -18,11 +20,13 @@
     "google-maps-api-loader": "^1.1.1",
     "install": "^0.12.2",
     "jquery": "^3.4.1",
+    "leaflet": "latest",
     "lodash": "^4.17.11",
     "material-icons": "^0.3.1",
-    "npm": "^6.9.0",
+    "npm": "^6.10.1",
     "proj4": "^2.5.0",
     "proj4leaflet": "^1.0.2",
+    "raw-loader": "^0.5.1",
     "tableexport": "^5.2.0",
     "tiptap": "^1.22.2",
     "tiptap-extensions": "^1.22.2",
@@ -44,8 +48,7 @@
     "vue2-touch-events": "^2.0.0",
     "vuedraggable": "^2.23.0",
     "vuesax": "^3.8.75",
-    "vuex": "^3.1.1",
-    "leaflet": "latest"
+    "vuex": "^3.1.1"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",

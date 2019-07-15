@@ -25,10 +25,11 @@
 <!--        :unchecked-value="1">-->
 <!--      </b-form-checkbox>-->
 
+
       <vs-checkbox id="is_private"
                    v-model="entity.library__is_private"
                    @input="$parent.$emit('toggle-library-state', entity.library__is_private, entity.id)"
-                   icon="fa-check"
+                   icon="fa-lock"
                    icon-pack="fas">
       </vs-checkbox>
     </td>

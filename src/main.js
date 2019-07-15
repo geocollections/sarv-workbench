@@ -12,6 +12,7 @@ import { createStore } from './store'
 import Vuesax from 'vuesax'
 import VueScrollTo from 'vue-scrollto'
 import Vue2TocuhEvents from 'vue2-touch-events'
+import CKEditor from '@ckeditor/ckeditor5-vue';
 
 // Leaflet START
 import { L } from 'vue2-leaflet'
@@ -61,6 +62,7 @@ Vue.use(VueScrollTo, {
   y: true
 })
 Vue.use(Vue2TocuhEvents)
+Vue.use(CKEditor)
 
 Vue.config.productionTip = false
 
