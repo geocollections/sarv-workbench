@@ -398,3 +398,38 @@ legend:hover {
 /*  background-color: #007bff;*/
 /*  color: #ffffff;*/
 /*}*/
+
+
+
+/********************
+ *** EDITOR START ***
+ ********************/
+
+.ck.ck-content ul,
+.ck.ck-content ul li {
+  list-style-type: inherit;
+}
+
+.ck.ck-content ul li ul,
+.ck.ck-content ul li ul li {
+  list-style-type: circle;
+}
+
+.ck.ck-content ul li ul li ul,
+.ck.ck-content ul li ul li ul li {
+  list-style-type: square;
+}
+
+.ck.ck-content ol,
+.ck.ck-content ol li {
+  list-style-type: decimal;
+}
+
+.ck.ck-content ul,
+.ck.ck-content ol {
+  padding-left: 40px;
+}
+
+/********************
+ ***  EDITOR END  ***
+ ********************/

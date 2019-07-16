@@ -1,7 +1,7 @@
 <template>
   <div class="header">
 
-    <b-navbar type="dark" variant="dark" toggleable="lg" fixed="top" style="z-index: 40001">
+    <b-navbar type="dark" variant="dark" toggleable="lg" fixed="top" style="z-index: 42000">
 
       <b-navbar-brand :to="{ path: '/dashboard' }">
         <!-- <span>{{ $t('header.title') }}</span>-->

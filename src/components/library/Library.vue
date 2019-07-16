@@ -97,7 +97,7 @@
             </div>
 
             <div class="col-sm-10 mb-2">
-              <ckeditor :editor="editor" v-model="library.abstract" :config="editorConfig"></ckeditor>
+              <editor :data.sync="library.abstract"></editor>
             </div>
           </div>
 
@@ -108,7 +108,7 @@
             </div>
 
             <div class="col-sm-10 mb-2">
-              <ckeditor :editor="editor" v-model="library.abstract_en" :config="editorConfig"></ckeditor>
+              <editor :data.sync="library.abstract_en"></editor>
             </div>
           </div>
 
@@ -274,13 +274,14 @@
   import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
   import localStorageMixin from "../mixins/localStorageMixin";
   import permissionsMixin from "../mixins/permissionsMixin";
-  import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+  import Editor from "../partial/editor/Editor";
 
   library.add(faTimes);
 
   export default {
     name: "Library",
     components: {
+      Editor,
       LibraryReferenceListView,
       LibraryReference,
       FontAwesomeIcon,
@@ -365,8 +366,8 @@
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           block: {info: true, members: true},
-          editor: ClassicEditor,
-          editorConfig: {}
+          // editor: BalloonEditor,
+          // editorConfig: {}
         }
       },
 

@@ -14,6 +14,8 @@ import VueScrollTo from 'vue-scrollto'
 import Vue2TocuhEvents from 'vue2-touch-events'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
+Vue.use( CKEditor );
+
 // Leaflet START
 import { L } from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css' // Leaflet css
@@ -62,7 +64,6 @@ Vue.use(VueScrollTo, {
   y: true
 })
 Vue.use(Vue2TocuhEvents)
-Vue.use(CKEditor)
 
 Vue.config.productionTip = false
 
