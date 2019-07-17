@@ -485,7 +485,7 @@
                             v-on:edit-row="editRow"
                             v-on:allow-remove-row="allowRemove"/>
 
-        <div class="row mb-4 pt-1">
+        <div class="row mb-2 pt-1">
           <div class="col pagination-center"
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
@@ -498,51 +498,55 @@
     </div>
 
     <!-- CHECKBOXES -->
-    <div class="row">
-      <div class="col">
+    <div class="d-flex flex-row flex-wrap">
+      <div class="px-2">
         <b-form-checkbox id="is_oa" v-model="reference.is_oa" :value="true" :unchecked-value="false">
           {{ $t('reference.is_oa') }}
         </b-form-checkbox>
+      </div>
 
+      <div class="px-2">
         <b-form-checkbox id="is_private" v-model="reference.is_private" :value="true" :unchecked-value="false">
           {{ $t('otherFiles.private') }}
         </b-form-checkbox>
+      </div>
 
+      <div class="px-2">
         <b-form-checkbox id="is_locked" v-model="reference.is_locked" :value="true" :unchecked-value="false">
           {{ $t('otherFiles.locked') }}
         </b-form-checkbox>
       </div>
     </div>
 
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference', true)"
-                :title="$t('edit.buttons.saveAndLeave') ">
-          <font-awesome-icon icon="door-open"/>
-          {{ $t('edit.buttons.saveAndLeave') }}
-        </button>
+<!--    <div class="row mt-3 mb-3">-->
+<!--      <div class="col">-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference', true)"-->
+<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
+<!--          <font-awesome-icon icon="door-open"/>-->
+<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData"
-                @click="add(true, 'reference', true)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
-          <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
-        </button>
+<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData"-->
+<!--                @click="add(true, 'reference', true)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+<!--          <font-awesome-icon icon="save"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('reference', $route.meta.isEdit)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
-          <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
-        </button>
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('reference', $route.meta.isEdit)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+<!--          <font-awesome-icon icon="ban"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+<!--        </button>-->
 
-        <button v-if="$route.meta.isEdit && showDoiButton()" class="float-right btn btn-primary mb-2"
-                :disabled="sendingData"
-                @click="addNewDoi()">
-          <font-awesome-icon :icon="['far', 'plus-square']"/>
-          {{ $t('edit.buttons.saveNewDoi') }}
-        </button>
-      </div>
-    </div>
+<!--        <button v-if="$route.meta.isEdit && showDoiButton()" class="float-right btn btn-primary mb-2"-->
+<!--                :disabled="sendingData"-->
+<!--                @click="addNewDoi()">-->
+<!--          <font-awesome-icon :icon="['far', 'plus-square']"/>-->
+<!--          {{ $t('edit.buttons.saveNewDoi') }}-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
 
 
   </div>

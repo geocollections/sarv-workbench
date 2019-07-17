@@ -487,26 +487,26 @@
       </div>
     </div>
 
-    <div class="row mt-3 mb-3">
+    <div class="row mt-3">
       <div class="col">
         <!-- Todo: Remove 3 buttons and add them do footer -->
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"
-                :title="$t('edit.buttons.saveAndLeave') ">
-          <font-awesome-icon icon="door-open"/>
-          {{ $t('edit.buttons.saveAndLeave') }}
-        </button>
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"-->
+<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
+<!--          <font-awesome-icon icon="door-open"/>-->
+<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'doi', true)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
-          <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
-        </button>
+<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'doi', true)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+<!--          <font-awesome-icon icon="save"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('doi', $route.meta.isEdit)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
-          <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
-        </button>
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('doi', $route.meta.isEdit)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+<!--          <font-awesome-icon icon="ban"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+<!--        </button>-->
 
         <button v-if="$route.meta.isEdit && showMetadataButton && validate('doi')" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
                 :title="showMetadataUpdateMessage ? $t('edit.buttons.updateMetadata') : $t('edit.buttons.registerMetadata')">

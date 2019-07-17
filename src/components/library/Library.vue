@@ -224,32 +224,32 @@
     <div class="row mt-3">
       <div class="col">
         <b-form-checkbox id="is_private" v-model="library.is_private" :value="1" :unchecked-value="0">
-          {{ $t('library.private') }}?
+          {{ $t('library.private') }}
         </b-form-checkbox>
       </div>
     </div>
 
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library', true)"
-                :title="$t('edit.buttons.saveAndLeave') ">
-          <font-awesome-icon icon="door-open"/>
-          {{ $t('edit.buttons.saveAndLeave') }}
-        </button>
+<!--    <div class="row mt-3 mb-3">-->
+<!--      <div class="col">-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library', true)"-->
+<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
+<!--          <font-awesome-icon icon="door-open"/>-->
+<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'library', true)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
-          <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
-        </button>
+<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'library', true)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+<!--          <font-awesome-icon icon="save"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('library', $route.meta.isEdit)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
-          <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
-        </button>
-      </div>
-    </div>
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('library', $route.meta.isEdit)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+<!--          <font-awesome-icon icon="ban"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 </template>

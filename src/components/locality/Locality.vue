@@ -428,31 +428,31 @@
     </div>
 
     <!-- BUTTONS -->
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality', true)"
-                :title="$t('edit.buttons.saveAndLeave') ">
-          <font-awesome-icon icon="door-open"/>
-          {{ $t('edit.buttons.saveAndLeave') }}
-        </button>
+<!--    <div class="row mt-3 mb-3">-->
+<!--      <div class="col">-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality', true)"-->
+<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
+<!--          <font-awesome-icon icon="door-open"/>-->
+<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'locality', true)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">
-          <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
-        </button>
+<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'locality', true)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
+<!--          <font-awesome-icon icon="save"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
+<!--        </button>-->
 
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality', $route.meta.isEdit)"
-                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">
-          <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
-        </button>
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality', $route.meta.isEdit)"-->
+<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
+<!--          <font-awesome-icon icon="ban"/>-->
+<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
+<!--        </button>-->
 
-        <span class="float-right">
-            <button class="btn btn-primary mb-2" @click="$parent.saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>
-          </span>
-      </div>
-    </div>
+<!--        <span class="float-right">-->
+<!--            <button class="btn btn-primary mb-2" @click="$parent.saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>-->
+<!--          </span>-->
+<!--      </div>-->
+<!--    </div>-->
 
   </div>
 </template>
