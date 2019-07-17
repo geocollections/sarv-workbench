@@ -141,17 +141,17 @@ export function fetchReferences(data) {
   if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
     searchFields += '&multi_search=value:' + data.bookJournal + ';fields:book,book_editor,journal__journal_name;lookuptype:icontains'
   }
-  if (data.abstractKeywordsRemarks !== null && data.abstractKeywordsRemarks.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.abstractKeywordsRemarks + ';fields:abstract,tags,remarks;lookuptype:icontains'
+  if (data.abstractRemarks && data.abstractRemarks.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.abstractRemarks + ';fields:abstract,remarks;lookuptype:icontains'
+  }
+  if (data.keywords !== null && data.keywords.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference__keywords;lookuptype:icontains'
   }
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += '&id__icontains=' + data.id
   }
-  if (data.libraryAuthor !== null && data.libraryAuthor.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.libraryAuthor + ';fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt;lookuptype:icontains&distinct=true'
-  }
-  if (data.libraryIdTitle !== null && data.libraryIdTitle.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.libraryIdTitle + ';fields:libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains&distinct=true'
+  if (data.libraryAuthorIdTitle && data.libraryAuthorIdTitle.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.libraryAuthorIdTitle + ';fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains&distinct=true'
   }
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
