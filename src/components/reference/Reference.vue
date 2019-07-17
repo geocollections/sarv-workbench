@@ -229,8 +229,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
-              <b-form-textarea :key="componentKey" id="abstract" v-model="reference.abstract" type="text" size="sm"
-                               :rows="1" :max-rows="20"></b-form-textarea>
+              <editor :data.sync="reference.abstract" />
             </div>
           </div>
 
@@ -263,8 +262,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
-              <b-form-textarea :key="componentKey" id="remarks" v-model="reference.remarks" type="text" size="sm"
-                               :rows="1" :max-rows="20"></b-form-textarea>
+              <editor :data.sync="reference.remarks"/>
             </div>
           </div>
 
@@ -577,10 +575,12 @@
   import permissionsMixin from "../mixins/permissionsMixin";
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
   import localStorageMixin from "../mixins/localStorageMixin";
+  import Editor from "../partial/editor/Editor";
 
   export default {
     name: "Reference",
     components: {
+      Editor,
       MultimediaComponent,
       LocalityTable,
       VueMultiselect,

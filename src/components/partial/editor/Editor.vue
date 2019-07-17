@@ -51,7 +51,6 @@
     props: {
       data: {
         type: String,
-        required: true,
         default: '<p></p>'
       }
     },
@@ -64,7 +63,7 @@
         },
 
         set(value) {
-          if (value) this.$emit('update:data', value);
+          if (value && value.length > 0) this.$emit('update:data', value);
           else this.$emit('update:data', '<p></p>');
         }
       }

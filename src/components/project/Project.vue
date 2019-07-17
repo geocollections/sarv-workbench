@@ -140,7 +140,7 @@
 
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <b-form-textarea id="remarks" v-model="project.remarks" type="text" size="sm" :rows="1" :max-rows="20"/>
+              <editor :data.sync="project.remarks"/>
             </div>
           </div>
         </div>
