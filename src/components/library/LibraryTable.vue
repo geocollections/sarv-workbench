@@ -28,7 +28,7 @@
 
       <vs-checkbox id="is_private"
                    v-model="entity.library__is_private"
-                   @input="$parent.$emit('toggle-library-state', entity.library__is_private, entity.id)"
+                   @input="$parent.$emit('toggle-library-state', entity.library__is_private, entity.library)"
                    icon="fa-lock"
                    icon-pack="fas">
       </vs-checkbox>

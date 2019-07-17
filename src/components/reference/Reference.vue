@@ -856,7 +856,7 @@
         uploadableObject.related_data.attachment = this.relatedData.attachment
         uploadableObject.related_data.locality = this.relatedData.locality
         uploadableObject.related_data.library = this.relatedData.library
-        
+
         if (this.isDefinedAndNotNull(this.relatedData.library)) {
           uploadableObject.related_data.library.forEach((library, index) => {
             uploadableObject.related_data.library[index] = {
