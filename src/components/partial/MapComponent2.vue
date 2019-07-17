@@ -94,7 +94,14 @@
 
         ],
         zoom: 11, //SET DEFAULT ZOOM LEVEL,
-        gpsID: null
+        gpsID: null,
+        markerIcon: new L.DivIcon({
+          html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #007bff;"></i>',
+          iconSize: [29, 37],
+          iconAnchor: [12, 36],
+          popupAnchor: [2, -34],
+          className: 'clean-icon'
+        })
       }
     },
 
@@ -145,7 +152,8 @@
 
         L.control.layers(baseLayers).addTo(this.map);
 
-        if (this.mode === 'single' && this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
+        // if (this.mode === 'single' && this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
+        if (this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
 
         //LAYERS CHANGED
         this.map.on('baselayerchange', (event) => {
@@ -173,10 +181,10 @@
         this.markers = [];
 
         newVal.forEach(entity => {
-          let marker = L.marker({lat: parseFloat(entity.latitude), lng: parseFloat(entity.longitude)})
+          let marker = L.marker({lat: parseFloat(entity.latitude), lng: parseFloat(entity.longitude)}, {icon: this.markerIcon})
             .addTo(this.map)
             .on('click', () => window.open(location.origin + '/site/' + entity.id, '', 'width=800,height=750'));
-          marker.bindTooltip(entity.name, {permanent: true, direction: 'right'});
+          marker.bindTooltip(entity.name, {permanent: true, direction: 'right', offset: [5,-23]});
           this.markers.push(marker)
         });
         let bounds = new L.featureGroup(this.markers).getBounds();
@@ -206,6 +214,7 @@
 
         this.marker = L.marker(location,
           {
+            icon: this.markerIcon,
             draggable: true,
             clickable: false,
             zIndexOffset: 100
@@ -219,15 +228,22 @@
       setCurrentGpsLocationIfExists() {
         this.getGPSLocation().then(currentGPSLocation => {
           if (currentGPSLocation === null) return;
-          let redIcon = new L.Icon({
-            iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-            iconSize: [25, 41],
+          let gpsIcon = new L.DivIcon({
+            html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #dc3545;"></i>',
+            iconSize: [29, 37],
             iconAnchor: [12, 41],
-            popupAnchor: [1, -34],
-            shadowSize: [41, 41]
+            popupAnchor: [2, -34],
+            className: 'clean-icon'
           });
-          this.currentLocation = L.marker({lat: currentGPSLocation.latitude, lng: currentGPSLocation.longitude}, {icon: redIcon, zIndexOffset: -1})
+          // let redIcon = new L.Icon({
+          //   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+          //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          //   iconSize: [25, 41],
+          //   iconAnchor: [12, 41],
+          //   popupAnchor: [1, -34],
+          //   shadowSize: [41, 41]
+          // });
+          this.currentLocation = L.marker({lat: currentGPSLocation.latitude, lng: currentGPSLocation.longitude}, {icon: gpsIcon, zIndexOffset: -1})
             .addTo(this.map);
           this.currentLocation.bindPopup("GPS location").openPopup();
         });
@@ -320,5 +336,8 @@
 </script>
 
 <style scoped>
-
+  .clean-icon {
+    background: unset;
+    border: unset;
+  }
 </style>
