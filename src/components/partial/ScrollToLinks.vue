@@ -4,10 +4,9 @@
 
     <b-button-group size="sm" class="d-block">
       <b-button v-for="(value, name, index) in activeSearchParams.block"
-                class="m-1"
-                style="border-radius: 0.25rem"
+                class="scroll-to-button"
                 :key="name"
-                variant="outline-primary"
+                variant="light"
                 v-scroll-to="'#block-' + name">
         <i :class="getIconPack(name) + ' ' + getIcon(name)"></i>
         {{ $t('sidebar.' + $route.meta.table + '.' + name) }}
@@ -53,5 +52,9 @@
 </script>
 
 <style scoped>
+  .scroll-to-button {
+    border: unset;
+    font-size: 0.675rem;
+  }
 
 </style>
