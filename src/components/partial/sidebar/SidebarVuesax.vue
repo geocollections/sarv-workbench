@@ -5,9 +5,9 @@
 
     <!--    <div class="header-sidebar" slot="header"> This makes it fixed  -->
     <div class="header-sidebar">
-      <vs-avatar/>
+      <vs-avatar @click="$router.push({ path: '/settings' })" title="Go to settings"/>
 
-      <h6>{{ currentUser.forename }} {{ currentUser.surename }}</h6>
+      <h6 @click="$router.push({ path: '/settings' })" title="Go to settings">{{ currentUser.forename }} {{ currentUser.surename }}</h6>
     </div>
 
     <vs-divider class="mt-0 mb-1"></vs-divider>
@@ -479,5 +479,9 @@
 
   .vs-sidebar--item:hover {
     color: #1F74FF;
+  }
+
+  .header-sidebar > h6:hover {
+    cursor: pointer;
   }
 </style>

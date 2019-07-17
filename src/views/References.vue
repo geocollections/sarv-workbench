@@ -9,12 +9,12 @@
       </div>
       <div class="col-sm-6 text-right">
         <!-- Combined view button available only on very large screens -->
-        <span class="custom-control custom-switch pr-2">
-            <input type="checkbox" class="custom-control-input" id="combinedSwitch" v-model="isCombinedView">
-            <label class="custom-control-label pl-0" for="combinedSwitch">
-              {{ $t(isCombinedView ? 'add.buttons.combinedViewEnabled' : 'add.buttons.combinedViewDisabled')}}
-            </label>
-        </span>
+<!--        <span class="custom-control custom-switch pr-2">-->
+<!--            <input type="checkbox" class="custom-control-input" id="combinedSwitch" v-model="isCombinedView">-->
+<!--            <label class="custom-control-label pl-0" for="combinedSwitch">-->
+<!--              {{ $t(isCombinedView ? 'add.buttons.combinedViewEnabled' : 'add.buttons.combinedViewDisabled')}}-->
+<!--            </label>-->
+<!--        </span>-->
 
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/reference/add' }">{{ $t('add.new') }}
         </router-link>
@@ -26,7 +26,7 @@
     <div v-if="isCombinedView" class="row mb-1" :class="{ 'break-out': isCombinedView }"
          :style="'width:' + freeSpacePercentage + 'vw;'">
       <div class="col">
-        <label for="combinedViewRangeInput" class="m-0">{{ $t('messages.combinedViewChangeSize') }}</label>
+        <label :for="`combinedViewRangeInput`" class="m-0">{{ $t('messages.combinedViewChangeSize') }}</label>
       </div>
       <b-form-input id="combinedViewRangeInput" v-model="combinedViewSize" type="range" min="0" max="12"></b-form-input>
     </div>
