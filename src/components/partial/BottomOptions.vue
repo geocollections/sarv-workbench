@@ -182,12 +182,12 @@
   }
 
   .bottom-item-disabled {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(0, 0, 0, 0.5);
   }
 
   .bottom-item-disabled:hover {
     cursor: not-allowed;
-    color: rgba(255, 255, 255, 0.5) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
   }
 
   .bottom-icon {
