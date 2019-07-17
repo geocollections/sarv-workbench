@@ -207,7 +207,12 @@
             </div>
 
             <div class="col-sm-12 col-md-5">
-              <label :for="`url`">URL:</label>
+              <label :for="`url`">
+                URL:
+                <a v-if="reference.url" class="link text-primary" :href="reference.url" target="_blank">
+                  <i class="fas fa-external-link-alt"></i>
+                </a>
+              </label>
               <b-form-input id="url" v-model="reference.url" type="text"></b-form-input>
             </div>
           </div>
@@ -1137,5 +1142,9 @@
 
   .link:hover {
     cursor: pointer;
+  }
+
+  .url-link {
+
   }
 </style>

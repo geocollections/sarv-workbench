@@ -34,9 +34,11 @@
     </td>
 
     <td>
-      <a v-if="entity.attachment__filename" href="javascript:void(0)"
-         @click="openPdf({pdf: entity.attachment__filename})">PDF</a>
-      <a v-if="entity.attachment__filename === null && entity.url" :href="entity.url" target="_blank" rel="noopener noreferrer">PDF</a>
+      <a v-if="entity.attachment__filename" href="javascript:void(0)" @click="openPdf({pdf: entity.attachment__filename})">PDF</a>
+    </td>
+
+    <td>
+      <a v-if="entity.attachment__filename === null && entity.url" :href="entity.url" target="_blank" rel="noopener noreferrer">URL</a>
     </td>
 
     <td v-if="isLibraryActive" @click="$parent.$emit('add-reference-to-active-library', entity.id)" class="add-library" :title="$t('reference.addReferenceToLibrary')">
