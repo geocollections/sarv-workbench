@@ -7,6 +7,7 @@
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
+            <th>{{ $t('settings.handle') }}</th>
             <th>{{ $t('reference.reference') }}
               <font-awesome-icon class="ml-2" icon="link"/>
             </th>
@@ -20,10 +21,14 @@
           <!--          <tbody>-->
           <draggable v-model="relatedData.library_reference"
                      tag="tbody"
+                     handle=".middle-handle"
                      v-bind="dragOptions"
                      @change="handleElementChange">
               <tr v-for="entity in relatedData.library_reference" :key="entity.id"
                   :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+                <td class="middle-handle">
+                  <i class="fas fa-align-justify fa-lg"></i>
+                </td>
                 <!-- VIEW MODE -->
                 <td v-if="!entity.editMode">
                   <router-link :to="{ path: '/reference/' + entity.reference }" target="_blank">
@@ -185,5 +190,14 @@
   .ghost {
     opacity: 0.5;
     background: #dee2e6;
+  }
+
+  .middle-handle {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .middle-handle:hover {
+    cursor: grab;
   }
 </style>
