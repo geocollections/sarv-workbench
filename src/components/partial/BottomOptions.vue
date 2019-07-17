@@ -138,15 +138,17 @@
 <!-- Styles are not scoped because now it is possible to add margin-bottom to footer easily -->
 <style>
   .bottom-options-new {
-    background-color: #343a40!important;
-    color: #fff;
+    /*background-color: #343a40!important;*/
+    background-color: #fff!important;
+    /*color: #fff;*/
+    color: #000;
     overflow: hidden;
     position: fixed;
     right: 0;
     bottom: 0;
     width: 100%;
     box-shadow: 0 4px 10px #000;
-    z-index: 10000;
+    z-index: 39000;
     height: 56px;
   }
 
@@ -211,16 +213,27 @@
     transition: opacity 0.5s;
   }
 
-  .bottom-finish:hover {
+  .bottom-finish {
     color: #007bff;
   }
 
-  .bottom-save:hover {
+  .bottom-save {
     color: #28a745;
   }
 
-  .bottom-cancel:hover {
+  .bottom-cancel {
     color: #dc3545;
+  }
+
+  .bottom-finish, .bottom-save, .bottom-cancel {
+    transition: letter-spacing 500ms, font-weight 250ms;
+  }
+
+  .bottom-finish:hover, .bottom-save:hover, .bottom-cancel:hover {
+    color: #000;
+    letter-spacing: 2px;
+    font-weight: 800;
+    transition: letter-spacing 500ms, font-weight 250ms;
   }
 
   /* Adds margin-bottom to footer so that it won't get caught behind buttons */
