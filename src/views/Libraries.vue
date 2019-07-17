@@ -110,7 +110,7 @@
 
       changeLibraryState(state, libraryID) {
         let formData = new FormData()
-        formData.append('data', JSON.stringify({library: libraryID, is_private: state}))
+        formData.append('data', JSON.stringify({id: libraryID, is_private: state}))
 
         fetchChangeLibraryState(formData).then(response => {
           if (typeof response.body.message !== 'undefined') {

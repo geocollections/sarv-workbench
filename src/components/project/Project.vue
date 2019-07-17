@@ -134,8 +134,7 @@
         <div  v-if="block.description">
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <b-form-textarea id="description" v-model="project.description" type="text" size="sm" :rows="1"
-                               :max-rows="20"/>
+              <editor :data.sync="project.description"/>
             </div>
           </div>
 
@@ -337,10 +336,12 @@
   import MultimediaComponent from "../partial/MultimediaComponent";
   import AddNewSite from "./addOrEditSiteModal";
   import FilePreviewModal from "../partial/filePreviewModal";
+  import Editor from "../partial/editor/Editor";
 
   export default {
     name: "Project",
     components: {
+      Editor,
       FilePreviewModal,
       AddNewSite,
       MultimediaComponent,

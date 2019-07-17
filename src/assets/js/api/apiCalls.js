@@ -491,7 +491,7 @@ export function fetchListLibraries(id) {
 }
 
 export function fetchChangeLibraryState(data) {
-  return fetchPost(`add/library_agent/`, data)
+  return fetchPost(`change/library/`, data)
 }
 
 /***********************
