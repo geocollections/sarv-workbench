@@ -33,12 +33,16 @@
       <a v-else-if="entity.doi_url" href="javascript:void(0)" @click="openDOI({doi: entity.doi_url})">DOI</a>
     </td>
 
-    <td>
-      <a v-if="entity.attachment__filename" href="javascript:void(0)" @click="openPdf({pdf: entity.attachment__filename})">PDF</a>
+    <td class="middle">
+      <a v-if="entity.attachment__filename" href="javascript:void(0)" @click="openPdf({pdf: entity.attachment__filename})">
+        <i class="far fa-file-pdf fa-lg" :title="entity.attachment__filename"></i>
+      </a>
     </td>
 
-    <td>
-      <a v-if="entity.attachment__filename === null && entity.url" :href="entity.url" target="_blank" rel="noopener noreferrer">URL</a>
+    <td class="middle">
+      <a v-if="entity.url && getUrl(entity.url) !== false" :href="getUrl(entity.url)" target="_blank" rel="noopener noreferrer">
+        <i class="fas fa-external-link-alt fa-lg" :title="entity.url"></i>
+      </a>
     </td>
 
     <td v-if="isLibraryActive" @click="$parent.$emit('add-reference-to-active-library', entity.id)" class="add-library" :title="$t('reference.addReferenceToLibrary')">
@@ -62,6 +66,14 @@
       isLibraryActive: {
         type: Boolean
       }
+    },
+    methods: {
+      getUrl(url) {
+        if (url.startsWith('http')) return url
+        else if (url.startsWith('www.')) return 'http://' + url
+        else if (url.includes('www.')) return 'http://' + url.substring(url.indexOf('www.'))
+        else return false
+      }
     }
 
   }
@@ -79,6 +91,11 @@
     cursor: pointer;
     background-color: rgba(40, 167, 69, 0.2);
     transition: background-color 300ms linear;
+  }
+
+  .middle {
+    text-align: center;
+    vertical-align: middle;
   }
 
 </style>

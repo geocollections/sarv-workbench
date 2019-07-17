@@ -213,7 +213,8 @@
                   <i class="fas fa-external-link-alt"></i>
                 </a>
               </label>
-              <b-form-input id="url" v-model="reference.url" type="text"></b-form-input>
+              <b-form-input id="url" v-model="reference.url" type="text" :state="isValidUrl"></b-form-input>
+              <b-form-text v-if="!isValidUrl">{{ $t('add.errors.url') }}.</b-form-text>
             </div>
           </div>
 
@@ -601,6 +602,12 @@
     computed: {
       sidebarUserAction() {
         return this.$store.state['sidebarUserAction']
+      },
+
+      isValidUrl() {
+        let regex = RegExp('^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$');
+        console.log(regex.test(this.reference.url))
+        return regex.test(this.reference.url)
       }
     },
     created() {

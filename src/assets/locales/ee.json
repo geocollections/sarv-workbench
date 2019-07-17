@@ -245,7 +245,8 @@
       "imagesetNumberExists": "See pildiseeria on juba olemas",
       "emptyField": "See väli ei tohi olla tühi",
       "noResults1": "Kahjuks ei leitud mitte ühtegi tulemust. Minge",
-      "noResults2": "ja alustage üleslaadimist."
+      "noResults2": "ja alustage üleslaadimist.",
+      "url": "Palun kasutage korrektset url formaati"
     }
   },
   "edit": {

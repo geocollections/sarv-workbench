@@ -172,7 +172,7 @@
           {id: "id", title: "", type: "text", orderBy: false},
           {id: "doi", title: "reference.doi", type: "text"},
           {id: "attachment__filename", title: "reference.pdf", type: "text"},
-          {id: "attachment__filename", title: "reference.url", type: "text"},
+          {id: "url", title: "reference.url", type: "text"},
           {id: "", title: "reference.library", type: "ACTIVE_LIBRARY_HEADER", orderBy: false, showHeader: true},
         ],
         filters: [

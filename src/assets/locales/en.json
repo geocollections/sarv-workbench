@@ -245,7 +245,8 @@
       "imagesetNumberExists": "This imageset already exists",
       "emptyField": "This field can't be empty",
       "noResults1": "Unfortunately we didn't find any results. Go to",
-      "noResults2": "and start uploading."
+      "noResults2": "and start uploading.",
+      "url": "Please use correct url format"
     }
   },
   "edit": {
