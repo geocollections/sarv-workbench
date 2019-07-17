@@ -490,8 +490,8 @@ export function fetchListLibraries(id) {
   return fetch(`library_agent/?agent=${id}&format=json`)
 }
 
-export function fetchChangeLibraryState(data) {
-  return fetchPost(`change/library/`, data)
+export function fetchChangeLibraryState(id, data) {
+  return fetchPost(`change/library/${id}`, data)
 }
 
 /***********************

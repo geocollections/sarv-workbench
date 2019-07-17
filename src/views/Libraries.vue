@@ -110,9 +110,9 @@
 
       changeLibraryState(state, libraryID) {
         let formData = new FormData()
-        formData.append('data', JSON.stringify({id: libraryID, is_private: state}))
+        formData.append('data', JSON.stringify({is_private: state}))
 
-        fetchChangeLibraryState(formData).then(response => {
+        fetchChangeLibraryState(libraryID, formData).then(response => {
           if (typeof response.body.message !== 'undefined') {
             if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
               toastSuccess({text: response.body.message_et});
