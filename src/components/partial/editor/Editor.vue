@@ -223,16 +223,6 @@
     overflow-x: hidden;
   }
 
-  #editor > .ck {
-    background-color: #fff!important;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-  }
-
-  #editor > .ck:focus-within {
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  }
-
   .ck-balloon-panel {
     z-index: 41000 !important;
   }

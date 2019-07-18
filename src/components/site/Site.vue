@@ -193,8 +193,7 @@
           <div class="row">
             <div class="col-sm-12 mb-2">
               <label :for="`remarks_location`">{{ $t('site.remarks_location') }}:</label>
-              <b-form-textarea id="remarks_location" v-model="site.remarks_location" type="text" size="sm" :rows="2"
-                               :max-rows="20"/>
+              <editor :data.sync="site.remarks_location"/>
             </div>
           </div>
         </div>
@@ -211,13 +210,13 @@
         <div v-if="block.description">
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <b-form-textarea id="description" v-model="site.description" type="text" size="sm" :rows="2" :max-rows="20"/>
+              <editor :data.sync="site.description"/>
             </div>
           </div>
 
           <div class="row">
             <div class="col-sm-12 mb-2">
-              <b-form-textarea id="remarks" v-model="site.remarks" type="text" size="sm" :rows="2" :max-rows="20"/>
+              <editor :data.sync="site.remarks"/>
             </div>
           </div>
         </div>
@@ -289,10 +288,12 @@
   import LinkedSampleTable from "../sample/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
   import sidebarMixin from "../mixins/sidebarMixin";
+  import Editor from "../partial/editor/Editor";
 
   export default {
     name: "Site",
     components: {
+      Editor,
       AddNewSample,
       LinkedSampleTable,
       SaveButtons,
