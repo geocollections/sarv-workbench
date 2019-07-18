@@ -495,7 +495,6 @@
   export default {
     name: "Locality",
     components: {
-      MapComponent2,
       LocalityStratigraphy,
       LocalityAttachment,
       LocalitySynonym,
@@ -791,8 +790,8 @@
     height: 50vh;
   }
 
-  .vue2leaflet-map, .leaflet-container {
-    cursor: crosshair;
+  .leaflet-container {
+    /*cursor: pointer;*/
   }
 
   label {
