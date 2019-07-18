@@ -314,10 +314,10 @@
   import VueMultiselect from 'vue-multiselect'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import Datepicker from 'vue2-datepicker'
-  import formManipulation from './../mixins/formManipulation'
-  import sidebarMixin from './../mixins/sidebarMixin'
-  import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
-  import localStorageMixin from './../mixins/localStorageMixin'
+  import formManipulation from '../../mixins/formManipulation'
+  import sidebarMixin from '../../mixins/sidebarMixin'
+  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import localStorageMixin from '../../mixins/localStorageMixin'
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchProjects,

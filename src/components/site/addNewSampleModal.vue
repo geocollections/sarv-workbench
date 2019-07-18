@@ -29,7 +29,7 @@
 </template>
 
 <script>
-  import fontAwesomeLib from './../mixins/fontAwasomeLib'
+  import fontAwesomeLib from '../../mixins/fontAwasomeLib'
     import Sample from "../sample/Sample";
     export default {
         name: "addNewSample",

@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import formManipulation from './../mixins/formManipulation'
+  import formManipulation from '../../mixins/formManipulation'
 
   export default {
     mixins: [formManipulation],

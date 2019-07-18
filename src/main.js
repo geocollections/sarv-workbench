@@ -72,8 +72,8 @@ Vue.config.productionTip = false
 
 // Gets translations from json files
 const messages = {
-  en: require('@/assets/locales/en.json'),
-  ee: require('@/assets/locales/ee.json'),
+  en: require('@/translations/en.json'),
+  ee: require('@/translations/ee.json'),
 };
 
 // Gets preferred language from localStorage (fallback is ee)
@@ -256,6 +256,13 @@ new Vue({
       type: Object
     },
     analysisViewType: {
+      type: String,
+      default: 'table'
+    },
+    specimenSearchHistory: {
+      type: Object
+    },
+    specimenViewType: {
       type: String,
       default: 'table'
     },

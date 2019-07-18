@@ -120,8 +120,8 @@
 
 <script>
   import FileTable from "../../partial/FileTable";
-  import formManipulation from "../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
+  import formManipulation from "../../../mixins/formManipulation";
+  import autocompleteFieldManipulation from "../../../mixins/autocompleFormManipulation";
 
   export default {
     components: {

@@ -122,8 +122,8 @@
 </template>
 
 <script>
-  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
-  import formManipulation from "../../mixins/formManipulation";
+  import autocompleteFieldManipulation from "../../../mixins/autocompleFormManipulation";
+  import formManipulation from "../../../mixins/formManipulation";
 
   export default {
     name: "DoiRelatedIdentifier",

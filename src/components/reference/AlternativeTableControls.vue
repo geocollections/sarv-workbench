@@ -71,7 +71,7 @@
 </template>
 
 <script>
-  import fontAwesomeLib from "../mixins/fontAwasomeLib";
+  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
 
   export default {
     name: "AlternativeTableControls",

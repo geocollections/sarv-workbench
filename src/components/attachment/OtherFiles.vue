@@ -980,7 +980,7 @@
 </template>
 
 <script>
-  import formManipulation  from './../mixins/formManipulation'
+  import formManipulation  from '../../mixins/formManipulation'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
@@ -995,8 +995,8 @@
 
   library.add(faFile)
   import Vue from 'vue'
-  import fontAwesomeLib from "../mixins/fontAwasomeLib";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
+  import permissionsMixin from "../../mixins/permissionsMixin";
   export default {
     components: {
       FontAwesomeIcon,

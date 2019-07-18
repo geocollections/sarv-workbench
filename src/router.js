@@ -853,6 +853,73 @@ const router = new Router({
             }
           ]
         },
+        {
+          path: '/specimen',
+          component: () => import('./views/Specimens.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/specimen/SpecimenTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/specimen/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/specimen/Specimen.vue'),
+              meta: {
+                isEdit:true,
+                table:'specimen',
+                title:'titles.editSpecimen',
+                heading:'editSpecimen.heading',
+                isBottomOptionShown: true,
+                isNavigationShown: true,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: 'specimen'
+              },
+            }
+          ]
+        },
+        {
+          path: '/specimen/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              name: 'Specimen add',
+              component: () => import('./components/specimen/Specimen.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addSpecimen',
+                addNew:'add.newSpecimen',
+                subForms:[
+                  {path:'/specimen/add',name:'add.specimen'}
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: true,
+                object: 'specimen'
+              },
+            }
+          ]
+        },
       ]
     },
   ],

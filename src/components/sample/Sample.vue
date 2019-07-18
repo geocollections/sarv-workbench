@@ -851,17 +851,17 @@
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
-  import formManipulation from './../mixins/formManipulation'
-  import copyForm from './../mixins/copyForm'
-  import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
+  import formManipulation from '../../mixins/formManipulation'
+  import copyForm from '../../mixins/copyForm'
+  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
   import SampleReference from "./relatedTables/SampleReference";
   import SampleAttachment from "./relatedTables/SampleAttachment";
   import SampleAnalysis from "./relatedTables/SampleAnalysis";
   import SamplePreparation from "./relatedTables/SamplePreparation";
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
   import SampleWrapper from "./SampleWrapper";
-  import localStorageMixin from './../mixins/localStorageMixin'
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import localStorageMixin from '../../mixins/localStorageMixin'
+  import permissionsMixin from "../../mixins/permissionsMixin";
 
   export default {
     name: "Sample",

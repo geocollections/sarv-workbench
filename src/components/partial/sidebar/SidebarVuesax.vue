@@ -294,7 +294,7 @@
 
 <script>
   import '@fortawesome/fontawesome-free/css/all.min.css'
-  import permissionsMixin from "../../mixins/permissionsMixin";
+  import permissionsMixin from "../../../mixins/permissionsMixin";
   import SidebarToggleButton from "./SidebarToggleButton";
 
   export default {

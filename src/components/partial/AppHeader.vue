@@ -71,9 +71,9 @@
 
 <script>
   import { toastInfo } from "@/assets/js/iziToast/iziToast";
-  import fontAwesomeLib from "../mixins/fontAwasomeLib";
-  import authenticate from "../mixins/authenticate";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
+  import authenticate from "../../mixins/authenticate";
+  import permissionsMixin from "../../mixins/permissionsMixin";
 
   export default {
     name: "app-header",

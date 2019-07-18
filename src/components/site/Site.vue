@@ -266,9 +266,9 @@
   import VueMultiselect from 'vue-multiselect'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import Datepicker from 'vue2-datepicker'
-  import formManipulation from './../mixins/formManipulation'
-  import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
-  import localStorageMixin from './../mixins/localStorageMixin'
+  import formManipulation from '../../mixins/formManipulation'
+  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import localStorageMixin from '../../mixins/localStorageMixin'
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchSites,
@@ -287,7 +287,7 @@
   import SaveButtons from "../partial/SaveButtons";
   import LinkedSampleTable from "../sample/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
-  import sidebarMixin from "../mixins/sidebarMixin";
+  import sidebarMixin from "../../mixins/sidebarMixin";
   import Editor from "../partial/editor/Editor";
 
   export default {

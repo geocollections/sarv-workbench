@@ -22,7 +22,7 @@
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faIdCard} from '@fortawesome/free-solid-svg-icons'
-  import authenticate from "../mixins/authenticate";
+  import authenticate from "../../mixins/authenticate";
 
   library.add(faIdCard)
 

@@ -40,8 +40,8 @@
 <script>
   import Attachments from '@/views/AttachmentsOld.vue'
   import RecentActivity from "./RecentActivity";
-  import permissionsMixin from "../mixins/permissionsMixin";
-  import localStorageMixin from "../mixins/localStorageMixin";
+  import permissionsMixin from "../../mixins/permissionsMixin";
+  import localStorageMixin from "../../mixins/localStorageMixin";
 
   export default {
     components: {

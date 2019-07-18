@@ -150,7 +150,7 @@
   import {fetchReferences} from "@/assets/js/api/apiCalls";
   import {fetchAddReferenceToLibrary} from "../assets/js/api/apiCalls";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
-  import permissionsMixin from "../components/mixins/permissionsMixin";
+  import permissionsMixin from "../mixins/permissionsMixin";
 
   export default {
     components: {

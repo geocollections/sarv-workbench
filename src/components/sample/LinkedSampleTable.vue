@@ -56,11 +56,11 @@
 </template>
 
 <script>
-  import fontAwasomeLib  from './../mixins/fontAwasomeLib'
+  import fontAwasomeLib  from '../../mixins/fontAwasomeLib'
   import {
     fetchLinkedSamplesX
   } from "../../assets/js/api/apiCalls";
-  import localStorageMixin from './../mixins/localStorageMixin'
+  import localStorageMixin from '../../mixins/localStorageMixin'
     export default {
         name: "LinkedSampleTable",
       mixins: [fontAwasomeLib,localStorageMixin],

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import fontAwesomeLib from './../mixins/fontAwasomeLib'
+  import fontAwesomeLib from '../../mixins/fontAwasomeLib'
     import Site from "../site/Site";
     export default {
         name: "addNewSite",

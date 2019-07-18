@@ -85,8 +85,8 @@
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
   import {fetchAddImageset, fetchIsImagesetNumberInImageset} from "../assets/js/api/apiCalls";
-  import autocompleteFieldManipulation from "../components/mixins/autocompleFormManipulation";
-  import permissionsMixin from "../components/mixins/permissionsMixin";
+  import autocompleteFieldManipulation from "../mixins/autocompleFormManipulation";
+  import permissionsMixin from "../mixins/permissionsMixin";
 
   export default {
     components: {

@@ -91,10 +91,10 @@
 
 <script>
   import '@fortawesome/fontawesome-free/css/all.min.css'
-  import permissionsMixin from "../components/mixins/permissionsMixin";
+  import permissionsMixin from "../mixins/permissionsMixin";
   import VueMultiselect from "vue-multiselect/src/Multiselect";
   import Shortcuts from "../components/partial/settings/Shortcuts";
-  import localStorageMixin from "../components/mixins/localStorageMixin";
+  import localStorageMixin from "../mixins/localStorageMixin";
 
   export default {
     name: "Settings",

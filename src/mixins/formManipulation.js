@@ -50,7 +50,7 @@ import {
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 import moment from 'moment'
-import {toastInfo} from "../../assets/js/iziToast/iziToast";
+import {toastInfo} from "../assets/js/iziToast/iziToast";
 import permissionsMixin from "./permissionsMixin";
 
 library.add(faBan, faSave, faDoorOpen, faProjectDiagram, faTag, faGlobeAmericas, faFileVideo, faFileAudio, faDownload, faVial, faVideo, faMicrophone, faCameraRetro, faChevronDown, faChevronUp, faGlobe, faFile, faFileExcel, faFileImage, faEye, faFolderOpen, faUserFriends, faFileContract, faInfo, faPenFancy, faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)

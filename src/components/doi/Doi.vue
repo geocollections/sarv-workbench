@@ -529,8 +529,8 @@
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
   import Datepicker from 'vue2-datepicker'
-  import formManipulation from "../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../mixins/autocompleFormManipulation";
+  import formManipulation from "../../mixins/formManipulation";
+  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchDois,
@@ -559,7 +559,7 @@
   import DoiGeolocation from "./relatedTables/DoiGeolocation";
   import DoiDate from "./relatedTables/DoiDate";
   import { toastSuccess, toastError, toastInfo } from "../../assets/js/iziToast/iziToast";
-  import localStorageMixin from "../mixins/localStorageMixin";
+  import localStorageMixin from "../../mixins/localStorageMixin";
 
   export default {
     components: {

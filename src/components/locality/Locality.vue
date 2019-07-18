@@ -466,7 +466,7 @@
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import {faTimes, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons'
   import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
-  import copyForm from './../mixins/copyForm'
+  import copyForm from '../../mixins/copyForm'
   import {
     fetchListLocalityTypes,
     fetchListLocalityExtent,
@@ -482,14 +482,14 @@
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
-  import formManipulation from './../mixins/formManipulation'
-  import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
+  import formManipulation from '../../mixins/formManipulation'
+  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
   import LocalityReference from "./relatedTables/LocalityReference";
   import LocalitySynonym from "./relatedTables/LocalitySynonym";
   import LocalityAttachment from "./relatedTables/LocalityAttachment";
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
   import MapComponent from '../partial/MapComponent'
-  import localStorageMixin from "../mixins/localStorageMixin";
+  import localStorageMixin from "../../mixins/localStorageMixin";
 
   library.add(faTimes, faChevronUp, faChevronDown)
   export default {

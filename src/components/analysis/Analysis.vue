@@ -415,8 +415,8 @@
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
   import Datepicker from 'vue2-datepicker'
-  import formManipulation from "../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../mixins/autocompleFormManipulation";
+  import formManipulation from "../../mixins/formManipulation";
+  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchAnalyses,
@@ -430,8 +430,8 @@
   import FileInputComponent from "../partial/MultimediaComponent";
   import AnalysisFiles from "./relatedTables/AnalysisFiles";
   import AnalysisResults from "./relatedTables/AnalysisResults";
-  import localStorageMixin from "../mixins/localStorageMixin";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import localStorageMixin from "../../mixins/localStorageMixin";
+  import permissionsMixin from "../../mixins/permissionsMixin";
 
   export default {
     components: {

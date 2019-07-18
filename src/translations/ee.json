@@ -36,6 +36,7 @@
     "dois": "DOI-d",
     "imagesets": "Pildiseeriad",
     "journals": "Ajakirjad",
+    "specimens": "Eksemplarid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -53,6 +54,8 @@
     "editProject": "Projektid",
     "addDoi": "Lisa DOI",
     "editDoi": "DOI-d",
+    "addSpecimen": "Lisa eksemplar",
+    "editSpecimen": "Eksemplarid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -89,6 +92,8 @@
       "doi": "Lisa DOI",
       "imageset": "Lisa pildiseeria",
       "journal": "Lisa ajakiri",
+      "specimen": "Lisa eksemplar",
+      "specimens": "Eksemplarid",
       "activeProject": "Minu aktiivne projekt",
       "activeSite": "Viimati külastatud vaatluspunkt",
       "activeSample": "Minu viimane proov"
@@ -205,6 +210,8 @@
     "imageset": "Pildiseeria",
     "newImageset": "Lisa uus pildiseeria",
     "newAnalysis": "Lisa uus analüüs",
+    "specimen": "Eksemplar",
+    "newSpecimen": "Lisa uus eksemplar",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -533,7 +540,8 @@
     "name": "Nimi"
   },
   "specimen": {
-    "specimenNumber": "Eksemplari nr"
+    "specimenNumber": "Eksemplari nr",
+    "header": "Eksemplarid"
   },
   "sample": {
     "header": "Minu proovid",

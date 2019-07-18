@@ -469,7 +469,7 @@
 </template>
 
 <script>
-  import formManipulation  from './../mixins/formManipulation'
+  import formManipulation  from '../../mixins/formManipulation'
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faPlus} from '@fortawesome/free-solid-svg-icons'
@@ -485,7 +485,7 @@
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from '@/components/partial/BottomOptions.vue'
   import MapComponent from "../partial/MapComponent";
-  import fontAwesomeLib from "../mixins/fontAwasomeLib";
+  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
 
   library.add(faPlus, faChevronUp, faChevronDown, faTrashAlt)
 

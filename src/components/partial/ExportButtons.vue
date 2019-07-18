@@ -18,7 +18,7 @@
 <script>
   import { toastSuccess } from "@/assets/js/iziToast/iziToast";
   import TableExport from 'tableexport'
-  import fontAwesomeLib from "../mixins/fontAwasomeLib";
+  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
 
   export default {
     // components: {

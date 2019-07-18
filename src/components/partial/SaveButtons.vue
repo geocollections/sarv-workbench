@@ -17,7 +17,7 @@
 </template>
 
 <script>
-  import fontAwasomeLib  from './../mixins/fontAwasomeLib'
+  import fontAwasomeLib  from '../../mixins/fontAwasomeLib'
     export default {
       name: "SaveButtons",
       props: {

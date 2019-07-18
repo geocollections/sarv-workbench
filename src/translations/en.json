@@ -36,6 +36,7 @@
     "dois": "DOIs",
     "imagesets": "Imagesets",
     "journals": "Journals",
+    "specimens": "Specimens",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -53,6 +54,8 @@
     "editProject": "Projects",
     "addDoi": "Add new DOI",
     "editDoi": "DOIs",
+    "addSpecimen": "Add specimen",
+    "editSpecimen": "Specimens",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -89,6 +92,8 @@
       "doi": "Add DOI",
       "imageset": "Add imageset",
       "journal": "Add journal",
+      "specimen": "Add specimen",
+      "specimens": "Specimens",
       "activeProject": "My active project",
       "activeSite": "Last visited site",
       "activeSample": "My last sample"
@@ -205,6 +210,8 @@
     "imageset": "Imageset",
     "newImageset": "Add new imageset",
     "newAnalysis": "Add new analysis",
+    "specimen": "Specimen",
+    "newSpecimen": "Add new specimen",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -532,7 +539,8 @@
     "name": "Name"
   },
   "specimen": {
-    "specimenNumber": "Specimen no"
+    "specimenNumber": "Specimen no",
+    "header": "Specimens"
   },
   "sample": {
     "header": "My samples",

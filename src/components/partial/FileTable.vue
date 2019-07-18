@@ -52,7 +52,7 @@
 </template>
 
 <script>
-  import formManipulation from './../mixins/formManipulation'
+  import formManipulation from '../../mixins/formManipulation'
   import FilePreviewModal from "./filePreviewModal";
 
   export default {

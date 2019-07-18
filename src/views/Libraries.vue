@@ -52,7 +52,7 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchChangeLibraryState, fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
-  import permissionsMixin from "../components/mixins/permissionsMixin";
+  import permissionsMixin from "../mixins/permissionsMixin";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
   export default {

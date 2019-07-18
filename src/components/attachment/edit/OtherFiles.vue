@@ -1015,7 +1015,7 @@
   import { toastError } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from "../../partial/BottomOptions";
   import MapComponent from "../../partial/MapComponent";
-  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
+  import fontAwesomeLib from "../../../mixins/fontAwasomeLib";
   import NewDoiButton from "../../partial/NewDoiButton";
 
   export default {

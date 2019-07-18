@@ -102,7 +102,7 @@
 </template>
 
 <script>
-  import fontAwesomeLib  from './../mixins/fontAwasomeLib'
+  import fontAwesomeLib  from '../../mixins/fontAwasomeLib'
   import EXIF from 'exif-js'
   import {toastError, toastInfo} from "../../assets/js/iziToast/iziToast";
     export default {

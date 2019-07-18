@@ -43,7 +43,7 @@
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faSignInAlt} from '@fortawesome/free-solid-svg-icons'
 
-  import authenticate from "../mixins/authenticate";
+  import authenticate from "../../mixins/authenticate";
 
   library.add(faSignInAlt)
 

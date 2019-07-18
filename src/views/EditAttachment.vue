@@ -48,7 +48,7 @@
   import Log from '@/components/partial/Log.vue'
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
-  import permissionsMixin from "../components/mixins/permissionsMixin";
+  import permissionsMixin from "../mixins/permissionsMixin";
 
   export default {
     components: {

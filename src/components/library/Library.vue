@@ -267,13 +267,13 @@
     fetchLibrariesFromLibraryAgent
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
-  import formManipulation from './../mixins/formManipulation'
-  import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
-  import copyForm from './../mixins/copyForm'
+  import formManipulation from '../../mixins/formManipulation'
+  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import copyForm from '../../mixins/copyForm'
   import LibraryReference from "./relatedTables/LibraryReference";
   import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
-  import localStorageMixin from "../mixins/localStorageMixin";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import localStorageMixin from "../../mixins/localStorageMixin";
+  import permissionsMixin from "../../mixins/permissionsMixin";
   import Editor from "../partial/editor/Editor";
 
   library.add(faTimes);

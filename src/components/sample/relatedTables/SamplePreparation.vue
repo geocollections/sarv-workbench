@@ -125,8 +125,8 @@
 
 <script>
 
-  import formManipulation  from './../../mixins/formManipulation';
-  import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
+  import formManipulation  from '../../../mixins/formManipulation';
+  import autocompleteFieldManipulation  from '../../../mixins/autocompleFormManipulation';
   import Datepicker from 'vue2-datepicker'
     export default {
       name: "SamplePreparation",

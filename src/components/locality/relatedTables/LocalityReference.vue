@@ -85,8 +85,8 @@
 </template>
 
 <script>
-  import formManipulation  from './../../mixins/formManipulation';
-  import autocompleteFieldManipulation  from './../../mixins/autocompleFormManipulation';
+  import formManipulation  from '../../../mixins/formManipulation';
+  import autocompleteFieldManipulation  from '../../../mixins/autocompleFormManipulation';
 
     export default {
       name: "LocalityReference",

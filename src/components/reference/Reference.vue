@@ -555,7 +555,7 @@
 <script>
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
-  import sidebarMixin from './../mixins/sidebarMixin'
+  import sidebarMixin from '../../mixins/sidebarMixin'
   import {
     fetchReference,
     fetchReferences,
@@ -574,17 +574,17 @@
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
-  import formManipulation from './../mixins/formManipulation'
-  import autocompleteFieldManipulation from './../mixins/autocompleFormManipulation'
-  import copyForm from './../mixins/copyForm'
+  import formManipulation from '../../mixins/formManipulation'
+  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import copyForm from '../../mixins/copyForm'
   import LocalityReference from "./relatedTables/LocalityReference"
   import FileTable from "../partial/FileTable";
   import LocalityTable from "../locality/LocalityTable";
   import MultimediaComponent from "../partial/MultimediaComponent";
-  import fontAwesomeLib from "../mixins/fontAwasomeLib";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
+  import permissionsMixin from "../../mixins/permissionsMixin";
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
-  import localStorageMixin from "../mixins/localStorageMixin";
+  import localStorageMixin from "../../mixins/localStorageMixin";
   import Editor from "../partial/editor/Editor";
 
   export default {

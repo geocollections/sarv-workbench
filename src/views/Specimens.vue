@@ -2,10 +2,10 @@
   <div>
     <div class="row mt-4 page-title">
       <div class="col-sm-6">
-        <p class="h2">{{ $t('header.analyses') }}</p>
+        <p class="h2">{{ $t('header.specimens') }}</p>
       </div>
       <div class="col-sm-6 text-right">
-        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/analysis/add' }">{{ $t('add.new') }}</router-link>
+        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/specimen/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
 
@@ -31,13 +31,13 @@
 
     <!-- SEARCH FIELDS END -->
     <list-module-core
-      module="analysis"
-      title="titles.editDoi"
+      module="specimen"
+      title="titles.editSpecimen"
       :columns="columns"
       :searchParameters="searchParameters"
-      :api-call="fetchAnalyses_"
-      search-history="analysisSearchHistory"
-      view-type="analysisViewType"
+      :api-call="fetchSpecimens"
+      search-history="specimenSearchHistory"
+      view-type="specimenViewType"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
@@ -47,34 +47,34 @@
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import {fetchAnalyses} from "../assets/js/api/apiCalls";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {fetchSpecimens} from "../assets/js/api/apiCalls";
 
   export default {
     components: {
       ListModuleCore
     },
-    name: "Analyses",
-    mixins: [permissionsMixin],
+    name: "Specimens",
 
     data() {
       return {
         response: {},
         columns: [
-          {id: "id", title: "analysis.id", type: "number"},
-          {id: "sample__id", title: "analysis.sample__id", type: "text"},
-          {id: "sample__number", title: "analysis.sample__number", type: "text"},
-          {id: "sample__locality__locality", title: "analysis.sample__locality", type: "text"},
-          {id: "sample__depth", title: "analysis.sample__depth", type: "text"},
-          {id: "analysis_method__analysis_method", title: "analysis.analysis_method", type: "text"},
-          {id: "date", title: "analysis.date_", type: "date"},
-          {id: "lab_txt", title: "analysis.labor_txt", type: "text"},
-          {id: "agent__agent", title: "analysis.agent", type: "text"}
+          {id: "id", title: "specimen.id", type: "number"},
+          {id: "coll__number", title: "specimen.coll_number", type: "text"},
+          {id: "specimen_id", title: "specimen.number", type: "text"},
+          {id: "specimen_nr", title: "specimen.oldNumber", type: "text"},
+          {id: "locality_id", title: "specimen.locality", type: "text"},
+          {id: "depth", title: "specimen.depth", type: "number"},
+          {id: "stratigraphy_id", title: "specimen.stratigraphy", type: "text"},
+          {id: "agent_collected__agent", title: "specimen.agent_collected", type: "text"},
+          {id: "storage__location", title: "specimen.storage", type: "text"},
         ],
         filters: [
-          {id: "id", title: "analysis.id", type: "number"},
-          {id: "analysis_method", title: "analysis.analysis_method", type: "text"},
-          {id: "agentAndLab", title: "analysis.agentAndLab", type: "text"},
+          {id: "id", title: "specimen.id", type: "number"},
+          {id: "number", title: "specimen.number", type: "text"},
+          {id: "identification", title: "specimen.identification", type: "text"},
+          {id: "locality", title: "specimen.locality", type: "text"},
+          {id: "stratigraphy", title: "specimen.stratigraphy", type: "text"},
         ],
         searchParameters: this.setDefaultSearchParameters(),
         block: {search: true}
@@ -82,9 +82,9 @@
     },
 
     methods: {
-      fetchAnalyses_() {
+      fetchSpecimens() {
         return new Promise((resolve) => {
-          resolve(fetchAnalyses(this.searchParameters, this.currentUser, this.databaseId))
+          resolve(fetchSpecimens(this.searchParameters))
         });
       },
       searchParametersChanged(newParams) {
@@ -92,9 +92,10 @@
       },
       setDefaultSearchParameters() {
         return {
-          id: null,
-          analysis_method: null,
-          agentAndLab: null,
+          identifier: null,
+          creators: null,
+          publication_year: null,
+          title: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',

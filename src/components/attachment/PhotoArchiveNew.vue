@@ -31,8 +31,8 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import formManipulation from "../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../mixins/autocompleFormManipulation";
+  import formManipulation from "../../mixins/formManipulation";
+  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import FileTable from "../partial/FileTable";
 
