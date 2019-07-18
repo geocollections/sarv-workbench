@@ -93,6 +93,7 @@
 
           <!--          <tbody>-->
           <tr class="related-input-data">
+            <td></td>
             <td>
               <vue-multiselect class="align-middle" v-model="relatedData.insert.library_reference.reference"
                                deselect-label="Can't remove this value"
@@ -169,11 +170,11 @@
         }
       },
 
-      handleMovedEvent(movedEvent) {
+      handleMovedEvent() {
         this.relatedData.library_reference.forEach((reference, index) => {
           // Every index has a certain sort number corresponding to amount of references in library i.e. 43 references then sort is from 0 - 43
           this.$set(reference, 'new', cloneDeep(reference));
-          reference.new.sort = this.relatedData.count.library_reference - index
+          reference.new.sort = this.relatedData.count.library_reference - index;
 
           // Updating only if sort changed
           if (reference.sort !== reference.new.sort) {
