@@ -55,9 +55,6 @@
         title: this.$t('titles.addAttachment')
       }
     },
-    created() {
-      console.log(this.$router)
-    },
     computed: {
       createRelationWith () { return this.$store.state['createRelationWith'] }
     },

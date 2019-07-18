@@ -224,8 +224,11 @@
       <div class="row mb-2">
         <div class="col">
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <map-component-2 v-if="showCollapseMap" mode="single" v-bind:locations="[]"
-                             v-bind:location="{ lat: upload.image_latitude ? (upload.image_latitude).toString() : null, lng: upload.image_longitude ? (upload.image_longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
+            <map-component v-if="showCollapseMap"
+                           mode="single"
+                           v-bind:locations="[]"
+                           v-bind:location="{ lat: upload.image_latitude ? (upload.image_latitude).toString() : null, lng: upload.image_longitude ? (upload.image_longitude).toString() : null }"
+                           v-on:update-coordinates="updateLocation"/>
           </b-collapse>
         </div>
       </div>
@@ -960,17 +963,17 @@
 
     <div class="row mt-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false)">{{ $t('add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true)">{{ $t('add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset">{{ $t('add.buttons.clearFields') }}</button>
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false)">{{ $t('add.buttons.add') }}</button>-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true)">{{ $t('add.buttons.addAnother') }}</button>-->
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset">{{ $t('add.buttons.clearFields') }}</button>-->
         <button class="btn btn-warning mr-2 mb-2" @click="clearLocalStorage">{{ $t('add.buttons.clearLocalStorage') }}</button>
       </div>
     </div>
 
 
-    <bottom-options :success-button="$t('add.buttons.add')"
-                    :danger-button="$t('add.buttons.clearFields')"
-                    object="attachment"
+    <bottom-options v-if="$route.meta.isBottomOptionShown"
+                    :object="$route.meta.object"
+                    :is-navigation-shown="$route.meta.isNavigationShown"
                     v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
@@ -987,8 +990,8 @@
   import cloneDeep from 'lodash/cloneDeep'
   import EXIF from 'exif-js'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
-  import BottomOptions from '@/components/partial/BottomOptionsOld.vue'
-  import MapComponent2 from "../partial/MapComponent2";
+  import BottomOptions from '@/components/partial/BottomOptions.vue'
+  import MapComponent from "../partial/MapComponent";
 
   library.add(faFile)
   import Vue from 'vue'
@@ -1001,7 +1004,7 @@
       Datepicker,
       Spinner,
       BottomOptions,
-      MapComponent2
+      MapComponent
     },
     name: "OtherFiles",
     mixins: [formManipulation, fontAwesomeLib, permissionsMixin],
@@ -1277,8 +1280,13 @@
     methods: {
 
       hoverButtonClicked(choice, object) {
-        if (choice === "SAVE") this.add(false)
-        if (choice === "CANCEL") this.reset()
+        if (choice === "SAVE_AND_LEAVE") this.add(false);
+        if (choice === "SAVE") this.add(true);
+        if (choice === "CANCEL") this.$router.push({path: '/' + object});
+        if (choice === "CLEAR") {
+          this.reset();
+          toastInfo({text: this.$t('messages.fieldsCleared')})
+        }
       },
 
       add(addAnother) {

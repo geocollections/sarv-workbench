@@ -859,7 +859,6 @@
   import SampleAnalysis from "./relatedTables/SampleAnalysis";
   import SamplePreparation from "./relatedTables/SamplePreparation";
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
-  import MapComponent from "../partial/MapComponent";
   import SampleWrapper from "./SampleWrapper";
   import localStorageMixin from './../mixins/localStorageMixin'
   import permissionsMixin from "../mixins/permissionsMixin";
@@ -868,8 +867,6 @@
     name: "Sample",
     components: {
       SampleWrapper,
-      MapComponent,
-
       SampleTaxonList,
       SamplePreparation,
       SampleAnalysis,

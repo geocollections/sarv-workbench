@@ -1,212 +1,343 @@
-<template class="map-component">
-  <l-map ref="map" :zoom="zoom" :center="center" @click="addMarker">
-
-    <!--:maxBounds= "[[57.52, 20.37],[60.0, 28.2]]" -->
-
-    <l-control-layers position="topright"></l-control-layers>
-    <l-tile-layer v-for="tileProvider in tileProviders"
-                  :key="tileProvider.name"
-                  :name="tileProvider.name"
-                  :visible="tileProvider.visible"
-                  :url="tileProvider.url"
-                  :attribution="tileProvider.attribution"
-                  layer-type="base"/>
-    <l-marker v-if="marker !== null" :lat-lng="marker" :draggable="true" :clickable="true" @dragend="updateCoordinates">
-    </l-marker>
-
-    <!--@l-add="$event.target.openPopup()"-->
-    <l-marker v-if="marker !== null && markers" :lat-lng="marker" v-for="(marker, index) in markers" :key="index" @click="openSite(marker.siteId)">
-      <!--<l-popup :content="'TEST'"></l-popup>-->
-    </l-marker>
-  </l-map>
-
+<template>
+  <div id="map" style="height: 50vh"></div>
 </template>
 
 <script>
-
-  import {LMap, LTileLayer, LControlLayers, LMarker, LPopup } from 'vue2-leaflet';
-  import proj4 from 'proj4'
-  proj4.defs([
-    [
-      'EPSG:3301', '+proj=lcc +lat_1=59.33333333333334 +lat_2=58 +lat_0=57.51755393055556 +lon_0=24 +x_0=500000 +y_0=6375000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'],
-    [
-      'WGS84', "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
-    ]
-  ]);
-  import 'proj4leaflet'
+  import * as L from "leaflet";
+  import {toastError, toastSuccess} from "../../assets/js/iziToast/iziToast";
 
   export default {
     name: "MapComponent",
     props: {
       location: {
         type: Object,
-        required: true,
-        default: null,
+        required: true
       },
       locations: {
         type: Array,
-        default: [],
+        default: null,
+      },
+      mode: {
+        type: String,
+        default: 'single',
+      },
+      gpsCoords: {
+        type: Boolean,
+        default: false
       }
-    },
-    components: {
-      LMap,
-      LTileLayer,
-      LControlLayers,
-      LMarker,
-      LPopup
     },
 
     data() {
       return {
+        marker: null,
+        markers: [],
         map: null,
-        zoom: 10,
-        center: this.isValidLocation(this.location) ? L.latLng(this.location) : L.latLng(58.5, 25.5),
-        marker: this.isValidLocation(this.location) ? L.latLng(this.location) : null,
-        markers:[],
+        center: L.latLng(58.5, 25.5),
+        currentLocation: undefined,
+        tileLayer: null,
         tileProviders: [
           {
             name: 'OpenStreetMap',
-            visible: true,
-            continuousWorld: true,
-            maxZoom: 8,
-            minZoom: 1,
-            url: 'https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3V1dG9iaW5lIiwiYSI6ImNpZWlxdXAzcjAwM2Nzd204enJvN2NieXYifQ.tp6-mmPsr95hfIWu3ASz2w',
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            leafletObject: L.tileLayer(
+              'https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3V1dG9iaW5lIiwiYSI6ImNpZWlxdXAzcjAwM2Nzd204enJvN2NieXYifQ.tp6-mmPsr95hfIWu3ASz2w', {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                minZoom: 1,
+              })
           },
           {
             name: 'OpenTopoMap',
-            visible: false,
-            continuousWorld: true,
-            url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
-            attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+            leafletObject: L.tileLayer(
+              'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)',
+                minZoom: 1,
+              })
           },
           {
             name: 'Maaameti fotokaart',
-            visible: false,
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            maxZoom: 18,
-            minZoom: 10,
-            zIndex: 2,
-            updateWhenIdle: true,
-            continuousWorld: true,
-            url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>'
-          },
-          {
-            name: 'Maaameti hübriidkaart',
-            visible: false,
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            maxZoom: 18,
-            minZoom: 10,
-            zIndex: 1,
-            updateWhenIdle: true,
-            continuousWorld: true,
-            url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>'
+            leafletObject: L.tileLayer(
+              'https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV', {
+                attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>',
+                tms: true,
+                worldCopyJump: true,
+                detectRetina: true,
+                zIndex: 1,
+                updateWhenIdle: true,
+                continuousWorld: true,
+              })
           },
           {
             name: 'Maaameti kaart',
-            visible: true,
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            maxZoom: 18,
-            minZoom: 10,
-            zIndex: 1,
-            updateWhenIdle: true,
-            continuousWorld: true,
-            url: 'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV',
-            attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>',
-          }
+            leafletObject: L.tileLayer(
+              'https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV', {
+                attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>',
+                tms: true,
+                worldCopyJump: true,
+                detectRetina: true,
+                zIndex: 1,
+                updateWhenIdle: true,
+                continuousWorld: true
+              })
+          },
+          {
+            name: 'Maaameti hübriidkaart',
+            leafletObject: L.tileLayer(
+              'https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV', {
+                attribution: 'Eesti kaardid: <a  href=\'http://www.maaamet.ee/\'>Maa-amet</a>',
+                tms: true,
+                worldCopyJump: true,
+                detectRetina: true,
+                zIndex: 2,
+                updateWhenIdle: true,
+                continuousWorld: true,
+              })
+          },
+
         ],
-        showMap:false
+        zoom: 11, //SET DEFAULT ZOOM LEVEL,
+        gpsID: null,
+        markerIcon: new L.DivIcon({
+          html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #007bff;"></i>',
+          iconSize: [29, 37],
+          iconAnchor: [12, 36],
+          popupAnchor: [2, -34],
+          className: 'clean-icon'
+        })
       }
     },
-    watch: {
-      location: function(newVal, oldVal) {
-        // console.log('Prop changed: ', newVal, ' | was: ', oldVal)
-        // Because if input from form fields is null then it gets reset to 0 and shows marker at 0:0, but I don't want that.
-        if (this.isValidLocation(newVal)) {
-          this.marker = L.latLng(newVal)
-          this.center = L.latLng(newVal)
-          this.checkIfCoordsInEPSG3301Projection(newVal)
-        } else {
-          this.marker = null
-          this.center = L.latLng(58.5, 25.5)
-          this.zoom = 10
-        }
+
+    computed: {
+      mapMarkersLoaded() {
+        return this.mode === 'single' && this.gpsCoords === true && this.currentLocation && this.location !== null
       },
-      locations: function(newVal, oldVal){
-        if(newVal.length === 0) return;
-        this.updateMarkers(newVal)
-        console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+
+      areLocationsSet() {
+        return this.locations !== null && this.locations.length > 0
       },
+
+      isLocationSet() {
+        return this.location !== null && this.location.lat !== null && this.location.lng !== null
+      }
     },
-    // Map start
-    mounted () {
-      this.initializeMap()
+
+    created() {
+      // SETTING DEFAULT ZOOM LEVEL
+      if (this.isLocationSet || this.areLocationsSet) this.zoom = 15;
+      else this.zoom = 6
     },
+
+    mounted() {
+      this.initMap();
+      // this.$nextTick(() => {
+      //   this.initMap();
+      // })
+    },
+
+    beforeDestroy() {
+      navigator.geolocation.clearWatch(this.gpsID)
+    },
+
     methods: {
-      initializeMap() {
-        this.$nextTick(() => {
-          this.map = this.$refs.map.mapObject;
-          let vm = this
-          this.updateMarkers([])
 
-          // this.map.on('baselayerchange', function (event) {
-          //
-          //   if(event.name === 'Maaameti kaart'){}
-          //   vm.setDefaultProjection()
-          // });
-        })
-      },
-      updateMarkers(newval){
-        this.markers = []
-        newval.forEach(entity => {
-          this.markers.push({lat:entity.latitude, lng: entity.longitude, siteId: entity.id})
+      initMap() {
+        this.map = L.map('map', {
+          layers: [this.tileProviders[0].leafletObject],
+          scrollWheelZoom: false
+        }).setView(this.center, this.zoom);
+
+        let vm = this;
+        let baseLayers = {};
+        this.tileProviders.forEach(provider => {
+          baseLayers[provider.name] = provider.leafletObject
         });
-        this.center = L.latLng(58.5, 25.5)
-        this.zoom = 6
-      },
-      // Validates if coordinates exist in correct form.
-      isValidLocation(loc) {
-        if (loc !== null)  {
-          if (loc.lat && loc.lat !== null && loc.lng && loc.lng !== null) {
-            return loc.lat.length > 0 && loc.lng.length > 0
-          }
-          return false
-        }
-        return false
-      },
-      addMarker(event) {
-        if(this.locations && this.locations.length > 0 || this.marker !== null) return
 
-        this.marker = L.latLng(event.latlng);
-        this.$emit('get-location', event.latlng)
+        L.control.layers(baseLayers).addTo(this.map);
+
+        // if (this.mode === 'single' && this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
+        if (this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
+
+        //LAYERS CHANGED
+        this.map.on('baselayerchange', (event) => {
+          this.tileProviders.forEach(tile => {
+            if (tile.name === event.name) {
+              this.map.options.minZoom = tile.minZoom;
+              this.map.options.maxZoom = tile.maxZoom;
+            }
+          })
+        });
+
+        //ZOOM ACTIVATED
+        this.map.on('zoomend', (event) => this.zoom = event.target._zoom);
+
+        if (this.mode === 'multiple') this.setMarkers(this.locations);
+
+        if (this.mode === 'single') {
+          if (this.isLocationSet) this.addMarker(this.location);
+          this.map.on('click', (event) => this.updateCoordinates(event.latlng));
+        }
       },
-      updateCoordinates(event){
-        this.$emit('get-location', event.target.getLatLng())
+
+      //SET GROUP OF MARKERS
+      setMarkers(newVal) {
+        this.markers = [];
+
+        newVal.forEach(entity => {
+          let marker = L.marker({lat: parseFloat(entity.latitude), lng: parseFloat(entity.longitude)}, {icon: this.markerIcon})
+            .addTo(this.map)
+            .on('click', () => window.open(location.origin + '/site/' + entity.id, '', 'width=800,height=750'));
+          marker.bindTooltip(entity.name, {permanent: true, direction: 'right', offset: [5,-23]});
+          this.markers.push(marker)
+        });
+        let bounds = new L.featureGroup(this.markers).getBounds();
+        this.map.fitBounds(bounds);
+        this.map.setZoom(this.map.getBoundsZoom(bounds) - 2)
       },
-      setEPSG3301Projection(){
-        this.minZoom = 6;
-        this.zoom = 7;
+
+      // Validates if coordinates exist in correct form.
+      // isValidLocation(loc) {
+      //   if (loc !== null) {
+      //     if (loc.lat && loc.lat !== null && loc.lng && loc.lng !== null) {
+      //       return loc.lat.length > 0 && loc.lng.length > 0
+      //     }
+      //     return false
+      //   }
+      //   return false
+      // },
+
+      updateCoordinates(coordinates) {
+        this.$emit('update-coordinates', coordinates)
       },
-      setDefaultProjection(){
-        this.zoom = 10
+
+      addMarker(latlng) {
+        if (this.marker !== null) this.map.removeLayer(this.marker);
+
+        let location = [parseFloat(latlng.lat), parseFloat(latlng.lng)];
+
+        this.marker = L.marker(location,
+          {
+            icon: this.markerIcon,
+            draggable: true,
+            clickable: false,
+            zIndexOffset: 100
+          })
+          .addTo(this.map)
+          .on('dragend', (event) => this.updateCoordinates(event.target._latlng));
+
+        this.map.setView(this.marker._latlng, this.zoom);
       },
-      checkIfCoordsInEPSG3301Projection(location){
-        // console.log(location)
+
+      setCurrentGpsLocationIfExists() {
+        this.getGPSLocation().then(currentGPSLocation => {
+          if (currentGPSLocation === null) return;
+          let gpsIcon = new L.DivIcon({
+            html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #dc3545;"></i>',
+            iconSize: [29, 37],
+            iconAnchor: [12, 41],
+            popupAnchor: [2, -34],
+            className: 'clean-icon'
+          });
+          // let redIcon = new L.Icon({
+          //   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+          //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          //   iconSize: [25, 41],
+          //   iconAnchor: [12, 41],
+          //   popupAnchor: [1, -34],
+          //   shadowSize: [41, 41]
+          // });
+          this.currentLocation = L.marker({lat: currentGPSLocation.latitude, lng: currentGPSLocation.longitude}, {icon: gpsIcon, zIndexOffset: -1})
+            .addTo(this.map);
+          this.currentLocation.bindPopup("GPS location").openPopup();
+        });
+
       },
-      openSite(siteId){
-        window.open('https://edit2.geocollections.info/site/'+siteId, '', 'width=800,height=750')
+      // GET CURRENT LOCATION FROM GPS
+      getGPSLocation() {
+        if (navigator.geolocation) {
+          return new Promise(resolve => {
+            this.gpsID = navigator.geolocation.watchPosition(position => {
+              console.log(position)
+              resolve({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude,
+                accuracy: position.coords.accuracy
+              });
+            }, error => {
+              toastError({text: error.message})
+              resolve(null)
+            })
+          });
+
+          // return new Promise(resolve => {
+          //   navigator.geolocation.getCurrentPosition((position) => {
+          //
+          //     resolve({
+          //       latitude: position.coords.latitude,
+          //       longitude: position.coords.longitude,
+          //       accuracy: position.coords.accuracy
+          //     })
+          //   }, function (error) {
+          //     if (error.code == error.PERMISSION_DENIED)
+          //       this.errorMessege = "Geolocation is not supported by this browser.";
+          //     resolve(null)
+          //   });
+          // });
+        }
+      },
+      setZoom() {
+        let featureGroup = [];
+        featureGroup.push(this.currentLocation);
+        if (this.marker !== null) {
+          featureGroup.push(this.marker);
+          let bounds = new L.featureGroup(featureGroup).getBounds();
+          this.map.fitBounds(bounds);
+          this.map.setZoom(this.map.getBoundsZoom(bounds) - 2)
+        }
+
+      },
+
+    },
+    watch: {
+      location: function (newVal, oldVal) {
+        if ((newVal.lat !== oldVal.lat) || (newVal.lng !== oldVal.lng)) {
+          if (this.mode === 'multiple') return;
+
+          if (this.isLocationSet) {
+            this.addMarker(newVal)
+          } else {
+            if (this.marker) this.map.removeLayer(this.marker)
+            this.marker = null
+
+          }
+        }
+      },
+
+      currentLocation: function (newVal, oldVal) {
+        // if (newVal !== null && this.marker !== null) {
+        //   this.setZoom()
+        // } else if (newVal === null && this.marker !== null) {
+        //   this.map.setView(this.marker._latlng, this.zoom);
+        // }
+      },
+      mapMarkersLoaded: function (newVal) {
+        if (this.marker !== null) this.map.setView(this.marker._latlng, this.zoom);
+        // if (this.gpsCoords && newVal) {
+        //   //zoom to fit all markers
+        //   let featureGroup = []
+        //   featureGroup.push(this.currentLocation);
+        //   if(this.marker !== null) featureGroup.push(this.marker)
+        //   if(featureGroup.length > 1) {
+        //     let bounds = new L.featureGroup(featureGroup).getBounds()
+        //     this.map.fitBounds(bounds);
+        //     this.map.setZoom(this.map.getBoundsZoom(bounds)-2)
+        //   }
+        // }
       },
     }
   }
 </script>
 
 <style scoped>
+  .clean-icon {
+    background: unset;
+    border: unset;
+  }
 </style>

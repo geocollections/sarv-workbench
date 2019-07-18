@@ -610,7 +610,6 @@
 
       isValidUrl() {
         let regex = RegExp('^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$');
-        console.log(regex.test(this.reference.url))
         return regex.test(this.reference.url)
       }
     },
@@ -982,7 +981,7 @@
             }
           }
         }, errResponse => {
-          console.log(errResponse)
+          // console.log(errResponse)
           this.sendingData = false;
           toastError({text: this.$t('reference.doiCheckUnsuccessful')})
         })

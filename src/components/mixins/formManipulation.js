@@ -165,14 +165,10 @@ const formManipulation = {
             this.$emit('data-saved', true);
 
             if (!returnPromise) {
-              if (!addAnother) {
-                this.$router.push({path: '/' + object})
-              } else if (savedObjectId && (savedObjectId === true || savedObjectId !== undefined)) {
-                this.$router.push({path: '/' + object + '/' + savedObjectId})
-              } else {
-                resolve(false)
-              }
-
+              if (savedObjectId && (savedObjectId === true || savedObjectId !== undefined)) {
+                if (!addAnother) this.$router.push({path: '/' + object})
+                else this.$router.push({path: '/' + object + '/' + savedObjectId})
+              } else resolve(false)
             } else {
               resolve(true)
 
@@ -580,7 +576,6 @@ const formManipulation = {
     },
 
     hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
-      console.log(choice)
       if (this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
 
       if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
@@ -588,14 +583,12 @@ const formManipulation = {
       if (choice === "FINISH") {
         this[object].date_end = new Date()
 
-        this.add(false, object, isRelationSavedSeparately).then(resp => {
-          this.$router.push({path: '/' + object})
-        });
+        this.add(false, object, isRelationSavedSeparately);
       }
 
-      if (choice === "SAVE_AND_LEAVE") this.add(false, object, isRelationSavedSeparately).then(resp => {
-        this.$router.push({path: '/' + object})
-      });
+      if (choice === "SAVE_AND_LEAVE") {
+        this.add(false, object, isRelationSavedSeparately);
+      }
 
       if (choice === "CLEAR") {
         this[object] = {}

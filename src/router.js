@@ -214,7 +214,8 @@ const router = new Router({
             isEdit: true,
             requiresAuth: true,
             isBottomOptionShown: true,
-            isNavigationShown: true,
+            isNavigationShown: false,
+            object: 'attachment'
           },
         },
         {
@@ -229,21 +230,30 @@ const router = new Router({
               path: '',
               component: () => import('./components/attachment/PhotoArchive.vue'),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
               }
             },
             {
               path: 'photo_archive',
               component: () => import('./components/attachment/PhotoArchive.vue'),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
               }
             },
             {
               path: 'specimen_image',
               component: () => import('./components/attachment/SpecimenImage.vue'),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
               }
             },
             {
@@ -251,14 +261,20 @@ const router = new Router({
               component: () => import('./components/attachment/OtherFiles.vue'),
               props: (route) => ({ from: route }),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
               }
             },
             {
               path: 'digitised_reference',
               component: () => import('./components/attachment/DigitisedReference.vue'),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'attachment'
               }
             },
           ]

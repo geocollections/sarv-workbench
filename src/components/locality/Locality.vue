@@ -112,10 +112,11 @@
           <div class="row mb-2">
             <div class="col">
               <b-collapse v-model="showCollapseMap" id="collapseMap">
-                <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
-                <map-component-2 v-if="showCollapseMap " mode="single" v-bind:locations="[]"
-                                 v-bind:location="{ lat: locality.latitude ? (locality.latitude).toString() : null, lng: locality.longitude ? (locality.longitude).toString() : null }"
-                                 v-on:get-location="updateLocation"></map-component-2>
+                <map-component v-if="showCollapseMap"
+                               mode="single"
+                               v-bind:locations="[]"
+                               v-bind:location="{ lat: locality.latitude ? (locality.latitude).toString() : null, lng: locality.longitude ? (locality.longitude).toString() : null }"
+                               v-on:update-coordinates="updateLocation"/>
               </b-collapse>
             </div>
           </div>
@@ -487,8 +488,7 @@
   import LocalitySynonym from "./relatedTables/LocalitySynonym";
   import LocalityAttachment from "./relatedTables/LocalityAttachment";
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
-  import MapComponent from '@/components/partial/MapComponent'
-  import MapComponent2 from "../partial/MapComponent2";
+  import MapComponent from '../partial/MapComponent'
   import localStorageMixin from "../mixins/localStorageMixin";
 
   library.add(faTimes, faChevronUp, faChevronDown)

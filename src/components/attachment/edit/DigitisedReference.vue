@@ -1,6 +1,12 @@
 <template>
   <div class="digitised-reference">
 
+    <div class="row" v-if="isAttachmentLocked">
+      <div class="col-md-6">
+        <div class="alert alert-info m-0 p-1">{{ $t('edit.locked') }}</div>
+      </div>
+    </div>
+
     <div class="row mt-4" v-if="attachment !== null">
 
       <!-- FILE -->
@@ -140,23 +146,23 @@
     </div>
 
 
-    <div class="row mt-3 mb-3">
-      <div class="col" v-if="!isAttachmentLocked">
-        <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>
-        <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>
+<!--    <div class="row mt-3 mb-3">-->
+<!--      <div class="col" v-if="!isAttachmentLocked">-->
+<!--&lt;!&ndash;        <button class="btn btn-success mr-2 mb-2" @click="sendData(false)" >{{ $t('edit.buttons.save') }}</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        <button class="btn btn-success mr-2 mb-2" @click="sendData(true)" >{{ $t('edit.buttons.saveAndContinue') }}</button>&ndash;&gt;-->
 
-        <button v-if="isChanged" @click="showModal = !showModal" class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>
-        <router-link v-else class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>
-      </div>
-      <div class="col-sm-6" v-else>
-        <div class="alert alert-info">{{ $t('edit.locked') }}</div>
-      </div>
-    </div>
+<!--&lt;!&ndash;        <button v-if="isChanged" @click="showModal = !showModal" class="btn btn-danger mr-2 mb-2" >{{ $t('edit.buttons.cancelWithoutSaving') }}</button>&ndash;&gt;-->
+<!--&lt;!&ndash;        <router-link v-else class="btn btn-danger mr-2 mb-2" :to="{ path: '/attachment' }">{{ $t('edit.buttons.cancelWithoutSaving') }}</router-link>&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="col-sm-6" v-else>-->
+<!--        <div class="alert alert-info">{{ $t('edit.locked') }}</div>-->
+<!--      </div>-->
+<!--    </div>-->
 
 
-    <bottom-options :success-button="$t('edit.buttons.save')"
-                    :danger-button="$t('edit.buttons.cancelWithoutSaving')"
-                    object="attachment"
+    <bottom-options v-if="$route.meta.isBottomOptionShown"
+                    :object="$route.meta.object"
+                    :is-navigation-shown="$route.meta.isNavigationShown"
                     v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
@@ -169,7 +175,7 @@
   import FileInformation from "@/components/partial/FileInformation.vue";
   import FilePreview from "@/components/partial/FilePreview.vue";
   import { toastError } from "@/assets/js/iziToast/iziToast";
-  import BottomOptions from "../../partial/BottomOptionsOld";
+  import BottomOptions from "../../partial/BottomOptions";
 
   export default {
     components: {
@@ -233,8 +239,9 @@
     methods: {
 
       hoverButtonClicked(choice, object) {
-        if (choice === "SAVE") this.sendData(false)
-        if (choice === "CANCEL") this.$router.push({ path: '/' + object })
+        if (choice === "SAVE_AND_LEAVE") this.sendData(false);
+        if (choice === "SAVE") this.sendData(true)
+        if (choice === "CANCEL") this.$router.push({path: '/' + object});
       },
 
 
@@ -244,12 +251,14 @@
        ******************/
 
       sendData(continueEditing) {
-        if (this.referenceState) {
-          const formattedData = this.formatDataForEdit(this.edit)
-          this.$emit('edit-data', formattedData, continueEditing)
-        } else {
-          toastError({text: this.$t('messages.checkForm')})
-        }
+        if (!this.isAttachmentLocked) {
+          if (this.referenceState) {
+            const formattedData = this.formatDataForEdit(this.edit)
+            this.$emit('edit-data', formattedData, continueEditing)
+          } else {
+            toastError({text: this.$t('messages.checkForm')})
+          }
+        } toastInfo({ text: this.$t('edit.locked') })
       },
 
       formatDataForEdit(unformattedData) {

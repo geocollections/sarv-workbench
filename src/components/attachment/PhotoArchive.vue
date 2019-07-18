@@ -187,44 +187,6 @@
       </div>
     </div>
 
-    <!-- LOCATION -->
-    <div class="row">
-      <div class="col-sm-2">
-        <label :for="`image_latitude`">{{ $t('photoArchive.imageLatitude') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="image_latitude" v-model="photo_archive.image_latitude" type="number" step="0.000001"></b-form-input>
-      </div>
-
-
-      <div class="col-sm-2">
-        <label :for="`image_longitude`">{{ $t('photoArchive.imageLongitude') }}:</label>
-      </div>
-
-      <div class="col-sm-4 mb-2">
-        <b-form-input id="image_longitude" v-model="photo_archive.image_longitude" type="number" step="0.000001"></b-form-input>
-      </div>
-    </div>
-
-    <!-- MAP -->
-    <!--<div class="row">-->
-      <!--<div class="col mb-1 toggle-collapse" @click="showCollapseMap = !showCollapseMap"-->
-           <!--:class="showCollapseMap ? 'collapsed' : null">-->
-        <!--{{ $t('photoArchive.collapseMap') }}-->
-        <!--<font-awesome-icon v-if="showCollapseMap" icon="chevron-up"></font-awesome-icon>-->
-        <!--<font-awesome-icon v-else icon="chevron-down"></font-awesome-icon>-->
-      <!--</div>-->
-    <!--</div>-->
-
-    <!--<div class="row mb-2">-->
-      <!--<div class="col-md-12">-->
-        <!--<b-collapse v-model="showCollapseMap" id="collapseMap">-->
-          <!--<map-component v-bind:location="{ lat: photo_archive.image_latitude, lng: photo_archive.image_longitude }" v-on:get-location="updateLocation" />-->
-        <!--</b-collapse>-->
-      <!--</div>-->
-    <!--</div>-->
-
     <!-- MAP -->
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto">
@@ -232,8 +194,28 @@
         <font-awesome-icon icon="globe-americas"/>
       </legend>
 
+      <!-- LOCATION -->
       <div class="row">
-        <span class="col ml-3 mt-3 custom-control custom-switch">
+        <div class="col-sm-2">
+          <label :for="`image_latitude`">{{ $t('photoArchive.imageLatitude') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="image_latitude" v-model="photo_archive.image_latitude" type="number" step="0.000001"></b-form-input>
+        </div>
+
+
+        <div class="col-sm-2">
+          <label :for="`image_longitude`">{{ $t('photoArchive.imageLongitude') }}:</label>
+        </div>
+
+        <div class="col-sm-4 mb-2">
+          <b-form-input id="image_longitude" v-model="photo_archive.image_longitude" type="number" step="0.000001"></b-form-input>
+        </div>
+      </div>
+
+      <div class="row">
+        <span class="col ml-3 custom-control custom-switch">
             <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
             <label class="custom-control-label" for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
           </span>
@@ -242,8 +224,11 @@
       <div class="row mb-2">
         <div class="col">
           <b-collapse v-model="showCollapseMap" id="collapseMap">
-            <map-component-2 v-if="showCollapseMap" mode="single" v-bind:locations="[]"
-                             v-bind:location="{ lat: photo_archive.image_latitude ? (photo_archive.image_latitude).toString() : null, lng: photo_archive.image_longitude ? (photo_archive.image_longitude).toString() : null }" v-on:get-location="updateLocation"></map-component-2>
+            <map-component v-if="showCollapseMap"
+                           mode="single"
+                           v-bind:locations="[]"
+                           v-bind:location="{ lat: photo_archive.image_latitude ? (photo_archive.image_latitude).toString() : null, lng: photo_archive.image_longitude ? (photo_archive.image_longitude).toString() : null }"
+                           v-on:update-coordinates="updateLocation"></map-component>
           </b-collapse>
         </div>
       </div>
@@ -467,17 +452,17 @@
 
     <div class="row mt-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false)">{{ $t('add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true)">{{ $t('add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset">{{ $t('add.buttons.clearFields') }}</button>
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false)">{{ $t('add.buttons.add') }}</button>-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true)">{{ $t('add.buttons.addAnother') }}</button>-->
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset">{{ $t('add.buttons.clearFields') }}</button>-->
         <button class="btn btn-warning mr-2 mb-2" @click="clearLocalStorage">{{ $t('add.buttons.clearLocalStorage') }}</button>
       </div>
     </div>
 
 
-    <bottom-options :success-button="$t('add.buttons.add')"
-                    :danger-button="$t('add.buttons.clearFields')"
-                    object="attachment"
+    <bottom-options v-if="$route.meta.isBottomOptionShown"
+                    :object="$route.meta.object"
+                    :is-navigation-shown="$route.meta.isNavigationShown"
                     v-on:button-clicked="hoverButtonClicked"></bottom-options>
 
   </div>
@@ -495,19 +480,17 @@
   import Datepicker from 'vue2-datepicker'
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
-  import MapComponent from '@/components/partial/MapComponent'
   import cloneDeep from 'lodash/cloneDeep'
   import EXIF from 'exif-js'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
-  import BottomOptions from '@/components/partial/BottomOptionsOld.vue'
-  import MapComponent2 from "../partial/MapComponent2";
+  import BottomOptions from '@/components/partial/BottomOptions.vue'
+  import MapComponent from "../partial/MapComponent";
   import fontAwesomeLib from "../mixins/fontAwasomeLib";
 
   library.add(faPlus, faChevronUp, faChevronDown, faTrashAlt)
 
   export default {
     components: {
-      MapComponent2,
       FontAwesomeIcon,
       VueMultiselect,
       Datepicker,
@@ -761,8 +744,13 @@
     methods: {
 
       hoverButtonClicked(choice, object) {
-        if (choice === "SAVE") this.add(false)
-        if (choice === "CANCEL") this.reset()
+        if (choice === "SAVE_AND_LEAVE") this.add(false);
+        if (choice === "SAVE") this.add(true);
+        if (choice === "CANCEL") this.$router.push({path: '/' + object});
+        if (choice === "CLEAR") {
+          this.reset();
+          toastInfo({text: this.$t('messages.fieldsCleared')})
+        }
       },
 
       add(addAnother) {

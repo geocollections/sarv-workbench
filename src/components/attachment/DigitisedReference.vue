@@ -188,18 +188,18 @@
 
     <div class="row mt-3">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false)">{{ $t('add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true)">{{ $t('add.buttons.addAnother') }}</button>
-        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset">{{ $t('add.buttons.clearFields') }}</button>
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false)">{{ $t('add.buttons.add') }}</button>-->
+<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(true)">{{ $t('add.buttons.addAnother') }}</button>-->
+<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset">{{ $t('add.buttons.clearFields') }}</button>-->
         <button class="btn btn-warning mr-2 mb-2" @click="clearLocalStorage">{{ $t('add.buttons.clearLocalStorage') }}</button>
       </div>
     </div>
 
 
-    <bottom-options :success-button="$t('add.buttons.add')"
-                    :danger-button="$t('add.buttons.clearFields')"
-                    object="attachment"
-                    v-on:button-clicked="hoverButtonClicked"></bottom-options>
+    <bottom-options v-if="$route.meta.isBottomOptionShown"
+                    :object="$route.meta.object"
+                    :is-navigation-shown="$route.meta.isNavigationShown"
+                    v-on:button-clicked="hoverButtonClicked"/>
 
   </div>
 </template>
@@ -215,7 +215,7 @@
   import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
-  import BottomOptions from "../partial/BottomOptionsOld";
+  import BottomOptions from "../partial/BottomOptions";
 
   library.add(faFile)
 
@@ -286,8 +286,13 @@
     methods: {
 
       hoverButtonClicked(choice, object) {
-        if (choice === "SAVE") this.add(false)
-        if (choice === "CANCEL") this.reset()
+        if (choice === "SAVE_AND_LEAVE") this.add(false);
+        if (choice === "SAVE") this.add(true);
+        if (choice === "CANCEL") this.$router.push({path: '/' + object});
+        if (choice === "CLEAR") {
+          this.reset();
+          toastInfo({text: this.$t('messages.fieldsCleared')})
+        }
       },
 
       add(addAnother) {

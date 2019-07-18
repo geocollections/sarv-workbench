@@ -124,13 +124,12 @@
           <div class="row my-2" v-if="showCollapseMap">
             <div class="col-lg-12">
               <b-collapse v-model="showCollapseMap" id="collapseMap">
-                <!--<map-component v-bind:locations="[]" v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }" v-on:get-location="updateLocation" />-->
-                <map-component-2 v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
+                <map-component v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
                                  :gps-coords="true"
                                  mode="single"
                                  v-bind:locations="[]"
                                  v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }"
-                                 v-on:update-coordinates="updateLocation"></map-component-2>
+                                 v-on:update-coordinates="updateLocation"/>
               </b-collapse>
             </div>
           </div>
@@ -284,7 +283,7 @@
   import FileInputComponent from "../partial/MultimediaComponent";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import GeocollectionsLink from "../partial/GeocollectionsLink";
-  import MapComponent2 from "../partial/MapComponent2";
+  import MapComponent from "../partial/MapComponent";
   import FileTable from "../partial/FileTable";
   import SaveButtons from "../partial/SaveButtons";
   import LinkedSampleTable from "../sample/LinkedSampleTable";
@@ -298,7 +297,7 @@
       LinkedSampleTable,
       SaveButtons,
       FileTable,
-      MapComponent2,
+      MapComponent,
       GeocollectionsLink,
       MultimediaComponent,
       FileInputComponent,

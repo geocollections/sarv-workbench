@@ -6,7 +6,7 @@
 
       <div class="bottom-item p-2 text-center bottom-nav"
            :class="{ 'bottom-item-disabled': previousDisabled }"
-           @click="!previousDisabled ? $parent.$emit('button-clicked', 'PREVIOUS', object) : ''"
+           @click="!previousDisabled ? handleClick('PREVIOUS') : ''"
            v-if="isNavigationShown">
         <span class="bottom-nav-icon">
           <font-awesome-icon icon="angle-double-left" size="sm"/>
@@ -17,7 +17,7 @@
 
       <div class="bottom-item p-2 text-center bottom-finish"
            v-if="object === 'site' && !$route.meta.isEdit"
-           @click="$parent.$emit('button-clicked', 'FINISH', object)">
+           @click="handleClick('FINISH')">
         <div class="d-lg-inline-block bottom-icon">
           <i class="fas fa-check-double fa-3x"></i>
         </div>
@@ -28,7 +28,7 @@
 
       <div class="bottom-item p-2 text-center bottom-save"
            v-else
-           @click="$parent.$emit('button-clicked', 'SAVE_AND_LEAVE', object)">
+           @click="handleClick('SAVE_AND_LEAVE')">
         <div class="d-lg-inline-block bottom-icon">
           <font-awesome-icon icon="door-open" size="3x"/>
         </div>
@@ -39,7 +39,7 @@
 
 
       <div class="bottom-item p-2 text-center bottom-save"
-           @click="$parent.$emit('button-clicked', 'SAVE', object)">
+           @click="handleClick('SAVE')">
         <div class="d-lg-inline-block bottom-icon">
           <font-awesome-icon icon="save" size="3x"/>
         </div>
@@ -50,7 +50,7 @@
 
 
       <div class="bottom-item p-2 text-center bottom-cancel"
-           @click="$route.meta.isEdit ? $parent.$emit('button-clicked', 'CANCEL', object) : $parent.$emit('button-clicked', 'CLEAR', object)">
+           @click="$route.meta.isEdit ? handleClick('CANCEL') : handleClick('CLEAR')">
         <div class="d-lg-inline-block bottom-icon">
           <font-awesome-icon icon="ban" size="3x"/>
         </div>
@@ -62,7 +62,7 @@
 
       <div class="bottom-item p-2 text-center bottom-nav"
            :class="{ 'bottom-item-disabled': nextDisabled }"
-           @click="!nextDisabled ? $parent.$emit('button-clicked', 'NEXT', object) : ''"
+           @click="!nextDisabled ? handleClick('NEXT') : ''"
            v-if="isNavigationShown">
         <span class="bottom-text">{{ $t('buttons.next') }} </span>
         <span class="bottom-nav-icon">
@@ -109,6 +109,12 @@
       // document.removeEventListener('keyup', this.handleKeyup)
     },
     methods: {
+      handleClick(action) {
+        if (this.object === 'attachment') this.$emit('button-clicked', action, this.object);
+        else this.$parent.$emit('button-clicked', action, this.object);
+      },
+
+
       disableNext(data) {
         this.nextDisabled = data
       },
@@ -226,14 +232,14 @@
   }
 
   .bottom-finish, .bottom-save, .bottom-cancel {
-    transition: letter-spacing 500ms, font-weight 250ms;
+    transition: color 250ms, letter-spacing 750ms, font-weight 250ms;
   }
 
   .bottom-finish:hover, .bottom-save:hover, .bottom-cancel:hover {
     color: #000;
     letter-spacing: 2px;
     font-weight: 800;
-    transition: letter-spacing 500ms, font-weight 250ms;
+    transition: color 250ms, letter-spacing 750ms, font-weight 250ms;
   }
 
   /* Adds margin-bottom to footer so that it won't get caught behind buttons */
