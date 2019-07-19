@@ -922,7 +922,37 @@ export function fetchSpecimens(data) {
   const fields = 'id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,is_private';
   let searchFields = '';
 
+  if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
+    searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:icontains`
+  }
 
+  if (data.collNumber && data.collNumber.trim().length > 0) {
+    searchFields += `&coll__number__icontains=${data.collNumber}`
+  }
+
+  if (data.classification && data.classification.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.classification};fields:classification__class_en,classification__class_field;lookuptype:icontains`
+  }
+
+  if (data.fossil && data.fossil.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.fossil};fields:specimenidentifications__name,specimenidentifications__taxon__taxon;lookuptype:icontains`
+  }
+
+  if (data.mineralRock && data.mineralRock.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.mineralRock};fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:icontains`
+  }
+
+  if (data.locality && data.locality.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.locality};fields:locality__locality,locality__locality_en,locality_free;lookuptype:icontains`
+  }
+
+  if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free;lookuptype:icontains`
+  }
+
+  if (data.agent_collected && data.agent_collected.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:icontains`
+  }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
@@ -936,3 +966,17 @@ export function fetchSpecimens(data) {
 /**********************
  ***  SPECIMEN END  ***
  **********************/
+
+
+
+/***********************
+ *** UNIVERSAL START ***
+ ***********************/
+
+export function fetchChangePrivacyState(table, id, stateData) {
+  return fetchPost('change/' + table + '/' + id, stateData)
+}
+
+/***********************
+ ***  UNIVERSAL END  ***
+ ***********************/

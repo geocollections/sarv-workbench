@@ -103,8 +103,8 @@
     data() {
       return {
         // Todo: Update lists according to routes
-        addList: ['attachment', 'reference', 'imageset', 'journal', 'locality', 'sample', 'project', 'site', 'library', 'doi', 'analysis'],
-        changeList: ['attachment', 'reference', 'locality', 'sample', 'project', 'site', 'library', 'doi', 'analysis'],
+        addList: ['attachment', 'reference', 'imageset', 'journal', 'locality', 'sample', 'project', 'site', 'library', 'doi', 'analysis', 'specimen'],
+        changeList: ['attachment', 'reference', 'locality', 'sample', 'project', 'site', 'library', 'doi', 'analysis', 'specimen'],
         deleteList: [],
         block: {shortcuts: true, permissions: true },
       }

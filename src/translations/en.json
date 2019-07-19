@@ -353,6 +353,9 @@
     "viewMessage": "View file in geocollections portal",
     "editMessage": "Edit file"
   },
+  "editSpecimen": {
+    "heading": "Specimen"
+  },
   "attachments": {
     "header": "My attachments",
     "file": "File",
@@ -540,7 +543,25 @@
   },
   "specimen": {
     "specimenNumber": "Specimen no",
-    "header": "Specimens"
+    "header": "Specimens",
+    "id": "ID",
+    "number": "Number",
+    "identification": "Identification",
+    "locality": "Locality",
+    "stratigraphy": "Stratigraphy",
+    "coll__number": "Collection no.",
+    "depth": "Depth",
+    "oldNumber": "Old no.",
+    "agent_collected": "Collector",
+    "storage": "Storage",
+    "idSpecimen": "ID or specimen no",
+    "classification": "Classification",
+    "fossil": "Fossil",
+    "mineralRock": "Mineral or Rock",
+    "editMessage": "Edit specimen",
+    "viewMessage": "View specimen in geocollections portal",
+    "is_private": "Private",
+    "addNew": "Add new Specimen"
   },
   "sample": {
     "header": "My samples",

@@ -324,8 +324,8 @@
   },
   "editLocality": {
     "heading": "Lokaliteet",
-    "editMessage": "Muuda lokaliteedit",
-    "viewMessage": "Vaata lokaliteedit geokogude portaalis",
+    "editMessage": "Muuda lokaliteeti",
+    "viewMessage": "Vaata lokaliteeti geokogude portaalis",
     "id": "ID",
     "locality": "Lokaliteet",
     "number": "Number",
@@ -352,6 +352,9 @@
     "heading": "Fail",
     "viewMessage": "Vaata faili geokogude portaalis",
     "editMessage": "Muuda faili"
+  },
+  "editSpecimen": {
+    "heading": "Eksemplar"
   },
   "attachments": {
     "header": "Minu failid",
@@ -541,7 +544,25 @@
   },
   "specimen": {
     "specimenNumber": "Eksemplari nr",
-    "header": "Eksemplarid"
+    "header": "Eksemplarid",
+    "id": "ID",
+    "number": "Number",
+    "identification": "Identifikaator",
+    "locality": "Lokaliteet",
+    "stratigraphy": "Stratigraafia",
+    "coll__number": "Kollektsiooni nr.",
+    "depth": "Sügavus",
+    "oldNumber": "Vana nr.",
+    "agent_collected": "Koguja",
+    "storage": "Hoiukoht",
+    "idSpecimen": "ID või eksemplari nr",
+    "classification": "Klassifikatioon",
+    "fossil": "Fossiil",
+    "mineralRock": "Mineraal või kivim",
+    "editMessage": "Muuda eksemplari",
+    "viewMessage": "Vaata eksemplari geokogude portaalis",
+    "is_private": "Privaatne",
+    "addNew": "Lisage uus Eksemplar"
   },
   "sample": {
     "header": "Minu proovid",

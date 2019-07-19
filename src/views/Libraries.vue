@@ -43,7 +43,7 @@
       view-type="libraryViewType"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
-      v-on:toggle-library-state="changeLibraryState"
+      v-on:toggle-privacy-state="changeLibraryState"
     ></list-module-core>
 
   </div>
@@ -51,7 +51,10 @@
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import {fetchChangeLibraryState, fetchLibrariesFromLibraryAgent} from "../assets/js/api/apiCalls";
+  import {
+    fetchChangePrivacyState,
+    fetchLibrariesFromLibraryAgent
+  } from "../assets/js/api/apiCalls";
   import permissionsMixin from "../mixins/permissionsMixin";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
@@ -112,7 +115,7 @@
         let formData = new FormData()
         formData.append('data', JSON.stringify({is_private: state}))
 
-        fetchChangeLibraryState(libraryID, formData).then(response => {
+        fetchChangePrivacyState('library', libraryID, formData).then(response => {
           if (typeof response.body.message !== 'undefined') {
             if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
               toastSuccess({text: response.body.message_et});

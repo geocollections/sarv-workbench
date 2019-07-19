@@ -148,6 +148,16 @@
         </vs-sidebar-item>
       </vs-sidebar-group>
 
+      <!-- SPECIMEN -->
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'specimen')" :title="$t('header.specimens')">
+        <vs-sidebar-item index="10.1" icon="fa-flask" icon-pack="fas" :to="{ path: '/specimen' }">
+          {{ $t('header.specimens') }}
+        </vs-sidebar-item>
+        <vs-sidebar-item index="10.2" icon="fa-plus-circle" icon-pack="fas" :to="{ path: '/specimen/add' }">
+          {{ $t('frontPage.buttons.specimen') }}
+        </vs-sidebar-item>
+      </vs-sidebar-group>
+
     </vs-sidebar-group>
 
 

@@ -38,8 +38,10 @@
       :api-call="fetchSpecimens"
       search-history="specimenSearchHistory"
       view-type="specimenViewType"
+      :multi-ordering="true"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
+      v-on:toggle-privacy-state="changeSpecimenPrivacyState"
     ></list-module-core>
 
   </div>
@@ -47,7 +49,8 @@
 
 <script>
   import ListModuleCore from "./ListModuleCore";
-  import {fetchSpecimens} from "../assets/js/api/apiCalls";
+  import {fetchChangePrivacyState, fetchSpecimens} from "../assets/js/api/apiCalls";
+  import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
   export default {
     components: {
@@ -60,21 +63,26 @@
         response: {},
         columns: [
           {id: "id", title: "specimen.id", type: "number"},
-          {id: "coll__number", title: "specimen.coll_number", type: "text"},
+          {id: "coll__number", title: "specimen.coll__number", type: "text"},
           {id: "specimen_id", title: "specimen.number", type: "text"},
           {id: "specimen_nr", title: "specimen.oldNumber", type: "text"},
-          {id: "locality_id", title: "specimen.locality", type: "text"},
+          {id: "locality__locality_en", title: "specimen.locality", type: "text"},
           {id: "depth", title: "specimen.depth", type: "number"},
-          {id: "stratigraphy_id", title: "specimen.stratigraphy", type: "text"},
+          {id: "stratigraphy__stratigraphy_en", title: "specimen.stratigraphy", type: "text"},
           {id: "agent_collected__agent", title: "specimen.agent_collected", type: "text"},
           {id: "storage__location", title: "specimen.storage", type: "text"},
+          {id: "is_private", title: "specimen.is_private", type: "text", isPrivate: true},
+          {id: "specimen", title: "specimen.specimen", type: "text", orderBy: false},
         ],
         filters: [
-          {id: "id", title: "specimen.id", type: "number"},
-          {id: "number", title: "specimen.number", type: "text"},
-          {id: "identification", title: "specimen.identification", type: "text"},
+          {id: "idSpecimen", title: "specimen.idSpecimen", type: "text"},
+          {id: "collNumber", title: "specimen.coll__number", type: "text"},
+          {id: "classification", title: "specimen.classification", type: "text"},
+          {id: "fossil", title: "specimen.fossil", type: "text"},
+          {id: "mineralRock", title: "specimen.mineralRock", type: "text"},
           {id: "locality", title: "specimen.locality", type: "text"},
           {id: "stratigraphy", title: "specimen.stratigraphy", type: "text"},
+          {id: "agent_collected", title: "specimen.agent_collected", type: "text"},
         ],
         searchParameters: this.setDefaultSearchParameters(),
         block: {search: true}
@@ -92,10 +100,14 @@
       },
       setDefaultSearchParameters() {
         return {
-          identifier: null,
-          creators: null,
-          publication_year: null,
-          title: null,
+          idSpecimen: null,
+          collNumber: null,
+          classification: null,
+          fossil: null,
+          mineralRock: null,
+          locality: null,
+          stratigraphy: null,
+          agent_collected: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',
@@ -103,6 +115,31 @@
       },
       setDefaultSearchParametersFromDeleteButton() {
         this.searchParameters = this.setDefaultSearchParameters()
+      },
+
+      changeSpecimenPrivacyState(state, id) {
+        let formData = new FormData()
+        formData.append('data', JSON.stringify({is_private: state}))
+
+        fetchChangePrivacyState('specimen', id, formData).then(response => {
+          if (typeof response.body.message !== 'undefined') {
+            if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
+              toastSuccess({text: response.body.message_et});
+            } else {
+              toastSuccess({text: response.body.message});
+            }
+          }
+          if (typeof response.body.error !== 'undefined') {
+            if (this.$i18n && this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
+              toastError({text: response.body.error_et});
+            } else {
+              toastError({text: response.body.error});
+            }
+          }
+        }, errResponse => {
+          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error})
+          toastError({text: this.$t('messages.uploadError')})
+        })
       }
     }
   }
