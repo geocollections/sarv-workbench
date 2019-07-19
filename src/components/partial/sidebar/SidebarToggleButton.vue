@@ -15,7 +15,7 @@
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import {faChevronRight, faChevronLeft} from '@fortawesome/free-solid-svg-icons'
 
-  library.add(faChevronRight, faChevronLeft)
+  library.add(faChevronRight, faChevronLeft);
 
   export default {
     components: {
@@ -33,18 +33,18 @@
     },
     methods: {
       toggleButton() {
-        this.buttonOpen = !this.buttonOpen
+        this.buttonOpen = !this.buttonOpen;
         this.$emit('toggle-sidebar', 'BUTTON CLICKED')
       },
 
       handleSwipe(direction) {
         if (direction === 'right') {
-          this.buttonOpen = true
+          this.buttonOpen = true;
           this.$emit('toggle-sidebar', 'BUTTON CLICKED')
         }
 
         if (direction === 'left') {
-          this.buttonOpen = false
+          this.buttonOpen = false;
           this.$emit('toggle-sidebar', 'BUTTON CLICKED')
         }
       }
