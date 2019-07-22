@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar-toggle-button">
-    <div v-if="!buttonOpen" class="swipe-right-button" v-touch:swipe="handleSwipe" ></div>
+    <div v-if="!buttonPressed" class="swipe-right-button" v-touch:swipe="handleSwipe" >tere</div>
 
-    <div class="toggle-button" :class="{ 'button-close': buttonOpen }" @click="toggleButton">
-      <font-awesome-icon class="chevron" :class="{ 'chevron-close': buttonOpen }" :icon="chevron"/>
+    <div class="toggle-button" :class="{ 'button-close': buttonPressed }" @click="$emit('toggle-sidebar', buttonPressed)">
+      <font-awesome-icon class="chevron" :class="{ 'chevron-close': buttonPressed }" :icon="chevron"/>
     </div>
 
-    <div v-if="buttonOpen" class="background-close-button" @click="toggleButton" v-touch:swipe="handleSwipe"></div>
+    <div v-if="buttonPressed" class="background-close-button" @click="$emit('toggle-sidebar', buttonPressed)" v-touch:swipe="handleSwipe"></div>
   </div>
 </template>
 
@@ -21,33 +21,28 @@
     components: {
       FontAwesomeIcon
     },
-    props: ['sidebarState'],
+    props: {
+      sidebarState: {
+        type: Boolean
+      },
+      buttonPressed: {
+        type: Boolean
+      }
+    },
     name: "SidebarToggleButton",
     computed: {
-      chevron() { return this.buttonOpen ? faChevronLeft : faChevronRight }
-    },
-    data() {
-      return {
-        buttonOpen: false,
-      }
+      chevron() { return this.buttonPressed ? faChevronLeft : faChevronRight }
     },
     methods: {
-      toggleButton() {
-        this.buttonOpen = !this.buttonOpen;
-        this.$emit('toggle-sidebar', 'BUTTON CLICKED')
-      },
-
       handleSwipe(direction) {
-        if (direction === 'right') {
-          this.buttonOpen = true;
-          this.$emit('toggle-sidebar', 'BUTTON CLICKED')
+        if (!this.buttonPressed && direction === 'right') {
+          this.$emit('toggle-sidebar', false)
         }
 
-        if (direction === 'left') {
-          this.buttonOpen = false;
-          this.$emit('toggle-sidebar', 'BUTTON CLICKED')
+        if (this.buttonPressed && direction === 'left') {
+          this.$emit('toggle-sidebar', true)
         }
-      }
+      },
     }
   }
 </script>

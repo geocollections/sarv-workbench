@@ -290,13 +290,12 @@
     </vs-sidebar-group>
 
 
-    <!--    <vs-divider icon="fa-user" icon-pack="fas" position="left"></vs-divider>-->
+    <div class="footer-sidebar d-none d-md-block d-lg-block d-xl-none" slot="footer">
+      <vs-button class="thumbstack" :class="{ active : thumbstackState }" icon="fa-thumbtack" icon-pack="fas" color="primary" type="line" @click="$emit('thumbstack-button-clicked')"></vs-button>
 
-
-    <!--    <div class="footer-sidebar" slot="footer">-->
-    <!--      <vs-button icon="fa-sign-out-alt" icon-pack="fas" color="danger" type="border" @click="logOut()">{{ $t('header.logOut') }}</vs-button>-->
+      <!--      <vs-button icon="fa-sign-out-alt" icon-pack="fas" color="danger" type="border" @click="logOut()">{{ $t('header.logOut') }}</vs-button>-->
     <!--      <vs-button icon="fa-cog" icon-pack="fas" color="primary" type="border" :title="$t('header.settings')" :to="{ path: '/settings' }"></vs-button>-->
-    <!--    </div>-->
+    </div>
 
   </vs-sidebar>
 
@@ -317,6 +316,9 @@
       },
       hideBackground: {
         type: Boolean,
+      },
+      thumbstackState: {
+        type: Boolean,
       }
     },
     data() {
@@ -329,7 +331,7 @@
         permissions: '',
         active: this.sidebarState,
         isReduced: false,
-        hiddenBackground: this.hideBackground
+        hiddenBackground: this.hideBackground,
       }
     },
 
@@ -343,13 +345,13 @@
       },
 
       activeLibrary() {
-        if (this.$store.state['activeLibrary'] !== null) return this.$store.state['activeLibrary']
-        else return ''
+        if (this.$store.state['activeLibrary'] !== null) return this.$store.state['activeLibrary'];
+        else return '';
       },
 
       activeProject() {
-        if (this.$store.state['activeProject'] !== null) return this.$store.state['activeProject']
-        else return ''
+        if (this.$store.state['activeProject'] !== null) return this.$store.state['activeProject'];
+        else return '';
       }
     },
 
@@ -411,7 +413,7 @@
         } else {
           this.$store.dispatch('ACTIVE_LIBRARY', library)
         }
-      }
+      },
     },
 
   }
@@ -493,5 +495,21 @@
 
   .header-sidebar > h6:hover {
     cursor: pointer;
+  }
+
+  .thumbstack {
+    float: right !important;
+  }
+
+  .thumbstack.active .vs-icon {
+    transform: unset;
+  }
+
+  .thumbstack > .vs-icon {
+    transform: rotateZ(45deg);
+  }
+
+  .thumbstack:hover .vs-icon {
+    transform: unset;
   }
 </style>

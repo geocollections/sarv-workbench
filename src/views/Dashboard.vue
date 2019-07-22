@@ -1,14 +1,19 @@
 <template>
-  <div class="dashboard" ref="parentSidebar" id="parentx">
+  <div class="dashboard" :class="{ 'thumbstack-active': thumbstackState }" ref="parentSidebar" id="parentx">
     <app-header/>
 
-    <sidebar-toggle-button class="d-xl-none d-print-none" v-on:toggle-sidebar="handleToggleSidebar"/>
+    <sidebar-toggle-button class="d-xl-none d-print-none"
+                           :class="{ 'd-sm-block d-md-none': thumbstackState}"
+                           :button-pressed="buttonPressed"
+                           v-on:toggle-sidebar="handleToggleSidebar"/>
 
     <!-- TODO: Add transition -->
     <sidebar-vuesax :class="sidebarState ? 'd-block' : 'd-none d-xl-block'"
                     class="d-print-none"
                     :sidebar-state="sidebarState"
-                    :hide-background="hideBackground"/>
+                    :hide-background="hideBackground"
+                    :thumbstack-state="thumbstackState"
+                    v-on:thumbstack-button-clicked="handleThumbstackButtonClick"/>
 
     <div class="main container">
       <router-view/>
@@ -43,7 +48,8 @@
       return {
         sidebarState: true,
         buttonPressed: false,
-        hideBackground: true
+        hideBackground: true,
+        thumbstackState: false,
       }
     },
 
@@ -69,21 +75,32 @@
           if (window.innerWidth >= 1200) { // If screen is wider than 992px then sidebar is always shown!
             this.sidebarState = true;
             this.hideBackground = true
+          } else if (window.innerWidth >= 768 && window.innerWidth < 1200 && this.thumbstackState) {
+            this.sidebarState = true;
+            this.hideBackground = true;
           } else { // Else if button is pressed then sidebar state is true.
             this.sidebarState = true;
             this.hideBackground = false
           }
         } else { // If user hasn't pressed button then sidebar state is changed according to screen size
-          this.sidebarState = window.innerWidth >= 1200;
+          if (window.innerWidth >= 768 && window.innerWidth < 1200 && this.thumbstackState) this.sidebarState = true;
+          else this.sidebarState = window.innerWidth >= 1200;
           this.hideBackground = true
         }
       },
 
-      handleToggleSidebar(data) {
-        this.buttonPressed = !this.buttonPressed;
+      handleToggleSidebar(buttonState) {
+        this.buttonPressed = !buttonState;
         this.sidebarState = !this.sidebarState;
         this.hideBackground = !this.hideBackground
       },
+
+      handleThumbstackButtonClick() {
+        this.thumbstackState = !this.thumbstackState;
+        this.buttonPressed = true;
+        this.sidebarState = true;
+        this.hideBackground = this.thumbstackState
+      }
     }
 
   }
@@ -102,6 +119,7 @@
     flex: 1;
   }
 
+  /* Small screens */
   @media (max-width: 768px) {
     .main.container {
       width: 100%!important;
@@ -109,6 +127,14 @@
     }
   }
 
+  /* Medium and large screens */
+  @media (min-width: 768px) and (max-width: 1199.98px) {
+    .thumbstack-active {
+      margin-left: 260px;
+    }
+  }
+
+  /* Extra large screens */
   @media (min-width: 1200px) {
     .container {
       max-width: 1400px;
