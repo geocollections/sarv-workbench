@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard" :class="{ 'thumbstack-active': thumbstackState }" ref="parentSidebar" id="parentx">
+  <div class="dashboard" :class="{ 'thumbstack-active': thumbstackState, 'thumbstack-inactive': !thumbstackState }" ref="parentSidebar" id="parentx">
     <app-header/>
 
     <sidebar-toggle-button class="d-xl-none d-print-none"
@@ -131,6 +131,14 @@
   @media (min-width: 768px) and (max-width: 1199.98px) {
     .thumbstack-active {
       margin-left: 260px;
+    }
+
+    .thumbstack-active >>> .bottom-options-lg {
+      margin-left: 260px !important;
+    }
+
+    .thumbstack-inactive >>> .bottom-options-lg {
+      margin-left: unset;
     }
   }
 

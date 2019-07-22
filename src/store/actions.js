@@ -9,7 +9,7 @@ import {
   fetchLibraries,
   fetchLocalities,
   fetchSamples,
-  fetchDois, fetchLibrariesFromLibraryAgent, fetchAnalyses
+  fetchDois, fetchLibrariesFromLibraryAgent, fetchAnalyses, fetchSpecimens
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -56,6 +56,11 @@ export default {
   FETCH_DOIS: ({ commit, state }) => {
     state.activeSearchParams.search.paginateBy = 10
     return fetchDois(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+  },
+
+  FETCH_SPECIMENS: ({ commit, state }) => {
+    state.activeSearchParams.search.paginateBy = 10
+    return fetchSpecimens(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
 
   SAVE_SHORTCUTS: ({ commit, state }, shortcuts) => {

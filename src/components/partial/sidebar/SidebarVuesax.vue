@@ -253,20 +253,6 @@
         </div>
       </div>
 
-
-      <!-- OLD VERSION, couldn't make whole list item clickable -->
-      <!--      <vs-list-item v-for="entity in sidebarList.results"-->
-      <!--                    :key="$route.meta.table !== 'library' ? entity.id : entity.library"-->
-      <!--                    v-if="sidebarList.results && sidebarList.results.length > 0"-->
-      <!--                    class="router-list-link"-->
-      <!--                    :class="$route.meta.table !== 'library' ? { active: $route.params.id == entity.id } : { active: $route.params.id == entity.library }"-->
-      <!--                    :subtitle="$route.meta.table !== 'library' ? entity.id + ' - ' + entity[activeSearchParams.field] : entity.library + ' - ' + entity[activeSearchParams.field]">-->
-      <!--        <router-link :to="$route.meta.table !== 'library' ? { path: '/' + $route.meta.table + '/' + entity.id } : { path: '/' + $route.meta.table + '/' + entity.library }">-->
-      <!--          <vs-button radius icon="fa-long-arrow-alt-right" icon-pack="fas" color="dark" type="line"></vs-button>-->
-      <!--        </router-link>-->
-      <!--      </vs-list-item>-->
-
-
       <!-- PAGINATION BUTTONS -->
       <vs-row class="sidebar-pagination">
         <vs-col vs-type="flex" vs-justify="center" vs-w="2">

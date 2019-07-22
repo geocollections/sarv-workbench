@@ -918,6 +918,10 @@ export function fetchIsImagesetNumberInImageset(imagesetNumber) {
  *** SPECIMEN START ***
  **********************/
 
+export function fetchSpecimen(id) {
+  return fetch(`specimen/?id=${id}&format=json`)
+}
+
 export function fetchSpecimens(data) {
   const fields = 'id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,is_private';
   let searchFields = '';
