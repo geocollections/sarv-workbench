@@ -3,6 +3,10 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
+
+    {{specimen}}
+
+
     <!-- REQUIRED INFO -->
     <fieldset class="border p-2 mb-2" :style="!validate('specimen') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('specimen') }"
@@ -26,7 +30,6 @@
               <label :for="`coll`">{{ $t('specimen.coll') }}:</label>
               <vue-multiselect id="copyright_agent" class="align-middle"
                                v-model="specimen.coll"
-                               deselect-label="Can't remove this value"
                                label="number"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -36,7 +39,6 @@
                                :class="isDefinedAndNotNull(specimen.coll) ? 'valid' : 'invalid'"
                                :internal-search="false"
                                :preserve-search="true"
-                               :allow-empty="false"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.number }}</strong>
@@ -52,7 +54,7 @@
 
     <!-- GENERAL INFO -->
     <fieldset class="border p-2 mb-2" id="block-info">
-      <legend class="w-auto" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('specimen.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
@@ -68,22 +70,32 @@
             </div>
 
             <div class="col-md-6">
-              TODO: välinumber
+              <label :for="`number_field`">{{ $t('specimen.number_field') }}:</label>
+              <b-form-input id="number_field" v-model="specimen.number_field" type="text"></b-form-input>
             </div>
           </div>
 
           <!-- FOSSIL?, TYPE, PART and FOSSIL?  -->
           <div class="row">
-            <div class="col-md-3"></div>
+            <div class="col-md-3">
+              <label :for="`classification`">{{ $t('specimen.classification') }}:</label>
 
-            <div class="col-md-3"></div>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`type`">{{ $t('specimen.type') }}:</label>
+
+            </div>
 
             <div class="col-md-3">
               <label :for="`part`">{{ $t('specimen.part') }}:</label>
               <b-form-input id="part" v-model="specimen.part" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-3"></div>
+            <div class="col-md-3">
+              <label :for="`fossil`">{{ $t('specimen.fossil') }}:</label>
+
+            </div>
           </div>
 
           <!-- LOCALITY, DEPTH and DEPTH_INTERVAL -->
@@ -297,7 +309,7 @@
           searchHistory: 'specimenSearchHistory',
           activeTab: '',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'specimen_id', 'coll__number', 'specimen_nr'],
+          copyFields: ['id', 'specimen_id', 'coll', 'specimen_nr', 'number_field'],
           autocomplete: {
             loaders: {
               coll: false,
@@ -331,10 +343,10 @@
             let handledResponse = this.handleResponse(response);
 
             if (handledResponse.length > 0) {
-              this.doi = this.handleResponse(response)[0];
+              this.specimen = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.specimen)
 
-              // this.removeUnnecessaryFields(this.specimen, this.copyFields);
+              this.removeUnnecessaryFields(this.specimen, this.copyFields);
               this.specimen.related_data = {};
 
               // this.forceRerender(); if needed
@@ -425,6 +437,7 @@
       },
 
       fillAutocompleteFields(obj) {
+        this.specimen.coll = { id: obj.coll, number: obj.coll__number }
         // this.doi.resource_type = { id: obj.resource_type, value: obj.resource_type__value }
         // this.doi.title_translated_language = { id: obj.title_translated_language, value: obj.title_translated_language__value, value_en: obj.title_translated_language__value_en }
         // this.doi.owner = { id: obj.owner, agent: obj.owner__agent }
