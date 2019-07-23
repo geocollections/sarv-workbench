@@ -65,7 +65,7 @@
           {id: "id", title: "specimen.id", type: "number"},
           {id: "coll__number", title: "specimen.coll__number", type: "text"},
           {id: "specimen_id", title: "specimen.number", type: "text"},
-          {id: "specimen_nr", title: "specimen.oldNumber", type: "text"},
+          {id: "specimen_nr", title: "specimen.specimen_nr", type: "text"},
           {id: "locality__locality_en", title: "specimen.locality", type: "text"},
           {id: "depth", title: "specimen.depth", type: "number"},
           {id: "stratigraphy__stratigraphy_en", title: "specimen.stratigraphy", type: "text"},
@@ -77,7 +77,7 @@
         filters: [
           {id: "idSpecimen", title: "specimen.idSpecimen", type: "text"},
           {id: "collNumber", title: "specimen.coll__number", type: "text"},
-          {id: "classification", title: "specimen.classification", type: "text"},
+          {id: "classification", title: "specimen.class", type: "text"},
           {id: "fossil", title: "specimen.fossil", type: "text"},
           {id: "mineralRock", title: "specimen.mineralRock", type: "text"},
           {id: "locality", title: "specimen.locality", type: "text"},

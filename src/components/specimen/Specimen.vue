@@ -23,17 +23,23 @@
             </div>
 
             <div class="col-md-6">
-              <label :for="`collection`">{{ $t('specimen.collection') }}:</label>
-              <vue-multiselect v-model="specimen.collection"
-                               id="collection"
-                               :options="autocomplete.collection"
-                               :track-by="nameLabel"
-                               label="value"
-                               :class="isDefinedAndNotNull(specimen.collection) ? 'valid' : 'invalid'"
+              <label :for="`coll`">{{ $t('specimen.coll') }}:</label>
+              <vue-multiselect id="copyright_agent" class="align-middle"
+                               v-model="specimen.coll"
+                               deselect-label="Can't remove this value"
+                               label="number"
+                               track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
-                               :show-labels="false">
+                               :loading="autocomplete.loaders.coll"
+                               :options="autocomplete.coll"
+                               @search-change="autcompleteCollSearch"
+                               :class="isDefinedAndNotNull(specimen.coll) ? 'valid' : 'invalid'"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :allow-empty="false"
+                               :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[nameLabel] }}</strong>
+                  <strong>{{ option.number }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -294,11 +300,11 @@
           copyFields: ['id', 'specimen_id', 'coll__number', 'specimen_nr'],
           autocomplete: {
             loaders: {
-              collection: false,
+              coll: false,
             },
-            collection: []
+            coll: []
           },
-          requiredFields: ['specimen_nr', 'collection'],
+          requiredFields: ['specimen_id', 'coll'],
           specimen: {},
           previousRecord: {},
           nextRecord: {},
@@ -394,11 +400,11 @@
 
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload)
-        // if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
+
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
 
         // Autocomplete fields
-        // if (this.isDefinedAndNotNull(objectToUpload.resource_type)) uploadableObject.resource_type = objectToUpload.resource_type.id
+        if (this.isDefinedAndNotNull(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id
         // if (this.isDefinedAndNotNull(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id
         // if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
         // if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id

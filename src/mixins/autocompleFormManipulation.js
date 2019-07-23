@@ -117,6 +117,9 @@ const autocompleteFieldManipulation = {
         case 'library_agent_search':
           query = `library_agent/?agent=${this.currentUser.id}&multi_search=value:${val};fields:library__title,library__title_en;lookuptype:icontains&fields=library,library__title,library__title_en`;
           break;
+        case 'coll':
+          query = `collection/?number__icontains=${val}&fields=id,number`;
+          break;
         default:
           break;
       }
@@ -232,6 +235,9 @@ const autocompleteFieldManipulation = {
     },
     autcompleteDoiAgentSearch(value) {
       this.autocompliteSearch(value, 'doi_agent', 'doi_agent', 3, false)
+    },
+    autcompleteCollSearch(value) {
+      this.autocompliteSearch(value, 'coll', 'coll', 2, false)
     },
     autocompliteSearch(value, type, options, minLength = 3, resetIfLessThanMinLength = true) {
       if (value.length < minLength) {
