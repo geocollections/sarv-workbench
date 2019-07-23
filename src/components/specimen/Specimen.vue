@@ -78,13 +78,35 @@
           <!-- FOSSIL?, TYPE, PART and FOSSIL?  -->
           <div class="row">
             <div class="col-md-3">
-              <label :for="`classification`">{{ $t('specimen.classification') }}:</label>
-
+              <label :for="`fossil`">{{ $t('specimen.fossil') }}:</label>
+              <vue-multiselect v-model="specimen.fossil"
+                               id="fossil"
+                               :options="autocomplete.specimen_kind"
+                               track-by="id"
+                               :label="commonLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </div>
 
             <div class="col-md-3">
               <label :for="`type`">{{ $t('specimen.type') }}:</label>
-
+              <vue-multiselect v-model="specimen.type"
+                               id="type"
+                               :options="autocomplete.specimen_type"
+                               track-by="id"
+                               :label="commonLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </div>
 
             <div class="col-md-3">
@@ -195,7 +217,7 @@
     <!-- REMARKS -->
     <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
-        {{ $t('specimen.remarks') }}
+        {{ $t('specimen.description') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
 
@@ -240,7 +262,15 @@
   import formManipulation from "../../mixins/formManipulation";
   import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
   import localStorageMixin from "../../mixins/localStorageMixin";
-  import {fetchSpecimen, fetchSpecimens} from "../../assets/js/api/apiCalls";
+  import {
+    fetchListSpecimenKind,
+    fetchListSpecimenOriginalStatus,
+    fetchListSpecimenPresence,
+    fetchListSpecimenStatus,
+    fetchListSpecimenType,
+    fetchSpecimen,
+    fetchSpecimens
+  } from "../../assets/js/api/apiCalls";
 
   export default {
     name: "Specimen",
@@ -309,12 +339,22 @@
           searchHistory: 'specimenSearchHistory',
           activeTab: '',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'specimen_id', 'coll', 'specimen_nr', 'number_field'],
+          copyFields: ['id', 'specimen_id', 'coll', 'specimen_nr', 'number_field', 'fossil', 'type', 'part'],
           autocomplete: {
             loaders: {
               coll: false,
+              specimen_kind: false,
+              specimen_original_status: false,
+              specimen_presence: false,
+              specimen_status: false,
+              specimen_type: false
             },
-            coll: []
+            coll: [],
+            specimen_kind: [],
+            specimen_original_status: [],
+            specimen_presence: [],
+            specimen_status: [],
+            specimen_type: []
           },
           requiredFields: ['specimen_id', 'coll'],
           specimen: {},
@@ -332,10 +372,12 @@
       },
 
       loadFullInfo() {
-        // fetching autocompletes
-        // fetchListLicences().then(response => {
-        //   this.autocomplete.licence = this.handleResponse(response)
-        // });
+        // fetching list autocompletes
+        fetchListSpecimenKind().then(response => this.autocomplete.specimen_kind = this.handleResponse(response));
+        fetchListSpecimenOriginalStatus().then(response => this.autocomplete.specimen_original_status = this.handleResponse(response));
+        fetchListSpecimenPresence().then(response => this.autocomplete.specimen_presence = this.handleResponse(response));
+        fetchListSpecimenStatus().then(response => this.autocomplete.specimen_status = this.handleResponse(response));
+        fetchListSpecimenType().then(response => this.autocomplete.specimen_type = this.handleResponse(response));
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
@@ -417,6 +459,7 @@
 
         // Autocomplete fields
         if (this.isDefinedAndNotNull(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id
+        if (this.isDefinedAndNotNull(objectToUpload.fossil)) uploadableObject.fossil = objectToUpload.fossil.id
         // if (this.isDefinedAndNotNull(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id
         // if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
         // if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
@@ -428,22 +471,17 @@
         // Adding related data
         if (saveRelatedData) {
           uploadableObject.related_data = {}
-          // uploadableObject.related_data.attachment = this.relatedData.attachment_link
         }
 
-        console.log('This object is sent in string format:')
-        console.log(uploadableObject)
+        console.log('This object is sent in string format:');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 
       fillAutocompleteFields(obj) {
-        this.specimen.coll = { id: obj.coll, number: obj.coll__number }
-        // this.doi.resource_type = { id: obj.resource_type, value: obj.resource_type__value }
-        // this.doi.title_translated_language = { id: obj.title_translated_language, value: obj.title_translated_language__value, value_en: obj.title_translated_language__value_en }
-        // this.doi.owner = { id: obj.owner, agent: obj.owner__agent }
-        // this.doi.language = { id: obj.language, value: obj.language__value, value_en: obj.language__value_en}
-        // this.doi.copyright_agent = { id: obj.copyright_agent, agent: obj.copyright_agent__agent }
-        // this.doi.licence = { id: obj.licence, licence: obj.licence__licence, licence_en: obj.licence__licence_en}
+        this.specimen.coll = { id: obj.coll, number: obj.coll__number };
+        this.specimen.fossil = { id: obj.fossil, value: obj.fossil__value, value_en: obj.fossil__value_en };
+        this.specimen.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
       },
 
       fillRelatedDataAutocompleteFields(obj, type) {

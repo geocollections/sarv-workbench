@@ -967,6 +967,16 @@ export function fetchSpecimens(data) {
   }
 }
 
+export function fetchListSpecimenKind() { return fetch(`list_specimen_kind/?format=json`) }
+
+export function fetchListSpecimenOriginalStatus() { return fetch(`list_specimen_original_status/?format=json`) }
+
+export function fetchListSpecimenPresence() { return fetch(`list_specimen_presence/?format=json`) }
+
+export function fetchListSpecimenStatus() { return fetch(`list_specimen_status/?format=json`) }
+
+export function fetchListSpecimenType() { return fetch(`list_specimen_type/?format=json`) }
+
 /**********************
  ***  SPECIMEN END  ***
  **********************/
