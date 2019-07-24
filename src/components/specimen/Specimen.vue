@@ -129,6 +129,7 @@
               </vue-multiselect>
             </div>
 
+            <!-- Todo: PARENT -->
             <div class="col-md-3">
               <label :for="`related_specimen`">{{ $t('specimen.related_specimen') }}:</label>
               <!-- Todo: related specimen? -->
@@ -479,6 +480,7 @@
     fetchSpecimen,
     fetchSpecimens
   } from "../../assets/js/api/apiCalls";
+  import permissionsMixin from "../../mixins/permissionsMixin";
 
   export default {
     name: "Specimen",
@@ -489,7 +491,7 @@
       Datepicker
     },
 
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, permissionsMixin],
 
     data() {
       return this.setInitialData()
@@ -508,6 +510,7 @@
           title: 'header.specimens',
           object: 'specimen',
           field: 'specimen_id',
+          databaseId: this.databaseId,
           block: this.block
         });
       }
@@ -707,6 +710,10 @@
         if (this.isDefinedAndNotNull(objectToUpload.status)) uploadableObject.status = objectToUpload.status.id;
         if (this.isDefinedAndNotNull(objectToUpload.original_status)) uploadableObject.original_status = objectToUpload.original_status.id;
 
+        if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
+          uploadableObject.database = this.databaseId
+        }
+
         // Adding related data
         if (saveRelatedData) {
           uploadableObject.related_data = {}
@@ -835,7 +842,7 @@
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
-          resolve(fetchSpecimens(params))
+          resolve(fetchSpecimens(params, this.databaseId))
         });
       },
 

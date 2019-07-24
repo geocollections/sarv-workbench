@@ -922,7 +922,7 @@ export function fetchSpecimen(id) {
   return fetch(`specimen/?id=${id}&format=json`)
 }
 
-export function fetchSpecimens(data) {
+export function fetchSpecimens(data, databaseId) {
   const fields = 'id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,is_private';
   let searchFields = '';
 
@@ -958,7 +958,9 @@ export function fetchSpecimens(data) {
     searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:icontains`
   }
 
-  // Todo: Database id
+  if (typeof databaseId !== 'undefined' && databaseId !== null) {
+    searchFields += `&database__id=${databaseId}`
+  }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 

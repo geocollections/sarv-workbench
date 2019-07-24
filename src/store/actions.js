@@ -60,7 +60,7 @@ export default {
 
   FETCH_SPECIMENS: ({ commit, state }) => {
     state.activeSearchParams.search.paginateBy = 10
-    return fetchSpecimens(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchSpecimens(state.activeSearchParams.search, state.activeSearchParams.databaseId).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
 
   SAVE_SHORTCUTS: ({ commit, state }, shortcuts) => {

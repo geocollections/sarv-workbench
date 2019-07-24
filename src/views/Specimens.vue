@@ -51,12 +51,14 @@
   import ListModuleCore from "./ListModuleCore";
   import {fetchChangePrivacyState, fetchSpecimens} from "../assets/js/api/apiCalls";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
+  import permissionsMixin from "../mixins/permissionsMixin";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Specimens",
+    mixins: [permissionsMixin],
 
     data() {
       return {
@@ -92,7 +94,7 @@
     methods: {
       fetchSpecimens() {
         return new Promise((resolve) => {
-          resolve(fetchSpecimens(this.searchParameters))
+          resolve(fetchSpecimens(this.searchParameters, this.databaseId))
         });
       },
       searchParametersChanged(newParams) {

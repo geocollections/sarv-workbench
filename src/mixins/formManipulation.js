@@ -166,6 +166,7 @@ const formManipulation = {
 
             if (!returnPromise) {
               console.log(savedObjectId)
+              /* Todo: FIX THAT!!!, save and go back is not working atm */
               if (savedObjectId && (savedObjectId === true || savedObjectId !== undefined)) {
                 if (!addAnother) this.$router.push({path: '/' + object})
                 else this.$router.push({path: '/' + object + '/' + savedObjectId})
