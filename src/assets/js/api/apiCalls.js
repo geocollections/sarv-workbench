@@ -955,8 +955,10 @@ export function fetchSpecimens(data) {
   }
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:icontains`
+    searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:icontains`
   }
+
+  // Todo: Database id
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
@@ -976,6 +978,10 @@ export function fetchListSpecimenPresence() { return fetch(`list_specimen_presen
 export function fetchListSpecimenStatus() { return fetch(`list_specimen_status/?format=json`) }
 
 export function fetchListSpecimenType() { return fetch(`list_specimen_type/?format=json`) }
+
+export function fetchAccession() { return fetch(`accession/?format=json`) }
+
+export function fetchDeaccession() { return fetch(`deaccession/?format=json`) }
 
 /**********************
  ***  SPECIMEN END  ***

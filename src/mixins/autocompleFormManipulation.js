@@ -59,6 +59,7 @@ const autocompleteFieldManipulation = {
         case 'library_agent':
         case 'agent':
         case 'owner':
+        case 'agent_collected':
         case 'copyright_agent':
           query = `agent/?multi_search=value:${val};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,forename,surename`;
           break;
@@ -120,6 +121,9 @@ const autocompleteFieldManipulation = {
         case 'coll':
           query = `collection/?number__icontains=${val}&fields=id,number`;
           break;
+        case 'classification':
+          query = `classification/?multi_search=value:${val};fields:id,class_field,class_en;lookuptype:icontains&fields=id,class_field,class_en`;
+          break;
         default:
           break;
       }
@@ -149,11 +153,20 @@ const autocompleteFieldManipulation = {
     autcompleteStratigraphySearch(value) {
       this.autocompliteSearch(value, 'stratigraphy', 'stratigraphy')
     },
+    autcompleteStratigraphySearch2(value) {
+      this.autocompliteSearch(value, 'stratigraphy', 'stratigraphy', 3, false)
+    },
     autcompleteLithostratigraphySearch(value) {
       this.autocompliteSearch(value, 'lithostratigraphy', 'lithostratigraphy')
     },
+    autcompleteLithostratigraphySearch2(value) {
+      this.autocompliteSearch(value, 'lithostratigraphy', 'lithostratigraphy', 3, false)
+    },
     autcompleteStorageSearch(value) {
       this.autocompliteSearch(value, 'storage', 'storage')
+    },
+    autcompleteStorageSearch2(value) {
+      this.autocompliteSearch(value, 'storage', 'storage', 3, false)
     },
     autcompleteAdditionalStorageSearch(value) {
       this.autocompliteSearch(value, 'storage_additional', 'storage_additional')
@@ -238,6 +251,12 @@ const autocompleteFieldManipulation = {
     },
     autcompleteCollSearch(value) {
       this.autocompliteSearch(value, 'coll', 'coll', 2, false)
+    },
+    autcompleteAgentCollectedSearch(value) {
+      this.autocompliteSearch(value, 'agent_collected', 'agent_collected', 2, false)
+    },
+    autcompleteClassificationSearch(value) {
+      this.autocompliteSearch(value, 'classification', 'classification', 2, false)
     },
     autocompliteSearch(value, type, options, minLength = 3, resetIfLessThanMinLength = true) {
       if (value.length < minLength) {

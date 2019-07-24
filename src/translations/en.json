@@ -582,8 +582,8 @@
     "sample": "Sample",
     "sample_number": "Sample number",
     "related_specimen": "Related specimen",
-    "loc_private": "Loc. private",
-    "loc_remarks": "Loc. remarks",
+    "locality_is_private": "Loc. private",
+    "remarks_collecting": "Loc. remarks",
     "lithostratigraphy": "Lithostratigraphy",
     "stratigraphy_free": "Stratigraphy free",
     "agent_collected_free": "Collector txt",
@@ -597,7 +597,9 @@
     "original_status": "Orig. status",
     "remarks": "Remarks public",
     "remarks_internal": "Remakrs internal",
-    "tags": "Tags"
+    "tags": "Tags",
+    "is_private_text": "Private",
+    "is_public_text": "Public"
   },
   "sample": {
     "header": "My samples",

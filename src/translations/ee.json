@@ -573,7 +573,7 @@
     "coll": "Kollektsioon",
     "specimen_nr": "Vana number",
     "number_field": "Välinumber",
-    "classification": "Olemus",
+    "classification": "Rühm",
     "type": "Tüüp",
     "part": "Osis",
     "fossil": "Olemus",
@@ -583,8 +583,8 @@
     "sample": "Proov",
     "sample_number": "Proovi number",
     "related_specimen": "Seotud eks.",
-    "loc_private": "Loc. salastatud",
-    "loc_remarks": "Leiukoha lisainfo",
+    "locality_is_private": "Loc. salastatud",
+    "remarks_collecting": "Leiukoha lisainfo",
     "lithostratigraphy": "Litostratigraafia",
     "stratigraphy_free": "Strat. tekstina",
     "agent_collected_free": "Koguja txt",
@@ -598,7 +598,9 @@
     "original_status": "Orig. staatus",
     "remarks": "Märkused avalik",
     "remarks_internal": "Märkused sise",
-    "tags": "Märksõnad"
+    "tags": "Märksõnad",
+    "is_private_text": "Privaatne",
+    "is_public_text": "Avalik"
   },
   "sample": {
     "header": "Minu proovid",

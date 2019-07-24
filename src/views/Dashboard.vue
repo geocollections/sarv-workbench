@@ -15,7 +15,7 @@
                     :thumbstack-state="thumbstackState"
                     v-on:thumbstack-button-clicked="handleThumbstackButtonClick"/>
 
-    <div class="main container">
+    <div class="main container-fluid">
       <router-view/>
     </div>
 
