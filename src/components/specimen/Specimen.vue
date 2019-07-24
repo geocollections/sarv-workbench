@@ -624,7 +624,6 @@
               this.removeUnnecessaryFields(this.specimen, this.copyFields);
               this.specimen.related_data = {};
 
-              // this.forceRerender(); if needed
               this.$emit('data-loaded', this.specimen)
               this.$emit('set-object', 'specimen')
               this.sendingData = false;

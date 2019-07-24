@@ -468,7 +468,7 @@
     </fieldset>
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row">
+    <div class="row" v-if="$route.meta.isEdit">
       <div class="col mt-4">
         <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
           <li class="nav-item">
@@ -609,6 +609,7 @@
       },
 
       isValidUrl() {
+        // Todo: only if not empty
         let regex = RegExp('^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$');
         return regex.test(this.reference.url)
       }
