@@ -580,19 +580,6 @@
         this.relatedData.attachment_link.push(option)
       },
 
-      setLocationDataIfExists() {
-        this.getGPSLocation().then(currentGPSLocation => {
-          console.log('teefs')
-          if (currentGPSLocation === null) return;
-          this.$set(this.site, 'latitude', currentGPSLocation.latitude === null ? null : currentGPSLocation.latitude.toFixed(6));
-          this.$set(this.site, 'longitude', currentGPSLocation.longitude === null ? null : currentGPSLocation.longitude.toFixed(6));
-          this.$set(this.site, 'location_accuracy', currentGPSLocation.accuracy);
-          this.$set(this.site, 'coord_det_method', {id: 6, value: 'GPS', value_en: 'GPS'});
-
-          // this.site.coord_det_method = {id: 6, value: 'GPS', value_en: 'GPS'};
-        });
-      },
-
       updateLocation(location, method, GPSPosition) {
         this.$set(this.site, 'latitude', location.lat.toFixed(6))
         this.$set(this.site, 'longitude', location.lng.toFixed(6))

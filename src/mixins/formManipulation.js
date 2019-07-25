@@ -620,29 +620,6 @@ const formManipulation = {
       else return 'file'
     },
 
-    // GET CURRENT LOCATION FROM GPS
-    getGPSLocation() {
-      let this_ = this;
-
-      if (navigator.geolocation) {
-        return new Promise(resolve => {
-          navigator.geolocation.getCurrentPosition(function (position) {
-            console.log('kas see ka toimin')
-
-            resolve({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              accuracy: position.coords.accuracy
-            })
-          }, function (error) {
-            if (error.code == error.PERMISSION_DENIED)
-              this_.errorMessege = "Geolocation is not supported by this browser.";
-            resolve(null)
-          });
-        });
-      }
-    },
-
     calculateNextName(previousName) {
       if (!this.isDefinedAndNotNull(previousName)) return
       let tokenize = previousName.split(/[^0-9]/g);
