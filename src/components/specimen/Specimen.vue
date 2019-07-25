@@ -714,6 +714,10 @@
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload);
 
+        // Todo: Api doesn't save specimen_nr and throws error
+        delete uploadableObject.specimen_nr
+        if (!this.$route.meta.isEdit) this.$localStorage.set('specimen', objectToUpload)
+
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
         if (this.isDefinedAndNotNull(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
 
