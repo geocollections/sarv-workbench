@@ -241,5 +241,8 @@
 </script>
 
 <style scoped>
-
+  .dragging {
+    color: #fff;
+    background-color: #007bff;
+  }
 </style>

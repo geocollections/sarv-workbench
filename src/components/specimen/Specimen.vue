@@ -86,7 +86,7 @@
             </div>
           </div>
 
-          <!-- TYPE, PART, CLASSIFICATION and Todo: Related_specimen? -->
+          <!-- TYPE, PART, CLASSIFICATION and PARENT -->
           <div class="row">
             <div class="col-md-3">
               <label :for="`type`">{{ $t('specimen.type') }}:</label>
@@ -129,10 +129,24 @@
               </vue-multiselect>
             </div>
 
-            <!-- Todo: PARENT -->
             <div class="col-md-3">
-              <label :for="`related_specimen`">{{ $t('specimen.related_specimen') }}:</label>
-              <!-- Todo: related specimen? -->
+              <label :for="`parent`">{{ $t('specimen.related_specimen') }}:</label>
+              <vue-multiselect id="parent"
+                               v-model="specimen.parent"
+                               label="specimen_id"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.specimen"
+                               :options="autocomplete.specimen"
+                               @search-change="autcompleteSpecimenSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.specimen_id }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </div>
           </div>
 
@@ -500,6 +514,7 @@
     created() {
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
+        console.log(this.searchHistory)
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
         let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
@@ -513,6 +528,12 @@
           databaseId: this.databaseId,
           block: this.block
         });
+      } else {
+        // Adding specimen default values from local storage
+        const specimenHistory = this.$localStorage.get('specimen', 'fallbackValue');
+        if (specimenHistory !== 'fallbackValue' && Object.keys(specimenHistory).length !== 0 && specimenHistory.constructor === Object) {
+          this.specimen = specimenHistory
+        }
       }
 
       this.loadFullInfo()
@@ -555,7 +576,8 @@
             'locality_free', 'depth', 'depth_interval', 'sample', 'sample_number', 'stratigraphy', 'lithostratigraphy',
             'agent_collected', 'agent_collected_free', 'date_collected', 'date_collected_free', 'agent_collected',
             'presence', 'storage', 'classification', 'locality_is_private', 'remarks_collecting', 'stratigraphy_free',
-            'accession', 'deaccession', 'remarks', 'remarks_internal', 'is_private', 'tags', 'status', 'original_status'],
+            'accession', 'deaccession', 'remarks', 'remarks_internal', 'is_private', 'tags', 'status',
+            'original_status', 'parent'],
           autocomplete: {
             loaders: {
               coll: false,
@@ -573,6 +595,7 @@
               classification: false,
               accession: false,
               deaccession: false,
+              specimen: false,
             },
             coll: [],
             specimen_kind: [],
@@ -589,6 +612,7 @@
             classification: [],
             accession: [],
             deaccession: [],
+            specimen: [],
           },
           requiredFields: ['fossil'],
           specimen: {},
@@ -709,6 +733,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id;
         if (this.isDefinedAndNotNull(objectToUpload.status)) uploadableObject.status = objectToUpload.status.id;
         if (this.isDefinedAndNotNull(objectToUpload.original_status)) uploadableObject.original_status = objectToUpload.original_status.id;
+        if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id;
 
         if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
           uploadableObject.database = this.databaseId
@@ -740,6 +765,8 @@
         this.specimen.deaccession = { id: obj.deaccession, nnumber: obj.deaccession__number };
         this.specimen.status = { id: obj.status, value: obj.status__value, value_en: obj.status__value_en };
         this.specimen.original_status = { id: obj.original_status, value: obj.original_status__value, value_en: obj.original_status__value_en };
+        this.specimen.parent = { id: obj.parent, specimen_id: obj.parent__specimen_id };
+
 
       },
 

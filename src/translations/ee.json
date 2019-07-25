@@ -678,7 +678,8 @@
     "generalInfo": "Üldinfo",
     "members": "Projekti liikmed",
     "files": "Projekti failid",
-    "sites": "Vaatluspunktid"
+    "sites": "Vaatluspunktid",
+    "addNew": "Lisage uus Projekt"
   },
   "site":{
     "header": "Vaatluspunktid",

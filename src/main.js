@@ -274,6 +274,9 @@ new Vue({
     },
     shortcuts: {
       type: Object
+    },
+    specimen: {
+      type: Object
     }
   },
   render: h => h(App)

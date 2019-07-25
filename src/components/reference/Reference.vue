@@ -15,7 +15,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.requiredFields">
+        <div v-show="block.requiredFields">
 
           <!-- REFERENCE and YEAR -->
           <div class="row">
@@ -64,7 +64,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.info">
+        <div v-show="block.info">
 
           <!-- TITLE ORIGINAL -->
           <div class="row">
@@ -254,7 +254,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.description">
+        <div v-show="block.description">
 
           <!-- AUTHOR KEYWORDS -->
           <div class="row">
@@ -318,7 +318,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.digital">
+        <div v-show="block.digital">
 
           <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false"
                                 acceptable-format="application/pdf" :accept-multiple="false"/>
@@ -337,7 +337,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.files">
+        <div v-show="block.files">
 
           <div class="row">
             <div class="col">
@@ -376,7 +376,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.libraries">
+        <div v-show="block.libraries">
 
           <div class="row">
             <div class="col-10 col-md-11">
@@ -409,7 +409,7 @@
     </fieldset>
 
     <!-- RELATED LOCALITIES -->
-    <fieldset class="border p-2 mb-2" id="block-localities">
+    <fieldset v-if="!$route.meta.isEdit" class="border p-2 mb-2" id="block-localities">
       <legend class="w-auto" :class="{ 'text-primary': !block.localities }"
               @click="block.localities = !block.localities">
         {{ $t('reference.relatedTables.locality') }}
@@ -417,7 +417,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.localities">
+        <div v-show="block.localities">
 
           <div class="row">
             <div class="col">
@@ -467,36 +467,6 @@
 
     </fieldset>
 
-    <!-- SHOWING RELATED_DATA -->
-    <div class="row" v-if="$route.meta.isEdit">
-      <div class="col mt-4">
-        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"
-               :class="{ active: activeTab === 'locality_reference' }">
-              {{ $t('reference.relatedTables.locality_reference') }}
-            </a>
-          </li>
-        </ul>
-
-        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                            v-on:related-data-added="addRelatedData"
-                            v-on:related-data-modified="editRelatedData"
-                            v-on:edit-row="editRow"
-                            v-on:allow-remove-row="allowRemove"/>
-
-        <div class="row mb-2 pt-1">
-          <div class="col pagination-center"
-               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
-            <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="10">
-            </b-pagination>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- CHECKBOXES -->
     <div class="d-flex flex-row flex-wrap">
       <div class="px-2">
@@ -515,6 +485,35 @@
         <b-form-checkbox id="is_locked" v-model="reference.is_locked" :value="true" :unchecked-value="false">
           {{ $t('otherFiles.locked') }}
         </b-form-checkbox>
+      </div>
+    </div>
+
+    <!-- SHOWING RELATED_DATA -->
+    <div class="row" v-if="$route.meta.isEdit">
+      <div class="col mt-2">
+        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"
+               :class="{ active: activeTab === 'locality_reference' }">
+              {{ $t('reference.relatedTables.locality_reference') }}
+            </a>
+          </li>
+        </ul>
+
+        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                            v-on:related-data-added="addRelatedData"
+                            v-on:related-data-modified="editRelatedData"
+                            v-on:edit-row="editRow"
+                            v-on:allow-remove-row="allowRemove"/>
+
+        <div class="row mb-2 pt-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+          <div class="col pagination-center">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
+              v-model="relatedData.page[activeTab]" :per-page="10">
+            </b-pagination>
+          </div>
+        </div>
       </div>
     </div>
 

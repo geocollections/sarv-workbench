@@ -677,7 +677,8 @@
     "generalInfo": "General info",
     "members": "Project members",
     "files": "Project files",
-    "sites": "Linked sites"
+    "sites": "Linked sites",
+    "addNew": "Add new Project"
   },
   "site":{
     "header": "Sites",

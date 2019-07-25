@@ -165,8 +165,6 @@ const formManipulation = {
             this.$emit('data-saved', true);
 
             if (!returnPromise) {
-              console.log(savedObjectId)
-              /* Todo: FIX THAT!!!, save and go back is not working atm */
               if (savedObjectId && (savedObjectId === true || savedObjectId !== undefined)) {
                 if (!addAnother) this.$router.push({path: '/' + object})
                 else this.$router.push({path: '/' + object + '/' + savedObjectId})
@@ -217,8 +215,10 @@ const formManipulation = {
           if (typeof response.body.message !== 'undefined') {
             if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
               toastSuccess({text: response.body.message_et});
+              resolve(response.body.id)
             } else {
               toastSuccess({text: response.body.message});
+              resolve(response.body.id)
             }
             if (object === 'attachment' && response.body.attachments_ids) {
               if (response.body.attachments_ids.length > 1) resolve(response.body.attachments_ids)
@@ -236,11 +236,10 @@ const formManipulation = {
           }
         }
       }, errResponse => {
-        console.log(this.$t('messages.uploadError'))
         console.log('ERROR: ' + JSON.stringify(errResponse));
         this.sendingData = false
         toastError({text: this.$t('messages.uploadError')});
-        resolve(undefined)
+        resolve(false)
       })
     },
 

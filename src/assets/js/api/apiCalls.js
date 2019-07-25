@@ -191,7 +191,7 @@ export function fetchListLanguages() {
 }
 
 export function fetchAttachmentForReference(id) {
-  return fetch(`attachment/?reference=${id}&format=json`)
+  return fetch(`attachment/?reference=${id}&fields=id,uuid_filename,original_filename&format=json`)
 }
 
 export function fetchJournals(query) {
@@ -643,19 +643,21 @@ export function fetchAddAttachmentLink(data) {
 export function fetchProject(id) {
   return fetch(`project/?id=${id}&format=json`)
 }
-export function fetchProjectAgent(id,agent) {
+export function fetchProjectAgent(id, agent) {
   return fetch(`project/${id}?fields=id,projectagent__agent,projectagent__agent__agent&format=json`)
 }
 export function fetchProjectAttachment(id,page=1) {
   return fetch(`attachment/?attach_link__project__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename&format=json`)
 }
-export function fetchLinkedSite(id,page=1) {
-  return fetch(`site/?project=${id}&page=${page}&paginate_by=10&fields=id,name,name_en,date_start,date_end,latitude,longitude&format=json`)
+export function fetchLinkedSite(id, page=1, paginateBy = 25) {
+  return fetch(`site/?project=${id}&page=${page}&paginate_by=${paginateBy}&fields=id,name,name_en,date_start,date_end,latitude,longitude&format=json`)
 }
 export function fetchProjectType() {
   return fetch(`project_type/?order_by=name&format=json`)
 }
-export function fetchProjects(data,agent) {
+export function fetchProjects(data, agent) {
+  console.log(data)
+  console.log(agent)
   const fields = 'id,name, name_en,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end,' +
     'date_free,description,remarks,owner,owner__agent,is_private';
   let searchFields = ''
@@ -668,7 +670,7 @@ export function fetchProjects(data,agent) {
   // }
 
   if (data.owner !== null && data.owner.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.owner};fields:owner__agent;fields:owner__agent_surname;fields:owner__agent_firstname;lookuptype:icontains`
+    searchFields += `&multi_search=value:${data.owner};fields:owner__agent;fields:owner__surename;fields:owner__forename;lookuptype:icontains`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)

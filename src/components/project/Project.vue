@@ -223,6 +223,7 @@
               </b-collapse>
             </div>
             <div class="table-responsive-sm col-12 p-0">
+
               <table class="table table-hover table-bordered">
                 <thead class="thead-light">
                 <tr>
@@ -230,24 +231,9 @@
                   <th>{{ $t('site.name') }}</th>
                   <th>{{ $t('site.date_start') }}</th>
                   <th>{{ $t('site.date_end') }}</th>
-                  <!--<th></th>-->
                 </tr>
-                <!--<tr>-->
-                <!--<th class="p-0" v-for="item in columns" v-if="showFilters">-->
-                <!--<b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"-->
-                <!--v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='text'"></b-form-input>-->
-                <!--<b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"-->
-                <!--v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='number'" min="0"></b-form-input>-->
-                <!--&lt;!&ndash;<datepicker style="display: inline !important;max-width: 100%; " :id="item.id"&ndash;&gt;-->
-                <!--&lt;!&ndash;v-model="searchParameters[item.id]"&ndash;&gt;-->
-                <!--&lt;!&ndash;use-utc="true "&ndash;&gt;-->
-                <!--&lt;!&ndash;lang="en"&ndash;&gt;-->
-                <!--&lt;!&ndash;:first-day-of-week="1"&ndash;&gt;-->
-                <!--&lt;!&ndash;format="DD MMM YYYY"&ndash;&gt;-->
-                <!--&lt;!&ndash;input-class="form-control" v-if="item.isDate"></datepicker>&ndash;&gt;-->
-                <!--</th>-->
-                <!--</tr>-->
                 </thead>
+
                 <tbody>
                 <tr v-for="(site,index) in relatedData.site">
                   <td style="padding: 4px;cursor: pointer" @click="addOrEditSite(site)"><!--@click="windowOpenNewTab('site','/site/'+site.id)"-->
@@ -261,11 +247,13 @@
                 </tr>
                 </tbody>
               </table>
+
             </div>
+            {{searchParameters.paginateBy}}
             <div class="col-sm-12 col-md-6 p-0" v-if="relatedData.count.site > searchParameters.paginateBy">
               <b-pagination
-                size="md" align="left" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count.site"
-                v-model="relatedData.page.site" :per-page="10">
+                size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count.site"
+                v-model="relatedData.page.site" :per-page="relatedData.paginateBy.site">
               </b-pagination>
             </div>
           </div>
@@ -337,6 +325,7 @@
   import AddNewSite from "./addOrEditSiteModal";
   import FilePreviewModal from "../partial/filePreviewModal";
   import Editor from "../partial/editor/Editor";
+  import permissionsMixin from "../../mixins/permissionsMixin";
 
   export default {
     name: "Project",
@@ -353,7 +342,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin,sidebarMixin],
+    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, sidebarMixin, permissionsMixin],
 
     data() {
       return this.setInitialData()
@@ -488,6 +477,7 @@
         return {
           projectagent: [], attachment_link: [], site: [],
           page: {projectagent: 1, attachment_link: 1, site: 1},
+          paginateBy: {projectagent: 25, attachment_link: 25, site: 100},
           count: {projectagent: 0, attachment_link: 0, site: 0}
         }
       },
@@ -554,7 +544,7 @@
         } else if (object === 'attachment_link') {
           query = fetchProjectAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
         } else if (object === 'site') {
-          query = fetchLinkedSite(this.$route.params.id, this.relatedData.page.site)
+          query = fetchLinkedSite(this.$route.params.id, this.relatedData.page.site, this.relatedData.paginateBy.site)
         }
         return new Promise(resolve => {
           //resolve it for my sites table
@@ -593,28 +583,17 @@
       fetchList(localStorageData) {
         let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
-          resolve(fetchProjects(params))
+          resolve(fetchProjects(params, this.currentUser.id))
         });
       },
 
       setDefaultSearchParameters() {
         return {
-          // locality: null,
-          // number: null,
-          // depth: null,
-          // stratigraphy: null,
-          // agent: null,
-          // storage: null,
-          // id: null,
-          // page: 1,
-          // paginateBy: 50,
-          // orderBy: '-id',
-          id: null,
-          name: null,
-          orderBy: "-id",
           owner: null,
+          id: null,
           page: 1,
-          paginateBy: 5
+          paginateBy: 50,
+          orderBy: '-id',
         }
       },
 

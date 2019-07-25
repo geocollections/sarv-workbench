@@ -38,7 +38,7 @@
       search-history="projectSearchHistory"
       view-type="projectViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="setDefaultSearchParameters"
+      v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
     ></list-module-core>
   </div>
 
@@ -68,7 +68,7 @@
           {id: "owner", title: "project.owner", type: "text"},
         ],
         filters: [
-          {id: "name", title: "project.name", type: "text"},
+          {id: "owner", title: "project.name", type: "text"},
           {id: "id", title: "project.id", type: "number"},
 
           //{id:"project_type",title:"project.project_type",type:"text"},
@@ -90,6 +90,9 @@
       },
       searchParametersChanged(newParams) {
         this.searchParameters = newParams
+      },
+      setDefaultSearchParametersFromDeleteButton() {
+        this.searchParameters = this.setDefaultSearchParameters()
       },
       setDefaultSearchParameters() {
         return {
