@@ -33,7 +33,7 @@
         markers: [],
         map: null,
         center: L.latLng(58.5, 25.5),
-        currentLocation: undefined,
+        currentLocation: null,
         tileLayer: null,
         tileProviders: [
           {
@@ -101,6 +101,13 @@
           iconAnchor: [12, 36],
           popupAnchor: [2, -34],
           className: 'clean-icon'
+        }),
+        gpsIcon: new L.DivIcon({
+          html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #dc3545;"></i>',
+          iconSize: [29, 37],
+          iconAnchor: [12, 36],
+          popupAnchor: [2, -34],
+          className: 'clean-icon'
         })
       }
     },
@@ -141,19 +148,18 @@
       initMap() {
         this.map = L.map('map', {
           layers: [this.tileProviders[0].leafletObject],
-          scrollWheelZoom: false
+          scrollWheelZoom: true
         }).setView(this.center, this.zoom);
 
-        let vm = this;
         let baseLayers = {};
         this.tileProviders.forEach(provider => {
           baseLayers[provider.name] = provider.leafletObject
         });
 
         L.control.layers(baseLayers).addTo(this.map);
+        L.control.scale({ imperial: false }).addTo(this.map)
 
-        // if (this.mode === 'single' && this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
-        if (this.gpsCoords === true) this.setCurrentGpsLocationIfExists();
+        if (this.gpsCoords === true) this.trackPosition();
 
         //LAYERS CHANGED
         this.map.on('baselayerchange', (event) => {
@@ -184,7 +190,7 @@
           let marker = L.marker({lat: parseFloat(entity.latitude), lng: parseFloat(entity.longitude)}, {icon: this.markerIcon})
             .addTo(this.map)
             .on('click', () => window.open(location.origin + '/site/' + entity.id, '', 'width=800,height=750'));
-          marker.bindTooltip(entity.name, {permanent: true, direction: 'right', offset: [5,-23]});
+          marker.bindTooltip(entity.name, {permanent: true, direction: 'right', offset: [10,-23]});
           this.markers.push(marker)
         });
         let bounds = new L.featureGroup(this.markers).getBounds();
@@ -203,8 +209,8 @@
       //   return false
       // },
 
-      updateCoordinates(coordinates) {
-        this.$emit('update-coordinates', coordinates)
+      updateCoordinates(coordinates, method, GPSPosition) {
+        this.$emit('update-coordinates', coordinates, method, GPSPosition)
       },
 
       addMarker(latlng) {
@@ -225,63 +231,35 @@
         this.map.setView(this.marker._latlng, this.zoom);
       },
 
-      setCurrentGpsLocationIfExists() {
-        this.getGPSLocation().then(currentGPSLocation => {
-          if (currentGPSLocation === null) return;
-          let gpsIcon = new L.DivIcon({
-            html: '<i class="fas fa-map-marker-alt fa-3x" style="color: #dc3545;"></i>',
-            iconSize: [29, 37],
-            iconAnchor: [12, 41],
-            popupAnchor: [2, -34],
-            className: 'clean-icon'
-          });
-          // let redIcon = new L.Icon({
-          //   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-          //   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-          //   iconSize: [25, 41],
-          //   iconAnchor: [12, 41],
-          //   popupAnchor: [1, -34],
-          //   shadowSize: [41, 41]
-          // });
-          this.currentLocation = L.marker({lat: currentGPSLocation.latitude, lng: currentGPSLocation.longitude}, {icon: gpsIcon, zIndexOffset: -1})
-            .addTo(this.map);
-          this.currentLocation.bindPopup("GPS location").openPopup();
-        });
-
-      },
-      // GET CURRENT LOCATION FROM GPS
-      getGPSLocation() {
+      trackPosition() {
         if (navigator.geolocation) {
-          return new Promise(resolve => {
-            this.gpsID = navigator.geolocation.watchPosition(position => {
-              console.log(position)
-              resolve({
-                latitude: position.coords.latitude,
-                longitude: position.coords.longitude,
-                accuracy: position.coords.accuracy
-              });
-            }, error => {
-              toastError({text: error.message})
-              resolve(null)
-            })
-          });
+          this.gpsID = navigator.geolocation.watchPosition(this.successGeo, this.errorGeo)
+        } else toastError({ text: 'Geolocation is not supported by this browser.' })
+      },
 
-          // return new Promise(resolve => {
-          //   navigator.geolocation.getCurrentPosition((position) => {
-          //
-          //     resolve({
-          //       latitude: position.coords.latitude,
-          //       longitude: position.coords.longitude,
-          //       accuracy: position.coords.accuracy
-          //     })
-          //   }, function (error) {
-          //     if (error.code == error.PERMISSION_DENIED)
-          //       this.errorMessege = "Geolocation is not supported by this browser.";
-          //     resolve(null)
-          //   });
-          // });
+      successGeo(position) {
+        console.log(position)
+        if (position !== null) {
+          if (this.currentLocation !== null) this.map.removeLayer(this.currentLocation)
+
+          this.currentLocation = L.marker(
+            { lat: position.coords.latitude, lng: position.coords.longitude },
+            { icon: this.gpsIcon, zIndexOffset: -1 }
+          ).addTo(this.map).on('click', (event) => this.handleGPSMarkerClick(event, position));
+
+          this.currentLocation.bindTooltip('GPS', {permanent: true, direction: 'right', offset: [10,-23]});
         }
       },
+
+      errorGeo(error) {
+        toastError({ text: error.message })
+      },
+
+      handleGPSMarkerClick(event, position) {
+        this.addMarker(event.latlng)
+        this.updateCoordinates(event.latlng, 'GPS', position)
+      },
+
       setZoom() {
         let featureGroup = [];
         featureGroup.push(this.currentLocation);
@@ -293,6 +271,11 @@
         }
 
       },
+
+      centerMapOnMarker(marker, zoomLevel) {
+        console.log(marker)
+        this.map.setView(marker.getLatLng(), zoomLevel);
+      }
 
     },
     watch: {
@@ -311,6 +294,12 @@
       },
 
       currentLocation: function (newVal, oldVal) {
+
+        // Centers map on GPS marker on 1st update and only if there are no other markers
+        if (newVal && oldVal === null) {
+          if (!this.isLocationSet && !this.areLocationsSet) this.centerMapOnMarker(newVal, 12)
+        }
+
         // if (newVal !== null && this.marker !== null) {
         //   this.setZoom()
         // } else if (newVal === null && this.marker !== null) {

@@ -627,6 +627,7 @@ const formManipulation = {
       if (navigator.geolocation) {
         return new Promise(resolve => {
           navigator.geolocation.getCurrentPosition(function (position) {
+            console.log('kas see ka toimin')
 
             resolve({
               latitude: position.coords.latitude,

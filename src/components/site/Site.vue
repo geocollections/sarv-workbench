@@ -451,7 +451,7 @@
           // this.loadRelatedData('sample');
         } else {
           // this.block.info = true
-          this.setLocationDataIfExists();
+          // this.setLocationDataIfExists();
           // this.setSiteNameAndProjectIfPreviousExists();
           // this.loadListOfExistingProjects();
         }
@@ -582,6 +582,7 @@
 
       setLocationDataIfExists() {
         this.getGPSLocation().then(currentGPSLocation => {
+          console.log('teefs')
           if (currentGPSLocation === null) return;
           this.$set(this.site, 'latitude', currentGPSLocation.latitude === null ? null : currentGPSLocation.latitude.toFixed(6));
           this.$set(this.site, 'longitude', currentGPSLocation.longitude === null ? null : currentGPSLocation.longitude.toFixed(6));
@@ -592,13 +593,20 @@
         });
       },
 
-      updateLocation(location) {
-        this.site.latitude = location.lat.toFixed(6);
-        this.site.longitude = location.lng.toFixed(6);
+      updateLocation(location, method, GPSPosition) {
+        this.$set(this.site, 'latitude', location.lat.toFixed(6))
+        this.$set(this.site, 'longitude', location.lng.toFixed(6))
+        // this.site.latitude = location.lat.toFixed(6);
+        // this.site.longitude = location.lng.toFixed(6);
 
         // If user chooses coordinates from map by clicking or dragging the marker then reset gps accuracy and coord_det_method
-        this.site.location_accuracy = null;
-        this.site.coord_det_method = null;
+        if (method === 'GPS') {
+          this.$set(this.site, 'location_accuracy', GPSPosition.coords.accuracy);
+          this.$set(this.site, 'coord_det_method', {id: 6, value: 'GPS', value_en: 'GPS'});
+        } else {
+          this.$set(this.site, 'location_accuracy', null);
+          this.$set(this.site, 'coord_det_method', null);
+        }
       },
 
       addFiles(data) {
