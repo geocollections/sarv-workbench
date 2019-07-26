@@ -611,14 +611,6 @@ const formManipulation = {
       }
     },
 
-
-    getFormatIcon(fileName) {
-      let format = fileName.split('.')[1];
-      if (['xlsx', 'xls'].indexOf(format) > -1) return 'file-excel';
-      if (['jpg', 'png'].indexOf(format) > -1) return 'file-image';
-      else return 'file'
-    },
-
     calculateNextName(previousName) {
       if (!this.isDefinedAndNotNull(previousName)) return
       let tokenize = previousName.split(/[^0-9]/g);
@@ -628,8 +620,7 @@ const formManipulation = {
     },
 
     getActiveProject() {
-      let activeProject = this.$localStorage.get('activeProject', 'fallbackValue')
-      console.log(activeProject)
+      let activeProject = this.$localStorage.get('activeProject', 'fallbackValue');
       if (this.isDefinedAndNotEmpty(activeProject) && activeProject !== 'fallbackValue') return activeProject[0];
       return null
     },
@@ -649,22 +640,22 @@ const formManipulation = {
       }
     }
   },
+
   watch: {
     'relatedData.page': {
-      handler: function (newVal) {
+      handler: function () {
         this.setActiveTab(this.activeTab)
       },
       deep: true
     },
-    'showCollapseMap'(newval, oldval) {
+    'showCollapseMap'(newval) {
       this.$localStorage.set('mapComponent', newval)
     },
     'attachmentLinkSaved': {
-      handler: function (newval, oldval) {
-        console.log(newval)
+      handler: function (newval) {
         if (newval === 0) {
           this.$root.$emit('attachment-loading-status', true)
-          this.loadRelatedData('attachment_link')
+          this.loadRelatedData('attachment_link');
           this.attachmentLinkSaved = -1
         }
 

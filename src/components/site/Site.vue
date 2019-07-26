@@ -647,12 +647,6 @@
         });
       },
 
-      finishWork() {
-        // set finish time
-        this.site.date_end = new Date();
-        this.saveAndNavigateBack('site')
-      },
-
       removeAttachmentRelation(idx) {
         this.relatedData.attachment_link.splice(idx, 1);
         this.add(true, 'site', true);
@@ -673,47 +667,6 @@
         }
       },
 
-      // handleSidebarUserAction(userAction) {
-      //   console.log(userAction)
-      //   if (userAction.action === 'addSample') this.addSample()
-      //   else if(userAction.action === 'navigate') {
-      //     let element = this.$refs[userAction.choice];
-      //     let sizeOfHeader = 60;
-      //     if(element) window.scrollTo(0,  element.offsetTop-sizeOfHeader);
-      //   } else if(userAction.action === 'save') {
-      //     this.saveAndNavigateBack('site')
-      //   } else if(userAction.action === 'cancel') {
-      //     this.navigateBack()
-      //   }
-      // },
-
-      saveAndNavigateBack(object) {
-        let vm = this;
-        this.add(false, object, false, true).then(resp => {
-          vm.navigateBack()
-        })
-      },
-
-      navigateBack() {
-        if (this.createRelationWith.object !== null) {
-
-          if (this.createRelationWith.data === null) {
-            window.close();
-          }
-
-          if (this.createRelationWith.edit === null) {
-            this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
-          } else {
-            this.$root.$emit('close-new-site-modal')
-          }
-        } else {
-          //special case (SITE do not have LIST view)
-          let activeProject = this.getActiveProject();
-          activeProject === null ?
-            this.$router.push({path: '/project'}) :
-            this.$router.push({path: '/project/' + activeProject})
-        }
-      },
       handleUserChoiceFromModal(choice) {
         console.log(choice);
         let vm = this;
@@ -726,19 +679,12 @@
         }
       },
 
-      // Resetting accuracy and coord det method becuase user changed coordinates manually
+      // Resetting accuracy and coord det method because user changed coordinates manually
       handleCoordinateChange(event) {
         this.site.location_accuracy = null;
         this.site.coord_det_method = null;
       },
     },
-
-    // beforeRouteLeave(to, from, next) {
-    //   //Do not remove relation object in case user created new relation object for simplified sample form
-    //   if (this.$store.state['sampleView'].isFull)
-    //     this.$store.commit('REMOVE_RELATION_OBJECT');
-    //   next()
-    // },
 
     watch: {
       'routeId': {
@@ -748,6 +694,8 @@
         deep: true
       },
       'sidebarUserAction'(newval, oldval) {
+        console.log(newval)
+        // Todo: Refactor like in sample view when adding analysis
         this.handleSidebarUserAction(newval, 'site')
       },
     }
@@ -755,7 +703,6 @@
 </script>
 
 <style scoped>
-
   .tooltip .fade {
     background-color: red !important;
   }
