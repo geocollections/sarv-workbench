@@ -243,15 +243,20 @@
         {{ $t('site.relatedSamples') }}
         <font-awesome-icon icon="vial"/>
       </legend>
+
       <transition name="fade">
-        <div class="row" v-if="block.samples">
+        <div class="row" v-show="block.samples">
+
           <add-new-sample :sendingData="sendingData"></add-new-sample>
+
           <div class="col-sm-12 mb-2">
             <span class="float-left">
-              <button class="btn btn-outline-primary mb-2" @click="addSample">{{ $t('add.new') }}</button>
+              <router-link class="btn btn-outline-primary mb-2" :to="{ name: 'Sample add', query: { site: JSON.stringify(site) } }" target="_blank">
+                {{ $t('add.new') }}
+              </router-link>
             </span>
-            <div class="table-responsive-sm" v-if="routeId">
-              <linked-sample-table :siteID="routeId+''"></linked-sample-table>
+            <div class="table-responsive-sm" v-if="$route.params.id">
+              <linked-sample-table :siteID="$route.params.id"></linked-sample-table>
             </div>
           </div>
         </div>
@@ -315,13 +320,9 @@
     computed: {
       createRelationWith() {
         return this.lsPullCreateRelationWith();
-        // return this.$store.state['createRelationWith']
       },
       sidebarUserAction() {
         return this.$store.state['sidebarUserAction']
-      },
-      routeId() {
-        return this.isDefinedAndNotNull(this.editSite) ? this.editSite.id : this.$route.params.id
       },
 
       // Checks if site object has latitude key and is edit view, using this check while rendering mapComponent,
@@ -333,9 +334,6 @@
       activeProject() {
         return this.$store.state['activeProject']
       }
-      // editSite() {
-      //   return this.$store.state['createRelationWith'].edit
-      // }
 
     },
     created() {
@@ -364,8 +362,8 @@
         }
       }
 
-      // Getting project (only from project view when user presses 'add site button')
-      if (typeof this.$route.params.project !== 'undefined' && this.$route.params.project !== null) {
+      // Getting project (only from project view when user presses 'add site button' in detail view or in sidebar)
+      if (this.$route.params.project) {
         const dataFromProject = this.$route.params.project;
 
         this.site.project = { id: dataFromProject.id, name: dataFromProject.name, name_en: dataFromProject.name_en };
@@ -422,7 +420,7 @@
         if (this.$route.meta.isEdit && this.createRelationWith.data === null || this.isDefinedAndNotNull(this.createRelationWith.edit)) {
           this.sendingData = true;
 
-          fetchSite(this.routeId).then(response => {
+          fetchSite(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
               this.site = this.handleResponse(response)[0];
@@ -521,9 +519,9 @@
         let query;
 
         if (object === 'attachment_link') {
-          query = fetchSiteAttachment(this.routeId, this.relatedData.page.attachment_link)
+          query = fetchSiteAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
         } else if (object === 'sample') {
-          query = fetchLinkedSamples(this.routeId, this.relatedData.page.sample)
+          query = fetchLinkedSamples(this.$route.params.id, this.relatedData.page.sample)
         }
         return new Promise(resolve => {
           query.then(response => {
@@ -687,16 +685,14 @@
     },
 
     watch: {
-      'routeId': {
+      '$route.params.id': {
         handler: function (newval, oldval) {
           this.reloadData()
         },
         deep: true
       },
-      'sidebarUserAction'(newval, oldval) {
-        console.log(newval)
-        // Todo: Refactor like in sample view when adding analysis
-        this.handleSidebarUserAction(newval, 'site')
+      'sidebarUserAction'(newVal) {
+        this.$_sidebarMixin_handleUserAction(newVal, 'site', this.site)
       },
     }
   }

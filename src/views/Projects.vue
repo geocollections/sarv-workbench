@@ -85,7 +85,7 @@
     methods: {
       fetchProjects() {
         return new Promise((resolve) => {
-          resolve(fetchProjects(this.searchParameters, this.currentUser.id))
+          resolve(fetchProjects(this.searchParameters, this.$_permissionsMixin_currentUser.id))
         });
       },
       searchParametersChanged(newParams) {

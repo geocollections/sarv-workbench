@@ -42,8 +42,8 @@ export default {
     })
   },
 
-  SET_SIDEBAR_USER_ACTION: (state, { userAction }) => {
-    Vue.set(state, 'sidebarUserAction', userAction || false)
+  SET_SIDEBAR_USER_ACTION: (state, userAction) => {
+    Vue.set(state, 'sidebarUserAction', userAction)
   },
 
   SET_ACTIVE_LIBRARY: (state, object) => {

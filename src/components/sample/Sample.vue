@@ -847,7 +847,7 @@
     fetchSampleRelatedAnalysis,
     fetchSampleRelatedPreparation,
     fetchLastSiteSample,
-    fetchSamples
+    fetchSamples, fetchLatestSampleInSite
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
@@ -920,11 +920,12 @@
       // SIMPLE VIEW
       this.isSimpleView = this.$localStorage.get('sampleView', false)
 
-      this.loadFullInfo()
-    },
+      console.log(this.$route)
 
-    mounted() {
-      this.createRelatedSampleWithSiteIfExists();
+      if (this.$route.query.site) this.addSiteDataToSampleObject(JSON.parse(this.$route.query.site));
+      else if (this.$route.params.site) this.addSiteDataToSampleObject(this.$route.params.site);
+
+      this.loadFullInfo()
     },
 
     updated() {
@@ -1077,10 +1078,7 @@
           this.$emit('related-data-info', this.tabs);
 
           this.setActiveTab('analysis')
-        } else {
-          this.$on('data-saved', this.createRelatedSampleWithSiteIfExists);
         }
-
 
         this.$root.$on('add-new-sample-from-modal', this.handleUserChoiceFromModal);
 
@@ -1277,61 +1275,6 @@
         }
       },
 
-      navigateBack() {
-        this.$router.push({path: '/' + this.createRelationWith.object + '/' + this.createRelationWith.data.id})
-      },
-      setPredefinedData() {
-        return new Promise(resolve => {
-          if (!this.createRelationWith.relatedData.isLastSampleExists) {
-
-            resolve({
-              locality__id: this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.id : null,
-              locality__locality_en: this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality_en : null,
-              locality__locality: this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality : null,
-              site__id: this.createRelationWith.data.id,
-              agent_collected__agent: this.currentUser.user,
-              agent_collected__id: this.currentUser.id,
-              date_collected: new Date(),
-              owner__agent: this.currentUser.user,
-              owner__id: this.currentUser.id
-            })
-          } else {
-            fetchLastSiteSample(this.createRelationWith.data.id).then(response => {
-              let resp = this.handleResponse(response)[0]
-              resp.number = this.calculateNextName(resp.number)
-              resp.number_field = this.calculateNextName(resp.number_field)
-              resp.locality__id = this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.id : null
-              resp.locality__locality_en = this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality_en : null
-              resp.locality__locality = this.isDefinedAndNotNull(this.createRelationWith.data.locality) ? this.createRelationWith.data.locality.locality : null
-              resolve(resp)
-            });
-
-          }
-        });
-      },
-      createRelatedSampleWithSiteIfExists() {
-        if (this.isDefinedAndNotNull(this.createRelationWith.data) && this.createRelationWith.data.hasOwnProperty('id')
-          && !this.$router.currentRoute.params.hasOwnProperty('id')) {
-          this.setPredefinedData().then(sample => {
-            this.sample = sample
-            console.log(sample)
-            this.fillAutocompleteFields(this.sample)
-            this.removeUnnecessaryFields(this.sample, this.simplifiedFormCopyFields);
-          })
-        }
-      },
-      saveAndNavigateBack() {
-        let vm = this, createRelationWith = this.createRelationWith
-        this.add(true, 'sample', false, true).then(function (status) {
-          if (createRelationWith.object === null)
-            vm.$router.push({path: '/sample'});
-          else {
-            // vm.$router.push({ path:'/'+createRelationWith.object+'/'+createRelationWith.data.id})
-            // vm.$root.$emit('close-new-sample-modal')
-            window.close()
-          }
-        })
-      },
       handleUserChoiceFromModal(choice) {
         console.log(choice)
         let vm = this
@@ -1347,6 +1290,21 @@
         if (option.id === null) return
         return `id: ${option.id} - ${option.name}`
       },
+
+      addSiteDataToSampleObject(site) {
+        console.log(site)
+        this.sample.locality = site.locality;
+        this.sample.site = { id: site.id, name: site.name };
+        this.sample.agent_collected = { id: this.$_permissionsMixin_currentUser.id , agent: this.$_permissionsMixin_currentUser.user };
+        this.sample.date_collected = new Date();
+        this.sample.owner = { id: this.$_permissionsMixin_currentUser.id , agent: this.$_permissionsMixin_currentUser.user };
+
+        fetchLatestSampleInSite(site.id).then(response => {
+          let sample = this.handleResponse(response)[0];
+          this.sample.number = this.calculateNextName(sample.number);
+          this.sample.number_field = this.calculateNextName(sample.number_field);
+        });
+      }
     },
   }
 </script>

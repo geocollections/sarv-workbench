@@ -462,6 +462,7 @@ const router = new Router({
           children: [
             {
               path: '',
+              name: 'Sample edit',
               component: () => import('./components/sample/Sample.vue'),
               meta: {
                 isEdit:true,
@@ -486,6 +487,7 @@ const router = new Router({
           children: [
             {
               path: '',
+              name: 'Sample add',
               component: () => import('./components/sample/Sample.vue'),
               meta: {
                 isEdit:false,
@@ -499,7 +501,7 @@ const router = new Router({
                 isNavigationShown: true,
                 object: 'sample'
               },
-            }
+            },
           ]
         },
         {
@@ -612,6 +614,7 @@ const router = new Router({
           children: [
             {
               path: '',
+              name: 'Site edit',
               component: () => import('./components/site/Site.vue'),
               meta: {
                 isEdit:true,

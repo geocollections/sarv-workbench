@@ -403,8 +403,8 @@ export function fetchLSampleAttachment(id,page = 1) {
 export function fetchSampleReference(id,page = 1) {
   return fetch(`sample_reference/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
 }
-export function fetchLastSiteSample(id) {
-  return fetch(`sample/?site__id=${id}&order_by=-id&paginate_by=1&format=json`)
+export function fetchLatestSampleInSite(siteId) {
+  return fetch(`sample/?site__id=${siteId}&order_by=-id&paginate_by=1&format=json`)
 }
 /************************
  ***  SAMPLES END  ***
@@ -769,43 +769,36 @@ export function fetchSiteAttachment(id,page=1) {
 export function fetchLinkedSamples(id,page=1) {
   return fetch(`sample/?site__id=${id}&page=${page}&paginate_by=100&fields=id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en&format=json`)
 }
-export function fetchLinkedSamplesX(data,siteID) {
-
+export function fetchLinkedSamplesX(data, siteID) {
   let fields = 'id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en';
-  let searchFields = ''
-  if (data.id !== null && data.id.trim().length > 0) {
+  let searchFields = '';
+
+  if (data.id && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`
   }
-
-  if (data.number !== null && data.number.trim().length > 0) {
-    //searchFields += `&number__icontains=${data.number}`
+  if (data.number && data.number.trim().length > 0) {
     searchFields += `&multi_search=value:${data.number};fields:number,number_additional,number_field;lookuptype:icontains`
   }
-  if (data.depth !== null && data.depth.trim().length > 0) {
-    //searchFields += '&depth__exact='+data.depth
+  if (data.depth && data.depth.trim().length > 0) {
     searchFields += `&multi_search=value:${data.depth};fields:depth;lookuptype:icontains`
   }
-  if (data.depth_interval !== null && data.depth_interval.trim().length > 0) {
-    //searchFields += '&depth__exact='+data.depth
+  if (data.depth_interval && data.depth_interval.trim().length > 0) {
     searchFields += `&multi_search=value:${data.depth_interval};fields:depth_interval;lookuptype:icontains`
   }
-  if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
+  if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
     searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy;lookuptype:icontains`
   }
-  if (data.lithostratigraphy !== null && data.lithostratigraphy.trim().length > 0) {
+  if (data.lithostratigraphy && data.lithostratigraphy.trim().length > 0) {
     searchFields += `&multi_search=value:${data.lithostratigraphy};fields:lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:icontains`
   }
-  if (data.rock !== null && data.rock.trim().length > 0) {
+  if (data.rock && data.rock.trim().length > 0) {
      searchFields += `&multi_search=value:${data.rock};fields:rock_en,rock;lookuptype:icontains`
   }
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
-    // return data.coords_not_null === true ? fetch(`site/?${searchFields}&order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
     return  fetch(`sample/?site__id=${siteID}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    // return data.coords_not_null === true ? fetch(`site/?order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
-
     return  fetch(`sample/?site__id=${siteID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }

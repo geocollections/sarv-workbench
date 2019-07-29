@@ -9,7 +9,7 @@
     </div>
 
     <div class="idcard-wrapper text-center">
-      <button class="btn btn-primary" @click="authenticate('id')" v-bind:disabled="loggingIn">
+      <button class="btn btn-primary" @click="$_authenticationMixin_authenticate('id')" v-bind:disabled="loggingIn">
         {{ $t('login.loginButton') }} &nbsp;<font-awesome-icon icon="id-card"></font-awesome-icon>
       </button>
     </div>
@@ -22,9 +22,9 @@
   import { library } from '@fortawesome/fontawesome-svg-core'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faIdCard} from '@fortawesome/free-solid-svg-icons'
-  import authenticate from "../../mixins/authenticate";
+  import authenticationMixin from "../../mixins/authenticationMixin";
 
-  library.add(faIdCard)
+  library.add(faIdCard);
 
   export default {
     components: {
@@ -32,7 +32,7 @@
       FontAwesomeIcon
     },
     name: "login-id",
-    mixins: [authenticate],
+    mixins: [authenticationMixin],
     data() {
       return {
         loggingIn: false,

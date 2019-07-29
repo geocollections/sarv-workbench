@@ -230,7 +230,7 @@
         title: 'header.libraries',
         object: 'library',
         field: 'library__title_en',
-        agent: this.currentUser
+        agent: this.$_permissionsMixin_currentUser
       });
     },
 

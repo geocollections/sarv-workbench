@@ -84,7 +84,7 @@
     methods: {
       fetchAnalyses_() {
         return new Promise((resolve) => {
-          resolve(fetchAnalyses(this.searchParameters, this.currentUser, this.databaseId))
+          resolve(fetchAnalyses(this.searchParameters, this.$_permissionsMixin_currentUser, this.$_permissionsMixin_databaseId))
         });
       },
       searchParametersChanged(newParams) {

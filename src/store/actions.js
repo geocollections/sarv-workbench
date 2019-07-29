@@ -81,5 +81,9 @@ export default {
 
   INITIALISE_ACTIVE_OBJECTS: ({commit}) => {
     commit('SET_ACTIVE_OBJECTS')
+  },
+
+  SIDEBAR_USER_ACTION: ({commit}, userAction) => {
+    commit('SET_SIDEBAR_USER_ACTION', userAction)
   }
 }

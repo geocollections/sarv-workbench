@@ -361,6 +361,7 @@ const formManipulation = {
       let routeData = this.$router.resolve({path: path, query: query, meta: meta});
       window.open(routeData.href, '_blank');
     },
+
     openGeoInNewWindow(params) {
       let width = 600;
       switch (params.object) {

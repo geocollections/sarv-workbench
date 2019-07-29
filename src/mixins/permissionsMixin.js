@@ -7,8 +7,7 @@ const permissionsMixin = {
     }
   },
   created() {
-    // Gets user data from session storage
-    const authUser = this.$localStorage.get('authUser', null)
+    const authUser = this.$localStorage.get('authUser', null);
     if (typeof authUser !== 'undefined' && authUser !== null) {
       this.currentUser = {
         id: authUser.agent_id,
@@ -16,23 +15,24 @@ const permissionsMixin = {
         forename: authUser.name,
         surename: authUser.surname,
         user: authUser.user,
-      }
-      this.permissions = authUser.permissions
+      };
+      this.permissions = authUser.permissions;
       this.databaseId = authUser.database_id
-      // console.log(this.currentUser);
     }
   },
 
+  computed: {
+    $_permissionsMixin_currentUser() { return this.currentUser },
+    $_permissionsMixin_permissions() { return this.permissions },
+    $_permissionsMixin_databaseId() { return this.databaseId },
+  },
+
   methods: {
-    isUserAllowedTo(action, table) {
-      if (typeof this.permissions[table] !== 'undefined') {
-        return this.permissions[table].includes(action)
-      } else {
-        // console.log('This table: ' + table + ' does not exist! (in permissions)')
-        return false
-      }
+    $_permissionsMixin_isUserAllowedTo(action, table) {
+      if (typeof this.permissions[table] !== 'undefined') return this.permissions[table].includes(action)
+      else return false
     }
   }
-}
+};
 
 export default permissionsMixin

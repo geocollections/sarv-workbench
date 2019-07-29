@@ -259,8 +259,9 @@ const autocompleteFieldManipulation = {
       this.autocompliteSearch(value, 'classification', 'classification', 2, false)
     },
     autocompliteSearch(value, type, options, minLength = 3, resetIfLessThanMinLength = true) {
-      if (value.length < minLength) if (resetIfLessThanMinLength) this.autocomplete[options] = [];
-      else if (value.length >= minLength) {
+      if (value.length < minLength) {
+        if (resetIfLessThanMinLength) this.autocomplete[options] = [];
+      } else if (value.length >= minLength) {
         let query = this.getAutocompleteQueryParameters(type, value)
         if (query.length === 0) return;
         this.autocomplete.loaders[type] = true;

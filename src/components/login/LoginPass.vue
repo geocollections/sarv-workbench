@@ -8,7 +8,7 @@
       <b>{{message}}</b>
     </div>
 
-    <b-form @submit.prevent="authenticate('password', {user: user.username, pwd: user.password})">
+    <b-form @submit.prevent="$_authenticationMixin_authenticate('password', {user: user.username, pwd: user.password})">
       <b-form-group label-for="username">
         <b-form-input
           id="username"
@@ -43,9 +43,9 @@
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faSignInAlt} from '@fortawesome/free-solid-svg-icons'
 
-  import authenticate from "../../mixins/authenticate";
+  import authenticationMixin from "../../mixins/authenticationMixin";
 
-  library.add(faSignInAlt)
+  library.add(faSignInAlt);
 
   export default {
     components: {
@@ -53,7 +53,7 @@
       FontAwesomeIcon
     },
     name: "login-pass",
-    mixins: [authenticate],
+    mixins: [authenticationMixin],
     data() {
       return {
         user: {
@@ -72,7 +72,7 @@
         },
 
         set: function (newValue) {
-          let name = newValue.toString()
+          let name = newValue.toString();
           this.user.username = name.toLowerCase().trim()
         }
       }
@@ -100,7 +100,7 @@
   /*left: 0;*/
   /*right: 0;*/
   /*top: 0;*/
-  /*z-index: 1;*/
+  /*z-index: 100000;*/
   /*background: rgba(255, 255, 25, 0.5);*/
   /*height: 100%;*/
   /*}*/

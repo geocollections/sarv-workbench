@@ -31,7 +31,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.info">
+        <div v-show="block.info">
           <div class="row">
             <div class="col-md-6">
               <label :for="`name`">{{ $t('project.name') }}:</label>
@@ -125,13 +125,13 @@
     </fieldset>
 
     <!-- DESCRIPTION -->
-    <fieldset class="border p-2 mb-2" id="block-description" :key="componentKey">
+    <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
         {{ $t('project.description') }} | {{ $t('project.remarks') }}
         <font-awesome-icon icon="pen-fancy" />
       </legend>
       <transition name="fade">
-        <div  v-if="block.description">
+        <div  v-show="block.description">
           <div class="row">
             <div class="col-sm-12 mb-2">
               <editor :data.sync="project.description"/>
@@ -155,7 +155,7 @@
         <font-awesome-icon icon="user-friends" />
       </legend>
       <transition name="fade">
-        <div class="row" v-if="block.members">
+        <div class="row" v-show="block.members">
 
           <div class="col-11 mb-2 mr-0">
             <vue-multiselect v-model="relatedData.projectagent"
@@ -189,7 +189,7 @@
         <font-awesome-icon icon="folder-open"/>
       </legend>
       <transition name="fade">
-        <div class="row p-3" v-if="block.files">
+        <div class="row p-3" v-show="block.files">
           <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="false"/>
           <file-table :attachments="relatedData.attachment_link" :object="'project'"
                       v-if="relatedData.attachment_link.length > 0"/>
@@ -205,7 +205,7 @@
         <font-awesome-icon icon="globe-americas" />
       </legend>
       <transition name="fade">
-        <div v-if="block.sites">
+        <div v-show="block.sites">
           <div v-if="relatedData.site.length > 0">
             <!---->
             <div class="col p-0">
@@ -235,10 +235,12 @@
                 </thead>
 
                 <tbody>
-                <tr v-for="(site,index) in relatedData.site">
-                  <td style="padding: 4px;cursor: pointer" @click="addOrEditSite(site)"><!--@click="windowOpenNewTab('site','/site/'+site.id)"-->
-                    <font-awesome-icon size="1x" icon="eye"/>
-                    {{site.id}}
+                <tr v-for="site in relatedData.site">
+                  <td>
+                    <router-link :to="{ path: '/site/' + site.id }" target="_blank">
+                      <font-awesome-icon size="1x" icon="eye"/>
+                      {{site.id}}
+                    </router-link>
                   </td>
                   <td v-translate="{et:site.name,en:site.name_en}"></td>
                   <td>{{parseDate(site.date_start)}}</td>
@@ -271,33 +273,10 @@
       </div>
     </div>
 
-
-<!--    <div class="row mt-3 mb-3">-->
-<!--      <div class="col">-->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'project', true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'project', true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--          &lt;!&ndash;{{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}&ndash;&gt;-->
-<!--        </button>-->
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('project',$route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
-
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
@@ -424,7 +403,6 @@
             {id: "date_end", title: "site.date_end", type: "text", isDate: true},
             {id: "date_free", title: "site.date_free", type: "text", isDate: true},
           ],
-          componentKey: 0,
           isActive: false,
           attachmentLinkSaved : -1,
           watchedSite: null,
@@ -454,7 +432,6 @@
               this.removeUnnecessaryFields(this.project, this.copyFields);
               this.project.related_data = {};
               // this.$set(this,'activeProject', this.checkIfProjectIsActive());
-              this.forceRerender()
               this.$emit('data-loaded', this.project)
               this.$emit('set-object', 'project');
               this.sendingData = false;
@@ -468,7 +445,7 @@
           this.loadRelatedData('site');
         } else {
           //set default user
-          this.project.owner = {agent: this.currentUser.user, id: this.currentUser.id}
+          this.project.owner = {agent: this.$_permissionsMixin_currentUser.user, id: this.$_permissionsMixin_currentUser.id}
         }
 
       },
@@ -607,40 +584,6 @@
         this.relatedData.attachment_link.push(option)
       },
 
-      addOrEditSite(site) {
-
-        if(site) this.watchedSite = site
-        //set relation object as site
-        let createRelationWith = {
-          object: 'project', edit:site, data: this.project,
-          info: this.$t('messages.projectSiteRelationInfo',
-            {data: `ID: ${this.project.id} (${this.project.name})`})
-        };
-
-        this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith});
-        //MODAL OPTION IS COMMENTED BUT NOT REMOVED
-        // this.$emit('show-new-site-modal')
-        // this.$router.push({path: '/site/add'})
-        let routeData = '';
-        if(site && site.id) {
-          createRelationWith.data = null;
-          this.lsPushCreateRelationWith(createRelationWith);
-          this.windowOpenNewTab('site','/site/'+ site.id)
-          // routeData = this.$router.resolve({ path:'/site/'+ site.id});
-        } else {
-          this.lsPushCreateRelationWith(createRelationWith);
-          this.windowOpenNewTab('site','/site/add')
-          // routeData = this.$router.resolve({ path:'/site/add'});
-        }
-
-        // window.open(routeData.href, '_blank', 'width=750,height=750');
-
-      },
-
-      forceRerender() {
-        this.componentKey += 1;
-      },
-
       chooseLocations(locations) {
         console.log(locations)
       },
@@ -648,18 +591,7 @@
         this.relatedData.attachment_link.splice(idx, 1);
         this.add(true, 'project', true);
       },
-      // handleSidebarUserAction(userAction) {
-      //   if (userAction.action === 'addSite') this.addOrEditSite()
-      //   else if(userAction.action === 'navigate') {
-      //     let element = this.$refs[userAction.choice];
-      //     let sizeOfHeader = 60;
-      //     if(element) window.scrollTo(0, element.offsetTop-sizeOfHeader);
-      //   } else if(userAction.action === 'save') {
-      //     this.hoverSaveOrCancelButtonClicked('SAVE_AND_LEAVE','project',true)
-      //   } else if(userAction.action === 'cancel') {
-      //     this.hoverSaveOrCancelButtonClicked('CANCEL','project',true)
-      //   }
-      // },
+
       handleVisibilityChange(event) {
         this.loadRelatedData('site')
       },
@@ -682,10 +614,8 @@
       'relatedData.page.site'(newval, oldval) {
         this.loadRelatedData('site')
       },
-      //Because of $root.$on triggering method 'handleSidebarUserAction' several times after each click. It was decided to
-      //store this action
-      'sidebarUserAction'(newval, oldval) {
-        this.handleSidebarUserAction(newval, 'project')
+      'sidebarUserAction'(newVal) {
+        this.$_sidebarMixin_handleUserAction(newVal, 'project', this.project)
       },
     }
   }

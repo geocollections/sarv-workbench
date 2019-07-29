@@ -30,7 +30,7 @@
         <div class="row" v-if="block.permissions">
 
 
-          <div class="col-6 col-sm-6 col-md-4 col-xl-3" v-for="(key, index) in permissions">
+          <div class="col-6 col-sm-6 col-md-4 col-xl-3" v-for="(key, index) in $_permissionsMixin_permissions">
             <vs-list>
               <vs-list-header style="word-break: break-all"
                               icon="fa-table"

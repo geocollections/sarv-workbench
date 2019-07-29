@@ -118,7 +118,7 @@
     methods: {
       fetchAttachments() {
         return new Promise((resolve) => {
-          resolve(fetchAttachments(this.searchParameters, this.currentUser))
+          resolve(fetchAttachments(this.searchParameters, this.$_permissionsMixin_currentUser))
         });
       },
       searchParametersChanged(newParams) {

@@ -1,7 +1,7 @@
 import { toastSuccess, toastError } from "../assets/js/iziToast/iziToast";
 import { fetchLogin, fetchLoginId, fetchLogout } from "../assets/js/api/apiCalls";
 
-const authenticate = {
+const authenticationMixin = {
 
   methods: {
 
@@ -13,7 +13,7 @@ const authenticate = {
      * @todo In the future possible to add more options e.g., 'mobile'
      * @param loginData, Object value of data user entered in login form
      */
-    authenticate(authenticationType, loginData) {
+    $_authenticationMixin_authenticate(authenticationType, loginData) {
       if (!this.loggingIn) {
         this.loggingIn = true;
 
@@ -41,7 +41,7 @@ const authenticate = {
      * First of all user cookies and localStorage is deleted
      * and then log out request is initiated.
      */
-    logOut() {
+    $_authenticationMixin_logOut() {
       this.$cookies.remove('csrftokenLocalhost', null, 'localhost')
       this.$cookies.remove('csrftoken', null, 'geocollections.info')
       this.$localStorage.remove('authUser')
@@ -141,4 +141,4 @@ const authenticate = {
 
 };
 
-export default authenticate;
+export default authenticationMixin;

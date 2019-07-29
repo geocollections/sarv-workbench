@@ -56,7 +56,7 @@
               {{ $t('header.settings') }}
             </b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="logOut()">
+            <b-dropdown-item @click="$_authenticationMixin_logOut()">
               <font-awesome-icon icon="sign-out-alt"/>
               {{ $t('header.logOut') }}
             </b-dropdown-item>
@@ -72,12 +72,12 @@
 <script>
   import { toastInfo } from "@/assets/js/iziToast/iziToast";
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
-  import authenticate from "../../mixins/authenticate";
   import permissionsMixin from "../../mixins/permissionsMixin";
+  import authenticationMixin from "../../mixins/authenticationMixin";
 
   export default {
     name: "app-header",
-    mixins: [fontAwesomeLib, authenticate, permissionsMixin],
+    mixins: [fontAwesomeLib, authenticationMixin, permissionsMixin],
     computed: {
       isBeta() {
         return document.location.origin.includes('edit2')

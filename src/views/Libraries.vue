@@ -89,7 +89,7 @@
     methods: {
       fetchLibraries() {
         return new Promise((resolve) => {
-          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.currentUser))
+          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.$_permissionsMixin_currentUser))
         });
       },
       searchParametersChanged(newParams) {

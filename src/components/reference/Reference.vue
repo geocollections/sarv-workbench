@@ -640,9 +640,6 @@
         },
         deep: true
       },
-      'sidebarUserAction'(newval, oldval) {
-        this.handleSidebarUserAction(newval, 'reference')
-      },
       'newlyAddedDoiId'(newval, oldval) {
         if (typeof newval !== 'undefined' && newval !== null) {
           let attachment = this.attachment;
@@ -1094,7 +1091,7 @@
       showDoiButton() {
         return this.isDefinedAndNotNull(this.reference.type) && this.reference.type.id > 3
           && this.isDefinedAndNotNullAndNotEmptyString(this.reference.doi)
-          && this.isUserAllowedTo('add', 'doi') && this.validate('reference') === 1
+          && this.$_permissionsMixin_isUserAllowedTo('add', 'doi') && this.validate('reference') === 1
       },
 
       // newlyAddedDoiID watcher triggers DOI related data requests + route push

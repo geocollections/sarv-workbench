@@ -94,7 +94,7 @@
     methods: {
       fetchSpecimens() {
         return new Promise((resolve) => {
-          resolve(fetchSpecimens(this.searchParameters, this.databaseId))
+          resolve(fetchSpecimens(this.searchParameters, this.$_permissionsMixin_databaseId))
         });
       },
       searchParametersChanged(newParams) {
