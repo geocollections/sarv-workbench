@@ -113,7 +113,7 @@
 
 <script>
   import formManipulation from "../../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
   export default {
     name: "DoiDate",
@@ -122,7 +122,7 @@
       autocomplete: Object,
       activeTab: String
     },
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
   }
 </script>
 

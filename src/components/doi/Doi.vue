@@ -26,7 +26,6 @@
             <div class="col-md-4">
               <label :for="`resource_type`">{{ $t('doi.resourceTypeGeneral') }}:</label>
               <vue-multiselect v-model="doi.resource_type"
-                               input-class="custom"
                                id="resource_type"
                                :options="autocomplete.resource_type"
                                track-by="id"
@@ -108,7 +107,7 @@
                                id="title_translated_language"
                                :options="autocomplete.language"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -127,7 +126,7 @@
                                id="language"
                                :options="autocomplete.language"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -162,19 +161,18 @@
 
             <div class="col-md-6">
               <label :for="`agent`">{{ $t('doi.copyright_agent') }}:</label>
-              <vue-multiselect id="agent" class="align-middle"
+              <vue-multiselect id="agent"
                                v-model="doi.owner"
-                               deselect-label="Can't remove this value"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
                                :options="autocomplete.agent"
-                               @search-change="autcompleteAgentSearch"
+                               @search-change="$_autocompleteAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :allow-empty="false"
-                               :open-direction="'bottom'">
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.agent }}</strong>
                 </template>
@@ -203,19 +201,18 @@
           <div class="row">
             <div class="col-md-6">
               <label :for="`copyright_agent`">{{ $t('doi.copyright') }}:</label>
-              <vue-multiselect id="copyright_agent" class="align-middle"
+              <vue-multiselect id="copyright_agent"
                                v-model="doi.copyright_agent"
-                               deselect-label="Can't remove this value"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.copyright_agent"
                                :options="autocomplete.copyright_agent"
-                               @search-change="autcompleteCopyrightAgentSearch"
+                               @search-change="$_autocompleteCopyrightAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :allow-empty="false"
-                               :open-direction="'bottom'">
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.agent }}</strong>
                 </template>
@@ -229,7 +226,7 @@
                                id="licence"
                                :options="autocomplete.licence"
                                track-by="id"
-                               :label="licenceLabel"
+                               :label="$_licenceLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -257,19 +254,17 @@
           <div class="row">
             <!-- REFERENCE -->
             <div class="col-sm-10 col-md-4 mb-2">
-<!--              <label :for="`reference`">{{ $t('doi.reference') }}:</label>-->
               <vue-multiselect v-model="relatedData.reference"
                                id="reference"
-                               :multiple="false"
                                track-by="id"
                                :options="autocomplete.reference"
                                :internal-search="false"
                                :preserve-search="true"
+                               :clear-on-select="false"
                                :close-on-select="true"
-                               @search-change="autcompleteDoiReferenceSearch"
+                               @search-change="$_autocompleteDoiReferenceSearch"
                                :custom-label="customLabelForReference"
                                :loading="autocomplete.loaders.reference"
-                               :placeholder="$t('add.inputs.autocomplete')"
                                placeholder="reference search..."
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -293,17 +288,15 @@
 <!--              <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>-->
               <vue-multiselect v-model="relatedData.dataset"
                                id="dataset"
-                               :multiple="false"
-                               label="name"
                                track-by="id"
                                :options="autocomplete.dataset"
                                :internal-search="false"
                                :preserve-search="true"
+                               :clear-on-select="false"
                                :close-on-select="true"
-                               @search-change="autcompleteDatasetSearch"
+                               @search-change="$_autocompleteDatasetSearch"
                                :custom-label="customLabelForDataset"
                                :loading="autocomplete.loaders.dataset"
-                               :placeholder="$t('add.inputs.autocomplete')"
                                placeholder="dataset search..."
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -530,7 +523,7 @@
   import VueMultiselect from 'vue-multiselect'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from "../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../mixins/autocompleteMixin";
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchDois,
@@ -559,7 +552,7 @@
   import DoiGeolocation from "./relatedTables/DoiGeolocation";
   import DoiDate from "./relatedTables/DoiDate";
   import { toastSuccess, toastError, toastInfo } from "../../assets/js/iziToast/iziToast";
-  import localStorageMixin from "../../mixins/localStorageMixin";
+  import formSectionsMixin from "../../mixins/formSectionsMixin";
 
   export default {
     components: {
@@ -574,7 +567,7 @@
       FileInputComponent,
     },
 
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
 
     name: "Doi",
 

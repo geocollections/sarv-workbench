@@ -78,7 +78,7 @@
 <script>
   import fontAwasomeLib from '../../mixins/fontAwasomeLib'
   import { fetchLinkedSamplesX } from "../../assets/js/api/apiCalls";
-  import localStorageMixin from '../../mixins/localStorageMixin'
+  import formSectionsMixin from '../../mixins/formSectionsMixin'
 
   export default {
     name: "LinkedSampleTable",
@@ -87,7 +87,7 @@
         type: String
       },
     },
-    mixins: [fontAwasomeLib, localStorageMixin],
+    mixins: [fontAwasomeLib, formSectionsMixin],
     data() {
       return {
         samples: [],

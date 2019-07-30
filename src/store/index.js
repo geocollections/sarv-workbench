@@ -10,6 +10,8 @@ export function createStore () {
   return new Vuex.Store({
     state: {
       currentUser:null,
+      permissions:null,
+      databaseId:null,
       createRelationWith: { object: null, data: null, info: null, edit: null },
       activeObject: null,
       sidebarList:[],

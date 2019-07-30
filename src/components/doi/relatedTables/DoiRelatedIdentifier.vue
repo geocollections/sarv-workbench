@@ -122,7 +122,7 @@
 </template>
 
 <script>
-  import autocompleteFieldManipulation from "../../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../../mixins/autocompleteMixin";
   import formManipulation from "../../../mixins/formManipulation";
 
   export default {
@@ -132,7 +132,7 @@
       autocomplete: Object,
       activeTab: String
     },
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
   }
 </script>
 

@@ -8,6 +8,7 @@
         <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/library/add' }">{{ $t('add.new') }}</router-link>
       </div>
     </div>
+
     <!-- SEARCH FIELDS START -->
     <fieldset class="border p-2" id="block-search">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
@@ -17,21 +18,17 @@
 
       <transition name="fade">
         <div class="row" v-if="filters.length > 0 && block.search">
-          <div class="col">
-            <div class="search-fields">
-              <div class="d-flex flex-row flex-wrap">
-                <div class="col-sm-6" v-for="field,idx in filters">
-                  <label class="col-sm-4 p-0" :for="field.id">{{ $t(field.title) }}:</label>
-                  <b-form-input style="display: inline !important; " class="col-sm-8 mb-2"
-                                v-model="searchParameters[field.id]" :id="field.id" :type="field.type">
-                  </b-form-input>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-6" v-for="field in filters">
+
+            <label :for="field.id">{{ $t(field.title) }}:</label>
+
+            <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
+
           </div>
         </div>
       </transition>
     </fieldset>
+
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="library"
@@ -55,15 +52,14 @@
     fetchChangePrivacyState,
     fetchLibrariesFromLibraryAgent
   } from "../assets/js/api/apiCalls";
-  import permissionsMixin from "../mixins/permissionsMixin";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
+  import {mapState} from "vuex";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Libraries",
-    mixins: [permissionsMixin],
     data() {
       return {
         response: {},
@@ -86,10 +82,14 @@
       }
     },
 
+    computed: {
+      ...mapState(["currentUser"])
+    },
+
     methods: {
       fetchLibraries() {
         return new Promise((resolve) => {
-          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.$_permissionsMixin_currentUser))
+          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.currentUser))
         });
       },
       searchParametersChanged(newParams) {
@@ -112,8 +112,8 @@
       },
 
       changeLibraryState(state, libraryID) {
-        let formData = new FormData()
-        formData.append('data', JSON.stringify({is_private: state}))
+        let formData = new FormData();
+        formData.append('data', JSON.stringify({is_private: state}));
 
         fetchChangePrivacyState('library', libraryID, formData).then(response => {
           if (typeof response.body.message !== 'undefined') {
@@ -131,7 +131,7 @@
             }
           }
         }, errResponse => {
-          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error})
+          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error});
           toastError({text: this.$t('messages.uploadError')})
         })
       }
@@ -140,5 +140,9 @@
 </script>
 
 <style scoped>
-
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+  }
 </style>

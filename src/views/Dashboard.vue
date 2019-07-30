@@ -55,6 +55,7 @@
 
     beforeCreate() {
       this.$store.dispatch('INITIALISE_ACTIVE_OBJECTS');
+      this.$store.dispatch('INITIALISE_USER_DATA');
     },
 
     created() {

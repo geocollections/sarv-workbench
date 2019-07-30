@@ -19,7 +19,7 @@
       </vs-sidebar-item>
 
       <!-- PROJECTS -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'project')" :title="$t('header.projects')">
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'project')" :title="$t('header.projects')">
         <vs-sidebar-item index="2.1" icon="fa-table" icon-pack="fas" :to="{ path: '/project' }">
           {{ $t('header.editProject') }}
         </vs-sidebar-item>
@@ -33,7 +33,7 @@
       </vs-sidebar-group>
 
       <!-- SITES -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'site')" :title="$t('header.sites')">
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'site')" :title="$t('header.sites')">
         <vs-sidebar-item index="3.1" icon="fa-globe" icon-pack="fas" :to="{ path: '/site' }">
           {{ $t('header.editSite') }}
         </vs-sidebar-item>
@@ -47,30 +47,30 @@
       </vs-sidebar-group>
 
       <!-- ATTACHMENTS -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'attachment') || $_permissionsMixin_isUserAllowedTo('add', 'imageset')"
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'attachment') || isUserAllowedTo('add', 'imageset')"
                         :title="$t('header.files')">
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'attachment')" index="4.1" icon="fa-folder" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'attachment')" index="4.1" icon="fa-folder" icon-pack="far"
                          :to="{ path: '/attachment' }">
           {{ $t('frontPage.buttons.myFiles') }}
         </vs-sidebar-item>
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'attachment')" index="4.2" icon="fa-image" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'attachment')" index="4.2" icon="fa-image" icon-pack="far"
                          :to="{ path: '/attachment/add/photo_archive' }">
           {{ $t('frontPage.buttons.photoArchive') }}
         </vs-sidebar-item>
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'attachment')" index="4.3" icon="fa-image" icon-pack="fas"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'attachment')" index="4.3" icon="fa-image" icon-pack="fas"
                          :to="{ path: '/attachment/add/specimen_image' }">
           {{ $t('frontPage.buttons.specimenImage') }}
         </vs-sidebar-item>
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'attachment')" index="4.4" icon="fa-file" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'attachment')" index="4.4" icon="fa-file" icon-pack="far"
                          :to="{ path: '/attachment/add/other_file' }">
           {{ $t('frontPage.buttons.otherFiles') }}
         </vs-sidebar-item>
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'attachment')" index="4.5" icon="fa-file-pdf" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'attachment')" index="4.5" icon="fa-file-pdf" icon-pack="far"
                          :to="{ path: '/attachment/add/digitised_reference' }">
           {{ $t('frontPage.buttons.digitisedReference') }}
         </vs-sidebar-item>
 
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'imageset')" index="4.6" icon="fa-images" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'imageset')" index="4.6" icon="fa-images" icon-pack="far"
                          :to="{ path: '/imageset/add' }">
           {{ $t('frontPage.buttons.imageset') }}
         </vs-sidebar-item>
@@ -78,34 +78,34 @@
 
       <!-- REFERENCES -->
       <vs-sidebar-group
-        v-if="$_permissionsMixin_isUserAllowedTo('add', 'reference') || $_permissionsMixin_isUserAllowedTo('add', 'library') || $_permissionsMixin_isUserAllowedTo('add', 'journal')"
+        v-if="isUserAllowedTo('add', 'reference') || isUserAllowedTo('add', 'library') || isUserAllowedTo('add', 'journal')"
         :title="$t('header.references')">
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'reference')" index="5.1" icon="fa-book" icon-pack="fas"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'reference')" index="5.1" icon="fa-book" icon-pack="fas"
                          :to="{ path: '/reference' }">
           {{ $t('frontPage.buttons.myReferences') }}
         </vs-sidebar-item>
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'reference')" index="5.2" icon="fa-book-open" icon-pack="fas"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'reference')" index="5.2" icon="fa-book-open" icon-pack="fas"
                          :to="{ path: '/reference/add' }">
           {{ $t('frontPage.buttons.reference') }}
         </vs-sidebar-item>
 
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'library')" index="5.3" icon="fa-list-alt" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'library')" index="5.3" icon="fa-list-alt" icon-pack="far"
                          :to="{ path: '/library' }">
           {{ $t('frontPage.buttons.libraries') }}
         </vs-sidebar-item>
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'library')" index="5.4" icon="fa-edit" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'library')" index="5.4" icon="fa-edit" icon-pack="far"
                          :to="{ path: '/library/add' }">
           {{ $t('frontPage.buttons.library') }}
         </vs-sidebar-item>
 
-        <vs-sidebar-item v-if="$_permissionsMixin_isUserAllowedTo('add', 'journal')" index="5.5" icon="fa-newspaper" icon-pack="far"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'journal')" index="5.5" icon="fa-newspaper" icon-pack="far"
                          :to="{ path: '/journal/add' }">
           {{ $t('frontPage.buttons.journal') }}
         </vs-sidebar-item>
       </vs-sidebar-group>
 
       <!-- LOCALITIES -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'locality')" :title="$t('header.localities')">
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'locality')" :title="$t('header.localities')">
         <vs-sidebar-item index="6.1" icon="fa-map-marked-alt" icon-pack="fas" :to="{ path: '/locality' }">
           {{ $t('frontPage.buttons.localities') }}
         </vs-sidebar-item>
@@ -115,7 +115,7 @@
       </vs-sidebar-group>
 
       <!-- SAMPLES -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'sample')" :title="$t('header.samples')">
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'sample')" :title="$t('header.samples')">
         <vs-sidebar-item index="7.1" icon="fa-vials" icon-pack="fas" :to="{ path: '/sample' }">
           {{ $t('frontPage.buttons.samples') }}
         </vs-sidebar-item>
@@ -129,7 +129,7 @@
       </vs-sidebar-group>
 
       <!-- ANALYSIS -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'analysis')" :title="$t('header.analyses')">
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'analysis')" :title="$t('header.analyses')">
         <vs-sidebar-item index="8.1" icon="fa-chart-bar" icon-pack="far" :to="{ path: '/analysis' }">
           {{ $t('header.editAnalysis') }}
         </vs-sidebar-item>
@@ -139,7 +139,7 @@
       </vs-sidebar-group>
 
       <!-- DOI -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'doi')" :title="$t('header.dois')">
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'doi')" :title="$t('header.dois')">
         <vs-sidebar-item index="9.1" icon="fa-database" icon-pack="fas" :to="{ path: '/doi' }">
           {{ $t('header.dois') }}
         </vs-sidebar-item>
@@ -149,7 +149,7 @@
       </vs-sidebar-group>
 
       <!-- SPECIMEN -->
-      <vs-sidebar-group v-if="$_permissionsMixin_isUserAllowedTo('add', 'specimen')" :title="$t('header.specimens')">
+      <vs-sidebar-group v-if="isUserAllowedTo('add', 'specimen')" :title="$t('header.specimens')">
         <vs-sidebar-item index="10.1" icon="fa-flask" icon-pack="fas" :to="{ path: '/specimen' }">
           {{ $t('header.specimens') }}
         </vs-sidebar-item>
@@ -272,13 +272,12 @@
 
 <script>
   import '@fortawesome/fontawesome-free/css/all.min.css'
-  import permissionsMixin from "../../../mixins/permissionsMixin";
   import SidebarToggleButton from "./SidebarToggleButton";
+  import {mapGetters, mapState} from "vuex";
 
   export default {
     name: "SidebarVuesax",
     components: {SidebarToggleButton},
-    mixins: [permissionsMixin],
     props: {
       sidebarState: {
         type: Boolean,
@@ -297,7 +296,6 @@
         surname: '',
         activeSite: '',
         activeSample: '',
-        permissions: '',
         active: this.sidebarState,
         isReduced: false,
         hiddenBackground: this.hideBackground,
@@ -321,18 +319,13 @@
       activeProject() {
         if (this.$store.state['activeProject'] !== null) return this.$store.state['activeProject'];
         else return '';
-      }
+      },
+
+      ...mapState(["currentUser"]),
+      ...mapGetters(['isUserAllowedTo'])
     },
 
     created: function () {
-      // Gets user's data
-      // if (this.$session.exists() && this.$session.get('authUser') != null) {
-      //   this.user = this.$session.get('authUser').user;
-      //   this.name = this.$session.get('authUser').name;
-      //   this.surname = this.$session.get('authUser').surname;
-      //   this.permissions = this.$session.get('authUser').permissions
-      // }
-
       if (this.$store.state['activeSearchParams'] !== null) {
         this.$store.dispatch(this.$store.state['activeSearchParams'].request)
       }

@@ -51,12 +51,11 @@ import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 import moment from 'moment'
 import {toastInfo} from "../assets/js/iziToast/iziToast";
-import permissionsMixin from "./permissionsMixin";
+import {mapState} from "vuex";
 
 library.add(faBan, faSave, faDoorOpen, faProjectDiagram, faTag, faGlobeAmericas, faFileVideo, faFileAudio, faDownload, faVial, faVideo, faMicrophone, faCameraRetro, faChevronDown, faChevronUp, faGlobe, faFile, faFileExcel, faFileImage, faEye, faFolderOpen, faUserFriends, faFileContract, faInfo, faPenFancy, faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
 
 const formManipulation = {
-  mixins: [permissionsMixin],
   data() {
     return {
       fileUrl: 'https://files.geocollections.info',
@@ -73,9 +72,6 @@ const formManipulation = {
     VueMultiselect,
     FontAwesomeIcon
   },
-  created: function () {
-    this.$store.commit('SET_CURRENT_USER', this.currentUser)
-  },
   mounted() {
     // Root event for confirmation modal which is emitted when user tries to leave the TAB without saving.
     this.$root.$on('user-choice', this.handleUserChoice);
@@ -89,6 +85,9 @@ const formManipulation = {
     let showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
     if (typeof showCollapseMap === 'undefined' || showCollapseMap === 'fallbackValue') return
     this.showCollapseMap = showCollapseMap
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
     isDefinedAndNotNullAndNotEmptyString(value) {

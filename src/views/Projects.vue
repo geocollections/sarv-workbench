@@ -18,7 +18,7 @@
 
       <transition name="fade">
         <div class="row" v-if="filters.length > 0 && block.search">
-          <div class="col-md-4" :class="{ 'col-md-6' : filters.length < 3 }" v-for="field,idx in filters">
+          <div class="col-md-4" :class="{ 'col-md-6' : filters.length < 3 }" v-for="field in filters">
 
             <label :for="field.id">{{ $t(field.title) }} :</label>
 
@@ -47,14 +47,13 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchProjects} from "@/assets/js/api/apiCalls";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Projects",
-    mixins: [permissionsMixin],
     data() {
       return {
         response: {},
@@ -70,22 +69,20 @@
         filters: [
           {id: "owner", title: "project.name", type: "text"},
           {id: "id", title: "project.id", type: "number"},
-
-          //{id:"project_type",title:"project.project_type",type:"text"},
-          //{id:"date_start",title:"project.date_start",type:"text"},
-          //{id:"date_end",title:"project.date_end",type:"text"},
-          //{id:"date_free",title:"project.date_free",type:"text"},
-          //{id:"owner",title:"project.owner",type:"text"},
         ],
         searchParameters: this.setDefaultSearchParameters(),
         block: {search: true}
       }
     },
 
+    computed: {
+      ...mapState(["currentUser"])
+    },
+
     methods: {
       fetchProjects() {
         return new Promise((resolve) => {
-          resolve(fetchProjects(this.searchParameters, this.$_permissionsMixin_currentUser.id))
+          resolve(fetchProjects(this.searchParameters, this.currentUser.id))
         });
       },
       searchParametersChanged(newParams) {

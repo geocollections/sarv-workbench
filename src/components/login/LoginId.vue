@@ -9,7 +9,7 @@
     </div>
 
     <div class="idcard-wrapper text-center">
-      <button class="btn btn-primary" @click="$_authenticationMixin_authenticate('id')" v-bind:disabled="loggingIn">
+      <button class="btn btn-primary" @click="$_authenticate('id')" v-bind:disabled="loggingIn">
         {{ $t('login.loginButton') }} &nbsp;<font-awesome-icon icon="id-card"></font-awesome-icon>
       </button>
     </div>

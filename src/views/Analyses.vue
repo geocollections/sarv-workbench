@@ -48,14 +48,13 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchAnalyses} from "../assets/js/api/apiCalls";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Analyses",
-    mixins: [permissionsMixin],
 
     data() {
       return {
@@ -81,10 +80,14 @@
       }
     },
 
+    computed: {
+      ...mapState(["currentUser", "databaseId"])
+    },
+
     methods: {
       fetchAnalyses_() {
         return new Promise((resolve) => {
-          resolve(fetchAnalyses(this.searchParameters, this.$_permissionsMixin_currentUser, this.$_permissionsMixin_databaseId))
+          resolve(fetchAnalyses(this.searchParameters, this.currentUser, this.databaseId))
         });
       },
       searchParametersChanged(newParams) {

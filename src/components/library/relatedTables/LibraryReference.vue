@@ -49,7 +49,7 @@
                                    label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                    :loading="autocomplete.loaders.reference" select-label=""
                                    :options="autocomplete.reference" :searchable="true"
-                                   @search-change="autcompleteReferenceSearch"
+                                   @search-change="$_autocompleteReferenceSearch"
                                    :allow-empty="true" :show-no-results="false"
                                    :open-direction="'top'">
                     <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong>
@@ -100,7 +100,7 @@
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference" select-label=""
                                :options="autocomplete.reference" :searchable="true"
-                               @search-change="autcompleteReferenceSearch"
+                               @search-change="$_autocompleteReferenceSearch"
                                :allow-empty="true" :show-no-results="false"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong></template>
@@ -137,7 +137,7 @@
 
 <script>
   import formManipulation from '../../../mixins/formManipulation';
-  import autocompleteFieldManipulation from '../../../mixins/autocompleFormManipulation';
+  import autocompleteMixin from '../../../mixins/autocompleteMixin';
   import draggable from 'vuedraggable'
   import cloneDeep from 'lodash/cloneDeep'
 
@@ -151,7 +151,7 @@
       autocomplete: Object,
       activeTab: String
     },
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
     computed: {
       dragOptions() {
         return {

@@ -18,7 +18,7 @@
 
       <transition name="fade">
         <div class="row" v-if="filters.length > 0 && block.search">
-          <div class="col-md-4" v-for="field,idx in filters">
+          <div class="col-md-4" v-for="field in filters">
 
             <label :for="field.id">{{ $t(field.title) }}:</label>
 
@@ -49,30 +49,23 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchSamples} from "@/assets/js/api/apiCalls";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Samples",
-    mixins: [permissionsMixin],
     data() {
       return {
         response: {},
         columns: [
           {id: "number", title: "sample.numberSlashId", type: "text"},
-          //{id:"number_additional",title:"sample.number_additional",type:"text", onlySearch:true},
-          //{id:"number_field",title:"sample.number_field",type:"text", onlySearch:true},
           {id: "id", title: "sample.id", type: "number"},
           {id: "locality", title: "sample.locality", type: "text"},
-          //{id:"locality_free",title:"sample.locality_free",type:"text", onlySearch:true},
           {id: "depth", title: "sample.depth", type: "text"},
           {id: "stratigraphy", title: "sample.stratigraphy", type: "text"},
-          //{id:"lithostratigraphy",title:"sample.lithostratigraphy",type:"text", onlySearch:true},
           {id: "agent", title: "sample.agent_collected", type: "text"},
-          //{id:"rock",title:"sample.rock",type:"text", onlySearch:true},
-          //{id:"date_collected",title:"sample.date_collected",type:"text", onlySearch:true},
           {id: "storage", title: "sample.storage", type: "text"}
         ],
         filters: [
@@ -88,10 +81,13 @@
         block: {search: true}
       }
     },
+    computed: {
+      ...mapState(["currentUser", "databaseId"])
+    } ,
     methods: {
       fetchSamples() {
         return new Promise((resolve) => {
-          resolve(fetchSamples(this.searchParameters, this.$_permissionsMixin_currentUser, this.$_permissionsMixin_databaseId))
+          resolve(fetchSamples(this.searchParameters, this.currentUser, this.databaseId))
         });
       },
       searchParametersChanged(newParams) {
@@ -101,9 +97,6 @@
         return {
           locality: null,
           number: null,
-          // number_additional: null,
-          // number_field: null,
-          // locality_free: null,
           depth: null,
           stratigraphy: null,
           agent: null,

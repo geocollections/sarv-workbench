@@ -25,13 +25,13 @@
               <vue-multiselect class="align-middle" v-model="site.project" select-label=""
                                id="project"
                                deselect-label="Can't remove this value"
-                               :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="$_nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.project"
                                :options="autocomplete.project"
-                               @search-change="autcompleteProjectSearch"
+                               @search-change="$_autocompleteProjectSearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option[nameLabel]}}</strong></template>
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option[$_nameLabel]}}</strong></template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -152,10 +152,10 @@
                                :options="autocomplete.coordMethod"
                                track-by="id"
                                class="high-z-index"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option[commonLabel] }}</strong></template>
+                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option[$_commonLabel] }}</strong></template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -177,10 +177,10 @@
               <vue-multiselect class="align-middle" v-model="site.locality" select-label=""
                                id="locality"
                                deselect-label="Can't remove this value"
-                               :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
                                :options="autocomplete.locality" :searchable="true"
-                               @search-change="autcompleteLocalitySearch"
+                               @search-change="$_autocompleteLocalitySearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -272,8 +272,8 @@
   import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from '../../mixins/formManipulation'
-  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
-  import localStorageMixin from '../../mixins/localStorageMixin'
+  import autocompleteMixin from '../../mixins/autocompleteMixin'
+  import formSectionsMixin from '../../mixins/formSectionsMixin'
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchSites,
@@ -312,7 +312,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, sidebarMixin],
+    mixins: [formManipulation, autocompleteMixin, formSectionsMixin, sidebarMixin],
     // props:['editSite'], USED FOR MODAL
     data() {
       return this.setInitialData()
@@ -692,7 +692,7 @@
         deep: true
       },
       'sidebarUserAction'(newVal) {
-        this.$_sidebarMixin_handleUserAction(newVal, 'site', this.site)
+        this.$_handleUserAction(newVal, 'site', this.site)
       },
     }
   }

@@ -44,7 +44,7 @@
 
           <transition name="fade">
             <div class="row" v-if="filters.length > 0 && block.search">
-              <div class="col-sm-6" v-for="field,idx in filters">
+              <div class="col-sm-6" v-for="field in filters">
 
                 <label :for="field.id">{{ $t(field.title) }}:</label>
 
@@ -150,14 +150,13 @@
   import {fetchReferences} from "@/assets/js/api/apiCalls";
   import {fetchAddReferenceToLibrary} from "../assets/js/api/apiCalls";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "References",
-    mixins: [permissionsMixin],
     data() {
       return {
         response: {},
@@ -199,14 +198,14 @@
 
     computed: {
       combinedViewLeftColSize() {
-        if (this.combinedViewSize > 0 && this.combinedViewSize < 12) return this.combinedViewSize
-        else if (this.combinedViewSize == 0) return 1
+        if (this.combinedViewSize > 0 && this.combinedViewSize < 12) return this.combinedViewSize;
+        else if (this.combinedViewSize == 0) return 1;
         else if (this.combinedViewSize == 12) return 11
       },
 
       combinedViewRightColSize() {
-        if (this.combinedViewSize > 0 && this.combinedViewSize < 12) return 12 - this.combinedViewSize
-        else if (this.combinedViewSize == 0) return 11
+        if (this.combinedViewSize > 0 && this.combinedViewSize < 12) return 12 - this.combinedViewSize;
+        else if (this.combinedViewSize == 0) return 11;
         else if (this.combinedViewSize == 12) return 1
       },
 
@@ -216,7 +215,9 @@
 
       isLibraryActive() {
         return this.$store.state['activeLibrary'] !== null;
-      }
+      },
+
+      ...mapState(["currentUser"])
     },
 
     created() {
@@ -230,7 +231,7 @@
         title: 'header.libraries',
         object: 'library',
         field: 'library__title_en',
-        agent: this.$_permissionsMixin_currentUser
+        agent: this.currentUser
       });
     },
 
@@ -276,14 +277,14 @@
       },
 
       openIframe() {
-        let url = this.inputUrl
+        let url = this.inputUrl;
         if (url !== null) {
-          url = url.toLowerCase()
+          url = url.toLowerCase();
           if (url.startsWith('https://') || url.startsWith('http://')) {
-            this.iframeUrl = null
+            this.iframeUrl = null;
             this.iframeUrl = url
           } else {
-            this.iframeUrl = null
+            this.iframeUrl = null;
             this.iframeUrl = 'http://' + url
           }
         }
@@ -303,8 +304,8 @@
       },
 
       addReferenceToActiveLibrary(id) {
-        let formData = new FormData()
-        formData.append('data', JSON.stringify({reference: id, library: this.activeLibrary.library}))
+        let formData = new FormData();
+        formData.append('data', JSON.stringify({reference: id, library: this.activeLibrary.library}));
 
         fetchAddReferenceToLibrary(formData).then(response => {
           if (typeof response.body.message !== 'undefined') {
@@ -322,7 +323,7 @@
             }
           }
         }, errResponse => {
-          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error})
+          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error});
           toastError({text: this.$t('messages.uploadError')})
         })
 

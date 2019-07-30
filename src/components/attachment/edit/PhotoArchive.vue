@@ -547,7 +547,7 @@
         return false
       },
 
-      localityLabel() {
+      $_localityLabel() {
         return this.$i18n.locale === 'ee' ? 'locality' : 'locality_en'
       },
 

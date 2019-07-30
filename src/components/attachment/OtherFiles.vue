@@ -993,10 +993,10 @@
   import BottomOptions from '@/components/partial/BottomOptions.vue'
   import MapComponent from "../partial/MapComponent";
 
-  library.add(faFile)
+  library.add(faFile);
   import Vue from 'vue'
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
-  import permissionsMixin from "../../mixins/permissionsMixin";
+  import {mapState} from "vuex";
   export default {
     components: {
       FontAwesomeIcon,
@@ -1007,7 +1007,7 @@
       MapComponent
     },
     name: "OtherFiles",
-    mixins: [formManipulation, fontAwesomeLib, permissionsMixin],
+    mixins: [formManipulation, fontAwesomeLib],
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',
@@ -1246,6 +1246,8 @@
         }
         return false
       },
+
+      ...mapState(["currentUser"])
     },
     created: function () {
       // Gets saved form values from local storage
@@ -1265,8 +1267,7 @@
 
       this.upload.author = {
         id: this.currentUser.id,
-        // agent: this.currentUser.agent,
-        agent: this.currentUser.surename + ', ' + this.currentUser.forename,
+        agent: this.currentUser.agent,
         forename: this.currentUser.forename,
         surename: this.currentUser.surename
       }

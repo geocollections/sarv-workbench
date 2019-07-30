@@ -25,7 +25,7 @@ import {
 library.add(
   faThumbtack,faProjectDiagram,faTag,faGlobeAmericas,faFileVideo,faFileAudio,faDownload,faVial,faVideo,faMicrophone,faCameraRetro,faChevronDown,faChevronUp,faGlobe,faFile,faFileExcel,faFileImage,faEye,faFolderOpen,faUserFriends,faFileContract,faInfo,faPenFancy,faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt,faCommentAlt,faLink,faPencilAlt,faTrashAlt, faBook, faUndo, faFilePdf, faFileExport, faAsterisk, faCheck, faExclamationTriangle, faAngleDoubleLeft, faAngleDoubleRight, faSave, faBan, faServer, faPlusCircle, faVials,faMapMarkedAlt, faMapMarkerAlt,faBookOpen,faTable, faPlusSquare,faCog, faSignOutAlt,faHome, faDatabase, faChartPie, faMapPin, faFilter, faSearch, faMap, faPlus, faDoorOpen,
   farFilePdf, farFileExcel, farCopy, farFile, farPlusSquare, farListAlt, farEdit, farFolder, farFileImage, farChartBar
-)
+);
 
 const fontAwesomeLib = {
   components: {

@@ -31,7 +31,7 @@
               <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.attachment_link.attachment" deselect-label="Can't remove this value"
                                label="original_filename" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.attachment" select-label=""
-                               :options="autocomplete.attachment" :searchable="true" @search-change="autcompleteAttachmentSearch"
+                               :options="autocomplete.attachment" :searchable="true" @search-change="$_autocompleteAttachmentSearch"
                                :allow-empty="true"  :show-no-results="false"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.original_filename }}</strong> </template>
@@ -59,7 +59,7 @@
 
 <script>
   import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteFieldManipulation  from '../../../mixins/autocompleFormManipulation';
+  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
     export default {
         name: "LocalityAttachment",
       props: {
@@ -67,7 +67,7 @@
         autocomplete: Object,
         activeTab: String
       },
-      mixins: [formManipulation, autocompleteFieldManipulation],
+      mixins: [formManipulation, autocompleteMixin],
       methods: {
         createAttachmentRelation() {
           let createRelationWith = { object: 'locality', data: this.$parent.locality,

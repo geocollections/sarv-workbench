@@ -32,7 +32,7 @@
 <script>
   import Spinner from 'vue-simple-spinner'
   import formManipulation from "../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../mixins/autocompleteMixin";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import FileTable from "../partial/FileTable";
 
@@ -42,7 +42,7 @@
       MultimediaComponent,
       FileTable
     },
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
     name: "PhotoArchiveNew",
 
     data() {

@@ -44,14 +44,14 @@
               <vue-multiselect class="align-middle"
                                v-model="entity.new.locality"
                                deselect-label="Can't remove this value"
-                               :label="localityLabel"
+                               :label="$_localityLabel"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
                                select-label=""
                                :options="autocomplete.locality"
                                :searchable="true"
-                               @search-change="autcompleteLocalitySearch"
+                               @search-change="$_autocompleteLocalitySearch"
                                :internal-search="false"
                                :allow-empty="true"
                                :show-no-results="false"
@@ -117,14 +117,14 @@
               <vue-multiselect class="align-middle"
                                v-model="relatedData.insert.doi_geolocation.locality"
                                deselect-label="Can't remove this value"
-                               :label="localityLabel"
+                               :label="$_localityLabel"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
                                select-label=""
                                :options="autocomplete.locality"
                                :searchable="true"
-                               @search-change="autcompleteLocalitySearch"
+                               @search-change="$_autocompleteLocalitySearch"
                                :internal-search="false"
                                :allow-empty="true"
                                :show-no-results="false"
@@ -185,7 +185,7 @@
 
 <script>
   import formManipulation from "../../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
   export default {
     name: "DoiGeolocation",
@@ -194,7 +194,7 @@
       autocomplete: Object,
       activeTab: String
     },
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
   }
 </script>
 

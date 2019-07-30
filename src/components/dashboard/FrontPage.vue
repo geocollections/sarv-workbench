@@ -40,8 +40,8 @@
 <script>
   import Attachments from '@/views/AttachmentsOld.vue'
   import RecentActivity from "./RecentActivity";
-  import permissionsMixin from "../../mixins/permissionsMixin";
-  import localStorageMixin from "../../mixins/localStorageMixin";
+  import formSectionsMixin from "../../mixins/formSectionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
@@ -49,7 +49,7 @@
       Attachments,
     },
     name: "front-page",
-    mixins: [permissionsMixin, localStorageMixin],
+    mixins: [formSectionsMixin],
 
     metaInfo () {
       return {
@@ -61,6 +61,10 @@
       return {
         block: { help: true }
       }
+    },
+
+    computed: {
+      ...mapState(["currentUser"])
     }
   }
 </script>

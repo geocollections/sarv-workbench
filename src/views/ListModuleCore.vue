@@ -10,9 +10,9 @@
              :font-size="30"
              :message="$t('edit.isLoading')"></spinner>
 
-    <div class="row mt-3" :class="{'d-print-none': $route.meta.table === 'sample'}">
+    <div class="d-flex flex-row flex-wrap justify-content-start mt-2" :class="{'d-print-none': $route.meta.table === 'sample'}">
       <!-- Deletes search preferences -->
-      <div class="mt-3 col-sm-6 col-md-5 col-xl-4" style="white-space: nowrap">
+      <div class="mt-3 mr-3">
         <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">
           <font-awesome-icon icon="filter" />
           {{ $t('buttons.deletePreferences') }}
@@ -20,7 +20,7 @@
       </div>
 
       <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
-      <div class="mt-3 col-sm-6 col-md-7 col-xl-8" v-if="useListView || useAlternativeTableView">
+      <div class="mt-3 radio-buttons align-self-center" v-if="useListView || useAlternativeTableView">
         <b-form-group>
           <b-form-radio-group v-model="currentView">
             <b-form-radio value="table">{{ $t('references.tableView') }}</b-form-radio>
@@ -546,5 +546,9 @@
     outline: 1px solid #dee2e6;
     outline-offset: -1px;
     box-shadow: 0 2px 0 #cfd5db;
+  }
+
+  .radio-buttons >>> .form-group {
+    margin-bottom: unset;
   }
 </style>

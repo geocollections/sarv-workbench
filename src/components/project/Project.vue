@@ -53,7 +53,7 @@
                                :options="autocomplete.project_type"
                                v-bind:class="{ valid: isDefinedAndNotNull(project.project_type), invalid: !isDefinedAndNotNull(project.project_type) }"
                                track-by="id"
-                               :label="nameLabel"
+                               :label="$_nameLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -67,7 +67,7 @@
                                deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.owner"
-                               :options="autocomplete.agent" :searchable="true" @search-change="autcompleteOwnerSearch"
+                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteOwnerSearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -79,10 +79,10 @@
               <vue-multiselect class="align-middle" v-model="project.parent_project" select-label=""
                                id="parent_project"
                                deselect-label="Can't remove this value"
-                               :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="$_nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.parent_project"
                                :options="autocomplete.parent_project" :searchable="true"
-                               @search-change="autcompleteParentProjectSearch"
+                               @search-change="$_autocompleteParentProjectSearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -160,7 +160,7 @@
           <div class="col-11 mb-2 mr-0">
             <vue-multiselect v-model="relatedData.projectagent"
                              id="projectagent"
-                             :searchable="true" @search-change="autcompleteProjectAgentSearch"
+                             :searchable="true" @search-change="$_autocompleteProjectAgentSearch"
                              :options="autocomplete.agent"
                              :loading="autocomplete.loaders.projectagent"
                              :multiple="true"
@@ -283,8 +283,8 @@
   import Datepicker from 'vue2-datepicker'
   import formManipulation from '../../mixins/formManipulation'
   import sidebarMixin from '../../mixins/sidebarMixin'
-  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
-  import localStorageMixin from '../../mixins/localStorageMixin'
+  import autocompleteMixin from '../../mixins/autocompleteMixin'
+  import formSectionsMixin from '../../mixins/formSectionsMixin'
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchProjects,
@@ -304,7 +304,7 @@
   import AddNewSite from "./addOrEditSiteModal";
   import FilePreviewModal from "../partial/filePreviewModal";
   import Editor from "../partial/editor/Editor";
-  import permissionsMixin from "../../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     name: "Project",
@@ -321,7 +321,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, sidebarMixin, permissionsMixin],
+    mixins: [formManipulation, autocompleteMixin, formSectionsMixin, sidebarMixin],
 
     data() {
       return this.setInitialData()
@@ -339,8 +339,9 @@
           if (newVal) this.$store.dispatch('ACTIVE_PROJECT', this.project)
           else this.$store.dispatch('ACTIVE_PROJECT', null)
         }
+      },
 
-      }
+      ...mapState(["currentUser"])
     },
     created() {
       this.activeObject = 'project';
@@ -445,7 +446,7 @@
           this.loadRelatedData('site');
         } else {
           //set default user
-          this.project.owner = {agent: this.$_permissionsMixin_currentUser.user, id: this.$_permissionsMixin_currentUser.id}
+          this.project.owner = {agent: this.currentUser.user, id: this.currentUser.id}
         }
 
       },
@@ -615,7 +616,7 @@
         this.loadRelatedData('site')
       },
       'sidebarUserAction'(newVal) {
-        this.$_sidebarMixin_handleUserAction(newVal, 'project', this.project)
+        this.$_handleUserAction(newVal, 'project', this.project)
       },
     }
   }

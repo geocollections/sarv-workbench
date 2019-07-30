@@ -33,7 +33,7 @@
                                select-label=""
                                :options="autocomplete.attachment"
                                :searchable="true"
-                               @search-change="autcompletePublicAttachmentSearch"
+                               @search-change="$_autocompletePublicAttachmentSearch"
                                :internal-search="false"
                                :allow-empty="true"
                                :show-no-results="false"
@@ -83,7 +83,7 @@
                                select-label=""
                                :options="autocomplete.attachment"
                                :searchable="true"
-                               @search-change="autcompletePublicAttachmentSearch"
+                               @search-change="$_autocompletePublicAttachmentSearch"
                                :internal-search="false"
                                :allow-empty="true"
                                :show-no-results="false"
@@ -128,7 +128,7 @@
 <script>
   import FileTable from "../../partial/FileTable";
   import formManipulation from "../../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
   export default {
     components: {
@@ -140,7 +140,7 @@
       autocomplete: Object,
       activeTab: String
     },
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
   }
 </script>
 

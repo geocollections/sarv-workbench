@@ -33,7 +33,7 @@
               <vue-multiselect class="align-middle" v-model="entity.new.taxon" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.taxon" id="taxon1"  select-label=""
                                label="taxon" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.taxon" :searchable="true" @search-change="autcompleteTaxonSearch"
+                               :options="autocomplete.taxon" :searchable="true" @search-change="$_autocompleteTaxonSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.taxon}}</strong> </template>
@@ -46,7 +46,7 @@
               <vue-multiselect class="align-middle" v-model="entity.new.agent_identified" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"  select-label=""
-                               :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'top'">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -88,7 +88,7 @@
               <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.taxon" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.taxon" id="taxon"  select-label=""
                                label="taxon" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.taxon" :searchable="true" @search-change="autcompleteTaxonSearch"
+                               :options="autocomplete.taxon" :searchable="true" @search-change="$_autocompleteTaxonSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.taxon}}</strong> </template>
@@ -101,7 +101,7 @@
               <vue-multiselect class="align-middle" v-model="relatedData.insert.taxon_list.agent_identified" deselect-label="Can't remove this value"
                                       label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                       :loading="autocomplete.loaders.agent"  select-label=""
-                                      :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                                      :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
                                       :allow-empty="true"  :show-no-results="false" :max-height="600"
                                       :open-direction="'bottom'">
               <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -144,7 +144,7 @@
 <script>
 
   import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteFieldManipulation  from '../../../mixins/autocompleFormManipulation';
+  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
   import Datepicker from 'vue2-datepicker'
     export default {
       name: "SampleTaxonList",
@@ -157,7 +157,7 @@
         activeTab: String
       },
 
-      mixins: [formManipulation,autocompleteFieldManipulation],
+      mixins: [formManipulation,autocompleteMixin],
 
       methods: {
         customPreparationLabel(item) {

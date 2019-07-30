@@ -26,7 +26,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.sample"
                                :options="autocomplete.sample"
-                               @search-change="autcompleteSampleSearch"
+                               @search-change="$_autocompleteSampleSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :allow-empty="false"
@@ -43,7 +43,7 @@
               <vue-multiselect class="align-middle" v-model="analysis.specimen" deselect-label="Can't remove this value"
                                label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.specimen"
-                               :options="autocomplete.specimen" :searchable="true" @search-change="autcompleteSpecimenSearch"
+                               :options="autocomplete.specimen" :searchable="true" @search-change="$_autocompleteSpecimenSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong> </template>
@@ -59,7 +59,7 @@
               <vue-multiselect v-model="analysis.analysis_method"
                                :options="autocomplete.analysis_methods"
                                track-by="id"
-                               :label="analysisMethodLabel"  select-label=""
+                               :label="$_analysisMethodLabel" select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -130,7 +130,7 @@
               <vue-multiselect v-model="analysis.lab"
                                :options="autocomplete.labs"
                                track-by="id"
-                               :label="labLabel"  select-label=""
+                               :label="$_labLabel" select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -163,11 +163,11 @@
               <vue-multiselect v-model="analysis.instrument"
                                :options="autocomplete.instruments"
                                track-by="id"
-                               :label="instrumentLabel"  select-label=""
+                               :label="$_instrumentLabel" select-label=""
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[instrumentLabel] }}</strong>
+                  <strong>{{ option[$_instrumentLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -192,7 +192,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
                                :options="autocomplete.agent"
-                               @search-change="autcompleteAgentSearch"
+                               @search-change="$_autocompleteAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :allow-empty="false"
@@ -222,7 +222,7 @@
                                :internal-search="false"
                                :preserve-search="true"
                                :close-on-select="true"
-                               @search-change="autcompleteDatasetSearch"
+                               @search-change="$_autocompleteDatasetSearch"
                                :custom-label="customLabelForDataset"
                                :loading="autocomplete.loaders.dataset"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -241,7 +241,7 @@
               <vue-multiselect class="align-middle" v-model="analysis.reference" deselect-label="Can't remove this value"
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference"  select-label=""
-                               :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
+                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
                                :allow-empty="true"  :show-no-results="false"
                                :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
@@ -258,7 +258,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.owner"
                                :options="autocomplete.agent"
-                               @search-change="autcompleteOwnerSearch"
+                               @search-change="$_autocompleteOwnerSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :allow-empty="false"
@@ -279,7 +279,7 @@
               <vue-multiselect class="align-middle" v-model="analysis.storage" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.storage" id="storage"
                                label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                               :options="autocomplete.storage" :searchable="true" @search-change="$_autocompleteStorageSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
@@ -416,7 +416,7 @@
   import VueMultiselect from 'vue-multiselect'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from "../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../mixins/autocompleteMixin";
   import cloneDeep from 'lodash/cloneDeep'
   import {
     fetchAnalyses,
@@ -430,8 +430,8 @@
   import FileInputComponent from "../partial/MultimediaComponent";
   import AnalysisFiles from "./relatedTables/AnalysisFiles";
   import AnalysisResults from "./relatedTables/AnalysisResults";
-  import localStorageMixin from "../../mixins/localStorageMixin";
-  import permissionsMixin from "../../mixins/permissionsMixin";
+  import formSectionsMixin from "../../mixins/formSectionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
@@ -443,7 +443,7 @@
       FileInputComponent,
     },
 
-    mixins: [formManipulation, autocompleteFieldManipulation, localStorageMixin, permissionsMixin],
+    mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
 
     name: "Analysis",
 
@@ -497,6 +497,10 @@
         },
         deep: true
       },
+    },
+
+    computed: {
+      ...mapState(["currentUser", "databaseId"])
     },
 
     methods: {
@@ -657,9 +661,8 @@
         if (this.isDefinedAndNotNull(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
         if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
 
-        if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
-          uploadableObject.database = this.databaseId
-        }
+        if (this.databaseId) uploadableObject.database = this.databaseId;
+
 
         // Adding related data
         // Related data is only added on edit view, no need to send empty fields because on add user can't add related data.

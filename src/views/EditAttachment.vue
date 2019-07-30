@@ -48,7 +48,7 @@
   import Log from '@/components/partial/Log.vue'
 
   import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
@@ -62,7 +62,6 @@
     },
     props: ['id'],
     name: "EditAttachment",
-    mixins: [permissionsMixin],
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',
@@ -113,6 +112,8 @@
       isDigitisedReference() {
         return this.attachment.specimen_image_attachment === 4
       },
+
+      ...mapState(["currentUser"])
     },
 
     created: function () {

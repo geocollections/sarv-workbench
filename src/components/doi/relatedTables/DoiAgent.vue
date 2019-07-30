@@ -66,7 +66,7 @@
                                select-label=""
                                :options="autocomplete.doi_agent"
                                :searchable="true"
-                               @search-change="autcompleteDoiAgentSearch"
+                               @search-change="$_autocompleteDoiAgentSearch"
                                :internal-search="false"
                                :allow-empty="true"
                                :show-no-results="false"
@@ -123,7 +123,7 @@
                                select-label=""
                                :options="autocomplete.doi_agent"
                                :searchable="true"
-                               @search-change="autcompleteDoiAgentSearch"
+                               @search-change="$_autocompleteDoiAgentSearch"
                                :internal-search="false"
                                :allow-empty="true"
                                :show-no-results="false"
@@ -147,7 +147,7 @@
 
 <script>
   import formManipulation from "../../../mixins/formManipulation";
-  import autocompleteFieldManipulation from "../../../mixins/autocompleFormManipulation";
+  import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
   export default {
     name: "DoiAgent",
@@ -156,7 +156,7 @@
       autocomplete: Object,
       activeTab: String
     },
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
     watch: {
       'relatedData.insert.doi_agent.agent': {
         handler: function (newVal, oldVal) {

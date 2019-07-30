@@ -56,7 +56,7 @@
               {{ $t('header.settings') }}
             </b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="$_authenticationMixin_logOut()">
+            <b-dropdown-item @click="$_logOut()">
               <font-awesome-icon icon="sign-out-alt"/>
               {{ $t('header.logOut') }}
             </b-dropdown-item>
@@ -72,12 +72,12 @@
 <script>
   import { toastInfo } from "@/assets/js/iziToast/iziToast";
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
-  import permissionsMixin from "../../mixins/permissionsMixin";
   import authenticationMixin from "../../mixins/authenticationMixin";
+  import {mapState} from "vuex";
 
   export default {
     name: "app-header",
-    mixins: [fontAwesomeLib, authenticationMixin, permissionsMixin],
+    mixins: [fontAwesomeLib, authenticationMixin],
     computed: {
       isBeta() {
         return document.location.origin.includes('edit2')
@@ -85,7 +85,9 @@
 
       isLocal() {
         return document.location.origin.includes('localhost')
-      }
+      },
+
+      ...mapState(["currentUser"])
     },
     beforeCreate: function() {
       this.$store.dispatch('GET_SHORTCUTS')

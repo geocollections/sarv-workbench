@@ -30,7 +30,7 @@
         <div class="row" v-if="block.permissions">
 
 
-          <div class="col-6 col-sm-6 col-md-4 col-xl-3" v-for="(key, index) in $_permissionsMixin_permissions">
+          <div class="col-6 col-sm-6 col-md-4 col-xl-3" v-for="(key, index) in permissions">
             <vs-list>
               <vs-list-header style="word-break: break-all"
                               icon="fa-table"
@@ -91,15 +91,15 @@
 
 <script>
   import '@fortawesome/fontawesome-free/css/all.min.css'
-  import permissionsMixin from "../mixins/permissionsMixin";
   import VueMultiselect from "vue-multiselect/src/Multiselect";
   import Shortcuts from "../components/partial/settings/Shortcuts";
-  import localStorageMixin from "../mixins/localStorageMixin";
+  import formSectionsMixin from "../mixins/formSectionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     name: "Settings",
     components: {Shortcuts, VueMultiselect},
-    mixins: [permissionsMixin, localStorageMixin],
+    mixins: [formSectionsMixin],
     data() {
       return {
         // Todo: Update lists according to routes
@@ -115,7 +115,9 @@
       }
     },
 
-
+    computed: {
+      ...mapState(["permissions"])
+    },
 
     methods: {
 

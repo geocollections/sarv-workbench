@@ -45,7 +45,7 @@
                                id="type"
                                :options="autocomplete.localityTypes"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -55,10 +55,10 @@
             <div class="col-md-3">
               <label :for="`parent`">{{ $t('locality.parent') }}:</label>
               <vue-multiselect class="align-middle" v-model="locality.parent" deselect-label="Can't remove this value"
-                               :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
                                :options="autocomplete.locality" :searchable="true"
-                               @search-change="autcompleteLocalitySearch"
+                               @search-change="$_autocompleteLocalitySearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -143,7 +143,7 @@
                                id="extent"
                                :options="autocomplete.extent"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -161,7 +161,7 @@
                                id="country"
                                :options="autocomplete.country"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -177,7 +177,7 @@
                                id="coord_det_precision"
                                :options="autocomplete.coordPrecision"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -190,7 +190,7 @@
                                id="coord_det_method"
                                :options="autocomplete.coordMethod"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -203,7 +203,7 @@
                                deselect-label="Can't remove this value" id="coord_det_agent"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
-                               :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -218,9 +218,9 @@
               <vue-multiselect class="align-middle" v-model="locality.stratigraphy_top"
                                deselect-label="Can't remove this value" id="stratigraphy_top"
                                :loading="autocomplete.loaders.stratigraphy_top"
-                               :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.stratigraphy_top" :searchable="true"
-                               @search-change="autcompleteStratigraphyTopSearch"
+                               @search-change="$_autocompleteStratigraphyTopSearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -241,10 +241,10 @@
               <label :for="`stratigraphy_base`">{{ $t('locality.stratigraphy_base') }}:</label>
               <vue-multiselect class="align-middle" v-model="locality.stratigraphy_base"
                                deselect-label="Can't remove this value" id="stratigraphy_base"
-                               :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.stratigraphy_base"
                                :options="autocomplete.stratigraphy_base" :searchable="true"
-                               @search-change="autcompleteStratigraphyBaseSearch"
+                               @search-change="$_autocompleteStratigraphyBaseSearch"
                                :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -483,13 +483,13 @@
   import cloneDeep from 'lodash/cloneDeep'
   import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
   import formManipulation from '../../mixins/formManipulation'
-  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import autocompleteMixin from '../../mixins/autocompleteMixin'
   import LocalityReference from "./relatedTables/LocalityReference";
   import LocalitySynonym from "./relatedTables/LocalitySynonym";
   import LocalityAttachment from "./relatedTables/LocalityAttachment";
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
   import MapComponent from '../partial/MapComponent'
-  import localStorageMixin from "../../mixins/localStorageMixin";
+  import formSectionsMixin from "../../mixins/formSectionsMixin";
 
   library.add(faTimes, faChevronUp, faChevronDown)
   export default {
@@ -505,7 +505,7 @@
       Spinner,
       MapComponent
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, localStorageMixin],
+    mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
 
     data() {
       return this.setInitialData()

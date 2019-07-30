@@ -39,7 +39,7 @@
                          :internal-search="false"
                          :preserve-search="true"
                          v-bind:class="{ valid: authorState, invalid: !authorState }"
-                         @search-change="autcompleteAgentSearch"
+                         @search-change="$_autocompleteAgentSearch"
                          :custom-label="customLabelForAuthor"
                          :loading="autocomplete.loaders.agent"
                          :placeholder="$t('add.inputs.autocomplete')"
@@ -85,8 +85,8 @@
   import cloneDeep from 'lodash/cloneDeep'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
   import {fetchAddImageset, fetchIsImagesetNumberInImageset} from "../assets/js/api/apiCalls";
-  import autocompleteFieldManipulation from "../mixins/autocompleFormManipulation";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import autocompleteMixin from "../mixins/autocompleteMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
@@ -94,7 +94,7 @@
       Spinner,
     },
     name: "Imageset",
-    mixins: [autocompleteFieldManipulation, permissionsMixin],
+    mixins: [autocompleteMixin],
     data () {
       return {
         loadingPercent: 0,
@@ -133,6 +133,8 @@
       authorState() {
         return this.imageset.author !== null
       },
+
+      ...mapState(["currentUser"])
     },
 
     created: function () {
@@ -142,7 +144,7 @@
 
       this.imageset.author = {
         id: this.currentUser.id,
-        agent: this.currentUser.surename + ', ' + this.currentUser.forename,
+        agent: this.currentUser.agent,
         forename: this.currentUser.forename,
         surename: this.currentUser.surename
       }

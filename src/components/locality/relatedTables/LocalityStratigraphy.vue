@@ -37,9 +37,9 @@
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.stratigraphy" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.stratigraphy" select-label=""
-                               :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.stratigraphy" :searchable="true" @search-change="autcompleteStratigraphySearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.stratigraphy" :searchable="true" @search-change="$_autocompleteStratigraphySearch"
+                               :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
                   {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
@@ -52,7 +52,7 @@
               <vue-multiselect class="align-middle" v-model="entity.new.reference" deselect-label="Can't remove this value"
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference" select-label=""
-                               :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
+                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
                                :allow-empty="true"  :show-no-results="false"
                                :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
@@ -63,7 +63,7 @@
               <vue-multiselect class="align-middle" v-model="entity.new.agent" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent" select-label=""
-                               :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'top'">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -87,9 +87,9 @@
             <td>
               <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.stratigraphy" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.stratigraphy" select-label=""
-                               :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.stratigraphy" :searchable="true" @search-change="autcompleteStratigraphySearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
+                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.stratigraphy" :searchable="true" @search-change="$_autocompleteStratigraphySearch"
+                               :allow-empty="true" :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
                   {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
@@ -102,7 +102,7 @@
               <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.reference" deselect-label="Can't remove this value"
                                label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference" select-label=""
-                               :options="autocomplete.reference" :searchable="true" @search-change="autcompleteReferenceSearch"
+                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
                                :allow-empty="true"  :show-no-results="false"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
@@ -113,7 +113,7 @@
               <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.agent" deselect-label="Can't remove this value"
                                label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent" select-label=""
-                               :options="autocomplete.agent" :searchable="true" @search-change="autcompleteAgentSearch"
+                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'bottom'">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -139,7 +139,7 @@
 
 <script>
   import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteFieldManipulation  from '../../../mixins/autocompleFormManipulation';
+  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
     export default {
         name: "LocalityStratigraphy",
       props: {
@@ -148,7 +148,7 @@
         activeTab: String
       },
 
-      mixins: [formManipulation,autocompleteFieldManipulation]
+      mixins: [formManipulation,autocompleteMixin]
     }
 </script>
 

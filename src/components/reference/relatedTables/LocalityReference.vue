@@ -30,10 +30,10 @@
             <td v-if="entity.editMode">
               <vue-multiselect class="align-middle" v-model="entity.new.locality"
                                deselect-label="Can't remove this value"
-                               :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality" select-label=""
                                :options="autocomplete.locality" :searchable="true"
-                               @search-change="autcompleteLocalitySearch"
+                               @search-change="$_autocompleteLocalitySearch"
                                :allow-empty="true" :show-no-results="false"
                                :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.locality }}</strong></template>
@@ -85,7 +85,7 @@
                                label="locality" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality" select-label=""
                                :options="autocomplete.locality" :searchable="true"
-                               @search-change="autcompleteLocalitySearch"
+                               @search-change="$_autocompleteLocalitySearch"
                                :allow-empty="true" :show-no-results="false"
                                :open-direction="'bottom'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.locality }}</strong></template>
@@ -129,7 +129,7 @@
 
 <script>
   import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteFieldManipulation  from '../../../mixins/autocompleFormManipulation';
+  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
 
   export default {
     name: "LocalityReference",
@@ -139,7 +139,7 @@
       activeTab: String
     },
 
-    mixins: [formManipulation, autocompleteFieldManipulation],
+    mixins: [formManipulation, autocompleteMixin],
 
   }
 </script>

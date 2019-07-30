@@ -79,14 +79,13 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchAttachments} from "../assets/js/api/apiCalls";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Attachments",
-    mixins: [permissionsMixin],
 
     data() {
       return {
@@ -115,10 +114,14 @@
       }
     },
 
+    computed: {
+      ...mapState(["currentUser"])
+    },
+
     methods: {
       fetchAttachments() {
         return new Promise((resolve) => {
-          resolve(fetchAttachments(this.searchParameters, this.$_permissionsMixin_currentUser))
+          resolve(fetchAttachments(this.searchParameters, this.currentUser))
         });
       },
       searchParametersChanged(newParams) {

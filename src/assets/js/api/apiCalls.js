@@ -280,7 +280,7 @@ export function fetchListCoordinatePrecision() {
 export function fetchListCountry() {
   return fetch(`list_country/?format=json`)
 }
-export function autocompleSearch(query) {
+export function autocompleteSearch(query) {
   return fetch(`${query}&format=json`)
 }
 export function fetchLocality(id) {

@@ -83,6 +83,10 @@ export default {
     commit('SET_ACTIVE_OBJECTS')
   },
 
+  INITIALISE_USER_DATA: ({commit}) => {
+    commit('SET_CURRENT_USER')
+  },
+
   SIDEBAR_USER_ACTION: ({commit}, userAction) => {
     commit('SET_SIDEBAR_USER_ACTION', userAction)
   }

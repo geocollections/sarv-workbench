@@ -27,7 +27,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
                                :options="autocomplete.agent"
-                               @search-change="autcompleteAgentSearch"
+                               @search-change="$_autocompleteAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :allow-empty="false"
@@ -133,7 +133,7 @@
             <div class="col-10 col-md-11">
               <vue-multiselect v-model="relatedData.library_agent"
                                id="library_agent"
-                               @search-change="autcompleteLibraryAgentSearch"
+                               @search-change="$_autocompleteLibraryAgentSearch"
                                :options="autocomplete.library_agent"
                                :loading="autocomplete.loaders.library_agent"
                                :multiple="true"
@@ -268,13 +268,13 @@
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import formManipulation from '../../mixins/formManipulation'
-  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import autocompleteMixin from '../../mixins/autocompleteMixin'
   import copyForm from '../../mixins/copyForm'
   import LibraryReference from "./relatedTables/LibraryReference";
   import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
-  import localStorageMixin from "../../mixins/localStorageMixin";
-  import permissionsMixin from "../../mixins/permissionsMixin";
+  import formSectionsMixin from "../../mixins/formSectionsMixin";
   import Editor from "../partial/editor/Editor";
+  import {mapState} from "vuex";
 
   library.add(faTimes);
 
@@ -288,7 +288,7 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, localStorageMixin, permissionsMixin],
+    mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
 
     data() {
       return this.setInitialData()
@@ -335,6 +335,10 @@
         deep: true
       },
 
+    },
+
+    computed: {
+      ...mapState(["currentUser"])
     },
 
     methods: {

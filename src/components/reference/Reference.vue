@@ -83,7 +83,7 @@
                                id="type"
                                :options="autocomplete.types"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :loading="autocomplete.loaders.types"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
@@ -100,7 +100,7 @@
                                id="language"
                                :options="autocomplete.languages"
                                track-by="id"
-                               :label="commonLabel"
+                               :label="$_commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -121,7 +121,7 @@
                                :options="autocomplete.journals"
                                :internal-search="false"
                                :preserve-search="true"
-                               @search-change="autcompleteJournalSearch"
+                               @search-change="$_autocompleteJournalSearch"
                                label="journal_name"
                                :loading="autocomplete.loaders.journals"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -350,7 +350,7 @@
                                :internal-search="false"
                                :preserve-search="true"
                                :close-on-select="false"
-                               @search-change="autcompleteAttachmentSearch3"
+                               @search-change="$_autocompleteAttachmentSearch3"
                                :custom-label="customLabelForAttachment"
                                :loading="autocomplete.loaders.attachment3"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -429,7 +429,7 @@
                                :internal-search="false"
                                :preserve-search="true"
                                :close-on-select="false"
-                               @search-change="autcompleteLocalitySearch2"
+                               @search-change="$_autocompleteLocalitySearch2"
                                :custom-label="customLabelForLocality"
                                :loading="autocomplete.loaders.locality"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -574,17 +574,17 @@
   import cloneDeep from 'lodash/cloneDeep'
   import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
   import formManipulation from '../../mixins/formManipulation'
-  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import autocompleteMixin from '../../mixins/autocompleteMixin'
   import copyForm from '../../mixins/copyForm'
   import LocalityReference from "./relatedTables/LocalityReference"
   import FileTable from "../partial/FileTable";
   import LocalityTable from "../locality/LocalityTable";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
-  import permissionsMixin from "../../mixins/permissionsMixin";
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
-  import localStorageMixin from "../../mixins/localStorageMixin";
+  import formSectionsMixin from "../../mixins/formSectionsMixin";
   import Editor from "../partial/editor/Editor";
+  import {mapState} from "vuex";
 
   export default {
     name: "Reference",
@@ -597,7 +597,7 @@
       LocalityReference,
       FileTable
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, sidebarMixin, fontAwesomeLib, permissionsMixin, localStorageMixin],
+    mixins: [formManipulation, copyForm, autocompleteMixin, sidebarMixin, fontAwesomeLib, formSectionsMixin],
 
     data() {
       return this.setInitialData()
@@ -611,7 +611,9 @@
         // Todo: only if not empty
         let regex = RegExp('^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$');
         return regex.test(this.reference.url)
-      }
+      },
+
+      ...mapState(["currentUser"])
     },
     created() {
       // USED BY SIDEBAR

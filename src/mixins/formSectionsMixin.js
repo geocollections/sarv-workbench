@@ -1,6 +1,5 @@
-import Vue from 'vue'
 
-const localStorageMixin = {
+const formSectionsMixin = {
 
   data() {
     return {
@@ -9,7 +8,7 @@ const localStorageMixin = {
   },
 
   created() {
-    this.formSections = Vue.localStorage.get('formSections');
+    this.formSections = this.$localStorage.get('formSections');
     this.$_localStorageMixin_setBlock();
   },
 
@@ -20,7 +19,7 @@ const localStorageMixin = {
   beforeRouteUpdate (to, from, next) {
     if (this.block && this.formSections) {
       this.formSections[this.$route.meta.object] = this.block;
-      Vue.localStorage.set('formSections', this.formSections)
+      this.$localStorage.set('formSections', this.formSections)
     }
     next()
   },
@@ -28,7 +27,7 @@ const localStorageMixin = {
   beforeRouteLeave(to, from, next) {
     if (this.block && this.formSections) {
       this.formSections[this.$route.meta.object] = this.block;
-      Vue.localStorage.set('formSections', this.formSections)
+      this.$localStorage.set('formSections', this.formSections)
     }
     next()
   },
@@ -51,4 +50,4 @@ function compareObjectKeys(objectA, objectB) {
   return JSON.stringify(aKeys) === JSON.stringify(bKeys)
 }
 
-export default localStorageMixin
+export default formSectionsMixin

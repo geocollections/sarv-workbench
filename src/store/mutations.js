@@ -1,12 +1,6 @@
 import Vue from 'vue'
 import isEmpty from 'lodash/isEmpty'
 
-function handleResponse(response){
-  if (response.status === 200) {
-    return (response.body.count > 0) ? response.body.results : false
-  }
-}
-
 export default {
 
   SET_ACTIVE_OBJECTS: (state) => {
@@ -17,16 +11,32 @@ export default {
     if (activeProject && !isEmpty(activeProject)) Vue.set(state, 'activeProject', activeProject);
   },
 
+  SET_CURRENT_USER: (state) => {
+    const authUser = Vue.localStorage.get('authUser', null);
+
+    let currentUser = {
+      id: authUser.agent_id,
+      agent: authUser.agent,
+      forename: authUser.name,
+      surename: authUser.surname,
+      user: authUser.user,
+    };
+    let permissions = authUser.permissions;
+    let databaseId = authUser.database_id;
+
+    if (authUser && !isEmpty(authUser)) {
+      Vue.set(state, 'currentUser', currentUser);
+      Vue.set(state, 'permissions', permissions);
+      Vue.set(state, 'databaseId', databaseId);
+    }
+  },
+
   CREATE_RELATION_OBJECT: (state, { createRelationWith }) => {
     Vue.set(state,'createRelationWith', createRelationWith )
   },
 
   REMOVE_RELATION_OBJECT: (state) => {
     Vue.set(state,'createRelationWith',  { object: null, data: null, info: null, edit: null } )
-  },
-
-  SET_CURRENT_USER: (state, object) => {
-    Vue.set(state,'currentUser', object)
   },
 
   SET_ACTIVE_SEARCH_PARAMS: (state, params) => {

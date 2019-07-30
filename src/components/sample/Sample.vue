@@ -61,7 +61,7 @@
                                  id="type"
                                  :options="autocomplete.purpose"
                                  track-by="id"
-                                 :label="commonLabel"
+                                 :label="$_commonLabel"
                                  :placeholder="$t('add.inputs.autocomplete')"
                                  :show-labels="false">
                   <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -79,7 +79,7 @@
                                  label="name" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.series"
                                  :options="autocomplete.series" :searchable="true"
-                                 @search-change="autcompleteSampleSeriesSearch"
+                                 @search-change="$_autocompleteSampleSeriesSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name}}</strong></template>
@@ -93,10 +93,10 @@
               <div class="col-sm-6 mb-2">
                 <label :for="`locality`">{{ $t('sample.locality') }}:</label>
                 <vue-multiselect class="align-middle" v-model="sample.locality" deselect-label="Can't remove this value"
-                                 :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.locality"
                                  :options="autocomplete.locality" :searchable="true"
-                                 @search-change="autcompleteLocalitySearch"
+                                 @search-change="$_autocompleteLocalitySearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -141,10 +141,11 @@
                 <vue-multiselect class="align-middle" v-model="sample.stratigraphy"
                                  deselect-label="Can't remove this value"
                                  :loading="autocomplete.loaders.stratigraphy"
-                                 :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :options="autocomplete.stratigraphy" :searchable="true"
-                                 @search-change="autcompleteStratigraphySearch"
-                                 :allow-empty="true" :show-no-results="false" :max-height="600"
+                                 @search-change="$_autocompleteStratigraphySearch"
+                                 :preserve-search="true"
+                                 :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
                     {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong></template>
@@ -157,9 +158,9 @@
                 <vue-multiselect class="align-middle" v-model="sample.lithostratigraphy"
                                  deselect-label="Can't remove this value"
                                  :loading="autocomplete.loaders.lithostratigraphy"
-                                 :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :options="autocomplete.lithostratigraphy" :searchable="true"
-                                 @search-change="autcompleteLithostratigraphySearch"
+                                 @search-change="$_autocompleteLithostratigraphySearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -189,7 +190,7 @@
                                  label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.agent"
                                  :options="autocomplete.agent" :searchable="true"
-                                 @search-change="autcompleteAgentSearch"
+                                 @search-change="$_autocompleteAgentSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -226,8 +227,8 @@
                 <vue-multiselect class="align-middle" v-model="sample.classification_rock"
                                  deselect-label="Can't remove this value"
                                  :loading="autocomplete.loaders.rock"
-                                 :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                                 :options="autocomplete.rock" :searchable="true" @search-change="autcompleteRockSearch"
+                                 :label="$_nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :options="autocomplete.rock" :searchable="true" @search-change="$_autocompleteRockSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -268,7 +269,7 @@
                                  :loading="autocomplete.loaders.storage" id="storage"
                                  label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :options="autocomplete.storage" :searchable="true"
-                                 @search-change="autcompleteStorageSearch"
+                                 @search-change="$_autocompleteStorageSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong></template>
@@ -283,7 +284,7 @@
                                  :loading="autocomplete.loaders.additional_storage" id="storage_additional"
                                  label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :options="autocomplete.storage_additional" :searchable="true"
-                                 @search-change="autcompleteAdditionalStorageSearch"
+                                 @search-change="$_autocompleteAdditionalStorageSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong></template>
@@ -297,7 +298,7 @@
                                  label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.owner"
                                  :options="autocomplete.agent" :searchable="true"
-                                 @search-change="autcompleteOwnerSearch"
+                                 @search-change="$_autocompleteOwnerSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -329,7 +330,7 @@
                                  label="number" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.sample" id="parent_sample"
                                  :options="autocomplete.sample" :searchable="true"
-                                 @search-change="autcompleteSampleSearch"
+                                 @search-change="$_autocompleteSampleSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.number}}</strong></template>
@@ -344,7 +345,7 @@
                                  label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.specimen"
                                  :options="autocomplete.specimen" :searchable="true"
-                                 @search-change="autcompleteSpecimenSearch"
+                                 @search-change="$_autocompleteSpecimenSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong>
@@ -358,7 +359,7 @@
                 <vue-multiselect class="align-middle" v-model="sample.site" deselect-label="Can't remove this value"
                                  :custom-label="siteLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.site" id="site"
-                                 :options="autocomplete.site" :searchable="true" @search-change="autcompleteSiteSearch"
+                                 :options="autocomplete.site" :searchable="true" @search-change="$_autocompleteSiteSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>id: {{ option.id}} -
@@ -429,7 +430,7 @@
                                  id="sample_purpose_simple"
                                  :options="autocomplete.purpose"
                                  track-by="id"
-                                 :label="commonLabel"
+                                 :label="$_commonLabel"
                                  :placeholder="$t('add.inputs.autocomplete')"
                                  :show-labels="false">
                   <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -445,7 +446,7 @@
                                  label="name" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.series" id="series_simple"
                                  :options="autocomplete.series" :searchable="true"
-                                 @search-change="autcompleteSampleSeriesSearch"
+                                 @search-change="$_autocompleteSampleSeriesSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.name}}</strong></template>
@@ -456,10 +457,10 @@
               <div class="col-md-4">
                 <label :for="`locality_simple`">{{ $t('sample.locality') }}:</label>
                 <vue-multiselect class="align-middle" v-model="sample.locality" deselect-label="Can't remove this value"
-                                 :label="localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.locality" id="locality_simple"
                                  :options="autocomplete.locality" :searchable="true"
-                                 @search-change="autcompleteLocalitySearch"
+                                 @search-change="$_autocompleteLocalitySearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -486,9 +487,9 @@
                 <vue-multiselect class="align-middle" v-model="sample.stratigraphy"
                                  deselect-label="Can't remove this value" id="stratigraphy_simple"
                                  :loading="autocomplete.loaders.stratigraphy"
-                                 :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :options="autocomplete.stratigraphy" :searchable="true"
-                                 @search-change="autcompleteStratigraphySearch"
+                                 @search-change="$_autocompleteStratigraphySearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -503,9 +504,9 @@
                 <vue-multiselect class="align-middle" v-model="sample.lithostratigraphy"
                                  deselect-label="Can't remove this value" id="lithostratigraphy_simple"
                                  :loading="autocomplete.loaders.lithostratigraphy"
-                                 :label="stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :options="autocomplete.lithostratigraphy" :searchable="true"
-                                 @search-change="autcompleteLithostratigraphySearch"
+                                 @search-change="$_autocompleteLithostratigraphySearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -529,7 +530,7 @@
                                  label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.agent" id="agent_collected_simple"
                                  :options="autocomplete.agent" :searchable="true"
-                                 @search-change="autcompleteAgentSearch"
+                                 @search-change="$_autocompleteAgentSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -553,7 +554,7 @@
                                  label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.owner" id="owner_simple"
                                  :options="autocomplete.agent" :searchable="true"
-                                 @search-change="autcompleteOwnerSearch"
+                                 @search-change="$_autocompleteOwnerSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -568,8 +569,8 @@
                 <vue-multiselect class="align-middle" v-model="sample.classification_rock"
                                  deselect-label="Can't remove this value"
                                  :loading="autocomplete.loaders.rock" id="classification_rock_simple"
-                                 :label="nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                                 :options="autocomplete.rock" :searchable="true" @search-change="autcompleteRockSearch"
+                                 :label="$_nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                                 :options="autocomplete.rock" :searchable="true" @search-change="$_autocompleteRockSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>
@@ -614,7 +615,7 @@
                                  label="number" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.sample" id="parent_sample"
                                  :options="autocomplete.sample" :searchable="true"
-                                 @search-change="autcompleteSampleSearch"
+                                 @search-change="$_autocompleteSampleSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.number}}</strong></template>
@@ -629,7 +630,7 @@
                                  label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.specimen"
                                  :options="autocomplete.specimen" :searchable="true"
-                                 @search-change="autcompleteSpecimenSearch"
+                                 @search-change="$_autocompleteSpecimenSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong>
@@ -643,7 +644,7 @@
                 <vue-multiselect class="align-middle" v-model="sample.site" deselect-label="Can't remove this value"
                                  :custom-label="siteLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
                                  :loading="autocomplete.loaders.site" id="site"
-                                 :options="autocomplete.site" :searchable="true" @search-change="autcompleteSiteSearch"
+                                 :options="autocomplete.site" :searchable="true" @search-change="$_autocompleteSiteSearch"
                                  :allow-empty="true" :show-no-results="false" :max-height="600"
                                  :open-direction="'bottom'">
                   <template slot="singleLabel" slot-scope="{ option }"><strong>id: {{ option.id}} -
@@ -853,15 +854,15 @@
   import Datepicker from 'vue2-datepicker'
   import formManipulation from '../../mixins/formManipulation'
   import copyForm from '../../mixins/copyForm'
-  import autocompleteFieldManipulation from '../../mixins/autocompleFormManipulation'
+  import autocompleteMixin from '../../mixins/autocompleteMixin'
   import SampleReference from "./relatedTables/SampleReference";
   import SampleAttachment from "./relatedTables/SampleAttachment";
   import SampleAnalysis from "./relatedTables/SampleAnalysis";
   import SamplePreparation from "./relatedTables/SamplePreparation";
   import SampleTaxonList from "./relatedTables/SampleTaxonList";
   import SampleWrapper from "./SampleWrapper";
-  import localStorageMixin from '../../mixins/localStorageMixin'
-  import permissionsMixin from "../../mixins/permissionsMixin";
+  import formSectionsMixin from '../../mixins/formSectionsMixin'
+  import {mapState} from "vuex";
 
   export default {
     name: "Sample",
@@ -878,22 +879,8 @@
       VueMultiselect,
       Spinner,
     },
-    mixins: [formManipulation, copyForm, autocompleteFieldManipulation, localStorageMixin, permissionsMixin],
+    mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
 
-    computed: {
-      getParentId() {
-        return this.sample.id
-      },
-
-      createRelationWith() {
-        const relation = this.lsPullCreateRelationWith();
-        console.log(relation)
-        this.lsPushCreateRelationWith({object: null, data: null, info: null, edit: null})
-
-        return relation
-        // return this.$store.state['createRelationWith']
-      },
-    },
     data() {
       return this.setInitialData()
     },
@@ -951,6 +938,23 @@
         },
         deep: true
       }
+    },
+
+    computed: {
+      getParentId() {
+        return this.sample.id
+      },
+
+      createRelationWith() {
+        const relation = this.lsPullCreateRelationWith();
+        console.log(relation)
+        this.lsPushCreateRelationWith({object: null, data: null, info: null, edit: null})
+
+        return relation
+        // return this.$store.state['createRelationWith']
+      },
+
+      ...mapState(["currentUser", "databaseId"])
     },
 
     methods: {
@@ -1295,9 +1299,9 @@
         console.log(site)
         this.sample.locality = site.locality;
         this.sample.site = { id: site.id, name: site.name };
-        this.sample.agent_collected = { id: this.$_permissionsMixin_currentUser.id , agent: this.$_permissionsMixin_currentUser.user };
+        this.sample.agent_collected = { id: this.currentUser.id , agent: this.currentUser.user };
         this.sample.date_collected = new Date();
-        this.sample.owner = { id: this.$_permissionsMixin_currentUser.id , agent: this.$_permissionsMixin_currentUser.user };
+        this.sample.owner = { id: this.currentUser.id , agent: this.currentUser.user };
 
         fetchLatestSampleInSite(site.id).then(response => {
           let sample = this.handleResponse(response)[0];

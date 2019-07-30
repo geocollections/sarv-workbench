@@ -692,7 +692,7 @@
         return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
       },
 
-      localityLabel() {
+      $_localityLabel() {
         return this.$i18n.locale === 'ee' ? 'locality' : 'locality_en'
       },
 

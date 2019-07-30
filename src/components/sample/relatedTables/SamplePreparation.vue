@@ -41,7 +41,7 @@
               <vue-multiselect class="align-middle" v-model="entity.new.storage" deselect-label="Can't remove this value"
                                :loading="autocomplete.loaders.storage" id="storage"  select-label=""
                                label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                               :options="autocomplete.storage" :searchable="true" @search-change="$_autocompleteStorageSearch"
                                :allow-empty="true"  :show-no-results="false" :max-height="600"
                                :open-direction="'top'">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
@@ -88,7 +88,7 @@
               <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.storage" deselect-label="Can't remove this value"
                                       :loading="autocomplete.loaders.storage" id="storage" select-label=""
                                       label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                                      :options="autocomplete.storage" :searchable="true" @search-change="autcompleteStorageSearch"
+                                      :options="autocomplete.storage" :searchable="true" @search-change="$_autocompleteStorageSearch"
                                       :allow-empty="true"  :show-no-results="false" :max-height="600"
                                       :open-direction="'bottom'">
               <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
@@ -126,7 +126,7 @@
 <script>
 
   import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteFieldManipulation  from '../../../mixins/autocompleFormManipulation';
+  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
   import Datepicker from 'vue2-datepicker'
     export default {
       name: "SamplePreparation",
@@ -140,7 +140,7 @@
         parentId: Number
       },
 
-      mixins: [formManipulation,autocompleteFieldManipulation],
+      mixins: [formManipulation,autocompleteMixin],
 
       methods: {
         customAnalysisLabel(item) {

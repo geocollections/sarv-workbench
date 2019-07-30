@@ -8,7 +8,7 @@
       <b>{{message}}</b>
     </div>
 
-    <b-form @submit.prevent="$_authenticationMixin_authenticate('password', {user: user.username, pwd: user.password})">
+    <b-form @submit.prevent="$_authenticate('password', {user: user.username, pwd: user.password})">
       <b-form-group label-for="username">
         <b-form-input
           id="username"

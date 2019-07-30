@@ -18,7 +18,7 @@
 
       <transition name="fade">
         <div class="row" v-if="filters.length > 0 && block.search">
-          <div class="col-md-4" v-for="field,idx in filters">
+          <div class="col-md-4" v-for="field in filters">
 
             <label :for="field.id">{{ $t(field.title) }}:</label>
 
@@ -51,15 +51,13 @@
   import ListModuleCore from "./ListModuleCore";
   import {fetchChangePrivacyState, fetchSpecimens} from "../assets/js/api/apiCalls";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
-  import permissionsMixin from "../mixins/permissionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
       ListModuleCore
     },
     name: "Specimens",
-    mixins: [permissionsMixin],
-
     data() {
       return {
         response: {},
@@ -91,10 +89,14 @@
       }
     },
 
+    computed: {
+      ...mapState(["databaseId"])
+    },
+
     methods: {
       fetchSpecimens() {
         return new Promise((resolve) => {
-          resolve(fetchSpecimens(this.searchParameters, this.$_permissionsMixin_databaseId))
+          resolve(fetchSpecimens(this.searchParameters, this.databaseId))
         });
       },
       searchParametersChanged(newParams) {
@@ -120,8 +122,8 @@
       },
 
       changeSpecimenPrivacyState(state, id) {
-        let formData = new FormData()
-        formData.append('data', JSON.stringify({is_private: state}))
+        let formData = new FormData();
+        formData.append('data', JSON.stringify({is_private: state}));
 
         fetchChangePrivacyState('specimen', id, formData).then(response => {
           if (typeof response.body.message !== 'undefined') {
@@ -139,7 +141,7 @@
             }
           }
         }, errResponse => {
-          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error})
+          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error});
           toastError({text: this.$t('messages.uploadError')})
         })
       }
