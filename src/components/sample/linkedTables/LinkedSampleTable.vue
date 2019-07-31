@@ -47,7 +47,7 @@
         </thead>
 
         <tbody v-if="sample_results.length > 0">
-        <tr v-for="sample in sample_results">
+        <tr v-for="sample in sample_results" :key="sample.id">
           <td>
             <router-link :to="{ path: '/sample/' + sample.id }" target="_blank">
               <font-awesome-icon size="1x" icon="eye"/>
@@ -64,16 +64,18 @@
         </tbody>
 
         <tbody v-else>
-        <td colspan="8" class="text-center">
-          <div class="d-flex justify-content-center">
-            <div class="px-1">
-              <strong>{{ $t('messages.inputNoResults') }}</strong>
+        <tr>
+          <td colspan="7" class="text-center">
+            <div class="d-flex justify-content-center">
+              <div class="px-1">
+                <strong>{{ $t('messages.inputNoResults') }}</strong>
+              </div>
+              <div class="px-1 reset-search" @click="setDefaultSearchParameters" title="Reset search">
+                <i class="fas fa-redo-alt fa-spin-hover"></i>
+              </div>
             </div>
-            <div class="px-1 reset-search" @click="setDefaultSearchParameters" title="Reset search">
-              <i class="fas fa-redo-alt fa-spin-hover"></i>
-            </div>
-          </div>
-        </td>
+          </td>
+        </tr>
         </tbody>
 
       </table>
