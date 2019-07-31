@@ -18,19 +18,18 @@
           <div class="row">
             <div class="col-md-6">
               <label class="p-0" :for="`agent`">{{ $t('analysis.sample') }}:</label>
-              <vue-multiselect id="sample" class="align-middle"
+              <vue-multiselect id="sample"
                                v-model="analysis.sample"
-                               deselect-label="Can't remove this value"
                                label="number"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.sample"
                                :options="autocomplete.sample"
-                               @search-change="$_autocompleteSampleSearch"
+                               @search-change="autocompleteSampleSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :allow-empty="false"
-                               :open-direction="'bottom'">
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.number }}</strong>
                 </template>
@@ -39,14 +38,22 @@
             </div>
 
             <div class="col-md-6">
-              <label class="p-0" :for="`agent`">{{ $t('analysis.specimen') }}:</label>
-              <vue-multiselect class="align-middle" v-model="analysis.specimen" deselect-label="Can't remove this value"
-                               label="specimen_id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+              <label class="p-0" :for="`specimen`">{{ $t('analysis.specimen') }}:</label>
+              <vue-multiselect v-model="analysis.specimen"
+                               id="specimen"
+                               label="specimen_id"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.specimen"
-                               :options="autocomplete.specimen" :searchable="true" @search-change="$_autocompleteSpecimenSearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.specimen_id}}</strong> </template>
+                               :options="autocomplete.specimen"
+                               @search-change="autocompleteSpecimenSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.specimen_id}}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -55,13 +62,17 @@
           <!-- ANALYSIS_METHOD and MASS -->
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0" :for="`agent`">{{ $t('analysis.method') }}:</label>
+              <label class="p-0" :for="`analysis_method`">{{ $t('analysis.method') }}:</label>
               <vue-multiselect v-model="analysis.analysis_method"
+                               id="analysis_method"
                                :options="autocomplete.analysis_methods"
                                track-by="id"
-                               :label="$_analysisMethodLabel" select-label=""
+                               :label="analysisMethodLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[analysisMethodLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -126,13 +137,17 @@
           <!-- LABOR and LABOR TXT -->
           <div class="row">
             <div class="col-md-6">
-              <label class="p-0" :for="`labor`">{{ $t('analysis.labor') }}:</label>
+              <label class="p-0" :for="`lab`">{{ $t('analysis.labor') }}:</label>
               <vue-multiselect v-model="analysis.lab"
+                               id="lab"
                                :options="autocomplete.labs"
                                track-by="id"
-                               :label="$_labLabel" select-label=""
+                               :label="labLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[labLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -161,13 +176,14 @@
             <div class="col-md-6">
               <label class="p-0" :for="`instrument`">{{ $t('analysis.tool') }}:</label>
               <vue-multiselect v-model="analysis.instrument"
+                               id="instrument"
                                :options="autocomplete.instruments"
                                track-by="id"
-                               :label="$_instrumentLabel" select-label=""
+                               :label="instrumentLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[$_instrumentLabel] }}</strong>
+                  <strong>{{ option[instrumentLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -184,19 +200,18 @@
 
             <div class="col-md-6">
               <label class="p-0" :for="`analyzer`">{{ $t('analysis.analyzer') }}:</label>
-              <vue-multiselect id="agent" class="align-middle"
+              <vue-multiselect id="agent"
                                v-model="analysis.agent"
-                               deselect-label="Can't remove this value"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
                                :options="autocomplete.agent"
-                               @search-change="$_autocompleteAgentSearch"
+                               @search-change="autocompleteAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :allow-empty="false"
-                               :open-direction="'bottom'">
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.agent }}</strong>
                 </template>
@@ -215,54 +230,56 @@
               <label class="p-0" :for="`dataset`">{{ $t('analysis.first_dataset') }}:</label>
               <vue-multiselect v-model="analysis.dataset"
                                id="dataset"
-                               :multiple="false"
-                               label="name"
+                               :custom-label="customLabelForDataset"
                                track-by="id"
+                               placeholder="dataset search..."
+                               :loading="autocomplete.loaders.dataset"
                                :options="autocomplete.dataset"
+                               @search-change="autocompleteDatasetSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :close-on-select="true"
-                               @search-change="$_autocompleteDatasetSearch"
-                               :custom-label="customLabelForDataset"
-                               :loading="autocomplete.loaders.dataset"
-                               :placeholder="$t('add.inputs.autocomplete')"
-                               placeholder="dataset search..."
+                               :clear-on-select="false"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.id }} - (</strong>
-                  <strong v-translate="{ et: option.name, en: option.name_en }"></strong>
-                  <strong>) </strong>
+                  <strong>{{ customLabelForDataset(option)</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
             <div class="col-md-4">
               <label class="p-0" :for="`reference`">{{ $t('analysis.publication') }}:</label>
-              <vue-multiselect class="align-middle" v-model="analysis.reference" deselect-label="Can't remove this value"
-                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.reference"  select-label=""
-                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
-                               :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+              <vue-multiselect v-model="analysis.reference"
+                               id="reference"
+                               label="reference"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.reference"
+                               :options="autocomplete.reference"
+                               @search-change="autocompleteReferenceSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.reference }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
             <div class="col-md-4">
-              <label class="p-0" :for="`analyzer`">{{ $t('analysis.owner') }}:</label>
-              <vue-multiselect id="owner" class="align-middle"
+              <label class="p-0" :for="`owner`">{{ $t('analysis.owner') }}:</label>
+              <vue-multiselect id="owner"
                                v-model="analysis.owner"
-                               deselect-label="Can't remove this value"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.owner"
                                :options="autocomplete.agent"
-                               @search-change="$_autocompleteOwnerSearch"
+                               @search-change="autocompleteOwnerSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :allow-empty="false"
-                               :open-direction="'bottom'">
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.agent }}</strong>
                 </template>
@@ -276,13 +293,21 @@
           <div class="row">
             <div class="col-md-6">
               <label class="p-0" :for="`labor_sample`">{{ $t('analysis.storage') }}:</label>
-              <vue-multiselect class="align-middle" v-model="analysis.storage" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.storage" id="storage"
-                               label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.storage" :searchable="true" @search-change="$_autocompleteStorageSearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+              <vue-multiselect v-model="analysis.storage"
+                               id="storage"
+                               label="location"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.storage"
+                               :options="autocomplete.storage"
+                               @search-change="autocompleteStorageSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{option.location}}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>

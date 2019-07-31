@@ -3,161 +3,173 @@ import {mapState} from "vuex";
 
 const autocompleteMixin = {
   computed: {
-    $_commonLabel() {
+    commonLabel() {
       return this.$i18n.locale === 'ee' ? 'value' : 'value_en'
     },
-    $_localityLabel() {
+    localityLabel() {
       return this.$i18n.locale === 'ee' ? 'locality' : 'locality_en'
     },
-    $_stratigraphyLabel() {
+    stratigraphyLabel() {
       return this.$i18n.locale === 'ee' ? 'stratigraphy' : 'stratigraphy_en'
     },
-    $_nameLabel() {
+    nameLabel() {
       return this.$i18n.locale === 'ee' ? 'name' : 'name_en'
     },
-    $_analysisMethodLabel() {
+    analysisMethodLabel() {
       return this.$i18n.locale === 'ee' ? 'analysis_method' : 'method_en'
     },
-    $_instrumentLabel() {
+    instrumentLabel() {
       return this.$i18n.locale === 'ee' ? 'instrument' : 'instrument_en'
     },
-    $_labLabel() {
+    labLabel() {
       return this.$i18n.locale === 'ee' ? 'lab' : 'lab_en'
     },
-    $_licenceLabel() {
+    licenceLabel() {
       return this.$i18n.locale === 'ee' ? 'licence' : 'licence_en'
+    },
+    classLabel() {
+      return this.$i18n.locale === 'ee' ? 'class_field' : 'class_en'
+    },
+    keywordCategoryLabel() {
+      return this.$i18n.locale === 'ee' ? 'keyword_category__name' : 'keyword_category__name_en'
+    },
+    libraryTitle() {
+      return this.$i18n.locale === 'ee' ? 'library__title' : 'library__title_en'
     },
     ...mapState(["currentUser"])
   },
   methods: {
-    $_autocompleteAnalysisSearch(value) {
+    autocompleteAnalysisSearch(value) {
       this.$_autocompleteMixin_search(value, 'analysis', 'analysis')
     },
-    $_autocompletePreparationSearch(value) {
+    autocompletePreparationSearch(value) {
       this.$_autocompleteMixin_search(value, 'preparation', 'preparation')
     },
-    $_autocompleteParentProjectSearch(value) {
+    autocompleteParentProjectSearch(value) {
       this.$_autocompleteMixin_search(value, 'parent_project', 'parent_project')
     },
-    $_autocompleteProjectSearch(value) {
+    autocompleteProjectSearch(value) {
       this.$_autocompleteMixin_search(value, 'project', 'project')
     },
-    $_autocompleteLocalitySearch(value) {
+    autocompleteLocalitySearch(value) {
       this.$_autocompleteMixin_search(value, 'locality', 'locality')
     },
-    $_autocompleteLocalitySearch2(value) {
+    autocompleteLocalitySearch2(value) {
       this.$_autocompleteMixin_search(value, 'locality', 'locality')
     },
-    $_autocompleteTaxonSearch(value) {
+    autocompleteTaxonSearch(value) {
       this.$_autocompleteMixin_search(value, 'taxon', 'taxon')
     },
-    $_autocompleteStratigraphySearch(value) {
+    autocompleteStratigraphySearch(value) {
       this.$_autocompleteMixin_search(value, 'stratigraphy', 'stratigraphy')
     },
-    $_autocompleteStratigraphySearch2(value) {
+    autocompleteStratigraphySearch2(value) {
       this.$_autocompleteMixin_search(value, 'stratigraphy', 'stratigraphy')
     },
-    $_autocompleteLithostratigraphySearch(value) {
+    autocompleteLithostratigraphySearch(value) {
       this.$_autocompleteMixin_search(value, 'lithostratigraphy', 'lithostratigraphy')
     },
-    $_autocompleteLithostratigraphySearch2(value) {
+    autocompleteLithostratigraphySearch2(value) {
       this.$_autocompleteMixin_search(value, 'lithostratigraphy', 'lithostratigraphy')
     },
-    $_autocompleteStorageSearch(value) {
+    autocompleteStorageSearch(value) {
       this.$_autocompleteMixin_search(value, 'storage', 'storage')
     },
-    $_autocompleteStorageSearch2(value) {
+    autocompleteStorageSearch2(value) {
       this.$_autocompleteMixin_search(value, 'storage', 'storage',)
     },
-    $_autocompleteAdditionalStorageSearch(value) {
+    autocompleteAdditionalStorageSearch(value) {
       this.$_autocompleteMixin_search(value, 'storage_additional', 'storage_additional')
     },
-    $_autocompleteStratigraphyTopSearch(value) {
+    autocompleteStratigraphyTopSearch(value) {
       this.$_autocompleteMixin_search(value, 'stratigraphy_top', 'stratigraphy_top')
     },
-    $_autocompleteStratigraphyBaseSearch(value) {
+    autocompleteStratigraphyBaseSearch(value) {
       this.$_autocompleteMixin_search(value, 'stratigraphy_base', 'stratigraphy_base')
     },
-    $_autocompleteAgentSearch(value) {
+    autocompleteAgentSearch(value) {
       this.$_autocompleteMixin_search(value, 'agent', 'agent')
     },
-    $_autocompleteOwnerSearch(value) {
+    autocompleteOwnerSearch(value) {
       this.$_autocompleteMixin_search(value, 'owner', 'agent')
     },
-    $_autocompleteCopyrightAgentSearch(value) {
+    autocompleteCopyrightAgentSearch(value) {
       this.$_autocompleteMixin_search(value, 'copyright_agent', 'copyright_agent')
     },
-    $_autocompleteProjectAgentSearch(value) {
+    autocompleteProjectAgentSearch(value) {
       this.$_autocompleteMixin_search(value, 'projectagent', 'agent')
     },
-    $_autocompleteLibraryAgentSearch(value) {
+    autocompleteLibraryAgentSearch(value) {
       this.$_autocompleteMixin_search(value, 'library_agent', 'library_agent', 1)
     },
-    $_autocompleteLibraryAgentSearch2(value) {
+    autocompleteLibraryAgentSearch2(value) {
       this.$_autocompleteMixin_search(value, 'library_agent_search', 'library', 1)
     },
-    $_autocompleteRockSearch(value) {
+    autocompleteRockSearch(value) {
       this.$_autocompleteMixin_search(value, 'rock', 'rock')
     },
-    $_autocompleteSampleSeriesSearch(value) {
+    autocompleteSampleSeriesSearch(value) {
       this.$_autocompleteMixin_search(value, 'series', 'series')
     },
-    $_autocompleteSampleSearch(value) {
+    autocompleteSampleSearch(value) {
       this.$_autocompleteMixin_search(value, 'sample', 'sample',1)
     },
-    $_autocompleteSpecimenSearch(value) {
+    autocompleteSpecimenSearch(value) {
       this.$_autocompleteMixin_search(value, 'specimen', 'specimen')
     },
-    $_autocompleteSiteSearch(value) {
+    autocompleteSiteSearch(value) {
       this.$_autocompleteMixin_search(value, 'site', 'site')
     },
-    $_autocompleteReferenceSearch(value) {
+    autocompleteReferenceSearch(value) {
       this.$_autocompleteMixin_search(value, 'reference', 'reference')
     },
-    $_autocompleteSynonymSearch(value) {
+    autocompleteSynonymSearch(value) {
       this.$_autocompleteMixin_search(value, 'synonym', 'synonym')
     },
-    $_autocompleteAttachmentSearch(value) {
+    autocompleteAttachmentSearch(value) {
       this.$_autocompleteMixin_search(value, 'attachment', 'attachment')
     },
-    $_autocompleteAttachmentSearch2(value) {
+    autocompleteAttachmentSearch2(value) {
       this.$_autocompleteMixin_search(value, 'attachment', 'attachment')
     },
-    $_autocompleteAttachmentSearch3(value) {
+    autocompleteAttachmentSearch3(value) {
       this.$_autocompleteMixin_search(value, 'attachment3', 'attachment')
     },
-    $_autocompletePublicAttachmentSearch(value) {
+    autocompletePublicAttachmentSearch(value) {
       this.$_autocompleteMixin_search(value, 'attachment_public', 'attachment')
     },
-    $_autocompleteJournalSearch(value) {
+    autocompleteJournalSearch(value) {
       this.$_autocompleteMixin_search(value, 'journals', 'journals', 1)
     },
-    $_autocompleteLibrarySearch(value) {
+    autocompleteLibrarySearch(value) {
       this.$_autocompleteMixin_search(value, 'library', 'library', 1)
     },
-    $_autocompleteDoiReferenceSearch(value) {
+    autocompleteDoiReferenceSearch(value) {
       this.$_autocompleteMixin_search(value, 'reference', 'reference')
     },
-    $_autocompleteDatasetSearch(value) {
+    autocompleteDatasetSearch(value) {
       this.$_autocompleteMixin_search(value, 'dataset', 'dataset', 1)
     },
-    $_autocompleteLabSearch(value) {
+    autocompleteLabSearch(value) {
       this.$_autocompleteMixin_search(value, 'lab', 'lab', 1)
     },
-    $_autocompleteInstrumentSearch(value) {
+    autocompleteInstrumentSearch(value) {
       this.$_autocompleteMixin_search(value, 'instrument', 'instrument', 1)
     },
-    $_autocompleteDoiAgentSearch(value) {
+    autocompleteDoiAgentSearch(value) {
       this.$_autocompleteMixin_search(value, 'doi_agent', 'doi_agent')
     },
-    $_autocompleteCollSearch(value) {
+    autocompleteCollSearch(value) {
       this.$_autocompleteMixin_search(value, 'coll', 'coll', 2)
     },
-    $_autocompleteAgentCollectedSearch(value) {
+    autocompleteAgentCollectedSearch(value) {
       this.$_autocompleteMixin_search(value, 'agent_collected', 'agent_collected', 2)
     },
-    $_autocompleteClassificationSearch(value) {
+    autocompleteClassificationSearch(value) {
       this.$_autocompleteMixin_search(value, 'classification', 'classification', 2)
+    },
+    autocompleteKeywordSearch(value) {
+      this.$_autocompleteMixin_search(value, 'keyword', 'keyword', 1, this.keywordCategoryLabel)
     },
 
     /**
@@ -166,11 +178,12 @@ const autocompleteMixin = {
      * @param type - String which is used for building search queries
      * @param options - String which will toggle loader state and sets results to autocomplete object
      * @param minLength {Integer} - Minimum length needed to trigger search
+     * @param groupByField {String} - Field used to group results
      */
-    $_autocompleteMixin_search(value, type, options, minLength = 3) {
+    $_autocompleteMixin_search(value, type, options, minLength = 3, groupByField) {
       if (value.length < minLength) this.autocomplete[options] = [];
       else if (value.length >= minLength) {
-        let query = buildAutocompleteQuery(type, value, this.currentUser);
+        let query = buildAutocompleteQuery(type, value, this.currentUser, groupByField);
         if (query.length === 0) return;
 
         this.autocomplete.loaders[options] = true;
@@ -198,9 +211,10 @@ function handleResponse(response) {
  * @param type - Search type of which query is built
  * @param value - User search input
  * @param currentUser - Current logged in user
+ * @param groupByField - Field used with &group_by=
  * @returns {string} - Search string
  */
-function buildAutocompleteQuery(type, value, currentUser) {
+function buildAutocompleteQuery(type, value, currentUser, groupByField) {
   switch (type) {
     case 'analysis':
       return `analysis/?multi_search=value:${value};fields:id;lookuptype:icontains&fields=id,analysis_method__analysis_method,analysis_method__method_en`;
@@ -264,6 +278,8 @@ function buildAutocompleteQuery(type, value, currentUser) {
       return `collection/?number__icontains=${value}&fields=id,number`;
     case 'classification':
       return `classification/?multi_search=value:${value};fields:id,class_field,class_en;lookuptype:icontains&fields=id,class_field,class_en`;
+    case 'keyword':
+      return `keyword/?multi_search=value:${value};fields:keyword,${groupByField};lookuptype:icontains&group_by=${groupByField}`;
     default:
       return ''
   }

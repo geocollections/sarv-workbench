@@ -26,11 +26,15 @@
             <td v-show="!entity.editMode" v-translate="{et: entity.analysis_method__analysis_method, en: entity.analysis_method__analysis_method_en}"></td>
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.analysis_method"
+                               id="analysis_method"
                                :options="autocomplete.analysis_method"
                                track-by="id"
-                               :label="$_analysisMethodLabel" select-label=""
+                               :label="analysisMethodLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[analysisMethodLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -55,12 +59,21 @@
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.date_free" type="text"/></td>
             <td v-show="!entity.editMode">{{entity.agent__agent}}</td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.agent" deselect-label="Can't remove this value"
-                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent"  select-label=""
-                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'top'">
+              <vue-multiselect v-model="entity.new.agent"
+                               id="agent"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autocompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -82,11 +95,15 @@
             <td></td>
             <td>
               <vue-multiselect v-model="relatedData.insert.analysis.analysis_method"
+                               id="analysis_method_insert"
                                :options="autocomplete.analysis_method"
                                track-by="id"
-                               :label="$_analysisMethodLabel" select-label=""
+                               :label="analysisMethodLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
-                               :show-labels="false" :open-direction="'bottom'">
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[analysisMethodLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -104,12 +121,21 @@
                             format="DD MMM YYYY"/></td>
             <td><b-form-input v-model="relatedData.insert.analysis.date_free" type="text"/></td>
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.analysis.agent" deselect-label="Can't remove this value"
-                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent"  select-label=""
-                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+              <vue-multiselect v-model="relatedData.insert.analysis.agent"
+                               id="agent_insert"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autocompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>

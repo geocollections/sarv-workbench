@@ -83,12 +83,12 @@
                                id="type"
                                :options="autocomplete.types"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :loading="autocomplete.loaders.types"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+                  <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -100,11 +100,11 @@
                                id="language"
                                :options="autocomplete.languages"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+                  <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -117,16 +117,18 @@
               <label :for="`journal`">{{ $t('reference.journal') }}:</label>
               <vue-multiselect v-model="reference.journal"
                                id="journal"
+                               label="journal_name"
                                track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.journals"
                                :options="autocomplete.journals"
+                               @search-change="autocompleteJournalSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               @search-change="$_autocompleteJournalSearch"
-                               label="journal_name"
-                               :loading="autocomplete.loaders.journals"
-                               :placeholder="$t('add.inputs.autocomplete')"
+                               :clear-on-select="false"
                                :show-labels="false">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.journal_name }}</strong>
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.journal_name }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -286,13 +288,23 @@
               <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
               <vue-multiselect v-model="relatedData.keyword"
                                id="keyword"
-                               :options="autocomplete.keyword"
-                               :multiple="true"
-                               :close-on-select="false"
-                               track-by="id"
                                label="keyword"
-                               :tag-placeholder="$t('add.inputs.keywordsAdd')"
-                               :placeholder="$t('add.inputs.keywords')"></vue-multiselect>
+                               track-by="id"
+                               :multiple="true"
+                               :placeholder="$t('add.inputs.keywords')"
+                               :loading="autocomplete.loaders.keyword"
+                               :options="autocomplete.keyword"
+                               @search-change="autocompleteKeywordSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :close-on-select="false"
+                               :show-labels="true"
+                               :group-label="keywordCategoryLabel"
+                               group-values="group_results"
+                               :group-select="true">
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </div>
 
             <div class="col-2 col-md-1 pl-0">
@@ -340,23 +352,32 @@
         <div v-show="block.files">
 
           <div class="row">
-            <div class="col">
+            <div class="col-10 col-md-11">
               <!-- loader is 'attachment3' because of #158, regarding problem 2 -->
               <vue-multiselect v-model="relatedData.attachment"
                                id="attachment"
-                               :multiple="true"
+                               :custom-label="customLabelForAttachment"
                                track-by="id"
+                               :multiple="true"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.attachment3"
                                :options="autocomplete.attachment"
+                               @search-change="autocompleteAttachmentSearch3"
                                :internal-search="false"
                                :preserve-search="true"
+                               :clear-on-select="false"
                                :close-on-select="false"
-                               @search-change="$_autocompleteAttachmentSearch3"
-                               :custom-label="customLabelForAttachment"
-                               :loading="autocomplete.loaders.attachment3"
-                               :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
+            </div>
+
+            <div class="col-2 col-md-1 pl-0">
+              <button class="btn btn-outline-danger"
+                      :disabled="!isDefinedAndNotEmpty(relatedData.attachment)"
+                      @click="relatedData.attachment = []">
+                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+              </button>
             </div>
           </div>
 
@@ -382,20 +403,24 @@
             <div class="col-10 col-md-11">
               <vue-multiselect v-model="relatedData.library"
                                id="library"
-                               :multiple="true"
-                               track-by="library"
-                               :options="autocomplete.library"
-                               :close-on-select="false"
                                :custom-label="customLabelForLibrary"
-                               :loading="autocomplete.loaders.library"
+                               track-by="library"
+                               :multiple="true"
                                :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.library"
+                               :loading="autocomplete.loaders.library"
+                               @search-change="autocompleteLibraryAgentSearch2"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :close-on-select="false"
                                :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
 
             <div class="col-2 col-md-1 pl-0">
-              <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+              <button class="btn btn-outline-danger"
                       :disabled="!isDefinedAndNotEmpty(relatedData.library)"
                       @click="relatedData.library = []">
                 <font-awesome-icon icon="trash-alt"></font-awesome-icon>
@@ -429,7 +454,7 @@
                                :internal-search="false"
                                :preserve-search="true"
                                :close-on-select="false"
-                               @search-change="$_autocompleteLocalitySearch2"
+                               @search-change="autocompleteLocalitySearch2"
                                :custom-label="customLabelForLocality"
                                :loading="autocomplete.loaders.locality"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -745,8 +770,8 @@
       loadFullInfo() {
         fetchListReferenceTypes().then(response => this.autocomplete.types = this.handleResponse(response));
         fetchListLanguages().then(response => this.autocomplete.languages = this.handleResponse(response));
-        fetchListKeywords().then(response => this.autocomplete.keyword = this.handleResponse(response));
-        fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
+        // fetchListKeywords().then(response => this.autocomplete.keyword = this.handleResponse(response));
+        // fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;

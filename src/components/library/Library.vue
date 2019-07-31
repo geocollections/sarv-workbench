@@ -10,7 +10,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.info">
+        <div v-show="block.info">
 
           <!-- AUTHOR AND YEAR -->
           <div class="row">
@@ -19,19 +19,21 @@
             </div>
 
             <div class="col-sm-4 mb-2">
-              <vue-multiselect id="author" class="align-middle"
+              <vue-multiselect id="author"
                                v-model="library.author"
-                               deselect-label="Can't remove this value"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
                                :options="autocomplete.agent"
-                               @search-change="$_autocompleteAgentSearch"
+                               @search-change="autocompleteAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :allow-empty="false"
-                               :open-direction="'bottom'">
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -125,24 +127,25 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.members">
+        <div v-show="block.members">
 
           <div class="row">
 
-            <!-- Prop: internal-search must be false otherwise it also filters by label -->
             <div class="col-10 col-md-11">
               <vue-multiselect v-model="relatedData.library_agent"
                                id="library_agent"
-                               @search-change="$_autocompleteLibraryAgentSearch"
+                               label="agent"
+                               track-by="id"
+                               :multiple="true"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :options="autocomplete.library_agent"
                                :loading="autocomplete.loaders.library_agent"
-                               :multiple="true"
-                               track-by="id"
-                               label="agent"
+                               @search-change="autocompleteLibraryAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :open-direction="'bottom'"
-                               :placeholder="$t('add.inputs.autocomplete')">
+                               :clear-on-select="false"
+                               :close-on-select="false"
+                               :show-labels="false">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>

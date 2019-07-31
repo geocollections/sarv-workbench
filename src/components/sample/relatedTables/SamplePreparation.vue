@@ -29,35 +29,50 @@
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.preparation_number" type="text"/></td>
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.taxon"
+                               id="taxon"
                                :options="autocomplete.fossil_group"
                                track-by="id"
                                label="taxon"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.taxon }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.storage" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.storage" id="storage"  select-label=""
-                               label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.storage" :searchable="true" @search-change="$_autocompleteStorageSearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+              <vue-multiselect v-model="entity.new.storage"
+                               id="storage"
+                               label="location"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.storage"
+                               :options="autocomplete.storage"
+                               @search-change="autocompleteStorageSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{option.location}}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect></td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.remarks" type="text"/></td>
 
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.analysis" deselect-label="Can't remove this value"
-                               :show-labels="false"  v-if="isDefinedAndNotEmpty(relatedData.analysis)"
-                               :custom-label="customAnalysisLabel" id="analysis"
-                               label="id" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+              <vue-multiselect v-model="entity.new.analysis"
+                               v-if="isDefinedAndNotEmpty(relatedData.analysis)"
+                               id="analysis"
                                :options="relatedData.analysis"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.id}}</strong> </template>
+                               track-by="id"
+                               :custom-label="customAnalysisLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ customAnalysisLabel(option) }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -76,34 +91,50 @@
             <td><b-form-input v-model="relatedData.insert.preparation.preparation_number" type="text"/></td>
             <td>
               <vue-multiselect v-model="relatedData.insert.preparation.taxon"
+                               id="taxon_insert"
                                :options="autocomplete.fossil_group"
                                track-by="id"
                                label="taxon"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.taxon }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.storage" deselect-label="Can't remove this value"
-                                      :loading="autocomplete.loaders.storage" id="storage" select-label=""
-                                      label="location" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                                      :options="autocomplete.storage" :searchable="true" @search-change="$_autocompleteStorageSearch"
-                                      :allow-empty="true"  :show-no-results="false" :max-height="600"
-                                      :open-direction="'bottom'">
-              <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.location}}</strong> </template>
+              <vue-multiselect v-model="relatedData.insert.preparation.storage"
+                               id="storage_insert"
+                               label="location"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.storage"
+                               :options="autocomplete.storage"
+                               @search-change="autocompleteStorageSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+              <template slot="singleLabel" slot-scope="{ option }">
+                <strong>{{option.location}}</strong>
+              </template>
               <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
             </vue-multiselect></td>
             <td><b-form-input v-model="relatedData.insert.preparation.remarks" type="text"/></td>
 
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.preparation.analysis" deselect-label="Can't remove this value"
-                               :show-labels="false" id="analysis" v-if="isDefinedAndNotEmpty(relatedData.analysis)"
-                               :custom-label="customAnalysisLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="relatedData.analysis" :searchable="true"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option.id}}</strong> </template>
+              <vue-multiselect v-model="relatedData.insert.preparation.analysis"
+                               v-if="isDefinedAndNotEmpty(relatedData.analysis)"
+                               id="analysis_insert"
+                               :options="relatedData.analysis"
+                               track-by="id"
+                               :custom-label="customAnalysisLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ customAnalysisLabel(option) }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -124,10 +155,10 @@
 </template>
 
 <script>
-
   import formManipulation  from '../../../mixins/formManipulation';
   import autocompleteMixin  from '../../../mixins/autocompleteMixin';
   import Datepicker from 'vue2-datepicker'
+
     export default {
       name: "SamplePreparation",
       components: {
@@ -140,7 +171,7 @@
         parentId: Number
       },
 
-      mixins: [formManipulation,autocompleteMixin],
+      mixins: [formManipulation, autocompleteMixin],
 
       methods: {
         customAnalysisLabel(item) {

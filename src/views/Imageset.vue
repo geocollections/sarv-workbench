@@ -35,15 +35,20 @@
       <div class="col-sm-4 mb-2">
         <vue-multiselect v-model="imageset.author"
                          id="author"
+                         label="agent"
+                         track-by="id"
+                         :placeholder="$t('add.inputs.autocomplete')"
+                         :loading="autocomplete.loaders.agent"
                          :options="autocomplete.agent"
+                         @search-change="autocompleteAgentSearch"
                          :internal-search="false"
                          :preserve-search="true"
+                         :clear-on-select="false"
                          v-bind:class="{ valid: authorState, invalid: !authorState }"
-                         @search-change="$_autocompleteAgentSearch"
-                         :custom-label="customLabelForAuthor"
-                         :loading="autocomplete.loaders.agent"
-                         :placeholder="$t('add.inputs.autocomplete')"
                          :show-labels="false">
+          <template slot="singleLabel" slot-scope="{ option }">
+            <strong>{{ option.agent }}</strong>
+          </template>
           <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
         </vue-multiselect>
         <b-form-text v-if="!authorState">{{ $t('add.errors.author') }}.</b-form-text>

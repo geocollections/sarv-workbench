@@ -40,6 +40,7 @@
 
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.agent_type"
+                               id="agent_type"
                                :options="autocomplete.doi_agent_type"
                                track-by="id"
                                label="value"
@@ -56,22 +57,21 @@
               <b-form-input v-model="entity.new.orcid" type="text"/>
             </td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle"
-                               v-model="entity.new.agent"
-                               deselect-label="Can't remove this value"
+              <vue-multiselect v-model="entity.new.agent"
+                               id="agent"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.doi_agent"
-                               select-label=""
                                :options="autocomplete.doi_agent"
-                               :searchable="true"
-                               @search-change="$_autocompleteDoiAgentSearch"
+                               @search-change="autocompleteDoiAgentSearch"
                                :internal-search="false"
-                               :allow-empty="true"
-                               :show-no-results="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.agent }}</strong> </template>
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -96,6 +96,7 @@
 
             <td>
               <vue-multiselect v-model="relatedData.insert.doi_agent.agent_type"
+                               id="agent_type_insert"
                                :options="autocomplete.doi_agent_type"
                                track-by="id"
                                label="value"
@@ -113,22 +114,21 @@
             </td>
 
             <td>
-              <vue-multiselect class="align-middle"
-                               v-model="relatedData.insert.doi_agent.agent"
-                               deselect-label="Can't remove this value"
+              <vue-multiselect v-model="relatedData.insert.doi_agent.agent"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.doi_agent"
-                               select-label=""
                                :options="autocomplete.doi_agent"
                                :searchable="true"
-                               @search-change="$_autocompleteDoiAgentSearch"
+                               @search-change="autocompleteDoiAgentSearch"
                                :internal-search="false"
-                               :allow-empty="true"
-                               :show-no-results="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.agent }}</strong> </template>
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>

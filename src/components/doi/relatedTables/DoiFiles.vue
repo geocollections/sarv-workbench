@@ -23,21 +23,18 @@
 
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle"
-                               v-model="entity.new.attachment"
-                               deselect-label="Can't remove this value"
+              <vue-multiselect v-model="entity.new.attachment"
+                               id="attachment"
                                label="original_filename"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.attachment_public"
-                               select-label=""
                                :options="autocomplete.attachment"
-                               :searchable="true"
-                               @search-change="$_autocompletePublicAttachmentSearch"
+                               @search-change="autocompletePublicAttachmentSearch"
                                :internal-search="false"
-                               :allow-empty="true"
-                               :show-no-results="false"
-                               :open-direction="'bottom'">
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.original_filename }}</strong>
                 </template>
@@ -73,21 +70,18 @@
           <!-- INSERT MODE -->
           <tr class="related-input-data">
             <td>
-              <vue-multiselect class="align-middle"
-                               v-model="relatedData.insert.attachment_link.attachment"
-                               deselect-label="Can't remove this value"
+              <vue-multiselect v-model="relatedData.insert.attachment_link.attachment"
+                               id="attachment_insert"
                                label="original_filename"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.attachment_public"
-                               select-label=""
                                :options="autocomplete.attachment"
-                               :searchable="true"
-                               @search-change="$_autocompletePublicAttachmentSearch"
+                               @search-change="autocompletePublicAttachmentSearch"
                                :internal-search="false"
-                               :allow-empty="true"
-                               :show-no-results="false"
-                               :open-direction="'bottom'">
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.original_filename }}</strong>
                 </template>

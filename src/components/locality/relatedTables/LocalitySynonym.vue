@@ -1,6 +1,6 @@
 <template>
   <div id="#tab-synonym" class="tab-pane row" :class="{active: activeTab === 'locality_synonym'}" role="tabpanel">
-    <div class="col-sm-8" v-if="activeTab === 'locality_synonym'">
+    <div class="col-sm-12" v-if="activeTab === 'locality_synonym'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered related-table">
           <thead class="thead-light">
@@ -22,13 +22,21 @@
 
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.synonym" type="text"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="entity.new.reference" deselect-label="" select-label=""
-                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+              <vue-multiselect v-model="entity.new.reference"
+                               id="reference"
+                               label="reference"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference"
-                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
-                               :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+                               :options="autocomplete.reference"
+                               @search-change="autocompleteReferenceSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.reference }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -48,13 +56,21 @@
           <tr class="related-input-data">
             <td><b-form-input v-model="relatedData.insert.locality_synonym.synonym" type="text"/></td>
             <td>
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.locality_synonym.reference" deselect-label="Can't remove this value"
-                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')" select-label=""
+              <vue-multiselect v-model="relatedData.insert.locality_synonym.reference"
+                               id="reference_insert"
+                               label="reference"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.reference"
-                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
-                               :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+                               :options="autocomplete.reference"
+                               @search-change="autocompleteReferenceSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.reference }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>

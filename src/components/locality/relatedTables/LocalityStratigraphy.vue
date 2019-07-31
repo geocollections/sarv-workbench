@@ -35,37 +35,61 @@
             <td v-if="!entity.editMode" class="text-center">{{ entity.current === true ? '&#10003' : '' }}</td>
 
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.stratigraphy" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.stratigraphy" select-label=""
-                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.stratigraphy" :searchable="true" @search-change="$_autocompleteStratigraphySearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>
-                  {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
+              <vue-multiselect v-model="entity.new.stratigraphy"
+                               id="startigraphy"
+                               :loading="autocomplete.loaders.stratigraphy"
+                               :label="stratigraphyLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.stratigraphy"
+                               @search-change="autocompleteStratigraphySearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[stratigraphyLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.depth_base" type="text"/></td>
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.depth_top" type="text"/></td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.reference" deselect-label="Can't remove this value"
-                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.reference" select-label=""
-                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
-                               :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+              <vue-multiselect v-model="entity.new.reference"
+                               id="reference"
+                               label="reference"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.reference"
+                               :options="autocomplete.reference"
+                               @search-change="autocompleteReferenceSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.reference }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.agent" deselect-label="Can't remove this value"
-                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent" select-label=""
-                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'top'">
+              <vue-multiselect v-model="entity.new.agent"
+                               id="agent"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autocompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -85,37 +109,61 @@
           </tr>
           <tr class="related-input-data">
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.stratigraphy" deselect-label="Can't remove this value"
-                               :loading="autocomplete.loaders.stratigraphy" select-label=""
-                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.stratigraphy" :searchable="true" @search-change="$_autocompleteStratigraphySearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>
-                  {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong> </template>
+              <vue-multiselect v-model="relatedData.insert.locality_stratigraphy.stratigraphy"
+                               id="stratigraphy_insert"
+                               :label="stratigraphyLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.stratigraphy"
+                               :options="autocomplete.stratigraphy"
+                               @search-change="autocompleteStratigraphySearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{option[stratigraphyLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
             <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_base" type="text"/></td>
             <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_top" type="text"/></td>
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.reference" deselect-label="Can't remove this value"
-                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.reference" select-label=""
-                               :options="autocomplete.reference" :searchable="true" @search-change="$_autocompleteReferenceSearch"
-                               :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong> </template>
+              <vue-multiselect v-model="relatedData.insert.locality_stratigraphy.reference"
+                               id="reference_insert"
+                               label="reference"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.reference"
+                               :options="autocomplete.reference"
+                               @search-change="autocompleteReferenceSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.reference }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_stratigraphy.agent" deselect-label="Can't remove this value"
-                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.agent" select-label=""
-                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
-                               :allow-empty="true"  :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+              <vue-multiselect v-model="relatedData.insert.locality_stratigraphy.agent"
+                               id="agent_insert"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent"
+                               :options="autocomplete.agent"
+                               @search-change="autocompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -148,7 +196,7 @@
         activeTab: String
       },
 
-      mixins: [formManipulation,autocompleteMixin]
+      mixins: [formManipulation, autocompleteMixin]
     }
 </script>
 

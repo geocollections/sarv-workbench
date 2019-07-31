@@ -31,6 +31,7 @@
 
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.date_type"
+                               id="date_type"
                                :options="autocomplete.doi_date_type"
                                track-by="id"
                                label="value"
@@ -76,6 +77,7 @@
 
             <td>
               <vue-multiselect v-model="relatedData.insert.doi_date.date_type"
+                               id="date_type_insert"
                                :options="autocomplete.doi_date_type"
                                track-by="id"
                                label="value"

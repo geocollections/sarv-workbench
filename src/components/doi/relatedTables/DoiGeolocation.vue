@@ -41,23 +41,20 @@
 
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle"
-                               v-model="entity.new.locality"
-                               deselect-label="Can't remove this value"
-                               :label="$_localityLabel"
+              <vue-multiselect v-model="entity.new.locality"
+                               id="locality"
+                               :label="localityLabel"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
-                               select-label=""
                                :options="autocomplete.locality"
-                               :searchable="true"
-                               @search-change="$_autocompleteLocalitySearch"
+                               @search-change="autocompleteLocalitySearch"
                                :internal-search="false"
-                               :allow-empty="true"
-                               :show-no-results="false"
-                               :open-direction="'bottom'">
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong v-translate="{ et: option.locality, en: option.locality_en }"></strong>
+                  <strong>{{ option[localityLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -114,23 +111,20 @@
 
           <tr class="related-input-data">
             <td>
-              <vue-multiselect class="align-middle"
-                               v-model="relatedData.insert.doi_geolocation.locality"
-                               deselect-label="Can't remove this value"
-                               :label="$_localityLabel"
+              <vue-multiselect v-model="relatedData.insert.doi_geolocation.locality"
+                               id="locality_insert"
+                               :label="localityLabel"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
-                               select-label=""
                                :options="autocomplete.locality"
-                               :searchable="true"
-                               @search-change="$_autocompleteLocalitySearch"
+                               @search-change="autocompleteLocalitySearch"
                                :internal-search="false"
-                               :allow-empty="true"
-                               :show-no-results="false"
-                               :open-direction="'bottom'">
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong v-translate="{ et: option.locality, en: option.locality_en }"></strong>
+                  <strong>{{ option[localityLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>

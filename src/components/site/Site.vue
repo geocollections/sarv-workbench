@@ -22,16 +22,21 @@
               <!--<label class="p-0">{{ $t('site.name_en') }}:</label>-->
               <!--<b-form-input id="name_en" v-model="site.name_en" type="text" maxlength="100"></b-form-input>-->
               <label :for="`project`">{{ $t('site.project') }}:</label>
-              <vue-multiselect class="align-middle" v-model="site.project" select-label=""
+              <vue-multiselect v-model="site.project"
                                id="project"
-                               deselect-label="Can't remove this value"
-                               :label="$_nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="nameLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.project"
                                :options="autocomplete.project"
-                               @search-change="$_autocompleteProjectSearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{option[$_nameLabel]}}</strong></template>
+                               @search-change="autocompleteProjectSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[nameLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -152,10 +157,12 @@
                                :options="autocomplete.coordMethod"
                                track-by="id"
                                class="high-z-index"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option[$_commonLabel] }}</strong></template>
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -174,15 +181,18 @@
 
             <div class="col-md-4">
               <label :for="`locality`">{{ $t('site.locality') }}:</label>
-              <vue-multiselect class="align-middle" v-model="site.locality" select-label=""
+              <vue-multiselect v-model="site.locality"
                                id="locality"
-                               deselect-label="Can't remove this value"
-                               :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="localityLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
-                               :options="autocomplete.locality" :searchable="true"
-                               @search-change="$_autocompleteLocalitySearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :options="autocomplete.locality"
+                               @search-change="autocompleteLocalitySearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
                   {{ $i18n.locale=== 'ee' ? option.locality :option.locality_en }}</strong></template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
@@ -318,9 +328,6 @@
       return this.setInitialData()
     },
     computed: {
-      createRelationWith() {
-        return this.lsPullCreateRelationWith();
-      },
       sidebarUserAction() {
         return this.$store.state['sidebarUserAction']
       },
@@ -417,7 +424,7 @@
           this.autocomplete.coordMethod = this.handleResponse(response);
         });
 
-        if (this.$route.meta.isEdit && this.createRelationWith.data === null || this.isDefinedAndNotNull(this.createRelationWith.edit)) {
+        if (this.$route.meta.isEdit) {
           this.sendingData = true;
 
           fetchSite(this.$route.params.id).then(response => {
@@ -426,19 +433,12 @@
               this.site = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.site);
               this.removeUnnecessaryFields(this.site, this.copyFields);
-              // if (this.site.latitude === null && this.site.longitude === null) {
-              //   this.setLocationDataIfExists();
-              // }
 
               this.site.related_data = {};
               this.$emit('data-loaded', this.site);
               this.$emit('set-object', 'site');
               this.sendingData = false;
               this.getListRecords('site')
-
-              //set relation object as site
-              // let createRelationWith = { object: 'site', data: this.site };
-              // this.$store.commit('CREATE_RELATION_OBJECT', { createRelationWith });
 
             } else {
               this.sendingData = false;
@@ -596,27 +596,6 @@
 
       addFiles(data) {
         this.addFileAsRelatedData(data, 'site');
-      },
-
-      addSample() {
-        //Because we open sample in separate window it has clean default storage. In this case store values in LocalStorage
-        // let isFull = false
-        // this.$store.commit('SET_SAMPLE_VIEW', {isFull});
-        // this.lsPushSampleView(false);
-        let createRelationWith = {
-          object: 'site', data: cloneDeep(this.site),
-          relatedData: {isLastSampleExists: this.relatedData.sample.length > 0},
-          info: this.$t('messages.siteSampleRelationInfo',
-            {data: `ID: ${this.site.id} (${this.site.name})`})
-        };
-        this.$store.commit('CREATE_RELATION_OBJECT', {createRelationWith});
-        // this.$emit('show-new-sample-modal')
-        // this.$router.push({path: '/sample/add'});
-
-        this.lsPushCreateRelationWith(createRelationWith);
-        this.windowOpenNewTab('sample', '/sample/add')
-        // let routeData = this.$router.resolve({ path:'/sample/add'});
-        // window.open(routeData.href, '_blank', 'width=750,height=750');
       },
 
       setSiteName(projectId) {

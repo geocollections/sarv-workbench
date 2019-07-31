@@ -44,15 +44,20 @@
 
                 <!-- EDIT MODE -->
                 <td v-if="entity.editMode">
-                  <vue-multiselect class="align-middle" v-model="entity.new.reference"
-                                   deselect-label="Can't remove this value"
-                                   label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                                   :loading="autocomplete.loaders.reference" select-label=""
-                                   :options="autocomplete.reference" :searchable="true"
-                                   @search-change="$_autocompleteReferenceSearch"
-                                   :allow-empty="true" :show-no-results="false"
-                                   :open-direction="'top'">
-                    <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong>
+                  <vue-multiselect v-model="entity.new.reference"
+                                   id="reference"
+                                   label="reference"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.reference"
+                                   :options="autocomplete.reference"
+                                   @search-change="autocompleteReferenceSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.reference }}</strong>
                     </template>
                     <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
                   </vue-multiselect>
@@ -95,15 +100,21 @@
           <tr class="related-input-data">
             <td></td>
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.library_reference.reference"
-                               deselect-label="Can't remove this value"
-                               label="reference" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.reference" select-label=""
-                               :options="autocomplete.reference" :searchable="true"
-                               @search-change="$_autocompleteReferenceSearch"
-                               :allow-empty="true" :show-no-results="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.reference }}</strong></template>
+              <vue-multiselect v-model="relatedData.insert.library_reference.reference"
+                               id="reference_insert"
+                               label="reference"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.reference"
+                               :options="autocomplete.reference"
+                               @search-change="autocompleteReferenceSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.reference }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>

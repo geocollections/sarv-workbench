@@ -28,15 +28,21 @@
             <td v-show="!entity.editMode">{{ entity.remarks }}</td>
 
             <td v-if="entity.editMode">
-              <vue-multiselect class="align-middle" v-model="entity.new.locality"
-                               deselect-label="Can't remove this value"
-                               :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.locality" select-label=""
-                               :options="autocomplete.locality" :searchable="true"
-                               @search-change="$_autocompleteLocalitySearch"
-                               :allow-empty="true" :show-no-results="false"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.locality }}</strong></template>
+              <vue-multiselect v-model="entity.new.locality"
+                               id="locality"
+                               :label="localityLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.locality"
+                               :options="autocomplete.locality"
+                               @search-change="autocompleteLocalitySearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[localityLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -80,15 +86,21 @@
 
           <tr class="related-input-data">
             <td>
-              <vue-multiselect class="align-middle" v-model="relatedData.insert.locality_reference.locality"
-                               deselect-label="Can't remove this value"
-                               label="locality" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.locality" select-label=""
-                               :options="autocomplete.locality" :searchable="true"
-                               @search-change="$_autocompleteLocalitySearch"
-                               :allow-empty="true" :show-no-results="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.locality }}</strong></template>
+              <vue-multiselect v-model="relatedData.insert.locality_reference.locality"
+                               id="locality_insert"
+                               label="locality"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.locality"
+                               :options="autocomplete.locality"
+                               @search-change="autocompleteLocalitySearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[localityLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>

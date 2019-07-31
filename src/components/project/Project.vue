@@ -53,40 +53,53 @@
                                :options="autocomplete.project_type"
                                v-bind:class="{ valid: isDefinedAndNotNull(project.project_type), invalid: !isDefinedAndNotNull(project.project_type) }"
                                track-by="id"
-                               :label="$_nameLabel"
+                               :label="nameLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[nameLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
 
             <div class="col-md-4">
               <label :for="`owner`">{{ $t('project.owner') }}:</label>
-              <vue-multiselect class="align-middle" v-model="project.owner" select-label=""
+              <vue-multiselect v-model="project.owner"
                                id="owner"
-                               deselect-label="Can't remove this value"
-                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.owner"
-                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteOwnerSearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :options="autocomplete.agent"
+                               @search-change="autocompleteOwnerSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
 
             <div class="col-sm-4">
               <label :for="`parent_project`">{{ $t('project.parent_project') }}:</label>
-              <vue-multiselect class="align-middle" v-model="project.parent_project" select-label=""
+              <vue-multiselect v-model="project.parent_project"
                                id="parent_project"
-                               deselect-label="Can't remove this value"
-                               :label="$_nameLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+                               :label="nameLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.parent_project"
-                               :options="autocomplete.parent_project" :searchable="true"
-                               @search-change="$_autocompleteParentProjectSearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :options="autocomplete.parent_project"
+                               @search-change="autocompleteParentProjectSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }"><strong>
-                  {{ $i18n.locale=== 'ee' ? option.name :option.name_en }}</strong></template>
+                  {{option[nameLabel] }}</strong></template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -160,19 +173,24 @@
           <div class="col-11 mb-2 mr-0">
             <vue-multiselect v-model="relatedData.projectagent"
                              id="projectagent"
-                             :searchable="true" @search-change="$_autocompleteProjectAgentSearch"
+                             label="agent"
+                             track-by="id"
+                             :multiple="true"
+                             :placeholder="$t('add.inputs.autocomplete')"
                              :options="autocomplete.agent"
                              :loading="autocomplete.loaders.projectagent"
-                             :multiple="true"
-                             track-by="id"
-                             label="agent" :open-direction="'bottom'"
-                             :placeholder="$t('add.inputs.autocomplete')">
+                             @search-change="autocompleteProjectAgentSearch"
+                             :internal-search="false"
+                             :preserve-search="true"
+                             :clear-on-select="false"
+                             :close-on-select="false"
+                             :show-labels="false">
               <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
             </vue-multiselect>
           </div>
 
           <div class="col-1 mb-2 ml-0 pl-0">
-            <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+            <button class="btn btn-outline-danger"
                     :disabled="!isDefinedAndNotEmpty(relatedData.projectagent)"
                     @click="relatedData.projectagent = []">
               <font-awesome-icon icon="trash-alt"></font-awesome-icon>

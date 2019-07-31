@@ -28,6 +28,7 @@
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.identifier_type"
+                               id="identifier_type"
                                :options="autocomplete.doi_related_identifier_type"
                                track-by="id"
                                label="value"
@@ -42,6 +43,7 @@
 
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.relation_type"
+                               id="relation_type"
                                :options="autocomplete.doi_relation_type"
                                track-by="id"
                                label="value"
@@ -74,6 +76,7 @@
           <tr class="related-input-data">
             <td>
               <vue-multiselect v-model="relatedData.insert.doi_related_identifier.identifier_type"
+                               id="identifier_type_insert"
                                :options="autocomplete.doi_related_identifier_type"
                                track-by="id"
                                label="value"
@@ -88,6 +91,7 @@
 
             <td>
               <vue-multiselect v-model="relatedData.insert.doi_related_identifier.relation_type"
+                               id="relation_type_insert"
                                :options="autocomplete.doi_relation_type"
                                track-by="id"
                                label="value"

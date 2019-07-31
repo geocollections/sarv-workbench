@@ -41,28 +41,38 @@
 
             <div class="col-md-3">
               <label :for="`type`">{{ $t('locality.type') }}:</label>
-              <vue-multiselect v-model="locality.type" v-if="isDefinedAndNotEmpty(autocomplete.localityTypes)"
+              <vue-multiselect v-model="locality.type"
+                               v-if="isDefinedAndNotEmpty(autocomplete.localityTypes)"
                                id="type"
                                :options="autocomplete.localityTypes"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
 
             <div class="col-md-3">
               <label :for="`parent`">{{ $t('locality.parent') }}:</label>
-              <vue-multiselect class="align-middle" v-model="locality.parent" deselect-label="Can't remove this value"
-                               :label="$_localityLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+              <vue-multiselect v-model="locality.parent"
+                               id="parent"
+                               :label="localityLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
-                               :options="autocomplete.locality" :searchable="true"
-                               @search-change="$_autocompleteLocalitySearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>
-                  {{ $i18n.locale=== 'ee' ? option.locality :option.locality_en }}</strong></template>
+                               :options="autocomplete.locality"
+                               @search-change="autocompleteLocalitySearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{  option[localityLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -143,9 +153,12 @@
                                id="extent"
                                :options="autocomplete.extent"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -161,9 +174,12 @@
                                id="country"
                                :options="autocomplete.country"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -177,9 +193,12 @@
                                id="coord_det_precision"
                                :options="autocomplete.coordPrecision"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -190,22 +209,33 @@
                                id="coord_det_method"
                                :options="autocomplete.coordMethod"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
 
             <div class="col-md-4">
               <label :for="`coord_det_agent`">{{ $t('locality.coord_det_agent') }}:</label>
-              <vue-multiselect class="align-middle" v-model="locality.coord_det_agent"
-                               deselect-label="Can't remove this value" id="coord_det_agent"
-                               label="agent" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+              <vue-multiselect v-model="locality.coord_det_agent"
+                               id="coord_det_agent"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
-                               :options="autocomplete.agent" :searchable="true" @search-change="$_autocompleteAgentSearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
+                               :options="autocomplete.agent"
+                               @search-change="autocompleteAgentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -215,16 +245,21 @@
           <div class="row">
             <div class="col-sm-6">
               <label :for="`stratigraphy_top`">{{ $t('locality.stratigraphy_top') }}:</label>
-              <vue-multiselect class="align-middle" v-model="locality.stratigraphy_top"
-                               deselect-label="Can't remove this value" id="stratigraphy_top"
+              <vue-multiselect v-model="locality.stratigraphy_top"
+                               id="stratigraphy_top"
                                :loading="autocomplete.loaders.stratigraphy_top"
-                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :options="autocomplete.stratigraphy_top" :searchable="true"
-                               @search-change="$_autocompleteStratigraphyTopSearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>
-                  {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong></template>
+                               :label="stratigraphyLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :options="autocomplete.stratigraphy_top"
+                               @search-change="autocompleteStratigraphyTopSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{  option[stratigraphyLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
@@ -239,16 +274,21 @@
           <div class="row">
             <div class="col-sm-6">
               <label :for="`stratigraphy_base`">{{ $t('locality.stratigraphy_base') }}:</label>
-              <vue-multiselect class="align-middle" v-model="locality.stratigraphy_base"
-                               deselect-label="Can't remove this value" id="stratigraphy_base"
-                               :label="$_stratigraphyLabel" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
+              <vue-multiselect v-model="locality.stratigraphy_base"
+                               id="stratigraphy_base"
+                               :label="stratigraphyLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.stratigraphy_base"
-                               :options="autocomplete.stratigraphy_base" :searchable="true"
-                               @search-change="$_autocompleteStratigraphyBaseSearch"
-                               :allow-empty="true" :show-no-results="false" :max-height="600"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>
-                  {{ $i18n.locale=== 'ee' ? option.stratigraphy :option.stratigraphy_en }}</strong></template>
+                               :options="autocomplete.stratigraphy_base"
+                               @search-change="autocompleteStratigraphyBaseSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[stratigraphyLabel] }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>

@@ -13,7 +13,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.requiredFields">
+        <div v-show="block.requiredFields">
 
           <!-- DOI, RESOURCE TYPE and RESOURCE -->
           <div class="row">
@@ -84,7 +84,7 @@
         <font-awesome-icon icon="project-diagram"/>
       </legend>
       <transition name="fade">
-        <div v-if="block.info">
+        <div v-show="block.info">
 
           <!-- TITLE ALTERNATIVE -->
           <div class="row">
@@ -107,7 +107,7 @@
                                id="title_translated_language"
                                :options="autocomplete.language"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -126,11 +126,11 @@
                                id="language"
                                :options="autocomplete.language"
                                track-by="id"
-                               :label="$_commonLabel"
+                               :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ $i18n.locale=== 'ee' ? option.value : option.value_en }}</strong>
+                  <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -168,7 +168,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.agent"
                                :options="autocomplete.agent"
-                               @search-change="$_autocompleteAgentSearch"
+                               @search-change="autocompleteAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :clear-on-select="false"
@@ -200,6 +200,7 @@
           <!-- COPYRIGHT_AGENT (copyright) and LICENCE -->
           <div class="row">
             <div class="col-md-6">
+              <!-- Todo: Use this TEMPLATE for search filled autocomplete -->
               <label :for="`copyright_agent`">{{ $t('doi.copyright') }}:</label>
               <vue-multiselect id="copyright_agent"
                                v-model="doi.copyright_agent"
@@ -208,7 +209,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.copyright_agent"
                                :options="autocomplete.copyright_agent"
-                               @search-change="$_autocompleteCopyrightAgentSearch"
+                               @search-change="autocompleteCopyrightAgentSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :clear-on-select="false"
@@ -220,17 +221,18 @@
               </vue-multiselect>
             </div>
 
+            <!-- Todo: Use this TEMPLATE for prefilled autocomplete -->
             <div class="col-md-6">
               <label :for="`licence`">{{ $t('doi.licence') }}:</label>
               <vue-multiselect v-model="doi.licence"
                                id="licence"
                                :options="autocomplete.licence"
                                track-by="id"
-                               :label="$_licenceLabel"
+                               :label="licenceLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ $i18n.locale=== 'ee' ? option.licence : option.licence_en }}</strong>
+                  <strong>{{ option[licenceLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -249,7 +251,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.referenceAndDataset">
+        <div v-show="block.referenceAndDataset">
 
           <div class="row">
             <!-- REFERENCE -->
@@ -262,7 +264,7 @@
                                :preserve-search="true"
                                :clear-on-select="false"
                                :close-on-select="true"
-                               @search-change="$_autocompleteDoiReferenceSearch"
+                               @search-change="autocompleteDoiReferenceSearch"
                                :custom-label="customLabelForReference"
                                :loading="autocomplete.loaders.reference"
                                placeholder="reference search..."
@@ -294,7 +296,7 @@
                                :preserve-search="true"
                                :clear-on-select="false"
                                :close-on-select="true"
-                               @search-change="$_autocompleteDatasetSearch"
+                               @search-change="autocompleteDatasetSearch"
                                :custom-label="customLabelForDataset"
                                :loading="autocomplete.loaders.dataset"
                                placeholder="dataset search..."
@@ -330,7 +332,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.description">
+        <div v-show="block.description">
 
           <div class="row">
             <div class="col-sm-12">
@@ -451,7 +453,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.datacite">
+        <div v-show="block.datacite">
 
           <div class="row">
             <div class="col-md-6 mb-2">

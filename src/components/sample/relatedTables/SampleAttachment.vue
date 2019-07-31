@@ -14,13 +14,21 @@
           <tr v-for="(entity, index) in relatedData.attachment_link"  :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
             <td  v-if="!entity.editMode">{{entity.original_filename}}</td>
             <td  v-if="entity.editMode">
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="entity.new.attachment" deselect-label="Can't remove this value"
-                               label="original_filename" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.attachment"  select-label=""
-                               :options="autocomplete.attachment" :searchable="true" @search-change="$_autocompleteAttachmentSearch"
-                               :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'top'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.original_filename }}</strong> </template>
+              <vue-multiselect v-model="entity.new.attachment"
+                               id="attachment"
+                               label="original_filename"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.attachment"
+                               :options="autocomplete.attachment"
+                               @search-change="autocompleteAttachmentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.original_filename }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
@@ -34,13 +42,21 @@
           </tr>
           <tr class="related-input-data">
             <td>
-              <vue-multiselect style="min-width: 300px!important" class="align-middle" v-model="relatedData.insert.attachment_link.attachment" deselect-label="Can't remove this value"
-                               label="original_filename" track-by="id" :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.attachment"  select-label=""
-                               :options="autocomplete.attachment" :searchable="true" @search-change="$_autocompleteAttachmentSearch"
-                               :allow-empty="true"  :show-no-results="false"
-                               :open-direction="'bottom'">
-                <template slot="singleLabel" slot-scope="{ option }"><strong>{{ option.original_filename }}</strong> </template>
+              <vue-multiselect v-model="relatedData.insert.attachment_link.attachment"
+                               id="attachment_insert"
+                               label="original_filename"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.attachment"
+                               :options="autocomplete.attachment"
+                               @search-change="autocompleteAttachmentSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.original_filename }}</strong>
+                </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
