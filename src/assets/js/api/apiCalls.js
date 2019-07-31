@@ -695,7 +695,6 @@ export function fetchActiveProjects(projectIds) {
  ******************/
 
 export function fetchSites(data,agent) {
-  console.log(data)
   let fields = 'id, project, project__name, locality, locality__locality, name, name_en, number,' +
     'latitude,longitude,location_accuracy,elevation,elevation_accuracy,' +
     'coord_det_method__value,coord_det_method__value_en, date_start,date_end,date_free,remarks_location,' +
@@ -766,10 +765,10 @@ export function fetchSite(id) {
 export function fetchSiteAttachment(id,page=1) {
   return fetch(`attachment/?attach_link__site__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`)
 }
-export function fetchLinkedSamples(id,page=1) {
-  return fetch(`sample/?site__id=${id}&page=${page}&paginate_by=100&fields=id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en&format=json`)
-}
-export function fetchLinkedSamplesX(data, siteID) {
+// export function fetchLinkedSamples(id,page=1) {
+//   return fetch(`sample/?site__id=${id}&page=${page}&paginate_by=100&fields=id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en&format=json`)
+// }
+export function fetchLinkedSamples(data, siteID) {
   let fields = 'id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en';
   let searchFields = '';
 
@@ -794,7 +793,7 @@ export function fetchLinkedSamplesX(data, siteID) {
   if (data.rock && data.rock.trim().length > 0) {
      searchFields += `&multi_search=value:${data.rock};fields:rock_en,rock;lookuptype:icontains`
   }
-  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
     return  fetch(`sample/?site__id=${siteID}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)

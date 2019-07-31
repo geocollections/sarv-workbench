@@ -4,11 +4,11 @@
                      id="active_library"
                      :options="sidebarList.results"
                      track-by="id"
-                     :label="libraryTitle"
+                     :label="$i18n.locale === 'ee' ? 'library__title' : 'library__title_en'"
                      :placeholder="$t('reference.chooseActiveLibrary')"
                      :show-labels="false">
       <template slot="singleLabel" slot-scope="{ option }">
-        <strong>{{ option[libraryTitle] }}</strong>
+        <strong>{{ this.$i18n.locale === 'ee' ? option.library__title : option.library__title_en }}</strong>
       </template>
       <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
     </vue-multiselect>
@@ -28,7 +28,7 @@
 
       activeLibrary: {
         get: function () {
-          if (this.$store.state['activeLibrary'] !== null) return this.$store.state['activeLibrary']
+          if (this.$store.state['activeLibrary']) return this.$store.state['activeLibrary'];
           else return ''
         },
 

@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div class="p-0">
-      <table class="table table-hover table-bordered" v-if="samples.length > 0">
+  <div class="linked-sample-table" v-if="samples.length > 0">
+    <div class="col-sm-12 p-0">
+      <table class="table table-hover table-bordered">
         <thead class="thead-light">
         <tr>
           <th>ID</th>
@@ -16,7 +16,7 @@
         <tr>
           <th class="p-0">
             <b-form-input autocomplete="off" class="col-sm-8 mw-100" v-model="searchParameters.id"
-                          type="number"></b-form-input>
+                          type="text"></b-form-input>
           </th>
           <th class="p-0">
             <b-form-input autocomplete="off" class="col-sm-8 mw-100" v-model="searchParameters.number"
@@ -24,11 +24,11 @@
           </th>
           <th class="p-0">
             <b-form-input autocomplete="off" class="col-sm-8 mw-100" v-model="searchParameters.depth"
-                          type="number"></b-form-input>
+                          type="text"></b-form-input>
           </th>
           <th class="p-0">
             <b-form-input autocomplete="off" class="col-sm-8 mw-100" v-model="searchParameters.depth_interval"
-                          type="number"></b-form-input>
+                          type="text"></b-form-input>
           </th>
           <th class="p-0">
             <b-form-input autocomplete="off" class="col-sm-8 mw-100" v-model="searchParameters.stratigraphy"
@@ -46,8 +46,8 @@
         </tr>
         </thead>
 
-        <tbody>
-        <tr v-for="sample in samples">
+        <tbody v-if="sample_results.length > 0">
+        <tr v-for="sample in sample_results">
           <td>
             <router-link :to="{ path: '/sample/' + sample.id }" target="_blank">
               <font-awesome-icon size="1x" icon="eye"/>
@@ -63,6 +63,19 @@
         </tr>
         </tbody>
 
+        <tbody v-else>
+        <td colspan="8" class="text-center">
+          <div class="d-flex justify-content-center">
+            <div class="px-1">
+              <strong>{{ $t('messages.inputNoResults') }}</strong>
+            </div>
+            <div class="px-1 reset-search" @click="setDefaultSearchParameters" title="Reset search">
+              <i class="fas fa-redo-alt fa-spin-hover"></i>
+            </div>
+          </div>
+        </td>
+        </tbody>
+
       </table>
     </div>
 
@@ -76,9 +89,8 @@
 </template>
 
 <script>
-  import fontAwasomeLib from '../../mixins/fontAwasomeLib'
-  import { fetchLinkedSamplesX } from "../../assets/js/api/apiCalls";
-  import formSectionsMixin from '../../mixins/formSectionsMixin'
+  import fontAwasomeLib from '../../../mixins/fontAwasomeLib'
+  import { fetchLinkedSamples } from "../../../assets/js/api/apiCalls";
 
   export default {
     name: "LinkedSampleTable",
@@ -86,11 +98,14 @@
       siteID: {
         type: String
       },
+      samples: {
+        type: Array
+      }
     },
-    mixins: [fontAwasomeLib, formSectionsMixin],
+    mixins: [fontAwasomeLib],
     data() {
       return {
-        samples: [],
+        sample_results: [],
         count: 0,
         searchParameters: {
           id: null,
@@ -107,38 +122,36 @@
       }
     },
 
-
-    created() {
-      //CREATE EVENT LOAD LINKED SAMLES ON PAGE CLOSE!!! CONTINUE
-      this.$root.$on('reload-linked-samples', this.loadLinkedSamples)
-      this.loadLinkedSamples();
-      window.addEventListener('visibilitychange', this.handleVisibilityChange);
-    },
-    destroyed() {
-      window.removeEventListener('visibilitychange', this.handleVisibilityChange)
-    },
     methods: {
-      windowOpenNewTab(name, path, query = {}, meta) {
-        let routeData = this.$router.resolve({path: path, query: query, meta: meta});
-        window.open(routeData.href, '_blank');
-      },
       loadLinkedSamples() {
-        fetchLinkedSamplesX(this.searchParameters, this.siteID).then(response => {
-          this.count = response.body.count
-          this.samples = response.body.results ? response.body.results : []
-          this.$parent.relatedData.sample = this.samples
+        fetchLinkedSamples(this.searchParameters, this.siteID).then(response => {
+          this.count = response.body.count;
+          this.sample_results = response.body.results ? response.body.results : [];
         });
       },
 
-      handleVisibilityChange() {
-        this.loadLinkedSamples()
-      },
+      setDefaultSearchParameters() {
+        console.log(this.searchParameters)
+        this.searchParameters = {
+          id: null,
+          number: null,
+          depth: null,
+          depth_interval: null,
+          stratigraphy: null,
+          lithostratigraphy: null,
+          rock: null,
+          page: 1,
+          paginateBy: 10,
+          orderBy: '-id',
+        }
+      }
     },
     watch: {
       'searchParameters': {
-        handler: function (newval, oldval) {
+        handler: function (newVal, oldVal) {
           this.loadLinkedSamples()
         },
+        immediate: true,
         deep: true
       }
     }
@@ -146,4 +159,17 @@
 </script>
 
 <style scoped>
+  .reset-search {
+    color: #007bff;
+  }
+
+  .reset-search:hover {
+    cursor: pointer;
+  }
+
+  .fa-spin-hover:hover {
+    -webkit-animation: fa-spin 2s infinite linear;
+    -moz-animation: fa-spin 2s infinite linear;
+    -o-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;}
 </style>

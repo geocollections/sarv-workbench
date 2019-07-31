@@ -265,8 +265,8 @@
                 {{ $t('add.new') }}
               </router-link>
             </span>
-            <div class="table-responsive-sm" v-if="$route.params.id">
-              <linked-sample-table :siteID="$route.params.id"></linked-sample-table>
+            <div class="table-responsive-sm" v-if="$route.meta.isEdit">
+              <linked-sample-table :siteID="$route.params.id" :samples="relatedData.sample"></linked-sample-table>
             </div>
           </div>
         </div>
@@ -300,7 +300,7 @@
   import MapComponent from "../partial/MapComponent";
   import FileTable from "../partial/FileTable";
   import SaveButtons from "../partial/SaveButtons";
-  import LinkedSampleTable from "../sample/LinkedSampleTable";
+  import LinkedSampleTable from "../sample/linkedTables/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
   import sidebarMixin from "../../mixins/sidebarMixin";
   import Editor from "../partial/editor/Editor";
@@ -446,7 +446,7 @@
           });
 
           this.loadRelatedData('attachment_link');
-          // this.loadRelatedData('sample');
+          this.loadRelatedData('sample');
         } else {
           // this.block.info = true
           // this.setLocationDataIfExists();
@@ -458,10 +458,31 @@
 
       setDefaultRalatedData() {
         return {
-          new: {attachment_link: []},
-          attachment_link: [], sample: [],
-          page: {attachment_link: 1, sample: 1},
-          count: {attachment_link: 0, sample: 0}
+          attachment_link: [],
+          sample: [],
+          new: {
+            attachment_link: []
+          },
+          page: {
+            attachment_link: 1,
+          },
+          count: {
+            attachment_link: 0,
+            sample: 0
+          },
+          // New format!!! I believe it is better for future updates
+          searchParameters: {
+            attachment_link: {
+              page: 1,
+              paginateBy: 25,
+              orderBy: '-id'
+            },
+            sample: {
+              page: 1,
+              paginateBy: 25,
+              orderBy: '-id'
+            },
+          }
         }
       },
 
@@ -519,18 +540,16 @@
         let query;
 
         if (object === 'attachment_link') {
+          // Todo: update to so that it would use searchParameters object
           query = fetchSiteAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
         } else if (object === 'sample') {
-          query = fetchLinkedSamples(this.$route.params.id, this.relatedData.page.sample)
+          query = fetchLinkedSamples(this.relatedData.searchParameters.sample, this.$route.params.id)
         }
         return new Promise(resolve => {
           query.then(response => {
-            //projectagent do not have count value
-            if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results : [];
-
             this.relatedData.count[object] = response.body.count;
-            this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
-
+            this.relatedData[object] = this.handleResponse(response);
+            // this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
             resolve(true)
           });
         });
