@@ -96,7 +96,8 @@
       "specimens": "Eksemplarid",
       "activeProject": "Minu aktiivne projekt",
       "activeSite": "Viimati külastatud vaatluspunkt",
-      "activeSample": "Minu viimane proov"
+      "activeSample": "Minu viimane proov",
+      "keyword": "Lisa termin"
     },
     "developmentSettings": {
       "button": "Kustuta kõik vaikimisi väärtused",
@@ -217,6 +218,8 @@
     "newAnalysis": "Lisa uus analüüs",
     "specimen": "Eksemplar",
     "newSpecimen": "Lisa uus eksemplar",
+    "keyword": "Termin",
+    "newKeyword": "Lisa uus termin",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -360,6 +363,9 @@
   },
   "editSpecimen": {
     "heading": "Eksemplar"
+  },
+  "editKeyword": {
+    "heading": "Termin"
   },
   "attachments": {
     "header": "Minu failid",
@@ -1017,6 +1023,14 @@
       "library_reference": "Kogumiku kirjandus",
       "library_reference_list": "Kogumiku kirjanduse listi vaade"
     }
+  },
+  "keyword": {
+    "generalInfo": "Üldinfo",
+    "keyword": "Termin",
+    "language": "Keel",
+    "keyword_category": "Kategooria",
+    "related_keyword": "Seotud termin",
+    "remarks": "Lisainfo"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

@@ -171,6 +171,12 @@ const autocompleteMixin = {
     autocompleteKeywordSearch(value) {
       this.$_autocompleteMixin_search(value, 'keyword', 'keyword', 1, this.keywordCategoryLabel)
     },
+    autocompleteKeywordCategorySearch(value) {
+      this.$_autocompleteMixin_search(value, 'keyword_category', 'keyword_category', 1)
+    },
+    autocompleteRelatedKeywordSearch(value) {
+      this.$_autocompleteMixin_search(value, 'related_keyword', 'related_keyword', 1)
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -280,6 +286,10 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `classification/?multi_search=value:${value};fields:id,class_field,class_en;lookuptype:icontains&fields=id,class_field,class_en`;
     case 'keyword':
       return `keyword/?multi_search=value:${value};fields:keyword,${groupByField};lookuptype:icontains&group_by=${groupByField}`;
+    case 'keyword_category':
+      return `keyword_category/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+    case 'related_keyword':
+      return `keyword/?keyword__icontains=${value}&fields=id,keyword`;
     default:
       return ''
   }

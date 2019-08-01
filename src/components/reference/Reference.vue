@@ -317,6 +317,17 @@
             </div>
           </div>
 
+          <div class="row mt-2">
+            <div class="col">
+              <router-link class="btn btn-outline-primary mb-2" :to="{ name: 'Keyword add', query: { reference: JSON.stringify(reference) } }" target="_blank">
+                {{ $t('frontPage.buttons.keyword') }}
+              </router-link>
+            </div>
+          </div>
+
+          <!-- Todo: #236 needs some discussing -->
+          <linked-keyword-table :referenceID="$route.params.id" :keywords="relatedData.keyword"></linked-keyword-table>
+
         </div>
       </transition>
 
@@ -610,10 +621,12 @@
   import formSectionsMixin from "../../mixins/formSectionsMixin";
   import Editor from "../partial/editor/Editor";
   import {mapState} from "vuex";
+  import LinkedKeywordTable from "../keyword/LinkedKeywordTable";
 
   export default {
     name: "Reference",
     components: {
+      LinkedKeywordTable,
       Editor,
       MultimediaComponent,
       LocalityTable,

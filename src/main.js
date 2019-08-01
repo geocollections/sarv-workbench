@@ -111,6 +111,7 @@ Vue.http.interceptors.push((request, next) => {
             timeout: 5000,
             closeOnEscape: true,
             pauseOnHover: false,
+            displayMode: 'replace'
           })
         }
 
@@ -128,7 +129,7 @@ Vue.http.interceptors.push((request, next) => {
             closeOnEscape: true,
             pauseOnHover: false,
             displayMode: 'replace'
-          })
+          });
           router.push({path: '/'})
         }
 

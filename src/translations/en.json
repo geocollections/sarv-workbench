@@ -96,7 +96,8 @@
       "specimens": "Specimens",
       "activeProject": "My active project",
       "activeSite": "Last visited site",
-      "activeSample": "My last sample"
+      "activeSample": "My last sample",
+      "keyword": "Add term"
     },
     "developmentSettings": {
       "button": "Remove all default settings",
@@ -217,6 +218,8 @@
     "newAnalysis": "Add new analysis",
     "specimen": "Specimen",
     "newSpecimen": "Add new specimen",
+    "keyword": "Term",
+    "newKeyword": "Add new term",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -360,6 +363,9 @@
   },
   "editSpecimen": {
     "heading": "Specimen"
+  },
+  "editKeyword": {
+    "heading": "Term"
   },
   "attachments": {
     "header": "My attachments",
@@ -1017,6 +1023,14 @@
       "library_reference": "References",
       "library_reference_list": "References list view"
     }
+  },
+  "keyword": {
+    "generalInfo": "General info",
+    "keyword": "Term",
+    "language": "Languge",
+    "keyword_category": "Category",
+    "related_keyword": "Related term",
+    "remarks": "Remarks"
   },
   "messages": {
     "langChange": "Changed language!",

@@ -345,7 +345,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: true,
+                isNavigationShown: false,
                 object: 'reference'
               },
             }
@@ -429,7 +429,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: true,
+                isNavigationShown: false,
                 object: 'locality'
               },
             }
@@ -498,7 +498,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: true,
+                isNavigationShown: false,
                 object: 'sample'
               },
             },
@@ -546,7 +546,7 @@ const router = new Router({
                     ],
                     requiresAuth: true,
                     isBottomOptionShown: true,
-                    isNavigationShown: true,
+                    isNavigationShown: false,
                     object: 'project'
                   },
                 }
@@ -651,7 +651,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: true,
+                isNavigationShown: false,
                 object: 'site'
               },
             }
@@ -783,7 +783,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: true,
+                isNavigationShown: false,
                 object: 'doi'
               },
             }
@@ -850,7 +850,7 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: true,
+                isNavigationShown: false,
                 object: 'analysis'
               },
             }
@@ -917,8 +917,76 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
-                isNavigationShown: true,
+                isNavigationShown: false,
                 object: 'specimen'
+              },
+            }
+          ]
+        },
+        // Todo: As of 01.08.2019 only keyword adding and editing is used
+        // {
+        //   path: '/keyword',
+        //   component: () => import('./views/Keyword.vue'),
+        //   meta: {
+        //     requiresAuth: true
+        //   },
+        //   children: [
+        //     {
+        //       path: '',
+        //       component: () => import('./components/specimen/KeywordTable.vue'),
+        //       meta: {
+        //         requiresAuth: true
+        //       },
+        //     }
+        //   ]
+        // },
+        {
+          path: '/keyword/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/keyword/Keyword.vue'),
+              meta: {
+                isEdit:true,
+                table:'keyword',
+                title:'titles.editKeyword',
+                heading:'editKeyword.heading',
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: 'keyword'
+              },
+            }
+          ]
+        },
+        {
+          path: '/keyword/add',
+          component: () => import('./views/AddForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              name: 'Keyword add',
+              component: () => import('./components/keyword/Keyword.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addKeyword',
+                addNew:'add.newKeyword',
+                subForms:[
+                  {path:'/keyword/add',name:'add.keyword'}
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'keyword'
               },
             }
           ]

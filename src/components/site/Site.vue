@@ -260,14 +260,15 @@
           <add-new-sample :sendingData="sendingData"></add-new-sample>
 
           <div class="col-sm-12 mb-2">
-            <span class="float-left">
-              <router-link class="btn btn-outline-primary mb-2" :to="{ name: 'Sample add', query: { site: JSON.stringify(site) } }" target="_blank">
-                {{ $t('add.new') }}
-              </router-link>
-            </span>
-            <div class="table-responsive-sm" v-if="$route.meta.isEdit">
-              <linked-sample-table :siteID="$route.params.id" :samples="relatedData.sample"></linked-sample-table>
+            <div class="row">
+              <div class="col">
+                <router-link class="btn btn-outline-primary mb-2" :to="{ name: 'Sample add', query: { site: JSON.stringify(site) } }" target="_blank">
+                  {{ $t('add.new') }}
+                </router-link>
+              </div>
             </div>
+
+            <linked-sample-table :siteID="$route.params.id" :samples="relatedData.sample"></linked-sample-table>
           </div>
         </div>
       </transition>
@@ -300,7 +301,7 @@
   import MapComponent from "../partial/MapComponent";
   import FileTable from "../partial/FileTable";
   import SaveButtons from "../partial/SaveButtons";
-  import LinkedSampleTable from "../sample/linkedTables/LinkedSampleTable";
+  import LinkedSampleTable from "../sample/LinkedSampleTable";
   import AddNewSample from "./addNewSampleModal";
   import sidebarMixin from "../../mixins/sidebarMixin";
   import Editor from "../partial/editor/Editor";
@@ -684,7 +685,7 @@
 
     watch: {
       '$route.params.id': {
-        handler: function (newval, oldval) {
+        handler: function (newVal, oldVal) {
           this.reloadData()
         },
         deep: true

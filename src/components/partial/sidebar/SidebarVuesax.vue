@@ -102,6 +102,11 @@
                          :to="{ path: '/journal/add' }">
           {{ $t('frontPage.buttons.journal') }}
         </vs-sidebar-item>
+
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'keyword')" index="5.6" icon="fa-stream" icon-pack="fas"
+                         :to="{ path: '/keyword/add' }">
+          {{ $t('frontPage.buttons.keyword') }}
+        </vs-sidebar-item>
       </vs-sidebar-group>
 
       <!-- LOCALITIES -->
