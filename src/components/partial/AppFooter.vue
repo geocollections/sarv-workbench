@@ -1,6 +1,5 @@
 <template>
-  <!-- TODO: If edit or add then add margin bottom (54px) so buttons wouldn't cover the footer -->
-  <div class="footer">
+  <div class="footer" :class="{ 'bottom-options-margin': isEditOrAddView }">
 
     <footer>
       <img src="https://geocollections.info/img/logos/sarv_logo_valge1.png" style="height: 60px; padding-bottom: 10px;" /><br />
@@ -15,7 +14,12 @@
 
 <script>
   export default {
-    name: "app-footer"
+    name: "app-footer",
+    computed: {
+      isEditOrAddView() {
+        return typeof this.$route.meta.isEdit !== 'undefined'
+      }
+    }
   }
 </script>
 
@@ -25,5 +29,9 @@
     padding: 8px 16px;
     font-size: 0.75rem;
     text-align: center;
+  }
+
+  .bottom-options-margin {
+    margin-bottom: 56px;
   }
 </style>

@@ -141,8 +141,7 @@
   }
 </script>
 
-<!-- Styles are not scoped because now it is possible to add margin-bottom to footer easily -->
-<style>
+<style scoped>
   .bottom-options-new {
     /*background-color: #343a40!important;*/
     background-color: #fff!important;
@@ -240,11 +239,5 @@
     letter-spacing: 2px;
     font-weight: 800;
     transition: color 250ms, letter-spacing 750ms, font-weight 250ms;
-  }
-
-  /* Adds margin-bottom to footer so that it won't get caught behind buttons */
-  /* TODO: Fix it so if component doesnt exist do not use the class*/
-  .footer {
-    margin-bottom: 56px;
   }
 </style>
