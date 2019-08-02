@@ -989,24 +989,28 @@ export function fetchKeyword(id) {
   return fetch(`keyword/?id=${id}&format=json`)
 }
 
-export function fetchKeywords(data) {
+export function fetchKeywords(data, listOfIDs) {
   let fields = 'id,keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,remarks';
   let searchFields = '';
 
+  if (listOfIDs && listOfIDs.length > 0) {
+    searchFields += `id__in=${listOfIDs}`
+  }
+
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`
+    searchFields += `&id__icontains=${data.id}`
   }
   if (data.term && data.term.trim().length > 0) {
     searchFields += `&keyword__icontains=${data.term}`
   }
   if (data.language && data.language.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.language};fields:language,language__value,language__value_en;lookuptype:icontains`
+    searchFields += `&multi_search=value:${data.language};fields:language__value,language__value_en;lookuptype:icontains`
   }
   if (data.keyword_category && data.keyword_category.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.keyword_category};fields:keyword_category,keyword_category__name,keyword_category__name_en;lookuptype:icontains`
+    searchFields += `&multi_search=value:${data.keyword_category};fields:keyword_category__name,keyword_category__name_en;lookuptype:icontains`
   }
-  if (data.related_category && data.related_category.trim().length > 0) {
-    searchFields += `&related_category__keyword__icontains=${data.related_category}`
+  if (data.related_keyword && data.related_keyword.trim().length > 0) {
+    searchFields += `&related_keyword__keyword__icontains=${data.related_keyword}`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
@@ -1018,36 +1022,8 @@ export function fetchKeywords(data) {
   }
 }
 
-export function fetchReferenceKeywords(data, referenceID) {
-  let fields = 'keyword,keyword__id,keyword__language,keyword__language__value,keyword__language__value_en,keyword__keyword_category,keyword__keyword__keyword_category__name,keyword__keyword_category__name_en,keyword__related_keyword,keyword__related_keyword__keyword,keyword__remarks';
-  let searchFields = '';
-
-  if (referenceID) {
-    searchFields += `reference=${referenceID}`
-  }
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `&keyword__id__icontains=${data.id}`
-  }
-  if (data.term && data.term.trim().length > 0) {
-    searchFields += `&keyword__keyword__icontains=${data.term}`
-  }
-  if (data.language && data.language.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.language};fields:keyword__language,keyword__language__value,keyword__language__value_en;lookuptype:icontains`
-  }
-  if (data.keyword_category && data.keyword_category.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.keyword_category};fields:keyword__keyword_category,keyword__keyword_category__name,keyword__keyword_category__name_en;lookuptype:icontains`
-  }
-  if (data.related_category && data.related_category.trim().length > 0) {
-    searchFields += `&keyword__related_category__keyword__icontains=${data.related_category}`
-  }
-
-  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return  fetch(`reference_keyword/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-  } else {
-    return  fetch(`reference_keyword/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-  }
+export function fetchReferenceKeywordIDs(referenceID) {
+  return  fetch(`reference_keyword/?reference=${referenceID}&fields=keyword&format=json`)
 }
 
 export function fetchListKeywords() {

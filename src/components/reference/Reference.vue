@@ -325,8 +325,7 @@
             </div>
           </div>
 
-          <!-- Todo: #236 needs some discussing -->
-          <linked-keyword-table :referenceID="$route.params.id" :keywords="relatedData.keyword"></linked-keyword-table>
+          <linked-keyword-table :referenceID="$route.params.id" :keywords="relatedData.keyword"/>
 
         </div>
       </transition>

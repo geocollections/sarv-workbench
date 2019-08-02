@@ -1,5 +1,5 @@
 <template>
-  <div class="linked-keyword-table row" v-if="keywords.length > 0">
+  <div class="linked-keyword-table row" v-if="keywordsExist">
     <div class="col-sm-12">
 
       <div class="table-responsive-sm">
@@ -37,8 +37,8 @@
           </tr>
           </thead>
 
-          <tbody v-if="keyword_results.length > 0">
-          <tr v-for="keyword in keyword_results" :key="keyword.id">
+          <tbody v-if="keywordResults.length > 0">
+          <tr v-for="keyword in keywordResults" :key="keyword.id">
             <td>
               <router-link :to="{ path: '/keyword/' + keyword.id }" target="_blank">
                 <i class="far fa-eye"></i>
@@ -59,7 +59,7 @@
                 <div class="px-1">
                   <strong>{{ $t('messages.inputNoResults') }}</strong>
                 </div>
-                <div class="px-1 reset-search" @click="setDefaultSearchParameters" title="Reset search">
+                <div class="px-1 reset-search" @click="searchParameters = getDefaultSearchParameters()" title="Reset search">
                   <i class="fas fa-redo-alt fa-spin-hover"></i>
                 </div>
               </div>
@@ -81,7 +81,7 @@
 </template>
 
 <script>
-  import {fetchKeywords, fetchReferenceKeywords} from "../../assets/js/api/apiCalls";
+  import {fetchKeywords, fetchReferenceKeywordIDs} from "../../assets/js/api/apiCalls";
 
   export default {
     name: "LinkedKeywordTable",
@@ -90,69 +90,111 @@
         type: String
       },
       keywords: {
-        type: Array
+        required: true
       }
     },
     data() {
       return {
-        keyword_results: [],
+        keywordsExist: true,
+        keywordResults: [],
         count: 0,
+        // Todo: Implement paginateBy and Ordering
         searchParameters: {
           id: null,
           term: null,
           language: null,
           keyword_category: null,
-          related_category: null,
+          related_keyword: null,
           page: 1,
           paginateBy: 10,
           orderBy: '-id',
         }
+      }
+    },
+
+    computed: {
+      searchParametersHaveChanged() {
+        return JSON.stringify(this.searchParameters) !== JSON.stringify(this.getDefaultSearchParameters())
+      },
+    },
+
+    watch: {
+      'searchParameters': {
+        handler: function (newVal, oldVal) {
+          if (this.$route.meta.isEdit) this.loadLinkedKeywords();
+          else this.searchKeywords(newVal)
+        },
+        immediate: true,
+        deep: true
+      },
+      'keywords': {
+        handler: function (newVal, oldVal) {
+          if (!this.$route.meta.isEdit) {
+            this.keywordsExist = newVal && newVal.length > 0;
+
+            this.count = newVal ? newVal.length : 0;
+            this.keywordResults = newVal ? newVal : [];
+          }
+        },
+        deep: true
+      },
+      'keywordsExist': {
+        handler: function (newVal, oldVal) {
+          if (!this.$route.meta.isEdit) {
+            this.keywordsExist = this.keywords && this.keywords.length > 0
+          }
+        },
+        immediate: true
       }
     },
 
     methods: {
-      loadLinkedKeywords() {
-        if (!this.$route.meta.isEdit) {
-          // Todo: Search object
-          this.count = this.keywords.length;
-          this.keyword_results = this.keywords;
-        } else if (this.$route.meta.isEdit && this.referenceID) {
-          fetchReferenceKeywords(this.searchParameters, this.referenceID).then(response => {
+      async loadLinkedKeywords() {
+        if (this.referenceID) {
+          let referenceKeywords = await fetchReferenceKeywordIDs(this.referenceID);
+          let listOfKeywordIDs = this.getListOfKeywordIDs(referenceKeywords);
+          if (listOfKeywordIDs.length > 0) {
+            fetchKeywords(this.searchParameters, listOfKeywordIDs).then(response => {
+              this.count = response.body.count;
+              this.keywordResults = response.body.results ? response.body.results : [];
+            })
+          } else {
+            this.keywordsExist = false;
+          }
+        } else {
+          // Todo: If some other object like attachment etc. then should add if clause or use regular keywords table (table in database needs update)
+          fetchKeywords(this.searchParameters).then(response => {
             this.count = response.body.count;
-            this.keyword_results = response.body.results ? response.body.results : [];
+            this.keywordResults = response.body.results ? response.body.results : [];
           });
         }
-        // else if (this.$route.meta.isEdit) {
-        //   fetchKeywords(this.searchParameters).then(response => {
-        //     this.count = response.body.count;
-        //     this.keyword_results = response.body.results ? response.body.results : [];
-        //   });
-        // }
       },
 
-      setDefaultSearchParameters() {
-        console.log(this.searchParameters)
-        this.searchParameters = {
+      searchKeywords(searchParameters) {
+        console.log('Todo: Search user inserted object')
+      },
+
+      getListOfKeywordIDs(keywordObject) {
+        if (keywordObject && keywordObject.status === 200) {
+          if (keywordObject.body && keywordObject.body.results && keywordObject.body.results.length > 0) {
+            return  keywordObject.body.results.map(item => item.keyword)
+          } else return []
+        } else return []
+      },
+
+      getDefaultSearchParameters() {
+        return {
           id: null,
           term: null,
           language: null,
           keyword_category: null,
-          related_category: null,
+          related_keyword: null,
           page: 1,
           paginateBy: 10,
           orderBy: '-id',
         }
       }
     },
-    watch: {
-      'searchParameters': {
-        handler: function (newVal, oldVal) {
-          this.loadLinkedKeywords()
-        },
-        immediate: true,
-        deep: true
-      }
-    }
   }
 </script>
 
