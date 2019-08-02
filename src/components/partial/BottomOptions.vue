@@ -243,6 +243,7 @@
   }
 
   /* Adds margin-bottom to footer so that it won't get caught behind buttons */
+  /* TODO: Fix it so if component doesnt exist do not use the class*/
   .footer {
     margin-bottom: 56px;
   }

@@ -117,6 +117,24 @@
     },
 
     created() {
+      // USED BY SIDEBAR
+      if (this.$route.meta.isEdit) {
+        const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+        let params = (searchHistory && searchHistory !== 'fallbackValue') ? searchHistory : this.searchParameters;
+        // let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
+          searchHistory: 'keywordSearchHistory',
+          defaultSearch: this.setDefaultSearchParameters(),
+          search: params,
+          request: 'FETCH_KEYWORDS',
+          title: 'header.keywords',
+          object: 'keyword',
+          field: 'keyword',
+          databaseId: this.databaseId,
+          block: this.block
+        });
+      }
+
       this.loadFullInfo();
     },
 
@@ -130,6 +148,7 @@
     methods: {
       setInitialData() {
         return {
+          searchHistory: 'keywordSearchHistory',
           copyFields: ['id', 'keyword', 'language', 'keyword_category', 'related_keyword', 'remarks'],
           autocomplete: {
             loaders: {
@@ -150,6 +169,7 @@
           },
           previousRecord: {},
           nextRecord: {},
+          searchParameters: this.setDefaultSearchParameters(),
           block: {
             info: true,
           }
@@ -174,6 +194,7 @@
               this.$emit('data-loaded', this.keyword);
               this.$emit('set-object', 'keyword');
               this.sendingData = false;
+              this.getListRecords('keyword')
 
             } else {
               this.sendingData = false;
@@ -199,6 +220,27 @@
         this.keyword.language = { id: obj.language, value: obj.language__value, value_en: obj.language__value_en};
         this.keyword.keyword_category = { id: obj.keyword_category, name: obj.keyword_category__name, name_en: obj.keyword_category__name_en };
         this.keyword.related_keyword = { id: obj.related_keyword, keyword: obj.related_keyword__keyword };
+      },
+
+      fetchList(localStorageData) {
+        console.log(localStorageData)
+        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
+        return new Promise((resolve) => {
+          resolve(fetchKeywords(params))
+        });
+      },
+
+      setDefaultSearchParameters() {
+        return {
+          id: null,
+          term: null,
+          language: null,
+          keyword_category: null,
+          related_keyword: null,
+          page: 1,
+          paginateBy: 10,
+          orderBy: '-id',
+        }
       },
     }
   }

@@ -529,7 +529,6 @@
     created() {
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
-        console.log(this.searchHistory)
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
         let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {

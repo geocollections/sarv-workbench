@@ -37,6 +37,7 @@
     "imagesets": "Pildiseeriad",
     "journals": "Ajakirjad",
     "specimens": "Eksemplarid",
+    "keywords": "Terminid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -56,6 +57,8 @@
     "editDoi": "DOI-d",
     "addSpecimen": "Lisa eksemplar",
     "editSpecimen": "Eksemplarid",
+    "addKeyword": "Lisa termin",
+    "editKeyword": "Terminind",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -97,6 +100,7 @@
       "activeProject": "Minu aktiivne projekt",
       "activeSite": "Viimati külastatud vaatluspunkt",
       "activeSample": "Minu viimane proov",
+      "keywords": "Terminid",
       "keyword": "Lisa termin"
     },
     "developmentSettings": {
@@ -184,6 +188,9 @@
       "requiredFields": "Kohustuslikud väljad",
       "info": "Üldinfo",
       "description": "Lisainfo"
+    },
+    "keyword": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -1025,12 +1032,16 @@
     }
   },
   "keyword": {
+    "header": "Terminid",
+    "id": "ID",
     "generalInfo": "Üldinfo",
     "keyword": "Termin",
     "language": "Keel",
     "keyword_category": "Kategooria",
     "related_keyword": "Seotud termin",
-    "remarks": "Lisainfo"
+    "remarks": "Lisainfo",
+    "editMessage": "Muuda terminit",
+    "addNew": "Lisage uus Termin"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

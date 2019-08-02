@@ -37,6 +37,7 @@
     "imagesets": "Imagesets",
     "journals": "Journals",
     "specimens": "Specimens",
+    "keywords": "Terms",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -56,6 +57,8 @@
     "editDoi": "DOIs",
     "addSpecimen": "Add specimen",
     "editSpecimen": "Specimens",
+    "addKeyword": "Add term",
+    "editKeyword": "Terms",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -97,6 +100,7 @@
       "activeProject": "My active project",
       "activeSite": "Last visited site",
       "activeSample": "My last sample",
+      "keywords": "Terms",
       "keyword": "Add term"
     },
     "developmentSettings": {
@@ -184,6 +188,9 @@
       "requiredFields": "Mandatory fields",
       "info": "General info",
       "description": "Description"
+    },
+    "keyword": {
+      "info": "General info"
     }
   },
   "add": {
@@ -1025,12 +1032,16 @@
     }
   },
   "keyword": {
+    "header": "Terms",
+    "id": "ID",
     "generalInfo": "General info",
     "keyword": "Term",
     "language": "Languge",
     "keyword_category": "Category",
     "related_keyword": "Related term",
-    "remarks": "Remarks"
+    "remarks": "Remarks",
+    "editMessage": "Edit term",
+    "addNew": "Add new Term"
   },
   "messages": {
     "langChange": "Changed language!",

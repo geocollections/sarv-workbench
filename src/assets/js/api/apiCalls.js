@@ -996,7 +996,6 @@ export function fetchKeywords(data, listOfIDs) {
   if (listOfIDs && listOfIDs.length > 0) {
     searchFields += `id__in=${listOfIDs}`
   }
-
   if (data.id && data.id.trim().length > 0) {
     searchFields += `&id__icontains=${data.id}`
   }

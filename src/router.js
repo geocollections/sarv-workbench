@@ -923,23 +923,22 @@ const router = new Router({
             }
           ]
         },
-        // Todo: As of 01.08.2019 only keyword adding and editing is used
-        // {
-        //   path: '/keyword',
-        //   component: () => import('./views/Keyword.vue'),
-        //   meta: {
-        //     requiresAuth: true
-        //   },
-        //   children: [
-        //     {
-        //       path: '',
-        //       component: () => import('./components/specimen/KeywordTable.vue'),
-        //       meta: {
-        //         requiresAuth: true
-        //       },
-        //     }
-        //   ]
-        // },
+        {
+          path: '/keyword',
+          component: () => import('./views/Keywords.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/keyword/KeywordTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
         {
           path: '/keyword/:id(\\d+)',
           props: true,

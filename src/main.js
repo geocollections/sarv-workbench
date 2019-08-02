@@ -267,6 +267,13 @@ new Vue({
       type: String,
       default: 'table'
     },
+    keywordSearchHistory: {
+      type: Object
+    },
+    keywordViewType: {
+      type: String,
+      default: 'table'
+    },
     formSections: {
       type: Object
     },

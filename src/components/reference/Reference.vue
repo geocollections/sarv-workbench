@@ -283,8 +283,8 @@
           </div>
 
           <!-- REFERENCE KEYWORDS -->
-          <div class="row">
-            <div class="col-10 col-md-11">
+          <div class="d-flex justify-content-start flex-wrap">
+            <div class="mr-3 flex-grow-1">
               <label :for="`keyword`">{{ $t('reference.referenceKeyword') }}:</label>
               <vue-multiselect v-model="relatedData.keyword"
                                id="keyword"
@@ -307,25 +307,27 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-2 col-md-1 pl-0">
-              <label style="visibility: hidden; display: block;">Empty</label>
+            <div class="mr-3 my-1 align-self-end">
+<!--              <label style="visibility: hidden; display: block;">Empty</label>-->
               <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
                       :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
                       @click="relatedData.keyword = null">
                 <font-awesome-icon icon="trash-alt"></font-awesome-icon>
               </button>
             </div>
-          </div>
 
-          <div class="row mt-2">
-            <div class="col">
-              <router-link class="btn btn-outline-primary mb-2" :to="{ name: 'Keyword add', query: { reference: JSON.stringify(reference) } }" target="_blank">
-                {{ $t('frontPage.buttons.keyword') }}
+            <div class="mr-2 my-1 align-self-end">
+<!--              <label style="visibility: hidden; display: block;">Add</label>-->
+              <router-link class="btn btn-outline-primary"
+                           :title="$t('add.new')"
+                           :to="{ name: 'Keyword add', query: { reference: JSON.stringify(reference) } }"
+                           target="_blank">
+                <i class="fas fa-plus"></i>
               </router-link>
             </div>
           </div>
 
-          <linked-keyword-table :referenceID="$route.params.id" :keywords="relatedData.keyword"/>
+<!--          <linked-keyword-table :referenceID="$route.params.id" :keywords="relatedData.keyword"/>-->
 
         </div>
       </transition>

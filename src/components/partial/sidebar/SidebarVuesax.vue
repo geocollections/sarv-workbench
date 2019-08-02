@@ -103,7 +103,11 @@
           {{ $t('frontPage.buttons.journal') }}
         </vs-sidebar-item>
 
-        <vs-sidebar-item v-if="isUserAllowedTo('add', 'keyword')" index="5.6" icon="fa-stream" icon-pack="fas"
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'keyword')" index="5.6" icon="fa-scroll" icon-pack="fas"
+                         :to="{ path: '/keyword' }">
+          {{ $t('frontPage.buttons.keywords') }}
+        </vs-sidebar-item>
+        <vs-sidebar-item v-if="isUserAllowedTo('add', 'keyword')" index="5.7" icon="fa-stream" icon-pack="fas"
                          :to="{ path: '/keyword/add' }">
           {{ $t('frontPage.buttons.keyword') }}
         </vs-sidebar-item>
