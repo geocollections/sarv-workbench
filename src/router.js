@@ -14,8 +14,9 @@ const router = new Router({
     if (savedPosition) {
       return savedPosition
     } else {
-      // Todo: if same route like /doi or /reference and only id changes then get scrollbar location
-      return { x: 0, y: 0 }
+      // if same route like /doi or /reference and only id changes then sets previous scrollbar location
+      if (isSameRoute(to, from)) return { x: from.meta.scrollbar.x, y: from.meta.scrollbar.y };
+      else return { x: 0, y: 0 }
     }
   },
   routes: [
@@ -996,6 +997,9 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
+  console.log('Before each');
+  // Adding scrollbar location to fromRoute
+  from.meta.scrollbar = { x: document.documentElement.scrollLeft, y: document.documentElement.scrollTop };
   // console.log('--- FROM ---')
   // console.log(from)
   // console.log('--- TO ---')
@@ -1081,6 +1085,12 @@ function handleResponse(response) {
 function getLoggedInUser(response) {
   if (handleResponse(response)) return response.body.results.user;
   else return ''
+}
+
+function isSameRoute(routeTo, routeFrom) {
+  let toPath = routeTo.path.split('/')[1];
+  let fromPath = routeFrom.path.split('/')[1];
+  return toPath === fromPath
 }
 
 export default router
