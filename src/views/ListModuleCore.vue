@@ -201,7 +201,7 @@
   import {faSortDown,faSortUp, faSort } from '@fortawesome/free-solid-svg-icons'
   import { faCalendarAlt as farCalendarAlt } from '@fortawesome/free-regular-svg-icons'
   import Datepicker from 'vue2-datepicker'
-  import ExportButtons from "../components/partial/ExportButtons";
+  import ExportButtons from "../components/partial/export/ExportButtons";
   import ListView from "../components/partial/ListView";
   import AlternativeTableView from "../components/reference/AlternativeTableView";
   import AlternativeTableControls from "../components/reference/AlternativeTableControls";

@@ -1107,7 +1107,8 @@
     "clear": "Clear",
     "homePage": "Home page",
     "lockSidebar": "Lock sidebar",
-    "unlockSidebar": "Unlock sidebar"
+    "unlockSidebar": "Unlock sidebar",
+    "downloadRIS": "Export to RIS"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",
