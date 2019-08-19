@@ -997,7 +997,6 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  console.log('Before each');
   // Adding scrollbar location to fromRoute
   from.meta.scrollbar = { x: document.documentElement.scrollLeft, y: document.documentElement.scrollTop };
   // console.log('--- FROM ---')

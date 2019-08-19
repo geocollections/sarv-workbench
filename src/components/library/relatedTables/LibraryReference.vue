@@ -7,7 +7,7 @@
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
-            <th>{{ $t('settings.handle') }}</th>
+            <th v-if="isDraggable">{{ $t('settings.handle') }}</th>
             <th>{{ $t('reference.reference') }}
               <font-awesome-icon class="ml-2" icon="link"/>
             </th>
@@ -26,7 +26,7 @@
                      @change="handleElementChange">
               <tr v-for="entity in relatedData.library_reference" :key="entity.id"
                   :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
-                <td class="middle-handle">
+                <td v-if="isDraggable" class="middle-handle">
                   <i class="fas fa-align-justify fa-lg"></i>
                 </td>
                 <!-- VIEW MODE -->
@@ -171,6 +171,10 @@
           disabled: false,
           ghostClass: "ghost"
         };
+      },
+
+      isDraggable() {
+        return this.relatedData.library_reference && this.relatedData.library_reference && this.relatedData.library_reference.length <= 25
       }
     },
     methods: {
