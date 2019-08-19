@@ -219,7 +219,8 @@
                            v-on:related-data-added="addRelatedData"
                            v-on:related-data-modified="editRelatedData"
                            v-on:edit-row="editRow"
-                           v-on:allow-remove-row="allowRemove"/>
+                           v-on:allow-remove-row="allowRemove"
+                           v-on:order-by-changed="changeOrdering"/>
       </div>
     </div>
 
@@ -337,6 +338,14 @@
         },
         deep: true
       },
+      'relatedData.orderBy': {
+        handler: function (newVal, oldVal) {
+          console.log(newVal);
+          console.log(oldVal);
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      }
 
     },
 
@@ -447,6 +456,9 @@
           paginateBy: {
             library_reference: 25,
           },
+          orderBy: {
+            library_reference: '-sort'
+          },
           count: {
             library_reference: 0,
             library_agent: 0,
@@ -483,12 +495,12 @@
         let query;
 
         if (object === 'library_reference') {
-          query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, this.relatedData.paginateBy.library_reference)
+          query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, this.relatedData.paginateBy.library_reference, this.relatedData.orderBy.library_reference)
         }
         if (object === 'library_reference_list') {
           if (this.relatedData.library_reference_list.length === 0) {
             // Get all records, maybe in the future add pagination and stuff
-            query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, 1000)
+            query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, 1000, '-sort,reference__author,-reference__year')
           } else {
             // Do nothing
             return
@@ -516,7 +528,7 @@
           uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
         }
 
-        console.log('This object is sent in string format (related_data):')
+        console.log('This object is sent in string format (related_data):');
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },

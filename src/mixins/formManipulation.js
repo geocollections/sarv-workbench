@@ -511,6 +511,10 @@ const formManipulation = {
       console.log("DELETE RECORD" + JSON.stringify(entity))
     },
 
+    changeOrdering(entity) {
+      this.$set(this.relatedData.orderBy, entity.tab, entity.orderBy)
+    },
+
     /** RELATED DATA ENDS**/
 
     /** SHOW NEXT OR PREVIOUS RECORD STARTS**/

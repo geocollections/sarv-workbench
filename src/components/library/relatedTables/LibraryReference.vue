@@ -6,14 +6,19 @@
 
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
-          <tr>
-            <th v-if="isDraggable">{{ $t('settings.handle') }}</th>
-            <th>{{ $t('reference.reference') }}
-              <font-awesome-icon class="ml-2" icon="link"/>
+          <tr class="th-sort">
+            <th v-show="isDraggable">{{ $t('settings.handle') }}</th>
+
+            <th class="nowrap" v-for="field in thFields">
+              <span @click="changeOrder(field)">
+                <i class="fas fa-sort" v-if="relatedData.orderBy.library_reference !== field && relatedData.orderBy.library_reference !== '-' + field"></i>
+                <i v-else :class="'fas fa-sort-' + sortingDirection"></i>
+                {{ $t('reference.' + field) }}
+
+                <font-awesome-icon v-if="field === 'reference'" icon="link"/>
+              </span>
             </th>
-            <th>{{ $t('reference.keywords') }}</th>
-            <th>{{ $t('reference.remarks') }}</th>
-            <th>{{ $t('reference.sort') }}</th>
+
             <th class="btn-th"></th>
           </tr>
           </thead>
@@ -26,7 +31,7 @@
                      @change="handleElementChange">
               <tr v-for="entity in relatedData.library_reference" :key="entity.id"
                   :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
-                <td v-if="isDraggable" class="middle-handle">
+                <td v-show="isDraggable" class="middle-handle">
                   <i class="fas fa-align-justify fa-lg"></i>
                 </td>
                 <!-- VIEW MODE -->
@@ -98,7 +103,7 @@
 
           <!--          <tbody>-->
           <tr class="related-input-data">
-            <td></td>
+            <td v-show="isDraggable"></td>
             <td>
               <vue-multiselect v-model="relatedData.insert.library_reference.reference"
                                id="reference_insert"
@@ -163,6 +168,11 @@
       activeTab: String
     },
     mixins: [formManipulation, autocompleteMixin],
+    data() {
+      return {
+        thFields: ['reference', 'keywords', 'remarks', 'sort']
+      }
+    },
     computed: {
       dragOptions() {
         return {
@@ -175,6 +185,10 @@
 
       isDraggable() {
         return this.relatedData.library_reference && this.relatedData.library_reference && this.relatedData.library_reference.length <= 25
+      },
+
+      sortingDirection() {
+        return this.relatedData.orderBy.library_reference.includes('-') ? 'down' : 'up'
       }
     },
     methods: {
@@ -196,8 +210,18 @@
             this.$emit('related-data-modified', reference)
           }
         })
+      },
 
-      }
+      changeOrder(orderValue) {
+        if (this.relatedData.orderBy.library_reference === orderValue) {
+          if (orderValue.charAt(0) !== '-') {
+            orderValue = '-' + orderValue;
+          } else {
+            orderValue = orderValue.substring(1);
+          }
+        }
+        this.$emit('order-by-changed', { tab: 'library_reference', orderBy:  orderValue });
+      },
     },
   }
 </script>
@@ -215,5 +239,21 @@
 
   .middle-handle:hover {
     cursor: grab;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .th-sort > th > span {
+    cursor: pointer;
+  }
+
+  .th-sort > th > span:hover {
+    color: #000;
+  }
+
+  .fa-sort-up, .fa-sort-down {
+    color: #007bff;
   }
 </style>
