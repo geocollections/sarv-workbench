@@ -1017,6 +1017,7 @@
   import MapComponent from "../../partial/MapComponent";
   import fontAwesomeLib from "../../../mixins/fontAwasomeLib";
   import NewDoiButton from "../../partial/NewDoiButton";
+  import {toastInfo} from "../../../assets/js/iziToast/iziToast";
 
   export default {
     components: {

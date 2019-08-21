@@ -272,19 +272,22 @@ const formManipulation = {
       let attach_link = 'attach_link__' + relatedObject;
 
       let formData = new FormData();
-      files.forEach(file => {
+      files.forEach((file, index) => {
         formData.append('data', JSON.stringify({
           description: file.type + ' for ' + relatedObject + ': ' + this[relatedObject].id,
           description_en: file.type + ' for ' + relatedObject + ': ' + this[relatedObject].id,
-          date_created: this.formatDataForUpload(new Date()),
+          author: this.currentUser.id,
+          date_created: this.formatDateForUpload(new Date()),
           is_private: 1,
           related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
         }));
+
+        formData.append('file' + [index], file);
       });
 
       try {
         this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
-          console.log(savedObjectId)
+          console.log(savedObjectId);
         });
       } catch (e) {
         console.log('Attachment cannot be added');
