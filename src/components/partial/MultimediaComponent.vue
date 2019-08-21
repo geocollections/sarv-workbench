@@ -9,7 +9,7 @@
              v-on:dragover.stop.prevent="isDragging = true"
              v-on:dragleave.stop.prevent="isDragging = false"
              v-on:drop.stop.prevent="dropFile"
-             class="btn btn-outline-primary btn-block">{{ $t('add.inputs.fileInput') }}
+             class="btn btn-outline-primary btn-block file-upload">{{ $t('add.inputs.fileInput') }}
       </label>
 
       <div class="mt-2 alert alert-warning" v-if="files !== null && files.length >= 10">{{ $t('add.inputs.fileInputMaxError', { num: files.length }) }}</div>
@@ -35,7 +35,7 @@
     </div>
 
     <div class="col-sm-12 mb-2" v-if="recordOptions">
-      <label for="photo-upload" class="btn btn-outline-primary p-2 mr-2">
+      <label :for="`photo-upload`" class="btn btn-outline-primary p-2 mr-2 file-upload">
         <font-awesome-icon icon="camera-retro"/> Add photo
       </label>
 
@@ -47,7 +47,7 @@
                    :placeholder="$t('add.inputs.fileInput')">
       </b-form-file>
 
-      <label for="video-upload" class="btn btn-outline-primary  p-2 mr-2">
+      <label :for="`video-upload`" class="btn btn-outline-primary p-2 mr-2 file-upload">
         <font-awesome-icon icon="video"/> Add video
       </label>
       <b-form-file v-model="recordedFile" accept="video/*;capture=camcorder"
@@ -58,7 +58,7 @@
                    :placeholder="$t('add.inputs.fileInput')">
       </b-form-file>
 
-      <label for="audio-upload" class="btn btn-outline-primary  p-2 mr-2">
+      <label :for="`audio-upload`" class="btn btn-outline-primary p-2 mr-2 file-upload">
         <font-awesome-icon icon="microphone"/> Add audio
       </label>
       <b-form-file v-model="recordedFile" accept="audio/*;capture=microphone"
@@ -241,6 +241,10 @@
 </script>
 
 <style scoped>
+  .file-upload:hover {
+    cursor: pointer;
+  }
+
   .dragging {
     color: #fff;
     background-color: #007bff;

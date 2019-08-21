@@ -268,16 +268,38 @@ const formManipulation = {
       }
     },
 
-    addFileAsRelatedData(data, object) {
-      console.log('file uploaded');
+    addFileAsRelatedDataNew(files, relatedObject) {
+      let attach_link = 'attach_link__' + relatedObject;
 
+      let formData = new FormData();
+      files.forEach(file => {
+        formData.append('data', JSON.stringify({
+          description: file.type + ' for ' + relatedObject + ': ' + this[relatedObject].id,
+          description_en: file.type + ' for ' + relatedObject + ': ' + this[relatedObject].id,
+          date_created: this.formatDataForUpload(new Date()),
+          is_private: 1,
+          related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
+        }));
+      });
+
+      try {
+        this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
+          console.log(savedObjectId)
+        });
+      } catch (e) {
+        console.log('Attachment cannot be added');
+        console.log(e)
+      }
+    },
+
+    addFileAsRelatedData(data, object) {
       let formData = new FormData();
       data.forEach((file, index) => {
         formData.append('data', JSON.stringify({
           description: file.type + ' for ' + object + ': ' + this[object].id,
           author: this.currentUser.id,
           date_created: this.formatDateForUpload(new Date()),
-          is_private: 1
+          is_private: 1,
         }));
 
         formData.append('file' + [index], file);

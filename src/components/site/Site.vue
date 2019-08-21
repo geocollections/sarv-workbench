@@ -11,7 +11,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.info">
+        <div v-show="block.info">
           <div class="row">
             <div class="col-md-6">
               <label :for="`name`">{{ $t('site.name') }}:</label>
@@ -84,7 +84,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.location">
+        <div v-show="block.location">
 
           <div class="row">
             <div class="col-md-4">
@@ -217,7 +217,7 @@
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
       <transition name="fade">
-        <div v-if="block.description">
+        <div v-show="block.description">
           <div class="row">
             <div class="col-sm-12 mb-2">
               <editor :data.sync="site.description"/>
@@ -240,7 +240,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.files">
+        <div v-show="block.files">
           <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="true"/>
           <file-table :attachments="relatedData.attachment_link" :object="'site'"
                       v-if="relatedData.attachment_link.length > 0"/>
@@ -614,8 +614,8 @@
         }
       },
 
-      addFiles(data) {
-        this.addFileAsRelatedData(data, 'site');
+      addFiles(files) {
+        this.addFileAsRelatedDataNew(files, 'site');
       },
 
       setSiteName(projectId) {

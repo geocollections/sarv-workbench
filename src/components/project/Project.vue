@@ -618,8 +618,8 @@
         this.window.width = window.innerWidth;
         this.window.height = window.innerHeight;
       },
-      addFiles(data){
-        this.addFileAsRelatedData(data, 'project');
+      addFiles(files){
+        this.addFileAsRelatedDataNew(files, 'project');
       },
     },
 
