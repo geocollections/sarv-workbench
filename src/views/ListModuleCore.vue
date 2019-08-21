@@ -32,10 +32,10 @@
     </div>
 
     <!-- ALTERNATIVE TABLE CONTROLS -->
-    <alternative-table-controls class="mt-3" v-if="isAlternativeTable"
+    <alternative-table-controls class="mt-3" v-if="isAlternativeTable && response.results.length > 0"
+                                :columns="Object.keys(response.results[0])"
                                 :alternativeTableControls="alternativeTableControls"
-                                v-on:set-default-controls="setDefaultAlternativeTableControlsFromResetButton"
-                                v-on:controls-changed="alternativeTableControlsChanged" />
+                                v-on:set-default-controls="setDefaultAlternativeTableControlsFromResetButton"/>
 
     <div class="row mt-4" :class="{'d-print-none': $route.meta.table === 'sample'}">
       <div class="col">
@@ -122,7 +122,9 @@
                 <!-- ALTERNATIVE TABLE TH START -->
                 <!-- MULTI ORDERING for alternativeTable -->
                 <th class="break-all-words" :style="'font-size:' + alternativeTableControls.size + 'px;'"
-                    v-if="multiOrdering === true && isAlternativeTable" v-for="(value, key) in response.results[0]">
+                    v-if="multiOrdering === true && isAlternativeTable && alternativeTableControls.fields.includes(key)"
+                    v-for="(value, key) in response.results[0]"
+                    :key="key">
                   <span @click="changeOrderMulti(key)" v-on:dblclick="removeOrder(key)">
                     <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(key) === 0" />
                     <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(key) === 1" />
@@ -134,7 +136,9 @@
 
                 <!-- REGULAR ORDERING for alternativeTable -->
                 <th class="break-all-words" :style="'font-size:' + alternativeTableControls.size + 'px;'"
-                    v-if="multiOrdering === false && isAlternativeTable" v-for="(value, key) in response.results[0]">
+                    v-if="multiOrdering === false && isAlternativeTable && alternativeTableControls.fields.includes(key)"
+                    v-for="(value, key) in response.results[0]"
+                    :key="key">
                   <span @click="changeOrder(key)">
                     <font-awesome-icon
                       v-if="searchParameters.orderBy !== key && searchParameters.orderBy !== '-'+key"
@@ -477,15 +481,12 @@
 
 
 
-      alternativeTableControlsChanged(newControls) {
-        this.alternativeTableControls = newControls
-      },
-
       setDefaultAlternativeTableControls() {
         return {
           height: '4',
           width: '8',
-          size: '14'
+          size: '14',
+          fields: (this.response && this.response.results && this.response.results.length > 0) ? Object.keys(this.response.results[0]) : []
         }
       },
 
@@ -495,8 +496,8 @@
 
       // Deletes local storage value + resets search parameters to default
       deleteSearchPreferences() {
-        this.$localStorage.remove(this.searchHistory)
-        this.$localStorage.remove(this.viewType)
+        this.$localStorage.remove(this.searchHistory);
+        this.$localStorage.remove(this.viewType);
         this.$emit('set-default-search-params', true, this.multiOrdering);
         this.currentView = 'table'
       }

@@ -14,7 +14,7 @@
 
       <div class="row">
         <div class="col">
-          <b-form-input id="table-col-height" v-model="alternativeTableControls.height" type="range" :min="0" :max="25" step="0.2"/>
+          <b-form-input id="table-col-height" v-model="alternativeTableControls.height" type="range" :min="0" :max="50" step="0.2"/>
         </div>
       </div>
     </div>
@@ -33,7 +33,7 @@
 
       <div class="row">
         <div class="col">
-          <b-form-input id="table-col-width" v-model="alternativeTableControls.width" type="range" :min="0" :max="25" step="0.2"/>
+          <b-form-input id="table-col-width" v-model="alternativeTableControls.width" type="range" :min="0" :max="50" step="0.2"/>
         </div>
       </div>
     </div>
@@ -67,28 +67,43 @@
         </div>
       </div>
     </div>
+
+    <div class="col-sm-12">
+      <label :for="`field-control`">Fields:</label>
+      <vue-multiselect v-model="alternativeTableControls.fields"
+                       id="field-control"
+                       :multiple="true"
+                       :options="columns"
+                       :preserve-search="true"
+                       :close-on-select="false"
+                       :clear-on-select="false"
+                       :show-labels="false">
+      </vue-multiselect>
+    </div>
   </div>
 </template>
 
 <script>
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
+  import VueMultiselect from 'vue-multiselect'
 
   export default {
     name: "AlternativeTableControls",
+    components: {
+      VueMultiselect,
+    },
     props: {
       alternativeTableControls: {
         type: Object
+      },
+      columns: {
+        type: Array
       }
     },
     mixins: [fontAwesomeLib],
 
-    watch: {
-      'controls': {
-        handler: function (newVal, oldVal) {
-          this.$emit('controls-changed', newVal)
-        },
-        deep: true
-      }
+    created() {
+      this.alternativeTableControls.fields = this.columns
     },
 
     methods: {
