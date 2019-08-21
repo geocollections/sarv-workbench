@@ -904,11 +904,11 @@
         if (objectToUpload.is_locked !== null) uploadableObject.is_locked = objectToUpload.is_locked === true ? '1' : '0';
 
         // Adding related data
-        uploadableObject.related_data = {}
-        uploadableObject.related_data.keyword = this.relatedData.keyword
-        uploadableObject.related_data.attachment = this.relatedData.attachment
-        uploadableObject.related_data.locality = this.relatedData.locality
-        uploadableObject.related_data.library = this.relatedData.library
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.keyword = this.relatedData.keyword;
+        uploadableObject.related_data.attachment = this.relatedData.attachment;
+        uploadableObject.related_data.locality = this.relatedData.locality;
+        uploadableObject.related_data.library = this.relatedData.library;
 
         if (this.isDefinedAndNotNull(this.relatedData.library)) {
           uploadableObject.related_data.library.forEach((library, index) => {
@@ -918,19 +918,19 @@
           });
         }
 
-        console.log('This object is sent in string format:')
-        console.log(uploadableObject)
+        console.log('This object is sent in string format:');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 
       fillAutocompleteFields(obj) {
-        this.reference.type = {id: obj.type__id, value: obj.type__value, value_en: obj.type__value_en}
-        this.reference.language = {id: obj.language__id, value: obj.language__value, value_en: obj.language__value_en}
+        this.reference.type = {id: obj.type__id, value: obj.type__value, value_en: obj.type__value_en, ris_type: obj.type__ris_type};
+        this.reference.language = {id: obj.language__id, value: obj.language__value, value_en: obj.language__value_en, iso1: obj.language__iso1};
         this.reference.journal = {id: obj.journal__id, journal_name: obj.journal__journal_name}
       },
 
       fillRelatedDataAutocompleteFields(obj) {
-        obj.locality = {locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality}
+        obj.locality = {locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality};
         return obj
       },
 
