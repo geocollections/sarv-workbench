@@ -344,7 +344,7 @@
       <transition name="fade">
         <div v-show="block.digital">
 
-          <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addFiles" :recordOptions="false"
+          <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addPDF" :recordOptions="false"
                                 acceptable-format="application/pdf" :accept-multiple="false"/>
           <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
 
@@ -1117,8 +1117,8 @@
         toastInfo({text: this.$t('reference.doiCheckSuccessful')})
       },
 
-      addFiles(data) {
-        this.addFileAsObject(data, 'reference', this.reference);
+      addPDF(fileData) {
+        this.addFileAsObject(fileData, 'reference');
       },
 
       /**
