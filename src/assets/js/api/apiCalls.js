@@ -975,6 +975,26 @@ export function fetchAccession() { return fetch(`accession/?format=json`) }
 
 export function fetchDeaccession() { return fetch(`deaccession/?format=json`) }
 
+export function fetchSpecimenIdentifications(specimenId, searchParameters) {
+  return fetch(`specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
+export function fetchSpecimenIdentificationGeologies(specimenId, searchParameters) {
+  return fetch(`specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
+export function fetchSpecimenReferences(specimenId, searchParameters) {
+  return fetch(`specimen_reference/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
+export function fetchSpecimenDescriptions(specimenId, searchParameters) {
+  return fetch(`specimen_description/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
+export function fetchListIdentificationType() { return fetch(`list_identification_type/?format=json`) }
+
+export function fetchListUnit() { return fetch(`list_unit/?format=json`) }
+
 /**********************
  ***  SPECIMEN END  ***
  **********************/

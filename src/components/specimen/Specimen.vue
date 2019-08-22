@@ -477,6 +477,100 @@
       </transition>
     </fieldset>
 
+    <!-- RELATED DATA TABS -->
+    <div class="row mb-2" v-if="$route.meta.isEdit">
+      <div class="col mt-2">
+        <ul class="nav nav-tabs nav-fill mb-3">
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('specimen_identification')" class="nav-link"
+               :class="{ active: activeTab === 'specimen_identification' }">
+              {{ $t('specimen.relatedTables.specimen_identification') }} <i class="fas fa-atlas"></i>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('specimen_identification_geology')" class="nav-link"
+               :class="{ active: activeTab === 'specimen_identification_geology' }">
+              {{ $t('specimen.relatedTables.specimen_identification_geology') }} <i class="far fa-gem"></i>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('specimen_reference')" class="nav-link"
+               :class="{ active: activeTab === 'specimen_reference' }">
+              {{ $t('specimen.relatedTables.specimen_reference') }} <i class="fas fa-book"></i>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('specimen_description')" class="nav-link"
+               :class="{ active: activeTab === 'specimen_description' }">
+              {{ $t('specimen.relatedTables.specimen_description') }} <i class="fas fa-info"></i>
+            </a>
+          </li>
+        </ul>
+
+        <div class="row">
+          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
+            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
+              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+            </b-form-select>
+          </div>
+
+          <div class="col-sm-12 col-md-3 export-center">
+            <!-- EXPORT BUTTON? -->
+          </div>
+
+          <div class="col-sm-12 col-md-6 pagination-center"
+               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
+              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
+            </b-pagination>
+          </div>
+        </div>
+
+        <specimen-identification :related-data="relatedData"
+                                 :autocomplete="autocomplete"
+                                 :active-tab="activeTab"
+                                 v-on:related-data-added="addRelatedData"
+                                 v-on:related-data-modified="editRelatedData"
+                                 v-on:edit-row="editRow"
+                                 v-on:allow-remove-row="allowRemove"/>
+
+        <specimen-identification-geology :related-data="relatedData"
+                                         :autocomplete="autocomplete"
+                                         :active-tab="activeTab"
+                                         v-on:related-data-added="addRelatedData"
+                                         v-on:related-data-modified="editRelatedData"
+                                         v-on:edit-row="editRow"
+                                         v-on:allow-remove-row="allowRemove" />
+
+        <specimen-reference :related-data="relatedData"
+                            :autocomplete="autocomplete"
+                            :active-tab="activeTab"
+                            v-on:related-data-added="addRelatedData"
+                            v-on:related-data-modified="editRelatedData"
+                            v-on:edit-row="editRow"
+                            v-on:allow-remove-row="allowRemove" />
+
+        <specimen-description :related-data="relatedData"
+                              :autocomplete="autocomplete"
+                              :active-tab="activeTab"
+                              v-on:related-data-added="addRelatedData"
+                              v-on:related-data-modified="editRelatedData"
+                              v-on:edit-row="editRow"
+                              v-on:allow-remove-row="allowRemove" />
+
+      </div>
+    </div>
+
     <!-- IS_PRIVATE -->
     <div class="row">
       <div class="col-sm-12">
@@ -501,20 +595,33 @@
   import {
     fetchAccession,
     fetchDeaccession,
+    fetchListIdentificationType,
     fetchListSpecimenKind,
     fetchListSpecimenOriginalStatus,
     fetchListSpecimenPresence,
     fetchListSpecimenStatus,
-    fetchListSpecimenType,
+    fetchListSpecimenType, fetchListUnit,
     fetchSpecimen,
+    fetchSpecimenDescriptions,
+    fetchSpecimenIdentificationGeologies,
+    fetchSpecimenIdentifications,
+    fetchSpecimenReferences,
     fetchSpecimens
   } from "../../assets/js/api/apiCalls";
   import {mapState} from "vuex";
+  import SpecimenIdentification from "./relatedTables/SpecimenIdentification";
+  import SpecimenIdentificationGeology from "./relatedTables/SpecimenIdentificationGeology";
+  import SpecimenReference from "./relatedTables/SpecimenReference";
+  import SpecimenDescription from "./relatedTables/SpecimenDescription";
 
   export default {
     name: "Specimen",
 
     components: {
+      SpecimenDescription,
+      SpecimenReference,
+      SpecimenIdentificationGeology,
+      SpecimenIdentification,
       Editor,
       Spinner,
       Datepicker
@@ -556,18 +663,12 @@
     watch: {
       '$route.params.id': {
         handler: function (newval, oldval) {
-          this.setInitialData()
+          this.setInitialData();
           this.reloadData()
         },
         deep: true
       },
-      'relatedData.paginateBy': {
-        handler: function (newVal, oldVal) {
-          this.loadRelatedData(this.activeTab)
-        },
-        deep: true
-      },
-      'relatedData.page': {
+      'relatedData.searchParameters': {
         handler: function (newVal, oldVal) {
           this.loadRelatedData(this.activeTab)
         },
@@ -586,9 +687,10 @@
 
       setInitialData() {
         return {
-          tabs:[],
+          tabs:['specimen_identification', 'specimen_identification_geology', 'specimen_reference', 'specimen_description',
+            'attachment', 'specimen_location', 'specimen_history', 'analysis'],
           searchHistory: 'specimenSearchHistory',
-          activeTab: '',
+          activeTab: 'specimen_identification',
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'specimen_id', 'coll', 'specimen_nr', 'number_field', 'fossil', 'type', 'part', 'locality',
             'locality_free', 'depth', 'depth_interval', 'sample', 'sample_number', 'stratigraphy', 'lithostratigraphy',
@@ -614,6 +716,12 @@
               accession: false,
               deaccession: false,
               specimen: false,
+              taxon: false,
+              agent: false,
+              reference: false,
+              list_identification_type: false,
+              rock: false,
+              list_unit: false,
             },
             coll: [],
             specimen_kind: [],
@@ -631,6 +739,12 @@
             accession: [],
             deaccession: [],
             specimen: [],
+            taxon: [],
+            agent: [],
+            reference: [],
+            list_identification_type: [],
+            rock: [],
+            list_unit: [],
           },
           requiredFields: ['fossil'],
           specimen: {},
@@ -679,18 +793,8 @@
           });
 
           // Fetching autocomplete fields for related data
-          // fetchDoiAgentType().then(response => {
-          //   this.autocomplete.doi_agent_type = this.handleResponse(response)
-          // });
-          // fetchDoiRelatedIdentifierType().then(response => {
-          //   this.autocomplete.doi_related_identifier_type = this.handleResponse(response)
-          // });
-          // fetchDoiRelationType().then(response => {
-          //   this.autocomplete.doi_relation_type = this.handleResponse(response)
-          // });
-          // fetchDoiDateType().then(response => {
-          //   this.autocomplete.doi_date_type = this.handleResponse(response)
-          // });
+          fetchListIdentificationType().then(response => this.autocomplete.list_identification_type = this.handleResponse(response));
+          fetchListUnit().then(response => this.autocomplete.list_unit = this.handleResponse(response));
 
           // Load Related Data which is in tabs
           this.tabs.forEach(entity => {
@@ -701,31 +805,63 @@
 
           this.$emit('related-data-info', this.tabs);
 
-          // this.setActiveTab('doi_agent')
+          this.setActiveTab('specimen_identification')
         }
       },
 
       setDefaultRelatedData() {
         return {
-          // doi_date: [],
-          // new: {
-          //   date_type: []
-          // },
-          // copyFields: {
-          //   doi_date: ['date', 'date_type', 'remarks']
-          // },
-          // insert: {
-          //   doi_date: {}
-          // },
-          // page: {
-          //   doi_date: 1
-          // },
-          // paginateBy: {
-          //   doi_date: 10
-          // },
-          // count: {
-          //   doi_date: 0
-          // }
+          // Todo: 'specimen_description','attachment', 'specimen_location', 'specimen_history', 'analysis'
+          specimen_identification: [],
+          specimen_identification_geology: [],
+          specimen_reference: [],
+          specimen_description: [],
+          new: {
+            specimen_identification: [],
+            specimen_identification_geology: [],
+            specimen_reference: [],
+            specimen_description: [],
+          },
+          copyFields: {
+            specimen_identification: ['taxon', 'name', 'agent', 'reference', 'date_identified', 'type', 'current'],
+            specimen_identification_geology: ['rock', 'name', 'name_en', 'agent', 'reference', 'date_identified', 'type', 'current'],
+            specimen_reference: ['reference', 'pages', 'figures', 'remarks'],
+            specimen_description: ['length', 'width', 'height', 'unit', 'mass', 'description', 'agent', 'date', 'remarks'],
+          },
+          insert: {
+            specimen_identification: {},
+            specimen_identification_geology: {},
+            specimen_reference: {},
+            specimen_description: {},
+          },
+          searchParameters: {
+            specimen_identification: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'taxon__taxon,current'
+            },
+            specimen_identification_geology: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'rock__name,rock__name_en,current'
+            },
+            specimen_reference: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'reference__reference'
+            },
+            specimen_description: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'length'
+            },
+          },
+          count: {
+            specimen_identification: 0,
+            specimen_identification_geology: 0,
+            specimen_reference: 0,
+            specimen_description: 0,
+          }
         }
       },
 
@@ -733,7 +869,7 @@
         let uploadableObject = cloneDeep(objectToUpload);
 
         // Todo: Api doesn't save specimen_nr and throws error
-        delete uploadableObject.specimen_nr
+        delete uploadableObject.specimen_nr;
         if (!this.$route.meta.isEdit) this.$localStorage.set('specimen', objectToUpload)
 
         if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
@@ -757,7 +893,7 @@
         if (this.isDefinedAndNotNull(objectToUpload.original_status)) uploadableObject.original_status = objectToUpload.original_status.id;
         if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id;
 
-        if (this.databaseId) uploadableObject.database = this.databaseId
+        if (this.databaseId) uploadableObject.database = this.databaseId;
 
         // Adding related data
         if (saveRelatedData) {
@@ -786,67 +922,47 @@
         this.specimen.status = { id: obj.status, value: obj.status__value, value_en: obj.status__value_en };
         this.specimen.original_status = { id: obj.original_status, value: obj.original_status__value, value_en: obj.original_status__value_en };
         this.specimen.parent = { id: obj.parent, specimen_id: obj.parent__specimen_id };
-
-
       },
 
-      fillRelatedDataAutocompleteFields(obj, type) {
-        if (obj === undefined) return;
-        // console.log(obj)
-        // console.log(type)
+      fillRelatedDataAutocompleteFields(obj) {
 
-        // This goes for related data in tabs
-        if (type === undefined) {
-          console.log(obj)
+        if (this.isDefinedAndNotNull(obj.taxon)) obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
+        if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent };
+        if (this.isDefinedAndNotNull(obj.reference)) obj.reference = { id: obj.reference, reference: obj.reference__reference };
+        if (this.isDefinedAndNotNull(obj.type)) obj.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
 
-          // if (this.isDefinedAndNotNull(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
-          // if (this.isDefinedAndNotNull(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
-          // if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
-          // if (this.isDefinedAndNotNull(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
-          // if (this.isDefinedAndNotNull(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value }
-          // if (this.isDefinedAndNotNull(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en }
-          // if (this.isDefinedAndNotNull(obj.date_type)) obj.date_type = { id: obj.date_type, value: obj.date_type__value }
+        if (this.isDefinedAndNotNull(obj.rock)) obj.rock = { id: obj.rock, name: obj.rock__name, name_en: obj.rock__name_en };
+        if (this.isDefinedAndNotNull(obj.unit)) obj.unit = {  id: obj.unit, value: obj.unit__value, value_en: obj.unit__value_en };
 
-          return obj;
-        }
 
-        let relatedData = cloneDeep(obj)
-        obj = [];
-        relatedData.forEach(entity => obj.push(entity));
         return obj
       },
 
-      loadRelatedData(object, doi = null) {
+      loadRelatedData(object) {
         let query;
 
-        if (object === 'attachment_link') {
-          // query = fetchDoiAttachment(this.$route.params.id, this.relatedData.page.attachment_link, this.relatedData.paginateBy.attachment_link)
-          // Todo: Fossiili määrangud
-        } else if (object === '') {
-          // Todo: kivimi/mineraali nimed
-        } else if (object === '') {
-          // Todo: kirjandusviited
-        } else if (object === '') {
-          // Todo: kirjeldused
-        } else if (object === '') {
-          // Todo: pildid
-        } else if (object === '') {
-          // Todo: manused
-        } else if (object === '') {
-          // Todo: osised ja asukohad
-        } else if (object === '') {
-          // Todo: ajalugu ja protseduurid
-        } else if (object === '') {
-          // Todo: analüüsid
+        if (object === 'specimen_identification') {
+          query = fetchSpecimenIdentifications(this.$route.params.id, this.relatedData.searchParameters.specimen_identification)
+        } else if (object === 'specimen_identification_geology') {
+          query = fetchSpecimenIdentificationGeologies(this.$route.params.id, this.relatedData.searchParameters.specimen_identification_geology)
+        } else if (object === 'specimen_reference') {
+          query = fetchSpecimenReferences(this.$route.params.id, this.relatedData.searchParameters.specimen_reference)
+        } else if (object === 'specimen_description') {
+          query = fetchSpecimenDescriptions(this.$route.params.id, this.relatedData.searchParameters.specimen_description)
+        } else if (object === 'attachment') {
+
+        } else if (object === 'specimen_location') {
+
+        } else if (object === 'specimen_history') {
+
+        } else if (object === 'analysis') {
+
         }
 
         return new Promise(resolve => {
           query.then(response => {
-            if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results : [];
-
+            this.relatedData[object] = this.handleResponse(response);
             this.relatedData.count[object] = response.body.count;
-            this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
-
             resolve(true)
           });
         });
@@ -859,29 +975,32 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.specimen = this.specimen.id;
 
-        if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
-          uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
-        }
-        if (this.isDefinedAndNotNull(uploadableObject.agent_type)) {
-          uploadableObject.agent_type = uploadableObject.agent_type.id ? uploadableObject.agent_type.id : uploadableObject.agent_type;
+        if (this.isDefinedAndNotNull(uploadableObject.taxon)) {
+          uploadableObject.taxon = uploadableObject.taxon.id ? uploadableObject.taxon.id : uploadableObject.taxon;
         }
         if (this.isDefinedAndNotNull(uploadableObject.agent)) {
           uploadableObject.agent = uploadableObject.agent.id ? uploadableObject.agent.id : uploadableObject.agent;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.identifier_type)) {
-          uploadableObject.identifier_type = uploadableObject.identifier_type.id ? uploadableObject.identifier_type.id : uploadableObject.identifier_type;
+        if (this.isDefinedAndNotNull(uploadableObject.reference)) {
+          uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.relation_type)) {
-          uploadableObject.relation_type = uploadableObject.relation_type.id ? uploadableObject.relation_type.id : uploadableObject.relation_type;
+        if (this.isDefinedAndNotNull(uploadableObject.date_identified)) {
+          uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified);
         }
-        if (this.isDefinedAndNotNull(uploadableObject.locality)) {
-          uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
+        if (this.isDefinedAndNotNull(uploadableObject.type)) {
+          uploadableObject.type = uploadableObject.type.id ? uploadableObject.type.id : uploadableObject.type;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.date_type)) {
-          uploadableObject.date_type = uploadableObject.date_type.id ? uploadableObject.date_type.id : uploadableObject.date_type;
+        if (this.isDefinedAndNotNull(uploadableObject.rock)) {
+          uploadableObject.rock = uploadableObject.rock.id ? uploadableObject.rock.id : uploadableObject.rock;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.unit)) {
+          uploadableObject.unit = uploadableObject.unit.id ? uploadableObject.unit.id : uploadableObject.unit;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.date)) {
+          uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
         }
 
-        console.log('This object is sent in string format (related_data):')
+        console.log('This object is sent in string format (related_data):');
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },

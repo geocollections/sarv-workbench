@@ -612,7 +612,53 @@
     "remarks_internal": "Remakrs internal",
     "tags": "Tags",
     "is_private_text": "Private",
-    "is_public_text": "Public"
+    "is_public_text": "Public",
+    "relatedTables": {
+      "specimen_identification": "Taxons",
+      "specimen_identification_geology": "Rock/Mineral names",
+      "specimen_reference": "References",
+      "specimen_description": "Descriptions",
+      "attachment": "Attachments",
+      "specimen_location": "Locations",
+      "specimen_history": "History",
+      "analysis": "Analyses"
+    }
+  },
+  "specimen_identification": {
+    "taxon": "Taxon",
+    "name": "Name",
+    "agent": "Agent",
+    "reference": "Refernece",
+    "date": "Date identified",
+    "type": "Type",
+    "current": "Current"
+  },
+  "specimen_identification_geology": {
+    "rock": "Mineral/rock",
+    "name": "Name",
+    "name_en": "Name en",
+    "agent": "Agent",
+    "reference": "Refernece",
+    "date": "Date identified",
+    "type": "Type",
+    "current": "Current"
+  },
+  "specimen_reference": {
+    "reference": "Publication",
+    "pages": "Pages",
+    "figures": "Figures",
+    "remarks": "Remarks"
+  },
+  "specimen_description": {
+    "length": "Length",
+    "width": "Width",
+    "height": "Height",
+    "unit": "Unit",
+    "mass": "Mass",
+    "description": "Description",
+    "agent": "Agent",
+    "date": "Date",
+    "remarks": "Remarks"
   },
   "sample": {
     "header": "My samples",

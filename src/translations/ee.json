@@ -613,7 +613,53 @@
     "remarks_internal": "Märkused sise",
     "tags": "Märksõnad",
     "is_private_text": "Privaatne",
-    "is_public_text": "Avalik"
+    "is_public_text": "Avalik",
+    "relatedTables": {
+      "specimen_identification": "Fossiili määrangud",
+      "specimen_identification_geology": "Kivimi/mineraali nimed",
+      "specimen_reference": "Kirjandusviited",
+      "specimen_description": "Kirjeldused",
+      "attachment": "Manused",
+      "specimen_location": "Osised ja asukohad",
+      "specimen_history": "Ajalugu ja protseduurid",
+      "analysis": "Analüüsid"
+    }
+  },
+  "specimen_identification": {
+    "taxon": "Takson registrist",
+    "name": "Nimi",
+    "agent": "Det.",
+    "reference": "Viide",
+    "date": "Det. aeg",
+    "type": "Määrangu tüüp",
+    "current": "Kehtiv"
+  },
+  "specimen_identification_geology": {
+    "rock": "Mineraal/kivim",
+    "name": "Nimi",
+    "name_en": "Nimi en",
+    "agent": "Det.",
+    "reference": "Viide",
+    "date": "Det. aeg",
+    "type": "Määrangu tüüp",
+    "current": "Kehtiv"
+  },
+  "specimen_reference": {
+    "reference": "Publikatsioon",
+    "pages": "Leheküljed",
+    "figures": "Joonised",
+    "remarks": "Lisainfo"
+  },
+  "specimen_description": {
+    "length": "Pikkus",
+    "width": "Laius",
+    "height": "Kõrgus",
+    "unit": "Ühik",
+    "mass": "Mass",
+    "description": "Kirjeldus",
+    "agent": "Kirjeldaja",
+    "date": "Kuupäev",
+    "remarks": "Lisainfo"
   },
   "sample": {
     "header": "Minu proovid",
