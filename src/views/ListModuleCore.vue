@@ -62,7 +62,7 @@
       </div>
 
       <div :class="{ 'mb-3': exportButtons, 'col-lg-12 col-xl-3 export-center-xl': combinedView, 'col-sm-12 col-md-3 export-center': !combinedView  }">
-        <export-buttons v-if="exportButtons" :filename="module"></export-buttons>
+        <export-buttons v-if="exportButtons" :filename="module" :table-data="response.results"></export-buttons>
       </div>
 
       <div v-if="$route.meta.table === 'reference'" class="d-lg-none d-xl-none mb-3 col-sm-6 col-md-6" style="margin: 0 auto;">

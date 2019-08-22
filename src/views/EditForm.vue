@@ -5,10 +5,6 @@
       <div class="row mt-4 page-title">
         <div class="col">
           <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
-          <export-ris v-if="$route.meta.table === 'reference' && $route.params.id"
-                      :id="$route.params.id"
-                      :data="data">
-          </export-ris>
         </div>
       </div>
 
@@ -36,12 +32,10 @@
   import ConfirmTabClose from "../components/partial/modals/ConfirmTabClose";
   import ConfirmPageClose from "../components/partial/modals/ConfirmPageClose";
   import ScrollToLinks from "../components/partial/ScrollToLinks";
-  import ExportRis from "../components/partial/export/ExportRis";
 
   export default {
     name: "EditForm",
     components: {
-      ExportRis,
       ScrollToLinks,
       ConfirmPageClose,
       ConfirmTabClose,
