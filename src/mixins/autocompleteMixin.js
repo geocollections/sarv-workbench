@@ -75,9 +75,6 @@ const autocompleteMixin = {
     autocompleteStorageSearch(value) {
       this.$_autocompleteMixin_search(value, 'storage', 'storage')
     },
-    autocompleteStorageSearch2(value) {
-      this.$_autocompleteMixin_search(value, 'storage', 'storage',)
-    },
     autocompleteAdditionalStorageSearch(value) {
       this.$_autocompleteMixin_search(value, 'storage_additional', 'storage_additional')
     },

@@ -971,6 +971,8 @@ export function fetchListSpecimenStatus() { return fetch(`list_specimen_status/?
 
 export function fetchListSpecimenType() { return fetch(`list_specimen_type/?format=json`) }
 
+export function fetchListHistoryType() { return fetch(`list_history_type/?format=json`) }
+
 export function fetchAccession() { return fetch(`accession/?format=json`) }
 
 export function fetchDeaccession() { return fetch(`deaccession/?format=json`) }
@@ -993,6 +995,18 @@ export function fetchSpecimenDescriptions(specimenId, searchParameters) {
 
 export function fetchSpecimenAttachments(specimenId, searchParameters) {
   return fetch(`attachment/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
+export function fetchSpecimenLocations(specimenId, searchParameters) {
+  return fetch(`specimen_location/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
+export function fetchSpecimenHistory(specimenId, searchParameters) {
+  return fetch(`specimen_history/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
+export function fetchSpecimenAnalyses(specimenId, searchParameters) {
+  return fetch(`analysis/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 export function fetchListIdentificationType() { return fetch(`list_identification_type/?format=json`) }

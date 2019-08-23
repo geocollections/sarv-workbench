@@ -661,6 +661,20 @@
     "date": "Kuupäev",
     "remarks": "Lisainfo"
   },
+  "specimen_location": {
+    "number": "Number",
+    "type": "Tüüp",
+    "part": "Osis",
+    "storage": "Hoiukoht",
+    "remarks": "Lisainfo"
+  },
+  "specimen_history": {
+    "type": "Tüüp",
+    "value_old": "Vana väärtus",
+    "value_new": "Uus väärtus",
+    "date": "Aeg",
+    "remarks": "Lisainfo"
+  },
   "sample": {
     "header": "Minu proovid",
     "id": "ID",

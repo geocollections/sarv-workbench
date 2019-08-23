@@ -357,7 +357,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.storage"
                                :options="autocomplete.storage"
-                               @search-change="autocompleteStorageSearch2"
+                               @search-change="autocompleteStorageSearch"
                                :internal-search="false"
                                :preserve-search="true"
                                :clear-on-select="false"
@@ -515,6 +515,27 @@
               {{ $t('specimen.relatedTables.attachment') }} <i class="far fa-folder-open"></i>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('specimen_location')" class="nav-link"
+               :class="{ active: activeTab === 'specimen_location' }">
+              {{ $t('specimen.relatedTables.specimen_location') }} <i class="fas fa-globe-europe"></i>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('specimen_history')" class="nav-link"
+               :class="{ active: activeTab === 'specimen_history' }">
+              {{ $t('specimen.relatedTables.specimen_history') }} <i class="fas fa-history"></i>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"
+               :class="{ active: activeTab === 'analysis' }">
+              {{ $t('specimen.relatedTables.analysis') }} <i class="far fa-chart-bar"></i>
+            </a>
+          </li>
         </ul>
 
         <div class="row">
@@ -583,15 +604,39 @@
                              v-on:edit-row="editRow"
                              v-on:allow-remove-row="allowRemove" />
 
+        <specimen-location :related-data="relatedData"
+                           :autocomplete="autocomplete"
+                           :active-tab="activeTab"
+                           v-on:related-data-added="addRelatedData"
+                           v-on:related-data-modified="editRelatedData"
+                           v-on:edit-row="editRow"
+                           v-on:allow-remove-row="allowRemove" />
+
+        <specimen-history :related-data="relatedData"
+                          :autocomplete="autocomplete"
+                          :active-tab="activeTab"
+                          v-on:related-data-added="addRelatedData"
+                          v-on:related-data-modified="editRelatedData"
+                          v-on:edit-row="editRow"
+                          v-on:allow-remove-row="allowRemove" />
+
+        <specimen-analysis :related-data="relatedData"
+                           :autocomplete="autocomplete"
+                           :active-tab="activeTab"
+                           v-on:related-data-added="addRelatedData"
+                           v-on:related-data-modified="editRelatedData"
+                           v-on:edit-row="editRow"
+                           v-on:allow-remove-row="allowRemove" />
+
       </div>
     </div>
 
     <!-- IS_PRIVATE -->
     <div class="row">
       <div class="col-sm-12">
-        <label :for="`is_private`">{{ $t('specimen.is_private') }}:</label>
+        <label :for="`is_private`">{{ specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}:</label>
         <vs-checkbox class="justify-content-start" id="is_private" v-model="specimen.is_private" icon="fa-lock" icon-pack="fas">
-          {{ specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}
+<!--          {{ specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}-->
         </vs-checkbox>
       </div>
     </div>
@@ -609,17 +654,17 @@
   import formSectionsMixin from "../../mixins/formSectionsMixin";
   import {
     fetchAccession,
-    fetchDeaccession,
+    fetchDeaccession, fetchListHistoryType,
     fetchListIdentificationType,
     fetchListSpecimenKind,
     fetchListSpecimenOriginalStatus,
     fetchListSpecimenPresence,
     fetchListSpecimenStatus,
     fetchListSpecimenType, fetchListUnit,
-    fetchSpecimen, fetchSpecimenAttachments,
-    fetchSpecimenDescriptions,
+    fetchSpecimen, fetchSpecimenAnalyses, fetchSpecimenAttachments,
+    fetchSpecimenDescriptions, fetchSpecimenHistory,
     fetchSpecimenIdentificationGeologies,
-    fetchSpecimenIdentifications,
+    fetchSpecimenIdentifications, fetchSpecimenLocations,
     fetchSpecimenReferences,
     fetchSpecimens
   } from "../../assets/js/api/apiCalls";
@@ -629,11 +674,17 @@
   import SpecimenReference from "./relatedTables/SpecimenReference";
   import SpecimenDescription from "./relatedTables/SpecimenDescription";
   import SpecimenAttachment from "./relatedTables/SpecimenAttachment";
+  import SpecimenLocation from "./relatedTables/SpecimenLocation";
+  import SpecimenHistory from "./relatedTables/SpecimenHistory";
+  import SpecimenAnalysis from "./relatedTables/SpecimenAnalysis";
 
   export default {
     name: "Specimen",
 
     components: {
+      SpecimenAnalysis,
+      SpecimenHistory,
+      SpecimenLocation,
       SpecimenAttachment,
       SpecimenDescription,
       SpecimenReference,
@@ -740,6 +791,8 @@
               rock: false,
               list_unit: false,
               attachment: false,
+              list_specimen_type: false,
+              list_history_type: false,
             },
             coll: [],
             specimen_kind: [],
@@ -764,6 +817,8 @@
             rock: [],
             list_unit: [],
             attachment: [],
+            list_specimen_type: [],
+            list_history_type: [],
           },
           requiredFields: ['fossil'],
           specimen: {},
@@ -814,6 +869,8 @@
           // Fetching autocomplete fields for related data
           fetchListIdentificationType().then(response => this.autocomplete.list_identification_type = this.handleResponse(response));
           fetchListUnit().then(response => this.autocomplete.list_unit = this.handleResponse(response));
+          fetchListSpecimenType().then(response => this.autocomplete.list_specimen_type = this.handleResponse(response));
+          fetchListHistoryType().then(response => this.autocomplete.list_history_type = this.handleResponse(response));
 
           // Load Related Data which is in tabs
           this.tabs.forEach(entity => {
@@ -830,18 +887,24 @@
 
       setDefaultRelatedData() {
         return {
-          // Todo: 'specimen_description','attachment', 'specimen_location', 'specimen_history', 'analysis'
+          // Todo: 'analysis'
           specimen_identification: [],
           specimen_identification_geology: [],
           specimen_reference: [],
           specimen_description: [],
           attachment: [],
+          specimen_location: [],
+          specimen_history: [],
+          analysis: [],
           new: {
             specimen_identification: [],
             specimen_identification_geology: [],
             specimen_reference: [],
             specimen_description: [],
             attachment: [],
+            specimen_location: [],
+            specimen_history: [],
+            analysis: [],
           },
           copyFields: {
             specimen_identification: ['taxon', 'name', 'agent', 'reference', 'date_identified', 'type', 'current'],
@@ -849,6 +912,9 @@
             specimen_reference: ['reference', 'pages', 'figures', 'remarks'],
             specimen_description: ['length', 'width', 'height', 'unit', 'mass', 'description', 'agent', 'date', 'remarks'],
             attachment: ['attachment', 'remarks'],
+            specimen_location: ['number', 'type', 'part', 'storage', 'remarks'],
+            specimen_history: ['type', 'value_old', 'value_new', 'date', 'remarks'],
+            analysis: ['analysis_method', 'methods_details', 'mass', 'date', 'date_end', 'date_free', 'agent', 'remarks', 'storage', 'is_private'],
           },
           insert: {
             specimen_identification: {},
@@ -856,6 +922,9 @@
             specimen_reference: {},
             specimen_description: {},
             attachment: {},
+            specimen_location: {},
+            specimen_history: {},
+            analysis: {},
           },
           searchParameters: {
             specimen_identification: {
@@ -883,6 +952,21 @@
               paginateBy: 10,
               orderBy: 'original_filename'
             },
+            specimen_location: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'number'
+            },
+            specimen_history: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'type'
+            },
+            analysis: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
           },
           count: {
             specimen_identification: 0,
@@ -890,6 +974,9 @@
             specimen_reference: 0,
             specimen_description: 0,
             attachment: 0,
+            specimen_location: 0,
+            specimen_history: 0,
+            analysis: 0,
           }
         }
       },
@@ -962,6 +1049,7 @@
         if (this.isDefinedAndNotNull(obj.rock)) obj.rock = { id: obj.rock, name: obj.rock__name, name_en: obj.rock__name_en };
         if (this.isDefinedAndNotNull(obj.unit)) obj.unit = {  id: obj.unit, value: obj.unit__value, value_en: obj.unit__value_en };
         if (this.isDefinedAndNotNull(obj.original_filename)) obj.attachment = { id: obj.id, original_filename: obj.original_filename };
+        if (this.isDefinedAndNotNull(obj.storage)) obj.storage = { id: obj.storage, location: obj.storage__location };
 
         return obj
       },
@@ -980,11 +1068,11 @@
         } else if (object === 'attachment') {
           query = fetchSpecimenAttachments(this.$route.params.id, this.relatedData.searchParameters.attachment)
         } else if (object === 'specimen_location') {
-
+          query = fetchSpecimenLocations(this.$route.params.id, this.relatedData.searchParameters.specimen_location)
         } else if (object === 'specimen_history') {
-
+          query = fetchSpecimenHistory(this.$route.params.id, this.relatedData.searchParameters.specimen_history)
         } else if (object === 'analysis') {
-
+          query = fetchSpecimenAnalyses(this.$route.params.id, this.relatedData.searchParameters.analysis)
         }
 
         return new Promise(resolve => {
@@ -1029,6 +1117,9 @@
         }
         if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
           uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.storage)) {
+          uploadableObject.storage = uploadableObject.storage.id ? uploadableObject.storage.id : uploadableObject.storage;
         }
 
         console.log('This object is sent in string format (related_data):');

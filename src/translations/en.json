@@ -620,7 +620,7 @@
       "specimen_description": "Descriptions",
       "attachment": "Files",
       "specimen_location": "Locations",
-      "specimen_history": "History",
+      "specimen_history": "History and procedures",
       "analysis": "Analyses"
     }
   },
@@ -657,6 +657,20 @@
     "mass": "Mass",
     "description": "Description",
     "agent": "Agent",
+    "date": "Date",
+    "remarks": "Remarks"
+  },
+  "specimen_location": {
+    "number": "Number",
+    "type": "Type",
+    "part": "Part",
+    "storage": "Storage",
+    "remarks": "Remarks"
+  },
+  "specimen_history": {
+    "type": "Type",
+    "value_old": "Old value",
+    "value_new": "New value",
     "date": "Date",
     "remarks": "Remarks"
   },
