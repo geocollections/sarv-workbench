@@ -1,25 +1,25 @@
 <template>
-  <div id="#tab-attachment" class="tab-attachment row" :class="{active: activeTab === 'attachment_link'}"
+  <div id="#tab-attachment" class="tab-attachment row" :class="{active: activeTab === 'attachment'}"
        role="tabpanel">
-    <div class="col-md-6" v-if="activeTab === 'attachment_link'">
+    <div class="col-xl-5" v-if="activeTab === 'attachment'">
       <div class="table-responsive-sm">
 
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
-            <th>{{ $t('doi.link') }}<font-awesome-icon class="ml-2" icon="link"/></th>
-            <th>{{ $t('doi.remarks') }}</th>
+            <th>Link <font-awesome-icon class="ml-2" icon="link"/></th>
+            <th>{{ $t('specimen.remarks') }}</th>
             <th class="btn-th"></th>
           </tr>
           </thead>
 
           <tbody>
-          <tr v-for="entity in relatedData.attachment_link"
+          <tr v-for="entity in relatedData.attachment"
               :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">
-              <router-link :to="{ path: '/attachment/' + entity.attachment }">
-                {{ entity.attachment__original_filename }}
+              <router-link :to="{ path: '/attachment/' + entity.id }">
+                {{ entity.original_filename }}
               </router-link>
             </td>
 
@@ -32,7 +32,7 @@
                                label="original_filename"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.attachment_public"
+                               :loading="autocomplete.loaders.attachment"
                                :options="autocomplete.attachment"
                                @search-change="autocompletePublicAttachmentSearch"
                                :internal-search="false"
@@ -74,12 +74,12 @@
           <!-- INSERT MODE -->
           <tr class="related-input-data">
             <td>
-              <vue-multiselect v-model="relatedData.insert.attachment_link.attachment"
+              <vue-multiselect v-model="relatedData.insert.attachment.attachment"
                                id="attachment_insert"
                                label="original_filename"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
-                               :loading="autocomplete.loaders.attachment_public"
+                               :loading="autocomplete.loaders.attachment"
                                :options="autocomplete.attachment"
                                @search-change="autocompletePublicAttachmentSearch"
                                :internal-search="false"
@@ -94,16 +94,15 @@
             </td>
 
             <td>
-              <b-form-input v-model="relatedData.insert.attachment_link.remarks" type="text"/>
+              <b-form-input v-model="relatedData.insert.attachment.remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
-              <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
               <button class="float-left btn btn-sm btn-success" @click="$emit('related-data-added', activeTab)"
                       :disabled="sendingData">
                 <font-awesome-icon icon="pencil-alt"/>
               </button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.attachment_link = {}"
+              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.attachment = {}"
                       :disabled="sendingData">
                 <font-awesome-icon icon="times"/>
               </button>
@@ -114,11 +113,10 @@
       </div>
     </div>
 
-    <div class="col-md-6" v-if="activeTab === 'attachment_link'">
-      <file-table :attachments="relatedData.attachment_link" :object="'doi'"
-                  prefix="attachment__"
-                  table-id="attachment"
-                  v-if="relatedData.attachment_link.length > 0"/>
+    <div class="col-xl-7" v-if="activeTab === 'attachment'">
+      <file-table :attachments="relatedData.attachment"
+                  :object="'specimen'"
+                  v-if="relatedData.attachment.length > 0"/>
     </div>
   </div>
 </template>
@@ -129,10 +127,10 @@
   import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
   export default {
+    name: "SpecimenAttachment",
     components: {
       FileTable
     },
-    name: "DoiFiles",
     props: {
       relatedData: Object,
       autocomplete: Object,

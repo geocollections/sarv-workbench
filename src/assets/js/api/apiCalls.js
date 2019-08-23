@@ -991,6 +991,10 @@ export function fetchSpecimenDescriptions(specimenId, searchParameters) {
   return fetch(`specimen_description/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
+export function fetchSpecimenAttachments(specimenId, searchParameters) {
+  return fetch(`attachment/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+}
+
 export function fetchListIdentificationType() { return fetch(`list_identification_type/?format=json`) }
 
 export function fetchListUnit() { return fetch(`list_unit/?format=json`) }

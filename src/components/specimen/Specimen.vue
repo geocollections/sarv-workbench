@@ -508,6 +508,13 @@
               {{ $t('specimen.relatedTables.specimen_description') }} <i class="fas fa-info"></i>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a href="#" v-on:click.prevent="setActiveTab('attachment')" class="nav-link"
+               :class="{ active: activeTab === 'attachment' }">
+              {{ $t('specimen.relatedTables.attachment') }} <i class="far fa-folder-open"></i>
+            </a>
+          </li>
         </ul>
 
         <div class="row">
@@ -568,6 +575,14 @@
                               v-on:edit-row="editRow"
                               v-on:allow-remove-row="allowRemove" />
 
+        <specimen-attachment :related-data="relatedData"
+                             :autocomplete="autocomplete"
+                             :active-tab="activeTab"
+                             v-on:related-data-added="addRelatedData"
+                             v-on:related-data-modified="editRelatedData"
+                             v-on:edit-row="editRow"
+                             v-on:allow-remove-row="allowRemove" />
+
       </div>
     </div>
 
@@ -601,7 +616,7 @@
     fetchListSpecimenPresence,
     fetchListSpecimenStatus,
     fetchListSpecimenType, fetchListUnit,
-    fetchSpecimen,
+    fetchSpecimen, fetchSpecimenAttachments,
     fetchSpecimenDescriptions,
     fetchSpecimenIdentificationGeologies,
     fetchSpecimenIdentifications,
@@ -613,11 +628,13 @@
   import SpecimenIdentificationGeology from "./relatedTables/SpecimenIdentificationGeology";
   import SpecimenReference from "./relatedTables/SpecimenReference";
   import SpecimenDescription from "./relatedTables/SpecimenDescription";
+  import SpecimenAttachment from "./relatedTables/SpecimenAttachment";
 
   export default {
     name: "Specimen",
 
     components: {
+      SpecimenAttachment,
       SpecimenDescription,
       SpecimenReference,
       SpecimenIdentificationGeology,
@@ -722,6 +739,7 @@
               list_identification_type: false,
               rock: false,
               list_unit: false,
+              attachment: false,
             },
             coll: [],
             specimen_kind: [],
@@ -745,6 +763,7 @@
             list_identification_type: [],
             rock: [],
             list_unit: [],
+            attachment: [],
           },
           requiredFields: ['fossil'],
           specimen: {},
@@ -816,23 +835,27 @@
           specimen_identification_geology: [],
           specimen_reference: [],
           specimen_description: [],
+          attachment: [],
           new: {
             specimen_identification: [],
             specimen_identification_geology: [],
             specimen_reference: [],
             specimen_description: [],
+            attachment: [],
           },
           copyFields: {
             specimen_identification: ['taxon', 'name', 'agent', 'reference', 'date_identified', 'type', 'current'],
             specimen_identification_geology: ['rock', 'name', 'name_en', 'agent', 'reference', 'date_identified', 'type', 'current'],
             specimen_reference: ['reference', 'pages', 'figures', 'remarks'],
             specimen_description: ['length', 'width', 'height', 'unit', 'mass', 'description', 'agent', 'date', 'remarks'],
+            attachment: ['attachment', 'remarks'],
           },
           insert: {
             specimen_identification: {},
             specimen_identification_geology: {},
             specimen_reference: {},
             specimen_description: {},
+            attachment: {},
           },
           searchParameters: {
             specimen_identification: {
@@ -855,12 +878,18 @@
               paginateBy: 10,
               orderBy: 'length'
             },
+            attachment: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'original_filename'
+            },
           },
           count: {
             specimen_identification: 0,
             specimen_identification_geology: 0,
             specimen_reference: 0,
             specimen_description: 0,
+            attachment: 0,
           }
         }
       },
@@ -930,10 +959,9 @@
         if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent };
         if (this.isDefinedAndNotNull(obj.reference)) obj.reference = { id: obj.reference, reference: obj.reference__reference };
         if (this.isDefinedAndNotNull(obj.type)) obj.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
-
         if (this.isDefinedAndNotNull(obj.rock)) obj.rock = { id: obj.rock, name: obj.rock__name, name_en: obj.rock__name_en };
         if (this.isDefinedAndNotNull(obj.unit)) obj.unit = {  id: obj.unit, value: obj.unit__value, value_en: obj.unit__value_en };
-
+        if (this.isDefinedAndNotNull(obj.original_filename)) obj.attachment = { id: obj.id, original_filename: obj.original_filename };
 
         return obj
       },
@@ -950,7 +978,7 @@
         } else if (object === 'specimen_description') {
           query = fetchSpecimenDescriptions(this.$route.params.id, this.relatedData.searchParameters.specimen_description)
         } else if (object === 'attachment') {
-
+          query = fetchSpecimenAttachments(this.$route.params.id, this.relatedData.searchParameters.attachment)
         } else if (object === 'specimen_location') {
 
         } else if (object === 'specimen_history') {
@@ -998,6 +1026,9 @@
         }
         if (this.isDefinedAndNotNull(uploadableObject.date)) {
           uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
+          uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
         }
 
         console.log('This object is sent in string format (related_data):');
