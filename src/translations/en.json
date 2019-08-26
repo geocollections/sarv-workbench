@@ -1032,6 +1032,7 @@
     "url": "URL",
     "addReferenceToLibrary": "Add reference to library",
     "chooseActiveLibrary": "Choose active library",
+    "is_estonian_reference": "Estonian reference",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

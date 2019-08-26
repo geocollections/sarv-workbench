@@ -523,6 +523,12 @@
           {{ $t('otherFiles.locked') }}
         </b-form-checkbox>
       </div>
+
+      <div class="px-2">
+        <b-form-checkbox id="is_estonian_reference" v-model="reference.is_estonian_reference" :value="true" :unchecked-value="false">
+          {{ $t('reference.is_estonian_reference') }}
+        </b-form-checkbox>
+      </div>
     </div>
 
     <!-- SHOWING RELATED_DATA -->
@@ -553,37 +559,6 @@
         </div>
       </div>
     </div>
-
-<!--    <div class="row mt-3 mb-3">-->
-<!--      <div class="col">-->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'reference', true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData"-->
-<!--                @click="add(true, 'reference', true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('reference', $route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-
-<!--        <button v-if="$route.meta.isEdit && showDoiButton()" class="float-right btn btn-primary mb-2"-->
-<!--                :disabled="sendingData"-->
-<!--                @click="addNewDoi()">-->
-<!--          <font-awesome-icon :icon="['far', 'plus-square']"/>-->
-<!--          {{ $t('edit.buttons.saveNewDoi') }}-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
-
 
   </div>
 </template>
@@ -734,7 +709,7 @@
           copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
             'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
             'issn', 'abstract', 'author_keywords', 'remarks', 'tags', 'book_editor', 'figures', 'is_locked',
-            'is_oa', 'is_private', 'language'],
+            'is_oa', 'is_private', 'is_estonian_reference', 'language'],
           autocomplete: {
             loaders: {
               types: false,
@@ -903,6 +878,7 @@
         if (objectToUpload.is_private !== null) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (objectToUpload.is_oa !== null) uploadableObject.is_oa = objectToUpload.is_oa === true ? '1' : '0';
         if (objectToUpload.is_locked !== null) uploadableObject.is_locked = objectToUpload.is_locked === true ? '1' : '0';
+        if (objectToUpload.is_estonian_reference !== null) uploadableObject.is_estonian_reference = objectToUpload.is_estonian_reference === true ? '1' : '0';
 
         // Adding related data
         uploadableObject.related_data = {};
