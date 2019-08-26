@@ -34,16 +34,16 @@
 
   import Link from '@ckeditor/ckeditor5-link/src/link';
 
-  import Image from '@ckeditor/ckeditor5-image/src/image';
+  // import Image from '@ckeditor/ckeditor5-image/src/image'; // Todo: Error (https://github.com/ckeditor/ckeditor5-vue/issues/72)
   import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar';
   import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
-  import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle';
-  import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload';
-  import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/base64uploadadapter';
+  // import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle'; // Todo: Error (https://github.com/ckeditor/ckeditor5-vue/issues/72)
+  // import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload'; // Todo: Error (https://github.com/ckeditor/ckeditor5-vue/issues/72)
+  // import Base64UploadAdapter from '@ckeditor/ckeditor5-upload/src/base64uploadadapter'; // Todo: Error (https://github.com/ckeditor/ckeditor5-vue/issues/72)
 
   import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
 
-  import Table from '@ckeditor/ckeditor5-table/src/table';
+  // import Table from '@ckeditor/ckeditor5-table/src/table'; // Todo: Error (https://github.com/ckeditor/ckeditor5-vue/issues/72)
   import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 
 
@@ -93,16 +93,16 @@
             Heading,
             Alignment,
             Link,
-            Image,
-            ImageToolbar,
+            // Image,
+            // ImageToolbar,
             ImageCaption,
-            ImageStyle,
-            ImageUpload,
+            // ImageStyle,
+            // ImageUpload,
             MediaEmbed,
-            Table,
+            // Table,
             TableToolbar,
             BalloonToolbar,
-            Base64UploadAdapter
+            // Base64UploadAdapter
           ],
 
           balloonToolbar: {
@@ -118,7 +118,7 @@
               'numberedList',
               '|',
               'link',
-              'imageUpload',
+              // 'imageUpload',
               '|',
               'undo',
               'redo',
@@ -162,23 +162,23 @@
             ]
           },
 
-          image: {
-            toolbar: [ 'imageTextAlternative', '|', 'imageStyle:full', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
-            styles: [
-              'full',
-              'alignLeft',
-              'alignCenter',
-              'alignRight'
-            ]
-          },
+          // image: {
+          //   toolbar: [ 'imageTextAlternative', '|', 'imageStyle:full', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
+          //   styles: [
+          //     'full',
+          //     'alignLeft',
+          //     'alignCenter',
+          //     'alignRight'
+          //   ]
+          // },
 
-          table: {
-            contentToolbar: [
-              'tableColumn',
-              'tableRow',
-              'mergeTableCells'
-            ]
-          },
+          // table: {
+          //   contentToolbar: [
+          //     'tableColumn',
+          //     'tableRow',
+          //     'mergeTableCells'
+          //   ]
+          // },
 
           toolbar: {
             items: [
@@ -205,7 +205,7 @@
               'alignment',
               '|',
               'link',
-              'imageUpload',
+              // 'imageUpload',
               'mediaEmbed',
               '|',
               'undo',

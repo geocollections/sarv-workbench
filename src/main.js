@@ -11,22 +11,10 @@ import VueCookies from 'vue-cookies'
 import { createStore } from './store'
 import Vuesax from 'vuesax'
 import VueScrollTo from 'vue-scrollto'
-import Vue2TocuhEvents from 'vue2-touch-events'
+import Vue2TouchEvents from 'vue2-touch-events'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 
 Vue.use( CKEditor );
-
-// Leaflet START
-import { L } from 'vue2-leaflet'
-import 'leaflet/dist/leaflet.css' // Leaflet css
-
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
-});
-// Leaflet END
-
 
 // Bootstrap css
 import 'bootstrap/dist/css/bootstrap.css'
@@ -36,17 +24,18 @@ import 'izitoast/dist/css/iziToast.min.css' // Pop-up messages style
 import 'vue-multiselect/dist/vue-multiselect.min.css' // Select input
 import 'vuesax/dist/vuesax.css'
 import 'material-icons/iconfont/material-icons.css';
+import 'leaflet/dist/leaflet.css' // Leaflet css
 // Custom css
 import '@/assets/css/styles.css'
 
-Vue.use(VueResource)
-Vue.use(VueLocalStorage)
-Vue.use(BootstrapVue)
-Vue.use(VueIziToast)
-Vue.use(VueI18n)
-Vue.use(VueMoment)
-Vue.use(VueCookies)
-Vue.use(Vuesax)
+Vue.use(VueResource);
+Vue.use(VueLocalStorage);
+Vue.use(BootstrapVue);
+Vue.use(VueIziToast);
+Vue.use(VueI18n);
+Vue.use(VueMoment);
+Vue.use(VueCookies);
+Vue.use(Vuesax);
 Vue.use(VueScrollTo, {
   container: "body",
   duration: 100,
@@ -59,10 +48,10 @@ Vue.use(VueScrollTo, {
   onCancel: false,
   x: false,
   y: true
-})
-Vue.use(Vue2TocuhEvents)
+});
+Vue.use(Vue2TouchEvents);
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 
 
@@ -77,7 +66,7 @@ const messages = {
 };
 
 // Gets preferred language from localStorage (fallback is ee)
-const lang = Vue.localStorage.get('geocollectionsFileUploadLang', 'ee')
+const lang = Vue.localStorage.get('geocollectionsFileUploadLang', 'ee');
 
 // Translation settings
 const i18n = new VueI18n({
@@ -85,7 +74,7 @@ const i18n = new VueI18n({
   fallbackLocale: 'en',
   silentTranslationWarn: process.env.NODE_ENV === 'production',
   messages
-})
+});
 /******************************
  ***  TRANSLATION CODE END  ***
  ******************************/
@@ -97,10 +86,10 @@ Vue.http.interceptors.push((request, next) => {
   // Only our rwapi needs csrftoken
   if (request.url.includes('rwapi')) {
 
-    let csrftoken = Vue.cookies.get('csrftoken')
+    let csrftoken = Vue.cookies.get('csrftoken');
 
     request.credentials = true;
-    request.headers.set('X-CSRFTOKEN', csrftoken)
+    request.headers.set('X-CSRFTOKEN', csrftoken);
 
     next(res => {
       if (res.status === 200) {
@@ -122,7 +111,7 @@ Vue.http.interceptors.push((request, next) => {
         if (res.body.error_not_logged_in) {
           Vue.cookies.remove('csrftokenLocalhost', null , 'localhost');
           Vue.cookies.remove('csrftoken', null, 'geocollections.info');
-          Vue.localStorage.remove('authUser')
+          Vue.localStorage.remove('authUser');
           Vue.prototype.$toast.error('Please log back in', 'Session expired', {
             position: 'bottomRight',
             timeout: 5000,
@@ -147,7 +136,7 @@ Vue.http.interceptors.push((request, next) => {
 });
 
 Vue.directive('translate', function (el, binding) {
-  let value = i18n.locale === 'ee' ? binding.value.et : binding.value.en
+  let value = i18n.locale === 'ee' ? binding.value.et : binding.value.en;
   el.innerHTML = value === undefined || value === null ? '' : value
 });
 
@@ -288,4 +277,4 @@ new Vue({
     }
   },
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

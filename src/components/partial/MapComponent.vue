@@ -5,6 +5,10 @@
 <script>
   import * as L from "leaflet";
   import {toastError, toastSuccess} from "../../assets/js/iziToast/iziToast";
+  import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
+  import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
+  import '../../assets/leafletPlugins/Leaflet.PolylineMeasure.css'
+  import '../../assets/leafletPlugins/Leaflet.PolylineMeasure.js'
 
   export default {
     name: "MapComponent",
@@ -25,6 +29,15 @@
         type: Boolean,
         default: false
       }
+    },
+
+    head: {
+      script: [
+        { src: 'https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js' }
+      ],
+      link: [
+        { href: 'https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css', rel: 'stylesheet' }
+      ]
     },
 
     data() {
@@ -148,7 +161,7 @@
       initMap() {
         this.map = L.map('map', {
           layers: [this.tileProviders[0].leafletObject],
-          scrollWheelZoom: true
+          scrollWheelZoom: true,
         }).setView(this.center, this.zoom);
 
         let baseLayers = {};
@@ -157,7 +170,12 @@
         });
 
         L.control.layers(baseLayers).addTo(this.map);
-        L.control.scale({ imperial: false }).addTo(this.map)
+        L.control.scale({ imperial: false }).addTo(this.map);
+
+        // Fullscreen
+        this.map.addControl(new window.L.Control.Fullscreen());
+        // PolylineMeasure
+        L.control.polylineMeasure().addTo(this.map)
 
         if (this.gpsCoords === true) this.trackPosition();
 
