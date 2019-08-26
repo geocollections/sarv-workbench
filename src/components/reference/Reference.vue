@@ -647,9 +647,10 @@
       },
 
       isValidUrl() {
-        // Todo: only if not empty
-        let regex = RegExp('^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$');
-        return regex.test(this.reference.url)
+        if (this.reference.url && this.reference.url.length > 0) {
+          let regex = RegExp('^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,4}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)$');
+          return regex.test(this.reference.url)
+        } else return true
       },
 
       ...mapState(["currentUser"])
