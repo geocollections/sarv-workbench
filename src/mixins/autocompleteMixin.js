@@ -109,7 +109,7 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, 'series', 'series')
     },
     autocompleteSampleSearch(value) {
-      this.$_autocompleteMixin_search(value, 'sample', 'sample',1)
+      this.$_autocompleteMixin_search(value, 'sample', 'sample', 1)
     },
     autocompleteSpecimenSearch(value) {
       this.$_autocompleteMixin_search(value, 'specimen', 'specimen')
@@ -173,6 +173,9 @@ const autocompleteMixin = {
     },
     autocompleteRelatedKeywordSearch(value) {
       this.$_autocompleteMixin_search(value, 'related_keyword', 'related_keyword', 1)
+    },
+    autocompleteAnalysisMethodSearch(value) {
+      this.$_autocompleteMixin_search(value, 'analysis_method', 'analysis_method', 1)
     },
 
     /**
@@ -255,7 +258,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case 'synonym':
       return `locality_synonym/?multi_search=value:${value};fields:synonym;lookuptype:icontains&fields=id,synonym,reference__reference,pages,remarks`;
     case 'attachment':
-      return`attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
+      return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
     case 'attachment_public':
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
     case 'attachment3':
@@ -287,6 +290,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `keyword_category/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case 'related_keyword':
       return `keyword/?keyword__icontains=${value}&fields=id,keyword`;
+    case 'analysis_method':
+      return `analysis_method/?multi_search=value:${value};fields:analysis_method,method_en;lookuptype:icontains&fields=id,analysis_method,method_en`;
     default:
       return ''
   }

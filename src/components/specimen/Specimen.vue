@@ -793,6 +793,7 @@
               attachment: false,
               list_specimen_type: false,
               list_history_type: false,
+              analysis_method: false,
             },
             coll: [],
             specimen_kind: [],
@@ -819,6 +820,7 @@
             attachment: [],
             list_specimen_type: [],
             list_history_type: [],
+            analysis_method: [],
           },
           requiredFields: ['fossil'],
           specimen: {},
@@ -1091,6 +1093,8 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.specimen = this.specimen.id;
 
+        // Todo: Use foreach because DRY basically
+
         if (this.isDefinedAndNotNull(uploadableObject.taxon)) {
           uploadableObject.taxon = uploadableObject.taxon.id ? uploadableObject.taxon.id : uploadableObject.taxon;
         }
@@ -1115,11 +1119,17 @@
         if (this.isDefinedAndNotNull(uploadableObject.date)) {
           uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
         }
+        if (this.isDefinedAndNotNull(uploadableObject.date_end)) {
+          uploadableObject.date_end = this.formatDateForUpload(uploadableObject.date_end);
+        }
         if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
           uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
         }
         if (this.isDefinedAndNotNull(uploadableObject.storage)) {
           uploadableObject.storage = uploadableObject.storage.id ? uploadableObject.storage.id : uploadableObject.storage;
+        }
+        if (this.isDefinedAndNotNull(uploadableObject.analysis_method)) {
+          uploadableObject.analysis_method = uploadableObject.analysis_method.id ? uploadableObject.analysis_method.id : uploadableObject.analysis_method;
         }
 
         console.log('This object is sent in string format (related_data):');
