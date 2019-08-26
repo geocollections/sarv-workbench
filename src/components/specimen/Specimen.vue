@@ -633,10 +633,10 @@
 
     <!-- IS_PRIVATE -->
     <div class="row">
-      <div class="col-sm-12">
-        <label :for="`is_private`">{{ specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}:</label>
+      <div class="col">
+<!--        <label :for="`is_private`">{{ specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}:</label>-->
         <vs-checkbox class="justify-content-start" id="is_private" v-model="specimen.is_private" icon="fa-lock" icon-pack="fas">
-<!--          {{ specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}-->
+          {{ $t('specimen.is_private_text') }}
         </vs-checkbox>
       </div>
     </div>
