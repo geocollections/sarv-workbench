@@ -481,59 +481,18 @@
     <div class="row mb-2" v-if="$route.meta.isEdit">
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('specimen_identification')" class="nav-link"
-               :class="{ active: activeTab === 'specimen_identification' }">
-              {{ $t('specimen.relatedTables.specimen_identification') }} <i class="fas fa-atlas"></i>
-            </a>
-          </li>
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('specimen_identification_geology')" class="nav-link"
-               :class="{ active: activeTab === 'specimen_identification_geology' }">
-              {{ $t('specimen.relatedTables.specimen_identification_geology') }} <i class="far fa-gem"></i>
-            </a>
-          </li>
+          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+            <a href="#" @click.prevent="setActiveTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+              <span>{{ $t('specimen.relatedTables.' + tab.name) }}</span>
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('specimen_reference')" class="nav-link"
-               :class="{ active: activeTab === 'specimen_reference' }">
-              {{ $t('specimen.relatedTables.specimen_reference') }} <i class="fas fa-book"></i>
-            </a>
-          </li>
+              <span>
+                <sup>
+                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                </sup>
+              </span>
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('specimen_description')" class="nav-link"
-               :class="{ active: activeTab === 'specimen_description' }">
-              {{ $t('specimen.relatedTables.specimen_description') }} <i class="fas fa-info"></i>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment')" class="nav-link"
-               :class="{ active: activeTab === 'attachment' }">
-              {{ $t('specimen.relatedTables.attachment') }} <i class="far fa-folder-open"></i>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('specimen_location')" class="nav-link"
-               :class="{ active: activeTab === 'specimen_location' }">
-              {{ $t('specimen.relatedTables.specimen_location') }} <i class="fas fa-globe-europe"></i>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('specimen_history')" class="nav-link"
-               :class="{ active: activeTab === 'specimen_history' }">
-              {{ $t('specimen.relatedTables.specimen_history') }} <i class="fas fa-history"></i>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"
-               :class="{ active: activeTab === 'analysis' }">
-              {{ $t('specimen.relatedTables.analysis') }} <i class="far fa-chart-bar"></i>
+              <span><i :class="tab.iconClass"></i></span>
             </a>
           </li>
         </ul>
@@ -757,6 +716,16 @@
         return {
           tabs:['specimen_identification', 'specimen_identification_geology', 'specimen_reference', 'specimen_description',
             'attachment', 'specimen_location', 'specimen_history', 'analysis'],
+          relatedTabs: [
+            { name: 'specimen_identification', iconClass: 'fas fa-atlas' },
+            { name: 'specimen_identification_geology', iconClass: 'far fa-gem' },
+            { name: 'specimen_reference', iconClass: 'fas fa-book' },
+            { name: 'specimen_description', iconClass: 'fas fa-info' },
+            { name: 'attachment', iconClass: 'far fa-folder-open' },
+            { name: 'specimen_location', iconClass: 'fas fa-globe-europe' },
+            { name: 'specimen_history', iconClass: 'fas fa-history' },
+            { name: 'analysis', iconClass: 'far fa-chart-bar' }
+          ],
           searchHistory: 'specimenSearchHistory',
           activeTab: 'specimen_identification',
           relatedData: this.setDefaultRelatedData(),
