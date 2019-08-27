@@ -4,8 +4,8 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" ref="info" id="block-info">
-      <legend class="w-auto" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
+    <fieldset class="border-top px-2 mb-2" ref="info" id="block-info">
+      <legend class="w-auto my-0" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
         {{ $t('site.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
@@ -77,8 +77,8 @@
     </fieldset>
 
     <!-- LOCATION -->
-    <fieldset class="border p-2 mb-2" id="block-location">
-      <legend class="w-auto" :class="{'text-primary': !block.location}" @click="block.location = !block.location">
+    <fieldset class="border-top px-2 mb-2" id="block-location">
+      <legend class="w-auto my-0" :class="{'text-primary': !block.location}" @click="block.location = !block.location">
         {{ $t('site.location') }}
         <font-awesome-icon icon="globe"/>
       </legend>
@@ -130,11 +130,12 @@
             <div class="col-lg-12">
               <b-collapse v-model="showCollapseMap" id="collapseMap">
                 <map-component v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
-                                 :gps-coords="true"
-                                 mode="single"
-                                 v-bind:locations="[]"
-                                 v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }"
-                                 v-on:update-coordinates="updateLocation"/>
+                               :gps-coords="true"
+                               mode="single"
+                               module="site"
+                               v-bind:locations="[]"
+                               v-bind:location="{ lat: site.latitude ? (site.latitude).toString() : null, lng: site.longitude ? (site.longitude).toString() : null }"
+                               v-on:update-coordinates="updateLocation"/>
               </b-collapse>
             </div>
           </div>
@@ -211,8 +212,8 @@
     </fieldset>
 
     <!-- DESCRIPTION -->
-    <fieldset class="border p-2 mb-2" id="block-description">
-      <legend class="w-auto" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
+    <fieldset class="border-top px-2 mb-2" id="block-description">
+      <legend class="w-auto my-0 mb-1" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
         {{ $t('site.description') }} | {{ $t('site.remarks') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
@@ -233,8 +234,8 @@
       </transition>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-files" ref="files">
-      <legend class="w-auto" @click="block.files = !block.files" :class="{'text-primary': !block.files}">
+    <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-files" ref="files">
+      <legend class="w-auto my-0 mb-1" @click="block.files = !block.files" :class="{'text-primary': !block.files}">
         {{ $t('site.files') }}
         <font-awesome-icon icon="folder-open"/>
       </legend>
@@ -248,8 +249,8 @@
       </transition>
     </fieldset>
 
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-samples" ref="samples">
-      <legend class="w-auto" @click="block.samples = !block.samples" :class="{'text-primary': !block.samples}">
+    <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-samples" ref="samples">
+      <legend class="w-auto my-0 mb-1" @click="block.samples = !block.samples" :class="{'text-primary': !block.samples}">
         {{ $t('site.relatedSamples') }}
         <font-awesome-icon icon="vial"/>
       </legend>

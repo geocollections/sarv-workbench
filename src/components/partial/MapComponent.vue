@@ -1,5 +1,20 @@
 <template>
-  <div id="map" style="height: 50vh"></div>
+  <div class="map-component">
+    <div id="map" style="height: 50vh"></div>
+    <div class="map-links text-right" v-if="isLocationSet">
+      <span class="google-map">
+        <a :href="`https://www.google.com/maps/?q=${this.location.lat},${this.location.lng}`"
+           :title="`https://www.google.com/maps/?q=${this.location.lat},${this.location.lng}`"
+           target="_blank">Google Maps</a>
+      </span>
+      <span> | </span>
+      <span class="xgis2">
+        <a :href="`https://xgis.maaamet.ee/xgis2/page/app/maainfo`"
+           title="TODO" 
+           target="_blank">Estonian Geoportal</a>
+      </span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -7,6 +22,8 @@
   import {toastError, toastSuccess} from "../../assets/js/iziToast/iziToast";
   import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
   import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
+  import 'leaflet-measure/dist/leaflet-measure.css'
+  import 'leaflet-measure/dist/leaflet-measure'
 
   export default {
     name: "MapComponent",
@@ -26,6 +43,9 @@
       gpsCoords: {
         type: Boolean,
         default: false
+      },
+      module: {
+        type: String
       }
     },
 
@@ -119,7 +139,15 @@
           iconAnchor: [12, 36],
           popupAnchor: [2, -34],
           className: 'clean-icon'
-        })
+        }),
+        measureOptions: {
+          position: 'bottomright',
+          primaryLengthUnit: 'kilometers',
+          secondaryLengthUnit: 'meters',
+          primaryAreaUnit: 'hectares',
+          secondaryAreaUnit: 'sqmeters',
+          thousandsSep: ' '
+        },
       }
     },
 
@@ -172,7 +200,8 @@
 
         // Fullscreen
         this.map.addControl(new window.L.Control.Fullscreen());
-        // Todo: Line/Area Measurements
+        // LeafletMeasure
+        if (this.module && (this.module === 'site' || this.module === 'project')) this.map.addControl(new window.L.Control.Measure(this.measureOptions));
 
         if (this.gpsCoords === true) this.trackPosition();
 
@@ -243,7 +272,8 @@
           .addTo(this.map)
           .on('dragend', (event) => this.updateCoordinates(event.target._latlng));
 
-        this.map.setView(this.marker._latlng, this.zoom);
+        // Uncomment to recenter after every click
+        // this.map.setView(this.marker._latlng, this.zoom);
       },
 
       trackPosition() {

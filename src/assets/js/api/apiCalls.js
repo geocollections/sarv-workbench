@@ -145,7 +145,7 @@ export function fetchReferences(data) {
     searchFields += '&multi_search=value:' + data.abstractRemarks + ';fields:abstract,remarks;lookuptype:icontains'
   }
   if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference__keywords;lookuptype:icontains'
+    searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference__keywords;lookuptype:icontains&distinct=true'
   }
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += '&id__icontains=' + data.id

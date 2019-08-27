@@ -235,6 +235,7 @@
                 <map-component :gps-coords="true"
                                mode="multiple"
                                v-if="showCollapseMap"
+                               module="project"
                                v-bind:location="{ lat: null, lng: null }"
                                v-bind:locations="relatedData.site"
                                v-on:choose-locations="chooseLocations"/>

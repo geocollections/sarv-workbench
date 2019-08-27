@@ -1,12 +1,12 @@
 <template>
   <fieldset class="log border-top px-2 mb-2" v-if="logs.length > 0">
-    <legend class="w-auto my-0" :class="{'text-primary': !block.logs}" @click="block.logs = !block.logs">
+    <legend class="w-auto my-0 mb-1" :class="{'text-primary': !block.logs}" @click="block.logs = !block.logs">
       {{ $t('logs.title') }}
       <font-awesome-icon icon="history"/>
     </legend>
 
     <transition name="fade">
-      <div class="row" v-if="block.logs">
+      <div class="row" v-show="block.logs">
         <div class="col">
 
           <div class="table-responsive">
@@ -162,7 +162,6 @@
 <style scoped>
   .log {
     width: 100%;
-    margin-top: 1rem;
     font-size: 0.8em;
   }
 

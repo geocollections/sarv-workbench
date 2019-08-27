@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-wrap justify-content-around align-items-center">
 
-    <div class="align-self-center mx-3 mb-3" v-for="(file, key) in attachments" :key="file.id">
+    <div class="align-self-center m-3" v-for="(file, key) in attachments" :key="file.id">
 
       <!-- FILES -->
       <div class="file-container" :title="composeFileUrl(file[prefix + 'uuid_filename'], 'original')">
@@ -43,22 +43,20 @@
 
       <!-- BUTTONS -->
       <div class="my-1">
-        <div class="text-center py-1">
-          <b-button squared
-                    class="p-0 px-4 mr-1"
+        <div class="text-right py-1">
+          <b-button class="p-0 px-2 mr-2"
                     size="sm"
-                    variant="info"
-                    title="View file in Geocollections.info"
-                    @click="openGeoInNewWindow({ object: 'file', id: file[tableId] })">
-            <font-awesome-icon icon="eye"/>
-          </b-button>
-
-          <b-button squared
-                    class="p-0 px-4 mr-1"
-                    size="sm"
-                    variant="primary"
+                    variant="outline-primary"
                     title="Open file detail view"
                     @click="windowOpenNewTab('attachment','/attachment/'+file[tableId])">
+          <font-awesome-icon icon="eye"/>
+          </b-button>
+
+          <b-button class="p-0 px-2"
+                    size="sm"
+                    variant="outline-secondary"
+                    title="View file in Geocollections.info"
+                    @click="openGeoInNewWindow({ object: 'file', id: file[tableId] })">
             <font-awesome-icon icon="external-link-alt"/>
           </b-button>
         </div>
