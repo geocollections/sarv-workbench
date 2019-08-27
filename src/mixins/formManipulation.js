@@ -1,4 +1,3 @@
-import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
 import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
 import VueMultiselect from 'vue-multiselect';
 import {library} from '@fortawesome/fontawesome-svg-core'
@@ -50,7 +49,7 @@ import {
 import cloneDeep from 'lodash/cloneDeep'
 import findIndex from 'lodash/findIndex';
 import moment from 'moment'
-import {toastInfo} from "../assets/js/iziToast/iziToast";
+import {toastInfo, toastSuccess, toastError} from "../assets/js/iziToast/iziToast";
 import {mapState} from "vuex";
 
 library.add(faBan, faSave, faDoorOpen, faProjectDiagram, faTag, faGlobeAmericas, faFileVideo, faFileAudio, faDownload, faVial, faVideo, faMicrophone, faCameraRetro, faChevronDown, faChevronUp, faGlobe, faFile, faFileExcel, faFileImage, faEye, faFolderOpen, faUserFriends, faFileContract, faInfo, faPenFancy, faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
@@ -209,6 +208,11 @@ const formManipulation = {
           }
         }
       }).then(response => {
+        // TODO: If related_data is sent then it returns wrong id!!! NEEDS FAST FIX
+        console.log('DEBUG')
+        console.log(response)
+        console.log('DEBUG')
+
         this.sendingData = false
         if (response.status === 200) {
           if (typeof response.body.message !== 'undefined') {

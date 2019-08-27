@@ -166,7 +166,8 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, 'classification', 'classification', 2)
     },
     autocompleteKeywordSearch(value) {
-      this.$_autocompleteMixin_search(value, 'keyword', 'keyword', 1, this.keywordCategoryLabel)
+      this.$_autocompleteMixin_search(value, 'keyword', 'keyword', 1, '', false)
+      // this.$_autocompleteMixin_search(value, 'keyword_group_by', 'keyword', 1, this.keywordCategoryLabel)
     },
     autocompleteKeywordCategorySearch(value) {
       this.$_autocompleteMixin_search(value, 'keyword_category', 'keyword_category', 1)
@@ -185,9 +186,12 @@ const autocompleteMixin = {
      * @param options - String which will toggle loader state and sets results to autocomplete object
      * @param minLength {Integer} - Minimum length needed to trigger search
      * @param groupByField {String} - Field used to group results
+     * @param clearAutocomplete {Boolean} - If set to false then autocomplete won't get cleared when multiselect field is cleared (needed in reference keywords search)
      */
-    $_autocompleteMixin_search(value, type, options, minLength = 3, groupByField) {
-      if (value.length < minLength) this.autocomplete[options] = [];
+    $_autocompleteMixin_search(value, type, options, minLength = 3, groupByField, clearAutocomplete = true) {
+      if (value.length < minLength) {
+        if (clearAutocomplete) this.autocomplete[options] = [];
+      }
       else if (value.length >= minLength) {
         let query = buildAutocompleteQuery(type, value, this.currentUser, groupByField);
         if (query.length === 0) return;
@@ -285,6 +289,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case 'classification':
       return `classification/?multi_search=value:${value};fields:id,class_field,class_en;lookuptype:icontains&fields=id,class_field,class_en`;
     case 'keyword':
+      return `keyword/?multi_search=value:${value};fields:id,keyword;lookuptype:icontains`;
+    case 'keyword_group_by':
       return `keyword/?multi_search=value:${value};fields:keyword,${groupByField};lookuptype:icontains&group_by=${groupByField}`;
     case 'keyword_category':
       return `keyword_category/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;

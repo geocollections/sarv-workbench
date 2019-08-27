@@ -70,10 +70,10 @@
 </template>
 
 <script>
-  import { toastInfo } from "@/assets/js/iziToast/iziToast";
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
   import authenticationMixin from "../../mixins/authenticationMixin";
   import {mapState} from "vuex";
+  import {toastInfo} from "../../assets/js/iziToast/iziToast";
 
   export default {
     name: "app-header",
@@ -97,10 +97,10 @@
       // Changes application's language
       changeLang(lang) {
         if (this.$localStorage.get('geocollectionsFileUploadLang') === lang) return;
-        this.$localStorage.set('geocollectionsFileUploadLang', lang)
-        this.$i18n.locale = lang
+        this.$localStorage.set('geocollectionsFileUploadLang', lang);
+        this.$i18n.locale = lang;
 
-        lang === 'ee' ? this.$moment.locale('et') : this.$moment.locale(lang)
+        lang === 'ee' ? this.$moment.locale('et') : this.$moment.locale(lang);
 
         toastInfo({text: this.$t('messages.langChange')})
       },

@@ -4,7 +4,7 @@
     <div class="align-self-center mx-3 mb-3" v-for="(file, key) in attachments" :key="file.id">
 
       <!-- FILES -->
-      <div class="file-container" :title="composeFileUrl(file[prefix + 'uuid_filename'], 'original')">
+      <div class="file-container" :class="{ 'text-center': fileIconExists }" :title="composeFileUrl(file[prefix + 'uuid_filename'], 'original')">
 
         <!-- AUDIO -->
         <audio v-if="file[prefix + 'uuid_filename'] !== null && ['mp3','wav'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1" controls>
@@ -31,7 +31,7 @@
              class="img-thumbnail image"/>
 
         <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-        <font-awesome-icon v-else style="max-height: 5rem" size="7x" icon="file"/>
+        <font-awesome-icon v-else ref="icon" size="5x" icon="file"/>
 
         <div class="middle">
           <div class="hover-text-box">
@@ -94,6 +94,12 @@
       }
     },
     mixins: [formManipulation],
+    data: () => ({
+      fileIconExists: false
+    }),
+    mounted() {
+      this.fileIconExists = this.$refs.icon && this.$refs.icon.length > 0
+    }
   }
 </script>
 
@@ -118,6 +124,10 @@
   .file-container {
     position: relative;
     cursor: pointer;
+  }
+
+  .file-container > .icon {
+    text-align: center;
   }
 
   .file-container:hover .image {

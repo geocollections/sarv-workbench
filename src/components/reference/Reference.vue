@@ -4,9 +4,9 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- REQUIRED INFO -->
-    <fieldset class="border p-2 mb-2" id="block-requiredFields"
+    <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
               :style="!validate('reference') ? 'border-color: #dc3545!important;' : ''">
-      <legend class="w-auto mb-0"
+      <legend class="w-auto my-0"
               :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('reference') }"
               @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
@@ -57,8 +57,8 @@
     </fieldset>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" id="block-info">
-      <legend class="w-auto" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+    <fieldset class="border-top px-2 mb-2" id="block-info">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('reference.info') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
@@ -233,11 +233,17 @@
             </div>
           </div>
 
-          <!-- ABSTRACT -->
+          <!-- ABSTRACT and AUTHOR KEYWORDS -->
           <div class="row">
             <div class="col-sm-12">
               <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
               <editor :data.sync="reference.abstract" />
+            </div>
+
+            <!-- AUTHOR KEYWORDS -->
+            <div class="col-sm-12">
+              <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
+              <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
             </div>
           </div>
 
@@ -247,9 +253,9 @@
 
     </fieldset>
 
-    <!-- REMARKS and KEYWORDS -->
-    <fieldset class="border p-2 mb-2" id="block-description">
-      <legend class="w-auto" :class="{ 'text-primary': !block.description }"
+    <!-- REMARKS and REFERENCE KEYWORDS -->
+    <fieldset class="border-top px-2 mb-2" id="block-description">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }"
               @click="block.description = !block.description">
         {{ $t('reference.description') }}
         <font-awesome-icon icon="pen-fancy"/>
@@ -258,27 +264,11 @@
       <transition name="fade">
         <div v-show="block.description">
 
-          <!-- AUTHOR KEYWORDS -->
-          <div class="row">
-            <div class="col-sm-12">
-              <label :for="`author_keywords`">{{ $t('reference.authorKeywords') }}:</label>
-              <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
-            </div>
-          </div>
-
           <!-- REMARKS -->
           <div class="row">
             <div class="col-sm-12">
               <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
               <editor :data.sync="reference.remarks"/>
-            </div>
-          </div>
-
-          <!-- ALLOW TEMPORARILY USER TAGS -->
-          <div class="row">
-            <div class="col-sm-12">
-              <label :for="`tags`">Kasutaja märksõnad (ajutine lahendus):</label>
-              <b-form-input id="tags" v-model="reference.tags" type="text"></b-form-input>
             </div>
           </div>
 
@@ -297,18 +287,34 @@
                                @search-change="autocompleteKeywordSearch"
                                :internal-search="false"
                                :preserve-search="true"
-                               :clear-on-select="false"
                                :close-on-select="false"
-                               :show-labels="true"
-                               :group-label="keywordCategoryLabel"
-                               group-values="group_results"
-                               :group-select="true">
+                               :show-labels="true">
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
+
+              <!-- KEYWORD INPUT USING GROUP BY -->
+<!--              <vue-multiselect v-model="relatedData.keyword"-->
+<!--                               id="keyword"-->
+<!--                               label="keyword"-->
+<!--                               track-by="id"-->
+<!--                               :multiple="true"-->
+<!--                               :placeholder="$t('add.inputs.keywords')"-->
+<!--                               :loading="autocomplete.loaders.keyword"-->
+<!--                               :options="autocomplete.keyword"-->
+<!--                               @search-change="autocompleteKeywordSearch"-->
+<!--                               :internal-search="false"-->
+<!--                               :preserve-search="true"-->
+<!--                               :clear-on-select="false"-->
+<!--                               :close-on-select="false"-->
+<!--                               :show-labels="true"-->
+<!--                               :group-label="keywordCategoryLabel"-->
+<!--                               group-values="group_results"-->
+<!--                               :group-select="true">-->
+<!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
+<!--              </vue-multiselect>-->
             </div>
 
             <div class="mr-3 my-1 align-self-end">
-<!--              <label style="visibility: hidden; display: block;">Empty</label>-->
               <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
                       :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
                       @click="relatedData.keyword = null">
@@ -317,7 +323,6 @@
             </div>
 
             <div class="mr-2 my-1 align-self-end">
-<!--              <label style="visibility: hidden; display: block;">Add</label>-->
               <router-link class="btn btn-outline-primary"
                            :title="$t('add.new')"
                            :to="{ name: 'Keyword add', query: { reference: JSON.stringify(reference) } }"
@@ -327,16 +332,14 @@
             </div>
           </div>
 
-<!--          <linked-keyword-table :referenceID="$route.params.id" :keywords="relatedData.keyword"/>-->
-
         </div>
       </transition>
 
     </fieldset>
 
     <!-- DIGITAL VERSION (PDF) -->
-    <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
-      <legend class="w-auto" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
+    <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <font-awesome-icon icon="file-pdf"/>
       </legend>
@@ -354,8 +357,8 @@
     </fieldset>
 
     <!-- RELATED FILES -->
-    <fieldset class="border p-2 mb-2" id="block-files">
-      <legend class="w-auto" :class="{ 'text-primary': !block.files }" @click="block.files = !block.files">
+    <fieldset class="border-top px-2 mb-2" id="block-files">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.files }" @click="block.files = !block.files">
         {{ $t('reference.relatedTables.attachment') }}
         <font-awesome-icon icon="folder-open"/>
       </legend>
@@ -363,9 +366,9 @@
       <transition name="fade">
         <div v-show="block.files">
 
-          <div class="row">
-            <div class="col-10 col-md-11">
-              <!-- loader is 'attachment3' because of #158, regarding problem 2 -->
+          <div class="d-flex justify-content-start flex-wrap">
+            <div class="mr-3 flex-grow-1">
+              <label :for="`attachment`">{{ $t('reference.attachments') }}:</label>
               <vue-multiselect v-model="relatedData.attachment"
                                id="attachment"
                                :custom-label="customLabelForAttachment"
@@ -384,7 +387,7 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-2 col-md-1 pl-0">
+            <div class="mr-3 my-1 align-self-end">
               <button class="btn btn-outline-danger"
                       :disabled="!isDefinedAndNotEmpty(relatedData.attachment)"
                       @click="relatedData.attachment = []">
@@ -402,8 +405,8 @@
     </fieldset>
 
     <!-- RELATED LIBRARIES -->
-    <fieldset class="border p-2 mb-2" id="block-libraries">
-      <legend class="w-auto" :class="{ 'text-primary': !block.libraries }" @click="block.libraries = !block.libraries">
+    <fieldset class="border-top px-2 mb-2" id="block-libraries">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.libraries }" @click="block.libraries = !block.libraries">
         {{ $t('reference.relatedTables.library') }}
         <font-awesome-icon icon="book"/>
       </legend>
@@ -411,8 +414,9 @@
       <transition name="fade">
         <div v-show="block.libraries">
 
-          <div class="row">
-            <div class="col-10 col-md-11">
+          <div class="d-flex justify-content-start flex-wrap">
+            <div class="mr-3 flex-grow-1">
+              <label :for="`library`">{{ $t('reference.libraries') }}:</label>
               <vue-multiselect v-model="relatedData.library"
                                id="library"
                                :custom-label="customLabelForLibrary"
@@ -431,7 +435,7 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-2 col-md-1 pl-0">
+            <div class="mr-3 my-1 align-self-end">
               <button class="btn btn-outline-danger"
                       :disabled="!isDefinedAndNotEmpty(relatedData.library)"
                       @click="relatedData.library = []">
@@ -446,8 +450,8 @@
     </fieldset>
 
     <!-- RELATED LOCALITIES -->
-    <fieldset v-if="!$route.meta.isEdit" class="border p-2 mb-2" id="block-localities">
-      <legend class="w-auto" :class="{ 'text-primary': !block.localities }"
+    <fieldset v-if="!$route.meta.isEdit" class="border-top px-2 mb-2" id="block-localities">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.localities }"
               @click="block.localities = !block.localities">
         {{ $t('reference.relatedTables.locality') }}
         <font-awesome-icon icon="map-marked"/>
@@ -458,6 +462,7 @@
 
           <div class="row">
             <div class="col">
+              <label :for="`locality`">{{ $t('reference.localities') }}:</label>
               <vue-multiselect v-model="relatedData.locality"
                                id="locality"
                                :multiple="true"
@@ -708,7 +713,7 @@
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
             'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
-            'issn', 'abstract', 'author_keywords', 'remarks', 'tags', 'book_editor', 'figures', 'is_locked',
+            'issn', 'abstract', 'author_keywords', 'remarks', 'book_editor', 'figures', 'is_locked',
             'is_oa', 'is_private', 'is_estonian_reference', 'language'],
           autocomplete: {
             loaders: {
@@ -960,14 +965,15 @@
           year: null,
           title: null,
           bookJournal: null,
-          abstractKeywordsRemarks: null,
+          abstractRemarks: null,
+          keywords: null,
           id: null,
-          libraryAuthor: null,
-          libraryIdTitle: null,
+          libraryAuthorIdTitle: null,
+          userAdded: null,
+          solrSearch: null,
           page: 1,
           paginateBy: 50,
-          orderBy: this.multiOrdering ? ['-id', '-year'] : '-id',
-          // orderBy: '-id',
+          orderBy: isMultiOrdering ? ['-id', '-year'] : '-id',
         }
       },
 
@@ -1130,7 +1136,7 @@
               publisher: this.reference.publisher,
               abstract: this.reference.abstract,
               reference: this.reference.id,
-              subjects: this.reference.author_keywords + this.reference.tags,
+              subjects: this.reference.author_keywords + this.reference.tags, // Todo: Tags was dropped so change it to reference keywords
               resource_type: 12,
               version: 1.0,
               formats: 'pdf',

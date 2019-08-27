@@ -7,8 +7,6 @@
   import {toastError, toastSuccess} from "../../assets/js/iziToast/iziToast";
   import 'leaflet-fullscreen/dist/leaflet.fullscreen.css';
   import 'leaflet-fullscreen/dist/Leaflet.fullscreen';
-  import '../../assets/leafletPlugins/Leaflet.PolylineMeasure.css'
-  import '../../assets/leafletPlugins/Leaflet.PolylineMeasure.js'
 
   export default {
     name: "MapComponent",
@@ -174,8 +172,7 @@
 
         // Fullscreen
         this.map.addControl(new window.L.Control.Fullscreen());
-        // PolylineMeasure
-        L.control.polylineMeasure().addTo(this.map)
+        // Todo: Line/Area Measurements
 
         if (this.gpsCoords === true) this.trackPosition();
 

@@ -1033,6 +1033,10 @@
     "addReferenceToLibrary": "Add reference to library",
     "chooseActiveLibrary": "Choose active library",
     "is_estonian_reference": "Estonian reference",
+    "localities": "Localities",
+    "libraries": "Kogumikud",
+    "attachments": "Attachments",
+    "userAdded": "User added",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

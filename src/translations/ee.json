@@ -1033,6 +1033,10 @@
     "addReferenceToLibrary": "Lisa kirjandus kogumikku",
     "chooseActiveLibrary": "Vali aktiivne kirjandus",
     "is_estonian_reference": "Eesti kirjandus",
+    "localities": "Lokaliteedid",
+    "libraries": "Kogumikud",
+    "attachments": "Failid",
+    "userAdded": "Lisaja",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",

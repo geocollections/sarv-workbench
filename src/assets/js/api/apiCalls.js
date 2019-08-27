@@ -153,6 +153,9 @@ export function fetchReferences(data) {
   if (data.libraryAuthorIdTitle && data.libraryAuthorIdTitle.trim().length > 0) {
     searchFields += '&multi_search=value:' + data.libraryAuthorIdTitle + ';fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains&distinct=true'
   }
+  if (data.userAdded && data.userAdded.trim().length > 0) {
+    searchFields += `&user_added__icontains=${data.userAdded}`
+  }
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
   if (searchFields.length > 0) {
