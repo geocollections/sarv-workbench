@@ -890,12 +890,12 @@
         uploadableObject.related_data.keyword = this.relatedData.keyword;
         uploadableObject.related_data.attachment = this.relatedData.attachment;
         uploadableObject.related_data.locality = this.relatedData.locality;
-        uploadableObject.related_data.library = this.relatedData.library;
+        uploadableObject.related_data.library = cloneDeep(this.relatedData.library);
 
         if (this.isDefinedAndNotNull(this.relatedData.library)) {
           uploadableObject.related_data.library.forEach((library, index) => {
             uploadableObject.related_data.library[index] = {
-              id: library.library
+              id: library.library ? library.library : library.id
             }
           });
         }
@@ -973,7 +973,7 @@
           solrSearch: null,
           page: 1,
           paginateBy: 50,
-          orderBy: isMultiOrdering ? ['-id', '-year'] : '-id',
+          orderBy: this.isMultiOrdering ? ['-id', '-year'] : '-id',
         }
       },
 

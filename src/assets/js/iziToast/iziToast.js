@@ -29,9 +29,7 @@ export function toastError(data) {
 export function toastInfo(data) {
   if (data.timeout === undefined) data.timeout = 2000;
 
-  console.log(Vue.prototype.$toast)
-
-  this.$toast.info(data.text, 'Info', {
+  Vue.prototype.$toast.info(data.text, 'Info', {
     position: 'bottomRight',
     timeout: data.timeout,
     pauseOnHover: false

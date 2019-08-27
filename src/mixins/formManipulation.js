@@ -208,11 +208,6 @@ const formManipulation = {
           }
         }
       }).then(response => {
-        // TODO: If related_data is sent then it returns wrong id!!! NEEDS FAST FIX
-        console.log('DEBUG')
-        console.log(response)
-        console.log('DEBUG')
-
         this.sendingData = false
         if (response.status === 200) {
           if (typeof response.body.message !== 'undefined') {
