@@ -10,7 +10,7 @@
       <span> | </span>
       <span class="xgis2">
         <a :href="`https://xgis.maaamet.ee/xgis2/page/app/maainfo`"
-           title="TODO" 
+           title="TODO"
            target="_blank">Estonian Geoportal</a>
       </span>
     </div>
