@@ -21,7 +21,7 @@
 
       <transition name="fade">
         <div class="row" v-if="filters.length > 0 && block.search">
-                <div class="col-sm-6" v-for="field,idx in filters">
+                <div class="col-sm-6" v-for="field in filters">
 
                   <label :for="field.id">{{ $t(field.title) }}:</label>
 

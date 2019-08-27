@@ -118,16 +118,28 @@ export function fetchReference(id) {
   return fetch(`reference/?id=${id}&format=json`)
 }
 
-export function fetchReferences(data) {
+export async function fetchReferences(data) {
+  console.log(data)
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch !== null && data.solrSearch.trim().length > 0) {
     // TODO: Add order by
     let start = (data.page - 1) * data.paginateBy
     return fetch(`reference/?q=${data.solrSearch}&rows=${data.paginateBy}&start=${start}&format=json`, api.solrUrl)
   }
+  if (data.keywords !== null && data.keywords.trim().length > 0) {
+    // #247 changing keywords search so that reference_keyword table is used
+    //searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference__keywords;lookuptype:icontains&distinct=true'
+
+    let listOfReferenceIDs = await fetchReferenceIDsUsingReferenceKeyword(data).then(response => {
+      if (response && response.body && response.body.results && response.body.results.length > 0) {
+        return response.body.results.map(reference_keyword => { return reference_keyword.reference })
+      } else return [314159265]
+    });
+    return fetch(`reference/?id__in=${listOfReferenceIDs}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&format=json`)
+  }
 
   const fields = 'id,reference,author,year,title,journal__journal_name,number,volume,pages,doi,attachment__filename,book,book_editor,publisher,publisher_place,url,is_private'
-  let searchFields = ''
+  let searchFields = '';
 
   if (data.author !== null && data.author.trim().length > 0) {
     searchFields += 'author__icontains=' + data.author
@@ -144,9 +156,6 @@ export function fetchReferences(data) {
   if (data.abstractRemarks && data.abstractRemarks.trim().length > 0) {
     searchFields += '&multi_search=value:' + data.abstractRemarks + ';fields:abstract,remarks;lookuptype:icontains'
   }
-  if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference__keywords;lookuptype:icontains&distinct=true'
-  }
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += '&id__icontains=' + data.id
   }
@@ -155,6 +164,9 @@ export function fetchReferences(data) {
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
     searchFields += `&user_added__icontains=${data.userAdded}`
+  }
+  if (data.isEstonianReference) {
+    searchFields += `&is_estonian_reference=${data.isEstonianReference}`
   }
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
 
@@ -167,6 +179,44 @@ export function fetchReferences(data) {
     // return fetch(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
     return fetch(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&format=json`)
   }
+}
+
+function fetchReferenceIDsUsingReferenceKeyword(data) {
+  let searchFields = '';
+
+  if (data.author !== null && data.author.trim().length > 0) {
+    searchFields += 'reference__author__icontains=' + data.author
+  }
+  if (data.year !== null && data.year.trim().length > 0) {
+    searchFields += '&reference__year__icontains=' + data.year
+  }
+  if (data.title !== null && data.title.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.title + ';fields:reference__title,reference__title_original;lookuptype:icontains'
+  }
+  if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.bookJournal + ';fields:reference__book,reference__book_editor,reference__journal__journal_name;lookuptype:icontains'
+  }
+  if (data.abstractRemarks && data.abstractRemarks.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.abstractRemarks + ';fields:reference__abstract,reference__remarks;lookuptype:icontains'
+  }
+  if (data.keywords !== null && data.keywords.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.keywords};fields:keyword__keyword,keyword_txt;lookuptype:icontains`
+  }
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += '&reference__id__icontains=' + data.id
+  }
+  if (data.libraryAuthorIdTitle && data.libraryAuthorIdTitle.trim().length > 0) {
+    searchFields += '&multi_search=value:' + data.libraryAuthorIdTitle + ';fields:reference__libraryreference__library__author__id,reference__libraryreference__library__author__agent,reference__libraryreference__library__author_txt,reference__libraryreference__library__id,reference__libraryreference__library__title,reference__libraryreference__library__title_en;lookuptype:icontains&distinct=true'
+  }
+  if (data.userAdded && data.userAdded.trim().length > 0) {
+    searchFields += `&reference__user_added__icontains=${data.userAdded}`
+  }
+  if (data.isEstonianReference) {
+    searchFields += `&reference__is_estonian_reference=${data.isEstonianReference}`
+  }
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
+
+  return fetch(`reference_keyword/?${searchFields}&fields=reference&format=json`)
 }
 
 export function fetchReferenceKeyword(id) {

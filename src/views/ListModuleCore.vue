@@ -101,6 +101,7 @@
                     {{ $t(item.title)}}
                     <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
                     <i v-if="item.isPrivate" class="fas fa-lock"></i>
+                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>
                   </span>
                   <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
                   <br/>
@@ -114,6 +115,7 @@
                     {{ $t(item.title)}}
                     <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
                     <i v-if="item.isPrivate" class="fas fa-lock"></i>
+                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>
                   </span>
                   <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
                   <br/>

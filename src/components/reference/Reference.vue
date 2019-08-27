@@ -970,6 +970,7 @@
           id: null,
           libraryAuthorIdTitle: null,
           userAdded: null,
+          isEstonianReference: false,
           solrSearch: null,
           page: 1,
           paginateBy: 50,
