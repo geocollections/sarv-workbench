@@ -19,22 +19,21 @@
 
           <!-- REFERENCE and YEAR -->
           <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-3">
               <label :for="`reference`">{{ $t('reference.reference') }}:</label>
               <b-form-input id="reference" v-model="reference.reference"
                             :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
               <label :for="`year`">{{ $t('reference.year') }}:</label>
               <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)"
                             type="number"></b-form-input>
             </div>
-          </div>
 
           <!-- AUTHOR -->
-          <div class="row">
-            <div class="col-sm-12">
+
+            <div class="col-sm-7">
               <label :for="`author`">{{ $t('reference.author') }}:</label>
               <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)"
                             type="text"></b-form-input>
@@ -46,7 +45,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`title`">{{ $t('reference.title') }}:</label>
-              <b-form-textarea id="title" v-model="reference.title"
+              <b-form-textarea :key="componentKey" id="title" v-model="reference.title"
                                :state="isDefinedAndNotNull(reference.title)" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
@@ -66,18 +65,9 @@
       <transition name="fade">
         <div v-show="block.info">
 
-          <!-- TITLE ORIGINAL -->
-          <div class="row">
-            <div class="col-sm-12">
-              <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
-              <b-form-textarea id="title_original" v-model="reference.title_original" type="text"
-                               :rows="1" :max-rows="4"></b-form-textarea>
-            </div>
-          </div>
-
           <!-- TYPE, LANGUAGE -->
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label :for="`type`">{{ $t('reference.type') }}:</label>
               <vue-multiselect v-model="reference.type"
                                id="type"
@@ -94,7 +84,7 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label :for="`language`">{{ $t('reference.language') }}:</label>
               <vue-multiselect v-model="reference.language"
                                id="language"
@@ -109,11 +99,15 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
+            <div class="col-md-4">
+              <label :for="`pages`">{{ $t('reference.pages') }}:</label>
+              <b-form-input id="pages" v-model="reference.pages" type="text"></b-form-input>
+            </div>
           </div>
 
           <!-- JOURNAL -->
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label :for="`journal`">{{ $t('reference.journal') }}:</label>
               <vue-multiselect v-model="reference.journal"
                                id="journal"
@@ -134,81 +128,77 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label :for="`journal_additional`">{{ $t('reference.journalAdditional') }}:</label>
               <b-form-input id="journal_additional" v-model="reference.journal_additional" type="text"></b-form-input>
             </div>
-
+            <div class="col-md-2">
+            <label :for="`volume`">{{ $t('reference.volume') }}:</label>
+            <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
           </div>
+
+          <div class="col-md-2">
+            <label :for="`number`">{{ $t('reference.number') }}:</label>
+            <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
+          </div>
+        </div>
 
           <!-- VOLUME and NUMBER -->
           <div class="row">
-            <div class="col-md-6">
-              <label :for="`volume`">{{ $t('reference.volume') }}:</label>
-              <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
-            </div>
 
-            <div class="col-md-6">
-              <label :for="`number`">{{ $t('reference.number') }}:</label>
-              <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
-            </div>
           </div>
 
           <!-- PAGES and BOOK EDITOR -->
           <div class="row">
-            <div class="col-md-6">
-              <label :for="`pages`">{{ $t('reference.pages') }}:</label>
-              <b-form-input id="pages" v-model="reference.pages" type="text"></b-form-input>
-            </div>
 
-            <div class="col-md-6">
-              <label :for="`book_editor`">{{ $t('reference.book_editor') }}:</label>
-              <b-form-input id="book_editor" v-model="reference.book_editor" type="text"></b-form-input>
-            </div>
+
           </div>
 
           <!-- BOOK and BOOK ORIGINAL -->
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <label :for="`book`">{{ $t('reference.book') }}:</label>
               <b-form-input id="book" v-model="reference.book" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-6">
-              <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
-              <b-form-input id="book_original" v-model="reference.book_original" type="text"></b-form-input>
+            <div class="col-md-3">
+              <label :for="`book_editor`">{{ $t('reference.book_editor') }}:</label>
+              <b-form-input id="book_editor" v-model="reference.book_editor" type="text"></b-form-input>
             </div>
-          </div>
 
-          <!-- PUBLISHER and PUBLISHER PLACE -->
-          <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
               <label :for="`publisher`">{{ $t('reference.publisher') }}:</label>
               <b-form-input id="publisher" v-model="reference.publisher" type="text"></b-form-input>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
               <label :for="`publisher_place`">{{ $t('reference.publisherPlace') }}:</label>
               <b-form-input id="publisher_place" v-model="reference.publisher_place" type="text"></b-form-input>
             </div>
+
+          </div>
+
+          <!-- PUBLISHER and PUBLISHER PLACE -->
+          <div class="row">
+
           </div>
 
           <!-- DOI and URL-->
           <div class="row">
-            <div class="col-7 col-md-5">
+            <div class="col-8 col-md-5">
               <label :for="`doi`">DOI:</label>
               <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
 
             </div>
 
-            <div class="col-5 col-md-2">
+            <div class="col-4 col-md-1">
               <label :for="`check-doi`" style="visibility: hidden; display: block;">DOI:</label>
               <b-button id="check-doi" variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">
                 {{ $t('reference.checkDoi') }}
               </b-button>
             </div>
 
-            <div class="col-sm-12 col-md-5">
+            <div class="col-12 col-md-6">
               <label :for="`url`">
                 URL:
                 <a v-if="reference.url" class="link text-primary" :href="reference.url" target="_blank">
@@ -220,18 +210,20 @@
             </div>
           </div>
 
-          <!-- ISBN and ISSN -->
-          <div class="row">
-            <div class="col-md-6">
-              <label :for="`isbn`">ISBN:</label>
-              <b-form-input id="isbn" v-model="reference.isbn" type="text"></b-form-input>
-            </div>
 
-            <div class="col-md-6">
-              <label :for="`issn`">ISSN:</label>
-              <b-form-input id="issn" v-model="reference.issn" type="text"></b-form-input>
-            </div>
-          </div>
+        </div>
+      </transition>
+    </fieldset>
+
+    <!-- OTHER DATA -->
+    <fieldset class="border-top px-2 mb-2" id="block-other">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.other }" @click="block.other = !block.other">
+          {{ $t('reference.otherData') }}
+          <font-awesome-icon icon="project-diagram"/>
+      </legend>
+
+      <transition name="fade">
+        <div v-show="block.other">
 
           <!-- ABSTRACT and AUTHOR KEYWORDS -->
           <div class="row">
@@ -246,11 +238,43 @@
               <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
             </div>
           </div>
+          <!-- TITLE ORIGINAL -->
+          <div class="row">
+            <div class="col-sm-6">
+              <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
+              <b-form-textarea :key="componentKey" id="title_original" v-model="reference.title_original" type="text"
+                               :rows="1" :max-rows="4"></b-form-textarea>
+            </div>
+          <!-- TITLE TRANSLATED -->
+            <div class="col-sm-6">
+              <label :for="`title_translated`">{{ $t('reference.titleTranslated') }}:</label>
+              <b-form-textarea :key="componentKey" id="title_translated" v-model="reference.title_translated" type="text"
+                               :rows="1" :max-rows="4"></b-form-textarea>
+            </div>
+          </div>
+          <!-- BOOK and BOOK ORIGINAL -->
+          <div class="row">
+            <div class="col-md-12">
+              <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
+              <b-form-input id="book_original" v-model="reference.book_original" type="text"></b-form-input>
+            </div>
+          </div>
+          <!-- ISBN and ISSN -->
+          <div class="row">
+            <div class="col-md-6">
+              <label :for="`isbn`">ISBN:</label>
+              <b-form-input id="isbn" v-model="reference.isbn" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-6">
+              <label :for="`issn`">ISSN:</label>
+              <b-form-input id="issn" v-model="reference.issn" type="text"></b-form-input>
+            </div>
+          </div>
+          
 
         </div>
       </transition>
-
-
     </fieldset>
 
     <!-- REMARKS and REFERENCE KEYWORDS -->
@@ -264,13 +288,6 @@
       <transition name="fade">
         <div v-show="block.description">
 
-          <!-- REMARKS -->
-          <div class="row">
-            <div class="col-sm-12">
-              <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
-              <editor :data.sync="reference.remarks"/>
-            </div>
-          </div>
 
           <!-- REFERENCE KEYWORDS -->
           <div class="d-flex justify-content-start flex-wrap">
@@ -332,10 +349,44 @@
             </div>
           </div>
 
+          <!-- REMARKS -->
+          <div class="row">
+            <div class="col-sm-12">
+              <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
+              <b-form-input id="reference.remarks" v-model="reference.remarks" type="text"></b-form-input>
+            </div>
+          </div>
         </div>
       </transition>
-
     </fieldset>
+
+    <!-- CHECKBOXES -->
+    <div class="d-flex flex-row flex-wrap">
+      <div class="px-2">
+        <b-form-checkbox id="is_oa" v-model="reference.is_oa" :value="true" :unchecked-value="false">
+          {{ $t('reference.is_oa') }}
+        </b-form-checkbox>
+      </div>
+
+      <div class="px-2">
+        <b-form-checkbox id="is_private" v-model="reference.is_private" :value="true" :unchecked-value="false">
+          {{ $t('otherFiles.private') }}
+        </b-form-checkbox>
+      </div>
+
+      <div class="px-2">
+        <b-form-checkbox id="is_locked" v-model="reference.is_locked" :value="true" :unchecked-value="false">
+          {{ $t('otherFiles.locked') }}
+        </b-form-checkbox>
+      </div>
+
+      <div class="px-2">
+        <b-form-checkbox id="is_estonian_reference" v-model="reference.is_estonian_reference" :value="true" :unchecked-value="false">
+          {{ $t('reference.is_estonian_reference') }}
+        </b-form-checkbox>
+      </div>
+    </div>
+
 
     <!-- DIGITAL VERSION (PDF) -->
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
@@ -509,32 +560,7 @@
 
     </fieldset>
 
-    <!-- CHECKBOXES -->
-    <div class="d-flex flex-row flex-wrap">
-      <div class="px-2">
-        <b-form-checkbox id="is_oa" v-model="reference.is_oa" :value="true" :unchecked-value="false">
-          {{ $t('reference.is_oa') }}
-        </b-form-checkbox>
-      </div>
 
-      <div class="px-2">
-        <b-form-checkbox id="is_private" v-model="reference.is_private" :value="true" :unchecked-value="false">
-          {{ $t('otherFiles.private') }}
-        </b-form-checkbox>
-      </div>
-
-      <div class="px-2">
-        <b-form-checkbox id="is_locked" v-model="reference.is_locked" :value="true" :unchecked-value="false">
-          {{ $t('otherFiles.locked') }}
-        </b-form-checkbox>
-      </div>
-
-      <div class="px-2">
-        <b-form-checkbox id="is_estonian_reference" v-model="reference.is_estonian_reference" :value="true" :unchecked-value="false">
-          {{ $t('reference.is_estonian_reference') }}
-        </b-form-checkbox>
-      </div>
-    </div>
 
     <!-- SHOWING RELATED_DATA -->
     <div class="row" v-if="$route.meta.isEdit">
@@ -711,7 +737,7 @@
           searchHistory: 'referenceSearchHistory',
           activeTab: 'locality_reference',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'type', 'language', 'journal', 'journal_additional',
+          copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'title_translated', 'type', 'language', 'journal', 'journal_additional',
             'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
             'issn', 'abstract', 'author_keywords', 'remarks', 'book_editor', 'figures', 'is_locked',
             'is_oa', 'is_private', 'is_estonian_reference', 'language'],
@@ -744,9 +770,11 @@
           attachment: {},
           doi: {},
           newlyAddedDoiId: null,
+          componentKey: 0,
           block: {
             requiredFields: true,
             info: true,
+            other: true,
             description: true,
             digital: true,
             files: true,
@@ -775,10 +803,11 @@
               this.reference = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.reference)
               this.removeUnnecessaryFields(this.reference, this.copyFields);
+              this.forceRerender()
               this.$emit('data-loaded', this.reference)
               this.$emit('set-object', 'reference')
               this.sendingData = false;
-              // this.getListRecords('reference')
+              this.getListRecords('reference')
             } else {
               this.sendingData = false;
             }
@@ -838,6 +867,10 @@
           this.setActiveTab('locality_reference')
         }
 
+      },
+
+      forceRerender() {
+        this.componentKey += 1;
       },
 
       setDefaultRelatedData() {
@@ -1127,6 +1160,7 @@
               publication_year: this.reference.year,
               title: this.reference.title,
               title_alternative: this.reference.title_original,
+              title_translated: this.reference.title_translated,
               language: this.reference.language.id,
               publisher: this.reference.publisher,
               abstract: this.reference.abstract,
