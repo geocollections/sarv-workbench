@@ -4,71 +4,89 @@
     <div class="d-flex justify-content-around align-items-center bottom-options-lg">
 
 
-      <div class="bottom-item p-2 text-center bottom-nav"
-           :class="{ 'bottom-item-disabled': previousDisabled }"
-           @click="!previousDisabled ? handleClick('PREVIOUS') : ''"
-           v-if="isNavigationShown">
+      <button class="bottom-item p-2 text-center bottom-nav"
+              :disabled="previousDisabled && sendingData"
+              :class="{ 'bottom-item-disabled': previousDisabled }"
+              @click="!previousDisabled ? handleClick('PREVIOUS', 'previous') : ''"
+              tabindex="4"
+              ref="previous"
+              v-if="isNavigationShown">
         <span class="bottom-nav-icon">
           <font-awesome-icon icon="angle-double-left" size="sm"/>
         </span>
         <span class="bottom-text"> {{ $t('buttons.previous') }}</span>
-      </div>
+      </button>
 
 
-      <div class="bottom-item p-2 text-center bottom-finish"
-           v-if="object === 'site' && !$route.meta.isEdit"
-           @click="handleClick('FINISH')">
-        <div class="d-lg-inline-block bottom-icon">
+      <button class="bottom-item p-2 text-center bottom-finish"
+              :disabled="sendingData"
+              v-if="object === 'site' && !$route.meta.isEdit"
+              tabindex="1"
+              ref="finish"
+              @click="handleClick('FINISH', 'finish')">
+        <span class="d-lg-inline-block bottom-icon">
           <i class="fas fa-check-double fa-3x"></i>
-        </div>
-        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+        </span>
+        <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $t('edit.buttons.finish') }}
-        </div>
-      </div>
+        </span>
+      </button>
 
-      <div class="bottom-item p-2 text-center bottom-save"
-           v-else
-           @click="handleClick('SAVE_AND_LEAVE')">
-        <div class="d-lg-inline-block bottom-icon">
+      <button class="bottom-item p-2 text-center bottom-save"
+              :disabled="sendingData"
+              v-else
+              tabindex="1"
+              ref="saveAndLeave"
+              @click="handleClick('SAVE_AND_LEAVE', 'saveAndLeave')">
+        <span class="d-lg-inline-block bottom-icon">
           <font-awesome-icon icon="door-open" size="3x"/>
-        </div>
-        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+        </span>
+        <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $t('edit.buttons.save') }}
-        </div>
-      </div>
+        </span>
+      </button>
 
 
-      <div class="bottom-item p-2 text-center bottom-save"
-           @click="handleClick('SAVE')">
-        <div class="d-lg-inline-block bottom-icon">
+      <button class="bottom-item p-2 text-center bottom-save"
+              :disabled="sendingData"
+              tabindex="2"
+              ref="save"
+              @click="handleClick('SAVE', 'save')">
+        <span class="d-lg-inline-block bottom-icon">
           <font-awesome-icon icon="save" size="3x"/>
-        </div>
-        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+        </span>
+        <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $t('edit.buttons.save') }}
-        </div>
-      </div>
+        </span>
+      </button>
 
 
-      <div class="bottom-item p-2 text-center bottom-cancel"
-           @click="$route.meta.isEdit ? handleClick('CANCEL') : handleClick('CLEAR')">
-        <div class="d-lg-inline-block bottom-icon">
+      <button class="bottom-item p-2 text-center bottom-cancel"
+              :disabled="sendingData"
+              tabindex="3"
+              ref="clearOrCancel"
+              @click="$route.meta.isEdit ? handleClick('CANCEL', 'clearOrCancel') : handleClick('CLEAR', 'clearOrCancel')">
+        <span class="d-lg-inline-block bottom-icon">
           <font-awesome-icon icon="ban" size="3x"/>
-        </div>
-        <div class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
+        </span>
+        <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $route.meta.isEdit ? $t('buttons.cancel') : $t('buttons.clear') }}
-        </div>
-      </div>
+        </span>
+      </button>
 
 
-      <div class="bottom-item p-2 text-center bottom-nav"
-           :class="{ 'bottom-item-disabled': nextDisabled }"
-           @click="!nextDisabled ? handleClick('NEXT') : ''"
-           v-if="isNavigationShown">
+      <button class="bottom-item p-2 text-center bottom-nav"
+              :disabled="nextDisabled && sendingData"
+              :class="{ 'bottom-item-disabled': nextDisabled }"
+              @click="!nextDisabled ? handleClick('NEXT', 'next') : ''"
+              tabindex="5"
+              ref="next"
+              v-if="isNavigationShown">
         <span class="bottom-text">{{ $t('buttons.next') }} </span>
         <span class="bottom-nav-icon">
           <font-awesome-icon icon="angle-double-right" size="sm"/>
         </span>
-      </div>
+      </button>
 
 
     </div>
@@ -94,8 +112,9 @@
     mixins: [fontAwesomeLib],
     data() {
       return {
-        nextDisabled : false,
-        previousDisabled : false
+        nextDisabled: false,
+        previousDisabled: false,
+        sendingData: false,
       }
     },
     mounted(){
@@ -109,9 +128,16 @@
       // document.removeEventListener('keyup', this.handleKeyup)
     },
     methods: {
-      handleClick(action) {
+      handleClick(action, elementRef) {
+        this.sendingData = true;
         if (this.object === 'attachment') this.$emit('button-clicked', action, this.object);
         else this.$parent.$emit('button-clicked', action, this.object);
+
+        // Resetting focus after 500ms
+        setTimeout(() => {
+          this.sendingData = false;
+          this.$nextTick(() => this.$refs[elementRef].focus());
+        }, 500)
       },
 
 
@@ -143,9 +169,7 @@
 
 <style scoped>
   .bottom-options-new {
-    /*background-color: #343a40!important;*/
     background-color: #fff!important;
-    /*color: #fff;*/
     color: #000;
     overflow: hidden;
     position: fixed;
@@ -210,12 +234,17 @@
 
   .bottom-nav:hover > .bottom-nav-icon {
     opacity: 1;
-    transition: opacity 0.5s;
+    transition: opacity 0.2s;
   }
 
   .bottom-nav > .bottom-nav-icon {
     opacity: 0;
-    transition: opacity 0.5s;
+    transition: opacity 0.2s;
+  }
+
+  /* Removes arrow transition when Previous or Next button is disabled */
+  .bottom-item-disabled:hover > .bottom-nav-icon {
+    opacity: 0;
   }
 
   .bottom-finish {
@@ -231,13 +260,42 @@
   }
 
   .bottom-finish, .bottom-save, .bottom-cancel {
-    transition: color 250ms, letter-spacing 750ms, font-weight 250ms;
+    transition: color 200ms, letter-spacing 500ms, font-weight 200ms;
   }
 
   .bottom-finish:hover, .bottom-save:hover, .bottom-cancel:hover {
     color: #000;
     letter-spacing: 2px;
     font-weight: 800;
-    transition: color 250ms, letter-spacing 750ms, font-weight 250ms;
+    transition: color 200ms, letter-spacing 500ms, font-weight 200ms;
+  }
+
+  .bottom-item:focus {
+    border-radius: 0.25rem;
+  }
+
+  /* Previous and Next buttons */
+  .bottom-nav:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
+  }
+
+  .bottom-finish:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+
+  .bottom-save:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+  }
+
+  .bottom-cancel:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
+
+  /* Overriding default button element styles */
+  button {
+    all: unset;
   }
 </style>
