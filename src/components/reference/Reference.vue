@@ -184,21 +184,27 @@
           </div>
 
           <!-- DOI and URL-->
-          <div class="row">
-            <div class="col-8 col-md-5">
-              <label :for="`doi`">DOI:</label>
-              <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
+          <div class="d-flex flex-wrap">
 
+            <!-- DOI -->
+            <div class="flex-grow-1">
+              <div class="d-flex">
+                <div class="flex-grow-1">
+                  <label :for="`doi`">DOI:</label>
+                  <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
+                </div>
+
+                <div class="mx-3">
+                  <label :for="`check-doi`" style="visibility: hidden; display: block;">DOI:</label>
+                  <b-button id="check-doi" variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">
+                    {{ $t('reference.checkDoi') }}
+                  </b-button>
+                </div>
+              </div>
             </div>
 
-            <div class="col-4 col-md-1">
-              <label :for="`check-doi`" style="visibility: hidden; display: block;">DOI:</label>
-              <b-button id="check-doi" variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">
-                {{ $t('reference.checkDoi') }}
-              </b-button>
-            </div>
-
-            <div class="col-12 col-md-6">
+            <!-- URL -->
+            <div class="flex-grow-1">
               <label :for="`url`">
                 URL:
                 <a v-if="reference.url" class="link text-primary" :href="reference.url" target="_blank">
@@ -208,8 +214,7 @@
               <b-form-input id="url" v-model="reference.url" type="text" :state="isValidUrl"></b-form-input>
               <b-form-text v-if="!isValidUrl">{{ $t('add.errors.url') }}.</b-form-text>
             </div>
-          </div>
-
+            </div>
 
         </div>
       </transition>
@@ -271,7 +276,7 @@
               <b-form-input id="issn" v-model="reference.issn" type="text"></b-form-input>
             </div>
           </div>
-          
+
 
         </div>
       </transition>

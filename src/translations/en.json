@@ -148,6 +148,7 @@
     "reference": {
       "requiredFields": "Mandatory fields",
       "info": "General info",
+      "other": "Abstract and other info",
       "description": "Remarks and keywords",
       "digital": "Digital version (pdf)",
       "files": "Related data files",

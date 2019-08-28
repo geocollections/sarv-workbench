@@ -148,6 +148,7 @@
     "reference": {
       "requiredFields": "Kohustuslikud väljad",
       "info": "Üldinfo",
+      "other": "Abstrakt ja muud andmed",
       "description": "Lisainfo ja märksõnad",
       "digital": "Digitaalne versioon (pdf)",
       "files": "Seotud andmefailid",
@@ -1023,7 +1024,7 @@
     "sort": "Sort",
     "solrSearch": "Kiire otsing",
     "info": "Üldinfo",
-    "otherData":"Abstrakt jm muud andmed",
+    "otherData":"Abstrakt ja muud andmed",
     "description": "Märksõnad ja lisainfo",
     "doiConfirmation": "Kas oled kindel, et soovid kirjandusallikale registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik.",
     "doiCheckSuccessful": "DOI kontrollimine edukas, väljad uuendatud",

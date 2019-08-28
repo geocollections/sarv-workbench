@@ -128,7 +128,6 @@
         handler: function (newVal, oldVal) {
           if (newVal && newVal.results && newVal.results.length > 0 && this.$route.meta.isEdit) {
             this.initNavigationButtons(newVal.results)
-            console.log(this.listOfIDs)
           }
         },
         deep: true
