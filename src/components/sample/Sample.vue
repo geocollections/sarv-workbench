@@ -1185,18 +1185,20 @@
 
         if (this.$route.meta.isEdit && this.$router.currentRoute.params.hasOwnProperty('id')) {
           this.sendingData = true;
+          this.$emit('set-object', 'sample');
           fetchSample(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.sample = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.sample)
               this.removeUnnecessaryFields(this.sample, this.copyFields);
               this.$emit('data-loaded', this.sample)
-              this.$emit('set-object', 'sample');
               this.sendingData = false;
               // this.getListRecords('sample')
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
 

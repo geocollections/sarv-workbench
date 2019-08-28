@@ -395,20 +395,22 @@
       loadFullInfo() {
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
+          this.$emit('set-object', 'library')
           fetchLibrary(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.library = this.handleResponse(response)[0];
               if (this.library.abstract === null || typeof this.library.abstract === 'undefined') this.library.abstract = '';
               if (this.library.abstract_en === null || typeof this.library.abstract_en === 'undefined') this.library.abstract_en = '';
               this.fillAutocompleteFields(this.library)
               this.removeUnnecessaryFields(this.library, this.copyFields);
               this.$emit('data-loaded', this.library)
-              this.$emit('set-object', 'library')
               this.sendingData = false;
               // this.getListRecords('library')
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
 

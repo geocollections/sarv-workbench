@@ -629,18 +629,20 @@
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
+          this.$emit('set-object', 'library')
           fetchLocality(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.locality = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.locality)
               this.removeUnnecessaryFields(this.locality, this.copyFields);
               this.$emit('data-loaded', this.locality)
-              this.$emit('set-object', 'locality')
               this.sendingData = false;
               // this.getListRecords('locality')
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
           //Manipulation with data itself should be done in class

@@ -602,10 +602,12 @@
 
         if (this.$route.meta.isEdit && this.$router.currentRoute.params.hasOwnProperty('id')) {
           this.sendingData = true;
+          this.$emit('set-object', 'analysis')
           fetchAnalysis(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
 
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.analysis = this.handleResponse(response)[0];
 
               this.fillAutocompleteFields(this.analysis)
@@ -619,11 +621,11 @@
 
               // this.forceRerender(); if needed
               this.$emit('data-loaded', this.analysis)
-              this.$emit('set-object', 'analysis')
               this.sendingData = false;
               // this.getListRecords('analysis')
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
 

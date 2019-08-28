@@ -1136,7 +1136,12 @@
     "combinedViewChangeSize": "Change combined view size using this slider",
     "userCancelled": "Action cancelled",
     "fieldsCleared": "Fields cleared!",
-    "mapUsingGPS": "GPS is enabled!"
+    "mapUsingGPS": "GPS is enabled!",
+    "ObjectDoesNotExist1": "Unfortunately",
+    "ObjectDoesNotExist2": "with an ID:",
+    "ObjectDoesNotExist3": "doesn't exist!",
+    "ObjectDoesNotExist4": "Back to",
+    "ObjectDoesNotExist5": "search"
   },
   "titles": {
     "main": "Geocollections Data Management",

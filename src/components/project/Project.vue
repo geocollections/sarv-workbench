@@ -443,21 +443,23 @@
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
+          this.$emit('set-object', 'project');
           fetchProject(this.$route.params.id).then(response => {
 
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.project = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.project)
               this.removeUnnecessaryFields(this.project, this.copyFields);
               this.project.related_data = {};
               // this.$set(this,'activeProject', this.checkIfProjectIsActive());
               this.$emit('data-loaded', this.project)
-              this.$emit('set-object', 'project');
               this.sendingData = false;
               // this.getListRecords('project')
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
           this.loadRelatedData('projectagent');

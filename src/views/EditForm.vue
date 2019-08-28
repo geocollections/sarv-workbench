@@ -8,9 +8,16 @@
         </div>
       </div>
 
-      <scroll-to-links/>
+      <scroll-to-links v-show="objectExists"/>
 
-      <router-view v-on:data-loaded="setData" v-on:set-object="setObject" v-on:related-data-info="setRelatedData" v-on:save-as-new="saveAsNew"/>
+      <router-view v-show="objectExists"
+                   v-on:data-loaded="setData"
+                   v-on:set-object="setObject"
+                   v-on:related-data-info="setRelatedData"
+                   v-on:save-as-new="saveAsNew"
+                   v-on:object-exists="toggleObjectState"/>
+
+      <object-does-not-exist v-if="!objectExists" :id="$route.params.id" :object="this.object" />
 
       <bottom-options :object="object" :is-navigation-shown="$route.meta.isNavigationShown" v-if="$route.meta.isBottomOptionShown"/>
 
@@ -20,7 +27,7 @@
       <confirm-page-close :title="$t($route.meta.heading) + ': '  + $route.params.id"/>
 
       <!-- LOGS -->
-      <log v-if="data !== null" :table="$route.meta.table" :data="data" :formatted-data="formattedData" :key="logComponentKey"></log>
+      <log v-if="data != null && objectExists" :table="$route.meta.table" :data="data" :formatted-data="formattedData" :key="logComponentKey"></log>
     </div>
 
 </template>
@@ -32,10 +39,12 @@
   import ConfirmTabClose from "../components/partial/modals/ConfirmTabClose";
   import ConfirmPageClose from "../components/partial/modals/ConfirmPageClose";
   import ScrollToLinks from "../components/partial/ScrollToLinks";
+  import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist";
 
   export default {
     name: "EditForm",
     components: {
+      ObjectDoesNotExist,
       ScrollToLinks,
       ConfirmPageClose,
       ConfirmTabClose,
@@ -52,6 +61,7 @@
         formattedData:null,
         isConfirmation: false,
         logComponentKey: 0,
+        objectExists: true
       }
     },
 
@@ -78,7 +88,13 @@
       setRelatedData(data){
         this.relatedData = data
       },
+
+      toggleObjectState(state) {
+        this.objectExists = state
+      },
+
       forceRerender() { this.logComponentKey += 1; },
+
     },
     // TODO: Trigger modal here only if user has unsaved data
     beforeRouteUpdate(to, from, next) {

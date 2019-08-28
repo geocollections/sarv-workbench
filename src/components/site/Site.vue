@@ -428,22 +428,24 @@
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
+          this.$emit('set-object', 'site');
 
           fetchSite(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.site = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.site);
               this.removeUnnecessaryFields(this.site, this.copyFields);
 
               this.site.related_data = {};
               this.$emit('data-loaded', this.site);
-              this.$emit('set-object', 'site');
               this.sendingData = false;
               // this.getListRecords('site')
 
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
 

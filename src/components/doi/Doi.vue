@@ -711,10 +711,12 @@
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
+          this.$emit('set-object', 'doi')
           fetchDoi(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
 
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.doi = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.doi)
 
@@ -727,11 +729,11 @@
 
               // this.forceRerender(); if needed
               this.$emit('data-loaded', this.doi)
-              this.$emit('set-object', 'doi')
               this.sendingData = false;
               // this.getListRecords('doi')
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
 

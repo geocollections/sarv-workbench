@@ -183,21 +183,23 @@
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
+          this.$emit('set-object', 'keyword');
 
           fetchKeyword(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.keyword = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.keyword);
               this.removeUnnecessaryFields(this.keyword, this.copyFields);
 
               this.$emit('data-loaded', this.keyword);
-              this.$emit('set-object', 'keyword');
               this.sendingData = false;
               // this.getListRecords('keyword')
 
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
 

@@ -802,19 +802,21 @@
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
+          this.$emit('set-object', 'reference');
           fetchReference(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
+              this.$emit('object-exists', true);
               this.reference = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.reference)
               this.removeUnnecessaryFields(this.reference, this.copyFields);
               this.forceRerender()
               this.$emit('data-loaded', this.reference)
-              this.$emit('set-object', 'reference')
               this.sendingData = false;
               this.getListRecords('reference')
             } else {
               this.sendingData = false;
+              this.$emit('object-exists', false);
             }
           });
 
