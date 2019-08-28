@@ -46,7 +46,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`title`">{{ $t('reference.title') }}:</label>
-              <b-form-textarea :key="componentKey" id="title" v-model="reference.title"
+              <b-form-textarea id="title" v-model="reference.title"
                                :state="isDefinedAndNotNull(reference.title)" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
@@ -70,7 +70,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
-              <b-form-textarea :key="componentKey" id="title_original" v-model="reference.title_original" type="text"
+              <b-form-textarea id="title_original" v-model="reference.title_original" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
           </div>
@@ -744,7 +744,6 @@
           attachment: {},
           doi: {},
           newlyAddedDoiId: null,
-          componentKey: 0,
           block: {
             requiredFields: true,
             info: true,
@@ -776,11 +775,10 @@
               this.reference = this.handleResponse(response)[0];
               this.fillAutocompleteFields(this.reference)
               this.removeUnnecessaryFields(this.reference, this.copyFields);
-              this.forceRerender()
               this.$emit('data-loaded', this.reference)
               this.$emit('set-object', 'reference')
               this.sendingData = false;
-              this.getListRecords('reference')
+              // this.getListRecords('reference')
             } else {
               this.sendingData = false;
             }
@@ -840,10 +838,6 @@
           this.setActiveTab('locality_reference')
         }
 
-      },
-
-      forceRerender() {
-        this.componentKey += 1;
       },
 
       setDefaultRelatedData() {

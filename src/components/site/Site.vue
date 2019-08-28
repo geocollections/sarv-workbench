@@ -440,7 +440,7 @@
               this.$emit('data-loaded', this.site);
               this.$emit('set-object', 'site');
               this.sendingData = false;
-              this.getListRecords('site')
+              // this.getListRecords('site')
 
             } else {
               this.sendingData = false;

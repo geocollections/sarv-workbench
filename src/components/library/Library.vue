@@ -406,7 +406,7 @@
               this.$emit('data-loaded', this.library)
               this.$emit('set-object', 'library')
               this.sendingData = false;
-              this.getListRecords('library')
+              // this.getListRecords('library')
             } else {
               this.sendingData = false;
             }

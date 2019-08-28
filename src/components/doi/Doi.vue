@@ -729,7 +729,7 @@
               this.$emit('data-loaded', this.doi)
               this.$emit('set-object', 'doi')
               this.sendingData = false;
-              this.getListRecords('doi')
+              // this.getListRecords('doi')
             } else {
               this.sendingData = false;
             }

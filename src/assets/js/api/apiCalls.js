@@ -119,7 +119,6 @@ export function fetchReference(id) {
 }
 
 export async function fetchReferences(data) {
-  console.log(data)
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch !== null && data.solrSearch.trim().length > 0) {
     // TODO: Add order by

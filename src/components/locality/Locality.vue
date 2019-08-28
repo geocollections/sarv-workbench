@@ -638,7 +638,7 @@
               this.$emit('data-loaded', this.locality)
               this.$emit('set-object', 'locality')
               this.sendingData = false;
-              this.getListRecords('locality')
+              // this.getListRecords('locality')
             } else {
               this.sendingData = false;
             }

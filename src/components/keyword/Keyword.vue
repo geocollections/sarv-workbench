@@ -194,7 +194,7 @@
               this.$emit('data-loaded', this.keyword);
               this.$emit('set-object', 'keyword');
               this.sendingData = false;
-              this.getListRecords('keyword')
+              // this.getListRecords('keyword')
 
             } else {
               this.sendingData = false;

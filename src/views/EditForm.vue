@@ -26,7 +26,7 @@
 </template>
 
 <script>
-  import BottomOptions from "@/components/partial/BottomOptions";
+  import BottomOptions from "../components/partial/BottomOptions";
   import Log from '@/components/partial/Log.vue'
   import SaveAsNewModal from "../components/partial/SaveAsNewModal";
   import ConfirmTabClose from "../components/partial/modals/ConfirmTabClose";

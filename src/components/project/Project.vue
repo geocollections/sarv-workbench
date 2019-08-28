@@ -455,7 +455,7 @@
               this.$emit('data-loaded', this.project)
               this.$emit('set-object', 'project');
               this.sendingData = false;
-              this.getListRecords('project')
+              // this.getListRecords('project')
             } else {
               this.sendingData = false;
             }

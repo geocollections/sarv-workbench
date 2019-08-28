@@ -3,19 +3,19 @@
 
     <div class="d-flex justify-content-around align-items-center bottom-options-lg">
 
-
-      <button class="bottom-item p-2 text-center bottom-nav"
-              :disabled="previousDisabled && sendingData"
-              :class="{ 'bottom-item-disabled': previousDisabled }"
-              @click="!previousDisabled ? handleClick('PREVIOUS', 'previous') : ''"
-              tabindex="4"
-              ref="previous"
-              v-if="isNavigationShown">
+      <router-link class="bottom-item p-2 text-center bottom-nav"
+                   :disabled="!previousId"
+                   :class="{ 'bottom-item-disabled': !previousId }"
+                   :to="{ path: `/${this.object}/${this.previousId}` }"
+                   tag="button"
+                   tabindex="4"
+                   ref="previous"
+                   v-if="isNavigationShown">
         <span class="bottom-nav-icon">
           <font-awesome-icon icon="angle-double-left" size="sm"/>
         </span>
         <span class="bottom-text"> {{ $t('buttons.previous') }}</span>
-      </button>
+      </router-link>
 
 
       <button class="bottom-item p-2 text-center bottom-finish"
@@ -75,18 +75,19 @@
       </button>
 
 
-      <button class="bottom-item p-2 text-center bottom-nav"
-              :disabled="nextDisabled && sendingData"
-              :class="{ 'bottom-item-disabled': nextDisabled }"
-              @click="!nextDisabled ? handleClick('NEXT', 'next') : ''"
-              tabindex="5"
-              ref="next"
-              v-if="isNavigationShown">
+      <router-link class="bottom-item p-2 text-center bottom-nav"
+                   :disabled="!nextId"
+                   :class="{ 'bottom-item-disabled': !nextId }"
+                   :to="{ path: `/${this.object}/${this.nextId}` }"
+                   tag="button"
+                   tabindex="5"
+                   ref="next"
+                   v-if="isNavigationShown">
         <span class="bottom-text">{{ $t('buttons.next') }} </span>
         <span class="bottom-nav-icon">
           <font-awesome-icon icon="angle-double-right" size="sm"/>
         </span>
-      </button>
+      </router-link>
 
 
     </div>
@@ -96,6 +97,7 @@
 
 <script>
   import fontAwesomeLib from "../../mixins/fontAwasomeLib";
+  import {mapState} from "vuex";
 
   export default {
     name: "BottomOptions",
@@ -112,20 +114,34 @@
     mixins: [fontAwesomeLib],
     data() {
       return {
-        nextDisabled: false,
-        previousDisabled: false,
         sendingData: false,
+        previousId: null,
+        nextId: null,
+        listOfIDs: []
       }
     },
-    mounted(){
-      this.$root.$on('disable-previous', this.disablePrevious);
-      this.$root.$on('disable-next', this.disableNext);
-
-      // TODO: Fix when user is using inputs
-      // document.addEventListener('keyup', this.handleKeyup)
+    computed: {
+      ...mapState(['sidebarList']),
     },
-    beforeDestroy() {
-      // document.removeEventListener('keyup', this.handleKeyup)
+    watch: {
+      'sidebarList': {
+        handler: function (newVal, oldVal) {
+          if (newVal && newVal.results && newVal.results.length > 0 && this.$route.meta.isEdit) {
+            this.initNavigationButtons(newVal.results)
+            console.log(this.listOfIDs)
+          }
+        },
+        deep: true
+      },
+      '$route.params.id': {
+        handler: function (newVal, oldVal) {
+          if (newVal && this.$route.meta.isEdit) {
+            this.previousId = this.calculatePreviousId(this.listOfIDs, newVal);
+            this.nextId = this.calculateNextId(this.listOfIDs, newVal);
+          }
+        },
+        deep: true
+      },
     },
     methods: {
       handleClick(action, elementRef) {
@@ -140,29 +156,34 @@
         }, 500)
       },
 
-
-      disableNext(data) {
-        this.nextDisabled = data
+      initNavigationButtons(list) {
+        this.listOfIDs = list.map(item => {
+          if (this.object === 'library') return item.library;
+          else return item.id
+        });
+        this.previousId = this.calculatePreviousId(this.listOfIDs, this.$route.params.id);
+        this.nextId = this.calculateNextId(this.listOfIDs, this.$route.params.id);
       },
-      disablePrevious(data) {
-        this.previousDisabled = data
+
+      calculatePreviousId(records, currentId) {
+        if (records && records.length > 0 && currentId) {
+          let currentIndex = records.indexOf(parseInt(currentId));
+          let previousIndex = currentIndex - 1;
+
+          if (previousIndex >= 0) return records[previousIndex];
+          else return null
+        }
       },
 
-      handleKeyup(event) {
-        // ArrowRight
-        if (event.keyCode === 39 || event.which === 39) {
-          if (!this.nextDisabled) {
-            this.$parent.$emit('button-clicked', 'NEXT', this.object)
-          }
-        }
+      calculateNextId(records, currentId) {
+        if (records && records.length > 0 && currentId) {
+          let currentIndex = records.indexOf(parseInt(currentId));
+          let nextIndex = currentIndex + 1;
 
-        // ArrowLeft
-        if (event.keyCode === 37 || event.which === 37) {
-          if (!this.previousDisabled) {
-            this.$parent.$emit('button-clicked', 'PREVIOUS', this.object)
-          }
+          if (nextIndex >= 0) return records[nextIndex];
+          else return null
         }
-      }
+      },
     }
   }
 </script>
@@ -294,7 +315,7 @@
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
 
-  /* Overriding default button element styles */
+  /* Removing button style */
   button {
     all: unset;
   }

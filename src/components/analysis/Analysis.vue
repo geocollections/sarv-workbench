@@ -621,7 +621,7 @@
               this.$emit('data-loaded', this.analysis)
               this.$emit('set-object', 'analysis')
               this.sendingData = false;
-              this.getListRecords('analysis')
+              // this.getListRecords('analysis')
             } else {
               this.sendingData = false;
             }

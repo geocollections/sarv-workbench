@@ -1194,7 +1194,7 @@
               this.$emit('data-loaded', this.sample)
               this.$emit('set-object', 'sample');
               this.sendingData = false;
-              this.getListRecords('sample')
+              // this.getListRecords('sample')
             } else {
               this.sendingData = false;
             }

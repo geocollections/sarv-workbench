@@ -344,15 +344,16 @@
     },
 
     watch: {
-      'activeSearchParams': {
-        handler: function (newval, oldval) {
-          if (newval === null) return;
-          this.$store.dispatch(newval.request)
+      'activeSearchParams.search.page': {
+        handler: function (newVal, oldVal) {
+          if (newVal && this.activeSearchParams && this.activeSearchParams.request) {
+            this.$store.dispatch(this.activeSearchParams.request)
+          }
         },
         deep: true
       },
       'sidebarList': {
-        handler: function (newval, oldval) {
+        handler: function (newVal, oldVal) {
 
         },
         deep: true
