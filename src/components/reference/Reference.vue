@@ -216,7 +216,7 @@
     </fieldset>
 
     <!-- OTHER DATA -->
-    <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-other">
+    <fieldset class="border-top px-2 mb-2" id="block-other">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.other }" @click="block.other = !block.other">
           {{ $t('reference.otherData') }}
           <font-awesome-icon icon="project-diagram"/>
