@@ -148,7 +148,6 @@
           secondaryAreaUnit: 'sqmeters',
           thousandsSep: ' '
         },
-        estonianGeoportalCoordinates: null
       }
     },
 

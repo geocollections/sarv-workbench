@@ -46,7 +46,6 @@
     "material-icons": "^0.3.1",
     "npm": "^6.11.2",
     "postcss-loader": "^3.0.0",
-    "proj4leaflet": "^1.0.2",
     "raw-loader": "^0.5.1",
     "tableexport": "^5.2.0",
     "tiptap": "^1.25.0",
