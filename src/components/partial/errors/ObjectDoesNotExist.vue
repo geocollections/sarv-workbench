@@ -3,16 +3,16 @@
       <div class="alert alert-info">
         <p class="text-center h5">
           {{ $t('messages.ObjectDoesNotExist1') }}
-          <strong>{{object}}</strong>
+          <strong>{{$route.meta.object}}</strong>
           {{ $t('messages.ObjectDoesNotExist2') }}
-          <strong>{{id}}</strong>
+          <strong>{{$route.params.id}}</strong>
           {{ $t('messages.ObjectDoesNotExist3') }}
         </p>
 
         <p class="text-center my-1">
-          <router-link class="p-3" :to="{ path: `/${object}` }">
+          <router-link class="p-3" :to="{ path: `/${$route.meta.object}` }">
             {{ $t('messages.ObjectDoesNotExist4') }}
-            <strong>{{object}}</strong>
+            <strong>{{$route.meta.object}}</strong>
             {{ $t('messages.ObjectDoesNotExist5') }}
           </router-link>
         </p>
@@ -23,14 +23,6 @@
 <script>
   export default {
     name: "ObjectDoesNotExist",
-    props: {
-      id: {
-        type: String,
-      },
-      object: {
-        type: String,
-      }
-    }
   }
 </script>
 

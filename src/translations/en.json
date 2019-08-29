@@ -255,7 +255,10 @@
       "keywordsRemove": "Remove keywords",
       "autocompleteSearch": "Search starts from {num}rd letter",
       "newImageset": "Add new imageset",
-      "newJournal": "Add new journal"
+      "newJournal": "Add new journal",
+      "photoInput": "Capture a picture",
+      "videoInput": "Film a video",
+      "audioInput": "Record an audio"
     },
     "errors": {
       "files": "Upload at least 1 file (max 10). File name should be less than 100 chars and without õ,ä,ö,ü etc.",

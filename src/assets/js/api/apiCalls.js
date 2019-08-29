@@ -104,6 +104,11 @@ export function fetchAttachments(data, author) {
   }
 }
 
+export function fetchAttachment(id, author) {
+  if (author) return fetch(`attachment/?id=${id}&or_search=author_id:${author.id};user_added:${author.user};user_changed:${author.user}&format=json`)
+  else return fetch(`attachment/?id=${id}&format=json`)
+}
+
 /*************************
  ***  ATTACHMENTS END  ***
  *************************/

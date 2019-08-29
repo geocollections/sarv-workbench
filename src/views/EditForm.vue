@@ -17,7 +17,7 @@
                    v-on:save-as-new="saveAsNew"
                    v-on:object-exists="toggleObjectState"/>
 
-      <object-does-not-exist v-if="!objectExists" :id="$route.params.id" :object="this.object" />
+      <object-does-not-exist v-if="!objectExists" />
 
       <bottom-options :object="object" :is-navigation-shown="$route.meta.isNavigationShown" v-if="$route.meta.isBottomOptionShown"/>
 

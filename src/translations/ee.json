@@ -255,7 +255,10 @@
       "keywordsRemove": "Eemalda märksõnad",
       "autocompleteSearch": "Otsing algab {num}ndast tähemärgist",
       "newImageset": "Lisa uus pildiseeria",
-      "newJournal": "Lisa uus ajakiri"
+      "newJournal": "Lisa uus ajakiri",
+      "photoInput": "Tee pilt",
+      "videoInput": "Filmi video",
+      "audioInput": "Salvesta helifail"
     },
     "errors": {
       "files": "Lae üles vähemalt 1 fail (max 10). Nimi olgu lühem kui 100 märki ja ilma täpitähtedeta.",

@@ -38,7 +38,6 @@
 </template>
 
 <script>
-  import Attachments from '@/views/AttachmentsOld.vue'
   import RecentActivity from "./RecentActivity";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
   import {mapState} from "vuex";
@@ -46,7 +45,6 @@
   export default {
     components: {
       RecentActivity,
-      Attachments,
     },
     name: "front-page",
     mixins: [formSectionsMixin],

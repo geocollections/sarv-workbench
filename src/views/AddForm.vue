@@ -1,20 +1,21 @@
 <template>
   <div class="add-form">
 
-    <div class="row mt-4 page-title">
-      <div class="col-sm-6">
+    <div class="d-flex flex-wrap justify-content-between mt-4">
+      <div class="pr-4">
         <p class="h2">{{ $t($route.meta.addNew) }}</p>
       </div>
 
-      <!-- TODO: Enable if more than one subform -->
-      <div class="col-sm-6 text-right" v-if="$route.meta.object === 'attachment'">
-        <ul class="nav nav-pills">
+      <div class="mb-2" v-if="$route.meta.object === 'attachment'">
+        <ul class="nav nav-pills nav-fill" v-if="$route.meta.object === 'attachment'">
           <li class="nav-item" v-for="item in $route.meta.subForms">
             <router-link class="nav-link" :to="{ path: item.path }">{{ $t(item.name) }}</router-link>
           </li>
         </ul>
       </div>
     </div>
+
+    <hr class="mt-1 mb-2 divider">
 
     <router-view/>
 
@@ -40,5 +41,9 @@
   .router-link-exact-active {
     color: #fff;
     background-color: #007bff;
+  }
+
+  .divider {
+    border-color: #999;
   }
 </style>

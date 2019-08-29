@@ -87,10 +87,10 @@ const router = new Router({
                 title: 'titles.editAttachment',
                 heading: 'editAttachment.heading',
                 isBottomOptionShown: true,
-                // isSidebarShown: false,
                 isNavigationShown: true,
                 isCopyFormShown: false,
-                requiresAuth: true
+                requiresAuth: true,
+                object: 'attachment'
               }
             },
           ]
@@ -104,7 +104,9 @@ const router = new Router({
           children: [
             {
               path: '',
-              component: () => import('./components/attachment/PhotoArchiveNew.vue'),
+              redirect: 'photo_archive',
+              name: 'Attachment add',
+              component: () => import('./components/attachment/AttachmentNew.vue'),
               meta: {
                 isEdit: false,
                 title: 'titles.addAttachment',
@@ -123,7 +125,7 @@ const router = new Router({
             },
             {
               path: 'photo_archive',
-              component: () => import('./components/attachment/PhotoArchiveNew.vue'),
+              component: () => import('./components/attachment/AttachmentNew.vue'),
               meta: {
                 isEdit: false,
                 title: 'titles.addAttachment',
@@ -137,12 +139,13 @@ const router = new Router({
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
-                object: 'attachment'
+                object: 'attachment',
+                child: 'photo_archive'
               }
             },
             {
               path: 'specimen_image',
-              component: () => import('./components/attachment/SpecimenImageNew.vue'),
+              component: () => import('./components/attachment/AttachmentNew.vue'),
               meta: {
                 isEdit: false,
                 title: 'titles.addAttachment',
@@ -156,12 +159,13 @@ const router = new Router({
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
-                object: 'attachment'
+                object: 'attachment',
+                child: 'specimen_image'
               }
             },
             {
               path: 'other_file',
-              component: () => import('./components/attachment/OtherFilesNew.vue'),
+              component: () => import('./components/attachment/AttachmentNew.vue'),
               meta: {
                 isEdit: false,
                 title: 'titles.addAttachment',
@@ -175,12 +179,13 @@ const router = new Router({
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
-                object: 'attachment'
+                object: 'attachment',
+                child: 'other_file'
               }
             },
             {
               path: 'digitised_reference',
-              component: () => import('./components/attachment/DigitisedReferenceNew.vue'),
+              component: () => import('./components/attachment/AttachmentNew.vue'),
               meta: {
                 isEdit: false,
                 title: 'titles.addAttachment',
@@ -194,19 +199,13 @@ const router = new Router({
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
-                object: 'attachment'
+                object: 'attachment',
+                child: 'digitised_reference'
               }
             }
           ]
         },
         // NEW ATTACHMENT END
-        {
-          path: '/attachment_old',
-          component: () => import('./views/AttachmentsOld.vue'),
-          meta: {
-            requiresAuth: true
-          },
-        },
         {
           path: '/attachment/:id(\\d+)',
           props: true,

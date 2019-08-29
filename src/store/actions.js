@@ -22,7 +22,7 @@ export default {
   // Todo: Need to update attachment views (photo archive, specimen image etc.)
   FETCH_ATTACHMENTS: ({ commit, state }) => {
     // state.activeSearchParams.search.paginateBy = 10;
-    return fetchAttachments(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchAttachments(state.activeSearchParams.search, state.currentUser).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
 
   FETCH_REFERENCES: ({ commit, state }) => {

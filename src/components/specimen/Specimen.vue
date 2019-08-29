@@ -665,7 +665,6 @@
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
         let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('idSpecimen') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-        console.log(params)
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'specimenSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -861,7 +860,6 @@
 
       setDefaultRelatedData() {
         return {
-          // Todo: 'analysis'
           specimen_identification: [],
           specimen_identification_geology: [],
           specimen_reference: [],
