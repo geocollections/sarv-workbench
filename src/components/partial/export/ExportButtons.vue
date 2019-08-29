@@ -171,7 +171,7 @@
 
               if (item.year) risString += 'PY  - ' + item.year.trim() + '\n';
 
-              if (item.journal && item.journal__journal_name) {
+              if (item.journal && item.journal__journal_name && item.type__ris_type === 'JOUR') {
                 risString += 'T2  - ' + item.journal__journal_name.trim() + '\n';
                 risString += 'JO  - ' + item.journal__journal_name.trim() + '\n';
               }
