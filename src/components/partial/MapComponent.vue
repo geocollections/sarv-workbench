@@ -9,7 +9,7 @@
       </span>
       <span> | </span>
       <span class="xgis2">
-        <a :href="`https://xgis.maaamet.ee/xgis2/page/app/maainfo`"
+        <a :href="`https://xgis.maaamet.ee/xgis2/page/app/geoloogia400k?punkt=${this.geoToLest(this.location.lat, this.location.lng)}&moot=20000&tooltip=test`"
            title="TODO"
            target="_blank">Estonian Geoportal</a>
       </span>
@@ -148,6 +148,7 @@
           secondaryAreaUnit: 'sqmeters',
           thousandsSep: ' '
         },
+        estonianGeoportalCoordinates: null
       }
     },
 
@@ -320,22 +321,59 @@
       centerMapOnMarker(marker, zoomLevel) {
         console.log(marker)
         this.map.setView(marker.getLatLng(), zoomLevel);
-      }
+      },
+
+      /* Code from:  http://www.maaamet.ee/rr/geo-lest/files/geo-lest_function_php.txt */
+      geoToLest(north, east) {
+        let LAT = (north*(Math.PI/180));
+        let LON = (east*(Math.PI/180));
+        let a = 6378137.000000000000;
+        let F = 298.257222100883;
+        let RF = F;
+        F = (1/F);
+        let B0 = ((57.000000000000 + 31.000000000000 / 60.000000000000 + 3.194148000000 / 3600.000000000000)*(Math.PI/180));
+        let L0 = ((24.000000000000)*(Math.PI/180));
+        let FN = 6375000.000000000000;
+        let FE = 500000.000000000000;
+        let B1 = ((59.000000000000 + 20.000000000000 / 60.000000000000)*(Math.PI/180));
+        let B2 = ((58.000000000000)*(Math.PI/180));
+        let xx = (north - FN);
+        let yy = (east - FE);
+        let f1 = (1 / RF);
+        let er = ((2.000000000000 * f1) - (f1 * f1));
+        let e = Math.sqrt(er);
+        let t1 = Math.sqrt(((1.000000000000 - Math.sin(B1)) / (1.000000000000 + Math.sin(B1))) * (Math.pow(((1.000000000000 + e * Math.sin(B1)) / (1.000000000000 - e * Math.sin(B1))), e)));
+        let t2 = Math.sqrt(((1.000000000000 - Math.sin(B2)) / (1.000000000000 + Math.sin(B2))) * (Math.pow(((1.000000000000 + e * Math.sin(B2)) / (1.000000000000 - e * Math.sin(B2))), e)));
+        let t0 = Math.sqrt(((1.000000000000 - Math.sin(B0)) / (1.000000000000 + Math.sin(B0))) * (Math.pow(((1.000000000000 + e * Math.sin(B0)) / (1.000000000000 - e * Math.sin(B0))), e)));
+        let t = Math.sqrt(((1.000000000000 - Math.sin(LAT)) / (1.000000000000 + Math.sin(LAT))) * (Math.pow(((1.000000000000 + e * Math.sin(LAT)) / (1.000000000000 - e * Math.sin(LAT))), e)));
+        let m1 = (Math.cos(B1) / (Math.pow((1.000000000000 - er * Math.sin(B1) * Math.sin(B1)), 0.500000000000)));
+        let m2 = (Math.cos(B2) / (Math.pow((1.000000000000 - er * Math.sin(B2) * Math.sin(B2)), 0.500000000000)));
+        let n = ((Math.log(m1) - Math.log(m2)) / (Math.log(t1) - Math.log(t2)));
+        let FF = (m1 / (n * Math.pow(t1, n)));
+        let p0 = (a * FF * (Math.pow(t0, n)));
+        let FII = (n * (LON - L0));
+        let p = (a * FF * Math.pow(t, n));
+        n = (p0 - (p * Math.cos(FII)) + FN);
+        e = (p * Math.sin(FII) + FE);
+
+        return [n,e];
+      },
 
     },
     watch: {
-      location: function (newVal, oldVal) {
-        if ((newVal.lat !== oldVal.lat) || (newVal.lng !== oldVal.lng)) {
-          if (this.mode === 'multiple') return;
+      'location': {
+        handler: function (newVal, oldVal) {
+          if (newVal && ((newVal.lat !== oldVal.lat) || (newVal.lng !== oldVal.lng))) {
+            if (this.mode === 'multiple') return;
 
-          if (this.isLocationSet) {
-            this.addMarker(newVal)
-          } else {
-            if (this.marker) this.map.removeLayer(this.marker)
-            this.marker = null
-
+            if (this.isLocationSet) {
+              this.addMarker(newVal);
+            } else {
+              if (this.marker) this.map.removeLayer(this.marker);
+              this.marker = null
+            }
           }
-        }
+        },
       },
 
       currentLocation: function (newVal, oldVal) {

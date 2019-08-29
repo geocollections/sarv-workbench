@@ -46,7 +46,6 @@
     "material-icons": "^0.3.1",
     "npm": "^6.11.2",
     "postcss-loader": "^3.0.0",
-    "proj4": "^2.5.0",
     "proj4leaflet": "^1.0.2",
     "raw-loader": "^0.5.1",
     "tableexport": "^5.2.0",
