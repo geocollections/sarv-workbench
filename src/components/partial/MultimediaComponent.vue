@@ -15,7 +15,7 @@
         </span>
       </label>
 
-      <div class="mt-2 alert alert-warning" v-if="files !== null && files.length >= 10">{{ $t('add.inputs.fileInputMaxError', { num: files.length }) }}</div>
+      <div class="mt-2 mb-0 alert alert-warning" v-if="files !== null && files.length >= 10">{{ $t('add.inputs.fileInputMaxError', { num: files.length }) }}</div>
 
       <!-- TODO: https://github.com/bootstrap-vue/bootstrap-vue/issues/1526, If multiple then accept does not take multiple formats. BUG -->
       <!-- TODO: BUG: If too many files or long filenames then breaks the input design -->
@@ -38,67 +38,103 @@
     </div>
 
     <div class="col-sm-12 mb-2 record-options" v-if="recordOptions">
-      <label :for="`photo-upload`" class="btn btn-outline-primary p-2 mr-2">
-        <font-awesome-icon icon="camera-retro"/> {{ $t('add.inputs.photoInput') }}
-      </label>
+      <div class="d-flex flex-wrap justify-content-start" v-if="filesState || recordOptions">
 
-      <b-form-file v-model="recordedFile" accept="image/*;capture=camera"
-                   id="photo-upload"
-                   plain
-                   style="display: none"
-                   ref="fileinput"
-                   :placeholder="$t('add.inputs.fileInput')">
-      </b-form-file>
+        <div>
+          <label :for="`photo-upload`" class="btn btn-outline-primary p-2 mr-2">
+            <font-awesome-icon icon="camera-retro"/> {{ $t('add.inputs.photoInput') }}
+          </label>
 
-      <label :for="`video-upload`" class="btn btn-outline-primary p-2 mr-2">
-        <font-awesome-icon icon="video"/> {{ $t('add.inputs.videoInput') }}
-      </label>
-      <b-form-file v-model="recordedFile" accept="video/*;capture=camcorder"
-                   id="video-upload"
-                   plain
-                   style="display: none"
-                   ref="fileinput"
-                   :placeholder="$t('add.inputs.fileInput')">
-      </b-form-file>
+          <b-form-file v-model="recordedFile" accept="image/*;capture=camera"
+                       id="photo-upload"
+                       plain
+                       style="display: none"
+                       ref="fileinput"
+                       :placeholder="$t('add.inputs.fileInput')">
+          </b-form-file>
+        </div>
 
-      <label :for="`audio-upload`" class="btn btn-outline-primary p-2 mr-2">
-        <font-awesome-icon icon="microphone"/> {{ $t('add.inputs.audioInput') }}
-      </label>
-      <b-form-file v-model="recordedFile" accept="audio/*;capture=microphone"
-                   id="audio-upload"
-                   plain
-                   style="display: none"
-                   ref="fileinput"
-                   :placeholder="$t('add.inputs.fileInput')">
-      </b-form-file>
-    </div>
+        <div>
+          <label :for="`video-upload`" class="btn btn-outline-primary p-2 mr-2">
+            <font-awesome-icon icon="video"/> {{ $t('add.inputs.videoInput') }}
+          </label>
+          <b-form-file v-model="recordedFile" accept="video/*;capture=camcorder"
+                       id="video-upload"
+                       plain
+                       style="display: none"
+                       ref="fileinput"
+                       :placeholder="$t('add.inputs.fileInput')">
+          </b-form-file>
+        </div>
 
-    <div class="col-sm-12 mb-2">
+        <div class="flex-grow-1">
+          <label :for="`audio-upload`" class="btn btn-outline-primary p-2 mr-2">
+            <font-awesome-icon icon="microphone"/> {{ $t('add.inputs.audioInput') }}
+          </label>
+          <b-form-file v-model="recordedFile" accept="audio/*;capture=microphone"
+                       id="audio-upload"
+                       plain
+                       style="display: none"
+                       ref="fileinput"
+                       :placeholder="$t('add.inputs.fileInput')">
+          </b-form-file>
+        </div>
 
-      <div class="mt-2" v-if="files !== null && arrayOfFiles.length > 0">
-        <div class="d-flex flex-row  flex-wrap" v-if="arrayOfFiles.length > 0" >
-          <div class="mt-2" v-for="(file, key) in arrayOfFiles">
-
-            <span v-if="file.type.includes('image')">
-              <img style="height: 10rem" onerror="this.style.display='none'" v-bind:ref="'image' + parseInt(key)" class="img-thumbnail thumbnail-preview responsive" alt="Image preview..." />
-            </span>
-
-            <span v-else >
-               <font-awesome-icon  style="height: 10rem" size="7x" icon="file"></font-awesome-icon>&nbsp;
-            </span>
-
-            <div style="width: 12rem; font-size: small"><b>{{ file.name }}</b></div>
-          </div>
+        <div v-if="filesState">
+          <button class="btn btn-outline-danger p-2" :disabled="sendingData" @click="clearFile" :title="$tc('add.buttons.resetFile', 1)">
+            <!--<font-awesome-icon icon="trash-alt"/>-->
+            <span v-show="arrayOfFiles.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
+            <span v-show="arrayOfFiles.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-12 col-md-6 mb-2">
-      <button class="btn btn-outline-danger ml-1" v-if="filesState" :disabled="sendingData" @click="clearFile" :title="$tc('add.buttons.resetFile', 1)">
-        <!--<font-awesome-icon icon="trash-alt"/>-->
-        <span v-show="arrayOfFiles.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
-        <span v-show="arrayOfFiles.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
-      </button>
+
+    <div class="col-sm-12 mb-2">
+
+      <div class="d-flex flex-wrap justify-content-start" v-if="files && arrayOfFiles.length > 0">
+
+        <div class="m-1" :class="{ 'flex-grow-1' : arrayOfFiles.length > 1 }" v-for="(file, key) in arrayOfFiles">
+
+          <!-- FILES -->
+          <div class="file-container" :title="file.name">
+
+            <!-- AUDIO -->
+            <audio v-if="file.type.includes('audio')" controls>
+              <source :ref="'image' + parseInt(key)" :type="file.type">
+              Your browser does not support the audio element.
+              <font-awesome-icon size="5x" icon="file-audio"/>
+            </audio>
+
+            <!-- VIDEO -->
+            <video v-else-if="file.type.includes('video')"
+                   type="video" style="max-height: 12rem" controls>
+              <source :ref="'image' + parseInt(key)" :type="file.type">
+              Your browser does not support the video element.
+              <font-awesome-icon size="5x" icon="file-video"/>
+            </video>
+
+            <!-- IMAGE -->
+            <img v-else-if="file.type.includes('image')"
+                 :ref="'image' + parseInt(key)"
+                 alt="Image preview..."
+                 class="img-thumbnail image"/>
+
+            <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
+            <font-awesome-icon v-else size="5x" icon="file"/>
+
+            <div class="my-1">
+              <div class="text-box">
+                <div>{{truncateFileInfo(file)}}</div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
     </div>
 
   </div>
@@ -241,6 +277,13 @@
 
           this.isDragging = false
         },
+
+
+        truncateFileInfo(file) {
+          // Showing only first 35 characters of filename
+          if (file.name && file.name.length > 37) return file.name.substring(0, 35) + '...';
+          else return file.name
+        },
       }
     }
 </script>
@@ -296,5 +339,43 @@
 
   .record-options > label:hover {
     cursor: pointer;
+  }
+
+  .image {
+    max-height: 12rem;
+    -webkit-transition: .2s ease;
+    transition: .2s ease;
+  }
+
+  .file-container {
+    position: relative;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .file-container > .icon {
+    text-align: center;
+  }
+
+  .file-container:hover .image {
+    opacity: 0.7;
+  }
+
+  .text-box {
+    width: 25vh;
+    margin: auto;
+    text-align: center;
+    font-size: 12px;
+    word-wrap: break-word;
+  }
+
+  .reset-button-wrapper {
+    margin-left: auto;
+  }
+
+  @media (max-width: 767.98px) {
+    .reset-button-wrapper {
+      margin-left: unset;
+    }
   }
 </style>
