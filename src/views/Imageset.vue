@@ -1,6 +1,8 @@
 <template>
   <div class="imageset">
 
+    <!-- TODO: Send data as query params like analysis or sample button does it -->
+
     <spinner v-show="sendingData" class="loading-overlay" size="massive" :message="$t('add.overlay') + ' ' + loadingPercent + '%'"></spinner>
     <button v-show="sendingData" @click="cancelRequest" class="abort-request-overlay btn btn-danger">{{ $t('add.buttons.cancel') }}</button>
 

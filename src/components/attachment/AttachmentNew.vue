@@ -9,11 +9,118 @@
                :message="$route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')"></spinner>
     </template>
 
+    <!-- TODO: ROUTE CHANGE/UPDATE MUST CLEAR INSERTED USER DATA!!! -->
+
     <template v-slot:file-input>
-      {{fileInputFormat}}
-      <multimedia-component :record-options="true"
+      <multimedia-component :record-options="recordOptions"
+                            :record-image="recordImage"
+                            :record-video="recordVideo"
+                            :record-audio="recordAudio"
                             :acceptable-format="fileInputFormat"
-                            :accept-multiple="true"/>
+                            :accept-multiple="acceptMultiple"/>
+    </template>
+
+    <template v-slot:photo-archive>
+      <div class="photo-archive">
+
+        <!-- REQUIRED INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
+                  :style="!validate('attachment', 'photo_archive') ? 'border-color: #dc3545!important;' : ''">
+          <legend class="w-auto my-0"
+                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
+                  @click="block.requiredFields = !block.requiredFields">
+            {{ $t('attachment.requiredFields') }}
+            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
+            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.requiredFields">
+
+              <!-- AUTHOR, AUTHOR FREE and IMAGESET -->
+              <div class="row">
+                <div class="col-md-4">
+                  <label :for="`author`">{{ $t('attachment.author') }}:</label>
+                  <vue-multiselect v-model="attachment.author"
+                                   id="author"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.agent"
+                                   :options="autocomplete.agent"
+                                   :class="{ valid:  isDefinedAndNotNull(attachment.author), invalid: ! isDefinedAndNotNull(attachment.author) }"
+                                   @search-change="autocompleteAgentSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+
+                <div class="col-md-4">
+                  <label :for="`author_free`">{{ $t('attachment.author_free') }}:</label>
+                  <b-form-input id="author_free" v-model="attachment.author_free" :state="isDefinedAndNotNull(attachment.author_free) ||  isDefinedAndNotNull(attachment.author)"
+                                type="text"></b-form-input>
+                </div>
+
+
+                <div class="col-md-4">
+                  <div class="d-flex">
+                    <div class="flex-grow-1 mr-3">
+                      <label :for="`imageset`">{{ $t('attachment.imageset') }}:</label>
+                      <vue-multiselect v-model="attachment.imageset"
+                                       id="imageset"
+                                       label="imageset_number"
+                                       track-by="id"
+                                       :placeholder="$t('add.inputs.autocomplete')"
+                                       :loading="autocomplete.loaders.imageset"
+                                       :options="autocomplete.imageset"
+                                       :class="{ valid: isDefinedAndNotNull(attachment.imageset), invalid: !isDefinedAndNotNull(attachment.imageset) }"
+                                       @search-change="autocompleteImagesetSearch"
+                                       :internal-search="false"
+                                       :preserve-search="true"
+                                       :clear-on-select="false"
+                                       :show-labels="false">
+                        <template slot="singleLabel" slot-scope="{ option }">
+                          <strong>{{ option.imageset_number }}</strong>
+                        </template>
+                        <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                      </vue-multiselect>
+                    </div>
+
+                    <div class="align-self-end">
+                      <router-link :to="{ path: '/imageset/add' }" class="btn btn-outline-info" :title="$t('add.inputs.newImageset')">
+                        <font-awesome-icon icon="plus"></font-awesome-icon>
+                      </router-link>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+      </div>
+    </template>
+
+    <template v-slot:checkbox>
+      <div class="d-flex flex-wrap">
+        {{attachment}}
+        <vs-checkbox id="is_private" v-model="attachment.is_private" icon="fa-eye-slash" icon-pack="fas">
+          {{ attachment.is_private ? $t('attachment.is_private_text') : $t('attachment.is_public_text') }}
+        </vs-checkbox>
+
+        <vs-checkbox id="is_locked" v-model="attachment.is_locked" icon="fa-lock" icon-pack="fas">
+          {{ attachment.is_locked ? $t('attachment.is_locked_text') : $t('attachment.is_unlocked_text') }}
+        </vs-checkbox>
+      </div>
     </template>
 
   </attachment-wrapper>
@@ -68,12 +175,52 @@
         return this.$route.meta.isEdit ? this.attachment.specimen_image_attachment === 4 : this.$route.meta.child === 'digitised_reference';
       },
 
+      recordOptions() {
+        if (this.isPhotoArchive) return true;
+        else if (this.isSpecimenImage) return true;
+        else if (this.isOtherFile) return true;
+        else if (this.isDigitisedReference) return false;
+        else return true
+      },
+
+      recordImage() {
+        if (this.isPhotoArchive) return true;
+        else if (this.isSpecimenImage) return true;
+        else if (this.isOtherFile) return true;
+        else if (this.isDigitisedReference) return false;
+        else return true
+      },
+
+      recordVideo() {
+        if (this.isPhotoArchive) return false;
+        else if (this.isSpecimenImage) return true;
+        else if (this.isOtherFile) return true;
+        else if (this.isDigitisedReference) return false;
+        else return true
+      },
+
+      recordAudio() {
+        if (this.isPhotoArchive) return false;
+        else if (this.isSpecimenImage) return true;
+        else if (this.isOtherFile) return true;
+        else if (this.isDigitisedReference) return false;
+        else return true
+      },
+
       fileInputFormat() {
         if (this.isPhotoArchive) return 'image/*';
-        else if (this.isSpecimenImage) return '*';
-        else if (this.isOtherFile) return '*';
-        else if (this.isDigitisedReference) return '.pdf';
+        else if (this.isSpecimenImage) return '*/*';
+        else if (this.isOtherFile) return '*/*';
+        else if (this.isDigitisedReference) return 'application/pdf';
         else return 'image/*'
+      },
+
+      acceptMultiple() {
+        if (this.isPhotoArchive) return true;
+        else if (this.isSpecimenImage) return true;
+        else if (this.isOtherFile) return true;
+        else if (this.isDigitisedReference) return true;
+        else return true
       }
     },
 
@@ -94,10 +241,10 @@
           block: this.block
         });
       } else {
-        // Adding specimen default values from local storage
+        // Adding attachment default values from local storage
         const attachmentHistory = this.$localStorage.get('attachment', 'fallbackValue');
         if (attachmentHistory !== 'fallbackValue' && Object.keys(attachmentHistory).length !== 0 && attachmentHistory.constructor === Object) {
-          this.specimen = attachmentHistory
+          this.attachment = attachmentHistory
         }
       }
 
@@ -133,14 +280,21 @@
           searchHistory: 'attachmentSearchHistory',
           activeTab: 'specimen_identification',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'specimen_image_attachment'],
+          copyFields: ['id', 'specimen_image_attachment', 'author', 'author_free', 'imageset', 'is_private', 'is_locked'],
           autocomplete: {
             loaders: {
-              coll: false,
+              agent: false,
+              imageset: false,
             },
-            coll: [],
+            agent: [],
+            imageset: [],
           },
-          requiredFields: ['id'],
+          requiredFields: {
+            photo_archive: ['author', 'author_free', 'imageset'],
+            specimen_image: [''],
+            other_file: [''],
+            digitised_reference: ['']
+          },
           attachment: {},
           searchParameters: this.setDefaultSearchParameters(),
           block: {requiredFields: true, info: true, description: true},
@@ -307,5 +461,9 @@
 </script>
 
 <style scoped>
-
+  label {
+    margin: 5px 0 0 0;
+    color: #999;
+    font-size: 0.8rem;
+  }
 </style>

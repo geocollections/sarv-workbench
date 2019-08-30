@@ -2,10 +2,14 @@
   <div class="attachment-wrapper">
     <slot name="loader"></slot>
     <slot name="file-input" v-if="!$route.meta.isEdit"></slot>
-    <slot name="photo_archive" v-if="isPhotoArchive"></slot>
-    <slot name="specimen_image" v-if="isSpecimenImage"></slot>
-    <slot name="other_file" v-if="isOtherFile"></slot>
-    <slot name="digitised_reference" v-if="isDigitisedReference"></slot>
+    <slot name="photo-archive" v-if="isPhotoArchive">
+      <slot name="map"></slot>
+    </slot>
+    <slot name="specimen-image" v-if="isSpecimenImage"></slot>
+    <slot name="other-file" v-if="isOtherFile">
+      <slot name="map"></slot>
+    </slot>
+    <slot name="digitised-reference" v-if="isDigitisedReference"></slot>
     <slot name="checkbox"></slot>
   </div>
 </template>

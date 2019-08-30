@@ -549,7 +549,11 @@
     "edit": "Edit",
     "addNew": "Add new file",
     "changeType": "Change type",
-    "doiConfirmation": "Are you sure you want to register a new DOI for this attachment? DOI-s cannot be deleted."
+    "doiConfirmation": "Are you sure you want to register a new DOI for this attachment? DOI-s cannot be deleted.",
+    "is_private_text": "Private",
+    "is_public_text": "Public",
+    "is_locked_text": "Locked",
+    "is_unlocked_text": "Unlocked"
   },
   "digitisedReference": {
     "reference": "Reference",
@@ -1129,7 +1133,7 @@
     "validFileFormatPDF": "This '{file}' is not a .pdf file!",
     "validFileFormatUniversal": "This '{file}' is not in correct format!",
     "useCorrectFormat": "Please use the following format: '{format}'",
-    "onlyOneFile": "Please add only 1 file!",
+    "onlyOneFile": "Only first file was added!",
     "localityAttachmentInfo":"Choose attachment link or add new",
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga '{ data }'. Lõpetamiseks mine tagasi lokaliteedi vormile",
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",

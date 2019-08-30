@@ -124,7 +124,7 @@
     "saveShortcuts": "Salvesta otseteed",
     "shortcutsSaved": "Otseteed salvestatud",
     "handle": "Lohista",
-    "pathInfo1": "Shortcut tee on kõik peale",
+    "pathInfo1": "Otsetee on kõik peale",
     "pathInfo2": "näiteks",
     "pathInfo3": ", kus",
     "pathInfo4": "on tee",
@@ -550,7 +550,11 @@
     "edit": "Muuda",
     "addNew": "Lisage uus fail",
     "changeType": "Muuda tüüpi",
-    "doiConfirmation": "Kas oled kindel, et soovid failile registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik."
+    "doiConfirmation": "Kas oled kindel, et soovid failile registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik.",
+    "is_private_text": "Privaatne",
+    "is_public_text": "Avalik",
+    "is_locked_text": "Lukus",
+    "is_unlocked_text": "Lukustamata"
   },
   "digitisedReference": {
     "reference": "Kirjandus",
@@ -1129,7 +1133,7 @@
     "validFileFormatPDF": "See '{file}' ei ole .pdf fail!",
     "validFileFormatUniversal": "See '{file}' ei ole õiges formaadis!",
     "useCorrectFormat": "Palun kasuta järgnevat formeeringut: '{format}'",
-    "onlyOneFile": "Palun lisa ainult 1 fail!",
+    "onlyOneFile": "Lisati ainult esimene fail!",
     "localityAttachmentInfo":"Vali link manusele või lisa uus",
     "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga {data}. Lõpetamiseks mine tagasi lokaliteedi vormile",
     "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",

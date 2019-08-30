@@ -129,12 +129,18 @@ const formManipulation = {
      * @param object, String value of, e.g., 'doi', 'reference'.
      * @returns {boolean}
      */
-    validate(object) {
-      let vm = this, isValid = true;
+    validate(object, child) {
+      let isValid = true;
       // console.log(vm[object])
-      this.requiredFields.forEach(function (el) {
-        isValid &= vm.isDefinedAndNotNullAndNotEmptyString(vm[object][el])
-      });
+      if (child) {
+        this.requiredFields[child].forEach(el => {
+          isValid &= this.isDefinedAndNotNullAndNotEmptyString(this[object][el])
+        })
+      } else {
+        this.requiredFields.forEach(el => {
+          isValid &= this.isDefinedAndNotNullAndNotEmptyString(this[object][el])
+        })
+      }
       return isValid
     },
 

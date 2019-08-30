@@ -178,6 +178,9 @@ const autocompleteMixin = {
     autocompleteAnalysisMethodSearch(value) {
       this.$_autocompleteMixin_search(value, 'analysis_method', 'analysis_method', 1)
     },
+    autocompleteImagesetSearch(value) {
+      this.$_autocompleteMixin_search(value, 'imageset', 'imageset', 2)
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -298,6 +301,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `keyword/?keyword__icontains=${value}&fields=id,keyword`;
     case 'analysis_method':
       return `analysis_method/?multi_search=value:${value};fields:analysis_method,method_en;lookuptype:icontains&fields=id,analysis_method,method_en`;
+    case 'imageset':
+      return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
     default:
       return ''
   }
