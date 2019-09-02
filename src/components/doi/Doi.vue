@@ -1011,6 +1011,12 @@
         }
       },
 
+      setCurrentTimeToDataCiteDateFields() {
+        let UTCString = (new Date()).toUTCString();
+        if (!this.doi.datacite_created) this.doi.datacite_created = UTCString;
+        this.doi.datacite_updated = UTCString;
+      },
+
       /**
        * Updates DOI creators field using persons (Creators) in doi_agent
        * Always overwrites creators field, because doi_agent is more reliable than user entered creators field!
@@ -1098,6 +1104,7 @@
                 if (typeof response.body.results !== 'undefined' && response.body.results.length > 0) {
                   if (response.body.results[0].success) {
                     toastSuccess({ text: this.$t('doi.dataciteMetadataUpdated') + ' DataCite response: ' + response.body.results[0].content, timeout: 5000 })
+                    this.setCurrentTimeToDataCiteDateFields();
                     this.showMetadataButton = false
                     this.showMetadataUpdateMessage = false
                     this.checkDoiUrl()
