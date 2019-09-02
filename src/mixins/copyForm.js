@@ -70,7 +70,7 @@ const copyForm = {
       Object.entries(data.relatedData).forEach(entry => {
         if(entry[1] === undefined || entry[1] === false) return;
         type = entry[0];
-        if(!this.isEmptyObject(this.relatedData[type])) {
+        if(this.isNotEmpty(this.relatedData[type])) {
           this.relatedData[type].forEach(entry => {
             if(type === 'attachment_link') {
               entry['attachment'] = entry.id

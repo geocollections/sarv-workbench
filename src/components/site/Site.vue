@@ -89,13 +89,13 @@
           <div class="row">
             <div class="col-md-4">
               <label :for="`latitude`">{{ $t('site.latitude') }}:</label>
-              <b-form-input id="latitude" v-model="site.latitude" :state="isDefinedAndNotNull(site.latitude)"
+              <b-form-input id="latitude" v-model="site.latitude" :state="isNotEmpty(site.latitude)"
                             type="number" step="0.000001" @input="handleCoordinateChange"></b-form-input>
             </div>
 
             <div class="col-md-4">
               <label :for="`longitude`">{{ $t('site.longitude') }}:</label>
-              <b-form-input id="longitude" v-model="site.longitude" :state="isDefinedAndNotNull(site.longitude)"
+              <b-form-input id="longitude" v-model="site.longitude" :state="isNotEmpty(site.longitude)"
                             type="number" step="0.000001" @input="handleCoordinateChange"></b-form-input>
             </div>
 
@@ -346,18 +346,17 @@
 
     },
     created() {
-      this.activeObject = 'site';
-
+      // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'siteSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
           search: params,
           request: 'FETCH_SITES',
           title: 'header.sites',
-          object: this.activeObject,
+          object: 'site',
           field: 'name',
           block: this.block
         })
@@ -493,18 +492,18 @@
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload);
 
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
-        if (this.isDefinedAndNotNull(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start, false);
-        if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end, false);
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start, false);
+        if (this.isNotEmpty(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end, false);
 
-        if (this.isDefinedAndNotNull(objectToUpload.location_accuracy)) uploadableObject.location_accuracy =
+        if (this.isNotEmpty(objectToUpload.location_accuracy)) uploadableObject.location_accuracy =
           typeof uploadableObject.location_accuracy === 'string' ? parseFloat(objectToUpload.location_accuracy).toFixed(2) : objectToUpload.location_accuracy.toFixed(2);
 
-        if (this.isDefinedAndNotNull(objectToUpload.project)) uploadableObject.project = objectToUpload.project.id;
-        if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id;
-        if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id;
-        if (this.isDefinedAndNotNull(objectToUpload.latitude)) uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(6);
-        if (this.isDefinedAndNotNull(objectToUpload.longitude)) uploadableObject.longitude = parseFloat(objectToUpload.longitude).toFixed(6);
+        if (this.isNotEmpty(objectToUpload.project)) uploadableObject.project = objectToUpload.project.id;
+        if (this.isNotEmpty(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id;
+        if (this.isNotEmpty(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id;
+        if (this.isNotEmpty(objectToUpload.latitude)) uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(6);
+        if (this.isNotEmpty(objectToUpload.longitude)) uploadableObject.longitude = parseFloat(objectToUpload.longitude).toFixed(6);
 
 
         if (saveRelatedData) {
@@ -573,7 +572,7 @@
 
 
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchSites(params))
         });
@@ -657,7 +656,7 @@
         if (currentActiveProjects && currentActiveProjects !== 'fallbackValue' && currentActiveProjects.length > 0) {
           fetchActiveProjects(currentActiveProjects.join(", ")).then(response => {
             this.autocomplete.project = this.handleResponse(response);
-            if (!this.isDefinedAndNotNull(this.site.project))
+            if (!this.isNotEmpty(this.site.project))
               this.$set(this.site, 'project', {
                 name: this.autocomplete.project[0].name,
                 name_en: this.autocomplete.project[0].name_en,

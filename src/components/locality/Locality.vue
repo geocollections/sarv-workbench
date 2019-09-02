@@ -17,7 +17,7 @@
           <div class="row">
             <div class="col-sm-6">
               <label :for="`locality`">{{ $t('locality.locality') }}:</label>
-              <b-form-input id="locality" :state="isDefinedAndNotNull(locality.locality)" v-model="locality.locality"
+              <b-form-input id="locality" :state="isNotEmpty(locality.locality)" v-model="locality.locality"
                             type="text"></b-form-input>
             </div>
 
@@ -42,7 +42,7 @@
             <div class="col-md-3">
               <label :for="`type`">{{ $t('locality.type') }}:</label>
               <vue-multiselect v-model="locality.type"
-                               v-if="isDefinedAndNotEmpty(autocomplete.localityTypes)"
+                               v-if="isNotEmpty(autocomplete.localityTypes)"
                                id="type"
                                :options="autocomplete.localityTypes"
                                track-by="id"
@@ -555,7 +555,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'localitySearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -675,22 +675,22 @@
       },
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isDefinedAndNotNull(objectToUpload.elevation))
+        if (this.isNotEmpty(objectToUpload.elevation))
           uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
         if (objectToUpload.latitude === '')
-          uploadableObject.latitude = this.isDefinedAndNotNull(objectToUpload.latitude) ? objectToUpload.latitude.toFixed(6) : null
+          uploadableObject.latitude = this.isNotEmpty(objectToUpload.latitude) ? objectToUpload.latitude.toFixed(6) : null
         if (objectToUpload.longitude === '')
-          uploadableObject.longitude = this.isDefinedAndNotNull(objectToUpload.longitude) ? objectToUpload.longitude.toFixed(6) : null
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
-        if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
-        if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id
-        if (this.isDefinedAndNotNull(objectToUpload.extent)) uploadableObject.extent = objectToUpload.extent.id
-        if (this.isDefinedAndNotNull(objectToUpload.coord_det_precision)) uploadableObject.coord_det_precision = objectToUpload.coord_det_precision.id
-        if (this.isDefinedAndNotNull(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
-        if (this.isDefinedAndNotNull(objectToUpload.coord_det_agent)) uploadableObject.coord_det_agent = objectToUpload.coord_det_agent.id
-        if (this.isDefinedAndNotNull(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id
-        if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
-        if (this.isDefinedAndNotNull(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
+          uploadableObject.longitude = this.isNotEmpty(objectToUpload.longitude) ? objectToUpload.longitude.toFixed(6) : null
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
+        if (this.isNotEmpty(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id
+        if (this.isNotEmpty(objectToUpload.extent)) uploadableObject.extent = objectToUpload.extent.id
+        if (this.isNotEmpty(objectToUpload.coord_det_precision)) uploadableObject.coord_det_precision = objectToUpload.coord_det_precision.id
+        if (this.isNotEmpty(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
+        if (this.isNotEmpty(objectToUpload.coord_det_agent)) uploadableObject.coord_det_agent = objectToUpload.coord_det_agent.id
+        if (this.isNotEmpty(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id
+        if (this.isNotEmpty(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
+        if (this.isNotEmpty(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
 
         // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
         return JSON.stringify(uploadableObject)
@@ -769,10 +769,10 @@
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.locality = this.locality.id;
-        if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
-        if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
-        if (this.isDefinedAndNotNull(uploadableObject.stratigraphy)) uploadableObject.stratigraphy = uploadableObject.stratigraphy.id;
-        if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
+        if (this.isNotEmpty(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
+        if (this.isNotEmpty(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
+        if (this.isNotEmpty(uploadableObject.stratigraphy)) uploadableObject.stratigraphy = uploadableObject.stratigraphy.id;
+        if (this.isNotEmpty(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
         return JSON.stringify(uploadableObject)
       },
 
@@ -781,7 +781,7 @@
         this.locality.longitude = location.lng.toFixed(6)
       },
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchLocalities(params))
         });

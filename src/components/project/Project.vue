@@ -35,7 +35,7 @@
           <div class="row">
             <div class="col-md-6">
               <label :for="`name`">{{ $t('project.name') }}:</label>
-              <b-form-input id="name" v-model="project.name" :state="isDefinedAndNotNull(project.name)" type="text"
+              <b-form-input id="name" v-model="project.name" :state="isNotEmpty(project.name)" type="text"
                             maxlength="100"></b-form-input>
             </div>
 
@@ -51,7 +51,7 @@
               <vue-multiselect v-model="project.project_type"
                                id="type"
                                :options="autocomplete.project_type"
-                               v-bind:class="{ valid: isDefinedAndNotNull(project.project_type), invalid: !isDefinedAndNotNull(project.project_type) }"
+                               v-bind:class="{ valid: isNotEmpty(project.project_type), invalid: !isNotEmpty(project.project_type) }"
                                track-by="id"
                                :label="nameLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -191,7 +191,7 @@
 
           <div class="col-1 mb-2 ml-0 pl-0">
             <button class="btn btn-outline-danger"
-                    :disabled="!isDefinedAndNotEmpty(relatedData.projectagent)"
+                    :disabled="!isNotEmpty(relatedData.projectagent)"
                     @click="relatedData.projectagent = []">
               <font-awesome-icon icon="trash-alt"></font-awesome-icon>
             </button>
@@ -363,18 +363,17 @@
       ...mapState(["currentUser"])
     },
     created() {
-      this.activeObject = 'project';
-
+      // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'projectSearchHistory',
           defaultSearch: this.searchParameters,
           search: params,
           request: 'FETCH_PROJECTS',
           title: 'header.projects',
-          object: this.activeObject,
+          object: 'project',
           field: 'name',
           block: this.block
         });
@@ -484,14 +483,14 @@
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload)
 
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
-        if (this.isDefinedAndNotNull(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start);
-        if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start);
+        if (this.isNotEmpty(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
 
         //autocomplete fields
-        if (this.isDefinedAndNotNull(objectToUpload.project_type)) uploadableObject.project_type = objectToUpload.project_type.id
-        if (this.isDefinedAndNotNull(objectToUpload.parent_project)) uploadableObject.parent_project = objectToUpload.parent_project.id
-        if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
+        if (this.isNotEmpty(objectToUpload.project_type)) uploadableObject.project_type = objectToUpload.project_type.id
+        if (this.isNotEmpty(objectToUpload.parent_project)) uploadableObject.parent_project = objectToUpload.parent_project.id
+        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
 
         //add related data
         uploadableObject.related_data = {}
@@ -512,7 +511,7 @@
 
         //set current user as default owner
 
-        // this.project.owner = this.isDefinedAndNotNull(this.project.owner) ? {agent:obj.owner__agent,id:obj.owner} : {agent:this.currentUser.user,id:this.currentUser.id}
+        // this.project.owner = this.isNotEmpty(this.project.owner) ? {agent:obj.owner__agent,id:obj.owner} : {agent:this.currentUser.user,id:this.currentUser.id}
         this.project.owner = {agent: obj.owner__agent, id: obj.owner}
 
         this.project.parent_project = {
@@ -580,7 +579,7 @@
 
 
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchProjects(params, this.currentUser.id))
         });

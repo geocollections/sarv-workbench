@@ -152,7 +152,7 @@
 
             <div class="col-2 col-md-1 pl-0">
               <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
-                      :disabled="!isDefinedAndNotEmpty(relatedData.library_agent)"
+                      :disabled="!isNotEmpty(relatedData.library_agent)"
                       @click="relatedData.library_agent = []">
                 <font-awesome-icon icon="trash-alt"></font-awesome-icon>
               </button>
@@ -302,7 +302,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'librarySearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -470,8 +470,8 @@
 
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
 
         // Adding related data
         uploadableObject.related_data = {}
@@ -526,7 +526,7 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.library = this.library.id;
 
-        if (this.isDefinedAndNotNull(uploadableObject.reference)) {
+        if (this.isNotEmpty(uploadableObject.reference)) {
           uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
         }
 
@@ -537,7 +537,7 @@
 
 
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchLibrariesFromLibraryAgent(params, this.$parent.agent))
         });

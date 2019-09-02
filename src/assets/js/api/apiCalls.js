@@ -609,28 +609,28 @@ export function fetchDoiCheck(doi) {
   return fetch(doi, api.checkDoiUrl)
 }
 
-export function fetchDoiAttachment(id, page, paginateBy = 25) {
-  return fetch(`attachment_link/?doi=${id}&page=${page}&paginate_by=${paginateBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks&format=json`)
+export function fetchDoiAttachment(id, searchParameters) {
+  return fetch(`attachment_link/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks&format=json`)
 }
 
-export function fetchDoiAgent(id, page, paginateBy = 25) {
-  return fetch(`doi_agent/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+export function fetchDoiAgent(id, searchParameters) {
+  return fetch(`doi_agent/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
 }
 
 export function fetchDoiAgentType() {
   return fetch(`doi_agent_type/?format=json`)
 }
 
-export function fetchDoiRelatedIdentifier(id, page, paginateBy = 25) {
-  return fetch(`doi_related_identifier/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+export function fetchDoiRelatedIdentifier(id, searchParameters) {
+  return fetch(`doi_related_identifier/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
 }
 
-export function fetchDoiGeolocation(id, page, paginateBy = 25) {
-  return fetch(`doi_geolocation/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+export function fetchDoiGeolocation(id, searchParameters) {
+  return fetch(`doi_geolocation/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
 }
 
-export function fetchDoiDate(id, page, paginateBy = 25) {
-  return fetch(`doi_date/?doi=${id}&page=${page}&paginate_by=${paginateBy}&format=json`)
+export function fetchDoiDate(id, searchParameters) {
+  return fetch(`doi_date/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
 }
 
 export function fetchDoiRelatedIdentifierType() {

@@ -160,7 +160,7 @@
     watch: {
       'relatedData.insert.doi_agent.agent': {
         handler: function (newVal, oldVal) {
-          if (newVal !== null && !this.isEmptyObject(newVal)) {
+          if (this.isNotEmpty(newVal)) {
             //  Adding NAME, AFFILIATION and AGENT_TYPE__VALUE
             console.log(newVal)
             this.relatedData.insert.doi_agent.name = newVal.agent

@@ -3,6 +3,8 @@ import VueMultiselect from 'vue-multiselect';
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
+// Todo: Remove FontAwesomeIcon imports!!!
+
 import {
   faBan,
   faSave,
@@ -47,7 +49,6 @@ import {
   faSitemap
 } from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
-import findIndex from 'lodash/findIndex';
 import moment from 'moment'
 import {toastInfo, toastSuccess, toastError} from "../assets/js/iziToast/iziToast";
 import {mapState} from "vuex";
@@ -63,7 +64,6 @@ const formManipulation = {
       sendingData: false,
       editMode: false,
       showCollapseMap: true,
-      activeObject: null
     }
   },
   components: {
@@ -76,7 +76,7 @@ const formManipulation = {
     this.$root.$on('user-choice', this.handleUserChoice);
     // this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
 
-    this.$parent.$on('button-clicked', this.hoverSaveOrCancelButtonClicked);
+    this.$parent.$on('button-clicked', this.bottomOptionClicked);
 
   },
   beforeMount() {
@@ -89,25 +89,39 @@ const formManipulation = {
     ...mapState(['currentUser'])
   },
   methods: {
-    isDefinedAndNotNullAndNotEmptyString(value) {
-      return !!value && value !== null && (value + '').trim().length > 0
+    /**
+     * Checks if variable is not empty and returns corresponding boolean.
+     *
+     * @param {*} value - This value will be checked
+     * @returns {boolean} false:
+     *                      undefined, null, "", [], {};
+     *                    true:
+     *                      true, false, 1, 0, -1, "foo", [1, 2, 3], { foo: 1 }
+     */
+    isNotEmpty(value) {
+      return !(
+        // null or undefined
+        (value == null) ||
+
+        // has length and it's zero
+        (value.hasOwnProperty('length') && value.length === 0) ||
+
+        //  is an Object and has no keys
+        (value.constructor === Object && Object.keys(value).length === 0)
+      )
     },
-    isDefinedAndNotNull(value) {
-      return !!value && value !== null
-    },
-    isDefinedAndNotEmpty(value) {
-      return !!value && value.length > 0
-    },
-    isEmptyObject(value) {
-      for (var prop in value) {
-        if (Object.prototype.hasOwnProperty.call(value, prop)) {
-          return false;
-        }
-      }
-      return true;
-    },
+
+    /**
+     * Returns date in string format
+     * onlyDate = true --> API has DateField type in Models
+     * onlyDate = false --> API has DateTimeField type in Models
+     *
+     * @param {object} date - Date object
+     * @param {boolean} [onlyDate=true] - If set to true then returns only date part of datetime.
+     * @returns {string} Date which can be only date part or full datetime
+     */
     formatDateForUpload(date, onlyDate = true) {
-      date = new Date(date)
+      date = new Date(date);
       let tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
       let localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, -1);
 
@@ -115,9 +129,20 @@ const formManipulation = {
       return localISOTime
     },
 
+    /**
+     * Cancels request which was just made, for example user tries uploading a large file
+     * but decides to cancel it then this method gets called.
+     */
     cancelRequest() {
       this.previousRequest.abort()
     },
+
+    /**
+     * Handles request's response by returning results list or empty list.
+     *
+     * @param {object} response - This comes straight from API and is handled here.
+     * @returns {array} Results from API.
+     */
     handleResponse(response) {
       if (response.status === 200) {
         return (response.body.count > 0) ? response.body.results : []
@@ -125,20 +150,22 @@ const formManipulation = {
     },
 
     /**
-     * Checks if required fields are okay to upload (not empty, null etc.)
-     * @param object, String value of, e.g., 'doi', 'reference'.
-     * @returns {boolean}
+     * Checks if required fields are okay to upload (not undefined, null etc.)
+     *
+     * @param {string} object - Current object which fields are validated e.g., 'doi', 'reference'.
+     * @param {string} child - Used for validating if requiredFields is an object like in attachments.
+     * @returns {boolean} True if required fields are OK and false if they are not.
      */
     validate(object, child) {
       let isValid = true;
       // console.log(vm[object])
       if (child) {
         this.requiredFields[child].forEach(el => {
-          isValid &= this.isDefinedAndNotNullAndNotEmptyString(this[object][el])
+          isValid &= this.isNotEmpty(this[object][el])
         })
       } else {
         this.requiredFields.forEach(el => {
-          isValid &= this.isDefinedAndNotNullAndNotEmptyString(this[object][el])
+          isValid &= this.isNotEmpty(this[object][el])
         })
       }
       return isValid
@@ -426,6 +453,12 @@ const formManipulation = {
       window.open('https://files.geocollections.info/' + params.pdf.substring(0, 2) + '/' + params.pdf.substring(2, 4) + '/' + params.pdf, '', 'width=1000,height=900')
     },
 
+    /**
+     * Removes unnecessary fields from object like Doi
+     * @param object - data object from api, for example doi, specimen etc.
+     * @param copyFields - Array of fields which will be sent to API using add or change request.
+     * @returns object, which has unnecessary fields removed.
+     */
     removeUnnecessaryFields(object, copyFields) {
       //copy only certain fields
       Object.entries(object).forEach(entry => {
@@ -453,7 +486,7 @@ const formManipulation = {
       if (this.activeTab === type) return
 
       this.nextTab = type;
-      if (isWarning && !this.isEmptyObject(this.relatedData.insert[this.activeTab])) {
+      if (isWarning && this.isNotEmpty(this.relatedData.insert[this.activeTab])) {
         this.$bvModal.show('confirm-tab-close')
       } else {
         // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
@@ -470,8 +503,7 @@ const formManipulation = {
      * should be called as $parent but you can listen event in parent classes ex. this.$root.$on('related-data-added',this.addRelatedData);**/
 
     editRelatedData(object) {
-      console.log(object)
-      if (this.isEmptyObject(object.new)) return;
+      if (!this.isNotEmpty(object.new)) return;
       let formData = new FormData();
 
       //CHECK REQUIRED FIELDS !!!
@@ -502,7 +534,7 @@ const formManipulation = {
     },
 
     addRelatedData(type, isTab = false) {
-      if (this.isEmptyObject(this.relatedData.insert[this.activeTab])) return;
+      if (!this.isNotEmpty(this.relatedData.insert[this.activeTab])) return;
       let formData = new FormData();
       if (type === undefined) type = this.activeTab;
 
@@ -521,12 +553,6 @@ const formManipulation = {
       });
     },
 
-
-    // ?
-    loadRelatedData() {
-    },
-    fillRelatedDataAutocompleteFields() {
-    },
     editRow(entity) {
       if (this.editMode === true) return;
       // console.log("EDIT RECORD" + JSON.stringify(entity));
@@ -547,106 +573,61 @@ const formManipulation = {
 
     /** RELATED DATA ENDS**/
 
-    /** SHOW NEXT OR PREVIOUS RECORD STARTS**/
-    findCurrentRecord(list, id) {
-      return findIndex(list, function (item) {
-        return item.id === id
-      })
-    },
-    getListRecords(object) {
-      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
+    /**
+     * Handles user's bottom options button click by calling add method, route leave or resetting object.
+     *
+     * @param {string} choice - User's choice in String format e.g., 'SAVE', 'CLEAR', etc.
+     * @param {string} object - Current object which user tries to edit or sth. ('specimen', 'doi', etc.)
+     * @param {string} [saveRelatedData=false] - Value for saving related data in related_data field.
+     *
+     * @example bottomOptionClicked('SAVE', 'doi')
+     */
+    bottomOptionClicked(choice, object, saveRelatedData = false) {
+      // Currently only doi should save related data in one go.
+      if (object === 'doi') saveRelatedData = true;
 
-      this.listSearch(searchHistory).then(results => {
-        if (results.length === 0) {
-          this.$root.$emit('disable-previous', true);
-          this.$root.$emit('disable-next', true);
-          return
-        }
-
-        let currentRecordId = this.findCurrentRecord(cloneDeep(results), this[object].id)
-
-        if (currentRecordId === -1) {
-          if (this[object].id === 1) {
-            this.nextRecord = this[object].id + 1;
-            this.$root.$emit('disable-previous', true);
-            this.$root.$emit('disable-next', false);
-          } else {
-            this.previousRecord = this[object].id - 1;
-            this.nextRecord = this[object].id + 1;
-            this.$root.$emit('disable-previous', false);
-            this.$root.$emit('disable-next', false);
-          }
-          return
-        }
-
-        if (currentRecordId === 0) {
-          this.$root.$emit('disable-previous', true)
-        } else {
-          this.previousRecord = results[currentRecordId - 1].id;
-          this.$root.$emit('disable-previous', false)
-        }
-        if (currentRecordId === results.length - 1) {
-          this.$root.$emit('disable-next', true)
-        } else {
-          this.nextRecord = results[currentRecordId + 1].id;
-          this.$root.$emit('disable-next', false)
-        }
-
-      })
-    },
-
-    listSearch(searchParams) {
-      this.sendingData = true;
-      return new Promise((resolve) => {
-        this.fetchList(searchParams).then(response => {
-          if (response.status === 200) {
-            if (response.body.count === 0) resolve([]);
-            if (response.body.count > 0) resolve(response.body.results)
-          }
-          this.sendingData = false
-        }, errResponse => {
-          this.sendingData = false
-        })
-      });
-    },
-
-    hoverSaveOrCancelButtonClicked(choice, object, isRelationSavedSeparately = false) {
-      if (this.isDefinedAndNotNull(this.activeObject)) object = this.activeObject
-
-      if (choice === "SAVE") this.add(true, object, isRelationSavedSeparately)
+      if (choice === "SAVE") this.add(true, object, saveRelatedData);
 
       if (choice === "FINISH") {
-        this[object].date_end = new Date()
-
-        this.add(false, object, isRelationSavedSeparately);
+        this[object].date_end = new Date();
+        this.add(false, object, saveRelatedData);
       }
 
       if (choice === "SAVE_AND_LEAVE") {
-        this.add(false, object, isRelationSavedSeparately);
+        this.add(false, object, saveRelatedData);
       }
 
       if (choice === "CLEAR") {
-        this[object] = {}
+        this[object] = {};
         toastInfo({text: this.$t('messages.fieldsCleared')})
       }
-      if (choice === "CANCEL") this.$router.push({path: '/' + object})
 
-      if (choice === "PREVIOUS") this.$router.push({path: '/' + object + '/' + this.previousRecord});
-      if (choice === "NEXT") this.$router.push({path: '/' + object + '/' + this.nextRecord});
+      if (choice === "CANCEL") this.$router.push({path: '/' + object})
     },
 
-    /** SHOW NEXT OR PREVIOUS RECORD ENDS**/
-
-    composeFileUrl(file, size = 'small') {
+    /**
+     * Returns file's url.
+     *
+     * @param filename - String value of file's name
+     * @param size - can be small, medium, large or original.
+     * @returns {string} - file's url
+     */
+    composeFileUrl(filename, size = 'small') {
       if (size === 'small' || size === 'medium' || size === 'large') {
-        return this.fileUrl + '/' + size + '/' + file.substring(0, 2) + '/' + file.substring(2, 4) + '/' + file
+        return this.fileUrl + '/' + size + '/' + filename.substring(0, 2) + '/' + filename.substring(2, 4) + '/' + filename
       } else {
-        return this.fileUrl + '/' + file.substring(0, 2) + '/' + file.substring(2, 4) + '/' + file
+        return this.fileUrl + '/' + filename.substring(0, 2) + '/' + filename.substring(2, 4) + '/' + filename
       }
     },
 
+    /**
+     * Calculates next name, for example 'Test site 1' --> 'Test site 2'
+     *
+     * @param {string} previousName - It will be used to calculate next name.
+     * @returns {string} - next name
+     */
     calculateNextName(previousName) {
-      if (!this.isDefinedAndNotNull(previousName)) return
+      if (!this.isNotEmpty(previousName)) return
       let tokenize = previousName.split(/[^0-9]/g);
       let lastToken = tokenize[tokenize.length - 1]
       //last token is number
@@ -655,7 +636,7 @@ const formManipulation = {
 
     getActiveProject() {
       let activeProject = this.$localStorage.get('activeProject', 'fallbackValue');
-      if (this.isDefinedAndNotEmpty(activeProject) && activeProject !== 'fallbackValue') return activeProject[0];
+      if (this.isNotEmpty(activeProject) && activeProject !== 'fallbackValue') return activeProject[0];
       return null
     },
 

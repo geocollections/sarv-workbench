@@ -30,7 +30,7 @@
                                :options="autocomplete.resource_type"
                                track-by="id"
                                label="value"
-                               :class="isDefinedAndNotNull(doi.resource_type) ? 'valid' : 'invalid'"
+                               :class="isNotEmpty(doi.resource_type) ? 'valid' : 'invalid'"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -42,7 +42,7 @@
 
             <div class="col-md-4">
               <label :for="`resource`">{{ $t('doi.resource') }}:</label>
-              <b-form-input id="resource" :state="isDefinedAndNotNull(doi.resource)" v-model="doi.resource" type="text"></b-form-input>
+              <b-form-input id="resource" :state="isNotEmpty(doi.resource)" v-model="doi.resource" type="text"></b-form-input>
             </div>
           </div>
 
@@ -51,17 +51,17 @@
             <div class="col-md-4">
               <label :for="`creators`">{{ $t('doi.creators') }}:</label>
               <!-- TODO: Connect with related persons -->
-              <b-form-input id="creators" :state="isDefinedAndNotNull(doi.creators)" v-model="doi.creators" type="text"></b-form-input>
+              <b-form-input id="creators" :state="isNotEmpty(doi.creators)" v-model="doi.creators" type="text"></b-form-input>
             </div>
 
             <div class="col-md-4">
               <label :for="`publication_year`">{{ $t('doi.year') }}:</label>
-              <b-form-input id="publication_year" :state="isDefinedAndNotNull(doi.publication_year)" v-model="doi.publication_year" type="number"></b-form-input>
+              <b-form-input id="publication_year" :state="isNotEmpty(doi.publication_year)" v-model="doi.publication_year" type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
               <label :for="`publisher`">{{ $t('doi.publisher') }}:</label>
-              <b-form-input id="publisher" :state="isDefinedAndNotNull(doi.publisher)" v-model="doi.publisher" type="text"></b-form-input>
+              <b-form-input id="publisher" :state="isNotEmpty(doi.publisher)" v-model="doi.publisher" type="text"></b-form-input>
             </div>
           </div>
 
@@ -69,7 +69,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`title`">{{ $t('doi.title') }}:</label>
-              <b-form-input id="title" :state="isDefinedAndNotNull(doi.title)" v-model="doi.title" type="text"></b-form-input>
+              <b-form-input id="title" :state="isNotEmpty(doi.title)" v-model="doi.title" type="text"></b-form-input>
             </div>
           </div>
 
@@ -349,45 +349,25 @@
     <div class="row mb-2" v-if="$route.meta.isEdit">
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('doi_agent')" class="nav-link"
-               :class="{ active: activeTab === 'doi_agent' }">
-              {{ $t('doi.relatedTables.doi_agent') }} <font-awesome-icon icon="user-friends"/>
-            </a>
-          </li>
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
-               :class="{ active: activeTab === 'attachment_link' }">
-              {{ $t('doi.relatedTables.files') }} <font-awesome-icon icon="folder-open"/>
-            </a>
-          </li>
+          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+            <a href="#" @click.prevent="setActiveTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+              <span>{{ $t('doi.relatedTables.' + tab.name) }}</span>
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('doi_geolocation')" class="nav-link"
-               :class="{ active: activeTab === 'doi_geolocation' }">
-              {{ $t('doi.relatedTables.doi_geolocation') }} <font-awesome-icon icon="globe-americas"/>
-            </a>
-          </li>
+              <span>
+                <sup>
+                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                </sup>
+              </span>
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('doi_related_identifier')" class="nav-link"
-               :class="{ active: activeTab === 'doi_related_identifier' }">
-              {{ $t('doi.relatedTables.doi_related_identifier') }} <font-awesome-icon icon="project-diagram"/>
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('doi_date')" class="nav-link"
-               :class="{ active: activeTab === 'doi_date' }">
-              {{ $t('doi.relatedTables.doi_date') }} <font-awesome-icon icon="calendar-alt"/>
+              <span><i :class="tab.iconClass"></i></span>
             </a>
           </li>
         </ul>
 
-        <div class="row" v-if="activeTab !== 'attachment_link'">
+        <div class="row">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
               <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
               <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
               <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -406,7 +386,7 @@
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
+              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
             </b-pagination>
           </div>
         </div>
@@ -484,25 +464,6 @@
 
     <div class="row mt-3">
       <div class="col">
-        <!-- Todo: Remove 3 buttons and add them do footer -->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'doi', true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'doi', true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('doi', $route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-
         <button v-if="$route.meta.isEdit && showMetadataButton && validate('doi')" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
                 :title="showMetadataUpdateMessage ? $t('edit.buttons.updateMetadata') : $t('edit.buttons.registerMetadata')">
           <font-awesome-icon icon="server"/>
@@ -581,7 +542,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('identifier') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'doiSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -599,31 +560,16 @@
 
     watch: {
       '$route.params.id': {
-        handler: function (newval, oldval) {
-          this.setInitialData()
+        handler: function (newVal, oldVal) {
           this.reloadData()
         },
-        deep: true
       },
-      'relatedData.paginateBy': {
+      'relatedData.searchParameters': {
         handler: function (newVal, oldVal) {
           this.loadRelatedData(this.activeTab)
         },
         deep: true
       },
-      'relatedData.page': {
-        handler: function (newVal, oldVal) {
-          this.loadRelatedData(this.activeTab)
-        },
-        deep: true
-      },
-      // Watching creators because sometimes fetchDoi takes more time than fetchDoiAgent
-      // and overwrites updated doi. Basically this here is fallback just in case.
-      // 'doi.creators': {
-      //   handler: function (newVal, oldVal) {
-      //     this.updateDoiCreatorsField(this.relatedData.doi_agent)
-      //   }
-      // }
     },
 
     methods: {
@@ -633,7 +579,13 @@
 
       setInitialData() {
         return {
-          tabs:['attachment_link', 'doi_related_identifier', 'doi_geolocation', 'doi_agent', 'doi_date'],
+          relatedTabs: [
+            { name: 'doi_agent', iconClass: 'fas fa-user-friends' },
+            { name: 'attachment_link', iconClass: 'fas fa-folder-open' },
+            { name: 'doi_geolocation', iconClass: 'fas fa-globe-americas' },
+            { name: 'doi_related_identifier', iconClass: 'far fa-project-diagram' },
+            { name: 'doi_date', iconClass: 'far fa-calendar-alt' },
+          ],
           searchHistory: 'doiSearchHistory',
           activeTab: 'doi_agent',
           relatedData: this.setDefaultRelatedData(),
@@ -674,10 +626,7 @@
           },
           requiredFields: ['resource_type', 'resource', 'creators', 'publication_year', 'publisher', 'title'],
           doi: {},
-          previousRecord: {},
-          nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          componentKey: 0,
           block: {requiredFields: true, info: true, referenceAndDataset: false, description: true,  datacite: true},
           showMetadataButton: false,
           showDoiUrlButton: false,
@@ -711,26 +660,24 @@
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
-          this.$emit('set-object', 'doi')
+          this.$emit('set-object', 'doi');
           fetchDoi(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
 
             if (handledResponse.length > 0) {
               this.$emit('object-exists', true);
               this.doi = this.handleResponse(response)[0];
-              this.fillAutocompleteFields(this.doi)
+              this.fillAutocompleteFields(this.doi);
 
               // Loading REFERENCE and DATASET here because they don't need api request
-              this.loadRelatedData('reference', this.doi)
-              this.loadRelatedData('dataset', this.doi)
+              this.loadRelatedData('reference', this.doi);
+              this.loadRelatedData('dataset', this.doi);
 
               this.removeUnnecessaryFields(this.doi, this.copyFields);
               this.doi.related_data = {};
 
-              // this.forceRerender(); if needed
               this.$emit('data-loaded', this.doi)
               this.sendingData = false;
-              // this.getListRecords('doi')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
@@ -756,13 +703,13 @@
           this.checkDoiUrl();
 
           // Load Related Data which is in tabs
-          this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
+          this.relatedTabs.forEach(tab => {
+            this.loadRelatedData(tab.name);
           });
 
           this.$on('tab-changed', this.setTab);
 
-          this.$emit('related-data-info', this.tabs);
+          this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
           this.setActiveTab('doi_agent')
         }
@@ -788,7 +735,6 @@
           copyFields: {
             attachment_link: ['attachment', 'remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
-            // doi_geolocation: ['point', 'box', 'place', 'locality', 'remarks'],
             doi_geolocation: ['locality', 'place', 'point_longitude', 'point_latitude', 'box_w_longitude','box_e_longitude', 'box_s_latitude', 'box_n_latitude'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
             doi_date: ['date', 'date_type', 'remarks']
@@ -800,19 +746,32 @@
             doi_agent: {},
             doi_date: {}
           },
-          page: {
-            attachment_link: 1,
-            doi_related_identifier: 1,
-            doi_geolocation: 1,
-            doi_agent: 1,
-            doi_date: 1
-          },
-          paginateBy: {
-            attachment_link: 10,
-            doi_related_identifier: 10,
-            doi_geolocation: 10,
-            doi_agent: 10,
-            doi_date: 10
+          searchParameters: {
+            attachment_link: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            doi_related_identifier: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            doi_geolocation: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            doi_agent: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            doi_date: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
           },
           count: {
             reference: 0,
@@ -828,23 +787,26 @@
 
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload)
-        // if (this.isDefinedAndNotNull(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
+        // if (this.isNotEmpty(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
 
         // Autocomplete fields
-        if (this.isDefinedAndNotNull(objectToUpload.resource_type)) uploadableObject.resource_type = objectToUpload.resource_type.id
-        if (this.isDefinedAndNotNull(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id
-        if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
-        if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
-        if (this.isDefinedAndNotNull(objectToUpload.copyright_agent)) uploadableObject.copyright_agent = objectToUpload.copyright_agent.id
-        if (this.isDefinedAndNotNull(objectToUpload.licence)) uploadableObject.licence = objectToUpload.licence.id
-        if (this.isDefinedAndNotNull(this.relatedData.reference)) uploadableObject.reference = this.relatedData.reference.id
-        if (this.isDefinedAndNotNull(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
+        if (this.isNotEmpty(objectToUpload.resource_type)) uploadableObject.resource_type = objectToUpload.resource_type.id
+        if (this.isNotEmpty(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id
+        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
+        if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
+        if (this.isNotEmpty(objectToUpload.copyright_agent)) uploadableObject.copyright_agent = objectToUpload.copyright_agent.id
+        if (this.isNotEmpty(objectToUpload.licence)) uploadableObject.licence = objectToUpload.licence.id
+        if (this.isNotEmpty(this.relatedData.reference)) uploadableObject.reference = this.relatedData.reference.id
+        if (this.isNotEmpty(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
 
         // Adding related data
         if (saveRelatedData) {
-          uploadableObject.related_data = {}
-          // uploadableObject.related_data.attachment = this.relatedData.attachment_link
+          uploadableObject.related_data = {};
+
+          this.relatedTabs.forEach(tab => {
+            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
+          });
         }
 
         console.log('This object is sent in string format:')
@@ -875,13 +837,13 @@
         if (type === undefined) {
           console.log(obj)
 
-          if (this.isDefinedAndNotNull(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
-          if (this.isDefinedAndNotNull(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
-          if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
-          if (this.isDefinedAndNotNull(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
-          if (this.isDefinedAndNotNull(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value }
-          if (this.isDefinedAndNotNull(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en }
-          if (this.isDefinedAndNotNull(obj.date_type)) obj.date_type = { id: obj.date_type, value: obj.date_type__value }
+          if (this.isNotEmpty(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
+          if (this.isNotEmpty(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
+          if (this.isNotEmpty(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
+          if (this.isNotEmpty(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
+          if (this.isNotEmpty(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value }
+          if (this.isNotEmpty(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en }
+          if (this.isNotEmpty(obj.date_type)) obj.date_type = { id: obj.date_type, value: obj.date_type__value }
 
           return obj;
         }
@@ -915,30 +877,23 @@
           this.setBlockVisibility(object, this.relatedData.count[object])
           return;
         } else if (object === 'attachment_link') {
-          query = fetchDoiAttachment(this.$route.params.id, this.relatedData.page.attachment_link, this.relatedData.paginateBy.attachment_link)
+          query = fetchDoiAttachment(this.$route.params.id, this.relatedData.searchParameters.attachment_link)
         } else if (object === 'doi_related_identifier') {
-          query = fetchDoiRelatedIdentifier(this.$route.params.id, this.relatedData.page.doi_related_identifier, this.relatedData.paginateBy.doi_related_identifier)
+          query = fetchDoiRelatedIdentifier(this.$route.params.id, this.relatedData.searchParameters.doi_related_identifier)
         } else if (object === 'doi_geolocation') {
-          query = fetchDoiGeolocation(this.$route.params.id, this.relatedData.page.doi_geolocation, this.relatedData.paginateBy.doi_geolocation)
+          query = fetchDoiGeolocation(this.$route.params.id, this.relatedData.searchParameters.doi_geolocation)
         } else if (object === 'doi_agent') {
-          query = fetchDoiAgent(this.$route.params.id, this.relatedData.page.doi_agent, this.relatedData.paginateBy.doi_agent)
+          query = fetchDoiAgent(this.$route.params.id, this.relatedData.searchParameters.doi_agent)
         } else if (object === 'doi_date') {
-          query = fetchDoiDate(this.$route.params.id, this.relatedData.page.doi_date, this.relatedData.paginateBy.doi_date)
+          query = fetchDoiDate(this.$route.params.id, this.relatedData.searchParameters.doi_date)
         }
 
         // Dataset and Reference are direct links and do not need extra request.
         if (object !== 'dataset' && object !== 'reference') {
           return new Promise(resolve => {
             query.then(response => {
-              if (response.status === 200) this.relatedData[object] = response.body.results ? response.body.results : [];
-
               this.relatedData.count[object] = response.body.count;
-              this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
-
-              // if (object === 'doi_agent') {
-              //   this.updateDoiCreatorsField(this.relatedData.doi_agent)
-              // }
-
+              this.relatedData[object] = this.handleResponse(response)
               resolve(true)
             });
           });
@@ -956,38 +911,34 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.doi = this.doi.id;
 
-        if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
+        if (this.isNotEmpty(uploadableObject.attachment)) {
           uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.agent_type)) {
+        if (this.isNotEmpty(uploadableObject.agent_type)) {
           uploadableObject.agent_type = uploadableObject.agent_type.id ? uploadableObject.agent_type.id : uploadableObject.agent_type;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.agent)) {
+        if (this.isNotEmpty(uploadableObject.agent)) {
           uploadableObject.agent = uploadableObject.agent.id ? uploadableObject.agent.id : uploadableObject.agent;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.identifier_type)) {
+        if (this.isNotEmpty(uploadableObject.identifier_type)) {
           uploadableObject.identifier_type = uploadableObject.identifier_type.id ? uploadableObject.identifier_type.id : uploadableObject.identifier_type;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.relation_type)) {
+        if (this.isNotEmpty(uploadableObject.relation_type)) {
           uploadableObject.relation_type = uploadableObject.relation_type.id ? uploadableObject.relation_type.id : uploadableObject.relation_type;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.locality)) {
+        if (this.isNotEmpty(uploadableObject.locality)) {
           uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.date_type)) {
+        if (this.isNotEmpty(uploadableObject.date_type)) {
           uploadableObject.date_type = uploadableObject.date_type.id ? uploadableObject.date_type.id : uploadableObject.date_type;
         }
+        if (this.isNotEmpty(uploadableObject.datacite_updated)) uploadableObject.datacite_updated = this.formatDateForUpload(objectToUpload.datacite_updated, false);
+
+        if (this.isNotEmpty(uploadableObject.datacite_created)) uploadableObject.datacite_created = this.formatDateForUpload(objectToUpload.datacite_created, false);
 
         console.log('This object is sent in string format (related_data):')
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
-      },
-
-      fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
-        return new Promise((resolve) => {
-          resolve(fetchDois(params))
-        });
       },
 
       customLabelForReference(option) {
@@ -1009,12 +960,6 @@
           paginateBy: 50,
           orderBy: '-id',
         }
-      },
-
-      setCurrentTimeToDataCiteDateFields() {
-        let UTCString = (new Date()).toUTCString();
-        if (!this.doi.datacite_created) this.doi.datacite_created = UTCString;
-        this.doi.datacite_updated = UTCString;
       },
 
       /**
@@ -1089,6 +1034,15 @@
           }
 
         }
+      },
+
+
+      /* DOI METADATA START */
+
+      setCurrentTimeToDataCiteDateFields() {
+        let UTCString = (new Date()).toUTCString();
+        if (!this.doi.datacite_created) this.doi.datacite_created = UTCString;
+        this.doi.datacite_updated = UTCString;
       },
 
       /**
@@ -1203,6 +1157,9 @@
         });
       }
     }
+
+    /* DOI METADATA END */
+
 
   }
 </script>

@@ -1028,7 +1028,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'sampleSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -1250,38 +1250,38 @@
         let uploadableObject = cloneDeep(objectToUpload)
 
         if (objectToUpload.latitude1 === '')
-          uploadableObject.latitude1 = this.isDefinedAndNotNull(objectToUpload.latitude1) ? objectToUpload.latitude1.toFixed(6) : null
+          uploadableObject.latitude1 = this.isNotEmpty(objectToUpload.latitude1) ? objectToUpload.latitude1.toFixed(6) : null
         if (objectToUpload.longitude1 === '')
-          uploadableObject.longitude1 = this.isDefinedAndNotNull(objectToUpload.longitude1) ? objectToUpload.longitude1.toFixed(6) : null
-        if (this.isDefinedAndNotNull(objectToUpload.palaeontology)) uploadableObject.palaeontology = objectToUpload.palaeontology === true ? '1' : '0';
-        if (this.isDefinedAndNotNull(objectToUpload.analysis)) uploadableObject.analysis = objectToUpload.analysis === true ? '1' : '0';
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
+          uploadableObject.longitude1 = this.isNotEmpty(objectToUpload.longitude1) ? objectToUpload.longitude1.toFixed(6) : null
+        if (this.isNotEmpty(objectToUpload.palaeontology)) uploadableObject.palaeontology = objectToUpload.palaeontology === true ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.analysis)) uploadableObject.analysis = objectToUpload.analysis === true ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
 
-        if (this.isDefinedAndNotNull(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
-        if (this.isDefinedAndNotNull(objectToUpload.depth)) {
+        if (this.isNotEmpty(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
+        if (this.isNotEmpty(objectToUpload.depth)) {
           if (objectToUpload.depth.toString().length > 0) uploadableObject.depth = parseFloat(objectToUpload.depth);
           else uploadableObject.depth = null;
         } else uploadableObject.depth = null;
-        if (this.isDefinedAndNotNull(objectToUpload.depth_interval)) {
+        if (this.isNotEmpty(objectToUpload.depth_interval)) {
           if (objectToUpload.depth_interval.toString().length > 0) uploadableObject.depth_interval = parseFloat(objectToUpload.depth_interval);
           else uploadableObject.depth_interval = null;
         } else uploadableObject.depth_interval = null;
 
         //autocomplete fields
 
-        if (this.isDefinedAndNotNull(objectToUpload.series)) uploadableObject.series = objectToUpload.series.id
-        if (this.isDefinedAndNotNull(objectToUpload.sample_purpose)) uploadableObject.sample_purpose = objectToUpload.sample_purpose.id
-        if (this.isDefinedAndNotNull(objectToUpload.parent_sample)) uploadableObject.parent_sample = objectToUpload.parent_sample.id
-        if (this.isDefinedAndNotNull(objectToUpload.parent_specimen)) uploadableObject.parent_specimen = objectToUpload.parent_specimen.id
-        if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
-        if (this.isDefinedAndNotNull(objectToUpload.stratigraphy)) uploadableObject.stratigraphy = objectToUpload.stratigraphy.id
-        if (this.isDefinedAndNotNull(objectToUpload.lithostratigraphy)) uploadableObject.lithostratigraphy = objectToUpload.lithostratigraphy.id
-        if (this.isDefinedAndNotNull(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id
-        if (this.isDefinedAndNotNull(objectToUpload.classification_rock)) uploadableObject.classification_rock = objectToUpload.classification_rock.id
-        if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
-        if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
-        if (this.isDefinedAndNotNull(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id
-        if (this.isDefinedAndNotNull(objectToUpload.site)) uploadableObject.site = objectToUpload.site.id
+        if (this.isNotEmpty(objectToUpload.series)) uploadableObject.series = objectToUpload.series.id
+        if (this.isNotEmpty(objectToUpload.sample_purpose)) uploadableObject.sample_purpose = objectToUpload.sample_purpose.id
+        if (this.isNotEmpty(objectToUpload.parent_sample)) uploadableObject.parent_sample = objectToUpload.parent_sample.id
+        if (this.isNotEmpty(objectToUpload.parent_specimen)) uploadableObject.parent_specimen = objectToUpload.parent_specimen.id
+        if (this.isNotEmpty(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
+        if (this.isNotEmpty(objectToUpload.stratigraphy)) uploadableObject.stratigraphy = objectToUpload.stratigraphy.id
+        if (this.isNotEmpty(objectToUpload.lithostratigraphy)) uploadableObject.lithostratigraphy = objectToUpload.lithostratigraphy.id
+        if (this.isNotEmpty(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id
+        if (this.isNotEmpty(objectToUpload.classification_rock)) uploadableObject.classification_rock = objectToUpload.classification_rock.id
+        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
+        if (this.isNotEmpty(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
+        if (this.isNotEmpty(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id
+        if (this.isNotEmpty(objectToUpload.site)) uploadableObject.site = objectToUpload.site.id
         if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
           uploadableObject.database = this.databaseId
         }
@@ -1381,25 +1381,25 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.sample = this.sample.id;
 
-        if (this.isDefinedAndNotNull(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
-        if (this.isDefinedAndNotNull(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
-        if (this.isDefinedAndNotNull(uploadableObject.analysis_method)) uploadableObject.analysis_method = uploadableObject.analysis_method.id;
-        if (this.isDefinedAndNotNull(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
-        if (this.isDefinedAndNotNull(uploadableObject.agent_identified)) uploadableObject.agent_identified = uploadableObject.agent_identified.id;
-        if (this.isDefinedAndNotNull(uploadableObject.date)) uploadableObject.date = this.formatDateForUpload(uploadableObject.date)
-        if (this.isDefinedAndNotNull(uploadableObject.date_end)) uploadableObject.date_end = this.formatDateForUpload(uploadableObject.date_end)
-        if (this.isDefinedAndNotNull(uploadableObject.date_identified)) uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified)
-        if (this.isDefinedAndNotNull(uploadableObject.taxon)) uploadableObject.taxon = uploadableObject.taxon.id;
-        if (this.isDefinedAndNotNull(uploadableObject.storage)) uploadableObject.storage = uploadableObject.storage.id;
-        if (this.isDefinedAndNotNull(uploadableObject.analysis)) uploadableObject.analysis = uploadableObject.analysis.id;
-        if (this.isDefinedAndNotNull(uploadableObject.preparation)) uploadableObject.preparation = uploadableObject.preparation.id;
+        if (this.isNotEmpty(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
+        if (this.isNotEmpty(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
+        if (this.isNotEmpty(uploadableObject.analysis_method)) uploadableObject.analysis_method = uploadableObject.analysis_method.id;
+        if (this.isNotEmpty(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
+        if (this.isNotEmpty(uploadableObject.agent_identified)) uploadableObject.agent_identified = uploadableObject.agent_identified.id;
+        if (this.isNotEmpty(uploadableObject.date)) uploadableObject.date = this.formatDateForUpload(uploadableObject.date)
+        if (this.isNotEmpty(uploadableObject.date_end)) uploadableObject.date_end = this.formatDateForUpload(uploadableObject.date_end)
+        if (this.isNotEmpty(uploadableObject.date_identified)) uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified)
+        if (this.isNotEmpty(uploadableObject.taxon)) uploadableObject.taxon = uploadableObject.taxon.id;
+        if (this.isNotEmpty(uploadableObject.storage)) uploadableObject.storage = uploadableObject.storage.id;
+        if (this.isNotEmpty(uploadableObject.analysis)) uploadableObject.analysis = uploadableObject.analysis.id;
+        if (this.isNotEmpty(uploadableObject.preparation)) uploadableObject.preparation = uploadableObject.preparation.id;
 
         // console.log(JSON.stringify(uploadableObject));
         return JSON.stringify(uploadableObject)
       },
 
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchSamples(params, this.currentUser, this.databaseId))
         });

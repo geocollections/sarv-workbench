@@ -926,11 +926,10 @@
     "dataciteMetadataUpdateFailed": "DataCite metadata update failed!",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
-      "files": "Files",
+      "attachment_link": "Files",
       "doi_related_identifier": "Related identifiers",
       "doi_geolocation": "Localities",
-      "doi_date": "Linked dates",
-      "attachment_link": ""
+      "doi_date": "Linked dates"
     }
   },
   "locality": {

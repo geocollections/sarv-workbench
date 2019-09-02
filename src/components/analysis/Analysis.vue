@@ -480,7 +480,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'analysisSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -671,22 +671,22 @@
 
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private == 1 ? '1' : '0';
-        if (this.isDefinedAndNotNull(objectToUpload.date)) uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
-        if (this.isDefinedAndNotNull(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private == 1 ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.date)) uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
+        if (this.isNotEmpty(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
 
         // Autocomplete fields
-        if (this.isDefinedAndNotNull(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id
-        if (this.isDefinedAndNotNull(objectToUpload.analysis_method)) uploadableObject.analysis_method = objectToUpload.analysis_method.id
-        if (this.isDefinedAndNotNull(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id
-        if (this.isDefinedAndNotNull(objectToUpload.lab)) uploadableObject.lab = objectToUpload.lab.id
-        if (this.isDefinedAndNotNull(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id
-        if (this.isDefinedAndNotNull(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
-        if (this.isDefinedAndNotNull(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
-        if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
+        if (this.isNotEmpty(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id
+        if (this.isNotEmpty(objectToUpload.analysis_method)) uploadableObject.analysis_method = objectToUpload.analysis_method.id
+        if (this.isNotEmpty(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id
+        if (this.isNotEmpty(objectToUpload.lab)) uploadableObject.lab = objectToUpload.lab.id
+        if (this.isNotEmpty(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id
+        if (this.isNotEmpty(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
+        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
+        if (this.isNotEmpty(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
 
-        if (this.isDefinedAndNotNull(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
-        if (this.isDefinedAndNotNull(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
+        if (this.isNotEmpty(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
+        if (this.isNotEmpty(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
 
@@ -729,7 +729,7 @@
         if (type === undefined) {
           console.log(obj)
 
-          if (this.isDefinedAndNotNull(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
+          if (this.isNotEmpty(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
 
 
           return obj;
@@ -773,7 +773,7 @@
       },
 
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchAnalyses(params, this.currentUser, this.databaseId))
         });

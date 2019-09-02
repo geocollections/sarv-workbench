@@ -63,7 +63,7 @@
 
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.analysis"
-                               v-if="isDefinedAndNotEmpty(relatedData.analysis)"
+                               v-if="isNotEmpty(relatedData.analysis)"
                                id="analysis"
                                :options="relatedData.analysis"
                                track-by="id"
@@ -125,7 +125,7 @@
 
             <td>
               <vue-multiselect v-model="relatedData.insert.preparation.analysis"
-                               v-if="isDefinedAndNotEmpty(relatedData.analysis)"
+                               v-if="isNotEmpty(relatedData.analysis)"
                                id="analysis_insert"
                                :options="relatedData.analysis"
                                track-by="id"

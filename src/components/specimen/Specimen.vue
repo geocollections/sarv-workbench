@@ -25,7 +25,7 @@
                                track-by="id"
                                :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
-                               :class="isDefinedAndNotNull(specimen.fossil) ? 'valid' : 'invalid'"
+                               :class="isNotEmpty(specimen.fossil) ? 'valid' : 'invalid'"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option[commonLabel] }}</strong>
@@ -664,7 +664,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('idSpecimen') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('idSpecimen') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'specimenSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -846,13 +846,13 @@
           fetchListHistoryType().then(response => this.autocomplete.list_history_type = this.handleResponse(response));
 
           // Load Related Data which is in tabs
-          this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
+          this.relatedTabs.forEach(tab => {
+            this.loadRelatedData(tab.name);
           });
 
           this.$on('tab-changed', this.setTab);
 
-          this.$emit('related-data-info', this.tabs);
+          this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
           this.setActiveTab('specimen_identification')
         }
@@ -960,26 +960,26 @@
         delete uploadableObject.specimen_nr;
         if (!this.$route.meta.isEdit) this.$localStorage.set('specimen', objectToUpload)
 
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
-        if (this.isDefinedAndNotNull(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
+        if (this.isNotEmpty(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
 
         // Autocomplete fields
-        if (this.isDefinedAndNotNull(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id;
-        if (this.isDefinedAndNotNull(objectToUpload.fossil)) uploadableObject.fossil = objectToUpload.fossil.id;
-        if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id;
-        if (this.isDefinedAndNotNull(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id;
-        if (this.isDefinedAndNotNull(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id;
-        if (this.isDefinedAndNotNull(objectToUpload.stratigraphy)) uploadableObject.stratigraphy = objectToUpload.stratigraphy.id;
-        if (this.isDefinedAndNotNull(objectToUpload.lithostratigraphy)) uploadableObject.lithostratigraphy = objectToUpload.lithostratigraphy.id;
-        if (this.isDefinedAndNotNull(objectToUpload.presence)) uploadableObject.presence = objectToUpload.presence.id;
-        if (this.isDefinedAndNotNull(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id;
-        if (this.isDefinedAndNotNull(objectToUpload.classification)) uploadableObject.classification = objectToUpload.classification.id;
-        if (this.isDefinedAndNotNull(objectToUpload.accession)) uploadableObject.accession = objectToUpload.accession.id;
-        if (this.isDefinedAndNotNull(objectToUpload.deaccession)) uploadableObject.deaccession = objectToUpload.deaccession.id;
-        if (this.isDefinedAndNotNull(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id;
-        if (this.isDefinedAndNotNull(objectToUpload.status)) uploadableObject.status = objectToUpload.status.id;
-        if (this.isDefinedAndNotNull(objectToUpload.original_status)) uploadableObject.original_status = objectToUpload.original_status.id;
-        if (this.isDefinedAndNotNull(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id;
+        if (this.isNotEmpty(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id;
+        if (this.isNotEmpty(objectToUpload.fossil)) uploadableObject.fossil = objectToUpload.fossil.id;
+        if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id;
+        if (this.isNotEmpty(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id;
+        if (this.isNotEmpty(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id;
+        if (this.isNotEmpty(objectToUpload.stratigraphy)) uploadableObject.stratigraphy = objectToUpload.stratigraphy.id;
+        if (this.isNotEmpty(objectToUpload.lithostratigraphy)) uploadableObject.lithostratigraphy = objectToUpload.lithostratigraphy.id;
+        if (this.isNotEmpty(objectToUpload.presence)) uploadableObject.presence = objectToUpload.presence.id;
+        if (this.isNotEmpty(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id;
+        if (this.isNotEmpty(objectToUpload.classification)) uploadableObject.classification = objectToUpload.classification.id;
+        if (this.isNotEmpty(objectToUpload.accession)) uploadableObject.accession = objectToUpload.accession.id;
+        if (this.isNotEmpty(objectToUpload.deaccession)) uploadableObject.deaccession = objectToUpload.deaccession.id;
+        if (this.isNotEmpty(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id;
+        if (this.isNotEmpty(objectToUpload.status)) uploadableObject.status = objectToUpload.status.id;
+        if (this.isNotEmpty(objectToUpload.original_status)) uploadableObject.original_status = objectToUpload.original_status.id;
+        if (this.isNotEmpty(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id;
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
 
@@ -1014,14 +1014,14 @@
 
       fillRelatedDataAutocompleteFields(obj) {
 
-        if (this.isDefinedAndNotNull(obj.taxon)) obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
-        if (this.isDefinedAndNotNull(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent };
-        if (this.isDefinedAndNotNull(obj.reference)) obj.reference = { id: obj.reference, reference: obj.reference__reference };
-        if (this.isDefinedAndNotNull(obj.type)) obj.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
-        if (this.isDefinedAndNotNull(obj.rock)) obj.rock = { id: obj.rock, name: obj.rock__name, name_en: obj.rock__name_en };
-        if (this.isDefinedAndNotNull(obj.unit)) obj.unit = {  id: obj.unit, value: obj.unit__value, value_en: obj.unit__value_en };
-        if (this.isDefinedAndNotNull(obj.original_filename)) obj.attachment = { id: obj.id, original_filename: obj.original_filename };
-        if (this.isDefinedAndNotNull(obj.storage)) obj.storage = { id: obj.storage, location: obj.storage__location };
+        if (this.isNotEmpty(obj.taxon)) obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
+        if (this.isNotEmpty(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent };
+        if (this.isNotEmpty(obj.reference)) obj.reference = { id: obj.reference, reference: obj.reference__reference };
+        if (this.isNotEmpty(obj.type)) obj.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
+        if (this.isNotEmpty(obj.rock)) obj.rock = { id: obj.rock, name: obj.rock__name, name_en: obj.rock__name_en };
+        if (this.isNotEmpty(obj.unit)) obj.unit = {  id: obj.unit, value: obj.unit__value, value_en: obj.unit__value_en };
+        if (this.isNotEmpty(obj.original_filename)) obj.attachment = { id: obj.id, original_filename: obj.original_filename };
+        if (this.isNotEmpty(obj.storage)) obj.storage = { id: obj.storage, location: obj.storage__location };
 
         return obj
       },
@@ -1065,40 +1065,40 @@
 
         // Todo: Use foreach because DRY basically
 
-        if (this.isDefinedAndNotNull(uploadableObject.taxon)) {
+        if (this.isNotEmpty(uploadableObject.taxon)) {
           uploadableObject.taxon = uploadableObject.taxon.id ? uploadableObject.taxon.id : uploadableObject.taxon;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.agent)) {
+        if (this.isNotEmpty(uploadableObject.agent)) {
           uploadableObject.agent = uploadableObject.agent.id ? uploadableObject.agent.id : uploadableObject.agent;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.reference)) {
+        if (this.isNotEmpty(uploadableObject.reference)) {
           uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.date_identified)) {
+        if (this.isNotEmpty(uploadableObject.date_identified)) {
           uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified);
         }
-        if (this.isDefinedAndNotNull(uploadableObject.type)) {
+        if (this.isNotEmpty(uploadableObject.type)) {
           uploadableObject.type = uploadableObject.type.id ? uploadableObject.type.id : uploadableObject.type;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.rock)) {
+        if (this.isNotEmpty(uploadableObject.rock)) {
           uploadableObject.rock = uploadableObject.rock.id ? uploadableObject.rock.id : uploadableObject.rock;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.unit)) {
+        if (this.isNotEmpty(uploadableObject.unit)) {
           uploadableObject.unit = uploadableObject.unit.id ? uploadableObject.unit.id : uploadableObject.unit;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.date)) {
+        if (this.isNotEmpty(uploadableObject.date)) {
           uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
         }
-        if (this.isDefinedAndNotNull(uploadableObject.date_end)) {
+        if (this.isNotEmpty(uploadableObject.date_end)) {
           uploadableObject.date_end = this.formatDateForUpload(uploadableObject.date_end);
         }
-        if (this.isDefinedAndNotNull(uploadableObject.attachment)) {
+        if (this.isNotEmpty(uploadableObject.attachment)) {
           uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.storage)) {
+        if (this.isNotEmpty(uploadableObject.storage)) {
           uploadableObject.storage = uploadableObject.storage.id ? uploadableObject.storage.id : uploadableObject.storage;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.analysis_method)) {
+        if (this.isNotEmpty(uploadableObject.analysis_method)) {
           uploadableObject.analysis_method = uploadableObject.analysis_method.id ? uploadableObject.analysis_method.id : uploadableObject.analysis_method;
         }
 
@@ -1108,7 +1108,7 @@
       },
 
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchSpecimens(params, this.databaseId))
         });

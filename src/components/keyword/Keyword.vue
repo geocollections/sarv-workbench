@@ -17,7 +17,7 @@
           <div class="row">
             <div class="col-md-4">
               <label :for="`keyword`">{{ $t('keyword.keyword') }}:</label>
-              <b-form-input id="name" v-model="keyword.keyword" :state="isDefinedAndNotNull(keyword.keyword)" type="text" maxlength="100"></b-form-input>
+              <b-form-input id="name" v-model="keyword.keyword" :state="isNotEmpty(keyword.keyword)" type="text" maxlength="100"></b-form-input>
             </div>
 
             <div class="col-md-4">
@@ -28,7 +28,7 @@
                                track-by="id"
                                :label="commonLabel"
                                :placeholder="$t('add.inputs.autocomplete')"
-                               :class="isDefinedAndNotNull(keyword.language) ? 'valid' : 'invalid'"
+                               :class="isNotEmpty(keyword.language) ? 'valid' : 'invalid'"
                                :allow-empty="false"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
@@ -47,7 +47,7 @@
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.keyword_category"
                                :options="autocomplete.keyword_category"
-                               :class="isDefinedAndNotNull(keyword.keyword_category) ? 'valid' : 'invalid'"
+                               :class="isNotEmpty(keyword.keyword_category) ? 'valid' : 'invalid'"
                                @search-change="autocompleteKeywordCategorySearch"
                                :internal-search="false"
                                :preserve-search="true"
@@ -121,7 +121,7 @@
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
         let params = (searchHistory && searchHistory !== 'fallbackValue') ? searchHistory : this.searchParameters;
-        // let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'keywordSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -209,9 +209,9 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
 
-        if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
-        if (this.isDefinedAndNotNull(objectToUpload.keyword_category)) uploadableObject.keyword_category = objectToUpload.keyword_category.id;
-        if (this.isDefinedAndNotNull(objectToUpload.related_keyword)) uploadableObject.related_keyword = objectToUpload.related_keyword.id;
+        if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
+        if (this.isNotEmpty(objectToUpload.keyword_category)) uploadableObject.keyword_category = objectToUpload.keyword_category.id;
+        if (this.isNotEmpty(objectToUpload.related_keyword)) uploadableObject.related_keyword = objectToUpload.related_keyword.id;
 
         console.log('This object is sent in string format:');
         console.log(uploadableObject);
@@ -226,7 +226,7 @@
 
       fetchList(localStorageData) {
         console.log(localStorageData)
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchKeywords(params))
         });

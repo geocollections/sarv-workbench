@@ -927,11 +927,10 @@
     "dataciteMetadataUpdateFailed": "DataCite metadata uuendus ebaõnnestus!",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
-      "files": "Failid",
+      "attachment_link": "Failid",
       "doi_related_identifier": "Seotud identifikaatorid",
       "doi_geolocation": "Lokaliteedid",
-      "doi_date": "Seotud kuupäevad",
-      "attachment_link": ""
+      "doi_date": "Seotud kuupäevad"
     }
   },
   "locality": {

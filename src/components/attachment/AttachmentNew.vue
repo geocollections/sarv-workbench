@@ -48,7 +48,7 @@
                                    :placeholder="$t('add.inputs.autocomplete')"
                                    :loading="autocomplete.loaders.agent"
                                    :options="autocomplete.agent"
-                                   :class="{ valid:  isDefinedAndNotNull(attachment.author), invalid: ! isDefinedAndNotNull(attachment.author) }"
+                                   :class="{ valid:  isNotEmpty(attachment.author), invalid: ! isNotEmpty(attachment.author) }"
                                    @search-change="autocompleteAgentSearch"
                                    :internal-search="false"
                                    :preserve-search="true"
@@ -64,7 +64,7 @@
 
                 <div class="col-md-4">
                   <label :for="`author_free`">{{ $t('attachment.author_free') }}:</label>
-                  <b-form-input id="author_free" v-model="attachment.author_free" :state="isDefinedAndNotNull(attachment.author_free) ||  isDefinedAndNotNull(attachment.author)"
+                  <b-form-input id="author_free" v-model="attachment.author_free" :state="isNotEmpty(attachment.author_free) ||  isNotEmpty(attachment.author)"
                                 type="text"></b-form-input>
                 </div>
 
@@ -80,7 +80,7 @@
                                        :placeholder="$t('add.inputs.autocomplete')"
                                        :loading="autocomplete.loaders.imageset"
                                        :options="autocomplete.imageset"
-                                       :class="{ valid: isDefinedAndNotNull(attachment.imageset), invalid: !isDefinedAndNotNull(attachment.imageset) }"
+                                       :class="{ valid: isNotEmpty(attachment.imageset), invalid: !isNotEmpty(attachment.imageset) }"
                                        @search-change="autocompleteImagesetSearch"
                                        :internal-search="false"
                                        :preserve-search="true"
@@ -228,7 +228,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('filename') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('filename') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'attachmentSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -380,11 +380,11 @@
 
         if (!this.$route.meta.isEdit) this.$localStorage.set('attachment', objectToUpload)
 
-        if (this.isDefinedAndNotNull(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
-        // if (this.isDefinedAndNotNull(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
+        // if (this.isNotEmpty(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
 
         // Autocomplete fields
-        if (this.isDefinedAndNotNull(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id;
+        if (this.isNotEmpty(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id;
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
 
@@ -404,7 +404,7 @@
 
       fillRelatedDataAutocompleteFields(obj) {
 
-        if (this.isDefinedAndNotNull(obj.taxon)) obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
+        if (this.isNotEmpty(obj.taxon)) obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
 
         return obj
       },
@@ -431,10 +431,10 @@
 
         // Todo: Use foreach because DRY basically
 
-        if (this.isDefinedAndNotNull(uploadableObject.taxon)) {
+        if (this.isNotEmpty(uploadableObject.taxon)) {
           uploadableObject.taxon = uploadableObject.taxon.id ? uploadableObject.taxon.id : uploadableObject.taxon;
         }
-        if (this.isDefinedAndNotNull(uploadableObject.date_identified)) {
+        if (this.isNotEmpty(uploadableObject.date_identified)) {
           uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified);
         }
 

@@ -22,12 +22,12 @@
             <div class="col-md-3">
               <label :for="`reference`">{{ $t('reference.reference') }}:</label>
               <b-form-input id="reference" v-model="reference.reference"
-                            :state="isDefinedAndNotNull(reference.reference)" type="text"></b-form-input>
+                            :state="isNotEmpty(reference.reference)" type="text"></b-form-input>
             </div>
 
             <div class="col-md-2">
               <label :for="`year`">{{ $t('reference.year') }}:</label>
-              <b-form-input id="year" v-model="reference.year" :state="isDefinedAndNotNull(reference.year)"
+              <b-form-input id="year" v-model="reference.year" :state="isNotEmpty(reference.year)"
                             type="number"></b-form-input>
             </div>
 
@@ -35,7 +35,7 @@
 
             <div class="col-sm-7">
               <label :for="`author`">{{ $t('reference.author') }}:</label>
-              <b-form-input id="author" v-model="reference.author" :state="isDefinedAndNotNull(reference.author)"
+              <b-form-input id="author" v-model="reference.author" :state="isNotEmpty(reference.author)"
                             type="text"></b-form-input>
             </div>
           </div>
@@ -46,7 +46,7 @@
             <div class="col-sm-12">
               <label :for="`title`">{{ $t('reference.title') }}:</label>
               <b-form-textarea :key="componentKey" id="title" v-model="reference.title"
-                               :state="isDefinedAndNotNull(reference.title)" type="text"
+                               :state="isNotEmpty(reference.title)" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
           </div>
@@ -196,7 +196,7 @@
 
                 <div class="mx-3">
                   <label :for="`check-doi`" style="visibility: hidden; display: block;">DOI:</label>
-                  <b-button id="check-doi" variant="info" :disabled="!isDefinedAndNotNull(reference.doi)" @click="checkDoi">
+                  <b-button id="check-doi" variant="info" :disabled="!isNotEmpty(reference.doi)" @click="checkDoi">
                     {{ $t('reference.checkDoi') }}
                   </b-button>
                 </div>
@@ -338,7 +338,7 @@
 
             <div class="mr-3 my-1 align-self-end">
               <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
-                      :disabled="!isDefinedAndNotEmpty(relatedData.keyword)"
+                      :disabled="!isNotEmpty(relatedData.keyword)"
                       @click="relatedData.keyword = null">
                 <font-awesome-icon icon="trash-alt"></font-awesome-icon>
               </button>
@@ -445,7 +445,7 @@
 
             <div class="mr-3 my-1 align-self-end">
               <button class="btn btn-outline-danger"
-                      :disabled="!isDefinedAndNotEmpty(relatedData.attachment)"
+                      :disabled="!isNotEmpty(relatedData.attachment)"
                       @click="relatedData.attachment = []">
                 <font-awesome-icon icon="trash-alt"></font-awesome-icon>
               </button>
@@ -493,7 +493,7 @@
 
             <div class="mr-3 my-1 align-self-end">
               <button class="btn btn-outline-danger"
-                      :disabled="!isDefinedAndNotEmpty(relatedData.library)"
+                      :disabled="!isNotEmpty(relatedData.library)"
                       @click="relatedData.library = []">
                 <font-awesome-icon icon="trash-alt"></font-awesome-icon>
               </button>
@@ -670,7 +670,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isDefinedAndNotNull(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'referenceSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -813,7 +813,6 @@
               this.forceRerender()
               this.$emit('data-loaded', this.reference)
               this.sendingData = false;
-              this.getListRecords('reference')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
@@ -911,9 +910,9 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
 
-        if (this.isDefinedAndNotNull(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
-        if (this.isDefinedAndNotNull(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
-        if (this.isDefinedAndNotNull(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id
+        if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
+        if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
+        if (this.isNotEmpty(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id
         if (objectToUpload.is_private !== null) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (objectToUpload.is_oa !== null) uploadableObject.is_oa = objectToUpload.is_oa === true ? '1' : '0';
         if (objectToUpload.is_locked !== null) uploadableObject.is_locked = objectToUpload.is_locked === true ? '1' : '0';
@@ -926,7 +925,7 @@
         uploadableObject.related_data.locality = this.relatedData.locality;
         uploadableObject.related_data.library = cloneDeep(this.relatedData.library);
 
-        if (this.isDefinedAndNotNull(this.relatedData.library)) {
+        if (this.isNotEmpty(this.relatedData.library)) {
           uploadableObject.related_data.library.forEach((library, index) => {
             uploadableObject.related_data.library[index] = {
               id: library.library ? library.library : library.id
@@ -975,7 +974,7 @@
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.reference = this.reference.id
 
-        if (this.isDefinedAndNotNull(uploadableObject.locality)) {
+        if (this.isNotEmpty(uploadableObject.locality)) {
           uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
           // uploadableObject.reference = parseInt(this.$route.params.id)
         }
@@ -987,7 +986,7 @@
 
 
       fetchList(localStorageData) {
-        let params = this.isDefinedAndNotNull(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
+        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
         return new Promise((resolve) => {
           resolve(fetchReferences(params))
         });
@@ -1142,14 +1141,14 @@
       /**
        * Returns boolean value whether to show DOI button or not.
        *
-       * (this.isDefinedAndNotNull(this.reference.type) && this.reference.type.id > 3) --> Checks if type exists and id is higher than 3
+       * (this.isNotEmpty(this.reference.type) && this.reference.type.id > 3) --> Checks if type exists and id is higher than 3
        * this.isDefinedAndNotNullAndNotEmptyString(this.reference.doi) --> Checks if DOI exists
        * this.isUserAllowedTo('add', 'doi') --> Checks if user has rights to add to doi table
        * (this.validate('reference') === 1) --> Checks if reference required fields are filled
        */
       showDoiButton() {
-        return this.isDefinedAndNotNull(this.reference.type) && this.reference.type.id > 3
-          && this.isDefinedAndNotNullAndNotEmptyString(this.reference.doi)
+        return this.isNotEmpty(this.reference.type) && this.reference.type.id > 3
+          && this.isNotEmpty(this.reference.doi)
           && this.$_permissionsMixin_isUserAllowedTo('add', 'doi') && this.validate('reference') === 1
       },
 
