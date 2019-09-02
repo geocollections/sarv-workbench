@@ -52,7 +52,7 @@ export default {
 
   FETCH_DOIS: ({ commit, state }) => {
     // state.activeSearchParams.search.paginateBy = 10;
-    return fetchDois(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchDois(state.activeSearchParams.search, state.databaseId).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
 
   FETCH_SPECIMENS: ({ commit, state }) => {

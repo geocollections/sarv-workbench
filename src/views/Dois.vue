@@ -48,6 +48,7 @@
 <script>
   import ListModuleCore from "./ListModuleCore";
   import {fetchDois} from "../assets/js/api/apiCalls";
+  import {mapState} from "vuex";
 
   export default {
     components: {
@@ -79,10 +80,14 @@
       }
     },
 
+    computed: {
+      ...mapState(["databaseId"])
+    },
+
     methods: {
       fetchDois() {
         return new Promise((resolve) => {
-          resolve(fetchDois(this.searchParameters))
+          resolve(fetchDois(this.searchParameters, this.databaseId))
         });
       },
       searchParametersChanged(newParams) {

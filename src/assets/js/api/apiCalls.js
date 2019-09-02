@@ -557,7 +557,7 @@ export function fetchChangeLibraryState(id, data) {
  *** DOI START ***
  *****************/
 
-export function fetchDois(data) {
+export function fetchDois(data, databaseId) {
   const fields = 'id,identifier,creators,publication_year,title,resource_type__value,is_private';
   let searchFields = '';
   if (data.identifier !== null && data.identifier.trim().length > 0) {
@@ -574,6 +574,10 @@ export function fetchDois(data) {
 
   if (data.title !== null && data.title.trim().length > 0) {
     searchFields += `&title__icontains=${data.title}`
+  }
+
+  if (typeof databaseId !== 'undefined' && databaseId !== null) {
+    searchFields += `&database__id=${databaseId}`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
