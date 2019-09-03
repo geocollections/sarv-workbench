@@ -169,18 +169,19 @@
     },
     mixins: [formManipulation, autocompleteMixin],
     watch: {
-      // 'relatedData.insert.doi_agent.agent': {
-      //   handler: function (newVal, oldVal) {
-      //     if (this.isNotEmpty(newVal)) {
-      //       //  Adding NAME, AFFILIATION and AGENT_TYPE__VALUE
-      //       console.log(newVal)
-      //       this.relatedData.insert.doi_agent.name = newVal.agent
-      //       this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en
-      //       this.$set(this.relatedData.insert.doi_agent, 'agent_type', { id: 1, value: 'Creator' })
-      //     }
-      //   },
-      //   deep: true
-      // },
+      'relatedData.insert.doi_agent.agent': {
+        handler: function (newVal, oldVal) {
+          if (this.isNotEmpty(newVal)) {
+            // Todo: Automatically add name, orcid and affiliation, creator for default
+            //  Adding NAME, AFFILIATION and AGENT_TYPE__VALUE
+            console.log(newVal)
+            this.relatedData.insert.doi_agent.name = newVal.agent
+            this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en
+            this.$set(this.relatedData.insert.doi_agent, 'agent_type', { id: 1, value: 'Creator' })
+          }
+        },
+        deep: true
+      },
     },
   }
 </script>

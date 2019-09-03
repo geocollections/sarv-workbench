@@ -734,7 +734,12 @@
             attachment_link: {},
             doi_related_identifier: {},
             doi_geolocation: {},
-            doi_agent: {},
+            doi_agent: {
+              agent_type: {
+                id: 1,
+                value: 'Creator'
+              }
+            },
             doi_date: {}
           },
           searchParameters: {

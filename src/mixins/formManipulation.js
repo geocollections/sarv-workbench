@@ -526,6 +526,7 @@ const formManipulation = {
             // Reload related data in current tab
             this.loadRelatedData(tab);
             // Clear previously inserted related data
+            // Todo: Default values for insert
             this.relatedData.insert[tab] = {};
           });
 
