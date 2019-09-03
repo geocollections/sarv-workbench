@@ -311,7 +311,7 @@ const formManipulation = {
           author: this.currentUser.id,
           date_created: this.formatDateForUpload(new Date()),
           is_private: 1,
-          related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
+          related_data: {[attach_link]: [{id: this[relatedObject].id}]}
         }));
 
         formData.append('file' + [index], file);
@@ -371,6 +371,7 @@ const formManipulation = {
       }
 
     },
+
     addRelationBetweenAnyObjectAndAttachment(attachmentId, object, createRelationWith = null) {
       let formData = new FormData()
       let uploadableObject = {
@@ -454,7 +455,8 @@ const formManipulation = {
     },
 
     /**
-     * Removes unnecessary fields from object like Doi
+     * Removes unnecessary fields from object.
+     *
      * @param object - data object from api, for example doi, specimen etc.
      * @param copyFields - Array of fields which will be sent to API using add or change request.
      * @returns object, which has unnecessary fields removed.
@@ -498,75 +500,134 @@ const formManipulation = {
     },
 
 
-    /** RELATED DATA STARTS**/
-    /** related data is child component for such classes as locality, sample... and all methods from those classes
-     * should be called as $parent but you can listen event in parent classes ex. this.$root.$on('related-data-added',this.addRelatedData);**/
+    /**
+     * Adds related data. Changing related data in edit view will send an add request to API.
+     * In add view and for DOI, data will be sent in related_data field.
+     *
+     * @param {string} tab - Current active tab which is being changed.
+     */
+    addRelatedData(tab) {
+      if (!this.isNotEmpty(tab)) tab = this.activeTab;
 
-    editRelatedData(object) {
-      if (!this.isNotEmpty(object.new)) return;
-      let formData = new FormData();
+      if (this.isNotEmpty(this.relatedData.insert[tab])) {
 
-      //CHECK REQUIRED FIELDS !!!
-      let type = this.activeTab;
-      if (this.checkRequiredFields(type, object.new)) {
+        if (this.$route.meta.isEdit && this.$route.meta.object !== 'doi') {
+          let formData = new FormData();
+
+          // Todo: CheckRequiredFields is not used anywhere, should change it to validate() and use requiredFields field in component data object.
+          if (this.checkRequiredFields(tab, this.relatedData.insert[tab])) {
+            toastError({text: this.$t('messages.checkForm')});
+            return;
+          }
+
+          formData.append('data', this.formatRelatedData(this.relatedData.insert[tab]));
+          this.saveData(tab, formData, 'add/' + tab + '/').then(isSuccessfullySaved => {
+
+            // Reload related data in current tab
+            this.loadRelatedData(tab);
+            // Clear previously inserted related data
+            this.relatedData.insert[tab] = {};
+          });
+
+
+        } else {
+          this.removeUnnecessaryFields(this.relatedData.insert[tab], this.relatedData.copyFields[tab]);
+          this.relatedData[tab].push(this.unformatRelatedDataAutocompleteFields(this.relatedData.insert[tab]))
+          this.relatedData.insert[tab] = {};
+        }
+
+      } else {
         toastError({text: this.$t('messages.checkForm')});
-        return
       }
-
-      let editableObject = this.removeUnnecessaryFields(object.new, this.relatedData.copyFields[type]);
-      formData.append('data', this.formatRelatedData(editableObject));
-      this.loadRelatedData(type).then(response => {
-        // this allows to set edit mode for multiple row
-        this.$set(object, 'editMode', false)
-        // it is required to edit only one record
-        this.editMode = false;
-      });
-      this.saveData(type, formData, 'change/' + type + '/' + object.id).then(isSuccessfullySaved => {
-        //  UPDATE ROW DATA
-        // object = cloneDeep(object.new)
-        // this.$set(object, 'new', {});
-        // RELOAD RELATED DATA IN CURRENT TAB
-        this.loadRelatedData(type).then(response => {
-          console.log(response)
-          this.$set(object, 'editMode', false)
-        });
-      });
     },
 
-    addRelatedData(type, isTab = false) {
-      if (!this.isNotEmpty(this.relatedData.insert[this.activeTab])) return;
-      let formData = new FormData();
-      if (type === undefined) type = this.activeTab;
 
-      // TypeError on TAB modal emit (because it gets triggered multiple times (shouldn't use root emitting and stuff, better use vuex for theese kinds of events))
-      if (this.checkRequiredFields(type, this.relatedData.insert[type])) {
-        toastError({text: this.$t('messages.checkForm')});
-        return
+    /**
+     * Main function is to edit related data. Firstly if allowRemove is enabled it disables it.
+     * Secondly on click it enables editMode where user can edit data.
+     * After data is changed user can click the button to send new data to API. API request is only done for edit views,
+     * for add views and DOI, data is always sent in related_data field.
+     *
+     * @param {object} entity - item from related data array.
+     * @param {int} index -  item's index in array which is used to replace it with new one.
+     */
+    editRow(entity, index) {
+      if (entity.allowRemove) {
+        this.$set(entity, 'allowRemove', false);
+      } else if (!entity.editMode) {
+        this.$set(entity, 'editMode', true);
+        this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
+      } else {
+        if (this.$route.meta.isEdit && this.$route.meta.object !== 'doi') {
+          if (this.isNotEmpty(entity.new)) {
+            let formData = new FormData();
+            if (this.checkRequiredFields(this.activeTab, entity.new)) {
+              toastError({text: this.$t('messages.checkForm')});
+              return;
+            }
+
+            let editableObject = this.removeUnnecessaryFields(entity.new, this.relatedData.copyFields[this.activeTab]);
+            formData.append('data', this.formatRelatedData(editableObject));
+
+            // Todo: Check saveData method and maybe refactor
+            this.saveData(this.activeTab, formData, 'change/' + this.activeTab + '/' + entity.id).then(isSuccessfullySaved => {
+              //  UPDATE ROW DATA
+              this.$set(this.relatedData[this.activeTab], index, this.unformatRelatedDataAutocompleteFields(entity.new, entity.id));
+              this.$set(entity, 'editMode', false);
+              this.$set(entity, 'new', {});
+            });
+
+          }
+        } else {
+          if (this.isNotEmpty(entity.new)) {
+            if (this.checkRequiredFields(this.activeTab, entity.new)) {
+              toastError({text: this.$t('messages.checkForm')});
+              return;
+            }
+
+            this.removeUnnecessaryFields(entity.new, this.relatedData.copyFields[this.activeTab]);
+            this.$set(this.relatedData[this.activeTab], index, this.unformatRelatedDataAutocompleteFields(entity.new, entity.id))
+            this.$set(entity, 'editMode', false);
+            this.$set(entity, 'new', {});
+          }
+        }
       }
-
-      formData.append('data', this.formatRelatedData(this.relatedData.insert[type]));
-      this.saveData(type, formData, 'add/' + type + '/').then(isSuccessfullySaved => {
-        // RELOAD RELATED DATA IN CURRENT TAB
-        this.loadRelatedData(type);
-        // CLEAR PREVIOUS INSERT DATA
-        this.relatedData.insert[this.activeTab] = {};
-      });
     },
 
-    editRow(entity) {
-      if (this.editMode === true) return;
-      // console.log("EDIT RECORD" + JSON.stringify(entity));
-      this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
-      this.$set(entity, 'editMode', !entity.editMode)
-      this.editMode = true;
-    },
-    allowRemove(entity) {
-      this.$set(entity, 'allowRemove', true)
-    },
-    removeRow(entity) {
-      console.log("DELETE RECORD" + JSON.stringify(entity))
+    /**
+     * Main function is to remove item from related data.
+     * First of all if editMode is activated then it disables it.
+     * Secondly if user presses delete button then allowRemove parameter is activated
+     * and user can see which row can be deleted, this is because of accidental misclicks.
+     * Lastly if isEdit then related data should be sent via API with DELETE request (this does not apply to DOI).
+     * Add view must always send data via related_data field, because main object doesn't exist in database yet.
+     *
+     * @param {object} entity - item from related data array.
+     * @param {int} index -  item's index in array which is used to remove it from array.
+     */
+    removeRow(entity, index) {
+      if (entity.editMode) {
+        this.$set(entity, 'editMode', false);
+      } else if (!entity.allowRemove) {
+        this.$set(entity, 'allowRemove', true);
+      } else {
+        if (this.$route.meta.isEdit) {
+          // Doi is special case and using only related data
+          if (this.$route.meta.object === 'doi') {
+            this.relatedData[this.activeTab].splice(index, 1);
+            toastSuccess({text: `Removed record with an ID: ${entity.id} from ${this.activeTab}`});
+          } else {
+            // Todo: Else send remove request to api
+            console.log('DELETE: ' + JSON.stringify(entity))
+          }
+        } else {
+          this.relatedData[this.activeTab].splice(index, 1);
+          toastSuccess({text: `Removed record with an ID: ${entity.id} from ${this.activeTab}`});
+        }
+      }
     },
 
+    // Todo: Drop that function after library is changed to new related data format. (searchParameters)
     changeOrdering(entity) {
       this.$set(this.relatedData.orderBy, entity.tab, entity.orderBy)
     },

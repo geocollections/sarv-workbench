@@ -346,8 +346,9 @@
     </fieldset>
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row mb-2" v-if="$route.meta.isEdit">
+    <div class="row mb-2">
       <div class="col mt-2">
+
         <ul class="nav nav-tabs nav-fill mb-3">
 
           <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
@@ -365,66 +366,65 @@
           </li>
         </ul>
 
-        <div class="row">
-          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
-              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
-              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
-              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
-              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
-              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
-              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
-              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
-            </b-form-select>
-          </div>
+        <!-- Todo: Add functionality after getting all related_data in one go problem solved -->
+<!--        <div class="row">-->
+<!--          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">-->
+<!--            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">-->
+<!--              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>-->
+<!--              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>-->
+<!--              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>-->
+<!--              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>-->
+<!--              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>-->
+<!--              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>-->
+<!--              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>-->
+<!--            </b-form-select>-->
+<!--          </div>-->
 
-          <div class="col-sm-12 col-md-3 export-center">
-            <!-- EXPORT BUTTON? -->
-          </div>
+<!--          <div class="col-sm-12 col-md-3 export-center">-->
+<!--            &lt;!&ndash; EXPORT BUTTON? &ndash;&gt;-->
+<!--          </div>-->
 
-          <div class="col-sm-12 col-md-6 pagination-center"
-               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
-            <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
-            </b-pagination>
-          </div>
-        </div>
+<!--          <div class="col-sm-12 col-md-6 pagination-center"-->
+<!--               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">-->
+<!--            <b-pagination-->
+<!--              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"-->
+<!--              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">-->
+<!--            </b-pagination>-->
+<!--          </div>-->
+<!--        </div>-->
 
-        <doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                   v-on:related-data-added="addRelatedData"
-                   v-on:related-data-modified="editRelatedData"
-                   v-on:edit-row="editRow"
-                   v-on:allow-remove-row="allowRemove"/>
+<!--        <doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
+<!--                   v-on:related-data-added="addRelatedData"-->
+<!--                   v-on:related-data-modified="editRelatedData"-->
+<!--                   v-on:edit-row="editRow"-->
+<!--                   v-on:remove-row="removeRow" />-->
 
-        <doi-related-identifier :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                                v-on:related-data-added="addRelatedData"
-                                v-on:related-data-modified="editRelatedData"
-                                v-on:edit-row="editRow"
-                                v-on:allow-remove-row="allowRemove"/>
+<!--        <doi-related-identifier :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
+<!--                                v-on:related-data-added="addRelatedData"-->
+<!--                                v-on:related-data-modified="editRelatedData"-->
+<!--                                v-on:edit-row="editRow"-->
+<!--                                v-on:remove-row="removeRow" />-->
 
-        <doi-geolocation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                         v-on:related-data-added="addRelatedData"
-                         v-on:related-data-modified="editRelatedData"
-                         v-on:edit-row="editRow"
-                         v-on:allow-remove-row="allowRemove"/>
+<!--        <doi-geolocation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
+<!--                         v-on:related-data-added="addRelatedData"-->
+<!--                         v-on:related-data-modified="editRelatedData"-->
+<!--                         v-on:edit-row="editRow"-->
+<!--                         v-on:remove-row="removeRow" />-->
 
         <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                   v-on:related-data-added="addRelatedData"
-                   v-on:related-data-modified="editRelatedData"
+                   v-on:add-related-data="addRelatedData"
                    v-on:edit-row="editRow"
-                   v-on:allow-remove-row="allowRemove"/>
+                   v-on:remove-row="removeRow" />
 
-        <doi-date :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                  v-on:related-data-added="addRelatedData"
-                  v-on:related-data-modified="editRelatedData"
-                  v-on:edit-row="editRow"
-                  v-on:allow-remove-row="allowRemove"/>
+<!--        <doi-date :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
+<!--                  v-on:related-data-added="addRelatedData"-->
+<!--                  v-on:related-data-modified="editRelatedData"-->
+<!--                  v-on:edit-row="editRow"-->
+<!--                  v-on:remove-row="removeRow" />-->
 
       </div>
     </div>
 
-    <!-- Todo: Format dates -->
     <!-- DATACITE CREATED and UPDATED -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" id="block-datacite">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.datacite }" @click="block.datacite = !block.datacite">
@@ -462,6 +462,7 @@
       </div>
     </div>
 
+    <!-- DOI METADATA REGISTER and UPDATE BUTTONS -->
     <div class="row mt-3">
       <div class="col">
         <button v-if="$route.meta.isEdit && showMetadataButton && validate('doi')" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
@@ -542,7 +543,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('identifier') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory !== 'fallbackValue' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'doiSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -583,7 +584,7 @@
             { name: 'doi_agent', iconClass: 'fas fa-user-friends' },
             { name: 'attachment_link', iconClass: 'fas fa-folder-open' },
             { name: 'doi_geolocation', iconClass: 'fas fa-globe-americas' },
-            { name: 'doi_related_identifier', iconClass: 'far fa-project-diagram' },
+            { name: 'doi_related_identifier', iconClass: 'fas fa-project-diagram' },
             { name: 'doi_date', iconClass: 'far fa-calendar-alt' },
           ],
           searchHistory: 'doiSearchHistory',
@@ -645,18 +646,7 @@
       },
 
       loadFullInfo() {
-        // fetching autocompletes
-        fetchDoiResourceType().then(response => {
-          this.autocomplete.resource_type = this.handleResponse(response);
-        });
-
-        fetchListLanguages().then(response => {
-          this.autocomplete.language = this.handleResponse(response)
-        });
-
-        fetchListLicences().then(response => {
-          this.autocomplete.licence = this.handleResponse(response)
-        });
+        this.loadAutocompleteFields(true, true);
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
@@ -684,21 +674,6 @@
             }
           });
 
-          // TODO: Optimization possible, i.e., fetch requests only if user has clicked certain related data TAB.
-          // Fetching autocomplete fields for related data
-          fetchDoiAgentType().then(response => {
-            this.autocomplete.doi_agent_type = this.handleResponse(response)
-          });
-          fetchDoiRelatedIdentifierType().then(response => {
-            this.autocomplete.doi_related_identifier_type = this.handleResponse(response)
-          });
-          fetchDoiRelationType().then(response => {
-            this.autocomplete.doi_relation_type = this.handleResponse(response)
-          });
-          fetchDoiDateType().then(response => {
-            this.autocomplete.doi_date_type = this.handleResponse(response)
-          });
-
           this.checkMetadata();
           this.checkDoiUrl();
 
@@ -712,6 +687,22 @@
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
           this.setActiveTab('doi_agent')
+        }
+      },
+
+      // TODO: Optimization possible, i.e., fetch requests only if user has clicked certain related data TAB.
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {
+          fetchDoiResourceType().then(response => this.autocomplete.resource_type = this.handleResponse(response));
+          fetchListLanguages().then(response => this.autocomplete.language = this.handleResponse(response));
+          fetchListLicences().then(response => this.autocomplete.licence = this.handleResponse(response));
+        }
+
+        if (relatedDataAutocompleteFields) {
+          fetchDoiAgentType().then(response => this.autocomplete.doi_agent_type = this.handleResponse(response));
+          fetchDoiRelatedIdentifierType().then(response => this.autocomplete.doi_related_identifier_type = this.handleResponse(response));
+          fetchDoiRelationType().then(response => this.autocomplete.doi_relation_type = this.handleResponse(response));
+          fetchDoiDateType().then(response => this.autocomplete.doi_date_type = this.handleResponse(response));
         }
       },
 
@@ -749,27 +740,27 @@
           searchParameters: {
             attachment_link: {
               page: 1,
-              paginateBy: 10,
+              paginateBy: 100,
               orderBy: 'id'
             },
             doi_related_identifier: {
               page: 1,
-              paginateBy: 10,
+              paginateBy: 100,
               orderBy: 'id'
             },
             doi_geolocation: {
               page: 1,
-              paginateBy: 10,
+              paginateBy: 100,
               orderBy: 'id'
             },
             doi_agent: {
               page: 1,
-              paginateBy: 10,
+              paginateBy: 100,
               orderBy: 'id'
             },
             doi_date: {
               page: 1,
-              paginateBy: 10,
+              paginateBy: 100,
               orderBy: 'id'
             },
           },
@@ -828,32 +819,57 @@
         this.doi.dataset = { id: obj.dataset, name: obj.dataset__name, name_en: obj.dataset__name_en}
       },
 
-      fillRelatedDataAutocompleteFields(obj, type) {
-        if (obj === undefined) return;
-        // console.log(obj)
-        // console.log(type)
+      fillRelatedDataAutocompleteFields(obj) {
+        if (this.isNotEmpty(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename };
+        if (this.isNotEmpty(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value };
+        if (this.isNotEmpty(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent };
+        if (this.isNotEmpty(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value };
+        if (this.isNotEmpty(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value };
+        if (this.isNotEmpty(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en };
+        if (this.isNotEmpty(obj.date_type)) obj.date_type = { id: obj.date_type, value: obj.date_type__value };
 
-        // This goes for related data in tabs
-        if (type === undefined) {
-          console.log(obj)
+        return obj;
+      },
 
-          if (this.isNotEmpty(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
-          if (this.isNotEmpty(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value }
-          if (this.isNotEmpty(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent }
-          if (this.isNotEmpty(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value }
-          if (this.isNotEmpty(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value }
-          if (this.isNotEmpty(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en }
-          if (this.isNotEmpty(obj.date_type)) obj.date_type = { id: obj.date_type, value: obj.date_type__value }
+      unformatRelatedDataAutocompleteFields(obj, objectID) {
+        let newObject = cloneDeep(obj);
 
-          return obj;
+        if (objectID) newObject.id = objectID;
+
+        if (this.isNotEmpty(obj.attachment)) {
+          newObject.attachment = obj.attachment.id;
+          newObject.attachment__original_filename = obj.attachment.original_filename;
         }
 
-        let relatedData = cloneDeep(obj)
-        obj = [];
-        relatedData.forEach(entity => {
-          if (type === 'attachment_link' || type === 'doi_agent' || type === 'doi_related_identifier' || type === 'doi_geolocation' || type === 'doi_date') obj.push(entity)
-        });
-        return obj
+        if (this.isNotEmpty(obj.agent_type)) {
+          newObject.agent_type = obj.agent_type.id;
+          newObject.agent_type__value = obj.agent_type.value;
+        }
+
+        if (this.isNotEmpty(obj.agent)) {
+          newObject.agent = obj.agent.id;
+          newObject.agent__agent = obj.agent.agent;
+        }
+        if (this.isNotEmpty(obj.identifier_type)) {
+          newObject.identifier_type = obj.identifier_type.id;
+          newObject.identifier_type__value = obj.identifier_type.value;
+        }
+        if (this.isNotEmpty(obj.relation_type)) {
+          newObject.relation_type = obj.relation_type.id;
+          newObject.relation_type__value = obj.relation_type.value;
+        }
+        if (this.isNotEmpty(obj.locality)) {
+          newObject.locality = obj.locality.id;
+          newObject.locality__locality = obj.locality.locality;
+          newObject.locality__locality_en = obj.locality.locality_en;
+        }
+        if (this.isNotEmpty(obj.date_type)) {
+          newObject.date_type = { id: obj.date_type, value: obj.date_type__value };
+          newObject.date_type = obj.date_type.id;
+          newObject.date_type__value = obj.date_type.value;
+        }
+
+        return newObject
       },
 
       loadRelatedData(object, doi = null) {

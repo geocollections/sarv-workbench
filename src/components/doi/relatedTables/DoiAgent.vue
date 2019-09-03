@@ -1,5 +1,5 @@
 <template>
-  <div id="#tab-agent" class="tab-agent row" :class="{active: activeTab === 'doi_agent'}" role="tabpanel">
+  <div class="row" :class="{active: activeTab === 'doi_agent'}">
     <div class="col-sm-12" v-if="activeTab === 'doi_agent'">
       <div class="table-responsive-sm">
 
@@ -16,7 +16,10 @@
           </thead>
 
           <tbody>
-          <tr v-for="entity in relatedData.doi_agent" :key="entity.id" :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+          <tr v-for="(entity, index) in relatedData.doi_agent"
+              :key="entity.id"
+              :class="{ 'allow-remove': entity.allowRemove, 'edit-mode': entity.editMode }">
+
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">{{ entity.name }}</td>
 
@@ -31,7 +34,6 @@
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.name" type="text"/>
-
             </td>
 
             <td v-if="entity.editMode">
@@ -77,11 +79,20 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+              <button class="float-left btn btn-sm"
+                      :class="entity.editMode ? 'btn-success' : 'btn-outline-success'"
+                      @click="$emit('edit-row', entity, index)"
+                      :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-right btn btn-sm"
+                      :class="entity.allowRemove ? 'btn-danger' : 'btn-outline-danger'"
+                      @click="$emit('remove-row', entity, index)"
+                      :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
 
-              <button v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+              <!--              <button v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>-->
+<!--              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="$emit('remove-row', entity, index)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>-->
+
+<!--              <button v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>-->
+<!--              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>-->
             </td>
           </tr>
 
@@ -134,7 +145,7 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" @click="$emit('related-data-added', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+              <button class="float-left btn btn-sm btn-success" @click="$emit('add-related-data', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
               <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.doi_agent = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
             </td>
           </tr>
@@ -158,22 +169,37 @@
     },
     mixins: [formManipulation, autocompleteMixin],
     watch: {
-      'relatedData.insert.doi_agent.agent': {
-        handler: function (newVal, oldVal) {
-          if (this.isNotEmpty(newVal)) {
-            //  Adding NAME, AFFILIATION and AGENT_TYPE__VALUE
-            console.log(newVal)
-            this.relatedData.insert.doi_agent.name = newVal.agent
-            this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en
-            this.$set(this.relatedData.insert.doi_agent, 'agent_type', { id: 1, value: 'Creator' })
-          }
-        },
-        deep: true
-      },
+      // 'relatedData.insert.doi_agent.agent': {
+      //   handler: function (newVal, oldVal) {
+      //     if (this.isNotEmpty(newVal)) {
+      //       //  Adding NAME, AFFILIATION and AGENT_TYPE__VALUE
+      //       console.log(newVal)
+      //       this.relatedData.insert.doi_agent.name = newVal.agent
+      //       this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en
+      //       this.$set(this.relatedData.insert.doi_agent, 'agent_type', { id: 1, value: 'Creator' })
+      //     }
+      //   },
+      //   deep: true
+      // },
     },
   }
 </script>
 
 <style scoped>
+  .allow-remove {
+    background-color: rgba(220, 53, 69, 0.2);
+  }
+
+  .allow-remove:hover {
+    background-color: rgba(220, 53, 69, 0.2);
+  }
+
+  .edit-mode {
+    background-color: rgba(40, 167, 69, 0.2);
+  }
+
+  .edit-mode:hover {
+    background-color: rgba(40, 167, 69, 0.2);
+  }
 
 </style>
