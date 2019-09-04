@@ -668,7 +668,7 @@
               this.loadRelatedData('dataset', this.doi);
 
               this.removeUnnecessaryFields(this.doi, this.copyFields);
-              this.$emit('data-loaded', this.doi)
+              this.$emit('data-loaded', this.doi);
               this.sendingData = false;
             } else {
               this.sendingData = false;
@@ -965,7 +965,7 @@
 
         if (this.isNotEmpty(uploadableObject.datacite_created)) uploadableObject.datacite_created = this.formatDateForUpload(objectToUpload.datacite_created, false);
 
-        console.log('This object is sent in string format (related_data):')
+        console.log('This object is sent in string format (related_data):');
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },

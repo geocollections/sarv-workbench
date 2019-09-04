@@ -549,8 +549,6 @@
           },
           requiredFields: [],
           analysis: {},
-          previousRecord: {},
-          nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           componentKey: 0,
           block: {info: true, description: true}

@@ -140,7 +140,7 @@
           // Todo: FIx that if some field contains ' then it should not get replaced, better fix would be API to send correct json format
           // example error reference/10835
           let validJsonString = changes.replace(/'/g, '"');
-
+          //
           // Exceptions
           // Todo: Combine these regular expressions!!!
           if (validJsonString.includes('"None"')) validJsonString = validJsonString.replace(/"None"/g, 'None');

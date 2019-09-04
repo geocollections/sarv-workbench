@@ -634,9 +634,13 @@ const formManipulation = {
       }
     },
 
-    // Todo: Drop that function after library is changed to new related data format. (searchParameters)
+    /**
+     * Changes ordering.
+     *
+     * @param {object} entity - Contains active tab name and new orderBy field.
+     */
     changeOrdering(entity) {
-      this.$set(this.relatedData.orderBy, entity.tab, entity.orderBy)
+      if (this.$route.meta.isEdit) this.$set(this.relatedData.searchParameters[entity.tab], 'order_by', entity.orderBy);
     },
 
     /**************************

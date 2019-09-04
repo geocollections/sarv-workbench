@@ -14,13 +14,26 @@
           </thead>
 
           <tbody>
-          <tr v-for="(entity, index) in relatedData.locality_synonym">
+          <tr v-for="(entity, index) in relatedData.locality_synonym"
+              :key="entity.id"
+              :class="{ 'allow-remove': entity.allowRemove, 'edit-mode': entity.editMode }">
+
+            <!-- VIEW MODE -->
             <td v-if="!entity.editMode">{{ entity.synonym }}</td>
-            <td v-if="!entity.editMode">{{ entity.reference__reference }}</td>
+
+            <td v-if="!entity.editMode">
+              <router-link :to="{ path: '/reference/' + entity.reference }" target="_blank">
+                {{ entity.reference__reference }}
+              </router-link>
+            </td>
+
             <td v-if="!entity.editMode">{{ entity.pages }}</td>
+
             <td v-if="!entity.editMode">{{ entity.remarks }}
 
+            <!-- EDIT MODE -->
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.synonym" type="text"/></td>
+
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.reference"
                                id="reference"
@@ -40,21 +53,33 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
+
             <td v-if="entity.editMode"><b-form-input v-model="entity.new.pages" type="text"/></td>
+
             <td v-if="entity.editMode" style="min-width: 20em;">
               <b-form-input v-model="entity.new.remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button  v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+              <button class="float-left btn btn-sm"
+                      :class="entity.editMode ? 'btn-success' : 'btn-outline-success'"
+                      :disabled="sendingData"
+                      @click="$emit('edit-row', entity, index)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
 
-              <button  v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
+              <button class="float-right btn btn-sm"
+                      :class="entity.allowRemove ? 'btn-danger' : 'btn-outline-danger'"
+                      :disabled="sendingData"
+                      @click="$emit('remove-row', entity, index)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
             </td>
           </tr>
+
           <tr class="related-input-data">
             <td><b-form-input v-model="relatedData.insert.locality_synonym.synonym" type="text"/></td>
+
             <td>
               <vue-multiselect v-model="relatedData.insert.locality_synonym.reference"
                                id="reference_insert"
@@ -74,13 +99,20 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </td>
+
             <td><b-form-input v-model="relatedData.insert.locality_synonym.pages" type="text"/></td>
+
             <td style="min-width: 20em;">
               <b-form-input v-model="relatedData.insert.locality_synonym.remarks" type="text"/>
             </td>
+
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" @click="$emit('related-data-added', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.locality_synonym = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+                <i class="fas fa-times"></i>
+              </button>
             </td>
           </tr>
           </tbody>

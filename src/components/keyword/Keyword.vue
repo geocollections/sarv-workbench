@@ -176,8 +176,6 @@
               value_en: 'English',
             }
           },
-          previousRecord: {},
-          nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           block: {
             info: true,

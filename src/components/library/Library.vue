@@ -165,33 +165,28 @@
     </fieldset>
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row" v-if="$route.meta.isEdit">
-      <div class="col mt-4">
-        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
+    <div class="row">
+      <div class="col mt-2">
+        <ul class="nav nav-tabs nav-fill mb-3">
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('library_reference')" class="nav-link"
-               :class="{ active: activeTab === 'library_reference' }">
-              {{ $t('library.relatedTables.libraryReference') }}
+          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name" v-if="tab.show">
+            <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+              <span>{{ $t('library.relatedTables.' + tab.name) }}</span>
+
+              <span>
+                <sup>
+                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                </sup>
+              </span>
+
+              <span><i :class="tab.iconClass"></i></span>
             </a>
           </li>
-
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('library_reference_list')" class="nav-link"
-               :class="{ active: activeTab === 'library_reference_list' }">
-              {{ $t('library.relatedTables.libraryReferenceList') }}
-              <font-awesome-icon icon="list-ol"/>
-            </a>
-          </li>
-
         </ul>
 
-        <library-reference-list-view :data="relatedData.library_reference_list"
-                                     :active-tab="activeTab"></library-reference-list-view>
-
-        <div class="row" v-if="activeTab !== 'library_reference_list'">
+        <div class="row" v-if="$route.meta.isEdit && activeTab !== 'library_reference_list'">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
               <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
               <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
               <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -210,50 +205,31 @@
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
+              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
             </b-pagination>
           </div>
         </div>
 
         <library-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                           v-on:related-data-added="addRelatedData"
-                           v-on:related-data-modified="editRelatedData"
+                           v-on:add-related-data="addRelatedData"
+                           v-on:set-default="setDefault"
                            v-on:edit-row="editRow"
-                           v-on:allow-remove-row="allowRemove"
+                           v-on:remove-row="removeRow"
                            v-on:order-by-changed="changeOrdering"/>
+
+        <library-reference-list-view v-if="$route.meta.isEdit" :data="relatedData.library_reference_list" :active-tab="activeTab"/>
+
       </div>
     </div>
 
     <!-- CHECKBOXES -->
-    <div class="row mt-3">
+    <div class="row">
       <div class="col">
         <b-form-checkbox id="is_private" v-model="library.is_private" :value="1" :unchecked-value="0">
           {{ $t('library.private') }}
         </b-form-checkbox>
       </div>
     </div>
-
-<!--    <div class="row mt-3 mb-3">-->
-<!--      <div class="col">-->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'library', true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'library', true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('library', $route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
 
   </div>
 </template>
@@ -262,8 +238,6 @@
   import Spinner from 'vue-simple-spinner'
   import {library} from '@fortawesome/fontawesome-svg-core'
   import VueMultiselect from 'vue-multiselect'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faTimes} from '@fortawesome/free-solid-svg-icons'
   import {
     fetchLibrary,
     fetchLibraryReference,
@@ -280,7 +254,6 @@
   import Editor from "../partial/editor/Editor";
   import {mapState} from "vuex";
 
-  library.add(faTimes);
 
   export default {
     name: "Library",
@@ -288,7 +261,6 @@
       Editor,
       LibraryReferenceListView,
       LibraryReference,
-      FontAwesomeIcon,
       VueMultiselect,
       Spinner,
     },
@@ -326,31 +298,16 @@
         },
         deep: true
       },
-      'relatedData.paginateBy': {
+      'relatedData.searchParameters': {
         handler: function (newVal, oldVal) {
           this.loadRelatedData(this.activeTab)
         },
         deep: true
       },
-      'relatedData.page': {
-        handler: function (newVal, oldVal) {
-          this.loadRelatedData(this.activeTab)
-        },
-        deep: true
-      },
-      'relatedData.orderBy': {
-        handler: function (newVal, oldVal) {
-          console.log(newVal);
-          console.log(oldVal);
-          this.loadRelatedData(this.activeTab)
-        },
-        deep: true
-      }
-
     },
 
     computed: {
-      ...mapState(["currentUser"])
+      ...mapState(["currentUser", "databaseId"])
     },
 
     methods: {
@@ -361,7 +318,10 @@
 
       setInitialData() {
         return {
-          tabs: ['library_reference', 'library_reference_list'],
+          relatedTabs: [
+            { name: 'library_reference', iconClass: 'fas fa-book-open', show: true },
+            { name: 'library_reference_list', iconClass: 'fas fa-list-ol', show: this.$route.meta.isEdit },
+          ],
           searchHistory: 'librarySearchHistory',
           activeTab: 'library_reference',
           relatedData: this.setDefaultRelatedData(),
@@ -378,12 +338,8 @@
           },
           requiredFields: [],
           library: {},
-          previousRecord: {},
-          nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           block: {info: true, members: true},
-          // editor: BalloonEditor,
-          // editorConfig: {}
         }
       },
 
@@ -395,25 +351,45 @@
       loadFullInfo() {
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
-          this.$emit('set-object', 'library')
+          this.$emit('set-object', 'library');
+
           fetchLibrary(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
+
             if (handledResponse.length > 0) {
               this.$emit('object-exists', true);
               this.library = this.handleResponse(response)[0];
-              if (this.library.abstract === null || typeof this.library.abstract === 'undefined') this.library.abstract = '';
-              if (this.library.abstract_en === null || typeof this.library.abstract_en === 'undefined') this.library.abstract_en = '';
-              this.fillAutocompleteFields(this.library)
+              this.fillAutocompleteFields(this.library);
+
               this.removeUnnecessaryFields(this.library, this.copyFields);
-              this.$emit('data-loaded', this.library)
+              this.$emit('data-loaded', this.library);
               this.sendingData = false;
-              // this.getListRecords('library')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
             }
           });
 
+          this.loadAutocompleteFields(false, true);
+
+          // Load Related Data which is in tabs
+          this.relatedTabs.forEach(tab => {
+            // Skips library_reference_list because it is static view
+            if (tab.name !== 'library_reference_list') this.loadRelatedData(tab.name);
+          });
+
+          this.$on('tab-changed', this.setTab);
+
+          this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
+
+          this.setTab('library_reference')
+        }
+      },
+
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {}
+
+        if (relatedDataAutocompleteFields) {
           fetchLibraryAgent(this.$route.params.id).then(response => {
             let libraryAgent = this.handleResponse(response);
             this.relatedData.library_agent = libraryAgent.map(entity => {
@@ -423,20 +399,6 @@
               }
             })
           });
-
-          // FETCH FIRST TAB RELATED DATA
-          this.tabs.forEach(entity => {
-            // Skips library_reference_list because it is static view
-            if (entity !== 'library_reference_list') {
-              this.loadRelatedData(entity);
-            }
-          });
-
-          this.$on('tab-changed', this.setTab);
-
-          this.$emit('related-data-info', this.tabs);
-
-          this.setActiveTab('library_reference')
         }
       },
 
@@ -448,18 +410,18 @@
           copyFields: {
             library_reference: ['reference', 'keywords', 'remarks', 'sort'],
           },
-          insert: {
-            library_reference: {},
-          },
-          page: {
-            library_reference: 1,
-            library_agent: 1,
-          },
-          paginateBy: {
-            library_reference: 25,
-          },
-          orderBy: {
-            library_reference: '-sort'
+          insert: this.setDefaultInsertRelatedData(),
+          searchParameters: {
+            library_reference: {
+              page: 1,
+              paginateBy: 25,
+              orderBy: '-sort'
+            },
+            library_reference_list: {
+              page: 1,
+              paginateBy: 1000,
+              orderBy: '-sort,reference__author,-reference__year'
+            }
           },
           count: {
             library_reference: 0,
@@ -468,14 +430,40 @@
         }
       },
 
+      setDefaultInsertRelatedData() {
+        return {
+          library_reference: {},
+        }
+      },
+
       formatDataForUpload(objectToUpload) {
-        let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isNotEmpty(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
+        let uploadableObject = cloneDeep(objectToUpload);
+
         if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
 
+        // Autocomplete fields
+        if (this.isNotEmpty(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id;
+
+        if (this.databaseId) uploadableObject.database = this.databaseId;
+
         // Adding related data
-        uploadableObject.related_data = {}
-        uploadableObject.related_data.agent = this.relatedData.library_agent
+        if (!this.$route.meta.isEdit) {
+          uploadableObject.related_data = {};
+
+          if (this.isNotEmpty(this.relatedData.library_agent)) uploadableObject.related_data.library_agent = this.relatedData.library_agent
+
+          this.relatedTabs.forEach(tab => {
+            if (tab.name !== 'library_reference_list') {
+              if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
+            }
+          });
+        } else {
+          // Library agent is not in tab.
+          if (this.isNotEmpty(this.relatedData.library_agent)) {
+            uploadableObject.related_data = {};
+            uploadableObject.related_data.library_agent = this.relatedData.library_agent
+          }
+        }
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
@@ -487,27 +475,34 @@
       },
 
       fillRelatedDataAutocompleteFields(obj) {
-        console.log(obj)
         obj.reference = {reference: obj.reference__reference, id: obj.reference}
         // obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
         return obj
+      },
+
+      unformatRelatedDataAutocompleteFields(obj, objectID) {
+        let newObject = cloneDeep(obj);
+
+        if (objectID) newObject.id = objectID;
+
+        if (this.isNotEmpty(obj.reference)) {
+          newObject.reference = obj.reference.id;
+          newObject.reference__reference = obj.reference.reference;
+        }
+
+        return newObject
       },
 
       loadRelatedData(object) {
         let query;
 
         if (object === 'library_reference') {
-          query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, this.relatedData.paginateBy.library_reference, this.relatedData.orderBy.library_reference)
+          query = fetchLibraryReference(this.$route.params.id, this.relatedData.searchParameters.library_reference)
         }
         if (object === 'library_reference_list') {
-          if (this.relatedData.library_reference_list.length === 0) {
-            // Get all records, maybe in the future add pagination and stuff
-            query = fetchLibraryReference(this.$route.params.id, this.relatedData.page.library_reference, 1000, '-sort,reference__author,-reference__year')
-          } else {
-            // Do nothing
-            return
-          }
+          query = fetchLibraryReference(this.$route.params.id, this.relatedData.searchParameters.library_reference_list)
         }
+
         return new Promise(resolve => {
           query.then(response => {
             this.relatedData[object] = this.handleResponse(response);
@@ -533,14 +528,6 @@
         console.log('This object is sent in string format (related_data):');
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
-      },
-
-
-      fetchList(localStorageData) {
-        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
-        return new Promise((resolve) => {
-          resolve(fetchLibrariesFromLibraryAgent(params, this.$parent.agent))
-        });
       },
 
       setDefaultSearchParameters() {

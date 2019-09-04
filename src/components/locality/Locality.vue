@@ -23,7 +23,7 @@
 
             <div class="col-sm-6">
               <label :for="`locality_en`">{{ $t('locality.locality_en') }}:</label>
-              <b-form-input id="locality_en" v-model="locality.locality_en" type="text"></b-form-input>
+              <b-form-input id="locality_en" :state="isNotEmpty(locality.locality_en)" v-model="locality.locality_en" type="text"></b-form-input>
             </div>
           </div>
 
@@ -390,34 +390,29 @@
     </div>
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row" v-if="$route.meta.isEdit">
+    <div class="row">
       <div class="col">
-        <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"
-               :class="{ active: activeTab === 'locality_reference' }">{{
-              $t('locality.relatedTables.locality_reference') }}</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_synonym')" class="nav-link"
-               :class="{ active: activeTab === 'locality_synonym' }">{{ $t('locality.relatedTables.locality_synonym')
-              }}</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
-               :class="{ active: activeTab === 'attachment_link' }">{{ $t('locality.relatedTables.attachment_link')
-              }}</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_stratigraphy')" class="nav-link"
-               :class="{ active: activeTab === 'locality_stratigraphy' }">{{
-              $t('locality.relatedTables.locality_stratigraphy') }}</a>
+
+        <ul class="nav nav-tabs nav-fill mb-3">
+
+          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+            <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+              <span>{{ $t('locality.relatedTables.' + tab.name) }}</span>
+
+              <span>
+                <sup>
+                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                </sup>
+              </span>
+
+              <span><i :class="tab.iconClass"></i></span>
+            </a>
           </li>
         </ul>
 
-        <div class="row" v-if="activeTab !== 'attachment_link'">
+        <div class="row" v-if="$route.meta.isEdit">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
               <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
               <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
               <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -436,76 +431,44 @@
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
+              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
             </b-pagination>
           </div>
         </div>
 
         <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                            v-on:related-data-added="addRelatedData"
-                            v-on:related-data-modified="editRelatedData"
+                            v-on:add-related-data="addRelatedData"
+                            v-on:set-default="setDefault"
                             v-on:edit-row="editRow"
-                            v-on:allow-remove-row="allowRemove"/>
+                            v-on:remove-row="removeRow" />
 
         <locality-synonym :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                          v-on:related-data-added="addRelatedData"
-                          v-on:related-data-modified="editRelatedData"
+                          v-on:add-related-data="addRelatedData"
+                          v-on:set-default="setDefault"
                           v-on:edit-row="editRow"
-                          v-on:allow-remove-row="allowRemove"/>
+                          v-on:remove-row="removeRow" />
 
         <locality-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                             v-on:related-data-added="addRelatedData"
-                             v-on:related-data-modified="editRelatedData"
+                             v-on:add-related-data="addRelatedData"
+                             v-on:set-default="setDefault"
                              v-on:edit-row="editRow"
-                             v-on:allow-remove-row="allowRemove"/>
+                             v-on:remove-row="removeRow" />
 
         <locality-stratigraphy :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                               v-on:related-data-added="addRelatedData"
-                               v-on:related-data-modified="editRelatedData"
+                               v-on:add-related-data="addRelatedData"
+                               v-on:set-default="setDefault"
                                v-on:edit-row="editRow"
-                               v-on:allow-remove-row="allowRemove"/>
+                               v-on:remove-row="removeRow" />
 
       </div>
     </div>
-
-    <!-- BUTTONS -->
-<!--    <div class="row mt-3 mb-3">-->
-<!--      <div class="col">-->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'locality', true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'locality', true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('locality', $route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-
-<!--        <span class="float-right">-->
-<!--            <button class="btn btn-primary mb-2" @click="$parent.saveAsNew" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>-->
-<!--          </span>-->
-<!--      </div>-->
-<!--    </div>-->
 
   </div>
 </template>
 
 <script>
-
   import Spinner from 'vue-simple-spinner'
-  import {library} from '@fortawesome/fontawesome-svg-core'
   import VueMultiselect from 'vue-multiselect'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faTimes, faChevronUp, faChevronDown} from '@fortawesome/free-solid-svg-icons'
-  import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
   import copyForm from '../../mixins/copyForm'
   import {
     fetchListLocalityTypes,
@@ -521,7 +484,6 @@
     fetchLocalities
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
-  import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
   import formManipulation from '../../mixins/formManipulation'
   import autocompleteMixin from '../../mixins/autocompleteMixin'
   import LocalityReference from "./relatedTables/LocalityReference";
@@ -530,8 +492,8 @@
   import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
   import MapComponent from '../partial/MapComponent'
   import formSectionsMixin from "../../mixins/formSectionsMixin";
+  import {mapState} from "vuex";
 
-  library.add(faTimes, faChevronUp, faChevronDown)
   export default {
     name: "Locality",
     components: {
@@ -539,8 +501,6 @@
       LocalityAttachment,
       LocalitySynonym,
       LocalityReference,
-      BFormInput,
-      FontAwesomeIcon,
       VueMultiselect,
       Spinner,
       MapComponent
@@ -555,7 +515,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('locality') && searchHistory !== 'fallbackValue' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'localitySearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -570,6 +530,25 @@
       this.loadFullInfo()
     },
 
+    watch: {
+      '$route.params.id': {
+        handler: function (newval, oldval) {
+          this.reloadData()
+        },
+        deep: true
+      },
+      'relatedData.searchParameters': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      },
+    },
+
+    computed: {
+      ...mapState(["databaseId"])
+    },
+
     methods: {
 
       setTab(type) {
@@ -578,28 +557,49 @@
 
       setInitialData() {
         return {
-          tabs: ['locality_reference', 'locality_synonym', 'attachment_link', 'locality_stratigraphy'],
+          relatedTabs: [
+            { name: 'locality_reference', iconClass: 'fas fa-book' },
+            { name: 'locality_synonym', iconClass: 'fas fa-font' },
+            { name: 'attachment_link', iconClass: 'fas fa-folder-open' },
+            { name: 'locality_stratigraphy', iconClass: 'fas fa-globe-asia' },
+          ],
           searchHistory: 'localitySearchHistory',
           activeTab: 'locality_reference',
-          relatedData: this.setDefaultRalatedData(),
+          relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'locality', 'locality_en', 'number', 'code', 'latitude', 'longitude', 'elevation', 'depth',
             'coordx', 'coordy', 'coord_system', 'stratigraphy_top_free', 'stratigraphy_base_free', 'maaamet_pa_id', 'eelis',
             'remarks_location', 'remarks', 'is_private', 'type', 'parent', 'extent', 'coord_det_precision', 'coord_det_method',
             'coord_det_agent', 'country', 'stratigraphy_top', 'stratigraphy_base'],
           autocomplete: {
             loaders: {
-              locality: false, stratigraphy_top: false, stratigraphy_base: false, agent: false,
-              reference: false, synonym: false, attachment: false, stratigraphy: false
+              locality: false,
+              stratigraphy_top: false,
+              stratigraphy_base: false,
+              agent: false,
+              reference: false,
+              synonym: false,
+              attachment: false,
+              stratigraphy: false
             },
-            localityTypes: [], locality: [], extent: [], coordPrecision: [], coordMethod: [], reference: [],
-            agent: [], country: [], county: [], parish: [], stratigraphy_top: [], stratigraphy_base: [], synonym: [],
-            attachment: [], stratigraphy: []
+            localityTypes: [],
+            locality: [],
+            extent: [],
+            coordPrecision: [],
+            coordMethod: [],
+            reference: [],
+            agent: [],
+            country: [],
+            county: [],
+            parish: [],
+            stratigraphy_top: [],
+            stratigraphy_base: [],
+            synonym: [],
+            attachment: [],
+            stratigraphy: []
           },
           requiredFields: ['locality', 'locality_en'],
           locality: {},
           showCollapseMap: true,
-          previousRecord: {},
-          nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           block: {info: true, map: true, additionalInfo: true, description: true}
         }
@@ -611,145 +611,203 @@
       },
 
       loadFullInfo() {
-        fetchListLocalityTypes().then(response => {
-          this.autocomplete.localityTypes = this.handleResponse(response);
-        });
-        fetchListLocalityExtent().then(response => {
-          this.autocomplete.extent = this.handleResponse(response);
-        });
-        fetchListCoordinateMethod().then(response => {
-          this.autocomplete.coordMethod = this.handleResponse(response);
-        });
-        fetchListCoordinatePrecision().then(response => {
-          this.autocomplete.coordPrecision = this.handleResponse(response);
-        });
-        fetchListCountry().then(response => {
-          this.autocomplete.country = this.handleResponse(response);
-        });
+        this.loadAutocompleteFields();
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
-          this.$emit('set-object', 'library')
+          this.$emit('set-object', 'locality');
+
           fetchLocality(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
+
             if (handledResponse.length > 0) {
               this.$emit('object-exists', true);
               this.locality = this.handleResponse(response)[0];
-              this.fillAutocompleteFields(this.locality)
+              this.fillAutocompleteFields(this.locality);
+
               this.removeUnnecessaryFields(this.locality, this.copyFields);
-              this.$emit('data-loaded', this.locality)
+              this.$emit('data-loaded', this.locality);
               this.sendingData = false;
-              // this.getListRecords('locality')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
             }
           });
-          //Manipulation with data itself should be done in class
+
+          // Load Related Data which is in tabs
+          this.relatedTabs.forEach(tab => {
+            this.loadRelatedData(tab.name);
+          });
+
           this.$on('tab-changed', this.setTab);
 
-          this.$emit('related-data-info', this.tabs);
-          // FETCH FIRST TAB RELATED DATA
-          this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
-          });
-          // FETCH FIRST TAB RELATED DATA
-          this.setActiveTab('locality_reference')
+          this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
+
+          this.setTab('locality_reference')
         }
       },
 
-      setDefaultRalatedData() {
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {
+          fetchListLocalityTypes().then(response => this.autocomplete.localityTypes = this.handleResponse(response));
+          fetchListLocalityExtent().then(response => this.autocomplete.extent = this.handleResponse(response));
+          fetchListCoordinateMethod().then(response => this.autocomplete.coordMethod = this.handleResponse(response));
+          fetchListCoordinatePrecision().then(response => this.autocomplete.coordPrecision = this.handleResponse(response));
+          fetchListCountry().then(response => this.autocomplete.country = this.handleResponse(response));
+        }
+
+        if (relatedDataAutocompleteFields) {}
+      },
+
+      setDefaultRelatedData() {
         return {
-          locality_reference: [], locality_synonym: [], attachment_link: [], locality_stratigraphy: [],
+          locality_reference: [],
+          locality_synonym: [],
+          attachment_link: [],
+          locality_stratigraphy: [],
           copyFields: {
             locality_reference: ['reference', 'pages', 'figures', 'remarks'],
             locality_synonym: ['synonym', 'reference', 'pages', 'remarks'],
             attachment_link: ['attachment', 'remarks'],
             locality_stratigraphy: ['stratigraphy', 'depth_base', 'depth_top', 'reference', 'agent', 'year', 'current'],
           },
-          insert: {locality_reference: {}, locality_synonym: {}, attachment_link: {}, locality_stratigraphy: {}},
-          page: {locality_reference: 1, locality_synonym: 1, attachment_link: 1, locality_stratigraphy: 1},
-          paginateBy: {locality_reference: 25, locality_synonym: 25, attachment_link: 25, locality_stratigraphy: 25},
-          count: {locality_reference: 0, locality_synonym: 0, attachment_link: 0, locality_stratigraphy: 0}
+          insert: this.setDefaultInsertRelatedData(),
+          searchParameters: {
+            locality_reference: {
+              page: 1,
+              paginateBy: 25,
+              orderBy: 'id'
+            },
+            locality_synonym: {
+              page: 1,
+              paginateBy: 25,
+              orderBy: 'id'
+            },
+            attachment_link: {
+              page: 1,
+              paginateBy: 25,
+              orderBy: 'id'
+            },
+            locality_stratigraphy: {
+              page: 1,
+              paginateBy: 25,
+              orderBy: 'id'
+            },
+          },
+          count: {
+            locality_reference: 0,
+            locality_synonym: 0,
+            attachment_link: 0,
+            locality_stratigraphy: 0
+          }
         }
       },
-      formatDataForUpload(objectToUpload) {
-        let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isNotEmpty(objectToUpload.elevation))
-          uploadableObject.elevation = objectToUpload.elevation.toFixed(1)
-        if (objectToUpload.latitude === '')
-          uploadableObject.latitude = this.isNotEmpty(objectToUpload.latitude) ? objectToUpload.latitude.toFixed(6) : null
-        if (objectToUpload.longitude === '')
-          uploadableObject.longitude = this.isNotEmpty(objectToUpload.longitude) ? objectToUpload.longitude.toFixed(6) : null
-        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
-        if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
-        if (this.isNotEmpty(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id
-        if (this.isNotEmpty(objectToUpload.extent)) uploadableObject.extent = objectToUpload.extent.id
-        if (this.isNotEmpty(objectToUpload.coord_det_precision)) uploadableObject.coord_det_precision = objectToUpload.coord_det_precision.id
-        if (this.isNotEmpty(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id
-        if (this.isNotEmpty(objectToUpload.coord_det_agent)) uploadableObject.coord_det_agent = objectToUpload.coord_det_agent.id
-        if (this.isNotEmpty(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id
-        if (this.isNotEmpty(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id
-        if (this.isNotEmpty(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id
 
-        // console.log('This object is sent in string format:\n'+JSON.stringify(uploadableObject))
+      setDefaultInsertRelatedData() {
+        return {
+          locality_reference: {},
+          locality_synonym: {},
+          attachment_link: {},
+          locality_stratigraphy: {}
+        }
+      },
+
+      formatDataForUpload(objectToUpload) {
+        let uploadableObject = cloneDeep(objectToUpload);
+
+        if (this.isNotEmpty(objectToUpload.elevation)) uploadableObject.elevation = objectToUpload.elevation.toFixed(1);
+        // Todo: Add else null for lat and long if some errors (04.09.2019)
+        if (this.isNotEmpty(objectToUpload.latitude)) uploadableObject.latitude = objectToUpload.latitude.toFixed(6);
+        if (this.isNotEmpty(objectToUpload.longitude)) uploadableObject.longitude = objectToUpload.longitude.toFixed(6);
+
+        // Autocomplete fields
+        if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id;
+        if (this.isNotEmpty(objectToUpload.parent)) uploadableObject.parent = objectToUpload.parent.id;
+        if (this.isNotEmpty(objectToUpload.extent)) uploadableObject.extent = objectToUpload.extent.id;
+        if (this.isNotEmpty(objectToUpload.coord_det_precision)) uploadableObject.coord_det_precision = objectToUpload.coord_det_precision.id;
+        if (this.isNotEmpty(objectToUpload.coord_det_method)) uploadableObject.coord_det_method = objectToUpload.coord_det_method.id;
+        if (this.isNotEmpty(objectToUpload.coord_det_agent)) uploadableObject.coord_det_agent = objectToUpload.coord_det_agent.id;
+        if (this.isNotEmpty(objectToUpload.country)) uploadableObject.country = objectToUpload.country.id;
+        if (this.isNotEmpty(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id;
+        if (this.isNotEmpty(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id;
+
+        if (this.databaseId) uploadableObject.database = this.databaseId;
+
+        // Adding related data only on add view
+        if (!this.$route.meta.isEdit) {
+          uploadableObject.related_data = {};
+
+          this.relatedTabs.forEach(tab => {
+            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
+          });
+        }
+
+        console.log('This object is sent in string format:');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 
       fillAutocompleteFields(obj) {
-        this.locality.type = {value: obj.type__value, value_en: obj.type__value_en, id: obj.type__id}
-        this.locality.parent = {
-          locality: obj.parent__locality,
-          locality_en: obj.parent__locality_en,
-          id: obj.parent__id
-        }
-        this.locality.extent = {value: obj.extent__value, value_en: obj.extent__value_en, id: obj.extent__id}
-        this.locality.coord_det_precision = {
-          value: obj.coord_det_precision__value,
-          value_en: obj.coord_det_precision__value_en,
-          id: obj.coord_det_precision__id
-        }
-        this.locality.coord_det_method = {
-          value: obj.coord_det_method__value,
-          value_en: obj.coord_det_method__value_en,
-          id: obj.coord_det_method__id
-        }
-        this.locality.coord_det_agent = {agent: obj.coord_det_agent__agent, id: obj.coord_det_agent__id}
-        this.locality.country = {value: obj.country__value, value_en: obj.country__value_en, id: obj.country__id}
-        this.locality.stratigraphy_top = {
-          stratigraphy: obj.stratigraphy_top__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
-          id: obj.stratigraphy_top__id
-        }
-        this.locality.stratigraphy_base = {
-          stratigraphy: obj.stratigraphy_base__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
-          id: obj.stratigraphy_base__id
-        }
+        this.locality.type = { value: obj.type__value, value_en: obj.type__value_en, id: obj.type__id }
+        this.locality.parent = { locality: obj.parent__locality, locality_en: obj.parent__locality_en, id: obj.parent__id }
+        this.locality.extent = { value: obj.extent__value, value_en: obj.extent__value_en, id: obj.extent__id }
+        this.locality.coord_det_precision = { value: obj.coord_det_precision__value, value_en: obj.coord_det_precision__value_en, id: obj.coord_det_precision__id }
+        this.locality.coord_det_method = { value: obj.coord_det_method__value, value_en: obj.coord_det_method__value_en, id: obj.coord_det_method__id }
+        this.locality.coord_det_agent = { agent: obj.coord_det_agent__agent, id: obj.coord_det_agent__id }
+        this.locality.country = { value: obj.country__value, value_en: obj.country__value_en, id: obj.country__id }
+        this.locality.stratigraphy_top = { stratigraphy: obj.stratigraphy_top__stratigraphy, stratigraphy_en: obj.stratigraphy_top__stratigraphy_en, id: obj.stratigraphy_top__id }
+        this.locality.stratigraphy_base = { stratigraphy: obj.stratigraphy_base__stratigraphy, stratigraphy_en: obj.stratigraphy_base__stratigraphy_en, id: obj.stratigraphy_base__id }
       },
 
 
       fillRelatedDataAutocompleteFields(obj) {
-        obj.reference = {reference: obj.reference__reference, id: obj.reference}
-        obj.stratigraphy = {
-          stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
-          id: obj.stratigraphy__id
-        }
-        obj.agent = {agent: obj.agent__agent, id: obj.agent}
+        obj.reference = { reference: obj.reference__reference, id: obj.reference }
+        obj.stratigraphy = { stratigraphy: obj.stratigraphy__stratigraphy, stratigraphy_en: obj.stratigraphy__stratigraphy_en, id: obj.stratigraphy__id }
+        obj.agent = { agent: obj.agent__agent, id: obj.agent }
+
         return obj
+      },
+
+      unformatRelatedDataAutocompleteFields(obj, objectID) {
+        let newObject = cloneDeep(obj);
+
+        if (objectID) newObject.id = objectID;
+
+        if (this.isNotEmpty(obj.reference)) {
+          newObject.reference = obj.reference.id;
+          newObject.reference__reference = obj.reference.reference;
+        }
+
+        if (this.isNotEmpty(obj.stratigraphy)) {
+          newObject.stratigraphy = obj.stratigraphy.id;
+          newObject.stratigraphy__stratigraphy = obj.stratigraphy.stratigraphy;
+          newObject.stratigraphy__stratigraphy_en = obj.stratigraphy.stratigraphy_en;
+        }
+
+        if (this.isNotEmpty(obj.agent)) {
+          newObject.agent = obj.agent.id;
+          newObject.agent__agent = obj.agent.agent;
+        }
+
+        if (this.isNotEmpty(obj.attachment)) {
+          newObject.attachment = obj.attachment.id;
+          newObject.attachment__original_filename = obj.attachment.original_filename;
+        }
+
+        return newObject
       },
 
       loadRelatedData(type) {
         let query;
+
         if (type === 'locality_reference') {
-          query = fetchLocalityReference(this.$route.params.id, this.relatedData.page.locality_reference)
+          query = fetchLocalityReference(this.$route.params.id, this.relatedData.searchParameters.locality_reference)
         } else if (type === 'locality_synonym') {
-          query = fetchLocalitySynonym(this.$route.params.id, this.relatedData.page.locality_synonym)
+          query = fetchLocalitySynonym(this.$route.params.id, this.relatedData.searchParameters.locality_synonym)
         } else if (type === 'attachment_link') {
-          query = fetchLocalityAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+          query = fetchLocalityAttachment(this.$route.params.id, this.relatedData.searchParameters.attachment_link)
         } else if (type === 'locality_stratigraphy') {
-          query = fetchLocalityStratigraphy(this.$route.params.id, this.relatedData.page.locality_stratigraphy)
+          query = fetchLocalityStratigraphy(this.$route.params.id, this.relatedData.searchParameters.locality_stratigraphy)
         }
 
         return new Promise(resolve => {
@@ -760,19 +818,27 @@
           });
         });
       },
-      checkRequiredFields(type, obj) {
-        // if(type === 'locality_reference') return obj.reference === undefined;
-        // if(type === 'locality_synonym') return obj.synonym === undefined;
-        // if(type === 'attachment_link') return obj.attachment === undefined;
-        // if(type === 'locality_stratigraphy') return obj.stratigraphy === undefined;
-      },
+
+      checkRequiredFields(type, obj) {},
+
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.locality = this.locality.id;
-        if (this.isNotEmpty(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
-        if (this.isNotEmpty(uploadableObject.attachment)) uploadableObject.attachment = uploadableObject.attachment.id;
-        if (this.isNotEmpty(uploadableObject.stratigraphy)) uploadableObject.stratigraphy = uploadableObject.stratigraphy.id;
-        if (this.isNotEmpty(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
+        if (this.isNotEmpty(uploadableObject.reference)) {
+          uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
+        }
+        if (this.isNotEmpty(uploadableObject.attachment)) {
+          uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
+        }
+        if (this.isNotEmpty(uploadableObject.stratigraphy)) {
+          uploadableObject.stratigraphy = uploadableObject.stratigraphy.id ? uploadableObject.stratigraphy.id : uploadableObject.stratigraphy;
+        }
+        if (this.isNotEmpty(uploadableObject.agent)) {
+          uploadableObject.agent = uploadableObject.agent.id ? uploadableObject.agent.id : uploadableObject.agent;
+        }
+
+        console.log('This object is sent in string format (related_data):');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 
@@ -801,17 +867,6 @@
         }
       },
     },
-
-    watch: {
-      '$route.params.id': {
-        handler: function (newval, oldval) {
-          this.reloadData()
-        },
-        deep: true
-      }
-    }
-
-
   }
 
 </script>

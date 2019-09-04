@@ -6,15 +6,20 @@
 
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
-          <tr class="th-sort">
+          <tr :class="{ 'th-sort': $route.meta.isEdit }">
             <th v-show="isDraggable">{{ $t('settings.handle') }}</th>
 
             <th class="nowrap" v-for="field in thFields">
-              <span @click="changeOrder(field)">
-                <i class="fas fa-sort" v-if="relatedData.orderBy.library_reference !== field && relatedData.orderBy.library_reference !== '-' + field"></i>
+              <span v-if="$route.meta.isEdit" @click="changeOrder(field)">
+                <i class="fas fa-sort" v-if="relatedData.searchParameters.library_reference.orderBy !== field && relatedData.searchParameters.library_reference.orderBy !== '-' + field"></i>
                 <i v-else :class="'fas fa-sort-' + sortingDirection"></i>
                 {{ $t('reference.' + field) }}
 
+                <font-awesome-icon v-if="field === 'reference'" icon="link"/>
+              </span>
+
+              <span v-else>
+                {{ $t('reference.' + field) }}
                 <font-awesome-icon v-if="field === 'reference'" icon="link"/>
               </span>
             </th>
@@ -29,8 +34,9 @@
                      handle=".middle-handle"
                      v-bind="dragOptions"
                      @change="handleElementChange">
-              <tr v-for="entity in relatedData.library_reference" :key="entity.id"
-                  :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+              <tr v-for="(entity, index) in relatedData.library_reference"
+                  :key="entity.id"
+                  :class="{ 'allow-remove': entity.allowRemove, 'edit-mode': entity.editMode }">
                 <td v-show="isDraggable" class="middle-handle">
                   <i class="fas fa-align-justify fa-lg"></i>
                 </td>
@@ -80,22 +86,18 @@
                   <b-form-input v-model="entity.new.sort" type="number" :min="0" :max="relatedData.count.library_reference"/>
                 </td>
                 <td style="padding: 0.6em!important;">
-                  <button v-show="entity.editMode" class="float-left btn btn-sm btn-success"
-                          @click="$emit('related-data-modified', entity)" :disabled="sendingData">
-                    <font-awesome-icon icon="pencil-alt"/>
-                  </button>
-                  <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger"
-                          @click="removeRow(entity)" :disabled="sendingData">
-                    <font-awesome-icon icon="trash-alt"/>
+                  <button class="float-left btn btn-sm"
+                          :class="entity.editMode ? 'btn-success' : 'btn-outline-success'"
+                          :disabled="sendingData"
+                          @click="$emit('edit-row', entity, index)">
+                    <i class="fas fa-pencil-alt"></i>
                   </button>
 
-                  <button v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success"
-                          @click="$emit('edit-row', entity)" :disabled="sendingData">
-                    <font-awesome-icon icon="pencil-alt"/>
-                  </button>
-                  <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger"
-                          @click="$emit('allow-remove-row', entity)" :disabled="sendingData">
-                    <font-awesome-icon icon="trash-alt"/>
+                  <button class="float-right btn btn-sm"
+                          :class="entity.allowRemove ? 'btn-danger' : 'btn-outline-danger'"
+                          :disabled="sendingData"
+                          @click="$emit('remove-row', entity, index)">
+                    <i class="fas fa-trash-alt"></i>
                   </button>
                 </td>
               </tr>
@@ -133,14 +135,11 @@
               <b-form-input v-model="relatedData.insert.library_reference.sort" type="number" :min="0" :max="relatedData.count.library_reference"/>
             </td>
             <td style="padding: 0.6em!important;">
-              <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
-              <button class="float-left btn btn-sm btn-success" @click="$emit('related-data-added', activeTab)"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+                <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.library_reference = {}"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="times"/>
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+                <i class="fas fa-times"></i>
               </button>
             </td>
           </tr>
@@ -184,11 +183,11 @@
       },
 
       isDraggable() {
-        return this.relatedData.library_reference && this.relatedData.library_reference && this.relatedData.library_reference.length <= 25
+        return this.$route.meta.isEdit && this.relatedData.library_reference && this.relatedData.library_reference && this.relatedData.library_reference.length <= 25
       },
 
       sortingDirection() {
-        return this.relatedData.orderBy.library_reference.includes('-') ? 'down' : 'up'
+        return this.relatedData.searchParameters.library_reference.orderBy.includes('-') ? 'down' : 'up'
       }
     },
     methods: {
@@ -213,7 +212,7 @@
       },
 
       changeOrder(orderValue) {
-        if (this.relatedData.orderBy.library_reference === orderValue) {
+        if (this.relatedData.searchParameters.library_reference.orderBy === orderValue) {
           if (orderValue.charAt(0) !== '-') {
             orderValue = '-' + orderValue;
           } else {

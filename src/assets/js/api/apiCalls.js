@@ -339,17 +339,17 @@ export function autocompleteSearch(query) {
 export function fetchLocality(id) {
   return fetch(`locality/?id=${id}&format=json`)
 }
-export function fetchLocalityReference(id,page = 1) {
-  return fetch(`locality_reference/?locality__id=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchLocalityReference(id, searchParameters) {
+  return fetch(`locality_reference/?locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
-export function fetchLocalitySynonym(id,page = 1) {
-  return fetch(`locality_synonym/?locality_id=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchLocalitySynonym(id, searchParameters) {
+  return fetch(`locality_synonym/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
-export function fetchLocalityAttachment(id,page = 1) {
-  return fetch(`attachment/?attach_link__locality__id=${id}&page=${page}&paginate_by=10&fields=id,original_filename,attach_link__locality__id,remarks&format=json`)
+export function fetchLocalityAttachment(id, searchParameters) {
+  return fetch(`attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,original_filename,attach_link__locality__id,remarks&format=json`)
 }
-export function fetchLocalityStratigraphy(id,page = 1) {
-  return fetch(`locality_stratigraphy/?locality_id=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchLocalityStratigraphy(id, searchParameters) {
+  return fetch(`locality_stratigraphy/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 /************************
@@ -531,8 +531,8 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
   }
 }
 
-export function fetchLibraryReference(id, page, paginateBy = 25, orderBy = '-sort,reference__author,-reference__year') {
-  return fetch(`library_reference/?library=${id}&page=${page}&paginate_by=${paginateBy}&order_by=${orderBy}&format=json`)
+export function fetchLibraryReference(id, searchParameters) {
+  return fetch(`library_reference/?library=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 export function fetchLibraryAgent(id) {
