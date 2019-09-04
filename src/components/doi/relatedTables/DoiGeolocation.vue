@@ -20,8 +20,9 @@
           </thead>
 
           <tbody>
-          <tr v-for="entity in relatedData.doi_geolocation"
-              :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+          <tr v-for="(entity, index) in relatedData.doi_geolocation"
+              :key="entity.id"
+              :class="{ 'allow-remove': entity.allowRemove, 'edit-mode': entity.editMode }">
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode" v-translate="{ et: entity.locality__locality, en: entity.locality__locality_en }"></td>
 
@@ -42,13 +43,14 @@
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.locality"
-                               id="locality"
+                               :id="index"
                                :label="localityLabel"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.locality"
                                :options="autocomplete.locality"
                                @search-change="autocompleteLocalitySearch"
+                               @select="fillFieldsUsingLocality"
                                :internal-search="false"
                                :preserve-search="true"
                                :clear-on-select="false"
@@ -89,22 +91,18 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button v-show="entity.editMode" class="float-left btn btn-sm btn-success"
-                      @click="$emit('related-data-modified', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
-              </button>
-              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="trash-alt"/>
+              <button class="float-left btn btn-sm"
+                      :class="entity.editMode ? 'btn-success' : 'btn-outline-success'"
+                      :disabled="sendingData"
+                      @click="$emit('edit-row', entity, index)">
+                <i class="fas fa-pencil-alt"></i>
               </button>
 
-              <button v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success"
-                      @click="$emit('edit-row', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
-              </button>
-              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger"
-                      @click="$emit('allow-remove-row', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="trash-alt"/>
+              <button class="float-right btn btn-sm"
+                      :class="entity.allowRemove ? 'btn-danger' : 'btn-outline-danger'"
+                      :disabled="sendingData"
+                      @click="$emit('remove-row', entity, index)">
+                <i class="fas fa-trash-alt"></i>
               </button>
             </td>
           </tr>
@@ -159,14 +157,11 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <!--<button class="float-left btn btn-sm btn-outline-success" @click="addRelatedData(activeTab)" :disabled="sendingData">S</button>-->
-              <button class="float-left btn btn-sm btn-success" @click="$emit('related-data-added', activeTab)"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+                <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.doi_geolocation = {}"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="times"/>
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+                <i class="fas fa-times"></i>
               </button>
             </td>
           </tr>
@@ -189,6 +184,29 @@
       activeTab: String
     },
     mixins: [formManipulation, autocompleteMixin],
+    watch: {
+      'relatedData.insert.doi_geolocation.locality': {
+        handler: function (newVal, oldVal) {
+          if (this.isNotEmpty(newVal)) {
+            // Adding PLACE NAME, POINT LATITUDE and POINT LONGITUDE
+            this.relatedData.insert.doi_geolocation.place = this.$i18n.locale === 'ee' ? newVal.locality : newVal.locality_en;
+            this.relatedData.insert.doi_geolocation.point_longitude = newVal.longitude;
+            this.relatedData.insert.doi_geolocation.point_latitude = newVal.latitude;
+          }
+        },
+        deep: true
+      },
+    },
+    methods: {
+      fillFieldsUsingLocality(selectedOption, id) {
+        if (this.isNotEmpty(selectedOption)) {
+          // Adding PLACE NAME, POINT LATITUDE and POINT LONGITUDE
+          this.relatedData.doi_geolocation[id].new.place = this.$i18n.locale === 'ee' ? selectedOption.locality : selectedOption.locality_en;
+          this.relatedData.doi_geolocation[id].new.point_longitude = selectedOption.longitude;
+          this.relatedData.doi_geolocation[id].new.point_latitude = selectedOption.latitude;
+        }
+      }
+    }
   }
 </script>
 

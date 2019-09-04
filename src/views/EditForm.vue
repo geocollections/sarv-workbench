@@ -23,7 +23,8 @@
 
       <save-as-new-modal v-if="data !== null" :title-extra="'Some title'"
                          :related-data="relatedData" :object="object" :object-id="data.id"/>
-      <confirm-tab-close title="TAB"/>
+<!--      commented on 04.09.2019-->
+<!--      <confirm-tab-close title="TAB"/>-->
       <confirm-page-close :title="$t($route.meta.heading) + ': '  + $route.params.id"/>
 
       <!-- LOGS -->

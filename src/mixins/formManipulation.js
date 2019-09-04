@@ -73,7 +73,8 @@ const formManipulation = {
   },
   mounted() {
     // Root event for confirmation modal which is emitted when user tries to leave the TAB without saving.
-    this.$root.$on('user-choice', this.handleUserChoice);
+    // commented on 04.09.2019
+    // this.$root.$on('user-choice', this.handleUserChoice);
     // this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
 
     this.$parent.$on('button-clicked', this.bottomOptionClicked);
@@ -471,6 +472,7 @@ const formManipulation = {
       return object;
     },
 
+    // Todo: Update TAB code
     handleUserChoice(choice) {
       this.$bvModal.hide('confirm-tab-close')
 
@@ -516,7 +518,7 @@ const formManipulation = {
 
       if (this.isNotEmpty(this.relatedData.insert[tab])) {
 
-        if (this.$route.meta.isEdit && this.$route.meta.object !== 'doi') {
+        if (this.$route.meta.isEdit) {
           let formData = new FormData();
 
           // Todo: CheckRequiredFields is not used anywhere, should change it to validate() and use requiredFields field in component data object.
@@ -527,11 +529,8 @@ const formManipulation = {
 
           formData.append('data', this.formatRelatedData(this.relatedData.insert[tab]));
           this.saveData(tab, formData, 'add/' + tab + '/').then(isSuccessfullySaved => {
-
-            // Reload related data in current tab
+            console.log(isSuccessfullySaved)
             this.loadRelatedData(tab);
-            // Clear previously inserted related data
-            // Todo: Default values for insert
             this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
           });
 
@@ -559,7 +558,7 @@ const formManipulation = {
      * Main function is to edit related data. Firstly if allowRemove is enabled it disables it.
      * Secondly on click it enables editMode where user can edit data.
      * After data is changed user can click the button to send new data to API. API request is only done for edit views,
-     * for add views and DOI, data is always sent in related_data field.
+     * for add views data is always sent in related_data field.
      *
      * @param {object} entity - item from related data array.
      * @param {int} index -  item's index in array which is used to replace it with new one.
@@ -571,7 +570,7 @@ const formManipulation = {
         this.$set(entity, 'editMode', true);
         this.$set(entity, 'new', this.fillRelatedDataAutocompleteFields(cloneDeep(entity)));
       } else {
-        if (this.$route.meta.isEdit && this.$route.meta.object !== 'doi') {
+        if (this.$route.meta.isEdit) {
           if (this.isNotEmpty(entity.new)) {
             let formData = new FormData();
             if (this.checkRequiredFields(this.activeTab, entity.new)) {
@@ -584,6 +583,7 @@ const formManipulation = {
 
             // Todo: Check saveData method and maybe refactor
             this.saveData(this.activeTab, formData, 'change/' + this.activeTab + '/' + entity.id).then(isSuccessfullySaved => {
+              console.log(isSuccessfullySaved)
               //  UPDATE ROW DATA
               this.$set(this.relatedData[this.activeTab], index, this.unformatRelatedDataAutocompleteFields(entity.new, entity.id));
               this.$set(entity, 'editMode', false);
@@ -612,7 +612,7 @@ const formManipulation = {
      * First of all if editMode is activated then it disables it.
      * Secondly if user presses delete button then allowRemove parameter is activated
      * and user can see which row can be deleted, this is because of accidental misclicks.
-     * Lastly if isEdit then related data should be sent via API with DELETE request (this does not apply to DOI).
+     * Lastly if isEdit then related data should be sent via API with DELETE request.
      * Add view must always send data via related_data field, because main object doesn't exist in database yet.
      *
      * @param {object} entity - item from related data array.
@@ -625,17 +625,12 @@ const formManipulation = {
         this.$set(entity, 'allowRemove', true);
       } else {
         if (this.$route.meta.isEdit) {
-          // Doi is special case and using only related data
-          if (this.$route.meta.object === 'doi') {
-            this.relatedData[this.activeTab].splice(index, 1);
-            toastSuccess({text: `Removed record with an ID: ${entity.id} from ${this.activeTab}`});
-          } else {
-            // Todo: Else send remove request to api
-            console.log('DELETE: ' + JSON.stringify(entity))
-          }
+          // Todo: Else send remove request to api
+          console.log('DELETE: ' + JSON.stringify(entity))
         } else {
           this.relatedData[this.activeTab].splice(index, 1);
-          toastSuccess({text: `Removed record with an ID: ${entity.id} from ${this.activeTab}`});
+          if (this.$route.meta.isEdit) toastSuccess({text: `Removed record with an ID: <b>${entity.id}</b> from <b>${this.activeTab}</b>`});
+          else toastSuccess({text: `Removed record from <b>${this.activeTab}</b>`});
         }
       }
     },
@@ -677,6 +672,9 @@ const formManipulation = {
 
       if (choice === "CLEAR") {
         this[object] = {};
+        this.relatedTabs.forEach(tab => {
+          if (this.isNotEmpty(this.relatedData[tab.name])) this.relatedData[tab.name] = {}
+        });
         toastInfo({text: this.$t('messages.fieldsCleared')})
       }
 

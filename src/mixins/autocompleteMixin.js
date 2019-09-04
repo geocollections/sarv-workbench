@@ -234,7 +234,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case 'preparation':
       return `preparation/?multi_search=value:${value};fields:preparation_number,id;lookuptype:icontains&fields=id,preparation_number`;
     case 'locality':
-      return `locality/?multi_search=value:${value};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`;
+      return `locality/?multi_search=value:${value};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en,longitude,latitude`;
     case 'storage_additional':
     case 'storage':
       return `location/?multi_search=value:${value};fields:location;lookuptype:icontains&fields=id,location`;

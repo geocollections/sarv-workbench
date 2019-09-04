@@ -352,7 +352,7 @@
         <ul class="nav nav-tabs nav-fill mb-3">
 
           <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
-            <a href="#" @click.prevent="setActiveTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+            <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
               <span>{{ $t('doi.relatedTables.' + tab.name) }}</span>
 
               <span>
@@ -366,32 +366,31 @@
           </li>
         </ul>
 
-        <!-- Todo: Add functionality after getting all related_data in one go problem solved -->
-<!--        <div class="row">-->
-<!--          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">-->
-<!--            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">-->
-<!--              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>-->
-<!--              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>-->
-<!--              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>-->
-<!--              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>-->
-<!--              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>-->
-<!--              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>-->
-<!--              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>-->
-<!--            </b-form-select>-->
-<!--          </div>-->
+        <div class="row" v-if="$route.meta.isEdit">
+          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
+            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
+              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+            </b-form-select>
+          </div>
 
-<!--          <div class="col-sm-12 col-md-3 export-center">-->
-<!--            &lt;!&ndash; EXPORT BUTTON? &ndash;&gt;-->
-<!--          </div>-->
+          <div class="col-sm-12 col-md-3 export-center">
+            <!-- EXPORT BUTTON? -->
+          </div>
 
-<!--          <div class="col-sm-12 col-md-6 pagination-center"-->
-<!--               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">-->
-<!--            <b-pagination-->
-<!--              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"-->
-<!--              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">-->
-<!--            </b-pagination>-->
-<!--          </div>-->
-<!--        </div>-->
+          <div class="col-sm-12 col-md-6 pagination-center"
+               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
+              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
+            </b-pagination>
+          </div>
+        </div>
 
         <doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                    v-on:add-related-data="addRelatedData"
@@ -733,27 +732,27 @@
           searchParameters: {
             attachment_link: {
               page: 1,
-              paginateBy: 100,
+              paginateBy: 10,
               orderBy: 'id'
             },
             doi_related_identifier: {
               page: 1,
-              paginateBy: 100,
+              paginateBy: 10,
               orderBy: 'id'
             },
             doi_geolocation: {
               page: 1,
-              paginateBy: 100,
+              paginateBy: 10,
               orderBy: 'id'
             },
             doi_agent: {
               page: 1,
-              paginateBy: 100,
+              paginateBy: 10,
               orderBy: 'id'
             },
             doi_date: {
               page: 1,
-              paginateBy: 100,
+              paginateBy: 10,
               orderBy: 'id'
             },
           },
