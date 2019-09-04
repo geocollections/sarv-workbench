@@ -35,7 +35,15 @@
             <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
 
           </div>
+
+          <div class="mx-2 w-100">
+            <!-- CHECKBOXES -->
+            <b-form-checkbox class="mt-2" v-model="searchParameters.is_primary">
+              {{ $t('keyword.is_primary') }}
+            </b-form-checkbox>
+          </div>
         </div>
+
       </transition>
     </fieldset>
 
@@ -73,6 +81,7 @@
           {id: "language", title: "keyword.language", type: "text"},
           {id: "keyword_category", title: "keyword.keyword_category", type: "text"},
           {id: "related_keyword", title: "keyword.related_keyword", type: "text"},
+          {id: "is_primary", title: "keyword.is_primary", type: "text"},
         ],
         filters: [
           {id: "id", title: "keyword.id", type: "number"},
@@ -104,6 +113,7 @@
           language: null,
           keyword_category: null,
           related_keyword: null,
+          is_primary: null,
           page: 1,
           paginateBy: 10,
           orderBy: '-id',

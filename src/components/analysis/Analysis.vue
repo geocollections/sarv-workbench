@@ -649,7 +649,6 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
 
-        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private;
         if (this.isNotEmpty(objectToUpload.date)) uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
         if (this.isNotEmpty(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
 

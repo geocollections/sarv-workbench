@@ -18,6 +18,10 @@
     <td v-translate="{et: entity.keyword_category__name, en: entity.keyword_category__name_en}"></td>
 
     <td>{{ entity.related_keyword__keyword }}</td>
+
+    <td class="middle">
+      <i v-if="entity.is_primary" class="fas fa-check fa"></i>
+    </td>
   </tr>
   </tbody>
 </template>
@@ -43,5 +47,10 @@
     opacity: 1;
     -webkit-transition: opacity 100ms ease-in;
     transition: opacity 100ms ease-in;
+  }
+
+  .middle {
+    text-align: center;
+    vertical-align: middle;
   }
 </style>

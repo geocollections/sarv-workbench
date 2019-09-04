@@ -1115,6 +1115,7 @@
     "keyword_category": "Kategooria",
     "related_keyword": "Seotud termin",
     "remarks": "Lisainfo",
+    "is_primary": "Esmane",
     "editMessage": "Muuda terminit",
     "addNew": "Lisage uus Termin"
   },

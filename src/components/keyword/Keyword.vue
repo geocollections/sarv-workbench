@@ -93,6 +93,15 @@
         </div>
       </transition>
     </fieldset>
+
+    <!-- IS PRIMARY -->
+    <div class="row mt-3">
+      <div class="col">
+        <b-form-checkbox id="is_primary" v-model="keyword.is_primary" :value="true" :unchecked-value="false">
+          {{ $t('keyword.is_primary') }}
+        </b-form-checkbox>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -195,8 +204,6 @@
 
               this.$emit('data-loaded', this.keyword);
               this.sendingData = false;
-              // this.getListRecords('keyword')
-
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
@@ -224,14 +231,6 @@
         this.keyword.related_keyword = { id: obj.related_keyword, keyword: obj.related_keyword__keyword };
       },
 
-      fetchList(localStorageData) {
-        console.log(localStorageData)
-        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
-        return new Promise((resolve) => {
-          resolve(fetchKeywords(params))
-        });
-      },
-
       setDefaultSearchParameters() {
         return {
           id: null,
@@ -239,6 +238,7 @@
           language: null,
           keyword_category: null,
           related_keyword: null,
+          is_primary: null,
           page: 1,
           paginateBy: 10,
           orderBy: '-id',

@@ -1115,6 +1115,7 @@
     "keyword_category": "Category",
     "related_keyword": "Related term",
     "remarks": "Remarks",
+    "is_primary": "Primary",
     "editMessage": "Edit term",
     "addNew": "Add new Term"
   },

@@ -1089,7 +1089,7 @@ export function fetchKeyword(id) {
 }
 
 export function fetchKeywords(data, listOfIDs) {
-  let fields = 'id,keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,remarks';
+  let fields = 'id,keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,remarks,is_primary';
   let searchFields = '';
 
   if (listOfIDs && listOfIDs.length > 0) {
@@ -1109,6 +1109,9 @@ export function fetchKeywords(data, listOfIDs) {
   }
   if (data.related_keyword && data.related_keyword.trim().length > 0) {
     searchFields += `&related_keyword__keyword__icontains=${data.related_keyword}`
+  }
+  if (data.is_primary) {
+    searchFields += `&is_primary=${data.is_primary}`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
