@@ -845,6 +845,7 @@
     "remarks": "Lisainfo",
     "location": "Asukoht",
     "is_locked": "Kinnine?",
+    "is_private": "Privaatne",
     "addNew": "Lisa uus analüüs",
     "relatedTables": {
       "analysis_results": "Analüüsi tulemused",

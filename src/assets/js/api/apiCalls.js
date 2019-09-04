@@ -610,11 +610,11 @@ export function fetchDoiCheck(doi) {
 }
 
 export function fetchDoiAttachment(id, searchParameters) {
-  return fetch(`attachment_link/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks&format=json`)
+  return fetch(`attachment_link/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks&format=json`)
 }
 
 export function fetchDoiAgent(id, searchParameters) {
-  return fetch(`doi_agent/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
+  return fetch(`doi_agent/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 export function fetchDoiAgentType() {
@@ -622,15 +622,15 @@ export function fetchDoiAgentType() {
 }
 
 export function fetchDoiRelatedIdentifier(id, searchParameters) {
-  return fetch(`doi_related_identifier/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
+  return fetch(`doi_related_identifier/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 export function fetchDoiGeolocation(id, searchParameters) {
-  return fetch(`doi_geolocation/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
+  return fetch(`doi_geolocation/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 export function fetchDoiDate(id, searchParameters) {
-  return fetch(`doi_date/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&format=json`)
+  return fetch(`doi_date/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 export function fetchDoiRelatedIdentifierType() {
@@ -916,12 +916,12 @@ export function fetchAnalyses(data, agent, databaseId) {
   }
 }
 
-export function fetchAnalysisAttachment(id,page=1) {
-  return fetch(`attachment/?attach_link__analysis__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`)
+export function fetchAnalysisAttachment(id, searchParameters) {
+  return fetch(`attachment/?attach_link__analysis__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`)
 }
 
-export function fetchAnalysisResults(id,page=1) {
-  return fetch(`analysis_results/?analysis=${id}&page=${page}&paginate_by=100&format=json`)
+export function fetchAnalysisResults(id, searchParameters) {
+  return fetch(`analysis_results/?analysis=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 /***************************
  ***  ANALYSIS LINK END  ***

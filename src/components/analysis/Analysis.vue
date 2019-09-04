@@ -230,7 +230,7 @@
               <label class="p-0" :for="`dataset`">{{ $t('analysis.first_dataset') }}:</label>
               <vue-multiselect v-model="analysis.dataset"
                                id="dataset"
-                               :custom-label="customLabelForDataset"
+                               :label="nameLabel"
                                track-by="id"
                                placeholder="dataset search..."
                                :loading="autocomplete.loaders.dataset"
@@ -241,7 +241,7 @@
                                :clear-on-select="false"
                                :show-labels="false">
                 <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ customLabelForDataset(option)</strong>
+                  <strong>{{ option[nameLabel] }}</strong>
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
@@ -343,28 +343,29 @@
     </fieldset>
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row mb-2" v-if="$route.meta.isEdit">
+    <div class="row mb-2">
       <div class="col mt-2">
-        <ul class="nav nav-tabs nav-fill mb-3">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('analysis_results')" class="nav-link"
-               :class="{ active: activeTab === 'analysis_results' }">
-              {{ $t('analysis.relatedTables.analysis_results') }}
-              <!--<font-awesome-icon icon="file-contract"/>-->
-            </a>
-          </li>
 
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
-               :class="{ active: activeTab === 'attachment_link' }">
-              {{ $t('analysis.relatedTables.attachment_link') }} <font-awesome-icon icon="folder-open"/>
+        <ul class="nav nav-tabs nav-fill mb-3">
+
+          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+            <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+              <span>{{ $t('analysis.relatedTables.' + tab.name) }}</span>
+
+              <span>
+                <sup>
+                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                </sup>
+              </span>
+
+              <span><i :class="tab.iconClass"></i></span>
             </a>
           </li>
         </ul>
 
-        <div class="row" v-if="activeTab !== 'attachment_link'">
+        <div class="row" v-if="$route.meta.isEdit">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
               <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
               <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
               <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -379,25 +380,26 @@
             <!-- EXPORT BUTTON? -->
           </div>
 
-          <!--<div class="col-sm-12 col-md-6 pagination-center"-->
-               <!--v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">-->
-            <!--<b-pagination-->
-              <!--size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"-->
-              <!--v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">-->
-            <!--</b-pagination>-->
-          <!--</div>-->
+          <div class="col-sm-12 col-md-6 pagination-center"
+               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+            <b-pagination
+              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
+              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
+            </b-pagination>
+          </div>
         </div>
+
         <analysis-results :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                          v-on:related-data-added="addRelatedData"
-                          v-on:related-data-modified="editRelatedData"
+                          v-on:add-related-data="addRelatedData"
+                          v-on:set-default="setDefault"
                           v-on:edit-row="editRow"
-                          v-on:allow-remove-row="allowRemove" />
+                          v-on:remove-row="removeRow" />
 
         <analysis-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                        v-on:related-data-added="addRelatedData"
-                        v-on:related-data-modified="editRelatedData"
+                        v-on:add-related-data="addRelatedData"
+                        v-on:set-default="setDefault"
                         v-on:edit-row="editRow"
-                        v-on:allow-remove-row="allowRemove" />
+                        v-on:remove-row="removeRow" />
 
       </div>
     </div>
@@ -405,33 +407,11 @@
     <!-- IS PRIVATE -->
     <div class="row mt-3">
       <div class="col">
-        <b-form-checkbox id="is_private" v-model="analysis.is_private" :value="true || 1" :unchecked-value="false || 0">
-          {{ $t('doi.private') }}?
+        <b-form-checkbox id="is_private" v-model="analysis.is_private" :value="true" :unchecked-value="false">
+          {{ $t('analysis.is_private') }}?
         </b-form-checkbox>
       </div>
     </div>
-
-<!--    <div class="row mt-3 mb-3">-->
-<!--      <div class="col">-->
-<!--        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'analysis', true)"-->
-<!--                :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--          <font-awesome-icon icon="door-open"/>-->
-<!--          {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'analysis', true)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--          <font-awesome-icon icon="save"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--        </button>-->
-
-<!--        <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('analysis', $route.meta.isEdit)"-->
-<!--                :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--          <font-awesome-icon icon="ban"/>-->
-<!--          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--        </button>-->
-<!--      </div>-->
-<!--    </div>-->
 
   </div>
 </template>
@@ -510,13 +490,7 @@
         },
         deep: true
       },
-      'relatedData.paginateBy': {
-        handler: function (newVal, oldVal) {
-          this.loadRelatedData(this.activeTab)
-        },
-        deep: true
-      },
-      'relatedData.page': {
+      'relatedData.searchParameters': {
         handler: function (newVal, oldVal) {
           this.loadRelatedData(this.activeTab)
         },
@@ -535,7 +509,10 @@
 
       setInitialData() {
         return {
-          tabs:[ 'analysis_results','attachment_link'],
+          relatedTabs: [
+            { name: 'analysis_results', iconClass: 'far fa-chart-bar' },
+            { name: 'attachment_link', iconClass: 'fas fa-folder-open' },
+          ],
           searchHistory: 'analysisSearchHistory',
           activeTab: 'analysis_results',
           relatedData: this.setDefaultRelatedData(),
@@ -586,43 +563,23 @@
       },
 
       loadFullInfo() {
-        // fetching autocompletes
+        this.loadAutocompleteFields();
 
-        fetchLabs().then(response => {
-          this.autocomplete.labs = this.handleResponse(response);
-        });
-
-        fetchInstruments().then(response => {
-          this.autocomplete.instruments = this.handleResponse(response);
-        });
-
-        fetchAnalysisMethod().then(response => {
-          this.autocomplete.analysis_methods = this.handleResponse(response)
-        })
-
-        if (this.$route.meta.isEdit && this.$router.currentRoute.params.hasOwnProperty('id')) {
+        if (this.$route.meta.isEdit) {
           this.sendingData = true;
-          this.$emit('set-object', 'analysis')
+          this.$emit('set-object', 'analysis');
+
           fetchAnalysis(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
 
             if (handledResponse.length > 0) {
               this.$emit('object-exists', true);
               this.analysis = this.handleResponse(response)[0];
-
               this.fillAutocompleteFields(this.analysis)
 
-              // Loading RESULTS and ATTACHMENTS here because they don't need api request
-              // this.loadRelatedData('analysis_results', this.analysis)
-              // this.loadRelatedData('attachment_link', this.analysis)
-
               this.removeUnnecessaryFields(this.analysis, this.copyFields);
-              this.analysis.related_data = {};
-
-              // this.forceRerender(); if needed
               this.$emit('data-loaded', this.analysis)
               this.sendingData = false;
-              // this.getListRecords('analysis')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
@@ -630,16 +587,25 @@
           });
 
           // Load Related Data which is in tabs
-          this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
+          this.relatedTabs.forEach(tab => {
+            this.loadRelatedData(tab.name);
           });
 
           this.$on('tab-changed', this.setTab);
 
-          this.$emit('related-data-info', this.tabs);
+          this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
-          this.setActiveTab('analysis_results')
+          this.setTab('analysis_results')
         }
+      },
+
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {
+          fetchLabs().then(response => this.autocomplete.labs = this.handleResponse(response));
+          fetchInstruments().then(response => this.autocomplete.instruments = this.handleResponse(response));
+          fetchAnalysisMethod().then(response => this.autocomplete.analysis_methods = this.handleResponse(response));
+        }
+        if (relatedDataAutocompleteFields) {}
       },
 
       setDefaultRelatedData() {
@@ -652,16 +618,20 @@
           },
           copyFields: {
             attachment_link: ['attachment', 'remarks'],
-            analysis_results: ['analysis_id', 'name'],
+            analysis_results: ['name', 'value', 'value_max', 'value_min', 'value_bin', 'value_txt'],
           },
-          insert: {
-            attachment_link: {},analysis_results: {},
-          },
-          page: {
-            attachment_link: 1, analysis_results: 1,
-          },
-          paginateBy: {
-            attachment_link: 10,  analysis_results: 10,
+          insert: this.setDefaultInsertRelatedData(),
+          searchParameters: {
+            attachment_link: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            analysis_results: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
           },
           count: {
             attachment_link: 0, analysis_results: 0,
@@ -669,87 +639,90 @@
         }
       },
 
-      formatDataForUpload(objectToUpload, saveRelatedData = false) {
-        let uploadableObject = cloneDeep(objectToUpload)
-        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private == 1 ? '1' : '0';
+      setDefaultInsertRelatedData() {
+        return {
+          attachment_link: {},
+          analysis_results: {},
+        }
+      },
+
+      formatDataForUpload(objectToUpload) {
+        let uploadableObject = cloneDeep(objectToUpload);
+
+        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private;
         if (this.isNotEmpty(objectToUpload.date)) uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
         if (this.isNotEmpty(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
 
         // Autocomplete fields
-        if (this.isNotEmpty(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id
-        if (this.isNotEmpty(objectToUpload.analysis_method)) uploadableObject.analysis_method = objectToUpload.analysis_method.id
-        if (this.isNotEmpty(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id
-        if (this.isNotEmpty(objectToUpload.lab)) uploadableObject.lab = objectToUpload.lab.id
-        if (this.isNotEmpty(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id
-        if (this.isNotEmpty(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id
-        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
-        if (this.isNotEmpty(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
+        if (this.isNotEmpty(objectToUpload.sample)) uploadableObject.sample = objectToUpload.sample.id;
+        if (this.isNotEmpty(objectToUpload.analysis_method)) uploadableObject.analysis_method = objectToUpload.analysis_method.id;
+        if (this.isNotEmpty(objectToUpload.specimen)) uploadableObject.specimen = objectToUpload.specimen.id;
+        if (this.isNotEmpty(objectToUpload.lab)) uploadableObject.lab = objectToUpload.lab.id;
+        if (this.isNotEmpty(objectToUpload.instrument)) uploadableObject.instrument = objectToUpload.instrument.id;
+        if (this.isNotEmpty(objectToUpload.agent)) uploadableObject.agent = objectToUpload.agent.id;
+        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id;
+        if (this.isNotEmpty(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id;
 
-        if (this.isNotEmpty(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id
-        if (this.isNotEmpty(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id
+        if (this.isNotEmpty(objectToUpload.reference)) uploadableObject.reference = objectToUpload.reference.id;
+        if (this.isNotEmpty(objectToUpload.dataset)) uploadableObject.dataset = objectToUpload.dataset.id;
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
 
 
-        // Adding related data
-        // Related data is only added on edit view, no need to send empty fields because on add user can't add related data.
-        // if (saveRelatedData && this.$route.meta.isEdit) {
-        //   uploadableObject.related_data = {}
-        //   uploadableObject.related_data.attachment = this.relatedData.attachment_link
-        //   uploadableObject.related_data.analysis_results = this.relatedData.analysis_results
-        // }
+        // Adding related data only on add view
+        if (!this.$route.meta.isEdit) {
+          uploadableObject.related_data = {};
 
-        console.log('This object is sent in string format:')
-        console.log(uploadableObject)
+          this.relatedTabs.forEach(tab => {
+            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
+          });
+        }
+
+        console.log('This object is sent in string format:');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 
       fillAutocompleteFields(obj) {
-         this.analysis.sample = { id: obj.sample, number: obj.sample__number }
-         this.analysis.agent = { id: obj.agent, agent: obj.agent__agent}
-         this.analysis.owner = { id: obj.owner, agent: obj.owner__agent}
-         this.analysis.analysis_method = { id: obj.analysis_method, analysis_method: obj.analysis_method__analysis_method}
-         if (typeof obj.dataset !== 'undefined' && obj.dataset !== null) {
-           this.analysis.dataset = { id: obj.dataset, name: obj.dataset__name,name_en: obj.dataset__name_en,}
-         }
-         this.analysis.lab = { id: obj.lab, lab: obj.lab__lab,lab_en: obj.lab__lab_en,}
-         this.analysis.instrument = { id: obj.instrument, instrument: obj.instrument__instrument, instrument_en: obj.instrument__instrument_en,}
-         this.analysis.specimen = { id: obj.specimen, specimen_id: obj.specimen__specimen_id}
-         this.analysis.reference = { id: obj.reference, reference: obj.reference__reference}
-         this.analysis.storage = {location:obj.storage__location,id:obj.storage}
-
+        console.log(obj)
+        this.analysis.sample = { id: obj.sample, number: obj.sample__number }
+        this.analysis.agent = { id: obj.agent, agent: obj.agent__agent}
+        this.analysis.owner = { id: obj.owner, agent: obj.owner__agent}
+        this.analysis.analysis_method = { id: obj.analysis_method, analysis_method: obj.analysis_method__analysis_method}
+        this.analysis.dataset = { id: obj.dataset, name: obj.dataset__name,name_en: obj.dataset__name_en,}
+        this.analysis.lab = { id: obj.lab, lab: obj.lab__lab,lab_en: obj.lab__lab_en,}
+        this.analysis.instrument = { id: obj.instrument, instrument: obj.instrument__instrument, instrument_en: obj.instrument__instrument_en,}
+        this.analysis.specimen = { id: obj.specimen, specimen_id: obj.specimen__specimen_id}
+        this.analysis.reference = { id: obj.reference, reference: obj.reference__reference}
+        this.analysis.storage = {location:obj.storage__location,id:obj.storage}
       },
 
-      fillRelatedDataAutocompleteFields(obj, type) {
-        if (obj === undefined) return;
-        // console.log(obj)
-        // console.log(type)
+      fillRelatedDataAutocompleteFields(obj) {
+        if (this.isNotEmpty(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
 
-        // This goes for related data in tabs
-        if (type === undefined) {
-          console.log(obj)
-
-          if (this.isNotEmpty(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename }
-
-
-          return obj;
-        }
-
-        let relatedData = cloneDeep(obj)
-        obj = [];
-        relatedData.forEach(entity => {
-          if (type === 'attachment_link') obj.push(entity)
-        });
         return obj
       },
 
-      loadRelatedData(object, analysis = null) {
+      unformatRelatedDataAutocompleteFields(obj, objectID) {
+        let newObject = cloneDeep(obj);
+
+        if (objectID) newObject.id = objectID;
+
+        if (this.isNotEmpty(obj.attachment)) {
+          newObject.attachment = obj.attachment.id;
+          newObject.attachment__original_filename = obj.attachment.original_filename;
+        }
+
+        return newObject
+      },
+
+      loadRelatedData(object) {
         let query;
 
         if (object === 'attachment_link') {
-          query = fetchAnalysisAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+          query = fetchAnalysisAttachment(this.$route.params.id, this.relatedData.searchParameters.attachment_link)
         } else if (object === 'analysis_results') {
-          query = fetchAnalysisResults(this.$route.params.id, this.relatedData.page.analysis_results)
+          query = fetchAnalysisResults(this.$route.params.id, this.relatedData.searchParameters.analysis_results)
         }
 
         return new Promise(resolve => {
@@ -767,29 +740,25 @@
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
         uploadableObject.analysis = this.analysis.id;
-        console.log(uploadableObject.analysis)
 
+        if (this.isNotEmpty(uploadableObject.attachment)) {
+          uploadableObject.attachment = uploadableObject.attachment.id ? uploadableObject.attachment.id : uploadableObject.attachment;
+        }
+
+        console.log('This object is sent in string format (related_data):')
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
-      },
-
-      fetchList(localStorageData) {
-        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
-        return new Promise((resolve) => {
-          resolve(fetchAnalyses(params, this.currentUser, this.databaseId))
-        });
       },
 
       setDefaultSearchParameters() {
         return {
+          id: null,
+          analysis_method: null,
+          agentAndLab: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',
         }
-      },
-
-      customLabelForDataset(option) {
-        if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
-        return `${option.id} - (${option.name_en})`
       },
     }
 

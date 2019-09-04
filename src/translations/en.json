@@ -833,6 +833,7 @@
     "remarks": "Remarks",
     "location": "Location",
     "is_locked": "Is locked?",
+    "is_private": "Private",
     "addNew": "Add new analysis",
     "relatedTables": {
       "analysis_results": "Analüüsi tulemused",

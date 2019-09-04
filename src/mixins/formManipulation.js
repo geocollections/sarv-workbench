@@ -172,8 +172,7 @@ const formManipulation = {
       return isValid
     },
 
-    add(addAnother, object, saveRelatedData = false, returnPromise = false) {
-
+    add(addAnother, object, returnPromise = false) {
       return new Promise(resolve => {
         if (this.validate(object) && !this.sendingData) {
 
@@ -184,7 +183,7 @@ const formManipulation = {
             delete this[object]['id']
           }
 
-          const dataToUpload = this.formatDataForUpload(this[object], saveRelatedData);
+          const dataToUpload = this.formatDataForUpload(this[object]);
           let formData = new FormData();
           formData.append('data', dataToUpload);
 
@@ -537,7 +536,7 @@ const formManipulation = {
 
         } else {
           this.removeUnnecessaryFields(this.relatedData.insert[tab], this.relatedData.copyFields[tab]);
-          this.relatedData[tab].push(this.unformatRelatedDataAutocompleteFields(this.relatedData.insert[tab]))
+          this.relatedData[tab].push(this.unformatRelatedDataAutocompleteFields(this.relatedData.insert[tab]));
           this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
         }
 
@@ -651,23 +650,19 @@ const formManipulation = {
      *
      * @param {string} choice - User's choice in String format e.g., 'SAVE', 'CLEAR', etc.
      * @param {string} object - Current object which user tries to edit or sth. ('specimen', 'doi', etc.)
-     * @param {string} [saveRelatedData=false] - Value for saving related data in related_data field.
      *
      * @example bottomOptionClicked('SAVE', 'doi')
      */
-    bottomOptionClicked(choice, object, saveRelatedData = false) {
-      // Currently only doi should save related data in one go.
-      if (object === 'doi') saveRelatedData = true;
-
-      if (choice === "SAVE") this.add(true, object, saveRelatedData);
+    bottomOptionClicked(choice, object) {
+      if (choice === "SAVE") this.add(true, object);
 
       if (choice === "FINISH") {
         this[object].date_end = new Date();
-        this.add(false, object, saveRelatedData);
+        this.add(false, object);
       }
 
       if (choice === "SAVE_AND_LEAVE") {
-        this.add(false, object, saveRelatedData);
+        this.add(false, object);
       }
 
       if (choice === "CLEAR") {

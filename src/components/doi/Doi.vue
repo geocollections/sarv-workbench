@@ -515,6 +515,7 @@
   import DoiDate from "./relatedTables/DoiDate";
   import { toastSuccess, toastError, toastInfo } from "../../assets/js/iziToast/iziToast";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
+  import {mapState} from "vuex";
 
   export default {
     components: {
@@ -569,6 +570,10 @@
         },
         deep: true
       },
+    },
+
+    computed: {
+      ...mapState(["databaseId"])
     },
 
     methods: {
@@ -649,6 +654,7 @@
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
           this.$emit('set-object', 'doi');
+
           fetchDoi(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
 
@@ -662,8 +668,6 @@
               this.loadRelatedData('dataset', this.doi);
 
               this.removeUnnecessaryFields(this.doi, this.copyFields);
-              this.doi.related_data = {};
-
               this.$emit('data-loaded', this.doi)
               this.sendingData = false;
             } else {
@@ -684,7 +688,7 @@
 
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
-          this.setActiveTab('doi_agent')
+          this.setTab('doi_agent')
         }
       },
 
@@ -783,23 +787,25 @@
         }
       },
 
-      formatDataForUpload(objectToUpload, saveRelatedData = false) {
-        let uploadableObject = cloneDeep(objectToUpload)
-        // if (this.isNotEmpty(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id
+      formatDataForUpload(objectToUpload) {
+        let uploadableObject = cloneDeep(objectToUpload);
+
         if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
 
         // Autocomplete fields
-        if (this.isNotEmpty(objectToUpload.resource_type)) uploadableObject.resource_type = objectToUpload.resource_type.id
+        if (this.isNotEmpty(objectToUpload.resource_type)) uploadableObject.resource_type = objectToUpload.resource_type.id;
         if (this.isNotEmpty(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id
-        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
-        if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
-        if (this.isNotEmpty(objectToUpload.copyright_agent)) uploadableObject.copyright_agent = objectToUpload.copyright_agent.id
-        if (this.isNotEmpty(objectToUpload.licence)) uploadableObject.licence = objectToUpload.licence.id
-        if (this.isNotEmpty(this.relatedData.reference)) uploadableObject.reference = this.relatedData.reference.id
-        if (this.isNotEmpty(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id
+        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id;
+        if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
+        if (this.isNotEmpty(objectToUpload.copyright_agent)) uploadableObject.copyright_agent = objectToUpload.copyright_agent.id;
+        if (this.isNotEmpty(objectToUpload.licence)) uploadableObject.licence = objectToUpload.licence.id;
+        if (this.isNotEmpty(this.relatedData.reference)) uploadableObject.reference = this.relatedData.reference.id;
+        if (this.isNotEmpty(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id;
 
-        // Adding related data
-        if (saveRelatedData) {
+        if (this.databaseId) uploadableObject.database = this.databaseId;
+
+        // Adding related data only on add view
+        if (!this.$route.meta.isEdit) {
           uploadableObject.related_data = {};
 
           this.relatedTabs.forEach(tab => {
@@ -887,8 +893,8 @@
           this.relatedData[object] = {
             id: doi.reference__id,
             reference: doi.reference__reference
-          }
-          this.setBlockVisibility(object, this.relatedData.count[object])
+          };
+          this.setBlockVisibility(object, this.relatedData.count[object]);
           return;
         } else if (object === 'dataset' && doi !== null && doi.dataset !== null && doi.dataset.id !== null) {
           this.relatedData.count[object] = 1;
@@ -896,8 +902,8 @@
             id: doi.dataset__id,
             name: doi.dataset__name,
             name_en: doi.dataset__name_en
-          }
-          this.setBlockVisibility(object, this.relatedData.count[object])
+          };
+          this.setBlockVisibility(object, this.relatedData.count[object]);
           return;
         } else if (object === 'attachment_link') {
           query = fetchDoiAttachment(this.$route.params.id, this.relatedData.searchParameters.attachment_link)
