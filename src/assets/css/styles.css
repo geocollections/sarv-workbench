@@ -127,6 +127,14 @@ body {
   z-index: 1000000!important;
 }
 
+.allow-remove {
+  background-color: rgba(220, 53, 69, 0.2) !important;
+}
+
+.edit-mode {
+  background-color: rgba(40, 167, 69, 0.2) !important;
+}
+
 /**************************
  ***  RELATED DATA END  ***
  **************************/

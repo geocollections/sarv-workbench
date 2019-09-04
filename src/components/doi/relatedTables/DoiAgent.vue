@@ -60,13 +60,14 @@
             </td>
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.agent"
-                               id="agent"
+                               :id="index"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
                                :loading="autocomplete.loaders.doi_agent"
                                :options="autocomplete.doi_agent"
                                @search-change="autocompleteDoiAgentSearch"
+                               @select="fillFieldsUsingAgent"
                                :internal-search="false"
                                :preserve-search="true"
                                :clear-on-select="false"
@@ -81,18 +82,17 @@
             <td style="padding: 0.6em!important;">
               <button class="float-left btn btn-sm"
                       :class="entity.editMode ? 'btn-success' : 'btn-outline-success'"
-                      @click="$emit('edit-row', entity, index)"
-                      :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
+                      :disabled="sendingData"
+                      @click="$emit('edit-row', entity, index)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+
               <button class="float-right btn btn-sm"
                       :class="entity.allowRemove ? 'btn-danger' : 'btn-outline-danger'"
-                      @click="$emit('remove-row', entity, index)"
-                      :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>
-
-              <!--              <button v-show="entity.editMode" class="float-left btn btn-sm btn-success" @click="$emit('related-data-modified', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>-->
-<!--              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="$emit('remove-row', entity, index)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>-->
-
-<!--              <button v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success" @click="$emit('edit-row', entity)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>-->
-<!--              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger" @click="$emit('allow-remove-row', entity)" :disabled="sendingData"><font-awesome-icon icon="trash-alt"/></button>-->
+                      :disabled="sendingData"
+                      @click="$emit('remove-row', entity, index)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
             </td>
           </tr>
 
@@ -126,6 +126,7 @@
 
             <td>
               <vue-multiselect v-model="relatedData.insert.doi_agent.agent"
+                               id="agent_insert"
                                label="agent"
                                track-by="id"
                                :placeholder="$t('add.inputs.autocomplete')"
@@ -145,8 +146,12 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" @click="$emit('add-related-data', activeTab)" :disabled="sendingData"><font-awesome-icon icon="pencil-alt"/></button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.doi_agent = {}" :disabled="sendingData"><font-awesome-icon icon="times"/></button>
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+                <i class="fas fa-pencil-alt"></i>
+              </button>
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+                <i class="fas fa-times"></i>
+              </button>
             </td>
           </tr>
           </tbody>
@@ -157,8 +162,8 @@
 </template>
 
 <script>
-  import formManipulation from "../../../mixins/formManipulation";
   import autocompleteMixin from "../../../mixins/autocompleteMixin";
+  import formManipulation from "../../../mixins/formManipulation";
 
   export default {
     name: "DoiAgent",
@@ -172,35 +177,27 @@
       'relatedData.insert.doi_agent.agent': {
         handler: function (newVal, oldVal) {
           if (this.isNotEmpty(newVal)) {
-            // Todo: Automatically add name, orcid and affiliation, creator for default
-            //  Adding NAME, AFFILIATION and AGENT_TYPE__VALUE
-            console.log(newVal)
-            this.relatedData.insert.doi_agent.name = newVal.agent
-            this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en
-            this.$set(this.relatedData.insert.doi_agent, 'agent_type', { id: 1, value: 'Creator' })
+            // Adding NAME, ORCID and AFFILIATION
+            this.relatedData.insert.doi_agent.name = newVal.agent;
+            this.relatedData.insert.doi_agent.orcid = newVal.orcid;
+            this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en;
           }
         },
         deep: true
       },
     },
+    methods: {
+      fillFieldsUsingAgent(selectedOption, id) {
+        if (this.isNotEmpty(selectedOption)) {
+          // Adding NAME, ORCID and AFFILIATION
+          this.relatedData.doi_agent[id].new.name = selectedOption.agent;
+          this.relatedData.doi_agent[id].new.orcid = selectedOption.orcid;
+          this.relatedData.doi_agent[id].new.affiliation = selectedOption.institution__institution_name_en;
+        }
+      }
+    }
   }
 </script>
 
 <style scoped>
-  .allow-remove {
-    background-color: rgba(220, 53, 69, 0.2);
-  }
-
-  .allow-remove:hover {
-    background-color: rgba(220, 53, 69, 0.2);
-  }
-
-  .edit-mode {
-    background-color: rgba(40, 167, 69, 0.2);
-  }
-
-  .edit-mode:hover {
-    background-color: rgba(40, 167, 69, 0.2);
-  }
-
 </style>

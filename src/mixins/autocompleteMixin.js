@@ -284,7 +284,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case 'dataset':
       return `dataset/?multi_search=value:${value};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case 'doi_agent':
-      return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,institution__institution_name_en`;
+      return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,institution__institution_name_en,orcid`;
     case 'library_agent_search':
       return `library_agent/?agent=${currentUser.id}&multi_search=value:${value};fields:library__title,library__title_en;lookuptype:icontains&fields=library,library__title,library__title_en`;
     case 'coll':

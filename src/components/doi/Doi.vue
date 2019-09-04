@@ -393,34 +393,35 @@
 <!--          </div>-->
 <!--        </div>-->
 
-<!--        <doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
-<!--                   v-on:related-data-added="addRelatedData"-->
-<!--                   v-on:related-data-modified="editRelatedData"-->
-<!--                   v-on:edit-row="editRow"-->
-<!--                   v-on:remove-row="removeRow" />-->
-
-<!--        <doi-related-identifier :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
-<!--                                v-on:related-data-added="addRelatedData"-->
-<!--                                v-on:related-data-modified="editRelatedData"-->
-<!--                                v-on:edit-row="editRow"-->
-<!--                                v-on:remove-row="removeRow" />-->
-
-<!--        <doi-geolocation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
-<!--                         v-on:related-data-added="addRelatedData"-->
-<!--                         v-on:related-data-modified="editRelatedData"-->
-<!--                         v-on:edit-row="editRow"-->
-<!--                         v-on:remove-row="removeRow" />-->
-
-        <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+        <doi-files :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                    v-on:add-related-data="addRelatedData"
+                   v-on:set-default="setDefault"
                    v-on:edit-row="editRow"
                    v-on:remove-row="removeRow" />
 
-<!--        <doi-date :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"-->
-<!--                  v-on:related-data-added="addRelatedData"-->
-<!--                  v-on:related-data-modified="editRelatedData"-->
-<!--                  v-on:edit-row="editRow"-->
-<!--                  v-on:remove-row="removeRow" />-->
+        <doi-related-identifier :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                v-on:add-related-data="addRelatedData"
+                                v-on:set-default="setDefault"
+                                v-on:edit-row="editRow"
+                                v-on:remove-row="removeRow" />
+
+        <doi-geolocation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                         v-on:add-related-data="addRelatedData"
+                         v-on:set-default="setDefault"
+                         v-on:edit-row="editRow"
+                         v-on:remove-row="removeRow" />
+
+        <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                   v-on:add-related-data="addRelatedData"
+                   v-on:set-default="setDefault"
+                   v-on:edit-row="editRow"
+                   v-on:remove-row="removeRow" />
+
+        <doi-date :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                  v-on:add-related-data="addRelatedData"
+                  v-on:set-default="setDefault"
+                  v-on:edit-row="editRow"
+                  v-on:remove-row="removeRow" />
 
       </div>
     </div>
@@ -490,7 +491,6 @@
   import autocompleteMixin from "../../mixins/autocompleteMixin";
   import cloneDeep from 'lodash/cloneDeep'
   import {
-    fetchDois,
     fetchDoi,
     fetchDoiResourceType,
     fetchListLanguages,
@@ -504,7 +504,6 @@
     fetchDoiRelatedIdentifierType,
     fetchDoiRelationType,
     fetchDoiDateType,
-    fetchCheckDoiInDataCite,
     fetchCheckMetadataInDataCite,
     fetchCheckDoiUrlInDataCite,
     fetchRegisterMetadataToDataCite, fetchRegisterDoiUrlToDataCite
@@ -730,18 +729,7 @@
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
             doi_date: ['date', 'date_type', 'remarks']
           },
-          insert: {
-            attachment_link: {},
-            doi_related_identifier: {},
-            doi_geolocation: {},
-            doi_agent: {
-              agent_type: {
-                id: 1,
-                value: 'Creator'
-              }
-            },
-            doi_date: {}
-          },
+          insert: this.setDefaultInsertRelatedData(),
           searchParameters: {
             attachment_link: {
               page: 1,
@@ -778,6 +766,21 @@
             doi_agent: 0,
             doi_date: 0
           }
+        }
+      },
+
+      setDefaultInsertRelatedData() {
+        return {
+          attachment_link: {},
+          doi_related_identifier: {},
+          doi_geolocation: {},
+          doi_agent: {
+            agent_type: {
+              id: 1,
+              value: 'Creator'
+            }
+          },
+          doi_date: {}
         }
       },
 

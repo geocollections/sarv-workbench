@@ -500,6 +500,11 @@ const formManipulation = {
     },
 
 
+
+    /**************************
+     *** RELATED DATA START ***
+     **************************/
+
     /**
      * Adds related data. Changing related data in edit view will send an add request to API.
      * In add view and for DOI, data will be sent in related_data field.
@@ -527,14 +532,14 @@ const formManipulation = {
             this.loadRelatedData(tab);
             // Clear previously inserted related data
             // Todo: Default values for insert
-            this.relatedData.insert[tab] = {};
+            this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
           });
 
 
         } else {
           this.removeUnnecessaryFields(this.relatedData.insert[tab], this.relatedData.copyFields[tab]);
           this.relatedData[tab].push(this.unformatRelatedDataAutocompleteFields(this.relatedData.insert[tab]))
-          this.relatedData.insert[tab] = {};
+          this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
         }
 
       } else {
@@ -542,6 +547,13 @@ const formManipulation = {
       }
     },
 
+    /**
+     * Setting all insert values to default. Can implement so it would only set activeTab's insert
+     * data to default, but this is can be done in the future if really needed.
+     */
+    setDefault() {
+      this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
+    },
 
     /**
      * Main function is to edit related data. Firstly if allowRemove is enabled it disables it.
@@ -633,7 +645,11 @@ const formManipulation = {
       this.$set(this.relatedData.orderBy, entity.tab, entity.orderBy)
     },
 
-    /** RELATED DATA ENDS**/
+    /**************************
+     ***  RELATED DATA END  ***
+     **************************/
+
+
 
     /**
      * Handles user's bottom options button click by calling add method, route leave or resetting object.
