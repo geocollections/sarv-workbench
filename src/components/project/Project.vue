@@ -3,29 +3,32 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <div class="row mb-2" v-if="$route.meta.isEdit">
-      <div class="col">
+    <!-- ACTIVE PROJECT and NEW SITE -->
+    <div class="d-flex flex-wrap justify-content-between mb-2" v-if="$route.meta.isEdit">
+      <div class="align-self-center">
         <add-new-site :sendingData="sendingData" :site="watchedSite"></add-new-site>
 
-        <span class="float-left">
-          <span class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch2" v-model="isActiveProject">
-            <label class="custom-control-label rounded pr-4 pl-4"
-                   :class="isActiveProject ? 'alert-success ' : 'alert-danger'" for="customSwitch2">
-              <font-awesome-icon icon="tag"/>&ensp;{{ $t(isActiveProject ? 'frontPage.active' : 'frontPage.non_active')}}</label>
-          </span>
+        <span class="custom-control custom-switch">
+          <input type="checkbox" class="custom-control-input" id="customSwitch2" v-model="isActiveProject">
+          <label class="custom-control-label rounded pr-4 pl-4"
+                 :class="isActiveProject ? 'alert-success ' : 'alert-danger'" for="customSwitch2">
+            <font-awesome-icon icon="tag"/>&ensp;{{ $t(isActiveProject ? 'frontPage.active' : 'frontPage.non_active')}}
+          </label>
         </span>
       </div>
 
-      <div class="col-6" v-if="$route.meta.isEdit">
-        <vs-button color="primary" type="line" icon="fa-globe-americas" icon-pack="fas" style="float: right;"
-                   :to="{ name: 'Site add', params: { project: project } }">{{ this.$t('project.newSite') }}</vs-button>
+      <div>
+        <vs-button color="primary" type="line"
+                   icon="fa-globe-americas" icon-pack="fas"
+                   :to="{ name: 'Site add', params: { project: project } }">
+          {{ this.$t('project.newSite') }}
+        </vs-button>
       </div>
     </div>
 
-    <!-- STORAGE -->
-    <fieldset class="border p-2 mb-2" ref="info" id="block-info">
-      <legend class="w-auto" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
+    <!-- GENERAL INFO -->
+    <fieldset class="border-top px-2 mb-2" ref="info" id="block-info">
+      <legend class="w-auto my-0" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
         {{ $t('project.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
@@ -138,8 +141,8 @@
     </fieldset>
 
     <!-- DESCRIPTION -->
-    <fieldset class="border p-2 mb-2" id="block-description">
-      <legend class="w-auto" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
+    <fieldset class="border-top px-2 mb-2" id="block-description">
+      <legend class="w-auto my-0" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
         {{ $t('project.description') }} | {{ $t('project.remarks') }}
         <font-awesome-icon icon="pen-fancy" />
       </legend>
@@ -162,8 +165,8 @@
     </fieldset>
 
     <!-- PROJECT MEMBERS -->
-    <fieldset class="border p-2 mb-2" id="block-members">
-      <legend class="w-auto" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
+    <fieldset class="border-top px-2 mb-2" id="block-members">
+      <legend class="w-auto my-0" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
         {{ $t('project.members') }}
         <font-awesome-icon icon="user-friends" />
       </legend>
@@ -201,24 +204,28 @@
     </fieldset>
 
     <!-- FILES -->
-    <fieldset class="border p-2 mb-2" id="block-files" ref="files">
-      <legend class="w-auto" :class="{'text-primary': !block.files}" @click="block.files = !block.files">
+    <fieldset class="border-top px-2 mb-2" id="block-files" ref="files" v-if="$route.meta.isEdit">
+      <legend class="w-auto my-0" :class="{'text-primary': !block.files}" @click="block.files = !block.files">
         {{ $t('project.files') }}
         <font-awesome-icon icon="folder-open"/>
       </legend>
       <transition name="fade">
         <div class="row p-3" v-show="block.files">
-          <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="false"/>
-          <file-table :attachments="relatedData.attachment_link" :object="'project'"
-                      v-if="relatedData.attachment_link.length > 0"/>
+          <div class="col-sm-12">
+            <multimedia-component v-on:file-uploaded="addFiles" :recordOptions="false"/>
+          </div>
+
+          <div class="col-sm-12">
+            <file-table :attachments="relatedData.attachment_link" :object="'project'" v-if="relatedData.attachment_link.length > 0"/>
+          </div>
         </div>
 
       </transition>
     </fieldset>
 
     <!-- SITES -->
-    <fieldset class="border p-2 mb-2" id="block-sites" ref="sites">
-      <legend class="w-auto" :class="{'text-primary': !block.sites}" @click="block.sites = !block.sites">
+    <fieldset class="border-top px-2 mb-2" id="block-sites" ref="sites" v-if="$route.meta.isEdit">
+      <legend class="w-auto my-0" :class="{'text-primary': !block.sites}" @click="block.sites = !block.sites">
         {{ $t('project.sites') }}
         <font-awesome-icon icon="globe-americas" />
       </legend>
@@ -270,7 +277,6 @@
               </table>
 
             </div>
-            {{searchParameters.paginateBy}}
             <div class="col-sm-12 col-md-6 p-0" v-if="relatedData.count.site > searchParameters.paginateBy">
               <b-pagination
                 size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count.site"
@@ -284,7 +290,7 @@
     </fieldset>
 
     <!-- IS PRIVATE-->
-    <div class="row mt-3">
+    <div class="row my-3">
       <div class="col">
         <b-form-checkbox id="is_private" v-model="project.is_private" :value="true" :unchecked-value="false">
           {{ $t('project.is_private') }}
@@ -366,7 +372,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'projectSearchHistory',
           defaultSearch: this.searchParameters,

@@ -2,7 +2,7 @@
   <!-- Todo: Ümber teha + ainult pildid ja lingi lisamise field + lohista nupp -->
   <div id="#tab-attachment" class="tab-attachment row" :class="{active: activeTab === 'attachment'}"
        role="tabpanel">
-    <div class="col-xl-5" v-if="activeTab === 'attachment'">
+    <div class="col-md-6" v-if="activeTab === 'attachment'">
       <div class="table-responsive-sm">
 
         <table class="table table-hover table-bordered  related-table">
@@ -15,8 +15,10 @@
           </thead>
 
           <tbody>
-          <tr v-for="entity in relatedData.attachment"
-              :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+          <tr v-for="(entity, index) in relatedData.attachment"
+              :key="entity.id"
+              :class="{ 'allow-remove': entity.allowRemove, 'edit-mode': entity.editMode }">
+
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">
               <router-link :to="{ path: '/attachment/' + entity.id }">
@@ -52,22 +54,18 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button v-show="entity.editMode" class="float-left btn btn-sm btn-success"
-                      @click="$emit('related-data-modified', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
-              </button>
-              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="trash-alt"/>
+              <button class="float-left btn btn-sm"
+                      :class="entity.editMode ? 'btn-success' : 'btn-outline-success'"
+                      :disabled="sendingData"
+                      @click="$emit('edit-row', entity, index)">
+                <i class="fas fa-pencil-alt"></i>
               </button>
 
-              <button v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success"
-                      @click="$emit('edit-row', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
-              </button>
-              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger"
-                      @click="$emit('allow-remove-row', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="trash-alt"/>
+              <button class="float-right btn btn-sm"
+                      :class="entity.allowRemove ? 'btn-danger' : 'btn-outline-danger'"
+                      :disabled="sendingData"
+                      @click="$emit('remove-row', entity, index)">
+                <i class="fas fa-trash-alt"></i>
               </button>
             </td>
           </tr>
@@ -99,13 +97,11 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" @click="$emit('related-data-added', activeTab)"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+                <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.attachment = {}"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="times"/>
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+                <i class="fas fa-times"></i>
               </button>
             </td>
           </tr>
@@ -114,7 +110,7 @@
       </div>
     </div>
 
-    <div class="col-xl-7" v-if="activeTab === 'attachment'">
+    <div class="col-md-6" v-if="activeTab === 'attachment' && $route.meta.isEdit">
       <file-table :attachments="relatedData.attachment"
                   :object="'specimen'"
                   v-if="relatedData.attachment.length > 0"/>

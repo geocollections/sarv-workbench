@@ -4,7 +4,7 @@
     <div class="col-md-6" v-if="activeTab === 'attachment_link'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
+        <table class="table table-hover table-bordered related-table">
           <thead class="thead-light">
           <tr>
             <th>{{ $t('doi.link') }}<font-awesome-icon class="ml-2" icon="link"/></th>
@@ -17,6 +17,7 @@
           <tr v-for="(entity, index) in relatedData.attachment_link"
               :key="entity.id"
               :class="{ 'allow-remove': entity.allowRemove, 'edit-mode': entity.editMode }">
+
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">
               <router-link :to="{ path: '/attachment/' + entity.attachment }">

@@ -231,8 +231,8 @@ export function fetchAttachmentLink(id) {
   return fetch(`attachment_link/?reference=${id}&format=json`)
 }
 
-export function fetchLocalityReferenceForReference(id, page = 1) {
-  return fetch(`locality_reference/?reference=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchLocalityReferenceForReference(id, searchParameters) {
+  return fetch(`locality_reference/?reference=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 
 export function fetchListReferenceTypes() {
@@ -437,24 +437,20 @@ export function fetchSamples(data, agent, databaseId) {
     return fetch(`sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
-export function fetchSampleAnalysis(id,page = 1) {
-  return fetch(`analysis/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchSampleAnalysis(id, searchParameters) {
+  return fetch(`analysis/?sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
-export function fetchSamplePreparation(id,page = 1,allData = false) {
-  let paging = ''
-  if(allData === false) {
-    paging = '&page=${page}&paginate_by=10'
-  }
-  return fetch(`preparation/?sample__id=${id}${paging}&format=json`)
+export function fetchSamplePreparation(id, searchParameters) {
+  return fetch(`preparation/?sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
-export function fetchTaxonList(id,page = 1) {
-  return fetch(`taxon_list/?sample=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchTaxonList(id, searchParameters) {
+  return fetch(`taxon_list/?sample=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
-export function fetchLSampleAttachment(id,page = 1) {
-  return fetch(`attachment/?attach_link__sample__id=${id}&page=${page}&paginate_by=10&fields=id,original_filename&format=json`)
+export function fetchLSampleAttachment(id, searchParameters) {
+  return fetch(`attachment/?attach_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,original_filename&format=json`)
 }
-export function fetchSampleReference(id,page = 1) {
-  return fetch(`sample_reference/?sample__id=${id}&page=${page}&paginate_by=10&format=json`)
+export function fetchSampleReference(id, searchParameters) {
+  return fetch(`sample_reference/?sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
 }
 export function fetchLatestSampleInSite(siteId) {
   return fetch(`sample/?site__id=${siteId}&order_by=-id&paginate_by=1&format=json`)

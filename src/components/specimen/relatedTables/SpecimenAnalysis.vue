@@ -22,21 +22,20 @@
           </thead>
 
           <tbody>
-          <tr v-for="entity in relatedData.analysis"
-              :style="{ backgroundColor : entity.editMode ? '#F8F9FA' : ''  }">
+          <tr v-for="(entity, index) in relatedData.analysis"
+              :key="entity.id"
+              :class="{ 'allow-remove': entity.allowRemove, 'edit-mode': entity.editMode }">
 
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">
-              <router-link :to="{ path: '/analysis/' + entity.id }" :title="'analysis id: ' + entity.id">
-                <span v-if="entity.analysis_method__analysis_method || entity.analysis_method__analysis_method_en"
+<!--              <router-link :to="{ path: '/analysis/' + entity.analysis_method }" :title="'analysis id: ' + entity.analysis_method">-->
+                <span v-if="entity.analysis_method__analysis_method || entity.analysis_method__method_en"
                       v-translate="{ et: entity.analysis_method__analysis_method , en: entity.analysis_method__method_en }"></span>
-                <span v-else>{{ entity.id }}</span>
-              </router-link>
+                <span v-else>{{ entity.analysis_method }}</span>
+<!--              </router-link>-->
             </td>
 
-            <td v-if="!entity.editMode">
-              <span v-translate="{ et: entity.method_details , en: entity.method_details_en }"></span>
-            </td>
+            <td v-if="!entity.editMode">{{ entity.method_details }}</td>
 
             <td v-if="!entity.editMode">{{ entity.mass }}</td>
 
@@ -157,22 +156,18 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button v-show="entity.editMode" class="float-left btn btn-sm btn-success"
-                      @click="$emit('related-data-modified', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
-              </button>
-              <button v-show="entity.allowRemove" class="float-right btn btn-sm btn-danger" @click="removeRow(entity)"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="trash-alt"/>
+              <button class="float-left btn btn-sm"
+                      :class="entity.editMode ? 'btn-success' : 'btn-outline-success'"
+                      :disabled="sendingData"
+                      @click="$emit('edit-row', entity, index)">
+                <i class="fas fa-pencil-alt"></i>
               </button>
 
-              <button v-show="!entity.editMode" class="float-left btn btn-sm btn-outline-success"
-                      @click="$emit('edit-row', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
-              </button>
-              <button v-show="!entity.allowRemove" class="float-right btn btn-sm btn-outline-danger"
-                      @click="$emit('allow-remove-row', entity)" :disabled="sendingData">
-                <font-awesome-icon icon="trash-alt"/>
+              <button class="float-right btn btn-sm"
+                      :class="entity.allowRemove ? 'btn-danger' : 'btn-outline-danger'"
+                      :disabled="sendingData"
+                      @click="$emit('remove-row', entity, index)">
+                <i class="fas fa-trash-alt"></i>
               </button>
             </td>
           </tr>
@@ -278,13 +273,11 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" @click="$emit('related-data-added', activeTab)"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="pencil-alt"/>
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+                <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="float-right btn btn-sm btn-danger" @click="relatedData.insert.analysis = {}"
-                      :disabled="sendingData">
-                <font-awesome-icon icon="times"/>
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+                <i class="fas fa-times"></i>
               </button>
             </td>
           </tr>

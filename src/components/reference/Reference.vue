@@ -45,7 +45,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`title`">{{ $t('reference.title') }}:</label>
-              <b-form-textarea :key="componentKey" id="title" v-model="reference.title"
+              <b-form-textarea id="title" v-model="reference.title"
                                :state="isNotEmpty(reference.title)" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
@@ -247,13 +247,13 @@
           <div class="row">
             <div class="col-sm-6">
               <label :for="`title_original`">{{ $t('reference.titleOriginal') }}:</label>
-              <b-form-textarea :key="componentKey" id="title_original" v-model="reference.title_original" type="text"
+              <b-form-textarea id="title_original" v-model="reference.title_original" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
           <!-- TITLE TRANSLATED -->
             <div class="col-sm-6">
               <label :for="`title_translated`">{{ $t('reference.titleTranslated') }}:</label>
-              <b-form-textarea :key="componentKey" id="title_translated" v-model="reference.title_translated" type="text"
+              <b-form-textarea id="title_translated" v-model="reference.title_translated" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
           </div>
@@ -366,7 +366,7 @@
     </fieldset>
 
     <!-- CHECKBOXES -->
-    <div class="d-flex flex-row flex-wrap">
+    <div class="d-flex flex-row flex-wrap mb-2">
       <div class="px-2">
         <b-form-checkbox id="is_oa" v-model="reference.is_oa" :value="true" :unchecked-value="false">
           {{ $t('reference.is_oa') }}
@@ -391,7 +391,6 @@
         </b-form-checkbox>
       </div>
     </div>
-
 
     <!-- DIGITAL VERSION (PDF) -->
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
@@ -422,7 +421,7 @@
       <transition name="fade">
         <div v-show="block.files">
 
-          <div class="d-flex justify-content-start flex-wrap">
+          <div class="d-flex justify-content-between">
             <div class="mr-3 flex-grow-1">
               <label :for="`attachment`">{{ $t('reference.attachments') }}:</label>
               <vue-multiselect v-model="relatedData.attachment"
@@ -470,7 +469,7 @@
       <transition name="fade">
         <div v-show="block.libraries">
 
-          <div class="d-flex justify-content-start flex-wrap">
+          <div class="d-flex justify-content-between">
             <div class="mr-3 flex-grow-1">
               <label :for="`library`">{{ $t('reference.libraries') }}:</label>
               <vue-multiselect v-model="relatedData.library"
@@ -506,93 +505,117 @@
     </fieldset>
 
     <!-- RELATED LOCALITIES -->
-    <fieldset v-if="!$route.meta.isEdit" class="border-top px-2 mb-2" id="block-localities">
-      <legend class="w-auto my-0" :class="{ 'text-primary': !block.localities }"
-              @click="block.localities = !block.localities">
-        {{ $t('reference.relatedTables.locality') }}
-        <font-awesome-icon icon="map-marked"/>
-      </legend>
+<!--    <fieldset v-if="!$route.meta.isEdit" class="border-top px-2 mb-2" id="block-localities">-->
+<!--      <legend class="w-auto my-0" :class="{ 'text-primary': !block.localities }"-->
+<!--              @click="block.localities = !block.localities">-->
+<!--        {{ $t('reference.relatedTables.locality') }}-->
+<!--        <font-awesome-icon icon="map-marked"/>-->
+<!--      </legend>-->
 
-      <transition name="fade">
-        <div v-show="block.localities">
+<!--      <transition name="fade">-->
+<!--        <div v-show="block.localities">-->
 
-          <div class="row">
-            <div class="col">
-              <label :for="`locality`">{{ $t('reference.localities') }}:</label>
-              <vue-multiselect v-model="relatedData.locality"
-                               id="locality"
-                               :multiple="true"
-                               track-by="id"
-                               :options="autocomplete.locality"
-                               :internal-search="false"
-                               :preserve-search="true"
-                               :close-on-select="false"
-                               @search-change="autocompleteLocalitySearch2"
-                               :custom-label="customLabelForLocality"
-                               :loading="autocomplete.loaders.locality"
-                               :placeholder="$t('add.inputs.autocomplete')"
-                               :show-labels="false">
-                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-              </vue-multiselect>
-            </div>
-          </div>
+<!--          <div class="row">-->
+<!--            <div class="col">-->
+<!--              <label :for="`locality`">{{ $t('reference.localities') }}:</label>-->
+<!--              <vue-multiselect v-model="relatedData.locality"-->
+<!--                               id="locality"-->
+<!--                               :multiple="true"-->
+<!--                               track-by="id"-->
+<!--                               :options="autocomplete.locality"-->
+<!--                               :internal-search="false"-->
+<!--                               :preserve-search="true"-->
+<!--                               :close-on-select="false"-->
+<!--                               @search-change="autocompleteLocalitySearch2"-->
+<!--                               :custom-label="customLabelForLocality"-->
+<!--                               :loading="autocomplete.loaders.locality"-->
+<!--                               :placeholder="$t('add.inputs.autocomplete')"-->
+<!--                               :show-labels="false">-->
+<!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
+<!--              </vue-multiselect>-->
+<!--            </div>-->
+<!--          </div>-->
 
-          <div class="row mt-2" v-if="relatedData.locality.length > 0">
-            <div class="table-responsive-sm col-12">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                <tr>
-                  <th>ID</th>
-                  <th>{{ $t('reference.relatedTables.locality') }}</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="entity in relatedData.locality">
-                  <td @click="windowOpenNewTab('locality', '/locality/' + entity.id)" class="link">
-                    <font-awesome-icon size="1x" icon="eye" color="blue"/>
-                    {{ entity.id }}
-                  </td>
+<!--          <div class="row mt-2" v-if="relatedData.locality.length > 0">-->
+<!--            <div class="table-responsive-sm col-12">-->
+<!--              <table class="table table-hover table-bordered">-->
+<!--                <thead class="thead-light">-->
+<!--                <tr>-->
+<!--                  <th>ID</th>-->
+<!--                  <th>{{ $t('reference.relatedTables.locality') }}</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr v-for="entity in relatedData.locality">-->
+<!--                  <td @click="windowOpenNewTab('locality', '/locality/' + entity.id)" class="link">-->
+<!--                    <font-awesome-icon size="1x" icon="eye" color="blue"/>-->
+<!--                    {{ entity.id }}-->
+<!--                  </td>-->
 
-                  <td v-translate="{et:entity.locality,en:entity.locality_en}"></td>
-                </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+<!--                  <td v-translate="{et:entity.locality,en:entity.locality_en}"></td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--              </table>-->
+<!--            </div>-->
+<!--          </div>-->
 
-        </div>
-      </transition>
+<!--        </div>-->
+<!--      </transition>-->
 
-    </fieldset>
-
-
+<!--    </fieldset>-->
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row" v-if="$route.meta.isEdit">
+    <div class="row">
       <div class="col mt-2">
-        <ul class="nav nav-tabs tab-links mb-3" style="flex-wrap: nowrap !important">
-          <li class="nav-item">
-            <a href="#" v-on:click.prevent="setActiveTab('locality_reference')" class="nav-link"
-               :class="{ active: activeTab === 'locality_reference' }">
-              {{ $t('reference.relatedTables.locality_reference') }}
+
+        <ul class="nav nav-tabs nav-fill mb-3">
+
+          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+            <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+              <span>{{ $t('reference.relatedTables.' + tab.name) }}</span>
+
+              <span>
+                <sup>
+                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                </sup>
+              </span>
+
+              <span><i :class="tab.iconClass"></i></span>
             </a>
           </li>
         </ul>
 
-        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                            v-on:related-data-added="addRelatedData"
-                            v-on:related-data-modified="editRelatedData"
-                            v-on:edit-row="editRow"
-                            v-on:allow-remove-row="allowRemove"/>
+        <div class="row" v-if="$route.meta.isEdit">
+          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
+            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
+              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+            </b-form-select>
+          </div>
 
-        <div class="row mb-2 pt-1" v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
-          <div class="col pagination-center">
+          <div class="col-sm-12 col-md-3 export-center">
+            <!-- EXPORT BUTTON? -->
+          </div>
+
+          <div class="col-sm-12 col-md-6 pagination-center"
+               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.page[activeTab]" :per-page="10">
+              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
             </b-pagination>
           </div>
         </div>
+
+        <locality-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                            v-on:add-related-data="addRelatedData"
+                            v-on:set-default="setDefault"
+                            v-on:edit-row="editRow"
+                            v-on:remove-row="removeRow" />
       </div>
     </div>
 
@@ -608,7 +631,6 @@
     fetchReferences,
     fetchListReferenceTypes,
     fetchListLanguages,
-    fetchListKeywords,
     fetchDoiCheck,
     fetchReferenceKeyword,
     fetchAttachmentLink,
@@ -617,10 +639,11 @@
     fetchLibrariesForReference,
     fetchAddDoi,
     fetchAddAttachmentLink,
-    fetchAddDoiGeolocation, fetchLibrariesFromLibraryAgent, fetchListLibraries, fetchJournal
+    fetchAddDoiGeolocation,
+    fetchJournal
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
-  import {toastSuccess, toastError} from "@/assets/js/iziToast/iziToast";
+  import {toastError} from "@/assets/js/iziToast/iziToast";
   import formManipulation from '../../mixins/formManipulation'
   import autocompleteMixin from '../../mixins/autocompleteMixin'
   import copyForm from '../../mixins/copyForm'
@@ -652,6 +675,7 @@
     data() {
       return this.setInitialData()
     },
+
     computed: {
       sidebarUserAction() {
         return this.$store.state['sidebarUserAction']
@@ -664,13 +688,14 @@
         } else return true
       },
 
-      ...mapState(["currentUser"])
+      ...mapState(["currentUser", "databaseId"])
     },
+
     created() {
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'referenceSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -690,6 +715,12 @@
       '$route.params.id': {
         handler: function (newval, oldval) {
           this.reloadData()
+        },
+        deep: true
+      },
+      'relatedData.searchParameters': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
         },
         deep: true
       },
@@ -738,7 +769,9 @@
 
       setInitialData() {
         return {
-          tabs: ['locality_reference'],
+          relatedTabs: [
+            { name: 'locality_reference', iconClass: 'fas fa-globe' },
+          ],
           searchHistory: 'referenceSearchHistory',
           activeTab: 'locality_reference',
           relatedData: this.setDefaultRelatedData(),
@@ -775,7 +808,6 @@
           attachment: {},
           doi: {},
           newlyAddedDoiId: null,
-          componentKey: 0,
           block: {
             requiredFields: true,
             info: true,
@@ -795,23 +827,22 @@
       },
 
       loadFullInfo() {
-        fetchListReferenceTypes().then(response => this.autocomplete.types = this.handleResponse(response));
-        fetchListLanguages().then(response => this.autocomplete.languages = this.handleResponse(response));
-        // fetchListKeywords().then(response => this.autocomplete.keyword = this.handleResponse(response));
-        // fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
+        this.loadAutocompleteFields();
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
           this.$emit('set-object', 'reference');
+
           fetchReference(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
+
             if (handledResponse.length > 0) {
               this.$emit('object-exists', true);
               this.reference = this.handleResponse(response)[0];
-              this.fillAutocompleteFields(this.reference)
+              this.fillAutocompleteFields(this.reference);
+
               this.removeUnnecessaryFields(this.reference, this.copyFields);
-              this.forceRerender()
-              this.$emit('data-loaded', this.reference)
+              this.$emit('data-loaded', this.reference);
               this.sendingData = false;
             } else {
               this.sendingData = false;
@@ -819,6 +850,31 @@
             }
           });
 
+          this.loadAutocompleteFields(false, true);
+
+          // Load Related Data which is in tabs
+          this.relatedTabs.forEach(tab => {
+            this.loadRelatedData(tab.name);
+          });
+
+          this.$on('tab-changed', this.setTab);
+
+          this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
+
+          this.setTab('locality_reference')
+        }
+
+      },
+
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {
+          fetchListReferenceTypes().then(response => this.autocomplete.types = this.handleResponse(response));
+          fetchListLanguages().then(response => this.autocomplete.languages = this.handleResponse(response));
+          // fetchListKeywords().then(response => this.autocomplete.keyword = this.handleResponse(response));
+          // fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
+        }
+
+        if (relatedDataAutocompleteFields) {
           fetchReferenceKeyword(this.$route.params.id).then(response => {
             let referenceKeyword = this.handleResponse(response);
             this.relatedData.keyword = referenceKeyword.map(entity => {
@@ -827,7 +883,7 @@
                 id: entity.keyword
               }
             })
-          })
+          });
 
           fetchAttachmentLink(this.$route.params.id).then(response => {
             let attachment = this.handleResponse(response);
@@ -843,40 +899,11 @@
                 original_filename: entity.attachment__original_filename,
               }
             })
-          })
-
-          fetchLocalityReferenceForReference(this.$route.params.id).then(response => {
-            let localityReference = this.handleResponse(response)
-
-            this.relatedData.locality = localityReference.map(entity => {
-              return {
-                id: entity.locality,
-                locality: entity.locality__locality,
-                locality_en: entity.locality__locality_en,
-              }
-            })
-          })
-
-          fetchAttachmentForReference(this.$route.params.id).then(response => this.attachment = this.handleResponse(response));
-
-          fetchLibrariesForReference(this.$route.params.id).then(response => this.relatedData.library = this.handleResponse(response));
-
-          // FETCH FIRST TAB RELATED DATA
-          this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
           });
 
-          this.$on('tab-changed', this.setTab);
-
-          this.$emit('related-data-info', this.tabs);
-
-          this.setActiveTab('locality_reference')
+          fetchAttachmentForReference(this.$route.params.id).then(response => this.attachment = this.handleResponse(response));
+          fetchLibrariesForReference(this.$route.params.id).then(response => this.relatedData.library = this.handleResponse(response));
         }
-
-      },
-
-      forceRerender() {
-        this.componentKey += 1;
       },
 
       setDefaultRelatedData() {
@@ -889,14 +916,28 @@
           copyFields: {
             locality_reference: ['locality', 'type', 'pages', 'figures', 'remarks'],
           },
-          insert: {
-            locality_reference: {},
-          },
-          page: {
-            locality_reference: 1,
-            attachment: 1,
-            keyword: 1,
-            locality: 1,
+          insert: this.setDefaultInsertRelatedData(),
+          searchParameters: {
+            locality_reference: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            attachment: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            keyword: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            locality: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
           },
           count: {
             locality_reference: 0,
@@ -907,16 +948,21 @@
         }
       },
 
-      formatDataForUpload(objectToUpload) {
-        let uploadableObject = cloneDeep(objectToUpload)
+      setDefaultInsertRelatedData() {
+        return {
+          locality_reference: {},
+        }
+      },
 
-        if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id
-        if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id
-        if (this.isNotEmpty(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id
-        if (objectToUpload.is_private !== null) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
-        if (objectToUpload.is_oa !== null) uploadableObject.is_oa = objectToUpload.is_oa === true ? '1' : '0';
-        if (objectToUpload.is_locked !== null) uploadableObject.is_locked = objectToUpload.is_locked === true ? '1' : '0';
-        if (objectToUpload.is_estonian_reference !== null) uploadableObject.is_estonian_reference = objectToUpload.is_estonian_reference === true ? '1' : '0';
+      formatDataForUpload(objectToUpload) {
+        let uploadableObject = cloneDeep(objectToUpload);
+
+        // Autocomplete fields
+        if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id;
+        if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
+        if (this.isNotEmpty(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id;
+
+        if (this.databaseId) uploadableObject.database = this.databaseId;
 
         // Adding related data
         uploadableObject.related_data = {};
@@ -930,6 +976,15 @@
             uploadableObject.related_data.library[index] = {
               id: library.library ? library.library : library.id
             }
+          });
+        }
+
+        // Adding related data only on add view
+        if (!this.$route.meta.isEdit) {
+          uploadableObject.related_data = {};
+
+          this.relatedTabs.forEach(tab => {
+            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
           });
         }
 
@@ -949,12 +1004,26 @@
         return obj
       },
 
+      unformatRelatedDataAutocompleteFields(obj, objectID) {
+        let newObject = cloneDeep(obj);
+
+        if (objectID) newObject.id = objectID;
+
+        if (this.isNotEmpty(obj.locality)) {
+          newObject.locality = obj.locality.id;
+          newObject.locality__locality = obj.locality.locality;
+          newObject.locality__locality_en = obj.locality.locality_en;
+        }
+
+        return newObject
+      },
+
       // TODO: Put request here, which are currently in loadFullInfo method + blockVisibility
       loadRelatedData(object) {
         let query;
 
         if (object === 'locality_reference') {
-          query = fetchLocalityReferenceForReference(this.$route.params.id, this.relatedData.page.locality_reference)
+          query = fetchLocalityReferenceForReference(this.$route.params.id, this.relatedData.searchParameters.locality_reference)
         }
         return new Promise(resolve => {
           query.then(response => {
@@ -972,24 +1041,15 @@
 
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
-        uploadableObject.reference = this.reference.id
+        uploadableObject.reference = this.reference.id;
 
         if (this.isNotEmpty(uploadableObject.locality)) {
           uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
-          // uploadableObject.reference = parseInt(this.$route.params.id)
         }
 
         console.log('This object is sent in string format (related data):')
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
-      },
-
-
-      fetchList(localStorageData) {
-        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' ? localStorageData : this.searchParameters;
-        return new Promise((resolve) => {
-          resolve(fetchReferences(params))
-        });
       },
 
       setDefaultSearchParameters() {

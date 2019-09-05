@@ -877,7 +877,6 @@
           newObject.locality__locality_en = obj.locality.locality_en;
         }
         if (this.isNotEmpty(obj.date_type)) {
-          newObject.date_type = { id: obj.date_type, value: obj.date_type__value };
           newObject.date_type = obj.date_type.id;
           newObject.date_type__value = obj.date_type.value;
         }

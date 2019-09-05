@@ -4,8 +4,8 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- REQUIRED INFO -->
-    <fieldset class="border p-2 mb-2" :style="!validate('specimen') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('specimen') }"
+    <fieldset class="border-top px-2 mb-2" :style="!validate('specimen') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('specimen') }"
               @click="block.requiredFields = !block.requiredFields">
         {{ $t('specimen.requiredFields') }}
         <font-awesome-icon v-if="validate('specimen')" color="#28a745" icon="check"/>
@@ -40,8 +40,8 @@
     </fieldset>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" id="block-info">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+    <fieldset class="border-top px-2 mb-2" id="block-info">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('specimen.generalInfo') }}
         <font-awesome-icon icon="project-diagram"/>
       </legend>
@@ -440,8 +440,8 @@
     </fieldset>
 
     <!-- REMARKS -->
-    <fieldset class="border p-2 mb-2" id="block-description">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
+    <fieldset class="border-top px-2 mb-2" id="block-description">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('specimen.description') }}
         <font-awesome-icon icon="pen-fancy"/>
       </legend>
@@ -478,12 +478,12 @@
     </fieldset>
 
     <!-- RELATED DATA TABS -->
-    <div class="row mb-2" v-if="$route.meta.isEdit">
+    <div class="row mb-2">
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
 
           <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
-            <a href="#" @click.prevent="setActiveTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+            <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
               <span>{{ $t('specimen.relatedTables.' + tab.name) }}</span>
 
               <span>
@@ -523,69 +523,53 @@
           </div>
         </div>
 
-        <specimen-identification :related-data="relatedData"
-                                 :autocomplete="autocomplete"
-                                 :active-tab="activeTab"
-                                 v-on:related-data-added="addRelatedData"
-                                 v-on:related-data-modified="editRelatedData"
+        <specimen-identification :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                 v-on:add-related-data="addRelatedData"
+                                 v-on:set-default="setDefault"
                                  v-on:edit-row="editRow"
-                                 v-on:allow-remove-row="allowRemove"/>
+                                 v-on:remove-row="removeRow" />
 
-        <specimen-identification-geology :related-data="relatedData"
-                                         :autocomplete="autocomplete"
-                                         :active-tab="activeTab"
-                                         v-on:related-data-added="addRelatedData"
-                                         v-on:related-data-modified="editRelatedData"
+        <specimen-identification-geology :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                         v-on:add-related-data="addRelatedData"
+                                         v-on:set-default="setDefault"
                                          v-on:edit-row="editRow"
-                                         v-on:allow-remove-row="allowRemove" />
+                                         v-on:remove-row="removeRow" />
 
-        <specimen-reference :related-data="relatedData"
-                            :autocomplete="autocomplete"
-                            :active-tab="activeTab"
-                            v-on:related-data-added="addRelatedData"
-                            v-on:related-data-modified="editRelatedData"
+        <specimen-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                            v-on:add-related-data="addRelatedData"
+                            v-on:set-default="setDefault"
                             v-on:edit-row="editRow"
-                            v-on:allow-remove-row="allowRemove" />
+                            v-on:remove-row="removeRow" />
 
-        <specimen-description :related-data="relatedData"
-                              :autocomplete="autocomplete"
-                              :active-tab="activeTab"
-                              v-on:related-data-added="addRelatedData"
-                              v-on:related-data-modified="editRelatedData"
+        <specimen-description :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                              v-on:add-related-data="addRelatedData"
+                              v-on:set-default="setDefault"
                               v-on:edit-row="editRow"
-                              v-on:allow-remove-row="allowRemove" />
+                              v-on:remove-row="removeRow" />
 
-        <specimen-attachment :related-data="relatedData"
-                             :autocomplete="autocomplete"
-                             :active-tab="activeTab"
-                             v-on:related-data-added="addRelatedData"
-                             v-on:related-data-modified="editRelatedData"
+        <specimen-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                             v-on:add-related-data="addRelatedData"
+                             v-on:set-default="setDefault"
                              v-on:edit-row="editRow"
-                             v-on:allow-remove-row="allowRemove" />
+                             v-on:remove-row="removeRow" />
 
-        <specimen-location :related-data="relatedData"
-                           :autocomplete="autocomplete"
-                           :active-tab="activeTab"
-                           v-on:related-data-added="addRelatedData"
-                           v-on:related-data-modified="editRelatedData"
+        <specimen-location :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                           v-on:add-related-data="addRelatedData"
+                           v-on:set-default="setDefault"
                            v-on:edit-row="editRow"
-                           v-on:allow-remove-row="allowRemove" />
+                           v-on:remove-row="removeRow" />
 
-        <specimen-history :related-data="relatedData"
-                          :autocomplete="autocomplete"
-                          :active-tab="activeTab"
-                          v-on:related-data-added="addRelatedData"
-                          v-on:related-data-modified="editRelatedData"
+        <specimen-history :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                          v-on:add-related-data="addRelatedData"
+                          v-on:set-default="setDefault"
                           v-on:edit-row="editRow"
-                          v-on:allow-remove-row="allowRemove" />
+                          v-on:remove-row="removeRow" />
 
-        <specimen-analysis :related-data="relatedData"
-                           :autocomplete="autocomplete"
-                           :active-tab="activeTab"
-                           v-on:related-data-added="addRelatedData"
-                           v-on:related-data-modified="editRelatedData"
+        <specimen-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                           v-on:add-related-data="addRelatedData"
+                           v-on:set-default="setDefault"
                            v-on:edit-row="editRow"
-                           v-on:allow-remove-row="allowRemove" />
+                           v-on:remove-row="removeRow" />
 
       </div>
     </div>
@@ -593,7 +577,6 @@
     <!-- IS_PRIVATE -->
     <div class="row">
       <div class="col">
-<!--        <label :for="`is_private`">{{ specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}:</label>-->
         <vs-checkbox class="justify-content-start" id="is_private" v-model="specimen.is_private" icon="fa-lock" icon-pack="fas">
           {{ $t('specimen.is_private_text') }}
         </vs-checkbox>
@@ -664,7 +647,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('idSpecimen') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('idSpecimen') && searchHistory !== 'fallbackValue' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'specimenSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -714,8 +697,6 @@
 
       setInitialData() {
         return {
-          tabs:['specimen_identification', 'specimen_identification_geology', 'specimen_reference', 'specimen_description',
-            'attachment', 'specimen_location', 'specimen_history', 'analysis'],
           relatedTabs: [
             { name: 'specimen_identification', iconClass: 'fas fa-atlas' },
             { name: 'specimen_identification_geology', iconClass: 'far fa-gem' },
@@ -793,10 +774,7 @@
           },
           requiredFields: ['fossil'],
           specimen: {},
-          previousRecord: {},
-          nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          componentKey: 0,
           block: {requiredFields: true, info: true, description: true},
         }
       },
@@ -807,14 +785,7 @@
       },
 
       loadFullInfo() {
-        // fetching list autocompletes
-        fetchListSpecimenKind().then(response => this.autocomplete.specimen_kind = this.handleResponse(response));
-        fetchListSpecimenOriginalStatus().then(response => this.autocomplete.specimen_original_status = this.handleResponse(response));
-        fetchListSpecimenPresence().then(response => this.autocomplete.specimen_presence = this.handleResponse(response));
-        fetchListSpecimenStatus().then(response => this.autocomplete.specimen_status = this.handleResponse(response));
-        fetchListSpecimenType().then(response => this.autocomplete.specimen_type = this.handleResponse(response));
-        fetchAccession().then(response => this.autocomplete.accession = this.handleResponse(response));
-        fetchDeaccession().then(response => this.autocomplete.deaccession = this.handleResponse(response));
+        this.loadAutocompleteFields(true, true);
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
@@ -828,33 +799,41 @@
               this.fillAutocompleteFields(this.specimen)
 
               this.removeUnnecessaryFields(this.specimen, this.copyFields);
-              this.specimen.related_data = {};
-
               this.$emit('data-loaded', this.specimen)
               this.sendingData = false;
-              // this.getListRecords('specimen')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
             }
           });
 
-          // Fetching autocomplete fields for related data
-          fetchListIdentificationType().then(response => this.autocomplete.list_identification_type = this.handleResponse(response));
-          fetchListUnit().then(response => this.autocomplete.list_unit = this.handleResponse(response));
-          fetchListSpecimenType().then(response => this.autocomplete.list_specimen_type = this.handleResponse(response));
-          fetchListHistoryType().then(response => this.autocomplete.list_history_type = this.handleResponse(response));
-
           // Load Related Data which is in tabs
-          this.relatedTabs.forEach(tab => {
-            this.loadRelatedData(tab.name);
-          });
+          this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
 
           this.$on('tab-changed', this.setTab);
 
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
-          this.setActiveTab('specimen_identification')
+          this.setTab('specimen_identification')
+        }
+      },
+
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {
+          fetchListSpecimenKind().then(response => this.autocomplete.specimen_kind = this.handleResponse(response));
+          fetchListSpecimenOriginalStatus().then(response => this.autocomplete.specimen_original_status = this.handleResponse(response));
+          fetchListSpecimenPresence().then(response => this.autocomplete.specimen_presence = this.handleResponse(response));
+          fetchListSpecimenStatus().then(response => this.autocomplete.specimen_status = this.handleResponse(response));
+          fetchListSpecimenType().then(response => this.autocomplete.specimen_type = this.handleResponse(response));
+          fetchAccession().then(response => this.autocomplete.accession = this.handleResponse(response));
+          fetchDeaccession().then(response => this.autocomplete.deaccession = this.handleResponse(response));
+        }
+
+        if (relatedDataAutocompleteFields) {
+          fetchListIdentificationType().then(response => this.autocomplete.list_identification_type = this.handleResponse(response));
+          fetchListUnit().then(response => this.autocomplete.list_unit = this.handleResponse(response));
+          fetchListSpecimenType().then(response => this.autocomplete.list_specimen_type = this.handleResponse(response));
+          fetchListHistoryType().then(response => this.autocomplete.list_history_type = this.handleResponse(response));
         }
       },
 
@@ -886,18 +865,9 @@
             attachment: ['attachment', 'remarks'],
             specimen_location: ['number', 'type', 'part', 'storage', 'remarks'],
             specimen_history: ['type', 'value_old', 'value_new', 'date', 'remarks'],
-            analysis: ['analysis_method', 'methods_details', 'mass', 'date', 'date_end', 'date_free', 'agent', 'remarks', 'storage', 'is_private'],
+            analysis: ['analysis_method', 'method_details', 'mass', 'date', 'date_end', 'date_free', 'agent', 'remarks', 'storage', 'is_private'],
           },
-          insert: {
-            specimen_identification: {},
-            specimen_identification_geology: {},
-            specimen_reference: {},
-            specimen_description: {},
-            attachment: {},
-            specimen_location: {},
-            specimen_history: {},
-            analysis: {},
-          },
+          insert: this.setDefaultInsertRelatedData(),
           searchParameters: {
             specimen_identification: {
               page: 1,
@@ -953,7 +923,20 @@
         }
       },
 
-      formatDataForUpload(objectToUpload, saveRelatedData = false) {
+      setDefaultInsertRelatedData() {
+        return {
+          specimen_identification: {},
+          specimen_identification_geology: {},
+          specimen_reference: {},
+          specimen_description: {},
+          attachment: {},
+          specimen_location: {},
+          specimen_history: {},
+          analysis: {},
+        }
+      },
+
+      formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
 
         // Todo: Api doesn't save specimen_nr and throws error
@@ -983,9 +966,13 @@
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
 
-        // Adding related data
-        if (saveRelatedData) {
-          uploadableObject.related_data = {}
+        // Adding related data only on add view
+        if (!this.$route.meta.isEdit) {
+          uploadableObject.related_data = {};
+
+          this.relatedTabs.forEach(tab => {
+            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
+          });
         }
 
         console.log('This object is sent in string format:');
@@ -1013,7 +1000,6 @@
       },
 
       fillRelatedDataAutocompleteFields(obj) {
-
         if (this.isNotEmpty(obj.taxon)) obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
         if (this.isNotEmpty(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent };
         if (this.isNotEmpty(obj.reference)) obj.reference = { id: obj.reference, reference: obj.reference__reference };
@@ -1022,8 +1008,59 @@
         if (this.isNotEmpty(obj.unit)) obj.unit = {  id: obj.unit, value: obj.unit__value, value_en: obj.unit__value_en };
         if (this.isNotEmpty(obj.original_filename)) obj.attachment = { id: obj.id, original_filename: obj.original_filename };
         if (this.isNotEmpty(obj.storage)) obj.storage = { id: obj.storage, location: obj.storage__location };
+        if (this.isNotEmpty(obj.analysis_method)) obj.analysis_method = { id: obj.analysis_method, analysis_method: obj.analysis_method__analysis_method, method_en: obj.analysis_method__method_en };
 
         return obj
+      },
+
+      unformatRelatedDataAutocompleteFields(obj, objectID) {
+        let newObject = cloneDeep(obj);
+
+        if (objectID) newObject.id = objectID;
+
+        if (this.isNotEmpty(obj.taxon)) {
+          newObject.taxon = obj.taxon.id;
+          newObject.taxon__taxon = obj.taxon.taxon;
+        }
+        if (this.isNotEmpty(obj.agent)) {
+          newObject.agent = obj.agent.id;
+          newObject.agent__agent = obj.agent.agent;
+        }
+        if (this.isNotEmpty(obj.reference)) {
+          newObject.reference = obj.reference.id;
+          newObject.reference__reference = obj.reference.reference;
+        }
+        if (this.isNotEmpty(obj.type)) {
+          newObject.type = obj.type.id;
+          newObject.type__value = obj.type.value;
+          newObject.type__value_en = obj.type.value_en;
+        }
+        if (this.isNotEmpty(obj.rock)) {
+          newObject.rock = obj.rock.id;
+          newObject.rock__name = obj.rock.name;
+          newObject.rock__name_en = obj.rock.name_en;
+        }
+        if (this.isNotEmpty(obj.unit)) {
+          newObject.unit = obj.unit.id;
+          newObject.unit__value = obj.unit.value;
+          newObject.unit__value_en = obj.unit.value_en;
+        }
+        if (this.isNotEmpty(obj.original_filename)) {
+          newObject.attachment = obj.attachment.id;
+          newObject.original_filename = obj.attachment.original_filename;
+        }
+        if (this.isNotEmpty(obj.storage)) {
+          newObject.storage = obj.storage.id;
+          newObject.storage__location = obj.storage.location;
+        }
+        if (this.isNotEmpty(obj.analysis_method)) {
+          newObject.analysis_method = obj.analysis_method.id;
+          newObject.analysis_method__analysis_method = obj.analysis_method.analysis_method;
+          newObject.analysis_method__method_en = obj.analysis_method.method_en;
+        }
+
+
+        return newObject
       },
 
       loadRelatedData(object) {

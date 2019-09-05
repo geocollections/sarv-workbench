@@ -7,17 +7,19 @@
 
 
     <template slot="switch">
-      <div class="row">
-        <div class="col-6 mb-3">
+      <div class="d-flex justify-content-between">
+        <div class="align-self-center">
           <vs-switch v-model="isSimpleView">
-          <span slot="on">{{ $t('sample.simpleForm') }}</span>
-          <span slot="off">{{ $t('sample.basicForm') }}</span>
+            <span slot="on">{{ $t('sample.simpleForm') }}</span>
+            <span slot="off">{{ $t('sample.basicForm') }}</span>
           </vs-switch>
         </div>
 
-        <div class="col-6" v-if="$route.meta.isEdit">
-          <vs-button color="primary" type="line" icon="fa-chart-pie" icon-pack="fas" style="float: right;"
-                     :to="{ name: 'Analysis add', params: { sample: { id: $route.params.id, number: $route.params.id } } }">{{ this.$t('sample.addAnalysis') }}</vs-button>
+        <div>
+          <vs-button color="primary" type="line" icon="fa-chart-pie" icon-pack="fas"
+                     :to="{ name: 'Analysis add', params: { sample: { id: sample.number, number: sample.number } } }">
+            {{ this.$t('sample.addAnalysis') }}
+          </vs-button>
         </div>
       </div>
     </template>
@@ -26,8 +28,8 @@
     <template slot="basic-form">
 
       <!-- GENERAL INFO -->
-      <fieldset class="border p-2 mb-2" id="block-info">
-        <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+      <fieldset class="border-top px-2 mb-2" id="block-info">
+        <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
           {{ $t('sample.generalInfo') }}
           <font-awesome-icon icon="project-diagram"/>
         </legend>
@@ -370,8 +372,8 @@
       </fieldset>
 
       <!-- RELATIONS -->
-      <fieldset class="border p-2 mb-2" id="block-relatedInfo">
-        <legend class="w-auto mb-0" :class="{ 'text-primary': !block.relatedInfo }"
+      <fieldset class="border-top px-2 mb-2" id="block-relatedInfo">
+        <legend class="w-auto my-0" :class="{ 'text-primary': !block.relatedInfo }"
                 @click="block.relatedInfo = !block.relatedInfo">
           {{ $t('sample.relatedInfo') }}
           <font-awesome-icon icon="project-diagram"/>
@@ -451,8 +453,8 @@
       </fieldset>
 
       <!-- DESCRIPTION -->
-      <fieldset class="border p-2 mb-2" id="block-description">
-        <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }"
+      <fieldset class="border-top px-2 mb-2" id="block-description">
+        <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }"
                 @click="block.description = !block.description">
           {{ $t('sample.description') }}
           <font-awesome-icon icon="pen-fancy"/>
@@ -479,8 +481,8 @@
     <template slot="simplified-form">
 
       <!-- GENERAL INFO SIMPLE -->
-      <fieldset class="border p-2 mb-2" id="block-info">
-        <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+      <fieldset class="border-top px-2 mb-2" id="block-info">
+        <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
           {{ $t('sample.generalInfo') }}
           <font-awesome-icon icon="project-diagram"/>
         </legend>
@@ -718,8 +720,8 @@
       </fieldset>
 
       <!-- RELATIONS -->
-      <fieldset class="border p-2 mb-2" id="block-relatedInfo">
-        <legend class="w-auto mb-0" :class="{ 'text-primary': !block.relatedInfo }"
+      <fieldset class="border-top px-2 mb-2" id="block-relatedInfo">
+        <legend class="w-auto my-0" :class="{ 'text-primary': !block.relatedInfo }"
                 @click="block.relatedInfo = !block.relatedInfo">
           {{ $t('sample.relatedInfo') }}
           <font-awesome-icon icon="project-diagram"/>
@@ -799,8 +801,8 @@
       </fieldset>
 
       <!-- DESCRIPTION SIMPLE -->
-      <fieldset class="border p-2 mb-2" id="block-description">
-        <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
+      <fieldset class="border-top px-2 mb-2" id="block-description">
+        <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
           {{ $t('sample.description') }}
           <font-awesome-icon icon="pen-fancy"/>
         </legend>
@@ -844,40 +846,28 @@
     <template slot="related-data">
 
       <!-- SHOWING RELATED_DATA -->
-      <div class="row" v-if="$route.meta.isEdit">
+      <div class="row">
         <div class="col">
-          <ul class="nav nav-tabs tab-links  mb-3" style="flex-wrap: nowrap !important">
-            <li class="nav-item">
-              <a href="#" v-on:click.prevent="setActiveTab('analysis')" class="nav-link"
-                 :class="{ active: activeTab === 'analysis' }">{{ $t('sample.relatedTables.analysis') }}</a>
-            </li>
+          <ul class="nav nav-tabs nav-fill mb-3">
 
-            <li class="nav-item">
-              <a href="#" v-on:click.prevent="setActiveTab('preparation')" class="nav-link"
-                 :class="{ active: activeTab === 'preparation' }">{{ $t('sample.relatedTables.preparation') }}</a>
-            </li>
+            <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+              <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
+                <span>{{ $t('sample.relatedTables.' + tab.name) }}</span>
 
-            <li class="nav-item">
-              <a href="#" v-on:click.prevent="setActiveTab('taxon_list')" class="nav-link"
-                 :class="{ active: activeTab === 'taxon_list' }">{{ $t('sample.relatedTables.taxon_list') }}</a>
-            </li>
+                <span>
+                <sup>
+                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                </sup>
+              </span>
 
-            <li class="nav-item">
-              <a href="#" v-on:click.prevent="setActiveTab('attachment_link')" class="nav-link"
-                 :class="{ active: activeTab === 'attachment_link' }">{{ $t('sample.relatedTables.attachment_link')
-                }}</a>
-            </li>
-
-            <li class="nav-item">
-              <a href="#" v-on:click.prevent="setActiveTab('sample_reference')" class="nav-link"
-                 :class="{ active: activeTab === 'sample_reference' }">{{ $t('sample.relatedTables.sample_reference')
-                }}</a>
+                <span><i :class="tab.iconClass"></i></span>
+              </a>
             </li>
           </ul>
 
-          <div class="row">
+          <div class="row" v-if="$route.meta.isEdit">
             <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-              <b-form-select v-model="relatedData.paginateBy[activeTab]" class="mb-3" size="sm">
+              <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
                 <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
                 <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
                 <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
@@ -896,42 +886,40 @@
                  v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
               <b-pagination
                 size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-                v-model="relatedData.page[activeTab]" :per-page="relatedData.paginateBy[activeTab]">
+                v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
               </b-pagination>
             </div>
           </div>
 
           <sample-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                           v-on:related-data-added="addRelatedData"
-                           v-on:related-data-modified="editRelatedData"
+                           v-on:add-related-data="addRelatedData"
+                           v-on:set-default="setDefault"
                            v-on:edit-row="editRow"
-                           v-on:allow-remove-row="allowRemove"/>
+                           v-on:remove-row="removeRow" />
 
           <sample-preparation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                              :parentId="getParentId"
-                              v-on:related-data-added="addRelatedData"
-                              v-on:related-data-modified="editRelatedData"
+                              v-on:add-related-data="addRelatedData"
+                              v-on:set-default="setDefault"
                               v-on:edit-row="editRow"
-                              v-on:allow-remove-row="allowRemove"/>
+                              v-on:remove-row="removeRow" />
 
           <sample-taxon-list :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                             :parentId="getParentId"
-                             v-on:related-data-added="addRelatedData"
-                             v-on:related-data-modified="editRelatedData"
+                             v-on:add-related-data="addRelatedData"
+                             v-on:set-default="setDefault"
                              v-on:edit-row="editRow"
-                             v-on:allow-remove-row="allowRemove"/>
+                             v-on:remove-row="removeRow" />
 
           <sample-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                             v-on:related-data-added="addRelatedData"
-                             v-on:related-data-modified="editRelatedData"
+                             v-on:add-related-data="addRelatedData"
+                             v-on:set-default="setDefault"
                              v-on:edit-row="editRow"
-                             v-on:allow-remove-row="allowRemove"/>
+                             v-on:remove-row="removeRow" />
 
           <sample-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                            v-on:related-data-added="addRelatedData"
-                            v-on:related-data-modified="editRelatedData"
+                            v-on:add-related-data="addRelatedData"
+                            v-on:set-default="setDefault"
                             v-on:edit-row="editRow"
-                            v-on:allow-remove-row="allowRemove"/>
+                            v-on:remove-row="removeRow" />
 
         </div>
       </div>
@@ -941,23 +929,6 @@
     <template slot="buttons">
       <div class="row mt-3 mb-3">
         <div class="col">
-<!--          <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="add(false, 'sample', true)"-->
-<!--                  :title="$t('edit.buttons.saveAndLeave') ">-->
-<!--            <font-awesome-icon icon="door-open"/>-->
-<!--            {{ $t('edit.buttons.saveAndLeave') }}-->
-<!--          </button>-->
-
-<!--          <button class="btn btn-success mr-2 mb-2 pr-5 pl-5" :disabled="sendingData" @click="add(true, 'sample', true)"-->
-<!--                  :title="$t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') ">-->
-<!--            <font-awesome-icon icon="save"/>-->
-<!--            {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}-->
-<!--          </button>-->
-
-<!--          <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="reset('sample', $route.meta.isEdit)"-->
-<!--                  :title="$t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') ">-->
-<!--            <font-awesome-icon icon="ban"/>-->
-<!--            {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}-->
-<!--          </button>-->
 
           <span>
             <button class="btn btn-primary mb-2" @click="$emit('save-as-new')" v-if="$route.meta.isCopyFormShown">{{ $t('add.saveAsNew') }}</button>
@@ -972,8 +943,6 @@
 <script>
   import Spinner from 'vue-simple-spinner'
   import VueMultiselect from 'vue-multiselect'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
   import {
     fetchSample,
     fetchSamplePurpose,
@@ -984,10 +953,7 @@
     fetchFossilGroup,
     fetchSamplePreparation,
     fetchTaxonList,
-    fetchSampleRelatedAnalysis,
-    fetchSampleRelatedPreparation,
-    fetchLastSiteSample,
-    fetchSamples, fetchLatestSampleInSite
+    fetchLatestSampleInSite
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import Datepicker from 'vue2-datepicker'
@@ -1012,8 +978,6 @@
       SampleAnalysis,
       SampleAttachment,
       SampleReference,
-      BFormInput,
-      FontAwesomeIcon,
       Datepicker,
       VueMultiselect,
       Spinner,
@@ -1028,7 +992,7 @@
       // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'sampleSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -1044,9 +1008,7 @@
       }
 
       // SIMPLE VIEW
-      this.isSimpleView = this.$localStorage.get('sampleView', false)
-
-      console.log(this.$route)
+      this.isSimpleView = this.$localStorage.get('sampleView', false);
 
       if (this.$route.query.site) this.addSiteDataToSampleObject(JSON.parse(this.$route.query.site));
       else if (this.$route.params.site) this.addSiteDataToSampleObject(this.$route.params.site);
@@ -1059,13 +1021,12 @@
     },
 
     beforeRouteUpdate(to, from, next) {
-      this.$localStorage.set('sampleView',  this.isSimpleView)
+      this.$localStorage.set('sampleView',  this.isSimpleView);
       next()
     },
 
     beforeRouteLeave(to, from, next) {
-      this.$localStorage.set('sampleView',  this.isSimpleView)
-      this.$store.commit('REMOVE_RELATION_OBJECT');
+      this.$localStorage.set('sampleView',  this.isSimpleView);
       next()
     },
 
@@ -1076,23 +1037,16 @@
           this.isSimpleView = this.$localStorage.get('sampleView', false)
         },
         deep: true
-      }
+      },
+      'relatedData.searchParameters': {
+        handler: function (newVal, oldVal) {
+          this.loadRelatedData(this.activeTab)
+        },
+        deep: true
+      },
     },
 
     computed: {
-      getParentId() {
-        return this.sample.id
-      },
-
-      createRelationWith() {
-        const relation = this.lsPullCreateRelationWith();
-        console.log(relation)
-        this.lsPushCreateRelationWith({object: null, data: null, info: null, edit: null})
-
-        return relation
-        // return this.$store.state['createRelationWith']
-      },
-
       ...mapState(["currentUser", "databaseId"])
     },
 
@@ -1103,17 +1057,22 @@
 
       setInitialData() {
         return {
-          tabs: ['analysis', 'preparation', 'taxon_list', 'attachment_link', 'sample_reference'],
+          relatedTabs: [
+            { name: 'analysis', iconClass: 'far fa-chart-bar' },
+            { name: 'preparation', iconClass: 'fas fa-vial' },
+            { name: 'taxon_list', iconClass: 'fas fa-list' },
+            { name: 'attachment_link', iconClass: 'fas fa-folder-open' },
+            { name: 'sample_reference', iconClass: 'fas fa-book' },
+          ],
           searchHistory: 'sampleSearchHistory',
           activeTab: 'analysis',
-          relatedData: this.setDefaultRalatedData(),
+          relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'number', 'number_additional', 'number_field', 'series', 'sample_purpose', 'sample_type',
             'parent_sample', 'parent_specimen', 'depth', 'depth_interval', 'latitude1', 'longitude1', 'stratigraphy', 'lithostratigraphy',
             'stratigraphy_free', 'stratigraphy_bed', 'agent_collected', 'agent_collected_free', 'date_collected', 'date_collected_free',
             'classification_rock', 'rock', 'rock_en', 'fossils', 'mass', 'storage', 'storage_additional', 'owner',
             'palaeontology', 'analysis', 'locality', 'locality_free', 'remarks', 'is_private', 'site'
           ],
-          //'depth','stratigraphy','lithostratigraphy','stratigraphy_free','fossils','locality',
           simplifiedFormCopyFields: ['number', 'number_field', 'sample_purpose', 'series', 'locality',
             'classification_rock', 'rock', 'site', 'agent_collected', 'date_collected', 'owner', 'remarks', 'is_private'],
           autocomplete: {
@@ -1137,7 +1096,7 @@
               taxon: false,
               preparation: false,
               site: false,
-              purpose: false
+              purpose: false,
             },
             series: [],
             purpose: [],
@@ -1164,8 +1123,6 @@
           },
           requiredFields: [],
           sample: {},
-          previousRecord: {},
-          nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
           block: {info: true, relatedInfo: true, description: true},
           isSimpleView: false,
@@ -1178,60 +1135,62 @@
       },
 
       loadFullInfo() {
+        this.loadAutocompleteFields(true, true);
 
-        fetchSamplePurpose().then(response => {
-          this.autocomplete.purpose = this.handleResponse(response);
-        });
-
-        if (this.$route.meta.isEdit && this.$router.currentRoute.params.hasOwnProperty('id')) {
+        if (this.$route.meta.isEdit) {
           this.sendingData = true;
           this.$emit('set-object', 'sample');
+
           fetchSample(this.$route.params.id).then(response => {
             let handledResponse = this.handleResponse(response);
+
             if (handledResponse.length > 0) {
               this.$emit('object-exists', true);
               this.sample = this.handleResponse(response)[0];
-              this.fillAutocompleteFields(this.sample)
+              this.fillAutocompleteFields(this.sample);
+
               this.removeUnnecessaryFields(this.sample, this.copyFields);
-              this.$emit('data-loaded', this.sample)
+              this.$emit('data-loaded', this.sample);
               this.sendingData = false;
-              // this.getListRecords('sample')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
             }
           });
 
-          fetchAnalysisMethod().then(response => {
-            this.autocomplete.analysis_method = this.handleResponse(response);
-          });
-
-          fetchFossilGroup().then(response => {
-            this.autocomplete.fossil_group = this.handleResponse(response);
-          });
-
-          this.tabs.forEach(entity => {
-            this.loadRelatedData(entity);
+          // Load Related Data which is in tabs
+          this.relatedTabs.forEach(tab => {
+            this.loadRelatedData(tab.name);
           });
 
           this.$on('tab-changed', this.setTab);
-          this.$on('related-data-modified', this.editRelatedData);
-          this.$on('related-data-added', this.addRelatedData);
-          this.$on('edit-row', this.editRow);
-          this.$on('allow-remove-row', this.allowRemove);
 
-          this.$emit('related-data-info', this.tabs);
+          this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
           this.setActiveTab('analysis')
         }
 
         this.$root.$on('add-new-sample-from-modal', this.handleUserChoiceFromModal);
-
       },
 
-      setDefaultRalatedData() {
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {
+          fetchSamplePurpose().then(response => this.autocomplete.purpose = this.handleResponse(response));
+        }
+
+        if (relatedDataAutocompleteFields) {
+          fetchAnalysisMethod().then(response => this.autocomplete.analysis_method = this.handleResponse(response));
+          fetchFossilGroup().then(response => this.autocomplete.fossil_group = this.handleResponse(response));
+        }
+      },
+
+      setDefaultRelatedData() {
         return {
-          sample_reference: [], attachment_link: [], analysis: [], preparation: [], taxon_list: [],
+          sample_reference: [],
+          attachment_link: [],
+          analysis: [],
+          preparation: [],
+          taxon_list: [],
           copyFields: {
             sample_reference: ['reference', 'remarks'],
             attachment_link: ['attachment'],
@@ -1239,125 +1198,185 @@
             preparation: ['preparation_number', 'taxon', 'storage', 'remarks', 'analysis', 'is_private'],
             taxon_list: ['taxon', 'name', 'frequency', 'agent_identified', 'date_identified', 'extra', 'preparation', 'is_private', 'remarks']
           },
-          insert: {sample_reference: {}, attachment_link: {}, analysis: {}, preparation: {}, taxon_list: {}},
-          page: {sample_reference: 1, attachment_link: 1, analysis: 1, preparation: 1, taxon_list: 1},
-          paginateBy: {sample_reference: 25, attachment_link: 25, analysis: 25, preparation: 25, taxon_list: 25},
-          count: {sample_reference: 0, attachment_link: 0, analysis: 0, preparation: 0, taxon_list: 0}
+          insert: this.setDefaultInsertRelatedData(),
+          searchParameters: {
+            sample_reference: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            attachment_link: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            analysis: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            preparation: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+            taxon_list: {
+              page: 1,
+              paginateBy: 10,
+              orderBy: 'id'
+            },
+          },
+          count: {
+            sample_reference: 0,
+            attachment_link: 0,
+            analysis: 0,
+            preparation: 0,
+            taxon_list: 0
+          }
+        }
+      },
+
+      setDefaultInsertRelatedData() {
+        return {
+          sample_reference: {},
+          attachment_link: {},
+          analysis: {},
+          preparation: {},
+          taxon_list: {}
         }
       },
 
       formatDataForUpload(objectToUpload) {
-        let uploadableObject = cloneDeep(objectToUpload)
+        let uploadableObject = cloneDeep(objectToUpload);
 
-        if (objectToUpload.latitude1 === '')
-          uploadableObject.latitude1 = this.isNotEmpty(objectToUpload.latitude1) ? objectToUpload.latitude1.toFixed(6) : null
-        if (objectToUpload.longitude1 === '')
-          uploadableObject.longitude1 = this.isNotEmpty(objectToUpload.longitude1) ? objectToUpload.longitude1.toFixed(6) : null
-        if (this.isNotEmpty(objectToUpload.palaeontology)) uploadableObject.palaeontology = objectToUpload.palaeontology === true ? '1' : '0';
-        if (this.isNotEmpty(objectToUpload.analysis)) uploadableObject.analysis = objectToUpload.analysis === true ? '1' : '0';
-        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
-
+        if (this.isNotEmpty(objectToUpload.latitude1)) uploadableObject.latitude1 = objectToUpload.latitude1.toFixed(6);
+        if (this.isNotEmpty(objectToUpload.longitude1)) uploadableObject.longitude1 =  objectToUpload.longitude1.toFixed(6);
         if (this.isNotEmpty(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
-        if (this.isNotEmpty(objectToUpload.depth)) {
-          if (objectToUpload.depth.toString().length > 0) uploadableObject.depth = parseFloat(objectToUpload.depth);
-          else uploadableObject.depth = null;
-        } else uploadableObject.depth = null;
-        if (this.isNotEmpty(objectToUpload.depth_interval)) {
-          if (objectToUpload.depth_interval.toString().length > 0) uploadableObject.depth_interval = parseFloat(objectToUpload.depth_interval);
-          else uploadableObject.depth_interval = null;
-        } else uploadableObject.depth_interval = null;
+        if (this.isNotEmpty(objectToUpload.depth)) uploadableObject.depth = parseFloat(objectToUpload.depth);
+        if (this.isNotEmpty(objectToUpload.depth_interval)) uploadableObject.depth_interval = parseFloat(objectToUpload.depth_interval);
 
         //autocomplete fields
+        if (this.isNotEmpty(objectToUpload.series)) uploadableObject.series = objectToUpload.series.id;
+        if (this.isNotEmpty(objectToUpload.sample_purpose)) uploadableObject.sample_purpose = objectToUpload.sample_purpose.id;
+        if (this.isNotEmpty(objectToUpload.parent_sample)) uploadableObject.parent_sample = objectToUpload.parent_sample.id;
+        if (this.isNotEmpty(objectToUpload.parent_specimen)) uploadableObject.parent_specimen = objectToUpload.parent_specimen.id;
+        if (this.isNotEmpty(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id;
+        if (this.isNotEmpty(objectToUpload.stratigraphy)) uploadableObject.stratigraphy = objectToUpload.stratigraphy.id;
+        if (this.isNotEmpty(objectToUpload.lithostratigraphy)) uploadableObject.lithostratigraphy = objectToUpload.lithostratigraphy.id;
+        if (this.isNotEmpty(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id;
+        if (this.isNotEmpty(objectToUpload.classification_rock)) uploadableObject.classification_rock = objectToUpload.classification_rock.id;
+        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id;
+        if (this.isNotEmpty(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id;
+        if (this.isNotEmpty(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id;
+        if (this.isNotEmpty(objectToUpload.site)) uploadableObject.site = objectToUpload.site.id;
 
-        if (this.isNotEmpty(objectToUpload.series)) uploadableObject.series = objectToUpload.series.id
-        if (this.isNotEmpty(objectToUpload.sample_purpose)) uploadableObject.sample_purpose = objectToUpload.sample_purpose.id
-        if (this.isNotEmpty(objectToUpload.parent_sample)) uploadableObject.parent_sample = objectToUpload.parent_sample.id
-        if (this.isNotEmpty(objectToUpload.parent_specimen)) uploadableObject.parent_specimen = objectToUpload.parent_specimen.id
-        if (this.isNotEmpty(objectToUpload.locality)) uploadableObject.locality = objectToUpload.locality.id
-        if (this.isNotEmpty(objectToUpload.stratigraphy)) uploadableObject.stratigraphy = objectToUpload.stratigraphy.id
-        if (this.isNotEmpty(objectToUpload.lithostratigraphy)) uploadableObject.lithostratigraphy = objectToUpload.lithostratigraphy.id
-        if (this.isNotEmpty(objectToUpload.agent_collected)) uploadableObject.agent_collected = objectToUpload.agent_collected.id
-        if (this.isNotEmpty(objectToUpload.classification_rock)) uploadableObject.classification_rock = objectToUpload.classification_rock.id
-        if (this.isNotEmpty(objectToUpload.owner)) uploadableObject.owner = objectToUpload.owner.id
-        if (this.isNotEmpty(objectToUpload.storage)) uploadableObject.storage = objectToUpload.storage.id
-        if (this.isNotEmpty(objectToUpload.storage_additional)) uploadableObject.storage_additional = objectToUpload.storage_additional.id
-        if (this.isNotEmpty(objectToUpload.site)) uploadableObject.site = objectToUpload.site.id
-        if (typeof this.databaseId !== 'undefined' && this.databaseId !== null) {
-          uploadableObject.database = this.databaseId
+        if (this.isNotEmpty(this.databaseId)) uploadableObject.database = this.databaseId;
+
+        // Adding related data only on add view
+        if (!this.$route.meta.isEdit) {
+          uploadableObject.related_data = {};
+
+          this.relatedTabs.forEach(tab => {
+            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
+          });
         }
-        console.log('This object is sent in string format:')
-        console.log(uploadableObject)
+
+        console.log('This object is sent in string format:');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
       fillAutocompleteFields(obj) {
-        this.sample.series = {name: obj.series__name, id: obj.series_id}
-        this.sample.sample_purpose = {
-          value: obj.sample_purpose__value,
-          value_en: obj.sample_purpose__value_en,
-          id: obj.sample_purpose__id
-        }
-        this.sample.parent_sample = {number: obj.parent_sample__number, id: obj.parent_sample}
-        this.sample.parent_specimen = {specimen_id: obj.parent_specimen__specimen_id, id: obj.parent_specimen}
-        this.sample.locality = {
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-          id: obj.locality__id
-        }
-        this.sample.stratigraphy = {
-          stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en,
-          id: obj.stratigraphy__id
-        }
-        this.sample.lithostratigraphy = {
-          stratigraphy: obj.lithostratigraphy__stratigraphy,
-          stratigraphy_en: obj.lithostratigraphy__stratigraphy_en,
-          id: obj.lithostratigraphy_id
-        }
-        this.sample.agent_collected = {agent: obj.agent_collected__agent, id: obj.agent_collected__id}
-        this.sample.classification_rock = {
-          name: obj.classification_rock__name,
-          name_en: obj.classification_rock__name_en,
-          id: obj.classification_rock__id
-        }
-        this.sample.owner = {agent: obj.owner__agent, id: obj.owner__id}
-        this.sample.storage = {location: obj.storage__location, id: obj.storage}
-        this.sample.storage_additional = {location: obj.storage_additional__location, id: obj.storage_additional}
-        if (typeof obj.site__id !== 'undefined' && obj.site !== null) {
-          this.sample.site = {id: obj.site__id, name: obj.site__name}
-        }
+        this.sample.series = { name: obj.series__name, id: obj.series_id };
+        this.sample.sample_purpose = { value: obj.sample_purpose__value, value_en: obj.sample_purpose__value_en, id: obj.sample_purpose__id };
+        this.sample.parent_sample = { number: obj.parent_sample__number, id: obj.parent_sample };
+        this.sample.parent_specimen = { specimen_id: obj.parent_specimen__specimen_id, id: obj.parent_specimen };
+        this.sample.locality = { locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality__id };
+        this.sample.stratigraphy = { stratigraphy: obj.stratigraphy__stratigraphy, stratigraphy_en: obj.stratigraphy__stratigraphy_en, id: obj.stratigraphy__id };
+        this.sample.lithostratigraphy = { stratigraphy: obj.lithostratigraphy__stratigraphy, stratigraphy_en: obj.lithostratigraphy__stratigraphy_en, id: obj.lithostratigraphy_id };
+        this.sample.agent_collected = { agent: obj.agent_collected__agent, id: obj.agent_collected__id };
+        this.sample.classification_rock = { name: obj.classification_rock__name, name_en: obj.classification_rock__name_en, id: obj.classification_rock__id };
+        this.sample.owner = { agent: obj.owner__agent, id: obj.owner__id };
+        this.sample.storage = { location: obj.storage__location, id: obj.storage };
+        this.sample.storage_additional = { location: obj.storage_additional__location, id: obj.storage_additional };
+        this.sample.site = { id: obj.site, name: obj.site__name };
       },
 
       fillRelatedDataAutocompleteFields(obj) {
-        obj.analysis_method = {
-          analysis_method: obj.analysis_method__analysis_method,
-          method_en: obj.analysis_method__method_en,
-          id: obj.analysis_method
-        }
-        obj.agent = {agent: obj.agent__agent, id: obj.agent}
-        obj.fossil_group = {taxon: obj.taxon__taxon, id: obj.taxon}
-        obj.storage = {location: obj.storage__location, id: obj.storage}
-        obj.analysis = {id: obj.analysis}
-        obj.taxon = {taxon: obj.taxon__taxon, id: obj.taxon}
-        obj.agent_identified = {agent: obj.agent_identified__agent, id: obj.agent_identified}
-        obj.preparation = {id: obj.preparation}
+        obj.analysis_method = { analysis_method: obj.analysis_method__analysis_method, method_en: obj.analysis_method__method_en, id: obj.analysis_method };
+        obj.agent = { agent: obj.agent__agent, id: obj.agent };
+        obj.fossil_group = { taxon: obj.taxon__taxon, id: obj.taxon };
+        obj.storage = { location: obj.storage__location, id: obj.storage };
+        obj.analysis = { id: obj.analysis };
+        obj.taxon = { taxon: obj.taxon__taxon, id: obj.taxon };
+        obj.agent_identified = { agent: obj.agent_identified__agent, id: obj.agent_identified };
+        obj.preparation = { id: obj.preparation, preparation_number: obj.preparation_number };
+        obj.reference = { reference: obj.reference__reference, id: obj.reference };
 
-        obj.reference = {reference: obj.reference__reference, id: obj.reference}
         return obj
+      },
+
+      unformatRelatedDataAutocompleteFields(obj, objectID) {
+        let newObject = cloneDeep(obj);
+
+        if (objectID) newObject.id = objectID;
+
+        if (this.isNotEmpty(obj.analysis_method)) {
+          newObject.analysis_method = obj.analysis_method.id;
+          newObject.analysis_method__analysis_method = obj.analysis_method.analysis_method;
+          newObject.analysis_method__method_en = obj.analysis_method.method_en;
+        }
+        if (this.isNotEmpty(obj.agent)) {
+          newObject.agent = obj.agent.id;
+          newObject.agent__agent = obj.agent.agent;
+        }
+        if (this.isNotEmpty(obj.fossil_group)) {
+          newObject.fossil_group = obj.fossil_group.id;
+          newObject.fossil_group__taxon = obj.fossil_group.taxon;
+        }
+        if (this.isNotEmpty(obj.storage)) {
+          newObject.storage = obj.storage.id;
+          newObject.storage__location = obj.storage.location;
+        }
+        if (this.isNotEmpty(obj.analysis)) {
+          newObject.analysis = obj.analysis.id;
+        }
+        if (this.isNotEmpty(obj.taxon)) {
+          newObject.taxon = obj.taxon.id;
+          newObject.taxon__taxon = obj.taxon.taxon;
+        }
+        if (this.isNotEmpty(obj.agent_identified)) {
+          newObject.agent_identified = obj.agent_identified.id;
+          newObject.agent_identified__agent = obj.agent_identified.agent;
+        }
+        if (this.isNotEmpty(obj.preparation)) {
+          newObject.preparation = obj.preparation.id;
+          newObject.preparation_number = obj.preparation.preparation_number;
+        }
+        if (this.isNotEmpty(obj.reference)) {
+          newObject.reference = obj.reference.id;
+          newObject.reference__reference = obj.reference.reference;
+        }
+        if (this.isNotEmpty(obj.attachment)) {
+          newObject.attachment = obj.attachment.id;
+          newObject.attachment__original_filename = obj.attachment.original_filename;
+        }
+
+        return newObject
       },
 
       loadRelatedData(object) {
         let query;
 
         if (object === 'analysis') {
-          query = fetchSampleAnalysis(this.$route.params.id, this.relatedData.page.analysis)
+          query = fetchSampleAnalysis(this.$route.params.id, this.relatedData.searchParameters.analysis)
         } else if (object === 'preparation') {
-          query = fetchSamplePreparation(this.$route.params.id, this.relatedData.page.preparation)
+          query = fetchSamplePreparation(this.$route.params.id, this.relatedData.searchParameters.preparation)
         } else if (object === 'taxon_list') {
-          query = fetchTaxonList(this.$route.params.id, this.relatedData.page.taxon_list)
+          query = fetchTaxonList(this.$route.params.id, this.relatedData.searchParameters.taxon_list)
         } else if (object === 'sample_reference') {
-          query = fetchSampleReference(this.$route.params.id, this.relatedData.page.sample_reference)
+          query = fetchSampleReference(this.$route.params.id, this.relatedData.searchParameters.sample_reference)
         } else if (object === 'attachment_link') {
-          query = fetchLSampleAttachment(this.$route.params.id, this.relatedData.page.attachment_link)
+          query = fetchLSampleAttachment(this.$route.params.id, this.relatedData.searchParameters.attachment_link)
         }
         return new Promise(resolve => {
           query.then(response => {
@@ -1369,13 +1388,7 @@
       },
 
       //check required fields for related data
-      checkRequiredFields(type) {
-        // if(type === 'sample_attachment') return this.relatedData.insert[type].attachment === undefined;
-        // if(type === 'sample_reference') return this.relatedData.insert[type].reference === undefined;
-        // if(type === 'analysis') return this.relatedData.insert[type].reference === undefined;
-        // if(type === 'preparation') return this.relatedData.insert[type].reference === undefined;
-        // if(type === 'taxon_list') return this.relatedData.insert[type].reference === undefined;
-      },
+      checkRequiredFields(type) {},
 
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
@@ -1386,23 +1399,17 @@
         if (this.isNotEmpty(uploadableObject.analysis_method)) uploadableObject.analysis_method = uploadableObject.analysis_method.id;
         if (this.isNotEmpty(uploadableObject.agent)) uploadableObject.agent = uploadableObject.agent.id;
         if (this.isNotEmpty(uploadableObject.agent_identified)) uploadableObject.agent_identified = uploadableObject.agent_identified.id;
-        if (this.isNotEmpty(uploadableObject.date)) uploadableObject.date = this.formatDateForUpload(uploadableObject.date)
-        if (this.isNotEmpty(uploadableObject.date_end)) uploadableObject.date_end = this.formatDateForUpload(uploadableObject.date_end)
+        if (this.isNotEmpty(uploadableObject.date)) uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
+        if (this.isNotEmpty(uploadableObject.date_end)) uploadableObject.date_end = this.formatDateForUpload(uploadableObject.date_end);
         if (this.isNotEmpty(uploadableObject.date_identified)) uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified)
         if (this.isNotEmpty(uploadableObject.taxon)) uploadableObject.taxon = uploadableObject.taxon.id;
         if (this.isNotEmpty(uploadableObject.storage)) uploadableObject.storage = uploadableObject.storage.id;
         if (this.isNotEmpty(uploadableObject.analysis)) uploadableObject.analysis = uploadableObject.analysis.id;
         if (this.isNotEmpty(uploadableObject.preparation)) uploadableObject.preparation = uploadableObject.preparation.id;
 
-        // console.log(JSON.stringify(uploadableObject));
+        console.log('This object is sent in string format (related_data):');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
-      },
-
-      fetchList(localStorageData) {
-        let params = this.isNotEmpty(localStorageData) && localStorageData !== 'fallbackValue' && localStorageData !== '[object Object]' ? localStorageData : this.searchParameters;
-        return new Promise((resolve) => {
-          resolve(fetchSamples(params, this.currentUser, this.databaseId))
-        });
       },
 
       setDefaultSearchParameters() {
@@ -1437,7 +1444,6 @@
       },
 
       addSiteDataToSampleObject(site) {
-        console.log(site)
         this.sample.locality = site.locality;
         this.sample.site = { id: site.id, name: site.name };
         this.sample.agent_collected = { id: this.currentUser.id , agent: this.currentUser.user };

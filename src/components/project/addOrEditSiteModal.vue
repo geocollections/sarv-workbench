@@ -9,19 +9,24 @@
            ref="newSiteForm"
            :title="title" @hide="hideModal">
 
-    <site :editSite = 'site'></site>
+    <site :editSite='site'></site>
 
     <template slot="modal-footer">
       <div class="col">
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="$root.$emit('add-or-edit-site-from-modal','SAVE_AND_LEAVE')">
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData"
+                @click="$root.$emit('add-or-edit-site-from-modal','SAVE_AND_LEAVE')">
           <font-awesome-icon icon="door-open"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}</button>
-        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData" @click="$root.$emit('add-or-edit-site-from-modal','SAVE')">
+          {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
+        </button>
+        <button class="btn btn-success mr-2 mb-2" :disabled="sendingData"
+                @click="$root.$emit('add-or-edit-site-from-modal','SAVE')">
           <font-awesome-icon icon="save"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}</button>
+          {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}
+        </button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="hideModal">
           <font-awesome-icon icon="ban"/>
-          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}</button>
+          {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
+        </button>
 
       </div>
     </template>
@@ -31,35 +36,36 @@
 
 <script>
   import fontAwesomeLib from '../../mixins/fontAwasomeLib'
-    import Site from "../site/Site";
-    export default {
-        name: "addNewSite",
-      components: {Site},
-      mixins: [fontAwesomeLib],
-      props: ['sendingData','site'],
-      mounted(){
-        this.$parent.$on('show-new-site-modal', this.showModal);
-        this.$root.$on('close-new-site-modal', this.hideModal);
+  import Site from "../site/Site";
 
-      },
-      computed: {
-          title() {
-            if(this.$store.state['createRelationWith'].edit === null || typeof this.$store.state['createRelationWith'].edit === 'undefined' ) return this.$t('header.sites');
-            return this.$t('header.sites') + ' id:' + this.$store.state['createRelationWith'].edit.id
-          }
-      },
-      methods: {
-        showModal(){
-          this.$refs.newSiteForm.show()
-        },
-        hideModal(){
-          if(this.$refs.newSiteForm)this.$refs.newSiteForm.hide()
-          this.$root.$off('add-or-edit-site-from-modal')
-          this.$parent.loadRelatedData('site')
-          this.$parent.watchedSite = null
-        },
+  export default {
+    name: "addNewSite",
+    components: {Site},
+    mixins: [fontAwesomeLib],
+    props: ['sendingData', 'site'],
+    mounted() {
+      this.$parent.$on('show-new-site-modal', this.showModal);
+      this.$root.$on('close-new-site-modal', this.hideModal);
+
+    },
+    computed: {
+      title() {
+        if (this.$store.state['createRelationWith'].edit === null || typeof this.$store.state['createRelationWith'].edit === 'undefined') return this.$t('header.sites');
+        return this.$t('header.sites') + ' id:' + this.$store.state['createRelationWith'].edit.id
       }
+    },
+    methods: {
+      showModal() {
+        this.$refs.newSiteForm.show()
+      },
+      hideModal() {
+        if (this.$refs.newSiteForm) this.$refs.newSiteForm.hide()
+        this.$root.$off('add-or-edit-site-from-modal')
+        this.$parent.loadRelatedData('site')
+        this.$parent.watchedSite = null
+      },
     }
+  }
 </script>
 
 <style scoped>
