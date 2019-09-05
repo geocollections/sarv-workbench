@@ -2,7 +2,7 @@
   <fieldset class="log border-top px-2 mb-2" v-if="logs.length > 0">
     <legend class="w-auto my-0 mb-1" :class="{'text-primary': !block.logs}" @click="block.logs = !block.logs">
       {{ $t('logs.title') }}
-      <font-awesome-icon icon="history"/>
+      <i class="fas fa-history"></i>
     </legend>
 
     <transition name="fade">
@@ -21,7 +21,7 @@
               </thead>
 
               <tbody>
-              <tr v-for="entity in logs">
+              <tr v-for="entity in logs" :key="entity.id">
                 <td><b>{{ entity.user }}</b></td>
                 <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
                 <td>{{ entity.command }}</td>
@@ -40,8 +40,9 @@
                                v-if="index === 'new'">
 
                             <div class="list-titles">
-                              <div class="vs-list--subtitle" v-if="typeof item === 'object'">
-                                  {{ item.join(', ') }}
+                              <div class="vs-list--subtitle" v-if="typeof item === 'object' && item">
+<!--                                  {{ item.join(', ') }}-->
+                                  {{ item.join() }}
                               </div>
 
                               <div class="vs-list--subtitle" v-else>{{ item }}</div>
@@ -54,8 +55,9 @@
                                v-if="index === 'old'">
 
                             <div class="list-titles">
-                              <div class="vs-list--subtitle" v-if="typeof item === 'object'">
-                                {{ item.join(', ') }}
+                              <div class="vs-list--subtitle" v-if="typeof item === 'object' && item">
+<!--                                {{ item.join(', ') }}-->
+                                {{ item.join() }}
                               </div>
 
                               <div class="vs-list--subtitle" v-else>{{ item }}</div>
@@ -84,12 +86,6 @@
 
 <script>
   import {fetchSpecificLogs} from "@/assets/js/api/apiCalls";
-  import {library} from '@fortawesome/fontawesome-svg-core'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-
-  import {faHistory} from '@fortawesome/free-solid-svg-icons'
-
-  library.add(faHistory)
 
   export default {
     props: ['table', 'data', 'formattedData'],
@@ -99,9 +95,6 @@
         block: {logs: false},
         logs: []
       }
-    },
-    components: {
-      FontAwesomeIcon
     },
     watch: {
       'formattedData': {
@@ -136,25 +129,25 @@
        * @returns {{}|any}, Empty object or JSON
        */
       handleChanges(changes) {
-        if (changes !== null && changes.trim().length > 0) {
-          // Todo: FIx that if some field contains ' then it should not get replaced, better fix would be API to send correct json format
+        if (typeof changes !== 'undefined' && changes !== null && changes.trim().length > 0) {
           // example error reference/10835
-          let validJsonString = changes.replace(/'/g, '"');
+          // let validJsonString = changes.replace(/'/g, '"');
           //
           // Exceptions
-          // Todo: Combine these regular expressions!!!
-          if (validJsonString.includes('"None"')) validJsonString = validJsonString.replace(/"None"/g, 'None');
-          if (validJsonString.includes('None')) validJsonString = validJsonString.replace(/None/g, '"None"');
+          // if (validJsonString.includes('"None"')) validJsonString = validJsonString.replace(/"None"/g, 'None');
+          // if (validJsonString.includes('None')) validJsonString = validJsonString.replace(/None/g, '"None"');
+          //
+          // if (validJsonString.includes('"True"')) validJsonString = validJsonString.replace(/"True"/g, 'True');
+          // if (validJsonString.includes('True')) validJsonString = validJsonString.replace(/True/g, '"True"');
+          //
+          // if (validJsonString.includes('"False"')) validJsonString = validJsonString.replace(/"False"/g, 'False');
+          // if (validJsonString.includes('False')) validJsonString = validJsonString.replace(/False/g, '"False"');
+          //
+          // if (validJsonString.includes('datetime.datetime')) validJsonString = validJsonString.replace(/datetime.datetime\((.*?)\)/g, '"$&"');
 
-          if (validJsonString.includes('"True"')) validJsonString = validJsonString.replace(/"True"/g, 'True');
-          if (validJsonString.includes('True')) validJsonString = validJsonString.replace(/True/g, '"True"');
-
-          if (validJsonString.includes('"False"')) validJsonString = validJsonString.replace(/"False"/g, 'False');
-          if (validJsonString.includes('False')) validJsonString = validJsonString.replace(/False/g, '"False"');
-
-          if (validJsonString.includes('datetime.datetime')) validJsonString = validJsonString.replace(/datetime.datetime\((.*?)\)/g, '"$&"');
-
-          return JSON.parse(validJsonString)
+          // console.log(changes)
+          // console.log(JSON.parse(changes))
+          return JSON.parse(changes)
         } else return {}
       },
     }
