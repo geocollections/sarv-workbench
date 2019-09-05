@@ -454,6 +454,10 @@ const formManipulation = {
       window.open('https://files.geocollections.info/' + params.pdf.substring(0, 2) + '/' + params.pdf.substring(2, 4) + '/' + params.pdf, '', 'width=1000,height=900')
     },
 
+    getDoiUrl(doi) {
+      return `https://doi.org/${doi}`
+    },
+
     /**
      * Removes unnecessary fields from object.
      *

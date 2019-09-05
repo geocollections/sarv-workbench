@@ -1043,6 +1043,7 @@
     "addReferenceToLibrary": "Add reference to library",
     "chooseActiveLibrary": "Choose active library",
     "is_estonian_reference": "Estonian reference",
+    "is_estonian_author": "Estonian author",
     "localities": "Localities",
     "libraries": "Kogumikud",
     "attachments": "Attachments",

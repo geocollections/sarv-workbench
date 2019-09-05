@@ -190,7 +190,12 @@
             <div class="flex-grow-1">
               <div class="d-flex">
                 <div class="flex-grow-1">
-                  <label :for="`doi`">DOI:</label>
+                  <label :for="`doi`">
+                    DOI:
+                    <a v-if="reference.doi" class="link text-primary" :href="getDoiUrl(reference.doi)" target="_blank" rel="noopener noreferrer">
+                      <i class="fas fa-external-link-alt"></i>
+                    </a>
+                  </label>
                   <b-form-input id="doi" v-model="reference.doi" type="text"></b-form-input>
                 </div>
 
@@ -207,7 +212,7 @@
             <div class="flex-grow-1">
               <label :for="`url`">
                 URL:
-                <a v-if="reference.url" class="link text-primary" :href="reference.url" target="_blank">
+                <a v-if="reference.url && isValidUrl" class="link text-primary" :href="reference.url" target="_blank">
                   <i class="fas fa-external-link-alt"></i>
                 </a>
               </label>
@@ -390,11 +395,17 @@
           {{ $t('reference.is_estonian_reference') }}
         </b-form-checkbox>
       </div>
+
+      <div class="px-2">
+        <b-form-checkbox id="is_estonian_author" v-model="reference.is_estonian_author" :value="true" :unchecked-value="false">
+          {{ $t('reference.is_estonian_author') }}
+        </b-form-checkbox>
+      </div>
     </div>
 
     <!-- DIGITAL VERSION (PDF) -->
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
-      <legend class="w-auto my-0" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
+      <legend class="w-auto my-0 mb-2" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <font-awesome-icon icon="file-pdf"/>
       </legend>
@@ -778,7 +789,7 @@
           copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'title_translated', 'type', 'language', 'journal', 'journal_additional',
             'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
             'issn', 'abstract', 'author_keywords', 'remarks', 'book_editor', 'figures', 'is_locked',
-            'is_oa', 'is_private', 'is_estonian_reference', 'language'],
+            'is_oa', 'is_private', 'is_estonian_reference', 'is_estonian_author', 'language'],
           autocomplete: {
             loaders: {
               types: false,
@@ -1063,7 +1074,8 @@
           id: null,
           libraryAuthorIdTitle: null,
           userAdded: null,
-          isEstonianReference: false,
+          isEstonianReference: null,
+          isEstonianAuthor: null,
           solrSearch: null,
           page: 1,
           paginateBy: 50,

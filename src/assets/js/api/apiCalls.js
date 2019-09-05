@@ -172,7 +172,10 @@ export async function fetchReferences(data) {
   if (data.isEstonianReference) {
     searchFields += `&is_estonian_reference=${data.isEstonianReference}`
   }
-  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1)
+  if (data.isEstonianAuthor) {
+    searchFields += `&is_estonian_author=${data.isEstonianAuthor}`
+  }
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
     // Not using 'fields' because of alternative table

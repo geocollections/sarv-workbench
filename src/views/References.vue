@@ -33,10 +33,20 @@
           </div>
 
           <!-- CHECKBOXES -->
-          <div class="col-6">
-            <b-form-checkbox class="mt-2" v-model="searchParameters.isEstonianReference">
-              {{ $t('reference.is_estonian_reference') }}
-            </b-form-checkbox>
+          <div class="col-sm-12">
+            <div class="d-flex flex-wrap">
+              <div class="pr-2">
+                <b-form-checkbox class="mt-2" v-model="searchParameters.isEstonianReference">
+                  {{ $t('reference.is_estonian_reference') }}
+                </b-form-checkbox>
+              </div>
+
+              <div class="pr-2">
+                <b-form-checkbox class="mt-2" v-model="searchParameters.isEstonianAuthor">
+                  {{ $t('reference.is_estonian_author') }}
+                </b-form-checkbox>
+              </div>
+            </div>
           </div>
         </div>
       </transition>
@@ -169,7 +179,8 @@
           id: null,
           libraryAuthorIdTitle: null,
           userAdded: null,
-          isEstonianReference: false,
+          isEstonianReference: null,
+          isEstonianAuthor: null,
           solrSearch: null,
           page: 1,
           paginateBy: 50,
