@@ -444,7 +444,7 @@
         // Autocomplete fields
         if (this.isNotEmpty(objectToUpload.author)) uploadableObject.author = objectToUpload.author.id;
 
-        if (this.databaseId) uploadableObject.database = this.databaseId;
+        // if (this.databaseId) uploadableObject.database = this.databaseId;
 
         // Adding related data
         if (!this.$route.meta.isEdit) {

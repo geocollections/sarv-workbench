@@ -973,7 +973,7 @@
         if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
         if (this.isNotEmpty(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id;
 
-        if (this.databaseId) uploadableObject.database = this.databaseId;
+        // if (this.databaseId) uploadableObject.database = this.databaseId;
 
         // Adding related data
         uploadableObject.related_data = {};

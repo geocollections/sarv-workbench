@@ -731,7 +731,7 @@
         if (this.isNotEmpty(objectToUpload.stratigraphy_top)) uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id;
         if (this.isNotEmpty(objectToUpload.stratigraphy_base)) uploadableObject.stratigraphy_base = objectToUpload.stratigraphy_base.id;
 
-        if (this.databaseId) uploadableObject.database = this.databaseId;
+        // if (this.databaseId) uploadableObject.database = this.databaseId;
 
         // Adding related data only on add view
         if (!this.$route.meta.isEdit) {

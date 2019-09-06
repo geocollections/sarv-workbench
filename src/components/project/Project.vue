@@ -366,7 +366,7 @@
         }
       },
 
-      ...mapState(["currentUser"])
+      ...mapState(["currentUser", "databaseId"])
     },
     created() {
       // USED BY SIDEBAR
