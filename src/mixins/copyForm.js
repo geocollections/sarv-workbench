@@ -8,7 +8,9 @@ const copyForm = {
   mounted(){
     this.$root.$on('save-object-as-new', this.saveAsNew);
   },
-
+  beforeDestroy() {
+    this.$root.$off('save-object-as-new', this.saveAsNew);
+  },
   methods: {
 
     // waitUntilAllCopiesSaved(){

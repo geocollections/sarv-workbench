@@ -329,6 +329,18 @@
     "bookJournal": "Book or journal",
     "abstractKeywordsRemarks": "Abstract, keywords or remarks"
   },
+  "editAnalysis": {
+    "heading": "Analysis",
+    "editMessage": "Edit analysis"
+  },
+  "editProject": {
+    "heading": "Project ID",
+    "editMessage": "Edit project"
+  },
+  "editSite": {
+    "heading": "Site ID",
+    "editMessage": "Edit site"
+  },
   "editLocality": {
     "heading": "Locality ID",
     "editMessage": "Edit locality",
@@ -344,18 +356,6 @@
     "heading": "Sample ID",
     "editMessage": "Edit sample",
     "viewMessage": "View sample in geocollections portal"
-  },
-  "editAnalysis": {
-    "heading": "Analysis",
-    "editMessage": "Edit analysis"
-  },
-  "editProject": {
-    "heading": "Project ID",
-    "editMessage": "Edit project"
-  },
-  "editSite": {
-    "heading": "Site ID",
-    "editMessage": "Edit site"
   },
   "editLibrary": {
     "heading": "Library ID",
@@ -395,6 +395,7 @@
     "edit": "Edit",
     "fancyView": "Fancy view",
     "regularView": "Old view",
+    "toggleFancyImageList": "Change image display",
     "errors": {
       "noFiles1": "Unfortunately we didn't find any files. Go to",
       "noFiles2": "and start uploading."
@@ -524,6 +525,8 @@
     }
   },
   "attachment": {
+    "requiredFields": "Mandatory fields",
+    "info": "General info",
     "header": "My attachments",
     "imageNumber": "Image number",
     "filename": "Filename",
@@ -535,6 +538,8 @@
     "format": "Format",
     "number": "Number",
     "author": "Author",
+    "author_free": "Author vaba",
+    "imageset": "Pildiseeria",
     "date": "Date",
     "reference": "Reference",
     "specimenImageAttachment": "Type",
@@ -553,7 +558,61 @@
     "is_private_text": "Private",
     "is_public_text": "Public",
     "is_locked_text": "Locked",
-    "is_unlocked_text": "Unlocked"
+    "is_unlocked_text": "Unlocked",
+    "authorFree": "Author free",
+    "dateCreated": "Date created",
+    "dateCreatedFree": "Date created free",
+    "imageType": "Image type",
+    "device": "Device",
+    "deviceTxt": "Device",
+    "agentDigitised": "Agent digitised",
+    "dateDigitised": "Date digitised",
+    "deviceDigitised": "Device digitised",
+    "type": "Type",
+    "imageScalebar": "Image scalebar",
+    "description": "Description",
+    "descriptionEn": "Description en",
+    "keywords": "Keywords",
+    "stars": "Rating",
+    "licence": "Licence",
+    "copyrightAgent": "Copyright agent",
+    "preferred": "Preferred",
+    "private": "Private",
+    "locked": "Locked",
+    "remarks": "Remarks",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "relatedData": "Related data",
+    "relatedDataDefault": "Choose related table",
+    "relatedTables": {
+      "collection": "Collection",
+      "specimen": "Specimen",
+      "sample": "Sample",
+      "sample_series": "Sample series",
+      "analysis": "Analysis",
+      "dataset": "Dataset",
+      "doi": "Doi",
+      "locality": "Locality",
+      "drillcore": "Drillcore",
+      "drillcore_box": "Drillcore box",
+      "preparation": "Preparation",
+      "reference": "Reference",
+      "storage": "Storage",
+      "attachment": "Attachment",
+      "project": "Project",
+      "site": "Site"
+    },
+    "imagesetId": "Imageset ID",
+    "imagePlace": "Image place",
+    "imageLatitude": "Image latitude",
+    "imageLongitude": "Image longitude",
+    "imageAltitude": "Image altitude",
+    "imageObject": "Image object",
+    "imagePeople": "Image people",
+    "imageDescription": "Image description",
+    "imageDescriptionEn": "Image description en",
+    "collapseMap": "Map",
+    "dateDigitisedFree": "Date digitised free"
   },
   "digitisedReference": {
     "reference": "Reference",
@@ -1022,7 +1081,6 @@
     "keywords": "Author keywords",
     "id": "ID",
     "bookJournal": "Book or journal",
-    "abstractKeywordsRemarks": "Abstract, keywords or remarks",
     "abstractRemarks": "Abstract or remarks",
     "keywordsSearch": "Keywords",
     "libraryAuthorIdTitle": "Library author, ID or title",
@@ -1057,6 +1115,12 @@
       "library": "Related libraries"
     }
   },
+  "synonym": {
+    "synonym":"Synonym",
+    "reference":"Reference",
+    "pages":"Page",
+    "remarks":"Remarks"
+  },
   "stratigraphy": {
     "stratigraphy":"Stratigraphy",
     "base":"Lower boundary (m)",
@@ -1065,12 +1129,6 @@
     "author":"Author",
     "year":"Year",
     "is_preferred":"Is preferred?"
-  },
-  "synonym": {
-    "synonym":"Synonym",
-    "reference":"Reference",
-    "pages":"Page",
-    "remarks":"Remarks"
   },
   "journal": {
     "journalName": "Journal name",

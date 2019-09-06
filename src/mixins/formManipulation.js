@@ -86,6 +86,9 @@ const formManipulation = {
     if (typeof showCollapseMap === 'undefined' || showCollapseMap === 'fallbackValue') return
     this.showCollapseMap = showCollapseMap
   },
+  beforeDestroy() {
+    this.$parent.$off('button-clicked', this.bottomOptionClicked);
+  },
   computed: {
     ...mapState(['currentUser'])
   },
@@ -151,7 +154,8 @@ const formManipulation = {
     },
 
     /**
-     * Checks if required fields are okay to upload (not undefined, null etc.)
+     * Checks if required fields are okay to upload (not undefined, null etc.).
+     * Optional parameters example can be seen while adding attachment.
      *
      * @param {string} object - Current object which fields are validated e.g., 'doi', 'reference'.
      * @param {string} child - Used for validating if requiredFields is an object like in attachments.
@@ -159,17 +163,23 @@ const formManipulation = {
      */
     validate(object, child) {
       let isValid = true;
-      // console.log(vm[object])
+      let isValidOptional = false;
+
+      let fields = this.requiredFields;
+      let optionalFields = this.optionalFields;
+
+      if (object === 'attachment') child = this.$route.meta.child;
       if (child) {
-        this.requiredFields[child].forEach(el => {
-          isValid &= this.isNotEmpty(this[object][el])
-        })
-      } else {
-        this.requiredFields.forEach(el => {
-          isValid &= this.isNotEmpty(this[object][el])
-        })
+        fields = fields[child];
+        optionalFields = fields[child];
       }
-      return isValid
+
+      if (this.isNotEmpty(fields)) fields.forEach(el => isValid &= this.isNotEmpty(this[object][el]));
+
+      if (this.isNotEmpty(optionalFields)) optionalFields.forEach(el => isValidOptional |= this.isNotEmpty(this[object][el]));
+      else isValidOptional = true;
+
+      return isValid && isValidOptional
     },
 
     add(addAnother, object, returnPromise = false) {
@@ -503,7 +513,6 @@ const formManipulation = {
         this.loadRelatedData(type);
       }
     },
-
 
 
     /**************************

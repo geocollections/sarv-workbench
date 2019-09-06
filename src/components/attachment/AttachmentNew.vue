@@ -20,6 +20,7 @@
                             :accept-multiple="acceptMultiple"/>
     </template>
 
+
     <template v-slot:photo-archive>
       <div class="photo-archive">
 
@@ -48,7 +49,7 @@
                                    :placeholder="$t('add.inputs.autocomplete')"
                                    :loading="autocomplete.loaders.agent"
                                    :options="autocomplete.agent"
-                                   :class="{ valid:  isNotEmpty(attachment.author), invalid: ! isNotEmpty(attachment.author) }"
+                                   :class="{ valid:  isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free), invalid: !(isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free)) }"
                                    @search-change="autocompleteAgentSearch"
                                    :internal-search="false"
                                    :preserve-search="true"
@@ -64,7 +65,8 @@
 
                 <div class="col-md-4">
                   <label :for="`author_free`">{{ $t('attachment.author_free') }}:</label>
-                  <b-form-input id="author_free" v-model="attachment.author_free" :state="isNotEmpty(attachment.author_free) ||  isNotEmpty(attachment.author)"
+                  <b-form-input id="author_free" v-model="attachment.author_free"
+                                :state="isNotEmpty(attachment.author_free) || isNotEmpty(attachment.author)"
                                 type="text"></b-form-input>
                 </div>
 
@@ -107,12 +109,263 @@
           </transition>
         </fieldset>
 
+        <!-- GENERAL INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-info">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+            {{ $t('attachment.info') }}
+            <font-awesome-icon icon="project-diagram"/>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.info">
+
+              <!-- DATE_CREATED and DATE_CREATED_FREE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`date_created`">{{ $t('attachment.dateCreated') }}:</label>
+                  <datepicker id="date_created"
+                              v-model="attachment.date_created"
+                              lang="en"
+                              :first-day-of-week="1"
+                              format="DD MMM YYYY"
+                              input-class="form-control"></datepicker>
+                </div>
+
+
+                <div class="col-md-6">
+                  <label :for="`date_created_free`">{{ $t('attachment.dateCreatedFree') }}:</label>
+                  <b-form-input id="date_created_free" v-model="attachment.date_created_free" type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- LOCALITY -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_place`">{{ $t('attachment.imagePlace') }}:</label>
+                  <b-form-input id="image_place" v-model="attachment.image_place" type="text"></b-form-input>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`locality`">{{ $t('attachment.locality') }}:</label>
+                  <vue-multiselect v-model="attachment.locality"
+                                   id="locality"
+                                   :label="localityLabel"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.locality"
+                                   :options="autocomplete.locality"
+                                   @search-change="autocompleteLocalitySearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[localityLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+
       </div>
     </template>
 
+
+    <template v-slot:specimen-image>
+      <div class="specimen-image">
+
+        <!-- REQUIRED INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
+                  :style="!validate('attachment', 'photo_archive') ? 'border-color: #dc3545!important;' : ''">
+          <legend class="w-auto my-0"
+                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
+                  @click="block.requiredFields = !block.requiredFields">
+            {{ $t('attachment.requiredFields') }}
+            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
+            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.requiredFields">
+
+              <!-- AUTHOR and AUTHOR FREE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`author`">{{ $t('attachment.author') }}:</label>
+                  <vue-multiselect v-model="attachment.author"
+                                   id="author"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.agent"
+                                   :options="autocomplete.agent"
+                                   :class="{ valid:  isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free), invalid: !(isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free)) }"
+                                   @search-change="autocompleteAgentSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+
+                <div class="col-md-6">
+                  <label :for="`author_free`">{{ $t('attachment.author_free') }}:</label>
+                  <b-form-input id="author_free" v-model="attachment.author_free"
+                                :state="isNotEmpty(attachment.author_free) || isNotEmpty(attachment.author)"
+                                type="text"></b-form-input>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+      </div>
+    </template>
+
+
+    <template v-slot:other-file>
+      <div class="other-file">
+
+        <!-- REQUIRED INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
+                  :style="!validate('attachment', 'photo_archive') ? 'border-color: #dc3545!important;' : ''">
+          <legend class="w-auto my-0"
+                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
+                  @click="block.requiredFields = !block.requiredFields">
+            {{ $t('attachment.requiredFields') }}
+            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
+            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.requiredFields">
+
+              <!-- AUTHOR and AUTHOR FREE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`author`">{{ $t('attachment.author') }}:</label>
+                  <vue-multiselect v-model="attachment.author"
+                                   id="author"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.agent"
+                                   :options="autocomplete.agent"
+                                   :class="{ valid:  isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free), invalid: !(isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free)) }"
+                                   @search-change="autocompleteAgentSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+
+                <div class="col-md-6">
+                  <label :for="`author_free`">{{ $t('attachment.author_free') }}:</label>
+                  <b-form-input id="author_free" v-model="attachment.author_free"
+                                :state="isNotEmpty(attachment.author_free) || isNotEmpty(attachment.author)"
+                                type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- DESCRIPTION and DESCRIPTION_EN -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`description`">{{ $t('attachment.description') }}:</label>
+                  <b-form-textarea id="description" :state="isNotEmpty(attachment.description)" v-model="attachment.description" type="text"
+                                   :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+
+                  <b-form-text v-if="!isNotEmpty(attachment.description)">{{ $t('add.errors.emptyField') }}.</b-form-text>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`description_en`">{{ $t('attachment.descriptionEn') }}:</label>
+                  <b-form-textarea id="description_en" :state="isNotEmpty(attachment.description_en)" v-model="attachment.description_en" type="text"
+                                   :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+
+                  <b-form-text v-if="!isNotEmpty(attachment.description_en)">{{ $t('add.errors.emptyField') }}.</b-form-text>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+      </div>
+    </template>
+
+
+    <template v-slot:digitised-reference>
+      <div class="digitised-reference">
+
+        <!-- REQUIRED INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
+                  :style="!validate('attachment', 'photo_archive') ? 'border-color: #dc3545!important;' : ''">
+          <legend class="w-auto my-0"
+                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
+                  @click="block.requiredFields = !block.requiredFields">
+            {{ $t('attachment.requiredFields') }}
+            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
+            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.requiredFields">
+
+              <!-- REFERENCE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`reference`">{{ $t('attachment.reference') }}:</label>
+                  <vue-multiselect v-model="attachment.reference"
+                                   id="reference"
+                                   label="reference"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.reference"
+                                   :options="autocomplete.reference"
+                                   :class="{ valid:  isNotEmpty(attachment.reference), invalid: !isNotEmpty(attachment.reference) }"
+                                   @search-change="autocompleteReferenceSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.reference }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+      </div>
+    </template>
+
+
     <template v-slot:checkbox>
       <div class="d-flex flex-wrap">
+
         {{attachment}}
+
         <vs-checkbox id="is_private" v-model="attachment.is_private" icon="fa-eye-slash" icon-pack="fas">
           {{ attachment.is_private ? $t('attachment.is_private_text') : $t('attachment.is_public_text') }}
         </vs-checkbox>
@@ -122,7 +375,6 @@
         </vs-checkbox>
       </div>
     </template>
-
   </attachment-wrapper>
 </template>
 
@@ -225,10 +477,9 @@
     },
 
     created() {
-      // USED BY SIDEBAR
       if (this.$route.meta.isEdit) {
         const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue');
-        let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('filename') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
+        let params = this.isNotEmpty(searchHistory) && searchHistory !== 'fallbackValue' && searchHistory.hasOwnProperty('filename') ? searchHistory : this.searchParameters;
         this.$store.commit('SET_ACTIVE_SEARCH_PARAMS', {
           searchHistory: 'attachmentSearchHistory',
           defaultSearch: this.setDefaultSearchParameters(),
@@ -285,15 +536,25 @@
             loaders: {
               agent: false,
               imageset: false,
+              reference: false,
+              locality: false,
             },
             agent: [],
             imageset: [],
+            reference: [],
+            locality: [],
           },
           requiredFields: {
-            photo_archive: ['author', 'author_free', 'imageset'],
-            specimen_image: [''],
-            other_file: [''],
-            digitised_reference: ['']
+            photo_archive: ['imageset'],
+            specimen_image: [],
+            other_file: ['description', 'description_en'],
+            digitised_reference: ['reference']
+          },
+          optionalFields: {
+            photo_archive: ['author', 'author_free'],
+            specimen_image: ['author', 'author_free'],
+            other_file: ['author', 'author_free'],
+            digitised_reference: []
           },
           attachment: {},
           searchParameters: this.setDefaultSearchParameters(),
@@ -424,6 +685,9 @@
           });
         });
       },
+
+      //check required fields for related data
+      checkRequiredFields(type) {},
 
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
