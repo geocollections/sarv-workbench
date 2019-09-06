@@ -977,10 +977,8 @@
 
         // Adding related data
         uploadableObject.related_data = {};
-        uploadableObject.related_data.keyword = this.relatedData.keyword;
-        uploadableObject.related_data.attachment = this.relatedData.attachment;
-        uploadableObject.related_data.locality = this.relatedData.locality;
-        uploadableObject.related_data.library = cloneDeep(this.relatedData.library);
+        if (this.isNotEmpty(this.relatedData.keyword)) uploadableObject.related_data.keyword = this.relatedData.keyword;
+        if (this.isNotEmpty(this.relatedData.attachment)) uploadableObject.related_data.attachment = this.relatedData.attachment;
 
         if (this.isNotEmpty(this.relatedData.library)) {
           uploadableObject.related_data.library.forEach((library, index) => {
@@ -992,7 +990,7 @@
 
         // Adding related data only on add view
         if (!this.$route.meta.isEdit) {
-          uploadableObject.related_data = {};
+          // uploadableObject.related_data = {};
 
           this.relatedTabs.forEach(tab => {
             if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
