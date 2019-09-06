@@ -12,11 +12,12 @@
 
     <vs-divider class="mt-0 mb-1"></vs-divider>
 
+    <vs-sidebar-item index="1" icon="fa-home" icon-pack="fas" :to="{ path: '/dashboard' }">
+      {{ $t('buttons.homePage') }}
+    </vs-sidebar-item>
+
     <!-- STATIC LINKS -->
     <vs-sidebar-group :open="!$route.meta.isEdit" :title="$t('header.title')" id="sidebar-navigation-links">
-      <vs-sidebar-item index="1" icon="fa-home" icon-pack="fas" :to="{ path: '/dashboard' }">
-        {{ $t('buttons.homePage') }}
-      </vs-sidebar-item>
 
       <!-- PROJECTS -->
       <vs-sidebar-group v-if="isUserAllowedTo('add', 'project')" :title="$t('header.projects')">
@@ -224,6 +225,10 @@
         </vs-col>
       </vs-row>
     </vs-sidebar-group>
+
+    <vs-divider v-if="$route.meta.isEdit && activeSearchParams !== null" class="mt-1 mb-2" icon="fa-list-ul" icon-pack="fas" position="left">
+      List
+    </vs-divider>
 
     <!-- DYNAMIC DATA -->
     <vs-sidebar-group v-if="$route.meta.isEdit && activeSearchParams !== null"
@@ -461,6 +466,10 @@
 
   .vs-sidebar--item:hover {
     color: #1F74FF;
+  }
+
+  .vs-sidebar-group h4 {
+    font-size: .95rem !important;
   }
 
   .header-sidebar > h6:hover {

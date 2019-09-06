@@ -981,6 +981,7 @@
         if (this.isNotEmpty(this.relatedData.attachment)) uploadableObject.related_data.attachment = this.relatedData.attachment;
 
         if (this.isNotEmpty(this.relatedData.library)) {
+          uploadableObject.related_data.library = cloneDeep(this.relatedData.library);
           uploadableObject.related_data.library.forEach((library, index) => {
             uploadableObject.related_data.library[index] = {
               id: library.library ? library.library : library.id
