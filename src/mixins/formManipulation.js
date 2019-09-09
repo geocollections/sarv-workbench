@@ -745,12 +745,6 @@ const formManipulation = {
   },
 
   watch: {
-    'relatedData.page': {
-      handler: function () {
-        this.setActiveTab(this.activeTab)
-      },
-      deep: true
-    },
     'showCollapseMap'(newval) {
       this.$localStorage.set('mapComponent', newval)
     },

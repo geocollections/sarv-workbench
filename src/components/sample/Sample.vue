@@ -1167,7 +1167,7 @@
 
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
-          this.setActiveTab('analysis')
+          this.setTab('analysis')
         }
 
         this.$root.$on('add-new-sample-from-modal', this.handleUserChoiceFromModal);

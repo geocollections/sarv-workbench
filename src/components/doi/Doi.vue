@@ -505,7 +505,7 @@
     fetchDoiDateType,
     fetchCheckMetadataInDataCite,
     fetchCheckDoiUrlInDataCite,
-    fetchRegisterMetadataToDataCite, fetchRegisterDoiUrlToDataCite
+    fetchRegisterMetadataToDataCite, fetchRegisterDoiUrlToDataCite, fetchDoiUsingEGF
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import DoiAgent from "./relatedTables/DoiAgent";
@@ -684,12 +684,16 @@
             this.loadRelatedData(tab.name);
           });
 
-          this.$on('tab-changed', this.setTab);
-
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
-          this.setTab('doi_agent')
+        } else if (this.$route.meta.isEGF) {
+          // Todo: #261
+          // fetchDoiUsingEGF(this.$route.params.id).then(response => {
+          //   console.log(response)
+          // })
         }
+
+        this.setTab('doi_agent')
       },
 
       // TODO: Optimization possible, i.e., fetch requests only if user has clicked certain related data TAB.
@@ -803,6 +807,8 @@
         if (this.isNotEmpty(this.relatedData.dataset)) uploadableObject.dataset = this.relatedData.dataset.id;
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
+
+        if (this.$route.meta.isEGF) uploadableObject.egf = this.$route.params.id;
 
         // Adding related data only on add view
         if (!this.$route.meta.isEdit) {

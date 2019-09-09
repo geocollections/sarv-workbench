@@ -7,15 +7,16 @@ const api = {
   url: 'https://rwapi.geocollections.info/',
   checkDoiUrl: 'https://api.crossref.org/works/',
   solrUrl: 'https://api.geocollections.info/solr/',
-  dataciteTestUrl: 'https://api18rw.geocollections.info/'
+  dataciteTestUrl: 'https://api18rw.geocollections.info/',
+  egfApi: 'https://tarkvara.datel.ee/fond/'
 };
 
-function fetch (child, url = 0) {
+function fetch (child, url = 0, headers = {}) {
   let queryUrl = api.url
   if (url !== 0) queryUrl = url
 
   return new Promise((resolve, reject) => {
-    Vue.http.get(queryUrl + child, {}).then(response => {
+    Vue.http.get(queryUrl + child, headers).then(response => {
       // console.log(response)
       resolve(response);
     }, errResponse => {
@@ -590,6 +591,29 @@ export function fetchDois(data, databaseId) {
 
 export function fetchDoi(id) {
   return fetch(`doi/?id=${id}&format=json`)
+}
+
+// Todo: #261 egf request to get doi data
+export function fetchDoiUsingEGF(id) {
+  // return window.fetch(api.egfApi + 'egf-api/' + id, {
+  //   method: 'GET',
+  //   mode: 'cors',
+  //   cache: 'no-cache',
+  //   credentials: 'include',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Basic ' + window.btoa('user:password')
+  //     // 'Content-Type': 'application/x-www-form-urlencoded',
+  //   },
+  //   redirect: 'follow', // manual, *follow, error
+  //   referrer: 'no-referrer', // no-referrer, *client
+  // })
+
+  // return fetch(`egf-api/${id}`, api.egfApi, {
+  //   "Accept": "application/json",
+  //   "cache-control": "no-cache",
+  //   "test":"123"
+  // })
 }
 
 export function fetchDoiResourceType() {

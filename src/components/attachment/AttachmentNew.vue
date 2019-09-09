@@ -607,7 +607,7 @@
 
           this.$emit('related-data-info', this.relatedTabs.map(entity => entity.name));
 
-          this.setActiveTab('specimen_identification')
+          this.setTab('specimen_identification')
         }
       },
 

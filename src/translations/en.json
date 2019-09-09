@@ -217,6 +217,7 @@
     "newSample": "Add new sample",
     "doi": "DOI",
     "newDoi": "Add new DOI",
+    "newDoiEgf": "Add new DOI (EGF)",
     "site": "Site",
     "newSite": "Add new site",
     "project": "Project",

@@ -786,6 +786,25 @@ const router = new Router({
                 isNavigationShown: false,
                 object: 'doi'
               },
+              children: [
+                {
+                  path: 'egf/:id(\\d+)',
+                  component: () => import('./components/doi/Doi.vue'),
+                  meta: {
+                    isEdit:false,
+                    isEGF: true,
+                    title:'titles.addDoi',
+                    addNew:'add.newDoiEgf',
+                    subForms:[
+                      {path:'/doi/add',name:'add.doi'}
+                    ],
+                    requiresAuth: true,
+                    isBottomOptionShown: true,
+                    isNavigationShown: false,
+                    object: 'doi'
+                  }
+                }
+              ]
             }
           ]
         },
