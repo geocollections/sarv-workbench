@@ -1190,9 +1190,26 @@
           }
         });
       }
-    }
+    },
 
     /* DOI METADATA END */
+
+
+    assignEgfFieldsToDoiObject(egfDoiObject) {
+      let sarvDoiObject = {};
+
+      if (egfDoiObject.creator) sarvDoiObject.creators = egfDoiObject.creator;
+      if (egfDoiObject.title) sarvDoiObject.title_translated = egfDoiObject.title;
+      if (egfDoiObject.title_orig) sarvDoiObject.title = egfDoiObject.title_orig;
+      if (egfDoiObject.date) sarvDoiObject.publication_year = egfDoiObject.date;
+      if (egfDoiObject.tags) sarvDoiObject.remarks = egfDoiObject.tags;
+      // Todo if (egfDoiObject.field) sarvDoiObject.creators = egfDoiObject.field;
+      // Todo if (egfDoiObject.deposit) sarvDoiObject.creators = egfDoiObject.deposit;
+      if (egfDoiObject.description) sarvDoiObject.abstract = egfDoiObject.description;
+      // Todo if (egfDoiObject.performer) sarvDoiObject.creators = egfDoiObject.performer;
+
+      return sarvDoiObject
+    }
 
 
   }
