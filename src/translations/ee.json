@@ -985,6 +985,7 @@
     "dataciteUrlUpdateFailed": "DataCite DOI URL uuendus ebaõnnestus!",
     "dataciteMetadataUpdated": "DataCite metadata uuendatud!",
     "dataciteMetadataUpdateFailed": "DataCite metadata uuendus ebaõnnestus!",
+    "addCreators": "Lisa autorid 'Seotud inimesed ja institutsioonid' tabelisse",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "attachment_link": "Failid",

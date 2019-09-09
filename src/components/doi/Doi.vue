@@ -49,9 +49,19 @@
           <!-- CREATORS, YEAR and PUBLISHER -->
           <div class="row">
             <div class="col-md-4">
-              <label :for="`creators`">{{ $t('doi.creators') }}:</label>
-              <!-- TODO: Connect with related persons -->
-              <b-form-input id="creators" :state="isNotEmpty(doi.creators)" v-model="doi.creators" type="text"></b-form-input>
+              <div class="d-flex">
+                <div class="flex-fill">
+                  <label :for="`creators`">{{ $t('doi.creators') }}:</label>
+                  <b-form-input id="creators" :state="isNotEmpty(doi.creators)" v-model="doi.creators" type="text"></b-form-input>
+                </div>
+
+                <div class="align-self-end pl-2" v-if="!this.$route.meta.isEdit && isNotEmpty(doi.creators)">
+                  <vs-button radius @click="addCreatorsToRelatedData"
+                             :title="$t('doi.addCreators')"
+                             color="primary" type="line" icon="fa-user-plus" icon-pack="fas">
+                  </vs-button>
+                </div>
+              </div>
             </div>
 
             <div class="col-md-4">
@@ -505,7 +515,7 @@
     fetchDoiDateType,
     fetchCheckMetadataInDataCite,
     fetchCheckDoiUrlInDataCite,
-    fetchRegisterMetadataToDataCite, fetchRegisterDoiUrlToDataCite, fetchDoiUsingEGF
+    fetchRegisterMetadataToDataCite, fetchRegisterDoiUrlToDataCite, fetchDoiUsingEGF, fetchAgentUsingName
   } from "../../assets/js/api/apiCalls";
   import FileInputComponent from "../partial/MultimediaComponent";
   import DoiAgent from "./relatedTables/DoiAgent";
@@ -1189,29 +1199,66 @@
             }
           }
         });
+      },
+
+      /* DOI METADATA END */
+
+
+      assignEgfFieldsToDoiObject(egfDoiObject) {
+        let sarvDoiObject = {};
+
+        if (egfDoiObject.creator) sarvDoiObject.creators = egfDoiObject.creator;
+        if (egfDoiObject.title) sarvDoiObject.title_translated = egfDoiObject.title;
+        if (egfDoiObject.title_orig) sarvDoiObject.title = egfDoiObject.title_orig;
+        if (egfDoiObject.date) sarvDoiObject.publication_year = egfDoiObject.date;
+        if (egfDoiObject.tags) sarvDoiObject.remarks = egfDoiObject.tags;
+        // Todo if (egfDoiObject.field) sarvDoiObject.creators = egfDoiObject.field;
+        // Todo if (egfDoiObject.deposit) sarvDoiObject.creators = egfDoiObject.deposit;
+        if (egfDoiObject.description) sarvDoiObject.abstract = egfDoiObject.description;
+        // Todo if (egfDoiObject.performer) sarvDoiObject.creators = egfDoiObject.performer;
+
+        return sarvDoiObject
+      },
+
+      addCreatorsToRelatedData() {
+        let creators = this.doi.creators;
+        let listOfCreators = [];
+
+        if (creators && creators.trim().length > 0) {
+          if (creators.includes(';')) listOfCreators = creators.split(';');
+          else listOfCreators.push(creators)
+        }
+
+        if (listOfCreators.length > 0) {
+          listOfCreators.forEach(creator => {
+            let doiAgentObject = {};
+            if (creator.trim().length > 0) {
+              fetchAgentUsingName(creator.trim()).then(response => {
+                let agentObject = this.handleResponse(response)[0];
+
+                if (this.isNotEmpty(agentObject)) {
+                  doiAgentObject.name = agentObject.agent;
+                  doiAgentObject.orcid  = agentObject.orcid;
+                  doiAgentObject.affiliation  = agentObject.institution__institution_name_en;
+                  doiAgentObject.agent = agentObject.id;
+                  doiAgentObject.agent__agent = agentObject.agent
+                } else {
+                  doiAgentObject.name = creator.trim()
+                }
+
+                this.relatedData['doi_agent'].push(doiAgentObject)
+              }, errResponse => {
+                doiAgentObject.name = creator.trim();
+                this.relatedData['doi_agent'].push(doiAgentObject)
+              });
+            }
+          });
+        } else {
+          this.relatedData['doi_agent'] = []
+        }
+
       }
     },
-
-    /* DOI METADATA END */
-
-
-    assignEgfFieldsToDoiObject(egfDoiObject) {
-      let sarvDoiObject = {};
-
-      if (egfDoiObject.creator) sarvDoiObject.creators = egfDoiObject.creator;
-      if (egfDoiObject.title) sarvDoiObject.title_translated = egfDoiObject.title;
-      if (egfDoiObject.title_orig) sarvDoiObject.title = egfDoiObject.title_orig;
-      if (egfDoiObject.date) sarvDoiObject.publication_year = egfDoiObject.date;
-      if (egfDoiObject.tags) sarvDoiObject.remarks = egfDoiObject.tags;
-      // Todo if (egfDoiObject.field) sarvDoiObject.creators = egfDoiObject.field;
-      // Todo if (egfDoiObject.deposit) sarvDoiObject.creators = egfDoiObject.deposit;
-      if (egfDoiObject.description) sarvDoiObject.abstract = egfDoiObject.description;
-      // Todo if (egfDoiObject.performer) sarvDoiObject.creators = egfDoiObject.performer;
-
-      return sarvDoiObject
-    }
-
-
   }
 </script>
 
@@ -1224,5 +1271,12 @@
 
   .link:hover {
     cursor: pointer;
+  }
+
+  @media (min-width: 768px) {
+    .px-15px {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
   }
 </style>

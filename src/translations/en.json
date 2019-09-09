@@ -985,6 +985,7 @@
     "dataciteUrlUpdateFailed": "DataCite DOI URL update failed!",
     "dataciteMetadataUpdated": "DataCite metadata updated!",
     "dataciteMetadataUpdateFailed": "DataCite metadata update failed!",
+    "addCreators": "Add creators to 'Related persons and institutions' table",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "attachment_link": "Files",

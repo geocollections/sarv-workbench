@@ -1155,8 +1155,22 @@ export function fetchListKeywords() {
 }
 
 /*********************
- *** KEYWORD START ***
+ ***  KEYWORD END  ***
  *********************/
+
+
+
+/*******************
+ *** AGENT START ***
+ *******************/
+
+export function fetchAgentUsingName(name) {
+  return  fetch(`agent/?multi_search=value:${name};fields:id,agent,forename,surename;lookuptype:icontains&page=1&paginate_by=1&fields=id,agent,institution__institution_name_en,orcid`)
+}
+
+/*******************
+ ***  AGENT END  ***
+ *******************/
 
 
 
