@@ -1139,6 +1139,8 @@
     "is_preferred":"Is preferred?"
   },
   "journal": {
+    "requiredFields": "Mandatory fields",
+    "generalInfo": "General info",
     "journalName": "Journal name",
     "journalShort": "Journal short",
     "publisher": "Publisher",

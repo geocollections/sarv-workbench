@@ -378,12 +378,28 @@ const router = new Router({
         },
         {
           path: '/journal/add',
-          component: () => import('./views/Journal.vue'),
+          component: () => import('./views/AddForm.vue'),
           meta: {
-            requiresAuth: true,
-            addNew: 'add.newJournal',
-            object: 'journal'
-          }
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/journal/Journal.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addJournal',
+                addNew:'add.newJournal',
+                subForms:[
+                  {path:'/journal/add',name:'add.journal'}
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'journal'
+              },
+            }
+          ]
         },
         {
           path: '/locality',

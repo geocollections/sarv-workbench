@@ -687,9 +687,11 @@ const formManipulation = {
 
       if (choice === "CLEAR") {
         this[object] = {};
-        this.relatedTabs.forEach(tab => {
-          if (this.isNotEmpty(this.relatedData[tab.name])) this.relatedData[tab.name] = {}
-        });
+        if (this.isNotEmpty(this.relatedTabs)) {
+          this.relatedTabs.forEach(tab => {
+            if (this.isNotEmpty(this.relatedData[tab.name])) this.relatedData[tab.name] = {}
+          });
+        }
         toastInfo({text: this.$t('messages.fieldsCleared')})
       }
 

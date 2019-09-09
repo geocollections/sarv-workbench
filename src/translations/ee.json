@@ -1139,6 +1139,8 @@
     "is_preferred":"Eelistatud"
   },
   "journal": {
+    "requiredFields": "Kohustuslikud väljad",
+    "generalInfo": "Üldinfo",
     "journalName": "Ajakirja nimi",
     "journalShort": "Ajakiri lühike",
     "publisher": "Kirjastaja",
