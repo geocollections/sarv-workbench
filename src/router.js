@@ -353,12 +353,28 @@ const router = new Router({
         },
         {
           path: '/imageset/add',
-          component: () => import('./views/Imageset.vue'),
+          component: () => import('./views/AddForm.vue'),
           meta: {
-            requiresAuth: true,
-            addNew: 'add.newImageset',
-            object: 'imageset'
-          }
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/imageset/Imageset.vue'),
+              meta: {
+                isEdit:false,
+                title:'titles.addImageset',
+                addNew:'add.newImageset',
+                subForms:[
+                  {path:'/imageset/add',name:'add.imageset'}
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: 'imageset'
+              },
+            }
+          ]
         },
         {
           path: '/journal/add',

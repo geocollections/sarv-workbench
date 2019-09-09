@@ -620,6 +620,8 @@
     "dateDigitisedFree": "Digiteerimise kp vaba"
   },
   "imageset": {
+    "requiredFields": "Kohustuslikud väljad",
+    "generalInfo": "Üldinfo",
     "imagesetNumber": "Pildiseeria number",
     "author": "Autor",
     "description": "Kirjeldus"
@@ -1072,6 +1074,7 @@
     "volume": "Köide",
     "number": "Number",
     "pages": "Leheküljed",
+    "pages_short": "Lk.",
     "figures": "Joonised",
     "referenceKeyword": "Kirjanduse märksõnad",
     "abstract": "Abstrakt",
@@ -1097,13 +1100,16 @@
     "doiCheckSuccessful": "DOI kontrollimine edukas, väljad uuendatud",
     "doiCheckUnsuccessful": "DOI kontrollimine ebaõnnestus!",
     "library": "Kogumik",
+    "library_short": "Kog.",
     "doi": "DOI",
     "pdf": "PDF",
     "url": "URL",
     "addReferenceToLibrary": "Lisa kirjandus kogumikku",
     "chooseActiveLibrary": "Vali aktiivne kirjandus",
     "is_estonian_reference": "Eesti kirjandus",
+    "is_estonian_reference_short": "EE",
     "is_estonian_author": "Eesti autor",
+    "is_estonian_author_short": "EE",
     "localities": "Lokaliteedid",
     "libraries": "Kogumikud",
     "attachments": "Failid",

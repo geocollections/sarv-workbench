@@ -27,6 +27,10 @@
       <i v-if="entity.is_estonian_reference" class="fas fa-check fa"></i>
     </td>
 
+    <td class="middle">
+      <i v-if="entity.is_estonian_author" class="fas fa-check fa"></i>
+    </td>
+
     <td>
       <a v-if="!entity.is_private" href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})"
          :title="$t('editReference.viewMessage')">{{ $t('edit.view') }}</a>

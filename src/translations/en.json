@@ -620,6 +620,8 @@
     "dateDigitisedFree": "Date digitised free"
   },
   "imageset": {
+    "requiredFields": "Mandatory fields",
+    "generalInfo": "General info",
     "imagesetNumber": "Imageset number",
     "author": "Author",
     "description": "Description"
@@ -1072,6 +1074,7 @@
     "volume": "Volume",
     "number": "Number",
     "pages": "Pages",
+    "pages_short": "Pp.",
     "figures": "Figures",
     "referenceKeyword": "Reference keywords",
     "abstract": "Abstract",
@@ -1097,13 +1100,16 @@
     "doiCheckSuccessful": "DOI check successful, fields updated",
     "doiCheckUnsuccessful": "DOI check failed!",
     "library": "Library",
+    "library_short": "Lib.",
     "doi": "DOI",
     "pdf": "PDF",
     "url": "URL",
     "addReferenceToLibrary": "Add reference to library",
     "chooseActiveLibrary": "Choose active library",
     "is_estonian_reference": "Estonian reference",
+    "is_estonian_reference_short": "EE",
     "is_estonian_author": "Estonian author",
+    "is_estonian_author_short": "EE",
     "localities": "Localities",
     "libraries": "Kogumikud",
     "attachments": "Attachments",

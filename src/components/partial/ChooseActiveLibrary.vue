@@ -8,7 +8,7 @@
                      :placeholder="$t('reference.chooseActiveLibrary')"
                      :show-labels="false">
       <template slot="singleLabel" slot-scope="{ option }">
-        <strong>{{ this.$i18n.locale === 'ee' ? option.library__title : option.library__title_en }}</strong>
+        <strong>{{ $i18n.locale === 'ee' ? option.library__title : option.library__title_en }}</strong>
       </template>
       <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
     </vue-multiselect>

@@ -168,7 +168,10 @@ const formManipulation = {
       let fields = this.requiredFields;
       let optionalFields = this.optionalFields;
 
+      // Exceptions
+      if (object === 'imageset') isValid &= !this.imagesetNumberExists;
       if (object === 'attachment') child = this.$route.meta.child;
+
       if (child) {
         fields = fields[child];
         optionalFields = fields[child];
