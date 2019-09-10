@@ -343,11 +343,11 @@
         <!--{{ $t('specimenImage.preferred') }}-->
         <!--</b-form-checkbox>-->
 
-        <b-form-checkbox id="is_private" v-model="upload.is_private" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="upload.is_private">
           {{ $t('specimenImage.private') }}
         </b-form-checkbox>
 
-        <b-form-checkbox id="is_locked" v-model="upload.is_locked" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_locked" v-model="upload.is_locked">
           {{ $t('specimenImage.locked') }}
         </b-form-checkbox>
       </div>
@@ -449,8 +449,8 @@
           licence: null,
           copyright_agent: null,
           // is_preferred: '1',
-          is_private: '0',
-          is_locked: '0',
+          is_private: false,
+          is_locked: false,
           // user_added: null,
           // date_added: null,
           // user_changed: null,
@@ -940,8 +940,8 @@
           licence: null,
           copyright_agent: null,
           // is_preferred: '1',
-          is_private: '0',
-          is_locked: '0',
+          is_private: false,
+          is_locked: false,
           // user_added: null,
           // date_added: null,
           // user_changed: null,

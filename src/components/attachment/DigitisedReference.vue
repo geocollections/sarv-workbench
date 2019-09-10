@@ -175,11 +175,11 @@
         <!--{{ $t('photoArchive.preferred') }}-->
         <!--</b-form-checkbox>-->
 
-        <b-form-checkbox id="is_private" v-model="upload.is_private" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="upload.is_private">
           {{ $t('photoArchive.private') }}
         </b-form-checkbox>
 
-        <b-form-checkbox id="is_locked" v-model="upload.is_locked" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_locked" v-model="upload.is_locked">
           {{ $t('photoArchive.locked') }}
         </b-form-checkbox>
       </div>
@@ -253,8 +253,8 @@
           date_digitised: null,
           date_digitised_free: null,
           // is_preferred: '1',
-          is_private: '0',
-          is_locked: '0',
+          is_private: false,
+          is_locked: false,
         }
       }
     },
@@ -541,8 +541,8 @@
           date_digitised_free: null,
           type: 4,
           // is_preferred: '1',
-          is_private: '0',
-          is_locked: '0',
+          is_private: false,
+          is_locked: false,
         }
       },
 

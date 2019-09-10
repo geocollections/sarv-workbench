@@ -135,11 +135,11 @@
         <!--{{ $t('specimenImage.preferred') }}-->
         <!--</b-form-checkbox>-->
 
-        <b-form-checkbox id="is_private" v-model="edit.is_private" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="edit.is_private">
           {{ $t('specimenImage.private') }}
         </b-form-checkbox>
 
-        <b-form-checkbox id="is_locked" v-model="edit.is_locked" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_locked" v-model="edit.is_locked">
           {{ $t('specimenImage.locked') }}
         </b-form-checkbox>
       </div>
@@ -211,8 +211,8 @@
           date_digitised: this.data.date_digitised,
           date_digitised_free: this.data.date_digitised_free,
           // is_preferred: this.data.is_preferred ? '1' : '0',
-          is_private: this.data.is_private ? '1' : '0',
-          is_locked: this.data.is_locked ? '1' : '0'
+          is_private: this.data.is_private,
+          is_locked: this.data.is_locked
         }
       }
     },

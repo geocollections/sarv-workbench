@@ -466,7 +466,7 @@
     <!-- IS PRIVATE -->
     <div class="row mt-3">
       <div class="col">
-        <b-form-checkbox id="is_private" v-model="doi.is_private" :value="1" :unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="doi.is_private" :value="true" :unchecked-value="false">
           {{ $t('doi.private') }}?
         </b-form-checkbox>
       </div>
@@ -803,8 +803,6 @@
 
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
-
-        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
 
         // Autocomplete fields
         if (this.isNotEmpty(objectToUpload.resource_type)) uploadableObject.resource_type = objectToUpload.resource_type.id;

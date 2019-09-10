@@ -641,7 +641,6 @@
 
         if (!this.$route.meta.isEdit) this.$localStorage.set('attachment', objectToUpload)
 
-        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === 1 ? '1' : '0';
         // if (this.isNotEmpty(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
 
         // Autocomplete fields

@@ -950,11 +950,11 @@
         <!--{{ $t('otherFiles.preferred') }}-->
         <!--</b-form-checkbox>-->
 
-        <b-form-checkbox id="is_private" v-model="upload.is_private" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_private" v-model="upload.is_private">
           {{ $t('otherFiles.private') }}
         </b-form-checkbox>
 
-        <b-form-checkbox id="is_locked" v-model="upload.is_locked" value="1" unchecked-value="0">
+        <b-form-checkbox id="is_locked" v-model="upload.is_locked">
           {{ $t('otherFiles.locked') }}
         </b-form-checkbox>
       </div>
@@ -1096,8 +1096,8 @@
           licence: null,
           copyright_agent: null,
           // is_preferred: '1',
-          is_private: '0',
-          is_locked: '0',
+          is_private: false,
+          is_locked: false,
           remarks: null,
           image_latitude: null,
           image_longitude: null,
@@ -1859,8 +1859,8 @@
           licence: null,
           copyright_agent: null,
           // is_preferred: '1',
-          is_private: '0',
-          is_locked: '0',
+          is_private: false,
+          is_locked: false,
           remarks: null,
           related_data: {
             attach_link__collection: null,

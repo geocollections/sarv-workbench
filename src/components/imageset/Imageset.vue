@@ -162,9 +162,9 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload)
 
-        if (!this.$route.meta.isEdit) this.$localStorage.set('imageset', objectToUpload)
+        if (!this.$route.meta.isEdit) this.$localStorage.set('imageset', uploadableObject)
 
-        if (this.isNotEmpty(uploadableObject.author)) uploadableObject.author = objectToUpload.author.id ? objectToUpload.author.id : objectToUpload.author;
+        if (this.isNotEmpty(uploadableObject.author)) uploadableObject.author = uploadableObject.author.id ? uploadableObject.author.id : uploadableObject.author;
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
