@@ -835,7 +835,7 @@
             {{ $t('sample.analysis') }}
           </b-form-checkbox>-->
 
-          <b-form-checkbox id="is_private" v-model="sample.is_private" :value="true" :unchecked-value="false">
+          <b-form-checkbox id="is_private" v-model="sample.is_private">
             {{ $t('sample.is_private') }}
           </b-form-checkbox>
         </div>

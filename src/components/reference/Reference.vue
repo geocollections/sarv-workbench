@@ -373,31 +373,31 @@
     <!-- CHECKBOXES -->
     <div class="d-flex flex-row flex-wrap mb-2">
       <div class="px-2">
-        <b-form-checkbox id="is_oa" v-model="reference.is_oa" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="is_oa" v-model="reference.is_oa">
           {{ $t('reference.is_oa') }}
         </b-form-checkbox>
       </div>
 
       <div class="px-2">
-        <b-form-checkbox id="is_private" v-model="reference.is_private" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="is_private" v-model="reference.is_private">
           {{ $t('otherFiles.private') }}
         </b-form-checkbox>
       </div>
 
       <div class="px-2">
-        <b-form-checkbox id="is_locked" v-model="reference.is_locked" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="is_locked" v-model="reference.is_locked">
           {{ $t('otherFiles.locked') }}
         </b-form-checkbox>
       </div>
 
       <div class="px-2">
-        <b-form-checkbox id="is_estonian_reference" v-model="reference.is_estonian_reference" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="is_estonian_reference" v-model="reference.is_estonian_reference">
           {{ $t('reference.is_estonian_reference') }}
         </b-form-checkbox>
       </div>
 
       <div class="px-2">
-        <b-form-checkbox id="is_estonian_author" v-model="reference.is_estonian_author" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="is_estonian_author" v-model="reference.is_estonian_author">
           {{ $t('reference.is_estonian_author') }}
         </b-form-checkbox>
       </div>

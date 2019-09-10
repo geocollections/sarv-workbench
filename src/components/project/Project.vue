@@ -292,7 +292,7 @@
     <!-- IS PRIVATE-->
     <div class="row my-3">
       <div class="col">
-        <b-form-checkbox id="is_private" v-model="project.is_private" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="is_private" v-model="project.is_private">
           {{ $t('project.is_private') }}
         </b-form-checkbox>
       </div>
@@ -489,7 +489,6 @@
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload)
 
-        if (this.isNotEmpty(objectToUpload.is_private)) uploadableObject.is_private = objectToUpload.is_private === true ? '1' : '0';
         if (this.isNotEmpty(objectToUpload.date_start)) uploadableObject.date_start = this.formatDateForUpload(objectToUpload.date_start);
         if (this.isNotEmpty(objectToUpload.date_end)) uploadableObject.date_end = this.formatDateForUpload(objectToUpload.date_end);
 

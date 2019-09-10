@@ -383,7 +383,7 @@
     <!-- CHECKBOXES -->
     <div class="row mt-3 mb-3">
       <div class="col">
-        <b-form-checkbox id="is_private" v-model="locality.is_private" :value="true" :unchecked-value="false">
+        <b-form-checkbox id="is_private" v-model="locality.is_private">
           {{ $t('locality.private') }}
         </b-form-checkbox>
       </div>

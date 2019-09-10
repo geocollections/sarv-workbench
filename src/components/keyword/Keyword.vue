@@ -97,7 +97,7 @@
     <!-- IS PRIMARY -->
     <div class="row mt-3">
       <div class="col">
-        <b-form-checkbox id="is_primary" v-model="keyword.is_primary" :value="1" :unchecked-value="0">
+        <b-form-checkbox id="is_primary" v-model="keyword.is_primary">
           {{ $t('keyword.is_primary') }}
         </b-form-checkbox>
       </div>
@@ -213,8 +213,6 @@
 
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
-
-        if (this.isNotEmpty(objectToUpload.is_primary)) uploadableObject.is_primary = objectToUpload.is_primary === 1 ? '1' : '0';
 
         if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
         if (this.isNotEmpty(objectToUpload.keyword_category)) uploadableObject.keyword_category = objectToUpload.keyword_category.id;

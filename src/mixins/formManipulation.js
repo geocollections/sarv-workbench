@@ -295,7 +295,7 @@ const formManipulation = {
           description: file.type.includes('pdf') ? null : file.type + ' for ' + relatedObject + ': ' + this[relatedObject].id,
           author: file.type.includes('pdf') ? null : this.currentUser.id,
           date_created: file.type.includes('pdf') ? null : this.formatDateForUpload(new Date()),
-          is_private: this[relatedObject].is_oa === true ? 0 : 1,
+          is_private: this[relatedObject].is_oa,
           specimen_image_attachment: relatedObject === 'reference' ? 4 : 3,
           [relatedObject]: this[relatedObject].id
         }));
@@ -323,7 +323,7 @@ const formManipulation = {
           description_en: file.type + ' for ' + relatedObject + ': ' + this[relatedObject].id,
           author: this.currentUser.id,
           date_created: this.formatDateForUpload(new Date()),
-          is_private: 1,
+          is_private: true,
           related_data: {[attach_link]: [{id: this[relatedObject].id}]}
         }));
 
@@ -347,7 +347,7 @@ const formManipulation = {
           description: file.type + ' for ' + object + ': ' + this[object].id,
           author: this.currentUser.id,
           date_created: this.formatDateForUpload(new Date()),
-          is_private: 1,
+          is_private: true,
         }));
 
         formData.append('file' + [index], file);
