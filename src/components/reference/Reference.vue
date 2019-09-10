@@ -997,10 +997,12 @@
         // Adding related data only on add view
         if (!this.$route.meta.isEdit) {
           // uploadableObject.related_data = {};
-
-          this.relatedTabs.forEach(tab => {
-            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
-          });
+          if (this.isNotEmpty(this.relatedData.locality_reference)) {
+            uploadableObject.related_data.locality = cloneDeep(this.relatedData.locality_reference);
+            uploadableObject.related_data.locality.forEach((loc_ref, index) => {
+              uploadableObject.related_data.locality[index]['id'] = loc_ref.locality
+            });
+          }
         }
 
         console.log('This object is sent in string format:');
