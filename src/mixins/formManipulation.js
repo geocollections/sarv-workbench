@@ -130,7 +130,7 @@ const formManipulation = {
       let localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, -1);
 
       if (onlyDate) return typeof date === 'string' ? date.split('T')[0] : localISOTime.split('T')[0];
-      return localISOTime
+      return localISOTime.replace('T', ' ')
     },
 
     /**
