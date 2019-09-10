@@ -127,10 +127,11 @@ const formManipulation = {
     formatDateForUpload(date, onlyDate = true) {
       date = new Date(date);
       let tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
-      let localISOTime = (new Date(date - tzoffset)).toISOString().slice(0, -1);
+      let localISOTime = (new Date(date - tzoffset)).toISOString().split('.')[0] + "Z"; // Without fractions
+      // let localISOTime = (new Date(date - tzoffset)).toISOString();
 
       if (onlyDate) return typeof date === 'string' ? date.split('T')[0] : localISOTime.split('T')[0];
-      return localISOTime.replace('T', ' ')
+      return localISOTime
     },
 
     /**
@@ -185,6 +186,7 @@ const formManipulation = {
       return isValid && isValidOptional
     },
 
+    // Todo: Update/Fix/Refactor it
     add(addAnother, object, returnPromise = false) {
       return new Promise(resolve => {
         if (this.validate(object) && !this.sendingData) {

@@ -263,6 +263,10 @@ export function fetchAddReferenceToLibrary(data) {
   return fetchPost(`add/library_reference/`, data)
 }
 
+export function fetchListLocalityReferenceType() {
+  return fetch(`list_locality_reference_type/?format=json`)
+}
+
 
 /************************
  ***  REFERENCES END  ***

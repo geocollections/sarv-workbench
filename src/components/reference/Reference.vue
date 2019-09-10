@@ -651,7 +651,7 @@
     fetchAddDoi,
     fetchAddAttachmentLink,
     fetchAddDoiGeolocation,
-    fetchJournal
+    fetchJournal, fetchListLocalityReferenceType
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastError} from "@/assets/js/iziToast/iziToast";
@@ -800,6 +800,7 @@
               attachment: false,
               attachment3: false, // For #158, regarding p-2
               library: false,
+              locality_reference_type: false,
             },
             types: [],
             languages: [],
@@ -808,6 +809,7 @@
             locality: [],
             attachment: [],
             library: [],
+            locality_reference_type: [],
           },
           requiredFields: ['reference', 'year', 'author', 'title'],
           reference: {
@@ -883,6 +885,8 @@
           fetchListLanguages().then(response => this.autocomplete.languages = this.handleResponse(response));
           // fetchListKeywords().then(response => this.autocomplete.keyword = this.handleResponse(response));
           // fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
+          // Related data autocomplete list
+          fetchListLocalityReferenceType().then(response => this.autocomplete.locality_reference_type = this.handleResponse(response))
         }
 
         if (relatedDataAutocompleteFields) {
@@ -914,6 +918,7 @@
 
           fetchAttachmentForReference(this.$route.params.id).then(response => this.attachment = this.handleResponse(response));
           fetchLibrariesForReference(this.$route.params.id).then(response => this.relatedData.library = this.handleResponse(response));
+          // fetchListLocalityReferenceType().then(response => this.autocomplete.locality_reference_type = this.handleResponse(response))
         }
       },
 
@@ -1011,6 +1016,7 @@
 
       fillRelatedDataAutocompleteFields(obj) {
         obj.locality = {locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality};
+        obj.type = {id: obj.type, value: obj.type__value, value_en: obj.type__value_en};
         return obj
       },
 
@@ -1023,6 +1029,11 @@
           newObject.locality = obj.locality.id;
           newObject.locality__locality = obj.locality.locality;
           newObject.locality__locality_en = obj.locality.locality_en;
+        }
+        if (this.isNotEmpty(obj.type)) {
+          newObject.type = obj.type.id;
+          newObject.type__value = obj.type.value;
+          newObject.type__value_en = obj.type.value_en;
         }
 
         return newObject
@@ -1055,6 +1066,9 @@
 
         if (this.isNotEmpty(uploadableObject.locality)) {
           uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
+        }
+        if (this.isNotEmpty(uploadableObject.type)) {
+          uploadableObject.type = uploadableObject.type.id ? uploadableObject.type.id : uploadableObject.type;
         }
 
         console.log('This object is sent in string format (related data):')

@@ -57,7 +57,18 @@
             </td>
 
             <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.type" type="text"/>
+              <vue-multiselect v-model="entity.new.type"
+                               id="type"
+                               :options="autocomplete.locality_reference_type"
+                               track-by="id"
+                               :label="commonLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </td>
 
             <td v-if="entity.editMode">
@@ -111,7 +122,18 @@
             </td>
 
             <td>
-              <b-form-input v-model="relatedData.insert.locality_reference.type" type="text"/>
+              <vue-multiselect v-model="relatedData.insert.locality_reference.type"
+                               id="type_insert"
+                               :options="autocomplete.locality_reference_type"
+                               track-by="id"
+                               :label="commonLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
             </td>
 
             <td>
