@@ -41,7 +41,6 @@
 
                             <div class="list-titles">
                               <div class="vs-list--subtitle" v-if="typeof item === 'object' && item">
-<!--                                  {{ item.join(', ') }}-->
                                   {{ item.join() }}
                               </div>
 
@@ -56,7 +55,6 @@
 
                             <div class="list-titles">
                               <div class="vs-list--subtitle" v-if="typeof item === 'object' && item">
-<!--                                {{ item.join(', ') }}-->
                                 {{ item.join() }}
                               </div>
 
@@ -123,30 +121,13 @@
       },
 
       /**
-       * Basically converts string from api to valid json. (Todo: API should return valid JSON string)
+       * Basically converts json string from api to valid json object.
        *
-       * @param changes, string from api which shows new and old values but is not valid json string yet
+       * @param changes, json string from api which shows new and old values
        * @returns {{}|any}, Empty object or JSON
        */
       handleChanges(changes) {
         if (typeof changes !== 'undefined' && changes !== null && changes.trim().length > 0) {
-          // example error reference/10835
-          // let validJsonString = changes.replace(/'/g, '"');
-          //
-          // Exceptions
-          // if (validJsonString.includes('"None"')) validJsonString = validJsonString.replace(/"None"/g, 'None');
-          // if (validJsonString.includes('None')) validJsonString = validJsonString.replace(/None/g, '"None"');
-          //
-          // if (validJsonString.includes('"True"')) validJsonString = validJsonString.replace(/"True"/g, 'True');
-          // if (validJsonString.includes('True')) validJsonString = validJsonString.replace(/True/g, '"True"');
-          //
-          // if (validJsonString.includes('"False"')) validJsonString = validJsonString.replace(/"False"/g, 'False');
-          // if (validJsonString.includes('False')) validJsonString = validJsonString.replace(/False/g, '"False"');
-          //
-          // if (validJsonString.includes('datetime.datetime')) validJsonString = validJsonString.replace(/datetime.datetime\((.*?)\)/g, '"$&"');
-
-          // console.log(changes)
-          // console.log(JSON.parse(changes))
           return JSON.parse(changes)
         } else return {}
       },
