@@ -10,7 +10,7 @@
 
     <div class="idcard-wrapper text-center">
       <button class="btn btn-primary" @click="$_authenticate('id')" v-bind:disabled="loggingIn">
-        {{ $t('login.loginButton') }} &nbsp;<font-awesome-icon icon="id-card"></font-awesome-icon>
+        {{ $t('login.loginButton') }} &nbsp;<i class="fas fa-id-card"></i>
       </button>
     </div>
 
@@ -19,17 +19,11 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faIdCard} from '@fortawesome/free-solid-svg-icons'
   import authenticationMixin from "../../mixins/authenticationMixin";
-
-  library.add(faIdCard);
 
   export default {
     components: {
       Spinner,
-      FontAwesomeIcon
     },
     name: "login-id",
     mixins: [authenticationMixin],
@@ -38,11 +32,6 @@
         loggingIn: false,
         message: null,
         error: false
-      }
-    },
-    computed: {
-      icon() {
-        return faIdCard
       }
     },
   }

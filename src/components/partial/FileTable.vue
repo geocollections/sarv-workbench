@@ -10,8 +10,7 @@
         <audio v-if="file[prefix + 'uuid_filename'] !== null && ['mp3','wav'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1" controls>
           <source :src="composeFileUrl(file[prefix + 'uuid_filename'], 'original')" :type="file.attachment_format__value">
           Your browser does not support the audio element.
-          <font-awesome-icon @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"
-                             style="max-height: 5rem" size="7x" icon="file-audio"/>
+          <i class="fas fa-file-audio fa-5x" @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"></i>
         </audio>
 
         <!-- VIDEO -->
@@ -19,8 +18,7 @@
                type="video" style="max-height: 12rem" controls>
           <source :src="composeFileUrl(file[prefix + 'uuid_filename'], 'original')" :type="file.attachment_format__value">
           Your browser does not support the video element.
-          <font-awesome-icon @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"
-                             style="max-height: 5rem" size="7x" icon="file-video"/>
+          <i class="fas fa-file-video fa-5x" @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"></i>
         </video>
 
         <!-- IMAGE -->
@@ -31,7 +29,7 @@
              class="img-thumbnail image"/>
 
         <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-        <font-awesome-icon v-else size="5x" icon="file"/>
+        <i v-else class="fas fa-file fa-5x"></i>
 
         <div class="middle">
           <div class="hover-text-box">
@@ -49,7 +47,7 @@
                     variant="outline-primary"
                     title="Open file detail view"
                     @click="windowOpenNewTab('attachment','/attachment/'+file[tableId])">
-          <font-awesome-icon icon="eye"/>
+            <i class="fas fa-eye"></i>
           </b-button>
 
           <b-button class="p-0 px-2"
@@ -57,7 +55,7 @@
                     variant="outline-secondary"
                     title="View file in Geocollections.info"
                     @click="openGeoInNewWindow({ object: 'file', id: file[tableId] })">
-            <font-awesome-icon icon="external-link-alt"/>
+            <i class="fas fa-external-link-alt"></i>
           </b-button>
         </div>
       </div>

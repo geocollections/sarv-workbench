@@ -15,16 +15,16 @@
       <div class="col">
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData"
                 @click="$root.$emit('add-or-edit-site-from-modal','SAVE_AND_LEAVE')">
-          <font-awesome-icon icon="door-open"/>
+          <i class="fas fa-door-open"></i>
           {{ $t($route.meta.isEdit? 'edit.buttons.save':'add.buttons.add') }}
         </button>
         <button class="btn btn-success mr-2 mb-2" :disabled="sendingData"
                 @click="$root.$emit('add-or-edit-site-from-modal','SAVE')">
-          <font-awesome-icon icon="save"/>
+          <i class="fas fa-save"></i>
           {{ $t($route.meta.isEdit? 'edit.buttons.saveAndContinue':'add.buttons.addAnother') }}
         </button>
         <button class="btn btn-danger mr-2 mb-2" :disabled="sendingData" @click="hideModal">
-          <font-awesome-icon icon="ban"/>
+          <i class="fas fa-ban"></i>
           {{ $t($route.meta.isEdit? 'edit.buttons.cancelWithoutSaving':'add.buttons.clearFields') }}
         </button>
 
@@ -35,13 +35,11 @@
 </template>
 
 <script>
-  import fontAwesomeLib from '../../mixins/fontAwasomeLib'
   import Site from "../site/Site";
 
   export default {
     name: "addNewSite",
     components: {Site},
-    mixins: [fontAwesomeLib],
     props: ['sendingData', 'site'],
     mounted() {
       this.$parent.$on('show-new-site-modal', this.showModal);

@@ -6,7 +6,7 @@
     <fieldset class="border p-2 mb-2" id="block-info">
       <legend class="w-auto" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('library.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -123,7 +123,7 @@
     <fieldset class="border p-2 mb-2" id="block-members">
       <legend class="w-auto" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
         {{ $t('library.libraryAgent') }}
-        <font-awesome-icon icon="user-friends"/>
+        <i class="fas fa-user-friends"></i>
       </legend>
 
       <transition name="fade">
@@ -154,7 +154,7 @@
               <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
                       :disabled="!isNotEmpty(relatedData.library_agent)"
                       @click="relatedData.library_agent = []">
-                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+                <i class="far fa-trash-alt"></i>
               </button>
             </div>
           </div>
@@ -236,13 +236,10 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import {library} from '@fortawesome/fontawesome-svg-core'
-  import VueMultiselect from 'vue-multiselect'
   import {
     fetchLibrary,
     fetchLibraryReference,
     fetchLibraryAgent,
-    fetchLibrariesFromLibraryAgent
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import formManipulation from '../../mixins/formManipulation'
@@ -254,14 +251,12 @@
   import Editor from "../partial/editor/Editor";
   import {mapState} from "vuex";
 
-
   export default {
     name: "Library",
     components: {
       Editor,
       LibraryReferenceListView,
       LibraryReference,
-      VueMultiselect,
       Spinner,
     },
     mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],

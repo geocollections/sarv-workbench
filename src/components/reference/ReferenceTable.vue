@@ -54,7 +54,7 @@
     </td>
 
     <td v-if="isLibraryActive" @click="$parent.$emit('add-reference-to-active-library', entity.id)" class="add-library" :title="$t('reference.addReferenceToLibrary')">
-      <font-awesome-icon :icon="['far', 'plus-square']" size="lg"/>
+      <i class="far fa-plus-square fa-lg"></i>
     </td>
 
   </tr>

@@ -1,5 +1,6 @@
 <template>
-  <div id="#tab-stratygraphy" class="tab-pane row" :class="{active: activeTab === 'locality_stratigraphy'}" role="tabpanel">
+  <div id="#tab-stratygraphy" class="tab-pane row" :class="{active: activeTab === 'locality_stratigraphy'}"
+       role="tabpanel">
     <div class="col-sm-12" v-if="activeTab === 'locality_stratigraphy'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered  related-table">
@@ -23,7 +24,8 @@
 
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">
-              <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'stratigraphy', id: entity.stratigraphy__id})"
+              <a href="javascript:void(0)"
+                 @click="openGeoInNewWindow({object: 'stratigraphy', id: entity.stratigraphy__id})"
                  v-translate="{et:entity.stratigraphy__stratigraphy ,en:entity.stratigraphy__stratigraphy_en}"></a>
             </td>
 
@@ -64,9 +66,13 @@
               </vue-multiselect>
             </td>
 
-            <td v-if="entity.editMode"><b-form-input v-model="entity.new.depth_base" type="text"/></td>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.depth_base" type="text"/>
+            </td>
 
-            <td v-if="entity.editMode"><b-form-input v-model="entity.new.depth_top" type="text"/></td>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.depth_top" type="text"/>
+            </td>
 
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.reference"
@@ -108,7 +114,9 @@
               </vue-multiselect>
             </td>
 
-            <td v-if="entity.editMode"><b-form-input v-model="entity.new.year" type="text"/></td>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.year" type="text"/>
+            </td>
 
             <td v-if="entity.editMode" class="text-center">
               <b-form-checkbox id="is_current2" v-model="entity.new.current" :value="true" :unchecked-value="false"/>
@@ -152,9 +160,13 @@
               </vue-multiselect>
             </td>
 
-            <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_base" type="text"/></td>
+            <td>
+              <b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_base" type="text"/>
+            </td>
 
-            <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_top" type="text"/></td>
+            <td>
+              <b-form-input v-model="relatedData.insert.locality_stratigraphy.depth_top" type="text"/>
+            </td>
 
             <td>
               <vue-multiselect v-model="relatedData.insert.locality_stratigraphy.reference"
@@ -196,18 +208,23 @@
               </vue-multiselect>
             </td>
 
-            <td><b-form-input v-model="relatedData.insert.locality_stratigraphy.year" type="text"/></td>
+            <td>
+              <b-form-input v-model="relatedData.insert.locality_stratigraphy.year" type="text"/>
+            </td>
 
             <td class="text-center">
-              <b-form-checkbox id="is_current" v-model="relatedData.insert.locality_stratigraphy.current" :value="true" :unchecked-value="false">
+              <b-form-checkbox id="is_current" v-model="relatedData.insert.locality_stratigraphy.current" :value="true"
+                               :unchecked-value="false">
               </b-form-checkbox>
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData"
+                      @click="$emit('add-related-data', activeTab)">
                 <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData"
+                      @click="$emit('set-default', activeTab)">
                 <i class="fas fa-times"></i>
               </button>
             </td>
@@ -221,18 +238,19 @@
 </template>
 
 <script>
-  import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
-    export default {
-        name: "LocalityStratigraphy",
-      props: {
-        relatedData: Object,
-        autocomplete: Object,
-        activeTab: String
-      },
+  import formManipulation from '../../../mixins/formManipulation';
+  import autocompleteMixin from '../../../mixins/autocompleteMixin';
 
-      mixins: [formManipulation, autocompleteMixin]
-    }
+  export default {
+    name: "LocalityStratigraphy",
+    props: {
+      relatedData: Object,
+      autocomplete: Object,
+      activeTab: String
+    },
+
+    mixins: [formManipulation, autocompleteMixin]
+  }
 </script>
 
 <style scoped>

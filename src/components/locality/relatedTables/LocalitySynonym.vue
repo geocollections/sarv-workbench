@@ -31,8 +31,10 @@
 
             <td v-if="!entity.editMode">{{ entity.remarks }}
 
-            <!-- EDIT MODE -->
-            <td v-if="entity.editMode"><b-form-input v-model="entity.new.synonym" type="text"/></td>
+              <!-- EDIT MODE -->
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.synonym" type="text"/>
+            </td>
 
             <td v-if="entity.editMode">
               <vue-multiselect v-model="entity.new.reference"
@@ -54,7 +56,9 @@
               </vue-multiselect>
             </td>
 
-            <td v-if="entity.editMode"><b-form-input v-model="entity.new.pages" type="text"/></td>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.pages" type="text"/>
+            </td>
 
             <td v-if="entity.editMode" style="min-width: 20em;">
               <b-form-input v-model="entity.new.remarks" type="text"/>
@@ -78,7 +82,9 @@
           </tr>
 
           <tr class="related-input-data">
-            <td><b-form-input v-model="relatedData.insert.locality_synonym.synonym" type="text"/></td>
+            <td>
+              <b-form-input v-model="relatedData.insert.locality_synonym.synonym" type="text"/>
+            </td>
 
             <td>
               <vue-multiselect v-model="relatedData.insert.locality_synonym.reference"
@@ -100,17 +106,21 @@
               </vue-multiselect>
             </td>
 
-            <td><b-form-input v-model="relatedData.insert.locality_synonym.pages" type="text"/></td>
+            <td>
+              <b-form-input v-model="relatedData.insert.locality_synonym.pages" type="text"/>
+            </td>
 
             <td style="min-width: 20em;">
               <b-form-input v-model="relatedData.insert.locality_synonym.remarks" type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData"
+                      @click="$emit('add-related-data', activeTab)">
                 <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData"
+                      @click="$emit('set-default', activeTab)">
                 <i class="fas fa-times"></i>
               </button>
             </td>
@@ -123,19 +133,19 @@
 </template>
 
 <script>
-  import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
+  import formManipulation from '../../../mixins/formManipulation';
+  import autocompleteMixin from '../../../mixins/autocompleteMixin';
 
   export default {
-      name: "LocalitySynonym",
-      props: {
-        relatedData: Object,
-        autocomplete: Object,
-        activeTab: String
-      },
+    name: "LocalitySynonym",
+    props: {
+      relatedData: Object,
+      autocomplete: Object,
+      activeTab: String
+    },
 
-      mixins: [formManipulation,autocompleteMixin]
-    }
+    mixins: [formManipulation, autocompleteMixin]
+  }
 </script>
 
 <style scoped>

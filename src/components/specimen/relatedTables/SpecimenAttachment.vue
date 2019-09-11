@@ -8,7 +8,7 @@
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
           <tr>
-            <th>Link <font-awesome-icon class="ml-2" icon="link"/></th>
+            <th>Link <i class="fas fa-link ml-2"></i></th>
             <th>{{ $t('specimen.remarks') }}</th>
             <th class="btn-th"></th>
           </tr>

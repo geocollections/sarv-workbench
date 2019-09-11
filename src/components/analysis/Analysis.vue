@@ -8,7 +8,7 @@
     <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('analysis.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -325,7 +325,7 @@
     <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('analysis.remarks') }}
-        <font-awesome-icon icon="pen-fancy"/>
+        <i class="fas fa-pen-fancy"></i>
       </legend>
 
       <transition name="fade">
@@ -418,13 +418,11 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from "../../mixins/formManipulation";
   import autocompleteMixin from "../../mixins/autocompleteMixin";
   import cloneDeep from 'lodash/cloneDeep'
   import {
-    fetchAnalyses,
     fetchAnalysis,
     fetchLabs,
     fetchInstruments,
@@ -443,7 +441,6 @@
       AnalysisResults,
       AnalysisFiles,
       Datepicker,
-      VueMultiselect,
       Spinner,
       FileInputComponent,
     },

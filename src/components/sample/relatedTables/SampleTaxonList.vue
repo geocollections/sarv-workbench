@@ -10,15 +10,15 @@
             <th>{{ $t('taxon.abundance') }}</th>
             <th>{{ $t('taxon.det_agent') }}</th>
             <th>{{ $t('taxon.det_date') }}
-              <font-awesome-icon icon="calendar-alt" title="Date identified"/>
+              <i class="fas fa-calendar-alt" title="Date identified"></i>
             </th>
             <th>{{ $t('taxon.extra') }}</th>
             <th>{{ $t('taxon.preparation') }}</th>
             <th>
-              <font-awesome-icon icon="user-lock" :title="$t('taxon.is_private')"/>
+              <i class="fas fa-user-lock" :title="$t('taxon.is_private')"></i>
             </th>
             <th>
-              <font-awesome-icon icon="comment-alt" :title="$t('taxon.remarks')"/>
+              <i class="fas fa-comment-alt" :title="$t('taxon.remarks')"></i>
             </th>
             <th class="btn-th"></th>
           </tr>

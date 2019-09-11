@@ -7,7 +7,7 @@
     <fieldset class="border-top px-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto my-0" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
         {{ $t('site.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -80,7 +80,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-location">
       <legend class="w-auto my-0" :class="{'text-primary': !block.location}" @click="block.location = !block.location">
         {{ $t('site.location') }}
-        <font-awesome-icon icon="globe"/>
+        <i class="fas fa-globe"></i>
       </legend>
 
       <transition name="fade">
@@ -215,7 +215,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-description">
       <legend class="w-auto my-0 mb-1" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
         {{ $t('site.description') }} | {{ $t('site.remarks') }}
-        <font-awesome-icon icon="pen-fancy"/>
+        <i class="fas fa-pen-fancy"></i>
       </legend>
       <transition name="fade">
         <div v-show="block.description">
@@ -237,7 +237,7 @@
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-files" ref="files">
       <legend class="w-auto my-0 mb-1" @click="block.files = !block.files" :class="{'text-primary': !block.files}">
         {{ $t('site.files') }}
-        <font-awesome-icon icon="folder-open"/>
+        <i class="fas fa-folder-open"></i>
       </legend>
 
       <transition name="fade">
@@ -252,7 +252,7 @@
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit && site.id" id="block-samples" ref="samples">
       <legend class="w-auto my-0 mb-1" @click="block.samples = !block.samples" :class="{'text-primary': !block.samples}">
         {{ $t('site.relatedSamples') }}
-        <font-awesome-icon icon="vial"/>
+        <i class="fas fa-vial"></i>
       </legend>
 
       <transition name="fade">
@@ -280,8 +280,6 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from '../../mixins/formManipulation'
   import autocompleteMixin from '../../mixins/autocompleteMixin'
@@ -319,13 +317,10 @@
       GeocollectionsLink,
       MultimediaComponent,
       FileInputComponent,
-      FontAwesomeIcon,
       Datepicker,
-      VueMultiselect,
       Spinner,
     },
     mixins: [formManipulation, autocompleteMixin, formSectionsMixin, sidebarMixin],
-    // props:['editSite'], USED FOR MODAL
     data() {
       return this.setInitialData()
     },
@@ -645,11 +640,6 @@
         });
       },
 
-      removeAttachmentRelation(idx) {
-        this.relatedData.attachment_link.splice(idx, 1);
-        this.add(true, 'site', true);
-      },
-
       loadListOfExistingProjects() {
         let vm = this, currentActiveProjects = cloneDeep(this.$localStorage.get('activeProject', 'fallbackValue'));
         if (currentActiveProjects && currentActiveProjects !== 'fallbackValue' && currentActiveProjects.length > 0) {
@@ -669,11 +659,11 @@
         console.log(choice);
         let vm = this;
         if (choice === 'SAVE_AND_LEAVE') {
-          this.add(false, 'site', false, true).then(resp => {
+          this.add(false, 'site', true).then(resp => {
             vm.$root.$emit('close-new-site-modal')
           })
         } else if (choice === 'SAVE') {
-          this.add(true, 'site', false, false)
+          this.add(true, 'site')
         }
       },
 

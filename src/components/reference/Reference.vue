@@ -10,8 +10,8 @@
               :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('reference') }"
               @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
-        <font-awesome-icon v-if="validate('reference')" color="#28a745" icon="check"/>
-        <font-awesome-icon v-if="!validate('reference')" color="#dc3545" icon="exclamation-triangle"/>
+        <i v-if="validate('reference')" class="fas fa-check text-success"></i>
+        <i v-if="!validate('reference')" class="fas fa-exclamation-triangle text-danger"></i>
       </legend>
 
       <transition name="fade">
@@ -59,7 +59,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-info">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('reference.info') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -228,8 +228,8 @@
     <!-- OTHER DATA -->
     <fieldset class="border-top px-2 mb-2" id="block-other">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.other }" @click="block.other = !block.other">
-          {{ $t('reference.otherData') }}
-          <font-awesome-icon icon="project-diagram"/>
+        {{ $t('reference.otherData') }}
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -292,7 +292,7 @@
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }"
               @click="block.description = !block.description">
         {{ $t('reference.description') }}
-        <font-awesome-icon icon="pen-fancy"/>
+        <i class="fas fa-pen-fancy"></i>
       </legend>
 
       <transition name="fade">
@@ -345,7 +345,7 @@
               <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
                       :disabled="!isNotEmpty(relatedData.keyword)"
                       @click="relatedData.keyword = null">
-                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+                <i class="far fa-trash-alt"></i>
               </button>
             </div>
 
@@ -407,7 +407,7 @@
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
       <legend class="w-auto my-0 mb-2" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
         {{ $t('reference.relatedTables.attachmentDigital') }}
-        <font-awesome-icon icon="file-pdf"/>
+        <i class="fas fa-file-pdf"></i>
       </legend>
 
       <transition name="fade">
@@ -426,7 +426,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-files">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.files }" @click="block.files = !block.files">
         {{ $t('reference.relatedTables.attachment') }}
-        <font-awesome-icon icon="folder-open"/>
+        <i class="fas fa-folder-open"></i>
       </legend>
 
       <transition name="fade">
@@ -457,7 +457,7 @@
               <button class="btn btn-outline-danger"
                       :disabled="!isNotEmpty(relatedData.attachment)"
                       @click="relatedData.attachment = []">
-                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+                <i class="far fa-trash-alt"></i>
               </button>
             </div>
           </div>
@@ -474,7 +474,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-libraries">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.libraries }" @click="block.libraries = !block.libraries">
         {{ $t('reference.relatedTables.library') }}
-        <font-awesome-icon icon="book"/>
+        <i class="fas fa-book"></i>
       </legend>
 
       <transition name="fade">
@@ -505,7 +505,7 @@
               <button class="btn btn-outline-danger"
                       :disabled="!isNotEmpty(relatedData.library)"
                       @click="relatedData.library = []">
-                <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+                <i class="far fa-trash-alt"></i>
               </button>
             </div>
           </div>
@@ -635,11 +635,9 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
   import sidebarMixin from '../../mixins/sidebarMixin'
   import {
     fetchReference,
-    fetchReferences,
     fetchListReferenceTypes,
     fetchListLanguages,
     fetchDoiCheck,
@@ -662,7 +660,6 @@
   import FileTable from "../partial/FileTable";
   import LocalityTable from "../locality/LocalityTable";
   import MultimediaComponent from "../partial/MultimediaComponent";
-  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
   import Editor from "../partial/editor/Editor";
@@ -676,12 +673,11 @@
       Editor,
       MultimediaComponent,
       LocalityTable,
-      VueMultiselect,
       Spinner,
       LocalityReference,
       FileTable
     },
-    mixins: [formManipulation, copyForm, autocompleteMixin, sidebarMixin, fontAwesomeLib, formSectionsMixin],
+    mixins: [formManipulation, copyForm, autocompleteMixin, sidebarMixin, formSectionsMixin],
 
     data() {
       return this.setInitialData()

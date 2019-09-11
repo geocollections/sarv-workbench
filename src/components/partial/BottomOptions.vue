@@ -12,7 +12,7 @@
                    ref="previous"
                    v-if="isNavigationShown">
         <span class="bottom-nav-icon">
-          <font-awesome-icon icon="angle-double-left" size="sm"/>
+          <i class="fas fa-angle-double-left fa-sm"></i>
         </span>
         <span class="bottom-text"> {{ $t('buttons.previous') }}</span>
       </router-link>
@@ -39,7 +39,7 @@
               ref="saveAndLeave"
               @click="handleClick('SAVE_AND_LEAVE', 'saveAndLeave')">
         <span class="d-lg-inline-block bottom-icon">
-          <font-awesome-icon icon="door-open" size="3x"/>
+          <i class="fas fa-door-open fa-3x"></i>
         </span>
         <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $t('edit.buttons.save') }}
@@ -53,7 +53,7 @@
               ref="save"
               @click="handleClick('SAVE', 'save')">
         <span class="d-lg-inline-block bottom-icon">
-          <font-awesome-icon icon="save" size="3x"/>
+          <i class="fas fa-save fa-sm"></i>
         </span>
         <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $t('edit.buttons.save') }}
@@ -67,7 +67,7 @@
               ref="clearOrCancel"
               @click="$route.meta.isEdit ? handleClick('CANCEL', 'clearOrCancel') : handleClick('CLEAR', 'clearOrCancel')">
         <span class="d-lg-inline-block bottom-icon">
-          <font-awesome-icon icon="ban" size="3x"/>
+          <i class="fas fa-ban fa-3x"></i>
         </span>
         <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $route.meta.isEdit ? $t('buttons.cancel') : $t('buttons.clear') }}
@@ -85,7 +85,7 @@
                    v-if="isNavigationShown">
         <span class="bottom-text">{{ $t('buttons.next') }} </span>
         <span class="bottom-nav-icon">
-          <font-awesome-icon icon="angle-double-right" size="sm"/>
+          <i class="fas fa-angle-double-right fa-sm"></i>
         </span>
       </router-link>
 
@@ -96,7 +96,6 @@
 </template>
 
 <script>
-  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
   import {mapState} from "vuex";
 
   export default {
@@ -111,7 +110,6 @@
         default: false
       },
     },
-    mixins: [fontAwesomeLib],
     data() {
       return {
         sendingData: false,
@@ -153,7 +151,9 @@
         // Resetting focus after 500ms
         setTimeout(() => {
           this.sendingData = false;
-          this.$nextTick(() => this.$refs[elementRef].focus());
+          this.$nextTick(() => {
+            if (this.$refs[elementRef]) this.$refs[elementRef].focus()
+          });
         }, 500)
       },
 

@@ -11,7 +11,7 @@
           <span v-else-if="isLocal">-development</span>
         </span>
         <span class="only-small-screen">
-          <span><font-awesome-icon icon="home"/></span>
+          <span><i class="fas fa-home"></i></span>
           <span v-if="isBeta"> - beta</span>
           <span v-else-if="isLocal"> - development</span></span>
 
@@ -52,12 +52,12 @@
 
           <b-nav-item-dropdown :text="currentUser.forename" right>
             <b-dropdown-item :to="{ path: '/settings' }">
-              <font-awesome-icon icon="cog"/>
+              <i class="fas fa-cog"></i>
               {{ $t('header.settings') }}
             </b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
             <b-dropdown-item @click="$_logOut()">
-              <font-awesome-icon icon="sign-out-alt"/>
+              <i class="fas fa-sign-out-alt"></i>
               {{ $t('header.logOut') }}
             </b-dropdown-item>
           </b-nav-item-dropdown>
@@ -70,14 +70,13 @@
 </template>
 
 <script>
-  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
   import authenticationMixin from "../../mixins/authenticationMixin";
   import {mapState} from "vuex";
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
 
   export default {
     name: "app-header",
-    mixins: [fontAwesomeLib, authenticationMixin],
+    mixins: [authenticationMixin],
     computed: {
       isBeta() {
         return document.location.origin.includes('edit2')

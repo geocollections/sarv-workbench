@@ -1,5 +1,6 @@
 <template>
-  <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'locality_reference'}" role="tabpanel">
+  <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'locality_reference'}"
+       role="tabpanel">
     <div class="col-sm-12" v-if="activeTab === 'locality_reference'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered  related-table">
@@ -52,9 +53,13 @@
               </vue-multiselect>
             </td>
 
-            <td v-if="entity.editMode"><b-form-input v-model="entity.new.pages" type="text"/></td>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.pages" type="text"/>
+            </td>
 
-            <td v-if="entity.editMode"><b-form-input v-model="entity.new.figures" type="text"/></td>
+            <td v-if="entity.editMode">
+              <b-form-input v-model="entity.new.figures" type="text"/>
+            </td>
 
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.remarks" type="text"/>
@@ -98,9 +103,13 @@
               </vue-multiselect>
             </td>
 
-            <td><b-form-input v-model="relatedData.insert.locality_reference.pages" type="text"/></td>
+            <td>
+              <b-form-input v-model="relatedData.insert.locality_reference.pages" type="text"/>
+            </td>
 
-            <td><b-form-input v-model="relatedData.insert.locality_reference.figures" type="text"/></td>
+            <td>
+              <b-form-input v-model="relatedData.insert.locality_reference.figures" type="text"/>
+            </td>
 
             <td>
               <b-form-input v-model="relatedData.insert.locality_reference.remarks" type="text"/>
@@ -108,10 +117,12 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData"
+                      @click="$emit('add-related-data', activeTab)">
                 <i class="fas fa-pencil-alt"></i>
               </button>
-              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
+              <button class="float-right btn btn-sm btn-danger" :disabled="sendingData"
+                      @click="$emit('set-default', activeTab)">
                 <i class="fas fa-times"></i>
               </button>
             </td>
@@ -124,20 +135,20 @@
 </template>
 
 <script>
-  import formManipulation  from '../../../mixins/formManipulation';
-  import autocompleteMixin  from '../../../mixins/autocompleteMixin';
+  import formManipulation from '../../../mixins/formManipulation';
+  import autocompleteMixin from '../../../mixins/autocompleteMixin';
 
-    export default {
-      name: "LocalityReference",
-      props: {
-        relatedData: Object,
-        autocomplete: Object,
-        activeTab: String
-      },
+  export default {
+    name: "LocalityReference",
+    props: {
+      relatedData: Object,
+      autocomplete: Object,
+      activeTab: String
+    },
 
-      mixins: [formManipulation,autocompleteMixin],
+    mixins: [formManipulation, autocompleteMixin],
 
-    }
+  }
 </script>
 
 <style scoped>

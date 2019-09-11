@@ -39,12 +39,12 @@
 
     </div>
 
-    <div class="col-sm-12 mb-2 record-options" v-if="recordOptions">
-      <div class="d-flex flex-wrap justify-content-start" v-if="filesState || recordOptions">
+    <div class="col-sm-12 mb-2 record-options" v-if="filesState || recordOptions">
+      <div class="d-flex flex-wrap justify-content-start">
 
-        <div v-if="recordImage" :class="{ 'flex-grow-1' : !recordVideo && !recordAudio }">
+        <div v-if="recordImage && recordOptions" :class="{ 'flex-grow-1' : !recordVideo && !recordAudio }">
           <label :for="`photo-upload`" class="btn btn-outline-primary p-2 mr-2">
-            <font-awesome-icon icon="camera-retro"/>
+            <i class="fas fa-camera-retro"></i>
             {{ $t('add.inputs.photoInput') }}
           </label>
 
@@ -57,9 +57,9 @@
           </b-form-file>
         </div>
 
-        <div v-if="recordVideo" :class="{ 'flex-grow-1' : !recordAudio }">
+        <div v-if="recordVideo && recordOptions" :class="{ 'flex-grow-1' : !recordAudio }">
           <label :for="`video-upload`" class="btn btn-outline-primary p-2 mr-2">
-            <font-awesome-icon icon="video"/>
+            <i class="fas fa-video"></i>
             {{ $t('add.inputs.videoInput') }}
           </label>
 
@@ -72,9 +72,9 @@
           </b-form-file>
         </div>
 
-        <div v-if="recordAudio" class="flex-grow-1">
+        <div v-if="recordAudio && recordOptions" class="flex-grow-1">
           <label :for="`audio-upload`" class="btn btn-outline-primary p-2 mr-2">
-            <font-awesome-icon icon="microphone"/>
+            <i class="fas fa-microphone"></i>
             {{ $t('add.inputs.audioInput') }}
           </label>
           <b-form-file v-model="recordedFile" accept="audio/*;capture=microphone"
@@ -111,7 +111,7 @@
                  :ref="'image' + parseInt(key)"
                  controls>
             Your browser does not support the audio element.
-            <font-awesome-icon size="5x" icon="file-audio"/>
+            <i class="fas fa-file-audio fa-5x"></i>
           </audio>
 
           <!-- VIDEO -->
@@ -121,7 +121,7 @@
                  style="max-height: 12rem"
                  controls>
             Your browser does not support the video element.
-            <font-awesome-icon size="5x" icon="file-video"/>
+            <i class="fas fa-file-video fa-5x"></i>
           </video>
 
           <!-- IMAGE -->
@@ -131,7 +131,8 @@
                class="img-thumbnail image"/>
 
           <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-          <font-awesome-icon v-else size="5x" icon="file"/>
+          <i v-else class="fas fa-file fa-5x"></i>
+
 
           <div class="my-1">
             <div class="text-box">
@@ -149,13 +150,11 @@
 </template>
 
 <script>
-  import fontAwesomeLib from '../../mixins/fontAwasomeLib'
   import EXIF from 'exif-js'
   import {toastError, toastInfo} from "../../assets/js/iziToast/iziToast";
 
   export default {
     name: "multimedia-component",
-    mixins: [fontAwesomeLib],
     props: {
       recordOptions: {
         type: Boolean

@@ -7,7 +7,7 @@
 
         <!-- REFERENCE -->
         <a v-if="reference && !data.is_private" class="no-underline" :href="'http://geocollections.info/reference/' + this.data.id" target="_blank">
-          <b>{{ $t('edit.referenceLink') }}</b> &nbsp;<font-awesome-icon icon="file"></font-awesome-icon>
+          <b>{{ $t('edit.referenceLink') }}</b> &nbsp;<i class="fas fa-file"></i>
         </a>
 
         <!-- FILE -->
@@ -91,16 +91,7 @@
 </template>
 
 <script>
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faFile} from '@fortawesome/free-solid-svg-icons'
-
-  library.add(faFile)
-
   export default {
-    components: {
-      FontAwesomeIcon,
-    },
     props: ['data', 'reference'],
     name: "FileInformation",
   }

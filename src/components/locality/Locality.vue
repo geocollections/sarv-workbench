@@ -7,7 +7,7 @@
     <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('locality.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -86,7 +86,7 @@
     <fieldset class="border p-2 mb-2" ref="info" id="block-map">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.map }" @click="block.map = !block.map">
         {{ $t('locality.map') }}
-        <font-awesome-icon icon="map"/>
+        <i class="fas fa-map"></i>
       </legend>
 
       <transition name="fade">
@@ -139,7 +139,7 @@
     <fieldset class="border p-2 mb-2" ref="info" id="block-additionalInfo">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.additionalInfo }" @click="block.additionalInfo = !block.additionalInfo">
         {{ $t('locality.additionalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -320,7 +320,7 @@
     <fieldset class="border p-2 mb-2" ref="info" id="block-description">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('locality.description') }}
-        <font-awesome-icon icon="pen-fancy"/>
+        <i class="fas fa-pen-fancy"></i>
       </legend>
 
       <transition name="fade">
@@ -468,7 +468,6 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
   import copyForm from '../../mixins/copyForm'
   import {
     fetchListLocalityTypes,
@@ -501,7 +500,6 @@
       LocalityAttachment,
       LocalitySynonym,
       LocalityReference,
-      VueMultiselect,
       Spinner,
       MapComponent
     },

@@ -23,7 +23,7 @@
                   <img v-bind:ref="'image' + parseInt(key)" class="img-thumbnail thumbnail-preview" alt="Image preview..." />
                 </span>
               <span v-else>
-                  <font-awesome-icon icon="file"></font-awesome-icon>&nbsp;
+                    <i class="fas fa-file"></i>
                 </span>
 
               <span><b>{{ file.name }}</b></span>

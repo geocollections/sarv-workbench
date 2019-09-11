@@ -3,7 +3,7 @@
     <div v-if="!buttonPressed" class="swipe-right-button" v-touch:swipe="handleSwipe" >tere</div>
 
     <div class="toggle-button" :class="{ 'button-close': buttonPressed }" @click="$emit('toggle-sidebar', buttonPressed)">
-      <font-awesome-icon class="chevron" :class="{ 'chevron-close': buttonPressed }" :icon="chevron"/>
+      <i class="fas chevron" :class="buttonPressed ? 'chevron-close fa-chevron-left' : 'fa-chevron-right'"></i>
     </div>
 
     <div v-if="buttonPressed" class="background-close-button" @click="$emit('toggle-sidebar', buttonPressed)" v-touch:swipe="handleSwipe"></div>
@@ -11,16 +11,7 @@
 </template>
 
 <script>
-  import {library} from '@fortawesome/fontawesome-svg-core'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faChevronRight, faChevronLeft} from '@fortawesome/free-solid-svg-icons'
-
-  library.add(faChevronRight, faChevronLeft);
-
   export default {
-    components: {
-      FontAwesomeIcon
-    },
     props: {
       sidebarState: {
         type: Boolean
@@ -30,9 +21,6 @@
       }
     },
     name: "SidebarToggleButton",
-    computed: {
-      chevron() { return this.buttonPressed ? faChevronLeft : faChevronRight }
-    },
     methods: {
       handleSwipe(direction) {
         if (!this.buttonPressed && direction === 'right') {

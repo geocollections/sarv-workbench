@@ -2,7 +2,6 @@
   <div id="#tab-attachment" class="tab-attachment row" :class="{active: activeTab === 'analysis_results'}"
        role="tabpanel">
 
-
     <div class="col-sm-12" v-if="activeTab === 'analysis_results'">
       <div class="table-responsive-sm">
 
@@ -125,9 +124,6 @@
   import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
   export default {
-    components: {
-
-    },
     name: "AnalysisResults",
     props: {
       relatedData: Object,

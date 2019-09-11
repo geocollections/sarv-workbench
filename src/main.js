@@ -27,6 +27,7 @@ import 'material-icons/iconfont/material-icons.css';
 import 'leaflet/dist/leaflet.css' // Leaflet css
 // Custom css
 import '@/assets/css/styles.css'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 Vue.use(VueResource);
 Vue.use(VueLocalStorage);

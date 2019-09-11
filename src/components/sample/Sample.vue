@@ -31,7 +31,7 @@
       <fieldset class="border-top px-2 mb-2" id="block-info">
         <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
           {{ $t('sample.generalInfo') }}
-          <font-awesome-icon icon="project-diagram"/>
+          <i class="fas fa-project-diagram"></i>
         </legend>
 
         <transition name="fade">
@@ -376,7 +376,7 @@
         <legend class="w-auto my-0" :class="{ 'text-primary': !block.relatedInfo }"
                 @click="block.relatedInfo = !block.relatedInfo">
           {{ $t('sample.relatedInfo') }}
-          <font-awesome-icon icon="project-diagram"/>
+          <i class="fas fa-project-diagram"></i>
         </legend>
 
         <transition name="fade">
@@ -457,7 +457,7 @@
         <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }"
                 @click="block.description = !block.description">
           {{ $t('sample.description') }}
-          <font-awesome-icon icon="pen-fancy"/>
+          <i class="fas fa-pen-fancy"></i>
         </legend>
 
         <transition name="fade">
@@ -484,7 +484,7 @@
       <fieldset class="border-top px-2 mb-2" id="block-info">
         <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
           {{ $t('sample.generalInfo') }}
-          <font-awesome-icon icon="project-diagram"/>
+          <i class="fas fa-project-diagram"></i>
         </legend>
 
         <transition name="fade">
@@ -724,7 +724,7 @@
         <legend class="w-auto my-0" :class="{ 'text-primary': !block.relatedInfo }"
                 @click="block.relatedInfo = !block.relatedInfo">
           {{ $t('sample.relatedInfo') }}
-          <font-awesome-icon icon="project-diagram"/>
+          <i class="fas fa-project-diagram"></i>
         </legend>
 
         <transition name="fade">
@@ -804,7 +804,7 @@
       <fieldset class="border-top px-2 mb-2" id="block-description">
         <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
           {{ $t('sample.description') }}
-          <font-awesome-icon icon="pen-fancy"/>
+          <i class="fas fa-pen-fancy"></i>
         </legend>
 
         <transition name="fade">
@@ -942,7 +942,6 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
   import {
     fetchSample,
     fetchSamplePurpose,
@@ -979,7 +978,6 @@
       SampleAttachment,
       SampleReference,
       Datepicker,
-      VueMultiselect,
       Spinner,
     },
     mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
@@ -1018,6 +1016,10 @@
 
     updated() {
       this.$localStorage.set('activeSample', this.$data.sample.id);
+    },
+
+    beforeDestroy() {
+      this.$root.$off('add-new-sample-from-modal', this.handleUserChoiceFromModal);
     },
 
     beforeRouteUpdate(to, from, next) {
@@ -1431,11 +1433,11 @@
         console.log(choice)
         let vm = this
         if (choice === 'SAVE_AND_LEAVE') {
-          this.add(false, 'sample', false, true).then(resp => {
+          this.add(false, 'sample', true).then(resp => {
             vm.$root.$emit('close-new-sample-modal')
           })
         } else if (choice === 'SAVE') {
-          this.add(true, 'sample', false, false)
+          this.add(true, 'sample')
         }
       },
       siteLabel(option) {

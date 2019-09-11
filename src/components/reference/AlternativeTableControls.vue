@@ -61,7 +61,7 @@
       <div class="row">
         <div class="col">
           <b-button variant="danger" @click="resetControls">
-            <font-awesome-icon icon="undo" />
+            <i class="fas fa-undo"></i>
             {{ $t('references.alternativeTableResetButton') }}
           </b-button>
         </div>
@@ -84,7 +84,6 @@
 </template>
 
 <script>
-  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
   import VueMultiselect from 'vue-multiselect'
 
   export default {
@@ -100,7 +99,6 @@
         type: Array
       }
     },
-    mixins: [fontAwesomeLib],
 
     created() {
       this.alternativeTableControls.fields = this.columns

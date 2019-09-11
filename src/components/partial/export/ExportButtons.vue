@@ -2,16 +2,16 @@
   <div>
     <b-dropdown variant="primary">
       <template slot="button-content">
-        Export <font-awesome-icon icon="file-export" />
+        Export <i class="fas fa-file-export"></i>
       </template>
 
-      <b-dropdown-item @click="exportTableByType('xlsx')">Export to XLSX &nbsp;<font-awesome-icon :icon="['far', 'file-excel']" /></b-dropdown-item>
+      <b-dropdown-item @click="exportTableByType('xlsx')">Export to XLSX &nbsp;<i class="far fa-file-excel"></i></b-dropdown-item>
 
-      <b-dropdown-item @click="exportTableByType('csv')">Export to CSV &nbsp;<font-awesome-icon :icon="['far', 'file']" /></b-dropdown-item>
+      <b-dropdown-item @click="exportTableByType('csv')">Export to CSV &nbsp;<i class="far fa-file"></i></b-dropdown-item>
 
-      <b-dropdown-item v-if="filename === 'reference'" @click="exportTableToRIS()">Export to RIS &nbsp;<font-awesome-icon :icon="['fas', 'file-download']" /></b-dropdown-item>
+      <b-dropdown-item v-if="filename === 'reference'" @click="exportTableToRIS()">Export to RIS &nbsp;<i class="far fa-file-download"></i></b-dropdown-item>
 
-      <b-dropdown-item @click="copyToClipboard()" >Copy to Clipboard &nbsp;<font-awesome-icon :icon="['far', 'copy']" /></b-dropdown-item>
+      <b-dropdown-item @click="copyToClipboard()" >Copy to Clipboard &nbsp;<i class="far fa-copy"></i></b-dropdown-item>
 
     </b-dropdown>
   </div>
@@ -20,13 +20,9 @@
 <script>
   import { toastSuccess } from "@/assets/js/iziToast/iziToast";
   import TableExport from 'tableexport'
-  import fontAwesomeLib from "../../../mixins/fontAwasomeLib";
   import {toastError} from "../../../assets/js/iziToast/iziToast";
 
   export default {
-    // components: {
-    //   FontAwesomeIcon,
-    // },
     props: {
       filename: {
         type: String,
@@ -41,7 +37,6 @@
       },
     },
     name: "ExportButtons",
-    mixins: [fontAwesomeLib],
 
     data() {
       return {

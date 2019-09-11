@@ -52,7 +52,7 @@
           <tr v-for="sample in sample_results" :key="sample.id">
             <td>
               <router-link :to="{ path: '/sample/' + sample.id }" target="_blank">
-                <font-awesome-icon size="1x" icon="eye"/>
+                <i class="fas fa-eye"></i>
                 {{sample.id}}
               </router-link>
             </td>
@@ -94,7 +94,6 @@
 </template>
 
 <script>
-  import fontAwasomeLib from '../../mixins/fontAwasomeLib'
   import { fetchLinkedSamples } from "../../assets/js/api/apiCalls";
 
   export default {
@@ -107,7 +106,6 @@
         type: Array
       }
     },
-    mixins: [fontAwasomeLib],
     data() {
       return {
         sample_results: [],

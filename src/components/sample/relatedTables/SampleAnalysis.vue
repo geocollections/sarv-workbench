@@ -15,7 +15,7 @@
             <th>{{ $t('analysis.remarks') }}</th>
             <th>{{ $t('analysis.location') }}</th>
             <th class="text-center">
-              <font-awesome-icon icon="lock" :title="$t('analysis.is_locked')"/>
+              <i class="fas fa-lock" :title="$t('analysis.is_locked')"></i>
             </th>
             <th class="btn-th"></th>
           </tr>

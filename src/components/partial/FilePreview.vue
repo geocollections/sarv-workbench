@@ -9,25 +9,17 @@
       <img class="image-preview"
            v-if="data.uuid_filename.endsWith('jpg') || data.uuid_filename.endsWith('jpeg') || data.uuid_filename.endsWith('png')"
            :src="getFileLink({size: 'medium', filename: data.uuid_filename})" alt="NO IMAGE"/>
-      <font-awesome-icon v-else icon="file" size="3x"></font-awesome-icon>
+      <i v-else class="fas fa-file fa-3x"></i>
+
     </a>
 
-    <font-awesome-icon v-else icon="file" size="3x"></font-awesome-icon>
+    <i v-else class="fas fa-file fa-3x"></i>
 
   </div>
 </template>
 
 <script>
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faFile} from '@fortawesome/free-solid-svg-icons'
-
-  library.add(faFile)
-
   export default {
-    components: {
-      FontAwesomeIcon,
-    },
     props: ['data'],
     name: "FilePreview",
     methods: {

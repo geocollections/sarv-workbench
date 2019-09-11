@@ -8,8 +8,8 @@
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('doi') }"
               @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
-        <font-awesome-icon v-if="validate('doi')" color="#28a745" icon="check"/>
-        <font-awesome-icon v-if="!validate('doi')" color="#dc3545" icon="exclamation-triangle"/>
+        <i v-if="validate('doi')" class="fas fa-check text-success"></i>
+        <i v-if="!validate('doi')" class="fas fa-exclamation-triangle text-danger"></i>
       </legend>
 
       <transition name="fade">
@@ -91,7 +91,7 @@
     <fieldset class="border p-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('doi.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
       <transition name="fade">
         <div v-show="block.info">
@@ -257,7 +257,7 @@
     <fieldset class="border p-2 mb-2" id="block-referenceAndDataset">
       <legend class="w-auto" :class="{ 'text-primary': !block.referenceAndDataset }" @click="block.referenceAndDataset = !block.referenceAndDataset">
         {{ $t('doi.primaryRefAndDat') }}
-        <font-awesome-icon icon="book"/>
+        <i class="fas fa-book"></i>
       </legend>
 
       <transition name="fade">
@@ -338,7 +338,7 @@
     <fieldset class="border p-2 mb-2" id="block-description">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('doi.remarks') }}
-        <font-awesome-icon icon="pen-fancy"/>
+        <i class="fas fa-pen-fancy"></i>
       </legend>
 
       <transition name="fade">
@@ -439,7 +439,7 @@
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" id="block-datacite">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.datacite }" @click="block.datacite = !block.datacite">
         {{ $t('doi.datacite') }}
-        <font-awesome-icon icon="sitemap"/>
+        <i class="fas fa-sitemap"></i>
       </legend>
 
       <transition name="fade">
@@ -477,13 +477,13 @@
       <div class="col">
         <button v-if="$route.meta.isEdit && showMetadataButton && validate('doi')" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
                 :title="showMetadataUpdateMessage ? $t('edit.buttons.updateMetadata') : $t('edit.buttons.registerMetadata')">
-          <font-awesome-icon icon="server"/>
+          <i class="fas fa-server"></i>
           {{ showMetadataUpdateMessage ? $t('edit.buttons.updateMetadata') : $t('edit.buttons.registerMetadata') }}
         </button>
 
         <button v-if="$route.meta.isEdit && showDoiUrlButton && validate('doi')" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerDoiUrl"
                 :title="showDoiUrlUpdateMessage ? $t('edit.buttons.updateUrl') : $t('edit.buttons.registerUrl')">
-          <font-awesome-icon icon="server"/>
+          <i class="fas fa-server"></i>
           {{ showDoiUrlUpdateMessage ? $t('edit.buttons.updateUrl') : $t('edit.buttons.registerUrl') }}
         </button>
       </div>
@@ -494,7 +494,6 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from "../../mixins/formManipulation";
   import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -535,7 +534,6 @@
       DoiFiles,
       DoiAgent,
       Datepicker,
-      VueMultiselect,
       Spinner,
       FileInputComponent,
     },

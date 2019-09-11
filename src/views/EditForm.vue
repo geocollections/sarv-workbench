@@ -78,6 +78,7 @@
       },
 
       setData(data) {
+        console.log(data)
         this.data = data
         if(this.data !== null) this.formattedData = data;
         this.forceRerender()

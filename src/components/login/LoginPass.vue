@@ -30,7 +30,7 @@
       </b-form-group>
 
       <b-button type="submit" variant="primary" v-bind:disabled="loggingIn">
-        {{ $t('login.loginButton') }} <font-awesome-icon icon="sign-in-alt"></font-awesome-icon>
+        {{ $t('login.loginButton') }} <i class="fas fa-sign-in-alt"></i>
       </b-button>
     </b-form>
 
@@ -39,18 +39,11 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faSignInAlt} from '@fortawesome/free-solid-svg-icons'
-
   import authenticationMixin from "../../mixins/authenticationMixin";
-
-  library.add(faSignInAlt);
 
   export default {
     components: {
       Spinner,
-      FontAwesomeIcon
     },
     name: "login-pass",
     mixins: [authenticationMixin],

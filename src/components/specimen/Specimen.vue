@@ -8,8 +8,8 @@
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('specimen') }"
               @click="block.requiredFields = !block.requiredFields">
         {{ $t('specimen.requiredFields') }}
-        <font-awesome-icon v-if="validate('specimen')" color="#28a745" icon="check"/>
-        <font-awesome-icon v-if="!validate('specimen')" color="#dc3545" icon="exclamation-triangle"/>
+        <i v-if="validate('specimen')" class="fas fa-check text-success"></i>
+        <i v-if="!validate('specimen')" class="fas fa-exclamation-triangle text-danger"></i>
       </legend>
 
       <transition name="fade">
@@ -43,7 +43,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-info">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
         {{ $t('specimen.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -443,7 +443,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-description">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
         {{ $t('specimen.description') }}
-        <font-awesome-icon icon="pen-fancy"/>
+        <i class="fas fa-pen-fancy"></i>
       </legend>
 
       <transition name="fade">

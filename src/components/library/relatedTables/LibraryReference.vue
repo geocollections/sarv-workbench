@@ -15,12 +15,12 @@
                 <i v-else :class="'fas fa-sort-' + sortingDirection"></i>
                 {{ $t('reference.' + field) }}
 
-                <font-awesome-icon v-if="field === 'reference'" icon="link"/>
+                <i v-if="field === 'reference'" class="fas fa-link"></i>
               </span>
 
               <span v-else>
                 {{ $t('reference.' + field) }}
-                <font-awesome-icon v-if="field === 'reference'" icon="link"/>
+                <i v-if="field === 'reference'" class="fas fa-link"></i>
               </span>
             </th>
 

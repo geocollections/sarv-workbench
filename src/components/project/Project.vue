@@ -12,7 +12,7 @@
           <input type="checkbox" class="custom-control-input" id="customSwitch2" v-model="isActiveProject">
           <label class="custom-control-label rounded pr-4 pl-4"
                  :class="isActiveProject ? 'alert-success ' : 'alert-danger'" for="customSwitch2">
-            <font-awesome-icon icon="tag"/>&ensp;{{ $t(isActiveProject ? 'frontPage.active' : 'frontPage.non_active')}}
+            <i class="fas fa-tag"></i>&ensp;{{ $t(isActiveProject ? 'frontPage.active' : 'frontPage.non_active')}}
           </label>
         </span>
       </div>
@@ -30,7 +30,7 @@
     <fieldset class="border-top px-2 mb-2" ref="info" id="block-info">
       <legend class="w-auto my-0" :class="{'text-primary': !block.info}" @click="block.info = !block.info">
         {{ $t('project.generalInfo') }}
-        <font-awesome-icon icon="project-diagram"/>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -144,7 +144,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-description">
       <legend class="w-auto my-0" :class="{'text-primary': !block.description}" @click="block.description = !block.description">
         {{ $t('project.description') }} | {{ $t('project.remarks') }}
-        <font-awesome-icon icon="pen-fancy" />
+        <i class="fas fa-pen-fancy"></i>
       </legend>
       <transition name="fade">
         <div  v-show="block.description">
@@ -168,7 +168,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-members">
       <legend class="w-auto my-0" :class="{'text-primary': !block.members}" @click="block.members = !block.members">
         {{ $t('project.members') }}
-        <font-awesome-icon icon="user-friends" />
+        <i class="fas fa-user-friends"></i>
       </legend>
       <transition name="fade">
         <div class="row" v-show="block.members">
@@ -196,7 +196,7 @@
             <button class="btn btn-outline-danger"
                     :disabled="!isNotEmpty(relatedData.projectagent)"
                     @click="relatedData.projectagent = []">
-              <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+              <i class="far fa-trash-alt"></i>
             </button>
           </div>
         </div>
@@ -207,7 +207,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-files" ref="files" v-if="$route.meta.isEdit">
       <legend class="w-auto my-0" :class="{'text-primary': !block.files}" @click="block.files = !block.files">
         {{ $t('project.files') }}
-        <font-awesome-icon icon="folder-open"/>
+        <i class="fas fa-folder-open"></i>
       </legend>
       <transition name="fade">
         <div class="row p-3" v-show="block.files">
@@ -227,7 +227,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-sites" ref="sites" v-if="$route.meta.isEdit">
       <legend class="w-auto my-0" :class="{'text-primary': !block.sites}" @click="block.sites = !block.sites">
         {{ $t('project.sites') }}
-        <font-awesome-icon icon="globe-americas" />
+        <i class="fas fa-globe-americas"></i>
       </legend>
       <transition name="fade">
         <div v-show="block.sites">
@@ -244,8 +244,7 @@
                                v-if="showCollapseMap"
                                module="project"
                                v-bind:location="{ lat: null, lng: null }"
-                               v-bind:locations="relatedData.site"
-                               v-on:choose-locations="chooseLocations"/>
+                               v-bind:locations="relatedData.site"/>
               </b-collapse>
             </div>
             <div class="table-responsive-sm col-12 p-0">
@@ -264,7 +263,7 @@
                 <tr v-for="site in relatedData.site">
                   <td>
                     <router-link :to="{ path: '/site/' + site.id }" target="_blank">
-                      <font-awesome-icon size="1x" icon="eye"/>
+                      <i class="fas fa-eye"></i>
                       {{site.id}}
                     </router-link>
                   </td>
@@ -303,8 +302,6 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
   import Datepicker from 'vue2-datepicker'
   import formManipulation from '../../mixins/formManipulation'
   import sidebarMixin from '../../mixins/sidebarMixin'
@@ -323,7 +320,6 @@
   import MapComponent from "../partial/MapComponent";
 
   import FileTable from "../partial/FileTable";
-  import findIndex from 'lodash/findIndex';
   import SaveButtons from "../partial/SaveButtons";
   import MultimediaComponent from "../partial/MultimediaComponent";
   import AddNewSite from "./addOrEditSiteModal";
@@ -341,9 +337,7 @@
       SaveButtons,
       FileTable,
       MapComponent,
-      FontAwesomeIcon,
       Datepicker,
-      VueMultiselect,
       Spinner,
     },
     mixins: [formManipulation, autocompleteMixin, formSectionsMixin, sidebarMixin],
@@ -386,15 +380,6 @@
       }
 
       this.loadFullInfo()
-      //TODO:REMOVE handle resize logic I DONT remember why?
-      window.addEventListener('resize', this.handleResize);
-      window.addEventListener('visibilitychange', this.handleVisibilityChange);
-      this.handleResize();
-    },
-
-    destroyed() {
-      window.removeEventListener('resize', this.handleResize)
-      window.removeEventListener('visibilitychange', this.handleVisibilityChange)
     },
 
     methods: {
@@ -605,26 +590,6 @@
           `${option.id} - (${option.description_en}) (${option.author__agent})`
       },
 
-      addRelatedDataAttachment(option) {
-        if (typeof this.relatedData.attachment_link === 'undefined') this.relatedData.attachment_link = [];
-        this.relatedData.attachment_link.push(option)
-      },
-
-      chooseLocations(locations) {
-        console.log(locations)
-      },
-      removeAttachmentRelation(idx) {
-        this.relatedData.attachment_link.splice(idx, 1);
-        this.add(true, 'project', true);
-      },
-
-      handleVisibilityChange(event) {
-        this.loadRelatedData('site')
-      },
-      handleResize() {
-        this.window.width = window.innerWidth;
-        this.window.height = window.innerHeight;
-      },
       addFiles(files){
         this.addFileAsRelatedDataNew(files, 'project');
       },

@@ -1,59 +1,8 @@
-import BFormInput from "bootstrap-vue/src/components/form-input/form-input";
 import VueMultiselect from 'vue-multiselect';
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-
-// Todo: Remove FontAwesomeIcon imports!!!
-
-import {
-  faBan,
-  faSave,
-  faDoorOpen,
-  faProjectDiagram,
-  faTag,
-  faGlobeAmericas,
-  faFileVideo,
-  faFileAudio,
-  faDownload,
-  faVial,
-  faVideo,
-  faMicrophone,
-  faCameraRetro,
-  faChevronDown,
-  faChevronUp,
-  faGlobe,
-  faFile,
-  faFileExcel,
-  faFileImage,
-  faEye,
-  faFolderOpen,
-  faUserFriends,
-  faFileContract,
-  faInfo,
-  faPenFancy,
-  faTimes,
-  faExternalLinkAlt,
-  faUserLock,
-  faLock,
-  faCalendarAlt,
-  faCommentAlt,
-  faLink,
-  faPencilAlt,
-  faTrashAlt,
-  faListOl,
-  faMapMarked,
-  faFilePdf,
-  faCheck,
-  faTimesCircle,
-  faDatabase,
-  faSitemap
-} from '@fortawesome/free-solid-svg-icons'
 import cloneDeep from 'lodash/cloneDeep'
 import moment from 'moment'
 import {toastInfo, toastSuccess, toastError} from "../assets/js/iziToast/iziToast";
 import {mapState} from "vuex";
-
-library.add(faBan, faSave, faDoorOpen, faProjectDiagram, faTag, faGlobeAmericas, faFileVideo, faFileAudio, faDownload, faVial, faVideo, faMicrophone, faCameraRetro, faChevronDown, faChevronUp, faGlobe, faFile, faFileExcel, faFileImage, faEye, faFolderOpen, faUserFriends, faFileContract, faInfo, faPenFancy, faTimes, faUserLock, faLock, faCalendarAlt, faExternalLinkAlt, faCommentAlt, faLink, faPencilAlt, faTrashAlt, faListOl, faMapMarked, faFilePdf, faCheck, faTimesCircle, faDatabase, faSitemap)
 
 const formManipulation = {
   data() {
@@ -61,15 +10,14 @@ const formManipulation = {
       fileUrl: 'https://files.geocollections.info',
       apiUrl: 'https://rwapi.geocollections.info/',
       loadingPercent: 0,
+      previousRequest: null,
       sendingData: false,
       editMode: false,
       showCollapseMap: true,
     }
   },
   components: {
-    BFormInput,
     VueMultiselect,
-    FontAwesomeIcon
   },
   mounted() {
     // Root event for confirmation modal which is emitted when user tries to leave the TAB without saving.
@@ -162,7 +110,7 @@ const formManipulation = {
      * @param {string} child - Used for validating if requiredFields is an object like in attachments.
      * @returns {boolean} True if required fields are OK and false if they are not.
      */
-    validate(object, child) {
+    validate(object, child = null) {
       let isValid = true;
       let isValidOptional = false;
 
@@ -190,36 +138,28 @@ const formManipulation = {
     add(addAnother, object, returnPromise = false) {
       return new Promise(resolve => {
         if (this.validate(object) && !this.sendingData) {
+          let objectToUpload = cloneDeep(this[object]);
 
-          let url = this[object].id === undefined ? 'add/' + object + '/' : 'change/' + object + '/' + this[object].id;
+          let url = (typeof objectToUpload.id !== 'undefined') ? `change/${object}/${objectToUpload.id}` : `add/${object}/`;
+          if (typeof objectToUpload.id !== 'undefined') delete objectToUpload.id;
 
-          let editableObject = cloneDeep(this[object]);
-          if (this[object].id !== undefined) {
-            delete this[object]['id']
-          }
-
-          const dataToUpload = this.formatDataForUpload(this[object]);
+          const dataToUpload = this.formatDataForUpload(objectToUpload);
           let formData = new FormData();
           formData.append('data', dataToUpload);
 
           this.saveData(object, formData, url).then(savedObjectId => {
-            console.log(savedObjectId)
-            //before save object ID was removed
-            this[object] = editableObject;
-            // if (savedObjectId === undefined || savedObjectId === false) return;
-            this.$emit('data-loaded', editableObject);
-            this.$emit('data-saved', true);
+            console.log('Saved object ID: ' + savedObjectId);
+
+            if (this.$route.meta.isEdit) this.$emit('data-loaded', this[object]);
 
             if (!returnPromise) {
-              if (savedObjectId && (savedObjectId === true || savedObjectId !== undefined)) {
-                if (!addAnother) this.$router.push({path: '/' + object})
-                else this.$router.push({path: '/' + object + '/' + savedObjectId})
-              } else resolve(false)
-            } else {
-              resolve(true)
-
-            }
+              if (addAnother) {
+                if (this.isNotEmpty(savedObjectId) && !this.$route.meta.isEdit) this.$router.push({ path: '/' + object + '/' + savedObjectId });
+              }
+              else this.$router.push({ path: '/' + object })
+            } else resolve(true);
           }, errResponse => {
+            console.log('tere')
             resolve(false)
             return false;
           });
@@ -235,14 +175,14 @@ const formManipulation = {
       });
     },
 
-    saveData(type, formData, url, isCopy = false) {
+    saveData(object, formData, url, isCopy = false) {
       return new Promise(resolve => {
-        this.request(type, formData, url, resolve, isCopy)
+        this.request(object, formData, url, resolve)
       })
     },
 
-    request(object, formData, url, resolve, isCopy) {
-      if (!isCopy) this.sendingData = true;
+    request(object, formData, url, resolve) {
+      this.sendingData = true;
       this.loadingPercent = 0;
 
       this.$http.post(this.apiUrl + url, formData, {
@@ -250,42 +190,32 @@ const formManipulation = {
           this.previousRequest = request
         },
         progress: (e) => {
-          if (e.lengthComputable) {
-            // console.log("e.loaded: %o, e.total: %o, percent: %o", e.loaded, e.total, (e.loaded / e.total ) * 100);
-            this.loadingPercent = Math.round((e.loaded / e.total) * 100)
-          }
+          if (e.lengthComputable) this.loadingPercent = Math.round((e.loaded / e.total) * 100)
         }
       }).then(response => {
-        this.sendingData = false
+        this.sendingData = false;
         if (response.status === 200) {
-          if (typeof response.body.message !== 'undefined') {
-            if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-              toastSuccess({text: response.body.message_et});
-              resolve(response.body.id)
+
+          if (response.body) {
+            if (this.$i18n.locale === 'ee') {
+              if (response.body.message_et) toastSuccess({text: response.body.message_et});
+              else if (response.body.error_et) toastError({text: response.body.error_et});
             } else {
-              toastSuccess({text: response.body.message});
-              resolve(response.body.id)
+              if (response.body.message) toastSuccess({text: response.body.message});
+              else if (response.body.error) toastError({text: response.body.error});
             }
+
             if (object === 'attachment' && response.body.attachments_ids) {
-              if (response.body.attachments_ids.length > 1) resolve(response.body.attachments_ids)
+              if (response.body.attachments_ids.length > 1) resolve(response.body.attachments_ids);
               resolve(response.body.attachments_ids[0])
-            } else
-              resolve(response.body.id)
+            } else if (response.body.id) resolve(response.body.id)
           }
-          if (typeof response.body.error !== 'undefined') {
-            resolve(false)
-            if (this.$i18n && this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-              toastError({text: response.body.error_et});
-            } else {
-              toastError({text: response.body.error});
-            }
-          }
+
         }
       }, errResponse => {
+        this.sendingData = false;
         console.log('ERROR: ' + JSON.stringify(errResponse));
-        this.sendingData = false
         toastError({text: this.$t('messages.uploadError')});
-        resolve(false)
       })
     },
 

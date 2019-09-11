@@ -11,7 +11,7 @@
             <th>{{ $t('preparation.remarks') }}</th>
 <!--            <th>{{ $t('preparation.method_id') }}</th>-->
             <th>
-              <font-awesome-icon icon="user-lock" :title="$t('taxon.is_private')"/>
+              <i class="fas fa-user-lock" :title="$t('taxon.is_private')"></i>
             </th>
             <th class="btn-th"></th>
           </tr>

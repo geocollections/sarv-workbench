@@ -7,7 +7,7 @@
           <thead class="thead-light">
           <tr>
             <th>{{ $t('reference.reference') }}
-              <font-awesome-icon class="ml-2" icon="link"/>
+              <i class="fas fa-link ml-2"></i>
             </th>
             <th>{{ $t('reference.remarks') }}</th>
             <th class="btn-th"></th>
