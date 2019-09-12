@@ -150,7 +150,7 @@
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto">
         {{ $t('photoArchive.collapseMap') }}
-        <font-awesome-icon icon="globe-americas"/>
+        <i class="fas fa-globe-americas"></i>
       </legend>
 
       <!-- LOCATION -->
@@ -216,8 +216,7 @@
       <div class="col-1 mb-2">
         <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeKeywords"
                 @click="edit.tags = null">
-          <font-awesome-icon icon="trash-alt" />
-<!--          <i class="fas fa-trash-alt"></i>-->
+          <i class="far fa-trash-alt"></i>
         </button>
       </div>
     </div>
@@ -961,7 +960,7 @@
 
       <div class="col-sm-1 mb-2">
         <a href="javascript:void(0)" @click="openInNewWindow({object: 'imageset', height: 500})" class="btn btn-outline-info" :title="$t('add.inputs.newImageset')">
-          <font-awesome-icon icon="plus"></font-awesome-icon>
+          <i class="fas fa-plus"></i>
         </a>
       </div>
     </div>
@@ -1015,7 +1014,6 @@
   import { toastError } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from "../../partial/BottomOptions";
   import MapComponent from "../../partial/MapComponent";
-  import fontAwesomeLib from "../../../mixins/fontAwasomeLib";
   import NewDoiButton from "../../partial/NewDoiButton";
   import {toastInfo} from "../../../assets/js/iziToast/iziToast";
 
@@ -1030,7 +1028,6 @@
       MapComponent
     },
     props:['data', 'attachLink'],
-    mixins: [fontAwesomeLib],
     name: "OtherFiles",
     data() {
       return {

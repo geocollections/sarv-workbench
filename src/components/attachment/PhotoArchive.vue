@@ -123,7 +123,7 @@
 
       <div class="col-sm-1 mb-2">
         <a href="javascript:void(0)" @click="openInNewWindow({object: 'imageset', height: 500})" class="btn btn-outline-info" :title="$t('add.inputs.newImageset')">
-          <font-awesome-icon icon="plus"></font-awesome-icon>
+          <i class="fas fa-plus"></i>
         </a>
       </div>
     </div>
@@ -191,7 +191,7 @@
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto">
         {{ $t('photoArchive.collapseMap') }}
-        <font-awesome-icon icon="globe-americas"/>
+        <i class="fas fa-globe-americas"></i>
       </legend>
 
       <!-- LOCATION -->
@@ -299,7 +299,7 @@
       <div class="col-1 mb-2">
         <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeKeywords"
                 @click="photo_archive.tags = null">
-          <font-awesome-icon icon="trash-alt"></font-awesome-icon>
+          <i class="far fa-trash-alt"></i>
         </button>
       </div>
     </div>
@@ -470,29 +470,17 @@
 
 <script>
   import formManipulation  from '../../mixins/formManipulation'
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-  import {faPlus} from '@fortawesome/free-solid-svg-icons'
-  import {faChevronUp} from '@fortawesome/free-solid-svg-icons'
-  import {faChevronDown} from '@fortawesome/free-solid-svg-icons'
-  import {faTrashAlt} from '@fortawesome/free-solid-svg-icons'
-
   import Datepicker from 'vue2-datepicker'
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'
   import EXIF from 'exif-js'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
   import BottomOptions from '@/components/partial/BottomOptions.vue'
   import MapComponent from "../partial/MapComponent";
-  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
 
-  library.add(faPlus, faChevronUp, faChevronDown, faTrashAlt)
 
   export default {
     components: {
-      FontAwesomeIcon,
-      VueMultiselect,
       Datepicker,
       Spinner,
       MapComponent,
@@ -500,7 +488,7 @@
     },
     name: "PhotoArchive",
 
-    mixins: [formManipulation, fontAwesomeLib],
+    mixins: [formManipulation],
     metaInfo: {
       link: [
         { rel: 'stylesheet', href: '/css/index.css' },

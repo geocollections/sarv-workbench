@@ -26,7 +26,7 @@
                   <img v-bind:ref="'image' + parseInt(key)" class="img-thumbnail thumbnail-preview" alt="Image preview..." />
                 </span>
                 <span v-else>
-                  <font-awesome-icon icon="file"></font-awesome-icon>&nbsp;
+                  <i class="fas fa-file"></i>
                 </span>
 
                 <span><b>{{ file.name }}</b></span>
@@ -191,7 +191,7 @@
     <fieldset class="border p-2 mb-2">
       <legend class="w-auto">
         {{ $t('photoArchive.collapseMap') }}
-        <font-awesome-icon icon="globe-americas"/>
+        <i class="fas fa-globe-americas"></i>
       </legend>
 
       <!-- LOCATION -->
@@ -257,8 +257,7 @@
       <div class="col-1 mb-2">
         <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')" :disabled="!removeKeywords"
                 @click="upload.tags = null">
-          <font-awesome-icon icon="trash-alt" />
-<!--          <i class="fas fa-trash-alt"></i>-->
+          <i class="far fa-trash-alt"></i>
         </button>
       </div>
     </div>
@@ -981,12 +980,9 @@
 
 <script>
   import formManipulation  from '../../mixins/formManipulation'
-  import { library } from '@fortawesome/fontawesome-svg-core'
-  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import {faFile} from '@fortawesome/free-solid-svg-icons'
   import Datepicker from 'vue2-datepicker'
   import Spinner from 'vue-simple-spinner'
-  import VueMultiselect from 'vue-multiselect'
   import cloneDeep from 'lodash/cloneDeep'
   import EXIF from 'exif-js'
   import { toastSuccess, toastError, toastInfo } from "@/assets/js/iziToast/iziToast";
@@ -994,20 +990,16 @@
   import MapComponent from "../partial/MapComponent";
 
   library.add(faFile);
-  import Vue from 'vue'
-  import fontAwesomeLib from "../../mixins/fontAwasomeLib";
   import {mapState} from "vuex";
   export default {
     components: {
-      FontAwesomeIcon,
-      VueMultiselect,
       Datepicker,
       Spinner,
       BottomOptions,
       MapComponent
     },
     name: "OtherFiles",
-    mixins: [formManipulation, fontAwesomeLib],
+    mixins: [formManipulation],
     data() {
       return {
         apiUrl: 'https://rwapi.geocollections.info/',

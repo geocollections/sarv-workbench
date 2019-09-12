@@ -45,7 +45,7 @@
     <td class="middle">
       <vs-checkbox id="is_private"
                    v-model="entity.is_private"
-                   @input="$parent.$emit('toggle-privacy-state', entity.is_private, entity.id)"
+                   @input="$emit('toggle-privacy-state', entity.is_private, entity.id)"
                    icon="fa-lock"
                    icon-pack="fas">
       </vs-checkbox>

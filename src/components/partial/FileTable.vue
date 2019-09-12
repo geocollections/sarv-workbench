@@ -29,7 +29,7 @@
              class="img-thumbnail image"/>
 
         <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-        <i v-else class="fas fa-file fa-5x"></i>
+        <i v-else class="fas fa-file fa-5x" @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"></i>
 
         <div class="middle">
           <div class="hover-text-box">

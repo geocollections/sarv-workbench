@@ -16,7 +16,7 @@
 
     <td>{{ entity.agent__agent }}</td>
 
-    <td class="text-center">
+    <td class="middle">
 <!--      <b-form-checkbox-->
 <!--        id="is_private"-->
 <!--        v-model="entity.library__is_private"-->
@@ -28,7 +28,7 @@
 
       <vs-checkbox id="is_private"
                    v-model="entity.library__is_private"
-                   @input="$parent.$emit('toggle-privacy-state', entity.library__is_private, entity.library)"
+                   @input="$emit('toggle-privacy-state', entity.library__is_private, entity.library)"
                    icon="fa-lock"
                    icon-pack="fas">
       </vs-checkbox>
@@ -57,15 +57,12 @@
         type: Object
       },
     },
-    methods: {
-      handlePrivateState(state, libraryID) {
-        console.log(state)
-        console.log(libraryID)
-      },
-    }
   }
 </script>
 
 <style scoped>
-
+  .middle {
+    text-align: center;
+    vertical-align: middle;
+  }
 </style>

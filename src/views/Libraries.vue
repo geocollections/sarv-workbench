@@ -40,7 +40,6 @@
       view-type="libraryViewType"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
-      v-on:toggle-privacy-state="changeLibraryState"
     ></list-module-core>
 
   </div>
@@ -110,31 +109,6 @@
       setDefaultSearchParametersFromDeleteButton() {
         this.searchParameters = this.setDefaultSearchParameters()
       },
-
-      changeLibraryState(state, libraryID) {
-        let formData = new FormData();
-        formData.append('data', JSON.stringify({is_private: state}));
-
-        fetchChangePrivacyState('library', libraryID, formData).then(response => {
-          if (typeof response.body.message !== 'undefined') {
-            if (this.$i18n.locale === 'ee' && typeof response.body.message_et !== 'undefined') {
-              toastSuccess({text: response.body.message_et});
-            } else {
-              toastSuccess({text: response.body.message});
-            }
-          }
-          if (typeof response.body.error !== 'undefined') {
-            if (this.$i18n && this.$i18n.locale === 'ee' && typeof response.body.error_et !== 'undefined') {
-              toastError({text: response.body.error_et});
-            } else {
-              toastError({text: response.body.error});
-            }
-          }
-        }, errResponse => {
-          if (typeof errResponse.body.error !== 'undefined') toastError({text: errResponse.body.error});
-          toastError({text: this.$t('messages.uploadError')})
-        })
-      }
     }
   }
 </script>

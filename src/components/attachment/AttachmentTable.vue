@@ -60,6 +60,15 @@
       <span v-if="entity.specimen_image_attachment === 4">{{ $t('attachment.digitisedReferenceFile') }}</span>
     </td>
 
+    <td class="middle">
+      <vs-checkbox id="is_private"
+                   v-model="entity.is_private"
+                   @input="$emit('toggle-privacy-state', entity.is_private, entity.id)"
+                   icon="fa-lock"
+                   icon-pack="fas">
+      </vs-checkbox>
+    </td>
+
     <td>
       <a href="javascript:void(0)" v-if="!entity.is_private" @click="openGeoInNewWindow({object: 'file', id: entity.id})"
          :title="$t('edit.viewMessage')">{{ $t('edit.view') }}</a>

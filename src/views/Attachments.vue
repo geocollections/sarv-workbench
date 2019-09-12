@@ -100,6 +100,7 @@
           {id: "specimen", title: "attachment.specimen", type: "text"},
           {id: "reference__reference", title: "attachment.reference", type: "text"},
           {id: "specimen_image_attachment", title: "attachment.specimenImageAttachment", type: "text"},
+          {id: "is_private", title: "attachment.is_private_text", type: "text", isPrivate: true},
           {id: "attachment__filename", title: "", type: "text", orderBy: false},
         ],
         filters: [

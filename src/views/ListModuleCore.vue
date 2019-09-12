@@ -14,7 +14,7 @@
       <!-- Deletes search preferences -->
       <div class="mt-3 mr-3">
         <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">
-          <font-awesome-icon icon="filter" />
+          <i class="fas fa-filter"></i>
           {{ $t('buttons.deletePreferences') }}
         </b-button>
       </div>
@@ -172,7 +172,10 @@
 
             </thead>
 
-            <router-view :response="response" :is-library-active="isLibraryActive"  v-if="response.count > 0 && isTableView"/>
+            <router-view :response="response"
+                         :is-library-active="isLibraryActive"
+                         v-if="response.count > 0 && isTableView"
+                         v-on:toggle-privacy-state="changeObjectsPrivacyState"/>
 
             <!-- ALTERNATIVE TABLE VIEW -->
             <alternative-table-view v-if="isAlternativeTable"
@@ -214,6 +217,8 @@
   import AlternativeTableView from "../components/reference/AlternativeTableView";
   import AlternativeTableControls from "../components/reference/AlternativeTableControls";
   import ChooseActiveLibrary from "../components/partial/ChooseActiveLibrary";
+  import {fetchChangePrivacyState} from "../assets/js/api/apiCalls";
+  import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
   library.add(faSort, faSortUp, faSortDown, farCalendarAlt)
 
@@ -504,6 +509,26 @@
         this.$localStorage.remove(this.viewType);
         this.$emit('set-default-search-params', true, this.multiOrdering);
         this.currentView = 'table'
+      },
+
+      changeObjectsPrivacyState(state, id) {
+        let formData = new FormData();
+        formData.append('data', JSON.stringify({is_private: state}));
+
+        fetchChangePrivacyState(this.module, id, formData).then(response => {
+          if (response && response.body) {
+            if (this.$i18n.locale === 'ee') {
+              if (response.body.message_et) toastSuccess({text: response.body.message_et});
+              else if (response.body.error_et) toastError({text: response.body.error_et});
+            } else {
+              if (response.body.message) toastSuccess({text: response.body.message});
+              else if (response.body.error) toastError({text: response.body.error});
+            }
+          }
+        }, errResponse => {
+          if (errResponse && errResponse.body && errResponse.body.error) toastError({text: errResponse.body.error});
+          toastError({text: this.$t('messages.uploadError')})
+        })
       }
     }
   }
