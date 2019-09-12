@@ -984,12 +984,15 @@
         if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
         if (this.isNotEmpty(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id;
 
-        // if (this.databaseId) uploadableObject.database = this.databaseId;
 
         // Adding related data
         uploadableObject.related_data = {};
+
         if (this.isNotEmpty(this.relatedData.keyword)) uploadableObject.related_data.keyword = this.relatedData.keyword;
+        else uploadableObject.related_data.keyword = null;
+
         if (this.isNotEmpty(this.relatedData.attachment)) uploadableObject.related_data.attachment = this.relatedData.attachment;
+        else uploadableObject.related_data.attachment = null;
 
         if (this.isNotEmpty(this.relatedData.library)) {
           uploadableObject.related_data.library = cloneDeep(this.relatedData.library);
@@ -998,7 +1001,7 @@
               id: library.library ? library.library : library.id
             }
           });
-        }
+        } else uploadableObject.related_data.library = null;
 
         // Adding related data only on add view
         if (!this.$route.meta.isEdit) {
@@ -1008,7 +1011,7 @@
             uploadableObject.related_data.locality.forEach((loc_ref, index) => {
               uploadableObject.related_data.locality[index]['id'] = loc_ref.locality
             });
-          }
+          } else uploadableObject.related_data.locality = null
         }
 
         console.log('This object is sent in string format:');

@@ -455,7 +455,7 @@
           if (this.isNotEmpty(this.relatedData.library_agent)) {
             uploadableObject.related_data = {};
             uploadableObject.related_data.agent = this.relatedData.library_agent
-          }
+          } else uploadableObject.related_data.agent = null;
         }
 
         console.log('This object is sent in string format:')
