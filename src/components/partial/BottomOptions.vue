@@ -53,7 +53,7 @@
               ref="save"
               @click="handleClick('SAVE', 'save')">
         <span class="d-lg-inline-block bottom-icon">
-          <i class="fas fa-save fa-sm"></i>
+          <i class="fas fa-save fa-3x"></i>
         </span>
         <span class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg">
           {{ $t('edit.buttons.save') }}

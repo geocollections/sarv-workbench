@@ -227,7 +227,7 @@ const formManipulation = {
           description: file.type.includes('pdf') ? null : file.type + ' for ' + relatedObject + ': ' + this[relatedObject].id,
           author: file.type.includes('pdf') ? null : this.currentUser.id,
           date_created: file.type.includes('pdf') ? null : this.formatDateForUpload(new Date()),
-          is_private: this[relatedObject].is_oa,
+          is_private: !this[relatedObject].is_oa,
           specimen_image_attachment: relatedObject === 'reference' ? 4 : 3,
           [relatedObject]: this[relatedObject].id
         }));
