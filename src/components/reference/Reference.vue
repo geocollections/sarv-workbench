@@ -407,14 +407,18 @@
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
       <legend class="w-auto my-0 mb-2" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
         {{ $t('reference.relatedTables.attachmentDigital') }}
-        <i class="fas fa-file-pdf"></i>
+        <i class="far fa-file-pdf"></i>
       </legend>
 
       <transition name="fade">
         <div v-show="block.digital">
 
-          <multimedia-component v-if="attachment.length === 0" v-on:file-uploaded="addPDF" :recordOptions="false"
-                                acceptable-format="application/pdf" :accept-multiple="false"/>
+          <multimedia-component v-if="attachment.length === 0"
+                                v-on:file-uploaded="addPDF"
+                                :recordOptions="false"
+                                acceptable-format="application/pdf"
+                                :accept-multiple="false"
+                                :show-try-again-button="true"/>
           <file-table :attachments="attachment" object="reference" v-if="attachment.length > 0"/>
 
         </div>
@@ -426,7 +430,7 @@
     <fieldset class="border-top px-2 mb-2" id="block-files">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.files }" @click="block.files = !block.files">
         {{ $t('reference.relatedTables.attachment') }}
-        <i class="fas fa-folder-open"></i>
+        <i class="far fa-folder-open"></i>
       </legend>
 
       <transition name="fade">
@@ -730,6 +734,12 @@
           this.loadRelatedData(this.activeTab)
         },
         deep: true
+      },
+      // This value is changed in formManipulation.js when file upload is successful (value will be savedObjectsId)
+      'isFileAddedAsObject': {
+        handler: function (newVal, oldVal) {
+          if (this.isNotEmpty(newVal)) fetchAttachmentForReference(this.$route.params.id).then(response => this.attachment = this.handleResponse(response));
+        }
       },
       'newlyAddedDoiId'(newval, oldval) {
         if (typeof newval !== 'undefined' && newval !== null) {

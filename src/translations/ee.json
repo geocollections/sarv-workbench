@@ -232,6 +232,7 @@
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
+      "tryAgain": "Proovi uuesti",
       "downloadFile": "Lae alla fail | Lae alla failid",
       "add": "Salvesta",
       "mapEnabled": "Näita kaarti",

@@ -232,6 +232,7 @@
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
+      "tryAgain": "Try again",
       "downloadFile": "Download file | Download files",
       "add": "Save",
       "mapEnabled": "Map enabled",

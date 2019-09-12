@@ -430,7 +430,6 @@
     fetchAnalysisResults,
     fetchAnalysisMethod,
   } from "../../assets/js/api/apiCalls";
-  import FileInputComponent from "../partial/MultimediaComponent";
   import AnalysisFiles from "./relatedTables/AnalysisFiles";
   import AnalysisResults from "./relatedTables/AnalysisResults";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -442,7 +441,6 @@
       AnalysisFiles,
       Datepicker,
       Spinner,
-      FileInputComponent,
     },
 
     mixins: [formManipulation, autocompleteMixin, formSectionsMixin],

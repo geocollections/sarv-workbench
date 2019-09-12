@@ -1,7 +1,6 @@
 <template>
 
   <!-- FILE -->
-
   <div class="row">
     <div class="col-sm-12 mb-2">
       <label :for="`files`"
@@ -94,14 +93,22 @@
             <span v-show="arrayOfFiles.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
           </button>
         </div>
+
+        <div v-if="filesState && showTryAgainButton" class="ml-2">
+          <button class="btn btn-outline-warning p-2"
+                  :disabled="sendingData"
+                  @click="$emit('file-uploaded', recordedFile.length > 0 ? recordedFile : arrayOfFiles)"
+                  :title="$t('add.buttons.tryAgain')">
+            {{ $t('add.buttons.tryAgain') }}
+          </button>
+        </div>
       </div>
     </div>
 
 
-    <div class="d-flex flex-wrap justify-content-start" v-if="files && arrayOfFiles.length > 0">
+    <div class="d-flex flex-wrap align-items-center col" v-if="files && arrayOfFiles.length > 0">
 
-      <div class="m-1 align-self-end" :class="{ 'flex-grow-1' : arrayOfFiles.length > 1 }"
-           v-for="(file, key) in arrayOfFiles">
+      <div class="align-self-center my-2 mx-5" v-for="(file, key) in arrayOfFiles" :key="file.name">
 
         <!-- FILES -->
         <div class="file-container" :title="file.name">
@@ -111,7 +118,7 @@
                  :ref="'image' + parseInt(key)"
                  controls>
             Your browser does not support the audio element.
-            <i class="fas fa-file-audio fa-5x"></i>
+            <i class="far fa-file-audio fa-5x"></i>
           </audio>
 
           <!-- VIDEO -->
@@ -121,7 +128,7 @@
                  style="max-height: 12rem"
                  controls>
             Your browser does not support the video element.
-            <i class="fas fa-file-video fa-5x"></i>
+            <i class="far fa-file-video fa-5x"></i>
           </video>
 
           <!-- IMAGE -->
@@ -131,14 +138,20 @@
                class="img-thumbnail image"/>
 
           <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-          <i v-else class="fas fa-file fa-5x"></i>
+          <i v-else-if="file.type.includes('pdf')" class="far fa-file-pdf fa-5x"></i>
+          <i v-else class="far fa-file fa-5x"></i>
 
-
-          <div class="my-1">
-            <div class="text-box">
-              <div>{{truncateFileInfo(file)}}</div>
+          <div class="middle">
+            <div class="hover-text-box">
+              <div>{{file.name}}</div>
             </div>
           </div>
+
+<!--          <div class="my-1">-->
+<!--            <div class="text-box">-->
+<!--              <div>{{truncateFileInfo(file)}}</div>-->
+<!--            </div>-->
+<!--          </div>-->
 
         </div>
 
@@ -182,6 +195,10 @@
       acceptMultiple: {
         type: Boolean,
         default: true
+      },
+      showTryAgainButton: {
+        type: Boolean,
+        default: false
       }
     },
     data() {
@@ -386,6 +403,10 @@
     opacity: 0.7;
   }
 
+  .file-container:hover .middle {
+    opacity: 1;
+  }
+
   .text-box {
     width: 25vh;
     margin: auto;
@@ -403,4 +424,26 @@
       margin-left: unset;
     }
   }
+
+  .middle {
+    opacity: 0;
+    -webkit-transition: opacity .2s ease;
+    transition: opacity .2s ease;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+  }
+
+  .hover-text-box {
+    background-color:#5e676a;
+    color:white;
+    width: 20vh;
+    margin: auto;
+    text-align: center;
+    font-size: 12px;
+    word-wrap: break-word;
+  }
+
 </style>

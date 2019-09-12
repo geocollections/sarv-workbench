@@ -1,16 +1,18 @@
 <template>
-  <div class="d-flex flex-wrap justify-content-around align-items-center">
+  <div class="d-flex flex-wrap align-items-center">
 
-    <div class="align-self-center m-3" v-for="(file, key) in attachments" :key="file.id">
+    <div class="align-self-center my-2 mx-5" v-for="(file, key) in attachments" :key="file.id">
 
       <!-- FILES -->
-      <div class="file-container" :title="composeFileUrl(file[prefix + 'uuid_filename'], 'original')">
+      <div class="file-container"
+           @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"
+           :title="composeFileUrl(file[prefix + 'uuid_filename'], 'original')">
 
         <!-- AUDIO -->
         <audio v-if="file[prefix + 'uuid_filename'] !== null && ['mp3','wav'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1" controls>
           <source :src="composeFileUrl(file[prefix + 'uuid_filename'], 'original')" :type="file.attachment_format__value">
           Your browser does not support the audio element.
-          <i class="fas fa-file-audio fa-5x" @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"></i>
+          <i class="far fa-file-audio fa-5x"></i>
         </audio>
 
         <!-- VIDEO -->
@@ -18,18 +20,18 @@
                type="video" style="max-height: 12rem" controls>
           <source :src="composeFileUrl(file[prefix + 'uuid_filename'], 'original')" :type="file.attachment_format__value">
           Your browser does not support the video element.
-          <i class="fas fa-file-video fa-5x" @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"></i>
+          <i class="far fa-file-video fa-5x"></i>
         </video>
 
         <!-- IMAGE -->
         <img v-else-if="file[prefix + 'uuid_filename'] !== null && ['png','jpeg','jpg'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1"
-             @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"
              :src="composeFileUrl(file[prefix + 'uuid_filename'])"
              alt="Image preview..."
              class="img-thumbnail image"/>
 
         <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-        <i v-else class="fas fa-file fa-5x" @click="openUrlInNewWindow({url: composeFileUrl(file[prefix + 'uuid_filename'], 'original')})"></i>
+        <i v-else-if="['pdf'].indexOf(file[prefix + 'uuid_filename'].split('.')[1]) > -1" class="far fa-file-pdf fa-5x"></i>
+        <i v-else class="far fa-file fa-5x"></i>
 
         <div class="middle">
           <div class="hover-text-box">

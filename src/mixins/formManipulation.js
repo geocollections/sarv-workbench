@@ -14,6 +14,7 @@ const formManipulation = {
       sendingData: false,
       editMode: false,
       showCollapseMap: true,
+      isFileAddedAsObject: null,
     }
   },
   components: {
@@ -158,11 +159,7 @@ const formManipulation = {
               }
               else this.$router.push({ path: '/' + object })
             } else resolve(true);
-          }, errResponse => {
-            console.log('tere')
-            resolve(false)
-            return false;
-          });
+          }, errResponse => resolve(false));
 
         } else if (this.sendingData) {
           // This runs only if user deletes html elements and tries to press 'add' button again
@@ -208,14 +205,16 @@ const formManipulation = {
             if (object === 'attachment' && response.body.attachments_ids) {
               if (response.body.attachments_ids.length > 1) resolve(response.body.attachments_ids);
               resolve(response.body.attachments_ids[0])
-            } else if (response.body.id) resolve(response.body.id)
-          }
+            } else if (response.body.id) resolve(response.body.id);
+            else resolve(undefined)
+          } else resolve(undefined)
 
-        }
+        } else resolve(undefined)
       }, errResponse => {
         this.sendingData = false;
         console.log('ERROR: ' + JSON.stringify(errResponse));
         toastError({text: this.$t('messages.uploadError')});
+        resolve(undefined)
       })
     },
 
@@ -236,8 +235,8 @@ const formManipulation = {
       });
 
       try {
-        this.saveData('attachment', formData, 'add/attachment/', false).then(savedObjectId => {
-          console.log(savedObjectId)
+        this.saveData('attachment', formData, 'add/attachment/').then(savedObjectId => {
+          if (this.isNotEmpty(savedObjectId)) this.isFileAddedAsObject = savedObjectId
         });
       } catch (e) {
         console.log('Attachment cannot be added');

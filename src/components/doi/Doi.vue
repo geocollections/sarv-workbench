@@ -516,7 +516,6 @@
     fetchCheckDoiUrlInDataCite,
     fetchRegisterMetadataToDataCite, fetchRegisterDoiUrlToDataCite, fetchDoiUsingEGF, fetchAgentUsingName
   } from "../../assets/js/api/apiCalls";
-  import FileInputComponent from "../partial/MultimediaComponent";
   import DoiAgent from "./relatedTables/DoiAgent";
   import DoiFiles from "./relatedTables/DoiFiles";
   import DoiRelatedIdentifier from "./relatedTables/DoiRelatedIdentifier";
@@ -535,7 +534,6 @@
       DoiAgent,
       Datepicker,
       Spinner,
-      FileInputComponent,
     },
 
     mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
