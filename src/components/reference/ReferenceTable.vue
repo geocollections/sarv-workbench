@@ -31,6 +31,15 @@
       <i v-if="entity.is_estonian_author" class="fas fa-check fa"></i>
     </td>
 
+    <td class="middle">
+      <vs-checkbox id="is_private"
+                   v-model="entity.is_private"
+                   @input="$emit('toggle-privacy-state', entity.is_private, entity.id)"
+                   icon="fa-lock"
+                   icon-pack="fas">
+      </vs-checkbox>
+    </td>
+
     <td>
       <a v-if="!entity.is_private" href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})"
          :title="$t('editReference.viewMessage')">{{ $t('edit.view') }}</a>

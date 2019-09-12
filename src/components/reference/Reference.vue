@@ -380,13 +380,13 @@
 
       <div class="px-2">
         <b-form-checkbox id="is_private" v-model="reference.is_private">
-          {{ $t('otherFiles.private') }}
+          {{ $t('reference.is_private') }}
         </b-form-checkbox>
       </div>
 
       <div class="px-2">
         <b-form-checkbox id="is_locked" v-model="reference.is_locked">
-          {{ $t('otherFiles.locked') }}
+          {{ $t('reference.is_locked') }}
         </b-form-checkbox>
       </div>
 
