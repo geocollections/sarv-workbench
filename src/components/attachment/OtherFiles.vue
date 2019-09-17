@@ -980,7 +980,6 @@
 
 <script>
   import formManipulation  from '../../mixins/formManipulation'
-  import {faFile} from '@fortawesome/free-solid-svg-icons'
   import Datepicker from 'vue2-datepicker'
   import Spinner from 'vue-simple-spinner'
   import cloneDeep from 'lodash/cloneDeep'
@@ -989,7 +988,6 @@
   import BottomOptions from '@/components/partial/BottomOptions.vue'
   import MapComponent from "../partial/MapComponent";
 
-  library.add(faFile);
   import {mapState} from "vuex";
   export default {
     components: {
