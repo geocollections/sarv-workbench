@@ -614,7 +614,8 @@
     "imageDescription": "Pildi kirjeldus",
     "imageDescriptionEn": "Pildi kirjeldus en",
     "collapseMap": "Kaart",
-    "dateDigitisedFree": "Digiteerimise kp vaba"
+    "dateDigitisedFree": "Digiteerimise kp vaba",
+    "map": "Kaart"
   },
   "digitisedReference": {
     "reference": "Kirjandus",

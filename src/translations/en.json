@@ -614,7 +614,8 @@
     "imageDescription": "Image description",
     "imageDescriptionEn": "Image description en",
     "collapseMap": "Map",
-    "dateDigitisedFree": "Date digitised free"
+    "dateDigitisedFree": "Date digitised free",
+    "map": "Map"
   },
   "digitisedReference": {
     "reference": "Reference",

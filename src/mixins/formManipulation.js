@@ -148,6 +148,13 @@ const formManipulation = {
           let formData = new FormData();
           formData.append('data', dataToUpload);
 
+          if (object === 'attachment' && this.files && this.files.length > 0) {
+            for (let file in this.files) {
+              if (file === '10' && this.files.length >= 10) break;
+              else formData.append('file' + file, this.files[file])
+            }
+          }
+
           this.saveData(object, formData, url).then(savedObjectId => {
             console.log('Saved object ID: ' + savedObjectId);
 
@@ -155,7 +162,13 @@ const formManipulation = {
 
             if (!returnPromise) {
               if (addAnother) {
-                if (this.isNotEmpty(savedObjectId) && !this.$route.meta.isEdit) this.$router.push({ path: '/' + object + '/' + savedObjectId });
+                if (this.isNotEmpty(savedObjectId) && !this.$route.meta.isEdit) {
+                  if (object === 'imageset') {
+                    this.$router.push({ name: 'photo_archive add', params: { imageset: { id: savedObjectId, imageset_number: this[object].imageset_number } } })
+                  } else if (object === 'journal') {
+                    this.$router.push({ name: 'reference add', params: { journal: { id: savedObjectId, journal_name: this[object].journal_name } } })
+                  } else this.$router.push({ path: '/' + object + '/' + savedObjectId });
+                }
               }
               else this.$router.push({ path: '/' + object })
             } else resolve(true);

@@ -125,6 +125,7 @@ const router = new Router({
             },
             {
               path: 'photo_archive',
+              name: 'photo_archive add',
               component: () => import('./components/attachment/AttachmentNew.vue'),
               meta: {
                 isEdit: false,
@@ -333,6 +334,7 @@ const router = new Router({
           children: [
             {
               path: '',
+              name: 'reference add',
               component: () => import('./components/reference/Reference.vue'),
               meta: {
                 isEdit: false,

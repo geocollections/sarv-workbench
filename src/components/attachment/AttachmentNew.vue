@@ -9,15 +9,17 @@
                :message="$route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')"></spinner>
     </template>
 
-    <!-- TODO: ROUTE CHANGE/UPDATE MUST CLEAR INSERTED USER DATA!!! -->
 
     <template v-slot:file-input>
+      {{attachment}}
+
       <multimedia-component :record-options="recordOptions"
                             :record-image="recordImage"
                             :record-video="recordVideo"
                             :record-audio="recordAudio"
                             :acceptable-format="fileInputFormat"
-                            :accept-multiple="acceptMultiple"/>
+                            :accept-multiple="acceptMultiple"
+                            v-on:file-uploaded="addFiles" />
     </template>
 
 
@@ -31,8 +33,8 @@
                   :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
                   @click="block.requiredFields = !block.requiredFields">
             {{ $t('attachment.requiredFields') }}
-            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
-            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+            <i v-if="validate('attachment', 'photo_archive')" class="fas fa-check text-success"></i>
+            <i v-if="!validate('attachment', 'photo_archive')" class="fas fa-exclamation-triangle text-danger"></i>
           </legend>
 
           <transition name="fade">
@@ -97,7 +99,7 @@
 
                     <div class="align-self-end">
                       <router-link :to="{ path: '/imageset/add' }" class="btn btn-outline-info" :title="$t('add.inputs.newImageset')">
-                        <font-awesome-icon icon="plus"></font-awesome-icon>
+                        <i class="fas fa-plus"></i>
                       </router-link>
                     </div>
                   </div>
@@ -113,7 +115,7 @@
         <fieldset class="border-top px-2 mb-2" id="block-info">
           <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
             {{ $t('attachment.info') }}
-            <font-awesome-icon icon="project-diagram"/>
+            <i class="fas fa-project-diagram"></i>
           </legend>
 
           <transition name="fade">
@@ -171,6 +173,36 @@
           </transition>
         </fieldset>
 
+        <!-- MAP -->
+        <fieldset class="border-top px-2 mb-2" id="block-map">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.map }" @click="block.map = !block.map">
+            {{ $t('attachment.map') }}
+            <i class="fas fa-globe-americas"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.map">
+
+
+            </div>
+          </transition>
+        </fieldset>
+
+        <!-- IMAGE INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-description">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
+            {{ $t('attachment.description') }}
+            <i class="far fa-image"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.description">
+
+
+            </div>
+          </transition>
+        </fieldset>
+
 
       </div>
     </template>
@@ -181,13 +213,13 @@
 
         <!-- REQUIRED INFO -->
         <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
-                  :style="!validate('attachment', 'photo_archive') ? 'border-color: #dc3545!important;' : ''">
+                  :style="!validate('attachment', 'specimen_image') ? 'border-color: #dc3545!important;' : ''">
           <legend class="w-auto my-0"
-                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
+                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'specimen_image') }"
                   @click="block.requiredFields = !block.requiredFields">
             {{ $t('attachment.requiredFields') }}
-            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
-            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+            <i v-if="validate('attachment', 'specimen_image')" class="fas fa-check text-success"></i>
+            <i v-if="!validate('attachment', 'specimen_image')" class="fas fa-exclamation-triangle text-danger"></i>
           </legend>
 
           <transition name="fade">
@@ -239,13 +271,13 @@
 
         <!-- REQUIRED INFO -->
         <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
-                  :style="!validate('attachment', 'photo_archive') ? 'border-color: #dc3545!important;' : ''">
+                  :style="!validate('attachment', 'other_file') ? 'border-color: #dc3545!important;' : ''">
           <legend class="w-auto my-0"
-                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
+                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'other_file') }"
                   @click="block.requiredFields = !block.requiredFields">
             {{ $t('attachment.requiredFields') }}
-            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
-            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+            <i v-if="validate('attachment', 'other_file')" class="fas fa-check text-success"></i>
+            <i v-if="!validate('attachment', 'other_file')" class="fas fa-exclamation-triangle text-danger"></i>
           </legend>
 
           <transition name="fade">
@@ -316,13 +348,13 @@
 
         <!-- REQUIRED INFO -->
         <fieldset class="border-top px-2 mb-2" id="block-requiredFields"
-                  :style="!validate('attachment', 'photo_archive') ? 'border-color: #dc3545!important;' : ''">
+                  :style="!validate('attachment', 'digitised_reference') ? 'border-color: #dc3545!important;' : ''">
           <legend class="w-auto my-0"
-                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'photo_archive') }"
+                  :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('attachment', 'digitised_reference') }"
                   @click="block.requiredFields = !block.requiredFields">
             {{ $t('attachment.requiredFields') }}
-            <font-awesome-icon v-if="validate('attachment', 'photo_archive')" color="#28a745" icon="check"/>
-            <font-awesome-icon v-if="!validate('attachment', 'photo_archive')" color="#dc3545" icon="exclamation-triangle"/>
+            <i v-if="validate('attachment', 'digitised_reference')" class="fas fa-check text-success"></i>
+            <i v-if="!validate('attachment', 'digitised_reference')" class="fas fa-exclamation-triangle text-danger"></i>
           </legend>
 
           <transition name="fade">
@@ -363,15 +395,14 @@
 
     <template v-slot:checkbox>
       <div class="d-flex flex-wrap">
-
-        {{attachment}}
-
         <vs-checkbox id="is_private" v-model="attachment.is_private" icon="fa-eye-slash" icon-pack="fas">
-          {{ attachment.is_private ? $t('attachment.is_private_text') : $t('attachment.is_public_text') }}
+<!--          {{ attachment.is_private ? $t('attachment.is_private_text') : $t('attachment.is_public_text') }}-->
+          {{ $t('attachment.is_private_text') }}
         </vs-checkbox>
 
         <vs-checkbox id="is_locked" v-model="attachment.is_locked" icon="fa-lock" icon-pack="fas">
-          {{ attachment.is_locked ? $t('attachment.is_locked_text') : $t('attachment.is_unlocked_text') }}
+<!--          {{ attachment.is_locked ? $t('attachment.is_locked_text') : $t('attachment.is_unlocked_text') }}-->
+          {{ $t('attachment.is_locked_text') }}
         </vs-checkbox>
       </div>
     </template>
@@ -491,12 +522,6 @@
           databaseId: this.databaseId,
           block: this.block
         });
-      } else {
-        // Adding attachment default values from local storage
-        const attachmentHistory = this.$localStorage.get('attachment', 'fallbackValue');
-        if (attachmentHistory !== 'fallbackValue' && Object.keys(attachmentHistory).length !== 0 && attachmentHistory.constructor === Object) {
-          this.attachment = attachmentHistory
-        }
       }
 
       this.loadFullInfo()
@@ -504,11 +529,50 @@
 
     watch: {
       '$route.params.id': {
-        handler: function (newval, oldval) {
+        handler: function (newVal, oldVal) {
           this.setInitialData();
           this.reloadData()
         },
-        deep: true
+      },
+      '$route.path': {
+        handler: function (newVal, oldVal) {
+          if (!this.$route.meta.isEdit) {
+            this.setInitialData();
+            this.reloadData();
+
+            let attachmentHistory;
+            if (this.isPhotoArchive) attachmentHistory =  this.$localStorage.get('photoArchive', 'fallbackValue');
+            else if (this.isSpecimenImage) attachmentHistory =  this.$localStorage.get('specimenImage', 'fallbackValue');
+            else if (this.isOtherFile) attachmentHistory =  this.$localStorage.get('otherFile', 'fallbackValue');
+            else if (this.isDigitisedReference) attachmentHistory =  this.$localStorage.get('digitisedReference', 'fallbackValue');
+
+            if (attachmentHistory && attachmentHistory !== 'fallbackValue' && Object.keys(attachmentHistory).length !== 0 && attachmentHistory.constructor === Object) {
+              this.attachment = attachmentHistory
+            }
+
+            if (this.isPhotoArchive) {
+              if (this.$route.params.imageset) {
+                this.attachment.imageset = this.$route.params.imageset
+              }
+            }
+
+            if (!this.isDigitisedReference) {
+              this.attachment.author = {
+                id: this.currentUser.id,
+                agent: this.currentUser.agent,
+                forename: this.currentUser.forename,
+                surename: this.currentUser.surename
+              }
+            }
+
+            // Universal attachment object
+            // const attachmentHistory = this.$localStorage.get('attachment', 'fallbackValue');
+            // if (attachmentHistory !== 'fallbackValue' && Object.keys(attachmentHistory).length !== 0 && attachmentHistory.constructor === Object) {
+            //   this.attachment = attachmentHistory
+            // }
+          }
+        },
+        immediate: true
       },
       'relatedData.searchParameters': {
         handler: function (newVal, oldVal) {
@@ -558,7 +622,7 @@
           },
           attachment: {},
           searchParameters: this.setDefaultSearchParameters(),
-          block: {requiredFields: true, info: true, description: true},
+          block: {requiredFields: true, info: true, map: true, description: true},
         }
       },
 
@@ -639,7 +703,13 @@
       formatDataForUpload(objectToUpload, saveRelatedData = false) {
         let uploadableObject = cloneDeep(objectToUpload);
 
-        if (!this.$route.meta.isEdit) this.$localStorage.set('attachment', objectToUpload)
+        if (!this.$route.meta.isEdit) {
+          if (this.isPhotoArchive) this.$localStorage.set('photoArchive', objectToUpload);
+          else if (this.isSpecimenImage) this.$localStorage.set('specimenImage', objectToUpload);
+          else if (this.isOtherFile) this.$localStorage.set('otherFile', objectToUpload);
+          else if (this.isDigitisedReference) this.$localStorage.set('digitisedReference', objectToUpload);
+          // this.$localStorage.set('attachment', objectToUpload);
+        }
 
         // if (this.isNotEmpty(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
 
@@ -704,6 +774,10 @@
         console.log('This object is sent in string format (related_data):');
         console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
+      },
+
+      addFiles(files) {
+        this.files = files
       },
 
       setDefaultSearchParameters() {

@@ -717,6 +717,10 @@
           field: 'reference',
           block: this.block
         });
+      } else {
+        if (this.$route.params.journal) {
+          this.reference.journal = this.$route.params.journal
+        }
       }
 
       this.loadFullInfo()
