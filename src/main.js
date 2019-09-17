@@ -13,6 +13,7 @@ import Vuesax from 'vuesax'
 import VueScrollTo from 'vue-scrollto'
 import Vue2TouchEvents from 'vue2-touch-events'
 import CKEditor from '@ckeditor/ckeditor5-vue';
+import animated from 'animate.css';
 
 Vue.use( CKEditor );
 
@@ -51,6 +52,7 @@ Vue.use(VueScrollTo, {
   y: true
 });
 Vue.use(Vue2TouchEvents);
+Vue.use(animated);
 
 Vue.config.productionTip = false;
 

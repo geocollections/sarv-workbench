@@ -152,10 +152,6 @@
     },
 
     computed: {
-      mapMarkersLoaded() {
-        return this.mode === 'single' && this.gpsCoords === true && this.currentLocation && this.location !== null
-      },
-
       areLocationsSet() {
         return this.locations !== null && this.locations.length > 0
       },
@@ -221,7 +217,10 @@
         if (this.mode === 'multiple') this.setMarkers(this.locations);
 
         if (this.mode === 'single') {
-          if (this.isLocationSet) this.addMarker(this.location);
+          if (this.isLocationSet) {
+            this.addMarker(this.location);
+            this.map.setView(this.marker._latlng, this.zoom);
+          }
           this.map.on('click', (event) => this.updateCoordinates(event.latlng));
         }
       },
@@ -386,20 +385,6 @@
         //   this.setZoom()
         // } else if (newVal === null && this.marker !== null) {
         //   this.map.setView(this.marker._latlng, this.zoom);
-        // }
-      },
-      mapMarkersLoaded: function (newVal) {
-        if (this.marker !== null) this.map.setView(this.marker._latlng, this.zoom);
-        // if (this.gpsCoords && newVal) {
-        //   //zoom to fit all markers
-        //   let featureGroup = []
-        //   featureGroup.push(this.currentLocation);
-        //   if(this.marker !== null) featureGroup.push(this.marker)
-        //   if(featureGroup.length > 1) {
-        //     let bounds = new L.featureGroup(featureGroup).getBounds()
-        //     this.map.fitBounds(bounds);
-        //     this.map.setZoom(this.map.getBoundsZoom(bounds)-2)
-        //   }
         // }
       },
     }

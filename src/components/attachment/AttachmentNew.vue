@@ -12,6 +12,7 @@
 
     <template v-slot:file-input>
       {{attachment}}
+      {{clearFiles}}
 
       <multimedia-component :record-options="recordOptions"
                             :record-image="recordImage"
@@ -19,7 +20,10 @@
                             :record-audio="recordAudio"
                             :acceptable-format="fileInputFormat"
                             :accept-multiple="acceptMultiple"
-                            v-on:file-uploaded="addFiles" />
+                            :clear-files="clearFiles"
+                            v-on:file-uploaded="addFiles"
+                            v-on:metadata-loaded="updateFields"
+                            v-on:files-cleared="clearUploadedFiles" />
     </template>
 
 
@@ -53,6 +57,7 @@
                                    :options="autocomplete.agent"
                                    :class="{ valid:  isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free), invalid: !(isNotEmpty(attachment.author) || isNotEmpty(attachment.author_free)) }"
                                    @search-change="autocompleteAgentSearch"
+                                   @input="resetImageset"
                                    :internal-search="false"
                                    :preserve-search="true"
                                    :clear-on-select="false"
@@ -140,7 +145,7 @@
                 </div>
               </div>
 
-              <!-- LOCALITY -->
+              <!-- IMAGE PLACE and LOCALITY -->
               <div class="row">
                 <div class="col-md-6">
                   <label :for="`image_place`">{{ $t('attachment.imagePlace') }}:</label>
@@ -181,9 +186,51 @@
           </legend>
 
           <transition name="fade">
-            <div v-show="block.map">
+            <div v-if="block.map">
 
+              <!-- IMAGE LATITUDE and IMAGE LONGITUDE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_latitude`">{{ $t('attachment.imageLatitude') }}:</label>
+                  <b-form-input id="image_latitude" v-model="attachment.image_latitude" type="number" step="0.000001"></b-form-input>
+                </div>
 
+                <div class="col-md-6">
+                  <label :for="`image_longitude`">{{ $t('attachment.imageLongitude') }}:</label>
+                  <b-form-input id="image_longitude" v-model="attachment.image_longitude" type="number" step="0.000001"></b-form-input>
+                </div>
+              </div>
+
+              <!-- MAP TOGGLE BUTTON -->
+              <div class="d-flex justify-content-start my-2">
+                <div class="align-self-center">
+                  <vs-switch id="map-switch" v-model="showCollapseMap">
+                    <span slot="on">ON</span>
+                    <span slot="off">OFF</span>
+                  </vs-switch>
+                </div>
+                <div class="align-self-center">
+                  <label class="m-0" :for="`map-switch`"><i class="far fa-map"></i> {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}</label>
+                </div>
+              </div>
+
+              <!-- MAP -->
+              <transition name="fade"
+                          enter-active-class="animated fadeIn faster"
+                          leave-active-class="animated fadeOut faster">
+              <div class="row" v-if="showCollapseMap">
+                <div class="col">
+                  <b-collapse v-model="showCollapseMap" id="collapseMap">
+                    <map-component mode="single"
+                                   module="attachment"
+                                   v-bind:locations="[]"
+                                   v-bind:location="{ lat: attachment.image_latitude ? (attachment.image_latitude).toString() : null, lng: attachment.image_longitude ? (attachment.image_longitude).toString() : null }"
+                                   v-on:update-coordinates="updateLocation"></map-component>
+                  </b-collapse>
+                </div>
+              </div>
+
+              </transition>
             </div>
           </transition>
         </fieldset>
@@ -198,11 +245,192 @@
           <transition name="fade">
             <div v-show="block.description">
 
+              <!-- OBJECT and PEOPLE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_object`">{{ $t('attachment.imageObject') }}:</label>
+                  <b-form-input id="image_object" v-model="attachment.image_object" type="text"></b-form-input>
+                </div>
+
+                <div class="col-md-6">
+                <label :for="`image_people`">{{ $t('attachment.imagePeople') }}:</label>
+                  <b-form-input id="image_people" v-model="attachment.image_people" type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- DESCRIPTION -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_description`">{{ $t('attachment.imageDescription') }}:</label>
+                  <b-form-textarea id="image_description" v-model="attachment.image_description" type="text" size="sm"
+                                   :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`image_description_en`">{{ $t('attachment.imageDescriptionEn') }}:</label>
+                  <b-form-textarea id="image_description_en" v-model="attachment.image_description_en" type="text" size="sm"
+                                   :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+                </div>
+              </div>
+
+              <!-- KEYWORDS -->
+              <div class="d-flex justify-content-start flex-wrap">
+                <div class="mr-3 flex-grow-1">
+                  <label :for="`keyword`">{{ $t('attachment.keywords') }}:</label>
+                  <vue-multiselect v-model="relatedData.keyword"
+                                   id="keyword"
+                                   label="keyword"
+                                   track-by="id"
+                                   :multiple="true"
+                                   :placeholder="$t('add.inputs.keywords')"
+                                   :loading="autocomplete.loaders.keyword"
+                                   :options="autocomplete.keyword"
+                                   @search-change="autocompleteKeywordSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :close-on-select="false"
+                                   :show-labels="true">
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="mr-3 my-1 align-self-end">
+                  <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+                          :disabled="!isNotEmpty(relatedData.keyword)"
+                          @click="relatedData.keyword = null">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                </div>
+
+                <div class="mr-2 my-1 align-self-end">
+                  <router-link class="btn btn-outline-primary"
+                               :title="$t('add.new')"
+                               :to="{ name: 'Keyword add', query: { attachment: JSON.stringify(attachment) } }"
+                               target="_blank">
+                    <i class="fas fa-plus"></i>
+                  </router-link>
+                </div>
+              </div>
+
+              <!-- LICENCE and COPYRIGHT -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`licence`">{{ $t('attachment.licence') }}:</label>
+                  <vue-multiselect v-model="attachment.licence"
+                                   id="licence"
+                                   :options="autocomplete.licence"
+                                   track-by="id"
+                                   :label="licenceLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[licenceLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`copyright_agent`">{{ $t('attachment.copyrightAgent') }}:</label>
+                  <vue-multiselect id="copyright_agent"
+                                   v-model="attachment.copyright_agent"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.copyright_agent"
+                                   :options="autocomplete.copyright_agent"
+                                   @search-change="autocompleteCopyrightAgentSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+              </div>
+
+              <!-- IMAGE_TYPE and DEVICE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_type`">{{ $t('attachment.imageType') }}:</label>
+                  <vue-multiselect v-model="attachment.image_type"
+                                   id="image_type"
+                                   :options="autocomplete.image_type"
+                                   track-by="id"
+                                   :label="commonLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[commonLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`device_txt`">{{ $t('attachment.deviceTxt') }}:</label>
+                  <b-form-input id="device_txt" v-model="attachment.device_txt" type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- AGENT, DATE DIGITISED and STARS -->
+              <div class="row">
+                <div class="col-md-4">
+                  <label :for="`agent_digitised`">{{ $t('attachment.agentDigitised') }}:</label>
+                  <vue-multiselect id="agent_digitised"
+                                   v-model="attachment.agent_digitised"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.agent_digitised"
+                                   :options="autocomplete.agent_digitised"
+                                   @search-change="autocompleteAgentDigitisedSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-4">
+                  <label :for="`date_digitised`">{{ $t('attachment.dateDigitised') }}:</label>
+                  <datepicker id="date_digitised"
+                              v-model="attachment.date_digitised"
+                              lang="en"
+                              :first-day-of-week="1"
+                              format="DD MMM YYYY"
+                              :not-after="new Date()"
+                              input-class="form-control"></datepicker>
+                </div>
+
+                <div class="col-md-4">
+                  <label :for="`stars`">{{ $t('attachment.stars') }}:</label>
+                  <b-form-select v-model="attachment.stars">
+                    <option :value="5">{{ $t('main.rating5') }}</option>
+                    <option :value="4">{{ $t('main.rating4') }}</option>
+                    <option :value="3">{{ $t('main.rating3') }}</option>
+                    <option :value="2">{{ $t('main.rating2') }}</option>
+                    <option :value="1">{{ $t('main.rating1') }}</option>
+                    <option :value="0">{{ $t('main.rating0') }}</option>
+                    <option :value="-1">{{ $t('main.rating-1') }}</option>
+                    <option :value="-2">{{ $t('main.rating-2') }}</option>
+                    <option :value="-3">{{ $t('main.rating-3') }}</option>
+                    <option :value="-4">{{ $t('main.rating-4') }}</option>
+                    <option :value="-5">{{ $t('main.rating-5') }}</option>
+                  </b-form-select>
+                </div>
+              </div>
 
             </div>
           </transition>
         </fieldset>
-
 
       </div>
     </template>
@@ -255,6 +483,240 @@
                   <b-form-input id="author_free" v-model="attachment.author_free"
                                 :state="isNotEmpty(attachment.author_free) || isNotEmpty(attachment.author)"
                                 type="text"></b-form-input>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+        <!-- GENERAL INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-info">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+            {{ $t('attachment.info') }}
+            <i class="fas fa-project-diagram"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.info">
+
+              <!-- SPECIMEN and SCALEBAR -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`specimen`">{{ $t('attachment.specimen') }}:</label>
+                  <vue-multiselect v-model="attachment.specimen"
+                                   id="specimen"
+                                   :custom-label="customSpecimenLabel"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.specimen"
+                                   :options="autocomplete.specimen"
+                                   @search-change="autocompleteSpecimenSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ customSpecimenLabel(option) }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+
+                <div class="col-md-6">
+                  <label :for="`image_scalebar`">{{ $t('attachment.imageScalebar') }}:</label>
+                  <b-form-input id="image_scalebar" v-model="attachment.image_scalebar" type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- DATE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`date_created`">{{ $t('attachment.dateCreated') }}:</label>
+                  <datepicker id="date_created"
+                              v-model="attachment.date_created"
+                              lang="en"
+                              :first-day-of-week="1"
+                              format="DD MMM YYYY"
+                              input-class="form-control"></datepicker>
+                </div>
+
+
+                <div class="col-md-6">
+                  <label :for="`date_created_free`">{{ $t('attachment.dateCreatedFree') }}:</label>
+                  <b-form-input id="date_created_free" v-model="attachment.date_created_free" type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- DESCRIPTION -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_description`">{{ $t('attachment.imageDescription') }}:</label>
+                  <b-form-textarea id="image_description" v-model="attachment.image_description" type="text" size="sm"
+                                   :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+                </div>
+
+
+                <div class="col-md-6">
+                  <label :for="`image_description_en`">{{ $t('attachment.imageDescriptionEn') }}:</label>
+                  <b-form-textarea id="image_description_en" v-model="attachment.image_description_en" type="text" size="sm"
+                                   :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+                </div>
+              </div>
+
+              <!-- KEYWORDS -->
+              <div class="d-flex justify-content-start flex-wrap">
+                <div class="mr-3 flex-grow-1">
+                  <label :for="`keyword`">{{ $t('attachment.keywords') }}:</label>
+                  <vue-multiselect v-model="relatedData.keyword"
+                                   id="keyword"
+                                   label="keyword"
+                                   track-by="id"
+                                   :multiple="true"
+                                   :placeholder="$t('add.inputs.keywords')"
+                                   :loading="autocomplete.loaders.keyword"
+                                   :options="autocomplete.keyword"
+                                   @search-change="autocompleteKeywordSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :close-on-select="false"
+                                   :show-labels="true">
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="mr-3 my-1 align-self-end">
+                  <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+                          :disabled="!isNotEmpty(relatedData.keyword)"
+                          @click="relatedData.keyword = null">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                </div>
+
+                <div class="mr-2 my-1 align-self-end">
+                  <router-link class="btn btn-outline-primary"
+                               :title="$t('add.new')"
+                               :to="{ name: 'Keyword add', query: { attachment: JSON.stringify(attachment) } }"
+                               target="_blank">
+                    <i class="fas fa-plus"></i>
+                  </router-link>
+                </div>
+              </div>
+
+              <!-- LICENCE and COPYRIGHT -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`licence`">{{ $t('attachment.licence') }}:</label>
+                  <vue-multiselect v-model="attachment.licence"
+                                   id="licence"
+                                   :options="autocomplete.licence"
+                                   track-by="id"
+                                   :label="licenceLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[licenceLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`copyright_agent`">{{ $t('attachment.copyrightAgent') }}:</label>
+                  <vue-multiselect id="copyright_agent"
+                                   v-model="attachment.copyright_agent"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.copyright_agent"
+                                   :options="autocomplete.copyright_agent"
+                                   @search-change="autocompleteCopyrightAgentSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+              </div>
+
+              <!-- IMAGE TYPE and DEVICE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_type`">{{ $t('attachment.imageType') }}:</label>
+                  <vue-multiselect v-model="attachment.image_type"
+                                   id="image_type"
+                                   :options="autocomplete.image_type"
+                                   track-by="id"
+                                   :label="commonLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[commonLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`device_txt`">{{ $t('attachment.deviceTxt') }}:</label>
+                  <b-form-input id="device_txt" v-model="attachment.device_txt" type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- AGENT, DATE DIGITISED and STARS -->
+              <div class="row">
+                <div class="col-md-4">
+                  <label :for="`agent_digitised`">{{ $t('attachment.agentDigitised') }}:</label>
+                  <vue-multiselect id="agent_digitised"
+                                   v-model="attachment.agent_digitised"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.agent_digitised"
+                                   :options="autocomplete.agent_digitised"
+                                   @search-change="autocompleteAgentDigitisedSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-4">
+                  <label :for="`date_digitised`">{{ $t('attachment.dateDigitised') }}:</label>
+                  <datepicker id="date_digitised"
+                              v-model="attachment.date_digitised"
+                              lang="en"
+                              :first-day-of-week="1"
+                              format="DD MMM YYYY"
+                              :not-after="new Date()"
+                              input-class="form-control"></datepicker>
+                </div>
+
+                <div class="col-md-4">
+                  <label :for="`stars`">{{ $t('attachment.stars') }}:</label>
+                  <b-form-select v-model="attachment.stars">
+                    <option :value="5">{{ $t('main.rating5') }}</option>
+                    <option :value="4">{{ $t('main.rating4') }}</option>
+                    <option :value="3">{{ $t('main.rating3') }}</option>
+                    <option :value="2">{{ $t('main.rating2') }}</option>
+                    <option :value="1">{{ $t('main.rating1') }}</option>
+                    <option :value="0">{{ $t('main.rating0') }}</option>
+                    <option :value="-1">{{ $t('main.rating-1') }}</option>
+                    <option :value="-2">{{ $t('main.rating-2') }}</option>
+                    <option :value="-3">{{ $t('main.rating-3') }}</option>
+                    <option :value="-4">{{ $t('main.rating-4') }}</option>
+                    <option :value="-5">{{ $t('main.rating-5') }}</option>
+                  </b-form-select>
                 </div>
               </div>
 
@@ -339,6 +801,274 @@
           </transition>
         </fieldset>
 
+        <!-- GENERAL INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-info">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+            {{ $t('attachment.info') }}
+            <i class="fas fa-project-diagram"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.info">
+
+              <!-- DATE_CREATED, DATE_CREATED_FREE and TYPE -->
+              <div class="row">
+                <div class="col-md-4">
+                  <label :for="`date_created`">{{ $t('attachment.dateCreated') }}:</label>
+                  <datepicker id="date_created"
+                              v-model="attachment.date_created"
+                              lang="en"
+                              :first-day-of-week="1"
+                              format="DD MMM YYYY"
+                              input-class="form-control"></datepicker>
+                </div>
+
+
+                <div class="col-md-4">
+                  <label :for="`date_created_free`">{{ $t('attachment.dateCreatedFree') }}:</label>
+                  <b-form-input id="date_created_free" v-model="attachment.date_created_free" type="text"></b-form-input>
+                </div>
+
+                <div class="col-md-4">
+                  <label :for="`type`">{{ $t('attachment.type') }}:</label>
+                  <vue-multiselect v-model="attachment.type"
+                                   id="type"
+                                   :options="autocomplete.type"
+                                   track-by="id"
+                                   :label="commonLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[commonLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+              </div>
+
+              <!-- REMARKS -->
+              <div class="row">
+                <div class="col-md-12">
+                  <label :for="`remarks`">{{ $t('attachment.remarks') }}:</label>
+                  <b-form-textarea id="remarks" v-model="attachment.remarks" type="text"
+                                   :no-resize="true" :rows="3" :max-rows="3"></b-form-textarea>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+        <!-- MAP -->
+        <fieldset class="border-top px-2 mb-2" id="block-map">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.map }" @click="block.map = !block.map">
+            {{ $t('attachment.map') }}
+            <i class="fas fa-globe-americas"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-if="block.map">
+
+              <!-- IMAGE LATITUDE and IMAGE LONGITUDE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_latitude`">{{ $t('attachment.imageLatitude') }}:</label>
+                  <b-form-input id="image_latitude" v-model="attachment.image_latitude" type="number" step="0.000001"></b-form-input>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`image_longitude`">{{ $t('attachment.imageLongitude') }}:</label>
+                  <b-form-input id="image_longitude" v-model="attachment.image_longitude" type="number" step="0.000001"></b-form-input>
+                </div>
+              </div>
+
+              <!-- MAP TOGGLE BUTTON -->
+              <div class="d-flex justify-content-start my-2">
+                <div class="align-self-center">
+                  <vs-switch id="map-switch" v-model="showCollapseMap">
+                    <span slot="on">ON</span>
+                    <span slot="off">OFF</span>
+                  </vs-switch>
+                </div>
+                <div class="align-self-center">
+                  <label class="m-0" :for="`map-switch`"><i class="far fa-map"></i> {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}</label>
+                </div>
+              </div>
+
+              <!-- MAP -->
+              <transition name="fade"
+                          enter-active-class="animated fadeIn faster"
+                          leave-active-class="animated fadeOut faster">
+                <div class="row" v-if="showCollapseMap">
+                  <div class="col">
+                    <b-collapse v-model="showCollapseMap" id="collapseMap">
+                      <map-component mode="single"
+                                     module="attachment"
+                                     v-bind:locations="[]"
+                                     v-bind:location="{ lat: attachment.image_latitude ? (attachment.image_latitude).toString() : null, lng: attachment.image_longitude ? (attachment.image_longitude).toString() : null }"
+                                     v-on:update-coordinates="updateLocation"></map-component>
+                    </b-collapse>
+                  </div>
+                </div>
+
+              </transition>
+            </div>
+          </transition>
+        </fieldset>
+
+        <!-- Todo: Related data -->
+        <!-- FILE INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-description">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
+            {{ $t('attachment.description') }}
+            <i class="far fa-file"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.description">
+
+              <!-- KEYWORDS -->
+              <div class="d-flex justify-content-start flex-wrap">
+                <div class="mr-3 flex-grow-1">
+                  <label :for="`keyword`">{{ $t('attachment.keywords') }}:</label>
+                  <vue-multiselect v-model="relatedData.keyword"
+                                   id="keyword"
+                                   label="keyword"
+                                   track-by="id"
+                                   :multiple="true"
+                                   :placeholder="$t('add.inputs.keywords')"
+                                   :loading="autocomplete.loaders.keyword"
+                                   :options="autocomplete.keyword"
+                                   @search-change="autocompleteKeywordSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :close-on-select="false"
+                                   :show-labels="true">
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="mr-3 my-1 align-self-end">
+                  <button class="btn btn-outline-danger" :title="$t('add.inputs.keywordsRemove')"
+                          :disabled="!isNotEmpty(relatedData.keyword)"
+                          @click="relatedData.keyword = null">
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                </div>
+
+                <div class="mr-2 my-1 align-self-end">
+                  <router-link class="btn btn-outline-primary"
+                               :title="$t('add.new')"
+                               :to="{ name: 'Keyword add', query: { attachment: JSON.stringify(attachment) } }"
+                               target="_blank">
+                    <i class="fas fa-plus"></i>
+                  </router-link>
+                </div>
+              </div>
+
+              <!-- LICENCE and COPYRIGHT -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`licence`">{{ $t('attachment.licence') }}:</label>
+                  <vue-multiselect v-model="attachment.licence"
+                                   id="licence"
+                                   :options="autocomplete.licence"
+                                   track-by="id"
+                                   :label="licenceLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[licenceLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`copyright_agent`">{{ $t('attachment.copyrightAgent') }}:</label>
+                  <vue-multiselect id="copyright_agent"
+                                   v-model="attachment.copyright_agent"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.copyright_agent"
+                                   :options="autocomplete.copyright_agent"
+                                   @search-change="autocompleteCopyrightAgentSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+              </div>
+
+              <!-- IMAGE_TYPE and DEVICE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`image_type`">{{ $t('attachment.imageType') }}:</label>
+                  <vue-multiselect v-model="attachment.image_type"
+                                   id="image_type"
+                                   :options="autocomplete.image_type"
+                                   track-by="id"
+                                   :label="commonLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[commonLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`device_txt`">{{ $t('attachment.deviceTxt') }}:</label>
+                  <b-form-input id="device_txt" v-model="attachment.device_txt" type="text"></b-form-input>
+                </div>
+              </div>
+
+              <!-- AGENT and DATE DIGITISED -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`agent_digitised`">{{ $t('attachment.agentDigitised') }}:</label>
+                  <vue-multiselect id="agent_digitised"
+                                   v-model="attachment.agent_digitised"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.agent_digitised"
+                                   :options="autocomplete.agent_digitised"
+                                   @search-change="autocompleteAgentDigitisedSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`date_digitised`">{{ $t('attachment.dateDigitised') }}:</label>
+                  <datepicker id="date_digitised"
+                              v-model="attachment.date_digitised"
+                              lang="en"
+                              :first-day-of-week="1"
+                              format="DD MMM YYYY"
+                              :not-after="new Date()"
+                              input-class="form-control"></datepicker>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
       </div>
     </template>
 
@@ -389,21 +1119,119 @@
           </transition>
         </fieldset>
 
+        <!-- GENERAL INFO -->
+        <fieldset class="border-top px-2 mb-2" id="block-info">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+            {{ $t('attachment.info') }}
+            <i class="fas fa-project-diagram"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.info">
+
+              <!-- LICENCE and COPYRIGHT -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`licence`">{{ $t('attachment.licence') }}:</label>
+                  <vue-multiselect v-model="attachment.licence"
+                                   id="licence"
+                                   :options="autocomplete.licence"
+                                   track-by="id"
+                                   :label="licenceLabel"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option[licenceLabel] }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-6">
+                  <label :for="`copyright_agent`">{{ $t('attachment.copyrightAgent') }}:</label>
+                  <vue-multiselect id="copyright_agent"
+                                   v-model="attachment.copyright_agent"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.copyright_agent"
+                                   :options="autocomplete.copyright_agent"
+                                   @search-change="autocompleteCopyrightAgentSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+              </div>
+
+              <!-- AGENT, DATE DIGITISED and DATE DIGITISED FREE -->
+              <div class="row">
+                <div class="col-md-4">
+                  <label :for="`agent_digitised`">{{ $t('attachment.agentDigitised') }}:</label>
+                  <vue-multiselect id="agent_digitised"
+                                   v-model="attachment.agent_digitised"
+                                   label="agent"
+                                   track-by="id"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders.agent_digitised"
+                                   :options="autocomplete.agent_digitised"
+                                   @search-change="autocompleteAgentDigitisedSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :clear-on-select="false"
+                                   :show-labels="false">
+                    <template slot="singleLabel" slot-scope="{ option }">
+                      <strong>{{ option.agent }}</strong>
+                    </template>
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+                <div class="col-md-4">
+                  <label :for="`date_digitised`">{{ $t('attachment.dateDigitised') }}:</label>
+                  <datepicker id="date_digitised"
+                              v-model="attachment.date_digitised"
+                              lang="en"
+                              :first-day-of-week="1"
+                              format="DD MMM YYYY"
+                              :not-after="new Date()"
+                              input-class="form-control"></datepicker>
+                </div>
+
+                <div class="col-md-4">
+                  <label :for="`date_digitised_free`">{{ $t('attachment.dateDigitisedFree') }}:</label>
+                  <b-form-input id="image_people" v-model="attachment.date_digitised_free" type="text"></b-form-input>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
       </div>
     </template>
 
 
     <template v-slot:checkbox>
-      <div class="d-flex flex-wrap">
+      <div class="d-flex flex-wrap mt-3">
         <vs-checkbox id="is_private" v-model="attachment.is_private" icon="fa-eye-slash" icon-pack="fas">
-<!--          {{ attachment.is_private ? $t('attachment.is_private_text') : $t('attachment.is_public_text') }}-->
           {{ $t('attachment.is_private_text') }}
         </vs-checkbox>
 
         <vs-checkbox id="is_locked" v-model="attachment.is_locked" icon="fa-lock" icon-pack="fas">
-<!--          {{ attachment.is_locked ? $t('attachment.is_locked_text') : $t('attachment.is_unlocked_text') }}-->
           {{ $t('attachment.is_locked_text') }}
         </vs-checkbox>
+      </div>
+    </template>
+
+    <template v-slot:local-storage>
+      <div class="d-flex mt-3">
+        <button class="btn btn-sm btn-warning" @click="clearLocalStorage">{{ $t('add.buttons.clearLocalStorage') }}</button>
       </div>
     </template>
   </attachment-wrapper>
@@ -418,9 +1246,16 @@
   import autocompleteMixin from "../../mixins/autocompleteMixin";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
   import {mapState} from "vuex";
-  import {fetchAttachment} from "../../assets/js/api/apiCalls";
+  import {
+    fetchAttachment,
+    fetchAttachmentKeyword, fetchListAttachmentType,
+    fetchListImageType,
+    fetchListLicences
+  } from "../../assets/js/api/apiCalls";
   import AttachmentWrapper from "./AttachmentWrapper";
   import MultimediaComponent from "../partial/MultimediaComponent";
+  import MapComponent from "../partial/MapComponent";
+  import {toastInfo} from "../../assets/js/iziToast/iziToast";
 
   export default {
     name: "AttachmentNew",
@@ -430,7 +1265,8 @@
       AttachmentWrapper,
       Editor,
       Spinner,
-      Datepicker
+      Datepicker,
+      MapComponent
     },
 
     mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -537,18 +1373,39 @@
       '$route.path': {
         handler: function (newVal, oldVal) {
           if (!this.$route.meta.isEdit) {
+            console.log(oldVal)
+            console.log(newVal)
             this.setInitialData();
             this.reloadData();
+            if (oldVal) this.clearFiles = true
+            // this.clearFiles = true
 
             let attachmentHistory;
-            if (this.isPhotoArchive) attachmentHistory =  this.$localStorage.get('photoArchive', 'fallbackValue');
-            else if (this.isSpecimenImage) attachmentHistory =  this.$localStorage.get('specimenImage', 'fallbackValue');
-            else if (this.isOtherFile) attachmentHistory =  this.$localStorage.get('otherFile', 'fallbackValue');
+            let keywords;
+            let showMap;
+            if (this.isPhotoArchive) {
+              attachmentHistory =  this.$localStorage.get('photoArchive', 'fallbackValue');
+              keywords = this.$localStorage.get('photoArchiveKeywords', 'fallbackValue');
+              showMap = this.$localStorage.get('mapComponent', 'fallbackValue');
+            }
+            else if (this.isSpecimenImage) {
+              attachmentHistory =  this.$localStorage.get('specimenImage', 'fallbackValue');
+              keywords = this.$localStorage.get('specimenImageKeywords', 'fallbackValue')
+            }
+            else if (this.isOtherFile) {
+              attachmentHistory =  this.$localStorage.get('otherFiles', 'fallbackValue');
+              keywords = this.$localStorage.get('otherFilesKeywords', 'fallbackValue');
+              showMap = this.$localStorage.get('mapComponent', 'fallbackValue');
+            }
             else if (this.isDigitisedReference) attachmentHistory =  this.$localStorage.get('digitisedReference', 'fallbackValue');
 
-            if (attachmentHistory && attachmentHistory !== 'fallbackValue' && Object.keys(attachmentHistory).length !== 0 && attachmentHistory.constructor === Object) {
+            if (this.isNotEmpty(attachmentHistory) && attachmentHistory !== 'fallbackValue' && attachmentHistory.hasOwnProperty('specimen_image_attachment')) {
+              // Todo: If specimen_image_attachment is wrong then delete storage
               this.attachment = attachmentHistory
             }
+            if (this.isNotEmpty(keywords) && keywords !== 'fallbackValue' && keywords.length > 0) this.relatedData.keyword = keywords;
+            if (this.isNotEmpty(showMap) && showMap !== 'fallbackValue') this.showCollapseMap = showMap;
+
 
             if (this.isPhotoArchive) {
               if (this.$route.params.imageset) {
@@ -602,11 +1459,25 @@
               imageset: false,
               reference: false,
               locality: false,
+              licence: false,
+              copyright_agent: false,
+              image_type: false,
+              agent_digitised: false,
+              keyword: false,
+              specimen: false,
+              type: false,
             },
             agent: [],
             imageset: [],
             reference: [],
             locality: [],
+            licence: [],
+            copyright_agent: [],
+            image_type: [],
+            agent_digitised: [],
+            keyword: [],
+            specimen: [],
+            type: [],
           },
           requiredFields: {
             photo_archive: ['imageset'],
@@ -620,9 +1491,11 @@
             other_file: ['author', 'author_free'],
             digitised_reference: []
           },
-          attachment: {},
+          attachment: this.setDefaultAttachmentFields(),
           searchParameters: this.setDefaultSearchParameters(),
           block: {requiredFields: true, info: true, map: true, description: true},
+          showCollapseMap: null,
+          clearFiles: false,
         }
       },
 
@@ -632,8 +1505,7 @@
       },
 
       loadFullInfo() {
-        // fetching list autocompletes
-        // fetchListSpecimenKind().then(response => this.autocomplete.specimen_kind = this.handleResponse(response));
+        this.loadAutocompleteFields();
 
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
@@ -659,8 +1531,7 @@
             }
           });
 
-          // Fetching autocomplete fields for related data
-          // fetchListIdentificationType().then(response => this.autocomplete.list_identification_type = this.handleResponse(response));
+          this.loadAutocompleteFields(false, true);
 
           // Load Related Data which is in tabs
           this.relatedTabs.forEach(entity => {
@@ -675,53 +1546,89 @@
         }
       },
 
+      loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {
+        if (regularAutocompleteFields) {
+          fetchListLicences().then(response => this.autocomplete.licence = this.handleResponse(response));
+          fetchListImageType().then(response => this.autocomplete.image_type = this.handleResponse(response));
+          fetchListAttachmentType().then(response => this.autocomplete.type = this.handleResponse(response));
+        }
+
+        if (relatedDataAutocompleteFields) {
+          fetchAttachmentKeyword(this.$route.params.id).then(response => {
+            let referenceKeyword = this.handleResponse(response);
+            this.relatedData.keyword = referenceKeyword.map(entity => {
+              return {
+                keyword: entity.keyword__keyword,
+                id: entity.keyword
+              }
+            })
+          });
+        }
+      },
+
       setDefaultRelatedData() {
         return {
-          specimen_identification: [],
-          new: {
-            specimen_identification: [],
-          },
-          copyFields: {
-            specimen_identification: ['taxon', 'name', 'agent', 'reference', 'date_identified', 'type', 'current'],
-            },
-          insert: {
-            specimen_identification: {},
-            },
+          keyword: [],
           searchParameters: {
-            specimen_identification: {
+            keyword: {
               page: 1,
               paginateBy: 10,
-              orderBy: 'taxon__taxon,current'
+              orderBy: 'id'
             },
           },
           count: {
-            specimen_identification: 0,
+            keyword: 0,
           }
         }
       },
 
-      formatDataForUpload(objectToUpload, saveRelatedData = false) {
+      formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
 
         if (!this.$route.meta.isEdit) {
-          if (this.isPhotoArchive) this.$localStorage.set('photoArchive', objectToUpload);
-          else if (this.isSpecimenImage) this.$localStorage.set('specimenImage', objectToUpload);
-          else if (this.isOtherFile) this.$localStorage.set('otherFile', objectToUpload);
+          if (this.isPhotoArchive) {
+            this.$localStorage.set('photoArchive', objectToUpload);
+            this.$localStorage.set('photoArchiveKeywords', this.relatedData.keyword)
+          }
+          else if (this.isSpecimenImage) {
+            this.$localStorage.set('specimenImage', objectToUpload);
+            this.$localStorage.set('specimenImageKeywords', this.relatedData.keyword)
+          }
+          else if (this.isOtherFile) {
+            this.$localStorage.set('otherFiles', objectToUpload);
+            this.$localStorage.set('otherFilesKeywords', this.relatedData.keyword)
+          }
           else if (this.isDigitisedReference) this.$localStorage.set('digitisedReference', objectToUpload);
           // this.$localStorage.set('attachment', objectToUpload);
         }
 
-        // if (this.isNotEmpty(objectToUpload.date_collected)) uploadableObject.date_collected = this.formatDateForUpload(objectToUpload.date_collected);
-
         // Autocomplete fields
+        if (this.isNotEmpty(uploadableObject.agent_digitised)) uploadableObject.agent_digitised = uploadableObject.agent_digitised.id;
+        if (this.isNotEmpty(uploadableObject.author)) uploadableObject.author = uploadableObject.author.id;
+        if (this.isNotEmpty(uploadableObject.copyright_agent)) uploadableObject.copyright_agent = uploadableObject.copyright_agent.id;
+        if (this.isNotEmpty(uploadableObject.date_created)) uploadableObject.date_created = this.formatDateForUpload(uploadableObject.date_created);
+        if (this.isNotEmpty(uploadableObject.date_digitised)) uploadableObject.date_digitised = this.formatDateForUpload(uploadableObject.date_digitised);
+        if (this.isNotEmpty(uploadableObject.image_type)) uploadableObject.image_type = uploadableObject.image_type.id;
+        if (this.isNotEmpty(uploadableObject.imageset)) uploadableObject.imageset = uploadableObject.imageset.id;
+        if (this.isNotEmpty(uploadableObject.licence)) uploadableObject.licence = uploadableObject.licence.id;
+        if (this.isNotEmpty(uploadableObject.locality)) uploadableObject.locality = uploadableObject.locality.id;
+        if (this.isNotEmpty(uploadableObject.specimen)) uploadableObject.specimen = uploadableObject.specimen.id;
+        if (this.isNotEmpty(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
+        if (this.isNotEmpty(uploadableObject.type)) uploadableObject.type = uploadableObject.type.id;
+
         if (this.isNotEmpty(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id;
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
 
         // Adding related data
-        if (saveRelatedData) {
-          uploadableObject.related_data = {}
-        }
+        uploadableObject.related_data = {};
+
+        if (this.isNotEmpty(this.relatedData.keyword)) uploadableObject.related_data.keyword = this.relatedData.keyword.map(keyword => {
+          let keywordObject = {};
+          keywordObject['id'] = keyword.id;
+          return keywordObject
+        });
+        else uploadableObject.related_data.keyword = null;
 
         console.log('This object is sent in string format:');
         console.log(uploadableObject);
@@ -776,8 +1683,147 @@
         return JSON.stringify(uploadableObject)
       },
 
+
+      /* MultimediaComponent Events START */
       addFiles(files) {
         this.files = files
+      },
+
+      clearUploadedFiles(state) {
+        this.clearFiles = false;
+        this.files = [];
+      },
+
+      updateFields(metadata) {
+        console.log('FILE METADATA: ');
+        console.log(metadata);
+        if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
+          // DATE
+          if (metadata.DateTimeOriginal) {
+            let formattedDate = this.$moment(metadata.DateTimeOriginal, 'YYYY:MM:DD HH:mm:ss');
+            this.attachment.date_created = formattedDate.toDate()
+          } else if (metadata.DateTime) {
+            let formattedDate = this.$moment(metadata.DateTime, 'YYYY:MM:DD HH:mm:ss');
+            this.attachment.date_created = formattedDate.toDate()
+          } else this.attachment.date_created = new Date();
+
+          // DEVICE_TXT
+          if (metadata.Model) this.attachment.device_txt = metadata.Model;
+          else if (metadata.Make) this.attachment.device_txt = metadata.Make;
+
+          // IMAGE DIMENSIONS
+          if (metadata.PixelXDimension) this.attachment.image_width = metadata.PixelXDimension;
+          else this.attachment.image_width = null;
+          if (metadata.PixelYDimension) this.attachment.image_height = metadata.PixelYDimension;
+          else this.attachment.image_height = null;
+
+          if (this.isSpecimenImage) {
+            // DESCRIPTION
+            if (metadata.ImageDescription && metadata.ImageDescription.trim().length > 0) {
+              this.attachment.image_description_en = metadata.ImageDescription.trim()
+            }
+          } else {
+            // DESCRIPTION
+            if (metadata.ImageDescription && metadata.ImageDescription.trim().length > 0) {
+              this.attachment.description_en = metadata.ImageDescription.trim()
+            }
+          }
+
+          if (this.isPhotoArchive) {
+            // GPS DATA
+            if (metadata.GPSLatitude) {
+              const degrees = metadata.GPSLatitude[0].numerator / metadata.GPSLatitude[0].denominator;
+              const minutes = metadata.GPSLatitude[1].numerator / metadata.GPSLatitude[1].denominator;
+              const seconds = metadata.GPSLatitude[2].numerator / metadata.GPSLatitude[2].denominator;
+              const latitude = this.convertExifGPSToDecimal(degrees, minutes, seconds, metadata.GPSLatitudeRef);
+
+              this.attachment.image_latitude = latitude.toFixed(6)
+            } else this.attachment.image_latitude = null;
+            if (metadata.GPSLongitude) {
+              const degrees = metadata.GPSLongitude[0].numerator / metadata.GPSLongitude[0].denominator;
+              const minutes = metadata.GPSLongitude[1].numerator / metadata.GPSLongitude[1].denominator;
+              const seconds = metadata.GPSLongitude[2].numerator / metadata.GPSLongitude[2].denominator;
+              const longitude = this.convertExifGPSToDecimal(degrees, minutes, seconds, metadata.GPSLatitudeRef);
+
+              this.attachment.image_longitude = longitude.toFixed(6)
+            } else this.attachment.image_longitude = null
+          }
+        }
+      },
+      /* MultimediaComponent Events END */
+
+
+      updateLocation(location) {
+        this.$set(this.attachment, 'image_latitude', location.lat.toFixed(6))
+        this.$set(this.attachment, 'image_longitude', location.lng.toFixed(6))
+      },
+
+      convertExifGPSToDecimal(degrees, minutes, seconds, direction) {
+        // Formula from https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Coordinate_format_conversion
+        let decimalDegrees = degrees + minutes/60 + seconds/3600;
+        if (direction === "S" || direction === "W") {
+          decimalDegrees = decimalDegrees * -1;
+        }
+        return decimalDegrees;
+      },
+
+      // This method is run if author field changes
+      resetImageset() {
+        this.attachment.imageset = null;
+        this.autocomplete.imagesets = [];
+      },
+
+      clearLocalStorage() {
+        if (this.isPhotoArchive) {
+          this.$localStorage.remove('photoArchive');
+          this.$localStorage.remove('photoArchiveKeywords');
+        } else if (this.isSpecimenImage) {
+          this.$localStorage.remove('specimenImage');
+          this.$localStorage.remove('specimenImageKeywords');
+        } else if (this.isOtherFile) {
+          this.$localStorage.remove('otherFiles');
+          this.$localStorage.remove('otherFilesKeywords');
+        } else if (this.isDigitisedReference) this.$localStorage.remove('digitisedReference');
+
+        toastInfo({text: this.$t('messages.defaultsRemoved')})
+      },
+
+      customSpecimenLabel(option) {
+        if (option.coll__number !== null) {
+          return `${option.coll__number.split(' ')[0]} ${option.specimen_id} (${option.id})`
+        } else {
+          return `${option.specimen_id} (${option.id})`
+        }
+      },
+
+      setDefaultAttachmentFields() {
+        let defaultFields = {
+          date_created: new Date(),
+          image_type: {
+            id: 5,
+            value: 'digipilt',
+            value_en: 'digital image'
+          },
+          type: {
+            id: 1,
+            value: 'foto',
+            value_en: 'image'
+          },
+          stars: 0,
+        };
+        if (this.isPhotoArchive) defaultFields.specimen_image_attachment = 2;
+        else if (this.isSpecimenImage) defaultFields.specimen_image_attachment = 1;
+        else if (this.isOtherFile) defaultFields.specimen_image_attachment = 3;
+        else if (this.isDigitisedReference) {
+          defaultFields.specimen_image_attachment = 4;
+          defaultFields.type = {
+            id: 4,
+            value: 'publikatsioon',
+            value_en: 'publication'
+          };
+          defaultFields.stars = null
+        }
+        return defaultFields;
       },
 
       setDefaultSearchParameters() {

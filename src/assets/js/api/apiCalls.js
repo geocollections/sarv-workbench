@@ -110,6 +110,18 @@ export function fetchAttachment(id, author) {
   else return fetch(`attachment/?id=${id}&format=json`)
 }
 
+export function fetchListImageType() {
+  return fetch(`list_image_type/?format=json`)
+}
+
+export function fetchAttachmentKeyword(id) {
+  return fetch(`attachment_keyword/?attachment=${id}&format=json`)
+}
+
+export function fetchListAttachmentType() {
+  return fetch(`list_attachment_type/?format=json`)
+}
+
 /*************************
  ***  ATTACHMENTS END  ***
  *************************/

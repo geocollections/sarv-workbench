@@ -93,6 +93,9 @@ const autocompleteMixin = {
     autocompleteCopyrightAgentSearch(value) {
       this.$_autocompleteMixin_search(value, 'copyright_agent', 'copyright_agent')
     },
+    autocompleteAgentDigitisedSearch(value) {
+      this.$_autocompleteMixin_search(value, 'agent_digitised', 'agent_digitised')
+    },
     autocompleteProjectAgentSearch(value) {
       this.$_autocompleteMixin_search(value, 'projectagent', 'agent')
     },
@@ -249,6 +252,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case 'library_agent':
     case 'agent':
     case 'owner':
+    case 'agent_digitised':
     case 'agent_collected':
     case 'copyright_agent':
       return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,forename,surename`;
@@ -259,7 +263,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case 'series': //sample series
       return `sample_series/?multi_search=value:${value};fields:name;lookuptype:icontains&fields=id,name`;
     case 'specimen':
-      return `specimen/?multi_search=value:${value};fields:specimen_id;lookuptype:icontains&fields=id,specimen_id`;
+      return `specimen/?multi_search=value:${value};fields:specimen_id,coll__number;lookuptype:icontains&fields=id,specimen_id,coll__number`;
     case 'reference':
       return `reference/?multi_search=value:${value};fields:reference,id;lookuptype:icontains&fields=id,reference,pages,figures,remarks`;
     case 'synonym':

@@ -84,7 +84,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-show="block.location">
+        <div v-if="block.location">
 
           <div class="row">
             <div class="col-md-4">

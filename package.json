@@ -34,6 +34,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/vue-fontawesome": "^0.1.6",
+    "animate.css": "^3.7.2",
     "bootstrap-vue": "^2.0.0-rc.28",
     "exif-js": "^2.3.0",
     "google-maps-api-loader": "^1.1.1",

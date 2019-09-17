@@ -13,7 +13,7 @@ const formManipulation = {
       previousRequest: null,
       sendingData: false,
       editMode: false,
-      showCollapseMap: true,
+      showCollapseMap: null,
       isFileAddedAsObject: null,
     }
   },
@@ -31,9 +31,8 @@ const formManipulation = {
   },
   beforeMount() {
     //localstorage settings
-    let showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue')
-    if (typeof showCollapseMap === 'undefined' || showCollapseMap === 'fallbackValue') return
-    this.showCollapseMap = showCollapseMap
+    let showCollapseMap = this.$localStorage.get('mapComponent', 'fallbackValue');
+    if (this.isNotEmpty(showCollapseMap) && showCollapseMap !== 'fallbackValue') this.$set(this.$data, 'showCollapseMap', showCollapseMap);
   },
   beforeDestroy() {
     this.$parent.$off('button-clicked', this.bottomOptionClicked);
@@ -120,7 +119,10 @@ const formManipulation = {
 
       // Exceptions
       if (object === 'imageset') isValid &= !this.imagesetNumberExists;
-      if (object === 'attachment') child = this.$route.meta.child;
+      if (object === 'attachment') {
+        child = this.$route.meta.child;
+        if (!this.isNotEmpty(this.files)) return false;
+      }
 
       if (child) {
         fields = fields[child];
@@ -630,12 +632,9 @@ const formManipulation = {
       }
 
       if (choice === "CLEAR") {
-        this[object] = {};
-        if (this.isNotEmpty(this.relatedTabs)) {
-          this.relatedTabs.forEach(tab => {
-            if (this.isNotEmpty(this.relatedData[tab.name])) this.relatedData[tab.name] = {}
-          });
-        }
+        this.setInitialData();
+        this.reloadData();
+        if (object === 'attachment') this.$set(this.$data, 'clearFiles', true);
         toastInfo({text: this.$t('messages.fieldsCleared')})
       }
 
@@ -694,8 +693,8 @@ const formManipulation = {
   },
 
   watch: {
-    'showCollapseMap'(newval) {
-      this.$localStorage.set('mapComponent', newval)
+    'showCollapseMap'(newVal) {
+      if (this.isNotEmpty(newVal)) this.$localStorage.set('mapComponent', newVal)
     },
     'attachmentLinkSaved': {
       handler: function (newval) {

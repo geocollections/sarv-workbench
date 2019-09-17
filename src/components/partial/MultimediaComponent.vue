@@ -87,7 +87,7 @@
 
         <div v-if="filesState">
           <button class="btn btn-outline-danger p-2" :disabled="sendingData" @click="clearFile"
-                  :title="$tc('add.buttons.resetFile', 1)">
+                  :title="arrayOfFiles.length > 1 ? $tc('add.buttons.resetFile', 2) : $tc('add.buttons.resetFile', 1)">
             <!--<font-awesome-icon icon="trash-alt"/>-->
             <span v-show="arrayOfFiles.length === 1">{{ $tc('add.buttons.resetFile', 1) }}</span>
             <span v-show="arrayOfFiles.length > 1">{{ $tc('add.buttons.resetFile', 2) }}</span>
@@ -199,6 +199,9 @@
       showTryAgainButton: {
         type: Boolean,
         default: false
+      },
+      clearFiles: {
+        type: Boolean,
       }
     },
     data() {
@@ -218,9 +221,6 @@
       filesState() {
         return this.files !== null && this.arrayOfFiles.length > 0
       },
-    },
-    created() {
-      this.$root.$on('attachment-loading-status', this.clearFile)
     },
     watch: {
       'recordedFile': function (newVal) {
@@ -261,6 +261,12 @@
           this.readMetaData(this.arrayOfFiles[0]);
         }
       },
+      'clearFiles': function (newVal) {
+        if (newVal) {
+          this.clearFile();
+          this.$emit('files-cleared', true)
+        }
+      }
 
     },
     methods: {
@@ -308,7 +314,8 @@
         fileReader.readAsArrayBuffer(file);
         fileReader.onload = (event) => {
           // TODO: Get thumbnail
-          this.fileMetaData = EXIF.readFromBinaryFile(event.target.result)
+          this.fileMetaData = EXIF.readFromBinaryFile(event.target.result);
+          this.$emit('metadata-loaded', this.fileMetaData);
         }
       },
 
