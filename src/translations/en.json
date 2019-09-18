@@ -192,6 +192,13 @@
     },
     "keyword": {
       "info": "General info"
+    },
+    "attachment": {
+      "requiredFields": "Mandatory fields",
+      "info": "General info",
+      "map": "Map",
+      "description": "Description",
+      "relatedData": "Related data"
     }
   },
   "add": {
@@ -531,8 +538,10 @@
     "info": "General info",
     "header": "My attachments",
     "imageNumber": "Image number",
+    "imageNumber_short": "Pildi no.",
     "filename": "Filename",
     "specimen": "Specimen",
+    "specimen_short": "Spec.",
     "imageInfo": "Image info",
     "locality": "Locality",
     "file": "File",
@@ -558,6 +567,7 @@
     "changeType": "Change type",
     "doiConfirmation": "Are you sure you want to register a new DOI for this attachment? DOI-s cannot be deleted.",
     "is_private_text": "Private",
+    "is_private_text_short": "Pvte.",
     "is_public_text": "Public",
     "is_locked_text": "Locked",
     "is_unlocked_text": "Unlocked",
@@ -602,7 +612,23 @@
       "storage": "Storage",
       "attachment": "Attachment",
       "project": "Project",
-      "site": "Site"
+      "site": "Site",
+      "attach_link__collection": "Kollektsioon",
+      "attach_link__specimen": "Eksemplar",
+      "attach_link__sample": "Proov",
+      "attach_link__sample_series": "Proovi seeria",
+      "attach_link__analysis": "Analüüs",
+      "attach_link__dataset": "Andmestik",
+      "attach_link__doi": "DOI",
+      "attach_link__locality": "Lokaliteet",
+      "attach_link__drillcore": "Puursüdamik",
+      "attach_link__drillcore_box": "Puursüdamiku kast",
+      "attach_link__preparation": "Preparaat",
+      "attach_link__reference": "Kirjandus",
+      "attach_link__storage": "Hoidla",
+      "attach_link__attachment": "Fail",
+      "attach_link__project": "Projekt",
+      "attach_link__site": "Vaatluspunkt"
     },
     "imagesetId": "Imageset ID",
     "imagePlace": "Image place",

@@ -4,6 +4,8 @@
 
     <slot name="file-input" v-if="!$route.meta.isEdit"></slot>
 
+    <slot name="file-output" v-if="$route.meta.isEdit"></slot>
+
     <slot name="photo-archive" v-if="isPhotoArchive">
       <slot name="map"></slot>
     </slot>

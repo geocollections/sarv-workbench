@@ -192,6 +192,13 @@
     },
     "keyword": {
       "info": "Üldinfo"
+    },
+    "attachment": {
+      "requiredFields": "Kohustuslikud väljad",
+      "info": "Üldinfo",
+      "map": "Kaart",
+      "description": "Kirjeldus",
+      "relatedData": "Seotud andmed"
     }
   },
   "add": {
@@ -531,8 +538,10 @@
     "info": "Üldinfo",
     "header": "Minu failid",
     "imageNumber": "Pildi number",
+    "imageNumber_short": "Pildi nr.",
     "filename": "Failinimi",
     "specimen": "Eksemplar",
+    "specimen_short": "Eks.",
     "imageInfo": "Pildi info",
     "locality": "Lokaliteet",
     "file": "Fail",
@@ -558,6 +567,7 @@
     "changeType": "Muuda tüüpi",
     "doiConfirmation": "Kas oled kindel, et soovid failile registreerida DOI koodi? Selle hilisem tühistamine ei ole võimalik.",
     "is_private_text": "Privaatne",
+    "is_private_text_short": "Priv.",
     "is_public_text": "Avalik",
     "is_locked_text": "Lukus",
     "is_unlocked_text": "Lukustamata",
@@ -602,7 +612,23 @@
       "storage": "Hoidla",
       "attachment": "Fail",
       "project": "Projekt",
-      "site": "Vaatluspunkt"
+      "site": "Vaatluspunkt",
+      "attach_link__collection": "Kollektsioon",
+      "attach_link__specimen": "Eksemplar",
+      "attach_link__sample": "Proov",
+      "attach_link__sample_series": "Proovi seeria",
+      "attach_link__analysis": "Analüüs",
+      "attach_link__dataset": "Andmestik",
+      "attach_link__doi": "DOI",
+      "attach_link__locality": "Lokaliteet",
+      "attach_link__drillcore": "Puursüdamik",
+      "attach_link__drillcore_box": "Puursüdamiku kast",
+      "attach_link__preparation": "Preparaat",
+      "attach_link__reference": "Kirjandus",
+      "attach_link__storage": "Hoidla",
+      "attach_link__attachment": "Fail",
+      "attach_link__project": "Projekt",
+      "attach_link__site": "Vaatluspunkt"
     },
     "imagesetId": "Pildiseeria ID",
     "imagePlace": "Pildi koht",

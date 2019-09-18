@@ -63,8 +63,8 @@ Vue.config.productionTip = false;
 
 // Gets translations from json files
 const messages = {
-  en: require('@/translations/en.json'),
-  ee: require('@/translations/ee.json'),
+  en: require('./translations/en'),
+  ee: require('./translations/ee'),
 };
 
 // Gets preferred language from localStorage (fallback is ee)

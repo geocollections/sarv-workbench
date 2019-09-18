@@ -8,7 +8,7 @@
         <img class="image-preview"
              v-if="entity.uuid_filename.endsWith('jpg') || entity.uuid_filename.endsWith('jpeg') || entity.uuid_filename.endsWith('png')"
              :src="composeFileUrl(entity.uuid_filename)"/>
-        <font-awesome-icon v-else size="3x" icon="file"/>
+        <i v-else class="far fa-file fa-3x" ></i>
       </router-link>
 
       <router-link :title="$t('edit.editMessage')" :to="{ path: '/attachment/' + entity.id }">
@@ -39,18 +39,24 @@
     <!-- TODO: ShowSpecimen only when specimens exist same goes to table head in list module core -->
 <!--    <td v-if="showSpecimen">-->
     <td>
-      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'specimen', id: entity.specimen})">
-        <!-- TODO: Get specimen name -->
+      <router-link :to="{ path: '/specimen/' + entity.specimen }" :title="$t('edit.editMessage')">
         {{ entity.specimen }}
-      </a>
+      </router-link>
+<!--      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'specimen', id: entity.specimen})">-->
+<!--        &lt;!&ndash; TODO: Get specimen name &ndash;&gt;-->
+<!--        {{ entity.specimen }}-->
+<!--      </a>-->
     </td>
 
     <!-- TODO: ShowReference only when references exist same goes to table head in list module core -->
 <!--    <td v-if="showReference">-->
     <td>
-      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.reference_id})">
+      <router-link :to="{ path: '/reference/' + entity.reference_id }" :title="$t('edit.editMessage')">
         {{ entity.reference__reference }}
-      </a>
+      </router-link>
+<!--      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.reference_id})">-->
+<!--        {{ entity.reference__reference }}-->
+<!--      </a>-->
     </td>
 
     <td>
@@ -99,5 +105,10 @@
     background-color: #fff;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;
+  }
+
+  .middle {
+    text-align: center;
+    vertical-align: middle;
   }
 </style>

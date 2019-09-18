@@ -23,6 +23,35 @@
                             v-on:files-cleared="clearUploadedFiles" />
     </template>
 
+    <template v-slot:file-output>
+      <div class="file-output">
+
+        <!-- FILE -->
+        <fieldset class="border-top px-2 mb-2" id="block-file">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.file }" @click="block.file = !block.file">
+            {{ $t('attachment.file') }}
+            <i class="far fa-file"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-if="block.file">
+
+              <div class="row">
+                <div class="col-md-6">
+                  <file-preview :data="rawAttachment" object="attachment"/>
+                </div>
+
+                <div class="col-md-6">
+                  <file-information :data="rawAttachment"/>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
+      </div>
+    </template>
 
     <template v-slot:photo-archive>
       <div class="photo-archive">
@@ -1638,7 +1667,6 @@
           </transition>
         </fieldset>
 
-
       </div>
     </template>
 
@@ -1826,11 +1854,15 @@
   import MultimediaComponent from "../partial/MultimediaComponent";
   import MapComponent from "../partial/MapComponent";
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
+  import FileInformation from "../partial/FileInformation";
+  import FilePreview from "../partial/FilePreview";
 
   export default {
     name: "AttachmentNew",
 
     components: {
+      FilePreview,
+      FileInformation,
       MultimediaComponent,
       AttachmentWrapper,
       Editor,
@@ -1941,16 +1973,11 @@
     },
 
     watch: {
-      '$route.params.id': {
-        handler: function (newVal, oldVal) {
-          this.reloadData()
-        },
-      },
       '$route.path': {
         handler: function (newVal, oldVal) {
+          this.reloadData();
           if (!this.$route.meta.isEdit) {
-            this.reloadData();
-            if (oldVal) this.clearFiles = true
+            if (oldVal) this.clearFiles = true;
 
             let attachmentHistory;
             let keywords;
@@ -1972,7 +1999,6 @@
             else if (this.isDigitisedReference) attachmentHistory =  this.$localStorage.get('digitisedReference', 'fallbackValue');
 
             if (this.isNotEmpty(attachmentHistory) && attachmentHistory !== 'fallbackValue' && attachmentHistory.hasOwnProperty('specimen_image_attachment')) {
-              // Todo: If specimen_image_attachment is wrong then delete storage
               this.attachment = attachmentHistory
             }
             if (this.isNotEmpty(keywords) && keywords !== 'fallbackValue' && keywords.length > 0) this.relatedData.keyword = keywords;
@@ -2038,7 +2064,11 @@
           searchHistory: 'attachmentSearchHistory',
           activeTab: 'specimen_identification',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'specimen_image_attachment', 'author', 'author_free', 'imageset', 'is_private', 'is_locked'],
+          copyFields: ['agent_digitised', 'author', 'author_free', 'copyright_agent', 'date_created', 'date_created_free',
+            'date_digitised', 'date_digitised_free', 'description', 'description_en', 'device_txt', 'id', 'image_description',
+            'image_description_en', 'image_latitude', 'image_longitude', 'image_object', 'image_people', 'image_place',
+            'image_scalebar', 'image_type', 'imageset', 'is_locked', 'is_private', 'licence', 'locality', 'remarks',
+            'specimen', 'specimen_image_attachment', 'stars', 'storage', 'type',],
           autocomplete: {
             loaders: {
               agent: false,
@@ -2108,8 +2138,9 @@
             digitised_reference: []
           },
           attachment: this.setDefaultAttachmentFields(),
+          rawAttachment: null,
           searchParameters: this.setDefaultSearchParameters(),
-          block: {requiredFields: true, info: true, map: true, description: true, relatedData: true},
+          block: {file: true, requiredFields: true, info: true, map: true, description: true, relatedData: true},
           showCollapseMap: null,
           clearFiles: false,
           selectedRelatedTable: null,
@@ -2135,11 +2166,10 @@
             if (handledResponse.length > 0) {
               this.$emit('object-exists', true);
               this.attachment = this.handleResponse(response)[0];
+              this.rawAttachment = cloneDeep(this.handleResponse(response)[0]);
               this.fillAutocompleteFields(this.attachment);
 
               this.removeUnnecessaryFields(this.attachment, this.copyFields);
-              this.attachment.related_data = {};
-
               this.$emit('data-loaded', this.attachment);
               this.sendingData = false;
             } else {

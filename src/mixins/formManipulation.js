@@ -120,8 +120,8 @@ const formManipulation = {
       // Exceptions
       if (object === 'imageset') isValid &= !this.imagesetNumberExists;
       if (object === 'attachment') {
-        child = this.$route.meta.child;
-        if (!this.isNotEmpty(this.files)) return false;
+        child = this.$route.meta.child ? this.$route.meta.child : child;
+        if (!this.isNotEmpty(this.files) && !this.$route.meta.isEdit) return false;
       }
 
       if (child) {
@@ -651,10 +651,12 @@ const formManipulation = {
      * @returns {string} - file's url
      */
     composeFileUrl(filename, size = 'small') {
-      if (size === 'small' || size === 'medium' || size === 'large') {
-        return this.fileUrl + '/' + size + '/' + filename.substring(0, 2) + '/' + filename.substring(2, 4) + '/' + filename
-      } else {
-        return this.fileUrl + '/' + filename.substring(0, 2) + '/' + filename.substring(2, 4) + '/' + filename
+      if (filename) {
+        if (size === 'small' || size === 'medium' || size === 'large') {
+          return this.fileUrl + '/' + size + '/' + filename.substring(0, 2) + '/' + filename.substring(2, 4) + '/' + filename
+        } else {
+          return this.fileUrl + '/' + filename.substring(0, 2) + '/' + filename.substring(2, 4) + '/' + filename
+        }
       }
     },
 

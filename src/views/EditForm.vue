@@ -8,7 +8,7 @@
         </div>
       </div>
 
-      <scroll-to-links v-show="objectExists"/>
+      <scroll-to-links v-show="objectExists" v-if="object !== 'attachment'"/>
 
       <router-view v-show="objectExists"
                    v-on:data-loaded="setData"

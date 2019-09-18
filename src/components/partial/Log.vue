@@ -1,5 +1,5 @@
 <template>
-  <fieldset class="log border-top px-2 mb-2" v-if="logs.length > 0">
+  <fieldset class="log border-top px-2 my-2" v-if="logs.length > 0">
     <legend class="w-auto my-0 mb-1" :class="{'text-primary': !block.logs}" @click="block.logs = !block.logs">
       {{ $t('logs.title') }}
       <i class="fas fa-history"></i>
