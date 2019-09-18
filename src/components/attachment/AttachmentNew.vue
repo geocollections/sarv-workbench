@@ -11,9 +11,6 @@
 
 
     <template v-slot:file-input>
-      {{attachment}}
-      {{clearFiles}}
-
       <multimedia-component :record-options="recordOptions"
                             :record-image="recordImage"
                             :record-video="recordVideo"
@@ -916,7 +913,6 @@
           </transition>
         </fieldset>
 
-        <!-- Todo: Related data -->
         <!-- FILE INFO -->
         <fieldset class="border-top px-2 mb-2" id="block-description">
           <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
@@ -1068,6 +1064,580 @@
             </div>
           </transition>
         </fieldset>
+
+        <!-- Todo: Related data -->
+        <fieldset class="border-top px-2 mb-2" id="block-relatedData">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.relatedData }" @click="block.relatedData = !block.relatedData">
+            {{ $t('attachment.relatedData') }}
+            <i class="fas fa-table"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.relatedData">
+
+              <div class="row">
+
+                <div class="col-md-6">
+                  <label :for="`related_data`">{{ $t('attachment.relatedData') }}:</label>
+                  <b-form-select id="related_data" v-model="selectedRelatedTable" class="mb-3">
+                    <option :value="null">{{ $t('attachment.relatedDataDefault') }}</option>
+                    <option v-for="tab in relatedTabs" :key="tab.name" :value="tab.name.split('__')[1]">
+                      {{ $t('attachment.relatedTables.' + tab.name.split('__')[1]) }}
+                    </option>
+                  </b-form-select>
+                </div>
+
+                <div class="col-md-6" v-if="selectedRelatedTable !== null">
+                  <label :for="selectedRelatedTable">{{ $t('attachment.relatedTables.' + selectedRelatedTable) }}:</label>
+                  <vue-multiselect v-model="relatedData['attach_link__' + selectedRelatedTable]"
+                                   :id="selectedRelatedTable"
+                                   :custom-label="customLabelForRelatedData"
+                                   track-by="id"
+                                   :multiple="true"
+                                   :placeholder="$t('add.inputs.autocomplete')"
+                                   :loading="autocomplete.loaders['attach_link__' + selectedRelatedTable]"
+                                   :options="autocomplete['attach_link__' + selectedRelatedTable]"
+                                   @search-change="autocompleteRelatedDataSearch"
+                                   :internal-search="false"
+                                   :preserve-search="true"
+                                   :close-on-select="false"
+                                   :show-labels="false">
+                    <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  </vue-multiselect>
+                </div>
+
+              </div>
+
+              <!-- SHOWING RELATED_DATA -->
+              <div class="row">
+
+                <!-- COLLECTION -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__collection && relatedData.attach_link__collection.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.collection') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('collection.name') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__collection">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'collection', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__collection.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- SPECIMEN -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__specimen && relatedData.attach_link__specimen.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.specimen') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('specimen.specimenNumber') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__specimen">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'specimen', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>
+                          <span v-if="entity.coll__number !== null">{{ entity.coll__number.split(' ')[0] }} {{ entity.specimen_id }}</span>
+                          <span v-else>{{ entity.specimen_id }}</span>
+                        </td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__specimen.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- SAMPLE -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__sample && relatedData.attach_link__sample.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.sample') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('sample.number') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__sample">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'sample', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ entity.number }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__sample.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- SAMPLE_SERIES -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__sample_series && relatedData.attach_link__sample_series.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.sample_series') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('sample_series.name') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__sample_series">
+                        <td>{{ entity.id }}</td>
+
+                        <td>{{ entity.name }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__sample_series.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- ANALYSIS -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__analysis && relatedData.attach_link__analysis.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.analysis') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('analysis.sample') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__analysis">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'analysis', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>
+                          <span v-if="entity.sample__number !== null && entity.sample__number">{{ entity.sample__number }}</span>
+                          <span v-else>{{ entity.sample__id }}</span>
+                        </td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__analysis.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- DATASET -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__dataset && relatedData.attach_link__dataset.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.dataset') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('dataset.name') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__dataset">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'dataset', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__dataset.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- DOI -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__doi && relatedData.attach_link__doi.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.doi') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('doi.identifier') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__doi">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'doi', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ entity.identifier }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__doi.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- LOCALITY -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__locality && relatedData.attach_link__locality.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.locality') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('locality.locality') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__locality">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'locality', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ $i18n.locale === 'ee' ? entity.locality : entity.locality_en }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__locality.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- DRILLCORE -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__drillcore && relatedData.attach_link__drillcore.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.drillcore') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('drillcore.drillcore') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__drillcore">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'drillcore', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ $i18n.locale === 'ee' ? entity.drillcore : entity.drillcore_en }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__drillcore.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- DRILLCORE_BOX -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__drillcore_box && relatedData.attach_link__drillcore_box.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.drillcore_box') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('drillcore_box.drillcore') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__drillcore_box">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'corebox', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ $i18n.locale === 'ee' ? entity.drillcore__drillcore : entity.drillcore__drillcore_en }} - {{ entity.number }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__drillcore_box.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- PREPARATION -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__preparation !== null && relatedData.attach_link__preparation.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.preparation') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('preparation.number') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__preparation">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'preparation', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ entity.preparation_number }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__preparation.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- REFERENCE -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__reference !== null && relatedData.attach_link__reference.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.reference') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('reference.reference') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__reference">
+                        <td>
+                          <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})">
+                            {{ entity.id }}
+                          </a>
+                        </td>
+
+                        <td>{{ entity.reference }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__reference.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- STORAGE -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__storage !== null && relatedData.attach_link__storage.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.storage') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('storage.storage') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__storage">
+                        <td>{{ entity.id }}</td>
+
+                        <td>
+                          <span v-if="entity.contents !== null">{{ entity.location }} - {{ entity.contents }}</span>
+                          <span v-else>{{ entity.location }}</span>
+                        </td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__storage.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- PROJECT -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__project !== null && relatedData.attach_link__project.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.project') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('project.name') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__project">
+                        <td>
+                          <router-link :to="{ path: '/project/' + entity.id }">{{ entity.id }}</router-link>
+                        </td>
+
+                        <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__project.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+
+                <!-- SITE -->
+                <div class="col-sm-6" v-if="relatedData.attach_link__site !== null && relatedData.attach_link__site.length > 0">
+
+                  <p class="h4">{{ $t('attachment.relatedTables.site') }}</p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t('site.name') }}</th>
+                        <th></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr v-for="(entity, index) in relatedData.attach_link__site">
+                        <td>
+                          <router-link :to="{ path: '/site/' + entity.id }">{{ entity.id }}</router-link>
+                        </td>
+
+                        <td>{{ $i18n.locale === 'ee' ? entity.name : entity.name_en }}</td>
+
+                        <td class="text-center delete-relation" @click="relatedData.attach_link__site.splice(index, 1)">
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+
 
       </div>
     </template>
@@ -1340,6 +1910,15 @@
         else if (this.isOtherFile) return true;
         else if (this.isDigitisedReference) return true;
         else return true
+      },
+
+      relatedDataOptions() {
+        return this.relatedTabs.map(tab => {
+          let option = {}
+          option.value = tab.name.split('__')[1];
+          option.text = tab.name.split('__')[1];
+          return option
+        })
       }
     },
 
@@ -1359,26 +1938,19 @@
           block: this.block
         });
       }
-
-      this.loadFullInfo()
     },
 
     watch: {
       '$route.params.id': {
         handler: function (newVal, oldVal) {
-          this.setInitialData();
           this.reloadData()
         },
       },
       '$route.path': {
         handler: function (newVal, oldVal) {
           if (!this.$route.meta.isEdit) {
-            console.log(oldVal)
-            console.log(newVal)
-            this.setInitialData();
             this.reloadData();
             if (oldVal) this.clearFiles = true
-            // this.clearFiles = true
 
             let attachmentHistory;
             let keywords;
@@ -1447,7 +2019,21 @@
       setInitialData() {
         return {
           relatedTabs: [
-            { name: 'specimen_identification', iconClass: 'fas fa-atlas' },
+            { name: 'attach_link__collection', iconClass: 'fas fa-server' },
+            { name: 'attach_link__specimen', iconClass: 'fas fa-flask' },
+            { name: 'attach_link__sample', iconClass: 'fas fa-vial' },
+            { name: 'attach_link__sample_series', iconClass: 'fas fa-vials' },
+            { name: 'attach_link__analysis', iconClass: 'fas fa-chart-pie' },
+            { name: 'attach_link__dataset', iconClass: 'fas fa-server' },
+            { name: 'attach_link__doi', iconClass: 'fas fa-database' },
+            { name: 'attach_link__locality', iconClass: 'fas fa-map-marker-alt' },
+            { name: 'attach_link__drillcore', iconClass: 'fas fa-tools' },
+            { name: 'attach_link__drillcore_box', iconClass: 'fas fa-boxes' },
+            { name: 'attach_link__preparation', iconClass: 'fas fa-prescription-bottle' },
+            { name: 'attach_link__reference', iconClass: 'fas fa-book' },
+            { name: 'attach_link__storage', iconClass: 'fas fa-archive' },
+            { name: 'attach_link__project', iconClass: 'fas fa-project-diagram' },
+            { name: 'attach_link__site', iconClass: 'fas fa-map-pin' },
           ],
           searchHistory: 'attachmentSearchHistory',
           activeTab: 'specimen_identification',
@@ -1466,6 +2052,21 @@
               keyword: false,
               specimen: false,
               type: false,
+              attach_link__collection: false,
+              attach_link__specimen: false,
+              attach_link__sample: false,
+              attach_link__sample_series: false,
+              attach_link__analysis: false,
+              attach_link__dataset: false,
+              attach_link__doi: false,
+              attach_link__locality: false,
+              attach_link__drillcore: false,
+              attach_link__drillcore_box: false,
+              attach_link__preparation: false,
+              attach_link__reference: false,
+              attach_link__storage: false,
+              attach_link__project: false,
+              attach_link__site: false,
             },
             agent: [],
             imageset: [],
@@ -1478,6 +2079,21 @@
             keyword: [],
             specimen: [],
             type: [],
+            attach_link__collection: [],
+            attach_link__specimen: [],
+            attach_link__sample: [],
+            attach_link__sample_series: [],
+            attach_link__analysis: [],
+            attach_link__dataset: [],
+            attach_link__doi: [],
+            attach_link__locality: [],
+            attach_link__drillcore: [],
+            attach_link__drillcore_box: [],
+            attach_link__preparation: [],
+            attach_link__reference: [],
+            attach_link__storage: [],
+            attach_link__project: [],
+            attach_link__site: [],
           },
           requiredFields: {
             photo_archive: ['imageset'],
@@ -1493,9 +2109,10 @@
           },
           attachment: this.setDefaultAttachmentFields(),
           searchParameters: this.setDefaultSearchParameters(),
-          block: {requiredFields: true, info: true, map: true, description: true},
+          block: {requiredFields: true, info: true, map: true, description: true, relatedData: true},
           showCollapseMap: null,
           clearFiles: false,
+          selectedRelatedTable: null,
         }
       },
 
@@ -1569,6 +2186,21 @@
       setDefaultRelatedData() {
         return {
           keyword: [],
+          attach_link__collection: [],
+          attach_link__specimen: [],
+          attach_link__sample: [],
+          attach_link__sample_series: [],
+          attach_link__analysis: [],
+          attach_link__dataset: [],
+          attach_link__doi: [],
+          attach_link__locality: [],
+          attach_link__drillcore: [],
+          attach_link__drillcore_box: [],
+          attach_link__preparation: [],
+          attach_link__reference: [],
+          attach_link__storage: [],
+          attach_link__project: [],
+          attach_link__site: [],
           searchParameters: {
             keyword: {
               page: 1,
@@ -1620,15 +2252,30 @@
 
         if (this.databaseId) uploadableObject.database = this.databaseId;
 
-        // Adding related data
+        /* Related Data START */
         uploadableObject.related_data = {};
 
-        if (this.isNotEmpty(this.relatedData.keyword)) uploadableObject.related_data.keyword = this.relatedData.keyword.map(keyword => {
-          let keywordObject = {};
-          keywordObject['id'] = keyword.id;
-          return keywordObject
-        });
-        else uploadableObject.related_data.keyword = null;
+        if (!this.isDigitisedReference) {
+          if (this.isNotEmpty(this.relatedData.keyword)) uploadableObject.related_data.keyword = this.relatedData.keyword.map(keyword => {
+            return {
+              id: keyword.id
+            }
+          });
+          else uploadableObject.related_data.keyword = null;
+        }
+
+        if (this.isOtherFile) {
+          this.relatedTabs.forEach(tab => {
+            if (this.relatedData[tab.name] && this.relatedData[tab.name].length > 0) {
+              uploadableObject.related_data[tab.name] = this.relatedData[tab.name].map(entity => {
+                return {
+                  id: entity.id
+                }
+              });
+            } else uploadableObject.related_data[tab.name] = null
+          })
+        }
+        /* Related Data END */
 
         console.log('This object is sent in string format:');
         console.log(uploadableObject);
@@ -1750,13 +2397,6 @@
           }
         }
       },
-      /* MultimediaComponent Events END */
-
-
-      updateLocation(location) {
-        this.$set(this.attachment, 'image_latitude', location.lat.toFixed(6))
-        this.$set(this.attachment, 'image_longitude', location.lng.toFixed(6))
-      },
 
       convertExifGPSToDecimal(degrees, minutes, seconds, direction) {
         // Formula from https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Coordinate_format_conversion
@@ -1766,6 +2406,16 @@
         }
         return decimalDegrees;
       },
+      /* MultimediaComponent Events END */
+
+
+      /* MapComponent Event START */
+      updateLocation(location) {
+        this.$set(this.attachment, 'image_latitude', location.lat.toFixed(6));
+        this.$set(this.attachment, 'image_longitude', location.lng.toFixed(6))
+      },
+      /* MapComponent Event END */
+
 
       // This method is run if author field changes
       resetImageset() {
@@ -1793,6 +2443,47 @@
           return `${option.coll__number.split(' ')[0]} ${option.specimen_id} (${option.id})`
         } else {
           return `${option.specimen_id} (${option.id})`
+        }
+      },
+
+      customLabelForRelatedData(option) {
+        switch(this.selectedRelatedTable) {
+          case 'collection':
+          case 'dataset':
+          case 'project':
+          case 'site':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.name})`
+            return `${option.id} - (${option.name_en})`
+          case 'specimen':
+            if (option.coll__number === null) return `${option.specimen_id} (${option.id})`
+            else return `${option.coll__number.split(' ')[0]} ${option.specimen_id} (${option.id})`
+          case 'sample':
+            return `${option.id} - (${option.number})`
+          case 'sample_series':
+            return `${option.id} - (${option.name})`
+          case 'analysis':
+            if (option.sample__number) return `${option.id} - (${option.sample__number})`
+            else return `${option.id}`
+          case 'doi':
+            return `${option.id} - (${option.identifier})`
+          case 'locality':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.locality})`
+            return `${option.id} - (${option.locality_en})`
+          case 'drillcore':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.drillcore})`
+            return `${option.id} - (${option.drillcore_en})`
+          case 'drillcore_box':
+            if (this.$i18n.locale === 'ee') return `${option.id} - (${option.drillcore__drillcore} - ${option.number})`
+            return `${option.id} - (${option.drillcore__drillcore_en} - ${option.number})`
+          case 'preparation':
+            return `${option.id} - (${option.preparation_number})`
+          case 'reference':
+            return `${option.id} - (${option.reference})`
+          case 'storage':
+            if (option.contents === null) return `${option.id} - (${option.location})`
+            else return `${option.id} - (${option.location} - ${option.contents})`;
+          default:
+            return `${option.id}`
         }
       },
 
@@ -1848,5 +2539,15 @@
     margin: 5px 0 0 0;
     color: #999;
     font-size: 0.8rem;
+  }
+
+  .delete-relation {
+    transition: background-color 500ms ease-in-out;
+    vertical-align: middle;
+  }
+
+  .delete-relation:hover {
+    cursor: pointer;
+    background-color: rgba(220,53,69, 0.7);
   }
 </style>

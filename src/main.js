@@ -97,8 +97,8 @@ Vue.http.interceptors.push((request, next) => {
     next(res => {
       if (res.status === 200) {
 
-        if (res.body.error_permissions) {
-          Vue.prototype.$toast.error(res.body.error_permissions, 'Missing permissions', {
+        if ( res.body.error_permissions) {
+          Vue.prototype.toast.error(res.body.error_permissions, 'Missing permissions', {
             position: 'bottomRight',
             timeout: 5000,
             closeOnEscape: true,
@@ -115,7 +115,7 @@ Vue.http.interceptors.push((request, next) => {
           Vue.cookies.remove('csrftokenLocalhost', null , 'localhost');
           Vue.cookies.remove('csrftoken', null, 'geocollections.info');
           Vue.localStorage.remove('authUser');
-          Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+          Vue.prototype.toast.error('Please log back in', 'Session expired', {
             position: 'bottomRight',
             timeout: 5000,
             closeOnEscape: true,
@@ -126,7 +126,7 @@ Vue.http.interceptors.push((request, next) => {
         }
 
         if (res.body.link_error) {
-          Vue.prototype.$toast.error(res.body.link_error, 'Error', {
+          Vue.prototype.toast.error(res.body.link_error, 'Error', {
             position: 'bottomRight',
             timeout: 99999999999,
             pauseOnHover: false,

@@ -17,16 +17,20 @@ const formSectionsMixin = {
   },
 
   beforeRouteUpdate (to, from, next) {
+    let object = this.$route.meta.object;
+    if (object === 'attachment') object = this.$route.meta.child;
     if (this.block && this.formSections) {
-      this.formSections[this.$route.meta.object] = this.block;
+      this.formSections[object] = this.block;
       this.$localStorage.set('formSections', this.formSections)
     }
     next()
   },
 
   beforeRouteLeave(to, from, next) {
+    let object = this.$route.meta.object;
+    if (object === 'attachment') object = this.$route.meta.child;
     if (this.block && this.formSections) {
-      this.formSections[this.$route.meta.object] = this.block;
+      this.formSections[object] = this.block;
       this.$localStorage.set('formSections', this.formSections)
     }
     next()
@@ -34,9 +38,11 @@ const formSectionsMixin = {
 
   methods: {
     $_localStorageMixin_setBlock() {
-      if (this.formSections && this.formSections[this.$route.meta.object] && this.block) {
-        if (Object.keys(this.formSections[this.$route.meta.object]).length >= Object.keys(this.block).length && compareObjectKeys(this.formSections[this.$route.meta.object], this.block)) {
-          this.block = this.formSections[this.$route.meta.object]
+      let object = this.$route.meta.object;
+      if (object === 'attachment') object = this.$route.meta.child;
+      if (this.formSections && this.formSections[object] && this.block) {
+        if (Object.keys(this.formSections[object]).length >= Object.keys(this.block).length && compareObjectKeys(this.formSections[object], this.block)) {
+          this.block = this.formSections[object]
         }
       }
     }

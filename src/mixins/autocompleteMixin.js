@@ -184,6 +184,9 @@ const autocompleteMixin = {
     autocompleteImagesetSearch(value) {
       this.$_autocompleteMixin_search(value, 'imageset', 'imageset', 2)
     },
+    autocompleteRelatedDataSearch(value, id) {
+      this.$_autocompleteMixin_search(value, 'attach_link__' + id, 'attach_link__' + id, 2)
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -197,8 +200,7 @@ const autocompleteMixin = {
     $_autocompleteMixin_search(value, type, options, minLength = 3, groupByField, clearAutocomplete = true) {
       if (value.length < minLength) {
         if (clearAutocomplete) this.autocomplete[options] = [];
-      }
-      else if (value.length >= minLength) {
+      } else if (value.length >= minLength) {
         let query = buildAutocompleteQuery(type, value, this.currentUser, groupByField);
         if (query.length === 0) return;
 
@@ -307,6 +309,33 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `analysis_method/?multi_search=value:${value};fields:analysis_method,method_en;lookuptype:icontains&fields=id,analysis_method,method_en`;
     case 'imageset':
       return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
+    case 'attach_link__collection':
+    case 'attach_link__dataset':
+    case 'attach_link__project':
+    case 'attach_link__site':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+    case 'attach_link__specimen':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,specimen_id,coll__number;lookuptype:icontains&fields=id,specimen_id,coll__number`;
+    case 'attach_link__sample':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,number;lookuptype:icontains&fields=id,number`;
+    case 'attach_link__sample_series':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,name;lookuptype:icontains&fields=id,name`;
+    case 'attach_link__analysis':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,sample__number;lookuptype:icontains&fields=id,sample__number`;
+    case 'attach_link__doi':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,identifier;lookuptype:icontains&fields=id,identifier`;
+    case 'attach_link__locality':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,locality,locality_en;lookuptype:icontains&fields=id,locality,locality_en`;
+    case 'attach_link__drillcore':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,drillcore,drillcore_en;lookuptype:icontains&fields=id,drillcore,drillcore_en`;
+    case 'attach_link__drillcore_box':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,drillcore__drillcore,drillcore__drillcore_en,number;lookuptype:icontains&fields=id,drillcore__drillcore,drillcore__drillcore_en,number`;
+    case 'attach_link__preparation':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,preparation_number;lookuptype:icontains&fields=id,preparation_number`;
+    case 'attach_link__reference':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,reference;lookuptype:icontains&fields=id,reference`;
+    case 'attach_link__storage':
+      return `${type.split('__')[1]}/?multi_search=value:${value};fields:id,location,contents;lookuptype:icontains&fields=id,location,contents`;
     default:
       return ''
   }
