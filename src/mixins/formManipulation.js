@@ -211,7 +211,9 @@ const formManipulation = {
           if (response.body) {
             if (this.$i18n.locale === 'ee') {
               if (response.body.message_et) toastSuccess({text: response.body.message_et});
+              else if (response.body.message) toastSuccess({text: response.body.message});
               else if (response.body.error_et) toastError({text: response.body.error_et});
+              else if (response.body.error) toastError({text: response.body.error});
             } else {
               if (response.body.message) toastSuccess({text: response.body.message});
               else if (response.body.error) toastError({text: response.body.error});

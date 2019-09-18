@@ -2247,10 +2247,7 @@
         if (this.isNotEmpty(uploadableObject.specimen)) uploadableObject.specimen = uploadableObject.specimen.id;
         if (this.isNotEmpty(uploadableObject.reference)) uploadableObject.reference = uploadableObject.reference.id;
         if (this.isNotEmpty(uploadableObject.type)) uploadableObject.type = uploadableObject.type.id;
-
-        if (this.isNotEmpty(objectToUpload.coll)) uploadableObject.coll = objectToUpload.coll.id;
-
-        if (this.databaseId) uploadableObject.database = this.databaseId;
+        if (this.isNotEmpty(uploadableObject.coll)) uploadableObject.coll = uploadableObject.coll.id;
 
         /* Related Data START */
         uploadableObject.related_data = {};

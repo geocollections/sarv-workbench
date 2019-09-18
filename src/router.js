@@ -1078,7 +1078,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (from.fullPath !== '/') {
       if (!to.params.dontShowSessionExpired) {
-        Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+        Vue.prototype.toast.error('Please log back in', 'Session expired', {
           position: 'bottomRight',
           timeout: 5000,
           closeOnEscape: true,
@@ -1115,7 +1115,7 @@ function removeBrowserDataAndLogout() {
 
   // Sending logout request to API
   fetchLogout().then(response => {
-    Vue.prototype.$toast.error('Please log back in', 'Session expired', {
+    Vue.prototype.toast.error('Please log back in', 'Session expired', {
       position: 'bottomRight',
       timeout: 5000,
       closeOnEscape: true,
