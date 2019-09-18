@@ -209,7 +209,7 @@ body {
  * https://github.com/shentao/vue-multiselect/issues/662
  */
 .multiselect--active {
-    z-index: 10;
+    z-index: 1500;
 }
 
 /* Giving this class to multiselects so they wouldn't get stuck behind some items i.e., maps */

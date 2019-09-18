@@ -1065,7 +1065,7 @@
           </transition>
         </fieldset>
 
-        <!-- Todo: Related data -->
+        <!-- RELATED DATA -->
         <fieldset class="border-top px-2 mb-2" id="block-relatedData">
           <legend class="w-auto my-0" :class="{ 'text-primary': !block.relatedData }" @click="block.relatedData = !block.relatedData">
             {{ $t('attachment.relatedData') }}
@@ -2308,28 +2308,6 @@
           });
         });
       },
-
-      //check required fields for related data
-      checkRequiredFields(type) {},
-
-      formatRelatedData(objectToUpload) {
-        let uploadableObject = cloneDeep(objectToUpload);
-        uploadableObject.attachment = this.attachment.id;
-
-        // Todo: Use foreach because DRY basically
-
-        if (this.isNotEmpty(uploadableObject.taxon)) {
-          uploadableObject.taxon = uploadableObject.taxon.id ? uploadableObject.taxon.id : uploadableObject.taxon;
-        }
-        if (this.isNotEmpty(uploadableObject.date_identified)) {
-          uploadableObject.date_identified = this.formatDateForUpload(uploadableObject.date_identified);
-        }
-
-        console.log('This object is sent in string format (related_data):');
-        console.log(uploadableObject);
-        return JSON.stringify(uploadableObject)
-      },
-
 
       /* MultimediaComponent Events START */
       addFiles(files) {

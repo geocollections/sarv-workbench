@@ -8,14 +8,14 @@ import VueIziToast from 'vue-izitoast' // Pop-up messages
 import VueI18n from 'vue-i18n' // Translations
 import VueMoment from 'vue-moment'
 import VueCookies from 'vue-cookies'
-import { createStore } from './store'
+import {createStore} from './store'
 import Vuesax from 'vuesax'
 import VueScrollTo from 'vue-scrollto'
 import Vue2TouchEvents from 'vue2-touch-events'
 import CKEditor from '@ckeditor/ckeditor5-vue';
 import animated from 'animate.css';
 
-Vue.use( CKEditor );
+Vue.use(CKEditor);
 
 // Bootstrap css
 import 'bootstrap/dist/css/bootstrap.css'
@@ -57,7 +57,6 @@ Vue.use(animated);
 Vue.config.productionTip = false;
 
 
-
 /******************************
  *** TRANSLATION CODE START ***
  ******************************/
@@ -97,7 +96,7 @@ Vue.http.interceptors.push((request, next) => {
     next(res => {
       if (res.status === 200) {
 
-        if ( res.body.error_permissions) {
+        if (res.body.error_permissions) {
           Vue.prototype.toast.error(res.body.error_permissions, 'Missing permissions', {
             position: 'bottomRight',
             timeout: 5000,
@@ -112,7 +111,7 @@ Vue.http.interceptors.push((request, next) => {
          * and user is redirected to login view.
          */
         if (res.body.error_not_logged_in) {
-          Vue.cookies.remove('csrftokenLocalhost', null , 'localhost');
+          Vue.cookies.remove('csrftokenLocalhost', null, 'localhost');
           Vue.cookies.remove('csrftoken', null, 'geocollections.info');
           Vue.localStorage.remove('authUser');
           Vue.prototype.toast.error('Please log back in', 'Session expired', {
@@ -149,28 +148,28 @@ new Vue({
   store,
   router,
   localStorage: {
-    createRelationWith:{
+    createRelationWith: {
       type: Object
     },
-    sampleView:{
+    sampleView: {
       type: Boolean,
       dafault: true
     },
-    refreshForm:{
+    refreshForm: {
       type: Boolean,
       dafault: false
     },
-    sidebar:{
+    sidebar: {
       type: Boolean
     },
-    mapComponent:{
+    mapComponent: {
       type: Boolean,
       default: false
     },
-    activeProject:{
+    activeProject: {
       type: Object
     },
-    activeLibrary:{
+    activeLibrary: {
       type: Object
     },
     photoArchive: {
