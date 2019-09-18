@@ -363,7 +363,15 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`remarks`">{{ $t('reference.remarks') }}:</label>
-              <b-form-input id="reference.remarks" v-model="reference.remarks" type="text"></b-form-input>
+              <b-form-input id="remarks" v-model="reference.remarks" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- LOCATION TXT -->
+          <div class="row">
+            <div class="col-sm-12">
+              <label :for="`location_txt`">{{ $t('reference.location_txt') }}:</label>
+              <b-form-input id="location_txt" v-model="reference.location_txt" type="text"></b-form-input>
             </div>
           </div>
         </div>
@@ -798,7 +806,7 @@
           relatedData: this.setDefaultRelatedData(),
           copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'title_translated', 'type', 'language', 'journal', 'journal_additional',
             'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
-            'issn', 'abstract', 'author_keywords', 'remarks', 'book_editor', 'figures', 'is_locked',
+            'issn', 'abstract', 'author_keywords', 'remarks', 'location_txt', 'book_editor', 'figures', 'is_locked',
             'is_oa', 'is_private', 'is_estonian_reference', 'is_estonian_author', 'language'],
           autocomplete: {
             loaders: {

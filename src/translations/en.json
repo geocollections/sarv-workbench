@@ -1118,6 +1118,7 @@
     "libraries": "Kogumikud",
     "attachments": "Attachments",
     "userAdded": "User added",
+    "location_txt": "Location",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

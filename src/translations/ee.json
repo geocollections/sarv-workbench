@@ -1118,6 +1118,7 @@
     "libraries": "Kogumikud",
     "attachments": "Failid",
     "userAdded": "Lisaja",
+    "location_txt": "Kohaviit",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",
