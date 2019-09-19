@@ -145,7 +145,7 @@ const formManipulation = {
       if (this.isNotEmpty(optionalFields)) optionalFields.forEach(el => isValidOptional |= this.isNotEmpty(this[object][el]));
       else isValidOptional = true;
 
-      return isValid && isValidOptional
+      return !!(isValid && isValidOptional)
     },
 
     /**

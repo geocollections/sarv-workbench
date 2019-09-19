@@ -264,7 +264,6 @@
       'clearFiles': function (newVal) {
         if (newVal) {
           this.clearFile();
-          this.$emit('files-cleared', true)
         }
       }
 
@@ -273,7 +272,8 @@
       clearFile() {
         if (this.$refs.fileinput)
           this.$refs.fileinput.reset();
-        this.files = []
+        this.files = [];
+        this.$emit('files-cleared', true)
       },
 
       dropFile(event) {

@@ -2215,6 +2215,7 @@
           block: {file: true, requiredFields: true, info: true, map: true, description: true, relatedData: true, changeType: false},
           showCollapseMap: null,
           clearFiles: false,
+          files: [],
           selectedRelatedTable: null,
           isAttachmentLocked: false,
           isAttachmentPhotoArchive: false,
@@ -2235,9 +2236,7 @@
         if (this.$route.meta.isEdit) {
           this.sendingData = true;
           this.$emit('set-object', 'attachment');
-          fetchAttachment(this.$route.params.id).then(response => {
-            // Todo: Uncomment in production
-            // fetchAttachment(this.$route.params.id, this.currentUser).then(response => {
+          fetchAttachment(this.$route.params.id, this.currentUser).then(response => {
             let handledResponse = this.handleResponse(response);
 
             if (handledResponse.length > 0) {
@@ -2578,6 +2577,8 @@
       clearUploadedFiles(state) {
         this.clearFiles = false;
         this.files = [];
+        console.log('MV')
+        this.validate('attachment')
       },
 
       updateFields(metadata) {

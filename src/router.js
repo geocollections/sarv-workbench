@@ -69,9 +69,8 @@ const router = new Router({
             }
           ]
         },
-        // NEW ATTACHMENT START
         {
-          path: '/attachment_new/:id(\\d+)',
+          path: '/attachment/:id(\\d+)',
           props: true,
           component: () => import('./views/EditForm.vue'),
           meta: {
@@ -206,19 +205,18 @@ const router = new Router({
             }
           ]
         },
-        // NEW ATTACHMENT END
-        {
-          path: '/attachment/:id(\\d+)',
-          props: true,
-          component: () => import('./views/EditAttachment.vue'),
-          meta: {
-            isEdit: true,
-            requiresAuth: true,
-            isBottomOptionShown: true,
-            isNavigationShown: false,
-            object: 'attachment'
-          },
-        },
+        // {
+        //   path: '/attachment/:id(\\d+)',
+        //   props: true,
+        //   component: () => import('./views/EditAttachment.vue'),
+        //   meta: {
+        //     isEdit: true,
+        //     requiresAuth: true,
+        //     isBottomOptionShown: true,
+        //     isNavigationShown: false,
+        //     object: 'attachment'
+        //   },
+        // },
         // {
         //   path: '/attachment/add',
         //   component: () => import('./views/AddAttachment.vue'),
