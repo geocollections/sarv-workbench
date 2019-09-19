@@ -26,7 +26,10 @@
            class="img-thumbnail image"/>
 
       <!-- IF ABOVE FAILS THEN SHOW FILE ICON -->
-      <i v-else class="far fa-5x" :class="getAttachmentIcon(data)"></i>
+      <i v-else class="far fa-5x link"
+         @click="openUrlInNewWindow({url: getFileLink({filename: data.uuid_filename})})"
+         :title="getFileLink({filename: data.uuid_filename})"
+         :class="getAttachmentIcon(data)"></i>
 
     </div>
 
@@ -126,5 +129,9 @@
   video {
     max-width: 100%;
     vertical-align: middle;
+  }
+
+  .link:hover {
+    cursor: pointer;
   }
 </style>

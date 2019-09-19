@@ -3,10 +3,18 @@
                       :is-specimen-image="isSpecimenImage"
                       :is-other-file="isOtherFile"
                       :is-digitised-reference="isDigitisedReference"
+                      :is-locked="isAttachmentLocked"
   >
     <template v-slot:loader>
       <spinner v-show="sendingData" class="loading-overlay" size="massive"
                :message="$route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')"></spinner>
+    </template>
+
+
+    <template v-slot:locked-info>
+      <div class="locked-info">
+        <b-alert show variant="info" class="text-center">{{ $t('messages.lockedForm') }}</b-alert>
+      </div>
     </template>
 
 
@@ -22,6 +30,7 @@
                             v-on:metadata-loaded="updateFields"
                             v-on:files-cleared="clearUploadedFiles" />
     </template>
+
 
     <template v-slot:file-output>
       <div class="file-output">
@@ -52,6 +61,7 @@
 
       </div>
     </template>
+
 
     <template v-slot:photo-archive>
       <div class="photo-archive">
@@ -1943,15 +1953,6 @@
         else if (this.isDigitisedReference) return true;
         else return true
       },
-
-      relatedDataOptions() {
-        return this.relatedTabs.map(tab => {
-          let option = {}
-          option.value = tab.name.split('__')[1];
-          option.text = tab.name.split('__')[1];
-          return option
-        })
-      }
     },
 
     created() {
@@ -2035,6 +2036,13 @@
         },
         deep: true
       },
+      'attachment': {
+        handler: function (newVal) {
+          if (this.isNotEmpty(newVal)) {
+            this.isAttachmentLocked = newVal.is_locked
+          }
+        }
+      }
     },
 
     methods: {
@@ -2067,8 +2075,8 @@
           copyFields: ['agent_digitised', 'author', 'author_free', 'copyright_agent', 'date_created', 'date_created_free',
             'date_digitised', 'date_digitised_free', 'description', 'description_en', 'device_txt', 'id', 'image_description',
             'image_description_en', 'image_latitude', 'image_longitude', 'image_object', 'image_people', 'image_place',
-            'image_scalebar', 'image_type', 'imageset', 'is_locked', 'is_private', 'licence', 'locality', 'remarks',
-            'specimen', 'specimen_image_attachment', 'stars', 'storage', 'type',],
+            'image_scalebar', 'image_type', 'imageset', 'is_locked', 'is_private', 'licence', 'locality', 'reference',
+            'remarks', 'specimen', 'specimen_image_attachment', 'stars', 'storage', 'type',],
           autocomplete: {
             loaders: {
               agent: false,
@@ -2144,6 +2152,7 @@
           showCollapseMap: null,
           clearFiles: false,
           selectedRelatedTable: null,
+          isAttachmentLocked: false,
         }
       },
 
@@ -2310,6 +2319,17 @@
       },
 
       fillAutocompleteFields(obj) {
+        console.log(obj)
+        this.attachment.agent_digitised = { id: obj.agent_digitised__id, agent: obj.agent_digitised__agent };
+        this.attachment.author = { id: obj.author_id, agent: obj.author__agent };
+        this.attachment.copyright_agent = { id: obj.copyright_agent__id, agent: obj.copyright_agent__agent };
+        this.attachment.image_type = { id: obj.image_type__id, value: obj.image_type__value, value_en: obj.image_type__value_en };
+        this.attachment.imageset = { id: obj.imageset__id, imageset_number: obj.imageset__imageset_number };
+        this.attachment.licence = { id: obj.licence__id, licence: obj.licence__licence, licence_en: obj.licence__licence_en};
+        this.attachment.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en };
+        this.attachment.specimen = { id: obj.specimen__id, specimen_id: obj.specimen_id, coll__number: obj.specimen__coll__number };
+        this.attachment.reference = { id: obj.reference, reference: obj.reference__reference };
+        this.attachment.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
         this.attachment.coll = { id: obj.coll, number: obj.coll__number };
       },
 

@@ -120,13 +120,24 @@ const formManipulation = {
       // Exceptions
       if (object === 'imageset') isValid &= !this.imagesetNumberExists;
       if (object === 'attachment') {
-        child = this.$route.meta.child ? this.$route.meta.child : child;
+        if (!this.isNotEmpty(child)) {
+          if (this.$route.meta.child) child = this.$route.meta.child;
+          else if (this.isNotEmpty(this[object].specimen_image_attachment)) {
+            let typeNumber = this[object].specimen_image_attachment;
+            if (typeNumber === 1) child = 'specimen_image';
+            else if (typeNumber === 2) child = 'photo_archive';
+            else if (typeNumber === 3) child = 'other_file';
+            else if (typeNumber === 4) child = 'digitised_reference';
+            else return false // This shouldn't run
+          } else return false // This shouldn't run
+        }
+
         if (!this.isNotEmpty(this.files) && !this.$route.meta.isEdit) return false;
       }
 
       if (child) {
         fields = fields[child];
-        optionalFields = fields[child];
+        optionalFields = optionalFields[child];
       }
 
       if (this.isNotEmpty(fields)) fields.forEach(el => isValid &= this.isNotEmpty(this[object][el]));
@@ -137,10 +148,20 @@ const formManipulation = {
       return isValid && isValidOptional
     },
 
-    // Todo: Update/Fix/Refactor it
+    /**
+     *
+     * @param {string} object - Current object which is being checked e.g., 'attachemnt', 'reference'.
+     * @returns {boolean} 'true' if is_locked field is true and 'false' if it is false.
+     */
+    isObjectLocked(object) {
+      if (this.$route.meta.isEdit && object === 'attachment') {
+        return !!this.isAttachmentLocked
+      } else return false
+    },
+
     add(addAnother, object, returnPromise = false) {
       return new Promise(resolve => {
-        if (this.validate(object) && !this.sendingData) {
+        if (this.validate(object) && !this.sendingData && !this.isObjectLocked(object)) {
           let objectToUpload = cloneDeep(this[object]);
 
           let url = (typeof objectToUpload.id !== 'undefined') ? `change/${object}/${objectToUpload.id}` : `add/${object}/`;
@@ -178,10 +199,11 @@ const formManipulation = {
 
         } else if (this.sendingData) {
           // This runs only if user deletes html elements and tries to press 'add' button again
-          toastError({text: this.$t('messages.easterEggError')})
+          toastError({text: this.$t('messages.easterEggError')});
           resolve(false)
         } else {
-          toastError({text: this.$t('messages.checkForm')})
+          if (object === 'attachment' && this.isAttachmentLocked) toastError({text: this.$t('messages.lockedForm')});
+          else toastError({text: this.$t('messages.checkForm')});
           resolve(false)
         }
       });

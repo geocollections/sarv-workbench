@@ -1223,6 +1223,7 @@
     "langChange": "Vahetasite keelt!",
     "easterEggError": "Mida sa teha üritad :D ??? Kui sa ei tea, kuidas see juhtus, siis palun võta ühendust olle.hints@ttu.ee",
     "checkForm": "Kontrolli, et kõik väljad oleks korrektselt täidetud!",
+    "lockedForm": "Kahjuks antud fail on lukus ja seda muuta ei saa!",
     "loginError": "Midagi läks valesti!",
     "loginIdError": "Midagi läks valesti! Proovi brauserile restarti teha ja kontrolli, et ID-kaart oleks arvutiga ühendatud.",
     "uploadError": "Üleslaadimine ebaõnnestus!",

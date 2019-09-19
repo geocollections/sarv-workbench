@@ -2,6 +2,8 @@
   <div class="attachment-wrapper">
     <slot name="loader"></slot>
 
+    <slot name="locked-info" v-if="$route.meta.isEdit && isLocked"></slot>
+
     <slot name="file-input" v-if="!$route.meta.isEdit"></slot>
 
     <slot name="file-output" v-if="$route.meta.isEdit"></slot>
@@ -38,6 +40,9 @@
         type: Boolean,
       },
       isDigitisedReference: {
+        type: Boolean,
+      },
+      isLocked: {
         type: Boolean,
       },
     }
