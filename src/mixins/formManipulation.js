@@ -465,7 +465,6 @@ const formManipulation = {
       if (choice === 'LEAVE') {
         this.setActiveTab(this.nextTab, false)
       } else if (choice === 'SAVE') {
-        console.log(this)
         this.addRelatedData(this.activeTab, true);
         this.setActiveTab(this.nextTab, false);
       }
@@ -566,7 +565,6 @@ const formManipulation = {
             let editableObject = this.removeUnnecessaryFields(entity.new, this.relatedData.copyFields[this.activeTab]);
             formData.append('data', this.formatRelatedData(editableObject));
 
-            // Todo: Check saveData method and maybe refactor
             this.saveData(this.activeTab, formData, 'change/' + this.activeTab + '/' + entity.id).then(isSuccessfullySaved => {
               console.log(isSuccessfullySaved)
               //  UPDATE ROW DATA

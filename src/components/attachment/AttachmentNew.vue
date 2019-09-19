@@ -2533,40 +2533,39 @@
       },
 
       fillAutocompleteFields(obj) {
-        if (this.isNotEmpty(obj.agent_digitised__id)) this.attachment.agent_digitised = { id: obj.agent_digitised__id, agent: obj.agent_digitised__agent };
-        if (this.isNotEmpty(obj.author_id)) this.attachment.author = { id: obj.author_id, agent: obj.author__agent };
-        if (this.isNotEmpty(obj.copyright_agent__id)) this.attachment.copyright_agent = { id: obj.copyright_agent__id, agent: obj.copyright_agent__agent };
-        if (this.isNotEmpty(obj.image_type__id)) this.attachment.image_type = { id: obj.image_type__id, value: obj.image_type__value, value_en: obj.image_type__value_en };
-        if (this.isNotEmpty(obj.imageset__id)) this.attachment.imageset = { id: obj.imageset__id, imageset_number: obj.imageset__imageset_number };
-        if (this.isNotEmpty(obj.licence__id)) this.attachment.licence = { id: obj.licence__id, licence: obj.licence__licence, licence_en: obj.licence__licence_en};
-        if (this.isNotEmpty(obj.locality)) this.attachment.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en };
-        if (this.isNotEmpty(obj.specimen__id)) this.attachment.specimen = { id: obj.specimen__id, specimen_id: obj.specimen_id, coll__number: obj.specimen__coll__number };
-        if (this.isNotEmpty(obj.reference)) this.attachment.reference = { id: obj.reference, reference: obj.reference__reference };
-        if (this.isNotEmpty(obj.type)) this.attachment.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
-        if (this.isNotEmpty(obj.coll)) this.attachment.coll = { id: obj.coll, number: obj.coll__number };
-      },
-
-      fillRelatedDataAutocompleteFields(obj) {
-
-        if (this.isNotEmpty(obj.taxon)) obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
-
-        return obj
-      },
-
-      loadRelatedData(object) {
-        let query;
-
-        if (object === 'specimen_identification') {
-          // query = fetchSpecimenIdentifications(this.$route.params.id, this.relatedData.searchParameters.specimen_identification)
+        if (this.isNotEmpty(obj.agent_digitised__id)){
+          this.$set(this.attachment, 'agent_digitised', { id: obj.agent_digitised__id, agent: obj.agent_digitised__agent })
         }
-
-        return new Promise(resolve => {
-          query.then(response => {
-            this.relatedData[object] = this.handleResponse(response);
-            this.relatedData.count[object] = response.body.count;
-            resolve(true)
-          });
-        });
+        if (this.isNotEmpty(obj.author_id)) {
+          this.$set(this.attachment, 'author', { id: obj.author_id, agent: obj.author__agent })
+        }
+        if (this.isNotEmpty(obj.copyright_agent__id)) {
+          this.$set(this.attachment, 'copyright_agent', { id: obj.copyright_agent__id, agent: obj.copyright_agent__agent })
+        }
+        if (this.isNotEmpty(obj.image_type__id)) {
+          this.$set(this.attachment, 'image_type', { id: obj.image_type__id, value: obj.image_type__value, value_en: obj.image_type__value_en })
+        }
+        if (this.isNotEmpty(obj.imageset__id)) {
+          this.$set(this.attachment, 'imageset', { id: obj.imageset__id, imageset_number: obj.imageset__imageset_number })
+        }
+        if (this.isNotEmpty(obj.licence__id)) {
+          this.$set(this.attachment, 'licence', { id: obj.licence__id, licence: obj.licence__licence, licence_en: obj.licence__licence_en})
+        }
+        if (this.isNotEmpty(obj.locality)) {
+          this.$set(this.attachment, 'locality', { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en })
+        }
+        if (this.isNotEmpty(obj.specimen__id)) {
+          this.$set(this.attachment, 'specimen', { id: obj.specimen__id, specimen_id: obj.specimen_id, coll__number: obj.specimen__coll__number })
+        }
+        if (this.isNotEmpty(obj.reference)) {
+          this.$set(this.attachment, 'reference', { id: obj.reference, reference: obj.reference__reference })
+        }
+        if (this.isNotEmpty(obj.type)) {
+          this.$set(this.attachment, 'type', { id: obj.type, value: obj.type__value, value_en: obj.type__value_en })
+        }
+        if (this.isNotEmpty(obj.coll)) {
+          this.$set(this.attachment, 'coll', { id: obj.coll, number: obj.coll__number })
+        }
       },
 
       /* MultimediaComponent Events START */
@@ -2577,8 +2576,6 @@
       clearUploadedFiles(state) {
         this.clearFiles = false;
         this.files = [];
-        console.log('MV')
-        this.validate('attachment')
       },
 
       updateFields(metadata) {
