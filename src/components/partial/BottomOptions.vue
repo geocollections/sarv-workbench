@@ -143,10 +143,7 @@
     methods: {
       handleClick(action, elementRef) {
         this.sendingData = true;
-        // Todo: Update code that after attachment_new is changed to attachment
-        if (window.location.pathname.includes('attachment_new')) this.$parent.$emit('button-clicked', action, this.object);
-        else if (this.object === 'attachment') this.$emit('button-clicked', action, this.object);
-        else this.$parent.$emit('button-clicked', action, this.object);
+        this.$parent.$emit('button-clicked', action, this.object);
 
         // Resetting focus after 500ms
         setTimeout(() => {

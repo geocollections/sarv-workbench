@@ -1825,6 +1825,44 @@
     </template>
 
 
+    <template v-slot:change-type>
+      <div class="change-type">
+        <fieldset class="border-top px-2 mb-2" id="block-changeType">
+          <legend class="w-auto my-0" :class="{ 'text-primary': !block.changeType }" @click="block.changeType = !block.changeType">
+            {{ $t('attachment.changeType') }}
+            <i class="fas fa-exchange-alt"></i>
+          </legend>
+
+          <transition name="fade">
+            <div v-show="block.changeType">
+
+              <!-- CHANGE TYPE -->
+              <div class="row">
+                <div class="col-md-6">
+                  <label :for="`specimen_image_attachment`">
+                    <span>{{ $t('attachment.changeType') }}: </span>
+                    <span v-if="currentAttachmentType !== getAttachmentTypeAsString(attachment.specimen_image_attachment)">
+                      <b>{{ $t('attachment.' + currentAttachmentType) }} </b>
+                      <i class="fas fa-long-arrow-alt-right"></i>
+                      <b> {{ $t('attachment.' + getAttachmentTypeAsString(attachment.specimen_image_attachment)) }}</b>
+                    </span>
+                  </label>
+                  <b-form-select id="specimen_image_attachment" v-model="attachment.specimen_image_attachment" class="mb-3">
+                    <option :value="2" :disabled="!isValidToChangeTo('photoArchive')">{{ $t('attachment.photoArchive') }}</option>
+                    <option :value="1" :disabled="!isValidToChangeTo('specimenImage')">{{ $t('attachment.specimenImage') }}</option>
+                    <option :value="3" :disabled="!isValidToChangeTo('otherFile')">{{ $t('attachment.otherFiles') }}</option>
+                    <option :value="4" :disabled="!isValidToChangeTo('digitisedReference')">{{ $t('attachment.digitisedReference') }}</option>
+                  </b-form-select>
+                </div>
+              </div>
+
+            </div>
+          </transition>
+        </fieldset>
+      </div>
+    </template>
+
+
     <template v-slot:checkbox>
       <div class="d-flex flex-wrap mt-3">
         <vs-checkbox id="is_private" v-model="attachment.is_private" icon="fa-eye-slash" icon-pack="fas">
@@ -1953,6 +1991,13 @@
         else if (this.isDigitisedReference) return true;
         else return true
       },
+
+      currentAttachmentType() {
+        if (this.isAttachmentPhotoArchive) return 'photoArchive';
+        else if (this.isAttachmentSpecimenImage) return 'specimenImage';
+        else if (this.isAttachmentOtherFile) return 'otherFiles';
+        else if (this.isAttachmentDigitisedReference) return 'digitisedReference';
+      }
     },
 
     created() {
@@ -2039,7 +2084,11 @@
       'attachment': {
         handler: function (newVal) {
           if (this.isNotEmpty(newVal)) {
-            this.isAttachmentLocked = newVal.is_locked
+            this.isAttachmentLocked = newVal.is_locked;
+            this.isAttachmentPhotoArchive = newVal.specimen_image_attachment === 2;
+            this.isAttachmentSpecimenImage =  newVal.specimen_image_attachment === 1;
+            this.isAttachmentOtherFile =  newVal.specimen_image_attachment === 3;
+            this.isAttachmentDigitisedReference =  newVal.specimen_image_attachment === 4;
           }
         }
       }
@@ -2148,11 +2197,15 @@
           attachment: this.setDefaultAttachmentFields(),
           rawAttachment: null,
           searchParameters: this.setDefaultSearchParameters(),
-          block: {file: true, requiredFields: true, info: true, map: true, description: true, relatedData: true},
+          block: {file: true, requiredFields: true, info: true, map: true, description: true, relatedData: true, changeType: false},
           showCollapseMap: null,
           clearFiles: false,
           selectedRelatedTable: null,
           isAttachmentLocked: false,
+          isAttachmentPhotoArchive: false,
+          isAttachmentSpecimenImage: false,
+          isAttachmentOtherFile: false,
+          isAttachmentDigitisedReference: false
         }
       },
 
@@ -2256,6 +2309,8 @@
       formatDataForUpload(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
 
+        // Todo: Remove unnecessary fields from object which does not need them, for example only digitised reference needs reference field
+
         if (!this.$route.meta.isEdit) {
           if (this.isPhotoArchive) {
             this.$localStorage.set('photoArchive', objectToUpload);
@@ -2319,18 +2374,17 @@
       },
 
       fillAutocompleteFields(obj) {
-        console.log(obj)
-        this.attachment.agent_digitised = { id: obj.agent_digitised__id, agent: obj.agent_digitised__agent };
-        this.attachment.author = { id: obj.author_id, agent: obj.author__agent };
-        this.attachment.copyright_agent = { id: obj.copyright_agent__id, agent: obj.copyright_agent__agent };
-        this.attachment.image_type = { id: obj.image_type__id, value: obj.image_type__value, value_en: obj.image_type__value_en };
-        this.attachment.imageset = { id: obj.imageset__id, imageset_number: obj.imageset__imageset_number };
-        this.attachment.licence = { id: obj.licence__id, licence: obj.licence__licence, licence_en: obj.licence__licence_en};
-        this.attachment.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en };
-        this.attachment.specimen = { id: obj.specimen__id, specimen_id: obj.specimen_id, coll__number: obj.specimen__coll__number };
-        this.attachment.reference = { id: obj.reference, reference: obj.reference__reference };
-        this.attachment.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
-        this.attachment.coll = { id: obj.coll, number: obj.coll__number };
+        if (this.isNotEmpty(obj.agent_digitised__id)) this.attachment.agent_digitised = { id: obj.agent_digitised__id, agent: obj.agent_digitised__agent };
+        if (this.isNotEmpty(obj.author_id)) this.attachment.author = { id: obj.author_id, agent: obj.author__agent };
+        if (this.isNotEmpty(obj.copyright_agent__id)) this.attachment.copyright_agent = { id: obj.copyright_agent__id, agent: obj.copyright_agent__agent };
+        if (this.isNotEmpty(obj.image_type__id)) this.attachment.image_type = { id: obj.image_type__id, value: obj.image_type__value, value_en: obj.image_type__value_en };
+        if (this.isNotEmpty(obj.imageset__id)) this.attachment.imageset = { id: obj.imageset__id, imageset_number: obj.imageset__imageset_number };
+        if (this.isNotEmpty(obj.licence__id)) this.attachment.licence = { id: obj.licence__id, licence: obj.licence__licence, licence_en: obj.licence__licence_en};
+        if (this.isNotEmpty(obj.locality)) this.attachment.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en };
+        if (this.isNotEmpty(obj.specimen__id)) this.attachment.specimen = { id: obj.specimen__id, specimen_id: obj.specimen_id, coll__number: obj.specimen__coll__number };
+        if (this.isNotEmpty(obj.reference)) this.attachment.reference = { id: obj.reference, reference: obj.reference__reference };
+        if (this.isNotEmpty(obj.type)) this.attachment.type = { id: obj.type, value: obj.type__value, value_en: obj.type__value_en };
+        if (this.isNotEmpty(obj.coll)) this.attachment.coll = { id: obj.coll, number: obj.coll__number };
       },
 
       fillRelatedDataAutocompleteFields(obj) {
@@ -2446,6 +2500,26 @@
       resetImageset() {
         this.attachment.imageset = null;
         this.autocomplete.imagesets = [];
+      },
+
+      isValidToChangeTo(changeTo) {
+        // Todo: Implement checks
+        if (changeTo === 'specimenImage') {
+          return true
+        } else if(changeTo === 'photoArchive') {
+          return true
+        } else if (changeTo === 'otherFile') {
+          return true
+        } else if (changeTo === 'digitisedReference') {
+          return true
+        }
+      },
+
+      getAttachmentTypeAsString(type) {
+        if (type === 2) return 'photoArchive';
+        else if (type === 1) return 'specimenImage';
+        else if (type === 3) return 'otherFiles';
+        else if (type === 4) return 'digitisedReference';
       },
 
       clearLocalStorage() {

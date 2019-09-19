@@ -99,7 +99,7 @@
           else if (fileType.includes('xls') || fileType.includes('ods')) return 'fa-file-excel'; // 4 xls and 2 ods
           else if (fileType.includes('txt')) return 'fa-file-alt'; // 1 txt
           else if (fileType.includes('webm')) return 'fa-file-video'; // 1 webm
-          else return 'fa-file'; // 4hz1
+          else return 'fa-file'; // 4 hz1
         }
       },
 
