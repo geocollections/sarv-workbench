@@ -1894,7 +1894,22 @@
   import {mapState} from "vuex";
   import {
     fetchAttachment,
-    fetchAttachmentKeyword, fetchListAttachmentType,
+    fetchAttachmentKeyword,
+    fetchAttachmentLinkAnalyses,
+    fetchAttachmentLinkCollections,
+    fetchAttachmentLinkDatasets,
+    fetchAttachmentLinkDois,
+    fetchAttachmentLinkDrillcoreBoxes,
+    fetchAttachmentLinkDrillcores,
+    fetchAttachmentLinkLocalities,
+    fetchAttachmentLinkPreparations,
+    fetchAttachmentLinkProjects,
+    fetchAttachmentLinkReferences,
+    fetchAttachmentLinkSamples,
+    fetchAttachmentLinkSampleSeries, fetchAttachmentLinkSites,
+    fetchAttachmentLinkSpecimens,
+    fetchAttachmentLinkStorages,
+    fetchListAttachmentType,
     fetchListImageType,
     fetchListLicences
   } from "../../assets/js/api/apiCalls";
@@ -2269,6 +2284,151 @@
               return {
                 keyword: entity.keyword__keyword,
                 id: entity.keyword
+              }
+            })
+          });
+
+          fetchAttachmentLinkCollections(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__collection = collections.map(entity => {
+              return {
+                id: entity.collection,
+                name: entity.collection__name,
+                name_en: entity.collection__name_en,
+              }
+            })
+          });
+          fetchAttachmentLinkSpecimens(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__specimen = collections.map(entity => {
+              return {
+                id: entity.specimen,
+                specimen_id: entity.specimen_id,
+                coll__number: entity.specimen__coll__number,
+              }
+            })
+          });
+          fetchAttachmentLinkSamples(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__sample = collections.map(entity => {
+              return {
+                id: entity.sample,
+                number: entity.sample__number,
+              }
+            })
+          });
+          fetchAttachmentLinkSampleSeries(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__sample_series = collections.map(entity => {
+              return {
+                id: entity.sample_series,
+                name: entity.sample_series__name,
+              }
+            })
+          });
+          fetchAttachmentLinkAnalyses(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__analysis = collections.map(entity => {
+              return {
+                id: entity.analysis,
+                sample__number: entity.analysis__sample__number,
+              }
+            })
+          });
+          fetchAttachmentLinkDatasets(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__dataset = collections.map(entity => {
+              return {
+                id: entity.dataset,
+                name: entity.dataset__name,
+                name_en: entity.dataset__name_en,
+              }
+            })
+          });
+          fetchAttachmentLinkLocalities(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__locality = collections.map(entity => {
+              return {
+                id: entity.locality,
+                locality: entity.locality__locality,
+                locality_en: entity.locality__locality_en,
+              }
+            })
+          });
+          fetchAttachmentLinkDrillcores(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__drillcore = collections.map(entity => {
+              return {
+                id: entity.drillcore,
+                drillcore: entity.drillcore__drillcore,
+                drillcore_en: entity.drillcore__drillcore_en,
+              }
+            })
+          });
+          fetchAttachmentLinkDrillcoreBoxes(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__drillcore_box = collections.map(entity => {
+              return {
+                id: entity.drillcore_box,
+                drillcore__drillcore: entity.drillcore_box__drillcore__drillcore,
+                drillcore__drillcore_en: entity.drillcore_box__drillcore__drillcore_en,
+              }
+            })
+          });
+          fetchAttachmentLinkPreparations(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__preparation = collections.map(entity => {
+              return {
+                id: entity.preparation,
+                preparation_number: entity.preparation__preparation_number,
+              }
+            })
+          });
+          fetchAttachmentLinkReferences(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__reference = collections.map(entity => {
+              return {
+                id: entity.reference,
+                reference: entity.reference__reference,
+              }
+            })
+          });
+          fetchAttachmentLinkDois(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__doi = collections.map(entity => {
+              return {
+                id: entity.doi,
+                identifier: entity.doi_identifier,
+              }
+            })
+          });
+          fetchAttachmentLinkStorages(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__storage = collections.map(entity => {
+              return {
+                id: entity.storage,
+                location: entity.storage__location,
+                contents: entity.storage__contents,
+              }
+            })
+          });
+          fetchAttachmentLinkProjects(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__project = collections.map(entity => {
+              return {
+                id: entity.project,
+                name: entity.project__name,
+                name_en: entity.project__name_en,
+              }
+            })
+          });
+          fetchAttachmentLinkSites(this.$route.params.id).then(response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__site = collections.map(entity => {
+              return {
+                id: entity.site,
+                name: entity.site__name,
+                name_en: entity.site__name_en,
               }
             })
           });

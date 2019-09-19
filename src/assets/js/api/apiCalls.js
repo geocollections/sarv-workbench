@@ -122,6 +122,66 @@ export function fetchListAttachmentType() {
   return fetch(`list_attachment_type/?format=json`)
 }
 
+export function fetchAttachmentLinkCollections(id) {
+  return fetch(`attachment_link/?attachment=${id}&collection__isnull=false&fields=collection,collection__name,collection__name_en&format=json`)
+}
+
+export function fetchAttachmentLinkSpecimens(id) {
+  return fetch(`attachment_link/?attachment=${id}&specimen__isnull=false&fields=specimen,specimen_id,specimen__coll__number&format=json`)
+}
+
+export function fetchAttachmentLinkSamples(id) {
+  return fetch(`attachment_link/?attachment=${id}&sample__isnull=false&fields=sample,sample__number&format=json`)
+}
+
+export function fetchAttachmentLinkSampleSeries(id) {
+  return fetch(`attachment_link/?attachment=${id}&sample_series__isnull=false&fields=sample_series,sample_series__name&format=json`)
+}
+
+export function fetchAttachmentLinkAnalyses(id) {
+  return fetch(`attachment_link/?attachment=${id}&analysis__isnull=false&fields=analysis,analysis__sample__number&format=json`)
+}
+
+export function fetchAttachmentLinkDatasets(id) {
+  return fetch(`attachment_link/?attachment=${id}&dataset__isnull=false&fields=dataset,dataset__name,dataset__name_en&format=json`)
+}
+
+export function fetchAttachmentLinkDois(id) {
+  return fetch(`attachment_link/?attachment=${id}&doi__isnull=false&fields=doi,doi__identifier&format=json`)
+}
+
+export function fetchAttachmentLinkLocalities(id) {
+  return fetch(`attachment_link/?attachment=${id}&locality__isnull=false&fields=locality,locality__locality,locality__locality_en&format=json`)
+}
+
+export function fetchAttachmentLinkDrillcores(id) {
+  return fetch(`attachment_link/?attachment=${id}&drillcore__isnull=false&fields=drillcore,drillcore__drillcore,drillcore__drillcore_en&format=json`)
+}
+
+export function fetchAttachmentLinkDrillcoreBoxes(id) {
+  return fetch(`attachment_link/?attachment=${id}&drillcore_box__isnull=false&fields=drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en&format=json`)
+}
+
+export function fetchAttachmentLinkPreparations(id) {
+  return fetch(`attachment_link/?attachment=${id}&preparation__isnull=false&fields=preparation,preparation__preparation_number&format=json`)
+}
+
+export function fetchAttachmentLinkReferences(id) {
+  return fetch(`attachment_link/?attachment=${id}&reference__isnull=false&fields=reference,reference__reference&format=json`)
+}
+
+export function fetchAttachmentLinkStorages(id) {
+  return fetch(`attachment_link/?attachment=${id}&storage__isnull=false&fields=storage,storage__location,storage__contents&format=json`)
+}
+
+export function fetchAttachmentLinkProjects(id) {
+  return fetch(`attachment_link/?attachment=${id}&project__isnull=false&fields=project,project__name,project__name_en&format=json`)
+}
+
+export function fetchAttachmentLinkSites(id) {
+  return fetch(`attachment_link/?attachment=${id}&site__isnull=false&fields=site,site__name,site__name_en&format=json`)
+}
+
 /*************************
  ***  ATTACHMENTS END  ***
  *************************/
