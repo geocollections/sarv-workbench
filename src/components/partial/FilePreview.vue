@@ -34,7 +34,11 @@
     </div>
 
     <div class="align-self-end" v-if="isAudioFile || isVideoFile">
-      test
+      <div class="btn btn-outline-primary btn-sm link"
+           @click="openUrlInNewWindow({url: getFileLink({filename: data.uuid_filename})})"
+           :title="getFileLink({filename: data.uuid_filename})">
+        <i class="fas fa-external-link-alt"></i>
+      </div>
     </div>
 
   </div>
