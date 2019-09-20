@@ -61,7 +61,7 @@
         if (this.data.attachment_format__value) {
            return !!this.data.attachment_format__value.includes('video');
         } else {
-          // As of 18.09.2019 total of 1508 attachments without attachment_format__value and only 1 is webm
+          // As of 18.09.2019 total of 1508 attachments are without attachment_format__value and only 1 is webm
           return !!this.data.uuid_filename.split('.')[1].includes('webm');
         }
       },
@@ -71,7 +71,7 @@
           return !!this.data.attachment_format__value.includes('image');
         } else {
           let fileType = this.data.uuid_filename.split('.')[1];
-          // As of 18.09.2019 total of 1508 attachments without attachment_format__value which 859 are jpg and 2 png
+          // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
           return !!(fileType.includes('jpg') || fileType.includes('png'));
         }
       }
@@ -93,7 +93,7 @@
           else return 'fa-file'
         } else {
           let fileType = attachment.uuid_filename.split('.')[1];
-          // As of 18.09.2019 total of 1508 attachments without attachment_format__value
+          // As of 18.09.2019 total of 1508 attachments are without attachment_format__value
           if (fileType.includes('jpg') || fileType.includes('png')) return 'fa-file-image'; // 859 jpg and 2 png
           else if (fileType.includes('pdf')) return 'fa-file-pdf'; // 635 pdf
           else if (fileType.includes('xls') || fileType.includes('ods')) return 'fa-file-excel'; // 4 xls and 2 ods

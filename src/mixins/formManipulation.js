@@ -184,8 +184,8 @@ const formManipulation = {
             if (this.$route.meta.isEdit) this.$emit('data-loaded', this[object]);
 
             if (!returnPromise) {
-              if (addAnother) {
-                if (this.isNotEmpty(savedObjectId) && !this.$route.meta.isEdit) {
+              if (addAnother) { // Save
+                if (this.isNotEmpty(savedObjectId) && !this.$route.meta.isEdit) { // savedObjectId exists and is add view
                   if (object === 'imageset') {
                     this.$router.push({ name: 'photo_archive add', params: { imageset: { id: savedObjectId, imageset_number: this[object].imageset_number } } })
                   } else if (object === 'journal') {
@@ -193,7 +193,9 @@ const formManipulation = {
                   } else this.$router.push({ path: '/' + object + '/' + savedObjectId });
                 }
               }
-              else this.$router.push({ path: '/' + object })
+              else { // Save and leave
+                if (this.isNotEmpty(savedObjectId)) this.$router.push({path: '/' + object})
+              }
             } else resolve(true);
           }, errResponse => resolve(false));
 

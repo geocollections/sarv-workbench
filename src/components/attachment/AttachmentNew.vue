@@ -547,6 +547,7 @@
                                    :placeholder="$t('add.inputs.autocomplete')"
                                    :loading="autocomplete.loaders.specimen"
                                    :options="autocomplete.specimen"
+                                   :class="{ valid: $route.meta.isEdit && isNotEmpty(attachment.specimen), invalid: $route.meta.isEdit && !isNotEmpty(attachment.specimen) }"
                                    @search-change="autocompleteSpecimenSearch"
                                    :internal-search="false"
                                    :preserve-search="true"
@@ -2012,6 +2013,29 @@
         else if (this.isAttachmentSpecimenImage) return 'specimenImage';
         else if (this.isAttachmentOtherFile) return 'otherFiles';
         else if (this.isAttachmentDigitisedReference) return 'digitisedReference';
+      },
+
+      isImageFile() {
+        if (this.rawAttachment) {
+          if (this.rawAttachment.attachment_format__value) {
+            return !!this.rawAttachment.attachment_format__value.includes('image');
+          } else {
+            let fileType = this.rawAttachment.uuid_filename.split('.')[1];
+            // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
+            return !!(fileType.includes('jpg') || fileType.includes('png'));
+          }
+        } else return false
+      },
+
+      isPdfFile() {
+        if (this.rawAttachment) {
+          if (this.rawAttachment.attachment_format__value) {
+            return !!this.rawAttachment.attachment_format__value.includes('pdf');
+          } else {
+            // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 635 are pdf
+            return !!(this.rawAttachment.uuid_filename.split('.')[1].includes('pdf'));
+          }
+        } else return false
       }
     },
 
@@ -2199,7 +2223,7 @@
           },
           requiredFields: {
             photo_archive: ['imageset'],
-            specimen_image: [],
+            specimen_image: [this.$route.meta.isEdit ? 'specimen' : ''],
             other_file: ['description', 'description_en'],
             digitised_reference: ['reference']
           },
@@ -2661,15 +2685,14 @@
       },
 
       isValidToChangeTo(changeTo) {
-        // Todo: Implement checks
         if (changeTo === 'specimenImage') {
           return true
         } else if(changeTo === 'photoArchive') {
-          return true
+          return this.isImageFile;
         } else if (changeTo === 'otherFile') {
           return true
         } else if (changeTo === 'digitisedReference') {
-          return true
+          return this.isPdfFile;
         }
       },
 
