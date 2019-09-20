@@ -663,9 +663,6 @@
     fetchLocalityReferenceForReference,
     fetchAttachmentForReference,
     fetchLibrariesForReference,
-    fetchAddDoi,
-    fetchAddAttachmentLink,
-    fetchAddDoiGeolocation,
     fetchJournal, fetchListLocalityReferenceType
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
@@ -760,41 +757,6 @@
           if (this.isNotEmpty(newVal)) fetchAttachmentForReference(this.$route.params.id).then(response => this.attachment = this.handleResponse(response));
         }
       },
-      'newlyAddedDoiId'(newval, oldval) {
-        if (typeof newval !== 'undefined' && newval !== null) {
-          let attachment = this.attachment;
-          let locality = this.relatedData.locality;
-
-          if (typeof attachment !== 'undefined' && attachment !== null && attachment.length > 0) {
-            let attachmentLinkFormData = new FormData();
-            attachmentLinkFormData.append('data', JSON.stringify({
-              doi: newval,
-              attachment: attachment[0].id,
-            }));
-            fetchAddAttachmentLink(attachmentLinkFormData).then(response => {
-              if (response.status === 200) this.toastResponseMessages(response)
-            }, errResponse => {
-              toastError({text: 'Attachment Link upload failed!'});
-            });
-          }
-          if (typeof locality !== 'undefined' && locality !== null && locality.length > 0) {
-            let doiGeolocationFormData = new FormData();
-            locality.forEach((entity) => {
-              doiGeolocationFormData.append('data', JSON.stringify({
-                doi: newval,
-                locality: entity.id
-              }))
-            })
-            fetchAddDoiGeolocation(doiGeolocationFormData).then(response => {
-              if (response.status === 200) this.toastResponseMessages(response)
-            }, errResponse => {
-              toastError({text: 'Doi Geolocation upload failed!'});
-            });
-          }
-
-          this.$router.push({path: '/doi/' + newval})
-        }
-      }
     },
 
     methods: {
@@ -845,7 +807,6 @@
           searchParameters: this.setDefaultSearchParameters(),
           attachment: [],
           doi: {},
-          newlyAddedDoiId: null,
           block: {
             requiredFields: true,
             info: true,
@@ -1252,63 +1213,6 @@
       addPDF(fileData) {
         this.addFileAsObject(fileData, 'reference');
       },
-
-      /**
-       * Returns boolean value whether to show DOI button or not.
-       *
-       * (this.isNotEmpty(this.reference.type) && this.reference.type.id > 3) --> Checks if type exists and id is higher than 3
-       * this.isDefinedAndNotNullAndNotEmptyString(this.reference.doi) --> Checks if DOI exists
-       * this.isUserAllowedTo('add', 'doi') --> Checks if user has rights to add to doi table
-       * (this.validate('reference') === 1) --> Checks if reference required fields are filled
-       */
-      showDoiButton() {
-        return this.isNotEmpty(this.reference.type) && this.reference.type.id > 3
-          && this.isNotEmpty(this.reference.doi)
-          && this.$_permissionsMixin_isUserAllowedTo('add', 'doi') && this.validate('reference') === 1
-      },
-
-      // newlyAddedDoiID watcher triggers DOI related data requests + route push
-      addNewDoi() {
-        if (this.validate('reference')) {
-          // TODO: Should make into nicer modal or something
-          // Asking for user confirmation
-          if (confirm(this.$t('reference.doiConfirmation'))) {
-            this.sendingData = true;
-
-            let doiFormData = new FormData();
-            doiFormData.append('data', JSON.stringify({
-              creators: this.reference.author,
-              publication_year: this.reference.year,
-              title: this.reference.title,
-              title_alternative: this.reference.title_original,
-              title_translated: this.reference.title_translated,
-              language: this.reference.language.id,
-              publisher: this.reference.publisher,
-              abstract: this.reference.abstract,
-              reference: this.reference.id,
-              subjects: this.reference.author_keywords + this.reference.tags, // Todo: Tags was dropped so change it to reference keywords
-              resource_type: 12,
-              version: 1.0,
-              formats: 'pdf',
-            }));
-
-            fetchAddDoi(doiFormData).then(response => {
-              if (response.status === 200) {
-                // Watcher triggers DOI related data requests + route push
-                this.newlyAddedDoiId = response.body.id
-                this.sendingData = false
-                this.toastResponseMessages(response)
-              }
-            }, errResponse => {
-              this.sendingData = false
-              toastError({text: 'DOI upload failed!'});
-            });
-          } else {
-            toastInfo({text: this.$t('messages.userCancelled')})
-          }
-        } else toastError({text: this.$t('messages.checkForm')})
-      },
-
     },
   }
 </script>
@@ -1323,9 +1227,5 @@
 
   .link:hover {
     cursor: pointer;
-  }
-
-  .url-link {
-
   }
 </style>
