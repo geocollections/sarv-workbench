@@ -642,6 +642,11 @@
       </div>
     </div>
 
+    <div class="d-flex justify-content-end" v-if="$route.meta.isEdit">
+      <new-doi-button v-if="reference && reference.type && reference.type.id > 3 && this.validate('reference')"
+                      object="reference" :data="reference" :related-data="relatedData" :attachment="attachment"/>
+    </div>
+
   </div>
 </template>
 
@@ -677,10 +682,12 @@
   import Editor from "../partial/editor/Editor";
   import {mapState} from "vuex";
   import LinkedKeywordTable from "../keyword/LinkedKeywordTable";
+  import NewDoiButton from "../partial/NewDoiButton";
 
   export default {
     name: "Reference",
     components: {
+      NewDoiButton,
       LinkedKeywordTable,
       Editor,
       MultimediaComponent,
@@ -836,7 +843,7 @@
           previousRecord: {},
           nextRecord: {},
           searchParameters: this.setDefaultSearchParameters(),
-          attachment: {},
+          attachment: [],
           doi: {},
           newlyAddedDoiId: null,
           block: {

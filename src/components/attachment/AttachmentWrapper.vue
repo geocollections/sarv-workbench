@@ -25,6 +25,8 @@
     <slot name="checkbox"></slot>
 
     <slot name="local-storage" v-if="!$route.meta.isEdit"></slot>
+
+    <slot name="add-doi" v-if="$route.meta.isEdit"></slot>
   </div>
 </template>
 

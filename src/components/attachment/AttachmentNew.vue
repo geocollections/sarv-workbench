@@ -1865,7 +1865,7 @@
 
 
     <template v-slot:checkbox>
-      <div class="d-flex flex-wrap mt-3">
+      <div class="d-flex flex-wrap mt-2">
         <vs-checkbox id="is_private" v-model="attachment.is_private" icon="fa-eye-slash" icon-pack="fas">
           {{ $t('attachment.is_private_text') }}
         </vs-checkbox>
@@ -1876,9 +1876,18 @@
       </div>
     </template>
 
+
     <template v-slot:local-storage>
       <div class="d-flex mt-3">
         <button class="btn btn-sm btn-warning" @click="clearLocalStorage">{{ $t('add.buttons.clearLocalStorage') }}</button>
+      </div>
+    </template>
+
+
+    <template v-slot:add-doi>
+      <div class="d-flex justify-content-end mt-3">
+        <new-doi-button v-if="attachment && rawAttachment && validate('attachment')" object="attachment"
+                        :data="attachment" :raw-data="rawAttachment" :related-data="relatedData"/>
       </div>
     </template>
   </attachment-wrapper>
@@ -1920,11 +1929,13 @@
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
   import FileInformation from "../partial/FileInformation";
   import FilePreview from "../partial/FilePreview";
+  import NewDoiButton from "../partial/NewDoiButton";
 
   export default {
     name: "AttachmentNew",
 
     components: {
+      NewDoiButton,
       FilePreview,
       FileInformation,
       MultimediaComponent,

@@ -1,14 +1,12 @@
 <template>
-  <button class="btn btn-primary"
-          :disabled="sendingData"
-          @click="addNewDoi()">
+  <button class="btn btn-primary" :disabled="sendingData" @click="addNewDoi()">
     <i class="far fa-plus-square"></i>
     {{ $t('edit.buttons.saveNewDoi') }}
   </button>
 </template>
 
 <script>
-  import {fetchAddAttachmentLink, fetchAddDoi, fetchAddDoiAgent} from "../../assets/js/api/apiCalls";
+  import {fetchAddDoi} from "../../assets/js/api/apiCalls";
   import {toastError, toastInfo, toastSuccess} from "../../assets/js/iziToast/iziToast";
 
   export default {
@@ -17,9 +15,14 @@
         type: Object,
         required: true
       },
-      formData: {
+      rawData: {
         type: Object,
-        required: true
+      },
+      relatedData: {
+        type: Object
+      },
+      attachment: {
+        type: Array
       },
       object: {
         type: String,
@@ -34,121 +37,105 @@
       }
     },
     methods: {
-      async addNewDoi() {
+      addNewDoi() {
         if (confirm(this.$t(this.object + '.doiConfirmation'))) {
           this.sendingData = true;
 
           let doi = this.buildDoiObject(this.object);
+          if (typeof doi !== 'undefined') {
+            let doiFormData = new FormData();
+            doiFormData.append('data', JSON.stringify(doi));
 
-          let doiFormData = new FormData();
-          doiFormData.append('data', JSON.stringify(doi));
+            fetchAddDoi(doiFormData).then(response => {
+              if (response && response.body) {
+                if (typeof response.body.message !== 'undefined') toastSuccess({text: response.body.message});
+                else if (typeof response.body.error !== 'undefined') toastError({text: response.body.error});
 
-          let response = await fetchAddDoi(doiFormData).then(response => response, error => toastError({text: 'DOI upload failed!'}))
-
-          if (response) {
-
-            this.addRelatedAttachmentLink(response.body.id, this.data.id)
-            this.addRelatedDoiAgent(response.body.id, this.formData)
-
-            this.$router.push({path: '/doi/' + response.body.id})
+                if (response.body.id) this.$router.push({path: '/doi/' + response.body.id})
+              }
+            }, error => {
+              toastError({text: 'DOI upload failed!'})
+            });
           }
 
           this.sendingData = false;
-
         } else toastInfo({text: this.$t('messages.userCancelled')})
       },
 
       buildDoiObject(object) {
+        let doiObject;
+
         if (object === 'reference') {
-          return {
-            creators: this.formData.author,
-            publication_year: this.formData.year,
-            title: this.formData.title,
-            title_alternative: this.formData.title_original,
-            language: this.formData.language ? this.formData.language.id : null,
-            publisher: this.formData.publisher,
-            abstract: this.formData.abstract,
-            reference: this.formData.id,
-            subjects: this.formData.author_keywords + this.formData.tags,
+          doiObject = {
+            creators: this.data.author,
+            publication_year: this.data.year,
+            title: this.data.title,
+            title_alternative: this.data.title_original,
+            language: this.data.language ? this.data.language.id : null,
+            publisher: this.data.publisher,
+            abstract: this.data.abstract,
+            reference: this.data.id,
+            subjects: (this.relatedData.keyword && this.relatedData.keyword.length > 0) ? this.relatedData.keyword.map(item => item.keyword).join(', ') : null,
             resource_type: 12,
-            version: 1.0,
+            version: '1.0',
             formats: 'pdf',
+            related_data: {}
+          };
+
+          if (this.attachment) doiObject.related_data.attachment_link = [{attachment: this.attachment[0].id}];
+          if (this.relatedData.locality_reference && this.relatedData.locality_reference.length > 0) {
+            doiObject.related_data.doi_geolocation = this.relatedData.locality_reference.map(item => {
+              return {
+                id: item.locality
+              };
+            })
           }
-        } else if (object === 'photoArchive') {
-          return {}
-        }
-         else if (object === 'specimenImage') {
-           return {}
-        }
-         else if (object === 'otherFiles') {
-          return {
-            creators: this.formData.author_free,
+        } else if (object === 'attachment') {
+          console.log(this.data)
+          doiObject = {
+            creators: this.data.author ? this.data.author.agent : this.data.author_free,
             publication_year: new Date().getFullYear(),
-            title: this.data.title_en,
-            title_alternative: this.data.title,
+            title: this.data.description_en ? this.data.description_en : this.data.image_description_en,
+            title_alternative: this.data.description ? this.data.description : this.data.image_description,
             publisher: 'SARV: Geoscience Data Platform',
-            abstract: this.formData.description_en,
-            subjects: this.formData.tags ? this.formData.tags.map(word => word['name']).join('|') : null,
+            abstract: this.data.description_en,
+            subjects: (this.relatedData.keyword && this.relatedData.keyword.length > 0) ? this.relatedData.keyword.map(item => item.keyword).join(', ') : null,
             resource_type: 14,
-            version: 1.0,
-            formats: this.data.attachment_format__value,
-            is_private: this.formData.is_private,
-            licence: this.formData.licence ? this.formData.licence.id : null,
-            copyright_agent: this.formData.copyright_agent ? this.formData.copyright_agent.id : null,
-            // sizes: this.data.size_mb, Todo: Attachment table size field?
+            version: '1.0',
+            formats: this.rawData.attachment_format__value ? this.rawData.attachment_format__value : this.rawData.uuid_filename.split('.')[1],
+            is_private: this.data.is_private,
+            licence: this.data.licence ? this.data.licence.id : null,
+            copyright_agent: this.data.copyright_agent ? this.data.copyright_agent.id : null,
+            related_data: {
+              attachment_link: [{attachment: this.data.id, remarks: this.data.remarks}],
+            }
+          };
+
+          if (this.data.author) {
+            doiObject.related_data.doi_agent = {
+              affiliation: this.data.author.institution_name ? this.data.author.institution_name : null,
+              agent: this.data.author.id,
+              name: this.data.author.agent,
+              orcid: this.data.author.orcid ? this.data.author.orcid : null
+            }
+          } else if (this.data.author_free) {
+            doiObject.related_data.doi_agent = {name: this.data.author_free}
           }
-        } else if (object === 'digitisedReference') {
-           return {}
-        }
 
-      },
-
-      addRelatedAttachmentLink(doiId, attachmentId) {
-        let attachmentLinkFormData = new FormData();
-        attachmentLinkFormData.append('data', JSON.stringify({ doi: doiId, attachment: attachmentId }));
-
-        fetchAddAttachmentLink(attachmentLinkFormData)
-          .then(
-            response => this.toastResponseMessages(response),
-            errResponse => toastError({text: 'Attachment Link upload failed!'})
-          );
-      },
-
-      addRelatedDoiAgent(doiId, formData) {
-        let author = {};
-
-        if ((this.object === 'photoArchive' || this.object === 'specimenImage' || this.object === 'otherFiles') && formData.author) {
-          author = {
-            doi: doiId,
-            agent: formData.author.id,
-            name: formData.author.surename + ', ' + formData.author.forename,
-            affiliation: formData.author.affiliation ? formData.author.affiliation : null, // Todo: Add to author object
-            orcid: formData.author.orcid ? formData.author.orcid : null, // Todo: Add to author object
-          }
-        } else if (this.object === 'digitisedReference' && formData.copyright_agent) {
-          author = {
-            doi: doiId,
-            agent: formData.copyright_agent.id,
-            name: formData.copyright_agent.surename + ', ' + formData.copyright_agent.forename,
-            affiliation: formData.copyright_agent.affiliation ? formData.copyright_agent.affiliation : null, // Todo: Add to author object
-            orcid: formData.copyright_agent.orcid ? formData.copyright_agent.orcid : null, // Todo: Add to author object
+          if (this.data.locality) {
+            doiObject.related_data.doi_geolocation = [{id: this.data.locality.id}]
+          } else if (this.data.image_place) {
+            doiObject.related_data.doi_geolocation = [
+              {
+                place: this.data.image_place,
+                point_latitude: this.data.image_latitude ? this.data.image_latitude : null,
+                point_longitude: this.data.image_longitude ? this.data.image_longitude : null
+              }
+            ]
           }
         }
-
-        let doiAgentFormData = new FormData();
-        doiAgentFormData.append('data', JSON.stringify(author));
-
-        fetchAddDoiAgent(doiAgentFormData)
-          .then(
-            response => this.toastResponseMessages(response),
-            errResponse => toastError({text: 'Doi Agent upload failed!'})
-          );
+        return doiObject;
       },
-
-      toastResponseMessages(response) {
-        if (typeof response.body.message !== 'undefined') toastSuccess({text: response.body.message});
-        if (typeof response.body.error !== 'undefined') toastError({text: response.body.error});
-      }
     }
   }
 </script>
