@@ -2234,7 +2234,7 @@
           },
           requiredFields: {
             photo_archive: ['imageset'],
-            specimen_image: [this.$route.meta.isEdit ? 'specimen' : ''],
+            specimen_image: [this.$route.meta.isEdit ? 'specimen' : 'author'],
             other_file: ['description', 'description_en'],
             digitised_reference: ['reference']
           },

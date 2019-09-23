@@ -156,7 +156,7 @@
       setInitialData() {
         return {
           searchHistory: 'keywordSearchHistory',
-          copyFields: ['id', 'keyword', 'language', 'keyword_category', 'related_keyword', 'remarks'],
+          copyFields: ['id', 'keyword', 'language', 'keyword_category', 'related_keyword', 'remarks', 'is_primary'],
           autocomplete: {
             loaders: {
               keyword_category: false,
