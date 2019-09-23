@@ -643,7 +643,7 @@
     </div>
 
     <div class="d-flex justify-content-end" v-if="$route.meta.isEdit">
-      <new-doi-button v-if="reference && reference.type && reference.type.id > 3 && this.validate('reference')"
+      <new-doi-button v-if="reference && reference.type && reference.type.id > 3 && this.validate('reference') && this.isUserAllowedTo('add', 'doi')"
                       object="reference" :data="reference" :related-data="relatedData" :attachment="attachment"/>
     </div>
 

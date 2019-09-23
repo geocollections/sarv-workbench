@@ -82,7 +82,7 @@
             related_data: {}
           };
 
-          if (this.attachment) doiObject.related_data.attachment_link = [{attachment: this.attachment[0].id}];
+          if (this.attachment) doiObject.related_data.attachment = [{attachment: this.attachment[0].id}];
           if (this.relatedData.locality_reference && this.relatedData.locality_reference.length > 0) {
             doiObject.related_data.doi_geolocation = this.relatedData.locality_reference.map(item => {
               return {
@@ -107,7 +107,7 @@
             licence: this.data.licence ? this.data.licence.id : null,
             copyright_agent: this.data.copyright_agent ? this.data.copyright_agent.id : null,
             related_data: {
-              attachment_link: [{attachment: this.data.id, remarks: this.data.remarks}],
+              attachment: [{attachment: this.data.id, remarks: this.data.remarks}],
             }
           };
 
