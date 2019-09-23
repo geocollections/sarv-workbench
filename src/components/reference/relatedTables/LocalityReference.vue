@@ -7,7 +7,7 @@
           <thead class="thead-light">
           <tr>
             <th>{{ $t('locality.locality') }}</th>
-            <th>{{ $t('locality.type') }}</th>
+<!--            <th>{{ $t('locality.type') }}</th>-->
             <th>{{ $t('reference.pages') }}</th>
             <th>{{ $t('reference.figures') }}</th>
             <th>{{ $t('reference.remarks') }}</th>
@@ -27,7 +27,9 @@
               </router-link>
             </td>
 
-            <td v-show="!entity.editMode">{{ entity.type }}</td>
+<!--            <td v-show="!entity.editMode">-->
+<!--              <span v-translate="{ et: entity.type__value, en: entity.type__value_en}"></span>-->
+<!--            </td>-->
 
             <td v-show="!entity.editMode">{{ entity.pages }}</td>
 
@@ -56,20 +58,20 @@
               </vue-multiselect>
             </td>
 
-            <td v-if="entity.editMode">
-              <vue-multiselect v-model="entity.new.type"
-                               id="type"
-                               :options="autocomplete.locality_reference_type"
-                               track-by="id"
-                               :label="commonLabel"
-                               :placeholder="$t('add.inputs.autocomplete')"
-                               :show-labels="false">
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-              </vue-multiselect>
-            </td>
+<!--            <td v-if="entity.editMode">-->
+<!--              <vue-multiselect v-model="entity.new.type"-->
+<!--                               id="type"-->
+<!--                               :options="autocomplete.locality_reference_type"-->
+<!--                               track-by="id"-->
+<!--                               :label="commonLabel"-->
+<!--                               :placeholder="$t('add.inputs.autocomplete')"-->
+<!--                               :show-labels="false">-->
+<!--                <template slot="singleLabel" slot-scope="{ option }">-->
+<!--                  <strong>{{ option[commonLabel] }}</strong>-->
+<!--                </template>-->
+<!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
+<!--              </vue-multiselect>-->
+<!--            </td>-->
 
             <td v-if="entity.editMode">
               <b-form-input v-model="entity.new.pages" type="text"/>
@@ -121,20 +123,20 @@
               </vue-multiselect>
             </td>
 
-            <td>
-              <vue-multiselect v-model="relatedData.insert.locality_reference.type"
-                               id="type_insert"
-                               :options="autocomplete.locality_reference_type"
-                               track-by="id"
-                               :label="commonLabel"
-                               :placeholder="$t('add.inputs.autocomplete')"
-                               :show-labels="false">
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
-              </vue-multiselect>
-            </td>
+<!--            <td>-->
+<!--              <vue-multiselect v-model="relatedData.insert.locality_reference.type"-->
+<!--                               id="type_insert"-->
+<!--                               :options="autocomplete.locality_reference_type"-->
+<!--                               track-by="id"-->
+<!--                               :label="commonLabel"-->
+<!--                               :placeholder="$t('add.inputs.autocomplete')"-->
+<!--                               :show-labels="false">-->
+<!--                <template slot="singleLabel" slot-scope="{ option }">-->
+<!--                  <strong>{{ option[commonLabel] }}</strong>-->
+<!--                </template>-->
+<!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
+<!--              </vue-multiselect>-->
+<!--            </td>-->
 
             <td>
               <b-form-input v-model="relatedData.insert.locality_reference.pages" type="text"/>
