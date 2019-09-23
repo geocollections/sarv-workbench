@@ -818,13 +818,81 @@
         if (!this.$route.meta.isEdit) {
           uploadableObject.related_data = {};
 
-          this.relatedTabs.forEach(tab => {
-            if (this.isNotEmpty(this.relatedData[tab.name])) uploadableObject.related_data[tab.name] = this.relatedData[tab.name]
-          });
+          if (this.isNotEmpty(this.relatedData.doi_agent)) {
+            let clonedData = cloneDeep(this.relatedData.doi_agent);
+            uploadableObject.related_data.doi_agent = clonedData
+              .filter(entity => this.isNotEmpty(entity.name))
+              .map((entity) => {
+                return {
+                  affiliation: entity.affiliation ? entity.affiliation : null,
+                  agent: entity.agent ? entity.agent : null,
+                  agent_type: entity.agent_type ? entity.agent_type : null,
+                  name: entity.name,
+                  orcid: entity.orcid ? entity.orcid : null
+                };
+              });
+          } else uploadableObject.related_data.doi_agent = null;
+
+          if (this.isNotEmpty(this.relatedData.attachment_link)) {
+            let clonedData = cloneDeep(this.relatedData.attachment_link);
+            uploadableObject.related_data.attachment = clonedData
+              .filter(entity => this.isNotEmpty(entity.attachment))
+              .map((entity) => {
+                return {
+                  attachment: entity.attachment,
+                  remarks: entity.remarks ? entity.remarks : null,
+                };
+              });
+          } else uploadableObject.related_data.doi_agent = null;
+
+          if (this.isNotEmpty(this.relatedData.doi_geolocation)) {
+            let clonedData = cloneDeep(this.relatedData.doi_geolocation);
+            uploadableObject.related_data.doi_geolocation = clonedData
+              .filter(entity => this.isNotEmpty(entity.locality))
+              .map((entity) => {
+                return {
+                  box_e_longitude: entity.box_e_longitude ? entity.box_e_longitude : null,
+                  box_n_latitude: entity.box_n_latitude ? entity.box_n_latitude : null,
+                  box_s_latitude: entity.box_s_latitude ? entity.box_s_latitude : null,
+                  box_w_longitude: entity.box_w_longitude ? entity.box_w_longitude : null,
+                  locality: entity.locality,
+                  place: entity.place ? entity.place : null,
+                  point_latitude: entity.point_latitude ? entity.point_latitude : null,
+                  point_longitude: entity.point_longitude ? entity.point_longitude : null
+                };
+              });
+          } else uploadableObject.related_data.doi_geolocation = null;
+
+          if (this.isNotEmpty(this.relatedData.doi_related_identifier)) {
+            let clonedData = cloneDeep(this.relatedData.doi_related_identifier);
+            uploadableObject.related_data.doi_related_identifier = clonedData
+              .filter(entity => this.isNotEmpty(entity.identifier_type))
+              .map((entity) => {
+                return {
+                  identifier_type: entity.identifier_type,
+                  relation_type: entity.relation_type ? entity.relation_type : null,
+                  remarks: entity.remarks ? entity.remarks : null,
+                  value: entity.value ? entity.value : null
+                };
+              });
+          } else uploadableObject.related_data.doi_related_identifier = null;
+
+          if (this.isNotEmpty(this.relatedData.doi_date)) {
+            let clonedData = cloneDeep(this.relatedData.doi_date);
+            uploadableObject.related_data.doi_date = clonedData
+              .filter(entity => this.isNotEmpty(entity.date))
+              .map((entity) => {
+                return {
+                  date: entity.date,
+                  date_type: entity.date_type ? entity.date_type : null,
+                  remarks: entity.remarks ? entity.remarks : null,
+                };
+              });
+          } else uploadableObject.related_data.doi_date = null;
         }
 
-        console.log('This object is sent in string format:')
-        console.log(uploadableObject)
+        console.log('This object is sent in string format:');
+        console.log(uploadableObject);
         return JSON.stringify(uploadableObject)
       },
 

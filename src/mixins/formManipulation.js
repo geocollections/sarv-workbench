@@ -111,6 +111,11 @@ const formManipulation = {
      * @returns {boolean} True if required fields are OK and false if they are not.
      */
     validate(object, child = null) {
+
+      // Made for debugging
+      return true
+      // REMOVE!!!!!!!!!!
+
       let isValid = true;
       let isValidOptional = false;
 
