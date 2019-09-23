@@ -31,7 +31,7 @@
                             type="number"></b-form-input>
             </div>
 
-          <!-- AUTHOR -->
+            <!-- AUTHOR -->
 
             <div class="col-sm-7">
               <label :for="`author`">{{ $t('reference.author') }}:</label>
@@ -133,15 +133,15 @@
               <b-form-input id="journal_additional" v-model="reference.journal_additional" type="text"></b-form-input>
             </div>
             <div class="col-md-2">
-            <label :for="`volume`">{{ $t('reference.volume') }}:</label>
-            <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
-          </div>
+              <label :for="`volume`">{{ $t('reference.volume') }}:</label>
+              <b-form-input id="volume" v-model="reference.volume" type="text"></b-form-input>
+            </div>
 
-          <div class="col-md-2">
-            <label :for="`number`">{{ $t('reference.number') }}:</label>
-            <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
+            <div class="col-md-2">
+              <label :for="`number`">{{ $t('reference.number') }}:</label>
+              <b-form-input id="number" v-model="reference.number" type="text"></b-form-input>
+            </div>
           </div>
-        </div>
 
           <!-- VOLUME and NUMBER -->
           <div class="row">
@@ -192,7 +192,8 @@
                 <div class="flex-grow-1">
                   <label :for="`doi`">
                     DOI:
-                    <a v-if="reference.doi" class="link text-primary" :href="getDoiUrl(reference.doi)" target="_blank" rel="noopener noreferrer">
+                    <a v-if="reference.doi" class="link text-primary" :href="getDoiUrl(reference.doi)" target="_blank"
+                       rel="noopener noreferrer">
                       <i class="fas fa-external-link-alt"></i>
                     </a>
                   </label>
@@ -219,7 +220,7 @@
               <b-form-input id="url" v-model="reference.url" type="text" :state="isValidUrl"></b-form-input>
               <b-form-text v-if="!isValidUrl">{{ $t('add.errors.url') }}.</b-form-text>
             </div>
-            </div>
+          </div>
 
         </div>
       </transition>
@@ -239,7 +240,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`abstract`">{{ $t('reference.abstract') }}:</label>
-              <editor :data.sync="reference.abstract" />
+              <editor :data.sync="reference.abstract"/>
             </div>
 
             <!-- AUTHOR KEYWORDS -->
@@ -255,7 +256,7 @@
               <b-form-textarea id="title_original" v-model="reference.title_original" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
-          <!-- TITLE TRANSLATED -->
+            <!-- TITLE TRANSLATED -->
             <div class="col-sm-6">
               <label :for="`title_translated`">{{ $t('reference.titleTranslated') }}:</label>
               <b-form-textarea id="title_translated" v-model="reference.title_translated" type="text"
@@ -320,25 +321,25 @@
               </vue-multiselect>
 
               <!-- KEYWORD INPUT USING GROUP BY -->
-<!--              <vue-multiselect v-model="relatedData.keyword"-->
-<!--                               id="keyword"-->
-<!--                               label="keyword"-->
-<!--                               track-by="id"-->
-<!--                               :multiple="true"-->
-<!--                               :placeholder="$t('add.inputs.keywords')"-->
-<!--                               :loading="autocomplete.loaders.keyword"-->
-<!--                               :options="autocomplete.keyword"-->
-<!--                               @search-change="autocompleteKeywordSearch"-->
-<!--                               :internal-search="false"-->
-<!--                               :preserve-search="true"-->
-<!--                               :clear-on-select="false"-->
-<!--                               :close-on-select="false"-->
-<!--                               :show-labels="true"-->
-<!--                               :group-label="keywordCategoryLabel"-->
-<!--                               group-values="group_results"-->
-<!--                               :group-select="true">-->
-<!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
-<!--              </vue-multiselect>-->
+              <!--              <vue-multiselect v-model="relatedData.keyword"-->
+              <!--                               id="keyword"-->
+              <!--                               label="keyword"-->
+              <!--                               track-by="id"-->
+              <!--                               :multiple="true"-->
+              <!--                               :placeholder="$t('add.inputs.keywords')"-->
+              <!--                               :loading="autocomplete.loaders.keyword"-->
+              <!--                               :options="autocomplete.keyword"-->
+              <!--                               @search-change="autocompleteKeywordSearch"-->
+              <!--                               :internal-search="false"-->
+              <!--                               :preserve-search="true"-->
+              <!--                               :clear-on-select="false"-->
+              <!--                               :close-on-select="false"-->
+              <!--                               :show-labels="true"-->
+              <!--                               :group-label="keywordCategoryLabel"-->
+              <!--                               group-values="group_results"-->
+              <!--                               :group-select="true">-->
+              <!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
+              <!--              </vue-multiselect>-->
             </div>
 
             <div class="mr-3 my-1 align-self-end">
@@ -413,7 +414,8 @@
 
     <!-- DIGITAL VERSION (PDF) -->
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
-      <legend class="w-auto my-0 mb-2" :class="{ 'text-primary': !block.digital }" @click="block.digital = !block.digital">
+      <legend class="w-auto my-0 mb-2" :class="{ 'text-primary': !block.digital }"
+              @click="block.digital = !block.digital">
         {{ $t('reference.relatedTables.attachmentDigital') }}
         <i class="far fa-file-pdf"></i>
       </legend>
@@ -484,7 +486,8 @@
 
     <!-- RELATED LIBRARIES -->
     <fieldset class="border-top px-2 mb-2" id="block-libraries">
-      <legend class="w-auto my-0" :class="{ 'text-primary': !block.libraries }" @click="block.libraries = !block.libraries">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.libraries }"
+              @click="block.libraries = !block.libraries">
         {{ $t('reference.relatedTables.library') }}
         <i class="fas fa-book"></i>
       </legend>
@@ -528,64 +531,64 @@
     </fieldset>
 
     <!-- RELATED LOCALITIES -->
-<!--    <fieldset v-if="!$route.meta.isEdit" class="border-top px-2 mb-2" id="block-localities">-->
-<!--      <legend class="w-auto my-0" :class="{ 'text-primary': !block.localities }"-->
-<!--              @click="block.localities = !block.localities">-->
-<!--        {{ $t('reference.relatedTables.locality') }}-->
-<!--        <font-awesome-icon icon="map-marked"/>-->
-<!--      </legend>-->
+    <!--    <fieldset v-if="!$route.meta.isEdit" class="border-top px-2 mb-2" id="block-localities">-->
+    <!--      <legend class="w-auto my-0" :class="{ 'text-primary': !block.localities }"-->
+    <!--              @click="block.localities = !block.localities">-->
+    <!--        {{ $t('reference.relatedTables.locality') }}-->
+    <!--        <font-awesome-icon icon="map-marked"/>-->
+    <!--      </legend>-->
 
-<!--      <transition name="fade">-->
-<!--        <div v-show="block.localities">-->
+    <!--      <transition name="fade">-->
+    <!--        <div v-show="block.localities">-->
 
-<!--          <div class="row">-->
-<!--            <div class="col">-->
-<!--              <label :for="`locality`">{{ $t('reference.localities') }}:</label>-->
-<!--              <vue-multiselect v-model="relatedData.locality"-->
-<!--                               id="locality"-->
-<!--                               :multiple="true"-->
-<!--                               track-by="id"-->
-<!--                               :options="autocomplete.locality"-->
-<!--                               :internal-search="false"-->
-<!--                               :preserve-search="true"-->
-<!--                               :close-on-select="false"-->
-<!--                               @search-change="autocompleteLocalitySearch2"-->
-<!--                               :custom-label="customLabelForLocality"-->
-<!--                               :loading="autocomplete.loaders.locality"-->
-<!--                               :placeholder="$t('add.inputs.autocomplete')"-->
-<!--                               :show-labels="false">-->
-<!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
-<!--              </vue-multiselect>-->
-<!--            </div>-->
-<!--          </div>-->
+    <!--          <div class="row">-->
+    <!--            <div class="col">-->
+    <!--              <label :for="`locality`">{{ $t('reference.localities') }}:</label>-->
+    <!--              <vue-multiselect v-model="relatedData.locality"-->
+    <!--                               id="locality"-->
+    <!--                               :multiple="true"-->
+    <!--                               track-by="id"-->
+    <!--                               :options="autocomplete.locality"-->
+    <!--                               :internal-search="false"-->
+    <!--                               :preserve-search="true"-->
+    <!--                               :close-on-select="false"-->
+    <!--                               @search-change="autocompleteLocalitySearch2"-->
+    <!--                               :custom-label="customLabelForLocality"-->
+    <!--                               :loading="autocomplete.loaders.locality"-->
+    <!--                               :placeholder="$t('add.inputs.autocomplete')"-->
+    <!--                               :show-labels="false">-->
+    <!--                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>-->
+    <!--              </vue-multiselect>-->
+    <!--            </div>-->
+    <!--          </div>-->
 
-<!--          <div class="row mt-2" v-if="relatedData.locality.length > 0">-->
-<!--            <div class="table-responsive-sm col-12">-->
-<!--              <table class="table table-hover table-bordered">-->
-<!--                <thead class="thead-light">-->
-<!--                <tr>-->
-<!--                  <th>ID</th>-->
-<!--                  <th>{{ $t('reference.relatedTables.locality') }}</th>-->
-<!--                </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr v-for="entity in relatedData.locality">-->
-<!--                  <td @click="windowOpenNewTab('locality', '/locality/' + entity.id)" class="link">-->
-<!--                    <font-awesome-icon size="1x" icon="eye" color="blue"/>-->
-<!--                    {{ entity.id }}-->
-<!--                  </td>-->
+    <!--          <div class="row mt-2" v-if="relatedData.locality.length > 0">-->
+    <!--            <div class="table-responsive-sm col-12">-->
+    <!--              <table class="table table-hover table-bordered">-->
+    <!--                <thead class="thead-light">-->
+    <!--                <tr>-->
+    <!--                  <th>ID</th>-->
+    <!--                  <th>{{ $t('reference.relatedTables.locality') }}</th>-->
+    <!--                </tr>-->
+    <!--                </thead>-->
+    <!--                <tbody>-->
+    <!--                <tr v-for="entity in relatedData.locality">-->
+    <!--                  <td @click="windowOpenNewTab('locality', '/locality/' + entity.id)" class="link">-->
+    <!--                    <font-awesome-icon size="1x" icon="eye" color="blue"/>-->
+    <!--                    {{ entity.id }}-->
+    <!--                  </td>-->
 
-<!--                  <td v-translate="{et:entity.locality,en:entity.locality_en}"></td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--              </table>-->
-<!--            </div>-->
-<!--          </div>-->
+    <!--                  <td v-translate="{et:entity.locality,en:entity.locality_en}"></td>-->
+    <!--                </tr>-->
+    <!--                </tbody>-->
+    <!--              </table>-->
+    <!--            </div>-->
+    <!--          </div>-->
 
-<!--        </div>-->
-<!--      </transition>-->
+    <!--        </div>-->
+    <!--      </transition>-->
 
-<!--    </fieldset>-->
+    <!--    </fieldset>-->
 
     <!-- SHOWING RELATED_DATA -->
     <div class="row">
@@ -629,7 +632,8 @@
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
+              v-model="relatedData.searchParameters[activeTab].page"
+              :per-page="relatedData.searchParameters[activeTab].paginateBy">
             </b-pagination>
           </div>
         </div>
@@ -638,13 +642,14 @@
                             v-on:add-related-data="addRelatedData"
                             v-on:set-default="setDefault"
                             v-on:edit-row="editRow"
-                            v-on:remove-row="removeRow" />
+                            v-on:remove-row="removeRow"/>
       </div>
     </div>
 
     <div class="d-flex justify-content-end" v-if="$route.meta.isEdit">
-      <new-doi-button v-if="reference && reference.type && reference.type.id > 3 && this.validate('reference') && this.isUserAllowedTo('add', 'doi')"
-                      object="reference" :data="reference" :related-data="relatedData" :attachment="attachment"/>
+      <new-doi-button
+        v-if="reference && reference.type && reference.type.id > 3 && this.validate('reference') && this.isUserAllowedTo('add', 'doi')"
+        object="reference" :data="reference" :related-data="relatedData" :attachment="attachment"/>
     </div>
 
   </div>
@@ -768,7 +773,7 @@
       setInitialData() {
         return {
           relatedTabs: [
-            { name: 'locality_reference', iconClass: 'fas fa-globe' },
+            {name: 'locality_reference', iconClass: 'fas fa-globe'},
           ],
           searchHistory: 'referenceSearchHistory',
           activeTab: 'locality_reference',
@@ -985,12 +990,18 @@
 
         // Adding related data only on add view
         if (!this.$route.meta.isEdit) {
-          // uploadableObject.related_data = {};
           if (this.isNotEmpty(this.relatedData.locality_reference)) {
-            uploadableObject.related_data.locality = cloneDeep(this.relatedData.locality_reference);
-            uploadableObject.related_data.locality.forEach((loc_ref, index) => {
-              if (loc_ref.locality) uploadableObject.related_data.locality[index]['id'] = loc_ref.locality;
-            });
+            let clonedLocalities = cloneDeep(this.relatedData.locality_reference);
+            uploadableObject.related_data.locality = clonedLocalities
+              .filter(entity => this.isNotEmpty(entity.locality))
+              .map((loc_ref) => {
+                return {
+                  id: loc_ref.locality,
+                  pages: loc_ref.pages ? loc_ref.pages : null,
+                  figures: loc_ref.figures ? loc_ref.figures : null,
+                  remarks: loc_ref.remarks ? loc_ref.remarks : null
+                };
+              });
           } else uploadableObject.related_data.locality = null
         }
 
@@ -1000,8 +1011,18 @@
       },
 
       fillAutocompleteFields(obj) {
-        this.reference.type = {id: obj.type__id, value: obj.type__value, value_en: obj.type__value_en, ris_type: obj.type__ris_type};
-        this.reference.language = {id: obj.language__id, value: obj.language__value, value_en: obj.language__value_en, iso1: obj.language__iso1};
+        this.reference.type = {
+          id: obj.type__id,
+          value: obj.type__value,
+          value_en: obj.type__value_en,
+          ris_type: obj.type__ris_type
+        };
+        this.reference.language = {
+          id: obj.language__id,
+          value: obj.language__value,
+          value_en: obj.language__value_en,
+          iso1: obj.language__iso1
+        };
         this.reference.journal = {id: obj.journal__id, journal_name: obj.journal__journal_name}
       },
 
@@ -1009,7 +1030,7 @@
         if (this.isNotEmpty(obj.locality)) {
           obj.locality = {locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality};
         }
-        if (this.isNotEmpty(obj.type)){
+        if (this.isNotEmpty(obj.type)) {
           obj.type = {id: obj.type, value: obj.type__value, value_en: obj.type__value_en};
         }
         return obj
@@ -1184,7 +1205,10 @@
           let journalName = data['container-title'][0]
           fetchJournal(journalName).then(response => {
             let journal = this.handleResponse(response)
-            if (journal.length === 1) this.reference.journal = { id: journal[0].id, journal_name: journal[0].journal_name }
+            if (journal.length === 1) this.reference.journal = {
+              id: journal[0].id,
+              journal_name: journal[0].journal_name
+            }
           })
         }
 

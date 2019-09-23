@@ -119,7 +119,7 @@
           </span>
           </div>
 
-          <div class="row mb-2">
+          <div class="row mb-3">
             <div class="col">
               <b-collapse v-model="showCollapseMap" id="collapseMap">
                 <map-component v-if="showCollapseMap"
