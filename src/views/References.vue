@@ -98,7 +98,7 @@
           {id: "pages", title: "reference.pages_short", type: "text"},
           {id: "is_estonian_reference", title: "reference.is_estonian_reference_short", type: "text", isEstonianReference: true},
           {id: "is_estonian_author", title: "reference.is_estonian_author_short", type: "text", isEstonianAuthor: true},
-          {id: "is_private", title: "reference.is_private", type: "text", isPrivate: true},
+          // {id: "is_private", title: "reference.is_private", type: "text", isPrivate: true},
           {id: "id", title: "", type: "text", orderBy: false},
           {id: "doi", title: "reference.doi", type: "text"},
           {id: "attachment__filename", title: "reference.pdf", type: "text"},
