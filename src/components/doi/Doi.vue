@@ -840,7 +840,7 @@
               .filter(entity => this.isNotEmpty(entity.attachment))
               .map((entity) => {
                 return {
-                  attachment: entity.attachment,
+                  id: entity.attachment,
                   remarks: entity.remarks ? entity.remarks : null,
                 };
               });
