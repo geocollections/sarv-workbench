@@ -113,7 +113,7 @@ const formManipulation = {
     validate(object, child = null) {
 
       // Made for debugging
-      return true
+      // return true
       // REMOVE!!!!!!!!!!
 
       let isValid = true;
