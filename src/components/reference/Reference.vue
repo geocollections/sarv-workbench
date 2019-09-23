@@ -989,7 +989,7 @@
           if (this.isNotEmpty(this.relatedData.locality_reference)) {
             uploadableObject.related_data.locality = cloneDeep(this.relatedData.locality_reference);
             uploadableObject.related_data.locality.forEach((loc_ref, index) => {
-              uploadableObject.related_data.locality[index]['id'] = loc_ref.locality
+              if (loc_ref.locality) uploadableObject.related_data.locality[index]['id'] = loc_ref.locality;
             });
           } else uploadableObject.related_data.locality = null
         }
@@ -1006,8 +1006,12 @@
       },
 
       fillRelatedDataAutocompleteFields(obj) {
-        obj.locality = {locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality};
-        obj.type = {id: obj.type, value: obj.type__value, value_en: obj.type__value_en};
+        if (this.isNotEmpty(obj.locality)) {
+          obj.locality = {locality: obj.locality__locality, locality_en: obj.locality__locality_en, id: obj.locality};
+        }
+        if (this.isNotEmpty(obj.type)){
+          obj.type = {id: obj.type, value: obj.type__value, value_en: obj.type__value_en};
+        }
         return obj
       },
 
