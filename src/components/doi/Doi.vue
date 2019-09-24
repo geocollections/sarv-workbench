@@ -828,7 +828,7 @@
                   agent: entity.agent ? entity.agent : null,
                   agent_type: entity.agent_type ? entity.agent_type : null,
                   name: entity.name,
-                  orcid: entity.orcid ? entity.orcid : null
+                  orcid: entity.orcid ? entity.orcid : null,
                 };
               });
             if (uploadableObject.related_data.doi_agent.length === 0) uploadableObject.related_data.doi_agent = null;
@@ -850,7 +850,7 @@
           if (this.isNotEmpty(this.relatedData.doi_geolocation)) {
             let clonedData = cloneDeep(this.relatedData.doi_geolocation);
             uploadableObject.related_data.doi_geolocation = clonedData
-              .filter(entity => this.isNotEmpty(entity.locality))
+              // .filter(entity => this.isNotEmpty(entity.locality))
               .map((entity) => {
                 return {
                   box_e_longitude: entity.box_e_longitude ? entity.box_e_longitude : null,
@@ -884,7 +884,7 @@
           if (this.isNotEmpty(this.relatedData.doi_date)) {
             let clonedData = cloneDeep(this.relatedData.doi_date);
             uploadableObject.related_data.doi_date = clonedData
-              .filter(entity => this.isNotEmpty(entity.date))
+              // .filter(entity => this.isNotEmpty(entity.date))
               .map((entity) => {
                 return {
                   date: entity.date,
