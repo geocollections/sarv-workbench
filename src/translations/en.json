@@ -1091,6 +1091,7 @@
     "title": "Title",
     "titleOriginal": "Original title",
     "titleTranslated":"Translated title",
+    "titleTranslatedLanguage":"Translated title (lang)",
     "book": "Book",
     "bookOriginal": "Book (orig.)",
     "book_editor": "Toimetaja(d)",

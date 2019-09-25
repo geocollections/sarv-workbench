@@ -249,6 +249,7 @@
               <b-form-input id="author_keywords" v-model="reference.author_keywords" type="text"></b-form-input>
             </div>
           </div>
+
           <!-- TITLE ORIGINAL -->
           <div class="row">
             <div class="col-sm-6">
@@ -256,6 +257,7 @@
               <b-form-textarea id="title_original" v-model="reference.title_original" type="text"
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
+
             <!-- TITLE TRANSLATED -->
             <div class="col-sm-6">
               <label :for="`title_translated`">{{ $t('reference.titleTranslated') }}:</label>
@@ -263,13 +265,32 @@
                                :rows="1" :max-rows="4"></b-form-textarea>
             </div>
           </div>
-          <!-- BOOK and BOOK ORIGINAL -->
+
+          <!-- TITLE TRANSLATED LANGUAGE -->
           <div class="row">
-            <div class="col-md-12">
+            <div class="col-sm-6">
+              <label :for="`title_translated_language`">{{ $t('reference.titleTranslatedLanguage') }}:</label>
+              <vue-multiselect v-model="reference.title_translated_language"
+                               id="title_translated_language"
+                               :options="autocomplete.languages"
+                               track-by="id"
+                               :label="commonLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[commonLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <!-- BOOK ORIGINAL -->
+            <div class="col-sm-6">
               <label :for="`book_original`">{{ $t('reference.bookOriginal') }}:</label>
               <b-form-input id="book_original" v-model="reference.book_original" type="text"></b-form-input>
             </div>
           </div>
+
           <!-- ISBN and ISSN -->
           <div class="row">
             <div class="col-md-6">
@@ -778,10 +799,11 @@
           searchHistory: 'referenceSearchHistory',
           activeTab: 'locality_reference',
           relatedData: this.setDefaultRelatedData(),
-          copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'title_translated', 'type', 'language', 'journal', 'journal_additional',
-            'volume', 'number', 'pages', 'book_editor', 'book', 'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn',
-            'issn', 'abstract', 'author_keywords', 'remarks', 'location_txt', 'book_editor', 'figures', 'is_locked',
-            'is_oa', 'is_private', 'is_estonian_reference', 'is_estonian_author', 'language'],
+          copyFields: ['id', 'reference', 'year', 'author', 'title', 'title_original', 'title_translated', 'type',
+            'language', 'journal', 'journal_additional', 'volume', 'number', 'pages', 'book_editor', 'book',
+            'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn', 'issn', 'abstract',
+            'author_keywords', 'remarks', 'location_txt', 'book_editor', 'figures', 'is_locked', 'is_oa', 'is_private',
+            'is_estonian_reference', 'is_estonian_author', 'language', 'title_translated_language'],
           autocomplete: {
             loaders: {
               types: false,
@@ -968,6 +990,7 @@
         if (this.isNotEmpty(objectToUpload.type)) uploadableObject.type = objectToUpload.type.id;
         if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
         if (this.isNotEmpty(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id;
+        if (this.isNotEmpty(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id;
 
 
         // Adding related data
@@ -1024,6 +1047,11 @@
           iso1: obj.language__iso1
         };
         this.reference.journal = {id: obj.journal__id, journal_name: obj.journal__journal_name}
+        this.reference.title_translated_language = {
+          id: obj.title_translated_language,
+          value: obj.title_translated_language__value,
+          value_en: obj.title_translated_language__value_en
+        }
       },
 
       fillRelatedDataAutocompleteFields(obj) {

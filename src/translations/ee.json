@@ -1091,6 +1091,7 @@
     "title": "Pealkiri",
     "titleOriginal": "Originaal pealkiri",
     "titleTranslated":"Tõlgitud pealkiri",
+    "titleTranslatedLanguage":"Tõlgitud pealkiri (keel)",
     "book": "Kogumik",
     "bookOriginal": "Kogumik (orig.)",
     "book_editor": "Toimetaja(d)",
