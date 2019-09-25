@@ -669,7 +669,7 @@
 
     <div class="d-flex justify-content-end" v-if="$route.meta.isEdit">
       <new-doi-button
-        v-if="reference && reference.type && reference.type.id > 3 && this.validate('reference') && this.isUserAllowedTo('add', 'doi')"
+        v-if="reference && reference.type && reference.type.id > 3 && validate('reference') && isUserAllowedTo('add', 'doi')"
         object="reference" :data="reference" :related-data="relatedData" :attachment="attachment"/>
     </div>
 
@@ -703,7 +703,7 @@
   import {toastInfo} from "../../assets/js/iziToast/iziToast";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
   import Editor from "../partial/editor/Editor";
-  import {mapState} from "vuex";
+  import {mapGetters, mapState} from "vuex";
   import LinkedKeywordTable from "../keyword/LinkedKeywordTable";
   import NewDoiButton from "../partial/NewDoiButton";
 
@@ -737,7 +737,8 @@
         } else return true
       },
 
-      ...mapState(["currentUser", "databaseId"])
+      ...mapState(["currentUser", "databaseId"]),
+      ...mapGetters(['isUserAllowedTo'])
     },
 
     created() {
