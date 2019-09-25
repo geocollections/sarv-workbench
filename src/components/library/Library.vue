@@ -175,7 +175,7 @@
 
               <span>
                 <sup>
-                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                  <b-badge pill variant="light">{{ relatedData[tab.name].length }}&nbsp;</b-badge>
                 </sup>
               </span>
 
