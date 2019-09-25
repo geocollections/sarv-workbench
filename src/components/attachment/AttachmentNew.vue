@@ -1886,7 +1886,7 @@
 
     <template v-slot:add-doi>
       <div class="d-flex justify-content-end mt-3">
-        <new-doi-button v-if="attachment && rawAttachment && validate('attachment')" object="attachment"
+        <new-doi-button v-if="attachment && rawAttachment && validate('attachment') && isUserAllowedTo('add', 'doi')" object="attachment"
                         :data="attachment" :raw-data="rawAttachment" :related-data="relatedData"/>
       </div>
     </template>
@@ -1901,7 +1901,7 @@
   import formManipulation from "../../mixins/formManipulation";
   import autocompleteMixin from "../../mixins/autocompleteMixin";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
-  import {mapState} from "vuex";
+  import {mapGetters, mapState} from "vuex";
   import {
     fetchAttachment,
     fetchAttachmentKeyword,
@@ -1954,6 +1954,7 @@
 
     computed: {
       ...mapState(["databaseId", "currentUser"]),
+      ...mapGetters(["isUserAllowedTo"]),
 
       isPhotoArchive() {
         return this.$route.meta.isEdit ? this.attachment.specimen_image_attachment === 2 : this.$route.meta.child === 'photo_archive';

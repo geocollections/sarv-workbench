@@ -4,7 +4,8 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- REQUIRED INFO -->
-    <fieldset class="border p-2 mb-2" :style="!validate('doi') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
+    <fieldset class="border p-2 mb-2" :style="!validate('doi') ? 'border-color: #dc3545!important;' : ''"
+              id="block-requiredFields">
       <legend class="w-auto mb-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('doi') }"
               @click="block.requiredFields = !block.requiredFields">
         {{ $t('doi.requiredFields') }}
@@ -19,7 +20,9 @@
           <div class="row">
             <div class="col-md-4">
               <label :for="`identifier`">{{ $t('doi.identifier') }}:</label>
-              <b-form-input id="identifier" v-model="doi.identifier" type="text" :placeholder="$route.meta.isEdit ? '' : $t('doi.identifierPlaceholder')" :disabled="true"></b-form-input>
+              <b-form-input id="identifier" v-model="doi.identifier" type="text"
+                            :placeholder="$route.meta.isEdit ? '' : $t('doi.identifierPlaceholder')"
+                            :disabled="true"></b-form-input>
             </div>
 
             <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
@@ -42,7 +45,8 @@
 
             <div class="col-md-4">
               <label :for="`resource`">{{ $t('doi.resource') }}:</label>
-              <b-form-input id="resource" :state="isNotEmpty(doi.resource)" v-model="doi.resource" type="text"></b-form-input>
+              <b-form-input id="resource" :state="isNotEmpty(doi.resource)" v-model="doi.resource"
+                            type="text"></b-form-input>
             </div>
           </div>
 
@@ -52,7 +56,8 @@
               <div class="d-flex">
                 <div class="flex-fill">
                   <label :for="`creators`">{{ $t('doi.creators') }}:</label>
-                  <b-form-input id="creators" :state="isNotEmpty(doi.creators)" v-model="doi.creators" type="text"></b-form-input>
+                  <b-form-input id="creators" :state="isNotEmpty(doi.creators)" v-model="doi.creators"
+                                type="text"></b-form-input>
                 </div>
 
                 <div class="align-self-end pl-2" v-if="!this.$route.meta.isEdit && isNotEmpty(doi.creators)">
@@ -66,12 +71,14 @@
 
             <div class="col-md-4">
               <label :for="`publication_year`">{{ $t('doi.year') }}:</label>
-              <b-form-input id="publication_year" :state="isNotEmpty(doi.publication_year)" v-model="doi.publication_year" type="number"></b-form-input>
+              <b-form-input id="publication_year" :state="isNotEmpty(doi.publication_year)"
+                            v-model="doi.publication_year" type="number"></b-form-input>
             </div>
 
             <div class="col-md-4">
               <label :for="`publisher`">{{ $t('doi.publisher') }}:</label>
-              <b-form-input id="publisher" :state="isNotEmpty(doi.publisher)" v-model="doi.publisher" type="text"></b-form-input>
+              <b-form-input id="publisher" :state="isNotEmpty(doi.publisher)" v-model="doi.publisher"
+                            type="text"></b-form-input>
             </div>
           </div>
 
@@ -195,7 +202,8 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`abstract`">{{ $t('doi.abstract') }}:</label>
-              <b-form-textarea id="abstract" v-model="doi.abstract" type="text" :rows="1" :max-rows="20"></b-form-textarea>
+              <b-form-textarea id="abstract" v-model="doi.abstract" type="text" :rows="1"
+                               :max-rows="20"></b-form-textarea>
             </div>
           </div>
 
@@ -203,7 +211,8 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`methods`">{{ $t('doi.methods') }}:</label>
-              <b-form-textarea id="methods" v-model="doi.methods" type="text" :rows="1" :max-rows="20"></b-form-textarea>
+              <b-form-textarea id="methods" v-model="doi.methods" type="text" :rows="1"
+                               :max-rows="20"></b-form-textarea>
             </div>
           </div>
 
@@ -255,7 +264,8 @@
 
     <!-- REFERENCE and DATASET -->
     <fieldset class="border p-2 mb-2" id="block-referenceAndDataset">
-      <legend class="w-auto" :class="{ 'text-primary': !block.referenceAndDataset }" @click="block.referenceAndDataset = !block.referenceAndDataset">
+      <legend class="w-auto" :class="{ 'text-primary': !block.referenceAndDataset }"
+              @click="block.referenceAndDataset = !block.referenceAndDataset">
         {{ $t('doi.primaryRefAndDat') }}
         <i class="fas fa-book"></i>
       </legend>
@@ -282,22 +292,23 @@
                 <template slot="singleLabel" slot-scope="{ option }">
                   <strong>{{ option.id + ' - (' + option.reference + ')' }} </strong>
                   <!-- TODO: How can I put links here, so they would work -->
-<!--                  <a href="" @click.prevent="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)">-->
-<!--                    <font-awesome-icon icon="link"  style=""/>-->
-<!--                  </a>-->
+                  <!--                  <a href="" @click.prevent="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)">-->
+                  <!--                    <font-awesome-icon icon="link"  style=""/>-->
+                  <!--                  </a>-->
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
 
             <div class="col-sm-2 mb-2">
-              <vs-button v-if="relatedData.reference !== null" radius @click="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)"
+              <vs-button v-if="relatedData.reference !== null" radius
+                         @click="windowOpenNewTab('reference', '/reference/' + relatedData.reference.id)"
                          color="primary" type="line" icon="link"></vs-button>
             </div>
 
             <!-- DATASET -->
             <div class="col-sm-10 col-md-4 mb-2">
-<!--              <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>-->
+              <!--              <label :for="`dataset`">{{ $t('doi.dataset') }}:</label>-->
               <vue-multiselect v-model="relatedData.dataset"
                                id="dataset"
                                track-by="id"
@@ -316,16 +327,17 @@
                   <strong v-translate="{ et: option.name, en: option.name_en }"></strong>
                   <strong>) </strong>
                   <!-- TODO: How can I put links here, so they would work -->
-<!--                  <a href="" @click.prevent="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})">-->
-<!--                    <font-awesome-icon icon="eye"  style="" class="link"/>-->
-<!--                  </a>-->
+                  <!--                  <a href="" @click.prevent="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})">-->
+                  <!--                    <font-awesome-icon icon="eye"  style="" class="link"/>-->
+                  <!--                  </a>-->
                 </template>
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
 
             <div class="col-sm-2 mb-2">
-              <vs-button v-if="relatedData.dataset !== null" radius @click="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})"
+              <vs-button v-if="relatedData.dataset !== null" radius
+                         @click="openGeoInNewWindow({object: 'dataset', id: relatedData.dataset.id})"
                          color="primary" type="line" icon="remove_red_eye"></vs-button>
             </div>
           </div>
@@ -336,7 +348,8 @@
 
     <!-- REMARKS -->
     <fieldset class="border p-2 mb-2" id="block-description">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.description }"
+              @click="block.description = !block.description">
         {{ $t('doi.remarks') }}
         <i class="fas fa-pen-fancy"></i>
       </legend>
@@ -347,7 +360,8 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`remarks`">{{ $t('doi.remarks') }}:</label>
-              <b-form-textarea id="remarks" v-model="doi.remarks" type="text" :rows="1" :max-rows="20"></b-form-textarea>
+              <b-form-textarea id="remarks" v-model="doi.remarks" type="text" :rows="1"
+                               :max-rows="20"></b-form-textarea>
             </div>
           </div>
 
@@ -397,7 +411,8 @@
                v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
             <b-pagination
               size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
+              v-model="relatedData.searchParameters[activeTab].page"
+              :per-page="relatedData.searchParameters[activeTab].paginateBy">
             </b-pagination>
           </div>
         </div>
@@ -406,38 +421,39 @@
                    v-on:add-related-data="addRelatedData"
                    v-on:set-default="setDefault"
                    v-on:edit-row="editRow"
-                   v-on:remove-row="removeRow" />
+                   v-on:remove-row="removeRow"/>
 
         <doi-related-identifier :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                                 v-on:add-related-data="addRelatedData"
                                 v-on:set-default="setDefault"
                                 v-on:edit-row="editRow"
-                                v-on:remove-row="removeRow" />
+                                v-on:remove-row="removeRow"/>
 
         <doi-geolocation :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                          v-on:add-related-data="addRelatedData"
                          v-on:set-default="setDefault"
                          v-on:edit-row="editRow"
-                         v-on:remove-row="removeRow" />
+                         v-on:remove-row="removeRow"/>
 
         <doi-agent :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                    v-on:add-related-data="addRelatedData"
                    v-on:set-default="setDefault"
                    v-on:edit-row="editRow"
-                   v-on:remove-row="removeRow" />
+                   v-on:remove-row="removeRow"/>
 
         <doi-date :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                   v-on:add-related-data="addRelatedData"
                   v-on:set-default="setDefault"
                   v-on:edit-row="editRow"
-                  v-on:remove-row="removeRow" />
+                  v-on:remove-row="removeRow"/>
 
       </div>
     </div>
 
     <!-- DATACITE CREATED and UPDATED -->
     <fieldset class="border p-2 mb-2" v-if="$route.meta.isEdit" id="block-datacite">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.datacite }" @click="block.datacite = !block.datacite">
+      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.datacite }"
+              @click="block.datacite = !block.datacite">
         {{ $t('doi.datacite') }}
         <i class="fas fa-sitemap"></i>
       </legend>
@@ -448,13 +464,17 @@
           <div class="row">
             <div class="col-md-6 mb-2">
               <label class="mt-0" :for="`datacite_created`">{{ $t('doi.dataciteCreated') }}:</label>
-              <b-form-input v-if="doi.datacite_created" size="sm" id="datacite_created" :value="doi.datacite_created | moment('ddd, MMM Do YYYY, HH:mm:ss')" type="text" disabled></b-form-input>
+              <b-form-input v-if="doi.datacite_created" size="sm" id="datacite_created"
+                            :value="doi.datacite_created | moment('ddd, MMM Do YYYY, HH:mm:ss')" type="text"
+                            disabled></b-form-input>
               <b-form-input v-else size="sm" v-model="doi.datacite_created" type="text" disabled></b-form-input>
             </div>
 
             <div class="col-md-6 mb-2">
               <label class="mt-0" :for="`datacite_updated`">{{ $t('doi.dataciteUpdated') }}:</label>
-              <b-form-input v-if="doi.datacite_updated" size="sm" id="datacite_updated" :value="doi.datacite_updated | moment('ddd, MMM Do YYYY, HH:mm:ss')" type="text" disabled></b-form-input>
+              <b-form-input v-if="doi.datacite_updated" size="sm" id="datacite_updated"
+                            :value="doi.datacite_updated | moment('ddd, MMM Do YYYY, HH:mm:ss')" type="text"
+                            disabled></b-form-input>
               <b-form-input v-else size="sm" v-model="doi.datacite_updated" type="text" disabled></b-form-input>
             </div>
           </div>
@@ -475,13 +495,15 @@
     <!-- DOI METADATA REGISTER and UPDATE BUTTONS -->
     <div class="row mt-3">
       <div class="col">
-        <button v-if="$route.meta.isEdit && showMetadataButton && validate('doi')" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerMetadata"
+        <button v-if="$route.meta.isEdit && showMetadataButton && validate('doi')" class="btn btn-primary mr-2 mb-2"
+                :disabled="sendingData" @click="registerMetadata"
                 :title="showMetadataUpdateMessage ? $t('edit.buttons.updateMetadata') : $t('edit.buttons.registerMetadata')">
           <i class="fas fa-server"></i>
           {{ showMetadataUpdateMessage ? $t('edit.buttons.updateMetadata') : $t('edit.buttons.registerMetadata') }}
         </button>
 
-        <button v-if="$route.meta.isEdit && showDoiUrlButton && validate('doi')" class="btn btn-primary mr-2 mb-2" :disabled="sendingData" @click="registerDoiUrl"
+        <button v-if="$route.meta.isEdit && showDoiUrlButton && validate('doi')" class="btn btn-primary mr-2 mb-2"
+                :disabled="sendingData" @click="registerDoiUrl"
                 :title="showDoiUrlUpdateMessage ? $t('edit.buttons.updateUrl') : $t('edit.buttons.registerUrl')">
           <i class="fas fa-server"></i>
           {{ showDoiUrlUpdateMessage ? $t('edit.buttons.updateUrl') : $t('edit.buttons.registerUrl') }}
@@ -521,7 +543,7 @@
   import DoiRelatedIdentifier from "./relatedTables/DoiRelatedIdentifier";
   import DoiGeolocation from "./relatedTables/DoiGeolocation";
   import DoiDate from "./relatedTables/DoiDate";
-  import { toastSuccess, toastError, toastInfo } from "../../assets/js/iziToast/iziToast";
+  import {toastSuccess, toastError, toastInfo} from "../../assets/js/iziToast/iziToast";
   import formSectionsMixin from "../../mixins/formSectionsMixin";
   import {mapState} from "vuex";
 
@@ -590,11 +612,11 @@
       setInitialData() {
         return {
           relatedTabs: [
-            { name: 'doi_agent', iconClass: 'fas fa-user-friends' },
-            { name: 'attachment_link', iconClass: 'fas fa-folder-open' },
-            { name: 'doi_geolocation', iconClass: 'fas fa-globe-americas' },
-            { name: 'doi_related_identifier', iconClass: 'fas fa-project-diagram' },
-            { name: 'doi_date', iconClass: 'far fa-calendar-alt' },
+            {name: 'doi_agent', iconClass: 'fas fa-user-friends'},
+            {name: 'attachment_link', iconClass: 'fas fa-folder-open'},
+            {name: 'doi_geolocation', iconClass: 'fas fa-globe-americas'},
+            {name: 'doi_related_identifier', iconClass: 'fas fa-project-diagram'},
+            {name: 'doi_date', iconClass: 'far fa-calendar-alt'},
           ],
           searchHistory: 'doiSearchHistory',
           activeTab: 'doi_agent',
@@ -637,7 +659,7 @@
           requiredFields: ['resource_type', 'resource', 'creators', 'publication_year', 'publisher', 'title'],
           doi: {},
           searchParameters: this.setDefaultSearchParameters(),
-          block: {requiredFields: true, info: true, referenceAndDataset: false, description: true,  datacite: true},
+          block: {requiredFields: true, info: true, referenceAndDataset: false, description: true, datacite: true},
           showMetadataButton: false,
           showDoiUrlButton: false,
           showMetadataUpdateMessage: false,
@@ -692,11 +714,13 @@
 
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
 
-        } else if (this.$route.meta.isEGF) {
-          // Todo: #261
-          // fetchDoiUsingEGF(this.$route.params.id).then(response => {
-          //   console.log(response)
-          // })
+        } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
+          fetchDoiUsingEGF(this.$route.params.id).then(response => {
+            // Todo: Handle response
+            console.log(response)
+          });
+
+          // this.assignEgfFieldsToDoiObject(JSON.parse("{\"identifier\":2,\"creator\":\"N. Pogrebov\",\"title\":\"Lühiülevaade Eesti Vabariigi geoloogilisest ehitusest ja mineraalsetest rikkustest\",\"title_orig\":\"Kratkii otsherk geologitsheskogo strojenija i mineralnõh bogatstv Estonskoi Respubliki\",\"date\":1923,\"tags\":\"aluspõhi, kvaliteet, kvaternaar, varu\",\"field\":\"kaardistamine, maavara\",\"deposit\":\"Sinimäed\",\"description\":\"12-leheküljelises 1944.a koostatud venekeelses aruandes on lühidalt iseloomustatud Eesti Vabariigi territooriumi geoloogilist ehitust ja olulisemaid maavarasid. Kirjanduse loetelus on ca pooled tööd pärit saksakeelsetelt autoritelt,\",\"performer\":\"Loode GV\",\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[59.053385,24.50002],[58.215376,25.10329],[58.453046,23.062895],[59.053385,24.50002]]]},\"geoLocations\":[{\"geoLocationPolygon\":[{\"polygonPoint\":{\"pointLatitude\":59.053385,\"pointLongitude\":24.50002}},{\"polygonPoint\":{\"pointLatitude\":58.215376,\"pointLongitude\":25.10329}},{\"polygonPoint\":{\"pointLatitude\":58.453046,\"pointLongitude\":23.062895}},{\"polygonPoint\":{\"pointLatitude\":59.053385,\"pointLongitude\":24.50002}}]}]}"));
         }
 
         this.setTab('doi_agent')
@@ -738,7 +762,7 @@
           copyFields: {
             attachment_link: ['attachment', 'remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
-            doi_geolocation: ['locality', 'place', 'point_longitude', 'point_latitude', 'box_w_longitude','box_e_longitude', 'box_s_latitude', 'box_n_latitude'],
+            doi_geolocation: ['locality', 'place', 'point_longitude', 'point_latitude', 'box_w_longitude', 'box_e_longitude', 'box_s_latitude', 'box_n_latitude'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
             doi_date: ['date', 'date_type', 'remarks']
           },
@@ -850,7 +874,7 @@
           if (this.isNotEmpty(this.relatedData.doi_geolocation)) {
             let clonedData = cloneDeep(this.relatedData.doi_geolocation);
             uploadableObject.related_data.doi_geolocation = clonedData
-              // .filter(entity => this.isNotEmpty(entity.locality))
+            // .filter(entity => this.isNotEmpty(entity.locality))
               .map((entity) => {
                 return {
                   box_e_longitude: entity.box_e_longitude ? entity.box_e_longitude : null,
@@ -884,7 +908,7 @@
           if (this.isNotEmpty(this.relatedData.doi_date)) {
             let clonedData = cloneDeep(this.relatedData.doi_date);
             uploadableObject.related_data.doi_date = clonedData
-              // .filter(entity => this.isNotEmpty(entity.date))
+            // .filter(entity => this.isNotEmpty(entity.date))
               .map((entity) => {
                 return {
                   date: entity.date,
@@ -902,27 +926,44 @@
       },
 
       fillAutocompleteFields(obj) {
-        this.doi.resource_type = { id: obj.resource_type, value: obj.resource_type__value }
-        this.doi.title_translated_language = { id: obj.title_translated_language, value: obj.title_translated_language__value, value_en: obj.title_translated_language__value_en }
-        this.doi.owner = { id: obj.owner, agent: obj.owner__agent }
-        this.doi.language = { id: obj.language, value: obj.language__value, value_en: obj.language__value_en}
-        this.doi.copyright_agent = { id: obj.copyright_agent, agent: obj.copyright_agent__agent }
-        this.doi.licence = { id: obj.licence, licence: obj.licence__licence, licence_en: obj.licence__licence_en}
+        this.doi.resource_type = {id: obj.resource_type, value: obj.resource_type__value}
+        this.doi.title_translated_language = {
+          id: obj.title_translated_language,
+          value: obj.title_translated_language__value,
+          value_en: obj.title_translated_language__value_en
+        }
+        this.doi.owner = {id: obj.owner, agent: obj.owner__agent}
+        this.doi.language = {id: obj.language, value: obj.language__value, value_en: obj.language__value_en}
+        this.doi.copyright_agent = {id: obj.copyright_agent, agent: obj.copyright_agent__agent}
+        this.doi.licence = {id: obj.licence, licence: obj.licence__licence, licence_en: obj.licence__licence_en}
 
         // Filling related data, doing it here because there is only 1 reference and 1 dataset
         // Reference and Dataset are direct links and should be added without relatedData object.
-        this.doi.reference = { id: obj.reference, reference: obj.reference__reference }
-        this.doi.dataset = { id: obj.dataset, name: obj.dataset__name, name_en: obj.dataset__name_en}
+        this.doi.reference = {id: obj.reference, reference: obj.reference__reference}
+        this.doi.dataset = {id: obj.dataset, name: obj.dataset__name, name_en: obj.dataset__name_en}
       },
 
       fillRelatedDataAutocompleteFields(obj) {
-        if (this.isNotEmpty(obj.attachment)) obj.attachment = { id: obj.attachment, original_filename: obj.attachment__original_filename };
-        if (this.isNotEmpty(obj.agent_type)) obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value };
-        if (this.isNotEmpty(obj.agent)) obj.agent = { id: obj.agent, agent: obj.agent__agent };
-        if (this.isNotEmpty(obj.identifier_type)) obj.identifier_type = { id: obj.identifier_type, value: obj.identifier_type__value };
-        if (this.isNotEmpty(obj.relation_type)) obj.relation_type = { id: obj.relation_type, value: obj.relation_type__value };
-        if (this.isNotEmpty(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en };
-        if (this.isNotEmpty(obj.date_type)) obj.date_type = { id: obj.date_type, value: obj.date_type__value };
+        if (this.isNotEmpty(obj.attachment)) obj.attachment = {
+          id: obj.attachment,
+          original_filename: obj.attachment__original_filename
+        };
+        if (this.isNotEmpty(obj.agent_type)) obj.agent_type = {id: obj.agent_type, value: obj.agent_type__value};
+        if (this.isNotEmpty(obj.agent)) obj.agent = {id: obj.agent, agent: obj.agent__agent};
+        if (this.isNotEmpty(obj.identifier_type)) obj.identifier_type = {
+          id: obj.identifier_type,
+          value: obj.identifier_type__value
+        };
+        if (this.isNotEmpty(obj.relation_type)) obj.relation_type = {
+          id: obj.relation_type,
+          value: obj.relation_type__value
+        };
+        if (this.isNotEmpty(obj.locality)) obj.locality = {
+          id: obj.locality,
+          locality: obj.locality__locality,
+          locality_en: obj.locality__locality_en
+        };
+        if (this.isNotEmpty(obj.date_type)) obj.date_type = {id: obj.date_type, value: obj.date_type__value};
 
         return obj;
       },
@@ -1011,12 +1052,13 @@
         }
       },
 
-      setBlockVisibility(object,count){
-        if(object === 'reference' || object === 'dataset') this.block.referenceAndDataset = count > 0
+      setBlockVisibility(object, count) {
+        if (object === 'reference' || object === 'dataset') this.block.referenceAndDataset = count > 0
       },
 
       //check required fields for related data
-      checkRequiredFields(type) {},
+      checkRequiredFields(type) {
+      },
 
       formatRelatedData(objectToUpload) {
         let uploadableObject = cloneDeep(objectToUpload);
@@ -1161,20 +1203,23 @@
        */
       registerMetadata() {
         if (this.validate('doi')) {
-          if (confirm( this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
+          if (confirm(this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
             this.sendingData = true
 
             fetchRegisterMetadataToDataCite(this.$route.params.id).then(response => {
               if (response.status === 200) {
                 if (typeof response.body.results !== 'undefined' && response.body.results.length > 0) {
                   if (response.body.results[0].success) {
-                    toastSuccess({ text: this.$t('doi.dataciteMetadataUpdated') + ' DataCite response: ' + response.body.results[0].content, timeout: 5000 })
+                    toastSuccess({
+                      text: this.$t('doi.dataciteMetadataUpdated') + ' DataCite response: ' + response.body.results[0].content,
+                      timeout: 5000
+                    })
                     this.setCurrentTimeToDataCiteDateFields();
                     this.showMetadataButton = false
                     this.showMetadataUpdateMessage = false
                     this.checkDoiUrl()
                   } else {
-                    toastError({ text: this.$t('doi.dataciteMetadataUpdateFailed') })
+                    toastError({text: this.$t('doi.dataciteMetadataUpdateFailed')})
                   }
                 }
               }
@@ -1187,18 +1232,21 @@
 
       registerDoiUrl() {
         if (this.validate('doi')) {
-          if (confirm( this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
+          if (confirm(this.showUpdateMessage ? this.$t('doi.doiDataCiteUpdateConfirmation') : this.$t('doi.doiDataCiteRegisterConfirmation'))) {
             this.sendingData = true
 
             fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(response => {
               if (response.status === 200) {
                 if (typeof response.body.results !== 'undefined' && response.body.results.length > 0) {
                   if (response.body.results[0].success) {
-                    toastSuccess({ text: this.$t('doi.dataciteUrlUpdated') + ' DataCite response: ' + response.body.results[0].content, timeout: 5000 })
+                    toastSuccess({
+                      text: this.$t('doi.dataciteUrlUpdated') + ' DataCite response: ' + response.body.results[0].content,
+                      timeout: 5000
+                    })
                     this.showDoiUrlButton = false
                     this.showDoiUrlUpdateMessage = false
                   } else {
-                    toastError({ text: this.$t('doi.dataciteUrlUpdateFailed') })
+                    toastError({text: this.$t('doi.dataciteUrlUpdateFailed')})
                   }
                 }
               }
@@ -1227,7 +1275,7 @@
                   this.sarvXML = response.body.results[0].sarv_xml
                   this.dataciteXML = response.body.results[0].datacite_xml
                   if (typeof response.body.results[0].error !== 'undefined' && response.body.results[0].error_et !== 'undefined') {
-                    if (this.$i18n.locale === 'ee')toastInfo({text: response.body.results[0].error_et})
+                    if (this.$i18n.locale === 'ee') toastInfo({text: response.body.results[0].error_et})
                     else toastInfo({text: response.body.results[0].error})
                   }
 
@@ -1272,19 +1320,71 @@
 
 
       assignEgfFieldsToDoiObject(egfDoiObject) {
-        let sarvDoiObject = {};
+        if (this.isNotEmpty(egfDoiObject)) {
+          if (egfDoiObject.creator) {
+            let creatorsList = [];
+            if (egfDoiObject.creator.includes(',')) {
+              this.doi.creators = egfDoiObject.creator.replace(/,/g, ';');
+              creatorsList = egfDoiObject.creator.split(',');
+            } else {
+              this.doi.creators = egfDoiObject.creator;
+              creatorsList.push(egfDoiObject.creator);
+            }
 
-        if (egfDoiObject.creator) sarvDoiObject.creators = egfDoiObject.creator;
-        if (egfDoiObject.title) sarvDoiObject.title_translated = egfDoiObject.title;
-        if (egfDoiObject.title_orig) sarvDoiObject.title = egfDoiObject.title_orig;
-        if (egfDoiObject.date) sarvDoiObject.publication_year = egfDoiObject.date;
-        if (egfDoiObject.tags) sarvDoiObject.remarks = egfDoiObject.tags;
-        // Todo if (egfDoiObject.field) sarvDoiObject.creators = egfDoiObject.field;
-        // Todo if (egfDoiObject.deposit) sarvDoiObject.creators = egfDoiObject.deposit;
-        if (egfDoiObject.description) sarvDoiObject.abstract = egfDoiObject.description;
-        // Todo if (egfDoiObject.performer) sarvDoiObject.creators = egfDoiObject.performer;
+            creatorsList.forEach(creator => {
+              this.relatedData.doi_agent.push({
+                name: creator,
+                agent_type: 1,
+                agent_type__value: 'Creator',
+              })
+            })
+          }
+          if (egfDoiObject.title) this.doi.title_translated = egfDoiObject.title;
+          if (egfDoiObject.title_orig) this.doi.title = egfDoiObject.title_orig;
+          if (egfDoiObject.date) this.doi.publication_year = egfDoiObject.date;
+          if (egfDoiObject.tags) this.doi.remarks = `"tags": "${egfDoiObject.tags}"`;
+          if (egfDoiObject.field) this.doi.remarks += `, "field": "${egfDoiObject.field}"`;
+          if (egfDoiObject.deposit) this.doi.remarks += `, "deposit": "${egfDoiObject.deposit}"`;
+          if (egfDoiObject.description) this.doi.abstract = egfDoiObject.description;
+          if (egfDoiObject.funder) {
+            let funderList = [];
+            if (egfDoiObject.funder.includes(',')) funderList = egfDoiObject.funder.split(',');
+            else funderList.push(egfDoiObject.funder);
 
-        return sarvDoiObject
+            funderList.forEach(funder => {
+              this.relatedData.doi_agent.push({
+                name: funder,
+                agent_type: 10,
+                agent_type__value: 'Funder',
+              })
+            })
+          }
+          if (egfDoiObject.performer) {
+            let performerList = [];
+            if (egfDoiObject.performer.includes(',')) performerList = egfDoiObject.performer.split(',');
+            else performerList.push(egfDoiObject.performer);
+
+            performerList.forEach(performer => {
+              this.relatedData.doi_agent.push({
+                name: performer,
+                agent_type: 11, // Todo: which one ???
+                agent_type__value: 'HostingInstitution', // Todo: which one ???
+              })
+            })
+          }
+          if (egfDoiObject.emk_protocol) this.doi.remarks += `, "emk_protocol": "${egfDoiObject.emk_protocol}"`;
+          if (egfDoiObject.geometry) {
+            if (egfDoiObject.geometry.coordinates && egfDoiObject.geometry.coordinates.length > 0) {
+              let coordinates = egfDoiObject.geometry.coordinates[0]
+              coordinates.forEach(entity => {
+                this.relatedData.doi_geolocation.push({
+                  point_latitude: entity[0],
+                  point_longitude: entity[1]
+                })
+              })
+            }
+          }
+        }
       },
 
       addCreatorsToRelatedData() {
@@ -1305,8 +1405,8 @@
 
                 if (this.isNotEmpty(agentObject)) {
                   doiAgentObject.name = agentObject.agent;
-                  doiAgentObject.orcid  = agentObject.orcid;
-                  doiAgentObject.affiliation  = agentObject.institution__institution_name_en;
+                  doiAgentObject.orcid = agentObject.orcid;
+                  doiAgentObject.affiliation = agentObject.institution__institution_name_en;
                   doiAgentObject.agent = agentObject.id;
                   doiAgentObject.agent__agent = agentObject.agent
                 } else {
