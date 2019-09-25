@@ -381,7 +381,7 @@
 
               <span>
                 <sup>
-                  <b-badge pill variant="light">{{ relatedData.count[tab.name] }}&nbsp;</b-badge>
+                  <b-badge pill variant="light">{{ relatedData[tab.name].length }}&nbsp;</b-badge>
                 </sup>
               </span>
 
@@ -720,7 +720,7 @@
             console.log(response)
           });
 
-          // this.assignEgfFieldsToDoiObject(JSON.parse("{\"identifier\":2,\"creator\":\"N. Pogrebov\",\"title\":\"Lühiülevaade Eesti Vabariigi geoloogilisest ehitusest ja mineraalsetest rikkustest\",\"title_orig\":\"Kratkii otsherk geologitsheskogo strojenija i mineralnõh bogatstv Estonskoi Respubliki\",\"date\":1923,\"tags\":\"aluspõhi, kvaliteet, kvaternaar, varu\",\"field\":\"kaardistamine, maavara\",\"deposit\":\"Sinimäed\",\"description\":\"12-leheküljelises 1944.a koostatud venekeelses aruandes on lühidalt iseloomustatud Eesti Vabariigi territooriumi geoloogilist ehitust ja olulisemaid maavarasid. Kirjanduse loetelus on ca pooled tööd pärit saksakeelsetelt autoritelt,\",\"performer\":\"Loode GV\",\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[59.053385,24.50002],[58.215376,25.10329],[58.453046,23.062895],[59.053385,24.50002]]]},\"geoLocations\":[{\"geoLocationPolygon\":[{\"polygonPoint\":{\"pointLatitude\":59.053385,\"pointLongitude\":24.50002}},{\"polygonPoint\":{\"pointLatitude\":58.215376,\"pointLongitude\":25.10329}},{\"polygonPoint\":{\"pointLatitude\":58.453046,\"pointLongitude\":23.062895}},{\"polygonPoint\":{\"pointLatitude\":59.053385,\"pointLongitude\":24.50002}}]}]}"));
+          this.assignEgfFieldsToDoiObject(JSON.parse("{\"identifier\":2,\"creator\":\"N. Pogrebov\",\"title\":\"Lühiülevaade Eesti Vabariigi geoloogilisest ehitusest ja mineraalsetest rikkustest\",\"title_orig\":\"Kratkii otsherk geologitsheskogo strojenija i mineralnõh bogatstv Estonskoi Respubliki\",\"date\":1923,\"tags\":\"aluspõhi, kvaliteet, kvaternaar, varu\",\"field\":\"kaardistamine, maavara\",\"deposit\":\"Sinimäed\",\"description\":\"12-leheküljelises 1944.a koostatud venekeelses aruandes on lühidalt iseloomustatud Eesti Vabariigi territooriumi geoloogilist ehitust ja olulisemaid maavarasid. Kirjanduse loetelus on ca pooled tööd pärit saksakeelsetelt autoritelt,\",\"performer\":\"Loode GV\",\"geometry\":{\"type\":\"Polygon\",\"coordinates\":[[[59.053385,24.50002],[58.215376,25.10329],[58.453046,23.062895],[59.053385,24.50002]]]},\"geoLocations\":[{\"geoLocationPolygon\":[{\"polygonPoint\":{\"pointLatitude\":59.053385,\"pointLongitude\":24.50002}},{\"polygonPoint\":{\"pointLatitude\":58.215376,\"pointLongitude\":25.10329}},{\"polygonPoint\":{\"pointLatitude\":58.453046,\"pointLongitude\":23.062895}},{\"polygonPoint\":{\"pointLatitude\":59.053385,\"pointLongitude\":24.50002}}]}]}"));
         }
 
         this.setTab('doi_agent')
