@@ -1321,6 +1321,10 @@
 
       assignEgfFieldsToDoiObject(egfDoiObject) {
         if (this.isNotEmpty(egfDoiObject)) {
+          this.doi.resource_type = { id: 12, value: 'Text' };
+          this.doi.resource = 'Report';
+          this.doi.publisher = 'Eesti Geoloogiateenistus';
+
           if (egfDoiObject.creator) {
             let creatorsList = [];
             if (egfDoiObject.creator.includes(',')) {
@@ -1342,9 +1346,9 @@
           if (egfDoiObject.title) this.doi.title_translated = egfDoiObject.title;
           if (egfDoiObject.title_orig) this.doi.title = egfDoiObject.title_orig;
           if (egfDoiObject.date) this.doi.publication_year = egfDoiObject.date;
-          if (egfDoiObject.tags) this.doi.remarks = `"tags": "${egfDoiObject.tags}"`;
-          if (egfDoiObject.field) this.doi.remarks += `, "field": "${egfDoiObject.field}"`;
-          if (egfDoiObject.deposit) this.doi.remarks += `, "deposit": "${egfDoiObject.deposit}"`;
+          if (egfDoiObject.tags) this.doi.remarks = egfDoiObject.tags;
+          if (egfDoiObject.field) this.doi.remarks += ', ' + egfDoiObject.field;
+          if (egfDoiObject.deposit) this.doi.remarks += ', ' + egfDoiObject.deposit;
           if (egfDoiObject.description) this.doi.abstract = egfDoiObject.description;
           if (egfDoiObject.funder) {
             let funderList = [];
@@ -1372,10 +1376,10 @@
               })
             })
           }
-          if (egfDoiObject.emk_protocol) this.doi.remarks += `, "emk_protocol": "${egfDoiObject.emk_protocol}"`;
+          if (egfDoiObject.emk_protocol) this.doi.remarks += ', ' + egfDoiObject.emk_protocol;
           if (egfDoiObject.geometry) {
             if (egfDoiObject.geometry.coordinates && egfDoiObject.geometry.coordinates.length > 0) {
-              let coordinates = egfDoiObject.geometry.coordinates[0]
+              let coordinates = egfDoiObject.geometry.coordinates[0];
               coordinates.forEach(entity => {
                 this.relatedData.doi_geolocation.push({
                   point_latitude: entity[0],
