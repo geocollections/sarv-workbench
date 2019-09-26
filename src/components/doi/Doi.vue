@@ -1328,20 +1328,28 @@
           if (egfDoiObject.creator) {
             let creatorsList = [];
             if (egfDoiObject.creator.includes(',')) {
-              this.doi.creators = egfDoiObject.creator.replace(/,/g, ';');
+              // this.doi.creators = egfDoiObject.creator.replace(/,/g, ';');
               creatorsList = egfDoiObject.creator.split(',');
             } else {
-              this.doi.creators = egfDoiObject.creator;
+              // this.doi.creators = egfDoiObject.creator;
               creatorsList.push(egfDoiObject.creator);
             }
 
+            let formattedCreatorsList = [];
             creatorsList.forEach(creator => {
+              let firstName = creator.substring(0, creator.lastIndexOf('.') + 1);
+              let lastName = creator.substring(creator.lastIndexOf('.') + 1);
+              let formattedName = `${lastName.trim()}, ${firstName.trim()}`;
+              formattedCreatorsList.push(formattedName);
+
               this.relatedData.doi_agent.push({
-                name: creator,
+                name: formattedName,
                 agent_type: 1,
                 agent_type__value: 'Creator',
               })
-            })
+            });
+
+            this.doi.creators = formattedCreatorsList.join('; ')
           }
           if (egfDoiObject.title) this.doi.title_translated = egfDoiObject.title;
           if (egfDoiObject.title_orig) this.doi.title = egfDoiObject.title_orig;

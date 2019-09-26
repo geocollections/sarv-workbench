@@ -2523,6 +2523,8 @@
           // this.$localStorage.set('attachment', objectToUpload);
         }
 
+
+
         // Autocomplete fields
         if (this.isNotEmpty(uploadableObject.agent_digitised)) uploadableObject.agent_digitised = uploadableObject.agent_digitised.id;
         if (this.isNotEmpty(uploadableObject.author)) uploadableObject.author = uploadableObject.author.id;
