@@ -192,13 +192,18 @@ const formManipulation = {
               if (addAnother) { // Save
                 if (this.isNotEmpty(savedObjectId) && !this.$route.meta.isEdit) { // savedObjectId exists and is add view
                   if (object === 'imageset') {
-                    this.$router.push({ name: 'photo_archive add', params: { imageset: { id: savedObjectId, imageset_number: this[object].imageset_number } } })
+                    this.$router.push({
+                      name: 'photo_archive add',
+                      params: {imageset: {id: savedObjectId, imageset_number: this[object].imageset_number}}
+                    })
                   } else if (object === 'journal') {
-                    this.$router.push({ name: 'reference add', params: { journal: { id: savedObjectId, journal_name: this[object].journal_name } } })
-                  } else this.$router.push({ path: '/' + object + '/' + savedObjectId });
+                    this.$router.push({
+                      name: 'reference add',
+                      params: {journal: {id: savedObjectId, journal_name: this[object].journal_name}}
+                    })
+                  } else this.$router.push({path: '/' + object + '/' + savedObjectId});
                 }
-              }
-              else { // Save and leave
+              } else { // Save and leave
                 if (this.isNotEmpty(savedObjectId)) this.$router.push({path: '/' + object})
               }
             } else resolve(true);
@@ -503,37 +508,46 @@ const formManipulation = {
      * In add view and for DOI, data will be sent in related_data field.
      *
      * @param {string} tab - Current active tab which is being changed.
+     * @param {boolean} checkForDuplicates - if true then we need to check that user won't enter duplicates
      */
-    addRelatedData(tab) {
+    addRelatedData(tab, checkForDuplicates = false) {
       if (!this.isNotEmpty(tab)) tab = this.activeTab;
 
+      console.log(this.recordAlreadyExists(tab, checkForDuplicates));
+      console.log(!this.recordAlreadyExists(tab, checkForDuplicates));
+
       if (this.isNotEmpty(this.relatedData.insert[tab])) {
+        if (!this.recordAlreadyExists(tab, checkForDuplicates)) {
 
-        if (this.$route.meta.isEdit) {
-          let formData = new FormData();
+          if (this.$route.meta.isEdit) {
+            let formData = new FormData();
 
-          // Todo: CheckRequiredFields is not used anywhere, should change it to validate() and use requiredFields field in component data object.
-          if (this.checkRequiredFields(tab, this.relatedData.insert[tab])) {
-            toastError({text: this.$t('messages.checkForm')});
-            return;
-          }
+            if (this.checkRequiredFields(tab, this.relatedData.insert[tab])) {
+              toastError({text: this.$t('messages.checkForm')});
+              return;
+            }
 
-          formData.append('data', this.formatRelatedData(this.relatedData.insert[tab]));
-          this.saveData(tab, formData, 'add/' + tab + '/').then(isSuccessfullySaved => {
-            console.log(isSuccessfullySaved)
-            this.loadRelatedData(tab);
+            formData.append('data', this.formatRelatedData(this.relatedData.insert[tab]));
+            this.saveData(tab, formData, 'add/' + tab + '/').then(isSuccessfullySaved => {
+              console.log(isSuccessfullySaved);
+              this.loadRelatedData(tab);
+              this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
+            });
+
+
+          } else {
+            if (this.checkRequiredFields(tab, this.relatedData.insert[tab])) {
+              toastError({text: this.$t('messages.checkForm')});
+              return;
+            }
+            this.removeUnnecessaryFields(this.relatedData.insert[tab], this.relatedData.copyFields[tab]);
+            this.relatedData[tab].push(this.unformatRelatedDataAutocompleteFields(this.relatedData.insert[tab]));
             this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
-          });
-
-
-        } else {
-          this.removeUnnecessaryFields(this.relatedData.insert[tab], this.relatedData.copyFields[tab]);
-          this.relatedData[tab].push(this.unformatRelatedDataAutocompleteFields(this.relatedData.insert[tab]));
-          this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
-        }
+          }
+        } else toastError({ text: this.$t('messages.checkFormDuplicate') })
 
       } else {
-        toastError({text: this.$t('messages.checkForm')});
+        toastError({text: this.$t('messages.checkFormEmpty')});
       }
     },
 
@@ -620,7 +634,6 @@ const formManipulation = {
         } else {
           this.relatedData[this.activeTab].splice(index, 1);
           if (this.$route.meta.isEdit) toastSuccess({text: `Removed record with an ID: <b>${entity.id}</b> from <b>${this.activeTab}</b>`});
-          else toastSuccess({text: `Removed record from <b>${this.activeTab}</b>`});
         }
       }
     },
@@ -632,6 +645,27 @@ const formManipulation = {
      */
     changeOrdering(entity) {
       if (this.$route.meta.isEdit) this.$set(this.relatedData.searchParameters[entity.tab], 'order_by', entity.orderBy);
+    },
+
+    recordAlreadyExists(tab, checkForDuplicates) {
+      if (checkForDuplicates) {
+        if (tab === 'doi_agent') {
+          if (this.relatedData[tab].length > 0) {
+            let name = this.relatedData.insert[tab].name;
+            let agent = this.relatedData.insert[tab].agent;
+
+            for (let entity in this.relatedData[tab]) {
+              console.log(this.relatedData[tab][entity].agent)
+              console.log(agent)
+
+              if (this.relatedData[tab][entity].name && name && (this.relatedData[tab][entity].name === name)) return true;
+              else if (this.relatedData[tab][entity].agent && agent && (this.relatedData[tab][entity].agent === agent.id)) return true;
+            }
+          }
+        }
+      }
+
+      return false
     },
 
     /**************************

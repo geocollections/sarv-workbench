@@ -1224,6 +1224,8 @@
     "langChange": "Changed language!",
     "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@taltech.ee",
     "checkForm": "Make sure everything is correct!",
+    "checkFormEmpty": "You can't input empty record!",
+    "checkFormDuplicate": "Similar record already exists!",
     "lockedForm": "Unfortunately given attachment is locked and cannot be changed!",
     "loginError": "Something went wrong!",
     "loginIdError": "Something went wrong! Try restarting your browser and make sure that ID-card is connected to a computer.",

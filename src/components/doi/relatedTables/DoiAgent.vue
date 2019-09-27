@@ -33,7 +33,7 @@
 
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.name" type="text"/>
+              <b-form-input v-model="entity.new.name" :state="isNotEmpty(entity.new.name)" type="text"/>
             </td>
 
             <td v-if="entity.editMode">
@@ -98,7 +98,7 @@
 
           <tr class="related-input-data">
             <td>
-              <b-form-input v-model="relatedData.insert.doi_agent.name" type="text"/>
+              <b-form-input v-model="relatedData.insert.doi_agent.name" :state="isNotEmpty(relatedData.insert.doi_agent.name)" type="text"/>
             </td>
 
             <td>
@@ -146,7 +146,7 @@
             </td>
 
             <td style="padding: 0.6em!important;">
-              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab)">
+              <button class="float-left btn btn-sm btn-success" :disabled="sendingData" @click="$emit('add-related-data', activeTab, true)">
                 <i class="fas fa-pencil-alt"></i>
               </button>
               <button class="float-right btn btn-sm btn-danger" :disabled="sendingData" @click="$emit('set-default', activeTab)">
@@ -178,9 +178,9 @@
         handler: function (newVal, oldVal) {
           if (this.isNotEmpty(newVal)) {
             // Adding NAME, ORCID and AFFILIATION
-            this.relatedData.insert.doi_agent.name = newVal.agent;
-            this.relatedData.insert.doi_agent.orcid = newVal.orcid;
-            this.relatedData.insert.doi_agent.affiliation = newVal.institution__institution_name_en;
+            this.$set(this.relatedData.insert.doi_agent, 'name', newVal.agent);
+            this.$set(this.relatedData.insert.doi_agent, 'orcid', newVal.orcid);
+            this.$set(this.relatedData.insert.doi_agent, 'affiliation', newVal.institution__institution_name_en);
           }
         },
         deep: true
@@ -190,9 +190,9 @@
       fillFieldsUsingAgent(selectedOption, id) {
         if (this.isNotEmpty(selectedOption)) {
           // Adding NAME, ORCID and AFFILIATION
-          this.relatedData.doi_agent[id].new.name = selectedOption.agent;
-          this.relatedData.doi_agent[id].new.orcid = selectedOption.orcid;
-          this.relatedData.doi_agent[id].new.affiliation = selectedOption.institution__institution_name_en;
+          this.$set(this.relatedData.doi_agent[id].new, 'name', newVal.agent);
+          this.$set(this.relatedData.doi_agent[id].new, 'orcid', newVal.orcid);
+          this.$set(this.relatedData.doi_agent[id].new, 'affiliation', newVal.institution__institution_name_en);
         }
       }
     }

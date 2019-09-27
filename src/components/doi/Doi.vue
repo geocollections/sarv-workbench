@@ -1057,7 +1057,10 @@
       },
 
       //check required fields for related data
-      checkRequiredFields(type) {
+      checkRequiredFields(tab, tabData) {
+        if (tab === 'doi_agent') {
+          return !this.isNotEmpty(tabData.name)
+        }
       },
 
       formatRelatedData(objectToUpload) {
