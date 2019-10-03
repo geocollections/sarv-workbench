@@ -11,10 +11,11 @@
             <th>{{ $t('doi.place') }}</th>
             <th>{{ $t('doi.pointLongitude') }}</th>
             <th>{{ $t('doi.pointLatitude') }}</th>
-            <th>{{ $t('doi.boxWLongitude') }}</th>
-            <th>{{ $t('doi.boxELongitude') }}</th>
-            <th>{{ $t('doi.boxSLatitude') }}</th>
-            <th>{{ $t('doi.boxNLatitude') }}</th>
+            <th>{{ $t('doi.polygon') }}</th>
+<!--            <th>{{ $t('doi.boxWLongitude') }}</th>-->
+<!--            <th>{{ $t('doi.boxELongitude') }}</th>-->
+<!--            <th>{{ $t('doi.boxSLatitude') }}</th>-->
+<!--            <th>{{ $t('doi.boxNLatitude') }}</th>-->
             <th class="btn-th"></th>
           </tr>
           </thead>
@@ -32,13 +33,7 @@
 
             <td v-if="!entity.editMode">{{ entity.point_latitude }}</td>
 
-            <td v-if="!entity.editMode">{{ entity.box_w_longitude }}</td>
-
-            <td v-if="!entity.editMode">{{ entity.box_e_longitude }}</td>
-
-            <td v-if="!entity.editMode">{{ entity.box_s_latitude }}</td>
-
-            <td v-if="!entity.editMode">{{ entity.box_n_latitude }}</td>
+            <td v-if="!entity.editMode">{{ entity.polygon }}</td>
 
             <!-- EDIT MODE -->
             <td v-if="entity.editMode">
@@ -75,19 +70,7 @@
             </td>
 
             <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.box_w_longitude" type="text"/>
-            </td>
-
-            <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.box_e_longitude" type="text"/>
-            </td>
-
-            <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.box_s_latitude" type="text"/>
-            </td>
-
-            <td v-if="entity.editMode">
-              <b-form-input v-model="entity.new.box_n_latitude" type="text"/>
+              <b-form-input v-model="entity.new.polygon" disabled type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">
@@ -141,19 +124,7 @@
             </td>
 
             <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.box_w_longitude" type="text"/>
-            </td>
-
-            <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.box_e_longitude" type="text"/>
-            </td>
-
-            <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.box_s_latitude" type="text"/>
-            </td>
-
-            <td>
-              <b-form-input v-model="relatedData.insert.doi_geolocation.box_n_latitude" type="text"/>
+              <b-form-input v-model="relatedData.insert.doi_geolocation.polygon" disabled type="text"/>
             </td>
 
             <td style="padding: 0.6em!important;">

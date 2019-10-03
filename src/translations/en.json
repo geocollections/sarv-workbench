@@ -996,6 +996,7 @@
     "value": "Value",
     "pointLongitude": "Point long.",
     "pointLatitude": "Point lat.",
+    "polygon": "Polygon",
     "boxWLongitude": "Box (W long)",
     "boxELongitude": "Box (E long)",
     "boxSLatitude": "Box (S lat)",

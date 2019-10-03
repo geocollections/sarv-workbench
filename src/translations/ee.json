@@ -996,6 +996,7 @@
     "value": "Väärtus",
     "pointLongitude": "Punkti long.",
     "pointLatitude": "Punkti lat.",
+    "polygon": "Polügoon",
     "boxWLongitude": "Box (W long)",
     "boxELongitude": "Box (E long)",
     "boxSLatitude": "Box (S lat)",

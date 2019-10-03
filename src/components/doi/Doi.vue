@@ -762,7 +762,7 @@
           copyFields: {
             attachment_link: ['attachment', 'remarks'],
             doi_related_identifier: ['identifier_type', 'relation_type', 'value', 'remarks'],
-            doi_geolocation: ['locality', 'place', 'point_longitude', 'point_latitude', 'box_w_longitude', 'box_e_longitude', 'box_s_latitude', 'box_n_latitude'],
+            doi_geolocation: ['locality', 'place', 'point_longitude', 'point_latitude', 'polygon'],
             doi_agent: ['name', 'affiliation', 'agent_type', 'orcid', 'agent'],
             doi_date: ['date', 'date_type', 'remarks']
           },
@@ -877,11 +877,8 @@
             // .filter(entity => this.isNotEmpty(entity.locality))
               .map((entity) => {
                 return {
-                  box_e_longitude: entity.box_e_longitude ? entity.box_e_longitude : null,
-                  box_n_latitude: entity.box_n_latitude ? entity.box_n_latitude : null,
-                  box_s_latitude: entity.box_s_latitude ? entity.box_s_latitude : null,
-                  box_w_longitude: entity.box_w_longitude ? entity.box_w_longitude : null,
-                  locality: entity.locality,
+                  polygon: entity.polygon ? entity.polygon : null,
+                  locality: entity.locality ? entity.locality : null,
                   place: entity.place ? entity.place : null,
                   point_latitude: entity.point_latitude ? entity.point_latitude : null,
                   point_longitude: entity.point_longitude ? entity.point_longitude : null
@@ -1382,21 +1379,20 @@
             performerList.forEach(performer => {
               this.relatedData.doi_agent.push({
                 name: performer,
-                agent_type: 11, // Todo: which one ???
-                agent_type__value: 'HostingInstitution', // Todo: which one ???
+                agent_type: 11,
+                agent_type__value: 'HostingInstitution',
               })
             })
           }
           if (egfDoiObject.emk_protocol) this.doi.remarks += ', ' + egfDoiObject.emk_protocol;
           if (egfDoiObject.geometry) {
             if (egfDoiObject.geometry.coordinates && egfDoiObject.geometry.coordinates.length > 0) {
-              let coordinates = egfDoiObject.geometry.coordinates[0];
-              coordinates.forEach(entity => {
+              if (egfDoiObject.geometry.type === 'Polygon') {
+                let coordinates = JSON.stringify(egfDoiObject.geometry.coordinates[0]);
                 this.relatedData.doi_geolocation.push({
-                  point_latitude: entity[0],
-                  point_longitude: entity[1]
-                })
-              })
+                  polygon: coordinates
+                });
+              }
             }
           }
         }
