@@ -1194,9 +1194,9 @@
       /* DOI METADATA START */
 
       setCurrentTimeToDataCiteDateFields() {
-        let UTCString = (new Date()).toUTCString();
-        if (!this.doi.datacite_created) this.doi.datacite_created = UTCString;
-        this.doi.datacite_updated = UTCString;
+        let ISOString = new Date().toISOString();
+        if (!this.doi.datacite_created) this.doi.datacite_created = ISOString;
+        this.doi.datacite_updated = ISOString;
       },
 
       /**
