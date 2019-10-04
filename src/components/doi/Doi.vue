@@ -1369,9 +1369,9 @@
           }
           if (egfDoiObject.title_orig) this.doi.title = egfDoiObject.title_orig;
           if (egfDoiObject.date) this.doi.publication_year = egfDoiObject.date;
-          if (egfDoiObject.tags) this.doi.subjects += egfDoiObject.tags;
-          if (egfDoiObject.field) this.doi.subjects += this.doi.subjects.length > 0 ? (', ' + egfDoiObject.field) : egfDoiObject.field;
-          if (egfDoiObject.deposit) this.doi.subjects += this.doi.subjects.length > 0 ? (', ' + egfDoiObject.deposit) : egfDoiObject.deposit;
+          if (egfDoiObject.tags && egfDoiObject.tags.trim().length > 0) this.doi.subjects += egfDoiObject.tags;
+          if (egfDoiObject.field && egfDoiObject.field.trim().length > 0) this.doi.subjects += this.doi.subjects.length > 0 ? (', ' + egfDoiObject.field) : egfDoiObject.field;
+          if (egfDoiObject.deposit && egfDoiObject.deposit.trim().length > 0) this.doi.subjects += this.doi.subjects.length > 0 ? (', ' + egfDoiObject.deposit) : egfDoiObject.deposit;
           if (egfDoiObject.description) this.doi.abstract = egfDoiObject.description;
           if (egfDoiObject.funder) {
             let funderList = [];
@@ -1399,7 +1399,7 @@
               })
             })
           }
-          if (egfDoiObject.emk_protocol) this.doi.subjects += this.doi.subjects.length > 0 ? (', ' + egfDoiObject.emk_protocol) : egfDoiObject.emk_protocol;
+          if (egfDoiObject.emk_protocol && egfDoiObject.emk_protocol.trim().length > 0) this.doi.subjects += this.doi.subjects.length > 0 ? (', ' + egfDoiObject.emk_protocol) : egfDoiObject.emk_protocol;
           if (egfDoiObject.geometry) {
             if (egfDoiObject.geometry.coordinates && egfDoiObject.geometry.coordinates.length > 0) {
               if (egfDoiObject.geometry.type === 'Polygon') {
