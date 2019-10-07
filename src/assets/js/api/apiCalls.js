@@ -11,6 +11,14 @@ const api = {
   egfApi: 'https://tarkvara.datel.ee/fond/'
 };
 
+async function get(child = "", customUrl) {
+  let url = api.url + child;
+  if (customUrl) url = customUrl + child;
+
+  const response = await window.fetch(url, { method: "GET" });
+  if (response.ok) return await response.json();
+}
+
 function fetch(child, url = 0, headers = {}) {
   let queryUrl = api.url;
   if (url !== 0) queryUrl = url;
@@ -687,7 +695,7 @@ export function fetchDoi(id) {
 }
 
 export function fetchDoiUsingEGF(id) {
-  return fetch(`egf-api/${id}`, api.egfApi)
+  return get(`egf/${id}`)
 }
 
 export function fetchDoiResourceType() {
