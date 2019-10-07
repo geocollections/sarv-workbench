@@ -517,9 +517,6 @@ const formManipulation = {
     addRelatedData(tab, checkForDuplicates = false) {
       if (!this.isNotEmpty(tab)) tab = this.activeTab;
 
-      console.log(this.recordAlreadyExists(tab, checkForDuplicates));
-      console.log(!this.recordAlreadyExists(tab, checkForDuplicates));
-
       if (this.isNotEmpty(this.relatedData.insert[tab])) {
         if (!this.recordAlreadyExists(tab, checkForDuplicates)) {
 

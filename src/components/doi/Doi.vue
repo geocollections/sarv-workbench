@@ -1448,16 +1448,23 @@
                   doiAgentObject.agent__agent = agentObject.agent;
                   doiAgentObject.agent_type = 1;
                   doiAgentObject.agent_type__value = 'Creator';
-                } else {
+                  if (!this.relatedData['doi_agent'].find(agent => agent.id === doiAgentObject.agent || agent.name === doiAgentObject.name)) {
+                    this.relatedData['doi_agent'].push(doiAgentObject)
+                  } else toastError({ text: `Author(s) with the same information already exists!` })
+              } else {
                   doiAgentObject.name = creator.trim();
                   doiAgentObject.agent_type = 1;
                   doiAgentObject.agent_type__value = 'Creator';
+                  if (!this.relatedData['doi_agent'].find(agent => agent.name === doiAgentObject.name)) {
+                    this.relatedData['doi_agent'].push(doiAgentObject)
+                  } else toastError({ text: `Author(s) with the same name already exists!` })
                 }
 
-                this.relatedData['doi_agent'].push(doiAgentObject)
               }, errResponse => {
                 doiAgentObject.name = creator.trim();
-                this.relatedData['doi_agent'].push(doiAgentObject)
+                if (!this.relatedData['doi_agent'].find(agent => agent.name === doiAgentObject.name)) {
+                  this.relatedData['doi_agent'].push(doiAgentObject)
+                } else toastError({ text: `Author(s) with the same name already exists!` });
               });
             }
           });
