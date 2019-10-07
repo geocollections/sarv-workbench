@@ -1275,7 +1275,7 @@
     "settings": "Geocollections Data Management: Settings"
   },
   "logs": {
-    "title": "Logs",
+    "title": "Editing history",
     "recentlyAdded": "Recently added",
     "recentlyUpdated": "Recently updated",
     "user": "User",
