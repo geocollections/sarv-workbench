@@ -453,6 +453,10 @@ const formManipulation = {
       return `https://doi.org/${doi}`
     },
 
+    getSarvDoiUrl(doiIdentifier) {
+      if (doiIdentifier) return 'https://doi.geocollections.info/' + doiIdentifier;
+    },
+
     /**
      * Removes unnecessary fields from object.
      *

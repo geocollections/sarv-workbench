@@ -659,7 +659,7 @@ export function fetchChangeLibraryState(id, data) {
  *****************/
 
 export function fetchDois(data, databaseId) {
-  const fields = 'id,identifier,creators,publication_year,title,resource_type__value,is_private';
+  const fields = 'id,identifier,creators,publication_year,title,resource_type__value,is_private,datacite_created';
   let searchFields = '';
   if (data.identifier !== null && data.identifier.trim().length > 0) {
     searchFields += `&identifier__icontains=${data.identifier}`

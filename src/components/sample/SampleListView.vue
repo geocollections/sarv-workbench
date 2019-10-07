@@ -3,7 +3,7 @@
 
     <div class="label2" v-for="(entity, index) in data">
       <div class="label2_head">
-        <div style="float: left;" v-translate="{et: entity.database__name, en: entity.database__name_en}"></div>
+        <div style="float: left; font-size: 90%" v-translate="{et: entity.database__name, en: entity.database__name_en}"></div>
 
         <div style="float: right; text-align: right; padding-right: 1mm; margin-top: -0.5mm; font-size: 1.0em">ID: {{ entity.id }}</div>
       </div>
@@ -76,6 +76,7 @@
     font-family: "open sans", arial, sans-serif;
     background-color: #fff;
     page-break-inside: avoid;
+    color: #000;
   }
 
   .label2_head {

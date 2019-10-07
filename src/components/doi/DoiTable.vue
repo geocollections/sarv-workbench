@@ -17,13 +17,14 @@
     <td>{{ entity.resource_type__value }}</td>
 
     <td>
-      <!-- Api returns server error 500 for this field, maybe not in models? -->
-      <!--      {{ entity.datacite_created }}-->
+      <span v-if="entity.datacite_created">
+              {{ new Date(entity.datacite_created).toDateString() }}
+      </span>
     </td>
 
     <td>
-      <a v-if="!entity.is_private" href="javascript:void(0)" @click="openGeoInNewWindow({object: 'doi', id: entity.id})"
-         :title="$t('editDoi.viewMessage')">{{ $t('edit.view') }}</a>
+      <a v-if="!entity.is_private" :href="getSarvDoiUrl(entity.identifier)" target="SarvDoiWindow"
+         :title="getSarvDoiUrl(entity.identifier)">{{ $t('edit.view') }}</a>
     </td>
 
 <!--    <td>-->
