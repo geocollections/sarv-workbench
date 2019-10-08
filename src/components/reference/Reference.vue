@@ -389,49 +389,54 @@
             </div>
           </div>
 
-          <!-- LOCATION TXT -->
+          <!-- LOCATION TXT, LICENCE and IS OA -->
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-sm-4">
               <label :for="`location_txt`">{{ $t('reference.location_txt') }}:</label>
               <b-form-input id="location_txt" v-model="reference.location_txt" type="text"></b-form-input>
+            </div>
+
+            <div class="col-sm-4">
+              <label :for="`licence`">{{ $t('reference.licence') }}:</label>
+              <vue-multiselect v-model="reference.licence"
+                               id="licence"
+                               :options="autocomplete.licence"
+                               track-by="id"
+                               :label="licenceLabel"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[licenceLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-sm-4">
+              <label :for="`is_oa`" style="visibility: hidden">{{ $t('reference.is_oa') }}:</label>
+              <b-form-checkbox id="is_oa" v-model="reference.is_oa">
+                {{ $t('reference.is_oa') }}
+              </b-form-checkbox>
+            </div>
+          </div>
+
+          <!-- IS ESTONIAN REFERENCE and IS ESTONIAN AUTHOR -->
+          <div class="d-flex flex-row flex-wrap mt-2">
+            <div class="pr-2">
+              <b-form-checkbox id="is_estonian_reference" v-model="reference.is_estonian_reference">
+                {{ $t('reference.is_estonian_reference') }}
+              </b-form-checkbox>
+            </div>
+
+            <div class="pl-2">
+              <b-form-checkbox id="is_estonian_author" v-model="reference.is_estonian_author">
+                {{ $t('reference.is_estonian_author') }}
+              </b-form-checkbox>
             </div>
           </div>
         </div>
       </transition>
     </fieldset>
-
-    <!-- CHECKBOXES -->
-    <div class="d-flex flex-row flex-wrap mb-2">
-      <div class="px-2">
-        <b-form-checkbox id="is_oa" v-model="reference.is_oa">
-          {{ $t('reference.is_oa') }}
-        </b-form-checkbox>
-      </div>
-
-      <div class="px-2">
-        <b-form-checkbox id="is_private" v-model="reference.is_private">
-          {{ $t('reference.is_private') }}
-        </b-form-checkbox>
-      </div>
-
-      <div class="px-2">
-        <b-form-checkbox id="is_locked" v-model="reference.is_locked">
-          {{ $t('reference.is_locked') }}
-        </b-form-checkbox>
-      </div>
-
-      <div class="px-2">
-        <b-form-checkbox id="is_estonian_reference" v-model="reference.is_estonian_reference">
-          {{ $t('reference.is_estonian_reference') }}
-        </b-form-checkbox>
-      </div>
-
-      <div class="px-2">
-        <b-form-checkbox id="is_estonian_author" v-model="reference.is_estonian_author">
-          {{ $t('reference.is_estonian_author') }}
-        </b-form-checkbox>
-      </div>
-    </div>
 
     <!-- DIGITAL VERSION (PDF) -->
     <fieldset class="border-top px-2 mb-2" v-if="$route.meta.isEdit" id="block-digital">
@@ -673,6 +678,21 @@
         object="reference" :data="reference" :related-data="relatedData" :attachment="attachment"/>
     </div>
 
+    <!-- IS PRIVATE and IS LOCKED -->
+    <div class="d-flex flex-row flex-wrap">
+      <div class="pr-2">
+        <b-form-checkbox id="is_private" v-model="reference.is_private">
+          {{ $t('reference.is_private') }}
+        </b-form-checkbox>
+      </div>
+
+      <div class="px-2">
+        <b-form-checkbox id="is_locked" v-model="reference.is_locked">
+          {{ $t('reference.is_locked') }}
+        </b-form-checkbox>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -689,7 +709,7 @@
     fetchLocalityReferenceForReference,
     fetchAttachmentForReference,
     fetchLibrariesForReference,
-    fetchJournal, fetchListLocalityReferenceType
+    fetchJournal, fetchListLocalityReferenceType, fetchListLicences
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastError} from "@/assets/js/iziToast/iziToast";
@@ -804,7 +824,7 @@
             'language', 'journal', 'journal_additional', 'volume', 'number', 'pages', 'book_editor', 'book',
             'book_original', 'publisher', 'publisher_place', 'doi', 'url', 'isbn', 'issn', 'abstract',
             'author_keywords', 'remarks', 'location_txt', 'book_editor', 'figures', 'is_locked', 'is_oa', 'is_private',
-            'is_estonian_reference', 'is_estonian_author', 'language', 'title_translated_language'],
+            'is_estonian_reference', 'is_estonian_author', 'language', 'title_translated_language', 'licence'],
           autocomplete: {
             loaders: {
               types: false,
@@ -816,6 +836,7 @@
               attachment3: false, // For #158, regarding p-2
               library: false,
               locality_reference_type: false,
+              licence: false,
             },
             types: [],
             languages: [],
@@ -825,6 +846,7 @@
             attachment: [],
             library: [],
             locality_reference_type: [],
+            licence: [],
           },
           requiredFields: ['reference', 'year', 'author', 'title'],
           reference: {
@@ -901,6 +923,7 @@
           // fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
           // Related data autocomplete list
           fetchListLocalityReferenceType().then(response => this.autocomplete.locality_reference_type = this.handleResponse(response))
+          fetchListLicences().then(response => this.autocomplete.licence = this.handleResponse(response));
         }
 
         if (relatedDataAutocompleteFields) {
@@ -992,6 +1015,7 @@
         if (this.isNotEmpty(objectToUpload.language)) uploadableObject.language = objectToUpload.language.id;
         if (this.isNotEmpty(objectToUpload.journal)) uploadableObject.journal = objectToUpload.journal.id;
         if (this.isNotEmpty(objectToUpload.title_translated_language)) uploadableObject.title_translated_language = objectToUpload.title_translated_language.id;
+        if (this.isNotEmpty(objectToUpload.licence)) uploadableObject.licence = objectToUpload.licence.id;
 
 
         // Adding related data
@@ -1053,6 +1077,7 @@
           value: obj.title_translated_language__value,
           value_en: obj.title_translated_language__value_en
         }
+        this.reference.licence = {id: obj.licence, licence: obj.licence__licence, licence_en: obj.licence__licence_en}
       },
 
       fillRelatedDataAutocompleteFields(obj) {

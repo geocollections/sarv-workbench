@@ -73,7 +73,7 @@ const authenticationMixin = {
           response.body.expires = date.setDate(date.getDate() + 7);
 
           // Cookie for localhost
-          this.$cookies.set('csrftokenLocalhost', 'test token', '1d', null, 'localhost')
+          this.$cookies.set('csrftokenLocalhost', 'test token', '1d', null, 'localhost');
           this.$localStorage.set('authUser', response.body);
 
           this.$router.push({ path: '/dashboard' });
