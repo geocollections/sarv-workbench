@@ -41,9 +41,6 @@
 
   </tr>
   </tbody>
-
-
-
 </template>
 
 <script>

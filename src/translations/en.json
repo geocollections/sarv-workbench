@@ -94,6 +94,7 @@
       "libraries": "Libraries",
       "doi": "Add DOI",
       "imageset": "Add imageset",
+      "journals": "Journals",
       "journal": "Add journal",
       "specimen": "Add specimen",
       "specimens": "Specimens",
@@ -199,6 +200,10 @@
       "map": "Map",
       "description": "Description",
       "relatedData": "Related data"
+    },
+    "journal": {
+      "requiredFields": "Mandatory fields",
+      "info": "General info"
     }
   },
   "add": {
@@ -386,6 +391,10 @@
   },
   "editKeyword": {
     "heading": "Term"
+  },
+  "editJournal": {
+    "heading": "Journal",
+    "editMessage": "Edit journal"
   },
   "attachments": {
     "header": "My attachments",
@@ -1173,12 +1182,19 @@
     "is_preferred":"Is preferred?"
   },
   "journal": {
+    "header": "Journal",
+    "id": "ID",
     "requiredFields": "Mandatory fields",
     "generalInfo": "General info",
     "journalName": "Journal name",
     "journalShort": "Journal short",
+    "journalOriginal": "Journal orig.",
+    "journalFilter": "Journal",
+    "publisherFilter": "Publisher",
+    "remarksFilter": "Remarks",
     "publisher": "Publisher",
-    "remarks": "Remarks"
+    "remarks": "Remarks",
+    "addNew": "Add new Journal"
   },
   "storage": {
     "storage": "Storage"

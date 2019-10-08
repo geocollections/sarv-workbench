@@ -260,6 +260,13 @@ new Vue({
       type: String,
       default: 'table'
     },
+    journalSearchHistory: {
+      type: Object
+    },
+    journalViewType: {
+      type: String,
+      default: 'table'
+    },
     keywordSearchHistory: {
       type: Object
     },

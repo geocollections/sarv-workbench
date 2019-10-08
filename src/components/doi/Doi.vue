@@ -1382,8 +1382,8 @@
             funderList.forEach(funder => {
               this.relatedData.doi_agent.push({
                 name: funder,
-                agent_type: 10,
-                agent_type__value: 'Funder',
+                agent_type: 22,
+                agent_type__value: 'Sponsor',
               })
             })
           }
@@ -1395,8 +1395,8 @@
             performerList.forEach(performer => {
               this.relatedData.doi_agent.push({
                 name: performer,
-                agent_type: 11,
-                agent_type__value: 'HostingInstitution',
+                agent_type: 12,
+                agent_type__value: 'Producer',
               })
             })
           }

@@ -709,7 +709,7 @@
     fetchLocalityReferenceForReference,
     fetchAttachmentForReference,
     fetchLibrariesForReference,
-    fetchJournal, fetchListLocalityReferenceType, fetchListLicences
+    fetchListLocalityReferenceType, fetchListLicences, fetchJournalForReference
   } from "../../assets/js/api/apiCalls";
   import cloneDeep from 'lodash/cloneDeep'
   import {toastError} from "@/assets/js/iziToast/iziToast";
@@ -1257,7 +1257,7 @@
 
         if (data['container-title'] && data['container-title'].length > 0) {
           let journalName = data['container-title'][0]
-          fetchJournal(journalName).then(response => {
+          fetchJournalForReference(journalName).then(response => {
             let journal = this.handleResponse(response)
             if (journal.length === 1) this.reference.journal = {
               id: journal[0].id,

@@ -304,6 +304,47 @@ const router = new Router({
           ]
         },
         {
+          path: '/journal',
+          component: () => import('./views/Journals.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/journal/JournalTable.vue'),
+              meta: {
+                requiresAuth: true
+              },
+            }
+          ]
+        },
+        {
+          path: '/journal/:id(\\d+)',
+          props: true,
+          component: () => import('./views/EditForm.vue'),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: '',
+              component: () => import('./components/journal/Journal.vue'),
+              meta: {
+                isEdit:true,
+                table:'journal',
+                title:'titles.editJournal',
+                heading:'editJournal.heading',
+                isBottomOptionShown: true,
+                isNavigationShown: true,
+                isCopyFormShown: true,
+                requiresAuth: true,
+                object: 'journal'
+              },
+            }
+          ]
+        },
+        {
           path: '/journal/add',
           component: () => import('./views/AddForm.vue'),
           meta: {

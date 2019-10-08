@@ -5,7 +5,7 @@ import {
   fetchAttachments,
   fetchLocalities,
   fetchSamples,
-  fetchDois, fetchLibrariesFromLibraryAgent, fetchAnalyses, fetchSpecimens, fetchKeywords
+  fetchDois, fetchLibrariesFromLibraryAgent, fetchAnalyses, fetchSpecimens, fetchKeywords, fetchJournals
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -63,6 +63,11 @@ export default {
   FETCH_KEYWORDS: ({ commit, state }) => {
     // state.activeSearchParams.search.paginateBy = 10;
     return fetchKeywords(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+  },
+
+  FETCH_JOURNALS: ({ commit, state }) => {
+    // state.activeSearchParams.search.paginateBy = 10;
+    return fetchJournals(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
   },
 
   SAVE_SHORTCUTS: ({ commit, state }, shortcuts) => {

@@ -329,10 +329,6 @@ export function fetchAttachmentForReference(id) {
   return fetch(`attachment/?reference=${id}&fields=id,uuid_filename,original_filename&format=json`)
 }
 
-export function fetchJournals(query) {
-  return fetch(`journal/?multi_search=value:${query};fields:id,journal_name,journal_short;lookuptype:icontains&format=json`)
-}
-
 export function fetchLibrariesForReference(id) {
   return fetch(`library_reference/?reference=${id}&fields=library,library__title,library__title_en&format=json`)
 }
@@ -1043,11 +1039,37 @@ export function fetchAnalysisResults(id, searchParameters) {
  *** JOURNAL START ***
  *********************/
 
-export function fetchAddJournal(data) {
-  return fetchPost(`add/journal/`, data)
+export function fetchJournal(id) {
+  return fetch(`journal/?id=${id}&format=json`)
 }
 
-export function fetchJournal(name) {
+export function fetchJournals(data) {
+  let fields = 'id,journal_name,journal_short, journal_original,publisher,remarks';
+  let searchFields = '';
+
+  if (data.journal !== null && data.journal.trim().length > 0) {
+    searchFields += `multi_search=value:${data.journal};fields:journal_name,journal_short,journal_original;lookuptype:icontains`
+  }
+
+  if (data.publisher !== null && data.publisher.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.publisher};fields:publisher,publisher_place;lookuptype:icontains`
+  }
+
+  if (data.remarks !== null && data.remarks.trim().length > 0) {
+    searchFields += `&remarks__icontains=${data.remarks}`
+  }
+
+  if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(`journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  } else {
+    return fetch(`journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+  }
+}
+
+
+export function fetchJournalForReference(name) {
   return fetch(`journal/?multi_search=value:${name};fields:journal_name,journal_short,journal_long,journal_original,journal_abbr;lookuptype:iexact`,)
 }
 

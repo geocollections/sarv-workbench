@@ -94,6 +94,7 @@
       "libraries": "Kogumikud",
       "doi": "Lisa DOI",
       "imageset": "Lisa pildiseeria",
+      "journals": "Ajakirjad",
       "journal": "Lisa ajakiri",
       "specimen": "Lisa eksemplar",
       "specimens": "Eksemplarid",
@@ -199,6 +200,10 @@
       "map": "Kaart",
       "description": "Kirjeldus",
       "relatedData": "Seotud andmed"
+    },
+    "journal": {
+      "requiredFields": "Kohustuslikud väljad",
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -386,6 +391,10 @@
   },
   "editKeyword": {
     "heading": "Termin"
+  },
+  "editJournal": {
+    "heading": "Ajakiri",
+    "editMessage": "Muuda ajakirja"
   },
   "attachments": {
     "header": "Minu failid",
@@ -1173,12 +1182,19 @@
     "is_preferred":"Eelistatud"
   },
   "journal": {
+    "header": "Ajakiri",
+    "id": "ID",
     "requiredFields": "Kohustuslikud väljad",
     "generalInfo": "Üldinfo",
     "journalName": "Ajakirja nimi",
     "journalShort": "Ajakiri lühike",
+    "journalOriginal": "Ajakiri orig.",
+    "journalFilter": "Ajakiri",
+    "publisherFilter": "Kirjastaja",
+    "remarksFilter": "Lisainfo",
     "publisher": "Kirjastaja",
-    "remarks": "Lisainfo"
+    "remarks": "Lisainfo",
+    "addNew": "Lisage uus Ajakiri"
   },
   "storage": {
     "storage": "Hoidla"
