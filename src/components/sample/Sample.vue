@@ -1422,6 +1422,7 @@
           stratigraphy: null,
           agent: null,
           storage: null,
+          site: null,
           id: null,
           page: 1,
           paginateBy: 50,

@@ -477,32 +477,21 @@ export function fetchAnalysisMethod() {
 
 export function fetchSamples(data, agent, databaseId) {
   const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
-    'number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,database__name,database__name_en,date_collected'
-  let searchFields = ''
+    'number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,locality';
+  let searchFields = '';
+
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`
   }
 
   if (data.number !== null && data.number.trim().length > 0) {
-    //searchFields += `&number__icontains=${data.number}`
     searchFields += `&multi_search=value:${data.number};fields:number,number_additional,number_field;lookuptype:icontains`
   }
-  //
-  // if (data.number_additional !== null && data.number_additional.trim().length > 0) {
-  //   searchFields += `&number_additional__icontains=${data.number_additional}`
-  // }
-  //
-  // if (data.number_field !== null && data.number_field.trim().length > 0) {
-  //   searchFields += `&number_field__icontains=${data.number_field}`
-  // }
 
   if (data.locality !== null && data.locality.trim().length > 0) {
     searchFields += `&multi_search=value:${data.locality};fields:locality__locality_en,locality__locality,locality_free;lookuptype:icontains`
   }
-  //
-  // if (data.locality_free !== null && data.locality_free.trim().length > 0) {
-  //   searchFields += `&locality_free__icontains=${data.locality_free}`
-  // }
+
   if (data.depth !== null && data.depth.trim().length > 0) {
     //searchFields += '&depth__exact='+data.depth
     searchFields += `&multi_search=value:${data.depth};fields:depth,depth_interval;lookuptype:icontains`
@@ -510,10 +499,7 @@ export function fetchSamples(data, agent, databaseId) {
   if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
     searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:icontains`
   }
-//  if (data.rock !== null && data.rock.trim().length > 0) {
-//    console.log('rock' + data.rock);
-//    searchFields += `&multi_search=value:${data.rock};fields:rock_en,rock,classification_rock__name,classification_rock__name_en;lookuptype:icontains`
-//  }
+
   if (data.agent !== null && data.agent.trim().length > 0) {
     searchFields += `&agent_collected__agent__icontains=${data.agent}`
   }
@@ -522,11 +508,20 @@ export function fetchSamples(data, agent, databaseId) {
     searchFields += `&or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`
   }
 
+  if (data.storage && data.storage.trim().length > 0) {
+    searchFields += `&storage__location__icontains=${data.storage}`
+  }
+
+  if (data.site !== null && data.site.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.site};fields:site__id,site__name,site__project__id,site__project__name;lookuptype:icontains`
+  }
+
   if (typeof databaseId !== 'undefined' && databaseId !== null) {
     searchFields += `&database__id=${databaseId}`
   }
 
   if (searchFields.startsWith('&')) searchFields = searchFields.substring(1);
+
   if (searchFields.length > 0) {
     return fetch(`sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {

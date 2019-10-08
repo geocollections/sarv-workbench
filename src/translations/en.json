@@ -830,6 +830,7 @@
     "simpleForm": "Simple view",
     "basicForm": "Full view",
     "addAnalysis": "Add analysis",
+    "site": "Site",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",

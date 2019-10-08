@@ -75,7 +75,8 @@
           {id: "depth", title: "sample.depth", type: "text"},
           {id: "stratigraphy", title: "sample.stratigraphy", type: "text"},
           {id: "agent", title: "sample.agent_collected", type: "text"},
-          {id: "storage", title: "sample.storage", type: "text"}
+          {id: "storage", title: "sample.storage", type: "text"},
+          {id: "site", title: "sample.site", type: "text"}
         ],
         searchParameters: this.setDefaultSearchParameters(),
         block: {search: true}
@@ -101,6 +102,7 @@
           stratigraphy: null,
           agent: null,
           storage: null,
+          site: null,
           id: null,
           page: 1,
           paginateBy: 50,

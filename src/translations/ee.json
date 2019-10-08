@@ -830,6 +830,7 @@
     "simpleForm": "Lihtne vaade",
     "basicForm": "Täisvaade",
     "addAnalysis": "Lisa analüüs",
+    "site": "Vaatluspunkt",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",
