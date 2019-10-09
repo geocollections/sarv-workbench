@@ -1,130 +1,142 @@
 <template>
-  <div class="recent-activity">
+  <v-row class="recent-activity">
+    <!-- RECENTLY ADDED -->
+    <v-col cols="12" md="6">
+      <v-card elevation="3">
+        <v-card-title>
+          <span>
+            {{ $t("logs.recentlyAdded") }}
+          </span>
+          <v-spacer></v-spacer>
+          <v-icon color="green">far fa-plus-square</v-icon>
+        </v-card-title>
 
-    <div class="row recent">
-
-      <!-- RECENTLY ADDED -->
-      <div class="col-lg-6">
-
-        <p class="h4">{{ $t('logs.recentlyAdded') }}:</p>
-
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>{{ $t('logs.time') }}</th>
-            </tr>
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>{{ $t("logs.time") }}</th>
+              </tr>
             </thead>
 
             <tbody>
-            <tr v-for="entity in recentlyInserted">
-              <td>
-                <router-link :to="{ path: '/' + entity.table_name + '/' + entity.row_id }">
-                  <b>{{ entity.table_name }}: {{ entity.row_id }}</b>
-                </router-link>
-              </td>
-              <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
-            </tr>
+              <tr v-for="(entity, index) in recentlyInserted" :key="index">
+                <td>
+                  <v-btn
+                    text
+                    color="blue"
+                    :to="{
+                      path: '/' + entity.table_name + '/' + entity.row_id
+                    }"
+                  >
+                    {{ entity.table_name }}: {{ entity.row_id }}
+                  </v-btn>
+                </td>
+                <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
+              </tr>
             </tbody>
-          </table>
-        </div>
+          </template>
+        </v-simple-table>
+      </v-card>
+    </v-col>
 
-      </div>
+    <!-- RECENTLY UPDATED -->
+    <v-col cols="12" md="6">
+      <v-card elevation="3">
+        <v-card-title>
+          <span>
+            {{ $t("logs.recentlyUpdated") }}
+          </span>
+          <v-spacer></v-spacer>
+          <v-icon color="orange">far fa-edit</v-icon>
+        </v-card-title>
 
-
-      <!-- RECENTLY UPDATED -->
-      <div class="col-lg-6">
-
-        <p class="h4">{{ $t('logs.recentlyUpdated') }}:</p>
-
-        <div class="table-responsive">
-          <table class="table table-hover table-bordered">
-            <thead class="thead-light">
-            <tr>
-              <th>ID</th>
-              <th>{{ $t('logs.time') }}</th>
-              <!--<th>{{ $t('logs.changes') }}</th>-->
-            </tr>
+        <v-simple-table>
+          <template v-slot:default>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>{{ $t("logs.time") }}</th>
+              </tr>
             </thead>
 
             <tbody>
-            <tr v-for="entity in recentlyUpdated">
-              <td>
-                <router-link :to="{ path: '/' + entity.table_name + '/' + entity.row_id }">
-                  <b>{{ entity.table_name }}: {{ entity.row_id }}</b>
-                </router-link>
-              </td>
-              <td>{{ entity.time | moment('DD.MM.YYYY | HH:mm:ss')}}</td>
-              <!--<td style="max-width: 25rem; padding:0.3rem; margin: 0;">
-                <div style="height: 3rem !important; overflow: auto;">
-                  {{ entity.changes }}
-                </div>
-              </td>-->
-            </tr>
+              <tr v-for="(entity, index) in recentlyUpdated" :key="index">
+                <td>
+                  <v-btn
+                    text
+                    color="blue"
+                    :to="{
+                      path: '/' + entity.table_name + '/' + entity.row_id
+                    }"
+                  >
+                    {{ entity.table_name }}: {{ entity.row_id }}
+                  </v-btn>
+                </td>
+                <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
+              </tr>
             </tbody>
-          </table>
-        </div>
-
-      </div>
-    </div>
-
-  </div>
+          </template>
+        </v-simple-table>
+      </v-card>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
-  import { fetchLatestLogs } from "@/assets/js/api/apiCalls";
+import { fetchLatestLogs } from "@/assets/js/api/apiCalls";
 
-  export default {
-    props: ['user'],
-    name: "recentActivity",
-    data() {
-      return {
-        recentlyInserted: [],
-        recentlyUpdated: [],
-      }
+export default {
+  props: ["user"],
+  name: "recentActivity",
+  data() {
+    return {
+      recentlyInserted: [],
+      recentlyUpdated: []
+    };
+  },
+
+  created: function() {
+    this.getRecentlyInsertedActivities();
+    this.getRecentlyUpdatedActivities();
+  },
+  methods: {
+    getRecentlyInsertedActivities() {
+      fetchLatestLogs({
+        user: this.user,
+        command: "INSERT"
+      }).then(response => {
+        if (response.status === 200) {
+          if (response.body.count > 0) {
+            this.recentlyInserted = response.body.results;
+          } else {
+            this.recentlyInserted = [];
+          }
+        }
+      });
     },
 
-    created: function () {
-      this.getRecentlyInsertedActivities()
-      this.getRecentlyUpdatedActivities()
-    },
-    methods: {
-      getRecentlyInsertedActivities() {
-        fetchLatestLogs({
-          user: this.user,
-          command: 'INSERT'
-        }).then(response => {
-          if (response.status === 200) {
-            if (response.body.count > 0) {
-              this.recentlyInserted = response.body.results;
-            } else {
-              this.recentlyInserted = []
-            }
+    getRecentlyUpdatedActivities() {
+      fetchLatestLogs({
+        user: this.user,
+        command: "UPDATE"
+      }).then(response => {
+        if (response.status === 200) {
+          if (response.body.count > 0) {
+            this.recentlyUpdated = response.body.results;
+          } else {
+            this.recentlyUpdated = [];
           }
-        }, errResponse => {})
-      },
-
-      getRecentlyUpdatedActivities() {
-        fetchLatestLogs({
-          user: this.user,
-          command: 'UPDATE'
-        }).then(response => {
-          if (response.status === 200) {
-            if (response.body.count > 0) {
-              this.recentlyUpdated = response.body.results;
-            } else {
-              this.recentlyUpdated = []
-            }
-          }
-        }, errResponse => {})
-      },
+        }
+      });
     }
   }
+};
 </script>
 
 <style scoped>
-.recent {
-  font-size: 0.8em;
+.recent-activity td {
+  height: 38px;
 }
 </style>

@@ -11,6 +11,12 @@ body {
 }
 
 
+/* Added this after vuetify becuase buttons get underline */
+a:hover {
+  text-decoration: none;
+}
+
+
 
 /*********************
  *** SIDEBAR START ***

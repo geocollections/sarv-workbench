@@ -3,8 +3,8 @@
     <lang-buttons v-if="$route.meta.isLogin" />
 
     <v-container fill-height>
-      <v-layout align-center justify-center>
-        <v-flex sm10 md8 lg6 style="margin: 48px 0;">
+      <v-row align="center" justify="center">
+        <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
           <v-tabs
             v-model="tab"
             class="elevation-6"
@@ -126,8 +126,8 @@
               </v-card>
             </v-tab-item>
           </v-tabs-items>
-        </v-flex>
-      </v-layout>
+        </v-col>
+      </v-row>
     </v-container>
   </v-content>
 </template>
