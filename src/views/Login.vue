@@ -1,54 +1,180 @@
 <template>
-    <div class="login row h-100 align-items-center text-center">
+  <v-content class="login">
+    <lang-buttons v-if="$route.meta.isLogin" />
 
-        <div class="col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
-            <b-tabs>
+    <v-container fill-height>
+      <v-layout align-center justify-center>
+        <v-flex sm10 md8 lg6 style="margin: 48px 0;">
+          <v-tabs
+            v-model="tab"
+            class="elevation-6"
+            dark
+            centered
+            grow
+            background-color="blue darken-4"
+            prominent
+          >
+            <v-tabs-slider></v-tabs-slider>
 
-                <b-tab :title="$t('login.idCard')">
-                    <div class="row mt-3 mb-3">
-                        <div class="col">
+            <v-tab class="font-weight-bold">{{ $t("login.idCard") }}</v-tab>
 
-                            <login-id/>
+            <v-tab class="font-weight-bold">{{ $t("login.password") }}</v-tab>
+          </v-tabs>
 
-                        </div>
+          <v-tabs-items v-model="tab" class="elevation-6">
+            <v-tab-item>
+              <v-card flat tile>
+                <v-card-text>
+                  <v-alert
+                    class="mb-0"
+                    border="right"
+                    :colored-border="!idError"
+                    :color="idError ? 'red' : 'green darken-3'"
+                    elevation="3"
+                    :icon="idError ? 'fas fa-exclamation' : 'fas fa-info'"
+                    prominent
+                    dense
+                  >
+                    <span v-if="!idMessage"
+                      ><b>{{ $t("login.idCardMessage") }}</b></span
+                    >
+                    <b>{{ idMessage }}</b>
+                  </v-alert>
+                </v-card-text>
+
+                <v-card-actions class="justify-center">
+                  <v-btn
+                    @click="authenticate('id')"
+                    :loading="loggingIn"
+                    color="green darken-3"
+                    dark
+                  >
+                    {{ $t("login.loginButton") }} &nbsp;<i
+                      class="fas fa-id-card"
+                    ></i>
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-tab-item>
+
+            <v-tab-item>
+              <v-card flat tile>
+                <v-card-text>
+                  <v-alert
+                    border="right"
+                    :colored-border="!passError"
+                    :color="passError ? 'red' : 'green darken-3'"
+                    elevation="3"
+                    :icon="passError ? 'fas fa-exclamation' : 'fas fa-info'"
+                    prominent
+                    dense
+                  >
+                    <span v-if="!passMessage">
+                      <b>{{ $t("login.passwordMessage") }}</b>
+                    </span>
+                    <b>{{ passMessage }}</b>
+                  </v-alert>
+
+                  <v-form v-model="valid">
+                    <v-text-field
+                      v-model="user.username"
+                      :rules="usernameRules"
+                      :label="$t('login.username')"
+                      placeholder=""
+                      color="blue darken-4"
+                      outlined
+                      dense
+                      required
+                    ></v-text-field>
+
+                    <v-text-field
+                      v-model="user.password"
+                      :rules="passwordRules"
+                      :label="$t('login.password')"
+                      placeholder=""
+                      color="blue darken-4"
+                      outlined
+                      dense
+                      :type="showPassword ? 'text' : 'password'"
+                      :append-icon="
+                        showPassword ? 'far fa-eye' : 'far fa-eye-slash'
+                      "
+                      @click:append="showPassword = !showPassword"
+                      required
+                    ></v-text-field>
+
+                    <div class="text-center mt-2">
+                      <v-btn
+                        @click="
+                          authenticate('password', {
+                            user: user.username,
+                            pwd: user.password
+                          })
+                        "
+                        :disabled="!valid"
+                        :loading="loggingIn"
+                        color="green darken-3"
+                        :dark="valid"
+                      >
+                        {{ $t("login.loginButton") }} &nbsp;<i
+                          class="fas fa-sign-in-alt"
+                        ></i>
+                      </v-btn>
                     </div>
-                </b-tab>
-
-                <b-tab :title="$t('login.password')">
-                    <div class="row mt-3 mb-3">
-                        <div class="col">
-
-                            <login-pass/>
-
-                        </div>
-                    </div>
-                </b-tab>
-
-
-
-            </b-tabs>
-
-        </div>
-    </div>
+                  </v-form>
+                </v-card-text>
+              </v-card>
+            </v-tab-item>
+          </v-tabs-items>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-content>
 </template>
 
 <script>
-    import LoginPass from '@/components/login/LoginPass.vue'
-    import LoginId from '@/components/login/LoginId.vue'
+import authenticationMixin from "../mixins/authenticationMixin";
+import LangButtons from "../components/partial/LangButtons";
 
-    export default {
-        name: 'Login',
-        components: {
-            LoginPass,
-            LoginId
-        }
-    }
+export default {
+  name: "Login",
+  components: {
+    LangButtons
+  },
+  mixins: [authenticationMixin],
+  data: () => ({
+    tab: null,
+    loggingIn: false,
+    valid: true,
+    user: {
+      username: "",
+      password: null
+    },
+    usernameRules: [
+      v => !!v || "Name is required",
+      v => (v && v.trim().length > 0) || "Name cant be empty"
+    ],
+    passwordRules: [
+      v => !!v || "Password is required",
+      v => (v && v.trim().length > 0) || "Password cant be empty"
+    ],
+    showPassword: false,
+    passMessage: null,
+    passError: false,
+    idMessage: null,
+    idError: false
+  })
+};
 </script>
 
-<style>
-    /* Overrides margin-left and right -15px from .row class */
-    .login {
-        margin-right: 0 !important;
-        margin-left: 0 !important;
-    }
+<style scoped>
+.login {
+  background-image: linear-gradient(
+      to top right,
+      rgba(255, 255, 255, 0.2) 0%,
+      rgba(0, 0, 0, 0.7) 100%
+    ),
+    url("https://files.geocollections.info/img/doi-header-bg.jpg");
+  background-size: cover;
+}
 </style>

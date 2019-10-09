@@ -56,7 +56,7 @@
               {{ $t('header.settings') }}
             </b-dropdown-item>
             <b-dropdown-divider></b-dropdown-divider>
-            <b-dropdown-item @click="$_logOut()">
+            <b-dropdown-item @click="logOut()">
               <i class="fas fa-sign-out-alt"></i>
               {{ $t('header.logOut') }}
             </b-dropdown-item>

@@ -95,11 +95,11 @@
                 <!-- MULTI ORDERING -->
                 <th class="nowrap" v-if="multiOrdering === true && isTableView" v-for="item in activeColumns">
                   <span @click="changeOrderMulti(item.id)" v-on:dblclick="removeOrder(item.id)" v-if="item.orderBy !== false">
-                    <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(item.id) === 0" />
-                    <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(item.id) === 1" />
-                    <font-awesome-icon icon="sort-down" v-if="isFieldInOrderBy(item.id) === -1" />
+                    <i class="fas fa-sort" v-if="isFieldInOrderBy(item.id) === 0"></i>
+                    <i class="fas fa-sort-up" v-if="isFieldInOrderBy(item.id) === 1"></i>
+                    <i class="fas fa-sort-down" v-if="isFieldInOrderBy(item.id) === -1"></i>
                     {{ $t(item.title)}}
-                    <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
+                    <i class="far fa-calendar-alt" v-if="item.isDate === true"></i>
                     <i v-if="item.isPrivate" class="fas fa-lock"></i>
                     <i v-else-if="item.isEstonianAuthor" class="fas fa-user"></i>
 <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
@@ -111,10 +111,10 @@
                 <!-- REGULAR ORDERING -->
                 <th class="nowrap" v-if="multiOrdering === false && isTableView" v-for="item in activeColumns">
                   <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
-                    <font-awesome-icon v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id" :icon="sort"/>
-                    <font-awesome-icon v-else :icon="sortingDirection"/>
+                    <i class="fas fa-sort" v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"></i>
+                    <i class="fas" :class="searchParameters.orderBy.includes('-') ? 'fa-sort-down' : 'fa-sort-up'" v-else></i>
                     {{ $t(item.title)}}
-                    <font-awesome-icon v-if="item.isDate === true" :icon="['far', 'calendar-alt']"/>
+                    <i class="far fa-calendar-alt" v-if="item.isDate === true"></i>
                     <i v-if="item.isPrivate" class="fas fa-lock"></i>
                     <i v-else-if="item.isEstonianAuthor" class="fas fa-user"></i>
 <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
@@ -130,9 +130,9 @@
                     v-for="(value, key) in response.results[0]"
                     :key="key">
                   <span @click="changeOrderMulti(key)" v-on:dblclick="removeOrder(key)">
-                    <font-awesome-icon icon="sort" v-if="isFieldInOrderBy(key) === 0" />
-                    <font-awesome-icon icon="sort-up" v-if="isFieldInOrderBy(key) === 1" />
-                    <font-awesome-icon icon="sort-down" v-if="isFieldInOrderBy(key) === -1" />
+                    <i class="fas fa-sort" v-if="isFieldInOrderBy(item.id) === 0"></i>
+                    <i class="fas fa-sort-up" v-if="isFieldInOrderBy(item.id) === 1"></i>
+                    <i class="fas fa-sort-down" v-if="isFieldInOrderBy(item.id) === -1"></i>
                     {{ key }}
                   </span>
                   <br/>
@@ -144,10 +144,8 @@
                     v-for="(value, key) in response.results[0]"
                     :key="key">
                   <span @click="changeOrder(key)">
-                    <font-awesome-icon
-                      v-if="searchParameters.orderBy !== key && searchParameters.orderBy !== '-'+key"
-                      :icon="sort"/>
-                    <font-awesome-icon v-else :icon="sortingDirection"/>
+                    <i class="fas fa-sort" v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"></i>
+                    <i class="fas" :class="searchParameters.orderBy.includes('-') ? 'fa-sort-down' : 'fa-sort-up'" v-else></i>
                     {{ key }}
                   </span><br/>
                 </th>
@@ -207,10 +205,6 @@
 
 <script>
   import Spinner from 'vue-simple-spinner'
-  import {library} from '@fortawesome/fontawesome-svg-core'
-  import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-  import {faSortDown,faSortUp, faSort } from '@fortawesome/free-solid-svg-icons'
-  import { faCalendarAlt as farCalendarAlt } from '@fortawesome/free-regular-svg-icons'
   import Datepicker from 'vue2-datepicker'
   import ExportButtons from "../components/partial/export/ExportButtons";
   import ListView from "../components/partial/ListView";
@@ -220,14 +214,12 @@
   import {fetchChangePrivacyState} from "../assets/js/api/apiCalls";
   import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
 
-  library.add(faSort, faSortUp, faSortDown, farCalendarAlt)
 
   export default {
     components: {
       ChooseActiveLibrary,
       AlternativeTableControls,
       AlternativeTableView,
-      FontAwesomeIcon,
       Spinner,
       Datepicker,
       ExportButtons,

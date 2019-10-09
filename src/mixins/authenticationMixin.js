@@ -13,19 +13,19 @@ const authenticationMixin = {
      * @todo In the future possible to add more options e.g., 'mobile'
      * @param loginData, Object value of data user entered in login form
      */
-    $_authenticate(authenticationType, loginData) {
+    authenticate(authenticationType, loginData) {
       if (!this.loggingIn) {
         this.loggingIn = true;
 
         if (authenticationType === 'password') {
           fetchLogin(loginData).then(successfulResponse => {
-              return this.$_authenticationMixin_handleSuccessfulAuthentication(successfulResponse);
+              return this.$_authenticationMixin_handleSuccessfulAuthentication(successfulResponse, authenticationType);
             }, errResponse => {
               return this.$_authenticationMixin_handleAuthenticationError(authenticationType);
             });
         } else if (authenticationType === 'id') {
           fetchLoginId().then(successfulResponse => {
-            return this.$_authenticationMixin_handleSuccessfulAuthentication(successfulResponse);
+            return this.$_authenticationMixin_handleSuccessfulAuthentication(successfulResponse, authenticationType);
             }, errResponse => {
             return this.$_authenticationMixin_handleAuthenticationError(authenticationType);
           });
@@ -41,7 +41,7 @@ const authenticationMixin = {
      * First of all user cookies and localStorage is deleted
      * and then log out request is initiated.
      */
-    $_logOut() {
+    logOut() {
       this.$cookies.remove('csrftokenLocalhost', null, 'localhost');
       this.$cookies.remove('csrftoken', null, 'geocollections.info');
       this.$localStorage.remove('authUser');
@@ -64,8 +64,9 @@ const authenticationMixin = {
      * @value loggingIn, Boolean which is used in login components to trigger loading spinner element.
      *
      * @param response, Object
+     * @param authenticationType, String value to know which message to show.
      */
-    $_authenticationMixin_handleSuccessfulAuthentication(response) {
+    $_authenticationMixin_handleSuccessfulAuthentication(response, authenticationType) {
       if (response.status === 200) {
         if (response.body.user != null) {
 
@@ -80,8 +81,13 @@ const authenticationMixin = {
           toastSuccessMessage(response, this.$i18n.locale)
 
         } else {
-          this.message = getErrorMessage(response, this.$i18n.locale);
-          this.error = true;
+          if (authenticationType === 'password') {
+            this.passMessage = getErrorMessage(response, this.$i18n.locale);
+            this.passError = true;
+          } else if (authenticationType === 'id') {
+            this.idMessage = getErrorMessage(response, this.$i18n.locale);
+            this.idError = true;
+          }
         }
         this.loggingIn = false;
       }
@@ -99,14 +105,15 @@ const authenticationMixin = {
      */
     $_authenticationMixin_handleAuthenticationError(authenticationType) {
       if (authenticationType === 'password') {
-        this.message = this.$t('messages.loginError');
+        this.passMessage = this.$t('messages.loginError');
+        this.passError = true;
         toastError({text: this.$t('messages.loginError')})
       } else if (authenticationType === 'id') {
-        this.message = this.$t('messages.loginIdError');
+        this.idMessage = this.$t('messages.loginIdError');
+        this.idError = true;
         toastError({text: this.$t('messages.loginIdError')})
       }
 
-      this.error = true;
       this.loggingIn = false;
     },
   }
