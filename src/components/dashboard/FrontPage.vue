@@ -1,17 +1,24 @@
 <template>
   <v-content class="front-page">
-
     <!-- NAME -->
     <v-row>
-      <v-col>
+      <v-col class="pb-0">
         <v-card flat color="#fafafa">
-          <v-card-title>
-            <span class="h3">{{ $t("frontPage.welcome") }}</span>
-            <span class="text-capitalize h3">{{
-              `, ${currentUser.forename} ${currentUser.surename}!`
-            }}</span>
+          <v-card-title class="pl-0">
+            <span class="h3 text-capitalize break-word">
+              {{
+                `${$t("frontPage.welcome")}, ${currentUser.forename} ${
+                  currentUser.surename
+                }!`
+              }}
+            </span>
             <v-spacer></v-spacer>
-            <v-btn icon :to="{ path: '/settings' }" color="deep-orange">
+            <v-btn
+              icon
+              :to="{ path: '/settings' }"
+              color="deep-orange"
+              :title="$t('header.settings')"
+            >
               <v-icon>fas fa-user-cog</v-icon>
             </v-btn>
           </v-card-title>
@@ -20,57 +27,53 @@
     </v-row>
 
     <!-- HELP -->
-    <v-row>
+    <v-row id="block-help">
       <v-col>
         <v-card elevation="3">
           <v-card-title>
-            <span>{{ $t("frontPage.help") }}</span>
-            <span><v-icon>far fa-question-circle</v-icon></span>
+            <span>{{ $t("frontPage.help") }}&nbsp;</span>
+            <v-icon color="blue darken-2">far fa-question-circle</v-icon>
             <v-spacer></v-spacer>
             <v-btn icon @click="block.help = !block.help" color="blue">
-              <v-icon>{{ block.help ? 'fas fa-angle-up' : 'fas fa-angle-down' }}</v-icon>
+              <v-icon>{{
+                block.help ? "fas fa-angle-up" : "fas fa-angle-down"
+              }}</v-icon>
             </v-btn>
           </v-card-title>
+
+          <v-card-text>
+            <transition enter-active-class="animated zoomIn faster">
+              <div v-show="block.help">
+                <p>
+                  Siinne kasutajaliides on aktiivses arenduses ja muutumises.
+                  Kui mõni funktsioon ei tööta, siis on soovitav kasutada
+                  eelmist stabiilsemat versiooni:
+                  <a href="https://edit.geocollections.info" target="HelpLink"
+                    >https://edit.geocollections.info</a
+                  >.
+                </p>
+                <p>
+                  Vigadest anna teada githubis:
+                  <a
+                    href="https://github.com/geocollections/sarv-edit"
+                    target="HelpLink"
+                    ><i class="fab fa-github"></i> https://github.com/geocollections/sarv-edit</a
+                  >
+                  või kirjuta:
+                  <a href="mailto:olle.hints@taltech.ee"
+                    ><i class="far fa-envelope"></i> olle.hints@taltech.ee</a
+                  >, või helista:
+                  <a href="tel:5130157"><i class="fas fa-phone"></i> 5130157</a
+                  >.
+                </p>
+              </div>
+            </transition>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
 
-    <fieldset class="border p-2 mt-3" id="block-help">
-      <legend
-        class="w-auto mb-0"
-        :class="{ 'text-primary': !block.help }"
-        @click="block.help = !block.help"
-      >
-        {{ $t("frontPage.help") }}
-        <i class="far fa-question-circle"></i>
-      </legend>
-
-      <transition name="fade">
-        <div v-if="block.help">
-          <p>
-            Siinne kasutajaliides on aktiivses arenduses ja muutumises. Kui mõni
-            funktsioon ei tööta, siis on soovitav kasutada eelmist stabiilsemat
-            versiooni:
-            <a href="https://edit.geocollections.info"
-              >https://edit.geocollections.info</a
-            >.
-          </p>
-          <p>
-            Vigadest anna teada githubis:
-            <a href="https://github.com/geocollections/sarv-edit"
-              >https://github.com/geocollections/sarv-edit</a
-            >
-            või kirjuta:
-            <a href="mailto:olle.hints@taltech.ee"
-              ><i class="far fa-envelope"></i> olle.hints@taltech.ee</a
-            >, või helista:
-            <a href="tel:5130157"><i class="fas fa-phone"></i> 5130157</a>.
-          </p>
-        </div>
-      </transition>
-    </fieldset>
-
-    <recent-activity class="mt-4" :user="currentUser.user"></recent-activity>
+    <recent-activity :user="currentUser.user"></recent-activity>
   </v-content>
 </template>
 
@@ -104,4 +107,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#block-help a:hover {
+  opacity: 0.8;
+}
+</style>

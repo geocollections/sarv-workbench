@@ -5,127 +5,127 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
-          <v-tabs
-            v-model="tab"
-            class="elevation-6"
-            dark
-            centered
-            grow
-            background-color="blue darken-4"
-            prominent
-          >
-            <v-tabs-slider></v-tabs-slider>
+          <v-card color="blue darken-4">
+            <v-tabs
+              v-model="tab"
+              class="elevation-6"
+              dark
+              grow
+              background-color="blue darken-4"
+            >
+              <v-tabs-slider></v-tabs-slider>
 
-            <v-tab class="font-weight-bold">{{ $t("login.idCard") }}</v-tab>
+              <v-tab class="font-weight-bold">{{ $t("login.idCard") }}</v-tab>
 
-            <v-tab class="font-weight-bold">{{ $t("login.password") }}</v-tab>
-          </v-tabs>
+              <v-tab class="font-weight-bold">{{ $t("login.password") }}</v-tab>
+            </v-tabs>
 
-          <v-tabs-items v-model="tab" class="elevation-6">
-            <v-tab-item>
-              <v-card flat tile>
-                <v-card-text>
-                  <v-alert
-                    class="mb-0"
-                    border="right"
-                    :colored-border="!idError"
-                    :color="idError ? 'red' : 'green darken-3'"
-                    elevation="3"
-                    :icon="idError ? 'fas fa-exclamation' : 'fas fa-info'"
-                    prominent
-                    dense
-                  >
-                    <span v-if="!idMessage"
-                      ><b>{{ $t("login.idCardMessage") }}</b></span
+            <v-tabs-items v-model="tab" class="elevation-6">
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-text>
+                    <v-alert
+                      class="mb-0"
+                      border="right"
+                      :colored-border="!idError"
+                      :color="idError ? 'red' : 'green darken-3'"
+                      elevation="3"
+                      :icon="idError ? 'fas fa-exclamation' : 'fas fa-info'"
+                      prominent
+                      dense
                     >
-                    <b>{{ idMessage }}</b>
-                  </v-alert>
-                </v-card-text>
-
-                <v-card-actions class="justify-center">
-                  <v-btn
-                    @click="authenticate('id')"
-                    :loading="loggingIn"
-                    color="green darken-3"
-                    dark
-                  >
-                    {{ $t("login.loginButton") }} &nbsp;<i
-                      class="fas fa-id-card"
-                    ></i>
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-tab-item>
-
-            <v-tab-item>
-              <v-card flat tile>
-                <v-card-text>
-                  <v-alert
-                    border="right"
-                    :colored-border="!passError"
-                    :color="passError ? 'red' : 'green darken-3'"
-                    elevation="3"
-                    :icon="passError ? 'fas fa-exclamation' : 'fas fa-info'"
-                    prominent
-                    dense
-                  >
-                    <span v-if="!passMessage">
-                      <b>{{ $t("login.passwordMessage") }}</b>
-                    </span>
-                    <b>{{ passMessage }}</b>
-                  </v-alert>
-
-                  <v-form v-model="valid">
-                    <v-text-field
-                      v-model="user.username"
-                      :rules="usernameRules"
-                      :label="$t('login.username')"
-                      placeholder=""
-                      color="blue darken-4"
-                      outlined
-                      dense
-                      required
-                    ></v-text-field>
-
-                    <v-text-field
-                      v-model="user.password"
-                      :rules="passwordRules"
-                      :label="$t('login.password')"
-                      placeholder=""
-                      color="blue darken-4"
-                      outlined
-                      dense
-                      :type="showPassword ? 'text' : 'password'"
-                      :append-icon="
-                        showPassword ? 'far fa-eye' : 'far fa-eye-slash'
-                      "
-                      @click:append="showPassword = !showPassword"
-                      required
-                    ></v-text-field>
-
-                    <div class="text-center mt-2">
-                      <v-btn
-                        @click="
-                          authenticate('password', {
-                            user: user.username,
-                            pwd: user.password
-                          })
-                        "
-                        :disabled="!valid"
-                        :loading="loggingIn"
-                        color="green darken-3"
-                        :dark="valid"
+                      <span v-if="!idMessage"
+                        ><b>{{ $t("login.idCardMessage") }}</b></span
                       >
-                        {{ $t("login.loginButton") }} &nbsp;<i
-                          class="fas fa-sign-in-alt"
-                        ></i>
-                      </v-btn>
-                    </div>
-                  </v-form>
-                </v-card-text>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
+                      <b>{{ idMessage }}</b>
+                    </v-alert>
+                  </v-card-text>
+
+                  <v-card-actions class="justify-center">
+                    <v-btn
+                      @click="authenticate('id')"
+                      :loading="loggingIn"
+                      color="green darken-3"
+                      dark
+                    >
+                      {{ $t("login.loginButton") }} &nbsp;<i
+                        class="fas fa-id-card"
+                      ></i>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-tab-item>
+
+              <v-tab-item>
+                <v-card flat>
+                  <v-card-text>
+                    <v-alert
+                      border="right"
+                      :colored-border="!passError"
+                      :color="passError ? 'red' : 'green darken-3'"
+                      elevation="3"
+                      :icon="passError ? 'fas fa-exclamation' : 'fas fa-info'"
+                      prominent
+                      dense
+                    >
+                      <span v-if="!passMessage">
+                        <b>{{ $t("login.passwordMessage") }}</b>
+                      </span>
+                      <b>{{ passMessage }}</b>
+                    </v-alert>
+
+                    <v-form v-model="valid">
+                      <v-text-field
+                        v-model="user.username"
+                        :rules="usernameRules"
+                        :label="$t('login.username')"
+                        placeholder=""
+                        color="blue darken-4"
+                        outlined
+                        dense
+                        required
+                      ></v-text-field>
+
+                      <v-text-field
+                        v-model="user.password"
+                        :rules="passwordRules"
+                        :label="$t('login.password')"
+                        placeholder=""
+                        color="blue darken-4"
+                        outlined
+                        dense
+                        :type="showPassword ? 'text' : 'password'"
+                        :append-icon="
+                          showPassword ? 'far fa-eye' : 'far fa-eye-slash'
+                        "
+                        @click:append="showPassword = !showPassword"
+                        required
+                      ></v-text-field>
+
+                      <div class="text-center mt-2">
+                        <v-btn
+                          @click="
+                            authenticate('password', {
+                              user: user.username,
+                              pwd: user.password
+                            })
+                          "
+                          :disabled="!valid"
+                          :loading="loggingIn"
+                          color="green darken-3"
+                          :dark="valid"
+                        >
+                          {{ $t("login.loginButton") }} &nbsp;<i
+                            class="fas fa-sign-in-alt"
+                          ></i>
+                        </v-btn>
+                      </div>
+                    </v-form>
+                  </v-card-text>
+                </v-card>
+              </v-tab-item>
+            </v-tabs-items>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
