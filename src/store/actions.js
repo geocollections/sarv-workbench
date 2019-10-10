@@ -5,96 +5,120 @@ import {
   fetchAttachments,
   fetchLocalities,
   fetchSamples,
-  fetchDois, fetchLibrariesFromLibraryAgent, fetchAnalyses, fetchSpecimens, fetchKeywords, fetchJournals
+  fetchDois,
+  fetchLibrariesFromLibraryAgent,
+  fetchAnalyses,
+  fetchSpecimens,
+  fetchKeywords,
+  fetchJournals
 } from "../assets/js/api/apiCalls";
 
 export default {
   FETCH_PROJECTS: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchProjects(state.activeSearchParams.search, state.currentUser.id).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchProjects(
+      state.activeSearchParams.search,
+      state.currentUser.id
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },
 
   FETCH_SITES: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchSites(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchSites(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
   },
 
-  // Todo: Need to update attachment views (photo archive, specimen image etc.)
   FETCH_ATTACHMENTS: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchAttachments(state.activeSearchParams.search, state.currentUser).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchAttachments(
+      state.activeSearchParams.search,
+      state.currentUser
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },
 
   FETCH_REFERENCES: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchReferences(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchReferences(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
   },
 
   FETCH_LIBRARIES: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchLibrariesFromLibraryAgent(state.activeSearchParams.search, state.activeSearchParams.agent).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchLibrariesFromLibraryAgent(
+      state.activeSearchParams.search,
+      state.activeSearchParams.agent
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },
 
   FETCH_LOCALITIES: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchLocalities(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchLocalities(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
   },
 
   FETCH_SAMPLES: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchSamples(state.activeSearchParams.search, state.activeSearchParams.agent, state.activeSearchParams.databaseId).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchSamples(
+      state.activeSearchParams.search,
+      state.activeSearchParams.agent,
+      state.activeSearchParams.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },
 
   FETCH_ANALYSES: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchAnalyses(state.activeSearchParams.search, state.activeSearchParams.agent, state.activeSearchParams.databaseId).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchAnalyses(
+      state.activeSearchParams.search,
+      state.activeSearchParams.agent,
+      state.activeSearchParams.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },
 
   FETCH_DOIS: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchDois(state.activeSearchParams.search, state.databaseId).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchDois(state.activeSearchParams.search, state.databaseId).then(
+      resp => commit("SET_SIDEBAR_LIST", { resp })
+    );
   },
 
   FETCH_SPECIMENS: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchSpecimens(state.activeSearchParams.search, state.activeSearchParams.databaseId).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchSpecimens(
+      state.activeSearchParams.search,
+      state.activeSearchParams.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },
 
   FETCH_KEYWORDS: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchKeywords(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchKeywords(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
   },
 
   FETCH_JOURNALS: ({ commit, state }) => {
-    // state.activeSearchParams.search.paginateBy = 10;
-    return fetchJournals(state.activeSearchParams.search).then(resp => commit('SET_SIDEBAR_LIST', {resp}))
+    return fetchJournals(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
   },
 
-  SAVE_SHORTCUTS: ({ commit, state }, shortcuts) => {
-    commit('SET_SHORTCUTS', { shortcuts })
+  SAVE_SHORTCUTS: ({ commit }, shortcuts) => {
+    commit("SET_SHORTCUTS", { shortcuts });
   },
 
   GET_SHORTCUTS: ({ commit }) => {
-    commit('GET_SHORTCUTS')
+    commit("GET_SHORTCUTS");
   },
 
-  ACTIVE_LIBRARY: ({commit, state}, library) => {
-    commit('SET_ACTIVE_LIBRARY', library)
+  ACTIVE_LIBRARY: ({ commit }, library) => {
+    commit("SET_ACTIVE_LIBRARY", library);
   },
 
-  ACTIVE_PROJECT: ({commit, state}, project) => {
-    commit('SET_ACTIVE_PROJECT', project)
+  ACTIVE_PROJECT: ({ commit }, project) => {
+    commit("SET_ACTIVE_PROJECT", project);
   },
 
-  INITIALISE_ACTIVE_OBJECTS: ({commit}) => {
-    commit('SET_ACTIVE_OBJECTS')
+  INITIALISE_ACTIVE_OBJECTS: ({ commit }) => {
+    commit("SET_ACTIVE_OBJECTS");
   },
 
-  INITIALISE_USER_DATA: ({commit}) => {
-    commit('SET_CURRENT_USER')
+  INITIALISE_USER_DATA: ({ commit }) => {
+    commit("SET_CURRENT_USER");
   },
 
-  SIDEBAR_USER_ACTION: ({commit}, userAction) => {
-    commit('SET_SIDEBAR_USER_ACTION', userAction)
+  SIDEBAR_USER_ACTION: ({ commit }, userAction) => {
+    commit("SET_SIDEBAR_USER_ACTION", userAction);
   }
-}
+};

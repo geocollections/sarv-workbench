@@ -1,5 +1,5 @@
 <template>
-  <v-content class="front-page">
+  <div class="front-page">
     <!-- NAME -->
     <v-row>
       <v-col class="pb-0">
@@ -74,7 +74,7 @@
     </v-row>
 
     <recent-activity :user="currentUser.user"></recent-activity>
-  </v-content>
+  </div>
 </template>
 
 <script>

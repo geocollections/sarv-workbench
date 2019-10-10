@@ -1,0 +1,177 @@
+<template>
+  <v-card tile class="app-bar">
+    <drawer-left
+      :current-user="currentUser"
+      :user-shortcuts="userShortcuts"
+      :drawerState="drawer"
+      v-on:update:drawerState="drawer = $event"
+    />
+
+    <v-app-bar app clipped-left fixed color="blue darken-4" dark dense>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+
+      <v-toolbar-items>
+        <v-btn text :to="{ path: '/dashboard' }" exact>
+          <span>{{ $t("header.title") }}</span>
+          <span v-if="isBeta">-beta</span>
+          <span v-else-if="isLocal">-development</span>
+        </v-btn>
+      </v-toolbar-items>
+
+      <v-toolbar-items
+        class="d-none d-md-block"
+        v-if="userShortcuts.length > 0 && userShortcuts.length < 5"
+      >
+        <v-btn
+          text
+          v-for="(entity, index) in userShortcuts"
+          :key="index"
+          :to="{ path: entity.path }"
+          exact
+        >
+          {{ entity.title }}
+        </v-btn>
+      </v-toolbar-items>
+
+      <template v-slot:extension v-if="userShortcuts.length >= 5">
+        <v-tabs
+          background-color="blue darken-4"
+          center-active
+          show-arrows
+          prev-icon="fas fa-angle-left"
+          next-icon="fas fa-angle-right"
+        >
+          <v-tab
+            v-for="(entity, index) in userShortcuts"
+            :key="index"
+            :to="{ path: entity.path }"
+            exact
+            >{{ entity.title }}</v-tab
+          >
+        </v-tabs>
+      </template>
+
+      <div class="flex-grow-1"></div>
+
+      <v-toolbar-items>
+        <v-btn text @click="changeLang('ee')">
+          EST &nbsp;<span class="flag flag-ee flag-squared flag-circle"></span>
+        </v-btn>
+        <v-btn text @click="changeLang('en')">
+          ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span>
+        </v-btn>
+
+        <v-menu v-model="showDropdown" offset-y>
+          <template class="teresesdfdsfdsfdsfdsfs" v-slot:activator="{ on }">
+            <v-btn text v-on="on">
+              {{ currentUser.forename }}&nbsp;
+              <v-icon>{{
+                showDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
+              }}</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list color="blue darken-4" dark dense style="border-radius: 0">
+            <v-list-item :to="{ path: '/settings' }">
+              <v-list-item-icon><v-icon>fa fa-cog</v-icon></v-list-item-icon>
+              <v-list-item-title>{{ $t("header.settings") }}</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="logOut()">
+              <v-list-item-icon
+                ><v-icon>fas fa-sign-out-alt</v-icon></v-list-item-icon
+              >
+              <v-list-item-title>{{ $t("header.logOut") }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar-items>
+
+      <v-app-bar-nav-icon
+        v-if="$route.path !== '/dashboard' && $route.path !== '/settings'"
+        @click.stop="drawerRight = !drawerRight"
+      ></v-app-bar-nav-icon>
+    </v-app-bar>
+  </v-card>
+</template>
+
+<script>
+import authenticationMixin from "../../../mixins/authenticationMixin";
+import { mapState } from "vuex";
+import DrawerLeft from "./DrawerLeft";
+import { toastInfo } from "../../../assets/js/iziToast/iziToast";
+
+export default {
+  name: "AppBar",
+  components: {
+    DrawerLeft
+  },
+  mixins: [authenticationMixin],
+  data: () => ({
+    drawer: null,
+    drawerRight: null,
+    showDropdown: false
+  }),
+  computed: {
+    isBeta() {
+      return document.location.origin.includes("edit2");
+    },
+
+    isLocal() {
+      return document.location.origin.includes("localhost");
+    },
+
+    userShortcuts() {
+      return this.$store.state["shortcuts"];
+    },
+
+    ...mapState(["currentUser"])
+  },
+  beforeCreate: function() {
+    this.$store.dispatch("GET_SHORTCUTS");
+  },
+  methods: {
+    changeLang(lang) {
+      if (this.$localStorage.get("geocollectionsFileUploadLang") === lang)
+        return;
+      this.$i18n.locale = lang;
+      this.$localStorage.set("geocollectionsFileUploadLang", lang);
+      toastInfo({ text: this.$t("messages.langChange") });
+    }
+  }
+};
+</script>
+
+<style scoped>
+.v-menu__content {
+  border-radius: 0 !important;
+}
+.flag {
+  position: relative;
+  display: inline-block;
+  width: 1.33333333em;
+  line-height: 1em;
+  background-size: cover;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
+.flag:before {
+  content: "\A0";
+}
+
+.flag-ee {
+  background-image: url("../../../assets/ee.svg");
+}
+
+.flag-en {
+  background-image: url("../../../assets/en.svg");
+}
+
+.flag-squared {
+  width: 1em;
+}
+
+.flag-circle {
+  border-radius: 100%;
+}
+</style>

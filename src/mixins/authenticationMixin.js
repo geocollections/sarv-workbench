@@ -1,10 +1,12 @@
 import { toastSuccess, toastError } from "../assets/js/iziToast/iziToast";
-import { fetchLogin, fetchLoginId, fetchLogout } from "../assets/js/api/apiCalls";
+import {
+  fetchLogin,
+  fetchLoginId,
+  fetchLogout
+} from "../assets/js/api/apiCalls";
 
 const authenticationMixin = {
-
   methods: {
-
     /**
      * Authenticates user according to the information entered.
      *
@@ -17,21 +19,37 @@ const authenticationMixin = {
       if (!this.loggingIn) {
         this.loggingIn = true;
 
-        if (authenticationType === 'password') {
-          fetchLogin(loginData).then(successfulResponse => {
-              return this.$_authenticationMixin_handleSuccessfulAuthentication(successfulResponse, authenticationType);
-            }, errResponse => {
-              return this.$_authenticationMixin_handleAuthenticationError(authenticationType);
-            });
-        } else if (authenticationType === 'id') {
-          fetchLoginId().then(successfulResponse => {
-            return this.$_authenticationMixin_handleSuccessfulAuthentication(successfulResponse, authenticationType);
-            }, errResponse => {
-            return this.$_authenticationMixin_handleAuthenticationError(authenticationType);
-          });
+        if (authenticationType === "password") {
+          fetchLogin(loginData).then(
+            successfulResponse => {
+              return this.$_authenticationMixin_handleSuccessfulAuthentication(
+                successfulResponse,
+                authenticationType
+              );
+            },
+            () => {
+              return this.$_authenticationMixin_handleAuthenticationError(
+                authenticationType
+              );
+            }
+          );
+        } else if (authenticationType === "id") {
+          fetchLoginId().then(
+            successfulResponse => {
+              return this.$_authenticationMixin_handleSuccessfulAuthentication(
+                successfulResponse,
+                authenticationType
+              );
+            },
+            () => {
+              return this.$_authenticationMixin_handleAuthenticationError(
+                authenticationType
+              );
+            }
+          );
         }
       } else {
-        toastError({text: this.$t('messages.easterEggError')})
+        toastError({ text: this.$t("messages.easterEggError") });
       }
     },
 
@@ -42,17 +60,19 @@ const authenticationMixin = {
      * and then log out request is initiated.
      */
     logOut() {
-      this.$cookies.remove('csrftokenLocalhost', null, 'localhost');
-      this.$cookies.remove('csrftoken', null, 'geocollections.info');
-      this.$localStorage.remove('authUser');
+      this.$cookies.remove("csrftokenLocalhost", null, "localhost");
+      this.$cookies.remove("csrftoken", null, "geocollections.info");
+      this.$localStorage.remove("authUser");
 
       fetchLogout().then(response => {
         if (response.status === 200) {
-          this.$router.push({ name: 'Geocollections Data Management', params: { dontShowSessionExpired: true } });
-          toastSuccessMessage(response, this.$i18n.locale)
-        } else getErrorMessage(response, this.$i18n.locale)
-
-      }, errResponse => {})
+          this.$router.push({
+            name: "Geocollections Data Management",
+            params: { dontShowSessionExpired: true }
+          });
+          toastSuccessMessage(response, this.$i18n.locale);
+        } else getErrorMessage(response, this.$i18n.locale);
+      });
     },
 
     /**
@@ -66,25 +86,32 @@ const authenticationMixin = {
      * @param response, Object
      * @param authenticationType, String value to know which message to show.
      */
-    $_authenticationMixin_handleSuccessfulAuthentication(response, authenticationType) {
+    $_authenticationMixin_handleSuccessfulAuthentication(
+      response,
+      authenticationType
+    ) {
       if (response.status === 200) {
         if (response.body.user != null) {
-
           let date = new Date();
           response.body.expires = date.setDate(date.getDate() + 7);
 
           // Cookie for localhost
-          this.$cookies.set('csrftokenLocalhost', 'test token', '1d', null, 'localhost');
-          this.$localStorage.set('authUser', response.body);
+          this.$cookies.set(
+            "csrftokenLocalhost",
+            "test token",
+            "1d",
+            null,
+            "localhost"
+          );
+          this.$localStorage.set("authUser", response.body);
 
-          this.$router.push({ path: '/dashboard' });
-          toastSuccessMessage(response, this.$i18n.locale)
-
+          this.$router.push({ path: "/dashboard" });
+          toastSuccessMessage(response, this.$i18n.locale);
         } else {
-          if (authenticationType === 'password') {
+          if (authenticationType === "password") {
             this.passMessage = getErrorMessage(response, this.$i18n.locale);
             this.passError = true;
-          } else if (authenticationType === 'id') {
+          } else if (authenticationType === "id") {
             this.idMessage = getErrorMessage(response, this.$i18n.locale);
             this.idError = true;
           }
@@ -104,20 +131,19 @@ const authenticationMixin = {
      *
      */
     $_authenticationMixin_handleAuthenticationError(authenticationType) {
-      if (authenticationType === 'password') {
-        this.passMessage = this.$t('messages.loginError');
+      if (authenticationType === "password") {
+        this.passMessage = this.$t("messages.loginError");
         this.passError = true;
-        toastError({text: this.$t('messages.loginError')})
-      } else if (authenticationType === 'id') {
-        this.idMessage = this.$t('messages.loginIdError');
+        toastError({ text: this.$t("messages.loginError") });
+      } else if (authenticationType === "id") {
+        this.idMessage = this.$t("messages.loginIdError");
         this.idError = true;
-        toastError({text: this.$t('messages.loginIdError')})
+        toastError({ text: this.$t("messages.loginIdError") });
       }
 
       this.loggingIn = false;
-    },
+    }
   }
-
 };
 
 /**
@@ -126,8 +152,9 @@ const authenticationMixin = {
  * @param locale - Current language preference
  */
 function toastSuccessMessage(response, locale) {
-  if (locale === 'ee' && response.body.message_et) toastSuccess({text: response.body.message_et});
-  else toastSuccess({text: response.body.message});
+  if (locale === "ee" && response.body.message_et)
+    toastSuccess({ text: response.body.message_et });
+  else toastSuccess({ text: response.body.message });
 }
 
 /**
@@ -137,11 +164,11 @@ function toastSuccessMessage(response, locale) {
  * @returns {String} - Message to show why request failed
  */
 function getErrorMessage(response, locale) {
-  if (locale === 'ee' && response.body.message_et) {
-    toastError({text: response.body.message_et});
+  if (locale === "ee" && response.body.message_et) {
+    toastError({ text: response.body.message_et });
     return response.body.message_et;
   } else {
-    toastError({text: response.body.message});
+    toastError({ text: response.body.message });
     return response.body.message;
   }
 }
