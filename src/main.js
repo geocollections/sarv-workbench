@@ -3,13 +3,13 @@ import App from "./App.vue";
 import router from "./router";
 import VueResource from "vue-resource"; // VueResource for HTTP requests
 import VueLocalStorage from "vue-localstorage"; // VueLocalStorage for using local storage
-// import BootstrapVue from "bootstrap-vue"; // Bootstrap
+import BootstrapVue from "bootstrap-vue"; // Bootstrap
 import VueIziToast from "vue-izitoast"; // Pop-up messages
 import VueI18n from "vue-i18n"; // Translations
 import VueMoment from "vue-moment";
 import VueCookies from "vue-cookies";
 import { createStore } from "./store";
-// import Vuesax from "vuesax";
+import Vuesax from "vuesax";
 import VueScrollTo from "vue-scrollto";
 import Vue2TouchEvents from "vue2-touch-events";
 import CKEditor from "@ckeditor/ckeditor5-vue";
@@ -19,12 +19,12 @@ import vuetify from "./plugins/vuetify";
 Vue.use(CKEditor);
 
 // Bootstrap css
-// import "bootstrap/dist/css/bootstrap.css";
-// import "bootstrap-vue/dist/bootstrap-vue.css";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import "izitoast/dist/css/iziToast.min.css"; // Pop-up messages style
 import "vue-multiselect/dist/vue-multiselect.min.css"; // Select input
-// import "vuesax/dist/vuesax.css";
+import "vuesax/dist/vuesax.css";
 import "material-icons/iconfont/material-icons.css";
 import "leaflet/dist/leaflet.css"; // Leaflet css
 // Custom css
@@ -33,12 +33,12 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 Vue.use(VueResource);
 Vue.use(VueLocalStorage);
-// Vue.use(BootstrapVue);
+Vue.use(BootstrapVue);
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueMoment);
 Vue.use(VueCookies);
-// Vue.use(Vuesax);
+Vue.use(Vuesax);
 Vue.use(VueScrollTo, {
   container: "body",
   duration: 100,

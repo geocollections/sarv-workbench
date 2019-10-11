@@ -43,6 +43,12 @@ main {
 .container {
   min-height: calc(100% - 82px);
 }
+
+/* TODO: BOOTSTRAP OVERRIDE, remove after integration */
+.container--fluid {
+  max-width: 100%;
+}
+
 /* Custom override for xl screens */
 @media (min-width: 1904px) {
   .container {
