@@ -3,12 +3,12 @@
     <app-header />
 
     <v-content>
-      <v-container>
+      <v-container fluid>
         <router-view />
       </v-container>
-    </v-content>
 
-    <app-footer />
+      <app-footer />
+    </v-content>
   </div>
 </template>
 
@@ -27,14 +27,6 @@ export default {
       title: this.$t("titles.dashboard")
     };
   },
-  data() {
-    return {
-      sidebarState: true,
-      buttonPressed: false,
-      hideBackground: true,
-      thumbstackState: false
-    };
-  },
 
   beforeCreate() {
     this.$store.dispatch("INITIALISE_ACTIVE_OBJECTS");
@@ -44,17 +36,13 @@ export default {
 </script>
 
 <style scoped>
-.dashboard {
-  /*display: flex;*/
-  /*min-height: 100vh;*/
-  /*flex-direction: column;*/
+main {
+  min-height: 100vh;
 }
 
-.main {
-  /*margin: 0 auto;*/
-  /*flex: 1;*/
+.container {
+  min-height: calc(100% - 82px);
 }
-
 /* Custom override for xl screens */
 @media (min-width: 1904px) {
   .container {

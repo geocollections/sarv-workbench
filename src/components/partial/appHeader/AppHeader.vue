@@ -1,5 +1,5 @@
 <template>
-  <v-card tile class="app-bar">
+  <v-card tile id="app-bar">
     <drawer-left
       :current-user="currentUser"
       :user-shortcuts="userShortcuts"
@@ -142,6 +142,9 @@ export default {
 </script>
 
 <style scoped>
+#app-bar {
+  z-index: 50000;
+}
 .v-menu__content {
   border-radius: 0 !important;
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-app id="app">
+  <v-app>
     <router-view />
   </v-app>
 </template>
@@ -20,5 +20,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   color: #2c3e50;
+}
+
+/* Overlay must hide everything except app header which has z-index of 50000 */
+.v-overlay--active {
+  z-index: 49999 !important;
 }
 </style>
