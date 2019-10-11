@@ -1,45 +1,15 @@
 <template>
-  <div>
-    <div class="row mt-4 page-title">
-      <div class="col-sm-6">
-        <p class="h2">{{ $t("header.journals") }}</p>
-      </div>
-      <div class="col-sm-6 text-right">
-        <router-link
-          class="btn btn-primary mr-2 mb-2"
-          :to="{ path: '/journal/add' }"
-          >{{ $t("add.new") }}</router-link
-        >
-      </div>
-    </div>
+  <div class="journals">
+    <table-view-title title="header.journals" buttonPath="/journal/add" />
 
-    <!-- SEARCH FIELDS START -->
-    <fieldset class="border p-2" id="block-search">
-      <legend
-        class="w-auto mb-0"
-        :class="{ 'text-primary': !block.search }"
-        @click="block.search = !block.search"
-      >
-        <i class="fas fa-search"></i>
-        {{ $t("edit.search") }}
-      </legend>
+    <table-view-search
+      :show-search="block.search"
+      v-on:update:showSearch="block.search = $event"
+      :filters="filters"
+      :search-parameters="searchParameters"
+      :col-size="4"
+    />
 
-      <transition name="fade">
-        <div class="row" v-if="filters.length > 0 && block.search">
-          <div class="col-md-4" v-for="field in filters">
-            <label :for="field.id">{{ $t(field.title) }}:</label>
-
-            <b-form-input
-              v-model="searchParameters[field.id]"
-              :id="field.id"
-              :type="field.type"
-            ></b-form-input>
-          </div>
-        </div>
-      </transition>
-    </fieldset>
-
-    <!-- SEARCH FIELDS END -->
     <list-module-core
       module="journal"
       title="titles.editJournal"
@@ -59,11 +29,15 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchJournals } from "../assets/js/api/apiCalls";
+import TableViewTitle from "../components/partial/tableView/TableViewTitle";
+import TableViewSearch from "../components/partial/tableView/TableViewSearch";
 
 export default {
   name: "Journals",
   components: {
-    ListModuleCore
+    ListModuleCore,
+    TableViewTitle,
+    TableViewSearch
   },
   data() {
     return {

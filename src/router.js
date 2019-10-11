@@ -66,7 +66,8 @@ const router = new Router({
               component: () =>
                 import("./components/attachment/AttachmentTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "attachment"
               }
             }
           ]
@@ -287,7 +288,8 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 table: "reference",
-                isTableView: true
+                isTableView: true,
+                object: "reference"
               }
             }
           ]
@@ -662,7 +664,8 @@ const router = new Router({
               path: "",
               component: () => import("./components/site/SiteTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "site"
               }
             }
           ]

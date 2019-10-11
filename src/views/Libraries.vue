@@ -1,35 +1,14 @@
 <template>
-  <div>
-    <div class="row mt-4 page-title">
-      <div class="col-sm-6">
-        <p class="h2">{{ $t('header.libraries') }}</p>
-      </div>
-      <div class="col-sm-6 text-right">
-        <router-link class="btn btn-primary mr-2 mb-2" :to="{ path: '/library/add' }">{{ $t('add.new') }}</router-link>
-      </div>
-    </div>
+  <div class="libraries">
+    <table-view-title title="header.libraries" buttonPath="/library/add" />
 
-    <!-- SEARCH FIELDS START -->
-    <fieldset class="border p-2" id="block-search">
-      <legend class="w-auto mb-0" :class="{ 'text-primary': !block.search }" @click="block.search = !block.search">
-        <i class="fas fa-search"></i>
-        {{ $t('edit.search') }}
-      </legend>
+    <table-view-search
+      :show-search="block.search"
+      v-on:update:showSearch="block.search = $event"
+      :filters="filters"
+      :search-parameters="searchParameters"
+    />
 
-      <transition name="fade">
-        <div class="row" v-if="filters.length > 0 && block.search">
-          <div class="col-md-6" v-for="field in filters">
-
-            <label :for="field.id">{{ $t(field.title) }}:</label>
-
-            <b-form-input v-model="searchParameters[field.id]" :id="field.id" :type="field.type"></b-form-input>
-
-          </div>
-        </div>
-      </transition>
-    </fieldset>
-
-    <!-- SEARCH FIELDS END -->
     <list-module-core
       module="library"
       title="titles.editLibrary"
@@ -39,84 +18,100 @@
       search-history="librarySearchHistory"
       view-type="libraryViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="setDefaultSearchParametersFromDeleteButton"
+      v-on:set-default-search-params="
+        setDefaultSearchParametersFromDeleteButton
+      "
     ></list-module-core>
-
   </div>
 </template>
 
 <script>
-  import ListModuleCore from "./ListModuleCore";
-  import {
-    fetchChangePrivacyState,
-    fetchLibrariesFromLibraryAgent
-  } from "../assets/js/api/apiCalls";
-  import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
-  import {mapState} from "vuex";
+import ListModuleCore from "./ListModuleCore";
+import { fetchLibrariesFromLibraryAgent } from "../assets/js/api/apiCalls";
+import { mapState } from "vuex";
+import TableViewTitle from "../components/partial/tableView/TableViewTitle";
+import TableViewSearch from "../components/partial/tableView/TableViewSearch";
 
-  export default {
-    components: {
-      ListModuleCore
-    },
-    name: "Libraries",
-    data() {
-      return {
-        response: {},
-        columns: [
-          {id: "library", title: "library.id", type: "number"},
-          {id: "library__title", title: "library.title", type: "text"},
-          {id: "agent__agent", title: "library.author_txt", type: "text"},
+export default {
+  components: {
+    ListModuleCore,
+    TableViewTitle,
+    TableViewSearch
+  },
+  name: "Libraries",
+  data() {
+    return {
+      response: {},
+      columns: [
+        { id: "library", title: "library.id", type: "number" },
+        { id: "library__title", title: "library.title", type: "text" },
+        { id: "agent__agent", title: "library.author_txt", type: "text" },
 
-          {id: "library__is_private", title: "library.private", type: "text", isPrivate: true},
-          {id: "reference", title: "library.reference", type: "text", orderBy: false},
-        ],
-        filters: [
-          {id: "author_txt", title: "library.author_txt", type: "text"},
-          {id: "year", title: "library.year", type: "number"},
-          {id: "title", title: "library.title", type: "text"},
-          {id: "reference", title: "library.reference", type: "text"},
-        ],
-        searchParameters: this.setDefaultSearchParameters(),
-        block: {search: true}
-      }
-    },
-
-    computed: {
-      ...mapState(["currentUser"])
-    },
-
-    methods: {
-      fetchLibraries() {
-        return new Promise((resolve) => {
-          resolve(fetchLibrariesFromLibraryAgent(this.searchParameters, this.currentUser))
-        });
-      },
-      searchParametersChanged(newParams) {
-        this.searchParameters = newParams
-      },
-      setDefaultSearchParameters() {
-        return {
-          author_txt: null,
-          year: null,
-          title: null,
-          reference: null,
-          id: null,
-          page: 1,
-          paginateBy: 50,
-          orderBy: '-library',
+        {
+          id: "library__is_private",
+          title: "library.private",
+          type: "text",
+          isPrivate: true
+        },
+        {
+          id: "reference",
+          title: "library.reference",
+          type: "text",
+          orderBy: false
         }
-      },
-      setDefaultSearchParametersFromDeleteButton() {
-        this.searchParameters = this.setDefaultSearchParameters()
-      },
+      ],
+      filters: [
+        { id: "author_txt", title: "library.author_txt", type: "text" },
+        { id: "year", title: "library.year", type: "number" },
+        { id: "title", title: "library.title", type: "text" },
+        { id: "reference", title: "library.reference", type: "text" }
+      ],
+      searchParameters: this.setDefaultSearchParameters(),
+      block: { search: true }
+    };
+  },
+
+  computed: {
+    ...mapState(["currentUser"])
+  },
+
+  methods: {
+    fetchLibraries() {
+      return new Promise(resolve => {
+        resolve(
+          fetchLibrariesFromLibraryAgent(
+            this.searchParameters,
+            this.currentUser
+          )
+        );
+      });
+    },
+    searchParametersChanged(newParams) {
+      this.searchParameters = newParams;
+    },
+    setDefaultSearchParameters() {
+      return {
+        author_txt: null,
+        year: null,
+        title: null,
+        reference: null,
+        id: null,
+        page: 1,
+        paginateBy: 50,
+        orderBy: "-library"
+      };
+    },
+    setDefaultSearchParametersFromDeleteButton() {
+      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
+};
 </script>
 
 <style scoped>
-  label {
-    margin: 5px 0 0 0;
-    color: #999;
-    font-size: 0.8rem;
-  }
+label {
+  margin: 5px 0 0 0;
+  color: #999;
+  font-size: 0.8rem;
+}
 </style>
