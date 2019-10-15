@@ -1170,6 +1170,7 @@
     "is_estonian_reference_short": "EE",
     "is_estonian_author": "Eesti autor",
     "is_estonian_author_short": "EE",
+    "link": "Link",
     "localities": "Lokaliteedid",
     "libraries": "Kogumikud",
     "attachments": "Failid",

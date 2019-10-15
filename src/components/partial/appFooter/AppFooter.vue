@@ -2,14 +2,12 @@
   <v-footer
     class="footer"
     :class="{ 'bottom-options-margin': isEditOrAddView }"
-    color="blue darken-4"
-    dark
   >
     <v-row no-gutters align="center" justify="center">
       <v-col cols="12" class="text-center pb-1">
         <v-img
           alt="SARV logo"
-          :src="require('../../../assets/img/sarv_logo.png')"
+          src="https://geocollections.info/img/logos/sarv_logo_valge1.png"
           max-height="60"
           max-width="175"
           style="margin: 0 auto"
@@ -57,7 +55,7 @@ export default {
 }
 
 .footer-link {
-  color: #ff5722;
+  color: #000000;
 }
 
 .footer-link:hover {

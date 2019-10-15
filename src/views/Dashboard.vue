@@ -6,20 +6,16 @@
       <v-container fluid>
         <router-view />
       </v-container>
-
-      <app-footer />
     </v-content>
   </div>
 </template>
 
 <script>
-import AppFooter from "@/components/partial/appFooter/AppFooter";
 import AppHeader from "../components/partial/appHeader/AppHeader";
 
 export default {
   components: {
-    AppHeader,
-    AppFooter
+    AppHeader
   },
   name: "Dashboard",
   metaInfo() {
@@ -36,14 +32,6 @@ export default {
 </script>
 
 <style scoped>
-main {
-  min-height: 100vh;
-}
-
-.container {
-  min-height: calc(100% - 82px);
-}
-
 /* TODO: BOOTSTRAP OVERRIDE, remove after integration */
 .container--fluid {
   max-width: 100%;

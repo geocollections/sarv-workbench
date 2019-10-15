@@ -3,10 +3,11 @@
     :value="drawerState"
     app
     clipped
-    color="blue darken-4"
+    color="blue-grey"
     dark
     @input="changeDrawerState"
-    mobile-break-point="960"
+    mobile-break-point="992"
+    disable-resize-watcher
   >
     <template v-slot:prepend>
       <v-list-item>
@@ -41,7 +42,7 @@
         v-if="allowedRouteLinks.length > 0"
         prepend-icon="fas fa-home"
         append-icon="fas fa-angle-down"
-        color="deep-orange"
+        color="black"
       >
         <template v-slot:activator>
           <v-list-item-title>SARV2</v-list-item-title>
@@ -49,7 +50,7 @@
 
         <v-list-group
           sub-group
-          color="deep-orange"
+          color="black"
           v-for="entity in allowedRouteLinks"
           :key="entity.title"
           v-model="entity.state"
@@ -65,7 +66,7 @@
             :to="{ path: link.path }"
             :key="index"
             class="pl-4"
-            color="deep-orange"
+            color="black"
             exact
           >
             <v-list-item-title
@@ -99,152 +100,152 @@ export default {
       required: false
     }
   },
-  data: () => ({
-    activeSite: false,
-    activeSample: false,
-    routeLinks: [
-      {
-        name: "project",
-        title: "projects",
-        links: [
-          { title: "editProject", path: "/project", icon: "fas fa-table" },
-          {
-            title: "addProject",
-            path: "/project/add",
-            icon: "far fa-plus-square"
-          },
-          { title: "activeProject", path: "", icon: "fas fa-globe-americas" }
-        ]
-      },
-      {
-        name: "site",
-        title: "sites",
-        links: [
-          { title: "editSite", path: "/site", icon: "fas fa-globe" },
-          { title: "addSite", path: "/site/add", icon: "fas fa-map-pin" },
-          { title: "activeSite", path: "", icon: "fas fa-map-marker-alt" }
-        ]
-      },
-      {
-        name: "attachment",
-        title: "files",
-        links: [
-          { title: "myFiles", path: "/attachment", icon: "far fa-folder" },
-          {
-            title: "photoArchive",
-            path: "/attachment/add/photo_archive",
-            icon: "far fa-image"
-          },
-          {
-            title: "specimenImage",
-            path: "/attachment/add/specimen_image",
-            icon: "fas fa-image"
-          },
-          {
-            title: "otherFiles",
-            path: "/attachment/add/other_file",
-            icon: "far fa-file"
-          },
-          {
-            title: "digitisedReference",
-            path: "/attachment/add/digitised_reference",
-            icon: "far fa-file-pdf"
-          },
-          { title: "imageset", path: "/imageset/add", icon: "far fa-images" }
-        ]
-      },
-      {
-        name: "reference",
-        title: "references",
-        links: [
-          { title: "myReferences", path: "/reference", icon: "fas fa-book" },
-          {
-            title: "reference",
-            path: "/reference/add",
-            icon: "fas fa-book-open"
-          },
-          { title: "libraries", path: "/library", icon: "far fa-list-alt" },
-          { title: "library", path: "/library/add", icon: "far fa-edit" },
-          { title: "journals", path: "/journal", icon: "fas fa-newspaper" },
-          { title: "journal", path: "/journal/add", icon: "far fa-newspaper" },
-          { title: "keywords", path: "/keyword", icon: "fas fa-scroll" },
-          { title: "keyword", path: "/keyword/add", icon: "fas fa-stream" }
-        ]
-      },
-      {
-        name: "locality",
-        title: "localities",
-        links: [
-          {
-            title: "localities",
-            path: "/locality",
-            icon: "fas fa-map-marked-alt"
-          },
-          {
-            title: "locality",
-            path: "/locality/add",
-            icon: "fas fa-map-marker-alt"
-          }
-        ]
-      },
-      {
-        name: "sample",
-        title: "samples",
-        links: [
-          { title: "samples", path: "/sample", icon: "fas fa-vials" },
-          { title: "sample", path: "/sample/add", icon: "fas fa-vial" },
-          { title: "activeSample", path: "", icon: "fas fa-fill-drip" }
-        ]
-      },
-      {
-        name: "analysis",
-        title: "analyses",
-        links: [
-          {
-            title: "editAnalysis",
-            path: "/analysis",
-            icon: "far fa-chart-bar"
-          },
-          {
-            title: "addAnalysis",
-            path: "/analysis/add",
-            icon: "fas fa-chart-pie"
-          }
-        ]
-      },
-      {
-        name: "doi",
-        title: "dois",
-        links: [
-          { title: "dois", path: "/doi", icon: "fas fa-database" },
-          { title: "doi", path: "/doi/add", icon: "fas fa-plus-circle" }
-        ]
-      },
-      {
-        name: "specimen",
-        title: "specimens",
-        links: [
-          { title: "specimens", path: "/specimen", icon: "fas fa-flask" },
-          {
-            title: "specimen",
-            path: "/specimen/add",
-            icon: "fas fa-plus-circle"
-          }
-        ]
-      }
-    ]
-  }),
+  data() {
+    return {
+      activeSite: false,
+      activeSample: false,
+      routeLinks: [
+        {
+          name: "project",
+          title: "projects",
+          links: [
+            { title: "editProject", path: "/project", icon: "fas fa-table" },
+            {
+              title: "addProject",
+              path: "/project/add",
+              icon: "far fa-plus-square"
+            },
+            { title: "activeProject", path: "", icon: "fas fa-globe-americas" }
+          ]
+        },
+        {
+          name: "site",
+          title: "sites",
+          links: [
+            { title: "editSite", path: "/site", icon: "fas fa-globe" },
+            { title: "addSite", path: "/site/add", icon: "fas fa-map-pin" },
+            { title: "activeSite", path: "", icon: "fas fa-map-marker-alt" }
+          ]
+        },
+        {
+          name: "attachment",
+          title: "files",
+          links: [
+            { title: "myFiles", path: "/attachment", icon: "far fa-folder" },
+            {
+              title: "photoArchive",
+              path: "/attachment/add/photo_archive",
+              icon: "far fa-image"
+            },
+            {
+              title: "specimenImage",
+              path: "/attachment/add/specimen_image",
+              icon: "fas fa-image"
+            },
+            {
+              title: "otherFiles",
+              path: "/attachment/add/other_file",
+              icon: "far fa-file"
+            },
+            {
+              title: "digitisedReference",
+              path: "/attachment/add/digitised_reference",
+              icon: "far fa-file-pdf"
+            },
+            { title: "imageset", path: "/imageset/add", icon: "far fa-images" }
+          ]
+        },
+        {
+          name: "reference",
+          title: "references",
+          links: [
+            { title: "myReferences", path: "/reference", icon: "fas fa-book" },
+            {
+              title: "reference",
+              path: "/reference/add",
+              icon: "fas fa-book-open"
+            },
+            { title: "libraries", path: "/library", icon: "far fa-list-alt" },
+            { title: "library", path: "/library/add", icon: "far fa-edit" },
+            { title: "journals", path: "/journal", icon: "fas fa-newspaper" },
+            {
+              title: "journal",
+              path: "/journal/add",
+              icon: "far fa-newspaper"
+            },
+            { title: "keywords", path: "/keyword", icon: "fas fa-scroll" },
+            { title: "keyword", path: "/keyword/add", icon: "fas fa-stream" }
+          ]
+        },
+        {
+          name: "locality",
+          title: "localities",
+          links: [
+            {
+              title: "localities",
+              path: "/locality",
+              icon: "fas fa-map-marked-alt"
+            },
+            {
+              title: "locality",
+              path: "/locality/add",
+              icon: "fas fa-map-marker-alt"
+            }
+          ]
+        },
+        {
+          name: "sample",
+          title: "samples",
+          links: [
+            { title: "samples", path: "/sample", icon: "fas fa-vials" },
+            { title: "sample", path: "/sample/add", icon: "fas fa-vial" },
+            { title: "activeSample", path: "", icon: "fas fa-fill-drip" }
+          ]
+        },
+        {
+          name: "analysis",
+          title: "analyses",
+          links: [
+            {
+              title: "editAnalysis",
+              path: "/analysis",
+              icon: "far fa-chart-bar"
+            },
+            {
+              title: "addAnalysis",
+              path: "/analysis/add",
+              icon: "fas fa-chart-pie"
+            }
+          ]
+        },
+        {
+          name: "doi",
+          title: "dois",
+          links: [
+            { title: "dois", path: "/doi", icon: "fas fa-database" },
+            { title: "doi", path: "/doi/add", icon: "fas fa-plus-circle" }
+          ]
+        },
+        {
+          name: "specimen",
+          title: "specimens",
+          links: [
+            { title: "specimens", path: "/specimen", icon: "fas fa-flask" },
+            {
+              title: "specimen",
+              path: "/specimen/add",
+              icon: "fas fa-plus-circle"
+            }
+          ]
+        }
+      ]
+    };
+  },
   computed: {
     allowedRouteLinks() {
       return this.routeLinks.filter(link =>
         this.isUserAllowedTo("add", link.name)
       );
-    },
-
-    activeLibrary() {
-      if (this.$store.state["activeLibrary"] !== null)
-        return this.$store.state["activeLibrary"];
-      else return "";
     },
 
     activeProject() {

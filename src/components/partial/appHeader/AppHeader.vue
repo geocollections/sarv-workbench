@@ -7,11 +7,27 @@
       v-on:update:drawerState="drawer = $event"
     />
 
-    <v-app-bar app clipped-left fixed color="blue darken-4" dark dense>
+    <v-app-bar
+      app
+      clipped-left
+      clipped-right
+      fixed
+      color="blue-grey"
+      dark
+      dense
+    >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-items>
-        <v-btn text :to="{ path: '/dashboard' }" exact>
+        <v-btn
+          v-if="$vuetify.breakpoint.smAndDown"
+          icon
+          exct
+          :to="{ path: '/dashboard' }"
+        >
+          <v-icon>fas fa-home</v-icon>
+        </v-btn>
+        <v-btn text :to="{ path: '/dashboard' }" exact v-else>
           <span>{{ $t("header.title") }}</span>
           <span v-if="isBeta">-beta</span>
           <span v-else-if="isLocal">-development</span>
@@ -35,7 +51,7 @@
 
       <template v-slot:extension v-if="userShortcuts.length >= 5">
         <v-tabs
-          background-color="blue darken-4"
+          background-color="blue-grey"
           center-active
           show-arrows
           prev-icon="fas fa-angle-left"
@@ -54,14 +70,22 @@
       <div class="flex-grow-1"></div>
 
       <v-toolbar-items>
-        <v-btn text @click="changeLang('ee')">
+        <v-btn
+          text
+          @click="changeLang('ee')"
+          v-if="$vuetify.breakpoint.mdAndUp"
+        >
           EST &nbsp;<span class="flag flag-ee flag-squared flag-circle"></span>
         </v-btn>
-        <v-btn text @click="changeLang('en')">
+        <v-btn
+          text
+          @click="changeLang('en')"
+          v-if="$vuetify.breakpoint.mdAndUp"
+        >
           ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span>
         </v-btn>
 
-        <v-menu v-model="showDropdown" offset-y>
+        <v-menu v-model="showDropdown" offset-y z-index="50100">
           <template class="teresesdfdsfdsfdsfdsfs" v-slot:activator="{ on }">
             <v-btn text v-on="on">
               {{ currentUser.forename }}&nbsp;
@@ -71,11 +95,32 @@
             </v-btn>
           </template>
 
-          <v-list color="blue darken-4" dark dense style="border-radius: 0">
+          <v-list color="blue-grey" dark dense style="border-radius: 0">
+            <v-list-item
+              @click="changeLang('ee')"
+              v-if="$vuetify.breakpoint.smAndDown"
+            >
+              <v-list-item-icon>
+                <span class="flag flag-ee flag-circle"></span>
+              </v-list-item-icon>
+              <v-list-item-title>EST</v-list-item-title>
+            </v-list-item>
+
+            <v-list-item
+              @click="changeLang('en')"
+              v-if="$vuetify.breakpoint.smAndDown"
+            >
+              <v-list-item-icon>
+                <span class="flag flag-en flag-circle"></span>
+              </v-list-item-icon>
+              <v-list-item-title>ENG</v-list-item-title>
+            </v-list-item>
+
             <v-list-item :to="{ path: '/settings' }">
               <v-list-item-icon><v-icon>fa fa-cog</v-icon></v-list-item-icon>
               <v-list-item-title>{{ $t("header.settings") }}</v-list-item-title>
             </v-list-item>
+
             <v-list-item @click="logOut()">
               <v-list-item-icon
                 ><v-icon>fas fa-sign-out-alt</v-icon></v-list-item-icon
@@ -91,6 +136,11 @@
         @click.stop="drawerRight = !drawerRight"
       ></v-app-bar-nav-icon>
     </v-app-bar>
+
+    <drawer-right
+      :drawerState="drawerRight"
+      v-on:update:drawerState="drawerRight = $event"
+    />
   </v-card>
 </template>
 
@@ -98,17 +148,19 @@
 import authenticationMixin from "../../../mixins/authenticationMixin";
 import { mapState } from "vuex";
 import DrawerLeft from "./DrawerLeft";
+import DrawerRight from "./DrawerRight";
 import { toastInfo } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   name: "AppBar",
   components: {
-    DrawerLeft
+    DrawerLeft,
+    DrawerRight
   },
   mixins: [authenticationMixin],
   data: () => ({
     drawer: null,
-    drawerRight: null,
+    drawerRight: false,
     showDropdown: false
   }),
   computed: {
@@ -152,7 +204,8 @@ export default {
   position: relative;
   display: inline-block;
   width: 1.33333333em;
-  line-height: 1em;
+  /*line-height: 1em;*/
+  line-height: 1.33333333em;
   background-size: cover;
   background-position: 50%;
   background-repeat: no-repeat;
@@ -172,6 +225,7 @@ export default {
 
 .flag-squared {
   width: 1em;
+  line-height: 1em;
 }
 
 .flag-circle {

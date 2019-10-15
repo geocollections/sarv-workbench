@@ -128,7 +128,9 @@ export default {
       "fallbackValue"
     );
     let params =
-      this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
+      typeof searchHistory !== "undefined" &&
+      searchHistory !== null &&
+      searchHistory !== "fallbackValue"
         ? searchHistory
         : this.searchParameters;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
@@ -151,10 +153,6 @@ export default {
   },
 
   methods: {
-    isDefinedAndNotNull(value) {
-      return !!value && value !== null;
-    },
-
     fetchReferences() {
       return new Promise(resolve => {
         resolve(fetchReferences(this.searchParameters));

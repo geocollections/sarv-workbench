@@ -1,576 +1,793 @@
 <template>
-  <div>
-    <spinner v-show="isLoading"
-             class="loading-overlay-search"
-             text-fg-color="#000000"
-             line-fg-color="#5cb85c"
-             line-bg-color="#000000"
-             :line-size="5"
-             size="100"
-             :font-size="30"
-             :message="$t('edit.isLoading')"></spinner>
-
-    <div class="d-flex flex-row flex-wrap justify-content-start mt-2" :class="{'d-print-none': $route.meta.table === 'sample'}">
-      <!-- Deletes search preferences -->
-      <div class="mt-3 mr-3">
-        <b-button class="border border-dark" variant="light" @click="deleteSearchPreferences">
-          <i class="fas fa-filter"></i>
-          {{ $t('buttons.deletePreferences') }}
-        </b-button>
+  <div class="list-module-core">
+    <!-- RESET PARAMETERS + OPTIONS -->
+    <v-row
+      align="center"
+      justify="start"
+      class="px-4"
+      :class="{ 'd-print-none': $route.meta.table === 'sample' }"
+    >
+      <div class="pr-4 mb-2">
+        <v-btn @click="deleteSearchPreferences" color="blue" dark>
+          <v-icon left>fas fa-filter</v-icon>
+          {{ $t("buttons.deletePreferences") }}
+        </v-btn>
       </div>
 
-      <!-- TOGGLE BETWEEN TABLE AND LIST VIEW -->
-      <div class="mt-3 radio-buttons align-self-center" v-if="useListView || useAlternativeTableView">
-        <b-form-group>
-          <b-form-radio-group v-model="currentView">
-            <b-form-radio value="table">{{ $t('references.tableView') }}</b-form-radio>
-            <b-form-radio v-if="useListView" value="list">{{ $t('references.listView') }}</b-form-radio>
-            <b-form-radio v-if="useAlternativeTableView" value="alternativeTable">{{ $t('references.alternativeTableView') }}</b-form-radio>
-          </b-form-radio-group>
-        </b-form-group>
+      <div v-if="useListView || useAlternativeTableView" class="mb-2">
+        <v-radio-group
+          class="radio-buttons mt-0"
+          v-model="currentView"
+          row
+          hide-details
+        >
+          <v-radio
+            value="table"
+            class="mb-2"
+            :label="$t('references.tableView')"
+            color="blue"
+          ></v-radio>
+          <v-radio
+            v-if="useListView"
+            class="mb-2"
+            value="list"
+            :label="$t('references.listView')"
+            color="blue"
+          ></v-radio>
+          <v-radio
+            v-if="useAlternativeTableView"
+            class="mb-2"
+            value="alternativeTable"
+            :label="$t('references.alternativeTableView')"
+            color="blue"
+          ></v-radio>
+        </v-radio-group>
+      </div>
+    </v-row>
+
+    <!-- PAGINATION -->
+    <div
+      v-if="response.count > 0"
+      :class="{ 'd-print-none': $route.meta.table === 'sample' }"
+      class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3"
+    >
+      <div class="mr-3 mb-3">
+        <v-select
+          v-model="searchParameters.paginateBy"
+          color="blue"
+          dense
+          :items="paginateByOptionsTranslated"
+          item-color="blue"
+          label="Paginate by"
+          hide-details
+        />
+      </div>
+
+      <!-- EXPORT -->
+      <div class="mr-3 mb-2 text-center text-md-left" v-if="exportButtons">
+        <export-buttons
+          :filename="module"
+          :table-data="response.results"
+        ></export-buttons>
+      </div>
+
+      <div>
+        <v-pagination
+          v-model="searchParameters.page"
+          color="blue"
+          prev-icon="fas fa-angle-left"
+          next-icon="fas fa-angle-right"
+          :length="Math.ceil(response.count / searchParameters.paginateBy)"
+          :total-visible="5"
+        />
       </div>
     </div>
 
     <!-- ALTERNATIVE TABLE CONTROLS -->
-    <alternative-table-controls class="mt-3" v-if="isAlternativeTable && response.results.length > 0"
-                                :columns="Object.keys(response.results[0])"
-                                :alternativeTableControls="alternativeTableControls"
-                                v-on:set-default-controls="setDefaultAlternativeTableControlsFromResetButton"/>
-
-    <div class="row mt-4" :class="{'d-print-none': $route.meta.table === 'sample'}">
-      <div class="col">
-          <span>
-            <b>{{ $t(module+'.header') }}</b>
-            <sup class="font-larger" v-bind:class="{ 'badge-style': response.count > 0 }">
-              <b-badge pill variant="info">{{ response.count }}</b-badge>
-            </sup>
-          </span>
-      </div>
-    </div>
-
-    <div class="row mt-3" v-if="response.count > 0" :class="{'d-print-none': $route.meta.table === 'sample'}">
-      <div class="pl-3 pr-3" :class="{ 'col-lg-6 col-xl-3 top-select-center-xl': combinedView, 'col-sm-6 col-md-3 top-select-center': !combinedView }">
-        <b-form-select v-model="searchParameters.paginateBy" class="mb-3" >
-          <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
-          <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
-          <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
-          <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
-          <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
-          <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
-          <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
-        </b-form-select>
-      </div>
-
-      <div :class="{ 'mb-3': exportButtons, 'col-lg-12 col-xl-3 export-center-xl': combinedView, 'col-sm-12 col-md-3 export-center': !combinedView  }">
-        <export-buttons v-if="exportButtons" :filename="module" :table-data="response.results"></export-buttons>
-      </div>
-
-      <div v-if="$route.meta.table === 'reference'" class="d-lg-none d-xl-none mb-3 col-sm-6 col-md-6" style="margin: 0 auto;">
-        <choose-active-library/>
-      </div>
-
-      <div :class="{ 'col-lg-12 col-xl-6 pagination-center-xl': combinedView, 'col-sm-12 col-md-6 pagination-center': !combinedView }">
-        <b-pagination
-          size="md" align="right" :limit="5" :hide-ellipsis="true" :total-rows="response.count"
-          v-model="searchParameters.page" :per-page="searchParameters.paginateBy">
-        </b-pagination>
-      </div>
-    </div>
+    <alternative-table-controls
+      class="mt-3"
+      v-if="isAlternativeTable && response.results.length > 0"
+      :columns="Object.keys(response.results[0])"
+      :alternativeTableControls="alternativeTableControls"
+      v-on:set-default-controls="
+        setDefaultAlternativeTableControlsFromResetButton
+      "
+    />
 
     <!-- LIST VIEW -->
     <!-- Currently List-View is only used by reference, but if in the future is need for other table types then it should be made universal -->
-    <list-view v-if="isListView && response.count > 0"
-               :module="module"
-               :data="response.results"/>
+    <list-view
+      v-if="isListView && response.count > 0"
+      :module="module"
+      :data="response.results"
+    />
+
+    <!-- DATA TABLE -->
+    <v-card
+      class="table-card my-1"
+      :loading="isLoading"
+      v-if="module === 'reference'"
+    >
+      <v-card-title>
+        <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
+        <span id="table-title" class="text-uppercase">
+          {{ module }}
+          <sup>
+            <v-chip
+              color="deep-orange"
+              small
+              text-color="#ffffff"
+              class="font-weight-bold"
+              >{{ response.count }}</v-chip
+            >
+          </sup>
+        </span>
+        <div class="flex-grow-1"></div>
+        <v-text-field
+          v-model="filterTable"
+          append-outer-icon="fas fa-search"
+          label="Filter records"
+          clear-icon="fas fa-times"
+          clearable
+          color="deep-orange"
+        ></v-text-field>
+      </v-card-title>
+
+      <router-view
+        ref="table"
+        :response="response"
+        :filter="filterTable"
+        :search-parameters="searchParameters"
+        :is-library-active="isLibraryActive"
+        v-if="isTableView"
+        v-on:toggle-privacy-state="changeObjectsPrivacyState"
+        v-on:add-reference-to-active-library="
+          $emit('add-reference-to-active-library', $event)
+        "
+      />
+    </v-card>
 
     <!-- TABLE -->
-    <div class="row" v-if="(isTableView || isAlternativeTable) && response.count > 0">
+    <div
+      class="row"
+      v-else-if="(isTableView || isAlternativeTable) && response.count > 0"
+    >
       <div class="col">
-
-        <div class="table-responsive" :class="{ 'fixed-table': isAlternativeTable }">
-          <table id="export-table" class="table table-hover table-bordered b-table-fixed">
-
-            <thead class="thead-light" :class="{ 'sticky-header': isAlternativeTable }">
+        <div
+          class="table-responsive"
+          :class="{ 'fixed-table': isAlternativeTable }"
+        >
+          <table
+            id="export-table"
+            class="table table-hover table-bordered b-table-fixed"
+          >
+            <thead
+              class="thead-light"
+              :class="{ 'sticky-header': isAlternativeTable }"
+            >
               <tr class="th-sort">
                 <!-- MULTI ORDERING -->
-                <th class="nowrap" v-if="multiOrdering === true && isTableView" v-for="item in activeColumns">
-                  <span @click="changeOrderMulti(item.id)" v-on:dblclick="removeOrder(item.id)" v-if="item.orderBy !== false">
-                    <i class="fas fa-sort" v-if="isFieldInOrderBy(item.id) === 0"></i>
-                    <i class="fas fa-sort-up" v-if="isFieldInOrderBy(item.id) === 1"></i>
-                    <i class="fas fa-sort-down" v-if="isFieldInOrderBy(item.id) === -1"></i>
-                    {{ $t(item.title)}}
-                    <i class="far fa-calendar-alt" v-if="item.isDate === true"></i>
+                <th
+                  class="nowrap"
+                  v-if="multiOrdering === true && isTableView"
+                  v-for="item in activeColumns"
+                >
+                  <span
+                    @click="changeOrderMulti(item.id)"
+                    v-on:dblclick="removeOrder(item.id)"
+                    v-if="item.orderBy !== false"
+                  >
+                    <i
+                      class="fas fa-sort"
+                      v-if="isFieldInOrderBy(item.id) === 0"
+                    ></i>
+                    <i
+                      class="fas fa-sort-up"
+                      v-if="isFieldInOrderBy(item.id) === 1"
+                    ></i>
+                    <i
+                      class="fas fa-sort-down"
+                      v-if="isFieldInOrderBy(item.id) === -1"
+                    ></i>
+                    {{ $t(item.title) }}
+                    <i
+                      class="far fa-calendar-alt"
+                      v-if="item.isDate === true"
+                    ></i>
                     <i v-if="item.isPrivate" class="fas fa-lock"></i>
-                    <i v-else-if="item.isEstonianAuthor" class="fas fa-user"></i>
-<!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
+                    <i
+                      v-else-if="item.isEstonianAuthor"
+                      class="fas fa-user"
+                    ></i>
+                    <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
                   </span>
-                  <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
-                  <br/>
+                  <span v-if="item.orderBy === false && item.showHeader">{{
+                    $t(item.title)
+                  }}</span>
+                  <br />
                 </th>
 
                 <!-- REGULAR ORDERING -->
-                <th class="nowrap" v-if="multiOrdering === false && isTableView" v-for="item in activeColumns">
-                  <span @click="changeOrder(item.id)" v-if="item.orderBy !== false">
-                    <i class="fas fa-sort" v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"></i>
-                    <i class="fas" :class="searchParameters.orderBy.includes('-') ? 'fa-sort-down' : 'fa-sort-up'" v-else></i>
-                    {{ $t(item.title)}}
-                    <i class="far fa-calendar-alt" v-if="item.isDate === true"></i>
+                <th
+                  class="nowrap"
+                  v-if="multiOrdering === false && isTableView"
+                  v-for="item in activeColumns"
+                >
+                  <span
+                    @click="changeOrder(item.id)"
+                    v-if="item.orderBy !== false"
+                  >
+                    <i
+                      class="fas fa-sort"
+                      v-if="
+                        searchParameters.orderBy !== item.id &&
+                          searchParameters.orderBy !== '-' + item.id
+                      "
+                    ></i>
+                    <i
+                      class="fas"
+                      :class="
+                        searchParameters.orderBy.includes('-')
+                          ? 'fa-sort-down'
+                          : 'fa-sort-up'
+                      "
+                      v-else
+                    ></i>
+                    {{ $t(item.title) }}
+                    <i
+                      class="far fa-calendar-alt"
+                      v-if="item.isDate === true"
+                    ></i>
                     <i v-if="item.isPrivate" class="fas fa-lock"></i>
-                    <i v-else-if="item.isEstonianAuthor" class="fas fa-user"></i>
-<!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
+                    <i
+                      v-else-if="item.isEstonianAuthor"
+                      class="fas fa-user"
+                    ></i>
+                    <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
                   </span>
-                  <span v-if="item.orderBy === false && item.showHeader">{{ $t(item.title) }}</span>
-                  <br/>
+                  <span v-if="item.orderBy === false && item.showHeader">{{
+                    $t(item.title)
+                  }}</span>
+                  <br />
                 </th>
 
                 <!-- ALTERNATIVE TABLE TH START -->
                 <!-- MULTI ORDERING for alternativeTable -->
-                <th class="break-all-words" :style="'font-size:' + alternativeTableControls.size + 'px;'"
-                    v-if="multiOrdering === true && isAlternativeTable && alternativeTableControls.fields.includes(key)"
-                    v-for="(value, key) in response.results[0]"
-                    :key="key">
-                  <span @click="changeOrderMulti(key)" v-on:dblclick="removeOrder(key)">
-                    <i class="fas fa-sort" v-if="isFieldInOrderBy(item.id) === 0"></i>
-                    <i class="fas fa-sort-up" v-if="isFieldInOrderBy(item.id) === 1"></i>
-                    <i class="fas fa-sort-down" v-if="isFieldInOrderBy(item.id) === -1"></i>
+                <th
+                  class="break-all-words"
+                  :style="'font-size:' + alternativeTableControls.size + 'px;'"
+                  v-if="
+                    multiOrdering === true &&
+                      isAlternativeTable &&
+                      alternativeTableControls.fields.includes(key)
+                  "
+                  v-for="(value, key) in response.results[0]"
+                  :key="key"
+                >
+                  <span
+                    @click="changeOrderMulti(key)"
+                    v-on:dblclick="removeOrder(key)"
+                  >
+                    <i
+                      class="fas fa-sort"
+                      v-if="isFieldInOrderBy(item.id) === 0"
+                    ></i>
+                    <i
+                      class="fas fa-sort-up"
+                      v-if="isFieldInOrderBy(item.id) === 1"
+                    ></i>
+                    <i
+                      class="fas fa-sort-down"
+                      v-if="isFieldInOrderBy(item.id) === -1"
+                    ></i>
                     {{ key }}
                   </span>
-                  <br/>
+                  <br />
                 </th>
 
                 <!-- REGULAR ORDERING for alternativeTable -->
-                <th class="break-all-words" :style="'font-size:' + alternativeTableControls.size + 'px;'"
-                    v-if="multiOrdering === false && isAlternativeTable && alternativeTableControls.fields.includes(key)"
-                    v-for="(value, key) in response.results[0]"
-                    :key="key">
+                <th
+                  class="break-all-words"
+                  :style="'font-size:' + alternativeTableControls.size + 'px;'"
+                  v-if="
+                    multiOrdering === false &&
+                      isAlternativeTable &&
+                      alternativeTableControls.fields.includes(key)
+                  "
+                  v-for="(value, key) in response.results[0]"
+                  :key="key"
+                >
                   <span @click="changeOrder(key)">
-                    <i class="fas fa-sort" v-if="searchParameters.orderBy !== item.id && searchParameters.orderBy !== '-'+item.id"></i>
-                    <i class="fas" :class="searchParameters.orderBy.includes('-') ? 'fa-sort-down' : 'fa-sort-up'" v-else></i>
-                    {{ key }}
-                  </span><br/>
+                    <i
+                      class="fas fa-sort"
+                      v-if="
+                        searchParameters.orderBy !== item.id &&
+                          searchParameters.orderBy !== '-' + item.id
+                      "
+                    ></i>
+                    <i
+                      class="fas"
+                      :class="
+                        searchParameters.orderBy.includes('-')
+                          ? 'fa-sort-down'
+                          : 'fa-sort-up'
+                      "
+                      v-else
+                    ></i>
+                    {{ key }} </span
+                  ><br />
                 </th>
                 <!-- ALTERNATIVE TABLE TH END -->
               </tr>
 
               <tr>
                 <th class="p-0" v-for="item in columns" v-if="showFilters">
-                  <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
-                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='text'"></b-form-input>
-                  <b-form-input autocomplete="off" style="display: inline !important;max-width: 100%; " class="col-sm-8"
-                                v-model="searchParameters[item.id]" :id="item.id" :type="item.type" v-if="item.type==='number'" min="0"></b-form-input>
-                  <!--<datepicker style="display: inline !important;max-width: 100%; " :id="item.id"-->
-                              <!--v-model="searchParameters[item.id]"-->
-                              <!--use-utc="true "-->
-                              <!--lang="en"-->
-                              <!--:first-day-of-week="1"-->
-                              <!--format="DD MMM YYYY"-->
-                              <!--input-class="form-control" v-if="item.isDate"></datepicker>-->
+                  <b-form-input
+                    autocomplete="off"
+                    style="display: inline !important;max-width: 100%; "
+                    class="col-sm-8"
+                    v-model="searchParameters[item.id]"
+                    :id="item.id"
+                    :type="item.type"
+                    v-if="item.type === 'text'"
+                  ></b-form-input>
+                  <b-form-input
+                    autocomplete="off"
+                    style="display: inline !important;max-width: 100%; "
+                    class="col-sm-8"
+                    v-model="searchParameters[item.id]"
+                    :id="item.id"
+                    :type="item.type"
+                    v-if="item.type === 'number'"
+                    min="0"
+                  ></b-form-input>
                 </th>
               </tr>
-
             </thead>
 
-            <router-view :response="response"
-                         :is-library-active="isLibraryActive"
-                         v-if="response.count > 0 && isTableView"
-                         v-on:toggle-privacy-state="changeObjectsPrivacyState"/>
+            <router-view
+              :response="response"
+              :is-library-active="isLibraryActive"
+              v-if="response.count > 0 && isTableView"
+              v-on:toggle-privacy-state="changeObjectsPrivacyState"
+            />
 
             <!-- ALTERNATIVE TABLE VIEW -->
-            <alternative-table-view v-if="isAlternativeTable"
-                                    module='reference'
-                                    :data="response.results"
-                                    :controls="alternativeTableControls"/>
-
+            <alternative-table-view
+              v-if="isAlternativeTable"
+              module="reference"
+              :data="response.results"
+              :controls="alternativeTableControls"
+            />
           </table>
         </div>
-
       </div>
     </div>
-
-
-    <div class="row mt-3" v-if="noResults">
-      <div class="col">
-        <p>
-          {{ $t('add.errors.noResults1') }}
-          <b>
-            <router-link :to="{ path: '/' + module + '/add' }">{{ $t(module + '.addNew') }}</router-link>
-          </b>
-          {{ $t('add.errors.noResults2') }}
-        </p>
-      </div>
-    </div>
-
   </div>
 </template>
 
 <script>
-  import Spinner from 'vue-simple-spinner'
-  import Datepicker from 'vue2-datepicker'
-  import ExportButtons from "../components/partial/export/ExportButtons";
-  import ListView from "../components/partial/ListView";
-  import AlternativeTableView from "../components/reference/AlternativeTableView";
-  import AlternativeTableControls from "../components/reference/AlternativeTableControls";
-  import ChooseActiveLibrary from "../components/partial/ChooseActiveLibrary";
-  import {fetchChangePrivacyState} from "../assets/js/api/apiCalls";
-  import {toastError, toastSuccess} from "../assets/js/iziToast/iziToast";
+import ExportButtons from "../components/partial/export/ExportButtons";
+import ListView from "../components/partial/ListView";
+import AlternativeTableView from "../components/reference/AlternativeTableView";
+import AlternativeTableControls from "../components/reference/AlternativeTableControls";
+import { fetchChangePrivacyState } from "../assets/js/api/apiCalls";
+import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 
-
-  export default {
-    components: {
-      ChooseActiveLibrary,
-      AlternativeTableControls,
-      AlternativeTableView,
-      Spinner,
-      Datepicker,
-      ExportButtons,
-      ListView
+export default {
+  components: {
+    AlternativeTableControls,
+    AlternativeTableView,
+    ExportButtons,
+    ListView
+  },
+  props: {
+    apiCall: {
+      type: Function
     },
-    props: {
-      apiCall: {
-        type: Function
-      },
-      columns: {
-        type: Array,
-        default: []
-      },
-      module: {
-        type: String,
-        default: null
-      },
-      title: {
-        type: String,
-        default: null
-      },
-      searchParameters: {
-        type: Object
-      },
-      searchHistory: {
-        type: String,
-        default: null
-      },
-      viewType: {
-        type: String,
-        default: null
-      },
-
-      showFilters: {
-        type: Boolean,
-        default: false
-      },
-
-      multiOrdering: {
-        type: Boolean,
-        default: false
-      },
-
-      exportButtons: {
-        type: Boolean,
-        default: false,
-      },
-
-      useListView: {
-        type: Boolean,
-        default: false,
-      },
-
-      useAlternativeTableView: {
-        type: Boolean,
-        default: false,
-      },
-
-      combinedView: {
-        type: Boolean,
-        default: false,
-      },
-
-      isLibraryActive: {
-        type: Boolean,
-      }
-
-    },
-    name: "ListModuleCore",
-    data() {
-      return {
-        noResults: null,
-        isLoading: false,
-        response: {
-          count: 0,
-          results: []
-        },
-        currentView: 'table',
-        alternativeTableControls: this.setDefaultAlternativeTableControls(),
+    columns: {
+      type: Array,
+      default: function() {
+        return [];
       }
     },
-
-    metaInfo() {
-      return {
-        title: this.$t(this.title)
-      }
+    module: {
+      type: String,
+      default: null
+    },
+    title: {
+      type: String,
+      default: null
+    },
+    searchParameters: {
+      type: Object
+    },
+    searchHistory: {
+      type: String,
+      default: null
+    },
+    viewType: {
+      type: String,
+      default: null
     },
 
-    computed: {
-      sort() {
-        return faSort
-      },
-
-      sortingDirection() {
-        return this.searchParameters.orderBy.includes('-') ? faSortDown : faSortUp
-      },
-
-      isTableView() {
-        // true and false checks are put just in case, because of migrating from old viewType value page didn't show table.
-        // Clear filtering button fixes it but just in case
-        return this.currentView === 'table' || this.currentView === 'false' || this.currentView === 'true' || typeof this.currentView === 'boolean'
-      },
-
-      isListView() {
-        return this.currentView === 'list'
-      },
-
-      isAlternativeTable() {
-        return this.currentView === 'alternativeTable'
-      },
-
-      // Special use case for references (choosing reference to active library).
-      activeColumns() {
-        return this.columns.filter(column => {
-          if (column.type !== 'ACTIVE_LIBRARY_HEADER') {
-            return column
-          } else if (column.type === 'ACTIVE_LIBRARY_HEADER' && this.isLibraryActive) {
-            return column
-          }
-        })
-      }
-
-    },
-    watch: {
-      'searchParameters': {
-        handler: function () {
-          this.search(this.searchParameters)
-        },
-        deep: true
-      },
-      'currentView'(newVal, oldVal) {
-        this.$localStorage.set(this.viewType, newVal)
-      }
+    showFilters: {
+      type: Boolean,
+      default: false
     },
 
-    created: function () {
-      const searchHistory = this.$localStorage.get(this.searchHistory, 'fallbackValue')
-
-      if (searchHistory !== 'fallbackValue' && Object.keys(searchHistory).length !== 0 && searchHistory.constructor === Object) {
-        this.$emit('search-params-changed',searchHistory);
-      } else {
-        this.search(this.searchParameters)
-      }
-
-      let viewingType = this.$localStorage.get(this.viewType, 'table')
-      // Changes old boolean value to correct string (maybe make the storage value into object or something?)
-      if (viewingType === 'false' || viewingType === 'true' || typeof viewingType === 'boolean') this.currentView = 'table'
-      else this.currentView = viewingType
+    multiOrdering: {
+      type: Boolean,
+      default: false
     },
 
-    methods: {
-      search(searchParameters) {
+    exportButtons: {
+      type: Boolean,
+      default: false
+    },
 
-        this.isLoading = true
-        //I don't know how to check if an object is serializable... at least i haven't found the solution
-        //sample search returns [object Object] but locality object {locality:null,...}
-        // if(this.searchHistory === 'sampleSearchHistory') searchParameters = JSON.stringify(searchParameters);
-        this.$localStorage.set(this.searchHistory,  searchParameters)
-        this.$emit('search-params-changed',searchParameters);
+    useListView: {
+      type: Boolean,
+      default: false
+    },
 
-        this.apiCall().then(response => {
-          if (response.status === 200) {
-            if (response.body.count === 0) this.noResults = true
-            if (response.body.count > 0) this.noResults = false
-            this.response.count = response.body.count
-            this.response.results = response.body.results
-          }
-          this.isLoading = false
-        }, errResponse => {
-          this.isLoading = false
-        })
+    useAlternativeTableView: {
+      type: Boolean,
+      default: false
+    },
+
+    combinedView: {
+      type: Boolean,
+      default: false
+    },
+
+    isLibraryActive: {
+      type: Boolean
+    }
+  },
+  name: "ListModuleCore",
+  data() {
+    return {
+      paginateByOptions: [
+        { text: "main.pagination", value: 10 },
+        { text: "main.pagination", value: 25 },
+        { text: "main.pagination", value: 50 },
+        { text: "main.pagination", value: 100 },
+        { text: "main.pagination", value: 250 },
+        { text: "main.pagination", value: 500 },
+        { text: "main.pagination", value: 1000 }
+      ],
+      filterTable: "",
+      noResults: null,
+      isLoading: false,
+      response: {
+        count: 0,
+        results: []
       },
+      currentView: "table",
+      alternativeTableControls: this.setDefaultAlternativeTableControls()
+    };
+  },
 
-      changeOrder(orderValue) {
-        if (this.searchParameters.orderBy === orderValue) {
-          if (orderValue.charAt(0) !== '-') {
-            orderValue = '-' + orderValue;
-          } else {
-            orderValue = orderValue.substring(1);
-          }
-        }
-        let searchParametes = this.searchParameters;
-        searchParametes.page = 1;
-        searchParametes.orderBy = orderValue;
-        this.$emit('search-params-changed',searchParametes);
-      },
+  metaInfo() {
+    return {
+      title: this.$t(this.title)
+    };
+  },
 
-
-
-      /* MULTI ORDERING CODE START */
-
-      changeOrderMulti(field) {
-        let searchParametes = this.searchParameters;
-
-        // Change string to array
-        if (typeof searchParametes.orderBy === "string") searchParametes.orderBy = searchParametes.orderBy.split()
-
-        if (searchParametes.orderBy.includes(field)) {
-          // Ascending
-          this.$set(searchParametes.orderBy, searchParametes.orderBy.indexOf(field), '-' + field);
-
-        } else if (searchParametes.orderBy.includes('-' + field)) {
-          // Descending
-          this.$set(searchParametes.orderBy, searchParametes.orderBy.indexOf('-' + field), field);
-
-        } else {
-
-          if (searchParametes.orderBy.length > 1) {
-            // Removes first and adds field
-            searchParametes.orderBy.shift();
-            searchParametes.orderBy.push(field);
-          } else {
-            // Just adds field
-            searchParametes.orderBy.push(field)
-          }
-        }
-
-        // Move it up if it starts to trigger multiple requests
-        searchParametes.page = 1;
-        this.$emit('search-params-changed',searchParametes);
-      },
-
-      // Returns 1 for ascending, -1 for descending and 0 if not in orderBy
-      isFieldInOrderBy(field) {
-        let searchParametes = this.searchParameters
-
-        // Change string to array
-        if (typeof searchParametes.orderBy === "string") searchParametes.orderBy = searchParametes.orderBy.split()
-
-        for (const i in searchParametes.orderBy) {
-          if (searchParametes.orderBy[i] === field) {
-            return 1;
-          }
-          if (searchParametes.orderBy[i] === '-' + field) {
-            return -1
-          }
-        }
-        return 0;
-      },
-
-      removeOrder(field) {
-        let searchParametes = this.searchParameters;
-
-        // Change string to array (this should already be array, but just in case)
-        if (typeof searchParametes.orderBy === "string") searchParametes.orderBy = searchParametes.orderBy.split()
-
-        // Removing is not possible if there is only 1 field
-        if (searchParametes.orderBy.length > 1) {
-          if (searchParametes.orderBy.includes(field)) {
-            searchParametes.orderBy.splice(searchParametes.orderBy.indexOf(field), 1)
-            this.$emit('search-params-changed',searchParametes);
-          } else if (searchParametes.orderBy.includes('-' + field)) {
-            searchParametes.orderBy.splice(searchParametes.orderBy.indexOf('-' + field), 1)
-            this.$emit('search-params-changed',searchParametes);
-          }
-        }
-      },
-
-      /* MULTI ORDERING CODE END */
-
-
-
-      setDefaultAlternativeTableControls() {
+  computed: {
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
         return {
-          height: '4',
-          width: '8',
-          size: '14',
-          fields: (this.response && this.response.results && this.response.results.length > 0) ? Object.keys(this.response.results[0]) : []
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
+      });
+    },
+
+    isTableView() {
+      // true and false checks are put just in case, because of migrating from old viewType value page didn't show table.
+      // Clear filtering button fixes it but just in case
+      return (
+        this.currentView === "table" ||
+        this.currentView === "false" ||
+        this.currentView === "true" ||
+        typeof this.currentView === "boolean"
+      );
+    },
+
+    isListView() {
+      return this.currentView === "list";
+    },
+
+    isAlternativeTable() {
+      return this.currentView === "alternativeTable";
+    },
+
+    // Special use case for references (choosing reference to active library).
+    activeColumns() {
+      return this.columns.filter(column => {
+        if (column.type !== "ACTIVE_LIBRARY_HEADER") {
+          return column;
+        } else if (
+          column.type === "ACTIVE_LIBRARY_HEADER" &&
+          this.isLibraryActive
+        ) {
+          return column;
         }
+      });
+    }
+  },
+  watch: {
+    searchParameters: {
+      handler: function() {
+        this.search(this.searchParameters);
       },
+      deep: true
+    },
+    currentView(newVal) {
+      this.$localStorage.set(this.viewType, newVal);
+    }
+  },
 
-      setDefaultAlternativeTableControlsFromResetButton() {
-        this.alternativeTableControls = this.setDefaultAlternativeTableControls()
-      },
+  created: function() {
+    const searchHistory = this.$localStorage.get(
+      this.searchHistory,
+      "fallbackValue"
+    );
 
-      // Deletes local storage value + resets search parameters to default
-      deleteSearchPreferences() {
-        this.$localStorage.remove(this.searchHistory);
-        this.$localStorage.remove(this.viewType);
-        this.$emit('set-default-search-params', true, this.multiOrdering);
-        this.currentView = 'table'
-      },
+    if (
+      searchHistory !== "fallbackValue" &&
+      Object.keys(searchHistory).length !== 0 &&
+      searchHistory.constructor === Object
+    ) {
+      this.$emit("search-params-changed", searchHistory);
+    } else {
+      this.search(this.searchParameters);
+    }
 
-      changeObjectsPrivacyState(state, id) {
-        let formData = new FormData();
-        formData.append('data', JSON.stringify({is_private: state}));
+    let viewingType = this.$localStorage.get(this.viewType, "table");
+    // Changes old boolean value to correct string (maybe make the storage value into object or something?)
+    if (
+      viewingType === "false" ||
+      viewingType === "true" ||
+      typeof viewingType === "boolean"
+    )
+      this.currentView = "table";
+    else this.currentView = viewingType;
+  },
 
-        fetchChangePrivacyState(this.module, id, formData).then(response => {
+  methods: {
+    search(searchParameters) {
+      this.isLoading = true;
+      //I don't know how to check if an object is serializable... at least i haven't found the solution
+      //sample search returns [object Object] but locality object {locality:null,...}
+      // if(this.searchHistory === 'sampleSearchHistory') searchParameters = JSON.stringify(searchParameters);
+      this.$localStorage.set(this.searchHistory, searchParameters);
+      this.$emit("search-params-changed", searchParameters);
+
+      this.apiCall().then(
+        response => {
+          if (response.status === 200) {
+            if (response.body.count === 0) this.noResults = true;
+            if (response.body.count > 0) this.noResults = false;
+            this.response.count = response.body.count;
+            this.response.results = response.body.results;
+          }
+          this.isLoading = false;
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+    },
+
+    changeOrder(orderValue) {
+      if (this.searchParameters.orderBy === orderValue) {
+        if (orderValue.charAt(0) !== "-") {
+          orderValue = "-" + orderValue;
+        } else {
+          orderValue = orderValue.substring(1);
+        }
+      }
+      let searchParametes = this.searchParameters;
+      searchParametes.page = 1;
+      searchParametes.orderBy = orderValue;
+      this.$emit("search-params-changed", searchParametes);
+    },
+
+    /* MULTI ORDERING CODE START */
+
+    changeOrderMulti(field) {
+      let searchParametes = this.searchParameters;
+
+      // Change string to array
+      if (typeof searchParametes.orderBy === "string")
+        searchParametes.orderBy = searchParametes.orderBy.split();
+
+      if (searchParametes.orderBy.includes(field)) {
+        // Ascending
+        this.$set(
+          searchParametes.orderBy,
+          searchParametes.orderBy.indexOf(field),
+          "-" + field
+        );
+      } else if (searchParametes.orderBy.includes("-" + field)) {
+        // Descending
+        this.$set(
+          searchParametes.orderBy,
+          searchParametes.orderBy.indexOf("-" + field),
+          field
+        );
+      } else {
+        if (searchParametes.orderBy.length > 1) {
+          // Removes first and adds field
+          searchParametes.orderBy.shift();
+          searchParametes.orderBy.push(field);
+        } else {
+          // Just adds field
+          searchParametes.orderBy.push(field);
+        }
+      }
+
+      // Move it up if it starts to trigger multiple requests
+      searchParametes.page = 1;
+      this.$emit("search-params-changed", searchParametes);
+    },
+
+    // Returns 1 for ascending, -1 for descending and 0 if not in orderBy
+    isFieldInOrderBy(field) {
+      let searchParametes = this.searchParameters;
+
+      // Change string to array
+      if (typeof searchParametes.orderBy === "string")
+        searchParametes.orderBy = searchParametes.orderBy.split();
+
+      for (const i in searchParametes.orderBy) {
+        if (searchParametes.orderBy[i] === field) {
+          return 1;
+        }
+        if (searchParametes.orderBy[i] === "-" + field) {
+          return -1;
+        }
+      }
+      return 0;
+    },
+
+    removeOrder(field) {
+      let searchParametes = this.searchParameters;
+
+      // Change string to array (this should already be array, but just in case)
+      if (typeof searchParametes.orderBy === "string")
+        searchParametes.orderBy = searchParametes.orderBy.split();
+
+      // Removing is not possible if there is only 1 field
+      if (searchParametes.orderBy.length > 1) {
+        if (searchParametes.orderBy.includes(field)) {
+          searchParametes.orderBy.splice(
+            searchParametes.orderBy.indexOf(field),
+            1
+          );
+          this.$emit("search-params-changed", searchParametes);
+        } else if (searchParametes.orderBy.includes("-" + field)) {
+          searchParametes.orderBy.splice(
+            searchParametes.orderBy.indexOf("-" + field),
+            1
+          );
+          this.$emit("search-params-changed", searchParametes);
+        }
+      }
+    },
+
+    /* MULTI ORDERING CODE END */
+
+    setDefaultAlternativeTableControls() {
+      return {
+        height: "4",
+        width: "8",
+        size: "14",
+        fields:
+          this.response &&
+          this.response.results &&
+          this.response.results.length > 0
+            ? Object.keys(this.response.results[0])
+            : []
+      };
+    },
+
+    setDefaultAlternativeTableControlsFromResetButton() {
+      this.alternativeTableControls = this.setDefaultAlternativeTableControls();
+    },
+
+    // Deletes local storage value + resets search parameters to default
+    deleteSearchPreferences() {
+      this.$localStorage.remove(this.searchHistory);
+      this.$localStorage.remove(this.viewType);
+      this.$emit("set-default-search-params", true, this.multiOrdering);
+      this.currentView = "table";
+    },
+
+    changeObjectsPrivacyState(state, id) {
+      let formData = new FormData();
+      formData.append("data", JSON.stringify({ is_private: state }));
+
+      fetchChangePrivacyState(this.module, id, formData).then(
+        response => {
           if (response && response.body) {
-            if (this.$i18n.locale === 'ee') {
-              if (response.body.message_et) toastSuccess({text: response.body.message_et});
-              else if (response.body.error_et) toastError({text: response.body.error_et});
+            if (this.$i18n.locale === "ee") {
+              if (response.body.message_et)
+                toastSuccess({ text: response.body.message_et });
+              else if (response.body.error_et)
+                toastError({ text: response.body.error_et });
             } else {
-              if (response.body.message) toastSuccess({text: response.body.message});
-              else if (response.body.error) toastError({text: response.body.error});
+              if (response.body.message)
+                toastSuccess({ text: response.body.message });
+              else if (response.body.error)
+                toastError({ text: response.body.error });
             }
           }
-        }, errResponse => {
-          if (errResponse && errResponse.body && errResponse.body.error) toastError({text: errResponse.body.error});
-          toastError({text: this.$t('messages.uploadError')})
-        })
-      }
+        },
+        errResponse => {
+          if (errResponse && errResponse.body && errResponse.body.error)
+            toastError({ text: errResponse.body.error });
+          toastError({ text: this.$t("messages.uploadError") });
+        }
+      );
     }
   }
+};
 </script>
 <style scoped>
-  .badge-style > span {
-    padding-left: 0.4em;
-    padding-right: 0.4em;
-  }
+.badge-style > span {
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}
 
-  .font-larger {
-    font-size: larger;
-  }
+.font-larger {
+  font-size: larger;
+}
 
-  .nowrap {
-    white-space: nowrap;
-  }
+.nowrap {
+  white-space: nowrap;
+}
 
-  .break-all-words {
-    word-break: break-all;
-  }
+.break-all-words {
+  word-break: break-all;
+}
 
-  .th-sort > th > span {
-    cursor: pointer;
-  }
+.th-sort > th > span {
+  cursor: pointer;
+}
 
-  .th-sort > th > span:hover {
-    color: #000;
-  }
+.th-sort > th > span:hover {
+  color: #000;
+}
 
-  .fa-sort-up, .fa-sort-down {
-    color: #007bff;
-  }
+.fa-sort-up,
+.fa-sort-down {
+  color: #007bff;
+}
 
-  /* Fixes table so scrolling happens inside table */
-  .fixed-table {
-    max-height: 65vh;
-  }
+/* Fixes table so scrolling happens inside table */
+.fixed-table {
+  max-height: 65vh;
+}
 
-  /* Sticky header for responsive table */
-  .sticky-header th {
-    position: sticky;
-    position: -webkit-sticky;
-    top:0;
-    outline: 1px solid #dee2e6;
-    outline-offset: -1px;
-    box-shadow: 0 2px 0 #cfd5db;
-  }
+/* Sticky header for responsive table */
+.sticky-header th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  outline: 1px solid #dee2e6;
+  outline-offset: -1px;
+  box-shadow: 0 2px 0 #cfd5db;
+}
 
-  .radio-buttons >>> .form-group {
-    margin-bottom: unset;
-  }
+.radio-buttons >>> .form-group {
+  margin-bottom: unset;
+}
+
+.radio-buttons >>> .v-label {
+  margin-bottom: 0;
+}
 </style>

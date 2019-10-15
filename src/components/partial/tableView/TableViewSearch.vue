@@ -1,15 +1,15 @@
 <template>
   <v-row class="table-view-search" v-if="filters.length > 0">
-    <v-col>
+    <v-col class="py-4">
       <v-card elevation="3">
         <v-card-title class="pb-0">
           <span>{{ $t("edit.search") }}&nbsp;</span>
-          <v-icon color="blue darken-2">fas fa-search</v-icon>
+          <v-icon color="deep-orange">fas fa-search</v-icon>
           <v-spacer></v-spacer>
           <v-btn
             icon
             @click="$emit('update:showSearch', !showSearch)"
-            color="blue"
+            color="deep-orange"
           >
             <v-icon>{{
               showSearch ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -39,6 +39,7 @@
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
+                        dense
                         v-model="searchParameters[field.id]"
                         :label="$t(field.title)"
                         prepend-inner-icon="far fa-calendar-alt"
@@ -57,9 +58,10 @@
 
                   <v-text-field
                     v-else
+                    dense
                     v-model="searchParameters[field.id]"
                     :label="$t(field.title)"
-                    color="blue darken-2"
+                    color="deep-orange"
                     :type="field.type"
                   ></v-text-field>
                 </v-col>
@@ -76,7 +78,7 @@
                       :label="$t('attachment.photoArchive')"
                       value="2"
                       class="mt-0 pr-6"
-                      color="blue darken-2"
+                      color="deep-orange"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
@@ -84,7 +86,7 @@
                       :label="$t('attachment.specimenImage')"
                       value="1"
                       class="mt-0 pr-6"
-                      color="blue darken-2"
+                      color="deep-orange"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
@@ -92,7 +94,7 @@
                       :label="$t('attachment.otherFiles')"
                       value="3"
                       class="mt-0 pr-6"
-                      color="blue darken-2"
+                      color="deep-orange"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
@@ -100,7 +102,7 @@
                       :label="$t('attachment.digitisedReference')"
                       value="4"
                       class="mt-0"
-                      color="blue darken-2"
+                      color="deep-orange"
                       hide-details
                     ></v-checkbox>
                   </v-row>
@@ -117,14 +119,14 @@
                       v-model="searchParameters.isEstonianReference"
                       :label="$t('reference.is_estonian_reference')"
                       class="mt-0 pr-6"
-                      color="blue darken-2"
+                      color="deep-orange"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
                       v-model="searchParameters.isEstonianAuthor"
                       :label="$t('reference.is_estonian_author')"
                       class="mt-0"
-                      color="blue darken-2"
+                      color="deep-orange"
                       hide-details
                     ></v-checkbox>
                   </v-row>

@@ -28,7 +28,7 @@
 
     <!-- HELP -->
     <v-row id="block-help">
-      <v-col>
+      <v-col class="py-6">
         <v-card elevation="3">
           <v-card-title>
             <span>{{ $t("frontPage.help") }}&nbsp;</span>
@@ -57,7 +57,8 @@
                   <a
                     href="https://github.com/geocollections/sarv-edit"
                     target="HelpLink"
-                    ><i class="fab fa-github"></i> https://github.com/geocollections/sarv-edit</a
+                    ><i class="fab fa-github"></i>
+                    https://github.com/geocollections/sarv-edit</a
                   >
                   või kirjuta:
                   <a href="mailto:olle.hints@taltech.ee"

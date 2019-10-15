@@ -1,118 +1,214 @@
 <template>
-  <tbody v-if="response.count > 0">
-  <tr v-for="entity in response.results">
+  <v-data-table
+    class="reference-table"
+    :headers="translatedHeaders"
+    dense
+    hide-default-footer
+    :items="response.results"
+    :items-per-page="searchParameters.paginateBy"
+    multi-sort
+    :page="searchParameters.page"
+    :search="filter"
+    expand-icon="fas fa-caret-down"
+  >
+    <template v-slot:header.is_estonian_author="{ item }">
+      <span> EE <v-icon x-small>fas fa-user</v-icon> </span>
+    </template>
 
-    <td>
-      <router-link :to="{ path: '/reference/' + entity.id }" :title="$t('editReference.editMessage')">{{
-        entity.id }}
+    <template v-slot:item.id="{ item }">
+      <router-link
+        :to="{ path: '/reference/' + item.id }"
+        :title="$t('editReference.editMessage')"
+        class="sarv-link"
+        >{{ item.id }}</router-link
+      >
+    </template>
+
+    <template v-slot:item.journal="{ item }">
+      <router-link
+        :to="{ path: '/journal/' + item.journal }"
+        :title="$t('editJournal.editMessage')"
+        class="sarv-link"
+        v-if="item.journal"
+      >
+        <span v-if="item.journal__journal_name">{{
+          item.journal__journal_name
+        }}</span>
+        <span v-else-if="item.journal_name">{{ item.journal_name }}</span>
       </router-link>
-    </td>
+    </template>
 
-    <td>{{ entity.author }}</td>
+    <template v-slot:item.is_estonian_reference="{ item }">
+      <v-icon v-if="item.is_estonian_reference" small>fas fa-check</v-icon>
+    </template>
 
-    <td>{{ entity.year }}</td>
+    <template v-slot:item.is_estonian_author="{ item }">
+      <v-icon v-if="item.is_estonian_author" small>fas fa-check</v-icon>
+    </template>
 
-    <td>{{ entity.title }}</td>
+    <template v-slot:item.link="{ item }">
+      <v-btn
+        v-if="!item.is_private"
+        :href="getGeoDetailUrl({ object: 'reference', id: item.id })"
+        :title="$t('editReference.viewMessage')"
+        color="deep-orange"
+        target="GeocollectionsWindow"
+        icon
+      >
+        <v-icon>far fa-eye</v-icon>
+      </v-btn>
+    </template>
 
-    <td>
-      <div v-if="entity.journal__journal_name">{{ entity.journal__journal_name }}</div>
-      <div v-else-if="entity.journal_name">{{ entity.journal_name }}</div>
-    </td>
+    <template v-slot:item.doi="{ item }">
+      <a
+        v-if="item.doi"
+        :href="getDoiUrl(item.doi)"
+        :title="getDoiUrl(item.doi)"
+        class="sarv-link"
+        target="DoiWindow"
+        >DOI</a
+      >
+    </template>
 
-    <td>{{ entity.volume }}</td>
+    <template v-slot:item.attachment__filename="{ item }">
+      <v-btn
+        v-if="item.attachment__filename"
+        :href="getFileUrl(item.attachment__filename)"
+        :title="getFileUrl(item.attachment__filename)"
+        color="deep-orange"
+        target="FileWindow"
+        icon
+      >
+        <v-icon>far fa-file-pdf</v-icon>
+      </v-btn>
+    </template>
 
-    <td>{{ entity.pages }}</td>
+    <template v-slot:item.url="{ item }">
+      <v-btn
+        v-if="item.url && getUrl(item.url)"
+        :href="getUrl(item.url)"
+        :title="getUrl(item.url)"
+        color="deep-orange"
+        target="UrlWindow"
+        rel="noopener noreferrer"
+        icon
+      >
+        <v-icon>fas fa-external-link-alt</v-icon>
+      </v-btn>
+    </template>
 
-    <td class="middle">
-      <i v-if="entity.is_estonian_reference" class="fas fa-check fa"></i>
-    </td>
-
-    <td class="middle">
-      <i v-if="entity.is_estonian_author" class="fas fa-check fa"></i>
-    </td>
-
-<!--    <td class="middle">-->
-<!--      <vs-checkbox id="is_private"-->
-<!--                   v-model="entity.is_private"-->
-<!--                   @input="$emit('toggle-privacy-state', entity.is_private, entity.id)"-->
-<!--                   icon="fa-lock"-->
-<!--                   icon-pack="fas">-->
-<!--      </vs-checkbox>-->
-<!--    </td>-->
-
-    <td>
-      <a v-if="!entity.is_private" href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.id})"
-         :title="$t('editReference.viewMessage')">{{ $t('edit.view') }}</a>
-    </td>
-
-    <td>
-      <a v-if="entity.doi" href="javascript:void(0)" @click="openDOI({doi: entity.doi})">DOI</a>
-      <a v-else-if="entity.doi_url" href="javascript:void(0)" @click="openDOI({doi: entity.doi_url})">DOI</a>
-    </td>
-
-    <td class="middle">
-      <a v-if="entity.attachment__filename" href="javascript:void(0)" @click="openPdf({pdf: entity.attachment__filename})">
-        <i class="far fa-file-pdf fa-lg" :title="entity.attachment__filename"></i>
-      </a>
-    </td>
-
-    <td class="middle">
-      <a v-if="entity.url && getUrl(entity.url) !== false" :href="getUrl(entity.url)" target="_blank" rel="noopener noreferrer">
-        <i class="fas fa-external-link-alt fa-lg" :title="entity.url"></i>
-      </a>
-    </td>
-
-    <td v-if="isLibraryActive" @click="$parent.$emit('add-reference-to-active-library', entity.id)" class="add-library" :title="$t('reference.addReferenceToLibrary')">
-      <i class="far fa-plus-square fa-lg"></i>
-    </td>
-
-  </tr>
-  </tbody>
+    <template v-slot:item.library="{ item }">
+      <v-btn
+        v-if="isLibraryActive"
+        @click="$emit('add-reference-to-active-library', item.id)"
+        :title="$t('reference.addReferenceToLibrary')"
+        color="green"
+        icon
+      >
+        <v-icon>far fa-plus-square</v-icon>
+      </v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-  import formManipulation from '../../mixins/formManipulation'
+import formManipulation from "../../mixins/formManipulation";
 
-  export default {
-    mixins: [formManipulation],
-    name: "ReferenceTable",
-    props: {
-      response: {
-        type: Object
-      },
-      isLibraryActive: {
-        type: Boolean
-      }
+export default {
+  mixins: [formManipulation],
+  name: "ReferenceTable",
+  props: {
+    response: {
+      type: Object
     },
-    methods: {
-      getUrl(url) {
-        if (url.startsWith('http')) return url
-        else if (url.startsWith('www.')) return 'http://' + url
-        else if (url.includes('www.')) return 'http://' + url.substring(url.indexOf('www.'))
-        else return false
+    isLibraryActive: {
+      type: Boolean
+    },
+    filter: {
+      type: String,
+      required: false
+    },
+    searchParameters: {
+      type: Object,
+      required: true,
+      default: function() {
+        return {
+          page: 1,
+          paginateBy: 25
+        };
       }
     }
+  },
+  data: () => ({
+    expanded: [],
+    headers: [
+      { text: "reference.id", value: "id" },
+      { text: "reference.author", value: "author" },
+      { text: "reference.year", value: "year" },
+      { text: "reference.title", value: "title" },
+      { text: "reference.journal", value: "journal" },
+      { text: "reference.volume", value: "volume" },
+      { text: "reference.pages_short", value: "pages" },
+      {
+        text: "reference.is_estonian_reference_short",
+        value: "is_estonian_reference"
+      },
+      {
+        text: "reference.is_estonian_author_short",
+        value: "is_estonian_author"
+      },
+      { text: "", value: "link", sortable: false },
+      { text: "reference.doi", value: "doi" },
+      { text: "reference.pdf", value: "attachment__filename" },
+      { text: "reference.url", value: "url" },
+      { text: "reference.library_short", value: "library", sortable: false }
+    ]
+  }),
+  computed: {
+    translatedHeaders() {
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(item => {
+          if (this.isLibraryActive) return item;
+          else if (item.value !== "library") return item;
+        });
+    }
+  },
+  methods: {
+    getGeoDetailUrl(params) {
+      return `https://geocollections.info/${params.object}/${params.id}`;
+    },
 
+    getDoiUrl(doi) {
+      return `https://doi.org/${doi}`;
+    },
+
+    getFileUrl(uuid) {
+      return `https://files.geocollections.info/${uuid.substring(
+        0,
+        2
+      )}/${uuid.substring(2, 4)}/${uuid}`;
+    },
+
+    getUrl(url) {
+      if (url.startsWith("http")) return url;
+      else if (url.startsWith("www.")) return "http://" + url;
+      else if (url.includes("www."))
+        return "http://" + url.substring(url.indexOf("www."));
+      else return false;
+    }
   }
+};
 </script>
 
-<style scoped>
-  .add-library {
-    text-align: center;
-    vertical-align: middle;
-    color: #28a745;
-    transition: background-color 300ms linear;
-  }
-
-  .add-library:hover {
-    cursor: pointer;
-    background-color: rgba(40, 167, 69, 0.2);
-    transition: background-color 300ms linear;
-  }
-
-  .middle {
-    text-align: center;
-    vertical-align: middle;
-  }
-
+<style>
+.reference-table.v-data-table td,
+.reference-table.v-data-table th {
+  padding: 0 8px;
+}
 </style>
