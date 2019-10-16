@@ -1331,7 +1331,8 @@
     "homePage": "Pealeht",
     "lockSidebar": "Lukusta külgriba",
     "unlockSidebar": "Ava külgriba",
-    "downloadRIS": "Ekspordi RIS"
+    "downloadRIS": "Ekspordi RIS",
+    "search": "Otsi"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",

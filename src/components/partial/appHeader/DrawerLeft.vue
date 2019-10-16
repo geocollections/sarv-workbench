@@ -3,8 +3,6 @@
     :value="drawerState"
     app
     clipped
-    color="blue-grey"
-    dark
     @input="changeDrawerState"
     mobile-break-point="992"
     disable-resize-watcher
@@ -65,11 +63,10 @@
             v-for="(link, index) in entity.links"
             :to="{ path: link.path }"
             :key="index"
-            class="pl-4"
-            color="black"
+            color="deep-orange"
             exact
           >
-            <v-list-item-title
+            <v-list-item-title style="white-space: unset"
               v-text="$t(`header.${link.title}`)"
             ></v-list-item-title>
             <v-list-item-icon>

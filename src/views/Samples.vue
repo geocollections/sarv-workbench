@@ -70,6 +70,18 @@ export default {
   computed: {
     ...mapState(["currentUser", "databaseId"])
   },
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "sample",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
   methods: {
     fetchSamples() {
       return new Promise(resolve => {

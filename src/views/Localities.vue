@@ -59,6 +59,19 @@ export default {
       block: { search: true }
     };
   },
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "locality",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchLocalities() {
       return new Promise(resolve => {

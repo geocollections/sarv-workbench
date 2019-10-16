@@ -28,6 +28,7 @@
                   :key="index"
                   class="py-0"
                 >
+                  <!-- DATEPICKER -->
                   <v-menu
                     v-if="field.isDate"
                     v-model="field.calendarState"
@@ -43,6 +44,7 @@
                         v-model="searchParameters[field.id]"
                         :label="$t(field.title)"
                         prepend-inner-icon="far fa-calendar-alt"
+                        color="deep-orange"
                         clearable
                         clear-icon="fas fa-times"
                         readonly
@@ -52,10 +54,13 @@
                     <v-date-picker
                       v-model="searchParameters[field.id]"
                       @input="field.calendarState = false"
+                      color="deep-orange"
+                      header-color="blue"
                       scrollable
                     ></v-date-picker>
                   </v-menu>
 
+                  <!-- REGULAR SEARCH FIELD -->
                   <v-text-field
                     v-else
                     dense
@@ -67,6 +72,7 @@
                 </v-col>
               </v-row>
 
+              <!-- ATTACHMENT CHECKBOXES -->
               <v-row
                 class="px-3 checkboxes"
                 v-if="$route.meta.object === 'attachment'"
@@ -109,6 +115,7 @@
                 </v-col>
               </v-row>
 
+              <!-- REFERENCE CHECKBOXES -->
               <v-row
                 class="px-3 checkboxes"
                 v-if="$route.meta.object === 'reference'"

@@ -78,6 +78,19 @@ export default {
     };
   },
 
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "keyword",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchKeywords() {
       return new Promise(resolve => {

@@ -7,8 +7,6 @@ const api = {
   url: 'https://rwapi.geocollections.info/',
   checkDoiUrl: 'https://api.crossref.org/works/',
   solrUrl: 'https://api.geocollections.info/solr/',
-  dataciteTestUrl: 'https://api18rw.geocollections.info/',
-  egfApi: 'https://tarkvara.datel.ee/fond/'
 };
 
 async function get(child = "", customUrl) {

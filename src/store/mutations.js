@@ -89,5 +89,12 @@ export default {
     } else {
       Vue.set(state, "shortcuts", []);
     }
+  },
+
+  UPDATE_SEARCH_PARAMETERS(state, payload) {
+    Vue.set(state.tableSearchParameters, payload.module, {
+      searchParameters: payload.params,
+      filters: payload.filters
+    });
   }
 };

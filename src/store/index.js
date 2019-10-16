@@ -15,6 +15,7 @@ export function createStore() {
       activeObject: null,
       sidebarList: [],
       activeSearchParams: null,
+      tableSearchParameters: {},
       sidebarUserAction: null,
       activeLibrary: null,
       activeProject: null,

@@ -102,6 +102,19 @@ export default {
     ...mapState(["databaseId"])
   },
 
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "specimen",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchSpecimens() {
       return new Promise(resolve => {

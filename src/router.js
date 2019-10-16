@@ -67,7 +67,8 @@ const router = new Router({
                 import("./components/attachment/AttachmentTable.vue"),
               meta: {
                 requiresAuth: true,
-                object: "attachment"
+                object: "attachment",
+                isTableView: true,
               }
             }
           ]
@@ -384,7 +385,9 @@ const router = new Router({
               path: "",
               component: () => import("./components/journal/JournalTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "journal",
+                isTableView: true,
               }
             }
           ]
@@ -449,7 +452,9 @@ const router = new Router({
               component: () =>
                 import("./components/locality/LocalityTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "locality",
+                isTableView: true,
               }
             }
           ]
@@ -514,7 +519,9 @@ const router = new Router({
               component: () => import("./components/sample/SampleTable.vue"),
               meta: {
                 requiresAuth: true,
-                table: "sample"
+                table: "sample",
+                object: "sample",
+                isTableView: true,
               }
             }
           ]
@@ -580,7 +587,9 @@ const router = new Router({
               path: "",
               component: () => import("./components/project/ProjectTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "project",
+                isTableView: true,
               }
             }
           ]
@@ -665,7 +674,8 @@ const router = new Router({
               component: () => import("./components/site/SiteTable.vue"),
               meta: {
                 requiresAuth: true,
-                object: "site"
+                object: "site",
+                isTableView: true,
               }
             }
           ]
@@ -732,7 +742,9 @@ const router = new Router({
               path: "",
               component: () => import("./components/library/LibraryTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "library",
+                isTableView: true,
               }
             }
           ]
@@ -796,7 +808,9 @@ const router = new Router({
               path: "",
               component: () => import("./components/doi/DoiTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "doi",
+                isTableView: true,
               }
             }
           ]
@@ -878,7 +892,9 @@ const router = new Router({
               component: () =>
                 import("./components/analysis/AnalysisTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "analysis",
+                isTableView: true,
               }
             }
           ]
@@ -944,7 +960,9 @@ const router = new Router({
               component: () =>
                 import("./components/specimen/SpecimenTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "specimen",
+                isTableView: true,
               }
             }
           ]
@@ -1009,7 +1027,9 @@ const router = new Router({
               path: "",
               component: () => import("./components/keyword/KeywordTable.vue"),
               meta: {
-                requiresAuth: true
+                requiresAuth: true,
+                object: "keyword",
+                isTableView: true,
               }
             }
           ]

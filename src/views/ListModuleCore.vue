@@ -373,6 +373,7 @@ import AlternativeTableView from "../components/reference/AlternativeTableView";
 import AlternativeTableControls from "../components/reference/AlternativeTableControls";
 import { fetchChangePrivacyState } from "../assets/js/api/apiCalls";
 import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
+import debounce from "lodash/debounce";
 
 export default {
   components: {
@@ -558,7 +559,7 @@ export default {
   },
 
   methods: {
-    search(searchParameters) {
+    search: debounce(function(searchParameters) {
       this.isLoading = true;
       //I don't know how to check if an object is serializable... at least i haven't found the solution
       //sample search returns [object Object] but locality object {locality:null,...}
@@ -580,7 +581,7 @@ export default {
           this.isLoading = false;
         }
       );
-    },
+    }, 500),
 
     changeOrder(orderValue) {
       if (this.searchParameters.orderBy === orderValue) {

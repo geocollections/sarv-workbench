@@ -64,6 +64,19 @@ export default {
     };
   },
 
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "journal",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchJournals() {
       return new Promise(resolve => {

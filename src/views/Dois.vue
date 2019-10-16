@@ -78,6 +78,19 @@ export default {
     ...mapState(["databaseId"])
   },
 
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "doi",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchDois() {
       return new Promise(resolve => {

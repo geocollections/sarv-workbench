@@ -106,6 +106,19 @@ export default {
     ...mapState(["currentUser"])
   },
 
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "attachment",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchAttachments() {
       return new Promise(resolve => {

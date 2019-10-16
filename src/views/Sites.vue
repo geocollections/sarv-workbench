@@ -70,8 +70,7 @@ export default {
           id: "date_end",
           title: "site.date_end",
           type: "text",
-          isDate: true,
-          calendarState: false
+          isDate: true
         }
       ],
       filters: [
@@ -84,13 +83,34 @@ export default {
           title: "site.date_start",
           type: "text",
           isDate: true,
-          calendarState: false
+          calendarState: false,
+          calendarStateDrawer: false
         },
-        { id: "date_end", title: "site.date_end", type: "text", isDate: true }
+        {
+          id: "date_end",
+          title: "site.date_end",
+          type: "text",
+          isDate: true,
+          calendarState: false,
+          calendarStateDrawer: false
+        }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
+  },
+
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "site",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
   },
 
   methods: {

@@ -11,7 +11,7 @@ body {
 }
 
 
-/* Todo: Remove after bootstrap integration Added this after vuetify becuase buttons get underline */
+/* Todo: Remove after bootstrap integration Added this after vuetify because buttons get underline */
 a:hover {
   text-decoration: none;
 }
@@ -44,6 +44,29 @@ th.sortable > span:after {
     min-height: 48px;
   }
 }
+
+/* Scrollbar style for drawers START */
+/* width */
+.v-navigation-drawer__content::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.v-navigation-drawer__content::-webkit-scrollbar-track {
+  background: #ECEFF1;
+}
+
+/* Handle */
+.v-navigation-drawer__content::-webkit-scrollbar-thumb {
+  background: #607D8B;
+}
+
+/* Handle on hover */
+.v-navigation-drawer__content::-webkit-scrollbar-thumb:hover {
+  background: #455A64;
+}
+/* Scrollbar style for drawers END */
+
 
 /*********************
  *** HELPERS START ***

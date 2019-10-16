@@ -75,6 +75,19 @@ export default {
     ...mapState(["currentUser"])
   },
 
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "library",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchLibraries() {
       return new Promise(resolve => {

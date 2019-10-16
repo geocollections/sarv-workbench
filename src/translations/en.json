@@ -1331,7 +1331,8 @@
     "homePage": "Home page",
     "lockSidebar": "Lock sidebar",
     "unlockSidebar": "Unlock sidebar",
-    "downloadRIS": "Export to RIS"
+    "downloadRIS": "Export to RIS",
+    "search": "Search"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",

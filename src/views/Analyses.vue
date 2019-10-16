@@ -85,6 +85,19 @@ export default {
     ...mapState(["currentUser", "databaseId"])
   },
 
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "analysis",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
+  },
+
   methods: {
     fetchAnalyses_() {
       return new Promise(resolve => {

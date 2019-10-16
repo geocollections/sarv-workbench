@@ -120,5 +120,9 @@ export default {
 
   SIDEBAR_USER_ACTION: ({ commit }, userAction) => {
     commit("SET_SIDEBAR_USER_ACTION", userAction);
+  },
+
+  updateSearchParameters({ commit }, payload) {
+    commit("UPDATE_SEARCH_PARAMETERS", payload);
   }
 };

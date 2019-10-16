@@ -144,12 +144,17 @@ export default {
     });
   },
 
-  mounted() {
-    window.addEventListener("resize", this.handleResize);
-  },
-
-  beforeDestroy() {
-    window.removeEventListener("resize", this.handleResize);
+  watch: {
+    searchParameters: {
+      handler: function(newVal) {
+        this.$store.dispatch("updateSearchParameters", {
+          module: "reference",
+          filters: this.filters,
+          params: newVal
+        });
+      },
+      deep: true
+    }
   },
 
   methods: {

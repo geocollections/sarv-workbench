@@ -134,16 +134,6 @@ Vue.http.interceptors.push((request, next) => {
         }
       }
     });
-  } else if (request.url.includes("egf-api")) {
-    request.headers.set(
-      "Authorization",
-      "Basic " +
-        window.btoa(
-          process.env.VUE_APP_EGF_API_USER +
-            ":" +
-            process.env.VUE_APP_EGF_API_SECRET
-        )
-    );
   }
 });
 
