@@ -119,7 +119,7 @@
     },
 
     computed: {
-      ...mapState(["currentUser"])
+      ...mapState(["currentUser", "databaseId"])
     },
 
     created() {
@@ -165,6 +165,8 @@
         if (!this.$route.meta.isEdit) this.$localStorage.set('imageset', uploadableObject)
 
         if (this.isNotEmpty(uploadableObject.author)) uploadableObject.author = uploadableObject.author.id ? uploadableObject.author.id : uploadableObject.author;
+
+        if (this.databaseId) uploadableObject.database = this.databaseId;
 
         console.log('This object is sent in string format:')
         console.log(uploadableObject)
