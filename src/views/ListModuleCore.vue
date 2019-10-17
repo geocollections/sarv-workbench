@@ -133,6 +133,7 @@
         ></v-text-field>
       </v-card-title>
 
+      {{filterTable}}
       <router-view
         ref="table"
         :response="response"

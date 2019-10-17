@@ -26,6 +26,30 @@
       </v-col>
     </v-row>
 
+    <!-- MAP -->
+    <v-row>
+      <v-col class="pb-0">
+        <v-card elevation="3">
+          <v-card-title>
+            <span>{{ $t("frontPage.sitesMap") }}&nbsp;</span>
+            <v-icon color="purple lighten-2">fas fa-map-marked-alt</v-icon>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.map = !block.map" color="blue">
+              <v-icon>{{
+                block.map ? "fas fa-angle-up" : "fas fa-angle-down"
+              }}</v-icon>
+            </v-btn>
+          </v-card-title>
+
+          <transition enter-active-class="animated zoomIn faster">
+            <div v-show="block.map">
+              <sites-map />
+            </div>
+          </transition>
+        </v-card>
+      </v-col>
+    </v-row>
+
     <!-- HELP -->
     <v-row id="block-help">
       <v-col class="py-6">
@@ -41,35 +65,32 @@
             </v-btn>
           </v-card-title>
 
-          <v-card-text>
-            <transition enter-active-class="animated zoomIn faster">
-              <div v-show="block.help">
-                <p>
-                  Siinne kasutajaliides on aktiivses arenduses ja muutumises.
-                  Kui mõni funktsioon ei tööta, siis on soovitav kasutada
-                  eelmist stabiilsemat versiooni:
-                  <a href="https://edit.geocollections.info" target="HelpLink"
-                    >https://edit.geocollections.info</a
-                  >.
-                </p>
-                <p>
-                  Vigadest anna teada githubis:
-                  <a
-                    href="https://github.com/geocollections/sarv-edit"
-                    target="HelpLink"
-                    ><i class="fab fa-github"></i>
-                    https://github.com/geocollections/sarv-edit</a
-                  >
-                  või kirjuta:
-                  <a href="mailto:olle.hints@taltech.ee"
-                    ><i class="far fa-envelope"></i> olle.hints@taltech.ee</a
-                  >, või helista:
-                  <a href="tel:5130157"><i class="fas fa-phone"></i> 5130157</a
-                  >.
-                </p>
-              </div>
-            </transition>
-          </v-card-text>
+          <transition enter-active-class="animated zoomIn faster">
+            <v-card-text v-show="block.help">
+              <p>
+                Siinne kasutajaliides on aktiivses arenduses ja muutumises. Kui
+                mõni funktsioon ei tööta, siis on soovitav kasutada eelmist
+                stabiilsemat versiooni:
+                <a href="https://edit.geocollections.info" target="HelpLink"
+                  >https://edit.geocollections.info</a
+                >.
+              </p>
+              <p>
+                Vigadest anna teada githubis:
+                <a
+                  href="https://github.com/geocollections/sarv-edit"
+                  target="HelpLink"
+                  ><i class="fab fa-github"></i>
+                  https://github.com/geocollections/sarv-edit</a
+                >
+                või kirjuta:
+                <a href="mailto:olle.hints@taltech.ee"
+                  ><i class="far fa-envelope"></i> olle.hints@taltech.ee</a
+                >, või helista:
+                <a href="tel:5130157"><i class="fas fa-phone"></i> 5130157</a>.
+              </p>
+            </v-card-text>
+          </transition>
         </v-card>
       </v-col>
     </v-row>
@@ -82,10 +103,12 @@
 import RecentActivity from "./RecentActivity";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
+import SitesMap from "./SitesMap";
 
 export default {
   components: {
-    RecentActivity
+    RecentActivity,
+    SitesMap
   },
   name: "front-page",
   mixins: [formSectionsMixin],
@@ -98,7 +121,7 @@ export default {
 
   data() {
     return {
-      block: { help: true }
+      block: { map: true, help: true }
     };
   },
 

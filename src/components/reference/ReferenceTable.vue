@@ -180,6 +180,10 @@ export default {
     }
   },
   methods: {
+    handleSort(event) {
+      console.log(event)
+      return event
+    },
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
     },

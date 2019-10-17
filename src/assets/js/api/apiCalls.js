@@ -960,6 +960,10 @@ export function fetchLastSiteName(projectId) {
   return fetch(`site/?project=${projectId}&fields=name&order_by=-id&paginate_by=1&format=json`)
 }
 
+export function fetchRecentSites(currentUserId) {
+  return fetch(`site/?project__projectagent__agent=${currentUserId}&order_by=-id&paginate_by=30&fields=name,latitude,longitude,id`)
+}
+
 /******************
  ***  SITE END  ***
  ******************/
