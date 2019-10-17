@@ -106,7 +106,6 @@
     <v-card
       class="table-card my-1"
       :loading="isLoading"
-      v-if="module === 'reference' && isTableView"
     >
       <v-card-title>
         <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
@@ -124,6 +123,7 @@
         </span>
         <div class="flex-grow-1"></div>
         <v-text-field
+          v-if="module === 'reference'"
           v-model="filterTable"
           append-outer-icon="fas fa-search"
           label="Filter records"
@@ -133,39 +133,37 @@
         ></v-text-field>
       </v-card-title>
 
-      {{filterTable}}
       <router-view
         ref="table"
         :response="response"
         :filter="filterTable"
         :search-parameters="searchParameters"
         :is-library-active="isLibraryActive"
-        v-if="isTableView"
+        v-if="module === 'reference' && isTableView"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:add-reference-to-active-library="
           $emit('add-reference-to-active-library', $event)
         "
       />
-    </v-card>
 
-    <!-- TABLE -->
-    <div
-      class="row"
-      v-else-if="(isTableView || isAlternativeTable) && response.count > 0"
-    >
-      <div class="col">
-        <div
-          class="table-responsive"
-          :class="{ 'fixed-table': isAlternativeTable }"
-        >
-          <table
-            id="export-table"
-            class="table table-hover table-bordered b-table-fixed"
+      <!-- TABLE -->
+      <div
+        class="row"
+        v-else-if="(isTableView || isAlternativeTable) && response.count > 0"
+      >
+        <div class="col">
+          <div
+            class="table-responsive mb-0"
+            :class="{ 'fixed-table': isAlternativeTable }"
           >
-            <thead
-              class="thead-light"
-              :class="{ 'sticky-header': isAlternativeTable }"
+            <table
+              id="export-table"
+              class="table table-hover table-bordered b-table-fixed"
             >
+              <thead
+                class="thead-light"
+                :class="{ 'sticky-header': isAlternativeTable }"
+              >
               <tr class="th-sort">
                 <!-- MULTI ORDERING -->
                 <th
@@ -344,26 +342,27 @@
                   ></b-form-input>
                 </th>
               </tr>
-            </thead>
+              </thead>
 
-            <router-view
-              :response="response"
-              :is-library-active="isLibraryActive"
-              v-if="response.count > 0 && isTableView"
-              v-on:toggle-privacy-state="changeObjectsPrivacyState"
-            />
+              <router-view
+                :response="response"
+                :is-library-active="isLibraryActive"
+                v-if="response.count > 0 && isTableView"
+                v-on:toggle-privacy-state="changeObjectsPrivacyState"
+              />
 
-            <!-- ALTERNATIVE TABLE VIEW -->
-            <alternative-table-view
-              v-if="isAlternativeTable"
-              module="reference"
-              :data="response.results"
-              :controls="alternativeTableControls"
-            />
-          </table>
+              <!-- ALTERNATIVE TABLE VIEW -->
+              <alternative-table-view
+                v-if="isAlternativeTable"
+                module="reference"
+                :data="response.results"
+                :controls="alternativeTableControls"
+              />
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+    </v-card>
   </div>
 </template>
 

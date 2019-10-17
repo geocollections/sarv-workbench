@@ -5,13 +5,13 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
-          <v-card color="blue darken-4">
+          <v-card color="blue-grey">
             <v-tabs
               v-model="tab"
               class="elevation-6"
               dark
               grow
-              background-color="blue darken-4"
+              background-color="blue-grey"
             >
               <v-tabs-slider></v-tabs-slider>
 
@@ -62,7 +62,7 @@
                     <v-alert
                       border="right"
                       :colored-border="!passError"
-                      :color="passError ? 'red' : 'green darken-3'"
+                      :color="passError ? 'red lighten-1' : 'green darken-3'"
                       elevation="3"
                       :icon="passError ? 'fas fa-exclamation' : 'fas fa-info'"
                       prominent
@@ -80,7 +80,7 @@
                         :rules="usernameRules"
                         :label="$t('login.username')"
                         placeholder=""
-                        color="blue darken-4"
+                        color="blue-grey"
                         outlined
                         dense
                         required
@@ -91,7 +91,7 @@
                         :rules="passwordRules"
                         :label="$t('login.password')"
                         placeholder=""
-                        color="blue darken-4"
+                        color="blue-grey"
                         outlined
                         dense
                         :type="showPassword ? 'text' : 'password'"
@@ -186,7 +186,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .login {
   background-image: linear-gradient(
       to top right,

@@ -18,7 +18,7 @@ export default {
     markers: [],
     response: null,
     markerIcon: new L.DivIcon({
-      html: "<i class='fas fa-circle' style='color: #FF5722' />",
+      html: "<i class='fas fa-circle' style='color: #ba68c8' />",
       className: "map-marker"
     }),
     baseMaps: [
