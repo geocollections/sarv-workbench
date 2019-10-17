@@ -106,7 +106,7 @@
     <v-card
       class="table-card my-1"
       :loading="isLoading"
-      v-if="module === 'reference'"
+      v-if="module === 'reference' && isTableView"
     >
       <v-card-title>
         <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>

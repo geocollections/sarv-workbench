@@ -132,7 +132,7 @@
       </v-toolbar-items>
 
       <v-app-bar-nav-icon
-        v-if="$route.path !== '/dashboard' && $route.path !== '/settings'"
+        v-if="$route.meta.isTableView || $route.meta.isEdit"
         @click.stop="drawerRight = !drawerRight"
       ></v-app-bar-nav-icon>
     </v-app-bar>
