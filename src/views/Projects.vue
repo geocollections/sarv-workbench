@@ -83,13 +83,15 @@ export default {
   watch: {
     searchParameters: {
       handler: function(newVal) {
+        console.log(newVal)
         this.$store.dispatch("updateSearchParameters", {
           module: "project",
           filters: this.filters,
           params: newVal
         });
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
 

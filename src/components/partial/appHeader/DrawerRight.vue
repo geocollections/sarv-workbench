@@ -36,7 +36,9 @@
 
         <v-list-item
           class="d-flex flex-column justify-content-end"
-          :style="{ 'padding-top': index === 0 && !$route.meta.isEdit ? '6px' : '' }"
+          :style="{
+            'padding-top': index === 0 && !$route.meta.isEdit ? '6px' : ''
+          }"
           v-for="(field, index) in tableSearchParameters.filters"
           :key="index"
         >

@@ -111,7 +111,8 @@ export default {
           params: newVal
         });
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
 
