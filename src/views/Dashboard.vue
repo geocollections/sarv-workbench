@@ -32,6 +32,9 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  margin-bottom: 56px;
+}
 /* TODO: BOOTSTRAP OVERRIDE, remove after integration */
 .container--fluid {
   max-width: 100%;
