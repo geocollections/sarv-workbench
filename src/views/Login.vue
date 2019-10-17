@@ -104,12 +104,7 @@
 
                       <div class="text-center mt-2">
                         <v-btn
-                          @click="
-                            authenticate('password', {
-                              user: user.username,
-                              pwd: user.password
-                            })
-                          "
+                          @click="login"
                           :disabled="!valid"
                           :loading="loggingIn"
                           color="green darken-3"
@@ -163,7 +158,31 @@ export default {
     passError: false,
     idMessage: null,
     idError: false
-  })
+  }),
+
+  created() {
+    window.addEventListener("keyup", this.handleKeyUp);
+  },
+
+  beforeDestroy() {
+    window.removeEventListener("keyup", this.handleKeyUp);
+  },
+
+  methods: {
+    login() {
+      if (this.valid && !this.loggingIn) {
+        this.authenticate("password", {
+          user: this.user.username,
+          pwd: this.user.password
+        });
+      }
+    },
+
+    handleKeyUp(event) {
+      if (this.tab === 1 && (event.key === "Enter" || event.keyCode === 13))
+        this.login();
+    }
+  }
 };
 </script>
 
