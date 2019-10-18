@@ -475,7 +475,7 @@ export function fetchAnalysisMethod() {
 
 export function fetchSamples(data, agent, databaseId) {
   const fields = 'id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,' +
-    'number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,locality';
+    'number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval';
   let searchFields = '';
 
   if (data.id !== null && data.id.trim().length > 0) {
@@ -1101,7 +1101,7 @@ export function fetchSpecimen(id) {
 }
 
 export function fetchSpecimens(data, databaseId) {
-  const fields = 'id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,is_private';
+  const fields = 'id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,date_collected,date_collected_free,depth,depth_interval,is_private';
   let searchFields = '';
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
@@ -1182,11 +1182,23 @@ export function fetchDeaccession() {
 }
 
 export function fetchSpecimenIdentifications(specimenId, searchParameters) {
-  return fetch(`specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+  if (searchParameters) {
+    return fetch(`specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+  } else {
+    // Used in specimen labels
+    let fields = "taxon__taxon";
+    return fetch(`specimen_identification/?specimen_id=${specimenId}&current=true&fields=${fields}&paginate_by=1&format=json`)
+  }
 }
 
 export function fetchSpecimenIdentificationGeologies(specimenId, searchParameters) {
-  return fetch(`specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+  if (searchParameters) {
+    return fetch(`specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`)
+  } else {
+    // Used in specimen labels
+    let fields = "name,name_en,rock__name,rock__name_en,rock__formula_html";
+    return fetch(`specimen_identification_geology/?specimen_id=${specimenId}&current=true&fields=${fields}&order_by=name&paginate_by=1&format=json`)
+  }
 }
 
 export function fetchSpecimenReferences(specimenId, searchParameters) {

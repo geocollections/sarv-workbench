@@ -1,8 +1,13 @@
 <template>
   <div class="samples">
-    <table-view-title title="header.samples" buttonPath="/sample/add" />
+    <table-view-title
+      title="header.samples"
+      buttonPath="/sample/add"
+      class="d-print-none"
+    />
 
     <table-view-search
+      class="d-print-none"
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
       :filters="filters"

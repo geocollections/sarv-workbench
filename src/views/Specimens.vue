@@ -1,8 +1,13 @@
 <template>
   <div class="specimens">
-    <table-view-title title="header.specimens" buttonPath="/specimen/add" />
+    <table-view-title
+      title="header.specimens"
+      buttonPath="/specimen/add"
+      class="d-print-none"
+    />
 
     <table-view-search
+      class="d-print-none"
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
@@ -19,6 +24,7 @@
       search-history="specimenSearchHistory"
       view-type="specimenViewType"
       :multi-ordering="true"
+      :use-list-view="true"
       v-on:search-params-changed="searchParametersChanged"
       v-on:set-default-search-params="
         setDefaultSearchParametersFromDeleteButton

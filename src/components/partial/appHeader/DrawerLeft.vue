@@ -41,6 +41,7 @@
         prepend-icon="fas fa-home"
         append-icon="fas fa-angle-down"
         color="black"
+        :value="true"
       >
         <template v-slot:activator>
           <v-list-item-title>SARV2</v-list-item-title>

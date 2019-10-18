@@ -2,7 +2,7 @@
   <div v-if="data.length > 0">
     <div class="list" v-for="(entity, index) in data" :key="index">
       <div class="list-row ml-2 p-1">
-        <span v-if="entity.author" class="ablack">
+        <span v-if="entity.author" class="ablack font-weight-medium">
           <router-link
             :to="{ path: '/reference/' + entity.id }"
             :title="$t('editReference.editMessage')"

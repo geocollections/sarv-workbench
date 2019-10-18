@@ -5,7 +5,7 @@
       align="center"
       justify="start"
       class="px-4"
-      :class="{ 'd-print-none': $route.meta.table === 'sample' }"
+      :class="{ 'd-print-none': $route.meta.object === 'sample' ||  $route.meta.object === 'specimen' }"
     >
       <div class="pr-4 mb-2">
         <v-btn @click="deleteSearchPreferences" color="blue" dark>
@@ -48,7 +48,7 @@
     <!-- PAGINATION -->
     <div
       v-if="response.count > 0"
-      :class="{ 'd-print-none': $route.meta.table === 'sample' }"
+      :class="{ 'd-print-none': $route.meta.object === 'sample' ||  $route.meta.object === 'specimen' }"
       class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3"
     >
       <div class="mr-3 mb-3">
@@ -94,20 +94,11 @@
       "
     />
 
-    <!-- LIST VIEW -->
-    <!-- Currently List-View is only used by reference, but if in the future is need for other table types then it should be made universal -->
-    <list-view
-      v-if="isListView && response.count > 0"
-      :module="module"
-      :data="response.results"
-    />
-
     <!-- DATA TABLE -->
-    <v-card
-      class="table-card my-1"
-      :loading="isLoading"
-    >
-      <v-card-title>
+    <v-card class="table-card my-1" :loading="isLoading">
+      <v-card-title
+        :class="{ 'd-print-none': $route.meta.object === 'sample' ||  $route.meta.object === 'specimen' }"
+      >
         <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
         <span id="table-title" class="text-uppercase">
           {{ module }}
@@ -123,7 +114,7 @@
         </span>
         <div class="flex-grow-1"></div>
         <v-text-field
-          v-if="module === 'reference'"
+          v-if="module === 'reference' && isTableView"
           v-model="filterTable"
           append-outer-icon="fas fa-search"
           label="Filter records"
@@ -132,6 +123,13 @@
           color="deep-orange"
         ></v-text-field>
       </v-card-title>
+
+      <!-- LIST VIEW -->
+      <list-view
+        v-if="isListView && response.count > 0"
+        :module="module"
+        :data="response.results"
+      />
 
       <router-view
         ref="table"
