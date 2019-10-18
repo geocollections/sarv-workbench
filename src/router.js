@@ -84,7 +84,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("./components/attachment/AttachmentNew.vue"),
+                import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: true,
                 table: "attachment",
@@ -111,7 +111,7 @@ const router = new Router({
               redirect: "photo_archive",
               name: "Attachment add",
               component: () =>
-                import("./components/attachment/AttachmentNew.vue"),
+                import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -144,7 +144,7 @@ const router = new Router({
               path: "photo_archive",
               name: "photo_archive add",
               component: () =>
-                import("./components/attachment/AttachmentNew.vue"),
+                import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -177,7 +177,7 @@ const router = new Router({
             {
               path: "specimen_image",
               component: () =>
-                import("./components/attachment/AttachmentNew.vue"),
+                import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -210,7 +210,7 @@ const router = new Router({
             {
               path: "other_file",
               component: () =>
-                import("./components/attachment/AttachmentNew.vue"),
+                import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -243,7 +243,7 @@ const router = new Router({
             {
               path: "digitised_reference",
               component: () =>
-                import("./components/attachment/AttachmentNew.vue"),
+                import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",

@@ -31,6 +31,18 @@
       </div>
     </div>
 
+    <!-- FILE SIZE -->
+    <div class="row" v-if="typeof data.size_mb !== 'undefined' && data.size_mb !== null">
+      <div class="col mb-2">
+        {{ $t('edit.size_mb') }}:
+        <span v-if="data.size_mb < 0.1">
+          <b>{{ $t('edit.size_mb_under') }} 0.1</b>
+        </span>
+        <b v-else>{{ data.size_mb }}</b>
+        MB
+      </div>
+    </div>
+
     <!-- ORIGINAL FILENAME -->
     <div class="row" v-if="data.original_filename && data.original_filename !== null">
       <div class="col mb-2">
