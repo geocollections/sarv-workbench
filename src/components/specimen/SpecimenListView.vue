@@ -110,9 +110,8 @@
           style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 1mm;"
         >
           <vue-q-r-code-component
-            :text="'http://geocollections.info/sample/' + entity.id"
+            :text="'http://geocollections.info/specimen/' + entity.id"
             error-level="L"
-            :size="40"
           ></vue-q-r-code-component>
         </div>
       </div>
@@ -282,7 +281,7 @@ export default {
   padding-left: 1mm;
   padding-right: 1mm;
   border-bottom: solid 0.5pt #000;
-  margin-bottom: 0.3mm;
+  margin-bottom: 0.5mm;
   font-size: 8pt;
   font-weight: bold;
 }
@@ -310,6 +309,6 @@ export default {
 }
 
 .small-image >>> img {
-  /*width: 40px !important;*/
+  width: 40px !important;
 }
 </style>

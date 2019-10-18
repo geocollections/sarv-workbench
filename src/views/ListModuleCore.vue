@@ -31,7 +31,7 @@
             v-if="useListView"
             class="mb-2"
             value="list"
-            :label="$t('references.listView')"
+            :label="($route.meta.object === 'sample' || $route.meta.object === 'specimen') ? $t('references.labelView') : $t('references.listView')"
             color="blue"
           ></v-radio>
           <v-radio

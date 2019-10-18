@@ -459,6 +459,7 @@
     "toggleViewLabel": "Toggle between table and list view",
     "tableView": "Table view",
     "listView": "List view",
+    "labelView": "Label view",
     "alternativeTableView": "Alternative table view",
     "alternativeTableHeight": "Height",
     "alternativeTableWidth": "Width",
