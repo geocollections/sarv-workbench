@@ -88,7 +88,6 @@ export default {
       filters: [
         { id: "idSpecimen", title: "specimen.idSpecimen", type: "text" },
         { id: "collNumber", title: "specimen.coll__number", type: "text" },
-        { id: "classification", title: "specimen.class", type: "text" },
         { id: "fossil", title: "specimen.fossil", type: "text" },
         { id: "mineralRock", title: "specimen.mineralRock", type: "text" },
         { id: "locality", title: "specimen.locality", type: "text" },
@@ -135,7 +134,6 @@ export default {
       return {
         idSpecimen: null,
         collNumber: null,
-        classification: null,
         fossil: null,
         mineralRock: null,
         locality: null,

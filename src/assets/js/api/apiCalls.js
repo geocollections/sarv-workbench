@@ -1328,10 +1328,6 @@ export function fetchSpecimens(data, databaseId) {
     searchFields += `&coll__number__icontains=${data.collNumber}`;
   }
 
-  if (data.classification && data.classification.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.classification};fields:classification__class_en,classification__class_field;lookuptype:icontains`;
-  }
-
   if (data.fossil && data.fossil.trim().length > 0) {
     searchFields += `&multi_search=value:${data.fossil};fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:icontains`;
   }
