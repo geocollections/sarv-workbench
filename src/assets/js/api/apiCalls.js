@@ -1341,7 +1341,7 @@ export function fetchSpecimens(data, databaseId) {
   }
 
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:icontains`;
   }
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
