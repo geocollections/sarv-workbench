@@ -14,7 +14,7 @@
     <template v-slot:item.id="{ item }">
       <router-link
         :to="{ path: '/specimen/' + item.id }"
-        :title="$t('editReference.editMessage')"
+        :title="$t('editSpecimen.editMessage')"
         class="sarv-link"
         >{{ item.id }}</router-link
       >

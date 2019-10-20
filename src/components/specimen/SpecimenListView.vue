@@ -1,6 +1,12 @@
 <template>
   <div class="row list-row" v-if="data.length > 0">
-    <div class="label2" v-for="(entity, index) in data" :key="index">
+    <router-link
+      class="label2"
+      v-for="(entity, index) in data"
+      :key="index"
+      :to="{ path: '/specimen/' + entity.id }"
+      :title="$t('editSpecimen.editMessage')"
+    >
       <div class="label2_head">
         <div
           style="float: left; font-size: 84%"
@@ -103,7 +109,9 @@
           }}</span>
         </div>
 
-        <div style="float: right; font-size: 0.9em">{{ entity.date_collected }}</div>
+        <div style="float: right; font-size: 0.9em">
+          {{ entity.date_collected }}
+        </div>
 
         <div
           class="small-image"
@@ -115,7 +123,7 @@
           ></vue-q-r-code-component>
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
@@ -327,6 +335,12 @@ export default {
 <style scoped>
 .list-row {
   margin: 0 15px 15px;
+}
+
+.label2:hover {
+  cursor: pointer;
+  /*opacity: 0.7;*/
+  background-color: rgba(255, 87, 34, 0.1);
 }
 
 /* STYLES FROM OLD APP */

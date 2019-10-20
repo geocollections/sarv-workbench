@@ -1359,7 +1359,7 @@ export function fetchSpecimens(data, databaseId) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&distinct=true&format=json`
+      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
