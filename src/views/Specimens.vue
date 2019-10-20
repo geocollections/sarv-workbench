@@ -51,9 +51,8 @@ export default {
       response: {},
       columns: [
         { id: "id", title: "specimen.id", type: "number" },
-        // { id: "coll__number", title: "specimen.coll__number", type: "text" },
         { id: "specimen_id", title: "specimen.number", type: "text" },
-        { id: "specimen_nr", title: "specimen.specimen_nr", type: "text" },
+        { id: "name", title: "specimen.name", type: "text", orderBy: false },
         {
           id: "locality__locality_en",
           title: "specimen.locality",
@@ -70,13 +69,6 @@ export default {
           title: "specimen.agent_collected",
           type: "text"
         },
-        // { id: "storage__location", title: "specimen.storage", type: "text" },
-        // {
-        //   id: "is_private",
-        //   title: "specimen.is_private",
-        //   type: "text",
-        //   isPrivate: true
-        // },
         {
           id: "specimen",
           title: "specimen.specimen",

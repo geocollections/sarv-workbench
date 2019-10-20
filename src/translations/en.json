@@ -399,7 +399,7 @@
   },
   "editDoi": {
     "heading": "Doi ID",
-    "viewMessage": "View DOi in geocollections portal",
+    "viewMessage": "View DOI in geocollections portal",
     "editMessage": "Edit DOI"
   },
   "editAttachment": {
@@ -408,7 +408,9 @@
     "editMessage": "Edit file"
   },
   "editSpecimen": {
-    "heading": "Specimen"
+    "heading": "Specimen",
+    "viewMessage": "View specimen in geocollections portal",
+    "editMessage": "Edit specimen"
   },
   "editKeyword": {
     "heading": "Term"
@@ -416,6 +418,11 @@
   "editJournal": {
     "heading": "Journal",
     "editMessage": "Edit journal"
+  },
+  "editStratigraphy": {
+    "heading": "Stratigraphy",
+    "editMessage": "Edit stratigraphy",
+    "viewMessage": "View stratigraphy in geocollections portal"
   },
   "attachments": {
     "header": "My attachments",
@@ -692,6 +699,7 @@
     "specimenNumber": "Specimen no",
     "header": "Specimens",
     "id": "ID",
+    "name": "Name",
     "number": "Number",
     "identification": "Identification",
     "locality": "Locality",

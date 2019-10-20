@@ -1317,7 +1317,7 @@ export function fetchSpecimen(id) {
 
 export function fetchSpecimens(data, databaseId) {
   const fields =
-    "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,date_collected,date_collected_free,depth,depth_interval,is_private";
+    "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy_id,date_collected,date_collected_free,depth,depth_interval,is_private";
   let searchFields = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
@@ -1333,6 +1333,9 @@ export function fetchSpecimens(data, databaseId) {
   }
 
   if (data.mineralRock && data.mineralRock.trim().length > 0) {
+    // Todo: Duplicate records issue, but distinct makes it slow
+    if (data.fossil && data.fossil.trim().length > 0)
+      searchFields += "&distinct=true";
     searchFields += `&multi_search=value:${data.mineralRock};fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:icontains`;
   }
 
@@ -1356,7 +1359,7 @@ export function fetchSpecimens(data, databaseId) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&distinct=true&format=json`
     );
   } else {
     return fetch(
@@ -1397,33 +1400,33 @@ export function fetchDeaccession() {
   return fetch(`deaccession/?format=json`);
 }
 
-export function fetchSpecimenIdentifications(specimenId, searchParameters) {
+export function fetchSpecimenIdentifications(searchParameters) {
   if (searchParameters) {
     return fetch(
-      `specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
-    );
-  } else {
-    // Used in specimen labels
-    let fields = "taxon__taxon";
-    return fetch(
-      `specimen_identification/?specimen_id=${specimenId}&current=true&fields=${fields}&paginate_by=1&format=json`
+      `specimen_identification/?page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
     );
   }
 }
 
-export function fetchSpecimenIdentificationGeologies(
-  specimenId,
-  searchParameters
-) {
+export function fetchSpecimenIdentificationsList(listOfIds) {
+  let fields = "taxon__taxon,taxon_id,specimen_id";
+  return fetch(
+    `specimen_identification/?specimen_id__in=${listOfIds}&current=true&fields=${fields}&format=json`
+  );
+}
+
+export function fetchSpecimenIdentificationGeologiesList(listOfIds) {
+  let fields =
+    "name,name_en,rock__name,rock__name_en,rock__formula_html,rock_id,specimen_id";
+  return fetch(
+    `specimen_identification_geology/?specimen_id__in=${listOfIds}&current=true&fields=${fields}&order_by=name&format=json`
+  );
+}
+
+export function fetchSpecimenIdentificationGeologies(searchParameters) {
   if (searchParameters) {
     return fetch(
-      `specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
-    );
-  } else {
-    // Used in specimen labels
-    let fields = "name,name_en,rock__name,rock__name_en,rock__formula_html";
-    return fetch(
-      `specimen_identification_geology/?specimen_id=${specimenId}&current=true&fields=${fields}&order_by=name&paginate_by=1&format=json`
+      `specimen_identification_geology/?page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
     );
   }
 }

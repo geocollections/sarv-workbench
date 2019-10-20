@@ -1,86 +1,322 @@
 <template>
-  <tbody v-if="response.count > 0">
-  <tr v-for="entity in response.results">
+  <v-data-table
+    class="spceimen-table"
+    :headers="translatedHeaders"
+    dense
+    hide-default-footer
+    :items="response.results"
+    :items-per-page="searchParameters.paginateBy"
+    multi-sort
+    :page="searchParameters.page"
+    :search="filter"
+    expand-icon="fas fa-caret-down"
+  >
+    <template v-slot:item.id="{ item }">
+      <router-link
+        :to="{ path: '/specimen/' + item.id }"
+        :title="$t('editReference.editMessage')"
+        class="sarv-link"
+        >{{ item.id }}</router-link
+      >
+    </template>
 
-    <td>
-      <router-link :to="{ path: '/specimen/' + entity.id }" :title="$t('specimen.editMessage')">
-        {{entity.id }}
+    <template v-slot:item.name="{ item }">
+      <div
+        v-if="
+          names &&
+            names.length > 0 &&
+            names.find(specimen => specimen.id === item.id)
+        "
+      >
+        <a
+          v-if="names.find(specimen => specimen.id === item.id).taxonId"
+          :href="
+            getTaxonUrl(names.find(specimen => specimen.id === item.id).taxonId)
+          "
+          title="Fossils"
+          class="sarv-link"
+          target="TaxonWindow"
+        >
+          <i
+            v-translate="{
+              et: names.find(specimen => specimen.id === item.id).name,
+              en: names.find(specimen => specimen.id === item.id).name_en
+            }"
+          ></i>
+        </a>
+
+        <a
+          v-else-if="names.find(specimen => specimen.id === item.id).rockId"
+          :href="
+            getRockUrl(names.find(specimen => specimen.id === item.id).rockId)
+          "
+          title="Minerals, rocks, and mineral resources"
+          class="sarv-link"
+          target="RockWindow"
+        >
+          <i
+            v-translate="{
+              et: names.find(specimen => specimen.id === item.id).name,
+              en: names.find(specimen => specimen.id === item.id).name_en
+            }"
+          ></i>
+        </a>
+
+        <i
+          v-else
+          v-translate="{
+            et: names.find(specimen => specimen.id === item.id).name,
+            en: names.find(specimen => specimen.id === item.id).name_en
+          }"
+        ></i>
+      </div>
+    </template>
+
+    <template v-slot:item.locality="{ item }">
+      <router-link
+        :to="{ path: '/locality/' + item.locality_id }"
+        :title="$t('editLocality.editMessage')"
+        class="sarv-link"
+        v-if="item.locality_id"
+      >
+        <span
+          v-translate="{
+            et: item.locality__locality,
+            en: item.locality__locality_en
+          }"
+        ></span>
       </router-link>
-    </td>
+    </template>
 
-<!--    <td>{{ entity.coll__number }}</td>-->
+    <template v-slot:item.depth="{ item }">
+      <span v-if="item.depth && item.depth_interval"
+        >{{ item.depth }} - {{ item.depth_interval }} m</span
+      >
+      <span v-else>{{ item.depth }}</span>
+    </template>
 
-    <td>{{ entity.specimen_id }}</td>
+    <template v-slot:item.stratigraphy="{ item }">
+      <div>
+        <a
+          v-if="item.stratigraphy_id"
+          :href="
+            getGeoDetailUrl({
+              object: 'stratigraphy',
+              id: item.stratigraphy_id
+            })
+          "
+          :title="$t('editStratigraphy.viewMessage')"
+          class="sarv-link"
+          target="GeocollectionsWindow"
+        >
+          <span
+            v-translate="{
+              et: item.stratigraphy__stratigraphy,
+              en: item.stratigraphy__stratigraphy_en
+            }"
+          ></span>
+        </a>
+        <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
+          |
+        </span>
+        <a
+          v-if="item.lithostratigraphy_id"
+          :href="
+            getGeoDetailUrl({
+              object: 'stratigraphy',
+              id: item.lithostratigraphy_id
+            })
+          "
+          :title="$t('editStratigraphy.viewMessage')"
+          class="sarv-link"
+          target="GeocollectionsWindow"
+        >
+          <span
+            v-translate="{
+              et: item.lithostratigraphy__stratigraphy,
+              en: item.lithostratigraphy__stratigraphy_en
+            }"
+          ></span>
+        </a>
+      </div>
+    </template>
 
-<!--    <td>{{ entity.specimen_nr }}</td>-->
-
-    <td>
-      <router-link v-if="entity.locality_id" :to="{ path: '/locality/' + entity.locality_id }" :title="$t('editLocality.editMessage')">
-        <div v-translate="{et: entity.locality__locality ,en: entity.locality__locality_en}"></div>
-      </router-link>
-
-      <div v-else>{{ entity.locality_free }}</div>
-    </td>
-
-    <td>
-      <span>{{ entity.depth }}</span>
-      <span v-if="entity.depth_interval"> ({{ entity.depth_interval }})</span>
-    </td>
-
-    <td>
-<!--      <router-link v-if="entity.stratigraphy_id" :to="{ path: '/stratigraphy/' + entity.stratigraphy_id }" :title="$t('stratigraphy.editMessage')">-->
-      <div v-if="entity.stratigraphy_id" v-translate="{et: entity.stratigraphy__stratigraphy ,en: entity.stratigraphy__stratigraphy_en}"></div>
-<!--      </router-link>-->
-      <div v-else>{{ entity.stratigraphy_free }}</div>
-    </td>
-
-<!--    <td>-->
-<!--      {{ entity.agent_collected__agent }}-->
-<!--    </td>-->
-
-<!--    <td>-->
-<!--      {{ entity.storage__location }}-->
-<!--    </td>-->
-
-    <td class="middle">
-      <vs-checkbox id="is_private"
-                   v-model="entity.is_private"
-                   @input="$emit('toggle-privacy-state', entity.is_private, entity.id)"
-                   icon="fa-lock"
-                   icon-pack="fas">
-      </vs-checkbox>
-    </td>
-
-    <td class="middle">
-      <a href="javascript:void(0)" v-if="!entity.is_private" @click="openGeoInNewWindow({object: 'specimen', id: entity.id})"
-         :title="$t('specimen.viewMessage')">
-        <i class="far fa-eye"></i>
-<!--        {{ $t('edit.view') }}-->
-      </a>
-    </td>
-
-  </tr>
-  </tbody>
+    <template v-slot:item.link="{ item }">
+      <v-btn
+        v-if="!item.is_private"
+        :href="getGeoDetailUrl({ object: 'specimen', id: item.id })"
+        :title="$t('editSpecimen.viewMessage')"
+        color="deep-orange"
+        target="GeocollectionsWindow"
+        icon
+      >
+        <v-icon>far fa-eye</v-icon>
+      </v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-  import formManipulation from "../../mixins/formManipulation";
+import {
+  fetchSpecimenIdentificationGeologiesList,
+  fetchSpecimenIdentificationsList
+} from "../../assets/js/api/apiCalls";
 
-  export default {
-    name: "SpecimenTable",
-    props: {
-      response: {
-        type: Object
-      },
+export default {
+  name: "SpecimenTable",
+  props: {
+    response: {
+      type: Object
     },
-    mixins: [formManipulation]
+    isLibraryActive: {
+      type: Boolean
+    },
+    filter: {
+      type: String,
+      required: false
+    },
+    searchParameters: {
+      type: Object,
+      required: true,
+      default: function() {
+        return {
+          page: 1,
+          paginateBy: 25
+        };
+      }
+    }
+  },
+  data: () => ({
+    expanded: [],
+    headers: [
+      { text: "specimen.id", value: "id" },
+      { text: "specimen.number", value: "specimen_id" },
+      { text: "specimen.name", value: "name", sortable: false },
+      { text: "specimen.locality", value: "locality" },
+      { text: "specimen.depth", value: "depth" },
+      { text: "specimen.stratigraphy", value: "stratigraphy" },
+      { text: "specimen.agent_collected", value: "agent_collected__agent" },
+      { text: "", value: "link", sortable: false }
+    ],
+    names: []
+  }),
+  computed: {
+    translatedHeaders() {
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(item => {
+          if (this.isLibraryActive) return item;
+          else if (item.value !== "library") return item;
+        });
+    }
+  },
+  watch: {
+    "response.results": {
+      handler(newVal) {
+        this.getNames(newVal);
+      },
+      immediate: true
+    }
+  },
+  methods: {
+    getGeoDetailUrl(params) {
+      return `https://geocollections.info/${params.object}/${params.id}`;
+    },
+
+    getTaxonUrl(id) {
+      return "https://fossiilid.info/" + id;
+    },
+
+    getRockUrl(id) {
+      return "https://kivid.info/" + id;
+    },
+
+    async getNames(listOfSpecimens) {
+      if (listOfSpecimens && listOfSpecimens.length > 0) {
+        let listOfIds = listOfSpecimens.map(specimen => specimen.id);
+
+        const taxonResponse = await fetchSpecimenIdentificationsList(listOfIds);
+        const rockResponse = await fetchSpecimenIdentificationGeologiesList(
+          listOfIds
+        );
+
+        if (taxonResponse.status === 200 && rockResponse.status === 200) {
+          let taxonList = [];
+          let rockList = [];
+
+          if (taxonResponse.body.count > 0) {
+            taxonList = taxonResponse.body.results.map(entity => {
+              return {
+                id: entity.specimen_id,
+                name: entity.taxon__taxon ? entity.taxon__taxon : entity.name,
+                name_en: entity.taxon__taxon
+                  ? entity.taxon__taxon
+                  : entity.name,
+                taxonId: entity.taxon_id
+              };
+            });
+          }
+
+          if (rockResponse.body.count > 0) {
+            rockList = rockResponse.body.results.map(entity => {
+              let name = "";
+              let name_en = "";
+
+              if (entity.rock__name && !entity.name) name = entity.rock__name;
+              else if (
+                entity.rock__name &&
+                entity.name &&
+                entity.rock__name !== entity.name
+              )
+                name = entity.name + " | " + entity.rock__name;
+              else name = entity.name;
+
+              if (entity.rock__name_en && !entity.name_en)
+                name_en = entity.rock__name_en;
+              else if (
+                entity.rock__name_en &&
+                entity.name_en &&
+                entity.rock__name_en !== entity.name_en
+              )
+                name_en = entity.name_en + " | " + entity.rock__name_en;
+              else name_en = entity.name_en;
+
+              if (entity.rock__formula_html) {
+                name += " | " + entity.rock__formula_html;
+                name_en += " | " + entity.rock__formula_html;
+              }
+
+              return {
+                id: entity.specimen_id,
+                name: name,
+                name_en: name_en,
+                rockId: entity.rock_id
+              };
+            });
+          }
+
+          if (taxonList.length > 0 && rockList.length > 0) {
+            rockList.forEach(taxon => {
+              let item = taxonList.find(rock => taxon.id === rock.id);
+              item ? this.names.push(item) : this.names.push(taxon);
+            });
+          } else if (taxonList.length > 0) this.names = taxonList;
+          else if (rockList.length > 0) this.names = rockList;
+        }
+      }
+    }
   }
+};
 </script>
 
-<style scoped>
-  .middle {
-    text-align: center;
-    vertical-align: middle;
-  }
-
+<style>
+.specimen-table.v-data-table td,
+.specimen-table.v-data-table th {
+  padding: 0 8px;
+}
 </style>

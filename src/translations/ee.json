@@ -408,7 +408,9 @@
     "editMessage": "Muuda faili"
   },
   "editSpecimen": {
-    "heading": "Eksemplar"
+    "heading": "Eksemplar",
+    "editMessage": "Muuda eksemplari",
+    "viewMessage": "Vaata eksemplari geokogude portaalis"
   },
   "editKeyword": {
     "heading": "Termin"
@@ -416,6 +418,11 @@
   "editJournal": {
     "heading": "Ajakiri",
     "editMessage": "Muuda ajakirja"
+  },
+  "editStratigraphy": {
+    "heading": "Stratigraafia",
+    "editMessage": "Muuda stratigraafiat",
+    "viewMessage": "Vaata stratigraafiat geokogude portaalis"
   },
   "attachments": {
     "header": "Minu failid",
@@ -692,6 +699,7 @@
     "specimenNumber": "Eksemplari nr",
     "header": "Eksemplarid",
     "id": "ID",
+    "name": "Nimi",
     "number": "Number",
     "identification": "Identifikaator",
     "locality": "Lokaliteet",
