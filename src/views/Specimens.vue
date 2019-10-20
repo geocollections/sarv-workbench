@@ -26,6 +26,7 @@
       view-type="specimenViewType"
       :multi-ordering="true"
       :use-list-view="true"
+      :export-buttons="true"
       v-on:search-params-changed="searchParametersChanged"
     ></list-module-core>
   </div>

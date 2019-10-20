@@ -1335,6 +1335,9 @@
     "homePage": "Pealeht",
     "lockSidebar": "Lukusta külgriba",
     "unlockSidebar": "Ava külgriba",
+    "export": "Ekspordi",
+    "exportTo": "Ekspordi",
+    "copyToClipboard": "Kopeeri",
     "downloadRIS": "Ekspordi RIS",
     "search": "Otsi"
   },

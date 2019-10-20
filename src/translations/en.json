@@ -1335,6 +1335,9 @@
     "homePage": "Home page",
     "lockSidebar": "Lock sidebar",
     "unlockSidebar": "Unlock sidebar",
+    "export": "Export",
+    "exportTo": "Export to",
+    "copy": "Copy to Clipboard",
     "downloadRIS": "Export to RIS",
     "search": "Search"
   },

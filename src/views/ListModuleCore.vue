@@ -1,11 +1,19 @@
 <template>
   <div class="list-module-core">
-    <!-- OPTIONS -->
+    <!-- EXPORT and OPTIONS -->
     <v-row
       align="center"
       justify="start"
       class="px-4 d-print-none"
     >
+      <!-- EXPORT -->
+      <div class="mr-4 mb-2" v-if="exportButtons">
+        <export-buttons
+          :filename="module"
+          :table-data="response.results"
+        ></export-buttons>
+      </div>
+
       <div v-if="useListView || useAlternativeTableView" class="mb-2">
         <v-radio-group
           class="radio-buttons mt-0"
@@ -54,18 +62,11 @@
         />
       </div>
 
-      <!-- EXPORT -->
-      <div class="mr-3 mb-2 text-center text-md-left" v-if="exportButtons">
-        <export-buttons
-          :filename="module"
-          :table-data="response.results"
-        ></export-buttons>
-      </div>
-
       <div>
         <v-pagination
           v-model="searchParameters.page"
           color="blue"
+          circle
           prev-icon="fas fa-angle-left"
           next-icon="fas fa-angle-right"
           :length="Math.ceil(response.count / searchParameters.paginateBy)"

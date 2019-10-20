@@ -1,35 +1,38 @@
 <template>
-  <div>
-    <b-dropdown variant="primary">
-      <template slot="button-content">
-        Export <i class="fas fa-file-export"></i>
-      </template>
+  <v-menu offset-y>
+    <template v-slot:activator="{ on }">
+      <v-btn color="blue" dark v-on="on">
+        <span>{{ $t("buttons.export") }}</span>
+        <v-icon right>fas fa-file-export</v-icon>
+      </v-btn>
+    </template>
+    <v-list color="blue" dark dense>
+      <v-list-item @click="exportToCSV">
+        <v-list-item-title>
+          {{ $t("buttons.exportTo") }} CSV &nbsp;
+          <v-icon>far fa-file</v-icon>
+        </v-list-item-title>
+      </v-list-item>
 
-      <b-dropdown-item @click="exportTableByType('xlsx')"
-        >Export to XLSX &nbsp;<i class="far fa-file-excel"></i
-      ></b-dropdown-item>
+      <v-list-item v-if="filename === 'reference'" @click="exportToRIS">
+        <v-list-item-title>
+          {{ $t("buttons.exportTo") }} RIS &nbsp;
+          <v-icon>fas fa-file-download</v-icon>
+        </v-list-item-title>
+      </v-list-item>
 
-      <b-dropdown-item @click="exportTableByType('csv')"
-        >Export to CSV &nbsp;<i class="far fa-file"></i
-      ></b-dropdown-item>
-
-      <b-dropdown-item
-        v-if="filename === 'reference'"
-        @click="exportTableToRIS()"
-        >Export to RIS &nbsp;<i class="fas fa-file-download"></i
-      ></b-dropdown-item>
-
-      <b-dropdown-item @click="copyToClipboard()"
-        >Copy to Clipboard &nbsp;<i class="far fa-copy"></i
-      ></b-dropdown-item>
-    </b-dropdown>
-  </div>
+      <v-list-item @click="copyToClipboard">
+        <v-list-item-title>
+          {{ $t("buttons.copy") }}
+          <v-icon>far fa-copy</v-icon>
+        </v-list-item-title>
+      </v-list-item>
+    </v-list>
+  </v-menu>
 </template>
 
 <script>
-import { toastSuccess } from "@/assets/js/iziToast/iziToast";
-import TableExport from "tableexport";
-import { toastError } from "../../../assets/js/iziToast/iziToast";
+import { toastError, toastSuccess } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   props: {
@@ -37,65 +40,57 @@ export default {
       type: String,
       default: "Geocollections Data Management"
     },
-    tableId: {
-      type: String,
-      default: "export-table"
-    },
     tableData: {
       type: Array
     }
   },
   name: "ExportButtons",
 
-  data() {
-    return {
-      table: this.tableId
-    };
-  },
-
-  created: function() {
-    if (typeof this.table === "undefined") {
-      this.table = "export-table";
-    }
-  },
-
   methods: {
-    exportTableByType(type) {
-      /* Defaults */
-      // TableExport(document.getElementsByTagName("table"), {
-      //   headers: true,                      // (Boolean), display table headers (th or td elements) in the <thead>, (default: true)
-      //   footers: true,                      // (Boolean), display table footers (th or td elements) in the <tfoot>, (default: false)
-      //   formats: ["xlsx", "csv", "txt"],    // (String[]), filetype(s) for the export, (default: ['xlsx', 'csv', 'txt'])
-      //   filename: "id",                     // (id, String), filename for the downloaded file, (default: 'id')
-      //   bootstrap: false,                   // (Boolean), style buttons using bootstrap, (default: true)
-      //   exportButtons: true,                // (Boolean), automatically generate the built-in export buttons for each of the specified formats (default: true)
-      //   position: "bottom",                 // (top, bottom), position of the caption element relative to table, (default: 'bottom')
-      //   ignoreRows: null,                   // (Number, Number[]), row indices to exclude from the exported file(s) (default: null)
-      //   ignoreCols: null,                   // (Number, Number[]), column indices to exclude from the exported file(s) (default: null)
-      //   trimWhitespace: true,               // (Boolean), remove all leading/trailing newlines, spaces, and tabs from cell text in the exported file(s) (default: false)
-      //   RTL: false,                         // (Boolean), set direction of the worksheet to right-to-left (default: false)
-      //   sheetname: "id"                     // (id, String), sheet name for the exported spreadsheet, (default: 'id')
-      // });
+    exportToCSV() {
+      let csvString = this.convertJsonToCsv(this.tableData);
 
-      let instance = new TableExport(document.getElementsByTagName("table"), {
-        formats: [type],
-        exportButtons: false,
-        filename: this.filename,
-        trimWhiteSpace: true
-      });
+      if (csvString.length === 0) {
+        toastError({ text: "Download failed: Not enough data!" });
+        return;
+      }
 
-      let exportTable = instance.getExportData()[this.table][type];
+      let file = new Blob([csvString], { type: "text/plain" });
 
-      instance.export2file(
-        exportTable.data,
-        exportTable.mimeType,
-        exportTable.filename,
-        exportTable.fileExtension
-      );
+      if (window.navigator.msSaveOrOpenBlob)
+        // IE10+
+        window.navigator.msSaveOrOpenBlob(file, this.filename + ".csv");
+      else {
+        // Others
+        let a = document.createElement("a");
+        let url = URL.createObjectURL(file);
+        a.href = url;
+        a.download = this.filename + ".csv";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 0);
+      }
 
-      toastSuccess({
-        text: "Exported to <strong>" + type.toUpperCase() + "</strong>"
-      });
+      toastSuccess({ text: "Exported to <strong>CSV</strong>" });
+    },
+
+    convertJsonToCsv(jsonArray) {
+      const { Parser } = require("json2csv");
+
+      // Possibility to export exact fields for each object
+      const fields = Object.keys(jsonArray[0]);
+      const opts = { fields };
+
+      try {
+        const parser = new Parser(opts);
+        return parser.parse(jsonArray);
+      } catch (err) {
+        toastError({ text: err });
+        return "";
+      }
     },
 
     copyToClipboard() {
@@ -125,7 +120,7 @@ export default {
       toastSuccess({ text: "Copied to <strong>clipboard!</strong>" });
     },
 
-    exportTableToRIS() {
+    exportToRIS() {
       let risString = this.convertJsonToRis(this.tableData);
 
       if (risString.length === 0) {
