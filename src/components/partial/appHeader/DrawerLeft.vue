@@ -104,28 +104,6 @@ export default {
       activeSample: false,
       routeLinks: [
         {
-          name: "project",
-          title: "projects",
-          links: [
-            { title: "editProject", path: "/project", icon: "fas fa-table" },
-            {
-              title: "addProject",
-              path: "/project/add",
-              icon: "far fa-plus-square"
-            },
-            { title: "activeProject", path: "", icon: "fas fa-globe-americas" }
-          ]
-        },
-        {
-          name: "site",
-          title: "sites",
-          links: [
-            { title: "editSite", path: "/site", icon: "fas fa-globe" },
-            { title: "addSite", path: "/site/add", icon: "fas fa-map-pin" },
-            { title: "activeSite", path: "", icon: "fas fa-map-marker-alt" }
-          ]
-        },
-        {
           name: "attachment",
           title: "files",
           links: [
@@ -176,6 +154,36 @@ export default {
           ]
         },
         {
+          name: "doi",
+          title: "dois",
+          links: [
+            { title: "dois", path: "/doi", icon: "fas fa-database" },
+            { title: "doi", path: "/doi/add", icon: "fas fa-plus-circle" }
+          ]
+        },
+        {
+          name: "project",
+          title: "projects",
+          links: [
+            { title: "editProject", path: "/project", icon: "fas fa-table" },
+            {
+              title: "addProject",
+              path: "/project/add",
+              icon: "far fa-plus-square"
+            },
+            { title: "activeProject", path: "", icon: "fas fa-globe-americas" }
+          ]
+        },
+        {
+          name: "site",
+          title: "sites",
+          links: [
+            { title: "editSite", path: "/site", icon: "fas fa-globe" },
+            { title: "addSite", path: "/site/add", icon: "fas fa-map-pin" },
+            { title: "activeSite", path: "", icon: "fas fa-map-marker-alt" }
+          ]
+        },
+        {
           name: "locality",
           title: "localities",
           links: [
@@ -214,14 +222,6 @@ export default {
               path: "/analysis/add",
               icon: "fas fa-chart-pie"
             }
-          ]
-        },
-        {
-          name: "doi",
-          title: "dois",
-          links: [
-            { title: "dois", path: "/doi", icon: "fas fa-database" },
-            { title: "doi", path: "/doi/add", icon: "fas fa-plus-circle" }
           ]
         },
         {
