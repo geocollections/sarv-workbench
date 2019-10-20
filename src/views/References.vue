@@ -8,6 +8,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       :col-size="4"
+      v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
@@ -24,9 +25,6 @@
       :use-alternative-table-view="true"
       :is-library-active="isLibraryActive"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
       v-on:add-reference-to-active-library="addReferenceToActiveLibrary"
     ></list-module-core>
   </div>
@@ -167,7 +165,7 @@ export default {
     searchParametersChanged(newParams) {
       this.searchParameters = newParams;
     },
-    setDefaultSearchParameters(isMultiOrdering) {
+    setDefaultSearchParameters() {
       return {
         author: null,
         year: null,
@@ -183,11 +181,19 @@ export default {
         solrSearch: null,
         page: 1,
         paginateBy: 50,
-        orderBy: isMultiOrdering ? ["-id", "-year"] : "-id"
+        orderBy: ["-id", "-year"]
       };
     },
-    setDefaultSearchParametersFromDeleteButton(arg1, isMultiOrdering) {
-      this.searchParameters = this.setDefaultSearchParameters(isMultiOrdering);
+    resetSearchPreferences() {
+      this.resetStorage();
+      this.resetSearchParameters();
+    },
+    resetStorage() {
+      this.$localStorage.remove("referenceSearchHistory");
+      this.$localStorage.remove("referenceViewType");
+    },
+    resetSearchParameters() {
+      this.searchParameters = this.setDefaultSearchParameters();
     },
 
     addReferenceToActiveLibrary(id) {

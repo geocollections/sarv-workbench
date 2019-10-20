@@ -7,6 +7,7 @@
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
+      v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
@@ -18,9 +19,6 @@
       search-history="localitySearchHistory"
       view-type="localityViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
     ></list-module-core>
   </div>
 </template>
@@ -95,7 +93,15 @@ export default {
         orderBy: "-id"
       };
     },
-    setDefaultSearchParametersFromDeleteButton() {
+    resetSearchPreferences() {
+      this.resetStorage();
+      this.resetSearchParameters();
+    },
+    resetStorage() {
+      this.$localStorage.remove("localitySearchHistory");
+      this.$localStorage.remove("localityViewType");
+    },
+    resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
     }
   }

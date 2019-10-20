@@ -7,6 +7,7 @@
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
+      v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <!-- SEARCH FIELDS END -->
@@ -19,9 +20,6 @@
       search-history="projectSearchHistory"
       view-type="projectViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
     ></list-module-core>
   </div>
 </template>
@@ -103,9 +101,6 @@ export default {
     searchParametersChanged(newParams) {
       this.searchParameters = newParams;
     },
-    setDefaultSearchParametersFromDeleteButton() {
-      this.searchParameters = this.setDefaultSearchParameters();
-    },
     setDefaultSearchParameters() {
       return {
         owner: null,
@@ -114,6 +109,17 @@ export default {
         paginateBy: 50,
         orderBy: "-id"
       };
+    },
+    resetSearchPreferences() {
+      this.resetStorage();
+      this.resetSearchParameters();
+    },
+    resetStorage() {
+      this.$localStorage.remove("projectSearchHistory");
+      this.$localStorage.remove("projectViewType");
+    },
+    resetSearchParameters() {
+      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };

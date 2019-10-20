@@ -142,7 +142,15 @@ export default {
         orderBy: "-id"
       };
     },
-    setDefaultSearchParametersFromDeleteButton() {
+    resetSearchPreferences() {
+      this.resetStorage();
+      this.resetSearchParameters();
+    },
+    resetStorage() {
+      this.$localStorage.remove("specimenSearchHistory");
+      this.$localStorage.remove("specimenViewType");
+    },
+    resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
     }
   }

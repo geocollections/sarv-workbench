@@ -1,18 +1,11 @@
 <template>
   <div class="list-module-core">
-    <!-- RESET PARAMETERS + OPTIONS -->
+    <!-- OPTIONS -->
     <v-row
       align="center"
       justify="start"
       class="px-4 d-print-none"
     >
-      <div class="pr-4 mb-2">
-        <v-btn @click="deleteSearchPreferences" color="blue" dark>
-          <v-icon left>fas fa-filter</v-icon>
-          {{ $t("buttons.deletePreferences") }}
-        </v-btn>
-      </div>
-
       <div v-if="useListView || useAlternativeTableView" class="mb-2">
         <v-radio-group
           class="radio-buttons mt-0"
@@ -692,14 +685,6 @@ export default {
 
     setDefaultAlternativeTableControlsFromResetButton() {
       this.alternativeTableControls = this.setDefaultAlternativeTableControls();
-    },
-
-    // Deletes local storage value + resets search parameters to default
-    deleteSearchPreferences() {
-      this.$localStorage.remove(this.searchHistory);
-      this.$localStorage.remove(this.viewType);
-      this.$emit("set-default-search-params", true, this.multiOrdering);
-      this.currentView = "table";
     },
 
     changeObjectsPrivacyState(state, id) {

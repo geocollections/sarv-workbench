@@ -8,11 +8,11 @@
       </router-link>
     </td>
 
-    <td>{{ entity.coll__number }}</td>
+<!--    <td>{{ entity.coll__number }}</td>-->
 
     <td>{{ entity.specimen_id }}</td>
 
-    <td>{{ entity.specimen_nr }}</td>
+<!--    <td>{{ entity.specimen_nr }}</td>-->
 
     <td>
       <router-link v-if="entity.locality_id" :to="{ path: '/locality/' + entity.locality_id }" :title="$t('editLocality.editMessage')">
@@ -34,13 +34,13 @@
       <div v-else>{{ entity.stratigraphy_free }}</div>
     </td>
 
-    <td>
-      {{ entity.agent_collected__agent }}
-    </td>
+<!--    <td>-->
+<!--      {{ entity.agent_collected__agent }}-->
+<!--    </td>-->
 
-    <td>
-      {{ entity.storage__location }}
-    </td>
+<!--    <td>-->
+<!--      {{ entity.storage__location }}-->
+<!--    </td>-->
 
     <td class="middle">
       <vs-checkbox id="is_private"

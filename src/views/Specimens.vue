@@ -13,6 +13,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       :col-size="4"
+      v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
@@ -26,9 +27,6 @@
       :multi-ordering="true"
       :use-list-view="true"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
     ></list-module-core>
   </div>
 </template>
@@ -52,7 +50,7 @@ export default {
       response: {},
       columns: [
         { id: "id", title: "specimen.id", type: "number" },
-        { id: "coll__number", title: "specimen.coll__number", type: "text" },
+        // { id: "coll__number", title: "specimen.coll__number", type: "text" },
         { id: "specimen_id", title: "specimen.number", type: "text" },
         { id: "specimen_nr", title: "specimen.specimen_nr", type: "text" },
         {
@@ -71,13 +69,13 @@ export default {
           title: "specimen.agent_collected",
           type: "text"
         },
-        { id: "storage__location", title: "specimen.storage", type: "text" },
-        {
-          id: "is_private",
-          title: "specimen.is_private",
-          type: "text",
-          isPrivate: true
-        },
+        // { id: "storage__location", title: "specimen.storage", type: "text" },
+        // {
+        //   id: "is_private",
+        //   title: "specimen.is_private",
+        //   type: "text",
+        //   isPrivate: true
+        // },
         {
           id: "specimen",
           title: "specimen.specimen",
@@ -95,6 +93,11 @@ export default {
         {
           id: "agent_collected",
           title: "specimen.agent_collected",
+          type: "text"
+        },
+        {
+          id: "storage",
+          title: "specimen.storage",
           type: "text"
         }
       ],
@@ -144,7 +147,15 @@ export default {
         orderBy: "-id"
       };
     },
-    setDefaultSearchParametersFromDeleteButton() {
+    resetSearchPreferences() {
+      this.resetStorage();
+      this.resetSearchParameters();
+    },
+    resetStorage() {
+      this.$localStorage.remove("specimenSearchHistory");
+      this.$localStorage.remove("specimenViewType");
+    },
+    resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
     }
   }

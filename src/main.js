@@ -218,16 +218,28 @@ new Vue({
     localitySearchHistory: {
       type: Object
     },
+    localityViewType: {
+      type: String,
+      default: "table"
+    },
     sampleSearchHistory: {
       type: Object
+    },
+    sampleViewType: {
+      type: String,
+      default: "table"
     },
     projectSearchHistory: {
       type: Object
     },
+    projectViewType: {
+      type: String,
+      default: "table"
+    },
     siteSearchHistory: {
       type: Object
     },
-    localityViewType: {
+    siteViewType: {
       type: String,
       default: "table"
     },

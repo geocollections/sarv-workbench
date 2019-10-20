@@ -8,6 +8,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       :col-size="4"
+      v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
@@ -19,9 +20,6 @@
       search-history="keywordSearchHistory"
       view-type="keywordViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
     ></list-module-core>
   </div>
 </template>
@@ -116,7 +114,15 @@ export default {
         orderBy: "-id"
       };
     },
-    setDefaultSearchParametersFromDeleteButton() {
+    resetSearchPreferences() {
+      this.resetStorage();
+      this.resetSearchParameters();
+    },
+    resetStorage() {
+      this.$localStorage.remove("keywordSearchHistory");
+      this.$localStorage.remove("keywordViewType");
+    },
+    resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
     }
   }

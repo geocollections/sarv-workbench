@@ -139,6 +139,19 @@
                   </v-row>
                 </v-col>
               </v-row>
+
+              <v-row>
+                <v-col cols="12">
+                  <v-btn
+                    @click="$emit('reset:searchPreferences', true)"
+                    color="blue"
+                    dark
+                  >
+                    <v-icon left>fas fa-filter</v-icon>
+                    {{ $t("buttons.deletePreferences") }}
+                  </v-btn>
+                </v-col>
+              </v-row>
             </div>
           </transition>
         </v-card-text>

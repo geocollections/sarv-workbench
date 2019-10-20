@@ -8,6 +8,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       :col-size="4"
+      v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
@@ -18,10 +19,8 @@
       :searchParameters="searchParameters"
       :api-call="fetchSites"
       search-history="siteSearchHistory"
+      view-type="siteViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
     ></list-module-core>
   </div>
 </template>
@@ -124,7 +123,15 @@ export default {
     searchParametersChanged(newParams) {
       this.searchParameters = newParams;
     },
-    setDefaultSearchParametersFromDeleteButton() {
+    resetSearchPreferences() {
+      this.resetStorage();
+      this.resetSearchParameters();
+    },
+    resetStorage() {
+      this.$localStorage.remove("siteSearchHistory");
+      this.$localStorage.remove("siteViewType");
+    },
+    resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
     },
     setDefaultSearchParameters() {
