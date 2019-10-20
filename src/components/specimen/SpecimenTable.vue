@@ -28,14 +28,8 @@
             names.find(specimen => specimen.id === item.id)
         "
       >
-        <a
+        <div
           v-if="names.find(specimen => specimen.id === item.id).taxonId"
-          :href="
-            getTaxonUrl(names.find(specimen => specimen.id === item.id).taxonId)
-          "
-          title="Fossils"
-          class="sarv-link"
-          target="TaxonWindow"
         >
           <i
             v-translate="{
@@ -43,16 +37,10 @@
               en: names.find(specimen => specimen.id === item.id).name_en
             }"
           ></i>
-        </a>
+        </div>
 
-        <a
+        <div
           v-else-if="names.find(specimen => specimen.id === item.id).rockId"
-          :href="
-            getRockUrl(names.find(specimen => specimen.id === item.id).rockId)
-          "
-          title="Minerals, rocks, and mineral resources"
-          class="sarv-link"
-          target="RockWindow"
         >
           <i
             v-translate="{
@@ -60,7 +48,7 @@
               en: names.find(specimen => specimen.id === item.id).name_en
             }"
           ></i>
-        </a>
+        </div>
 
         <i
           v-else
@@ -72,7 +60,7 @@
       </div>
     </template>
 
-    <template v-slot:item.locality="{ item }">
+    <template v-slot:item.locality__locality="{ item }">
       <router-link
         :to="{ path: '/locality/' + item.locality_id }"
         :title="$t('editLocality.editMessage')"
@@ -95,49 +83,49 @@
       <span v-else>{{ item.depth }}</span>
     </template>
 
-    <template v-slot:item.stratigraphy="{ item }">
+    <template v-slot:item.stratigraphy__stratigraphy="{ item }">
       <div>
-        <a
-          v-if="item.stratigraphy_id"
-          :href="
-            getGeoDetailUrl({
-              object: 'stratigraphy',
-              id: item.stratigraphy_id
-            })
-          "
-          :title="$t('editStratigraphy.viewMessage')"
-          class="sarv-link"
-          target="GeocollectionsWindow"
-        >
+<!--        <a-->
+<!--          v-if="item.stratigraphy_id"-->
+<!--          :href="-->
+<!--            getGeoDetailUrl({-->
+<!--              object: 'stratigraphy',-->
+<!--              id: item.stratigraphy_id-->
+<!--            })-->
+<!--          "-->
+<!--          :title="$t('editStratigraphy.viewMessage')"-->
+<!--          class="sarv-link"-->
+<!--          target="GeocollectionsWindow"-->
+<!--        >-->
           <span
             v-translate="{
               et: item.stratigraphy__stratigraphy,
               en: item.stratigraphy__stratigraphy_en
             }"
           ></span>
-        </a>
+<!--        </a>-->
         <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
           |
         </span>
-        <a
-          v-if="item.lithostratigraphy_id"
-          :href="
-            getGeoDetailUrl({
-              object: 'stratigraphy',
-              id: item.lithostratigraphy_id
-            })
-          "
-          :title="$t('editStratigraphy.viewMessage')"
-          class="sarv-link"
-          target="GeocollectionsWindow"
-        >
+<!--        <a-->
+<!--          v-if="item.lithostratigraphy_id"-->
+<!--          :href="-->
+<!--            getGeoDetailUrl({-->
+<!--              object: 'stratigraphy',-->
+<!--              id: item.lithostratigraphy_id-->
+<!--            })-->
+<!--          "-->
+<!--          :title="$t('editStratigraphy.viewMessage')"-->
+<!--          class="sarv-link"-->
+<!--          target="GeocollectionsWindow"-->
+<!--        >-->
           <span
             v-translate="{
               et: item.lithostratigraphy__stratigraphy,
               en: item.lithostratigraphy__stratigraphy_en
             }"
           ></span>
-        </a>
+<!--        </a>-->
       </div>
     </template>
 
@@ -192,9 +180,9 @@ export default {
       { text: "specimen.id", value: "id" },
       { text: "specimen.number", value: "specimen_id" },
       { text: "specimen.name", value: "name", sortable: false },
-      { text: "specimen.locality", value: "locality" },
+      { text: "specimen.locality", value: "locality__locality" },
       { text: "specimen.depth", value: "depth" },
-      { text: "specimen.stratigraphy", value: "stratigraphy" },
+      { text: "specimen.stratigraphy", value: "stratigraphy__stratigraphy" },
       { text: "specimen.agent_collected", value: "agent_collected__agent" },
       { text: "", value: "link", sortable: false }
     ],

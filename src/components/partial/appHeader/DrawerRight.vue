@@ -36,9 +36,6 @@
 
         <v-list-item
           class="d-flex flex-column justify-content-end"
-          :style="{
-            'padding-top': index === 0 && !$route.meta.isEdit ? '6px' : ''
-          }"
           v-for="(field, index) in tableSearchParameters.filters"
           :key="index"
         >
@@ -55,7 +52,7 @@
           >
             <template v-slot:activator="{ on }">
               <v-text-field
-                dense
+                hide-details
                 v-model="tableSearchParameters.searchParameters[field.id]"
                 :label="$t(field.title)"
                 prepend-inner-icon="far fa-calendar-alt"
@@ -83,13 +80,13 @@
             v-model="tableSearchParameters.searchParameters[field.id]"
             color="deep-orange"
             :type="field.type"
-            dense
+            hide-details
           ></v-text-field>
         </v-list-item>
 
         <!-- CHECKBOXES START -->
         <!-- PHOTO_ARCHIVE -->
-        <v-list-item v-if="$route.meta.object === 'attachment'">
+        <v-list-item class="mt-2" v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
               tableSearchParameters.searchParameters.specimen_image_attachment
@@ -145,7 +142,7 @@
         </v-list-item>
 
         <!-- IS_ESTONIAN_REFERENCE -->
-        <v-list-item v-if="$route.meta.object === 'reference'">
+        <v-list-item class="mt-2" v-if="$route.meta.object === 'reference'">
           <v-checkbox
             v-model="tableSearchParameters.searchParameters.isEstonianReference"
             :label="$t('reference.is_estonian_reference')"

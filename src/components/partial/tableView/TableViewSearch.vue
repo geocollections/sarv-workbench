@@ -63,10 +63,10 @@
                   <!-- REGULAR SEARCH FIELD -->
                   <v-text-field
                     v-else
-                    dense
                     v-model="searchParameters[field.id]"
                     :label="$t(field.title)"
                     color="deep-orange"
+                    hide-details
                     :type="field.type"
                   ></v-text-field>
                 </v-col>
@@ -74,7 +74,7 @@
 
               <!-- ATTACHMENT CHECKBOXES -->
               <v-row
-                class="px-3 checkboxes"
+                class="px-3 mt-3 checkboxes"
                 v-if="$route.meta.object === 'attachment'"
               >
                 <v-col cols="12" class="py-0">
@@ -117,7 +117,7 @@
 
               <!-- REFERENCE CHECKBOXES -->
               <v-row
-                class="px-3 checkboxes"
+                class="px-3 mt-3 checkboxes"
                 v-if="$route.meta.object === 'reference'"
               >
                 <v-col cols="12" class="py-0">
@@ -140,7 +140,8 @@
                 </v-col>
               </v-row>
 
-              <v-row>
+              <!-- RESET SEARCH PREFERENCES -->
+              <v-row class="mt-3">
                 <v-col cols="12">
                   <v-btn
                     @click="$emit('reset:searchPreferences', true)"

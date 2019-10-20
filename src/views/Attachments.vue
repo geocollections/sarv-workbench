@@ -23,9 +23,6 @@
       view-type="attachmentViewType"
       :use-list-view="true"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
     ></list-module-core>
   </div>
 </template>
