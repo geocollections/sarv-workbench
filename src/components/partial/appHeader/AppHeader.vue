@@ -1,5 +1,5 @@
 <template>
-  <v-card tile id="app-bar" :class="{ 'd-print-none': $route.meta.object === 'sample' ||  $route.meta.object === 'specimen' }">
+  <v-card tile id="app-bar" class="d-print-none">
     <drawer-left
       :current-user="currentUser"
       :user-shortcuts="userShortcuts"

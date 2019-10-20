@@ -4,8 +4,7 @@
     <v-row
       align="center"
       justify="start"
-      class="px-4"
-      :class="{ 'd-print-none': $route.meta.object === 'sample' ||  $route.meta.object === 'specimen' }"
+      class="px-4 d-print-none"
     >
       <div class="pr-4 mb-2">
         <v-btn @click="deleteSearchPreferences" color="blue" dark>
@@ -48,8 +47,7 @@
     <!-- PAGINATION -->
     <div
       v-if="response.count > 0"
-      :class="{ 'd-print-none': $route.meta.object === 'sample' ||  $route.meta.object === 'specimen' }"
-      class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3"
+      class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none"
     >
       <div class="mr-3 mb-3">
         <v-select
@@ -96,9 +94,7 @@
 
     <!-- DATA TABLE -->
     <v-card class="table-card my-1" :loading="isLoading">
-      <v-card-title
-        :class="{ 'd-print-none': $route.meta.object === 'sample' ||  $route.meta.object === 'specimen' }"
-      >
+      <v-card-title class="d-print-none">
         <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
         <span id="table-title" class="text-uppercase">
           {{ module }}

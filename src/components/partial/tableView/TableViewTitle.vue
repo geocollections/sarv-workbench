@@ -1,5 +1,5 @@
 <template>
-  <v-row class="table-view-title">
+  <v-row class="table-view-title d-print-none">
     <v-col>
       <span class="table-title">
         {{ $t(title) }}

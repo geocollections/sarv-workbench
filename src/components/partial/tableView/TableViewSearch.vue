@@ -1,5 +1,5 @@
 <template>
-  <v-row class="table-view-search" v-if="filters.length > 0">
+  <v-row class="table-view-search d-print-none" v-if="filters.length > 0">
     <v-col class="py-4">
       <v-card elevation="3">
         <v-card-title class="pb-0">
