@@ -4,7 +4,7 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border-top px-2 mb-2" :style="!validate('specimen') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
+    <fieldset class="border-top px-2 mb-2" :style="!validate('specimen') ? 'border-color: #dc3545!important;' : ''" id="block-info">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.info, 'text-danger': !validate('specimen') }"
               @click="block.info = !block.info">
         {{ $t('specimen.generalInfo') }}
@@ -70,21 +70,208 @@
       </transition>
     </fieldset>
 
-    <!-- GENERAL INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-info">
-      <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
-        {{ $t('specimen.generalInfo') }}
-        <i class="fas fa-project-diagram"></i>
+    <!-- LOCALITY INFO -->
+    <fieldset class="border-top px-2 mb-2" id="block-localityInfo">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.localityInfo }" @click="block.localityInfo = !block.localityInfo">
+        {{ $t('specimen.localityInfo') }}
+        <i class="fas fa-map-signs"></i>
       </legend>
 
       <transition name="fade">
-        <div v-show="block.info">
+        <div v-show="block.localityInfo">
 
-          <!-- NUMBER_FIELD -->
+          <!-- LOCALITY, LOCALITY_FREE, REMARKS_COLLECTING and LOCALITY_IS_PRIVATE -->
           <div class="row">
+            <div class="col-md-3">
+              <label :for="`locality`">{{ $t('specimen.locality') }}:</label>
+              <vue-multiselect v-model="specimen.locality"
+                               id="locality"
+                               track-by="id"
+                               :label="localityLabel"
+                               :options="autocomplete.locality"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               @search-change="autocompleteLocalitySearch2"
+                               :loading="autocomplete.loaders.locality"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[localityLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
 
+            <div class="col-md-3">
+              <label :for="`locality_free`">{{ $t('specimen.locality_free') }}:</label>
+              <b-form-input id="locality_free" v-model="specimen.locality_free" type="text"></b-form-input>
+            </div>
 
+            <div class="col-md-3">
+              <label :for="`remarks_collecting`">{{ $t('specimen.remarks_collecting') }}:</label>
+              <b-form-input id="remarks_collecting" v-model="specimen.remarks_collecting" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`locality_is_private`">{{ $t('specimen.locality_is_private') }}:</label>
+              <vs-checkbox class="justify-content-start" id="locality_is_private" v-model="specimen.locality_is_private" icon="fa-eye-slash" icon-pack="fas">
+                {{ specimen.locality_is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}
+              </vs-checkbox>
+            </div>
           </div>
+
+          <!-- SAMPLE, SAMPLE_NUMBER, DEPTH and DEPTH_INTERVAL -->
+          <div class="row">
+            <div class="col-md-3">
+              <label :for="`sample`">{{ $t('specimen.sample') }}:</label>
+              <vue-multiselect id="sample"
+                               v-model="specimen.sample"
+                               label="number"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.sample"
+                               :options="autocomplete.sample"
+                               @search-change="autocompleteSampleSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.number }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`sample_number`">{{ $t('specimen.sample_number') }}:</label>
+              <b-form-input id="sample_number" v-model="specimen.sample_number" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`depth`">{{ $t('specimen.depth') }}:</label>
+              <b-form-input id="depth" v-model="specimen.depth" type="number" step="0.01"></b-form-input>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`depth_interval`">{{ $t('specimen.depth_interval') }}:</label>
+              <b-form-input id="depth_interval" v-model="specimen.depth_interval" type="number" step="0.01"></b-form-input>
+            </div>
+          </div>
+
+          <!-- STRATIGRAPHY, LITHOSTRATIGRAPHY, STRATIGRAPHY_FREE and FIELD NUMBER -->
+          <div class="row">
+            <div class="col-md-3">
+              <label :for="`stratigraphy`">{{ $t('specimen.stratigraphy') }}:</label>
+              <vue-multiselect v-model="specimen.stratigraphy"
+                               id="stratigraphy"
+                               :label="stratigraphyLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.stratigraphy"
+                               :options="autocomplete.stratigraphy"
+                               @search-change="autocompleteStratigraphySearch2"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[stratigraphyLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`lithostratigraphy`">{{ $t('specimen.lithostratigraphy') }}:</label>
+              <vue-multiselect v-model="specimen.lithostratigraphy"
+                               id="lithostratigraphy"
+                               :label="stratigraphyLabel"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.lithostratigraphy"
+                               :options="autocomplete.lithostratigraphy"
+                               @search-change="autocompleteLithostratigraphySearch2"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option[stratigraphyLabel] }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`stratigraphy_free`">{{ $t('specimen.stratigraphy_free') }}:</label>
+              <b-form-input id="stratigraphy_free" v-model="specimen.stratigraphy_free" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`number_field`">{{ $t('specimen.number_field') }}:</label>
+              <b-form-input id="number_field" v-model="specimen.number_field" type="text"></b-form-input>
+            </div>
+          </div>
+
+          <!-- AGENT_COLLECTED, AGENT_COLLECTED_FREE, DATE_COLLECTED, DATE_COLLECTED_FREE -->
+          <div class="row">
+            <div class="col-md-3">
+              <label :for="`agent_collected`">{{ $t('specimen.agent_collected') }}:</label>
+              <vue-multiselect id="agent"
+                               v-model="specimen.agent_collected"
+                               label="agent"
+                               track-by="id"
+                               :placeholder="$t('add.inputs.autocomplete')"
+                               :loading="autocomplete.loaders.agent_collected"
+                               :options="autocomplete.agent_collected"
+                               @search-change="autocompleteAgentCollectedSearch"
+                               :internal-search="false"
+                               :preserve-search="true"
+                               :clear-on-select="false"
+                               :show-labels="false">
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.agent }}</strong>
+                </template>
+                <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+              </vue-multiselect>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`agent_collected_free`">{{ $t('specimen.agent_collected_free') }}:</label>
+              <b-form-input id="agent_collected_free" v-model="specimen.agent_collected_free" type="text"></b-form-input>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`date_collected`">{{ $t('specimen.date_collected') }}:</label>
+              <datepicker id="date_start"
+                          v-model="specimen.date_collected"
+                          use-utc="true "
+                          lang="en"
+                          :first-day-of-week="1"
+                          format="DD MMM YYYY"
+                          input-class="form-control"></datepicker>
+            </div>
+
+            <div class="col-md-3">
+              <label :for="`date_collected_free`">{{ $t('specimen.date_collected_free') }}:</label>
+              <b-form-input id="date_collected_free" v-model="specimen.date_collected_free" type="text"></b-form-input>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </fieldset>
+
+    <!-- GENERAL INFO -->
+    <fieldset class="border-top px-2 mb-2" id="block-info">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.localityInfo }" @click="block.localityInfo = !block.localityInfo">
+        {{ $t('specimen.localityInfo') }}
+        <i class="fas fa-map-signs"></i>
+      </legend>
+
+      <transition name="fade">
+        <div v-show="block.localityInfo">
 
           <!-- TYPE, PART, CLASSIFICATION and PARENT -->
           <div class="row">
@@ -777,7 +964,7 @@
           requiredFields: ['fossil'],
           specimen: {},
           searchParameters: this.setDefaultSearchParameters(),
-          block: {requiredFields: true, info: true, description: true},
+          block: {requiredFields: true, localityInfo: true, description: true},
         }
       },
 
