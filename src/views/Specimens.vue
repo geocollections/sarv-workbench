@@ -26,8 +26,10 @@
       view-type="specimenViewType"
       :multi-ordering="true"
       :use-list-view="true"
+      :use-image-view="true"
       :export-buttons="true"
       v-on:search-params-changed="searchParametersChanged"
+      v-on:search:specimenImages="searchSpecimenImages"
     ></list-module-core>
   </div>
 </template>
@@ -37,7 +39,7 @@ import ListModuleCore from "./ListModuleCore";
 import { mapState } from "vuex";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
-import { fetchSpecimens } from "../assets/js/api/apiCalls";
+import {fetchSpecimenImages, fetchSpecimens} from "../assets/js/api/apiCalls";
 
 export default {
   components: {
@@ -95,7 +97,8 @@ export default {
         }
       ],
       searchParameters: this.setDefaultSearchParameters(),
-      block: { search: true }
+      block: { search: true },
+      searchImages: false
     };
   },
 
@@ -120,7 +123,7 @@ export default {
   methods: {
     fetchSpecimens() {
       return new Promise(resolve => {
-        resolve(fetchSpecimens(this.searchParameters, this.databaseId));
+        resolve(this.searchImages ? fetchSpecimenImages(this.searchParameters, this.databaseId) : fetchSpecimens(this.searchParameters, this.databaseId));
       });
     },
     searchParametersChanged(newParams) {
@@ -150,6 +153,12 @@ export default {
     },
     resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
+    },
+    searchSpecimenImages(searchImages) {
+      this.searchImages = searchImages;
+      // Just to trigger change
+      if (searchImages) this.searchParameters.orderBy = "-date_added";
+      else this.searchParameters.orderBy = "-id";
     }
   }
 };

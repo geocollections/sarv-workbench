@@ -512,7 +512,7 @@
           </li>
         </ul>
 
-        <div class="row">
+        <div class="row" v-if="$route.meta.isEdit">
           <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
             <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
               <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>

@@ -21,7 +21,7 @@
       :api-call="fetchAttachments"
       search-history="attachmentSearchHistory"
       view-type="attachmentViewType"
-      :use-list-view="true"
+      :use-image-view="true"
       v-on:search-params-changed="searchParametersChanged"
     ></list-module-core>
   </div>

@@ -1380,6 +1380,58 @@ export function fetchSpecimens(data, databaseId) {
   }
 }
 
+export function fetchSpecimenImages(data, databaseId) {
+  const fields = "id,specimen_id,size_mb,original_filename,uuid_filename,user_added";
+  let searchFields = "";
+  //
+  // if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
+  //   searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:icontains`;
+  // }
+  //
+  // if (data.collNumber && data.collNumber.trim().length > 0) {
+  //   searchFields += `&coll__number__icontains=${data.collNumber}`;
+  // }
+  //
+  // if (data.fossil && data.fossil.trim().length > 0) {
+  //   searchFields += `&multi_search=value:${data.fossil};fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:icontains`;
+  // }
+  //
+  // if (data.mineralRock && data.mineralRock.trim().length > 0) {
+  //   // Todo: Duplicate records issue, but distinct makes it slow
+  //   if (data.fossil && data.fossil.trim().length > 0)
+  //     searchFields += "&distinct=true";
+  //   searchFields += `&multi_search=value:${data.mineralRock};fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:icontains`;
+  // }
+  //
+  // if (data.locality && data.locality.trim().length > 0) {
+  //   searchFields += `&multi_search=value:${data.locality};fields:locality__locality,locality__locality_en,locality_free;lookuptype:icontains`;
+  // }
+  //
+  // if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
+  //   searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:icontains`;
+  // }
+  //
+  // if (data.agent_collected && data.agent_collected.trim().length > 0) {
+  //   searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:icontains`;
+  // }
+
+  if (typeof databaseId !== "undefined" && databaseId !== null) {
+    searchFields += `&database_id=${databaseId}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
 export function fetchListSpecimenKind() {
   return fetch(`list_specimen_kind/?format=json`);
 }

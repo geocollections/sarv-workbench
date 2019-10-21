@@ -1,11 +1,7 @@
 <template>
   <div class="list-module-core">
     <!-- EXPORT and OPTIONS -->
-    <v-row
-      align="center"
-      justify="start"
-      class="px-4 d-print-none"
-    >
+    <v-row align="center" justify="start" class="px-4 d-print-none">
       <!-- EXPORT -->
       <div class="mr-4 mb-2" v-if="exportButtons">
         <export-buttons
@@ -14,7 +10,10 @@
         ></export-buttons>
       </div>
 
-      <div v-if="useListView || useAlternativeTableView" class="mb-2">
+      <div
+        v-if="useListView || useImageView || useAlternativeTableView"
+        class="mb-2"
+      >
         <v-radio-group
           class="radio-buttons mt-0"
           v-model="currentView"
@@ -31,7 +30,19 @@
             v-if="useListView"
             class="mb-2"
             value="list"
-            :label="($route.meta.object === 'sample' || $route.meta.object === 'specimen') ? $t('references.labelView') : $t('references.listView')"
+            :label="
+              $route.meta.object === 'sample' ||
+              $route.meta.object === 'specimen'
+                ? $t('references.labelView')
+                : $t('references.listView')
+            "
+            color="blue"
+          ></v-radio>
+          <v-radio
+            v-if="useImageView"
+            class="mb-2"
+            value="image"
+            :label="$t('buttons.imageView')"
             color="blue"
           ></v-radio>
           <v-radio
@@ -121,6 +132,13 @@
         :data="response.results"
       />
 
+      <!-- IMAGE VIEW -->
+      <image-view
+        v-if="isImageView && response.count > 0"
+        :module="module"
+        :data="response.results"
+      />
+
       <router-view
         ref="table"
         :response="response"
@@ -152,184 +170,188 @@
                 class="thead-light"
                 :class="{ 'sticky-header': isAlternativeTable }"
               >
-              <tr class="th-sort">
-                <!-- MULTI ORDERING -->
-                <th
-                  class="nowrap"
-                  v-if="multiOrdering === true && isTableView"
-                  v-for="item in activeColumns"
-                >
-                  <span
-                    @click="changeOrderMulti(item.id)"
-                    v-on:dblclick="removeOrder(item.id)"
-                    v-if="item.orderBy !== false"
+                <tr class="th-sort">
+                  <!-- MULTI ORDERING -->
+                  <th
+                    class="nowrap"
+                    v-if="multiOrdering === true && isTableView"
+                    v-for="item in activeColumns"
                   >
-                    <i
-                      class="fas fa-sort"
-                      v-if="isFieldInOrderBy(item.id) === 0"
-                    ></i>
-                    <i
-                      class="fas fa-sort-up"
-                      v-if="isFieldInOrderBy(item.id) === 1"
-                    ></i>
-                    <i
-                      class="fas fa-sort-down"
-                      v-if="isFieldInOrderBy(item.id) === -1"
-                    ></i>
-                    {{ $t(item.title) }}
-                    <i
-                      class="far fa-calendar-alt"
-                      v-if="item.isDate === true"
-                    ></i>
-                    <i v-if="item.isPrivate" class="fas fa-lock"></i>
-                    <i
-                      v-else-if="item.isEstonianAuthor"
-                      class="fas fa-user"
-                    ></i>
-                    <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
-                  </span>
-                  <span v-if="item.orderBy === false && item.showHeader">{{
-                    $t(item.title)
-                  }}</span>
-                  <br />
-                </th>
+                    <span
+                      @click="changeOrderMulti(item.id)"
+                      v-on:dblclick="removeOrder(item.id)"
+                      v-if="item.orderBy !== false"
+                    >
+                      <i
+                        class="fas fa-sort"
+                        v-if="isFieldInOrderBy(item.id) === 0"
+                      ></i>
+                      <i
+                        class="fas fa-sort-up"
+                        v-if="isFieldInOrderBy(item.id) === 1"
+                      ></i>
+                      <i
+                        class="fas fa-sort-down"
+                        v-if="isFieldInOrderBy(item.id) === -1"
+                      ></i>
+                      {{ $t(item.title) }}
+                      <i
+                        class="far fa-calendar-alt"
+                        v-if="item.isDate === true"
+                      ></i>
+                      <i v-if="item.isPrivate" class="fas fa-lock"></i>
+                      <i
+                        v-else-if="item.isEstonianAuthor"
+                        class="fas fa-user"
+                      ></i>
+                      <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
+                    </span>
+                    <span v-if="item.orderBy === false && item.showHeader">{{
+                      $t(item.title)
+                    }}</span>
+                    <br />
+                  </th>
 
-                <!-- REGULAR ORDERING -->
-                <th
-                  class="nowrap"
-                  v-if="multiOrdering === false && isTableView"
-                  v-for="item in activeColumns"
-                >
-                  <span
-                    @click="changeOrder(item.id)"
-                    v-if="item.orderBy !== false"
+                  <!-- REGULAR ORDERING -->
+                  <th
+                    class="nowrap"
+                    v-if="multiOrdering === false && isTableView"
+                    v-for="item in activeColumns"
                   >
-                    <i
-                      class="fas fa-sort"
-                      v-if="
-                        searchParameters.orderBy !== item.id &&
-                          searchParameters.orderBy !== '-' + item.id
-                      "
-                    ></i>
-                    <i
-                      class="fas"
-                      :class="
-                        searchParameters.orderBy.includes('-')
-                          ? 'fa-sort-down'
-                          : 'fa-sort-up'
-                      "
-                      v-else
-                    ></i>
-                    {{ $t(item.title) }}
-                    <i
-                      class="far fa-calendar-alt"
-                      v-if="item.isDate === true"
-                    ></i>
-                    <i v-if="item.isPrivate" class="fas fa-lock"></i>
-                    <i
-                      v-else-if="item.isEstonianAuthor"
-                      class="fas fa-user"
-                    ></i>
-                    <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
-                  </span>
-                  <span v-if="item.orderBy === false && item.showHeader">{{
-                    $t(item.title)
-                  }}</span>
-                  <br />
-                </th>
+                    <span
+                      @click="changeOrder(item.id)"
+                      v-if="item.orderBy !== false"
+                    >
+                      <i
+                        class="fas fa-sort"
+                        v-if="
+                          searchParameters.orderBy !== item.id &&
+                            searchParameters.orderBy !== '-' + item.id
+                        "
+                      ></i>
+                      <i
+                        class="fas"
+                        :class="
+                          searchParameters.orderBy.includes('-')
+                            ? 'fa-sort-down'
+                            : 'fa-sort-up'
+                        "
+                        v-else
+                      ></i>
+                      {{ $t(item.title) }}
+                      <i
+                        class="far fa-calendar-alt"
+                        v-if="item.isDate === true"
+                      ></i>
+                      <i v-if="item.isPrivate" class="fas fa-lock"></i>
+                      <i
+                        v-else-if="item.isEstonianAuthor"
+                        class="fas fa-user"
+                      ></i>
+                      <!--                    <i v-else-if="item.isEstonianReference" class="fas fa-book"></i>-->
+                    </span>
+                    <span v-if="item.orderBy === false && item.showHeader">{{
+                      $t(item.title)
+                    }}</span>
+                    <br />
+                  </th>
 
-                <!-- ALTERNATIVE TABLE TH START -->
-                <!-- MULTI ORDERING for alternativeTable -->
-                <th
-                  class="break-all-words"
-                  :style="'font-size:' + alternativeTableControls.size + 'px;'"
-                  v-if="
-                    multiOrdering === true &&
-                      isAlternativeTable &&
-                      alternativeTableControls.fields.includes(key)
-                  "
-                  v-for="(value, key) in response.results[0]"
-                  :key="key"
-                >
-                  <span
-                    @click="changeOrderMulti(key)"
-                    v-on:dblclick="removeOrder(key)"
+                  <!-- ALTERNATIVE TABLE TH START -->
+                  <!-- MULTI ORDERING for alternativeTable -->
+                  <th
+                    class="break-all-words"
+                    :style="
+                      'font-size:' + alternativeTableControls.size + 'px;'
+                    "
+                    v-if="
+                      multiOrdering === true &&
+                        isAlternativeTable &&
+                        alternativeTableControls.fields.includes(key)
+                    "
+                    v-for="(value, key) in response.results[0]"
+                    :key="key"
                   >
-                    <i
-                      class="fas fa-sort"
-                      v-if="isFieldInOrderBy(item.id) === 0"
-                    ></i>
-                    <i
-                      class="fas fa-sort-up"
-                      v-if="isFieldInOrderBy(item.id) === 1"
-                    ></i>
-                    <i
-                      class="fas fa-sort-down"
-                      v-if="isFieldInOrderBy(item.id) === -1"
-                    ></i>
-                    {{ key }}
-                  </span>
-                  <br />
-                </th>
+                    <span
+                      @click="changeOrderMulti(key)"
+                      v-on:dblclick="removeOrder(key)"
+                    >
+                      <i
+                        class="fas fa-sort"
+                        v-if="isFieldInOrderBy(item.id) === 0"
+                      ></i>
+                      <i
+                        class="fas fa-sort-up"
+                        v-if="isFieldInOrderBy(item.id) === 1"
+                      ></i>
+                      <i
+                        class="fas fa-sort-down"
+                        v-if="isFieldInOrderBy(item.id) === -1"
+                      ></i>
+                      {{ key }}
+                    </span>
+                    <br />
+                  </th>
 
-                <!-- REGULAR ORDERING for alternativeTable -->
-                <th
-                  class="break-all-words"
-                  :style="'font-size:' + alternativeTableControls.size + 'px;'"
-                  v-if="
-                    multiOrdering === false &&
-                      isAlternativeTable &&
-                      alternativeTableControls.fields.includes(key)
-                  "
-                  v-for="(value, key) in response.results[0]"
-                  :key="key"
-                >
-                  <span @click="changeOrder(key)">
-                    <i
-                      class="fas fa-sort"
-                      v-if="
-                        searchParameters.orderBy !== item.id &&
-                          searchParameters.orderBy !== '-' + item.id
-                      "
-                    ></i>
-                    <i
-                      class="fas"
-                      :class="
-                        searchParameters.orderBy.includes('-')
-                          ? 'fa-sort-down'
-                          : 'fa-sort-up'
-                      "
-                      v-else
-                    ></i>
-                    {{ key }} </span
-                  ><br />
-                </th>
-                <!-- ALTERNATIVE TABLE TH END -->
-              </tr>
+                  <!-- REGULAR ORDERING for alternativeTable -->
+                  <th
+                    class="break-all-words"
+                    :style="
+                      'font-size:' + alternativeTableControls.size + 'px;'
+                    "
+                    v-if="
+                      multiOrdering === false &&
+                        isAlternativeTable &&
+                        alternativeTableControls.fields.includes(key)
+                    "
+                    v-for="(value, key) in response.results[0]"
+                    :key="key"
+                  >
+                    <span @click="changeOrder(key)">
+                      <i
+                        class="fas fa-sort"
+                        v-if="
+                          searchParameters.orderBy !== item.id &&
+                            searchParameters.orderBy !== '-' + item.id
+                        "
+                      ></i>
+                      <i
+                        class="fas"
+                        :class="
+                          searchParameters.orderBy.includes('-')
+                            ? 'fa-sort-down'
+                            : 'fa-sort-up'
+                        "
+                        v-else
+                      ></i>
+                      {{ key }} </span
+                    ><br />
+                  </th>
+                  <!-- ALTERNATIVE TABLE TH END -->
+                </tr>
 
-              <tr>
-                <th class="p-0" v-for="item in columns" v-if="showFilters">
-                  <b-form-input
-                    autocomplete="off"
-                    style="display: inline !important;max-width: 100%; "
-                    class="col-sm-8"
-                    v-model="searchParameters[item.id]"
-                    :id="item.id"
-                    :type="item.type"
-                    v-if="item.type === 'text'"
-                  ></b-form-input>
-                  <b-form-input
-                    autocomplete="off"
-                    style="display: inline !important;max-width: 100%; "
-                    class="col-sm-8"
-                    v-model="searchParameters[item.id]"
-                    :id="item.id"
-                    :type="item.type"
-                    v-if="item.type === 'number'"
-                    min="0"
-                  ></b-form-input>
-                </th>
-              </tr>
+                <tr>
+                  <th class="p-0" v-for="item in columns" v-if="showFilters">
+                    <b-form-input
+                      autocomplete="off"
+                      style="display: inline !important;max-width: 100%; "
+                      class="col-sm-8"
+                      v-model="searchParameters[item.id]"
+                      :id="item.id"
+                      :type="item.type"
+                      v-if="item.type === 'text'"
+                    ></b-form-input>
+                    <b-form-input
+                      autocomplete="off"
+                      style="display: inline !important;max-width: 100%; "
+                      class="col-sm-8"
+                      v-model="searchParameters[item.id]"
+                      :id="item.id"
+                      :type="item.type"
+                      v-if="item.type === 'number'"
+                      min="0"
+                    ></b-form-input>
+                  </th>
+                </tr>
               </thead>
 
               <router-view
@@ -362,13 +384,15 @@ import AlternativeTableControls from "../components/reference/AlternativeTableCo
 import { fetchChangePrivacyState } from "../assets/js/api/apiCalls";
 import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import debounce from "lodash/debounce";
+import ImageView from "../components/partial/ImageView";
 
 export default {
   components: {
     AlternativeTableControls,
     AlternativeTableView,
     ExportButtons,
-    ListView
+    ListView,
+    ImageView
   },
   props: {
     apiCall: {
@@ -416,6 +440,11 @@ export default {
     },
 
     useListView: {
+      type: Boolean,
+      default: false
+    },
+
+    useImageView: {
       type: Boolean,
       default: false
     },
@@ -489,6 +518,10 @@ export default {
       return this.currentView === "list";
     },
 
+    isImageView() {
+      return this.currentView === "image";
+    },
+
     isAlternativeTable() {
       return this.currentView === "alternativeTable";
     },
@@ -516,6 +549,10 @@ export default {
     },
     currentView(newVal) {
       this.$localStorage.set(this.viewType, newVal);
+
+      if (this.module === "specimen" && newVal === "image") {
+        this.$emit("search:specimenImages", true);
+      } else this.$emit("search:specimenImages", false);
     }
   },
 

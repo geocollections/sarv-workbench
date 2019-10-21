@@ -1351,7 +1351,8 @@
     "copy": "Copy to Clipboard",
     "downloadRIS": "Export to RIS",
     "search": "Search",
-    "listView": "List view"
+    "listView": "List view",
+    "imageView": "Image view"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",

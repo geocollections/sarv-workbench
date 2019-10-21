@@ -1,7 +1,7 @@
 <template>
   <div v-if="data.length > 0">
 
-    <vs-switch class="mb-2" v-model="isFancyImageList">
+    <vs-switch class="mb-2 mx-2" v-model="isFancyImageList">
       <span slot="on">{{ $t('attachments.fancyView') }}</span>
       <span slot="off">{{ $t('attachments.regularView') }}</span>
     </vs-switch>
@@ -9,7 +9,7 @@
     <div v-if="isFancyImageList" class="vs-component vs-images vs-images-hover-default">
 
       <ul class="vs-ul-images vs-images--ul">
-        <li class="vs-image custom-size" v-for="(entity, index) in data">
+        <li class="vs-image custom-size" v-for="(entity, index) in data" :key="index">
 
           <div class="con-vs-image" :id="'icon-' + index">
 
@@ -45,8 +45,8 @@
 
     </div>
 
-    <div v-if="!isFancyImageList" class="row">
-      <div class="preview" v-for="(entity, index) in data">
+    <div v-if="!isFancyImageList" class="row mb-3 mx-3">
+      <div class="preview" v-for="(entity, index) in data" :key="index">
 
         <div :id="'icon-' + index" class="">
           <router-link v-if="entity.uuid_filename !== null" :title="$t('edit.editMessage')"
@@ -54,11 +54,11 @@
             <img class="image-preview"
                  v-if="entity.uuid_filename.endsWith('jpg') || entity.uuid_filename.endsWith('jpeg') || entity.uuid_filename.endsWith('png')"
                  :src="composeFileUrl(entity.uuid_filename)"/>
-            <font-awesome-icon v-else class="ico" size="6x" icon="file"/>
+            <i v-else class="ico far fa-file fa-6x"/>
           </router-link>
 
           <router-link :title="$t('edit.editMessage')" :to="{ path: '/attachment/' + entity.id }">
-            <font-awesome-icon v-if="entity.uuid_filename === null" size="5x" :icon="file"/>
+            <i v-if="entity.uuid_filename === null" class=" far fa-file fa-5x"/>
           </router-link>
         </div>
 

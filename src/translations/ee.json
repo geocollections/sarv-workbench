@@ -1351,7 +1351,8 @@
     "copy": "Kopeeri",
     "downloadRIS": "Ekspordi RIS",
     "search": "Otsi",
-    "listView": "Loendivaade"
+    "listView": "Loendivaade",
+    "imageView": "Pildid"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",
