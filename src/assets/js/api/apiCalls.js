@@ -1381,7 +1381,7 @@ export function fetchSpecimens(data, databaseId) {
 }
 
 export function fetchSpecimenImages(data, databaseId) {
-  const fields = "id,specimen_id,size_mb,original_filename,uuid_filename,user_added";
+  const fields = "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__database__acronym";
   let searchFields = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
