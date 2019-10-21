@@ -206,8 +206,9 @@
       "description": "Description"
     },
     "specimen": {
-      "requiredFields": "Mandatory fields",
       "info": "General info",
+      "localityInfo": "Locality and stratigraphy",
+      "details": "Specimen details",
       "description": "Description"
     },
     "keyword": {
@@ -746,20 +747,20 @@
     "status": "Status",
     "original_status": "Orig. status",
     "remarks": "Remarks public",
-    "remarks_internal": "Remakrs internal",
+    "remarks_internal": "Remarks internal",
     "tags": "Tags",
     "is_private_text": "Private",
     "is_public_text": "Public",
     "localityInfo": "Locality and stratigraphy",
     "details": "Specimen details",
     "relatedTables": {
-      "specimen_identification": "Taxons",
-      "specimen_identification_geology": "Rock/Mineral names",
+      "specimen_identification": "Taxon names",
+      "specimen_identification_geology": "Rock names",
       "specimen_reference": "References",
       "specimen_description": "Descriptions",
       "attachment": "Files",
       "specimen_location": "Locations",
-      "specimen_history": "History and procedures",
+      "specimen_history": "History",
       "analysis": "Analyses"
     }
   },

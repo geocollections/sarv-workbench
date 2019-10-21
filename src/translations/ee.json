@@ -206,8 +206,9 @@
       "description": "Kirjeldus"
     },
     "specimen": {
-      "requiredFields": "Kohustuslikud väljad",
       "info": "Üldinfo",
+      "localityInfo": "Leiuinfo",
+      "details": "Säiliku info",
       "description": "Lisainfo"
     },
     "keyword": {
@@ -753,13 +754,13 @@
     "localityInfo": "Leiuinfo",
     "details": "Säiliku info",
     "relatedTables": {
-      "specimen_identification": "Fossiili määrangud",
-      "specimen_identification_geology": "Kivimi/mineraali nimed",
-      "specimen_reference": "Kirjandusviited",
+      "specimen_identification": "Taksoni nimed",
+      "specimen_identification_geology": "Kivi nimed",
+      "specimen_reference": "Kirjandus",
       "specimen_description": "Kirjeldused",
       "attachment": "Failid",
-      "specimen_location": "Osised ja asukohad",
-      "specimen_history": "Ajalugu ja protseduurid",
+      "specimen_location": "Osised",
+      "specimen_history": "Ajalugu",
       "analysis": "Analüüsid"
     }
   },

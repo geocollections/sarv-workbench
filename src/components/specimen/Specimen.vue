@@ -490,7 +490,7 @@
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
 
-          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+          <li class="nav-item" v-for="tab in computedRelatedTabs" :key="tab.name">
             <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
               <span>{{ $t('specimen.relatedTables.' + tab.name) }}</span>
 
@@ -531,13 +531,15 @@
           </div>
         </div>
 
-        <specimen-identification :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+        <specimen-identification v-if="specimen.fossil && (specimen.fossil.id === 1 || specimen.fossil.id === 7)"
+                                 :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                                  v-on:add-related-data="addRelatedData"
                                  v-on:set-default="setDefault"
                                  v-on:edit-row="editRow"
                                  v-on:remove-row="removeRow" />
 
-        <specimen-identification-geology :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+        <specimen-identification-geology v-if="specimen.fossil && (specimen.fossil.id === 1 || specimen.fossil.id === 7)"
+                                         :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
                                          v-on:add-related-data="addRelatedData"
                                          v-on:set-default="setDefault"
                                          v-on:edit-row="editRow"
@@ -695,7 +697,17 @@
     },
 
     computed: {
-      ...mapState(["databaseId"])
+      ...mapState(["databaseId"]),
+
+      computedRelatedTabs() {
+        return this.relatedTabs.filter(tab => {
+          if (tab.name === "specimen_identification" || tab.name === "specimen_identification_geology") {
+            if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
+              return tab
+            }
+          } else return tab
+        });
+      }
     },
 
     methods: {
@@ -809,6 +821,11 @@
               this.removeUnnecessaryFields(this.specimen, this.copyFields);
               this.$emit('data-loaded', this.specimen)
               this.sendingData = false;
+
+              // Set default tab
+              if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
+                this.setTab('specimen_identification')
+              } else this.setTab('specimen_reference')
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
@@ -821,8 +838,11 @@
           this.$on('tab-changed', this.setTab);
 
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
-
-          this.setTab('specimen_identification')
+        } else {
+          // Set default tab
+          if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
+            this.setTab('specimen_identification')
+          } else this.setTab('specimen_reference')
         }
       },
 

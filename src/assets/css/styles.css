@@ -10,6 +10,10 @@ body {
   overflow-x: unset !important; /* Todo: Had to insert it after vuetify  */
 }
 
+/* Vuetify ul override for tabs in edit and add view */
+ul.nav.nav-tabs.nav-fill {
+  padding-left: 0 !important;
+}
 
 /* Todo: Remove after bootstrap integration Added this after vuetify because buttons get underline */
 a:hover {

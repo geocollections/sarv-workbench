@@ -43,6 +43,8 @@
         if (name === 'map') return 'fa-map';
         if (name === 'additionalInfo') return 'fa-project-diagram';
         if (name === 'relatedData') return 'fa-table';
+        if (name === 'localityInfo') return 'fa-map-signs';
+        if (name === 'details') return 'fa-info';
       },
 
       getIconPack(name) {
