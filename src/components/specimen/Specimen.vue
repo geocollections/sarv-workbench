@@ -3,21 +3,21 @@
     <spinner v-show="sendingData" class="loading-overlay" size="massive"
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
-    <!-- REQUIRED INFO -->
+    <!-- GENERAL INFO -->
     <fieldset class="border-top px-2 mb-2" :style="!validate('specimen') ? 'border-color: #dc3545!important;' : ''" id="block-requiredFields">
-      <legend class="w-auto my-0" :class="{ 'text-primary': !block.requiredFields, 'text-danger': !validate('specimen') }"
-              @click="block.requiredFields = !block.requiredFields">
-        {{ $t('specimen.requiredFields') }}
-        <i v-if="validate('specimen')" class="fas fa-check text-success"></i>
-        <i v-if="!validate('specimen')" class="fas fa-exclamation-triangle text-danger"></i>
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.info, 'text-danger': !validate('specimen') }"
+              @click="block.info = !block.info">
+        {{ $t('specimen.generalInfo') }}
+        <i v-if="validate('specimen')" class="fas fa-project-diagram text-success"></i>
+        <i v-if="!validate('specimen')" class="fas fa-project-diagram text-danger"></i>
       </legend>
 
       <transition name="fade">
-        <div v-if="block.requiredFields">
+        <div v-if="block.info">
 
-          <!-- FOSSIL -->
+          <!-- FOSSIL, SPECIMEN_ID, COLL and SPECIMEN_NR  -->
           <div class="row">
-            <div class="col-sm-12">
+            <div class="col-md-3">
               <label :for="`fossil`">{{ $t('specimen.fossil') }}:</label>
               <vue-multiselect v-model="specimen.fossil"
                                id="fossil"
@@ -33,24 +33,7 @@
                 <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
               </vue-multiselect>
             </div>
-          </div>
 
-        </div>
-      </transition>
-    </fieldset>
-
-    <!-- GENERAL INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-info">
-      <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
-        {{ $t('specimen.generalInfo') }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
-
-      <transition name="fade">
-        <div v-show="block.info">
-
-          <!-- SPECIMEN_ID, COLL, SPECIMEN_NR and NUMBER_FIELD -->
-          <div class="row">
             <div class="col-md-3">
               <label :for="`specimen_id`">{{ $t('specimen.specimen_id') }}:</label>
               <b-form-input id="specimen_id" v-model="specimen.specimen_id" type="text"></b-form-input>
@@ -81,11 +64,26 @@
               <label :for="`specimen_nr`">{{ $t('specimen.specimen_nr') }}:</label>
               <b-form-input id="specimen_nr" v-model="specimen.specimen_nr" type="text"></b-form-input>
             </div>
+          </div>
 
-            <div class="col-md-3">
-              <label :for="`number_field`">{{ $t('specimen.number_field') }}:</label>
-              <b-form-input id="number_field" v-model="specimen.number_field" type="text"></b-form-input>
-            </div>
+        </div>
+      </transition>
+    </fieldset>
+
+    <!-- GENERAL INFO -->
+    <fieldset class="border-top px-2 mb-2" id="block-info">
+      <legend class="w-auto my-0" :class="{ 'text-primary': !block.info }" @click="block.info = !block.info">
+        {{ $t('specimen.generalInfo') }}
+        <i class="fas fa-project-diagram"></i>
+      </legend>
+
+      <transition name="fade">
+        <div v-show="block.info">
+
+          <!-- NUMBER_FIELD -->
+          <div class="row">
+
+
           </div>
 
           <!-- TYPE, PART, CLASSIFICATION and PARENT -->
@@ -234,9 +232,9 @@
             </div>
           </div>
 
-          <!-- STRATIGRAPHY, LITHOSTRATIGRAPHY and STRATIGRAPHY_FREE -->
+          <!-- STRATIGRAPHY, LITHOSTRATIGRAPHY, STRATIGRAPHY_FREE and FIELD NUMBER -->
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label :for="`stratigraphy`">{{ $t('specimen.stratigraphy') }}:</label>
               <vue-multiselect v-model="specimen.stratigraphy"
                                id="stratigraphy"
@@ -257,7 +255,7 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label :for="`lithostratigraphy`">{{ $t('specimen.lithostratigraphy') }}:</label>
               <vue-multiselect v-model="specimen.lithostratigraphy"
                                id="lithostratigraphy"
@@ -278,11 +276,15 @@
               </vue-multiselect>
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
               <label :for="`stratigraphy_free`">{{ $t('specimen.stratigraphy_free') }}:</label>
               <b-form-input id="stratigraphy_free" v-model="specimen.stratigraphy_free" type="text"></b-form-input>
             </div>
 
+            <div class="col-md-3">
+              <label :for="`number_field`">{{ $t('specimen.number_field') }}:</label>
+              <b-form-input id="number_field" v-model="specimen.number_field" type="text"></b-form-input>
+            </div>
           </div>
 
           <!-- AGENT_COLLECTED, AGENT_COLLECTED_FREE, DATE_COLLECTED, DATE_COLLECTED_FREE -->
