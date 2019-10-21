@@ -727,6 +727,7 @@
     "type": "Tüüp",
     "part": "Osis",
     "fossil": "Olemus",
+    "fossilSearch": "Olemus",
     "depth_interval": "Sügavus int",
     "locality_free": "Loc. txt",
     "locality_free_en": "Loc. txt, EN",
