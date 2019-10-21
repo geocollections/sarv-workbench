@@ -494,13 +494,20 @@
             <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
               <span>{{ $t('specimen.relatedTables.' + tab.name) }}</span>
 
-              <span>
-                <sup>
-                  <b-badge pill variant="light">{{ relatedData[tab.name].length }}&nbsp;</b-badge>
-                </sup>
-              </span>
+              <v-chip v-if="relatedData[tab.name].length > 0" class="ml-1" color="blue lighten-2" dark outlined>
+                <v-icon left small>{{ tab.iconClass }}</v-icon>
+                <b style="color: black; font-size: larger;">
+                  {{ relatedData[tab.name].length }}
+                </b>
+              </v-chip>
 
-              <span><i :class="tab.iconClass"></i></span>
+<!--              <span>-->
+<!--                <sup>-->
+<!--                  <b-badge pill variant="light">{{ relatedData[tab.name].length }}&nbsp;</b-badge>-->
+<!--                </sup>-->
+<!--              </span>-->
+
+<!--              <span><i :class="tab.iconClass"></i></span>-->
             </a>
           </li>
         </ul>
