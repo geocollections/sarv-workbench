@@ -725,7 +725,7 @@
     "classification": "Classification",
     "type": "Type",
     "part": "Osis",
-    "fossil": "Fossil",
+    "fossil": "Category",
     "depth_interval": "Depth interval",
     "locality_free": "Loc. txt",
     "locality_free_en": "Loc. txt, EN",
