@@ -117,10 +117,14 @@
           class="small-image"
           style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 1mm;"
         >
-          <vue-q-r-code-component
-            :text="'http://geocollections.info/specimen/' + entity.id"
-            error-level="L"
-          ></vue-q-r-code-component>
+          <transition enter-active-class="animated fadeIn faster">
+            <div v-show="showQRCode">
+              <vue-q-r-code-component
+                :text="'http://geocollections.info/specimen/' + entity.id"
+                error-level="L"
+              ></vue-q-r-code-component>
+            </div>
+          </transition>
         </div>
       </div>
     </router-link>
@@ -145,8 +149,12 @@ export default {
     VueQRCodeComponent
   },
   data: () => ({
-    names: []
+    names: [],
+    showQRCode: false
   }),
+  created() {
+    setTimeout(() => (this.showQRCode = true), 1);
+  },
   watch: {
     data: {
       handler(newVal) {
@@ -230,85 +238,6 @@ export default {
         }
       }
     },
-
-    // getNames(listOfSpecimens) {
-    //   if (listOfSpecimens && listOfSpecimens.length > 0) {
-    //     listOfSpecimens.forEach(specimen => {
-    //       let specimenObject = {
-    //         id: specimen.id,
-    //         name: "",
-    //         name_en: ""
-    //       };
-    //
-    //       fetchSpecimenIdentifications(specimen.id).then(response => {
-    //         if (response.status === 200) {
-    //           if (
-    //             response.body &&
-    //             response.body.results &&
-    //             response.body.results.length > 0
-    //           ) {
-    //             let taxon = response.body.results[0].taxon__taxon;
-    //             let name = response.body.results[0].name;
-    //
-    //             if (taxon) {
-    //               specimenObject.name = taxon;
-    //               specimenObject.name_en = taxon;
-    //             } else if (name) {
-    //               specimenObject.name = name;
-    //               specimenObject.name_en = name;
-    //             }
-    //           } else {
-    //             // Try fetching name from identification geologies
-    //             fetchSpecimenIdentificationGeologies(specimen.id).then(
-    //               response => {
-    //                 if (response.status === 200) {
-    //                   if (
-    //                     response.body &&
-    //                     response.body.results &&
-    //                     response.body.results.length > 0
-    //                   ) {
-    //                     let rock_name = response.body.results[0].rock__name;
-    //                     let rock_name_en =
-    //                       response.body.results[0].rock__name_en;
-    //                     let rock_formula =
-    //                       response.body.results[0].rock__formula_html;
-    //                     let name = response.body.results[0].name;
-    //                     let name_en = response.body.results[0].name_en;
-    //
-    //                     // EST
-    //                     if (rock_name && !name) specimenObject.name = rock_name;
-    //                     else if (rock_name && name && rock_name !== name)
-    //                       specimenObject.name = name + " | " + rock_name;
-    //                     else specimenObject.name = name;
-    //
-    //                     // ENG
-    //                     if (rock_name_en && !name_en)
-    //                       specimenObject.name_en = rock_name_en;
-    //                     else if (
-    //                       rock_name_en &&
-    //                       name_en &&
-    //                       rock_name_en !== name_en
-    //                     )
-    //                       specimenObject.name_en =
-    //                         name_en + " | " + rock_name_en;
-    //                     else specimenObject.name_en = name_en;
-    //
-    //                     if (rock_formula) {
-    //                       specimenObject.name += " | " + rock_formula;
-    //                       specimenObject.name_en += " | " + rock_formula;
-    //                     }
-    //                   }
-    //                 }
-    //               }
-    //             );
-    //           }
-    //         }
-    //       });
-    //
-    //       this.names.push(specimenObject);
-    //     });
-    //   }
-    // },
 
     getFontSizeUsingLength(specimenName) {
       if (specimenName) {
@@ -398,6 +327,6 @@ export default {
 }
 
 .small-image >>> img {
-  width: 40px !important;
+  max-width: 40px !important;
 }
 </style>
