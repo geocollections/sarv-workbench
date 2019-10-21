@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    class="spceimen-table"
+    class="specimen-table"
     :headers="translatedHeaders"
     dense
     hide-default-footer

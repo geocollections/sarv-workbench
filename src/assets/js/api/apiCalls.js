@@ -1383,37 +1383,37 @@ export function fetchSpecimens(data, databaseId) {
 export function fetchSpecimenImages(data, databaseId) {
   const fields = "id,specimen_id,size_mb,original_filename,uuid_filename,user_added";
   let searchFields = "";
-  //
-  // if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-  //   searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:icontains`;
-  // }
-  //
-  // if (data.collNumber && data.collNumber.trim().length > 0) {
-  //   searchFields += `&coll__number__icontains=${data.collNumber}`;
-  // }
-  //
-  // if (data.fossil && data.fossil.trim().length > 0) {
-  //   searchFields += `&multi_search=value:${data.fossil};fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:icontains`;
-  // }
-  //
-  // if (data.mineralRock && data.mineralRock.trim().length > 0) {
-  //   // Todo: Duplicate records issue, but distinct makes it slow
-  //   if (data.fossil && data.fossil.trim().length > 0)
-  //     searchFields += "&distinct=true";
-  //   searchFields += `&multi_search=value:${data.mineralRock};fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:icontains`;
-  // }
-  //
-  // if (data.locality && data.locality.trim().length > 0) {
-  //   searchFields += `&multi_search=value:${data.locality};fields:locality__locality,locality__locality_en,locality_free;lookuptype:icontains`;
-  // }
-  //
-  // if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-  //   searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:icontains`;
-  // }
-  //
-  // if (data.agent_collected && data.agent_collected.trim().length > 0) {
-  //   searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:icontains`;
-  // }
+
+  if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
+    searchFields += `multi_search=value:${data.idSpecimen};fields:specimen_id,specimen__specimen_id,specimen__specimen_nr;lookuptype:icontains`;
+  }
+
+  if (data.collNumber && data.collNumber.trim().length > 0) {
+    searchFields += `&specimen__coll__number__icontains=${data.collNumber}`;
+  }
+
+  if (data.fossil && data.fossil.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.fossil};fields:specimen__specimenidentification__name,specimen__specimenidentification__taxon__taxon;lookuptype:icontains`;
+  }
+
+  if (data.mineralRock && data.mineralRock.trim().length > 0) {
+    // Todo: Duplicate records issue, but distinct makes it slow
+    if (data.fossil && data.fossil.trim().length > 0)
+      searchFields += "&distinct=true";
+    searchFields += `&multi_search=value:${data.mineralRock};fields:specimen__specimenidentificationgeologies__name,specimen__specimenidentificationgeologies__name_en,specimen__specimenidentificationgeologies__rock__name,specimen__specimenidentificationgeologies__rock__name_en;lookuptype:icontains`;
+  }
+
+  if (data.locality && data.locality.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.locality};fields:specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free;lookuptype:icontains`;
+  }
+
+  if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.stratigraphy};fields:specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en;lookuptype:icontains`;
+  }
+
+  if (data.agent_collected && data.agent_collected.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.agent_collected};fields:specimen__agent_collected__agent,specimen__agent_collected__forename,specimen__agent_collected__surename,specimen__agent_collected_free;lookuptype:icontains`;
+  }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database_id=${databaseId}`;

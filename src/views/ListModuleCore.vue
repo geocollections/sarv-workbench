@@ -550,9 +550,14 @@ export default {
     currentView(newVal) {
       this.$localStorage.set(this.viewType, newVal);
 
+      // Because specimen image and table use different search url
       if (this.module === "specimen" && newVal === "image") {
+        this.response = { count: 0, results: [] };
         this.$emit("search:specimenImages", true);
-      } else this.$emit("search:specimenImages", false);
+      } else {
+        this.response = { count: 0, results: [] };
+        this.$emit("search:specimenImages", false);
+      }
     }
   },
 
