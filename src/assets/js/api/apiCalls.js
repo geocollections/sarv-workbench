@@ -1412,10 +1412,18 @@ export function fetchDeaccession() {
   return fetch(`deaccession/?format=json`);
 }
 
-export function fetchSpecimenIdentifications(searchParameters) {
+export function fetchSpecimenIdentifications(specimenId, searchParameters) {
   if (searchParameters) {
     return fetch(
-      `specimen_identification/?page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+      `specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    );
+  }
+}
+
+export function fetchSpecimenIdentificationGeologies(specimenId, searchParameters) {
+  if (searchParameters) {
+    return fetch(
+      `specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
     );
   }
 }
@@ -1433,14 +1441,6 @@ export function fetchSpecimenIdentificationGeologiesList(listOfIds) {
   return fetch(
     `specimen_identification_geology/?specimen_id__in=${listOfIds}&current=true&fields=${fields}&order_by=name&format=json`
   );
-}
-
-export function fetchSpecimenIdentificationGeologies(searchParameters) {
-  if (searchParameters) {
-    return fetch(
-      `specimen_identification_geology/?page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
-    );
-  }
 }
 
 export function fetchSpecimenReferences(specimenId, searchParameters) {
