@@ -228,7 +228,7 @@ export default {
           name: "specimen",
           title: "specimens",
           links: [
-            { title: "specimens", path: "/specimen", icon: "fas fa-flask" },
+            { title: "specimens", path: "/specimen", icon: "fas fa-fish" },
             {
               title: "specimen",
               path: "/specimen/add",
