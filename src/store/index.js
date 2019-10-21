@@ -21,7 +21,8 @@ export function createStore() {
       activeProject: null,
       activeSample: null,
       activeSite: null,
-      shortcuts: []
+      shortcuts: [],
+      activeRelatedDataTab: null
     },
     actions,
     mutations,
