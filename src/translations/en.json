@@ -751,6 +751,7 @@
     "is_private_text": "Private",
     "is_public_text": "Public",
     "localityInfo": "Locality and stratigraphy",
+    "details": "Specimen details",
     "relatedTables": {
       "specimen_identification": "Taxons",
       "specimen_identification_geology": "Rock/Mineral names",

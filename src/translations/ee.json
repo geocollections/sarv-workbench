@@ -751,6 +751,7 @@
     "is_private_text": "Privaatne",
     "is_public_text": "Avalik",
     "localityInfo": "Leiuinfo",
+    "details": "Säiliku info",
     "relatedTables": {
       "specimen_identification": "Fossiili määrangud",
       "specimen_identification_geology": "Kivimi/mineraali nimed",
