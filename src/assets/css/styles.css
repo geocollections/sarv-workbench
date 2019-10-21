@@ -384,6 +384,7 @@ label {
 }
 
 .page-title {
+  padding-bottom: 0.5rem;
 	margin-bottom: 0.5rem;
 	border-bottom: solid 1px #999;
 }

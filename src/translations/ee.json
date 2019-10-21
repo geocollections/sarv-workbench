@@ -1347,7 +1347,8 @@
     "exportTo": "Ekspordi",
     "copyToClipboard": "Kopeeri",
     "downloadRIS": "Ekspordi RIS",
-    "search": "Otsi"
+    "search": "Otsi",
+    "listView": "Loendivaade"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",

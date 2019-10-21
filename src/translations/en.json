@@ -1347,7 +1347,8 @@
     "exportTo": "Export to",
     "copy": "Copy to Clipboard",
     "downloadRIS": "Export to RIS",
-    "search": "Search"
+    "search": "Search",
+    "listView": "List view"
   },
   "confirmation": {
     "question": "Are you sure you want to leave without saving the edits?",

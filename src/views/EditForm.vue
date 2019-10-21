@@ -2,9 +2,14 @@
 
     <div class="edit-form">
 
-      <div class="row mt-4 page-title">
-        <div class="col">
-          <p class="h2 float-left">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
+      <div class="d-flex flex-wrap mt-4 page-title justify-space-between">
+        <div class="">
+          <p class="h2 float-left mb-1 mr-2">{{ $t($route.meta.heading) }}: <b>{{$route.params.id}}</b></p>
+        </div>
+        <div class=" text-right">
+          <v-btn :to="{ path: '/' + $route.meta.object }" color="deep-orange" dark>
+            {{ $t("buttons.listView") }}
+          </v-btn>
         </div>
       </div>
 
