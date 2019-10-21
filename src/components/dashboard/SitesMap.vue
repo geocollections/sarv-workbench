@@ -8,17 +8,42 @@
 import * as L from "leaflet";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
-import { fetchRecentSites } from "../../assets/js/api/apiCalls";
+import {
+  fetchRecentImages,
+  fetchRecentSamples,
+  fetchRecentSites,
+  fetchRecentSpecimens
+} from "../../assets/js/api/apiCalls";
 import { mapState } from "vuex";
 
 export default {
   name: "SitesMap",
   data: () => ({
     map: null,
-    markers: [],
-    response: null,
-    markerIcon: new L.DivIcon({
-      html: "<i class='fas fa-circle' style='color: #ba68c8' />",
+    sites: [],
+    samples: [],
+    specimens: [],
+    images: [],
+    response: {
+      recentSites: null,
+      recentSamples: null,
+      recentSpecimens: null,
+      recentImages: null
+    },
+    sitesIcon: new L.DivIcon({
+      html: "<i class='far fa-circle' style='color: #FF3D00; background-color: #FFAB91; border-radius: 100%;' />",
+      className: "map-marker"
+    }),
+    samplesIcon: new L.DivIcon({
+      html: "<i class='far fa-circle' style='color: #FFC107; background-color: #FFE082; border-radius: 100%;' />",
+      className: "map-marker"
+    }),
+    specimensIcon: new L.DivIcon({
+      html: "<i class='far fa-circle' style='color: #673AB7; background-color: #B39DDB; border-radius: 100%;'/>",
+      className: "map-marker"
+    }),
+    imagesIcon: new L.DivIcon({
+      html: "<i class='far fa-circle' style='color: #009688; background-color: #80CBC4; border-radius: 100%;'/>",
       className: "map-marker"
     }),
     baseMaps: [
@@ -110,18 +135,19 @@ export default {
   },
 
   created() {
-    if (this.currentUser && this.currentUser.id) {
-      fetchRecentSites(this.currentUser.id).then(response => {
-        if (response && response.status === 200) this.response = response.body;
-      });
-    }
+    if (this.currentUser && this.currentUser.id)
+      this.fetchRecentData(this.currentUser.id);
   },
 
   watch: {
     response: {
       handler(newVal) {
-        if (newVal && newVal.results && newVal.results.length > 0) {
-          this.initMap(newVal.results);
+        if (
+          newVal &&
+          Object.entries(newVal).length > 0 &&
+          newVal.constructor === Object
+        ) {
+          this.initMap(newVal);
         }
       },
       deep: true
@@ -129,7 +155,33 @@ export default {
   },
 
   methods: {
-    initMap(results) {
+    async fetchRecentData(userId) {
+      const recentSites = await fetchRecentSites(userId);
+      const recentSamples = await fetchRecentSamples(userId);
+      const recentSpecimens = await fetchRecentSpecimens(userId);
+      const recentImages = await fetchRecentImages(userId);
+
+      this.response = {
+        recentSites: this.returnResponseResults(recentSites),
+        recentSamples: this.returnResponseResults(recentSamples),
+        recentSpecimens: this.returnResponseResults(recentSpecimens),
+        recentImages: this.returnResponseResults(recentImages)
+      };
+    },
+
+    returnResponseResults(apiResponse) {
+      if (apiResponse && apiResponse.status === 200) {
+        if (
+          apiResponse.body &&
+          apiResponse.body.count &&
+          apiResponse.body.count > 0
+        ) {
+          return apiResponse.body.results;
+        } else return null;
+      } else return null;
+    },
+
+    initMap(recentData) {
       this.map = L.map("map", {
         layers: [this.baseMaps[0].leafletObject],
         scrollWheelZoom: true
@@ -153,7 +205,7 @@ export default {
       //LAYERS CHANGED
       this.map.on("baselayerchange", this.handleLayerChange);
 
-      this.setMarkers(results);
+      this.setMarkers(recentData);
     },
 
     handleLayerChange(event) {
@@ -171,36 +223,119 @@ export default {
       }
     },
 
-    setMarkers(locations) {
-      this.markers = [];
+    setMarkers(recentData) {
+      this.sites = [];
+      this.samples = [];
+      this.specimens = [];
+      this.images = [];
 
-      locations.forEach(entity => {
+      // SITES
+      recentData.recentSites.forEach(site => {
         let marker = L.marker(
           {
-            lat: parseFloat(entity.latitude),
-            lng: parseFloat(entity.longitude)
+            lat: parseFloat(site.latitude),
+            lng: parseFloat(site.longitude)
           },
-          { icon: this.markerIcon }
+          { icon: this.sitesIcon }
         ).addTo(this.map);
-        if (entity.id)
+        if (site.id)
           marker.on("click", () => {
             let routeData = this.$router.resolve({
-              path: "/site/" + entity.id
+              path: "/site/" + site.id
             });
             window.open(routeData.href, "SiteWindow");
           });
-        marker.bindTooltip(entity.name, {
+        marker.bindTooltip(site.name, {
           permanent: false,
           direction: "right",
           offset: [7, 0]
         });
-        this.markers.push(marker);
+        this.sites.push(marker);
       });
-      let bounds = new L.featureGroup(this.markers).getBounds();
+
+      // SAMPLES
+      recentData.recentSamples.forEach(sample => {
+        let marker = L.marker(
+          {
+            lat: parseFloat(sample.locality__latitude),
+            lng: parseFloat(sample.locality__longitude)
+          },
+          { icon: this.samplesIcon }
+        ).addTo(this.map);
+        if (sample.locality__id)
+          marker.on("click", () => {
+            let routeData = this.$router.resolve({
+              path: "/locality/" + sample.locality__id
+            });
+            window.open(routeData.href, "LocalityWindow");
+          });
+        marker.bindTooltip(sample.locality__locality, {
+          permanent: false,
+          direction: "right",
+          offset: [7, 0]
+        });
+        this.samples.push(marker);
+      });
+
+      // SPECIMENS
+      recentData.recentSpecimens.forEach(specimen => {
+        let marker = L.marker(
+          {
+            lat: parseFloat(specimen.locality__latitude),
+            lng: parseFloat(specimen.locality__longitude)
+          },
+          { icon: this.specimensIcon }
+        ).addTo(this.map);
+        if (specimen.locality__id)
+          marker.on("click", () => {
+            let routeData = this.$router.resolve({
+              path: "/locality/" + specimen.locality__id
+            });
+            window.open(routeData.href, "LocalityWindow");
+          });
+        marker.bindTooltip(specimen.locality__locality, {
+          permanent: false,
+          direction: "right",
+          offset: [7, 0]
+        });
+        this.specimens.push(marker);
+      });
+
+      // IMAGES
+      recentData.recentImages.forEach(image => {
+        let marker = L.marker(
+          {
+            lat: parseFloat(image.image_latitude),
+            lng: parseFloat(image.image_longitude)
+          },
+          { icon: this.imagesIcon }
+        ).addTo(this.map);
+        if (image.id)
+          marker.on("click", () => {
+            let routeData = this.$router.resolve({
+              path: "/attachment/" + image.id
+            });
+            window.open(routeData.href, "ImageWindow");
+          });
+        marker.bindTooltip(image.image_place, {
+          permanent: false,
+          direction: "right",
+          offset: [7, 0]
+        });
+        this.images.push(marker);
+      });
+
+      let bounds = new L.featureGroup([...this.sites, ...this.samples, ...this.specimens, ...this.images]).getBounds();
       this.map.fitBounds(bounds, { maxZoom: 10 });
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style>
+  .sites-icon {
+    color: #BA68C8;
+    background-color: #E1BEE7;
+    border-radius: 100%;
+  }
+</style>

@@ -34,7 +34,7 @@
             <span>{{ $t("frontPage.sitesMap") }}&nbsp;</span>
             <v-icon color="purple lighten-2">fas fa-map-marked-alt</v-icon>
             <v-spacer></v-spacer>
-            <v-btn icon @click="block.map = !block.map" color="blue">
+            <v-btn icon @click="block.map = !block.map" color="purple lighten-2">
               <v-icon>{{
                 block.map ? "fas fa-angle-up" : "fas fa-angle-down"
               }}</v-icon>
@@ -58,7 +58,7 @@
             <span>{{ $t("frontPage.help") }}&nbsp;</span>
             <v-icon color="blue darken-2">far fa-question-circle</v-icon>
             <v-spacer></v-spacer>
-            <v-btn icon @click="block.help = !block.help" color="blue">
+            <v-btn icon @click="block.help = !block.help" color="blue darken-2">
               <v-icon>{{
                 block.help ? "fas fa-angle-up" : "fas fa-angle-down"
               }}</v-icon>

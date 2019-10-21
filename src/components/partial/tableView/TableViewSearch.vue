@@ -40,7 +40,7 @@
                   >
                     <template v-slot:activator="{ on }">
                       <v-text-field
-                        dense
+                        hide-details
                         v-model="searchParameters[field.id]"
                         :label="$t(field.title)"
                         prepend-inner-icon="far fa-calendar-alt"

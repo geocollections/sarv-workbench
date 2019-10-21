@@ -239,6 +239,12 @@ export function fetchAttachmentLinkSites(id) {
   );
 }
 
+export function fetchRecentImages(currentUserId) {
+  return fetch(
+    `attachment/?author_id=${currentUserId}&image_latitude!=null&order_by=-id&paginate_by=30&fields=image_latitude,image_longitude,id,image_place`
+  );
+}
+
 /*************************
  ***  ATTACHMENTS END  ***
  *************************/
@@ -684,6 +690,12 @@ export function fetchSampleReference(id, searchParameters) {
 export function fetchLatestSampleInSite(siteId) {
   return fetch(
     `sample/?site__id=${siteId}&order_by=-id&paginate_by=1&format=json`
+  );
+}
+
+export function fetchRecentSamples(currentUserId) {
+  return fetch(
+    `sample/?agent_collected__id=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
   );
 }
 
@@ -1473,6 +1485,12 @@ export function fetchListIdentificationType() {
 
 export function fetchListUnit() {
   return fetch(`list_unit/?format=json`);
+}
+
+export function fetchRecentSpecimens(currentUserId) {
+  return fetch(
+    `specimen/?agent_collected__id=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
+  );
 }
 
 /**********************
