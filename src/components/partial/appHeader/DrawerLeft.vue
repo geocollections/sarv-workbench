@@ -233,6 +233,12 @@ export default {
               title: "specimen",
               path: "/specimen/add",
               icon: "fas fa-plus-circle"
+            },
+            { title: "collections", path: "/collection", icon: "fas fa-boxes" },
+            {
+              title: "collection",
+              path: "/collection/add",
+              icon: "fas fa-box"
             }
           ]
         }

@@ -1082,6 +1082,73 @@ const router = new Router({
               }
             }
           ]
+        },
+        {
+          path: "/collection",
+          component: () => import("./views/Collections.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/collection/CollectionTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "collections",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/collection/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/collection/Collection.vue"),
+              meta: {
+                isEdit: true,
+                table: "collection",
+                title: "titles.editCollection",
+                heading: "editCollection.heading",
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: "collection"
+              }
+            }
+          ]
+        },
+        {
+          path: "/collection/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Collection add",
+              component: () => import("./components/collection/Collection.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addCollection",
+                addNew: "add.newCollection",
+                subForms: [{ path: "/collection/add", name: "add.collection" }],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: "collection"
+              }
+            }
+          ]
         }
       ]
     }

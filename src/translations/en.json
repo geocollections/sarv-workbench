@@ -38,6 +38,7 @@
     "journals": "Journals",
     "specimens": "Specimens",
     "keywords": "Terms",
+    "collections": "Collections",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -59,6 +60,8 @@
     "editSpecimen": "Specimens",
     "addKeyword": "Add term",
     "editKeyword": "Terms",
+    "addCollection": "Collections",
+    "editCollection": "Collection",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -80,7 +83,8 @@
     "activeProject": "My active project",
     "activeSite": "Last visited site",
     "activeSample": "My last sample",
-    "keyword": "Add term"
+    "keyword": "Add term",
+    "collection": "Add collection"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -261,6 +265,8 @@
     "newSpecimen": "Add new specimen",
     "keyword": "Term",
     "newKeyword": "Add new term",
+    "collection": "Collection",
+    "newCollection": "Add new collection",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -424,6 +430,11 @@
     "heading": "Stratigraphy",
     "editMessage": "Edit stratigraphy",
     "viewMessage": "View stratigraphy in geocollections portal"
+  },
+  "editCollection": {
+    "heading": "Collection",
+    "viewMessage": "View collection in geocollections portal",
+    "editMessage": "Edit collection"
   },
   "attachments": {
     "header": "My attachments",
@@ -694,7 +705,14 @@
     "description": "Description"
   },
   "collection": {
-    "name": "Name"
+    "id": "ID",
+    "number": "Number",
+    "name": "Name",
+    "name_long": "Name long",
+    "agent": "Agent",
+    "locality": "Locality",
+    "reference": "Reference",
+    "database": "Database"
   },
   "specimen": {
     "specimenNumber": "Specimen no",

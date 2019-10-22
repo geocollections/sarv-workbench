@@ -28,9 +28,7 @@
             names.find(specimen => specimen.id === item.id)
         "
       >
-        <div
-          v-if="names.find(specimen => specimen.id === item.id).taxonId"
-        >
+        <div v-if="names.find(specimen => specimen.id === item.id).taxonId">
           <i
             v-translate="{
               et: names.find(specimen => specimen.id === item.id).name,
@@ -39,9 +37,7 @@
           ></i>
         </div>
 
-        <div
-          v-else-if="names.find(specimen => specimen.id === item.id).rockId"
-        >
+        <div v-else-if="names.find(specimen => specimen.id === item.id).rockId">
           <i
             v-translate="{
               et: names.find(specimen => specimen.id === item.id).name,
@@ -85,47 +81,47 @@
 
     <template v-slot:item.stratigraphy__stratigraphy="{ item }">
       <div>
-<!--        <a-->
-<!--          v-if="item.stratigraphy_id"-->
-<!--          :href="-->
-<!--            getGeoDetailUrl({-->
-<!--              object: 'stratigraphy',-->
-<!--              id: item.stratigraphy_id-->
-<!--            })-->
-<!--          "-->
-<!--          :title="$t('editStratigraphy.viewMessage')"-->
-<!--          class="sarv-link"-->
-<!--          target="GeocollectionsWindow"-->
-<!--        >-->
-          <span
-            v-translate="{
-              et: item.stratigraphy__stratigraphy,
-              en: item.stratigraphy__stratigraphy_en
-            }"
-          ></span>
-<!--        </a>-->
+        <!--        <a-->
+        <!--          v-if="item.stratigraphy_id"-->
+        <!--          :href="-->
+        <!--            getGeoDetailUrl({-->
+        <!--              object: 'stratigraphy',-->
+        <!--              id: item.stratigraphy_id-->
+        <!--            })-->
+        <!--          "-->
+        <!--          :title="$t('editStratigraphy.viewMessage')"-->
+        <!--          class="sarv-link"-->
+        <!--          target="GeocollectionsWindow"-->
+        <!--        >-->
+        <span
+          v-translate="{
+            et: item.stratigraphy__stratigraphy,
+            en: item.stratigraphy__stratigraphy_en
+          }"
+        ></span>
+        <!--        </a>-->
         <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
           |
         </span>
-<!--        <a-->
-<!--          v-if="item.lithostratigraphy_id"-->
-<!--          :href="-->
-<!--            getGeoDetailUrl({-->
-<!--              object: 'stratigraphy',-->
-<!--              id: item.lithostratigraphy_id-->
-<!--            })-->
-<!--          "-->
-<!--          :title="$t('editStratigraphy.viewMessage')"-->
-<!--          class="sarv-link"-->
-<!--          target="GeocollectionsWindow"-->
-<!--        >-->
-          <span
-            v-translate="{
-              et: item.lithostratigraphy__stratigraphy,
-              en: item.lithostratigraphy__stratigraphy_en
-            }"
-          ></span>
-<!--        </a>-->
+        <!--        <a-->
+        <!--          v-if="item.lithostratigraphy_id"-->
+        <!--          :href="-->
+        <!--            getGeoDetailUrl({-->
+        <!--              object: 'stratigraphy',-->
+        <!--              id: item.lithostratigraphy_id-->
+        <!--            })-->
+        <!--          "-->
+        <!--          :title="$t('editStratigraphy.viewMessage')"-->
+        <!--          class="sarv-link"-->
+        <!--          target="GeocollectionsWindow"-->
+        <!--        >-->
+        <span
+          v-translate="{
+            et: item.lithostratigraphy__stratigraphy,
+            en: item.lithostratigraphy__stratigraphy_en
+          }"
+        ></span>
+        <!--        </a>-->
       </div>
     </template>
 
@@ -155,9 +151,6 @@ export default {
   props: {
     response: {
       type: Object
-    },
-    isLibraryActive: {
-      type: Boolean
     },
     filter: {
       type: String,
@@ -190,17 +183,12 @@ export default {
   }),
   computed: {
     translatedHeaders() {
-      return this.headers
-        .map(header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        })
-        .filter(item => {
-          if (this.isLibraryActive) return item;
-          else if (item.value !== "library") return item;
-        });
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
     }
   },
   watch: {

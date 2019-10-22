@@ -38,6 +38,7 @@
     "journals": "Ajakirjad",
     "specimens": "Eksemplarid",
     "keywords": "Terminid",
+    "collections": "Kollektsioonid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -59,6 +60,8 @@
     "editSpecimen": "Eksemplarid",
     "addKeyword": "Lisa termin",
     "editKeyword": "Terminind",
+    "addCollection": "Kollektsioonid",
+    "editCollection": "Kollektsioon",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -80,7 +83,8 @@
     "activeProject": "Minu aktiivne projekt",
     "activeSite": "Viimati külastatud vaatluspunkt",
     "activeSample": "Minu viimane proov",
-    "keyword": "Lisa termin"
+    "keyword": "Lisa termin",
+    "collection": "Lisa kollektsioon"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -261,6 +265,8 @@
     "newSpecimen": "Lisa uus eksemplar",
     "keyword": "Termin",
     "newKeyword": "Lisa uus termin",
+    "collection": "Kollektsioon",
+    "newCollection": "Lisa uus kollektsioon",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -424,6 +430,11 @@
     "heading": "Stratigraafia",
     "editMessage": "Muuda stratigraafiat",
     "viewMessage": "Vaata stratigraafiat geokogude portaalis"
+  },
+  "editCollection": {
+    "heading": "Collection",
+    "viewMessage": "Vaata kollektsiooni geokogude portaalis",
+    "editMessage": "Muuda kollektsiooni"
   },
   "attachments": {
     "header": "Minu failid",
@@ -694,7 +705,14 @@
     "description": "Kirjeldus"
   },
   "collection": {
-    "name": "Nimi"
+    "id": "ID",
+    "number": "Number",
+    "name": "Nimi",
+    "name_long": "Pikk nimi",
+    "agent": "Isik/asutus",
+    "locality": "Lokaliteet",
+    "reference": "Kirjandus",
+    "database": "Andmebaas"
   },
   "specimen": {
     "specimenNumber": "Eksemplari nr",

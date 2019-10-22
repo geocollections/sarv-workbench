@@ -285,6 +285,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    collectionSearchHistory: {
+      type: Object
+    },
+    collectionViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

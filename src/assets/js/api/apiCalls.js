@@ -1549,6 +1549,60 @@ export function fetchRecentSpecimens(currentUserId) {
  ***  SPECIMEN END  ***
  **********************/
 
+
+/************************
+ *** COLLECTION START ***
+ ************************/
+
+export function fetchCollections(data, databaseId) {
+  const fields = "id,number,name,name_en,name_long,name_long_en,database__acronym";
+  let searchFields = "";
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`;
+  }
+
+  if (data.number && data.number.trim().length > 0) {
+    searchFields += `&number__icontains=${data.number}`;
+  }
+
+  if (data.name && data.name.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.name};fields:name,name_en,name_long,name_long_en;lookuptype:icontains`;
+  }
+
+  if (data.agent && data.agent.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.agent};fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:icontains`;
+  }
+
+  if (data.locality && data.locality.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.locality};fields:locality__id,locality__locality,locality__locality_en;lookuptype:icontains`;
+  }
+
+  if (data.reference && data.reference.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.reference};fields:reference__id,reference__reference;lookuptype:icontains`
+  }
+
+  if (typeof databaseId !== "undefined" && databaseId !== null) {
+    searchFields += `&database_id=${databaseId}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(`collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`);
+  }
+
+}
+
+/************************
+ ***  COLLECTION END  ***
+ ************************/
+
+
 /*********************
  *** KEYWORD START ***
  *********************/
