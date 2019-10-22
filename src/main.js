@@ -296,9 +296,6 @@ new Vue({
     },
     specimen: {
       type: Object
-    },
-    activeRelatedDataTab: {
-      type: String
     }
   },
   render: h => h(App)
