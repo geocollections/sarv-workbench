@@ -39,6 +39,7 @@
     "specimens": "Specimens",
     "keywords": "Terms",
     "collections": "Collections",
+    "taxa": "Taxa",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -62,6 +63,8 @@
     "editKeyword": "Terms",
     "addCollection": "Collections",
     "editCollection": "Collection",
+    "addTaxon": "Taxa",
+    "editTaxon": "Taxon",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -84,7 +87,8 @@
     "activeSite": "Last visited site",
     "activeSample": "My last sample",
     "keyword": "Add term",
-    "collection": "Add collection"
+    "collection": "Add collection",
+    "taxon": "Add taxon"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -272,6 +276,8 @@
     "newKeyword": "Add new term",
     "collection": "Collection",
     "newCollection": "Add new collection",
+    "taxon": "Taxon",
+    "newTaxon": "Add new taxon",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -440,6 +446,11 @@
     "heading": "Collection",
     "viewMessage": "View collection in geocollections portal",
     "editMessage": "Edit collection"
+  },
+  "editTaxon": {
+    "heading": "Taxon",
+    "viewMessage": "View taxon in fossils portal",
+    "editMessage": "Edit taxon"
   },
   "attachments": {
     "header": "My attachments",
@@ -1017,7 +1028,12 @@
     }
   },
   "taxon": {
+    "id": "ID",
     "taxon": "Taxon",
+    "author_year": "Author/year",
+    "taxon_epithet": "Taxon epithet",
+    "parent__taxon": "Parent taxon",
+    "user_added": "User added",
     "taxon_free": "Taxon, txt",
     "abundance": "Abundande",
     "det_agent": "Det.",

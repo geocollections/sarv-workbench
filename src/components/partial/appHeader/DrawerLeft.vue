@@ -239,6 +239,12 @@ export default {
               title: "collection",
               path: "/collection/add",
               icon: "fas fa-box"
+            },
+            { title: "taxa", path: "/taxon", icon: "fas fa-pastafarianism" },
+            {
+              title: "taxon",
+              path: "/taxon/add",
+              icon: "fas fa-otter"
             }
           ]
         }

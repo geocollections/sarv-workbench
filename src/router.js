@@ -1149,6 +1149,73 @@ const router = new Router({
               }
             }
           ]
+        },
+        {
+          path: "/taxon",
+          component: () => import("./views/Taxa.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/taxon/TaxonTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "taxon",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/taxon/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/taxon/Taxon.vue"),
+              meta: {
+                isEdit: true,
+                table: "taxon",
+                title: "titles.editTaxon",
+                heading: "editTaxon.heading",
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: "taxon"
+              }
+            }
+          ]
+        },
+        {
+          path: "/taxon/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Taxon add",
+              component: () => import("./components/taxon/Taxon.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addTaxon",
+                addNew: "add.newTaxon",
+                subForms: [{ path: "/taxon/add", name: "add.taxon" }],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: "taxon"
+              }
+            }
+          ]
         }
       ]
     }

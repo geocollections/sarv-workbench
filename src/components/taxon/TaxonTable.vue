@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    class="collection-table"
+    class="taxon-table"
     :headers="translatedHeaders"
     dense
     hide-default-footer
@@ -11,40 +11,42 @@
     :search="filter"
     expand-icon="fas fa-caret-down"
   >
-    <template v-slot:item.collection_id="{ item }">
+    <template v-slot:item.id="{ item }">
       <router-link
-        :to="{ path: '/collection/' + item.id }"
-        :title="$t('editCollection.editMessage')"
+        :to="{ path: '/taxon/' + item.id }"
+        :title="$t('editTaxon.editMessage')"
         class="sarv-link"
-        >{{ item.collection_id }}</router-link
+        >{{ item.id }}</router-link
       >
     </template>
 
-    <template v-slot:item.name="{ item }">
-      <span
-        v-translate="{
-          et: item.name,
-          en: item.name_en
-        }"
-      ></span>
+    <template v-slot:item.taxon="{ item }">
+      <a
+        :href="getFossilsUrl(item.id)"
+        :title="getFossilsUrl(item.id)"
+        class="sarv-link"
+        target="FossilsLink"
+        >{{ item.taxon }}</a
+      >
     </template>
 
-    <template v-slot:item.name_long="{ item }">
-      <span
-        v-translate="{
-          et: item.name_long,
-          en: item.name_long_en
-        }"
-      ></span>
+    <template v-slot:item.parent__taxon="{ item }">
+      <a
+        :href="getFossilsUrl(item.parent_id)"
+        :title="getFossilsUrl(item.parent_id)"
+        class="sarv-link"
+        target="FossilsLink"
+        >{{ item.parent__taxon }}</a
+      >
     </template>
 
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'collection', id: item.id })"
-        :title="$t('editCollection.viewMessage')"
+        :href="getFossilsUrl(item.id)"
+        :title="$t('editTaxon.viewMessage')"
         color="deep-orange"
-        target="GeocollectionsWindow"
+        target="FossilsWindow"
         icon
       >
         <v-icon>far fa-eye</v-icon>
@@ -55,7 +57,7 @@
 
 <script>
 export default {
-  name: "CollectionTable",
+  name: "TaxonTable",
   props: {
     response: {
       type: Object
@@ -78,10 +80,11 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "collection.number", value: "collection_id" },
-      { text: "collection.name", value: "name" },
-      { text: "collection.name_long", value: "name_long" },
-      { text: "collection.database", value: "database__acronym" },
+      { text: "taxon.id", value: "id" },
+      { text: "taxon.taxon", value: "taxon" },
+      { text: "taxon.author_year", value: "author_year" },
+      { text: "taxon.taxon_epithet", value: "taxon_epithet" },
+      { text: "taxon.parent__taxon", value: "parent__taxon" },
       { text: "", value: "link", sortable: false }
     ],
     names: []
@@ -97,16 +100,16 @@ export default {
     }
   },
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
+    getFossilsUrl(id) {
+      return `https://fossiilid.info/${id}`;
     }
   }
 };
 </script>
 
 <style scoped>
-.collection-table.v-data-table td,
-.collection-table.v-data-table th {
+.taxon-table.v-data-table td,
+.taxon-table.v-data-table th {
   padding: 0 8px;
 }
 </style>

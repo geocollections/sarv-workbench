@@ -1549,7 +1549,6 @@ export function fetchRecentSpecimens(currentUserId) {
  ***  SPECIMEN END  ***
  **********************/
 
-
 /************************
  *** COLLECTION START ***
  ************************/
@@ -1609,6 +1608,52 @@ export function fetchListCollectionType() {
  ***  COLLECTION END  ***
  ************************/
 
+/*******************
+ *** TAXON START ***
+ *******************/
+
+export function fetchTaxa(data) {
+  const fields = "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon";
+  let searchFields = "";
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`;
+  }
+
+  if (data.taxon && data.taxon.trim().length > 0) {
+    searchFields += `&taxon__icontains=${data.taxon}`;
+  }
+
+  if (data.author_year && data.author_year.trim().length > 0) {
+    searchFields += `&author_year__icontains=${data.author_year}`;
+  }
+
+  if (data.parent__taxon && data.parent__taxon.trim().length > 0) {
+    searchFields += `&parent__taxon__icontains=${data.parent__taxon}`;
+  }
+
+  if (data.taxon_epithet && data.taxon_epithet.trim().length > 0) {
+    searchFields += `&taxon_epithet__icontains=${data.taxon_epithet}`;
+  }
+
+  if (data.user_added && data.user_added.trim().length > 0) {
+    searchFields += `&user_added__icontains=${data.user_added}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(`taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`);
+  }
+}
+
+/*******************
+ ***  TAXON END  ***
+ *******************/
 
 /*********************
  *** KEYWORD START ***

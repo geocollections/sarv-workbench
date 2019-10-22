@@ -292,6 +292,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    taxonSearchHistory: {
+      type: Object
+    },
+    taxonViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

@@ -39,6 +39,7 @@
     "specimens": "Eksemplarid",
     "keywords": "Terminid",
     "collections": "Kollektsioonid",
+    "taxa": "Taksonid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -62,6 +63,8 @@
     "editKeyword": "Terminind",
     "addCollection": "Kollektsioonid",
     "editCollection": "Kollektsioon",
+    "addTaxon": "Taksonid",
+    "editTaxon": "Takson",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -84,7 +87,8 @@
     "activeSite": "Viimati külastatud vaatluspunkt",
     "activeSample": "Minu viimane proov",
     "keyword": "Lisa termin",
-    "collection": "Lisa kollektsioon"
+    "collection": "Lisa kollektsioon",
+    "taxon": "Lisa takson"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -272,6 +276,8 @@
     "newKeyword": "Lisa uus termin",
     "collection": "Kollektsioon",
     "newCollection": "Lisa uus kollektsioon",
+    "taxon": "Takson",
+    "newTaxon": "Lisa uus takson",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -440,6 +446,11 @@
     "heading": "Collection",
     "viewMessage": "Vaata kollektsiooni geokogude portaalis",
     "editMessage": "Muuda kollektsiooni"
+  },
+  "editTaxon": {
+    "heading": "Takson",
+    "viewMessage": "Vaata taksonit fossiilide portaalis",
+    "editMessage": "Muuda taksonit"
   },
   "attachments": {
     "header": "Minu failid",
@@ -963,17 +974,6 @@
     "mapEnabled": "Kaart nähtaval",
     "mapDisabled": "Kaart peidetud"
   },
-  "taxon": {
-    "taxon": "Takson",
-    "taxon_free": "Takson, txt",
-    "abundance": "Arvukus",
-    "det_agent": "Det.",
-    "det_date": "Det.aeg",
-    "extra": "Ekstra",
-    "preparation": "Preparaat",
-    "is_private": "Privaatne?",
-    "remarks": "Lisainfo"
-  },
   "sample_series": {
     "name": "Nimi"
   },
@@ -1026,6 +1026,22 @@
       "result_max": "Max",
       "result_min": "Min"
     }
+  },
+  "taxon": {
+    "id": "ID",
+    "taxon": "Takson",
+    "author_year": "Autor/aasta",
+    "taxon_epithet": "Liiginimi",
+    "parent__taxon": "Kuulub: takson",
+    "user_added": "Sisestaja",
+    "taxon_free": "Takson, txt",
+    "abundance": "Arvukus",
+    "det_agent": "Det.",
+    "det_date": "Det.aeg",
+    "extra": "Ekstra",
+    "preparation": "Preparaat",
+    "is_private": "Privaatne?",
+    "remarks": "Lisainfo"
   },
   "dataset": {
     "name": "Nimi"
