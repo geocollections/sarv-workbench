@@ -475,32 +475,32 @@ const formManipulation = {
     },
 
     // Todo: Update TAB code
-    handleUserChoice(choice) {
-      this.$bvModal.hide('confirm-tab-close')
-
-      if (choice === 'LEAVE') {
-        this.setActiveTab(this.nextTab, false)
-      } else if (choice === 'SAVE') {
-        this.addRelatedData(this.activeTab, true);
-        this.setActiveTab(this.nextTab, false);
-      }
-    },
-
-    setActiveTab(type, isWarning = true) {
-      // If user clicks on currently active tab then do nothing
-      if (this.activeTab === type) return
-
-      this.nextTab = type;
-      if (isWarning && this.isNotEmpty(this.relatedData.insert[this.activeTab])) {
-        this.$bvModal.show('confirm-tab-close')
-      } else {
-        // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
-        this.relatedData.insert[this.activeTab] = {};
-        // this.activeTab = type;
-        this.$emit('tab-changed', type);
-        this.loadRelatedData(type);
-      }
-    },
+    // handleUserChoice(choice) {
+    //   this.$bvModal.hide('confirm-tab-close')
+    //
+    //   if (choice === 'LEAVE') {
+    //     this.setActiveTab(this.nextTab, false)
+    //   } else if (choice === 'SAVE') {
+    //     this.addRelatedData(this.activeTab, true);
+    //     this.setActiveTab(this.nextTab, false);
+    //   }
+    // },
+    //
+    // setActiveTab(type, isWarning = true) {
+    //   // If user clicks on currently active tab then do nothing
+    //   if (this.activeTab === type) return
+    //
+    //   this.nextTab = type;
+    //   if (isWarning && this.isNotEmpty(this.relatedData.insert[this.activeTab])) {
+    //     this.$bvModal.show('confirm-tab-close')
+    //   } else {
+    //     // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
+    //     this.relatedData.insert[this.activeTab] = {};
+    //     // this.activeTab = type;
+    //     this.$emit('tab-changed', type);
+    //     this.loadRelatedData(type);
+    //   }
+    // },
 
 
     /**************************

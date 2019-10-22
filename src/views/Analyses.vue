@@ -19,9 +19,6 @@
       search-history="analysisSearchHistory"
       view-type="analysisViewType"
       v-on:search-params-changed="searchParametersChanged"
-      v-on:set-default-search-params="
-        setDefaultSearchParametersFromDeleteButton
-      "
     ></list-module-core>
   </div>
 </template>

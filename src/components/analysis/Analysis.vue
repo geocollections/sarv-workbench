@@ -494,12 +494,22 @@
     },
 
     computed: {
-      ...mapState(["currentUser", "databaseId"])
+      ...mapState(["currentUser", "databaseId"]),
+
+      activeRelatedDataTab() {
+        let tabObject = this.$store.state.activeRelatedDataTab;
+        if (tabObject && tabObject[this.$route.meta.object]) {
+          return tabObject[this.$route.meta.object];
+        } else return null;
+      },
     },
 
     methods: {
       setTab(type) {
-        this.activeTab = type
+        if (type) {
+          this.$store.dispatch("updateActiveTab", { tab: type, object: this.$route.meta.object });
+          this.activeTab = type
+        }
       },
 
       setInitialData() {
@@ -587,9 +597,10 @@
           this.$on('tab-changed', this.setTab);
 
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
-
-          this.setTab('analysis_results')
         }
+
+        if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
+        else this.setTab('analysis_results')
       },
 
       loadAutocompleteFields(regularAutocompleteFields = true, relatedDataAutocompleteFields = false) {

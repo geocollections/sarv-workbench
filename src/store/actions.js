@@ -124,5 +124,9 @@ export default {
 
   updateSearchParameters({ commit }, payload) {
     commit("UPDATE_SEARCH_PARAMETERS", payload);
+  },
+
+  updateActiveTab({ commit }, payload) {
+    commit("UPDATE_ACTIVE_TAB", payload);
   }
 };

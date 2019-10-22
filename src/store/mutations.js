@@ -96,5 +96,9 @@ export default {
       searchParameters: payload.params,
       filters: payload.filters
     });
+  },
+
+  UPDATE_ACTIVE_TAB(state, payload) {
+    Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
   }
 };

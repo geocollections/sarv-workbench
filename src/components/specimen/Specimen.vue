@@ -706,6 +706,13 @@
     computed: {
       ...mapState(["databaseId"]),
 
+      activeRelatedDataTab() {
+        let tabObject = this.$store.state.activeRelatedDataTab;
+        if (tabObject && tabObject[this.$route.meta.object]) {
+          return tabObject[this.$route.meta.object];
+        } else return null;
+      },
+
       computedRelatedTabs() {
         return this.relatedTabs.filter(tab => {
           if (tab.name === "specimen_identification" || tab.name === "specimen_identification_geology") {
@@ -714,12 +721,17 @@
             }
           } else return tab
         });
-      }
+      },
+
+
     },
 
     methods: {
       setTab(type) {
-        this.activeTab = type
+        if (type) {
+          this.$store.dispatch("updateActiveTab", { tab: type, object: this.$route.meta.object });
+          this.activeTab = type
+        }
       },
 
       setInitialData() {
@@ -831,8 +843,12 @@
 
               // Set default tab
               if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
-                this.setTab('specimen_identification')
-              } else this.setTab('specimen_reference')
+                if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
+                else this.setTab('specimen_identification')
+              } else {
+                if (this.activeRelatedDataTab && this.activeRelatedDataTab !== "specimen_identification" && this.activeRelatedDataTab !== "specimen_identification_geology") this.setTab(this.activeRelatedDataTab);
+                else this.setTab('specimen_reference')
+              }
             } else {
               this.sendingData = false;
               this.$emit('object-exists', false);
@@ -848,8 +864,12 @@
         } else {
           // Set default tab
           if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
-            this.setTab('specimen_identification')
-          } else this.setTab('specimen_reference')
+            if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
+            else this.setTab('specimen_identification')
+          } else {
+            if (this.activeRelatedDataTab !== "specimen_identification" && this.activeRelatedDataTab !== "specimen_identification_geology") this.setTab(this.activeRelatedDataTab);
+            else this.setTab('specimen_reference')
+          }
         }
       },
 

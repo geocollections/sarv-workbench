@@ -601,12 +601,22 @@
     },
 
     computed: {
-      ...mapState(["databaseId"])
+      ...mapState(["databaseId"]),
+
+      activeRelatedDataTab() {
+        let tabObject = this.$store.state.activeRelatedDataTab;
+        if (tabObject && tabObject[this.$route.meta.object]) {
+          return tabObject[this.$route.meta.object];
+        } else return null;
+      },
     },
 
     methods: {
       setTab(type) {
-        this.activeTab = type
+        if (type) {
+          this.$store.dispatch("updateActiveTab", { tab: type, object: this.$route.meta.object });
+          this.activeTab = type
+        }
       },
 
       setInitialData() {
@@ -722,7 +732,8 @@
 
         }
 
-        this.setTab('doi_agent')
+        if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
+        else this.setTab('doi_agent');
       },
 
       // TODO: Optimization possible, i.e., fetch requests only if user has clicked certain related data TAB.
