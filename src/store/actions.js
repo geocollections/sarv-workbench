@@ -10,7 +10,8 @@ import {
   fetchAnalyses,
   fetchSpecimens,
   fetchKeywords,
-  fetchJournals
+  fetchJournals,
+  fetchCollections
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -92,6 +93,12 @@ export default {
     return fetchJournals(state.activeSearchParams.search).then(resp =>
       commit("SET_SIDEBAR_LIST", { resp })
     );
+  },
+
+  FETCH_COLLECTIONS: ({ commit, state }) => {
+    return fetchCollections(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
   },
 
   SAVE_SHORTCUTS: ({ commit }, shortcuts) => {

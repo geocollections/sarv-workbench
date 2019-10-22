@@ -1095,7 +1095,7 @@ const router = new Router({
               component: () => import("./components/collection/CollectionTable.vue"),
               meta: {
                 requiresAuth: true,
-                object: "collections",
+                object: "collection",
                 isTableView: true
               }
             }

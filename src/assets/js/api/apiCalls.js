@@ -1555,7 +1555,7 @@ export function fetchRecentSpecimens(currentUserId) {
  ************************/
 
 export function fetchCollections(data, databaseId) {
-  const fields = "id,number,name,name_en,name_long,name_long_en,database__acronym";
+  const fields = "id,collection_id,number,name,name_en,name_long,name_long_en,database__acronym";
   let searchFields = "";
 
   if (data.id && data.id.trim().length > 0) {
@@ -1563,7 +1563,7 @@ export function fetchCollections(data, databaseId) {
   }
 
   if (data.number && data.number.trim().length > 0) {
-    searchFields += `&number__icontains=${data.number}`;
+    searchFields += `&collection_id__icontains=${data.number}`;
   }
 
   if (data.name && data.name.trim().length > 0) {
@@ -1595,7 +1595,14 @@ export function fetchCollections(data, databaseId) {
   } else {
     return fetch(`collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`);
   }
+}
 
+export function fetchCollection(id) {
+  return fetch(`collection/?id=${id}&format=json`);
+}
+
+export function fetchListCollectionType() {
+  return fetch(`list_collection_type/?format=json`);
 }
 
 /************************

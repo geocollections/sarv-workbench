@@ -56,7 +56,7 @@ export default {
       ],
       filters: [
         { id: "id", title: "collection.id", type: "number" },
-        { id: "number", title: "collection.number", type: "text" },
+        { id: "number", title: "collection.number", type: "number" },
         { id: "name", title: "collection.name", type: "text" },
         { id: "agent", title: "collection.agent", type: "text" },
         { id: "locality", title: "collection.locality", type: "text" },

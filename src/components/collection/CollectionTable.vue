@@ -11,12 +11,12 @@
     :search="filter"
     expand-icon="fas fa-caret-down"
   >
-    <template v-slot:item.number="{ item }">
+    <template v-slot:item.collection_id="{ item }">
       <router-link
         :to="{ path: '/collection/' + item.id }"
         :title="$t('editCollection.editMessage')"
         class="sarv-link"
-        >{{ item.number }}</router-link
+        >{{ item.collection_id }}</router-link
       >
     </template>
 
@@ -78,10 +78,10 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "collection.number", value: "number" },
+      { text: "collection.number", value: "collection_id" },
       { text: "collection.name", value: "name" },
       { text: "collection.name_long", value: "name_long" },
-      // { text: "collection.database", value: "database__acronym" },
+      { text: "collection.database", value: "database__acronym" },
       { text: "", value: "link", sortable: false }
     ],
     names: []

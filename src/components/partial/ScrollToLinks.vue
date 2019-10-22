@@ -39,7 +39,7 @@
         if (name === 'requiredFields') return 'fa-check';
         if (name === 'referenceAndDataset') return 'fa-book';
         if (name === 'datacite') return 'fa-sitemap';
-        if (name === 'relatedInfo') return 'fa-project-diagram';
+        if (name === 'relatedInfo') return 'fa-sitemap';
         if (name === 'map') return 'fa-map';
         if (name === 'additionalInfo') return 'fa-project-diagram';
         if (name === 'relatedData') return 'fa-table';

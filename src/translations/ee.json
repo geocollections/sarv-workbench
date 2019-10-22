@@ -228,6 +228,11 @@
     "journal": {
       "requiredFields": "Kohustuslikud väljad",
       "info": "Üldinfo"
+    },
+    "collection": {
+      "info": "Üldinfo",
+      "relatedInfo": "Seotud info",
+      "description": "Lisainfo"
     }
   },
   "add": {
@@ -712,7 +717,20 @@
     "agent": "Isik/asutus",
     "locality": "Lokaliteet",
     "reference": "Kirjandus",
-    "database": "Andmebaas"
+    "database": "Andmebaas",
+    "name_en": "Nimi (EN)",
+    "name_long_en": "Nimi pikk (EN)",
+    "generalInfo": "Üldinfo",
+    "collection_id": "Number",
+    "number_detail": "Number akronüümiga",
+    "relatedInfo": "Seotud info",
+    "description": "Kirjeldus",
+    "type": "Alus",
+    "classification": "Klassifikatsioon",
+    "stratigraphy": "Stratgraafia",
+    "remarks": "Märkused",
+    "number_objects": "Objektid",
+    "number_types": "Originaalid"
   },
   "specimen": {
     "specimenNumber": "Eksemplari nr",

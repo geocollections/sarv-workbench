@@ -3,10 +3,10 @@
 
     <div class="d-flex flex-wrap justify-content-between mt-4">
       <div class="pr-4">
-        <p class="h2">{{ $t($route.meta.addNew) }}</p>
+        <p class="h2 mb-1">{{ $t($route.meta.addNew) }}</p>
       </div>
 
-      <div class="mb-2" v-if="$route.meta.object === 'attachment'">
+      <div class="mb-1" v-if="$route.meta.object === 'attachment'">
         <ul class="nav nav-pills nav-fill" v-if="$route.meta.object === 'attachment'">
           <li class="nav-item" v-for="item in $route.meta.subForms">
             <router-link class="nav-link" :to="{ path: item.path }">{{ $t(item.name) }}</router-link>

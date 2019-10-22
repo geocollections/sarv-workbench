@@ -228,6 +228,11 @@
     "journal": {
       "requiredFields": "Mandatory fields",
       "info": "General info"
+    },
+    "collection": {
+      "info": "General info",
+      "relatedInfo": "Related info",
+      "description": "Description"
     }
   },
   "add": {
@@ -708,11 +713,24 @@
     "id": "ID",
     "number": "Number",
     "name": "Name",
+    "name_en": "Name (EN)",
     "name_long": "Name long",
+    "name_long_en": "Name long (EN)",
     "agent": "Agent",
     "locality": "Locality",
     "reference": "Reference",
-    "database": "Database"
+    "database": "Database",
+    "generalInfo": "General info",
+    "collection_id": "Number",
+    "number_detail": "Number with acronym",
+    "relatedInfo": "Related info",
+    "description": "Description",
+    "type": "Classification type",
+    "classification": "Classification",
+    "stratigraphy": "Stratigraphy",
+    "remarks": "Remarks",
+    "number_objects": "Objects",
+    "number_types": "Originals"
   },
   "specimen": {
     "specimenNumber": "Specimen no",
