@@ -395,106 +395,51 @@
       <transition name="fade">
         <div v-show="block.additionalInfo">
           <!-- TAXON_ID_PBDB, TAXON_ID_PLUTOF, TAXON_ID_TOL, TAXON_ID_EOL and TAXON_ID_NRM -->
-          <div class="row">
-            <div class="col-md-2">
-              <label :for="`taxon_id_pbdb`"
-                >{{ $t("taxon.taxon_id_pbdb") }}:</label
-              >
-              <b-form-input
-                id="taxon_id_pbdb"
-                v-model="taxon.taxon_id_pbdb"
-                type="number"
-              ></b-form-input>
-            </div>
+          <v-row class="mt-2">
+            <v-col class="mb-2" cols="12" md="">
+              <v-text-field v-model="taxon.taxon_id_pbdb" dense hide-details :label="$t('taxon.taxon_id_pbdb')" outlined type="number"></v-text-field>
+            </v-col>
 
-            <div class="col-md-2">
-              <label :for="`taxon_id_plutof`"
-                >{{ $t("taxon.taxon_id_plutof") }}:</label
-              >
-              <b-form-input
-                id="taxon_id_plutof"
-                v-model="taxon.taxon_id_plutof"
-                type="number"
-              ></b-form-input>
-            </div>
+            <v-col class="mb-2" cols="12" md="">
+              <v-text-field v-model="taxon.taxon_id_plutof" dense hide-details :label="$t('taxon.taxon_id_plutof')" outlined type="number"></v-text-field>
+            </v-col>
 
-            <div class="col-md-2">
-              <label :for="`taxon_id_tol`"
-                >{{ $t("taxon.taxon_id_tol") }}:</label
-              >
-              <b-form-input
-                id="taxon_id_tol"
-                v-model="taxon.taxon_id_tol"
-                type="number"
-              ></b-form-input>
-            </div>
+            <v-col class="mb-2" cols="12" md="">
+              <v-text-field v-model="taxon.taxon_id_tol" dense hide-details :label="$t('taxon.taxon_id_tol')" outlined type="number"></v-text-field>
+            </v-col>
 
-            <div class="col-md-2">
-              <label :for="`taxon_id_eol`"
-                >{{ $t("taxon.taxon_id_eol") }}:</label
-              >
-              <b-form-input
-                id="taxon_id_eol"
-                v-model="taxon.taxon_id_eol"
-                type="number"
-              ></b-form-input>
-            </div>
+            <v-col class="mb-2" cols="12" md="">
+              <v-text-field v-model="taxon.taxon_id_eol" dense hide-details :label="$t('taxon.taxon_id_eol')" outlined type="number"></v-text-field>
+            </v-col>
 
-            <div class="col-md-2">
-              <label :for="`taxon_id_nrm`"
-                >{{ $t("taxon.taxon_id_nrm") }}:</label
-              >
-              <b-form-input
-                id="taxon_id_nrm"
-                v-model="taxon.taxon_id_nrm"
-                type="number"
-              ></b-form-input>
-            </div>
-          </div>
+            <v-col cols="12" md="">
+              <v-text-field v-model="taxon.taxon_id_nrm" dense hide-details :label="$t('taxon.taxon_id_nrm')" outlined type="number"></v-text-field>
+            </v-col>
+          </v-row>
 
           <!-- OWNER, IS_AUTHORIZED, USER_AUTHORIZED, SORT -->
-          <div class="row">
-            <div class="col-md-3">
-              <label :for="`owner`">{{ $t("taxon.owner") }}:</label>
-              <b-form-input
-                id="owner"
-                v-model="taxon.owner"
-                type="text"
-              ></b-form-input>
-            </div>
+          <v-row class="mt-2">
+            <v-col class="mb-2" cols="12" md="3">
+              <v-text-field v-model="taxon.owner" :label="$t('taxon.owner')" dense hide-details outlined></v-text-field>
+            </v-col>
 
-            <div class="col-md-3 checkboxes">
-              <label style="visibility: hidden;" :for="`is_authorized`"
-                >{{ $t("taxon.is_authorized") }}:</label
-              >
+            <v-col class="mb-2 checkboxes" cols="12" md="3">
               <v-checkbox
                 v-model="taxon.is_authorized"
                 :label="$t('taxon.is_authorized')"
                 class="mt-0"
                 hide-details
               ></v-checkbox>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
-              <label :for="`user_authorized`"
-                >{{ $t("taxon.user_authorized") }}:</label
-              >
-              <b-form-input
-                id="user_authorized"
-                v-model="taxon.user_authorized"
-                type="text"
-              ></b-form-input>
-            </div>
+            <v-col class="mb-2" cols="12" md="3">
+              <v-text-field v-model="taxon.user_authorized" :label="$t('taxon.user_authorized')" dense hide-details outlined></v-text-field>
+            </v-col>
 
-            <div class="col-md-3">
-              <label :for="`sort`">{{ $t("taxon.sort") }}:</label>
-              <b-form-input
-                id="sort"
-                v-model="taxon.sort"
-                type="number"
-              ></b-form-input>
-            </div>
-          </div>
+            <v-col cols="12" md="3">
+              <v-text-field v-model="taxon.sort" :label="$t('taxon.sort')" dense hide-details outlined type="number"></v-text-field>
+            </v-col>
+          </v-row>
         </div>
       </transition>
     </fieldset>
