@@ -1070,7 +1070,18 @@
     "owner": "Omanik",
     "is_authorized": "Autoriseeritud?",
     "user_authorized": "Autoriseerija",
-    "sort": "Sorteeri"
+    "sort": "Sorteeri",
+    "relatedTables": {
+      "taxon_rank": "Alamtaksonid",
+      "taxon_synonym": "Sünonüümika",
+      "taxon_type_specimen": "Tüüpeksemplarid",
+      "taxon_occurence": "Levik ja viited",
+      "taxon_opinion": "Arvamused",
+      "taxon_common_name": "Tavanimed",
+      "taxon_description": "Kirjeldused",
+      "taxon_page": "Veebilehed",
+      "taxon_image": "Pildid"
+    }
   },
   "dataset": {
     "name": "Nimi"

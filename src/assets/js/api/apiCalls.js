@@ -1655,6 +1655,10 @@ export function fetchTaxon(id) {
   return fetch(`taxon/?id=${id}&format=json`);
 }
 
+export function fetchTaxonRank() {
+  return fetch(`taxon_rank/?format=json`);
+}
+
 /*******************
  ***  TAXON END  ***
  *******************/

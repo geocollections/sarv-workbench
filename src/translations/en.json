@@ -1070,7 +1070,18 @@
     "owner": "Owner",
     "is_authorized": "Is authorized",
     "user_authorized": "User authorized",
-    "sort": "Sort"
+    "sort": "Sort",
+    "relatedTables": {
+      "taxon_rank": "Ranks",
+      "taxon_synonym": "Synonymy",
+      "taxon_type_specimen": "Type specimens",
+      "taxon_occurence": "Occurences",
+      "taxon_opinion": "Opinions",
+      "taxon_common_name": "Names",
+      "taxon_description": "Descriptions",
+      "taxon_page": "Webpages",
+      "taxon_image": "Images"
+    }
   },
   "dataset": {
     "name": "Name"

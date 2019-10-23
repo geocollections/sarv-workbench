@@ -114,7 +114,7 @@
                 :placeholder="$t('add.inputs.autocomplete')"
                 :loading="autocomplete.loaders.parent"
                 :options="autocomplete.parent"
-                @search-change="autocompleteTaxonSearch"
+                @search-change="autocompleteTaxonParentSearch"
                 :internal-search="false"
                 :preserve-search="true"
                 :clear-on-select="false"
@@ -166,7 +166,7 @@
                 :placeholder="$t('add.inputs.autocomplete')"
                 :loading="autocomplete.loaders.fossil_group"
                 :options="autocomplete.fossil_group"
-                @search-change="autocompleteTaxonSearch"
+                @search-change="autocompleteTaxonFossilGroupSearch"
                 :internal-search="false"
                 :preserve-search="true"
                 :clear-on-select="false"
@@ -213,7 +213,9 @@
           <!-- TAXON_ORIGINAL_NAME and RANK_ORIGINAL -->
           <div class="row">
             <div class="col-md-6">
-              <label :for="`taxon_original_name`">{{ $t("taxon.taxon_original_name") }}:</label>
+              <label :for="`taxon_original_name`"
+                >{{ $t("taxon.taxon_original_name") }}:</label
+              >
               <b-form-input
                 id="taxon_original_name"
                 v-model="taxon.taxon_original_name"
@@ -238,7 +240,7 @@
                   <strong>{{ option[rankLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </div>
@@ -247,7 +249,9 @@
           <!-- TYPE_TAXON_ID and TYPE_TAXON -->
           <div class="row">
             <div class="col-md-6">
-              <label :for="`type_taxon_id`">{{ $t("taxon.type_taxon_id") }}:</label>
+              <label :for="`type_taxon_id`"
+                >{{ $t("taxon.type_taxon_id") }}:</label
+              >
               <vue-multiselect
                 id="type_taxon_id"
                 v-model="taxon.type_taxon_id"
@@ -266,15 +270,13 @@
                   <strong>{{ option.taxon }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </div>
 
             <div class="col-md-6">
-              <label :for="`type_taxon`"
-                >{{ $t("taxon.type_taxon") }}:</label
-              >
+              <label :for="`type_taxon`">{{ $t("taxon.type_taxon") }}:</label>
               <b-form-input
                 id="type_taxon"
                 v-model="taxon.type_taxon"
@@ -321,7 +323,9 @@
           <!-- STRATIGRAPHY_TOP and STRATIGRAPHY_BASE -->
           <div class="row">
             <div class="col-md-6">
-              <label :for="`stratigraphy_top`">{{ $t("taxon.stratigraphy_top") }}:</label>
+              <label :for="`stratigraphy_top`"
+                >{{ $t("taxon.stratigraphy_top") }}:</label
+              >
               <vue-multiselect
                 v-model="taxon.stratigraphy_top"
                 id="stratigraphy_top"
@@ -367,7 +371,7 @@
                   <strong>{{ option[stratigraphyLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </div>
@@ -392,7 +396,9 @@
           <!-- TAXON_ID_PBDB, TAXON_ID_PLUTOF, TAXON_ID_TOL, TAXON_ID_EOL and TAXON_ID_NRM -->
           <div class="row">
             <div class="col-md-2">
-              <label :for="`taxon_id_pbdb`">{{ $t("taxon.taxon_id_pbdb") }}:</label>
+              <label :for="`taxon_id_pbdb`"
+                >{{ $t("taxon.taxon_id_pbdb") }}:</label
+              >
               <b-form-input
                 id="taxon_id_pbdb"
                 v-model="taxon.taxon_id_pbdb"
@@ -401,7 +407,9 @@
             </div>
 
             <div class="col-md-2">
-              <label :for="`taxon_id_plutof`">{{ $t("taxon.taxon_id_plutof") }}:</label>
+              <label :for="`taxon_id_plutof`"
+                >{{ $t("taxon.taxon_id_plutof") }}:</label
+              >
               <b-form-input
                 id="taxon_id_plutof"
                 v-model="taxon.taxon_id_plutof"
@@ -410,7 +418,9 @@
             </div>
 
             <div class="col-md-2">
-              <label :for="`taxon_id_tol`">{{ $t("taxon.taxon_id_tol") }}:</label>
+              <label :for="`taxon_id_tol`"
+                >{{ $t("taxon.taxon_id_tol") }}:</label
+              >
               <b-form-input
                 id="taxon_id_tol"
                 v-model="taxon.taxon_id_tol"
@@ -419,7 +429,9 @@
             </div>
 
             <div class="col-md-2">
-              <label :for="`taxon_id_eol`">{{ $t("taxon.taxon_id_eol") }}:</label>
+              <label :for="`taxon_id_eol`"
+                >{{ $t("taxon.taxon_id_eol") }}:</label
+              >
               <b-form-input
                 id="taxon_id_eol"
                 v-model="taxon.taxon_id_eol"
@@ -428,7 +440,9 @@
             </div>
 
             <div class="col-md-2">
-              <label :for="`taxon_id_nrm`">{{ $t("taxon.taxon_id_nrm") }}:</label>
+              <label :for="`taxon_id_nrm`"
+                >{{ $t("taxon.taxon_id_nrm") }}:</label
+              >
               <b-form-input
                 id="taxon_id_nrm"
                 v-model="taxon.taxon_id_nrm"
@@ -449,7 +463,9 @@
             </div>
 
             <div class="col-md-3 checkboxes">
-              <label style="visibility: hidden;" :for="`is_authorized`">{{ $t("taxon.is_authorized") }}:</label>
+              <label style="visibility: hidden;" :for="`is_authorized`"
+                >{{ $t("taxon.is_authorized") }}:</label
+              >
               <v-checkbox
                 v-model="taxon.is_authorized"
                 :label="$t('taxon.is_authorized')"
@@ -459,7 +475,9 @@
             </div>
 
             <div class="col-md-3">
-              <label :for="`user_authorized`">{{ $t("taxon.user_authorized") }}:</label>
+              <label :for="`user_authorized`"
+                >{{ $t("taxon.user_authorized") }}:</label
+              >
               <b-form-input
                 id="user_authorized"
                 v-model="taxon.user_authorized"
@@ -504,191 +522,101 @@
       </transition>
     </fieldset>
 
-    <!-- RELATED DATA TABS -->
-<!--    <div class="row mb-2">-->
-<!--      <div class="col mt-2">-->
-<!--        <ul class="nav nav-tabs nav-fill mb-3">-->
-<!--          <li-->
-<!--            class="nav-item"-->
-<!--            v-for="tab in relatedTabs"-->
-<!--            :key="tab.name"-->
-<!--          >-->
-<!--            <a-->
-<!--              href="#"-->
-<!--              @click.prevent="setTab(tab.name)"-->
-<!--              class="nav-link"-->
-<!--              :class="{ active: activeTab === tab.name }"-->
-<!--            >-->
-<!--              <span>{{ $t("specimen.relatedTables." + tab.name) }}</span>-->
+    <!-- RELATED DATA TABS  -->
+    <div class="row mb-2">
+      <div class="col mt-2">
+        <ul class="nav nav-tabs nav-fill mb-3">
+          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+            <a
+              href="#"
+              @click.prevent="setTab(tab.name)"
+              class="nav-link"
+              :class="{ active: activeTab === tab.name }"
+            >
+              <span>{{ $t("taxon.relatedTables." + tab.name) }}</span>
 
-<!--              <v-chip-->
-<!--                v-if="relatedData[tab.name].length > 0"-->
-<!--                class="ml-1"-->
-<!--                color="blue lighten-2"-->
-<!--                dark-->
-<!--                outlined-->
-<!--              >-->
-<!--                <v-icon left small>{{ tab.iconClass }}</v-icon>-->
-<!--                <b style="color: black; font-size: larger;">-->
-<!--                  {{ relatedData[tab.name].length }}-->
-<!--                </b>-->
-<!--              </v-chip>-->
+              <v-chip
+                v-if="relatedData[tab.name].length > 0"
+                class="ml-1"
+                color="blue lighten-2"
+                dark
+                outlined
+              >
+                <v-icon left small>{{ tab.iconClass }}</v-icon>
+                <b style="color: black; font-size: larger;">
+                  {{ relatedData[tab.name].length }}
+                </b>
+              </v-chip>
+            </a>
+          </li>
+        </ul>
 
-<!--              &lt;!&ndash;              <span>&ndash;&gt;-->
-<!--              &lt;!&ndash;                <sup>&ndash;&gt;-->
-<!--              &lt;!&ndash;                  <b-badge pill variant="light">{{ relatedData[tab.name].length }}&nbsp;</b-badge>&ndash;&gt;-->
-<!--              &lt;!&ndash;                </sup>&ndash;&gt;-->
-<!--              &lt;!&ndash;              </span>&ndash;&gt;-->
+        <div class="row" v-if="$route.meta.isEdit">
+          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
+            <b-form-select
+              v-model="relatedData.searchParameters[activeTab].paginateBy"
+              class="mb-3"
+              size="sm"
+            >
+              <option :value="10">{{
+                this.$t("main.pagination", { num: "10" })
+              }}</option>
+              <option :value="25">{{
+                this.$t("main.pagination", { num: "25" })
+              }}</option>
+              <option :value="50">{{
+                this.$t("main.pagination", { num: "50" })
+              }}</option>
+              <option :value="100">{{
+                this.$t("main.pagination", { num: "100" })
+              }}</option>
+              <option :value="250">{{
+                this.$t("main.pagination", { num: "250" })
+              }}</option>
+              <option :value="500">{{
+                this.$t("main.pagination", { num: "500" })
+              }}</option>
+              <option :value="1000">{{
+                this.$t("main.pagination", { num: "1000" })
+              }}</option>
+            </b-form-select>
+          </div>
 
-<!--              &lt;!&ndash;              <span><i :class="tab.iconClass"></i></span>&ndash;&gt;-->
-<!--            </a>-->
-<!--          </li>-->
-<!--        </ul>-->
+          <div class="col-sm-12 col-md-3 export-center">
+            <!-- EXPORT BUTTON? -->
+          </div>
 
-<!--        <div class="row" v-if="$route.meta.isEdit">-->
-<!--          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">-->
-<!--            <b-form-select-->
-<!--              v-model="relatedData.searchParameters[activeTab].paginateBy"-->
-<!--              class="mb-3"-->
-<!--              size="sm"-->
-<!--            >-->
-<!--              <option :value="10">{{-->
-<!--                this.$t("main.pagination", { num: "10" })-->
-<!--              }}</option>-->
-<!--              <option :value="25">{{-->
-<!--                this.$t("main.pagination", { num: "25" })-->
-<!--              }}</option>-->
-<!--              <option :value="50">{{-->
-<!--                this.$t("main.pagination", { num: "50" })-->
-<!--              }}</option>-->
-<!--              <option :value="100">{{-->
-<!--                this.$t("main.pagination", { num: "100" })-->
-<!--              }}</option>-->
-<!--              <option :value="250">{{-->
-<!--                this.$t("main.pagination", { num: "250" })-->
-<!--              }}</option>-->
-<!--              <option :value="500">{{-->
-<!--                this.$t("main.pagination", { num: "500" })-->
-<!--              }}</option>-->
-<!--              <option :value="1000">{{-->
-<!--                this.$t("main.pagination", { num: "1000" })-->
-<!--              }}</option>-->
-<!--            </b-form-select>-->
-<!--          </div>-->
+          <div
+            class="col-sm-12 col-md-6 pagination-center"
+            v-if="
+              relatedData[activeTab] !== null &&
+                relatedData[activeTab].length > 0
+            "
+          >
+            <b-pagination
+              size="sm"
+              align="right"
+              :limit="5"
+              :hide-ellipsis="true"
+              :total-rows="relatedData.count[activeTab]"
+              v-model="relatedData.searchParameters[activeTab].page"
+              :per-page="relatedData.searchParameters[activeTab].paginateBy"
+            >
+            </b-pagination>
+          </div>
+        </div>
 
-<!--          <div class="col-sm-12 col-md-3 export-center">-->
-<!--            &lt;!&ndash; EXPORT BUTTON? &ndash;&gt;-->
-<!--          </div>-->
-
-<!--          <div-->
-<!--            class="col-sm-12 col-md-6 pagination-center"-->
-<!--            v-if="-->
-<!--              relatedData[activeTab] !== null &&-->
-<!--                relatedData[activeTab].length > 0-->
-<!--            "-->
-<!--          >-->
-<!--            <b-pagination-->
-<!--              size="sm"-->
-<!--              align="right"-->
-<!--              :limit="5"-->
-<!--              :hide-ellipsis="true"-->
-<!--              :total-rows="relatedData.count[activeTab]"-->
-<!--              v-model="relatedData.searchParameters[activeTab].page"-->
-<!--              :per-page="relatedData.searchParameters[activeTab].paginateBy"-->
-<!--            >-->
-<!--            </b-pagination>-->
-<!--          </div>-->
-<!--        </div>-->
-
-<!--        <specimen-identification-->
-<!--          v-if="-->
-<!--            specimen.fossil &&-->
-<!--              (specimen.fossil.id === 1 || specimen.fossil.id === 7)-->
-<!--          "-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-
-<!--        <specimen-identification-geology-->
-<!--          v-if="-->
-<!--            specimen.fossil &&-->
-<!--              (specimen.fossil.id === 1 || specimen.fossil.id === 7)-->
-<!--          "-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-
-<!--        <specimen-reference-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-
-<!--        <specimen-description-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-
-<!--        <specimen-attachment-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-
-<!--        <specimen-location-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-
-<!--        <specimen-history-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-
-<!--        <specimen-analysis-->
-<!--          :related-data="relatedData"-->
-<!--          :autocomplete="autocomplete"-->
-<!--          :active-tab="activeTab"-->
-<!--          v-on:add-related-data="addRelatedData"-->
-<!--          v-on:set-default="setDefault"-->
-<!--          v-on:edit-row="editRow"-->
-<!--          v-on:remove-row="removeRow"-->
-<!--        />-->
-<!--      </div>-->
-<!--    </div>-->
+        <!--            <specimen-analysis-->
+        <!--              :related-data="relatedData"-->
+        <!--              :autocomplete="autocomplete"-->
+        <!--              :active-tab="activeTab"-->
+        <!--              v-on:add-related-data="addRelatedData"-->
+        <!--              v-on:set-default="setDefault"-->
+        <!--              v-on:edit-row="editRow"-->
+        <!--              v-on:remove-row="removeRow"-->
+        <!--            />-->
+      </div>
+    </div>
 
     <!-- IS_PRIVATE -->
     <div class="row">
@@ -709,9 +637,9 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
-import cloneDeep from 'lodash/cloneDeep'
-import {fetchTaxon} from "../../assets/js/api/apiCalls";
-import Spinner from 'vue-simple-spinner'
+import cloneDeep from "lodash/cloneDeep";
+import { fetchTaxon, fetchTaxonRank } from "../../assets/js/api/apiCalls";
+import Spinner from "vue-simple-spinner";
 import Editor from "../partial/editor/Editor";
 
 export default {
@@ -721,7 +649,6 @@ export default {
     Editor,
     Spinner
   },
-
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
 
@@ -752,7 +679,7 @@ export default {
         block: this.block
       });
     } else {
-      // Adding specimen default values from local storage
+      // Adding taxon default values from local storage
       const taxonHistory = this.$localStorage.get("taxon", "fallbackValue");
       if (
         taxonHistory !== "fallbackValue" &&
@@ -807,17 +734,18 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "specimen_identification", iconClass: "fas fa-atlas" },
-          { name: "specimen_identification_geology", iconClass: "far fa-gem" },
-          { name: "specimen_reference", iconClass: "fas fa-book" },
-          { name: "specimen_description", iconClass: "fas fa-info" },
-          { name: "attachment", iconClass: "far fa-folder-open" },
-          { name: "specimen_location", iconClass: "fas fa-globe-europe" },
-          { name: "specimen_history", iconClass: "fas fa-history" },
-          { name: "analysis", iconClass: "far fa-chart-bar" }
+          { name: "taxon_rank", iconClass: "fas fa-atlas" },
+          { name: "taxon_synonym", iconClass: "far fa-gem" },
+          { name: "taxon_type_specimen", iconClass: "fas fa-book" },
+          { name: "taxon_occurence", iconClass: "fas fa-info" },
+          { name: "taxon_opinion", iconClass: "far fa-folder-open" },
+          { name: "taxon_common_name", iconClass: "fas fa-globe-europe" },
+          { name: "taxon_description", iconClass: "fas fa-history" },
+          { name: "taxon_page", iconClass: "far fa-chart-bar" },
+          { name: "taxon_image", iconClass: "far fa-chart-bar" }
         ],
         searchHistory: "taxonSearchHistory",
-        activeTab: "specimen_identification",
+        activeTab: "taxon_rank",
         relatedData: this.setDefaultRelatedData(),
         copyFields: ["id"],
         autocomplete: {
@@ -894,10 +822,10 @@ export default {
       relatedDataAutocompleteFields = false
     ) {
       if (regularAutocompleteFields) {
-        // fetchDeaccession().then(
-        //   response =>
-        //     (this.autocomplete.deaccession = this.handleResponse(response))
-        // );
+        fetchTaxonRank().then(
+          response =>
+            (this.autocomplete.rank = this.handleResponse(response))
+        );
       }
 
       if (relatedDataAutocompleteFields) {
@@ -912,191 +840,134 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        specimen_identification: [],
-        specimen_identification_geology: [],
-        specimen_reference: [],
-        specimen_description: [],
-        attachment: [],
-        specimen_location: [],
-        specimen_history: [],
-        analysis: [],
+        taxon_rank: [],
+        taxon_synonym: [],
+        taxon_type_specimen: [],
+        taxon_occurence: [],
+        taxon_opinion: [],
+        taxon_common_name: [],
+        taxon_description: [],
+        taxon_page: [],
+        taxon_image: [],
         new: {
-          specimen_identification: [],
-          specimen_identification_geology: [],
-          specimen_reference: [],
-          specimen_description: [],
-          attachment: [],
-          specimen_location: [],
-          specimen_history: [],
-          analysis: []
+          taxon_rank: [],
+          taxon_synonym: [],
+          taxon_type_specimen: [],
+          taxon_occurence: [],
+          taxon_opinion: [],
+          taxon_common_name: [],
+          taxon_description: [],
+          taxon_page: [],
+          taxon_image: []
         },
         copyFields: {
-          specimen_identification: [
-            "taxon",
-            "name",
-            "agent",
-            "reference",
-            "date_identified",
-            "type",
-            "current"
-          ],
-          specimen_identification_geology: [
-            "rock",
-            "name",
-            "name_en",
-            "agent",
-            "reference",
-            "date_identified",
-            "type",
-            "current"
-          ],
-          specimen_reference: ["reference", "pages", "figures", "remarks"],
-          specimen_description: [
-            "length",
-            "width",
-            "height",
-            "unit",
-            "mass",
-            "description",
-            "agent",
-            "date",
-            "remarks"
-          ],
-          attachment: ["attachment", "remarks"],
-          specimen_location: ["number", "type", "part", "storage", "remarks"],
-          specimen_history: [
-            "type",
-            "value_old",
-            "value_new",
-            "date",
-            "remarks"
-          ],
-          analysis: [
-            "analysis_method",
-            "method_details",
-            "mass",
-            "date",
-            "date_end",
-            "date_free",
-            "agent",
-            "remarks",
-            "storage",
-            "is_private"
-          ]
+          taxon_rank: [],
+          taxon_synonym: [],
+          taxon_type_specimen: [],
+          taxon_occurence: [],
+          taxon_opinion: [],
+          taxon_common_name: [],
+          taxon_description: [],
+          taxon_page: [],
+          taxon_image: []
         },
         insert: this.setDefaultInsertRelatedData(),
         searchParameters: {
-          specimen_identification: {
+          taxon_rank: {
             page: 1,
             paginateBy: 10,
-            orderBy: "taxon__taxon,current"
+            orderBy: "id"
           },
-          specimen_identification_geology: {
+          taxon_synonym: {
             page: 1,
             paginateBy: 10,
-            orderBy: "rock__name,rock__name_en,current"
+            orderBy: "id"
           },
-          specimen_reference: {
+          taxon_type_specimen: {
             page: 1,
             paginateBy: 10,
-            orderBy: "reference__reference"
+            orderBy: "id"
           },
-          specimen_description: {
+          taxon_occurence: {
             page: 1,
             paginateBy: 10,
-            orderBy: "length"
+            orderBy: "id"
           },
-          attachment: {
+          taxon_opinion: {
             page: 1,
             paginateBy: 10,
-            orderBy: "original_filename"
+            orderBy: "id"
           },
-          specimen_location: {
+          taxon_common_name: {
             page: 1,
             paginateBy: 10,
-            orderBy: "number"
+            orderBy: "id"
           },
-          specimen_history: {
+          taxon_description: {
             page: 1,
             paginateBy: 10,
-            orderBy: "type"
+            orderBy: "id"
           },
-          analysis: {
+          taxon_page: {
+            page: 1,
+            paginateBy: 10,
+            orderBy: "id"
+          },
+          taxon_image: {
             page: 1,
             paginateBy: 10,
             orderBy: "id"
           }
         },
         count: {
-          specimen_identification: 0,
-          specimen_identification_geology: 0,
-          specimen_reference: 0,
-          specimen_description: 0,
-          attachment: 0,
-          specimen_location: 0,
-          specimen_history: 0,
-          analysis: 0
+          taxon_rank: 0,
+          taxon_synonym: 0,
+          taxon_type_specimen: 0,
+          taxon_occurence: 0,
+          taxon_opinion: 0,
+          taxon_common_name: 0,
+          taxon_description: 0,
+          taxon_page: 0,
+          taxon_image: 0
         }
       };
     },
 
     setDefaultInsertRelatedData() {
       return {
-        specimen_identification: {},
-        specimen_identification_geology: {},
-        specimen_reference: {},
-        specimen_description: {},
-        attachment: {},
-        specimen_location: {},
-        specimen_history: {},
-        analysis: {}
+        taxon_rank: {},
+        taxon_synonym: {},
+        taxon_type_specimen: {},
+        taxon_occurence: {},
+        taxon_opinion: {},
+        taxon_common_name: {},
+        taxon_description: {},
+        taxon_page: {},
+        taxon_image: {}
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.date_collected))
-        uploadableObject.date_collected = this.formatDateForUpload(
-          objectToUpload.date_collected
-        );
-
       // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.coll))
-        uploadableObject.coll = objectToUpload.coll.id;
-      if (this.isNotEmpty(objectToUpload.fossil))
-        uploadableObject.fossil = objectToUpload.fossil.id;
-      if (this.isNotEmpty(objectToUpload.type))
-        uploadableObject.type = objectToUpload.type.id;
-      if (this.isNotEmpty(objectToUpload.locality))
-        uploadableObject.locality = objectToUpload.locality.id;
-      if (this.isNotEmpty(objectToUpload.sample))
-        uploadableObject.sample = objectToUpload.sample.id;
-      if (this.isNotEmpty(objectToUpload.stratigraphy))
-        uploadableObject.stratigraphy = objectToUpload.stratigraphy.id;
-      if (this.isNotEmpty(objectToUpload.lithostratigraphy))
-        uploadableObject.lithostratigraphy =
-          objectToUpload.lithostratigraphy.id;
-      if (this.isNotEmpty(objectToUpload.presence))
-        uploadableObject.presence = objectToUpload.presence.id;
-      if (this.isNotEmpty(objectToUpload.storage))
-        uploadableObject.storage = objectToUpload.storage.id;
-      if (this.isNotEmpty(objectToUpload.classification))
-        uploadableObject.classification = objectToUpload.classification.id;
-      if (this.isNotEmpty(objectToUpload.accession))
-        uploadableObject.accession = objectToUpload.accession.id;
-      if (this.isNotEmpty(objectToUpload.deaccession))
-        uploadableObject.deaccession = objectToUpload.deaccession.id;
-      if (this.isNotEmpty(objectToUpload.agent_collected))
-        uploadableObject.agent_collected = objectToUpload.agent_collected.id;
-      if (this.isNotEmpty(objectToUpload.status))
-        uploadableObject.status = objectToUpload.status.id;
-      if (this.isNotEmpty(objectToUpload.original_status))
-        uploadableObject.original_status = objectToUpload.original_status.id;
+      if (this.isNotEmpty(objectToUpload.reference))
+        uploadableObject.reference = objectToUpload.reference.id;
+      if (this.isNotEmpty(objectToUpload.rank))
+        uploadableObject.rank = objectToUpload.rank.id;
       if (this.isNotEmpty(objectToUpload.parent))
         uploadableObject.parent = objectToUpload.parent.id;
-
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.isNotEmpty(objectToUpload.fossil_group))
+        uploadableObject.fossil_group = objectToUpload.fossil_group.id;
+      if (this.isNotEmpty(objectToUpload.rank_original))
+        uploadableObject.rank_original = objectToUpload.rank_original.id;
+      if (this.isNotEmpty(objectToUpload.type_taxon_id))
+        uploadableObject.type_taxon_id = objectToUpload.type_taxon_id.id;
+      if (this.isNotEmpty(objectToUpload.stratigraphy_top))
+        uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id;
+      if (this.isNotEmpty(objectToUpload.stratigraphy_base))
+        uploadableObject.stratigraphy_base =
+          objectToUpload.stratigraphy_base.id;
 
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {
@@ -1128,45 +999,6 @@ export default {
     fillRelatedDataAutocompleteFields(obj) {
       if (this.isNotEmpty(obj.taxon))
         obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
-      if (this.isNotEmpty(obj.agent))
-        obj.agent = { id: obj.agent, agent: obj.agent__agent };
-      if (this.isNotEmpty(obj.reference))
-        obj.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference
-        };
-      if (this.isNotEmpty(obj.type))
-        obj.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en
-        };
-      if (this.isNotEmpty(obj.rock))
-        obj.rock = {
-          id: obj.rock,
-          name: obj.rock__name,
-          name_en: obj.rock__name_en
-        };
-      if (this.isNotEmpty(obj.unit))
-        obj.unit = {
-          id: obj.unit,
-          value: obj.unit__value,
-          value_en: obj.unit__value_en
-        };
-      if (this.isNotEmpty(obj.original_filename))
-        obj.attachment = {
-          id: obj.id,
-          original_filename: obj.original_filename
-        };
-      if (this.isNotEmpty(obj.storage))
-        obj.storage = { id: obj.storage, location: obj.storage__location };
-      if (this.isNotEmpty(obj.analysis_method))
-        obj.analysis_method = {
-          id: obj.analysis_method,
-          analysis_method: obj.analysis_method__analysis_method,
-          method_en: obj.analysis_method__method_en
-        };
-
       return obj;
     },
 
@@ -1179,43 +1011,6 @@ export default {
         newObject.taxon = obj.taxon.id;
         newObject.taxon__taxon = obj.taxon.taxon;
       }
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-      if (this.isNotEmpty(obj.type)) {
-        newObject.type = obj.type.id;
-        newObject.type__value = obj.type.value;
-        newObject.type__value_en = obj.type.value_en;
-      }
-      if (this.isNotEmpty(obj.rock)) {
-        newObject.rock = obj.rock.id;
-        newObject.rock__name = obj.rock.name;
-        newObject.rock__name_en = obj.rock.name_en;
-      }
-      if (this.isNotEmpty(obj.unit)) {
-        newObject.unit = obj.unit.id;
-        newObject.unit__value = obj.unit.value;
-        newObject.unit__value_en = obj.unit.value_en;
-      }
-      if (this.isNotEmpty(obj.original_filename)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.original_filename = obj.attachment.original_filename;
-      }
-      if (this.isNotEmpty(obj.storage)) {
-        newObject.storage = obj.storage.id;
-        newObject.storage__location = obj.storage.location;
-      }
-      if (this.isNotEmpty(obj.analysis_method)) {
-        newObject.analysis_method = obj.analysis_method.id;
-        newObject.analysis_method__analysis_method =
-          obj.analysis_method.analysis_method;
-        newObject.analysis_method__method_en = obj.analysis_method.method_en;
-      }
 
       return newObject;
     },
@@ -1224,45 +1019,10 @@ export default {
       let query;
 
       if (object === "specimen_identification") {
-        query = fetchSpecimenIdentifications(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen_identification
-        );
-      } else if (object === "specimen_identification_geology") {
-        query = fetchSpecimenIdentificationGeologies(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen_identification_geology
-        );
-      } else if (object === "specimen_reference") {
-        query = fetchSpecimenReferences(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen_reference
-        );
-      } else if (object === "specimen_description") {
-        query = fetchSpecimenDescriptions(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen_description
-        );
-      } else if (object === "attachment") {
-        query = fetchSpecimenAttachments(
-          this.$route.params.id,
-          this.relatedData.searchParameters.attachment
-        );
-      } else if (object === "specimen_location") {
-        query = fetchSpecimenLocations(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen_location
-        );
-      } else if (object === "specimen_history") {
-        query = fetchSpecimenHistory(
-          this.$route.params.id,
-          this.relatedData.searchParameters.specimen_history
-        );
-      } else if (object === "analysis") {
-        query = fetchSpecimenAnalyses(
-          this.$route.params.id,
-          this.relatedData.searchParameters.analysis
-        );
+        // query = fetchSpecimenIdentifications(
+        //   this.$route.params.id,
+        //   this.relatedData.searchParameters.specimen_identification
+        // );
       }
 
       return new Promise(resolve => {
@@ -1287,59 +1047,6 @@ export default {
         uploadableObject.taxon = uploadableObject.taxon.id
           ? uploadableObject.taxon.id
           : uploadableObject.taxon;
-      }
-      if (this.isNotEmpty(uploadableObject.agent)) {
-        uploadableObject.agent = uploadableObject.agent.id
-          ? uploadableObject.agent.id
-          : uploadableObject.agent;
-      }
-      if (this.isNotEmpty(uploadableObject.reference)) {
-        uploadableObject.reference = uploadableObject.reference.id
-          ? uploadableObject.reference.id
-          : uploadableObject.reference;
-      }
-      if (this.isNotEmpty(uploadableObject.date_identified)) {
-        uploadableObject.date_identified = this.formatDateForUpload(
-          uploadableObject.date_identified
-        );
-      }
-      if (this.isNotEmpty(uploadableObject.type)) {
-        uploadableObject.type = uploadableObject.type.id
-          ? uploadableObject.type.id
-          : uploadableObject.type;
-      }
-      if (this.isNotEmpty(uploadableObject.rock)) {
-        uploadableObject.rock = uploadableObject.rock.id
-          ? uploadableObject.rock.id
-          : uploadableObject.rock;
-      }
-      if (this.isNotEmpty(uploadableObject.unit)) {
-        uploadableObject.unit = uploadableObject.unit.id
-          ? uploadableObject.unit.id
-          : uploadableObject.unit;
-      }
-      if (this.isNotEmpty(uploadableObject.date)) {
-        uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
-      }
-      if (this.isNotEmpty(uploadableObject.date_end)) {
-        uploadableObject.date_end = this.formatDateForUpload(
-          uploadableObject.date_end
-        );
-      }
-      if (this.isNotEmpty(uploadableObject.attachment)) {
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      }
-      if (this.isNotEmpty(uploadableObject.storage)) {
-        uploadableObject.storage = uploadableObject.storage.id
-          ? uploadableObject.storage.id
-          : uploadableObject.storage;
-      }
-      if (this.isNotEmpty(uploadableObject.analysis_method)) {
-        uploadableObject.analysis_method = uploadableObject.analysis_method.id
-          ? uploadableObject.analysis_method.id
-          : uploadableObject.analysis_method;
       }
 
       console.log("This object is sent in string format (related_data):");
