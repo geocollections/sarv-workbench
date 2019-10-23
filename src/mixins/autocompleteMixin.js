@@ -36,6 +36,9 @@ const autocompleteMixin = {
     libraryTitle() {
       return this.$i18n.locale === 'ee' ? 'library__title' : 'library__title_en'
     },
+    rankLabel() {
+      return this.$i18n.locale === 'ee' ? 'rank' : 'rank_en'
+    },
     ...mapState(["currentUser"])
   },
   methods: {

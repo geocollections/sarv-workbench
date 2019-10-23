@@ -1651,6 +1651,10 @@ export function fetchTaxa(data) {
   }
 }
 
+export function fetchTaxon(id) {
+  return fetch(`taxon/?id=${id}&format=json`);
+}
+
 /*******************
  ***  TAXON END  ***
  *******************/

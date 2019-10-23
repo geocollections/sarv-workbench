@@ -11,7 +11,7 @@ import {
   fetchSpecimens,
   fetchKeywords,
   fetchJournals,
-  fetchCollections
+  fetchCollections, fetchTaxa
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -97,6 +97,12 @@ export default {
 
   FETCH_COLLECTIONS: ({ commit, state }) => {
     return fetchCollections(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_TAXA: ({ commit, state }) => {
+    return fetchTaxa(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },
