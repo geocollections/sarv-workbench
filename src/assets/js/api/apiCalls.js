@@ -1659,6 +1659,42 @@ export function fetchTaxonRank() {
   return fetch(`taxon_rank/?format=json`);
 }
 
+export function fetchTaxonRankRelated(taxonId, searchParameters) {
+  return fetch(`taxon_rank/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonSynonym(taxonId, searchParameters) {
+  return fetch(`taxon_synonym/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonTypeSpecimen(taxonId, searchParameters) {
+  return fetch(`taxon_type_specimen/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonOccurence(taxonId, searchParameters) {
+  return fetch(`taxon_occurence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonOpinion(taxonId, searchParameters) {
+  return fetch(`taxon_opinion/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonCommonName(taxonId, searchParameters) {
+  return fetch(`taxon_common_name/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonDescription(taxonId, searchParameters) {
+  return fetch(`taxon_description/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonPage(taxonId, searchParameters) {
+  return fetch(`taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchTaxonImage(taxonId, searchParameters) {
+  return fetch(`taxon_image/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
 /*******************
  ***  TAXON END  ***
  *******************/

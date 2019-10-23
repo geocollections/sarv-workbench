@@ -606,15 +606,95 @@
           </div>
         </div>
 
-        <!--            <specimen-analysis-->
-        <!--              :related-data="relatedData"-->
-        <!--              :autocomplete="autocomplete"-->
-        <!--              :active-tab="activeTab"-->
-        <!--              v-on:add-related-data="addRelatedData"-->
-        <!--              v-on:set-default="setDefault"-->
-        <!--              v-on:edit-row="editRow"-->
-        <!--              v-on:remove-row="removeRow"-->
-        <!--            />-->
+        <taxon-rank
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-synonym
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-type-specimen
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-occurence
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-opinion
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-common-name
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-description
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-page
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
+
+        <taxon-image
+          :related-data="relatedData"
+          :autocomplete="autocomplete"
+          :active-tab="activeTab"
+          v-on:add-related-data="addRelatedData"
+          v-on:set-default="setDefault"
+          v-on:edit-row="editRow"
+          v-on:remove-row="removeRow"
+        />
       </div>
     </div>
 
@@ -638,16 +718,46 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import cloneDeep from "lodash/cloneDeep";
-import { fetchTaxon, fetchTaxonRank } from "../../assets/js/api/apiCalls";
+import {
+  fetchTaxon,
+  fetchTaxonCommonName,
+  fetchTaxonDescription,
+  fetchTaxonImage,
+  fetchTaxonOccurence,
+  fetchTaxonOpinion,
+  fetchTaxonPage,
+  fetchTaxonRank,
+  fetchTaxonRankRelated,
+  fetchTaxonSynonym,
+  fetchTaxonTypeSpecimen
+} from "../../assets/js/api/apiCalls";
 import Spinner from "vue-simple-spinner";
 import Editor from "../partial/editor/Editor";
+import TaxonRank from "./relatedTables/TaxonRank";
+import TaxonSynonym from "./relatedTables/TaxonSynonym";
+import TaxonTypeSpecimen from "./relatedTables/TaxonTypeSpecimen";
+import TaxonOccurence from "./relatedTables/TaxonOccurence";
+import TaxonOpinion from "./relatedTables/TaxonOpinion";
+import TaxonCommonName from "./relatedTables/TaxonCommonName";
+import TaxonDescription from "./relatedTables/TaxonDescription";
+import TaxonPage from "./relatedTables/TaxonPage";
+import TaxonImage from "./relatedTables/TaxonImage";
 
 export default {
   name: "Taxon",
 
   components: {
     Editor,
-    Spinner
+    Spinner,
+    TaxonRank,
+    TaxonSynonym,
+    TaxonTypeSpecimen,
+    TaxonOccurence,
+    TaxonOpinion,
+    TaxonCommonName,
+    TaxonDescription,
+    TaxonPage,
+    TaxonImage
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -841,7 +951,7 @@ export default {
         });
 
         // Load Related Data which is in tabs
-        // this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
 
         this.$on("tab-changed", this.setTab);
 
@@ -1092,11 +1202,51 @@ export default {
     loadRelatedData(object) {
       let query;
 
-      if (object === "specimen_identification") {
-        // query = fetchSpecimenIdentifications(
-        //   this.$route.params.id,
-        //   this.relatedData.searchParameters.specimen_identification
-        // );
+      if (object === "taxon_rank") {
+        query = fetchTaxonRankRelated(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_rank
+        );
+      } else if (object === "taxon_synonym") {
+        query = fetchTaxonSynonym(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_synonym
+        );
+      } else if (object === "taxon_type_specimen") {
+        query = fetchTaxonTypeSpecimen(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_type_specimen
+        );
+      } else if (object === "taxon_occurence") {
+        query = fetchTaxonOccurence(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_occurence
+        );
+      } else if (object === "taxon_opinion") {
+        query = fetchTaxonOpinion(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_opinion
+        );
+      } else if (object === "taxon_common_name") {
+        query = fetchTaxonCommonName(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_common_name
+        );
+      } else if (object === "taxon_description") {
+        query = fetchTaxonDescription(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_description
+        );
+      } else if (object === "taxon_page") {
+        query = fetchTaxonPage(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_page
+        );
+      } else if (object === "taxon_image") {
+        query = fetchTaxonImage(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_image
+        );
       }
 
       return new Promise(resolve => {
