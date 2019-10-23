@@ -44,6 +44,7 @@
                 id="taxon"
                 v-model="taxon.taxon"
                 type="text"
+                :state="isNotEmpty(taxon.taxon)"
               ></b-form-input>
             </div>
 
@@ -260,7 +261,7 @@
                 :placeholder="$t('add.inputs.autocomplete')"
                 :loading="autocomplete.loaders.type_taxon_id"
                 :options="autocomplete.type_taxon_id"
-                @search-change="autocompleteTaxonSearch"
+                @search-change="autocompleteTypeTaxonIdSearch"
                 :internal-search="false"
                 :preserve-search="true"
                 :clear-on-select="false"
@@ -335,7 +336,7 @@
                 :internal-search="false"
                 :preserve-search="true"
                 :clear-on-select="false"
-                @search-change="autocompleteStratigraphySearch"
+                @search-change="autocompleteStratigraphyTopSearch"
                 :loading="autocomplete.loaders.stratigraphy_top"
                 :placeholder="$t('add.inputs.autocomplete')"
                 :show-labels="false"
@@ -362,7 +363,7 @@
                 :internal-search="false"
                 :preserve-search="true"
                 :clear-on-select="false"
-                @search-change="autocompleteStratigraphySearch"
+                @search-change="autocompleteStratigraphyBaseSearch"
                 :loading="autocomplete.loaders.stratigraphy"
                 :placeholder="$t('add.inputs.autocomplete')"
                 :show-labels="false"
@@ -822,10 +823,10 @@ export default {
       relatedDataAutocompleteFields = false
     ) {
       if (regularAutocompleteFields) {
-        fetchTaxonRank().then(
-          response =>
-            (this.autocomplete.rank = this.handleResponse(response))
-        );
+        fetchTaxonRank().then(response => {
+          this.autocomplete.rank = this.handleResponse(response);
+          this.autocomplete.rank_original = this.handleResponse(response);
+        });
       }
 
       if (relatedDataAutocompleteFields) {
