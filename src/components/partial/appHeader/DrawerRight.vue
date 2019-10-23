@@ -10,6 +10,7 @@
     <v-list expand dense>
       <!-- SEARCH -->
       <v-list-group
+        class="mb-1"
         :value="$route.meta.isTableView"
         color="black"
         append-icon="fas fa-angle-down"
@@ -27,8 +28,7 @@
         </template>
 
         <!-- SEARCH BUTTON -->
-        <v-list-item v-if="$route.meta.isEdit">
-          <v-spacer></v-spacer>
+        <v-list-item v-if="$route.meta.isEdit" class="justify-center">
           <v-btn color="deep-orange" dark small @click="searchRecords">
             {{ $t("buttons.search") }}
           </v-btn>
