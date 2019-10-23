@@ -206,7 +206,7 @@
         @click="block.details = !block.details"
       >
         {{ $t("taxon.details") }}
-        <i class="fas fa-project-diagram"></i>
+        <i class="fas fa-info"></i>
       </legend>
 
       <transition name="fade">
@@ -389,7 +389,7 @@
         @click="block.additionalInfo = !block.additionalInfo"
       >
         {{ $t("taxon.additionalInfo") }}
-        <i class="fas fa-info"></i>
+        <i class="fas fa-project-diagram"></i>
       </legend>
 
       <transition name="fade">
@@ -397,30 +397,71 @@
           <!-- TAXON_ID_PBDB, TAXON_ID_PLUTOF, TAXON_ID_TOL, TAXON_ID_EOL and TAXON_ID_NRM -->
           <v-row class="mt-2">
             <v-col class="mb-2" cols="12" md="">
-              <v-text-field v-model="taxon.taxon_id_pbdb" dense hide-details :label="$t('taxon.taxon_id_pbdb')" outlined type="number"></v-text-field>
+              <v-text-field
+                v-model="taxon.taxon_id_pbdb"
+                dense
+                hide-details
+                :label="$t('taxon.taxon_id_pbdb')"
+                outlined
+                type="number"
+              ></v-text-field>
             </v-col>
 
             <v-col class="mb-2" cols="12" md="">
-              <v-text-field v-model="taxon.taxon_id_plutof" dense hide-details :label="$t('taxon.taxon_id_plutof')" outlined type="number"></v-text-field>
+              <v-text-field
+                v-model="taxon.taxon_id_plutof"
+                dense
+                hide-details
+                :label="$t('taxon.taxon_id_plutof')"
+                outlined
+                type="number"
+              ></v-text-field>
             </v-col>
 
             <v-col class="mb-2" cols="12" md="">
-              <v-text-field v-model="taxon.taxon_id_tol" dense hide-details :label="$t('taxon.taxon_id_tol')" outlined type="number"></v-text-field>
+              <v-text-field
+                v-model="taxon.taxon_id_tol"
+                dense
+                hide-details
+                :label="$t('taxon.taxon_id_tol')"
+                outlined
+                type="number"
+              ></v-text-field>
             </v-col>
 
             <v-col class="mb-2" cols="12" md="">
-              <v-text-field v-model="taxon.taxon_id_eol" dense hide-details :label="$t('taxon.taxon_id_eol')" outlined type="number"></v-text-field>
+              <v-text-field
+                v-model="taxon.taxon_id_eol"
+                dense
+                hide-details
+                :label="$t('taxon.taxon_id_eol')"
+                outlined
+                type="number"
+              ></v-text-field>
             </v-col>
 
             <v-col cols="12" md="">
-              <v-text-field v-model="taxon.taxon_id_nrm" dense hide-details :label="$t('taxon.taxon_id_nrm')" outlined type="number"></v-text-field>
+              <v-text-field
+                v-model="taxon.taxon_id_nrm"
+                dense
+                hide-details
+                :label="$t('taxon.taxon_id_nrm')"
+                outlined
+                type="number"
+              ></v-text-field>
             </v-col>
           </v-row>
 
           <!-- OWNER, IS_AUTHORIZED, USER_AUTHORIZED, SORT -->
           <v-row class="mt-2">
             <v-col class="mb-2" cols="12" md="3">
-              <v-text-field v-model="taxon.owner" :label="$t('taxon.owner')" dense hide-details outlined></v-text-field>
+              <v-text-field
+                v-model="taxon.owner"
+                :label="$t('taxon.owner')"
+                dense
+                hide-details
+                outlined
+              ></v-text-field>
             </v-col>
 
             <v-col class="mb-2 checkboxes" cols="12" md="3">
@@ -433,11 +474,24 @@
             </v-col>
 
             <v-col class="mb-2" cols="12" md="3">
-              <v-text-field v-model="taxon.user_authorized" :label="$t('taxon.user_authorized')" dense hide-details outlined></v-text-field>
+              <v-text-field
+                v-model="taxon.user_authorized"
+                :label="$t('taxon.user_authorized')"
+                dense
+                hide-details
+                outlined
+              ></v-text-field>
             </v-col>
 
             <v-col cols="12" md="3">
-              <v-text-field v-model="taxon.sort" :label="$t('taxon.sort')" dense hide-details outlined type="number"></v-text-field>
+              <v-text-field
+                v-model="taxon.sort"
+                :label="$t('taxon.sort')"
+                dense
+                hide-details
+                outlined
+                type="number"
+              ></v-text-field>
             </v-col>
           </v-row>
         </div>
@@ -565,16 +619,16 @@
     </div>
 
     <!-- IS_PRIVATE -->
-    <div class="row">
-      <div class="col checkboxes">
+    <v-row>
+      <v-col class="checkboxes">
         <v-checkbox
           v-model="taxon.is_private"
           :label="$t('taxon.is_private')"
           class="mt-0"
           hide-details
         ></v-checkbox>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -693,7 +747,39 @@ export default {
         searchHistory: "taxonSearchHistory",
         activeTab: "taxon_rank",
         relatedData: this.setDefaultRelatedData(),
-        copyFields: ["id"],
+        copyFields: [
+          "id",
+          "taxon",
+          "author_year",
+          "taxon_epithet",
+          "taxon_original_name",
+          "reference",
+          "parent",
+          "fossil_group",
+          "hierarchy_string",
+          "rank",
+          "rank_original",
+          "type_taxon_id",
+          "type_taxon",
+          "stratigraphy_base",
+          "stratigraphy_top",
+          "in_estonia",
+          "in_baltoscandia",
+          "is_fossil",
+          "is_private",
+          "is_valid",
+          "is_fossil_group",
+          "sort",
+          "taxon_id_pbdb",
+          "taxon_id_plutof",
+          "taxon_id_tol",
+          "taxon_id_eol",
+          "taxon_id_nrm",
+          "remarks",
+          "owner",
+          "is_authorized",
+          "user_authorized"
+        ],
         autocomplete: {
           loaders: {
             reference: false,
@@ -933,11 +1019,53 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.type)) {
-        this.collection.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en
+      if (this.isNotEmpty(obj.reference)) {
+        this.taxon.reference = {
+          id: obj.reference,
+          reference: obj.reference__reference
+        };
+      }
+      if (this.isNotEmpty(obj.rank)) {
+        this.taxon.rank = {
+          id: obj.rank,
+          rank: obj.rank__rank,
+          rank_en: obj.rank__rank_en
+        };
+      }
+      if (this.isNotEmpty(obj.rank_original)) {
+        this.taxon.rank_original = {
+          id: obj.rank_original,
+          rank: obj.rank_original__rank,
+          rank_en: obj.rank_original__rank_en
+        };
+      }
+      if (this.isNotEmpty(obj.parent)) {
+        this.taxon.parent = { id: obj.parent, taxon: obj.parent__taxon };
+      }
+      if (this.isNotEmpty(obj.fossil_group)) {
+        this.taxon.fossil_group = {
+          id: obj.fossil_group,
+          taxon: obj.fossil_group__taxon
+        };
+      }
+      if (this.isNotEmpty(obj.type_taxon_id)) {
+        this.taxon.type_taxon_id = {
+          id: obj.type_taxon_id,
+          taxon: obj.type_taxon
+        };
+      }
+      if (this.isNotEmpty(obj.stratigraphy_top)) {
+        this.taxon.stratigraphy_top = {
+          id: obj.stratigraphy_top,
+          stratigraphy: obj.stratigraphy_top__stratigraphy,
+          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en
+        };
+      }
+      if (this.isNotEmpty(obj.stratigraphy_base)) {
+        this.taxon.stratigraphy_base = {
+          id: obj.stratigraphy_base,
+          stratigraphy: obj.stratigraphy_base__stratigraphy,
+          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en
         };
       }
     },

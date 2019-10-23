@@ -237,6 +237,12 @@
       "info": "Üldinfo",
       "relatedInfo": "Seotud info",
       "description": "Lisainfo"
+    },
+    "taxon": {
+      "info": "Üldinfo",
+      "details": "Taksoni info",
+      "additionalInfo": "Lisainfo",
+      "description": "Kirjeldus"
     }
   },
   "add": {

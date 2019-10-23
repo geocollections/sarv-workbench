@@ -237,6 +237,12 @@
       "info": "General info",
       "relatedInfo": "Related info",
       "description": "Description"
+    },
+    "taxon": {
+      "info": "General info",
+      "details": "Taxon details",
+      "additionalInfo": "Additional info",
+      "description": "Remarks"
     }
   },
   "add": {
