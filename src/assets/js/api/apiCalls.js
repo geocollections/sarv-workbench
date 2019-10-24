@@ -1695,6 +1695,10 @@ export function fetchTaxonImage(taxonId, searchParameters) {
   return fetch(`taxon_image/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
 }
 
+export function fetchTaxonTypeType() {
+  return fetch(`taxon_type_type/?format=json`);
+}
+
 /*******************
  ***  TAXON END  ***
  *******************/
