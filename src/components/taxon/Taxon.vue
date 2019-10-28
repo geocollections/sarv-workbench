@@ -639,7 +639,7 @@
           v-on:remove-row="removeRow"
         />
 
-        <taxon-occurence
+        <taxon-occurrence
           :related-data="relatedData"
           :autocomplete="autocomplete"
           :active-tab="activeTab"
@@ -727,7 +727,7 @@ import {
   fetchTaxonCommonName,
   fetchTaxonDescription,
   fetchTaxonImage,
-  fetchTaxonOccurence,
+  fetchTaxonOccurrence,
   fetchTaxonOpinion,
   fetchTaxonOpinionType,
   fetchTaxonPage,
@@ -742,7 +742,7 @@ import Editor from "../partial/editor/Editor";
 import TaxonRank from "./relatedTables/TaxonRank";
 import TaxonSynonym from "./relatedTables/TaxonSynonym";
 import TaxonTypeSpecimen from "./relatedTables/TaxonTypeSpecimen";
-import TaxonOccurence from "./relatedTables/TaxonOccurence";
+import TaxonOccurrence from "./relatedTables/TaxonOccurrence";
 import TaxonOpinion from "./relatedTables/TaxonOpinion";
 import TaxonCommonName from "./relatedTables/TaxonCommonName";
 import TaxonDescription from "./relatedTables/TaxonDescription";
@@ -758,7 +758,7 @@ export default {
     TaxonRank,
     TaxonSynonym,
     TaxonTypeSpecimen,
-    TaxonOccurence,
+    TaxonOccurrence,
     TaxonOpinion,
     TaxonCommonName,
     TaxonDescription,
@@ -853,7 +853,7 @@ export default {
           { name: "taxon_rank", iconClass: "fas fa-atlas" },
           { name: "taxon_synonym", iconClass: "far fa-clone" },
           { name: "taxon_type_specimen", iconClass: "fas fa-fish" },
-          { name: "taxon_occurence", iconClass: "fas fa-info" },
+          { name: "taxon_occurrence", iconClass: "fas fa-mountain" },
           { name: "taxon_opinion", iconClass: "far fa-lightbulb" },
           { name: "taxon_common_name", iconClass: "fas fa-signature" },
           { name: "taxon_description", iconClass: "far fa-comment-dots" },
@@ -1017,7 +1017,7 @@ export default {
         taxon_rank: [],
         taxon_synonym: [],
         taxon_type_specimen: [],
-        taxon_occurence: [],
+        taxon_occurrence: [],
         taxon_opinion: [],
         taxon_common_name: [],
         taxon_description: [],
@@ -1027,7 +1027,7 @@ export default {
           taxon_rank: [],
           taxon_synonym: [],
           taxon_type_specimen: [],
-          taxon_occurence: [],
+          taxon_occurrence: [],
           taxon_opinion: [],
           taxon_common_name: [],
           taxon_description: [],
@@ -1054,7 +1054,14 @@ export default {
             "stratigraphy",
             "remarks"
           ],
-          taxon_occurence: [],
+          taxon_occurrence: [
+            "reference",
+            "locality",
+            "locality_free",
+            "stratigraphy_base",
+            "stratigraphy_top",
+            "remarks"
+          ],
           taxon_opinion: [
             "opinion_type",
             "other_taxon",
@@ -1110,7 +1117,7 @@ export default {
             paginateBy: 10,
             orderBy: "id"
           },
-          taxon_occurence: {
+          taxon_occurrence: {
             page: 1,
             paginateBy: 10,
             orderBy: "id"
@@ -1145,7 +1152,7 @@ export default {
           taxon_rank: 0,
           taxon_synonym: 0,
           taxon_type_specimen: 0,
-          taxon_occurence: 0,
+          taxon_occurrence: 0,
           taxon_opinion: 0,
           taxon_common_name: 0,
           taxon_description: 0,
@@ -1160,7 +1167,7 @@ export default {
         taxon_rank: {},
         taxon_synonym: {},
         taxon_type_specimen: {},
-        taxon_occurence: {},
+        taxon_occurrence: {},
         taxon_opinion: {},
         taxon_common_name: {},
         taxon_description: {},
@@ -1321,6 +1328,18 @@ export default {
           id: obj.link,
           taxon: obj.link__taxon
         };
+      if (this.isNotEmpty(obj.stratigraphy_base))
+        obj.stratigraphy_base = {
+          id: obj.stratigraphy_base,
+          stratigraphy: obj.stratigraphy_base__stratigraphy,
+          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en
+        };
+      if (this.isNotEmpty(obj.stratigraphy_top))
+        obj.stratigraphy_top = {
+          id: obj.stratigraphy_top,
+          stratigraphy: obj.stratigraphy_top__stratigraphy,
+          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en
+        };
       return obj;
     },
 
@@ -1379,6 +1398,18 @@ export default {
         newObject.link = obj.link.id;
         newObject.link__taxon = obj.link.taxon;
       }
+      if (this.isNotEmpty(obj.stratigraphy_base)) {
+        newObject.stratigraphy_base = obj.stratigraphy_base.id;
+        newObject.stratigraphy_base__stratigraphy = obj.stratigraphy_base.stratigraphy;
+        newObject.stratigraphy_base__stratigraphy_en =
+          obj.stratigraphy_base.stratigraphy_en;
+      }
+      if (this.isNotEmpty(obj.stratigraphy_top)) {
+        newObject.stratigraphy_top = obj.stratigraphy_top.id;
+        newObject.stratigraphy_top__stratigraphy = obj.stratigraphy_top.stratigraphy;
+        newObject.stratigraphy_top__stratigraphy_en =
+          obj.stratigraphy_top.stratigraphy_en;
+      }
 
       return newObject;
     },
@@ -1401,10 +1432,10 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.taxon_type_specimen
         );
-      } else if (object === "taxon_occurence") {
-        query = fetchTaxonOccurence(
+      } else if (object === "taxon_occurrence") {
+        query = fetchTaxonOccurrence(
           this.$route.params.id,
-          this.relatedData.searchParameters.taxon_occurence
+          this.relatedData.searchParameters.taxon_occurrence
         );
       } else if (object === "taxon_opinion") {
         query = fetchTaxonOpinion(
@@ -1498,6 +1529,16 @@ export default {
         uploadableObject.link = uploadableObject.link.id
           ? uploadableObject.link.id
           : uploadableObject.link;
+      if (this.isNotEmpty(uploadableObject.stratigraphy_base)) {
+        uploadableObject.stratigraphy_base = uploadableObject.stratigraphy_base.id
+          ? uploadableObject.stratigraphy_base.id
+          : uploadableObject.stratigraphy_base;
+      }
+      if (this.isNotEmpty(uploadableObject.stratigraphy_top)) {
+        uploadableObject.stratigraphy_top = uploadableObject.stratigraphy_top.id
+          ? uploadableObject.stratigraphy_top.id
+          : uploadableObject.stratigraphy_top;
+      }
 
       console.log("This object is sent in string format (related_data):");
       console.log(uploadableObject);

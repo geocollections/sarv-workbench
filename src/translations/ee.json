@@ -1102,11 +1102,12 @@
     "title": "Pealkiri",
     "title_en": "Pealkiri (EN)",
     "attachment": "Manus",
+    "locality_free": "Leiukoht txt",
     "relatedTables": {
       "taxon_rank": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
       "taxon_type_specimen": "Tüüpeksemplarid",
-      "taxon_occurence": "Levik ja viited",
+      "taxon_occurrence": "Levik ja viited",
       "taxon_opinion": "Arvamused",
       "taxon_common_name": "Tavanimed",
       "taxon_description": "Kirjeldused",

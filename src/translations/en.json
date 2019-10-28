@@ -1102,11 +1102,12 @@
     "title": "Title",
     "title_en": "Title (EN)",
     "attachment": "Attachment",
+    "locality_free": "Locality txt",
     "relatedTables": {
       "taxon_rank": "Ranks",
       "taxon_synonym": "Synonymy",
       "taxon_type_specimen": "Type specimens",
-      "taxon_occurence": "Occurences",
+      "taxon_occurrence": "Occurences",
       "taxon_opinion": "Opinions",
       "taxon_common_name": "Names",
       "taxon_description": "Descriptions",

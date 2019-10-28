@@ -1671,8 +1671,8 @@ export function fetchTaxonTypeSpecimen(taxonId, searchParameters) {
   return fetch(`taxon_type_specimen/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
 }
 
-export function fetchTaxonOccurence(taxonId, searchParameters) {
-  return fetch(`taxon_occurence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+export function fetchTaxonOccurrence(taxonId, searchParameters) {
+  return fetch(`taxon_occurrence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
 }
 
 export function fetchTaxonOpinion(taxonId, searchParameters) {
