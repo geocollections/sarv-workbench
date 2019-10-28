@@ -1659,8 +1659,9 @@ export function fetchTaxonRank() {
   return fetch(`taxon_rank/?format=json`);
 }
 
-export function fetchTaxonRankRelated(taxonId, searchParameters) {
-  return fetch(`taxon_rank/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+export function fetchTaxonSubclass(taxonId, searchParameters) {
+  let fields = "id,taxon,parent_id,parent__taxon,author_year,remarks";
+  return fetch(`taxon/?parent_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=${fields}&format=json`);
 }
 
 export function fetchTaxonSynonym(taxonId, searchParameters) {

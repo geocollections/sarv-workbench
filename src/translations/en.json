@@ -1104,7 +1104,7 @@
     "attachment": "Attachment",
     "locality_free": "Locality txt",
     "relatedTables": {
-      "taxon_rank": "Ranks",
+      "taxon_subclass": "Subtaxons",
       "taxon_synonym": "Synonymy",
       "taxon_type_specimen": "Type specimens",
       "taxon_occurrence": "Occurences",

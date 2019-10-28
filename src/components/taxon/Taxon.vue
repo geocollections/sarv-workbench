@@ -526,7 +526,7 @@
     <div class="row mb-2">
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
-          <li class="nav-item" v-for="tab in relatedTabs" :key="tab.name">
+          <li class="nav-item" v-for="tab in filteredRelatedTabs" :key="tab.name">
             <a
               href="#"
               @click.prevent="setTab(tab.name)"
@@ -609,7 +609,9 @@
           </div>
         </div>
 
-        <taxon-rank
+        <!-- Todo: Taxon subclass can only be added if taxon already exists (needs backend support because same table) -->
+        <taxon-subclass
+          v-if="$route.meta.isEdit"
           :related-data="relatedData"
           :autocomplete="autocomplete"
           :active-tab="activeTab"
@@ -724,6 +726,7 @@ import cloneDeep from "lodash/cloneDeep";
 import {
   fetchListLanguages,
   fetchTaxon,
+  fetchTaxonSubclass,
   fetchTaxonCommonName,
   fetchTaxonDescription,
   fetchTaxonImage,
@@ -732,14 +735,13 @@ import {
   fetchTaxonOpinionType,
   fetchTaxonPage,
   fetchTaxonRank,
-  fetchTaxonRankRelated,
   fetchTaxonSynonym,
   fetchTaxonTypeSpecimen,
   fetchTaxonTypeType
 } from "../../assets/js/api/apiCalls";
 import Spinner from "vue-simple-spinner";
 import Editor from "../partial/editor/Editor";
-import TaxonRank from "./relatedTables/TaxonRank";
+import TaxonSubclass from "./relatedTables/TaxonSubclass";
 import TaxonSynonym from "./relatedTables/TaxonSynonym";
 import TaxonTypeSpecimen from "./relatedTables/TaxonTypeSpecimen";
 import TaxonOccurrence from "./relatedTables/TaxonOccurrence";
@@ -755,7 +757,7 @@ export default {
   components: {
     Editor,
     Spinner,
-    TaxonRank,
+    TaxonSubclass,
     TaxonSynonym,
     TaxonTypeSpecimen,
     TaxonOccurrence,
@@ -833,6 +835,14 @@ export default {
       if (tabObject && tabObject[this.$route.meta.object]) {
         return tabObject[this.$route.meta.object];
       } else return null;
+    },
+
+    filteredRelatedTabs() {
+      return this.relatedTabs.filter(tab => {
+        if (!this.$route.meta.isEdit) {
+          if (tab.name !== "taxon_subclass") return tab;
+        } else return tab
+      })
     }
   },
 
@@ -850,7 +860,7 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "taxon_rank", iconClass: "fas fa-atlas" },
+          { name: "taxon_subclass", iconClass: "fas fa-pastafarianism" },
           { name: "taxon_synonym", iconClass: "far fa-clone" },
           { name: "taxon_type_specimen", iconClass: "fas fa-fish" },
           { name: "taxon_occurrence", iconClass: "fas fa-mountain" },
@@ -861,7 +871,7 @@ export default {
           { name: "taxon_image", iconClass: "far fa-image" }
         ],
         searchHistory: "taxonSearchHistory",
-        activeTab: "taxon_rank",
+        activeTab: this.$route.meta.isEdit ? "taxon_subclass" : "taxon_synonym",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
@@ -1014,7 +1024,7 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        taxon_rank: [],
+        taxon_subclass: [],
         taxon_synonym: [],
         taxon_type_specimen: [],
         taxon_occurrence: [],
@@ -1024,7 +1034,7 @@ export default {
         taxon_page: [],
         taxon_image: [],
         new: {
-          taxon_rank: [],
+          taxon_subclass: [],
           taxon_synonym: [],
           taxon_type_specimen: [],
           taxon_occurrence: [],
@@ -1035,7 +1045,11 @@ export default {
           taxon_image: []
         },
         copyFields: {
-          taxon_rank: [],
+          taxon_subclass: [
+            "taxon",
+            "author_year",
+            "remarks"
+          ],
           taxon_synonym: [
             "taxon_synonym",
             "author",
@@ -1102,7 +1116,7 @@ export default {
         },
         insert: this.setDefaultInsertRelatedData(),
         searchParameters: {
-          taxon_rank: {
+          taxon_subclass: {
             page: 1,
             paginateBy: 10,
             orderBy: "id"
@@ -1149,7 +1163,7 @@ export default {
           }
         },
         count: {
-          taxon_rank: 0,
+          taxon_subclass: 0,
           taxon_synonym: 0,
           taxon_type_specimen: 0,
           taxon_occurrence: 0,
@@ -1164,7 +1178,7 @@ export default {
 
     setDefaultInsertRelatedData() {
       return {
-        taxon_rank: {},
+        taxon_subclass: {},
         taxon_synonym: {},
         taxon_type_specimen: {},
         taxon_occurrence: {},
@@ -1340,6 +1354,11 @@ export default {
           stratigraphy: obj.stratigraphy_top__stratigraphy,
           stratigraphy_en: obj.stratigraphy_top__stratigraphy_en
         };
+      if (this.isNotEmpty(obj.taxon) && this.activeTab === "taxon_subclass")
+        obj.taxon = {
+          id: obj.id,
+          taxon: obj.taxon
+        };
       return obj;
     },
 
@@ -1410,6 +1429,10 @@ export default {
         newObject.stratigraphy_top__stratigraphy_en =
           obj.stratigraphy_top.stratigraphy_en;
       }
+      if (this.isNotEmpty(obj.taxon) && this.activeTab === "taxon_subclass") {
+        newObject.id = obj.taxon.id;
+        newObject.taxon = obj.taxon.taxon;
+      }
 
       return newObject;
     },
@@ -1417,10 +1440,10 @@ export default {
     loadRelatedData(object) {
       let query;
 
-      if (object === "taxon_rank") {
-        query = fetchTaxonRankRelated(
+      if (object === "taxon_subclass") {
+        query = fetchTaxonSubclass(
           this.$route.params.id,
-          this.relatedData.searchParameters.taxon_rank
+          this.relatedData.searchParameters.taxon_subclass
         );
       } else if (object === "taxon_synonym") {
         query = fetchTaxonSynonym(
@@ -1477,8 +1500,15 @@ export default {
     checkRequiredFields(type) {},
 
     formatRelatedData(objectToUpload) {
+      console.log(objectToUpload)
       let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.taxon = this.taxon.id;
+      if (this.activeTab === "taxon_subclass") {
+        console.log(this.taxon.id)
+        console.log(uploadableObject)
+        uploadableObject.parent = this.taxon.id;
+      } else {
+        uploadableObject.taxon = this.taxon.id;
+      }
 
       if (this.isNotEmpty(uploadableObject.type_type)) {
         uploadableObject.type_type = uploadableObject.type_type.id
@@ -1538,6 +1568,11 @@ export default {
         uploadableObject.stratigraphy_top = uploadableObject.stratigraphy_top.id
           ? uploadableObject.stratigraphy_top.id
           : uploadableObject.stratigraphy_top;
+      }
+      if (this.isNotEmpty(uploadableObject.taxon) && this.activeTab === "taxon_subclass") {
+        uploadableObject.taxon = uploadableObject.taxon.id
+          ? uploadableObject.taxon.id
+          : uploadableObject.taxon;
       }
 
       console.log("This object is sent in string format (related_data):");

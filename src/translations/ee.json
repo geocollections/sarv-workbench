@@ -1104,7 +1104,7 @@
     "attachment": "Manus",
     "locality_free": "Leiukoht txt",
     "relatedTables": {
-      "taxon_rank": "Alamtaksonid",
+      "taxon_subclass": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
       "taxon_type_specimen": "Tüüpeksemplarid",
       "taxon_occurrence": "Levik ja viited",

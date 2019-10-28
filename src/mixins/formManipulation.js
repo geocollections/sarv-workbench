@@ -533,8 +533,12 @@ const formManipulation = {
               return;
             }
 
+            // Special use case for taxon
+            let url = "/add" + tab + "/";
+            if (tab === "taxon_subclass") url = "/add/taxon/";
+
             formData.append('data', this.formatRelatedData(this.relatedData.insert[tab]));
-            this.saveData(tab, formData, 'add/' + tab + '/').then(isSuccessfullySaved => {
+            this.saveData(tab, formData, url).then(isSuccessfullySaved => {
               console.log(isSuccessfullySaved);
               this.loadRelatedData(tab);
               this.$set(this.relatedData, 'insert', this.setDefaultInsertRelatedData());
@@ -592,7 +596,11 @@ const formManipulation = {
             let editableObject = this.removeUnnecessaryFields(entity.new, this.relatedData.copyFields[this.activeTab]);
             formData.append('data', this.formatRelatedData(editableObject));
 
-            this.saveData(this.activeTab, formData, 'change/' + this.activeTab + '/' + entity.id).then(isSuccessfullySaved => {
+            let tab = this.activeTab;
+            // Special use case for taxon
+            if (this.activeTab === "taxon_subclass") tab = "taxon";
+
+            this.saveData(this.activeTab, formData, 'change/' + tab + '/' + entity.id).then(isSuccessfullySaved => {
               console.log(isSuccessfullySaved)
               //  UPDATE ROW DATA
               this.$set(this.relatedData[this.activeTab], index, this.unformatRelatedDataAutocompleteFields(entity.new, entity.id));
