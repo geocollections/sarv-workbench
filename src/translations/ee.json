@@ -1100,6 +1100,8 @@
     "frontpage_title": "Avalehe pealkiri",
     "author_txt": "Autor txt",
     "title": "Pealkiri",
+    "title_en": "Pealkiri (EN)",
+    "attachment": "Manus",
     "relatedTables": {
       "taxon_rank": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",

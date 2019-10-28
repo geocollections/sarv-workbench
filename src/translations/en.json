@@ -1100,6 +1100,8 @@
     "frontpage_title": "Front page title",
     "author_txt": "Author txt",
     "title": "Title",
+    "title_en": "Title (EN)",
+    "attachment": "Attachment",
     "relatedTables": {
       "taxon_rank": "Ranks",
       "taxon_synonym": "Synonymy",

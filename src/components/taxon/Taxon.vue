@@ -913,7 +913,8 @@ export default {
             stratigraphy: false,
             opinion_type: false,
             taxon: false,
-            language: false
+            language: false,
+            attachment: false
           },
           reference: [],
           rank: [],
@@ -930,7 +931,8 @@ export default {
           stratigraphy: [],
           opinion_type: [],
           taxon: [],
-          language: []
+          language: [],
+          attachment: []
         },
         requiredFields: ["taxon"],
         taxon: {},
@@ -1082,7 +1084,14 @@ export default {
             "author_txt",
             "date_txt"
           ],
-          taxon_image: []
+          taxon_image: [
+            "attachment",
+            "link",
+            "title",
+            "title_en",
+            "sort",
+            "remarks"
+          ]
         },
         insert: this.setDefaultInsertRelatedData(),
         searchParameters: {
@@ -1302,6 +1311,16 @@ export default {
           id: obj.agent,
           agent: obj.agent__agent
         };
+      if (this.isNotEmpty(obj.attachment))
+        obj.attachment = {
+          id: obj.attachment,
+          original_filename: obj.attachment__original_filename
+        };
+      if (this.isNotEmpty(obj.link))
+        obj.link = {
+          id: obj.link,
+          taxon: obj.link__taxon
+        };
       return obj;
     },
 
@@ -1351,6 +1370,14 @@ export default {
       if (this.isNotEmpty(obj.agent)) {
         newObject.agent = obj.agent.id;
         newObject.agent__agent = obj.agent.agent;
+      }
+      if (this.isNotEmpty(obj.attachment)) {
+        newObject.attachment = obj.attachment.id;
+        newObject.attachment__original_filename = obj.attachment.original_filename;
+      }
+      if (this.isNotEmpty(obj.link)) {
+        newObject.link = obj.link.id;
+        newObject.link__taxon = obj.link.taxon;
       }
 
       return newObject;
@@ -1463,6 +1490,14 @@ export default {
         uploadableObject.agent = uploadableObject.agent.id
           ? uploadableObject.agent.id
           : uploadableObject.agent;
+      if (this.isNotEmpty(uploadableObject.attachment))
+        uploadableObject.attachment = uploadableObject.attachment.id
+          ? uploadableObject.attachment.id
+          : uploadableObject.attachment;
+      if (this.isNotEmpty(uploadableObject.link))
+        uploadableObject.link = uploadableObject.link.id
+          ? uploadableObject.link.id
+          : uploadableObject.link;
 
       console.log("This object is sent in string format (related_data):");
       console.log(uploadableObject);

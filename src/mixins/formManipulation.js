@@ -457,6 +457,11 @@ const formManipulation = {
       if (doiIdentifier) return 'https://doi.geocollections.info/' + doiIdentifier;
     },
 
+    getFossilsUrl(id) {
+      return `https://fossiilid.info/${id}`;
+    },
+
+
     /**
      * Removes unnecessary fields from object.
      *
