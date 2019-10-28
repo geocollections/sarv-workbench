@@ -10,7 +10,7 @@
             <tr>
               <th>{{ $t("taxon.opinion") }}</th>
               <th>{{ $t("taxon.other_taxon") }}</th>
-              <th>{{ $t("taxon.opinion_reference") }}</th>
+              <th>{{ $t("taxon.reference") }}</th>
               <th>{{ $t("taxon.pages") }}</th>
               <th>{{ $t("taxon.author") }}</th>
               <th>{{ $t("taxon.year") }}</th>

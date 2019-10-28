@@ -58,7 +58,7 @@
             </div>
 
             <div class="col-md-4">
-              <label :for="`reference`">{{ $t("taxon.reference") }}:</label>
+              <label :for="`reference`">{{ $t("taxon.reference_original") }}:</label>
               <vue-multiselect
                 id="reference"
                 v-model="taxon.reference"
@@ -856,7 +856,7 @@ export default {
           { name: "taxon_occurence", iconClass: "fas fa-info" },
           { name: "taxon_opinion", iconClass: "far fa-lightbulb" },
           { name: "taxon_common_name", iconClass: "fas fa-globe-europe" },
-          { name: "taxon_description", iconClass: "fas fa-history" },
+          { name: "taxon_description", iconClass: "far fa-comment-dots" },
           { name: "taxon_page", iconClass: "far fa-chart-bar" },
           { name: "taxon_image", iconClass: "far fa-chart-bar" }
         ],
@@ -913,7 +913,7 @@ export default {
             stratigraphy: false,
             opinion_type: false,
             taxon: false,
-            language: false
+            language: false,
           },
           reference: [],
           rank: [],
@@ -1064,7 +1064,15 @@ export default {
             "remarks"
           ],
           taxon_common_name: ["name", "language", "is_preferred", "remarks"],
-          taxon_description: [],
+          taxon_description: [
+            "reference",
+            "agent",
+            "author_free",
+            "date_free",
+            "language",
+            "description",
+            "remarks"
+          ],
           taxon_page: [],
           taxon_image: []
         },
@@ -1281,6 +1289,11 @@ export default {
           value: obj.language__value,
           value_en: obj.language__value_en
         };
+      if (this.isNotEmpty(obj.agent))
+        obj.agent = {
+          id: obj.agent,
+          agent: obj.agent__agent
+        };
       return obj;
     },
 
@@ -1326,6 +1339,10 @@ export default {
         newObject.language = obj.language.id;
         newObject.language__value = obj.language.value;
         newObject.language__value_en = obj.language.value_en;
+      }
+      if (this.isNotEmpty(obj.agent)) {
+        newObject.agent = obj.agent.id;
+        newObject.agent__agent = obj.agent.agent;
       }
 
       return newObject;
@@ -1434,6 +1451,10 @@ export default {
         uploadableObject.language = uploadableObject.language.id
           ? uploadableObject.language.id
           : uploadableObject.language;
+      if (this.isNotEmpty(uploadableObject.agent))
+        uploadableObject.agent = uploadableObject.agent.id
+          ? uploadableObject.agent.id
+          : uploadableObject.agent;
 
       console.log("This object is sent in string format (related_data):");
       console.log(uploadableObject);
