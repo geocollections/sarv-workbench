@@ -1,11 +1,11 @@
 <template>
   <div
-    class="taxon-opinion row"
+    class="taxon-common-name row"
     :class="{ active: activeTab === 'taxon_common_name' }"
   >
     <div class="col-sm-12" v-if="activeTab === 'taxon_common_name'">
       <div class="table-responsive-sm">
-        <table class="table table-hover table-bordered  related-table">
+        <table class="table table-hover table-bordered related-table">
           <thead class="thead-light">
             <tr>
               <th>{{ $t("taxon.name") }}</th>
@@ -36,7 +36,7 @@
                 }"
               ></td>
 
-              <td v-if="!entity.editMode" class="text-center">
+              <td v-if="!entity.editMode" class="text-center" style="vertical-align: middle">
                 <v-icon small color="blue" v-if="entity.is_preferred"
                   >fas fa-plus</v-icon
                 >
@@ -69,11 +69,11 @@
                 </vue-multiselect>
               </td>
 
-              <td v-if="entity.editMode" class="middle">
+              <td v-if="entity.editMode">
                 <v-checkbox
                   v-model="entity.new.is_preferred"
                   color="blue"
-                  class="justify-center pt-0 mt-0"
+                  class="justify-center pt-0 mt-2"
                   hide-details
                 ></v-checkbox>
               </td>
@@ -135,11 +135,11 @@
                 </vue-multiselect>
               </td>
 
-              <td class="middle">
+              <td>
                 <v-checkbox
                   v-model="relatedData.insert.taxon_common_name.is_preferred"
                   color="blue"
-                  class="justify-center pt-0 mt-0"
+                  class="justify-center pt-0 mt-2"
                   hide-details
                 ></v-checkbox>
               </td>
@@ -190,8 +190,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.middle {
-  vertical-align: middle;
-}
-</style>
+<style scoped></style>

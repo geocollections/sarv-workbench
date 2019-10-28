@@ -1,11 +1,11 @@
 <template>
   <div
-    class="taxon-opinion row"
+    class="taxon-description row"
     :class="{ active: activeTab === 'taxon_description' }"
   >
     <div class="col-sm-12" v-if="activeTab === 'taxon_description'">
       <div class="table-responsive-sm">
-        <table class="table table-hover table-bordered  related-table">
+        <table class="table table-hover table-bordered related-table">
           <thead class="thead-light">
             <tr>
               <th>{{ $t("taxon.reference") }}</th>

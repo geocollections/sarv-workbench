@@ -1096,6 +1096,10 @@
     "name": "Nimi",
     "language": "Keel",
     "is_preferred": "Eelistatud?",
+    "frontpage": "Avaleht",
+    "frontpage_title": "Avalehe pealkiri",
+    "author_txt": "Autor txt",
+    "title": "Pealkiri",
     "relatedTables": {
       "taxon_rank": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",

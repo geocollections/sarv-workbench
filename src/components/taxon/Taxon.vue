@@ -855,10 +855,10 @@ export default {
           { name: "taxon_type_specimen", iconClass: "fas fa-fish" },
           { name: "taxon_occurence", iconClass: "fas fa-info" },
           { name: "taxon_opinion", iconClass: "far fa-lightbulb" },
-          { name: "taxon_common_name", iconClass: "fas fa-globe-europe" },
+          { name: "taxon_common_name", iconClass: "fas fa-signature" },
           { name: "taxon_description", iconClass: "far fa-comment-dots" },
-          { name: "taxon_page", iconClass: "far fa-chart-bar" },
-          { name: "taxon_image", iconClass: "far fa-chart-bar" }
+          { name: "taxon_page", iconClass: "fas fa-pager" },
+          { name: "taxon_image", iconClass: "far fa-image" }
         ],
         searchHistory: "taxonSearchHistory",
         activeTab: "taxon_rank",
@@ -913,7 +913,7 @@ export default {
             stratigraphy: false,
             opinion_type: false,
             taxon: false,
-            language: false,
+            language: false
           },
           reference: [],
           rank: [],
@@ -1073,7 +1073,15 @@ export default {
             "description",
             "remarks"
           ],
-          taxon_page: [],
+          taxon_page: [
+            "language",
+            "frontpage",
+            "frontpage_title",
+            "title",
+            "author",
+            "author_txt",
+            "date_txt"
+          ],
           taxon_image: []
         },
         insert: this.setDefaultInsertRelatedData(),
@@ -1283,7 +1291,7 @@ export default {
           id: obj.other_taxon,
           taxon: obj.other_taxon__taxon
         };
-      if (this.isNotEmpty(obj.language))
+      if (this.isNotEmpty(obj.language) && this.activeTab !== "taxon_page")
         obj.language = {
           id: obj.language,
           value: obj.language__value,
@@ -1335,7 +1343,7 @@ export default {
         newObject.other_taxon = obj.other_taxon.id;
         newObject.other_taxon__taxon = obj.other_taxon.taxon;
       }
-      if (this.isNotEmpty(obj.language)) {
+      if (this.isNotEmpty(obj.language) && this.activeTab !== "taxon_page") {
         newObject.language = obj.language.id;
         newObject.language__value = obj.language.value;
         newObject.language__value_en = obj.language.value_en;
@@ -1447,7 +1455,7 @@ export default {
         uploadableObject.other_taxon = uploadableObject.other_taxon.id
           ? uploadableObject.other_taxon.id
           : uploadableObject.other_taxon;
-      if (this.isNotEmpty(uploadableObject.language))
+      if (this.isNotEmpty(uploadableObject.language) && this.activeTab !== "taxon_page")
         uploadableObject.language = uploadableObject.language.id
           ? uploadableObject.language.id
           : uploadableObject.language;

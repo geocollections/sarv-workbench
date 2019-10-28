@@ -1096,6 +1096,10 @@
     "name": "Name",
     "language": "Language",
     "is_preferred": "Is preferred?",
+    "frontpage": "Front page",
+    "frontpage_title": "Front page title",
+    "author_txt": "Author txt",
+    "title": "Title",
     "relatedTables": {
       "taxon_rank": "Ranks",
       "taxon_synonym": "Synonymy",
