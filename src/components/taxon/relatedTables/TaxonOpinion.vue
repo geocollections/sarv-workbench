@@ -145,11 +145,12 @@
                 <b-form-input v-model="entity.new.year" type="text" />
               </td>
 
-              <td v-if="entity.editMode">
+              <td v-if="entity.editMode" class="middle">
                 <v-checkbox
                   v-model="entity.new.is_preferred"
                   color="blue"
-                  class="justify-center"
+                  class="justify-center pt-0 mt-0"
+                  hide-details
                 ></v-checkbox>
               </td>
 
@@ -272,11 +273,12 @@
                 />
               </td>
 
-              <td>
+              <td class="middle">
                 <v-checkbox
                   v-model="relatedData.insert.taxon_opinion.is_preferred"
                   color="blue"
-                  class="justify-center"
+                  class="justify-center pt-0 mt-0"
+                  hide-details
                 ></v-checkbox>
               </td>
 
@@ -326,4 +328,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.middle {
+  vertical-align: middle;
+}
+</style>

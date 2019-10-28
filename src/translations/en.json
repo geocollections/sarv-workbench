@@ -1092,6 +1092,9 @@
     "other_taxon": "Other taxon",
     "opinion_reference": "Reference",
     "is_preferred_opinion": "Is preferred",
+    "name": "Name",
+    "language": "Language",
+    "is_preferred": "Is preferred?",
     "relatedTables": {
       "taxon_rank": "Ranks",
       "taxon_synonym": "Synonymy",

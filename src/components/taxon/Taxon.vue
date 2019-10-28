@@ -722,6 +722,7 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import cloneDeep from "lodash/cloneDeep";
 import {
+  fetchListLanguages,
   fetchTaxon,
   fetchTaxonCommonName,
   fetchTaxonDescription,
@@ -911,7 +912,8 @@ export default {
             locality: false,
             stratigraphy: false,
             opinion_type: false,
-            taxon: false
+            taxon: false,
+            language: false
           },
           reference: [],
           rank: [],
@@ -927,7 +929,8 @@ export default {
           locality: [],
           stratigraphy: [],
           opinion_type: [],
-          taxon: []
+          taxon: [],
+          language: []
         },
         requiredFields: ["taxon"],
         taxon: {},
@@ -999,6 +1002,11 @@ export default {
           response =>
             (this.autocomplete.opinion_type = this.handleResponse(response))
         );
+
+        fetchListLanguages().then(
+          response =>
+            (this.autocomplete.language = this.handleResponse(response))
+        );
       }
     },
 
@@ -1055,7 +1063,7 @@ export default {
             "is_preferred",
             "remarks"
           ],
-          taxon_common_name: [],
+          taxon_common_name: ["name", "language", "is_preferred", "remarks"],
           taxon_description: [],
           taxon_page: [],
           taxon_image: []
@@ -1267,6 +1275,12 @@ export default {
           id: obj.other_taxon,
           taxon: obj.other_taxon__taxon
         };
+      if (this.isNotEmpty(obj.language))
+        obj.language = {
+          id: obj.language,
+          value: obj.language__value,
+          value_en: obj.language__value_en
+        };
       return obj;
     },
 
@@ -1307,6 +1321,11 @@ export default {
       if (this.isNotEmpty(obj.other_taxon)) {
         newObject.other_taxon = obj.other_taxon.id;
         newObject.other_taxon__taxon = obj.other_taxon.taxon;
+      }
+      if (this.isNotEmpty(obj.language)) {
+        newObject.language = obj.language.id;
+        newObject.language__value = obj.language.value;
+        newObject.language__value_en = obj.language.value_en;
       }
 
       return newObject;
@@ -1411,6 +1430,10 @@ export default {
         uploadableObject.other_taxon = uploadableObject.other_taxon.id
           ? uploadableObject.other_taxon.id
           : uploadableObject.other_taxon;
+      if (this.isNotEmpty(uploadableObject.language))
+        uploadableObject.language = uploadableObject.language.id
+          ? uploadableObject.language.id
+          : uploadableObject.language;
 
       console.log("This object is sent in string format (related_data):");
       console.log(uploadableObject);

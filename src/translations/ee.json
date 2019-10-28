@@ -1092,6 +1092,9 @@
     "other_taxon": "Teine takson",
     "opinion_reference": "Viide",
     "is_preferred_opinion": "Eelistatud arvamus",
+    "name": "Nimi",
+    "language": "Keel",
+    "is_preferred": "Eelistatud?",
     "relatedTables": {
       "taxon_rank": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
