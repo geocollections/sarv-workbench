@@ -1699,6 +1699,10 @@ export function fetchTaxonTypeType() {
   return fetch(`taxon_type_type/?format=json`);
 }
 
+export function fetchTaxonOpinionType() {
+  return fetch(`taxon_opinion_type/?format=json`);
+}
+
 /*******************
  ***  TAXON END  ***
  *******************/

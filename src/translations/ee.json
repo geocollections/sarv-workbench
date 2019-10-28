@@ -1088,6 +1088,10 @@
     "specimen_number": "Number",
     "locality": "Leiukoht",
     "stratigraphy": "Stratigraafia",
+    "opinion": "Arvamus",
+    "other_taxon": "Teine takson",
+    "opinion_reference": "Viide",
+    "is_preferred_opinion": "Eelistatud arvamus",
     "relatedTables": {
       "taxon_rank": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",

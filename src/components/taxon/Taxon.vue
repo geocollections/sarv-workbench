@@ -728,6 +728,7 @@ import {
   fetchTaxonImage,
   fetchTaxonOccurence,
   fetchTaxonOpinion,
+  fetchTaxonOpinionType,
   fetchTaxonPage,
   fetchTaxonRank,
   fetchTaxonRankRelated,
@@ -852,7 +853,7 @@ export default {
           { name: "taxon_synonym", iconClass: "far fa-clone" },
           { name: "taxon_type_specimen", iconClass: "fas fa-fish" },
           { name: "taxon_occurence", iconClass: "fas fa-info" },
-          { name: "taxon_opinion", iconClass: "far fa-folder-open" },
+          { name: "taxon_opinion", iconClass: "far fa-lightbulb" },
           { name: "taxon_common_name", iconClass: "fas fa-globe-europe" },
           { name: "taxon_description", iconClass: "fas fa-history" },
           { name: "taxon_page", iconClass: "far fa-chart-bar" },
@@ -908,7 +909,9 @@ export default {
             taxon_type_type: false,
             specimen: false,
             locality: false,
-            stratigraphy: false
+            stratigraphy: false,
+            opinion_type: false,
+            taxon: false
           },
           reference: [],
           rank: [],
@@ -922,7 +925,9 @@ export default {
           taxon_type_type: [],
           specimen: [],
           locality: [],
-          stratigraphy: []
+          stratigraphy: [],
+          opinion_type: [],
+          taxon: []
         },
         requiredFields: ["taxon"],
         taxon: {},
@@ -987,9 +992,12 @@ export default {
       if (relatedDataAutocompleteFields) {
         fetchTaxonTypeType().then(
           response =>
-            (this.autocomplete.taxon_type_type = this.handleResponse(
-              response
-            ))
+            (this.autocomplete.taxon_type_type = this.handleResponse(response))
+        );
+
+        fetchTaxonOpinionType().then(
+          response =>
+            (this.autocomplete.opinion_type = this.handleResponse(response))
         );
       }
     },
@@ -1027,17 +1035,26 @@ export default {
             "remarks"
           ],
           taxon_type_specimen: [
-            'type_type',
-            'repository',
-            'specimen',
-            'specimen_number',
-            'reference',
-            'locality',
-            'stratigraphy',
-            'remarks',
+            "type_type",
+            "repository",
+            "specimen",
+            "specimen_number",
+            "reference",
+            "locality",
+            "stratigraphy",
+            "remarks"
           ],
           taxon_occurence: [],
-          taxon_opinion: [],
+          taxon_opinion: [
+            "opinion_type",
+            "other_taxon",
+            "reference",
+            "pages",
+            "author",
+            "year",
+            "is_preferred",
+            "remarks"
+          ],
           taxon_common_name: [],
           taxon_description: [],
           taxon_page: [],
@@ -1211,11 +1228,45 @@ export default {
     },
 
     fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.type_type)) obj.type_type = { id: obj.type_type, value: obj.type_type__value, value_en: obj.type_type__value_en };
-      if (this.isNotEmpty(obj.specimen)) obj.specimen = { id: obj.specimen, specimen_id: obj.specimen__specimen_id };
-      if (this.isNotEmpty(obj.reference)) obj.reference = { id: obj.reference, reference: obj.reference__reference };
-      if (this.isNotEmpty(obj.locality)) obj.locality = { id: obj.locality, locality: obj.locality__locality, locality_en: obj.locality__locality_en };
-      if (this.isNotEmpty(obj.stratigraphy)) obj.stratigraphy = { id: obj.stratigraphy, stratigraphy: obj.stratigraphy__stratigraphy, stratigraphy_en: obj.stratigraphy__stratigraphy_en };
+      if (this.isNotEmpty(obj.type_type))
+        obj.type_type = {
+          id: obj.type_type,
+          value: obj.type_type__value,
+          value_en: obj.type_type__value_en
+        };
+      if (this.isNotEmpty(obj.specimen))
+        obj.specimen = {
+          id: obj.specimen,
+          specimen_id: obj.specimen__specimen_id
+        };
+      if (this.isNotEmpty(obj.reference))
+        obj.reference = {
+          id: obj.reference,
+          reference: obj.reference__reference
+        };
+      if (this.isNotEmpty(obj.locality))
+        obj.locality = {
+          id: obj.locality,
+          locality: obj.locality__locality,
+          locality_en: obj.locality__locality_en
+        };
+      if (this.isNotEmpty(obj.stratigraphy))
+        obj.stratigraphy = {
+          id: obj.stratigraphy,
+          stratigraphy: obj.stratigraphy__stratigraphy,
+          stratigraphy_en: obj.stratigraphy__stratigraphy_en
+        };
+      if (this.isNotEmpty(obj.opinion_type))
+        obj.opinion_type = {
+          id: obj.opinion_type,
+          value: obj.opinion_type__value,
+          value_en: obj.opinion_type__value_en
+        };
+      if (this.isNotEmpty(obj.other_taxon))
+        obj.other_taxon = {
+          id: obj.other_taxon,
+          taxon: obj.other_taxon__taxon
+        };
       return obj;
     },
 
@@ -1245,7 +1296,17 @@ export default {
       if (this.isNotEmpty(obj.stratigraphy)) {
         newObject.stratigraphy = obj.stratigraphy.id;
         newObject.stratigraphy__stratigraphy = obj.stratigraphy.stratigraphy;
-        newObject.stratigraphy__stratigraphy_en = obj.stratigraphy.stratigraphy_en;
+        newObject.stratigraphy__stratigraphy_en =
+          obj.stratigraphy.stratigraphy_en;
+      }
+      if (this.isNotEmpty(obj.opinion_type)) {
+        newObject.opinion_type = obj.opinion_type.id;
+        newObject.opinion_type__value = obj.opinion_type.value;
+        newObject.opinion_type__value_en = obj.opinion_type.value_en;
+      }
+      if (this.isNotEmpty(obj.other_taxon)) {
+        newObject.other_taxon = obj.other_taxon.id;
+        newObject.other_taxon__taxon = obj.other_taxon.taxon;
       }
 
       return newObject;
@@ -1318,20 +1379,38 @@ export default {
       uploadableObject.taxon = this.taxon.id;
 
       if (this.isNotEmpty(uploadableObject.type_type)) {
-        uploadableObject.type_type = uploadableObject.type_type.id ? uploadableObject.type_type.id : uploadableObject.type_type;
+        uploadableObject.type_type = uploadableObject.type_type.id
+          ? uploadableObject.type_type.id
+          : uploadableObject.type_type;
       }
       if (this.isNotEmpty(uploadableObject.specimen)) {
-        uploadableObject.specimen = uploadableObject.specimen.id ? uploadableObject.specimen.id : uploadableObject.specimen;
+        uploadableObject.specimen = uploadableObject.specimen.id
+          ? uploadableObject.specimen.id
+          : uploadableObject.specimen;
       }
       if (this.isNotEmpty(uploadableObject.reference)) {
-        uploadableObject.reference = uploadableObject.reference.id ? uploadableObject.reference.id : uploadableObject.reference;
+        uploadableObject.reference = uploadableObject.reference.id
+          ? uploadableObject.reference.id
+          : uploadableObject.reference;
       }
       if (this.isNotEmpty(uploadableObject.locality)) {
-        uploadableObject.locality = uploadableObject.locality.id ? uploadableObject.locality.id : uploadableObject.locality;
+        uploadableObject.locality = uploadableObject.locality.id
+          ? uploadableObject.locality.id
+          : uploadableObject.locality;
       }
       if (this.isNotEmpty(uploadableObject.stratigraphy)) {
-        uploadableObject.stratigraphy = uploadableObject.stratigraphy.id ? uploadableObject.stratigraphy.id : uploadableObject.stratigraphy;
+        uploadableObject.stratigraphy = uploadableObject.stratigraphy.id
+          ? uploadableObject.stratigraphy.id
+          : uploadableObject.stratigraphy;
       }
+      if (this.isNotEmpty(uploadableObject.opinion_type))
+        uploadableObject.opinion_type = uploadableObject.opinion_type.id
+          ? uploadableObject.opinion_type.id
+          : uploadableObject.opinion_type;
+      if (this.isNotEmpty(uploadableObject.other_taxon))
+        uploadableObject.other_taxon = uploadableObject.other_taxon.id
+          ? uploadableObject.other_taxon.id
+          : uploadableObject.other_taxon;
 
       console.log("This object is sent in string format (related_data):");
       console.log(uploadableObject);
