@@ -1058,6 +1058,7 @@
     "parent": "Kuulub",
     "hierarchy_string": "Hierarhia",
     "fossil_group": "Kuulub rühma",
+    "fossil_group__taxon": "Kuulub: rühm",
     "is_fossil_group": "On fossilirühm",
     "taxon_original_name": "Takson originaal",
     "rank_original": "Algne tase",

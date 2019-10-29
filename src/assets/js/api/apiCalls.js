@@ -1613,7 +1613,7 @@ export function fetchListCollectionType() {
  *******************/
 
 export function fetchTaxa(data) {
-  const fields = "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon";
+  const fields = "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
   let searchFields = "";
 
   if (data.id && data.id.trim().length > 0) {

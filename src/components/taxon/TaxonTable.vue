@@ -21,22 +21,31 @@
     </template>
 
     <template v-slot:item.taxon="{ item }">
-      <a
-        :href="getFossilsUrl(item.id)"
-        :title="getFossilsUrl(item.id)"
+      <router-link
+        :to="{ path: '/taxon/' + item.id }"
+        :title="$t('editTaxon.editMessage')"
         class="sarv-link"
-        target="FossilsLink"
-        >{{ item.taxon }}</a
+        >{{ item.taxon }}</router-link
       >
     </template>
 
-    <template v-slot:item.parent__taxon="{ item }">
-      <a
-        :href="getFossilsUrl(item.parent_id)"
-        :title="getFossilsUrl(item.parent_id)"
+    <template v-slot:item.author_year="{ item }">
+      <router-link
+        v-if="item.reference"
+        :to="{ path: '/reference/' + item.reference }"
         class="sarv-link"
-        target="FossilsLink"
-        >{{ item.parent__taxon }}</a
+      >
+        {{ item.author_year }}
+      </router-link>
+      <span v-else>{{ item.author_year }}</span>
+    </template>
+
+    <template v-slot:item.parent__taxon="{ item }">
+      <router-link
+        :to="{ path: '/taxon/' + item.parent_id }"
+        :title="$t('editTaxon.editMessage')"
+        class="sarv-link"
+        >{{ item.parent__taxon }}</router-link
       >
     </template>
 
@@ -85,6 +94,7 @@ export default {
       { text: "taxon.author_year", value: "author_year" },
       { text: "taxon.taxon_epithet", value: "taxon_epithet" },
       { text: "taxon.parent__taxon", value: "parent__taxon" },
+      { text: "taxon.fossil_group__taxon", value: "fossil_group__taxon" },
       { text: "", value: "link", sortable: false }
     ],
     names: []

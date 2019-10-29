@@ -1058,6 +1058,7 @@
     "parent": "Parent",
     "hierarchy_string": "Hierarchy string",
     "fossil_group": "Fossil group",
+    "fossil_group__taxon": "Fossil group",
     "is_fossil_group": "Is fossil group",
     "taxon_original_name": "Taxon original",
     "rank_original": "Rank original",
