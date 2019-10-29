@@ -45,6 +45,7 @@
         if (name === 'relatedData') return 'fa-table';
         if (name === 'localityInfo') return 'fa-map-signs';
         if (name === 'details') return 'fa-info';
+        if (name === 'specimen') return 'fa-fish';
       },
 
       getIconPack(name) {

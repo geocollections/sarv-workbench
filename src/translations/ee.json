@@ -236,7 +236,8 @@
     "collection": {
       "info": "Üldinfo",
       "relatedInfo": "Seotud info",
-      "description": "Lisainfo"
+      "description": "Lisainfo",
+      "specimen": "Eksemplarid"
     },
     "taxon": {
       "info": "Üldinfo",
@@ -747,7 +748,8 @@
     "stratigraphy": "Stratgraafia",
     "remarks": "Märkused",
     "number_objects": "Objektid",
-    "number_types": "Originaalid"
+    "number_types": "Originaalid",
+    "specimen": "Eksemplarid"
   },
   "specimen": {
     "specimenNumber": "Eksemplari nr",

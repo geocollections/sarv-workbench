@@ -333,6 +333,84 @@
         </div>
       </transition>
     </fieldset>
+
+    <!-- REMARKS -->
+    <fieldset class="border-top px-2 mb-2" id="block-specimen" v-if="$route.meta.isEdit && specimens.count > 0">
+      <legend
+        class="w-auto my-0"
+        :class="{ 'text-primary': !block.specimen }"
+        @click="block.specimen = !block.specimen"
+      >
+        {{ $t("collection.specimen") }}
+        <i class="fas fa-fish"></i>
+      </legend>
+
+      <transition name="fade">
+        <div v-show="block.specimen">
+
+          <!-- PAGINATION -->
+          <div
+            v-if="specimens.count > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="specimenSearchParameters.paginateBy"
+                color="blue"
+                dense
+                :items="paginateByOptionsTranslated"
+                item-color="blue"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="specimenSearchParameters.page"
+                color="blue"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="Math.ceil(specimens.count / specimenSearchParameters.paginateBy)"
+                :total-visible="5"
+              />
+            </div>
+          </div>
+
+          <v-card class="table-card my-1">
+            <v-card-title class="d-print-none">
+              <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
+              <span id="table-title" class="text-uppercase">
+                {{ $t("collection.specimen") }}
+          <sup>
+            <v-chip
+              color="deep-orange"
+              small
+              text-color="#ffffff"
+              class="font-weight-bold"
+            >{{ specimens.count }}</v-chip
+            >
+          </sup>
+        </span>
+              <div class="flex-grow-1"></div>
+              <v-text-field
+                v-model="filterSpecimens"
+                append-outer-icon="fas fa-search"
+                label="Filter records"
+                clear-icon="fas fa-times"
+                clearable
+                color="deep-orange"
+              ></v-text-field>
+            </v-card-title>
+
+          <specimen-table :response="specimens" :search-parameters="specimenSearchParameters" :filter="filterSpecimens"/>
+
+          </v-card>
+
+        </div>
+      </transition>
+    </fieldset>
   </div>
 </template>
 
@@ -342,24 +420,40 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchCollection,
-  fetchListCollectionType
+  fetchListCollectionType, fetchSpecimens
 } from "../../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
 import Spinner from "vue-simple-spinner";
 import Editor from "../partial/editor/Editor";
+import SpecimenTable from "../specimen/SpecimenTable";
+import {mapState} from "vuex";
 
 export default {
   name: "Collection",
 
   components: {
     Spinner,
-    Editor
+    Editor,
+    SpecimenTable
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
 
   data() {
     return this.setInitialData();
+  },
+
+  computed: {
+    ...mapState(["databaseId"]),
+
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
+      });
+    }
   },
 
   created() {
@@ -409,6 +503,13 @@ export default {
         this.reloadData();
       },
       deep: true
+    },
+
+    "specimenSearchParameters": {
+      handler() {
+        this.getSpecimensBelongingToCollection();
+      },
+      deep: true
     }
   },
 
@@ -453,7 +554,34 @@ export default {
         requiredFields: ["collection_id", "number"],
         collection: {},
         searchParameters: this.setDefaultSearchParameters(),
-        block: { info: true, relatedInfo: true, description: true }
+        block: { info: true, relatedInfo: true, description: true, specimen: true },
+        filterSpecimens: "",
+        databaseAcronym: "",
+        specimens: {
+          count: 0,
+          results: []
+        },
+        specimenSearchParameters: {
+          idSpecimen: null,
+          collNumber: null,
+          fossil: null,
+          mineralRock: null,
+          locality: null,
+          stratigraphy: null,
+          agent_collected: null,
+          page: 1,
+          paginateBy: 25,
+          orderBy: "-id"
+        },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ],
       };
     },
 
@@ -476,6 +604,9 @@ export default {
             this.collection = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.collection);
 
+            // Needs to be before fields are removed
+            this.specimenSearchParameters.collNumber = this.collection.number;
+
             this.removeUnnecessaryFields(this.collection, this.copyFields);
             this.$emit("data-loaded", this.collection);
             this.sendingData = false;
@@ -485,6 +616,15 @@ export default {
           }
         });
       }
+    },
+
+    getSpecimensBelongingToCollection() {
+      fetchSpecimens(this.specimenSearchParameters).then(response => {
+        if (response.status === 200) {
+          this.specimens.count = response.body.count;
+          this.specimens.results = response.body.results;
+        }
+      });
     },
 
     loadAutocompleteFields(regularAutocompleteFields = true) {

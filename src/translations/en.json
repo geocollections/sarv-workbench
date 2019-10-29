@@ -236,7 +236,8 @@
     "collection": {
       "info": "General info",
       "relatedInfo": "Related info",
-      "description": "Description"
+      "description": "Description",
+      "specimen": "Specimens"
     },
     "taxon": {
       "info": "General info",
@@ -747,7 +748,8 @@
     "stratigraphy": "Stratigraphy",
     "remarks": "Remarks",
     "number_objects": "Objects",
-    "number_types": "Originals"
+    "number_types": "Originals",
+    "specimen": "Specimens"
   },
   "specimen": {
     "specimenNumber": "Specimen no",
@@ -1105,7 +1107,7 @@
     "attachment": "Attachment",
     "locality_free": "Locality txt",
     "relatedTables": {
-      "taxon_subclass": "Subtaxons",
+      "taxon_subclass": "Subtaxa",
       "taxon_synonym": "Synonymy",
       "taxon_type_specimen": "Type specimens",
       "taxon_occurrence": "Occurences",
