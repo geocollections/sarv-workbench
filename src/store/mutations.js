@@ -100,5 +100,13 @@ export default {
 
   UPDATE_ACTIVE_TAB(state, payload) {
     Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
+  },
+
+  UPDATE_DRAWER_STATE(state, payload) {
+    Vue.set(state, "drawerState", payload);
+  },
+
+  UPDATE_DRAWER_RIGHT_STATE(state, payload) {
+    Vue.set(state, "drawerRightState", payload);
   }
 };

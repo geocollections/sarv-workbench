@@ -141,5 +141,13 @@ export default {
 
   updateActiveTab({ commit }, payload) {
     commit("UPDATE_ACTIVE_TAB", payload);
+  },
+
+  updateDrawerState({ commit }, payload) {
+    commit("UPDATE_DRAWER_STATE", payload);
+  },
+
+  updateDrawerRightState({ commit }, payload) {
+    commit("UPDATE_DRAWER_RIGHT_STATE", payload);
   }
 };

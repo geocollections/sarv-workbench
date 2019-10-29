@@ -22,7 +22,9 @@ export function createStore() {
       activeSample: null,
       activeSite: null,
       shortcuts: [],
-      activeRelatedDataTab: {}
+      activeRelatedDataTab: {},
+      drawerState: null,
+      drawerRightState: null
     },
     actions,
     mutations,

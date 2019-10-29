@@ -181,6 +181,14 @@ export default {
   beforeCreate: function() {
     this.$store.dispatch("GET_SHORTCUTS");
   },
+  watch: {
+    drawer(newVal) {
+      this.$store.dispatch("updateDrawerState", newVal);
+    },
+    drawerRight(newVal) {
+      this.$store.dispatch("updateDrawerRightState", newVal);
+    }
+  },
   methods: {
     changeLang(lang) {
       if (this.$localStorage.get("geocollectionsFileUploadLang") === lang)
