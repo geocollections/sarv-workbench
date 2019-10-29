@@ -310,6 +310,9 @@ new Vue({
     },
     specimen: {
       type: Object
+    },
+    SARV_APP_ZOOM_LEVEL: {
+      type: Number
     }
   },
   render: h => h(App)

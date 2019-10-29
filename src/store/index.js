@@ -24,7 +24,10 @@ export function createStore() {
       shortcuts: [],
       activeRelatedDataTab: {},
       drawerState: null,
-      drawerRightState: null
+      drawerRightState: null,
+      accessibility: {
+        zoom: 1
+      }
     },
     actions,
     mutations,

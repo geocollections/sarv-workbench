@@ -36,7 +36,7 @@
 
       <v-toolbar-items
         class="d-none d-md-block"
-        v-if="userShortcuts.length > 0 && userShortcuts.length < 5"
+        v-if="userShortcuts.length > 0"
       >
         <v-btn
           text
@@ -48,24 +48,6 @@
           {{ entity.title }}
         </v-btn>
       </v-toolbar-items>
-
-      <template v-slot:extension v-if="userShortcuts.length >= 5">
-        <v-tabs
-          background-color="blue-grey"
-          center-active
-          show-arrows
-          prev-icon="fas fa-angle-left"
-          next-icon="fas fa-angle-right"
-        >
-          <v-tab
-            v-for="(entity, index) in userShortcuts"
-            :key="index"
-            :to="{ path: entity.path }"
-            exact
-            >{{ entity.title }}</v-tab
-          >
-        </v-tabs>
-      </template>
 
       <div class="flex-grow-1"></div>
 

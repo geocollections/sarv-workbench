@@ -143,6 +143,7 @@
   "settings": {
     "permissions": "My permissions",
     "shortcuts": "My shortcuts",
+    "accessibility": "Accessibility",
     "addShortcut": "Add shortcut",
     "removeShortcut": "Remove shortcut",
     "title": "Shortcut name",

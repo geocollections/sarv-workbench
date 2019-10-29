@@ -108,5 +108,9 @@ export default {
 
   UPDATE_DRAWER_RIGHT_STATE(state, payload) {
     Vue.set(state, "drawerRightState", payload);
+  },
+
+  UPDATE_APP_ZOOM(state, zoomLevel) {
+    Vue.set(state.accessibility, "zoom", zoomLevel);
   }
 };

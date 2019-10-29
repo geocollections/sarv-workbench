@@ -1,12 +1,21 @@
 <template>
-  <v-app>
+  <v-app :style="{ zoom: accessibility.zoom === 1 ? 'unset' : + accessibility.zoom + ' !important' }">
     <router-view />
   </v-app>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
-  name: "App"
+  name: "App",
+  computed: {
+    ...mapState(["accessibility"])
+  },
+  created() {
+    let zoomLevel = this.$localStorage.get("SARV_APP_ZOOM_LEVEL", 1);
+    if (zoomLevel) this.$store.dispatch("updateAppZoom", zoomLevel);
+  }
 };
 </script>
 <style>

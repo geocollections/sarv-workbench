@@ -149,5 +149,9 @@ export default {
 
   updateDrawerRightState({ commit }, payload) {
     commit("UPDATE_DRAWER_RIGHT_STATE", payload);
+  },
+
+  updateAppZoom({ commit }, zoomLevel) {
+    commit("UPDATE_APP_ZOOM", zoomLevel);
   }
 };

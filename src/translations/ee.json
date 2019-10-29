@@ -143,6 +143,7 @@
   "settings": {
     "permissions": "Minu õigused",
     "shortcuts": "Minu otseteed",
+    "accessibility": "Ligipääsetavus",
     "addShortcut": "Lisa otsetee",
     "removeShortcut": "Eemalda otsetee",
     "title": "Otsetee nimi",

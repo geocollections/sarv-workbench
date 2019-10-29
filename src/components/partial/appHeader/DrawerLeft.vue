@@ -30,6 +30,7 @@
           v-for="(entity, index) in userShortcuts"
           :key="index"
           :to="{ path: entity.path }"
+          color="black"
         >
           <v-list-item-title v-text="entity.title"></v-list-item-title>
         </v-list-item>
