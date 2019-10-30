@@ -188,6 +188,12 @@ th.sortable > span:after {
   padding: 0.25rem 0.4rem !important;
 }
 
+.related-table th {
+  background-color: #ECEFF1;
+  border: unset;
+  border-bottom: unset !important;
+}
+
 .related-table th.date-th {
   min-width: 100px!important;
 }

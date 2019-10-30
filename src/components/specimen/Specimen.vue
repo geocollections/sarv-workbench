@@ -455,14 +455,13 @@
       <v-col>
         <v-card elevation="3">
           <v-tabs
-            dark
-            background-color="blue-grey darken-1"
+            background-color="blue-grey lighten-2"
             show-arrows
             grow
             prev-icon="fas fa-angle-left"
             next-icon="fas fa-angle-right"
-            slider-color="blue-grey lighten-5"
-            slider-size="6"
+            active-class="active-tab-color"
+            hide-slider
           >
             <v-tab
               v-for="tab in computedRelatedTabs"
@@ -1262,5 +1261,9 @@
 
   .related-tabs >>> .related-table > thead {
     color: #546E7A;
+  }
+  .active-tab-color {
+    background-color: #ECEFF1;
+    color: #000000;
   }
 </style>
