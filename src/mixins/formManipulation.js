@@ -534,7 +534,7 @@ const formManipulation = {
             }
 
             // Special use case for taxon
-            let url = "/add" + tab + "/";
+            let url = "/add/" + tab + "/";
             if (tab === "taxon_subclass") url = "/add/taxon/";
 
             formData.append('data', this.formatRelatedData(this.relatedData.insert[tab]));

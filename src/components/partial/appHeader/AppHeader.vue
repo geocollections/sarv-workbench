@@ -68,7 +68,7 @@
         </v-btn>
 
         <v-menu v-model="showDropdown" offset-y z-index="50100">
-          <template class="teresesdfdsfdsfdsfdsfs" v-slot:activator="{ on }">
+          <template v-slot:activator="{ on }">
             <v-btn text v-on="on">
               {{ currentUser.forename }}&nbsp;
               <v-icon>{{

@@ -6,6 +6,10 @@
       </div>
     </div>
 
+    <!-- SPEED DIAL -->
+    <floating-settings/>
+
+    <!-- ACCESSIBILITY -->
     <fieldset class="border p-2 mt-2">
       <legend
         class="w-auto mb-0"
@@ -23,6 +27,7 @@
       </transition>
     </fieldset>
 
+    <!-- SHORTCUTS -->
     <fieldset class="border p-2 mt-2">
       <legend
         class="w-auto mb-0"
@@ -40,6 +45,7 @@
       </transition>
     </fieldset>
 
+    <!-- PERMISSIONS -->
     <fieldset class="border p-2 mt-2">
       <legend
         class="w-auto mb-0"
@@ -136,12 +142,13 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Shortcuts from "../components/partial/settings/Shortcuts";
 import Accessibility from "../components/partial/settings/Accessibility";
+import FloatingSettings from "../components/partial/settings/FloatingSettings";
 import formSectionsMixin from "../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 
 export default {
   name: "Settings",
-  components: { Shortcuts, Accessibility },
+  components: { Shortcuts, Accessibility, FloatingSettings },
   mixins: [formSectionsMixin],
   data() {
     return {
