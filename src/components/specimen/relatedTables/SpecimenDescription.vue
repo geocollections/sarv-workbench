@@ -1,11 +1,10 @@
 <template>
-  <div id="#tab-description" class="tab-description row" :class="{active: activeTab === 'specimen_description'}"
-       role="tabpanel">
+  <div class="tab-description row" :class="{active: activeTab === 'specimen_description'}">
     <div class="col-sm-12" v-if="activeTab === 'specimen_description'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
-          <thead class="thead-light">
+        <table class="table table-hover related-table">
+          <thead>
           <tr>
             <th>{{ $t('specimen_description.length') }}</th>
             <th>{{ $t('specimen_description.width') }}</th>

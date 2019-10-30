@@ -1,12 +1,11 @@
 <template>
   <!-- Todo: Ümber teha + ainult pildid ja lingi lisamise field + lohista nupp -->
-  <div id="#tab-attachment" class="tab-attachment row" :class="{active: activeTab === 'attachment'}"
-       role="tabpanel">
+  <div class="tab-attachment row" :class="{active: activeTab === 'attachment'}">
     <div class="col-md-6" v-if="activeTab === 'attachment'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
-          <thead class="thead-light">
+        <table class="table table-hover related-table">
+          <thead>
           <tr>
             <th>Link <i class="fas fa-link ml-2"></i></th>
             <th>{{ $t('specimen.remarks') }}</th>

@@ -1,11 +1,10 @@
 <template>
-  <div id="#tab-reference" class="tab-reference row" :class="{active: activeTab === 'specimen_reference'}"
-       role="tabpanel">
+  <div class="tab-reference row" :class="{active: activeTab === 'specimen_reference'}">
     <div class="col-sm-12" v-if="activeTab === 'specimen_reference'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
-          <thead class="thead-light">
+        <table class="table table-hover related-table">
+          <thead>
           <tr>
             <th>{{ $t('specimen_reference.reference') }}</th>
             <th>{{ $t('specimen_reference.pages') }}</th>

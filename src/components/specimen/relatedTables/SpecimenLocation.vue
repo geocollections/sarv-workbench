@@ -1,11 +1,10 @@
 <template>
-  <div id="#tab-location" class="tab-location row" :class="{active: activeTab === 'specimen_location'}"
-       role="tabpanel">
+  <div class="tab-location row" :class="{active: activeTab === 'specimen_location'}">
     <div class="col-sm-12" v-if="activeTab === 'specimen_location'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
-          <thead class="thead-light">
+        <table class="table table-hover related-table">
+          <thead>
           <tr>
             <th>{{ $t('specimen_location.number') }}</th>
             <th>{{ $t('specimen_location.type') }}</th>

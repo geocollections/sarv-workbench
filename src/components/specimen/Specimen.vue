@@ -447,6 +447,119 @@
       </transition>
     </fieldset>
 
+    <!-- RELATED DATA TABS -->
+    <v-row class="related-tabs mb-2">
+      <v-col>
+        <v-card elevation="3">
+          <v-tabs
+            dark
+            background-color="blue-grey darken-1"
+            show-arrows
+            grow
+            prev-icon="fas fa-angle-left"
+            next-icon="fas fa-angle-right"
+            slider-color="blue-grey lighten-5"
+            slider-size="6"
+          >
+            <v-tab
+              v-for="tab in computedRelatedTabs"
+              :key="tab.name"
+              @click.prevent="setTab(tab.name)"
+            >
+              <span>{{ $t("specimen.relatedTables." + tab.name) }}</span>
+              <span class="ml-1">
+                <v-icon small>{{ tab.iconClass }}</v-icon>
+              </span>
+              <span v-if="relatedData[tab.name].length > 0" class="font-weight-bold ml-2" style="font-size: large;">
+                {{ relatedData[tab.name].length }}
+              </span>
+            </v-tab>
+          </v-tabs>
+
+          <v-tabs-items>
+            <v-card class="pt-3 px-1" flat color="blue-grey lighten-5">
+              <specimen-identification v-if="specimen.fossil && (specimen.fossil.id === 1 || specimen.fossil.id === 7)"
+                                       :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                       v-on:add-related-data="addRelatedData"
+                                       v-on:set-default="setDefault"
+                                       v-on:edit-row="editRow"
+                                       v-on:remove-row="removeRow" />
+
+              <specimen-identification-geology v-if="specimen.fossil && (specimen.fossil.id !== 1 && specimen.fossil.id !== 7)"
+                                               :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                               v-on:add-related-data="addRelatedData"
+                                               v-on:set-default="setDefault"
+                                               v-on:edit-row="editRow"
+                                               v-on:remove-row="removeRow" />
+
+              <specimen-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                  v-on:add-related-data="addRelatedData"
+                                  v-on:set-default="setDefault"
+                                  v-on:edit-row="editRow"
+                                  v-on:remove-row="removeRow" />
+
+              <specimen-description :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                    v-on:add-related-data="addRelatedData"
+                                    v-on:set-default="setDefault"
+                                    v-on:edit-row="editRow"
+                                    v-on:remove-row="removeRow" />
+
+              <specimen-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                   v-on:add-related-data="addRelatedData"
+                                   v-on:set-default="setDefault"
+                                   v-on:edit-row="editRow"
+                                   v-on:remove-row="removeRow" />
+
+              <specimen-location :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                 v-on:add-related-data="addRelatedData"
+                                 v-on:set-default="setDefault"
+                                 v-on:edit-row="editRow"
+                                 v-on:remove-row="removeRow" />
+
+              <specimen-history :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                v-on:add-related-data="addRelatedData"
+                                v-on:set-default="setDefault"
+                                v-on:edit-row="editRow"
+                                v-on:remove-row="removeRow" />
+
+              <specimen-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
+                                 v-on:add-related-data="addRelatedData"
+                                 v-on:set-default="setDefault"
+                                 v-on:edit-row="editRow"
+                                 v-on:remove-row="removeRow" />
+
+              <!-- PAGINATION -->
+              <v-row no-gutters v-if="$route.meta.isEdit">
+                <v-col sm="6" md="3" class="pr-3 t-paginate-by-center">
+                  <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
+                    <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
+                    <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
+                    <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
+                    <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
+                    <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
+                    <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
+                    <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
+                  </b-form-select>
+                </v-col>
+
+                <v-col sm="12" md="3" class="export-center">
+                  <!-- EXPORT BUTTON? -->
+                </v-col>
+
+                <v-col sm="12" md="6" class="pagination-center"
+                     v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
+                  <b-pagination
+                    size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
+                    v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
+                  </b-pagination>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-tabs-items>
+        </v-card>
+      </v-col>
+    </v-row>
+
     <!-- REMARKS -->
     <fieldset class="border-top px-2 mb-2" id="block-description">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.description }" @click="block.description = !block.description">
@@ -484,112 +597,6 @@
         </div>
       </transition>
     </fieldset>
-
-    <!-- RELATED DATA TABS -->
-    <div class="row mb-2">
-      <div class="col mt-2">
-        <ul class="nav nav-tabs nav-fill mb-3">
-
-          <li class="nav-item" v-for="tab in computedRelatedTabs" :key="tab.name">
-            <a href="#" @click.prevent="setTab(tab.name)" class="nav-link" :class="{ active: activeTab === tab.name }">
-              <span>{{ $t('specimen.relatedTables.' + tab.name) }}</span>
-
-              <v-chip v-if="relatedData[tab.name].length > 0" class="ml-1" color="blue lighten-2" dark outlined>
-                <v-icon left small>{{ tab.iconClass }}</v-icon>
-                <b style="color: black; font-size: larger;">
-                  {{ relatedData[tab.name].length }}
-                </b>
-              </v-chip>
-
-<!--              <span>-->
-<!--                <sup>-->
-<!--                  <b-badge pill variant="light">{{ relatedData[tab.name].length }}&nbsp;</b-badge>-->
-<!--                </sup>-->
-<!--              </span>-->
-
-<!--              <span><i :class="tab.iconClass"></i></span>-->
-            </a>
-          </li>
-        </ul>
-
-        <div class="row" v-if="$route.meta.isEdit">
-          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select v-model="relatedData.searchParameters[activeTab].paginateBy" class="mb-3" size="sm">
-              <option :value="10">{{ this.$t('main.pagination', { num: '10' }) }}</option>
-              <option :value="25">{{ this.$t('main.pagination', { num: '25' }) }}</option>
-              <option :value="50">{{ this.$t('main.pagination', { num: '50' }) }}</option>
-              <option :value="100">{{ this.$t('main.pagination', { num: '100' }) }}</option>
-              <option :value="250">{{ this.$t('main.pagination', { num: '250' }) }}</option>
-              <option :value="500">{{ this.$t('main.pagination', { num: '500' }) }}</option>
-              <option :value="1000">{{ this.$t('main.pagination', { num: '1000' }) }}</option>
-            </b-form-select>
-          </div>
-
-          <div class="col-sm-12 col-md-3 export-center">
-            <!-- EXPORT BUTTON? -->
-          </div>
-
-          <div class="col-sm-12 col-md-6 pagination-center"
-               v-if="relatedData[activeTab] !== null && relatedData[activeTab].length > 0">
-            <b-pagination
-              size="sm" align="right" :limit="5" :hide-ellipsis="true" :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.searchParameters[activeTab].page" :per-page="relatedData.searchParameters[activeTab].paginateBy">
-            </b-pagination>
-          </div>
-        </div>
-
-        <specimen-identification v-if="specimen.fossil && (specimen.fossil.id === 1 || specimen.fossil.id === 7)"
-                                 :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                                 v-on:add-related-data="addRelatedData"
-                                 v-on:set-default="setDefault"
-                                 v-on:edit-row="editRow"
-                                 v-on:remove-row="removeRow" />
-
-        <specimen-identification-geology v-if="specimen.fossil && (specimen.fossil.id === 1 || specimen.fossil.id === 7)"
-                                         :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                                         v-on:add-related-data="addRelatedData"
-                                         v-on:set-default="setDefault"
-                                         v-on:edit-row="editRow"
-                                         v-on:remove-row="removeRow" />
-
-        <specimen-reference :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                            v-on:add-related-data="addRelatedData"
-                            v-on:set-default="setDefault"
-                            v-on:edit-row="editRow"
-                            v-on:remove-row="removeRow" />
-
-        <specimen-description :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                              v-on:add-related-data="addRelatedData"
-                              v-on:set-default="setDefault"
-                              v-on:edit-row="editRow"
-                              v-on:remove-row="removeRow" />
-
-        <specimen-attachment :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                             v-on:add-related-data="addRelatedData"
-                             v-on:set-default="setDefault"
-                             v-on:edit-row="editRow"
-                             v-on:remove-row="removeRow" />
-
-        <specimen-location :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                           v-on:add-related-data="addRelatedData"
-                           v-on:set-default="setDefault"
-                           v-on:edit-row="editRow"
-                           v-on:remove-row="removeRow" />
-
-        <specimen-history :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                          v-on:add-related-data="addRelatedData"
-                          v-on:set-default="setDefault"
-                          v-on:edit-row="editRow"
-                          v-on:remove-row="removeRow" />
-
-        <specimen-analysis :related-data="relatedData" :autocomplete="autocomplete" :active-tab="activeTab"
-                           v-on:add-related-data="addRelatedData"
-                           v-on:set-default="setDefault"
-                           v-on:edit-row="editRow"
-                           v-on:remove-row="removeRow" />
-
-      </div>
-    </div>
 
     <!-- IS_PRIVATE -->
     <div class="row">
@@ -715,8 +722,12 @@
 
       computedRelatedTabs() {
         return this.relatedTabs.filter(tab => {
-          if (tab.name === "specimen_identification" || tab.name === "specimen_identification_geology") {
+          if (tab.name === "specimen_identification") {
             if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
+              return tab
+            }
+          } else if (tab.name === "specimen_identification_geology") {
+            if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id !== 1 && this.specimen.fossil.id !== 7)) {
               return tab
             }
           } else return tab
@@ -842,9 +853,14 @@
               this.sendingData = false;
 
               // Set default tab
-              if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
-                if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
-                else this.setTab('specimen_identification')
+              if (this.specimen && this.specimen.fossil) {
+                if (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7) {
+                  if (this.activeRelatedDataTab && this.activeRelatedDataTab !== "specimen_identification_geology") this.setTab(this.activeRelatedDataTab);
+                  else this.setTab('specimen_identification')
+                } else {
+                  if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
+                  else this.setTab('specimen_identification_geology')
+                }
               } else {
                 if (this.activeRelatedDataTab && this.activeRelatedDataTab !== "specimen_identification" && this.activeRelatedDataTab !== "specimen_identification_geology") this.setTab(this.activeRelatedDataTab);
                 else this.setTab('specimen_reference')
@@ -863,11 +879,16 @@
           this.$emit('related-data-info', this.relatedTabs.map(tab => tab.name));
         } else {
           // Set default tab
-          if (this.specimen && this.specimen.fossil && (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)) {
-            if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
-            else this.setTab('specimen_identification')
+          if (this.specimen && this.specimen.fossil) {
+            if (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7) {
+              if (this.activeRelatedDataTab && this.activeRelatedDataTab !== "specimen_identification_geology") this.setTab(this.activeRelatedDataTab);
+              else this.setTab('specimen_identification')
+            } else {
+              if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
+              else this.setTab('specimen_identification_geology')
+            }
           } else {
-            if (this.activeRelatedDataTab !== "specimen_identification" && this.activeRelatedDataTab !== "specimen_identification_geology") this.setTab(this.activeRelatedDataTab);
+            if (this.activeRelatedDataTab && this.activeRelatedDataTab !== "specimen_identification" && this.activeRelatedDataTab !== "specimen_identification_geology") this.setTab(this.activeRelatedDataTab);
             else this.setTab('specimen_reference')
           }
         }
@@ -1230,5 +1251,9 @@
     margin: 5px 0 0 0;
     color: #999;
     font-size: 0.8rem;
+  }
+
+  .related-tabs >>> .related-table > thead {
+    color: #546E7A;
   }
 </style>

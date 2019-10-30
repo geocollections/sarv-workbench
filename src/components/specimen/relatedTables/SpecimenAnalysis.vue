@@ -1,11 +1,10 @@
 <template>
-  <div id="#tab-analysis" class="tab-analysis row" :class="{active: activeTab === 'analysis'}"
-       role="tabpanel">
+  <div class="tab-analysis row" :class="{active: activeTab === 'analysis'}">
     <div class="col-sm-12" v-if="activeTab === 'analysis'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
-          <thead class="thead-light">
+        <table class="table table-hover related-table">
+          <thead>
           <tr>
             <th>{{ $t('analysis.analysis_method') }}</th>
             <th>{{ $t('analysis.method_specification') }}</th>

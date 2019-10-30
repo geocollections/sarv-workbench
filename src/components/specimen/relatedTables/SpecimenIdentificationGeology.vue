@@ -1,11 +1,10 @@
 <template>
-  <div id="#tab-identification-geology" class="tab-identification-geology row" :class="{active: activeTab === 'specimen_identification_geology'}"
-       role="tabpanel">
+  <div class="tab-identification-geology row" :class="{active: activeTab === 'specimen_identification_geology'}">
     <div class="col-sm-12" v-if="activeTab === 'specimen_identification_geology'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
-          <thead class="thead-light">
+        <table class="table table-hover related-table">
+          <thead>
           <tr>
             <th>{{ $t('specimen_identification_geology.rock') }}</th>
             <th>{{ $t('specimen_identification_geology.name') }}</th>

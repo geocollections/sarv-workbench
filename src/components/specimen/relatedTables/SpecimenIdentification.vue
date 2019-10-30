@@ -1,11 +1,10 @@
 <template>
-  <div id="#tab-identification" class="tab-identification row" :class="{active: activeTab === 'specimen_identification'}"
-       role="tabpanel">
+  <div class="tab-identification row" :class="{active: activeTab === 'specimen_identification'}">
     <div class="col-sm-12" v-if="activeTab === 'specimen_identification'">
       <div class="table-responsive-sm">
 
-        <table class="table table-hover table-bordered  related-table">
-          <thead class="thead-light">
+        <table class="table table-hover related-table">
+          <thead>
           <tr>
             <th>{{ $t('specimen_identification.taxon') }}</th>
             <th>{{ $t('specimen_identification.name') }}</th>
