@@ -154,11 +154,11 @@ new Vue({
     },
     sampleView: {
       type: Boolean,
-      dafault: true
+      default: true
     },
     refreshForm: {
       type: Boolean,
-      dafault: false
+      default: false
     },
     sidebar: {
       type: Boolean
@@ -313,6 +313,9 @@ new Vue({
     },
     SARV_APP_ZOOM_LEVEL: {
       type: Number
+    },
+    SARV_APP_SETTINGS: {
+      type: Object
     }
   },
   render: h => h(App)
