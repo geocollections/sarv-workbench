@@ -15,6 +15,11 @@ ul.nav.nav-tabs.nav-fill {
   padding-left: 0 !important;
 }
 
+/* Vuetify checkbox label margins (bootstrap label override) */
+.vuetify-checkbox label {
+  margin-bottom: 0;
+}
+
 /* Todo: Remove after bootstrap integration Added this after vuetify because buttons get underline */
 a:hover {
   text-decoration: none;
@@ -383,7 +388,7 @@ ul.multiselect__content {
 	  }
 label {
 	font-size: 0.9rem;
-	padding: 0.20rem 0.4rem;
+	/*padding: 0.20rem 0.4rem;*/
 	color: #666;
 }
 

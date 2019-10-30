@@ -115,9 +115,12 @@
 
             <div class="col-md-3">
               <label :for="`locality_is_private`">{{ $t('specimen.locality_is_private') }}:</label>
-              <vs-checkbox class="justify-content-start" id="locality_is_private" v-model="specimen.locality_is_private" icon="fa-eye-slash" icon-pack="fas">
-                {{ specimen.locality_is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text') }}
-              </vs-checkbox>
+              <v-checkbox
+                v-model="specimen.locality_is_private"
+                :label="specimen.locality_is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text')"
+                hide-details
+                class="mt-0 vuetify-checkbox"
+              ></v-checkbox>
             </div>
           </div>
 
@@ -599,13 +602,17 @@
     </fieldset>
 
     <!-- IS_PRIVATE -->
-    <div class="row">
-      <div class="col">
-        <vs-checkbox class="justify-content-start" id="is_private" v-model="specimen.is_private" icon="fa-lock" icon-pack="fas">
-          {{ $t('specimen.is_private_text') }}
-        </vs-checkbox>
-      </div>
-    </div>
+    <v-row>
+      <v-col>
+        <v-checkbox
+          v-model="specimen.is_private"
+          id="is_private"
+          :label="specimen.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
 
   </div>
 </template>
@@ -1248,8 +1255,8 @@
 
 <style scoped>
   label {
-    margin: 5px 0 0 0;
-    color: #999;
+    margin: 0;
+    color: #546E7A;
     font-size: 0.8rem;
   }
 
