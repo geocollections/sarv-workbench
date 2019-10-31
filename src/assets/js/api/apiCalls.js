@@ -1385,7 +1385,7 @@ export function fetchSpecimenImages(data, databaseId) {
   let searchFields = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `multi_search=value:${data.idSpecimen};fields:specimen_id,specimen__specimen_id,specimen__specimen_nr;lookuptype:icontains`;
+    searchFields += `multi_search=value:${data.idSpecimen};fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:icontains`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {
