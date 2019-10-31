@@ -116,13 +116,18 @@
 
           <div class="d-flex justify-content-start mt-3">
             <div class="align-self-center">
-              <vs-switch id="map-switch" v-model="showCollapseMap">
-              <span slot="on">ON</span>
-              <span slot="off">OFF</span>
-            </vs-switch>
+              <v-switch
+                v-model="showCollapseMap"
+                hide-details
+                id="map-switch"
+                class="vuetify-switch my-1"
+              ></v-switch>
             </div>
             <div class="align-self-center">
-              <label class="m-0" :for="`map-switch`"><i class="far fa-map"></i> {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}</label>
+              <label class="m-0" :for="`map-switch`">
+                <i class="far fa-map"></i>
+                {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}
+              </label>
             </div>
           </div>
 

@@ -112,11 +112,14 @@
 
           <!-- MAP -->
           <div class="row">
-            <span class="col ml-3 mt-3 custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
-            <label class="custom-control-label"
-                   for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>
-          </span>
+            <div class="col">
+              <v-switch
+                v-model="showCollapseMap"
+                hide-details
+                class="vuetify-switch my-2"
+                :label="showCollapseMap ? 'Map enabled' : 'Map disabled'"
+              ></v-switch>
+            </div>
           </div>
 
           <div class="row mb-3">

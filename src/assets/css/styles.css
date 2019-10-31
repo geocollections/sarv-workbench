@@ -20,6 +20,11 @@ ul.nav.nav-tabs.nav-fill {
   margin-bottom: 0;
 }
 
+/* Vuetify switch label margins (bootstrap label override) */
+.vuetify-switch label {
+  margin-bottom: 0;
+}
+
 /* Todo: Remove after bootstrap integration Added this after vuetify because buttons get underline */
 a:hover {
   text-decoration: none;

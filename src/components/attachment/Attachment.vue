@@ -240,13 +240,18 @@
               <!-- MAP TOGGLE BUTTON -->
               <div class="d-flex justify-content-start my-2">
                 <div class="align-self-center">
-                  <vs-switch id="map-switch" v-model="showCollapseMap">
-                    <span slot="on">ON</span>
-                    <span slot="off">OFF</span>
-                  </vs-switch>
+                  <v-switch
+                    v-model="showCollapseMap"
+                    hide-details
+                    id="map-switch"
+                    class="vuetify-switch my-1"
+                  ></v-switch>
                 </div>
                 <div class="align-self-center">
-                  <label class="m-0" :for="`map-switch`"><i class="far fa-map"></i> {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}</label>
+                  <label class="m-0" :for="`map-switch`">
+                    <i class="far fa-map"></i>
+                    {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}
+                  </label>
                 </div>
               </div>
 
@@ -254,7 +259,7 @@
               <transition name="fade"
                           enter-active-class="animated fadeIn faster"
                           leave-active-class="animated fadeOut faster">
-              <div class="row" v-if="showCollapseMap">
+              <div class="row" v-show="showCollapseMap">
                 <div class="col">
                   <b-collapse v-model="showCollapseMap" id="collapseMap">
                     <map-component mode="single"
@@ -922,13 +927,18 @@
               <!-- MAP TOGGLE BUTTON -->
               <div class="d-flex justify-content-start my-2">
                 <div class="align-self-center">
-                  <vs-switch id="map-switch" v-model="showCollapseMap">
-                    <span slot="on">ON</span>
-                    <span slot="off">OFF</span>
-                  </vs-switch>
+                  <v-switch
+                    v-model="showCollapseMap"
+                    hide-details
+                    id="map-switch"
+                    class="vuetify-switch my-1"
+                  ></v-switch>
                 </div>
                 <div class="align-self-center">
-                  <label class="m-0" :for="`map-switch`"><i class="far fa-map"></i> {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}</label>
+                  <label class="m-0" :for="`map-switch`">
+                    <i class="far fa-map"></i>
+                    {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}
+                  </label>
                 </div>
               </div>
 
@@ -936,7 +946,7 @@
               <transition name="fade"
                           enter-active-class="animated fadeIn faster"
                           leave-active-class="animated fadeOut faster">
-                <div class="row" v-if="showCollapseMap">
+                <div class="row" v-show="showCollapseMap">
                   <div class="col">
                     <b-collapse v-model="showCollapseMap" id="collapseMap">
                       <map-component mode="single"
@@ -1866,13 +1876,21 @@
 
     <template v-slot:checkbox>
       <div class="d-flex flex-wrap mt-2">
-        <vs-checkbox id="is_private" v-model="attachment.is_private" icon="fa-eye-slash" icon-pack="fas">
-          {{ $t('attachment.is_private_text') }}
-        </vs-checkbox>
+        <v-checkbox
+          v-model="attachment.is_private"
+          id="is_private"
+          :label="attachment.is_private ? $t('specimen.is_private_text') : $t('specimen.is_public_text')"
+          hide-details
+          class="mt-0 vuetify-checkbox mr-3"
+        ></v-checkbox>
 
-        <vs-checkbox id="is_locked" v-model="attachment.is_locked" icon="fa-lock" icon-pack="fas">
-          {{ $t('attachment.is_locked_text') }}
-        </vs-checkbox>
+        <v-checkbox
+          v-model="attachment.is_locked"
+          id="is_locked"
+          :label="attachment.is_locked ? $t('attachment.is_locked_text') : $t('attachment.is_unlocked_text')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
       </div>
     </template>
 

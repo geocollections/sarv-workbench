@@ -4,27 +4,37 @@
              :message="$route.meta.isEdit ? $t('edit.overlayLoading'):$t('add.overlay')"></spinner>
 
     <!-- ACTIVE PROJECT and NEW SITE -->
-    <div class="d-flex flex-wrap justify-content-between mb-2" v-if="$route.meta.isEdit">
-      <div class="align-self-center">
+    <v-row v-if="$route.meta.isEdit">
+      <v-col>
         <add-new-site :sendingData="sendingData" :site="watchedSite"></add-new-site>
 
-        <span class="custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="customSwitch2" v-model="isActiveProject">
-          <label class="custom-control-label rounded pr-4 pl-4"
-                 :class="isActiveProject ? 'alert-success ' : 'alert-danger'" for="customSwitch2">
-            <i class="fas fa-tag"></i>&ensp;{{ $t(isActiveProject ? 'frontPage.active' : 'frontPage.non_active')}}
-          </label>
-        </span>
-      </div>
+        <v-switch
+          class="vuetify-switch mt-0"
+          inset
+          v-model="isActiveProject"
+          hide-details
+          color="blue"
+        >
+          <template v-slot:label>
+            <div :class="{ 'green--text': isActiveProject }">
+              <v-icon x-small :class="{ 'green--text': isActiveProject }">fas fa-tag</v-icon>
+              {{ isActiveProject ? $t('frontPage.active') : $t('frontPage.non_active') }}
+            </div>
+          </template>
+        </v-switch>
+      </v-col>
 
-      <div>
-        <vs-button color="primary" type="line"
-                   icon="fa-globe-americas" icon-pack="fas"
-                   :to="{ name: 'Site add', params: { project: project } }">
-          {{ this.$t('project.newSite') }}
-        </vs-button>
-      </div>
-    </div>
+      <v-col class="text-right">
+        <v-btn
+          dark
+          color="blue"
+          :to="{ name: 'Site add', params: { project: project } }"
+        >
+          <v-icon left small>fas fa-globe-americas</v-icon>
+          {{ $t('project.newSite') }}
+        </v-btn>
+      </v-col>
+    </v-row>
 
     <!-- GENERAL INFO -->
     <fieldset class="border-top px-2 mb-2" ref="info" id="block-info">
@@ -234,10 +244,23 @@
           <div v-if="relatedData.site.length > 0">
             <!---->
             <div class="col p-0">
-         <span class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">
-            <label class="custom-control-label" for="customSwitch">{{ $t(showCollapseMap ? 'add.buttons.mapEnabled' : 'add.buttons.mapDisabled')}}</label>
-          </span>
+              <div class="d-flex justify-content-start mt-1 mb-3">
+                <div class="align-self-center">
+                  <v-switch
+                    v-model="showCollapseMap"
+                    hide-details
+                    id="map-switch"
+                    class="vuetify-switch mt-0"
+                  ></v-switch>
+                </div>
+                <div class="align-self-center">
+                  <label class="m-0" :for="`map-switch`">
+                    <i class="far fa-map"></i>
+                    {{showCollapseMap ? $t('site.mapEnabled') : $t('site.mapDisabled')}}
+                  </label>
+                </div>
+              </div>
+
               <b-collapse v-model="showCollapseMap" id="collapseMap">
                 <map-component :gps-coords="true"
                                mode="multiple"

@@ -7,21 +7,29 @@
 
 
     <template slot="switch">
-      <div class="d-flex justify-content-between">
-        <div class="align-self-center">
-          <vs-switch v-model="isSimpleView">
-            <span slot="on">{{ $t('sample.simpleForm') }}</span>
-            <span slot="off">{{ $t('sample.basicForm') }}</span>
-          </vs-switch>
-        </div>
+      <v-row>
+        <v-col>
+          <v-switch
+            class="vuetify-switch mt-0"
+            inset
+            v-model="isSimpleView"
+            :label="isSimpleView ? $t('sample.simpleForm') : $t('sample.basicForm')"
+            hide-details
+            color="blue"
+          ></v-switch>
+        </v-col>
 
-        <div>
-          <vs-button color="primary" type="line" icon="fa-chart-pie" icon-pack="fas"
-                     :to="{ name: 'Analysis add', params: { sample: { id: sample.number, number: sample.number } } }">
+        <v-col class="text-right">
+          <v-btn
+            dark
+            color="blue"
+            :to="{ name: 'Analysis add', params: { sample: { id: sample.number, number: sample.number } } }"
+          >
+            <v-icon left small>fas fa-chart-pie</v-icon>
             {{ this.$t('sample.addAnalysis') }}
-          </vs-button>
-        </div>
-      </div>
+          </v-btn>
+        </v-col>
+      </v-row>
     </template>
 
 
