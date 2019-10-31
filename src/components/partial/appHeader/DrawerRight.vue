@@ -31,12 +31,7 @@
 
         <!-- SEARCH BUTTON -->
         <v-list-item v-if="$route.meta.isEdit" class="justify-center">
-          <v-btn
-            :color="drawerActiveColor"
-            dark
-            small
-            @click="searchRecords"
-          >
+          <v-btn :color="drawerActiveColor" dark small @click="searchRecords">
             {{ $t("buttons.search") }}
           </v-btn>
         </v-list-item>
@@ -245,6 +240,116 @@
               <span class="font-weight-bold">{{
                 $route.meta.table !== "library" ? entity.id : entity.library
               }}</span>
+              <span> - {{ entity[activeSearchParams.field] }}</span>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <!-- PAGINATION -->
+        <v-list-item class="d-flex flex-row flex-nowrap justify-space-between">
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="previousPage"
+              v-if="
+                sidebarList.totalPages && activeSearchParams.search.page > 1
+              "
+            >
+              <v-icon>fas fa-angle-double-left</v-icon>
+            </v-btn>
+          </div>
+
+          <div class="align-self-center">
+            {{ sidebarList.page }}
+          </div>
+
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="nextPage"
+              v-if="
+                sidebarList.totalPages &&
+                  activeSearchParams.search.page < sidebarList.totalPages
+              "
+            >
+              <v-icon>fas fa-angle-double-right</v-icon>
+            </v-btn>
+          </div>
+        </v-list-item>
+      </v-list-group>
+
+      <!-- Todo: Sites for projects, samples for site -->
+      <!-- SITES only for Project -->
+
+      <!-- SAMPLES only for Site -->
+
+      <!-- LIBRARIES only for Reference -->
+      <v-list-group
+        :value="true"
+        :color="drawerActiveColor"
+        append-icon="fas fa-angle-down"
+        v-if="$route.meta.isTableView && $route.meta.table === 'reference'"
+      >
+        <template v-slot:activator>
+          <v-list-item-title class="text-uppercase">
+            {{ $t("sidebar.library.active") }}
+            <v-icon small>far fa-list-alt</v-icon>
+          </v-list-item-title>
+        </template>
+
+        <!-- PAGINATION -->
+        <v-list-item
+          class="d-flex flex-row flex-nowrap justify-space-between"
+          v-if="sidebarList.totalPages"
+        >
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="previousPage"
+              v-if="activeSearchParams.search.page > 1"
+            >
+              <v-icon>fas fa-angle-double-left</v-icon>
+            </v-btn>
+          </div>
+
+          <div class="align-self-center">
+            {{ sidebarList.page }}
+          </div>
+
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="nextPage"
+              v-if="activeSearchParams.search.page < sidebarList.totalPages"
+            >
+              <v-icon>fas fa-angle-double-right</v-icon>
+            </v-btn>
+          </div>
+        </v-list-item>
+
+        <!-- LIST ITEMS -->
+        <v-list-item
+          v-for="entity in sidebarList.results"
+          :key="entity.library"
+          :color="drawerActiveColor"
+          :title="
+            activeLibrary.library === entity.library
+              ? $t('sidebar.library.inactiveTitle')
+              : $t('sidebar.library.activeTitle')
+          "
+          dense
+          @click="makeActive(entity)"
+          :class="{
+            'v-list-item--active': activeLibrary.library === entity.library
+          }"
+        >
+          <v-list-item-content>
+            <v-list-item-title style="white-space: unset">
+              <span class="font-weight-bold">{{ entity.library }}</span>
               <span> - {{ entity[activeSearchParams.field] }}</span>
             </v-list-item-title>
           </v-list-item-content>

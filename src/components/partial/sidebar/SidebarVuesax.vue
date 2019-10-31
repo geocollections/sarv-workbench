@@ -175,6 +175,7 @@
 
     </vs-sidebar-group>
 
+
     <!-- SITES only for Project -->
     <vs-sidebar-group v-if="$route.meta.isEdit && $route.meta.table === 'project'"
                       :title="$t('header.sites').toUpperCase()">
