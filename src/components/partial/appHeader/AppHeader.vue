@@ -128,6 +128,7 @@
     </v-app-bar>
 
     <drawer-right
+      v-if="$route.meta.isTableView || $route.meta.isEdit"
       :drawerState="drawerRight"
       :drawer-color="appSettings.drawerRightColor"
       :is-drawer-dark="appSettings.drawerRightDark"
