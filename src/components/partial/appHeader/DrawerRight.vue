@@ -246,7 +246,10 @@
         </v-list-item>
 
         <!-- PAGINATION -->
-        <v-list-item class="d-flex flex-row flex-nowrap justify-space-between">
+        <v-list-item
+          class="d-flex flex-row flex-nowrap justify-space-between"
+          v-if="sidebarList.totalPages"
+        >
           <div>
             <v-btn
               icon
@@ -282,8 +285,28 @@
 
       <!-- Todo: Sites for projects, samples for site -->
       <!-- SITES only for Project -->
+      <v-list-item
+        v-if="$route.meta.isEdit && $route.meta.table === 'project'"
+        @click="setAction('add', 'Site')"
+        dense
+      >
+        <v-list-item-title class="text-uppercase">
+          {{ $t("header.addSite") }}
+          <v-icon small>far fa-plus-square</v-icon>
+        </v-list-item-title>
+      </v-list-item>
 
       <!-- SAMPLES only for Site -->
+      <v-list-item
+        v-if="$route.meta.isEdit && $route.meta.table === 'site'"
+        @click="setAction('add', 'Sample')"
+        dense
+      >
+        <v-list-item-title class="text-uppercase">
+          {{ $t("header.addSample") }}
+          <v-icon small>far fa-plus-square</v-icon>
+        </v-list-item-title>
+      </v-list-item>
 
       <!-- LIBRARIES only for Reference -->
       <v-list-group
