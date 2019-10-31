@@ -155,7 +155,11 @@ export default {
     commit("UPDATE_APP_ZOOM", zoomLevel);
   },
 
-  updateSettings({ commit }, newSettings) {
-    console.log(newSettings)
+  updateSettings({ commit }, settings) {
+    commit("UPDATE_APP_SETTINGS", settings);
+  },
+
+  initialiseAppSettings({ commit }) {
+    commit("INITIALISE_APP_SETTINGS");
   }
 };

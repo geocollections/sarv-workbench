@@ -6,13 +6,15 @@
     right
     disable-resize-watcher
     @input="changeDrawerState"
+    :dark="isDrawerDark"
+    :color="drawerColor"
   >
     <v-list expand dense>
       <!-- SEARCH -->
       <v-list-group
         class="mb-1"
         :value="$route.meta.isTableView"
-        color="black"
+        :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
         v-if="
           tableSearchParameters &&
@@ -29,7 +31,12 @@
 
         <!-- SEARCH BUTTON -->
         <v-list-item v-if="$route.meta.isEdit" class="justify-center">
-          <v-btn color="deep-orange" dark small @click="searchRecords">
+          <v-btn
+            :color="drawerActiveColor"
+            dark
+            small
+            @click="searchRecords"
+          >
             {{ $t("buttons.search") }}
           </v-btn>
         </v-list-item>
@@ -56,7 +63,7 @@
                 v-model="tableSearchParameters.searchParameters[field.id]"
                 :label="$t(field.title)"
                 prepend-inner-icon="far fa-calendar-alt"
-                color="deep-orange"
+                :color="drawerActiveColor"
                 clearable
                 clear-icon="fas fa-times"
                 readonly
@@ -66,8 +73,8 @@
             <v-date-picker
               v-model="tableSearchParameters.searchParameters[field.id]"
               @input="field.calendarStateDrawer = false"
-              color="deep-orange"
-              header-color="blue"
+              :color="drawerActiveColor"
+              :header-color="drawerActiveColor"
               scrollable
             ></v-date-picker>
           </v-menu>
@@ -78,7 +85,7 @@
             class="w-100"
             :label="$t(field.title)"
             v-model="tableSearchParameters.searchParameters[field.id]"
-            color="deep-orange"
+            :color="drawerActiveColor"
             :type="field.type"
             hide-details
           ></v-text-field>
@@ -94,7 +101,7 @@
             :label="$t('attachment.photoArchive')"
             value="2"
             class="mt-0 pr-6"
-            color="deep-orange"
+            :color="drawerActiveColor"
             hide-details
           ></v-checkbox>
         </v-list-item>
@@ -108,7 +115,7 @@
             :label="$t('attachment.specimenImage')"
             value="1"
             class="mt-0 pr-6"
-            color="deep-orange"
+            :color="drawerActiveColor"
             hide-details
           ></v-checkbox>
         </v-list-item>
@@ -122,7 +129,7 @@
             :label="$t('attachment.otherFiles')"
             value="3"
             class="mt-0 pr-6"
-            color="deep-orange"
+            :color="drawerActiveColor"
             hide-details
           ></v-checkbox>
         </v-list-item>
@@ -136,7 +143,7 @@
             :label="$t('attachment.digitisedReference')"
             value="4"
             class="mt-0"
-            color="deep-orange"
+            :color="drawerActiveColor"
             hide-details
           ></v-checkbox>
         </v-list-item>
@@ -147,7 +154,7 @@
             v-model="tableSearchParameters.searchParameters.isEstonianReference"
             :label="$t('reference.is_estonian_reference')"
             class="mt-0 pr-6"
-            color="deep-orange"
+            :color="drawerActiveColor"
             hide-details
           ></v-checkbox>
         </v-list-item>
@@ -158,7 +165,7 @@
             v-model="tableSearchParameters.searchParameters.isEstonianAuthor"
             :label="$t('reference.is_estonian_author')"
             class="mt-0"
-            color="deep-orange"
+            :color="drawerActiveColor"
             hide-details
           ></v-checkbox>
         </v-list-item>
@@ -168,7 +175,7 @@
       <!-- LIST OF OBJECTS -->
       <v-list-group
         :value="true"
-        color="black"
+        :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
         v-if="
           $route.meta.isEdit &&
@@ -194,7 +201,7 @@
           <div>
             <v-btn
               icon
-              color="deep-orange"
+              :color="drawerActiveColor"
               @click="previousPage"
               v-if="activeSearchParams.search.page > 1"
             >
@@ -209,7 +216,7 @@
           <div>
             <v-btn
               icon
-              color="deep-orange"
+              :color="drawerActiveColor"
               @click="nextPage"
               v-if="activeSearchParams.search.page < sidebarList.totalPages"
             >
@@ -228,7 +235,7 @@
                 ? `/${$route.meta.table}/${entity.id}`
                 : `/${$route.meta.table}/${entity.library}`
           }"
-          color="deep-orange"
+          :color="drawerActiveColor"
           :title="entity[activeSearchParams.field]"
           dense
           exact
@@ -248,7 +255,7 @@
           <div>
             <v-btn
               icon
-              color="deep-orange"
+              :color="drawerActiveColor"
               @click="previousPage"
               v-if="
                 sidebarList.totalPages && activeSearchParams.search.page > 1
@@ -265,7 +272,7 @@
           <div>
             <v-btn
               icon
-              color="deep-orange"
+              :color="drawerActiveColor"
               @click="nextPage"
               v-if="
                 sidebarList.totalPages &&
@@ -287,6 +294,21 @@ export default {
   props: {
     drawerState: {
       required: true
+    },
+    isDrawerDark: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    drawerColor: {
+      type: String,
+      required: false,
+      default: "white"
+    },
+    drawerActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   computed: {

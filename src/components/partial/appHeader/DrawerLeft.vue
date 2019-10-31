@@ -6,6 +6,8 @@
     @input="changeDrawerState"
     mobile-break-point="992"
     disable-resize-watcher
+    :dark="isDrawerDark"
+    :color="drawerColor"
   >
     <template v-slot:prepend>
       <v-list-item>
@@ -30,7 +32,7 @@
           v-for="(entity, index) in userShortcuts"
           :key="index"
           :to="{ path: entity.path }"
-          color="black"
+          :color="drawerActiveColor"
         >
           <v-list-item-title v-text="entity.title"></v-list-item-title>
         </v-list-item>
@@ -41,7 +43,7 @@
         v-if="allowedRouteLinks.length > 0"
         prepend-icon="fas fa-home"
         append-icon="fas fa-angle-down"
-        color="black"
+        :color="drawerActiveColor"
         :value="true"
       >
         <template v-slot:activator>
@@ -50,7 +52,7 @@
 
         <v-list-group
           sub-group
-          color="black"
+          :color="drawerActiveColor"
           v-for="entity in allowedRouteLinks"
           :key="entity.title"
           v-model="entity.state"
@@ -65,7 +67,7 @@
             v-for="(link, index) in entity.links"
             :to="{ path: link.path }"
             :key="index"
-            color="deep-orange"
+            :color="drawerActiveColor"
             exact
           >
             <v-list-item-title style="white-space: unset"
@@ -97,6 +99,21 @@ export default {
     userShortcuts: {
       type: Array,
       required: false
+    },
+    isDrawerDark: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    drawerColor: {
+      type: String,
+      required: false,
+      default: "white"
+    },
+    drawerActiveColor: {
+      type: String,
+      required: false,
+      default: "black"
     }
   },
   data() {

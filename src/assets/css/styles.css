@@ -76,6 +76,28 @@ th.sortable > span:after {
 }
 /* Scrollbar style for drawers END */
 
+/* Scrollbar style for floating settings START */
+/* width */
+.floating-settings::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+.floating-settings::-webkit-scrollbar-track {
+  background: #ECEFF1;
+}
+
+/* Handle */
+.floating-settings::-webkit-scrollbar-thumb {
+  background: #90A4AE;
+}
+
+/* Handle on hover */
+.floating-settings::-webkit-scrollbar-thumb:hover {
+  background: #607D8B;
+}
+/* Scrollbar style for floating settings END */
+
 
 /*********************
  *** HELPERS START ***

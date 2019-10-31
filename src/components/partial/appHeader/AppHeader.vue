@@ -4,6 +4,9 @@
       :current-user="currentUser"
       :user-shortcuts="userShortcuts"
       :drawerState="drawer"
+      :drawer-color="appSettings.drawerLeftColor"
+      :is-drawer-dark="appSettings.drawerLeftDark"
+      :drawer-active-color="appSettings.drawerLeftActiveColor"
       v-on:update:drawerState="drawer = $event"
     />
 
@@ -12,8 +15,8 @@
       clipped-left
       clipped-right
       fixed
-      color="blue-grey"
-      dark
+      :color="appSettings.navbarColor"
+      :dark="appSettings.navbarDark"
       dense
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -77,7 +80,12 @@
             </v-btn>
           </template>
 
-          <v-list color="blue-grey" dark dense style="border-radius: 0">
+          <v-list
+            :color="appSettings.navbarColor"
+            :dark="appSettings.navbarDark"
+            dense
+            style="border-radius: 0;"
+          >
             <v-list-item
               @click="changeLang('ee')"
               v-if="$vuetify.breakpoint.smAndDown"
@@ -121,6 +129,9 @@
 
     <drawer-right
       :drawerState="drawerRight"
+      :drawer-color="appSettings.drawerRightColor"
+      :is-drawer-dark="appSettings.drawerRightDark"
+      :drawer-active-color="appSettings.drawerRightActiveColor"
       v-on:update:drawerState="drawerRight = $event"
     />
   </v-card>
@@ -158,9 +169,10 @@ export default {
       return this.$store.state["shortcuts"];
     },
 
-    ...mapState(["currentUser"])
+    ...mapState(["currentUser", "appSettings"])
   },
   beforeCreate: function() {
+    this.$store.dispatch("initialiseAppSettings");
     this.$store.dispatch("GET_SHORTCUTS");
   },
   watch: {

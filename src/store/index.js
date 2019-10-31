@@ -27,6 +27,16 @@ export function createStore() {
       drawerRightState: null,
       accessibility: {
         zoom: 1
+      },
+      appSettings: {
+        navbarColor: "blue-grey",
+        navbarDark: true,
+        drawerLeftColor: "white",
+        drawerLeftDark: false,
+        drawerLeftActiveColor: "black",
+        drawerRightColor: "white",
+        drawerRightDark: false,
+        drawerRightActiveColor: "deep-orange"
       }
     },
     actions,

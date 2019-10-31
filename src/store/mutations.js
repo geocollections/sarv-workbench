@@ -112,5 +112,20 @@ export default {
 
   UPDATE_APP_ZOOM(state, zoomLevel) {
     Vue.set(state.accessibility, "zoom", zoomLevel);
+  },
+
+  UPDATE_APP_SETTINGS(state, settings) {
+    Vue.set(state, "appSettings", settings);
+  },
+
+  INITIALISE_APP_SETTINGS(state) {
+    let settings = Vue.localStorage.get("SARV_APP_SETTINGS");
+    if (
+      settings &&
+      Object.entries(settings).length > 0 &&
+      settings.constructor === Object
+    ) {
+      Vue.set(state, "appSettings", settings);
+    }
   }
 };
