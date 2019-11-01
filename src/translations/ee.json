@@ -11,7 +11,9 @@
     "rating-2": "-2 - kehvake",
     "rating-3": "-3 - halb",
     "rating-4": "-4 - väga halb",
-    "rating-5": "-5 - kasutuskõlbmatu"
+    "rating-5": "-5 - kasutuskõlbmatu",
+    "found": "Leitud",
+    "records": "kirjet"
   },
   "login": {
     "password": "Parool",

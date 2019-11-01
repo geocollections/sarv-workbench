@@ -63,7 +63,6 @@
     "vue2-datepicker": "^2.12.0",
     "vue2-touch-events": "^2.0.0",
     "vuedraggable": "^2.23.0",
-    "vuesax": "^3.9.0",
     "vuetify": "^2.1.2",
     "vuex": "^3.1.1"
   },

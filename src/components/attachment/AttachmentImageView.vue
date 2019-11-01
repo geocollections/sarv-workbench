@@ -62,7 +62,7 @@
               <v-row align="center" v-else>
                 <v-col class="text-center">
                   <div class="py-3">
-                    <v-icon style="font-size: 6rem" color="black">far {{ getAttachmentIcon(image) }}</v-icon>
+                    <v-icon style="font-size: 6rem" color="blue-grey lighten-3">far {{ getAttachmentIcon(image) }}</v-icon>
                   </div>
                 </v-col>
               </v-row>

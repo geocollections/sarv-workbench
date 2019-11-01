@@ -11,7 +11,9 @@
     "rating-2": "-2 - poorish",
     "rating-3": "-3 - poor",
     "rating-4": "-4 - very poor",
-    "rating-5": "-5 - useless"
+    "rating-5": "-5 - useless",
+    "found": "Found",
+    "records": "records"
   },
   "login": {
     "password": "Password",

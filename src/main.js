@@ -9,7 +9,6 @@ import VueI18n from "vue-i18n"; // Translations
 import VueMoment from "vue-moment";
 import VueCookies from "vue-cookies";
 import { createStore } from "./store";
-import Vuesax from "vuesax";
 import VueScrollTo from "vue-scrollto";
 import Vue2TouchEvents from "vue2-touch-events";
 import CKEditor from "@ckeditor/ckeditor5-vue";
@@ -24,7 +23,6 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import "izitoast/dist/css/iziToast.min.css"; // Pop-up messages style
 import "vue-multiselect/dist/vue-multiselect.min.css"; // Select input
-import "vuesax/dist/vuesax.css";
 import "material-icons/iconfont/material-icons.css";
 import "leaflet/dist/leaflet.css"; // Leaflet css
 // Custom css
@@ -38,7 +36,6 @@ Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueMoment);
 Vue.use(VueCookies);
-Vue.use(Vuesax);
 Vue.use(VueScrollTo, {
   container: "body",
   duration: 100,

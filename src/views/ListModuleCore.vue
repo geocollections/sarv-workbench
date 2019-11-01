@@ -101,17 +101,10 @@
     <v-card class="table-card my-1" :loading="isLoading">
       <v-card-title class="d-print-none">
         <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
-        <span id="table-title" class="text-uppercase">
-          {{ module }}
-          <sup>
-            <v-chip
-              color="deep-orange"
-              small
-              text-color="#ffffff"
-              class="font-weight-bold"
-              >{{ response.count }}</v-chip
-            >
-          </sup>
+        <span id="table-title">
+          <span>{{ $t("main.found") }}</span>
+          <span class="font-weight-bold">{{ ` ${response.count} ` }}</span>
+          <span>{{ $t("main.records") }}</span>
         </span>
         <div class="flex-grow-1"></div>
         <v-text-field
