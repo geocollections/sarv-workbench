@@ -5,7 +5,7 @@ body {
 
 body {
   font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
-  background-color: #f8f9fa;
+  /*background-color: #f8f9fa;*/
   overflow-x: unset !important; /* Todo: Had to insert it after vuetify  */
 }
 
@@ -122,84 +122,6 @@ th.sortable > span:after {
 
 /*********************
  ***  HELPERS END  ***
- *********************/
-
-
-/*********************
- *** SIDEBAR START ***
- *********************/
-
-.vs-sidebar.vs-sidebar-parent {
-  position: fixed;
-  padding-top: 56px;
-}
-
-/* Overflow START */
-/* width */
-.vs-sidebar--items::-webkit-scrollbar {
-  width: 5px;
-}
-
-/* Track */
-.vs-sidebar--items::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-.vs-sidebar--items::-webkit-scrollbar-thumb {
-  /*background: #888;*/
-  background: #bfc0bf;
-}
-
-/* Handle on hover */
-.vs-sidebar--items::-webkit-scrollbar-thumb:hover {
-  background: darkgrey;
-}
-
-/* Handle on active */
-.vs-sidebar--items::-webkit-scrollbar-thumb:active {
-  background: #747374;
-}
-/* Overflow END */
-
-/* Sidebar icon style */
-.vs-sidebar--item > a > i {
-  margin-right: 8px;
-  font-size: 1rem;
-}
-
-/* Override sidebar static router link */
-#sidebar-navigation-links .vs-sidebar--item > a {
-  color: unset !important;
-  opacity: unset !important;
-}
-
-#sidebar-navigation-links .vs-sidebar-item-active {
-  font-weight: unset !important;
-  background: unset !important;
-  border-right: unset !important;
-}
-
-/* Override sidebar static active router link */
-#sidebar-navigation-links a.router-link-exact-active {
-  /* Styles from .vs-sidebar-item-active class */
-  font-weight: 700;
-  background: -webkit-gradient(linear,left top, right top,from(transparent),to(rgba(0,0,0,.01)));
-  background: linear-gradient(90deg,transparent,rgba(0,0,0,.01));
-  border-right: 3px solid rgba(var(--vs-primary),1)!important;
-
-  /* Styles from .vs-sidebar-item-active a tag */
-  color: rgba(var(--vs-primary),1)!important;
-  opacity: 1!important;
-}
-
-/* Overriding sidebar-group ul tag's margin bottom */
-.vs-sidebar--group-items {
-  margin-bottom: 0;
-}
-
-/*********************
- ***  SIDEBAR END  ***
  *********************/
 
 

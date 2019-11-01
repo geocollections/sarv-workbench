@@ -1,28 +1,28 @@
 <template>
   <div class="shortcuts row">
     <div class="col-12 mb-3">
-      <b-button-group size="sm" class="d-block">
-        <b-button
-          class="m-1"
-          style="border-radius: 0.25rem"
-          variant="outline-success"
-          @click="addShortcut"
-        >
-          <i class="fa fa-plus"></i>
-          {{ $t("settings.addShortcut") }}
-        </b-button>
 
-        <b-button
-          class="m-1"
-          v-if="this.shortcuts.length > 0"
-          style="border-radius: 0.25rem"
-          variant="outline-success"
-          @click="saveShortcuts"
-        >
-          <i class="fa fa-save"></i>
-          {{ $t("settings.saveShortcuts") }}
-        </b-button>
-      </b-button-group>
+      <v-btn
+        small
+        @click="addShortcut"
+        class="mb-2 mr-3"
+        :color="bodyActiveColor"
+        :dark="bodyActiveColorDark"
+      >
+        <v-icon left small>fa fa-plus</v-icon>
+        {{ $t("settings.addShortcut") }}
+      </v-btn>
+
+      <v-btn
+        small
+        @click="saveShortcuts"
+        class="mb-2"
+        :color="bodyActiveColor"
+        :dark="bodyActiveColorDark"
+      >
+        <v-icon left small>fa fa-save</v-icon>
+        {{ $t("settings.saveShortcuts") }}
+      </v-btn>
     </div>
 
     <div class="col-12" v-if="shortcuts.length > 0">
@@ -67,6 +67,8 @@
                   v-model="entity.title"
                   :label="$t('settings.title')"
                   class="mt-0"
+                  dark=""
+                  :color="bodyActiveColor"
                 ></v-text-field>
               </td>
 
@@ -76,6 +78,7 @@
                   v-model="entity.path"
                   :label="$t('settings.path')"
                   class="mt-0"
+                  :color="bodyActiveColor"
                 ></v-text-field>
               </td>
 
@@ -83,7 +86,7 @@
                 <v-checkbox
                   v-model="entity.isAlwaysVisible"
                   hide-details
-                  color="blue"
+                  :color="bodyActiveColor"
                   class="mt-0 justify-center"
                 ></v-checkbox>
               </td>
@@ -115,6 +118,18 @@ export default {
     draggable
   },
   name: "Shortcuts",
+  props: {
+    bodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "black"
+    }
+  },
   data() {
     return {
       origin: "",

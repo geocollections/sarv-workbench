@@ -131,8 +131,13 @@
               </vue-multiselect>
             </td>
 
-            <td class="align-middle" v-if="entity.editMode">
-              <vs-checkbox id="current" v-model="entity.new.current" icon="fa-check" icon-pack="fas"></vs-checkbox>
+            <td style="vertical-align: middle" v-if="entity.editMode">
+              <v-checkbox
+                id="current"
+                v-model="entity.new.current"
+                hide-details
+                class="mt-0 justify-center"
+              ></v-checkbox>
             </td>
 
             <td style="padding: 0.6em!important;">
@@ -240,8 +245,13 @@
               </vue-multiselect>
             </td>
 
-            <td class="align-middle">
-              <vs-checkbox id="current_insert" v-model="relatedData.insert.specimen_identification.current" icon="fa-check" icon-pack="fas"></vs-checkbox>
+            <td style="vertical-align: middle">
+              <v-checkbox
+                id="current_insert"
+                v-model="relatedData.insert.specimen_identification.current"
+                hide-details
+                class="mt-0 justify-center"
+              ></v-checkbox>
             </td>
 
             <td style="padding: 0.6em!important;">

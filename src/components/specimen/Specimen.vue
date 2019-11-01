@@ -455,7 +455,7 @@
       <v-col>
         <v-card elevation="3">
           <v-tabs
-            background-color="blue-grey lighten-2"
+            background-color="blue-grey lighten-4"
             show-arrows
             grow
             prev-icon="fas fa-angle-left"

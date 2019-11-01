@@ -150,8 +150,13 @@
               </vue-multiselect>
             </td>
 
-            <td class="align-middle" v-if="entity.editMode">
-              <vs-checkbox id="is_private" v-model="entity.new.is_private" icon="fa-check" icon-pack="fas"></vs-checkbox>
+            <td style="vertical-align: middle" v-if="entity.editMode">
+              <v-checkbox
+                id="is_private"
+                v-model="entity.new.is_private"
+                hide-details
+                class="mt-0 justify-center"
+              ></v-checkbox>
             </td>
 
             <td style="padding: 0.6em!important;">
@@ -267,8 +272,13 @@
               </vue-multiselect>
             </td>
 
-            <td class="align-middle">
-              <vs-checkbox id="is_private_insert" v-model="relatedData.insert.analysis.is_private" icon="fa-check" icon-pack="fas"></vs-checkbox>
+            <td style="vertical-align: middle">
+              <v-checkbox
+                id="is_private_insert"
+                v-model="relatedData.insert.analysis.is_private"
+                hide-details
+                class="mt-0 justify-center"
+              ></v-checkbox>
             </td>
 
             <td style="padding: 0.6em!important;">

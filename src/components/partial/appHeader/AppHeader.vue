@@ -45,6 +45,7 @@
           :key="index"
           :to="{ path: entity.path }"
           exact
+          class="text-none"
         >
           {{ entity.title }}
         </v-btn>

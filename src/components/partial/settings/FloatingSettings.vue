@@ -31,6 +31,136 @@
     </template>
 
     <v-card flat>
+      <!-- BODY -->
+      <v-row>
+        <v-col>
+          <v-card flat tile color="blue-grey lighten-4">
+            <v-card-title
+              class="font-weight-bold py-2"
+              style="font-size: 1rem;"
+            >
+              <span>Body</span>
+              <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="showBodySettings = !showBodySettings"
+                color="black"
+              >
+                <v-icon>{{
+                  showBodySettings ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+              </v-btn>
+            </v-card-title>
+
+            <transition
+              enter-active-class="animated fadeInLeft faster"
+              leave-active-class="animated fadeOutRight faster"
+            >
+              <div v-show="showBodySettings">
+                <v-switch
+                  v-model="settings.bodyDark"
+                  class="mt-2 mx-3"
+                  hide-details
+                  inset
+                  :color="settings.bodyDark ? 'black' : 'white'"
+                >
+                  <template v-slot:label>
+                    <span>
+                      <b>{{ settings.bodyDark ? "Dark" : "Light" }}</b>
+                      body
+                    </span>
+                  </template>
+                </v-switch>
+
+                <v-radio-group
+                  v-model="settings.bodyColor"
+                  row
+                  hide-details
+                  class="mt-1 mx-3"
+                >
+                  <v-radio
+                    v-for="(entity, index) in colors"
+                    :key="index"
+                    :value="entity"
+                    :color="entity"
+                    :off-icon="`far fa-circle ${entity}--text`"
+                    on-icon="fas fa-circle"
+                    class="mx-1 my-2"
+                  ></v-radio>
+                </v-radio-group>
+              </div>
+            </transition>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <!-- BODY ACTIVE COLOR-->
+      <v-row>
+        <v-col>
+          <v-card flat tile color="blue-grey lighten-4">
+            <v-card-title
+              class="font-weight-bold py-2"
+              style="font-size: 1rem;"
+            >
+              <span>Body active color</span>
+              <v-spacer></v-spacer>
+              <v-btn
+                icon
+                @click="
+                  showBodyActiveColorSettings = !showBodyActiveColorSettings
+                "
+                color="black"
+              >
+                <v-icon>{{
+                  showBodyActiveColorSettings
+                    ? "fas fa-angle-up"
+                    : "fas fa-angle-down"
+                }}</v-icon>
+              </v-btn>
+            </v-card-title>
+
+            <transition
+              enter-active-class="animated fadeInLeft faster"
+              leave-active-class="animated fadeOutRight faster"
+            >
+              <div v-show="showBodyActiveColorSettings">
+                <v-switch
+                  v-model="settings.bodyActiveColorDark"
+                  class="mt-2 mx-3"
+                  hide-details
+                  inset
+                  :color="settings.bodyActiveColorDark ? 'black' : 'white'"
+                >
+                  <template v-slot:label>
+                    <span>
+                      <b>{{ settings.bodyActiveColorDark ? "Dark" : "Light" }}</b>
+                      text
+                    </span>
+                  </template>
+                </v-switch>
+                
+                <v-radio-group
+                  v-model="settings.bodyActiveColor"
+                  row
+                  hide-details
+                  class="mt-1 mx-3"
+                >
+                  <v-radio
+                    v-for="(entity, index) in colors"
+                    :key="index"
+                    :value="entity"
+                    :color="entity"
+                    :off-icon="`far fa-circle ${entity}--text`"
+                    on-icon="fas fa-circle"
+                    class="mx-1 my-2"
+                  ></v-radio>
+                </v-radio-group>
+              </div>
+            </transition>
+          </v-card>
+        </v-col>
+      </v-row>
+
       <!-- NAVBAR -->
       <v-row>
         <v-col>
@@ -228,9 +358,9 @@
               >
                 <v-icon>{{
                   showDrawerRightSettings
-                  ? "fas fa-angle-up"
-                  : "fas fa-angle-down"
-                  }}</v-icon>
+                    ? "fas fa-angle-up"
+                    : "fas fa-angle-down"
+                }}</v-icon>
               </v-btn>
             </v-card-title>
 
@@ -295,9 +425,9 @@
               >
                 <v-icon>{{
                   showDrawerRightActiveColorSettings
-                  ? "fas fa-angle-up"
-                  : "fas fa-angle-down"
-                  }}</v-icon>
+                    ? "fas fa-angle-up"
+                    : "fas fa-angle-down"
+                }}</v-icon>
               </v-btn>
             </v-card-title>
 
@@ -336,12 +466,18 @@ export default {
   name: "FloatingSettings",
   data: () => ({
     showSettings: false,
+    showBodySettings: true,
+    showBodyActiveColorSettings: false,
     showNavbarSettings: true,
     showDrawerLeftSettings: false,
     showDrawerLeftActiveColorSettings: false,
     showDrawerRightSettings: false,
     showDrawerRightActiveColorSettings: false,
     settings: {
+      bodyColor: "white",
+      bodyDark: false,
+      bodyActiveColor: "deep-orange",
+      bodyActiveColorDark: true,
       navbarColor: "blue-grey",
       navbarDark: true,
       drawerLeftColor: "white",

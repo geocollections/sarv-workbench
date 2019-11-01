@@ -29,6 +29,10 @@ export function createStore() {
         zoom: 1
       },
       appSettings: {
+        bodyColor: "white",
+        bodyDark: false,
+        bodyActiveColor: "deep-orange",
+        bodyActiveColorDark: true,
         navbarColor: "blue-grey",
         navbarDark: true,
         drawerLeftColor: "white",

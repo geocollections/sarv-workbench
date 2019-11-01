@@ -1,6 +1,6 @@
 <template>
   <tbody v-if="response.count > 0">
-  <tr v-for="entity in response.results">
+  <tr v-for="(entity, index) in response.results" :key="index">
 
     <td class="text-center">
       <router-link v-if="entity.uuid_filename !== null" :title="$t('edit.editMessage')"
@@ -66,13 +66,14 @@
       <span v-if="entity.specimen_image_attachment === 4">{{ $t('attachment.digitisedReferenceFile') }}</span>
     </td>
 
-    <td class="middle">
-      <vs-checkbox id="is_private"
-                   v-model="entity.is_private"
-                   @input="$emit('toggle-privacy-state', entity.is_private, entity.id)"
-                   icon="fa-lock"
-                   icon-pack="fas">
-      </vs-checkbox>
+    <td style="vertical-align: middle;">
+      <v-checkbox
+        id="is_private"
+        v-model="entity.is_private"
+        @change="$emit('toggle-privacy-state', entity.is_private, entity.id)"
+        hide-details
+        class="mt-0 justify-center"
+      ></v-checkbox>
     </td>
 
     <td>

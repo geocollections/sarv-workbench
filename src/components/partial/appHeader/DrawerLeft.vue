@@ -167,18 +167,18 @@ export default {
             {
               title: "reference",
               path: "/reference/add",
-              icon: "fas fa-book-open"
+              icon: "far fa-plus-square"
             },
             { title: "libraries", path: "/library", icon: "far fa-list-alt" },
-            { title: "library", path: "/library/add", icon: "far fa-edit" },
+            { title: "library", path: "/library/add", icon: "far fa-plus-square" },
             { title: "journals", path: "/journal", icon: "fas fa-newspaper" },
             {
               title: "journal",
               path: "/journal/add",
-              icon: "far fa-newspaper"
+              icon: "far fa-plus-square"
             },
             { title: "keywords", path: "/keyword", icon: "fas fa-scroll" },
-            { title: "keyword", path: "/keyword/add", icon: "fas fa-stream" }
+            { title: "keyword", path: "/keyword/add", icon: "far fa-plus-square" }
           ]
         },
         {
@@ -186,7 +186,7 @@ export default {
           title: "dois",
           links: [
             { title: "dois", path: "/doi", icon: "fas fa-database" },
-            { title: "doi", path: "/doi/add", icon: "fas fa-plus-circle" }
+            { title: "doi", path: "/doi/add", icon: "far fa-plus-square" }
           ]
         },
         {
@@ -207,7 +207,7 @@ export default {
           title: "sites",
           links: [
             { title: "editSite", path: "/site", icon: "fas fa-globe" },
-            { title: "addSite", path: "/site/add", icon: "fas fa-map-pin" },
+            { title: "addSite", path: "/site/add", icon: "far fa-plus-square" },
             { title: "activeSite", path: "", icon: "fas fa-map-marker-alt" }
           ]
         },
@@ -223,7 +223,7 @@ export default {
             {
               title: "locality",
               path: "/locality/add",
-              icon: "fas fa-map-marker-alt"
+              icon: "far fa-plus-square"
             }
           ]
         },
@@ -232,7 +232,7 @@ export default {
           title: "samples",
           links: [
             { title: "samples", path: "/sample", icon: "fas fa-vials" },
-            { title: "sample", path: "/sample/add", icon: "fas fa-vial" },
+            { title: "sample", path: "/sample/add", icon: "far fa-plus-square" },
             { title: "activeSample", path: "", icon: "fas fa-fill-drip" }
           ]
         },
@@ -248,7 +248,7 @@ export default {
             {
               title: "addAnalysis",
               path: "/analysis/add",
-              icon: "fas fa-chart-pie"
+              icon: "far fa-plus-square"
             }
           ]
         },
@@ -260,7 +260,7 @@ export default {
             {
               title: "taxon",
               path: "/taxon/add",
-              icon: "fas fa-otter"
+              icon: "far fa-plus-square"
             }
           ]
         },
@@ -272,13 +272,13 @@ export default {
             {
               title: "specimen",
               path: "/specimen/add",
-              icon: "fas fa-plus-circle"
+              icon: "far fa-plus-square"
             },
             { title: "collections", path: "/collection", icon: "fas fa-boxes" },
             {
               title: "collection",
               path: "/collection/add",
-              icon: "fas fa-box"
+              icon: "far fa-plus-square"
             }
           ]
         }

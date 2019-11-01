@@ -22,7 +22,10 @@
 
       <transition name="fade">
         <div v-show="block.accessibility">
-          <Accessibility />
+          <Accessibility
+            :bodyActiveColor="appSettings.bodyActiveColor"
+            :bodyDark="appSettings.bodyDark"
+          />
         </div>
       </transition>
     </fieldset>
@@ -40,7 +43,10 @@
 
       <transition name="fade">
         <div v-show="block.shortcuts">
-          <shortcuts />
+          <shortcuts
+            :bodyActiveColor="appSettings.bodyActiveColor"
+            :bodyActiveColorDark="appSettings.bodyActiveColorDark"
+          />
         </div>
       </transition>
     </fieldset>
@@ -203,7 +209,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["permissions"])
+    ...mapState(["permissions", "appSettings"])
   },
 
   methods: {

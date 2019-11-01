@@ -1,5 +1,11 @@
 <template>
-  <div class="dashboard">
+  <div
+    :class="[
+      'dashboard',
+      appSettings.bodyDark ? 'white--text' : 'black--text',
+      appSettings.bodyColor
+    ]"
+  >
     <app-header />
 
     <v-content>
@@ -12,6 +18,7 @@
 
 <script>
 import AppHeader from "../components/partial/appHeader/AppHeader";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -23,7 +30,9 @@ export default {
       title: this.$t("titles.dashboard")
     };
   },
-
+  computed: {
+    ...mapState(["appSettings"])
+  },
   beforeCreate() {
     this.$store.dispatch("INITIALISE_ACTIVE_OBJECTS");
     this.$store.dispatch("INITIALISE_USER_DATA");
@@ -32,10 +41,15 @@ export default {
 </script>
 
 <style scoped>
+.dashboard {
+  height: 100%;
+}
+
 .container {
   margin-bottom: 56px;
 }
-/* TODO: BOOTSTRAP OVERRIDE, remove after integration */
+
+/* BOOTSTRAP OVERRIDE, remove after integration */
 .container--fluid {
   max-width: 100%;
 }

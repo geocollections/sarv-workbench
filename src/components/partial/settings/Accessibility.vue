@@ -10,7 +10,8 @@
             :label="entity.text"
             :value="entity.value"
             class="mb-2"
-            color="deep-orange"
+            :dark="bodyDark"
+            :color="bodyActiveColor"
           ></v-radio>
         </v-radio-group>
       </v-col>
@@ -21,6 +22,18 @@
 <script>
 export default {
   name: "Accessibility",
+  props: {
+    bodyDark: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "black"
+    }
+  },
   data: () => ({
     zoom: 1,
     zoomOptions: [
