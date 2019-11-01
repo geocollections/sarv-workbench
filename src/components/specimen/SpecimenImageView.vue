@@ -20,7 +20,8 @@
               :title="$t('editSpecimen.editMessage')"
             >
               <v-img
-                :src="getFileUrl(image.uuid_filename, 'medium')"
+                max-height="400"
+                :src="getFileUrl(image.uuid_filename, 'small')"
                 :lazy-src="getFileUrl(image.uuid_filename, 'small')"
                 class="grey lighten-2"
               >
