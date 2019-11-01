@@ -6,8 +6,8 @@
       </div>
     </div>
 
-    <!-- SPEED DIAL -->
-    <floating-settings/>
+    <!-- APP SETTINGS -->
+    <floating-settings />
 
     <!-- ACCESSIBILITY -->
     <fieldset class="border p-2 mt-2">
@@ -21,7 +21,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.accessibility">
+        <div v-show="block.accessibility">
           <Accessibility />
         </div>
       </transition>
@@ -39,7 +39,7 @@
       </legend>
 
       <transition name="fade">
-        <div v-if="block.shortcuts">
+        <div v-show="block.shortcuts">
           <shortcuts />
         </div>
       </transition>
@@ -56,83 +56,91 @@
         <i class="fas fa-user-lock"></i>
       </legend>
 
-      <transition name="fade">
-        <div class="row" v-if="block.permissions">
-          <div
-            class="col-6 col-sm-6 col-md-4 col-xl-3"
+      <transition
+        name="fade"
+        enter-active-class="animated fadeIn faster"
+        leave-active-class="animated fadeOut faster"
+      >
+        <v-row v-show="block.permissions">
+          <v-col
+            cols="12"
+            sm="6"
+            md="4"
+            xl="3"
+            class="pb-7"
             v-for="(key, index) in permissions"
             :key="index"
           >
-            <vs-list>
-              <vs-list-header
-                style="word-break: break-all"
-                icon="fa-table"
-                icon-pack="fas"
-                :title="index.charAt(0).toUpperCase() + index.substring(1)"
-                color="dark"
-              ></vs-list-header>
+            <v-card>
+              <v-card-title class="font-weight-bold px-3 py-1">
+                <span>
+                  <v-icon small color="black">fas fa-table</v-icon>&nbsp;
+                  <span style="font-size: 1rem">{{ index }}</span>
+                </span>
+              </v-card-title>
 
-              <div v-for="(entity, entityIndex) in key" :key="entityIndex">
-                <div
-                  class="vs-list--item"
-                  :class="{
-                    'list-link-add': isTableInCorrectList(index, 'add')
-                  }"
-                  v-if="entity === 'add'"
-                  @click="goTo(index, 'add')"
-                >
-                  <div class="vs-list--icon">
-                    <i
-                      class="vs-icon notranslate icon-scale far fa-plus-square null"
-                    ></i>
-                  </div>
+              <v-divider class="m-0"></v-divider>
 
-                  <div class="list-titles">
-                    <div class="vs-list--subtitle">{{ entity }}</div>
-                  </div>
-                </div>
+              <v-card-text class="px-3 py-1">
+                <v-row v-for="(entity, entityIndex) in key" :key="entityIndex">
+                  <v-col>
+                    <!-- ADD -->
+                    <v-btn
+                      v-if="entity === 'add'"
+                      text
+                      :color="
+                        isTableInCorrectList(index, 'add') ? 'green' : 'black'
+                      "
+                      @click="goTo(index, 'add')"
+                    >
+                      <v-icon small left>far fa-plus-square</v-icon>
+                      {{ entity }}
+                    </v-btn>
 
-                <div
-                  class="vs-list--item"
-                  :class="{
-                    'list-link-change': isTableInCorrectList(index, 'change')
-                  }"
-                  v-if="entity === 'change'"
-                  @click="goTo(index, 'change')"
-                >
-                  <div class="vs-list--icon">
-                    <i
-                      class="vs-icon notranslate icon-scale far fa-edit null"
-                    ></i>
-                  </div>
+                    <!-- CHANGE -->
+                    <v-btn
+                      v-else-if="entity === 'change'"
+                      text
+                      :color="
+                        isTableInCorrectList(index, 'change') ? 'blue' : 'black'
+                      "
+                      @click="goTo(index, 'change')"
+                    >
+                      <v-icon small left>far fa-edit</v-icon>
+                      {{ entity }}
+                    </v-btn>
 
-                  <div class="list-titles">
-                    <div class="vs-list--subtitle">{{ entity }}</div>
-                  </div>
-                </div>
+                    <!-- DELETE -->
+                    <v-btn
+                      v-else-if="entity === 'delete'"
+                      text
+                      :color="
+                        isTableInCorrectList(index, 'delete') ? 'red' : 'black'
+                      "
+                      @click="goTo(index, 'delete')"
+                    >
+                      <v-icon small left>far fa-minus-square</v-icon>
+                      {{ entity }}
+                    </v-btn>
 
-                <div
-                  class="vs-list--item"
-                  :class="{
-                    'list-link-delete': isTableInCorrectList(index, 'delete')
-                  }"
-                  v-if="entity === 'delete'"
-                  @click="goTo(index, 'delete')"
-                >
-                  <div class="vs-list--icon">
-                    <i
-                      class="vs-icon notranslate icon-scale far fa-minus-square null"
-                    ></i>
-                  </div>
-
-                  <div class="list-titles">
-                    <div class="vs-list--subtitle">{{ entity }}</div>
-                  </div>
-                </div>
-              </div>
-            </vs-list>
-          </div>
-        </div>
+                    <!-- VIEW -->
+                    <v-btn
+                      v-else-if="entity === 'view'"
+                      text
+                      :color="
+                        isTableInCorrectList(index, 'change') ? 'blue' : 'black'
+                      "
+                      @click="goTo(index, 'change')"
+                    >
+                      <v-icon small left>far fa-eye</v-icon>
+                      {{ entity }}
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
       </transition>
     </fieldset>
   </div>
@@ -145,6 +153,7 @@ import Accessibility from "../components/partial/settings/Accessibility";
 import FloatingSettings from "../components/partial/settings/FloatingSettings";
 import formSectionsMixin from "../mixins/formSectionsMixin";
 import { mapState } from "vuex";
+import { toastInfo } from "../assets/js/iziToast/iziToast";
 
 export default {
   name: "Settings",
@@ -152,7 +161,7 @@ export default {
   mixins: [formSectionsMixin],
   data() {
     return {
-      // Todo: Update lists according to routes
+      // Todo: Update lists according to routes this.$router.options.routes
       addList: [
         "attachment",
         "reference",
@@ -204,6 +213,10 @@ export default {
           this.$router.push({ path: "/" + table + "/" + action });
         if (action === "change" || action === "delete")
           this.$router.push({ path: "/" + table });
+      } else {
+        toastInfo({
+          text: `<b>${table}</b> doesn't have <b>${action}</b> view!`
+        });
       }
     },
 

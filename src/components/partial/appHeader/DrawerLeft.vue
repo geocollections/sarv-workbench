@@ -25,9 +25,19 @@
 
     <v-divider class="mt-0"></v-divider>
 
-    <v-list dense>
+    <v-list expand dense>
       <!-- USER SHORTCUTS -->
-      <div v-if="userShortcuts.length > 0" class="d-md-none d-sm-block">
+      <v-list-group
+        v-if="userShortcuts.length > 0"
+        class="d-block d-md-none"
+        prepend-icon="fas fa-link"
+        append-icon="fas fa-angle-down"
+        :color="drawerActiveColor"
+      >
+        <template v-slot:activator>
+          <v-list-item-title>{{ $t("settings.shortcuts") }}</v-list-item-title>
+        </template>
+
         <v-list-item
           v-for="(entity, index) in userShortcuts"
           :key="index"
@@ -36,7 +46,7 @@
         >
           <v-list-item-title v-text="entity.title"></v-list-item-title>
         </v-list-item>
-      </div>
+      </v-list-group>
 
       <!-- ROUTES -->
       <v-list-group

@@ -37,13 +37,11 @@
         </v-btn>
       </v-toolbar-items>
 
-      <v-toolbar-items
-        class="d-none d-md-block"
-        v-if="userShortcuts.length > 0"
-      >
+      <v-toolbar-items v-if="userShortcuts.length > 0">
         <v-btn
           text
           v-for="(entity, index) in userShortcuts"
+          :class="{ 'd-none d-md-flex': !entity.isAlwaysVisible }"
           :key="index"
           :to="{ path: entity.path }"
           exact
