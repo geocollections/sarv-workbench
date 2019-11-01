@@ -628,9 +628,9 @@ export function fetchSamples(data, agent, databaseId) {
     searchFields += `&agent_collected__agent__icontains=${data.agent}`;
   }
 
-  // if (typeof agent !== "undefined" && agent !== null) {
-  //   searchFields += `&or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
-  // }
+  if (typeof agent !== "undefined" && agent !== null) {
+    searchFields += `&or_search=agent_collected__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
+  }
 
   if (data.storage && data.storage.trim().length > 0) {
     searchFields += `&storage__location__icontains=${data.storage}`;
