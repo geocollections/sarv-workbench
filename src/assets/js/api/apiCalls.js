@@ -557,7 +557,7 @@ export function fetchLocalitySynonym(id, searchParameters) {
 
 export function fetchLocalityAttachment(id, searchParameters) {
   return fetch(
-    `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,original_filename,attach_link__locality__id,remarks&format=json`
+    `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
   );
 }
 

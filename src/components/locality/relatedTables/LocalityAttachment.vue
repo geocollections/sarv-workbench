@@ -1,6 +1,6 @@
 <template>
   <div id="#tab-attachment" class="tab-pane row" :class="{active: activeTab === 'attachment_link'}" role="tabpanel">
-    <div class="col-sm-8" v-if="activeTab === 'attachment_link'">
+    <div class="col-md-6" v-if="activeTab === 'attachment_link'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered  related-table">
           <thead class="thead-light">
@@ -18,8 +18,8 @@
 
             <!-- VIEW MODE -->
             <td v-if="!entity.editMode">
-              <router-link :to="{ path: '/attachment/' + entity.attachment }">
-                {{ entity.attachment__original_filename }}
+              <router-link :to="{ path: '/attachment/' + entity.id }">
+                {{ entity.original_filename }}
               </router-link>
             </td>
 
@@ -106,15 +106,25 @@
         </table>
       </div>
     </div>
+
+    <div class="col-md-6" v-if="activeTab === 'attachment_link' && $route.meta.isEdit">
+      <file-table :attachments="relatedData.attachment_link"
+                  :object="'locality'"
+                  v-if="relatedData.attachment_link.length > 0"/>
+    </div>
   </div>
 </template>
 
 <script>
   import formManipulation from '../../../mixins/formManipulation';
   import autocompleteMixin from '../../../mixins/autocompleteMixin';
+  import FileTable from "../../partial/FileTable";
 
   export default {
     name: "LocalityAttachment",
+    components: {
+      FileTable
+    },
     props: {
       relatedData: Object,
       autocomplete: Object,

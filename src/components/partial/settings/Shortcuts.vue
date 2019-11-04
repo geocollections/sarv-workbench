@@ -67,7 +67,6 @@
                   v-model="entity.title"
                   :label="$t('settings.title')"
                   class="mt-0"
-                  dark=""
                   :color="bodyActiveColor"
                 ></v-text-field>
               </td>
