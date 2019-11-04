@@ -80,7 +80,8 @@
             :color="drawerActiveColor"
             exact
           >
-            <v-list-item-title style="white-space: unset"
+            <v-list-item-title
+              style="white-space: unset"
               v-text="$t(`header.${link.title}`)"
             ></v-list-item-title>
             <v-list-item-icon>
@@ -170,7 +171,11 @@ export default {
               icon: "far fa-plus-square"
             },
             { title: "libraries", path: "/library", icon: "far fa-list-alt" },
-            { title: "library", path: "/library/add", icon: "far fa-plus-square" },
+            {
+              title: "library",
+              path: "/library/add",
+              icon: "far fa-plus-square"
+            },
             { title: "journals", path: "/journal", icon: "fas fa-newspaper" },
             {
               title: "journal",
@@ -178,7 +183,11 @@ export default {
               icon: "far fa-plus-square"
             },
             { title: "keywords", path: "/keyword", icon: "fas fa-scroll" },
-            { title: "keyword", path: "/keyword/add", icon: "far fa-plus-square" }
+            {
+              title: "keyword",
+              path: "/keyword/add",
+              icon: "far fa-plus-square"
+            }
           ]
         },
         {
@@ -232,7 +241,11 @@ export default {
           title: "samples",
           links: [
             { title: "samples", path: "/sample", icon: "fas fa-vials" },
-            { title: "sample", path: "/sample/add", icon: "far fa-plus-square" },
+            {
+              title: "sample",
+              path: "/sample/add",
+              icon: "far fa-plus-square"
+            },
             { title: "activeSample", path: "", icon: "fas fa-fill-drip" }
           ]
         },
@@ -278,6 +291,22 @@ export default {
             {
               title: "collection",
               path: "/collection/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
+          name: "selection_series",
+          title: "selection_series",
+          links: [
+            {
+              title: "selection_series",
+              path: "/selection_series",
+              icon: "fas fa-clipboard-list"
+            },
+            {
+              title: "selection_series",
+              path: "/selection_series/add",
               icon: "far fa-plus-square"
             }
           ]

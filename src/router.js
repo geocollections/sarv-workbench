@@ -1218,73 +1218,73 @@ const router = new Router({
           ]
         },
         /* Todo: Selection */
-        // {
-        //   path: "/taxon",
-        //   component: () => import("./views/Taxa.vue"),
-        //   meta: {
-        //     requiresAuth: true
-        //   },
-        //   children: [
-        //     {
-        //       path: "",
-        //       component: () => import("./components/taxon/TaxonTable.vue"),
-        //       meta: {
-        //         requiresAuth: true,
-        //         object: "taxon",
-        //         isTableView: true
-        //       }
-        //     }
-        //   ]
-        // },
-        // {
-        //   path: "/taxon/:id(\\d+)",
-        //   props: true,
-        //   component: () => import("./views/EditForm.vue"),
-        //   meta: {
-        //     requiresAuth: true
-        //   },
-        //   children: [
-        //     {
-        //       path: "",
-        //       component: () => import("./components/taxon/Taxon.vue"),
-        //       meta: {
-        //         isEdit: true,
-        //         table: "taxon",
-        //         title: "titles.editTaxon",
-        //         heading: "editTaxon.heading",
-        //         isBottomOptionShown: true,
-        //         isNavigationShown: false,
-        //         isCopyFormShown: false,
-        //         requiresAuth: true,
-        //         object: "taxon"
-        //       }
-        //     }
-        //   ]
-        // },
-        // {
-        //   path: "/taxon/add",
-        //   component: () => import("./views/AddForm.vue"),
-        //   meta: {
-        //     requiresAuth: true
-        //   },
-        //   children: [
-        //     {
-        //       path: "",
-        //       name: "Taxon add",
-        //       component: () => import("./components/taxon/Taxon.vue"),
-        //       meta: {
-        //         isEdit: false,
-        //         title: "titles.addTaxon",
-        //         addNew: "add.newTaxon",
-        //         subForms: [{ path: "/taxon/add", name: "add.taxon" }],
-        //         requiresAuth: true,
-        //         isBottomOptionShown: true,
-        //         isNavigationShown: false,
-        //         object: "taxon"
-        //       }
-        //     }
-        //   ]
-        // }
+        {
+          path: "/selection_series",
+          component: () => import("./views/SelectionSeries.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/selection_series/SelectionSeriesTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "selection_series",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/selection_series/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/selection_series/SelectionSeries.vue"),
+              meta: {
+                isEdit: true,
+                table: "selection_series",
+                title: "titles.editSelectionSeries",
+                heading: "editSelectionSeries.heading",
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: "selection_series"
+              }
+            }
+          ]
+        },
+        {
+          path: "/selection_series/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Selection series add",
+              component: () => import("./components/selection_series/SelectionSeries.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addSelectionSeries",
+                addNew: "add.newSelectionSeries",
+                subForms: [{ path: "/selection_series/add", name: "add.selection_series" }],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: "selection_series"
+              }
+            }
+          ]
+        }
       ]
     }
   ]
