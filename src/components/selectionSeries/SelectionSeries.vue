@@ -29,6 +29,9 @@
                 outlined
                 dense
                 hide-details
+                :append-icon="
+                  !isNotEmpty(selection_series.name) ? 'fas fa-exclamation' : ''
+                "
                 :error="!isNotEmpty(selection_series.name)"
                 :color="bodyActiveColor"
                 :label="$t('selectionSeries.name')"
@@ -143,7 +146,10 @@ export default {
             this.$emit("object-exists", true);
             this.selection_series = this.handleResponse(response)[0];
 
-            this.removeUnnecessaryFields(this.selection_series, this.copyFields);
+            this.removeUnnecessaryFields(
+              this.selection_series,
+              this.copyFields
+            );
             this.$emit("data-loaded", this.selection_series);
             this.sendingData = false;
           } else {
