@@ -296,17 +296,17 @@ export default {
           ]
         },
         {
-          name: "selection_series",
-          title: "selection_series",
+          name: "selectionSeries",
+          title: "selectionSeries",
           links: [
             {
-              title: "selection_series",
-              path: "/selection_series",
+              title: "selectionSeries",
+              path: "/selectionSeries",
               icon: "fas fa-clipboard-list"
             },
             {
-              title: "selection_series",
-              path: "/selection_series/add",
+              title: "selection_serie",
+              path: "/selectionSeries/add",
               icon: "far fa-plus-square"
             }
           ]

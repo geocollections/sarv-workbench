@@ -1217,7 +1217,6 @@ const router = new Router({
             }
           ]
         },
-        /* Todo: Selection */
         {
           path: "/selection_series",
           component: () => import("./views/SelectionSeries.vue"),
@@ -1227,10 +1226,10 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/selection_series/SelectionSeriesTable.vue"),
+              component: () => import("./components/selectionSeries/SelectionSeriesTable.vue"),
               meta: {
                 requiresAuth: true,
-                object: "selection_series",
+                object: "selectionSeries",
                 isTableView: true
               }
             }
@@ -1246,17 +1245,17 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/selection_series/SelectionSeries.vue"),
+              component: () => import("./components/selectionSeries/SelectionSeries.vue"),
               meta: {
                 isEdit: true,
-                table: "selection_series",
+                table: "selectionSeries",
                 title: "titles.editSelectionSeries",
                 heading: "editSelectionSeries.heading",
                 isBottomOptionShown: true,
                 isNavigationShown: false,
                 isCopyFormShown: false,
                 requiresAuth: true,
-                object: "selection_series"
+                object: "selectionSeries"
               }
             }
           ]
@@ -1271,16 +1270,16 @@ const router = new Router({
             {
               path: "",
               name: "Selection series add",
-              component: () => import("./components/selection_series/SelectionSeries.vue"),
+              component: () => import("./components/selectionSeries/SelectionSeries.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addSelectionSeries",
                 addNew: "add.newSelectionSeries",
-                subForms: [{ path: "/selection_series/add", name: "add.selection_series" }],
+                subForms: [{ path: "/selectionSeries/add", name: "add.selectionSeries" }],
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
-                object: "selection_series"
+                object: "selectionSeries"
               }
             }
           ]

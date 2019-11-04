@@ -42,6 +42,7 @@
     "keywords": "Terms",
     "collections": "Collections",
     "taxa": "Taxa",
+    "selectionSeries": "Selection series",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -63,10 +64,12 @@
     "editSpecimen": "Specimens",
     "addKeyword": "Add term",
     "editKeyword": "Terms",
-    "addCollection": "Collections",
-    "editCollection": "Collection",
-    "addTaxon": "Taxa",
-    "editTaxon": "Taxon",
+    "addCollection": "Add collection",
+    "editCollection": "Collections",
+    "addTaxon": "Add taxon",
+    "editTaxon": "Taxa",
+    "addSelectionSeries": "Add selection series",
+    "editSelectionSeries": "Selection series",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -90,7 +93,8 @@
     "activeSample": "My last sample",
     "keyword": "Add term",
     "collection": "Add collection",
-    "taxon": "Add taxon"
+    "taxon": "Add taxon",
+    "selectionSerie": "Add selection series"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -288,6 +292,8 @@
     "newCollection": "Add new collection",
     "taxon": "Taxon",
     "newTaxon": "Add new taxon",
+    "selectionSeries": "Selection series",
+    "newSelectionSeries": "Add new selection series",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -461,6 +467,10 @@
     "heading": "Taxon",
     "viewMessage": "View taxon in fossils portal",
     "editMessage": "Edit taxon"
+  },
+  "editSelectionSeries": {
+    "heading": "Selection series",
+    "editMessage": "Edit selection series"
   },
   "attachments": {
     "header": "My attachments",
@@ -1407,6 +1417,13 @@
     "is_primary": "Primary",
     "editMessage": "Edit term",
     "addNew": "Add new Term"
+  },
+  "selectionSeries": {
+    "header": "Selection series",
+    "id": "ID",
+    "name": "Name",
+    "remarks": "Remarks",
+    "user_added": "User added"
   },
   "messages": {
     "langChange": "Changed language!",

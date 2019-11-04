@@ -42,6 +42,7 @@
     "keywords": "Terminid",
     "collections": "Kollektsioonid",
     "taxa": "Taksonid",
+    "selectionSeries": "Valikud",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -63,10 +64,12 @@
     "editSpecimen": "Eksemplarid",
     "addKeyword": "Lisa termin",
     "editKeyword": "Terminind",
-    "addCollection": "Kollektsioonid",
-    "editCollection": "Kollektsioon",
-    "addTaxon": "Taksonid",
-    "editTaxon": "Takson",
+    "addCollection": "Lisa kollektsioon",
+    "editCollection": "Kollektsioonid",
+    "addTaxon": "Lisa takson",
+    "editTaxon": "Taksonid",
+    "addSelectionSeries": "Lisa valik",
+    "editSelectionSeries": "Valikud",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -90,7 +93,8 @@
     "activeSample": "Minu viimane proov",
     "keyword": "Lisa termin",
     "collection": "Lisa kollektsioon",
-    "taxon": "Lisa takson"
+    "taxon": "Lisa takson",
+    "selectionSerie": "Lisa valik"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -288,6 +292,8 @@
     "newCollection": "Lisa uus kollektsioon",
     "taxon": "Takson",
     "newTaxon": "Lisa uus takson",
+    "selectionSeries": "Valik",
+    "newSelectionSeries": "Lisa uus valik",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -461,6 +467,10 @@
     "heading": "Takson",
     "viewMessage": "Vaata taksonit fossiilide portaalis",
     "editMessage": "Muuda taksonit"
+  },
+  "editSelectionSeries": {
+    "heading": "Valik",
+    "editMessage": "Muuda valikut"
   },
   "attachments": {
     "header": "Minu failid",
@@ -1407,6 +1417,13 @@
     "is_primary": "Esmane",
     "editMessage": "Muuda terminit",
     "addNew": "Lisage uus Termin"
+  },
+  "selectionSeries": {
+    "header": "Valikud",
+    "id": "ID",
+    "name": "Nimi",
+    "remarks": "Märkused",
+    "user_added": "Kasutaja"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

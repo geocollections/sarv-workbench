@@ -138,7 +138,7 @@
         :filter="filterTable"
         :search-parameters="searchParameters"
         :is-library-active="isLibraryActive"
-        v-if="(module === 'reference' || module === 'specimen' || module === 'collection' || module === 'taxon') && isTableView"
+        v-if="(module === 'reference' || module === 'specimen' || module === 'collection' || module === 'taxon' || 'selectionSeries') && isTableView"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:add-reference-to-active-library="
           $emit('add-reference-to-active-library', $event)

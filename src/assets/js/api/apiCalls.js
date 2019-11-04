@@ -1800,6 +1800,46 @@ export function fetchAgentUsingName(name) {
  ***  AGENT END  ***
  *******************/
 
+
+/******************************
+ *** SELECTION SERIES START ***
+ ******************************/
+
+export function fetchSelectionSeries(data) {
+  let fields = "id,name,remarks,user_added";
+  let searchFields = "";
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `&id__icontains=${data.id}`;
+  }
+  if (data.name && data.name.trim().length > 0) {
+    searchFields += `&name__icontains=${data.name}`;
+  }
+  if (data.remarks && data.remarks.trim().length > 0) {
+    searchFields += `&remarks__icontains=${data.remarks}`;
+  }
+  if (data.user_added && data.user_added.trim().length > 0) {
+    searchFields += `&user_added__icontains=${data.user_added}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/******************************
+ ***  SELECTION SERIES END  ***
+ ******************************/
+
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/
