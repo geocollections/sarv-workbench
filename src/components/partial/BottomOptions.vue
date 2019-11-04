@@ -1,120 +1,111 @@
 <template>
   <div class="bottom-options-new">
     <div
-      class="d-flex justify-content-around align-items-center bottom-options-lg"
-      :class="{ 'drawer-left-margin': drawerState, 'drawer-left-margin-0': !drawerState, 'drawer-right-margin': drawerRightState, 'drawer-right-margin-0': !drawerRightState }"
+      class="d-flex justify-content-around align-items-center"
+      :class="{
+        'drawer-left-margin': drawerState,
+        'drawer-left-margin-0': !drawerState,
+        'drawer-right-margin': drawerRightState,
+        'drawer-right-margin-0': !drawerRightState
+      }"
     >
-      <router-link
-        class="bottom-item p-2 text-center bottom-nav"
+      <v-btn
+        :icon="$vuetify.breakpoint.smAndDown"
+        :color="navbarColor"
+        :dark="isNavbarDark"
         :disabled="!previousId"
-        :class="{ 'bottom-item-disabled': !previousId }"
-        :to="{ path: `/${this.object}/${this.previousId}` }"
-        tag="button"
-        tabindex="4"
-        ref="previous"
+        :to="{ path: `/${object}/${previousId}` }"
         title="Go to previous record"
         v-if="isNavigationShown"
+        retain-focus-on-click
       >
-        <span class="bottom-nav-icon">
-          <i class="fas fa-angle-double-left fa-sm"></i>
-        </span>
-        <span class="bottom-text"> {{ $t("buttons.previous") }}</span>
-      </router-link>
+        <v-icon>fas fa-angle-double-left</v-icon>
+        <span v-show="$vuetify.breakpoint.mdAndUp"
+          >&nbsp;{{ $t("buttons.previous") }}</span
+        >
+      </v-btn>
 
-      <button
-        class="bottom-item p-2 text-center bottom-finish"
-        :disabled="sendingData"
-        v-if="object === 'site' && !$route.meta.isEdit"
-        tabindex="1"
-        ref="finish"
-        @click="handleClick('FINISH', 'finish')"
+      <v-btn
+        :icon="$vuetify.breakpoint.smAndDown"
+        color="blue"
+        dark
+        :loading="sendingData"
+        @click="handleClick('FINISH')"
         title="Finish record"
+        v-if="object === 'site' && !$route.meta.isEdit"
+        retain-focus-on-click
       >
-        <span class="d-lg-inline-block bottom-icon">
-          <i class="fas fa-check-double fa-3x"></i>
-        </span>
-        <span
-          class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg"
+        <v-icon>fas fa-check-double</v-icon>
+        <span v-show="$vuetify.breakpoint.mdAndUp"
+          >&nbsp;{{ $t("edit.buttons.finish") }}</span
         >
-          {{ $t("edit.buttons.finish") }}
-        </span>
-      </button>
+      </v-btn>
 
-      <button
-        class="bottom-item p-2 text-center bottom-save"
-        :disabled="sendingData"
-        v-else
-        tabindex="1"
-        ref="saveAndLeave"
-        @click="handleClick('SAVE_AND_LEAVE', 'saveAndLeave')"
+      <v-btn
+        :icon="$vuetify.breakpoint.smAndDown"
+        color="green"
+        dark
+        :loading="sendingData"
+        @click="handleClick('SAVE_AND_LEAVE')"
         title="Save record and go back to list view"
+        v-else
+        retain-focus-on-click
       >
-        <span class="d-lg-inline-block bottom-icon">
-          <i class="fas fa-door-open fa-3x"></i>
-        </span>
-        <span
-          class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg"
+        <v-icon>fas fa-door-open</v-icon>
+        <span v-show="$vuetify.breakpoint.mdAndUp"
+          >&nbsp;{{ $t("edit.buttons.save") }}</span
         >
-          {{ $t("edit.buttons.save") }}
-        </span>
-      </button>
+      </v-btn>
 
-      <button
-        class="bottom-item p-2 text-center bottom-save"
-        :disabled="sendingData"
-        tabindex="2"
-        ref="save"
+      <v-btn
+        :icon="$vuetify.breakpoint.smAndDown"
+        color="green"
+        dark
+        :loading="sendingData"
         @click="handleClick('SAVE', 'save')"
         title="Save record"
+        retain-focus-on-click
       >
-        <span class="d-lg-inline-block bottom-icon">
-          <i class="fas fa-save fa-3x"></i>
-        </span>
-        <span
-          class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg"
+        <v-icon>fas fa-save</v-icon>
+        <span v-show="$vuetify.breakpoint.mdAndUp"
+          >&nbsp;{{ $t("edit.buttons.save") }}</span
         >
-          {{ $t("edit.buttons.save") }}
-        </span>
-      </button>
+      </v-btn>
 
-      <button
-        class="bottom-item p-2 text-center bottom-cancel"
-        :disabled="sendingData"
-        tabindex="3"
-        ref="clearOrCancel"
-        :title="$route.meta.isEdit ? 'Go back to list view' : 'Clear fields'"
+      <v-btn
+        :icon="$vuetify.breakpoint.smAndDown"
+        color="red"
+        dark
+        :loading="sendingData"
         @click="
-          $route.meta.isEdit
-            ? handleClick('CANCEL', 'clearOrCancel')
-            : handleClick('CLEAR', 'clearOrCancel')
+          $route.meta.isEdit ? handleClick('CANCEL') : handleClick('CLEAR')
         "
+        :title="$route.meta.isEdit ? 'Go back to list view' : 'Clear fields'"
+        retain-focus-on-click
       >
-        <span class="d-lg-inline-block bottom-icon">
-          <i class="fas fa-ban fa-3x"></i>
+        <v-icon>fas fa-ban</v-icon>
+        <span v-show="$vuetify.breakpoint.mdAndUp">
+          &nbsp;{{
+            $route.meta.isEdit ? $t("buttons.cancel") : $t("buttons.clear")
+          }}
         </span>
-        <span
-          class="d-none d-sm-block d-lg-inline-block bottom-text bottom-text-lg"
-        >
-          {{ $route.meta.isEdit ? $t("buttons.cancel") : $t("buttons.clear") }}
-        </span>
-      </button>
+      </v-btn>
 
-      <router-link
-        class="bottom-item p-2 text-center bottom-nav"
+      <v-btn
+        :icon="$vuetify.breakpoint.smAndDown"
+        :color="navbarColor"
+        :dark="isNavbarDark"
         :disabled="!nextId"
-        :class="{ 'bottom-item-disabled': !nextId }"
-        :to="{ path: `/${this.object}/${this.nextId}` }"
-        tag="button"
-        tabindex="5"
-        ref="next"
-        v-if="isNavigationShown"
+        :to="{ path: `/${object}/${nextId}` }"
         title="Go to next record"
+        v-if="isNavigationShown"
+        retain-focus-on-click
       >
-        <span class="bottom-text">{{ $t("buttons.next") }} </span>
-        <span class="bottom-nav-icon">
-          <i class="fas fa-angle-double-right fa-sm"></i>
-        </span>
-      </router-link>
+        <span v-show="$vuetify.breakpoint.mdAndUp"
+          >{{ $t("buttons.next") }}&nbsp;</span
+        >
+        <v-icon>fas fa-angle-double-right</v-icon>
+      </v-btn>
     </div>
   </div>
 </template>
@@ -132,6 +123,16 @@ export default {
     isNavigationShown: {
       type: Boolean,
       default: false
+    },
+    isNavbarDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    navbarColor: {
+      type: String,
+      required: false,
+      default: "blue-grey"
     }
   },
   data() {
@@ -171,16 +172,12 @@ export default {
     }
   },
   methods: {
-    handleClick(action, elementRef) {
+    async handleClick(action) {
       this.sendingData = true;
-      this.$parent.$emit("button-clicked", action, this.object);
-
-      // Resetting focus after 500ms
+      await this.$parent.$emit("button-clicked", action, this.object);
       setTimeout(() => {
-        this.sendingData = false;
-        this.$nextTick(() => {
-          if (this.$refs[elementRef]) this.$refs[elementRef].focus();
-        });
+        // will run after $emit is done in 500ms
+        this.sendingData = false
       }, 500);
     },
 
@@ -233,6 +230,10 @@ export default {
   height: 56px;
 }
 
+.bottom-options-new > div {
+  height: 56px;
+}
+
 .drawer-right-margin-0 {
   margin-right: 0;
   transition: all 200ms ease-out;
@@ -255,120 +256,5 @@ export default {
     margin-left: 0;
     transition: all 200ms ease-out;
   }
-
-  .d-lg-inline-block {
-    display: inline-block !important;
-  }
-
-  .bottom-text-lg {
-    vertical-align: 0.25rem;
-    margin-left: 1rem;
-    font-size: 15px !important;
-  }
-
-  .bottom-text {
-    font-size: 15px !important;
-  }
-}
-
-.bottom-options-new > div {
-  height: 56px;
-}
-
-.bottom-item:hover {
-  cursor: pointer;
-}
-
-.bottom-item-disabled {
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.bottom-item-disabled:hover {
-  cursor: not-allowed;
-  color: rgba(0, 0, 0, 0.5) !important;
-}
-
-.bottom-icon {
-  font-size: 0.5rem;
-}
-
-.bottom-text {
-  font-size: 12px;
-  margin-top: -0.1rem;
-}
-
-.bottom-nav:hover {
-  color: #007bff;
-}
-
-.bottom-nav:hover > .bottom-nav-icon {
-  opacity: 1;
-  transition: opacity 0.2s;
-}
-
-.bottom-nav > .bottom-nav-icon {
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-
-/* Removes arrow transition when Previous or Next button is disabled */
-.bottom-item-disabled:hover > .bottom-nav-icon {
-  opacity: 0;
-}
-
-.bottom-finish {
-  color: #007bff;
-}
-
-.bottom-save {
-  color: #28a745;
-}
-
-.bottom-cancel {
-  color: #dc3545;
-}
-
-.bottom-finish,
-.bottom-save,
-.bottom-cancel {
-  transition: color 200ms, letter-spacing 500ms, font-weight 200ms;
-}
-
-.bottom-finish:hover,
-.bottom-save:hover,
-.bottom-cancel:hover {
-  color: #000;
-  letter-spacing: 2px;
-  font-weight: 800;
-  transition: color 200ms, letter-spacing 500ms, font-weight 200ms;
-}
-
-.bottom-item:focus {
-  border-radius: 0.25rem;
-}
-
-/* Previous and Next buttons */
-.bottom-nav:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.25);
-}
-
-.bottom-finish:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
-
-.bottom-save:focus {
-  border-color: #28a745;
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
-}
-
-.bottom-cancel:focus {
-  border-color: #dc3545;
-  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
-}
-
-/* Removing button style */
-button {
-  all: unset;
 }
 </style>
