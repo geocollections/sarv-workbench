@@ -1835,6 +1835,10 @@ export function fetchSelectionSeries(data) {
   }
 }
 
+export function fetchSelectionSerie(id) {
+  return fetch(`selection_series/?id=${id}&format=json`);
+}
+
 /******************************
  ***  SELECTION SERIES END  ***
  ******************************/

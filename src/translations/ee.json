@@ -251,6 +251,9 @@
       "details": "Taksoni info",
       "additionalInfo": "Lisainfo",
       "description": "Kirjeldus"
+    },
+    "selection_series": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -1423,7 +1426,8 @@
     "id": "ID",
     "name": "Nimi",
     "remarks": "Märkused",
-    "user_added": "Kasutaja"
+    "user_added": "Kasutaja",
+    "generalInfo": "Üldinfo"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

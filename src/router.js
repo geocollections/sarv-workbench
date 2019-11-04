@@ -1229,7 +1229,7 @@ const router = new Router({
               component: () => import("./components/selectionSeries/SelectionSeriesTable.vue"),
               meta: {
                 requiresAuth: true,
-                object: "selectionSeries",
+                object: "selection_series",
                 isTableView: true
               }
             }
@@ -1248,14 +1248,14 @@ const router = new Router({
               component: () => import("./components/selectionSeries/SelectionSeries.vue"),
               meta: {
                 isEdit: true,
-                table: "selectionSeries",
+                table: "selection_series",
                 title: "titles.editSelectionSeries",
                 heading: "editSelectionSeries.heading",
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
-                object: "selectionSeries"
+                object: "selection_series"
               }
             }
           ]
@@ -1275,11 +1275,11 @@ const router = new Router({
                 isEdit: false,
                 title: "titles.addSelectionSeries",
                 addNew: "add.newSelectionSeries",
-                subForms: [{ path: "/selectionSeries/add", name: "add.selectionSeries" }],
+                subForms: [{ path: "/selection_series/add", name: "add.selectionSeries" }],
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
-                object: "selectionSeries"
+                object: "selection_series"
               }
             }
           ]

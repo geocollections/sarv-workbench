@@ -9,8 +9,8 @@
       <div class=" text-right">
         <v-btn
           :to="{ path: '/' + $route.meta.object }"
-          color="deep-orange"
-          dark
+          :color="appSettings.bodyActiveColor"
+          :dark="appSettings.bodyActiveColorDark"
         >
           {{ $t("buttons.listView") }}
         </v-btn>
@@ -21,6 +21,8 @@
 
     <router-view
       v-show="objectExists"
+      :body-active-color="appSettings.bodyActiveColor"
+      :is-body-active-color-dark="appSettings.bodyActiveColorDark"
       v-on:data-loaded="setData"
       v-on:set-object="setObject"
       v-on:related-data-info="setRelatedData"
@@ -112,7 +114,6 @@ export default {
     },
 
     setData(data) {
-      console.log(data);
       this.data = data;
       if (this.data !== null) this.formattedData = data;
       this.forceRerender();

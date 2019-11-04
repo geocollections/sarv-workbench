@@ -251,6 +251,9 @@
       "details": "Taxon details",
       "additionalInfo": "Additional info",
       "description": "Remarks"
+    },
+    "selection_series": {
+      "info": "General info"
     }
   },
   "add": {
@@ -1423,7 +1426,8 @@
     "id": "ID",
     "name": "Name",
     "remarks": "Remarks",
-    "user_added": "User added"
+    "user_added": "User added",
+    "generalInfo": "General info"
   },
   "messages": {
     "langChange": "Changed language!",

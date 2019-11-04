@@ -21,7 +21,10 @@
 
     <hr class="mt-1 mb-2 divider" />
 
-    <router-view />
+    <router-view
+      :body-active-color="appSettings.bodyActiveColor"
+      :is-body-active-color-dark="appSettings.bodyActiveColorDark"
+    />
 
     <bottom-options
       :is-navbar-dark="appSettings.navbarDark"
