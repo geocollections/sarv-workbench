@@ -1442,6 +1442,8 @@
           agent: null,
           storage: null,
           site: null,
+          selectionId: null,
+          selection: null,
           id: null,
           page: 1,
           paginateBy: 50,

@@ -64,7 +64,9 @@ export default {
         { id: "stratigraphy", title: "sample.stratigraphy", type: "text" },
         { id: "agent", title: "sample.agent_collected", type: "text" },
         { id: "storage", title: "sample.storage", type: "text" },
-        { id: "site", title: "sample.site", type: "text" }
+        { id: "site", title: "sample.site", type: "text" },
+        { id: "selectionId", title: "specimen.selectionId", type: "number" },
+        { id: "selection", title: "specimen.selection", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
@@ -106,6 +108,8 @@ export default {
         agent: null,
         storage: null,
         site: null,
+        selectionId: null,
+        selection: null,
         id: null,
         page: 1,
         paginateBy: 50,

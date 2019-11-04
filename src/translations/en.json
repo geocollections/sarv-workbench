@@ -812,6 +812,8 @@
     "is_public_text": "Public",
     "localityInfo": "Locality and stratigraphy",
     "details": "Specimen details",
+    "selectionId": "Selection ID",
+    "selection": "Selection",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",
@@ -923,6 +925,8 @@
     "basicForm": "Full view",
     "addAnalysis": "Add analysis",
     "site": "Site",
+    "selectionId": "Selection ID",
+    "selection": "Selection",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",

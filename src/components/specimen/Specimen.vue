@@ -1242,6 +1242,8 @@
           locality: null,
           stratigraphy: null,
           agent_collected: null,
+          selectionId: null,
+          selection: null,
           page: 1,
           paginateBy: 50,
           orderBy: '-id',

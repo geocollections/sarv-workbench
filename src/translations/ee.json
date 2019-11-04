@@ -812,6 +812,8 @@
     "is_public_text": "Avalik",
     "localityInfo": "Leiuinfo",
     "details": "Säiliku info",
+    "selectionId": "Valiku ID",
+    "selection": "Valik",
     "relatedTables": {
       "specimen_identification": "Taksoni nimed",
       "specimen_identification_geology": "Kivi nimed",
@@ -923,6 +925,8 @@
     "basicForm": "Täisvaade",
     "addAnalysis": "Lisa analüüs",
     "site": "Vaatluspunkt",
+    "selectionId": "Valiku ID",
+    "selection": "Valik",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",

@@ -94,7 +94,9 @@ export default {
           id: "storage",
           title: "specimen.storage",
           type: "text"
-        }
+        },
+        { id: "selectionId", title: "specimen.selectionId", type: "number" },
+        { id: "selection", title: "specimen.selection", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true },
@@ -138,6 +140,8 @@ export default {
         locality: null,
         stratigraphy: null,
         agent_collected: null,
+        selectionId: null,
+        selection: null,
         page: 1,
         paginateBy: 50,
         orderBy: "-id"

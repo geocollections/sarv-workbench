@@ -640,6 +640,14 @@ export function fetchSamples(data, agent, databaseId) {
     searchFields += `&multi_search=value:${data.site};fields:site__id,site__name,site__project__id,site__project__name;lookuptype:icontains`;
   }
 
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&selection__selection=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+  }
+
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database__id=${databaseId}`;
   }
@@ -1361,6 +1369,14 @@ export function fetchSpecimens(data, databaseId) {
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
     searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:icontains`;
+  }
+
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&selection__selection=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&selection__selection__name__icontains=${data.selection}`;
   }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
