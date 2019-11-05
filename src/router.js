@@ -521,7 +521,7 @@ const router = new Router({
                 requiresAuth: true,
                 table: "sample",
                 object: "sample",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -962,7 +962,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "specimen",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]

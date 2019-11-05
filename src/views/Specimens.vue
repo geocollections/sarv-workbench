@@ -28,6 +28,8 @@
       :use-list-view="true"
       :use-image-view="true"
       :export-buttons="true"
+      :is-selection-series-active="isSelectionSeriesActive"
+      :active-selection-series="activeSelectionSeries"
       v-on:search-params-changed="searchParametersChanged"
       v-on:search:specimenImages="searchSpecimenImages"
     ></list-module-core>
@@ -105,7 +107,34 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"])
+    isSelectionSeriesActive() {
+      return !!this.activeSelectionSeries;
+    },
+
+    ...mapState(["databaseId", "activeSelectionSeries"])
+  },
+
+  created() {
+    // Used by sidebar
+    const searchHistory = this.$localStorage.get(
+      "selectionSeriesSearchHistory",
+      "fallbackValue"
+    );
+    let params =
+      typeof searchHistory !== "undefined" &&
+      searchHistory !== null &&
+      searchHistory !== "fallbackValue"
+        ? searchHistory
+        : this.searchParameters;
+    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
+      searchHistory: "selectionSeriesSearchHistory",
+      search: params,
+      request: "FETCH_SELECTION_SERIES",
+      title: "header.selectionSeries",
+      object: "selection_series",
+      field: "name",
+      agent: this.currentUser
+    });
   },
 
   watch: {

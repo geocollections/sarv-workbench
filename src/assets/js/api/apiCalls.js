@@ -601,7 +601,7 @@ export function fetchAnalysisMethod() {
 export function fetchSamples(data, agent, databaseId) {
   const fields =
     "id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional," +
-    "number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval";
+    "number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval,storage__location";
   let searchFields = "";
 
   if (data.id !== null && data.id.trim().length > 0) {
@@ -641,7 +641,7 @@ export function fetchSamples(data, agent, databaseId) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection=${data.selectionId}`;
+    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -1372,7 +1372,7 @@ export function fetchSpecimens(data, databaseId) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection=${data.selectionId}`;
+    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -1842,6 +1842,19 @@ export function fetchSelectionSerie(id) {
 /******************************
  ***  SELECTION SERIES END  ***
  ******************************/
+
+
+/***********************
+ *** SELECTION START ***
+ ***********************/
+
+export function fetchAddItemToSelection(data) {
+  return fetchPost(`add/selection/`, data);
+}
+
+/***********************
+ ***  SELECTION END  ***
+ ***********************/
 
 
 /***********************

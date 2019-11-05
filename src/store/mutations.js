@@ -5,11 +5,17 @@ export default {
   SET_ACTIVE_OBJECTS: state => {
     const activeLibrary = Vue.localStorage.get("activeLibrary", null);
     const activeProject = Vue.localStorage.get("activeProject", null);
+    const activeSelectionSeries = Vue.localStorage.get(
+      "activeSelectionSeries",
+      null
+    );
 
     if (activeLibrary && !isEmpty(activeLibrary))
       Vue.set(state, "activeLibrary", activeLibrary);
     if (activeProject && !isEmpty(activeProject))
       Vue.set(state, "activeProject", activeProject);
+    if (activeSelectionSeries && !isEmpty(activeSelectionSeries))
+      Vue.set(state, "activeSelectionSeries", activeSelectionSeries);
   },
 
   SET_CURRENT_USER: state => {
@@ -65,6 +71,11 @@ export default {
   SET_ACTIVE_LIBRARY: (state, object) => {
     Vue.localStorage.set("activeLibrary", object);
     Vue.set(state, "activeLibrary", object);
+  },
+
+  SET_ACTIVE_SELECTION_SERIES: (state, object) => {
+    Vue.localStorage.set("activeSelectionSeries", object);
+    Vue.set(state, "activeSelectionSeries", object);
   },
 
   SET_ACTIVE_PROJECT: (state, object) => {

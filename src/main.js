@@ -170,6 +170,9 @@ new Vue({
     activeLibrary: {
       type: Object
     },
+    activeSelectionSeries: {
+      type: Object
+    },
     photoArchive: {
       type: Object
     },

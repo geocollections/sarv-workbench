@@ -21,6 +21,7 @@ export function createStore() {
       activeProject: null,
       activeSample: null,
       activeSite: null,
+      activeSelectionSeries: null,
       shortcuts: [],
       activeRelatedDataTab: {},
       drawerState: null,

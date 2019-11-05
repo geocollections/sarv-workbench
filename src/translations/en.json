@@ -253,7 +253,10 @@
       "description": "Remarks"
     },
     "selection_series": {
-      "info": "General info"
+      "info": "General info",
+      "active": "Active selection series",
+      "activeTitle": "Make selection series active",
+      "inactiveTitle": "Make selection series inactive"
     }
   },
   "add": {

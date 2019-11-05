@@ -283,7 +283,6 @@
         </v-list-item>
       </v-list-group>
 
-      <!-- Todo: Sites for projects, samples for site -->
       <!-- SITES only for Project -->
       <v-list-item
         v-if="$route.meta.isEdit && $route.meta.table === 'project'"
@@ -313,7 +312,7 @@
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="$route.meta.isTableView && $route.meta.table === 'reference'"
+        v-if="$route.meta.isTableView && $route.meta.object === 'reference'"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -365,7 +364,7 @@
               : $t('sidebar.library.activeTitle')
           "
           dense
-          @click="makeActive(entity)"
+          @click="toggleActive(entity, 'ACTIVE_LIBRARY')"
           :class="{
             'v-list-item--active': activeLibrary.library === entity.library
           }"
@@ -412,11 +411,122 @@
           </div>
         </v-list-item>
       </v-list-group>
+
+      <!-- SELECTION SERIES for samples and specimens (for now) -->
+      <v-list-group
+        :value="true"
+        :color="drawerActiveColor"
+        append-icon="fas fa-angle-down"
+        v-if="
+          $route.meta.isTableView &&
+            ($route.meta.object === 'specimen' ||
+              $route.meta.object === 'sample')
+        "
+      >
+        <template v-slot:activator>
+          <v-list-item-title class="text-uppercase">
+            {{ $t("sidebar.selection_series.active") }}
+            <v-icon small>far fa-list-alt</v-icon>
+          </v-list-item-title>
+        </template>
+
+        <!-- PAGINATION -->
+        <v-list-item
+          class="d-flex flex-row flex-nowrap justify-space-between"
+          v-if="sidebarList.totalPages"
+        >
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="previousPage"
+              v-if="activeSearchParams.search.page > 1"
+            >
+              <v-icon>fas fa-angle-double-left</v-icon>
+            </v-btn>
+          </div>
+
+          <div class="align-self-center">
+            {{ sidebarList.page }}
+          </div>
+
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="nextPage"
+              v-if="activeSearchParams.search.page < sidebarList.totalPages"
+            >
+              <v-icon>fas fa-angle-double-right</v-icon>
+            </v-btn>
+          </div>
+        </v-list-item>
+
+        <!-- LIST ITEMS -->
+        <v-list-item
+          v-for="entity in sidebarList.results"
+          :key="entity.id"
+          :color="drawerActiveColor"
+          :title="
+            activeSelectionSeries.id === entity.id
+              ? $t('sidebar.selection_series.inactiveTitle')
+              : $t('sidebar.selection_series.activeTitle')
+          "
+          dense
+          @click="toggleActive(entity, 'ACTIVE_SELECTION_SERIES')"
+          :class="{
+            'v-list-item--active': activeSelectionSeries.id === entity.id
+          }"
+        >
+          <v-list-item-content>
+            <v-list-item-title style="white-space: unset">
+              <span class="font-weight-bold">{{ entity.id }}</span>
+              <span> - {{ entity[activeSearchParams.field] }}</span>
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <!-- PAGINATION -->
+        <v-list-item class="d-flex flex-row flex-nowrap justify-space-between">
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="previousPage"
+              v-if="
+                sidebarList.totalPages && activeSearchParams.search.page > 1
+              "
+            >
+              <v-icon>fas fa-angle-double-left</v-icon>
+            </v-btn>
+          </div>
+
+          <div class="align-self-center">
+            {{ sidebarList.page }}
+          </div>
+
+          <div>
+            <v-btn
+              icon
+              :color="drawerActiveColor"
+              @click="nextPage"
+              v-if="
+                sidebarList.totalPages &&
+                  activeSearchParams.search.page < sidebarList.totalPages
+              "
+            >
+              <v-icon>fas fa-angle-double-right</v-icon>
+            </v-btn>
+          </div>
+        </v-list-item>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
+import { toastInfo } from "../../../assets/js/iziToast/iziToast";
+
 export default {
   name: "DrawerRight",
   props: {
@@ -458,14 +568,17 @@ export default {
       if (this.$store.state["activeLibrary"] !== null)
         return this.$store.state["activeLibrary"];
       else return "";
+    },
+
+    activeSelectionSeries() {
+      if (this.$store.state["activeSelectionSeries"] !== null)
+        return this.$store.state["activeSelectionSeries"];
+      else return "";
     }
   },
   created() {
     if (this.$store.state["activeSearchParams"] !== null) {
       this.$store.dispatch(this.$store.state["activeSearchParams"].request);
-    }
-
-    if (this.$route.meta.isEdit) {
     }
   },
   watch: {
@@ -501,11 +614,27 @@ export default {
       });
     },
 
-    makeActive(library) {
-      if (this.activeLibrary.id === library.id) {
-        this.$store.dispatch("ACTIVE_LIBRARY", null);
+    toggleActive(entity, activeObject) {
+      let makeActive = true;
+
+      if (
+        activeObject === "ACTIVE_LIBRARY" &&
+        this.activeLibrary.id === entity.id
+      ) {
+        makeActive = false;
+      } else if (
+        activeObject === "ACTIVE_SELECTION_SERIES" &&
+        this.activeSelectionSeries.id === entity.id
+      ) {
+        makeActive = false;
+      }
+
+      if (makeActive) {
+        this.$store.dispatch(activeObject, entity);
+        toastInfo({ text: "Object is active!", timeout: 1000 });
       } else {
-        this.$store.dispatch("ACTIVE_LIBRARY", library);
+        this.$store.dispatch(activeObject, null);
+        toastInfo({ text: "Object is inactive!", timeout: 1000 });
       }
     },
 

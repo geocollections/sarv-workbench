@@ -9,6 +9,9 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
+    :show-select="isSelectionSeriesActive"
+    @item-selected="$emit('add-item-to-selection-series', $event, 'specimen')"
+    @toggle-select-all="$emit('toggle-select-all', $event, 'specimen')"
     expand-icon="fas fa-caret-down"
   >
     <template v-slot:item.id="{ item }">
@@ -137,6 +140,18 @@
         <v-icon>far fa-eye</v-icon>
       </v-btn>
     </template>
+
+    <template v-slot:item.selection_series="{ item }">
+      <v-btn
+        v-if="isSelectionSeriesActive"
+        @click="$emit('add-item-to-selection-series', item.id, 'specimen')"
+        title="Add specimen to selection series"
+        color="green"
+        icon
+      >
+        <v-icon>fas fa-plus-square</v-icon>
+      </v-btn>
+    </template>
   </v-data-table>
 </template>
 
@@ -165,6 +180,9 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    isSelectionSeriesActive: {
+      type: Boolean
     }
   },
   data: () => ({
@@ -177,18 +195,24 @@ export default {
       { text: "specimen.depth", value: "depth" },
       { text: "specimen.stratigraphy", value: "stratigraphy__stratigraphy" },
       { text: "specimen.agent_collected", value: "agent_collected__agent" },
-      { text: "", value: "link", sortable: false }
+      { text: "", value: "link", sortable: false },
+      { text: "", value: "selection_series", sortable: false }
     ],
     names: []
   }),
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(item => {
+          if (this.isSelectionSeriesActive) return item;
+          else if (item.value !== "selection_series") return item;
+        });
     }
   },
   watch: {

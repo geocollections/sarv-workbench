@@ -253,7 +253,10 @@
       "description": "Kirjeldus"
     },
     "selection_series": {
-      "info": "Üldinfo"
+      "info": "Üldinfo",
+      "active": "Aktiivne valik",
+      "activeTitle": "Tee valik aktiivseks",
+      "inactiveTitle": "Tee valik mitteaktiivseks"
     }
   },
   "add": {

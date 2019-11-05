@@ -138,11 +138,14 @@
         :filter="filterTable"
         :search-parameters="searchParameters"
         :is-library-active="isLibraryActive"
-        v-if="(module === 'reference' || module === 'specimen' || module === 'collection' || module === 'taxon' || 'selectionSeries') && isTableView"
+        :is-selection-series-active="isSelectionSeriesActive"
+        v-if="(module === 'reference' || 'specimen' ||'collection' || 'taxon' || 'selectionSeries' || 'sample') && isTableView"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:add-reference-to-active-library="
           $emit('add-reference-to-active-library', $event)
         "
+        v-on:add-item-to-selection-series="addItemToSelectionSeries"
+        v-on:toggle-select-all="toggleSelectAll"
       />
 
       <!-- TABLE -->
@@ -374,7 +377,7 @@ import ExportButtons from "../components/partial/export/ExportButtons";
 import ListView from "../components/partial/ListView";
 import AlternativeTableView from "../components/reference/AlternativeTableView";
 import AlternativeTableControls from "../components/reference/AlternativeTableControls";
-import { fetchChangePrivacyState } from "../assets/js/api/apiCalls";
+import {fetchAddItemToSelection, fetchChangePrivacyState} from "../assets/js/api/apiCalls";
 import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import debounce from "lodash/debounce";
 import ImageView from "../components/partial/ImageView";
@@ -454,6 +457,14 @@ export default {
 
     isLibraryActive: {
       type: Boolean
+    },
+
+    isSelectionSeriesActive: {
+      type: Boolean
+    },
+
+    activeSelectionSeries: {
+      type: Object
     }
   },
   name: "ListModuleCore",
@@ -749,6 +760,56 @@ export default {
           toastError({ text: this.$t("messages.uploadError") });
         }
       );
+    },
+
+    addItemToSelectionSeries(item, relation) {
+      if (typeof item === "number") {
+        let formData = new FormData();
+        formData.append(
+          "data",
+          JSON.stringify({ [relation]: item, selection: this.activeSelectionSeries.id })
+        );
+
+        fetchAddItemToSelection(formData).then(
+          response => {
+            if (typeof response.body.message !== "undefined") {
+              if (
+                this.$i18n.locale === "ee" &&
+                typeof response.body.message_et !== "undefined"
+              ) {
+                toastSuccess({ text: response.body.message_et });
+              } else {
+                toastSuccess({ text: response.body.message });
+              }
+            }
+            if (typeof response.body.error !== "undefined") {
+              if (
+                this.$i18n &&
+                this.$i18n.locale === "ee" &&
+                typeof response.body.error_et !== "undefined"
+              ) {
+                toastError({ text: response.body.error_et });
+              } else {
+                toastError({ text: response.body.error });
+              }
+            }
+          },
+          errResponse => {
+            if (typeof errResponse.body.error !== "undefined")
+              toastError({ text: errResponse.body.error });
+            toastError({ text: this.$t("messages.uploadError") });
+          }
+        );
+
+      } else {
+        // Todo: vuetify built in select
+        console.log(item);
+        console.log("TODO");
+      }
+    },
+
+    toggleSelectAll(test) {
+      console.log(test);
     }
   }
 };

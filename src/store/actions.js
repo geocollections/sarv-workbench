@@ -125,6 +125,10 @@ export default {
     commit("SET_ACTIVE_LIBRARY", library);
   },
 
+  ACTIVE_SELECTION_SERIES: ({ commit }, selection_series) => {
+    commit("SET_ACTIVE_SELECTION_SERIES", selection_series);
+  },
+
   ACTIVE_PROJECT: ({ commit }, project) => {
     commit("SET_ACTIVE_PROJECT", project);
   },
