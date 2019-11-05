@@ -1,6 +1,6 @@
 <template>
   <div class="add-form">
-    <div class="d-flex flex-wrap justify-content-between mt-4">
+    <div class="d-flex flex-wrap justify-content-between mt-2">
       <div class="pr-4">
         <p class="h2 mb-1">{{ $t($route.meta.addNew) }}</p>
       </div>

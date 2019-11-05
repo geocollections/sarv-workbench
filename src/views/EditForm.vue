@@ -1,6 +1,6 @@
 <template>
   <div class="edit-form">
-    <div class="d-flex flex-wrap mt-4 page-title justify-space-between">
+    <div class="d-flex flex-wrap mt-2 page-title justify-space-between">
       <div class="">
         <p class="h2 float-left mb-1 mr-2">
           {{ $t($route.meta.heading) }}: <b>{{ $route.params.id }}</b>

@@ -36,7 +36,7 @@
 
             <div class="col-md-3">
               <label :for="`specimen_id`">{{ $t('specimen.specimen_id') }}:</label>
-              <b-form-input id="specimen_id" v-model="specimen.specimen_id" type="text"></b-form-input>
+              <b-form-input size="sm" id="specimen_id" v-model="specimen.specimen_id" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3">
@@ -62,7 +62,7 @@
 
             <div class="col-md-3">
               <label :for="`specimen_nr`">{{ $t('specimen.specimen_nr') }}:</label>
-              <b-form-input id="specimen_nr" v-model="specimen.specimen_nr" type="text"></b-form-input>
+              <b-form-input size="sm" id="specimen_nr" v-model="specimen.specimen_nr" type="text"></b-form-input>
             </div>
           </div>
 
@@ -105,12 +105,12 @@
 
             <div class="col-md-3">
               <label :for="`locality_free`">{{ $t('specimen.locality_free') }}:</label>
-              <b-form-input id="locality_free" v-model="specimen.locality_free" type="text"></b-form-input>
+              <b-form-input size="sm" id="locality_free" v-model="specimen.locality_free" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3">
               <label :for="`remarks_collecting`">{{ $t('specimen.remarks_collecting') }}:</label>
-              <b-form-input id="remarks_collecting" v-model="specimen.remarks_collecting" type="text"></b-form-input>
+              <b-form-input size="sm" id="remarks_collecting" v-model="specimen.remarks_collecting" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3">
@@ -149,17 +149,17 @@
 
             <div class="col-md-3">
               <label :for="`sample_number`">{{ $t('specimen.sample_number') }}:</label>
-              <b-form-input id="sample_number" v-model="specimen.sample_number" type="text"></b-form-input>
+              <b-form-input size="sm" id="sample_number" v-model="specimen.sample_number" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3">
               <label :for="`depth`">{{ $t('specimen.depth') }}:</label>
-              <b-form-input id="depth" v-model="specimen.depth" type="number" step="0.01"></b-form-input>
+              <b-form-input size="sm" id="depth" v-model="specimen.depth" type="number" step="0.01"></b-form-input>
             </div>
 
             <div class="col-md-3">
               <label :for="`depth_interval`">{{ $t('specimen.depth_interval') }}:</label>
-              <b-form-input id="depth_interval" v-model="specimen.depth_interval" type="number" step="0.01"></b-form-input>
+              <b-form-input size="sm" id="depth_interval" v-model="specimen.depth_interval" type="number" step="0.01"></b-form-input>
             </div>
           </div>
 
@@ -209,12 +209,12 @@
 
             <div class="col-md-3">
               <label :for="`stratigraphy_free`">{{ $t('specimen.stratigraphy_free') }}:</label>
-              <b-form-input id="stratigraphy_free" v-model="specimen.stratigraphy_free" type="text"></b-form-input>
+              <b-form-input size="sm" id="stratigraphy_free" v-model="specimen.stratigraphy_free" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3">
               <label :for="`number_field`">{{ $t('specimen.number_field') }}:</label>
-              <b-form-input id="number_field" v-model="specimen.number_field" type="text"></b-form-input>
+              <b-form-input size="sm" id="number_field" v-model="specimen.number_field" type="text"></b-form-input>
             </div>
           </div>
 
@@ -243,7 +243,7 @@
 
             <div class="col-md-3">
               <label :for="`agent_collected_free`">{{ $t('specimen.agent_collected_free') }}:</label>
-              <b-form-input id="agent_collected_free" v-model="specimen.agent_collected_free" type="text"></b-form-input>
+              <b-form-input size="sm" id="agent_collected_free" v-model="specimen.agent_collected_free" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3">
@@ -254,12 +254,12 @@
                           lang="en"
                           :first-day-of-week="1"
                           format="DD MMM YYYY"
-                          input-class="form-control"></datepicker>
+                          input-class="form-control form-control-sm"></datepicker>
             </div>
 
             <div class="col-md-3">
               <label :for="`date_collected_free`">{{ $t('specimen.date_collected_free') }}:</label>
-              <b-form-input id="date_collected_free" v-model="specimen.date_collected_free" type="text"></b-form-input>
+              <b-form-input size="sm" id="date_collected_free" v-model="specimen.date_collected_free" type="text"></b-form-input>
             </div>
           </div>
         </div>
@@ -267,7 +267,7 @@
     </fieldset>
 
     <!-- SPECIMEN DETAILS -->
-    <fieldset class="border-top px-2 mb-2" id="block-details">
+    <fieldset class="border-top px-2 mb-3" id="block-details">
       <legend class="w-auto my-0" :class="{ 'text-primary': !block.details }" @click="block.details = !block.details">
         {{ $t('specimen.details') }}
         <i class="fas fa-info"></i>
@@ -296,7 +296,7 @@
 
             <div class="col-md-3">
               <label :for="`part`">{{ $t('specimen.part') }}:</label>
-              <b-form-input id="part" v-model="specimen.part" type="text"></b-form-input>
+              <b-form-input size="sm" id="part" v-model="specimen.part" type="text"></b-form-input>
             </div>
 
             <div class="col-md-3">
@@ -592,7 +592,7 @@
           <div class="row">
             <div class="col-sm-12">
               <label :for="`tags`">{{ $t('specimen.tags') }}:</label>
-              <b-form-input id="tags" v-model="specimen.tags" type="text"></b-form-input>
+              <b-form-input size="sm" id="tags" v-model="specimen.tags" type="text"></b-form-input>
             </div>
           </div>
 
@@ -1267,5 +1267,32 @@
   .active-tab-color {
     background-color: #ECEFF1;
     color: #000000;
+  }
+
+  /* Multiselect component size override */
+  .specimen >>> .multiselect {
+    min-height: 31px;
+    height: 31px;
+  }
+
+  .specimen >>> .multiselect__tags {
+    min-height: 31px;
+    height: 31px;
+    padding: 4px 40px 4px 8px;
+  }
+
+  .specimen >>> .multiselect__select {
+    min-height: 29px;
+    height: 29px;
+  }
+
+  .specimen >>> .multiselect__single {
+    padding: 0;
+    margin-bottom: 0;
+  }
+
+  .specimen >>> .multiselect__placeholder {
+    padding: 0;
+    margin-bottom: 0;
   }
 </style>
