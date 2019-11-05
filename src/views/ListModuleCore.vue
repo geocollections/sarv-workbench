@@ -139,6 +139,7 @@
         :search-parameters="searchParameters"
         :is-library-active="isLibraryActive"
         :is-selection-series-active="isSelectionSeriesActive"
+        :active-selection-series="activeSelectionSeries"
         v-if="(module === 'reference' || 'specimen' ||'collection' || 'taxon' || 'selectionSeries' || 'sample') && isTableView"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:add-reference-to-active-library="

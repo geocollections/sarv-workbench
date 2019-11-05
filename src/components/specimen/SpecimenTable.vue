@@ -13,6 +13,7 @@
     @item-selected="$emit('add-item-to-selection-series', $event, 'specimen')"
     @toggle-select-all="$emit('toggle-select-all', $event, 'specimen')"
     expand-icon="fas fa-caret-down"
+    :value="selected"
   >
     <template v-slot:item.id="{ item }">
       <router-link
@@ -183,6 +184,9 @@ export default {
     },
     isSelectionSeriesActive: {
       type: Boolean
+    },
+    activeSelectionSeries: {
+      type: Object
     }
   },
   data: () => ({
@@ -198,7 +202,9 @@ export default {
       { text: "", value: "link", sortable: false },
       { text: "", value: "selection_series", sortable: false }
     ],
-    names: []
+    names: [],
+    // Todo: Get all item from active selection series
+    selected: []
   }),
   computed: {
     translatedHeaders() {

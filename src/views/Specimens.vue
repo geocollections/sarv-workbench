@@ -41,7 +41,7 @@ import ListModuleCore from "./ListModuleCore";
 import { mapState } from "vuex";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
-import {fetchSpecimenImages, fetchSpecimens} from "../assets/js/api/apiCalls";
+import { fetchSpecimenImages, fetchSpecimens } from "../assets/js/api/apiCalls";
 
 export default {
   components: {
@@ -154,7 +154,11 @@ export default {
   methods: {
     fetchSpecimens() {
       return new Promise(resolve => {
-        resolve(this.searchImages ? fetchSpecimenImages(this.searchParameters, this.databaseId) : fetchSpecimens(this.searchParameters, this.databaseId));
+        resolve(
+          this.searchImages
+            ? fetchSpecimenImages(this.searchParameters, this.databaseId)
+            : fetchSpecimens(this.searchParameters, this.databaseId)
+        );
       });
     },
     searchParametersChanged(newParams) {
