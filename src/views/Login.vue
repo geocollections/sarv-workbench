@@ -12,6 +12,8 @@
               dark
               grow
               background-color="blue-grey"
+              hide-slider
+              active-class="active-tab-color"
             >
               <v-tabs-slider></v-tabs-slider>
 
@@ -130,6 +132,7 @@
 <script>
 import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
+import {mapState} from "vuex";
 
 export default {
   name: "Login",
@@ -195,5 +198,10 @@ export default {
     ),
     url("https://files.geocollections.info/img/doi-header-bg.jpg");
   background-size: cover;
+}
+
+.active-tab-color {
+  background-color: #ECEFF1;
+  color: #37474F !important;
 }
 </style>
