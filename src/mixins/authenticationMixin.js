@@ -105,7 +105,11 @@ const authenticationMixin = {
           );
           this.$localStorage.set("authUser", response.body);
 
-          this.$router.push({ path: "/dashboard" });
+          if (this.$route.query.from) {
+            this.$router.push({ path: this.$route.query.from });
+          } else {
+            this.$router.push({ path: "/dashboard" });
+          }
           toastSuccessMessage(response, this.$i18n.locale);
         } else {
           if (authenticationType === "password") {

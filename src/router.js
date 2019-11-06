@@ -1295,10 +1295,12 @@ router.beforeEach(async (to, from, next) => {
     x: document.documentElement.scrollLeft,
     y: document.documentElement.scrollTop
   };
-  // console.log('--- FROM ---')
-  // console.log(from)
-  // console.log('--- TO ---')
-  // console.log(to)
+  // console.log('--- FROM ---');
+  // console.log(from);
+  // console.log('--- TO ---');
+  // console.log(to);
+
+  const loginPath = window.location.pathname;
 
   const loginStateResponse = await fetchIsLoggedIn().then(
     response => response,
@@ -1333,8 +1335,9 @@ router.beforeEach(async (to, from, next) => {
         });
       }
     }
+    console.log(to.meta.requiresAuth)
 
-    if (to.meta.requiresAuth) next({ path: "/" });
+    if (to.meta.requiresAuth) next({ path: "/", query: { from: loginPath } });
     else next();
   }
 });
