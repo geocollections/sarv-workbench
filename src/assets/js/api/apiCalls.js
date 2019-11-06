@@ -1211,7 +1211,7 @@ export function fetchInstruments() {
 
 export function fetchAnalyses(data, agent, databaseId) {
   const fields =
-    "id,sample__id,sample__number,sample__locality__locality,sample__depth,analysis_method__analysis_method," +
+    "id,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,analysis_method__analysis_method," +
     "date,lab_txt,agent__agent,is_private";
   let searchFields = "";
 

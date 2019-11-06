@@ -117,7 +117,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .taxon-table.v-data-table td,
 .taxon-table.v-data-table th {
   padding: 0 8px;
