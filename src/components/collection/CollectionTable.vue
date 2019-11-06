@@ -2,9 +2,9 @@
   <v-data-table
     class="collection-table"
     :headers="translatedHeaders"
-    dense
     hide-default-footer
     :items="response.results"
+    dense
     :items-per-page="searchParameters.paginateBy"
     multi-sort
     :page="searchParameters.page"
@@ -104,7 +104,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .collection-table.v-data-table td,
 .collection-table.v-data-table th {
   padding: 0 8px;

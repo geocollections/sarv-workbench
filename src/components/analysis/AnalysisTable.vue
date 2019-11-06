@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    class="taxon-table"
+    class="analysis-table"
     :headers="translatedHeaders"
     dense
     hide-default-footer
@@ -12,14 +12,22 @@
     expand-icon="fas fa-caret-down"
   >
     <template v-slot:item.id="{ item }">
-      <router-link :to="{ path: '/analysis/' + item.id }" :title="$t('editAnalysis.editMessage')" class="sarv-link">
+      <router-link
+        :to="{ path: '/analysis/' + item.id }"
+        :title="$t('editAnalysis.editMessage')"
+        class="sarv-link"
+      >
         {{ item.id }}
       </router-link>
     </template>
 
     <template v-slot:item.sample="{ item }">
-      <router-link :to="{ path: '/sample/' + item.sample }" :title="$t('editSample.editMessage')" class="sarv-link">
-        {{ item.sample}}
+      <router-link
+        :to="{ path: '/sample/' + item.sample }"
+        :title="$t('editSample.editMessage')"
+        class="sarv-link"
+      >
+        {{ item.sample }}
       </router-link>
     </template>
 
@@ -55,64 +63,70 @@
 </template>
 
 <script>
-  export default {
-    name: "AnalysisTable",
-    props: {
-      response: {
-        type: Object
-      },
-      filter: {
-        type: String,
-        required: false
-      },
-      searchParameters: {
-        type: Object,
-        required: true,
-        default: function() {
-          return {
-            page: 1,
-            paginateBy: 25
-          };
-        }
-      }
+export default {
+  name: "AnalysisTable",
+  props: {
+    response: {
+      type: Object
     },
-    data: () => ({
-      expanded: [],
-      headers: [
-        { text: "analysis.id", value: "id" },
-        { text: "analysis.sample__id", value: "sample" },
-        { text: "analysis.sample__number", value: "sample__number" },
-        { text: "analysis.sample__locality", value: "sample__locality__locality" },
-        { text: "analysis.sample__depth", value: "sample__depth" },
-        { text: "analysis.analysis_method", value: "analysis_method__analysis_method" },
-        { text: "analysis.date_", value: "date" },
-        { text: "analysis.labor_txt", value: "lab_txt" },
-        { text: "analysis.agent", value: "agent__agent" },
-        { text: "", value: "link", sortable: false }
-      ],
-      names: []
-    }),
-    computed: {
-      translatedHeaders() {
-        return this.headers.map(header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        });
-      }
+    filter: {
+      type: String,
+      required: false
     },
-    methods: {
-      getGeoDetailUrl(params) {
-        return `https://geocollections.info/${params.object}/${params.id}`;
+    searchParameters: {
+      type: Object,
+      required: true,
+      default: function() {
+        return {
+          page: 1,
+          paginateBy: 25
+        };
+      }
+    }
+  },
+  data: () => ({
+    expanded: [],
+    headers: [
+      { text: "analysis.id", value: "id" },
+      { text: "analysis.sample__id", value: "sample" },
+      { text: "analysis.sample__number", value: "sample__number" },
+      {
+        text: "analysis.sample__locality",
+        value: "sample__locality__locality"
       },
+      { text: "analysis.sample__depth", value: "sample__depth" },
+      {
+        text: "analysis.analysis_method",
+        value: "analysis_method__analysis_method"
+      },
+      { text: "analysis.date_", value: "date" },
+      { text: "analysis.labor_txt", value: "lab_txt" },
+      { text: "analysis.agent", value: "agent__agent" },
+      { text: "", value: "link", sortable: false }
+    ],
+    names: []
+  }),
+  computed: {
+    translatedHeaders() {
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
+    }
+  },
+  methods: {
+    getGeoDetailUrl(params) {
+      return `https://geocollections.info/${params.object}/${params.id}`;
     }
   }
+};
 </script>
 
 <style>
-  .analysis-table.v-data-table td,
-  .analysis-table.v-data-table th {
-    padding: 0 8px;
-  }
+.analysis-table.v-data-table td,
+.analysis-table.v-data-table th {
+  padding: 0 8px;
+}
 </style>

@@ -406,7 +406,8 @@
   },
   "editAnalysis": {
     "heading": "Analüüs",
-    "editMessage": "Muuda analüüsi"
+    "editMessage": "Muuda analüüsi",
+    "viewMessage": "Vaata analüüsi geokogude portaalis"
   },
   "editProject": {
     "heading": "Projekt",
@@ -419,13 +420,7 @@
   "editLocality": {
     "heading": "Lokaliteet",
     "editMessage": "Muuda lokaliteeti",
-    "viewMessage": "Vaata lokaliteeti geokogude portaalis",
-    "id": "ID",
-    "locality": "Lokaliteet",
-    "number": "Number",
-    "county": "Küla:asutusüksus",
-    "country": "Riik:value",
-    "agent": "Sisestaja"
+    "viewMessage": "Vaata lokaliteeti geokogude portaalis"
   },
   "editSample": {
     "heading": "Proov",
@@ -439,7 +434,7 @@
   },
   "editDoi": {
     "heading": "DOI",
-    "viewMessage": "Vaata DOI-d geokogude portaalis",
+    "viewMessage": "Vaata DOI-d",
     "editMessage": "Muuda DOI-d"
   },
   "editAttachment": {
@@ -1220,6 +1215,8 @@
     }
   },
   "locality": {
+    "id": "ID",
+    "agent": "Sisestaja",
     "header": "Minu lokaliteedid",
     "locality": "Lokaliteet",
     "locality_en": "Lokaliteet ingl. k.",
@@ -1240,6 +1237,8 @@
     "coord_det_agent": "Koord. määraja",
     "country": "Riik",
     "county": "Maakond",
+    "county_search": "Küla:asutusüksus",
+    "country_search": "Riik:value",
     "parish": "Vald",
     "area": "Küla",
     "stratigraphy_top": "Strat. ülemine",

@@ -406,7 +406,8 @@
   },
   "editAnalysis": {
     "heading": "Analysis",
-    "editMessage": "Edit analysis"
+    "editMessage": "Edit analysis",
+    "viewMessage": "View analysis in geocollections portal"
   },
   "editProject": {
     "heading": "Project ID",
@@ -419,13 +420,7 @@
   "editLocality": {
     "heading": "Locality ID",
     "editMessage": "Edit locality",
-    "viewMessage": "View locality in geocollections portal",
-    "id": "ID",
-    "locality": "Locality",
-    "number": "Number",
-    "county": "County",
-    "country": "Country",
-    "agent": "Creator"
+    "viewMessage": "View locality in geocollections portal"
   },
   "editSample": {
     "heading": "Sample ID",
@@ -439,7 +434,7 @@
   },
   "editDoi": {
     "heading": "Doi ID",
-    "viewMessage": "View DOI in geocollections portal",
+    "viewMessage": "View DOI",
     "editMessage": "Edit DOI"
   },
   "editAttachment": {
@@ -1220,6 +1215,8 @@
     }
   },
   "locality": {
+    "id": "ID",
+    "agent": "Creator",
     "header": "My localities",
     "locality": "Locality (Est)",
     "locality_en": "Locality",
@@ -1240,6 +1237,8 @@
     "coord_det_agent": "Coord. assigner",
     "country": "Country",
     "county": "County",
+    "county_search": "County",
+    "country_search": "Country",
     "parish": "Parish",
     "area": "Aria",
     "stratigraphy_top": "Strat. top",

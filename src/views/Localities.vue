@@ -40,18 +40,18 @@ export default {
     return {
       response: {},
       columns: [
-        { id: "id", title: "editLocality.id", type: "number" },
-        { id: "locality", title: "editLocality.locality", type: "text" },
-        { id: "number", title: "editLocality.number", type: "text" },
-        { id: "country", title: "editLocality.country", type: "text" },
-        { id: "agent", title: "editLocality.agent", type: "text" }
+        { id: "id", title: "locality.id", type: "number" },
+        { id: "locality", title: "locality.locality", type: "text" },
+        { id: "number", title: "locality.number", type: "text" },
+        { id: "country", title: "locality.country", type: "text" },
+        { id: "agent", title: "locality.agent", type: "text" }
       ],
       filters: [
-        { id: "id", title: "editLocality.id", type: "number" },
-        { id: "locality", title: "editLocality.locality", type: "text" },
-        { id: "number", title: "editLocality.number", type: "text" },
-        { id: "country", title: "editLocality.country", type: "text" },
-        { id: "agent", title: "editLocality.agent", type: "text" }
+        { id: "id", title: "locality.id", type: "number" },
+        { id: "locality", title: "locality.locality", type: "text" },
+        { id: "number", title: "locality.number", type: "text" },
+        { id: "country", title: "locality.country", type: "text" },
+        { id: "agent", title: "locality.agent", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }

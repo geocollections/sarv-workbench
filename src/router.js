@@ -1051,7 +1051,7 @@ const router = new Router({
                 title: "titles.editKeyword",
                 heading: "editKeyword.heading",
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "keyword"
@@ -1118,7 +1118,7 @@ const router = new Router({
                 title: "titles.editCollection",
                 heading: "editCollection.heading",
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "collection"
@@ -1185,7 +1185,7 @@ const router = new Router({
                 title: "titles.editTaxon",
                 heading: "editTaxon.heading",
                 isBottomOptionShown: true,
-                isNavigationShown: false,
+                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "taxon"

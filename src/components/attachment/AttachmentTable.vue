@@ -1,115 +1,218 @@
 <template>
-  <tbody v-if="response.count > 0">
-  <tr v-for="(entity, index) in response.results" :key="index">
+  <v-data-table
+    class="attachment-table"
+    :headers="translatedHeaders"
+    hide-default-footer
+    dense
+    :items="response.results"
+    :items-per-page="searchParameters.paginateBy"
+    multi-sort
+    :page="searchParameters.page"
+    :search="filter"
+    expand-icon="fas fa-caret-down"
+  >
+    <template v-slot:item.uuid_filename="{ item }">
+      <router-link
+        v-if="item.uuid_filename"
+        :title="$t('edit.editMessage')"
+        :to="{ path: '/attachment/' + item.id }"
+      >
+        <v-img
+          v-if="!!item.attachment_format__value.includes('image')"
+          :src="getFileUrl(item.uuid_filename, 'small')"
+          :lazy-src="getFileUrl(item.uuid_filename, 'small')"
+          class="grey lighten-2 attachment-table-image-preview my-1"
+        >
+          <template v-slot:placeholder>
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+            >
+              <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+              ></v-progress-circular>
+            </v-row>
+          </template>
+        </v-img>
 
-    <td class="text-center">
-      <router-link v-if="entity.uuid_filename !== null" :title="$t('edit.editMessage')"
-                   :to="{ path: '/attachment/' + entity.id }">
-        <img class="image-preview"
-             v-if="entity.uuid_filename.endsWith('jpg') || entity.uuid_filename.endsWith('jpeg') || entity.uuid_filename.endsWith('png')"
-             :src="composeFileUrl(entity.uuid_filename)"/>
-        <i v-else class="far fa-file fa-3x" ></i>
+        <v-icon v-else class="my-1" style="font-size: 3rem">far fa-file</v-icon>
       </router-link>
 
-      <router-link :title="$t('edit.editMessage')" :to="{ path: '/attachment/' + entity.id }">
-        <font-awesome-icon v-if="entity.uuid_filename === null" size="3x" :icon="file"/>
+      <router-link
+        v-else
+        :title="$t('edit.editMessage')"
+        :to="{ path: '/attachment/' + item.id }"
+      >
+        <v-icon class="my-1" style="font-size: 3rem">far fa-file</v-icon>
       </router-link>
-    </td>
+    </template>
 
-    <td>
-      <router-link :to="{ path: '/attachment/' + entity.id }" :title="$t('edit.editMessage')">{{ entity.id }}
+    <template v-slot:item.id="{ item }">
+      <router-link
+        :to="{ path: '/attachment/' + item.id }"
+        :title="$t('edit.editMessage')"
+        class="sarv-link"
+      >
+        {{ item.id }}
       </router-link>
-    </td>
+    </template>
 
-    <td>{{ entity.uuid_filename.split('.')[1] }}</td>
+    <template v-slot:item.author__agent="{ item }">
+      <span v-if="item.author__agent">{{ item.author__agent }}</span>
+      <span v-else>{{ item.author_free }}</span>
+    </template>
 
-    <td>{{ entity.image_number }}</td>
+    <template v-slot:item.date_created="{ item }">
+      <span v-if="item.date_created">{{
+        item.date_created | moment("ddd, MMM Do YYYY")
+      }}</span>
+      <span v-else>{{ item.date_created_free }}</span>
+    </template>
 
-    <td>
-      <span v-if="entity.author__agent">{{ entity.author__agent }}</span>
-      <span v-else>{{ entity.author_free }}</span>
-    </td>
-
-    <td>
-      <span v-if="entity.date_created !== null">{{ entity.date_created | moment('ddd, MMM Do YYYY') }}</span>
-      <span
-        v-if="entity.date_created === null && entity.date_created_free !== null">{{ entity.date_created_free }}</span>
-    </td>
-
-    <!-- TODO: ShowSpecimen only when specimens exist same goes to table head in list module core -->
-<!--    <td v-if="showSpecimen">-->
-    <td>
-      <router-link :to="{ path: '/specimen/' + entity.specimen }" :title="$t('edit.editMessage')">
-        {{ entity.specimen }}
+    <template v-slot:item.specimen="{ item }">
+      <router-link
+        :to="{ path: '/specimen/' + item.specimen }"
+        :title="$t('editSpecimen.editMessage')"
+        class="sarv-link"
+      >
+        {{ item.specimen }}
       </router-link>
-<!--      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'specimen', id: entity.specimen})">-->
-<!--        &lt;!&ndash; TODO: Get specimen name &ndash;&gt;-->
-<!--        {{ entity.specimen }}-->
-<!--      </a>-->
-    </td>
+    </template>
 
-    <!-- TODO: ShowReference only when references exist same goes to table head in list module core -->
-<!--    <td v-if="showReference">-->
-    <td>
-      <router-link :to="{ path: '/reference/' + entity.reference_id }" :title="$t('edit.editMessage')">
-        {{ entity.reference__reference }}
+    <template v-slot:item.reference__reference="{ item }">
+      <router-link
+        :to="{ path: '/reference/' + item.reference_id }"
+        :title="$t('editReference.editMessage')"
+        class="sarv-link"
+      >
+        {{ item.reference__reference }}
       </router-link>
-<!--      <a href="javascript:void(0)" @click="openGeoInNewWindow({object: 'reference', id: entity.reference_id})">-->
-<!--        {{ entity.reference__reference }}-->
-<!--      </a>-->
-    </td>
+    </template>
 
-    <td>
-      <span v-if="entity.specimen_image_attachment === 1">{{ $t('attachment.specimenFile') }}</span>
-      <span v-if="entity.specimen_image_attachment === 2">{{ $t('attachment.photoArchiveFile') }}</span>
-      <span v-if="entity.specimen_image_attachment === 3">{{ $t('attachment.otherFile') }}</span>
-      <span v-if="entity.specimen_image_attachment === 4">{{ $t('attachment.digitisedReferenceFile') }}</span>
-    </td>
+    <template v-slot:item.specimen_image_attachment="{ item }">
+      <span v-if="item.specimen_image_attachment === 1">{{
+        $t("attachment.specimenFile")
+      }}</span>
+      <span v-if="item.specimen_image_attachment === 2">{{
+        $t("attachment.photoArchiveFile")
+      }}</span>
+      <span v-if="item.specimen_image_attachment === 3">{{
+        $t("attachment.otherFile")
+      }}</span>
+      <span v-if="item.specimen_image_attachment === 4">{{
+        $t("attachment.digitisedReferenceFile")
+      }}</span>
+    </template>
 
-    <td style="vertical-align: middle;">
+    <template v-slot:item.is_private="{ item }">
       <v-checkbox
-        id="is_private"
-        v-model="entity.is_private"
-        @change="$emit('toggle-privacy-state', entity.is_private, entity.id)"
         hide-details
-        class="mt-0 justify-center"
+        class="mt-0"
+        v-model="item.is_private"
+        @change="$emit('toggle-privacy-state', item.is_private, item.id)"
       ></v-checkbox>
-    </td>
+    </template>
 
-    <td>
-      <a href="javascript:void(0)" v-if="!entity.is_private" @click="openGeoInNewWindow({object: 'file', id: entity.id})"
-         :title="$t('edit.viewMessage')">{{ $t('edit.view') }}</a>
-    </td>
-  </tr>
-  </tbody>
+    <template v-slot:item.link="{ item }">
+      <v-btn
+        v-if="!item.is_private"
+        :href="getGeoDetailUrl({ object: 'file', id: item.id })"
+        :title="$t('editAttachment.viewMessage')"
+        color="deep-orange"
+        target="GeocollectionsWindow"
+        icon
+      >
+        <v-icon>far fa-eye</v-icon>
+      </v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-  import formManipulation from "../../mixins/formManipulation";
-
-  export default {
-    mixins: [formManipulation],
-    name: "AttachmentTable",
-    props: {
-      response: {
-        type: Object
-      },
+export default {
+  name: "AttachmentTable",
+  props: {
+    response: {
+      type: Object
+    },
+    filter: {
+      type: String,
+      required: false
+    },
+    searchParameters: {
+      type: Object,
+      required: true,
+      default: function() {
+        return {
+          page: 1,
+          paginateBy: 25
+        };
+      }
     }
+  },
+  data: () => ({
+    expanded: [],
+    headers: [
+      { text: "attachment.file", value: "uuid_filename", align: "center" },
+      { text: "attachment.id", value: "id" },
+      { text: "attachment.format", value: "attachment_format__value" },
+      { text: "attachment.imageNumber_short", value: "image_number" },
+      { text: "attachment.author", value: "author__agent" },
+      { text: "attachment.date", value: "date_created" },
+      { text: "attachment.specimen_short", value: "specimen" },
+      { text: "attachment.reference", value: "reference__reference" },
+      {
+        text: "attachment.specimenImageAttachment",
+        value: "specimen_image_attachment"
+      },
+      { text: "attachment.is_private_text_short", value: "is_private" },
+      { text: "", value: "link", sortable: false }
+    ],
+    names: []
+  }),
+  computed: {
+    translatedHeaders() {
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
+    }
+  },
+  methods: {
+    getGeoDetailUrl(params) {
+      return `https://geocollections.info/${params.object}/${params.id}`;
+    },
+
+    getFileUrl(uuid, size = null) {
+      if (size) {
+        return `https://files.geocollections.info/${size}/${uuid.substring(
+          0,
+          2
+        )}/${uuid.substring(2, 4)}/${uuid}`;
+      } else {
+        return `https://files.geocollections.info/${uuid.substring(
+          0,
+          2
+        )}/${uuid.substring(2, 4)}/${uuid}`;
+      }
+    },
   }
+};
 </script>
 
-<style scoped>
-  .image-preview {
-    max-height: 200px;
-    max-width: 200px;
-    padding: 0.25rem;
-    background-color: #fff;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-  }
+<style>
+.attachment-table.v-data-table td,
+.attachment-table.v-data-table th {
+  padding: 0 8px;
+}
 
-  .middle {
-    text-align: center;
-    vertical-align: middle;
-  }
+.attachment-table-image-preview {
+  max-height: 200px;
+  max-width: 200px;
+  border-radius: 0.25rem;
+}
 </style>

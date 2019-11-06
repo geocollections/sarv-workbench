@@ -1057,7 +1057,7 @@ export function fetchActiveProjects(projectIds) {
 
 export function fetchSites(data) {
   let fields =
-    "id, project, project__name, locality, locality__locality, name, name_en, number," +
+    "id,project,project__name,project__name_en,locality,locality__locality,name,name_en,number," +
     "latitude,longitude,location_accuracy,elevation,elevation_accuracy," +
     "coord_det_method__value,coord_det_method__value_en, date_start,date_end,date_free,remarks_location," +
     "description,remarks";

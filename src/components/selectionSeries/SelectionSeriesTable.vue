@@ -67,4 +67,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.selectionSeries-table.v-data-table td,
+.selectionSeries-table.v-data-table th {
+  padding: 0 8px;
+}
+</style>

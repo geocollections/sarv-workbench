@@ -1,65 +1,119 @@
 <template>
-  <tbody v-if="response.count > 0">
-  <tr v-for="entity in response.results">
-
-    <td>
-      <router-link :to="{ path: '/library/' + entity.library }" :title="$t('editLibrary.editMessage')">
-        {{ entity.library }}
+  <v-data-table
+    class="library-table"
+    :headers="translatedHeaders"
+    hide-default-footer
+    :items="response.results"
+    :items-per-page="searchParameters.paginateBy"
+    multi-sort
+    :page="searchParameters.page"
+    :search="filter"
+    expand-icon="fas fa-caret-down"
+  >
+    <template v-slot:item.library="{ item }">
+      <router-link
+        :to="{ path: '/library/' + item.library }"
+        :title="$t('editLibrary.editMessage')"
+        class="sarv-link"
+      >
+        {{ item.library }}
       </router-link>
-    </td>
+    </template>
 
-    <td>
-      <router-link :to="{ path: '/library/' + entity.library }" :title="$t('editLibrary.editMessage')">
-        {{ entity.library__title }}
+    <template v-slot:item.library__title="{ item }">
+      <router-link
+        :to="{ path: '/library/' + item.library }"
+        :title="$t('editLibrary.editMessage')"
+        class="sarv-link"
+      >
+        {{ item.library__title }}
       </router-link>
-    </td>
+    </template>
 
-    <td>{{ entity.agent__agent }}</td>
+    <template v-slot:item.library__is_private="{ item }">
+      <v-checkbox
+        hide-details
+        class="mt-0"
+        v-model="item.library__is_private"
+        @change="
+          $emit(
+            'toggle-privacy-state',
+            item.library__is_private,
+            item.library
+          )
+        "
+      ></v-checkbox>
+    </template>
 
-    <td class="middle">
-<!--      <b-form-checkbox-->
-<!--        id="is_private"-->
-<!--        v-model="entity.library__is_private"-->
-<!--        @change="handlePrivateState"-->
-<!--        :value="0"-->
-<!--        :unchecked-value="1">-->
-<!--      </b-form-checkbox>-->
-
-
-      <vs-checkbox id="is_private"
-                   v-model="entity.library__is_private"
-                   @input="$emit('toggle-privacy-state', entity.library__is_private, entity.library)"
-                   icon="fa-lock"
-                   icon-pack="fas">
-      </vs-checkbox>
-    </td>
-
-    <td>
-      <a href="javascript:void(0)" v-if="!entity.library__is_private" @click="openGeoInNewWindow({object: 'library', id: entity.library})"
-         :title="$t('editLibrary.viewMessage')">{{ $t('edit.view') }}</a>
-    </td>
-
-  </tr>
-  </tbody>
+    <template v-slot:item.link="{ item }">
+      <v-btn
+        v-if="!item.is_private"
+        :href="getGeoDetailUrl({ object: 'library', id: item.library })"
+        :title="$t('editLibrary.viewMessage')"
+        color="deep-orange"
+        target="GeocollectionsWindow"
+        icon
+      >
+        <v-icon>far fa-eye</v-icon>
+      </v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-  import formManipulation from '../../mixins/formManipulation'
-
-  export default {
-    mixins: [formManipulation],
-    name: "LibraryTable",
-    props: {
-      response: {
-        type: Object
-      },
+export default {
+  name: "LibraryTable",
+  props: {
+    response: {
+      type: Object
     },
+    filter: {
+      type: String,
+      required: false
+    },
+    searchParameters: {
+      type: Object,
+      required: true,
+      default: function() {
+        return {
+          page: 1,
+          paginateBy: 25
+        };
+      }
+    }
+  },
+  data: () => ({
+    expanded: [],
+    headers: [
+      { text: "library.id", value: "library" },
+      { text: "library.title", value: "library__title" },
+      { text: "library.author_txt", value: "agent__agent" },
+      { text: "library.private", value: "library__is_private" },
+      { text: "", value: "link", sortable: false }
+    ],
+    names: []
+  }),
+  computed: {
+    translatedHeaders() {
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
+    }
+  },
+  methods: {
+    getGeoDetailUrl(params) {
+      return `https://geocollections.info/${params.object}/${params.id}`;
+    }
   }
+};
 </script>
 
-<style scoped>
-  .middle {
-    text-align: center;
-    vertical-align: middle;
-  }
+<style>
+.library-table.v-data-table td,
+.library-table.v-data-table th {
+  padding: 0 8px;
+}
 </style>
