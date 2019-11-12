@@ -17,7 +17,7 @@ jobs:
             - "da:37:31:66:0f:b9:99:16:61:2a:af:0b:ec:e2:95:d5"
       - run:
           name: Directory update
-          command: ssh -p 5522 deploy@193.40.102.19 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
+          command: ssh -o "StrictHostKeyChecking no" -p 5522 deploy@193.40.102.19 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
       - run:
           name: Build production code
           command: npm run build
