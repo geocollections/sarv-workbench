@@ -1,2 +1,1 @@
-#!/usr/bash
 echo "TEST"
