@@ -132,7 +132,7 @@
 <script>
 import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "Login",
@@ -201,7 +201,7 @@ export default {
 }
 
 .active-tab-color {
-  background-color: #ECEFF1;
-  color: #37474F !important;
+  background-color: #eceff1;
+  color: #37474f !important;
 }
 </style>

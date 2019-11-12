@@ -1397,7 +1397,8 @@ export function fetchSpecimens(data, databaseId) {
 }
 
 export function fetchSpecimenImages(data, databaseId) {
-  const fields = "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__database__acronym";
+  const fields =
+    "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__database__acronym";
   let searchFields = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
@@ -1488,7 +1489,10 @@ export function fetchSpecimenIdentifications(specimenId, searchParameters) {
   }
 }
 
-export function fetchSpecimenIdentificationGeologies(specimenId, searchParameters) {
+export function fetchSpecimenIdentificationGeologies(
+  specimenId,
+  searchParameters
+) {
   if (searchParameters) {
     return fetch(
       `specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
@@ -1570,7 +1574,8 @@ export function fetchRecentSpecimens(currentUserId) {
  ************************/
 
 export function fetchCollections(data, databaseId) {
-  const fields = "id,collection_id,number,name,name_en,name_long,name_long_en,database__acronym";
+  const fields =
+    "id,collection_id,number,name,name_en,name_long,name_long_en,database__acronym";
   let searchFields = "";
 
   if (data.id && data.id.trim().length > 0) {
@@ -1594,7 +1599,7 @@ export function fetchCollections(data, databaseId) {
   }
 
   if (data.reference && data.reference.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.reference};fields:reference__id,reference__reference;lookuptype:icontains`
+    searchFields += `&multi_search=value:${data.reference};fields:reference__id,reference__reference;lookuptype:icontains`;
   }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
@@ -1608,7 +1613,9 @@ export function fetchCollections(data, databaseId) {
       `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(`collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`);
+    return fetch(
+      `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
   }
 }
 
@@ -1629,7 +1636,8 @@ export function fetchListCollectionType() {
  *******************/
 
 export function fetchTaxa(data) {
-  const fields = "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
+  const fields =
+    "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
   let searchFields = "";
 
   if (data.id && data.id.trim().length > 0) {
@@ -1663,7 +1671,9 @@ export function fetchTaxa(data) {
       `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(`taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`);
+    return fetch(
+      `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+    );
   }
 }
 
@@ -1677,39 +1687,57 @@ export function fetchTaxonRank() {
 
 export function fetchTaxonSubclass(taxonId, searchParameters) {
   let fields = "id,taxon,parent_id,parent__taxon,author_year,remarks";
-  return fetch(`taxon/?parent_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=${fields}&format=json`);
+  return fetch(
+    `taxon/?parent_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=${fields}&format=json`
+  );
 }
 
 export function fetchTaxonSynonym(taxonId, searchParameters) {
-  return fetch(`taxon_synonym/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_synonym/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonTypeSpecimen(taxonId, searchParameters) {
-  return fetch(`taxon_type_specimen/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_type_specimen/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonOccurrence(taxonId, searchParameters) {
-  return fetch(`taxon_occurrence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_occurrence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonOpinion(taxonId, searchParameters) {
-  return fetch(`taxon_opinion/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_opinion/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonCommonName(taxonId, searchParameters) {
-  return fetch(`taxon_common_name/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_common_name/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonDescription(taxonId, searchParameters) {
-  return fetch(`taxon_description/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_description/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonPage(taxonId, searchParameters) {
-  return fetch(`taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonImage(taxonId, searchParameters) {
-  return fetch(`taxon_image/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return fetch(
+    `taxon_image/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchTaxonTypeType() {
@@ -1800,7 +1828,6 @@ export function fetchAgentUsingName(name) {
  ***  AGENT END  ***
  *******************/
 
-
 /******************************
  *** SELECTION SERIES START ***
  ******************************/
@@ -1843,7 +1870,6 @@ export function fetchSelectionSerie(id) {
  ***  SELECTION SERIES END  ***
  ******************************/
 
-
 /***********************
  *** SELECTION START ***
  ***********************/
@@ -1855,7 +1881,6 @@ export function fetchAddItemToSelection(data) {
 /***********************
  ***  SELECTION END  ***
  ***********************/
-
 
 /***********************
  *** UNIVERSAL START ***

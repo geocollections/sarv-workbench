@@ -81,17 +81,21 @@
 
               <!-- EDIT MODE -->
               <td v-if="entity.editMode">
-                <vue-multiselect v-model="entity.new.type_type"
-                                 id="type"
-                                 :options="autocomplete.taxon_type_type"
-                                 track-by="id"
-                                 :label="commonLabel"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="entity.new.type_type"
+                  id="type"
+                  :options="autocomplete.taxon_type_type"
+                  track-by="id"
+                  :label="commonLabel"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[commonLabel] }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
@@ -100,86 +104,105 @@
               </td>
 
               <td v-if="entity.editMode">
-                <vue-multiselect v-model="entity.new.specimen"
-                                 id="specimen"
-                                 label="specimen_id"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.specimen"
-                                 :options="autocomplete.specimen"
-                                 @search-change="autocompleteSpecimenSearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="entity.new.specimen"
+                  id="specimen"
+                  label="specimen_id"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.specimen"
+                  :options="autocomplete.specimen"
+                  @search-change="autocompleteSpecimenSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.specimen_id }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
               <td v-if="entity.editMode">
-                <b-form-input v-model="entity.new.specimen_number" type="text" />
+                <b-form-input
+                  v-model="entity.new.specimen_number"
+                  type="text"
+                />
               </td>
 
               <td v-if="entity.editMode">
-                <vue-multiselect v-model="entity.new.reference"
-                                 id="reference"
-                                 label="reference"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.reference"
-                                 :options="autocomplete.reference"
-                                 @search-change="autocompleteReferenceSearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="entity.new.reference"
+                  id="reference"
+                  label="reference"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.reference"
+                  :options="autocomplete.reference"
+                  @search-change="autocompleteReferenceSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.reference }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
               <td v-if="entity.editMode">
-                <vue-multiselect v-model="entity.new.locality"
-                                 id="locality"
-                                 :label="localityLabel"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.locality"
-                                 :options="autocomplete.locality"
-                                 @search-change="autocompleteLocalitySearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="entity.new.locality"
+                  id="locality"
+                  :label="localityLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.locality"
+                  :options="autocomplete.locality"
+                  @search-change="autocompleteLocalitySearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[localityLabel] }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
               <td v-if="entity.editMode">
-                <vue-multiselect v-model="entity.new.stratigraphy"
-                                 id="stratigraphy"
-                                 :label="stratigraphyLabel"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.stratigraphy"
-                                 :options="autocomplete.stratigraphy"
-                                 @search-change="autocompleteStratigraphySearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="entity.new.stratigraphy"
+                  id="stratigraphy"
+                  :label="stratigraphyLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.stratigraphy"
+                  :options="autocomplete.stratigraphy"
+                  @search-change="autocompleteStratigraphySearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[stratigraphyLabel] }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
@@ -215,17 +238,21 @@
             <!-- INSERT MODE -->
             <tr class="related-input-data">
               <td>
-                <vue-multiselect v-model="relatedData.insert.taxon_type_specimen.type_type"
-                                 id="type_insert"
-                                 :options="autocomplete.taxon_type_type"
-                                 track-by="id"
-                                 :label="commonLabel"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="relatedData.insert.taxon_type_specimen.type_type"
+                  id="type_insert"
+                  :options="autocomplete.taxon_type_type"
+                  track-by="id"
+                  :label="commonLabel"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[commonLabel] }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
@@ -237,89 +264,107 @@
               </td>
 
               <td>
-                <vue-multiselect v-model="relatedData.insert.taxon_type_specimen.specimen"
-                                 id="specimen_insert"
-                                 label="specimen_id"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.specimen"
-                                 :options="autocomplete.specimen"
-                                 @search-change="autocompleteSpecimenSearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="relatedData.insert.taxon_type_specimen.specimen"
+                  id="specimen_insert"
+                  label="specimen_id"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.specimen"
+                  :options="autocomplete.specimen"
+                  @search-change="autocompleteSpecimenSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.specimen_id }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
               <td>
                 <b-form-input
-                  v-model="relatedData.insert.taxon_type_specimen.specimen_number"
+                  v-model="
+                    relatedData.insert.taxon_type_specimen.specimen_number
+                  "
                   type="text"
                 />
               </td>
 
               <td>
-                <vue-multiselect v-model="relatedData.insert.taxon_type_specimen.reference"
-                                 id="reference_insert"
-                                 label="reference"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.reference"
-                                 :options="autocomplete.reference"
-                                 @search-change="autocompleteReferenceSearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="relatedData.insert.taxon_type_specimen.reference"
+                  id="reference_insert"
+                  label="reference"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.reference"
+                  :options="autocomplete.reference"
+                  @search-change="autocompleteReferenceSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.reference }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
               <td>
-                <vue-multiselect v-model="relatedData.insert.taxon_type_specimen.locality"
-                                 id="locality_insert"
-                                 :label="localityLabel"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.locality"
-                                 :options="autocomplete.locality"
-                                 @search-change="autocompleteLocalitySearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="relatedData.insert.taxon_type_specimen.locality"
+                  id="locality_insert"
+                  :label="localityLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.locality"
+                  :options="autocomplete.locality"
+                  @search-change="autocompleteLocalitySearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[localityLabel] }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 
               <td>
-                <vue-multiselect v-model="relatedData.insert.taxon_type_specimen.stratigraphy"
-                                 id="stratigraphy_insert"
-                                 :label="stratigraphyLabel"
-                                 track-by="id"
-                                 :placeholder="$t('add.inputs.autocomplete')"
-                                 :loading="autocomplete.loaders.stratigraphy"
-                                 :options="autocomplete.stratigraphy"
-                                 @search-change="autocompleteStratigraphySearch"
-                                 :internal-search="false"
-                                 :preserve-search="true"
-                                 :clear-on-select="false"
-                                 :show-labels="false">
+                <vue-multiselect
+                  v-model="relatedData.insert.taxon_type_specimen.stratigraphy"
+                  id="stratigraphy_insert"
+                  :label="stratigraphyLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.stratigraphy"
+                  :options="autocomplete.stratigraphy"
+                  @search-change="autocompleteStratigraphySearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
+                >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[stratigraphyLabel] }}</strong>
                   </template>
-                  <template slot="noResult"><b>{{ $t('messages.inputNoResults') }}</b></template>
+                  <template slot="noResult"
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  >
                 </vue-multiselect>
               </td>
 

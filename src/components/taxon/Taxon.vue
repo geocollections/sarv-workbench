@@ -58,7 +58,9 @@
             </div>
 
             <div class="col-md-4">
-              <label :for="`reference`">{{ $t("taxon.reference_original") }}:</label>
+              <label :for="`reference`"
+                >{{ $t("taxon.reference_original") }}:</label
+              >
               <vue-multiselect
                 id="reference"
                 v-model="taxon.reference"
@@ -526,7 +528,11 @@
     <div class="row mb-2">
       <div class="col mt-2">
         <ul class="nav nav-tabs nav-fill mb-3">
-          <li class="nav-item" v-for="tab in filteredRelatedTabs" :key="tab.name">
+          <li
+            class="nav-item"
+            v-for="tab in filteredRelatedTabs"
+            :key="tab.name"
+          >
             <a
               href="#"
               @click.prevent="setTab(tab.name)"
@@ -841,8 +847,8 @@ export default {
       return this.relatedTabs.filter(tab => {
         if (!this.$route.meta.isEdit) {
           if (tab.name !== "taxon_subclass") return tab;
-        } else return tab
-      })
+        } else return tab;
+      });
     }
   },
 
@@ -1045,11 +1051,7 @@ export default {
           taxon_image: []
         },
         copyFields: {
-          taxon_subclass: [
-            "taxon",
-            "author_year",
-            "remarks"
-          ],
+          taxon_subclass: ["taxon", "author_year", "remarks"],
           taxon_synonym: [
             "taxon_synonym",
             "author",
@@ -1411,7 +1413,8 @@ export default {
       }
       if (this.isNotEmpty(obj.attachment)) {
         newObject.attachment = obj.attachment.id;
-        newObject.attachment__original_filename = obj.attachment.original_filename;
+        newObject.attachment__original_filename =
+          obj.attachment.original_filename;
       }
       if (this.isNotEmpty(obj.link)) {
         newObject.link = obj.link.id;
@@ -1419,13 +1422,15 @@ export default {
       }
       if (this.isNotEmpty(obj.stratigraphy_base)) {
         newObject.stratigraphy_base = obj.stratigraphy_base.id;
-        newObject.stratigraphy_base__stratigraphy = obj.stratigraphy_base.stratigraphy;
+        newObject.stratigraphy_base__stratigraphy =
+          obj.stratigraphy_base.stratigraphy;
         newObject.stratigraphy_base__stratigraphy_en =
           obj.stratigraphy_base.stratigraphy_en;
       }
       if (this.isNotEmpty(obj.stratigraphy_top)) {
         newObject.stratigraphy_top = obj.stratigraphy_top.id;
-        newObject.stratigraphy_top__stratigraphy = obj.stratigraphy_top.stratigraphy;
+        newObject.stratigraphy_top__stratigraphy =
+          obj.stratigraphy_top.stratigraphy;
         newObject.stratigraphy_top__stratigraphy_en =
           obj.stratigraphy_top.stratigraphy_en;
       }
@@ -1500,11 +1505,11 @@ export default {
     checkRequiredFields(type) {},
 
     formatRelatedData(objectToUpload) {
-      console.log(objectToUpload)
+      console.log(objectToUpload);
       let uploadableObject = cloneDeep(objectToUpload);
       if (this.activeTab === "taxon_subclass") {
-        console.log(this.taxon.id)
-        console.log(uploadableObject)
+        console.log(this.taxon.id);
+        console.log(uploadableObject);
         uploadableObject.parent = this.taxon.id;
       } else {
         uploadableObject.taxon = this.taxon.id;
@@ -1543,7 +1548,10 @@ export default {
         uploadableObject.other_taxon = uploadableObject.other_taxon.id
           ? uploadableObject.other_taxon.id
           : uploadableObject.other_taxon;
-      if (this.isNotEmpty(uploadableObject.language) && this.activeTab !== "taxon_page")
+      if (
+        this.isNotEmpty(uploadableObject.language) &&
+        this.activeTab !== "taxon_page"
+      )
         uploadableObject.language = uploadableObject.language.id
           ? uploadableObject.language.id
           : uploadableObject.language;
@@ -1560,7 +1568,8 @@ export default {
           ? uploadableObject.link.id
           : uploadableObject.link;
       if (this.isNotEmpty(uploadableObject.stratigraphy_base)) {
-        uploadableObject.stratigraphy_base = uploadableObject.stratigraphy_base.id
+        uploadableObject.stratigraphy_base = uploadableObject.stratigraphy_base
+          .id
           ? uploadableObject.stratigraphy_base.id
           : uploadableObject.stratigraphy_base;
       }
@@ -1569,7 +1578,10 @@ export default {
           ? uploadableObject.stratigraphy_top.id
           : uploadableObject.stratigraphy_top;
       }
-      if (this.isNotEmpty(uploadableObject.taxon) && this.activeTab === "taxon_subclass") {
+      if (
+        this.isNotEmpty(uploadableObject.taxon) &&
+        this.activeTab === "taxon_subclass"
+      ) {
         uploadableObject.taxon = uploadableObject.taxon.id
           ? uploadableObject.taxon.id
           : uploadableObject.taxon;

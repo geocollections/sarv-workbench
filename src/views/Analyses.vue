@@ -85,7 +85,7 @@ export default {
   watch: {
     searchParameters: {
       handler: function(newVal) {
-        console.log(newVal)
+        console.log(newVal);
         this.$store.dispatch("updateSearchParameters", {
           module: "analysis",
           filters: this.filters,

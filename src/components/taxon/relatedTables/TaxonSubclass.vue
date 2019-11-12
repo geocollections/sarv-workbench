@@ -26,7 +26,12 @@
             >
               <!-- VIEW MODE -->
               <td v-if="!entity.editMode">
-                <a v-if="entity.id" :href="getFossilsUrl(entity.id)" :title="getFossilsUrl(entity.id)" target="FossilsWindow">
+                <a
+                  v-if="entity.id"
+                  :href="getFossilsUrl(entity.id)"
+                  :title="getFossilsUrl(entity.id)"
+                  target="FossilsWindow"
+                >
                   {{ entity.taxon }}
                 </a>
               </td>

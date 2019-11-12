@@ -68,7 +68,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "attachment",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -83,8 +83,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("./components/attachment/Attachment.vue"),
+              component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: true,
                 table: "attachment",
@@ -110,8 +109,7 @@ const router = new Router({
               path: "",
               redirect: "photo_archive",
               name: "Attachment add",
-              component: () =>
-                import("./components/attachment/Attachment.vue"),
+              component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -143,8 +141,7 @@ const router = new Router({
             {
               path: "photo_archive",
               name: "photo_archive add",
-              component: () =>
-                import("./components/attachment/Attachment.vue"),
+              component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -176,8 +173,7 @@ const router = new Router({
             },
             {
               path: "specimen_image",
-              component: () =>
-                import("./components/attachment/Attachment.vue"),
+              component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -209,8 +205,7 @@ const router = new Router({
             },
             {
               path: "other_file",
-              component: () =>
-                import("./components/attachment/Attachment.vue"),
+              component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -242,8 +237,7 @@ const router = new Router({
             },
             {
               path: "digitised_reference",
-              component: () =>
-                import("./components/attachment/Attachment.vue"),
+              component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAttachment",
@@ -387,7 +381,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "journal",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -454,7 +448,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "locality",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -589,7 +583,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "project",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -675,7 +669,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "site",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -744,7 +738,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "library",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -810,7 +804,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "doi",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -894,7 +888,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "analysis",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -1029,7 +1023,7 @@ const router = new Router({
               meta: {
                 requiresAuth: true,
                 object: "keyword",
-                isTableView: true,
+                isTableView: true
               }
             }
           ]
@@ -1092,7 +1086,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/collection/CollectionTable.vue"),
+              component: () =>
+                import("./components/collection/CollectionTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "collection",
@@ -1226,7 +1221,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/selectionSeries/SelectionSeriesTable.vue"),
+              component: () =>
+                import("./components/selectionSeries/SelectionSeriesTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "selection_series",
@@ -1245,7 +1241,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/selectionSeries/SelectionSeries.vue"),
+              component: () =>
+                import("./components/selectionSeries/SelectionSeries.vue"),
               meta: {
                 isEdit: true,
                 table: "selection_series",
@@ -1270,12 +1267,15 @@ const router = new Router({
             {
               path: "",
               name: "Selection series add",
-              component: () => import("./components/selectionSeries/SelectionSeries.vue"),
+              component: () =>
+                import("./components/selectionSeries/SelectionSeries.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addSelectionSeries",
                 addNew: "add.newSelectionSeries",
-                subForms: [{ path: "/selection_series/add", name: "add.selectionSeries" }],
+                subForms: [
+                  { path: "/selection_series/add", name: "add.selectionSeries" }
+                ],
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
@@ -1335,7 +1335,7 @@ router.beforeEach(async (to, from, next) => {
         });
       }
     }
-    console.log(to.meta.requiresAuth)
+    console.log(to.meta.requiresAuth);
 
     if (to.meta.requiresAuth) next({ path: "/", query: { from: loginPath } });
     else next();

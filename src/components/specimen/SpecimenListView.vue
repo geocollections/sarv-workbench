@@ -242,7 +242,9 @@ export default {
     getFontSizeUsingLength(specimenName) {
       if (specimenName) {
         let nameLength = specimenName.name ? specimenName.name.length : 0;
-        let nameLengthEn = specimenName.name_en ? specimenName.name_en.length : 0;
+        let nameLengthEn = specimenName.name_en
+          ? specimenName.name_en.length
+          : 0;
 
         if (this.$i18n.locale === "ee") {
           if (nameLength > 75) return "1em";

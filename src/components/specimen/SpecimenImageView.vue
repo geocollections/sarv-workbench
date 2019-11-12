@@ -41,8 +41,15 @@
 
               <v-fade-transition>
                 <v-overlay v-if="hover" absolute color="teal lighten-2">
-                  <span class="font-weight-bold mx-2" v-if="image.specimen__database__acronym && image.specimen__specimen_id">
-                    {{ image.specimen__database__acronym }} {{ image.specimen__specimen_id }}
+                  <span
+                    class="font-weight-bold mx-2"
+                    v-if="
+                      image.specimen__database__acronym &&
+                        image.specimen__specimen_id
+                    "
+                  >
+                    {{ image.specimen__database__acronym }}
+                    {{ image.specimen__specimen_id }}
                   </span>
                 </v-overlay>
               </v-fade-transition>

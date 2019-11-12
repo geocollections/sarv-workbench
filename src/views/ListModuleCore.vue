@@ -140,7 +140,15 @@
         :is-library-active="isLibraryActive"
         :is-selection-series-active="isSelectionSeriesActive"
         :active-selection-series="activeSelectionSeries"
-        v-if="(module === 'reference' || 'specimen' ||'collection' || 'taxon' || 'selectionSeries' || 'sample') && isTableView"
+        v-if="
+          (module === 'reference' ||
+            'specimen' ||
+            'collection' ||
+            'taxon' ||
+            'selectionSeries' ||
+            'sample') &&
+            isTableView
+        "
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:add-reference-to-active-library="
           $emit('add-reference-to-active-library', $event)
@@ -378,7 +386,10 @@ import ExportButtons from "../components/partial/export/ExportButtons";
 import ListView from "../components/partial/ListView";
 import AlternativeTableView from "../components/reference/AlternativeTableView";
 import AlternativeTableControls from "../components/reference/AlternativeTableControls";
-import {fetchAddItemToSelection, fetchChangePrivacyState} from "../assets/js/api/apiCalls";
+import {
+  fetchAddItemToSelection,
+  fetchChangePrivacyState
+} from "../assets/js/api/apiCalls";
 import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import debounce from "lodash/debounce";
 import ImageView from "../components/partial/ImageView";
@@ -768,7 +779,10 @@ export default {
         let formData = new FormData();
         formData.append(
           "data",
-          JSON.stringify({ [relation]: item, selection: this.activeSelectionSeries.id })
+          JSON.stringify({
+            [relation]: item,
+            selection: this.activeSelectionSeries.id
+          })
         );
 
         fetchAddItemToSelection(formData).then(
@@ -801,7 +815,6 @@ export default {
             toastError({ text: this.$t("messages.uploadError") });
           }
         );
-
       } else {
         // Todo: vuetify built in select
         console.log(item);

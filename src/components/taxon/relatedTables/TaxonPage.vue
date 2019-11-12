@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="taxon-page row"
-    :class="{ active: activeTab === 'taxon_page' }"
-  >
+  <div class="taxon-page row" :class="{ active: activeTab === 'taxon_page' }">
     <div class="col-sm-12" v-if="activeTab === 'taxon_page'">
       <div class="table-responsive-sm">
         <table class="table table-hover table-bordered  related-table">
@@ -53,7 +50,10 @@
               </td>
 
               <td v-if="entity.editMode">
-                <b-form-input v-model="entity.new.frontpage_title" type="text" />
+                <b-form-input
+                  v-model="entity.new.frontpage_title"
+                  type="text"
+                />
               </td>
 
               <td v-if="entity.editMode">

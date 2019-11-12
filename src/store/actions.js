@@ -11,7 +11,9 @@ import {
   fetchSpecimens,
   fetchKeywords,
   fetchJournals,
-  fetchCollections, fetchTaxa, fetchSelectionSeries
+  fetchCollections,
+  fetchTaxa,
+  fetchSelectionSeries
 } from "../assets/js/api/apiCalls";
 
 export default {

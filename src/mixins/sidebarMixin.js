@@ -1,8 +1,5 @@
-
 const sidebarMixin = {
-
   methods: {
-
     /**
      * Routes user to desired location with current location's object data.
      *
@@ -13,10 +10,12 @@ const sidebarMixin = {
      * @param objectData {Object} - Data to be sent e.g., 'sample' object.
      */
     $_handleUserAction(userAction, objectName, objectData) {
-      this.$router.push({ name: userAction.userAction.choice + ' ' + userAction.userAction.action, params: { [objectName]: objectData } })
-    },
-
+      this.$router.push({
+        name: userAction.userAction.choice + " " + userAction.userAction.action,
+        params: { [objectName]: objectData }
+      });
+    }
   }
 };
 
-export default sidebarMixin
+export default sidebarMixin;

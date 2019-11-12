@@ -36,7 +36,11 @@
                 }"
               ></td>
 
-              <td v-if="!entity.editMode" class="text-center" style="vertical-align: middle">
+              <td
+                v-if="!entity.editMode"
+                class="text-center"
+                style="vertical-align: middle"
+              >
                 <v-icon small color="blue" v-if="entity.is_preferred"
                   >fas fa-plus</v-icon
                 >
