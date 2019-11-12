@@ -16,8 +16,14 @@ jobs:
           fingerprints:
             - "da:37:31:66:0f:b9:99:16:61:2a:af:0b:ec:e2:95:d5"
       - run:
-          name: run deploy script
-          command: ./deploy.sh
+          name: Directory update
+          command: ssh -p 5522 deploy@193.40.102.19 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
+      - run:
+          name: Build production code
+          command: npm run build
+      - run:
+          name: Copy built files to production server
+          command: scp -P 5522 -a dist/. deploy@193.40.102.19:/var/www/sarv-edit-dev
       - save_cache:
           paths:
             - node_modules
