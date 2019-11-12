@@ -1,4 +1,3 @@
-#!/usr/bash
 currentDate=$(date +"%Y-%m-%d")
 
 ssh -p 5522 deploy@193.40.102.19 << EOF

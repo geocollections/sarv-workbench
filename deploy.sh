@@ -1,4 +1,3 @@
-#!/usr/bash
 bash server_dir_update.sh
 
   echo "-------------------------------"
