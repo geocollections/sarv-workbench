@@ -27,10 +27,13 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-      - run: ls -l
+      - run: pwd
+      - run: ls -a
+      - run: cd dist/
+      - run: ls -a
       - run:
           name: run deploy script
-          command: ./deployment.sh
+          command: ./deploy.sh
 
 workflows:
   version: 2
