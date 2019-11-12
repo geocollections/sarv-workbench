@@ -20,5 +20,3 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
-deploy.sh
-server_dir_update.sh
