@@ -9,8 +9,8 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-      - run: npm install
-      - run: npm run build
+#      - run: npm install
+#      - run: npm run build
       - save_cache:
           paths:
             - node_modules
@@ -22,13 +22,12 @@ jobs:
     docker:
       - image: circleci/node:9.11.2
     steps:
+      - checkout
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-      - run:
-          name: show directory
-          command: pwd
+      - run: ls -l
       - run:
           name: run deploy script
           command: ./deployment.sh
