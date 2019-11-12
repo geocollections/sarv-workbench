@@ -5,35 +5,35 @@ jobs:
       - image: circleci/node:9.11.2
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-#      - run: npm install
-#      - run: npm run build
-      - save_cache:
-          paths:
-            - node_modules
-            - dist
-            - package.json
-          key: v1-dependencies-{{ checksum "package.json" }}
+#      - restore_cache:
+#          keys:
+#            - v1-dependencies-{{ checksum "package.json" }}
+#            - v1-dependencies-
+      - run: npm install
+      - run: npm run build
+#      - save_cache:
+#          paths:
+#            - node_modules
+#            - dist
+#            - package.json
+#          key: v1-dependencies-{{ checksum "package.json" }}
 
   deploy:
     docker:
       - image: circleci/node:9.11.2
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
+#      - restore_cache:
+#          keys:
+#            - v1-dependencies-{{ checksum "package.json" }}
+#            - v1-dependencies-
       - run: pwd
       - run: ls -a
       - run: cd dist/
       - run: ls -a
       - run:
           name: run deploy script
-          command: ./deploy.sh
+          command: ./deployment.sh
 
 workflows:
   version: 2
