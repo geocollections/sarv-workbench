@@ -13,8 +13,8 @@ jobs:
           name: install packages
           command: npm install
       - add_ssh_keys:
-          - fingerprints:
-              - "da:37:31:66:0f:b9:99:16:61:2a:af:0b:ec:e2:95:d5"
+          fingerprints:
+            - "da:37:31:66:0f:b9:99:16:61:2a:af:0b:ec:e2:95:d5"
       - run:
           name: run deploy script
           command: ./deploy.sh
