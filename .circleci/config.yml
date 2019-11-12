@@ -23,7 +23,7 @@ jobs:
           command: npm run build
       - run:
           name: Copy built files to production server
-          command: scp -r dist/* -P 5522 deploy@193.40.102.19:/var/www/sarv-edit-dev
+          command: scp -P 5522 -r dist/* deploy@193.40.102.19:/var/www/sarv-edit-dev
       - save_cache:
           paths:
             - node_modules
