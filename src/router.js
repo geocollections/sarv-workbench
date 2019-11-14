@@ -1335,7 +1335,6 @@ router.beforeEach(async (to, from, next) => {
         });
       }
     }
-    console.log(to.meta.requiresAuth);
 
     if (to.meta.requiresAuth) next({ path: "/", query: { from: loginPath } });
     else next();

@@ -10,35 +10,31 @@
     ></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset
-      class="border-top px-2 mb-2"
-      :style="!validate('specimen') ? 'border-color: #dc3545!important;' : ''"
-      id="block-info"
-    >
-      <legend
-        class="w-auto my-0"
-        :class="{
-          'text-primary': !block.info,
-          'text-danger': !validate('specimen')
-        }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("specimen.generalInfo") }}
-        <i
-          v-if="validate('specimen')"
-          class="fas fa-project-diagram text-success"
-        ></i>
-        <i
-          v-if="!validate('specimen')"
-          class="fas fa-project-diagram text-danger"
-        ></i>
-      </legend>
+    <v-card class="mt-2" id="block-info">
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span :class="validate('specimen') ? 'green--text' : 'red--text'">{{
+            $t("specimen.generalInfo")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('specimen') ? 'green--text' : 'red--text'"
+            >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-if="block.info">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- FOSSIL, SPECIMEN_ID, COLL and SPECIMEN_NR  -->
-          <div class="row">
-            <div class="col-md-3">
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`fossil`">{{ $t("specimen.fossil") }}:</label>
               <vue-multiselect
                 v-model="specimen.fossil"
@@ -57,9 +53,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`specimen_id`"
                 >{{ $t("specimen.specimen_id") }}:</label
               >
@@ -69,9 +65,9 @@
                 v-model="specimen.specimen_id"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`coll`">{{ $t("specimen.coll") }}:</label>
               <vue-multiselect
                 id="copyright_agent"
@@ -94,9 +90,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`specimen_nr`"
                 >{{ $t("specimen.specimen_nr") }}:</label
               >
@@ -106,28 +102,39 @@
                 v-model="specimen.specimen_nr"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- LOCALITY INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-localityInfo">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.localityInfo }"
-        @click="block.localityInfo = !block.localityInfo"
-      >
-        {{ $t("specimen.localityInfo") }}
-        <i class="fas fa-map-signs"></i>
-      </legend>
+    <v-card class="mt-2" id="block-localityInfo">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.localityInfo = !block.localityInfo"
+        >
+          <span>{{ $t("specimen.localityInfo") }}</span>
+          <v-icon right>fas fa-map-signs</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.localityInfo = !block.localityInfo"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.localityInfo ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.localityInfo">
+      <transition>
+        <div v-show="block.localityInfo" class="px-1 pt-1 pb-2">
           <!-- LOCALITY, LOCALITY_FREE, REMARKS_COLLECTING and LOCALITY_IS_PRIVATE -->
-          <div class="row">
-            <div class="col-md-3">
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`locality`">{{ $t("specimen.locality") }}:</label>
               <vue-multiselect
                 v-model="specimen.locality"
@@ -150,9 +157,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`locality_free`"
                 >{{ $t("specimen.locality_free") }}:</label
               >
@@ -162,9 +169,9 @@
                 v-model="specimen.locality_free"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`remarks_collecting`"
                 >{{ $t("specimen.remarks_collecting") }}:</label
               >
@@ -174,9 +181,9 @@
                 v-model="specimen.remarks_collecting"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`locality_is_private`"
                 >{{ $t("specimen.locality_is_private") }}:</label
               >
@@ -190,12 +197,12 @@
                 hide-details
                 class="mt-0 vuetify-checkbox"
               ></v-checkbox>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- SAMPLE, SAMPLE_NUMBER, DEPTH and DEPTH_INTERVAL -->
-          <div class="row">
-            <div class="col-md-3">
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`sample`">{{ $t("specimen.sample") }}:</label>
               <vue-multiselect
                 id="sample"
@@ -218,9 +225,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`sample_number`"
                 >{{ $t("specimen.sample_number") }}:</label
               >
@@ -230,9 +237,9 @@
                 v-model="specimen.sample_number"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`depth`">{{ $t("specimen.depth") }}:</label>
               <b-form-input
                 size="sm"
@@ -241,9 +248,9 @@
                 type="number"
                 step="0.01"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`depth_interval`"
                 >{{ $t("specimen.depth_interval") }}:</label
               >
@@ -254,12 +261,12 @@
                 type="number"
                 step="0.01"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- STRATIGRAPHY, LITHOSTRATIGRAPHY, STRATIGRAPHY_FREE and FIELD NUMBER -->
-          <div class="row">
-            <div class="col-md-3">
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`stratigraphy`"
                 >{{ $t("specimen.stratigraphy") }}:</label
               >
@@ -284,9 +291,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`lithostratigraphy`"
                 >{{ $t("specimen.lithostratigraphy") }}:</label
               >
@@ -311,9 +318,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`stratigraphy_free`"
                 >{{ $t("specimen.stratigraphy_free") }}:</label
               >
@@ -323,9 +330,9 @@
                 v-model="specimen.stratigraphy_free"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`number_field`"
                 >{{ $t("specimen.number_field") }}:</label
               >
@@ -335,12 +342,12 @@
                 v-model="specimen.number_field"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- AGENT_COLLECTED, AGENT_COLLECTED_FREE, DATE_COLLECTED, DATE_COLLECTED_FREE -->
-          <div class="row">
-            <div class="col-md-3">
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`agent_collected`"
                 >{{ $t("specimen.agent_collected") }}:</label
               >
@@ -365,9 +372,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`agent_collected_free`"
                 >{{ $t("specimen.agent_collected_free") }}:</label
               >
@@ -377,9 +384,9 @@
                 v-model="specimen.agent_collected_free"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`date_collected`"
                 >{{ $t("specimen.date_collected") }}:</label
               >
@@ -392,9 +399,9 @@
                 format="DD MMM YYYY"
                 input-class="form-control form-control-sm"
               ></datepicker>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`date_collected_free`"
                 >{{ $t("specimen.date_collected_free") }}:</label
               >
@@ -404,28 +411,39 @@
                 v-model="specimen.date_collected_free"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- SPECIMEN DETAILS -->
-    <fieldset class="border-top px-2 mb-3" id="block-details">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.details }"
-        @click="block.details = !block.details"
-      >
-        {{ $t("specimen.details") }}
-        <i class="fas fa-info"></i>
-      </legend>
+    <v-card class="mt-2" id="block-details">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.details = !block.details"
+        >
+          <span>{{ $t("specimen.details") }}</span>
+          <v-icon right>fas fa-info</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.details = !block.details"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.details ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.details">
+      <transition>
+        <div v-show="block.details" class="px-1 pt-1 pb-2">
           <!-- TYPE, PART, CLASSIFICATION and PARENT -->
-          <div class="row">
-            <div class="col-md-3">
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`type`">{{ $t("specimen.type") }}:</label>
               <vue-multiselect
                 v-model="specimen.type"
@@ -443,9 +461,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`part`">{{ $t("specimen.part") }}:</label>
               <b-form-input
                 size="sm"
@@ -453,9 +471,9 @@
                 v-model="specimen.part"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`classification`"
                 >{{ $t("specimen.classification") }}:</label
               >
@@ -480,9 +498,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`parent`"
                 >{{ $t("specimen.related_specimen") }}:</label
               >
@@ -507,12 +525,12 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- PRESENCE and STORAGE -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`presence`">{{ $t("specimen.presence") }}:</label>
               <vue-multiselect
                 v-model="specimen.presence"
@@ -530,9 +548,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`storage`">{{ $t("specimen.storage") }}:</label>
               <vue-multiselect
                 v-model="specimen.storage"
@@ -555,12 +573,12 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- ACCESSION, DEACCESSION, STATUS and ORIGINAL_STATUS -->
-          <div class="row">
-            <div class="col-md-3">
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`accession`">{{ $t("specimen.accession") }}:</label>
               <vue-multiselect
                 v-model="specimen.accession"
@@ -578,9 +596,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`deaccession`"
                 >{{ $t("specimen.deaccession") }}:</label
               >
@@ -600,9 +618,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`status`">{{ $t("specimen.status") }}:</label>
               <vue-multiselect
                 v-model="specimen.status"
@@ -620,9 +638,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <label :for="`original_status`"
                 >{{ $t("specimen.original_status") }}:</label
               >
@@ -642,233 +660,224 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- RELATED DATA TABS -->
-    <v-row class="related-tabs mb-2">
-      <v-col>
-        <v-card elevation="3">
-          <v-tabs
-            background-color="blue-grey lighten-4"
-            show-arrows
-            grow
-            prev-icon="fas fa-angle-left"
-            next-icon="fas fa-angle-right"
-            active-class="active-tab-color"
-            hide-slider
+    <v-card class="related-tabs mt-2">
+      <v-tabs
+        background-color="blue-grey lighten-4"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        active-class="active-tab-color"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in computedRelatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
+        >
+          <span>{{ $t("specimen.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].length > 0"
+            class="font-weight-bold ml-2"
+            style="font-size: large;"
           >
-            <v-tab
-              v-for="tab in computedRelatedTabs"
-              :key="tab.name"
-              @click.prevent="setTab(tab.name)"
-            >
-              <span>{{ $t("specimen.relatedTables." + tab.name) }}</span>
-              <span class="ml-1">
-                <v-icon small>{{ tab.iconClass }}</v-icon>
-              </span>
-              <span
-                v-if="relatedData[tab.name].length > 0"
-                class="font-weight-bold ml-2"
-                style="font-size: large;"
+            {{ relatedData[tab.name].length }}
+          </span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items>
+        <v-card class="pt-3 px-1" flat color="blue-grey lighten-5">
+          <specimen-identification
+            v-if="
+              specimen.fossil &&
+                (specimen.fossil.id === 1 || specimen.fossil.id === 7)
+            "
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <specimen-identification-geology
+            v-if="
+              specimen.fossil &&
+                (specimen.fossil.id !== 1 && specimen.fossil.id !== 7)
+            "
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <specimen-reference
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <specimen-description
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <specimen-attachment
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <specimen-location
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <specimen-history
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <specimen-analysis
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <!-- PAGINATION -->
+          <v-row no-gutters v-if="$route.meta.isEdit">
+            <v-col sm="6" md="3" class="pr-3 t-paginate-by-center">
+              <b-form-select
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                class="mb-3"
+                size="sm"
               >
-                {{ relatedData[tab.name].length }}
-              </span>
-            </v-tab>
-          </v-tabs>
+                <option :value="10">{{
+                  this.$t("main.pagination", { num: "10" })
+                }}</option>
+                <option :value="25">{{
+                  this.$t("main.pagination", { num: "25" })
+                }}</option>
+                <option :value="50">{{
+                  this.$t("main.pagination", { num: "50" })
+                }}</option>
+                <option :value="100">{{
+                  this.$t("main.pagination", { num: "100" })
+                }}</option>
+                <option :value="250">{{
+                  this.$t("main.pagination", { num: "250" })
+                }}</option>
+                <option :value="500">{{
+                  this.$t("main.pagination", { num: "500" })
+                }}</option>
+                <option :value="1000">{{
+                  this.$t("main.pagination", { num: "1000" })
+                }}</option>
+              </b-form-select>
+            </v-col>
 
-          <v-tabs-items>
-            <v-card class="pt-3 px-1" flat color="blue-grey lighten-5">
-              <specimen-identification
-                v-if="
-                  specimen.fossil &&
-                    (specimen.fossil.id === 1 || specimen.fossil.id === 7)
-                "
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
+            <v-col sm="12" md="3" class="export-center">
+              <!-- EXPORT BUTTON? -->
+            </v-col>
 
-              <specimen-identification-geology
-                v-if="
-                  specimen.fossil &&
-                    (specimen.fossil.id !== 1 && specimen.fossil.id !== 7)
-                "
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
-
-              <specimen-reference
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
-
-              <specimen-description
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
-
-              <specimen-attachment
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
-
-              <specimen-location
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
-
-              <specimen-history
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
-
-              <specimen-analysis
-                :related-data="relatedData"
-                :autocomplete="autocomplete"
-                :active-tab="activeTab"
-                v-on:add-related-data="addRelatedData"
-                v-on:set-default="setDefault"
-                v-on:edit-row="editRow"
-                v-on:remove-row="removeRow"
-              />
-
-              <!-- PAGINATION -->
-              <v-row no-gutters v-if="$route.meta.isEdit">
-                <v-col sm="6" md="3" class="pr-3 t-paginate-by-center">
-                  <b-form-select
-                    v-model="relatedData.searchParameters[activeTab].paginateBy"
-                    class="mb-3"
-                    size="sm"
-                  >
-                    <option :value="10">{{
-                      this.$t("main.pagination", { num: "10" })
-                    }}</option>
-                    <option :value="25">{{
-                      this.$t("main.pagination", { num: "25" })
-                    }}</option>
-                    <option :value="50">{{
-                      this.$t("main.pagination", { num: "50" })
-                    }}</option>
-                    <option :value="100">{{
-                      this.$t("main.pagination", { num: "100" })
-                    }}</option>
-                    <option :value="250">{{
-                      this.$t("main.pagination", { num: "250" })
-                    }}</option>
-                    <option :value="500">{{
-                      this.$t("main.pagination", { num: "500" })
-                    }}</option>
-                    <option :value="1000">{{
-                      this.$t("main.pagination", { num: "1000" })
-                    }}</option>
-                  </b-form-select>
-                </v-col>
-
-                <v-col sm="12" md="3" class="export-center">
-                  <!-- EXPORT BUTTON? -->
-                </v-col>
-
-                <v-col
-                  sm="12"
-                  md="6"
-                  class="pagination-center"
-                  v-if="
-                    relatedData[activeTab] !== null &&
-                      relatedData[activeTab].length > 0
-                  "
-                >
-                  <b-pagination
-                    size="sm"
-                    align="right"
-                    :limit="5"
-                    :hide-ellipsis="true"
-                    :total-rows="relatedData.count[activeTab]"
-                    v-model="relatedData.searchParameters[activeTab].page"
-                    :per-page="
-                      relatedData.searchParameters[activeTab].paginateBy
-                    "
-                  >
-                  </b-pagination>
-                </v-col>
-              </v-row>
-            </v-card>
-          </v-tabs-items>
+            <v-col
+              sm="12"
+              md="6"
+              class="pagination-center"
+              v-if="
+                relatedData[activeTab] !== null &&
+                  relatedData[activeTab].length > 0
+              "
+            >
+              <b-pagination
+                size="sm"
+                align="right"
+                :limit="5"
+                :hide-ellipsis="true"
+                :total-rows="relatedData.count[activeTab]"
+                v-model="relatedData.searchParameters[activeTab].page"
+                :per-page="relatedData.searchParameters[activeTab].paginateBy"
+              >
+              </b-pagination>
+            </v-col>
+          </v-row>
         </v-card>
-      </v-col>
-    </v-row>
+      </v-tabs-items>
+    </v-card>
 
     <!-- REMARKS -->
-    <fieldset class="border-top px-2 mb-2" id="block-description">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.description }"
-        @click="block.description = !block.description"
-      >
-        {{ $t("specimen.description") }}
-        <i class="fas fa-pen-fancy"></i>
-      </legend>
+    <v-card class="mt-2" id="block-description">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("specimen.description") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.description">
-          <!-- REMARKS -->
-          <div class="row">
-            <div class="col-sm-12">
+      <transition>
+        <div v-show="block.description" class="px-1 pt-1 pb-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`remarks`">{{ $t("specimen.remarks") }}:</label>
               <editor :data.sync="specimen.remarks" />
-            </div>
-          </div>
+            </v-col>
 
-          <!-- REMARKS_INTERNAL -->
-          <div class="row">
-            <div class="col-sm-12">
-              <label :for="`remarks_internal`"
-                >{{ $t("specimen.remarks_internal") }}:</label
-              >
-              <editor :data.sync="specimen.remarks_internal" />
-            </div>
-          </div>
-
-          <!-- TAGS -->
-          <div class="row">
-            <div class="col-sm-12">
+            <v-col cols="12" class="px-1">
               <label :for="`tags`">{{ $t("specimen.tags") }}:</label>
               <b-form-input
                 size="sm"
@@ -876,14 +885,14 @@
                 v-model="specimen.tags"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- IS_PRIVATE -->
-    <v-row>
+    <v-row no-gutters class="mt-2">
       <v-col>
         <v-checkbox
           v-model="specimen.is_private"
@@ -956,6 +965,19 @@ export default {
     Editor,
     Spinner,
     Datepicker
+  },
+
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -1889,6 +1911,11 @@ label {
 .active-tab-color {
   background-color: #eceff1;
   color: #000000;
+}
+
+.card-title--clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 
 /* Multiselect component size override */
