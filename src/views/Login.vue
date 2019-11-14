@@ -132,7 +132,6 @@
 <script>
 import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
-import { mapState } from "vuex";
 
 export default {
   name: "Login",
