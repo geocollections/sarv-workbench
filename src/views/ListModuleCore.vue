@@ -613,6 +613,8 @@ export default {
       this.$localStorage.set(this.searchHistory, searchParameters);
       this.$emit("search-params-changed", searchParameters);
 
+      console.log(searchParameters)
+
       this.apiCall().then(
         response => {
           if (response.status === 200) {

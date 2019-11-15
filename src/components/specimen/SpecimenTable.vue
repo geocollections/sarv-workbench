@@ -1,159 +1,164 @@
 <template>
-  <v-data-table
-    class="specimen-table"
-    :headers="translatedHeaders"
-    dense
-    hide-default-footer
-    :items="response.results"
-    :items-per-page="searchParameters.paginateBy"
-    multi-sort
-    :page="searchParameters.page"
-    :search="filter"
-    :show-select="isSelectionSeriesActive"
-    @item-selected="$emit('add-item-to-selection-series', $event, 'specimen')"
-    @toggle-select-all="$emit('toggle-select-all', $event, 'specimen')"
-    expand-icon="fas fa-caret-down"
-    :value="selected"
-  >
-    <template v-slot:item.id="{ item }">
-      <router-link
-        :to="{ path: '/specimen/' + item.id }"
-        :title="$t('editSpecimen.editMessage')"
-        class="sarv-link"
-        >{{ item.id }}</router-link
-      >
-    </template>
+  <div>
+    <v-data-table
+      class="specimen-table"
+      :headers="translatedHeaders"
+      dense
+      hide-default-footer
+      :items="response.results"
+      :items-per-page="searchParameters.paginateBy"
+      multi-sort
+      :page="searchParameters.page"
+      :search="filter"
+      :show-select="isSelectionSeriesActive"
+      @item-selected="$emit('add-item-to-selection-series', $event, 'specimen')"
+      @toggle-select-all="$emit('toggle-select-all', $event, 'specimen')"
+      expand-icon="fas fa-caret-down"
+      :value="selected"
+      :custom-sort="sortRecords"
+    >
+      <template v-slot:item.id="{ item }">
+        <router-link
+          :to="{ path: '/specimen/' + item.id }"
+          :title="$t('editSpecimen.editMessage')"
+          class="sarv-link"
+          >{{ item.id }}</router-link
+        >
+      </template>
 
-    <template v-slot:item.name="{ item }">
-      <div
-        v-if="
-          names &&
-            names.length > 0 &&
-            names.find(specimen => specimen.id === item.id)
-        "
-      >
-        <div v-if="names.find(specimen => specimen.id === item.id).taxonId">
+      <template v-slot:item.name="{ item }">
+        <div
+          v-if="
+            names &&
+              names.length > 0 &&
+              names.find(specimen => specimen.id === item.id)
+          "
+        >
+          <div v-if="names.find(specimen => specimen.id === item.id).taxonId">
+            <i
+              v-translate="{
+                et: names.find(specimen => specimen.id === item.id).name,
+                en: names.find(specimen => specimen.id === item.id).name_en
+              }"
+            ></i>
+          </div>
+
+          <div
+            v-else-if="names.find(specimen => specimen.id === item.id).rockId"
+          >
+            <i
+              v-translate="{
+                et: names.find(specimen => specimen.id === item.id).name,
+                en: names.find(specimen => specimen.id === item.id).name_en
+              }"
+            ></i>
+          </div>
+
           <i
+            v-else
             v-translate="{
               et: names.find(specimen => specimen.id === item.id).name,
               en: names.find(specimen => specimen.id === item.id).name_en
             }"
           ></i>
         </div>
+      </template>
 
-        <div v-else-if="names.find(specimen => specimen.id === item.id).rockId">
-          <i
+      <template v-slot:item.locality__locality="{ item }">
+        <router-link
+          :to="{ path: '/locality/' + item.locality_id }"
+          :title="$t('editLocality.editMessage')"
+          class="sarv-link"
+          v-if="item.locality_id"
+        >
+          <span
             v-translate="{
-              et: names.find(specimen => specimen.id === item.id).name,
-              en: names.find(specimen => specimen.id === item.id).name_en
+              et: item.locality__locality,
+              en: item.locality__locality_en
             }"
-          ></i>
+          ></span>
+        </router-link>
+      </template>
+
+      <template v-slot:item.depth="{ item }">
+        <span v-if="item.depth && item.depth_interval"
+          >{{ item.depth }} - {{ item.depth_interval }} m</span
+        >
+        <span v-else>{{ item.depth }}</span>
+      </template>
+
+      <template v-slot:item.stratigraphy__stratigraphy="{ item }">
+        <div>
+          <!--        <a-->
+          <!--          v-if="item.stratigraphy_id"-->
+          <!--          :href="-->
+          <!--            getGeoDetailUrl({-->
+          <!--              object: 'stratigraphy',-->
+          <!--              id: item.stratigraphy_id-->
+          <!--            })-->
+          <!--          "-->
+          <!--          :title="$t('editStratigraphy.viewMessage')"-->
+          <!--          class="sarv-link"-->
+          <!--          target="GeocollectionsWindow"-->
+          <!--        >-->
+          <span
+            v-translate="{
+              et: item.stratigraphy__stratigraphy,
+              en: item.stratigraphy__stratigraphy_en
+            }"
+          ></span>
+          <!--        </a>-->
+          <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
+            |
+          </span>
+          <!--        <a-->
+          <!--          v-if="item.lithostratigraphy_id"-->
+          <!--          :href="-->
+          <!--            getGeoDetailUrl({-->
+          <!--              object: 'stratigraphy',-->
+          <!--              id: item.lithostratigraphy_id-->
+          <!--            })-->
+          <!--          "-->
+          <!--          :title="$t('editStratigraphy.viewMessage')"-->
+          <!--          class="sarv-link"-->
+          <!--          target="GeocollectionsWindow"-->
+          <!--        >-->
+          <span
+            v-translate="{
+              et: item.lithostratigraphy__stratigraphy,
+              en: item.lithostratigraphy__stratigraphy_en
+            }"
+          ></span>
+          <!--        </a>-->
         </div>
+      </template>
 
-        <i
-          v-else
-          v-translate="{
-            et: names.find(specimen => specimen.id === item.id).name,
-            en: names.find(specimen => specimen.id === item.id).name_en
-          }"
-        ></i>
-      </div>
-    </template>
+      <template v-slot:item.link="{ item }">
+        <v-btn
+          v-if="!item.is_private"
+          :href="getGeoDetailUrl({ object: 'specimen', id: item.id })"
+          :title="$t('editSpecimen.viewMessage')"
+          color="deep-orange"
+          target="GeocollectionsWindow"
+          icon
+        >
+          <v-icon>far fa-eye</v-icon>
+        </v-btn>
+      </template>
 
-    <template v-slot:item.locality__locality="{ item }">
-      <router-link
-        :to="{ path: '/locality/' + item.locality_id }"
-        :title="$t('editLocality.editMessage')"
-        class="sarv-link"
-        v-if="item.locality_id"
-      >
-        <span
-          v-translate="{
-            et: item.locality__locality,
-            en: item.locality__locality_en
-          }"
-        ></span>
-      </router-link>
-    </template>
-
-    <template v-slot:item.depth="{ item }">
-      <span v-if="item.depth && item.depth_interval"
-        >{{ item.depth }} - {{ item.depth_interval }} m</span
-      >
-      <span v-else>{{ item.depth }}</span>
-    </template>
-
-    <template v-slot:item.stratigraphy__stratigraphy="{ item }">
-      <div>
-        <!--        <a-->
-        <!--          v-if="item.stratigraphy_id"-->
-        <!--          :href="-->
-        <!--            getGeoDetailUrl({-->
-        <!--              object: 'stratigraphy',-->
-        <!--              id: item.stratigraphy_id-->
-        <!--            })-->
-        <!--          "-->
-        <!--          :title="$t('editStratigraphy.viewMessage')"-->
-        <!--          class="sarv-link"-->
-        <!--          target="GeocollectionsWindow"-->
-        <!--        >-->
-        <span
-          v-translate="{
-            et: item.stratigraphy__stratigraphy,
-            en: item.stratigraphy__stratigraphy_en
-          }"
-        ></span>
-        <!--        </a>-->
-        <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
-          |
-        </span>
-        <!--        <a-->
-        <!--          v-if="item.lithostratigraphy_id"-->
-        <!--          :href="-->
-        <!--            getGeoDetailUrl({-->
-        <!--              object: 'stratigraphy',-->
-        <!--              id: item.lithostratigraphy_id-->
-        <!--            })-->
-        <!--          "-->
-        <!--          :title="$t('editStratigraphy.viewMessage')"-->
-        <!--          class="sarv-link"-->
-        <!--          target="GeocollectionsWindow"-->
-        <!--        >-->
-        <span
-          v-translate="{
-            et: item.lithostratigraphy__stratigraphy,
-            en: item.lithostratigraphy__stratigraphy_en
-          }"
-        ></span>
-        <!--        </a>-->
-      </div>
-    </template>
-
-    <template v-slot:item.link="{ item }">
-      <v-btn
-        v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'specimen', id: item.id })"
-        :title="$t('editSpecimen.viewMessage')"
-        color="deep-orange"
-        target="GeocollectionsWindow"
-        icon
-      >
-        <v-icon>far fa-eye</v-icon>
-      </v-btn>
-    </template>
-
-    <template v-slot:item.selection_series="{ item }">
-      <v-btn
-        v-if="isSelectionSeriesActive"
-        @click="$emit('add-item-to-selection-series', item.id, 'specimen')"
-        title="Add specimen to selection series"
-        color="green"
-        icon
-      >
-        <v-icon>fas fa-plus-square</v-icon>
-      </v-btn>
-    </template>
-  </v-data-table>
+      <template v-slot:item.selection_series="{ item }">
+        <v-btn
+          v-if="isSelectionSeriesActive"
+          @click="$emit('add-item-to-selection-series', item.id, 'specimen')"
+          title="Add specimen to selection series"
+          color="green"
+          icon
+        >
+          <v-icon>fas fa-plus-square</v-icon>
+        </v-btn>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -240,6 +245,28 @@ export default {
 
     getRockUrl(id) {
       return "https://kivid.info/" + id;
+    },
+
+    sortRecords(items, sortBy, sortDesc) {
+      let orderBy = "";
+      if (sortBy && sortBy.length > 0) {
+        sortBy.forEach((field, index) => {
+          orderBy += (sortDesc[index] ? "-" : "") + field + ",";
+        });
+      }
+
+      if (orderBy && orderBy.length > 0) {
+        this.searchParameters.orderBy = orderBy.substring(0, orderBy.length - 1);
+        // this.searchParameters.sortBy = sortBy;
+        // this.searchParameters.sortDesc = sortDesc;
+      } else {
+        this.searchParameters.orderBy = "-id";
+        // this.searchParameters.sortBy = sortBy;
+        // this.searchParameters.sortDesc = sortDesc;
+      }
+
+      console.log("sortRecords");
+      return items;
     },
 
     async getNames(listOfSpecimens) {
