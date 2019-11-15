@@ -18,7 +18,7 @@ jobs:
       - run:
           name: Build production code
           command: npm run build
-      - run:K
+      - run:
           name: Directory update
           command: ssh -o "StrictHostKeyChecking no" -p 5522 deploy@193.40.102.19 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
       - run:
