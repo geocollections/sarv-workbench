@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  deploy:
+  build-test-deploy:
     docker:
       - image: circleci/node:9.11.2
     steps:
@@ -12,6 +12,9 @@ jobs:
       - run:
           name: install packages
           command: npm install
+      - run:
+          name: unit test application
+          command: npm run unit:test
       - run:
           name: Build production code
           command: npm run build
@@ -29,9 +32,9 @@ jobs:
 
 workflows:
   version: 2
-  -deploy:
+  sarv-edit:
     jobs:
-      - deploy:
+      - build-test-deploy:
           filters:
             branches:
               only: master

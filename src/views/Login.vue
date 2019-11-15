@@ -45,6 +45,7 @@
 
                   <v-card-actions class="justify-center">
                     <v-btn
+                      id="login-id"
                       @click="authenticate('id')"
                       :loading="loggingIn"
                       color="green darken-3"
@@ -78,6 +79,7 @@
 
                     <v-form v-model="valid">
                       <v-text-field
+                        id="username-field"
                         v-model="user.username"
                         :rules="usernameRules"
                         :label="$t('login.username')"
@@ -89,6 +91,7 @@
                       ></v-text-field>
 
                       <v-text-field
+                        id="password-field"
                         v-model="user.password"
                         :rules="passwordRules"
                         :label="$t('login.password')"
@@ -106,6 +109,7 @@
 
                       <div class="text-center mt-2">
                         <v-btn
+                          id="login-pass"
                           @click="login"
                           :disabled="!valid"
                           :loading="loggingIn"
