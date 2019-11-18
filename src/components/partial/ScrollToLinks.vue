@@ -1,64 +1,71 @@
 <template>
-  <div class="scroll-to-links mb-2"
-       v-if="$route.meta.isEdit && activeSearchParams !== null && typeof activeSearchParams.block !== 'undefined' && activeSearchParams.block !== null">
-
+  <div
+    class="scroll-to-links mb-2"
+    v-if="
+      $route.meta.isEdit &&
+        activeSearchParams !== null &&
+        typeof activeSearchParams.block !== 'undefined' &&
+        activeSearchParams.block !== null
+    "
+  >
     <b-button-group size="sm" class="d-block">
-      <b-button v-for="(value, name, index) in activeSearchParams.block"
-                class="scroll-to-button"
-                :key="name"
-                variant="light"
-                v-scroll-to="'#block-' + name">
+      <b-button
+        v-for="(value, name) in activeSearchParams.block"
+        class="scroll-to-button"
+        :key="name"
+        variant="light"
+        v-scroll-to="'#block-' + name"
+      >
         <i :class="getIconPack(name) + ' ' + getIcon(name)"></i>
-        {{ $t('sidebar.' + $route.meta.table + '.' + name) }}
+        {{ $t("sidebar." + $route.meta.table + "." + name) }}
       </b-button>
     </b-button-group>
-
   </div>
 </template>
 
 <script>
-  export default {
-    name: "ScrollToLinks",
-    computed: {
-      activeSearchParams() {
-        return this.$store.state['activeSearchParams']
-      },
+export default {
+  name: "ScrollToLinks",
+  computed: {
+    activeSearchParams() {
+      return this.$store.state["activeSearchParams"];
+    }
+  },
+  methods: {
+    getIcon(name) {
+      if (name === "info") return "fa-project-diagram";
+      if (name === "description") return "fa-pen-fancy";
+      if (name === "members") return "fa-user-friends";
+      if (name === "files") return "fa-folder-open";
+      if (name === "sites") return "fa-globe-americas";
+      if (name === "location") return "fa-globe";
+      if (name === "samples") return "fa-vial";
+      if (name === "digital") return "fa-file-pdf";
+      if (name === "libraries") return "fa-book";
+      if (name === "localities") return "fa-map-marked";
+      if (name === "requiredFields") return "fa-check";
+      if (name === "referenceAndDataset") return "fa-book";
+      if (name === "datacite") return "fa-sitemap";
+      if (name === "relatedInfo") return "fa-sitemap";
+      if (name === "map") return "fa-map";
+      if (name === "additionalInfo") return "fa-project-diagram";
+      if (name === "relatedData") return "fa-table";
+      if (name === "localityInfo") return "fa-map-signs";
+      if (name === "details") return "fa-info";
+      if (name === "specimen") return "fa-fish";
     },
-    methods: {
-      getIcon(name) {
-        if (name === 'info') return 'fa-project-diagram';
-        if (name === 'description') return 'fa-pen-fancy';
-        if (name === 'members') return 'fa-user-friends';
-        if (name === 'files') return 'fa-folder-open';
-        if (name === 'sites') return 'fa-globe-americas';
-        if (name === 'location') return 'fa-globe';
-        if (name === 'samples') return 'fa-vial';
-        if (name === 'digital') return 'fa-file-pdf';
-        if (name === 'libraries') return 'fa-book';
-        if (name === 'localities') return 'fa-map-marked';
-        if (name === 'requiredFields') return 'fa-check';
-        if (name === 'referenceAndDataset') return 'fa-book';
-        if (name === 'datacite') return 'fa-sitemap';
-        if (name === 'relatedInfo') return 'fa-sitemap';
-        if (name === 'map') return 'fa-map';
-        if (name === 'additionalInfo') return 'fa-project-diagram';
-        if (name === 'relatedData') return 'fa-table';
-        if (name === 'localityInfo') return 'fa-map-signs';
-        if (name === 'details') return 'fa-info';
-        if (name === 'specimen') return 'fa-fish';
-      },
 
-      getIconPack(name) {
-        return 'fas'
-      },
+    getIconPack(name) {
+      console.log(name);
+      return "fas";
     }
   }
+};
 </script>
 
 <style scoped>
-  .scroll-to-button {
-    border: unset;
-    font-size: 0.675rem;
-  }
-
+.scroll-to-button {
+  border: unset;
+  font-size: 0.675rem;
+}
 </style>

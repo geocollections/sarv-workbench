@@ -34,7 +34,7 @@
 
 <script>
 import * as L from "leaflet";
-import { toastError, toastSuccess } from "../../assets/js/iziToast/iziToast";
+import { toastError } from "../../assets/js/iziToast/iziToast";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
@@ -145,25 +145,25 @@ export default {
         }
       ],
       overlayMaps: [
-      {
-        name: "Maaameti hübriidkaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
-            tms: true,
-            worldCopyJump: true,
-            detectRetina: true,
-            zIndex: 2,
-            updateWhenIdle: true,
-            continuousWorld: true
-          }
-        ),
-        minZoom: 6,
-        maxZoom: 18
-      }
-    ],
+        {
+          name: "Maaameti hübriidkaart",
+          leafletObject: L.tileLayer(
+            "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+            {
+              attribution:
+                "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+              tms: true,
+              worldCopyJump: true,
+              detectRetina: true,
+              zIndex: 2,
+              updateWhenIdle: true,
+              continuousWorld: true
+            }
+          ),
+          minZoom: 6,
+          maxZoom: 18
+        }
+      ],
       zoom: 11, //SET DEFAULT ZOOM LEVEL,
       gpsID: null,
       markerIcon: new L.DivIcon({
@@ -425,8 +425,8 @@ export default {
       let FE = 500000.0;
       let B1 = (59.0 + 20.0 / 60.0) * (Math.PI / 180);
       let B2 = 58.0 * (Math.PI / 180);
-      let xx = north - FN;
-      let yy = east - FE;
+      // let xx = north - FN;
+      // let yy = east - FE;
       let f1 = 1 / RF;
       let er = 2.0 * f1 - f1 * f1;
       let e = Math.sqrt(er);

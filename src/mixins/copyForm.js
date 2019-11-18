@@ -1,7 +1,6 @@
-import { toastSuccess, toastError } from "@/assets/js/iziToast/iziToast";
+import { toastError } from "@/assets/js/iziToast/iziToast";
 
 import cloneDeep from "lodash/cloneDeep";
-import Vue from "vue";
 import findIndex from "lodash/findIndex";
 
 const copyForm = {
@@ -55,7 +54,7 @@ const copyForm = {
               return false;
             }
           },
-          errResponse => {
+          () => {
             return false;
           }
         );

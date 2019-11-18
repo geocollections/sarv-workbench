@@ -34,7 +34,11 @@
             <span>{{ $t("frontPage.sitesMap") }}&nbsp;</span>
             <v-icon color="purple lighten-2">fas fa-map-marked-alt</v-icon>
             <v-spacer></v-spacer>
-            <v-btn icon @click="block.map = !block.map" color="purple lighten-2">
+            <v-btn
+              icon
+              @click="block.map = !block.map"
+              color="purple lighten-2"
+            >
               <v-icon>{{
                 block.map ? "fas fa-angle-up" : "fas fa-angle-down"
               }}</v-icon>

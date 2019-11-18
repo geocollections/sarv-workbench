@@ -1,7 +1,6 @@
 <template>
   <div class="shortcuts row">
     <div class="col-12 mb-3">
-
       <v-btn
         small
         @click="addShortcut"

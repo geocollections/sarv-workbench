@@ -133,12 +133,14 @@
                 >
                   <template v-slot:label>
                     <span>
-                      <b>{{ settings.bodyActiveColorDark ? "Dark" : "Light" }}</b>
+                      <b>{{
+                        settings.bodyActiveColorDark ? "Dark" : "Light"
+                      }}</b>
                       text
                     </span>
                   </template>
                 </v-switch>
-                
+
                 <v-radio-group
                   v-model="settings.bodyActiveColor"
                   row

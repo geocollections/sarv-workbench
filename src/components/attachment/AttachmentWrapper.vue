@@ -31,28 +31,26 @@
 </template>
 
 <script>
-  export default {
-    name: "AttachmentWrapper",
-    props: {
-      isPhotoArchive: {
-        type: Boolean,
-      },
-      isSpecimenImage: {
-        type: Boolean,
-      },
-      isOtherFile: {
-        type: Boolean,
-      },
-      isDigitisedReference: {
-        type: Boolean,
-      },
-      isLocked: {
-        type: Boolean,
-      },
+export default {
+  name: "AttachmentWrapper",
+  props: {
+    isPhotoArchive: {
+      type: Boolean
+    },
+    isSpecimenImage: {
+      type: Boolean
+    },
+    isOtherFile: {
+      type: Boolean
+    },
+    isDigitisedReference: {
+      type: Boolean
+    },
+    isLocked: {
+      type: Boolean
     }
   }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

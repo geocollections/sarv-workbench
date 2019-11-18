@@ -1501,9 +1501,6 @@ export default {
       });
     },
 
-    //check required fields for related data
-    checkRequiredFields(type) {},
-
     formatRelatedData(objectToUpload) {
       console.log(objectToUpload);
       let uploadableObject = cloneDeep(objectToUpload);

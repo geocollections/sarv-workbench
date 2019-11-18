@@ -62,7 +62,9 @@
               <v-row align="center" v-else>
                 <v-col class="text-center">
                   <div class="py-3">
-                    <v-icon style="font-size: 6rem" color="blue-grey lighten-3">far {{ getAttachmentIcon(image) }}</v-icon>
+                    <v-icon style="font-size: 6rem" color="blue-grey lighten-3"
+                      >far {{ getAttachmentIcon(image) }}</v-icon
+                    >
                   </div>
                 </v-col>
               </v-row>
@@ -180,7 +182,7 @@ export default {
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value and only 1 is webm
         return !!this.data.uuid_filename.split(".")[1].includes("webm");
       }
-    },
+    }
   },
   methods: {
     getFileUrl(uuid, size = null) {

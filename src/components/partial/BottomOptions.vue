@@ -177,7 +177,7 @@ export default {
       await this.$parent.$emit("button-clicked", action, this.object);
       setTimeout(() => {
         // will run after $emit is done in 500ms
-        this.sendingData = false
+        this.sendingData = false;
       }, 500);
     },
 

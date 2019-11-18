@@ -11,17 +11,15 @@
 </template>
 
 <script>
-  export default {
-    name: "SampleWrapper",
-    props: {
-      simpleView: {
-        type: Boolean,
-        default: false
-      },
+export default {
+  name: "SampleWrapper",
+  props: {
+    simpleView: {
+      type: Boolean,
+      default: false
     }
   }
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

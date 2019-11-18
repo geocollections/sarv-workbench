@@ -24,11 +24,7 @@
           class="grey lighten-2 attachment-table-image-preview my-1"
         >
           <template v-slot:placeholder>
-            <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
-            >
+            <v-row class="fill-height ma-0" align="center" justify="center">
               <v-progress-circular
                 indeterminate
                 color="grey lighten-5"
@@ -199,7 +195,7 @@ export default {
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
       }
-    },
+    }
   }
 };
 </script>

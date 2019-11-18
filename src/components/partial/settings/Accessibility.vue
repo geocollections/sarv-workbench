@@ -2,8 +2,15 @@
   <div class="accessibility">
     <v-row no-gutters>
       <v-col class="mx-2">
-        <span>Zoom level: <span class="font-weight-bold">{{ zoom }}</span></span>
-        <v-radio-group v-model="zoom" row class="zoom-radios" messages="Use with caution, may break some elements">
+        <span
+          >Zoom level: <span class="font-weight-bold">{{ zoom }}</span></span
+        >
+        <v-radio-group
+          v-model="zoom"
+          row
+          class="zoom-radios"
+          messages="Use with caution, may break some elements"
+        >
           <v-radio
             v-for="entity in zoomOptions"
             :key="entity.value"

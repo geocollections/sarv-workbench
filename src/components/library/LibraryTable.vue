@@ -36,11 +36,7 @@
         class="mt-0"
         v-model="item.library__is_private"
         @change="
-          $emit(
-            'toggle-privacy-state',
-            item.library__is_private,
-            item.library
-          )
+          $emit('toggle-privacy-state', item.library__is_private, item.library)
         "
       ></v-checkbox>
     </template>

@@ -10,7 +10,11 @@
           class="nav nav-pills nav-fill"
           v-if="$route.meta.object === 'attachment'"
         >
-          <li class="nav-item" v-for="item in $route.meta.subForms">
+          <li
+            class="nav-item"
+            v-for="(item, index) in $route.meta.subForms"
+            :key="index"
+          >
             <router-link class="nav-link" :to="{ path: item.path }">{{
               $t(item.name)
             }}</router-link>

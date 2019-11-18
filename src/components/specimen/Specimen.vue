@@ -994,9 +994,7 @@ export default {
         "fallbackValue"
       );
       let params =
-        this.isNotEmpty(searchHistory) &&
-        searchHistory.hasOwnProperty("idSpecimen") &&
-        searchHistory !== "fallbackValue"
+        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
           ? searchHistory
           : this.searchParameters;
       this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
@@ -1030,14 +1028,14 @@ export default {
 
   watch: {
     "$route.params.id": {
-      handler: function(newval, oldval) {
+      handler: function() {
         this.setInitialData();
         this.reloadData();
       },
       deep: true
     },
     "relatedData.searchParameters": {
-      handler: function(newVal, oldVal) {
+      handler: function() {
         this.loadRelatedData(this.activeTab);
       },
       deep: true
@@ -1791,9 +1789,6 @@ export default {
         });
       });
     },
-
-    //check required fields for related data
-    checkRequiredFields(type) {},
 
     formatRelatedData(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);

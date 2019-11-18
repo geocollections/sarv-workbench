@@ -335,7 +335,11 @@
     </fieldset>
 
     <!-- REMARKS -->
-    <fieldset class="border-top px-2 mb-2" id="block-specimen" v-if="$route.meta.isEdit && specimens.count > 0">
+    <fieldset
+      class="border-top px-2 mb-2"
+      id="block-specimen"
+      v-if="$route.meta.isEdit && specimens.count > 0"
+    >
       <legend
         class="w-auto my-0"
         :class="{ 'text-primary': !block.specimen }"
@@ -347,7 +351,6 @@
 
       <transition name="fade">
         <div v-show="block.specimen">
-
           <!-- PAGINATION -->
           <div
             v-if="specimens.count > 0"
@@ -372,7 +375,11 @@
                 circle
                 prev-icon="fas fa-angle-left"
                 next-icon="fas fa-angle-right"
-                :length="Math.ceil(specimens.count / specimenSearchParameters.paginateBy)"
+                :length="
+                  Math.ceil(
+                    specimens.count / specimenSearchParameters.paginateBy
+                  )
+                "
                 :total-visible="5"
               />
             </div>
@@ -383,16 +390,16 @@
               <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
               <span id="table-title" class="text-uppercase">
                 {{ $t("collection.specimen") }}
-          <sup>
-            <v-chip
-              color="deep-orange"
-              small
-              text-color="#ffffff"
-              class="font-weight-bold"
-            >{{ specimens.count }}</v-chip
-            >
-          </sup>
-        </span>
+                <sup>
+                  <v-chip
+                    color="deep-orange"
+                    small
+                    text-color="#ffffff"
+                    class="font-weight-bold"
+                    >{{ specimens.count }}</v-chip
+                  >
+                </sup>
+              </span>
               <div class="flex-grow-1"></div>
               <v-text-field
                 v-model="filterSpecimens"
@@ -404,10 +411,12 @@
               ></v-text-field>
             </v-card-title>
 
-          <specimen-table :response="specimens" :search-parameters="specimenSearchParameters" :filter="filterSpecimens"/>
-
+            <specimen-table
+              :response="specimens"
+              :search-parameters="specimenSearchParameters"
+              :filter="filterSpecimens"
+            />
           </v-card>
-
         </div>
       </transition>
     </fieldset>
@@ -420,13 +429,14 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchCollection,
-  fetchListCollectionType, fetchSpecimens
+  fetchListCollectionType,
+  fetchSpecimens
 } from "../../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
 import Spinner from "vue-simple-spinner";
 import Editor from "../partial/editor/Editor";
 import SpecimenTable from "../specimen/SpecimenTable";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "Collection",
@@ -505,7 +515,7 @@ export default {
       deep: true
     },
 
-    "specimenSearchParameters": {
+    specimenSearchParameters: {
       handler() {
         this.getSpecimensBelongingToCollection();
       },
@@ -554,7 +564,12 @@ export default {
         requiredFields: ["collection_id", "number"],
         collection: {},
         searchParameters: this.setDefaultSearchParameters(),
-        block: { info: true, relatedInfo: true, description: true, specimen: true },
+        block: {
+          info: true,
+          relatedInfo: true,
+          description: true,
+          specimen: true
+        },
         filterSpecimens: "",
         databaseAcronym: "",
         specimens: {
@@ -581,7 +596,7 @@ export default {
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
           { text: "main.pagination", value: 1000 }
-        ],
+        ]
       };
     },
 

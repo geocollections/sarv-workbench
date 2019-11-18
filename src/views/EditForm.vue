@@ -68,7 +68,6 @@
 import BottomOptions from "../components/partial/BottomOptions";
 import Log from "@/components/partial/Log.vue";
 import SaveAsNewModal from "../components/partial/SaveAsNewModal";
-import ConfirmTabClose from "../components/partial/modals/ConfirmTabClose";
 import ConfirmPageClose from "../components/partial/modals/ConfirmPageClose";
 import ScrollToLinks from "../components/partial/ScrollToLinks";
 import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist";
@@ -80,7 +79,6 @@ export default {
     ObjectDoesNotExist,
     ScrollToLinks,
     ConfirmPageClose,
-    ConfirmTabClose,
     BottomOptions,
     SaveAsNewModal,
     Log

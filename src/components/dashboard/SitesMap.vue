@@ -31,19 +31,23 @@ export default {
       recentImages: null
     },
     sitesIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #FF3D00; background-color: #FFAB91; border-radius: 100%;' />",
+      html:
+        "<i class='far fa-circle' style='color: #FF3D00; background-color: #FFAB91; border-radius: 100%;' />",
       className: "map-marker"
     }),
     samplesIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #FFC107; background-color: #FFE082; border-radius: 100%;' />",
+      html:
+        "<i class='far fa-circle' style='color: #FFC107; background-color: #FFE082; border-radius: 100%;' />",
       className: "map-marker"
     }),
     specimensIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #673AB7; background-color: #B39DDB; border-radius: 100%;'/>",
+      html:
+        "<i class='far fa-circle' style='color: #673AB7; background-color: #B39DDB; border-radius: 100%;'/>",
       className: "map-marker"
     }),
     imagesIcon: new L.DivIcon({
-      html: "<i class='far fa-circle' style='color: #009688; background-color: #80CBC4; border-radius: 100%;'/>",
+      html:
+        "<i class='far fa-circle' style='color: #009688; background-color: #80CBC4; border-radius: 100%;'/>",
       className: "map-marker"
     }),
     baseMaps: [
@@ -325,7 +329,12 @@ export default {
         this.images.push(marker);
       });
 
-      let bounds = new L.featureGroup([...this.sites, ...this.samples, ...this.specimens, ...this.images]).getBounds();
+      let bounds = new L.featureGroup([
+        ...this.sites,
+        ...this.samples,
+        ...this.specimens,
+        ...this.images
+      ]).getBounds();
       this.map.fitBounds(bounds, { maxZoom: 10 });
     }
   }
@@ -333,9 +342,9 @@ export default {
 </script>
 
 <style>
-  .sites-icon {
-    color: #BA68C8;
-    background-color: #E1BEE7;
-    border-radius: 100%;
-  }
+.sites-icon {
+  color: #ba68c8;
+  background-color: #e1bee7;
+  border-radius: 100%;
+}
 </style>

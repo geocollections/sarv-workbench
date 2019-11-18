@@ -256,7 +256,10 @@ export default {
       }
 
       if (orderBy && orderBy.length > 0) {
-        this.searchParameters.orderBy = orderBy.substring(0, orderBy.length - 1);
+        this.searchParameters.orderBy = orderBy.substring(
+          0,
+          orderBy.length - 1
+        );
         // this.searchParameters.sortBy = sortBy;
         // this.searchParameters.sortDesc = sortDesc;
       } else {

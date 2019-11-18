@@ -62,7 +62,7 @@ const formManipulation = {
       (
         value == null ||
         // has length and it's zero
-        (value.hasOwnProperty("length") && value.length === 0) ||
+        value.length === 0 ||
         //  is an Object and has no keys
         (value.constructor === Object && Object.keys(value).length === 0)
       );
@@ -251,7 +251,7 @@ const formManipulation = {
                 }
               } else resolve(true);
             },
-            errResponse => resolve(false)
+            () => resolve(false)
           );
         } else if (this.sendingData) {
           // This runs only if user deletes html elements and tries to press 'add' button again
@@ -266,7 +266,7 @@ const formManipulation = {
       });
     },
 
-    saveData(object, formData, url, isCopy = false) {
+    saveData(object, formData, url) {
       return new Promise(resolve => {
         this.request(object, formData, url, resolve);
       });
@@ -396,7 +396,7 @@ const formManipulation = {
       });
 
       try {
-        this.saveData("attachment", formData, "add/attachment/", false).then(
+        this.saveData("attachment", formData, "add/attachment/").then(
           savedObjectId => {
             console.log(savedObjectId);
           }
@@ -424,7 +424,7 @@ const formManipulation = {
       });
 
       try {
-        this.saveData("attachment", formData, "add/attachment/", false).then(
+        this.saveData("attachment", formData, "add/attachment/").then(
           savedObjectId => {
             console.log(savedObjectId);
             if (savedObjectId === undefined || savedObjectId === false) return;
@@ -440,7 +440,7 @@ const formManipulation = {
                   object: object,
                   id: vm[object].id
                 }
-              ).then(response => {
+              ).then(() => {
                 vm.attachmentLinkSaved -= 1;
               });
             }
@@ -481,7 +481,7 @@ const formManipulation = {
 
       let url = "add/" + object + "/";
       return new Promise(resolve => {
-        this.saveData(object, formData, url).then(isSuccessfullySaved => {
+        this.saveData(object, formData, url).then(() => {
           console.log(
             "Relation created with locality id: " +
               this.$store.state["createRelationWith"].id
@@ -652,7 +652,10 @@ const formManipulation = {
           if (this.$route.meta.isEdit) {
             let formData = new FormData();
 
-            if (this.checkRequiredFields(tab, this.relatedData.insert[tab])) {
+            if (
+              this.$route.meta.object === "doi" &&
+              this.checkRequiredFields(tab, this.relatedData.insert[tab])
+            ) {
               toastError({ text: this.$t("messages.checkForm") });
               return;
             }
@@ -675,7 +678,10 @@ const formManipulation = {
               );
             });
           } else {
-            if (this.checkRequiredFields(tab, this.relatedData.insert[tab])) {
+            if (
+              this.$route.meta.object === "doi" &&
+              this.checkRequiredFields(tab, this.relatedData.insert[tab])
+            ) {
               toastError({ text: this.$t("messages.checkForm") });
               return;
             }
@@ -731,7 +737,10 @@ const formManipulation = {
         if (this.$route.meta.isEdit) {
           if (this.isNotEmpty(entity.new)) {
             let formData = new FormData();
-            if (this.checkRequiredFields(this.activeTab, entity.new)) {
+            if (
+              this.$route.meta.object === "doi" &&
+              this.checkRequiredFields(this.activeTab, entity.new)
+            ) {
               toastError({ text: this.$t("messages.checkForm") });
               return;
             }
@@ -767,7 +776,10 @@ const formManipulation = {
           }
         } else {
           if (this.isNotEmpty(entity.new)) {
-            if (this.checkRequiredFields(this.activeTab, entity.new)) {
+            if (
+              this.$route.meta.object === "doi" &&
+              this.checkRequiredFields(this.activeTab, entity.new)
+            ) {
               toastError({ text: this.$t("messages.checkForm") });
               return;
             }
