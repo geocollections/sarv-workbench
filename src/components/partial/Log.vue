@@ -38,55 +38,41 @@
                         )"
                         :key="field"
                       >
-                        <vs-list>
-                          <vs-list-header
-                            class="mb-0"
-                            :title="field"
-                            color="primary"
-                          ></vs-list-header>
+                        <div class="mb-3">
+                          <div class="log-title mb-1">{{ field }}</div>
 
                           <div v-for="(item, index) in changes" :key="index">
                             <div
-                              class="vs-list--item"
+                              class="pa-1"
                               :title="$t('logs.newValue')"
                               :class="{ 'list-item-new': index === 'new' }"
                               v-if="index === 'new'"
                             >
                               <div class="list-titles">
-                                <div
-                                  class="vs-list--subtitle"
-                                  v-if="typeof item === 'object' && item"
-                                >
+                                <div v-if="typeof item === 'object' && item">
                                   {{ item.join() }}
                                 </div>
 
-                                <div class="vs-list--subtitle" v-else>
-                                  {{ item }}
-                                </div>
+                                <div v-else>{{ item }}</div>
                               </div>
                             </div>
 
                             <div
-                              class="vs-list--item"
+                              class="pa-1"
                               :title="$t('logs.oldValue')"
                               :class="{ 'list-item-old': index === 'old' }"
                               v-if="index === 'old'"
                             >
                               <div class="list-titles">
-                                <div
-                                  class="vs-list--subtitle"
-                                  v-if="typeof item === 'object' && item"
-                                >
+                                <div v-if="typeof item === 'object' && item">
                                   {{ item.join() }}
                                 </div>
 
-                                <div class="vs-list--subtitle" v-else>
-                                  {{ item }}
-                                </div>
+                                <div v-else>{{ item }}</div>
                               </div>
                             </div>
                           </div>
-                        </vs-list>
+                        </div>
                       </div>
                     </div>
                   </td>
@@ -165,6 +151,11 @@ export default {
 .log .table th,
 .table td {
   padding: 0.3rem;
+}
+
+.log-title {
+  font-weight: bold;
+  font-size: larger;
 }
 
 .list-item-new {
