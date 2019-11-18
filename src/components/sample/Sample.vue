@@ -1135,9 +1135,14 @@
             {{ $t('sample.analysis') }}
           </b-form-checkbox>-->
 
-          <b-form-checkbox id="is_private" v-model="sample.is_private">
-            {{ $t("sample.is_private") }}
-          </b-form-checkbox>
+          <!-- IS_PRIVATE -->
+          <v-checkbox
+            v-model="sample.is_private"
+            id="is_private"
+            :label="$t('specimen.is_private_text')"
+            hide-details
+            class="mt-0 vuetify-checkbox"
+          ></v-checkbox>
         </div>
       </div>
     </template>

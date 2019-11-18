@@ -131,13 +131,17 @@
     </fieldset>
 
     <!-- IS PRIMARY -->
-    <div class="row mt-3">
-      <div class="col">
-        <b-form-checkbox id="is_primary" v-model="keyword.is_primary">
-          {{ $t("keyword.is_primary") }}
-        </b-form-checkbox>
-      </div>
-    </div>
+    <v-row no-gutters class="mt-0">
+      <v-col>
+        <v-checkbox
+          v-model="keyword.is_primary"
+          id="is_primary"
+          :label="$t('keyword.is_primary')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

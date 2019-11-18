@@ -310,14 +310,18 @@
       </div>
     </div>
 
-    <!-- CHECKBOXES -->
-    <div class="row">
-      <div class="col">
-        <b-form-checkbox id="is_private" v-model="library.is_private">
-          {{ $t("library.private") }}
-        </b-form-checkbox>
-      </div>
-    </div>
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters>
+      <v-col>
+        <v-checkbox
+          v-model="library.is_private"
+          id="is_private"
+          :label="$t('library.private')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

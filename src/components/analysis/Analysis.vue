@@ -576,14 +576,18 @@
       </div>
     </div>
 
-    <!-- IS PRIVATE -->
-    <div class="row mt-3">
-      <div class="col">
-        <b-form-checkbox id="is_private" v-model="analysis.is_private">
-          {{ $t("analysis.is_private") }}?
-        </b-form-checkbox>
-      </div>
-    </div>
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters>
+      <v-col>
+        <v-checkbox
+          v-model="analysis.is_private"
+          id="is_private"
+          :label="$t('analysis.is_private')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

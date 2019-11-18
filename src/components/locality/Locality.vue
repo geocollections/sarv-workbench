@@ -523,14 +523,18 @@
     </div>
     -->
 
-    <!-- CHECKBOXES -->
-    <div class="row mt-3 mb-3">
-      <div class="col">
-        <b-form-checkbox id="is_private" v-model="locality.is_private">
-          {{ $t("locality.private") }}
-        </b-form-checkbox>
-      </div>
-    </div>
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters class="my-3">
+      <v-col>
+        <v-checkbox
+          v-model="locality.is_private"
+          id="is_private"
+          :label="$t('locality.private')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
 
     <!-- SHOWING RELATED_DATA -->
     <div class="row">

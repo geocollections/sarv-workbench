@@ -2844,11 +2844,7 @@
         <v-checkbox
           v-model="attachment.is_private"
           id="is_private"
-          :label="
-            attachment.is_private
-              ? $t('specimen.is_private_text')
-              : $t('specimen.is_public_text')
-          "
+          :label="$t('specimen.is_private_text')"
           hide-details
           class="mt-0 vuetify-checkbox mr-3"
         ></v-checkbox>
@@ -2856,11 +2852,7 @@
         <v-checkbox
           v-model="attachment.is_locked"
           id="is_locked"
-          :label="
-            attachment.is_locked
-              ? $t('attachment.is_locked_text')
-              : $t('attachment.is_unlocked_text')
-          "
+          :label="$t('attachment.is_locked_text')"
           hide-details
           class="mt-0 vuetify-checkbox"
         ></v-checkbox>

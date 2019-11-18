@@ -731,14 +731,18 @@
       </transition>
     </fieldset>
 
-    <!-- IS PRIVATE -->
-    <div class="row mt-3">
-      <div class="col">
-        <b-form-checkbox id="is_private" v-model="doi.is_private">
-          {{ $t("doi.private") }}?
-        </b-form-checkbox>
-      </div>
-    </div>
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters class="mt-0">
+      <v-col>
+        <v-checkbox
+          v-model="doi.is_private"
+          id="is_private"
+          :label="$t('doi.private')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
 
     <!-- DOI METADATA REGISTER and UPDATE BUTTONS -->
     <div class="row mt-3">

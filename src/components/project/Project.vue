@@ -424,14 +424,18 @@
       </transition>
     </fieldset>
 
-    <!-- IS PRIVATE-->
-    <div class="row my-3">
-      <div class="col">
-        <b-form-checkbox id="is_private" v-model="project.is_private">
-          {{ $t("project.is_private") }}
-        </b-form-checkbox>
-      </div>
-    </div>
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters class="my-3">
+      <v-col>
+        <v-checkbox
+          v-model="project.is_private"
+          id="is_private"
+          :label="$t('project.is_private')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

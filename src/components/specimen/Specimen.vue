@@ -189,12 +189,9 @@
               >
               <v-checkbox
                 v-model="specimen.locality_is_private"
-                :label="
-                  specimen.locality_is_private
-                    ? $t('specimen.is_private_text')
-                    : $t('specimen.is_public_text')
-                "
+                :label=" $t('specimen.is_private_text')"
                 hide-details
+                :color="bodyActiveColor"
                 class="mt-0 vuetify-checkbox"
               ></v-checkbox>
             </v-col>
@@ -897,12 +894,9 @@
         <v-checkbox
           v-model="specimen.is_private"
           id="is_private"
-          :label="
-            specimen.is_private
-              ? $t('specimen.is_private_text')
-              : $t('specimen.is_public_text')
-          "
+          :label="$t('specimen.is_private_text')"
           hide-details
+          :color="bodyActiveColor"
           class="mt-0 vuetify-checkbox"
         ></v-checkbox>
       </v-col>

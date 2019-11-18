@@ -936,19 +936,27 @@
     </div>
 
     <!-- IS PRIVATE and IS LOCKED -->
-    <div class="d-flex flex-row flex-wrap">
-      <div class="pr-2">
-        <b-form-checkbox id="is_private" v-model="reference.is_private">
-          {{ $t("reference.is_private") }}
-        </b-form-checkbox>
-      </div>
+    <v-card no-gutters class="d-flex flex-row flex-wrap mt-2" flat tile>
+      <v-card flat tile class="mr-4 mb-3">
+        <v-checkbox
+          v-model="reference.is_private"
+          id="is_private"
+          :label="$t('reference.is_private')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-card>
 
-      <div class="px-2">
-        <b-form-checkbox id="is_locked" v-model="reference.is_locked">
-          {{ $t("reference.is_locked") }}
-        </b-form-checkbox>
-      </div>
-    </div>
+      <v-card flat tile>
+        <v-checkbox
+          v-model="reference.is_locked"
+          id="is_locked"
+          :label="$t('reference.is_locked')"
+          hide-details
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-card>
+    </v-card>
   </div>
 </template>
 
