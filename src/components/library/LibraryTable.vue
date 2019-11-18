@@ -9,6 +9,8 @@
     :page="searchParameters.page"
     :search="filter"
     expand-icon="fas fa-caret-down"
+    :sort-by.sync="searchParameters.sortBy"
+    :sort-desc.sync="searchParameters.sortDesc"
   >
     <template v-slot:item.library="{ item }">
       <router-link

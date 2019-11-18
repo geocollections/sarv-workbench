@@ -11,6 +11,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       :col-size="4"
+      v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
@@ -136,7 +137,8 @@ export default {
         specimen_image_attachment: ["2", "1", "3", "4"],
         page: 1,
         paginateBy: 50,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     },
     resetSearchPreferences() {

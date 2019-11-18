@@ -1517,7 +1517,8 @@ export default {
         solrSearch: null,
         page: 1,
         paginateBy: 50,
-        orderBy: this.isMultiOrdering ? ["-id", "-year"] : "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     },
 

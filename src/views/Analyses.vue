@@ -7,6 +7,8 @@
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
+      v-on:reset:searchPreferences="resetSearchPreferences"
+      :col-size="4"
     />
 
     <!-- SEARCH FIELDS END -->
@@ -119,7 +121,8 @@ export default {
         agentAndLab: null,
         page: 1,
         paginateBy: 50,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     },
     resetSearchPreferences() {

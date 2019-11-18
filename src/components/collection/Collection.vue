@@ -724,7 +724,8 @@ export default {
         reference: null,
         page: 1,
         paginateBy: 50,
-        orderBy: "-id"
+        sortBy: ["collection_id"],
+        sortDesc: [true]
       };
     }
   }

@@ -75,6 +75,7 @@ export function fetchAttachments(data, author) {
   const fields =
     "id,uuid_filename,original_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment,is_private,attachment_format__value";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.image_number !== null && data.image_number.trim().length > 0) {
     searchFields += "image_number__icontains=" + data.image_number;
@@ -118,12 +119,12 @@ export function fetchAttachments(data, author) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `attachment/?${searchFields}&or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `attachment/?${searchFields}&or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
     // return fetch(`attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
     return fetch(
-      `attachment/?or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `attachment/?or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
     // return fetch(`attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
@@ -258,6 +259,7 @@ export function fetchReference(id) {
 }
 
 export async function fetchReferences(data) {
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch.trim().length > 0) {
     let start = (data.page - 1) * data.paginateBy;
@@ -285,7 +287,7 @@ export async function fetchReferences(data) {
       } else return [314159265];
     });
     return fetch(
-      `reference/?id__in=${listOfReferenceIDs}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&format=json`
+      `reference/?id__in=${listOfReferenceIDs}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
 
@@ -342,13 +344,13 @@ export async function fetchReferences(data) {
     // Not using 'fields' because of alternative table
     // return fetch(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
     return fetch(
-      `reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&format=json`
+      `reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   } else {
     // Not using 'fields' because of alternative table
     // return fetch(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
     return fetch(
-      `reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&format=json`
+      `reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
 }
@@ -482,6 +484,8 @@ export function fetchLocalities(data) {
   const fields =
     "id,country__value_en,country__value,locality_en,locality,user_added,number";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
   }
@@ -506,11 +510,11 @@ export function fetchLocalities(data) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `locality/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `locality/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `locality/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `locality/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -603,6 +607,7 @@ export function fetchSamples(data, agent, databaseId) {
     "id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional," +
     "number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval,storage__location";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
@@ -656,11 +661,11 @@ export function fetchSamples(data, agent, databaseId) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -722,6 +727,8 @@ export function fetchLibrary(id) {
 export function fetchLibraries(data) {
   const fields = "id,author_txt,year,title,title_en,is_private";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
   if (data.author_txt !== null && data.author_txt.trim().length > 0) {
     searchFields += `author_txt__icontains=${data.author_txt}`;
   }
@@ -742,11 +749,11 @@ export function fetchLibraries(data) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -755,6 +762,7 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
   const fields =
     "id,library,library__author_txt,library__title,library__title_en,agent,agent__agent,agent__surename,agent__forename,library__is_private";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   // Using typeof check because for active libraries (reference view uses active libraries but search data will be related to referneces)
   if (
@@ -793,11 +801,11 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `library_agent/?agent=${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `library_agent/?agent=${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `library_agent/?agent=${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `library_agent/?agent=${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -832,6 +840,8 @@ export function fetchDois(data, databaseId) {
   const fields =
     "id,identifier,creators,publication_year,title,resource_type__value,is_private,datacite_created";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
   if (data.identifier !== null && data.identifier.trim().length > 0) {
     searchFields += `&identifier__icontains=${data.identifier}`;
   }
@@ -859,11 +869,11 @@ export function fetchDois(data, databaseId) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1017,6 +1027,8 @@ export function fetchProjects(data, agent) {
     "id,name, name_en,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end," +
     "date_free,description,remarks,owner,owner__agent,is_private";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
   }
@@ -1032,11 +1044,11 @@ export function fetchProjects(data, agent) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return fetch(
-      `project/?projectagent__agent=${agent}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `project/?projectagent__agent=${agent}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `project/?projectagent__agent=${agent}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `project/?projectagent__agent=${agent}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1062,6 +1074,7 @@ export function fetchSites(data) {
     "coord_det_method__value,coord_det_method__value_en, date_start,date_end,date_free,remarks_location," +
     "description,remarks";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
@@ -1114,13 +1127,13 @@ export function fetchSites(data) {
   if (searchFields.length > 0) {
     // return data.coords_not_null === true ? fetch(`site/?${searchFields}&order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
     return fetch(
-      `site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     // return data.coords_not_null === true ? fetch(`site/?order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
 
     return fetch(
-      `site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1214,6 +1227,7 @@ export function fetchAnalyses(data, agent, databaseId) {
     "id,sample,sample__number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__depth,analysis_method__analysis_method," +
     "date,lab_txt,agent__agent,is_private";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
@@ -1238,11 +1252,11 @@ export function fetchAnalyses(data, agent, databaseId) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
     return fetch(
-      `analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1275,6 +1289,7 @@ export function fetchJournals(data) {
   let fields =
     "id,journal_name,journal_short, journal_original,publisher,remarks";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.journal !== null && data.journal.trim().length > 0) {
     searchFields += `multi_search=value:${data.journal};fields:journal_name,journal_short,journal_original;lookuptype:icontains`;
@@ -1292,11 +1307,11 @@ export function fetchJournals(data) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1339,7 +1354,7 @@ export function fetchSpecimens(data, databaseId) {
   const fields =
     "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy_id,date_collected,date_collected_free,depth,depth_interval,is_private";
   let searchFields = "";
-  let orderBy = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
     searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:icontains`;
@@ -1385,8 +1400,6 @@ export function fetchSpecimens(data, databaseId) {
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (searchFields.length > 0) {
     return fetch(
@@ -1583,6 +1596,7 @@ export function fetchCollections(data, databaseId) {
   const fields =
     "id,collection_id,number,name,name_en,name_long,name_long_en,database__acronym";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
@@ -1616,11 +1630,11 @@ export function fetchCollections(data, databaseId) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1645,6 +1659,7 @@ export function fetchTaxa(data) {
   const fields =
     "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
@@ -1674,11 +1689,11 @@ export function fetchTaxa(data) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1770,6 +1785,7 @@ export function fetchKeywords(data, listOfIDs) {
   let fields =
     "id,keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,remarks,is_primary";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (listOfIDs && listOfIDs.length > 0) {
     searchFields += `id__in=${listOfIDs}`;
@@ -1797,11 +1813,11 @@ export function fetchKeywords(data, listOfIDs) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `keyword/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `keyword/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `keyword/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `keyword/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1841,6 +1857,7 @@ export function fetchAgentUsingName(name) {
 export function fetchSelectionSeries(data) {
   let fields = "id,name,remarks,user_added";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
     searchFields += `&id__icontains=${data.id}`;
@@ -1859,11 +1876,11 @@ export function fetchSelectionSeries(data) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1899,7 +1916,6 @@ export function fetchChangePrivacyState(table, id, stateData) {
 /***********************
  ***  UNIVERSAL END  ***
  ***********************/
-
 
 /*********************
  *** HELPERS START ***

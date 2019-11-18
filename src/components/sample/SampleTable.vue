@@ -13,6 +13,8 @@
     @item-selected="$emit('add-item-to-selection-series', $event, 'sample')"
     @toggle-select-all="$emit('toggle-select-all', $event, 'sample')"
     expand-icon="fas fa-caret-down"
+    :sort-by.sync="searchParameters.sortBy"
+    :sort-desc.sync="searchParameters.sortDesc"
   >
     <template v-slot:item.number="{ item }">
       <router-link

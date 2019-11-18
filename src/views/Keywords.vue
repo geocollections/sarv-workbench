@@ -111,7 +111,8 @@ export default {
         is_primary: null,
         page: 1,
         paginateBy: 10,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     },
     resetSearchPreferences() {

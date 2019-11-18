@@ -195,7 +195,6 @@ export default {
     searchSpecimenImages(searchImages) {
       this.searchImages = searchImages;
       // Just to trigger change
-      console.log(searchImages)
       if (searchImages) {
         this.searchParameters.sortBy = ["date_added"];
         this.searchParameters.sortDesc = [true];

@@ -1886,7 +1886,8 @@ export default {
         selection: null,
         page: 1,
         paginateBy: 50,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     }
   }

@@ -110,7 +110,8 @@ export default {
         id: null,
         page: 1,
         paginateBy: 50,
-        orderBy: "-library"
+        sortBy: ["library"],
+        sortDesc: [true]
       };
     },
     resetSearchPreferences() {

@@ -144,7 +144,8 @@ export default {
         date_end: null,
         page: 1,
         paginateBy: 10,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     }
   }

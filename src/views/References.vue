@@ -181,7 +181,8 @@ export default {
         solrSearch: null,
         page: 1,
         paginateBy: 50,
-        orderBy: ["-id", "-year"]
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     },
     resetSearchPreferences() {

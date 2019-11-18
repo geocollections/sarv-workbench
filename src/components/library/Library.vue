@@ -657,7 +657,8 @@ export default {
         id: null,
         page: 1,
         paginateBy: 100,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     }
   }

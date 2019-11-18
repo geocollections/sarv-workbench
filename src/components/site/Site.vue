@@ -779,7 +779,8 @@ export default {
         projectId: null,
         page: 1,
         paginateBy: 8,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     },
 
