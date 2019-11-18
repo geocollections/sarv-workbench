@@ -1655,15 +1655,21 @@ export default {
 
       this.reference.reference = reference;
 
+      this.reference.language = {
+        id: 1,
+        value: "inglise",
+        value_en: "English"
+      };
+
       if (data["container-title"] && data["container-title"].length > 0) {
         let journalName = data["container-title"][0];
         fetchJournalForReference(journalName).then(response => {
           let journal = this.handleResponse(response);
           if (journal.length === 1)
-            this.reference.journal = {
+            this.$set(this.reference, "journal", {
               id: journal[0].id,
               journal_name: journal[0].journal_name
-            };
+            });
         });
       }
 
@@ -1693,7 +1699,7 @@ export default {
           this.reference.publisher = data.publisher;
       }
       if (data.type === "journal-article") {
-        this.type = {
+        this.reference.type = {
           id: 1,
           value: "artikkel ajakirjas",
           value_en: "article in journal"

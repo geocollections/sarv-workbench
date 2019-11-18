@@ -173,6 +173,12 @@ new Vue({
     activeSelectionSeries: {
       type: Object
     },
+    activeSample: {
+      type: Object
+    },
+    activeSite: {
+      type: Object
+    },
     photoArchive: {
       type: Object
     },

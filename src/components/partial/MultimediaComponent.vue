@@ -153,7 +153,7 @@
       <div
         class="align-self-center my-2 mx-5"
         v-for="(file, key) in arrayOfFiles"
-        :key="file.name"
+        :key="key"
       >
         <!-- FILES -->
         <div class="file-container" :title="file.name">
@@ -276,9 +276,10 @@ export default {
       this.files.push(newVal);
     },
     files: function(newVal) {
-      this.arrayOfFiles = [];
+      // this.arrayOfFiles = [];
       if (Array.isArray(newVal)) {
-        this.arrayOfFiles = newVal;
+        newVal.forEach(file => this.arrayOfFiles.push(file));
+        // this.arrayOfFiles = newVal;
       } else {
         // Adding File object to array
         // because for single file upload only File object is returned
@@ -290,33 +291,35 @@ export default {
 
       if (this.arrayOfFiles.length > 0) {
         for (let i = 0; i < this.arrayOfFiles.length; i++) {
-          console.log(this.arrayOfFiles[i]);
-          if (
-            this.arrayOfFiles[i].type.includes("image") ||
-            this.arrayOfFiles[i].type.includes("video") ||
-            this.arrayOfFiles[i].type.includes("audio")
-          ) {
-            let reader = new FileReader();
+          if (!this.arrayOfFiles[i].isAlreadyRead) {
+            if (
+              this.arrayOfFiles[i].type.includes("image") ||
+              this.arrayOfFiles[i].type.includes("video") ||
+              this.arrayOfFiles[i].type.includes("audio")
+            ) {
+              let reader = new FileReader();
 
-            reader.onload = event => {
+              reader.onload = event => {
+                this.$emit(
+                  "file-uploaded",
+                  this.recordedFile.length > 0
+                    ? this.recordedFile
+                    : this.arrayOfFiles
+                );
+
+                // console.log(event.target.result)
+                this.$refs["image" + parseInt(i)][0].src = event.target.result;
+              };
+              reader.readAsDataURL(this.arrayOfFiles[i]);
+            } else if (this.arrayOfFiles[i].type.includes("pdf")) {
               this.$emit(
                 "file-uploaded",
                 this.recordedFile.length > 0
                   ? this.recordedFile
                   : this.arrayOfFiles
               );
-
-              // console.log(event.target.result)
-              this.$refs["image" + parseInt(i)][0].src = event.target.result;
-            };
-            reader.readAsDataURL(this.files[i]);
-          } else if (this.arrayOfFiles[i].type.includes("pdf")) {
-            this.$emit(
-              "file-uploaded",
-              this.recordedFile.length > 0
-                ? this.recordedFile
-                : this.arrayOfFiles
-            );
+            }
+            this.arrayOfFiles[i].isAlreadyRead = true;
           }
         }
       }
@@ -335,6 +338,7 @@ export default {
     clearFile() {
       if (this.$refs.fileinput) this.$refs.fileinput.reset();
       this.files = [];
+      this.arrayOfFiles = [];
       this.$emit("files-cleared", true);
     },
 

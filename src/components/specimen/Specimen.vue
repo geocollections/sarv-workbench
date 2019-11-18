@@ -189,7 +189,7 @@
               >
               <v-checkbox
                 v-model="specimen.locality_is_private"
-                :label=" $t('specimen.is_private_text')"
+                :label="$t('specimen.is_private_text')"
                 hide-details
                 :color="bodyActiveColor"
                 class="mt-0 vuetify-checkbox"

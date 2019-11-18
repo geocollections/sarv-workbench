@@ -714,7 +714,7 @@
       <v-col class="checkboxes">
         <v-checkbox
           v-model="taxon.is_private"
-          :label=" $t('specimen.is_private_text')"
+          :label="$t('specimen.is_private_text')"
           class="mt-0"
           hide-details
         ></v-checkbox>

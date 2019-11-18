@@ -5,6 +5,8 @@ export default {
   SET_ACTIVE_OBJECTS: state => {
     const activeLibrary = Vue.localStorage.get("activeLibrary", null);
     const activeProject = Vue.localStorage.get("activeProject", null);
+    const activeSite = Vue.localStorage.get("activeSite", null);
+    const activeSample = Vue.localStorage.get("activeSample", null);
     const activeSelectionSeries = Vue.localStorage.get(
       "activeSelectionSeries",
       null
@@ -14,6 +16,10 @@ export default {
       Vue.set(state, "activeLibrary", activeLibrary);
     if (activeProject && !isEmpty(activeProject))
       Vue.set(state, "activeProject", activeProject);
+    if (activeSite && !isEmpty(activeSite))
+      Vue.set(state, "activeSite", activeSite);
+    if (activeSample && !isEmpty(activeSample))
+      Vue.set(state, "activeSample", activeSample);
     if (activeSelectionSeries && !isEmpty(activeSelectionSeries))
       Vue.set(state, "activeSelectionSeries", activeSelectionSeries);
   },
@@ -81,6 +87,16 @@ export default {
   SET_ACTIVE_PROJECT: (state, object) => {
     Vue.localStorage.set("activeProject", object);
     Vue.set(state, "activeProject", object);
+  },
+
+  SET_ACTIVE_SAMPLE: (state, object) => {
+    Vue.localStorage.set("activeSample", object);
+    Vue.set(state, "activeSample", object);
+  },
+
+  SET_ACTIVE_SITE: (state, object) => {
+    Vue.localStorage.set("activeSite", object);
+    Vue.set(state, "activeSite", object);
   },
 
   SET_SHORTCUTS: (state, { shortcuts }) => {
