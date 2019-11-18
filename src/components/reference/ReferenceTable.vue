@@ -12,6 +12,7 @@
     expand-icon="fas fa-caret-down"
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
+    :server-items-length="response.count"
   >
     <template v-slot:header.is_estonian_author="{ item }">
       <span> EE <v-icon x-small>fas fa-user</v-icon> </span>

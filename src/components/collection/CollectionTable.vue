@@ -12,6 +12,7 @@
     expand-icon="fas fa-caret-down"
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
+    :server-items-length="response.count"
   >
     <template v-slot:item.collection_id="{ item }">
       <router-link
