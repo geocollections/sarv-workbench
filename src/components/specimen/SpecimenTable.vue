@@ -15,7 +15,8 @@
       @toggle-select-all="$emit('toggle-select-all', $event, 'specimen')"
       expand-icon="fas fa-caret-down"
       :value="selected"
-      :custom-sort="sortRecords"
+      :sort-by.sync="searchParameters.sortBy"
+      :sort-desc.sync="searchParameters.sortDesc"
     >
       <template v-slot:item.id="{ item }">
         <router-link
@@ -245,31 +246,6 @@ export default {
 
     getRockUrl(id) {
       return "https://kivid.info/" + id;
-    },
-
-    sortRecords(items, sortBy, sortDesc) {
-      let orderBy = "";
-      if (sortBy && sortBy.length > 0) {
-        sortBy.forEach((field, index) => {
-          orderBy += (sortDesc[index] ? "-" : "") + field + ",";
-        });
-      }
-
-      if (orderBy && orderBy.length > 0) {
-        this.searchParameters.orderBy = orderBy.substring(
-          0,
-          orderBy.length - 1
-        );
-        // this.searchParameters.sortBy = sortBy;
-        // this.searchParameters.sortDesc = sortDesc;
-      } else {
-        this.searchParameters.orderBy = "-id";
-        // this.searchParameters.sortBy = sortBy;
-        // this.searchParameters.sortDesc = sortDesc;
-      }
-
-      console.log("sortRecords");
-      return items;
     },
 
     async getNames(listOfSpecimens) {

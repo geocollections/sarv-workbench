@@ -1339,6 +1339,7 @@ export function fetchSpecimens(data, databaseId) {
   const fields =
     "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy_id,date_collected,date_collected_free,depth,depth_interval,is_private";
   let searchFields = "";
+  let orderBy = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
     searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:icontains`;
@@ -1385,13 +1386,15 @@ export function fetchSpecimens(data, databaseId) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
+  orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
   if (searchFields.length > 0) {
     return fetch(
-      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1400,6 +1403,7 @@ export function fetchSpecimenImages(data, databaseId) {
   const fields =
     "id,specimen_id,size_mb,original_filename,uuid_filename,user_added,date_added,specimen__specimen_id,specimen__database__acronym";
   let searchFields = "";
+  let orderBy = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
     searchFields += `multi_search=value:${data.idSpecimen};fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:icontains`;
@@ -1438,13 +1442,15 @@ export function fetchSpecimenImages(data, databaseId) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
+  orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
   if (searchFields.length > 0) {
     return fetch(
-      `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
@@ -1893,3 +1899,27 @@ export function fetchChangePrivacyState(table, id, stateData) {
 /***********************
  ***  UNIVERSAL END  ***
  ***********************/
+
+
+/*********************
+ *** HELPERS START ***
+ *********************/
+
+function buildOrderBy(sortBy, sortDesc) {
+  if (sortBy && sortDesc && sortBy.length > 0 && sortDesc.length > 0) {
+    let orderBy = "";
+
+    sortBy.forEach((field, index) => {
+      orderBy += (sortDesc[index] ? "-" : "") + field + ",";
+    });
+
+    if (orderBy.length > 0) orderBy = orderBy.substring(0, orderBy.length - 1);
+    else orderBy = "-id";
+
+    return orderBy;
+  } else return "-id";
+}
+
+/*********************
+ ***  HELPERS END  ***
+ *********************/

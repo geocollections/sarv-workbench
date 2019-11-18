@@ -177,7 +177,8 @@ export default {
         selection: null,
         page: 1,
         paginateBy: 50,
-        orderBy: "-id"
+        sortBy: ["id"],
+        sortDesc: [true]
       };
     },
     resetSearchPreferences() {
@@ -194,8 +195,14 @@ export default {
     searchSpecimenImages(searchImages) {
       this.searchImages = searchImages;
       // Just to trigger change
-      if (searchImages) this.searchParameters.orderBy = "-date_added";
-      else this.searchParameters.orderBy = "-id";
+      console.log(searchImages)
+      if (searchImages) {
+        this.searchParameters.sortBy = ["date_added"];
+        this.searchParameters.sortDesc = [true];
+      } else {
+        this.searchParameters.sortBy = ["id"];
+        this.searchParameters.sortDesc = [true];
+      }
     }
   }
 };
