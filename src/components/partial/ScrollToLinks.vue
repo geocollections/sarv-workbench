@@ -55,8 +55,7 @@ export default {
       if (name === "specimen") return "fa-fish";
     },
 
-    getIconPack(name) {
-      console.log(name);
+    getIconPack() {
       return "fas";
     }
   }

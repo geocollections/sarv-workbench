@@ -4,7 +4,7 @@
       <v-card elevation="3">
         <v-card-title class="pb-0">
           <span>{{ $t("edit.search") }}&nbsp;</span>
-          <v-icon color="deep-orange">fas fa-search</v-icon>
+          <v-icon right color="deep-orange">fas fa-search</v-icon>
           <v-spacer></v-spacer>
           <v-btn
             icon

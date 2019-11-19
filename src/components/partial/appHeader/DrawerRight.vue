@@ -359,14 +359,15 @@
           :key="entity.library"
           :color="drawerActiveColor"
           :title="
-            activeLibrary.library === entity.library
+            activeLibrary && activeLibrary.library === entity.library
               ? $t('sidebar.library.inactiveTitle')
               : $t('sidebar.library.activeTitle')
           "
           dense
-          @click="toggleActive(entity, 'ACTIVE_LIBRARY')"
+          @click="toggleActive(entity, 'setActiveLibrary')"
           :class="{
-            'v-list-item--active': activeLibrary.library === entity.library
+            'v-list-item--active':
+              activeLibrary && activeLibrary.library === entity.library
           }"
         >
           <v-list-item-content>
@@ -473,7 +474,7 @@
               : $t('sidebar.selection_series.activeTitle')
           "
           dense
-          @click="toggleActive(entity, 'ACTIVE_SELECTION_SERIES')"
+          @click="toggleActive(entity, 'setActiveSelectionSeries')"
           :class="{
             'v-list-item--active': activeSelectionSeries.id === entity.id
           }"
@@ -526,6 +527,7 @@
 
 <script>
 import { toastInfo } from "../../../assets/js/iziToast/iziToast";
+import { mapState } from "vuex";
 
 export default {
   name: "DrawerRight",
@@ -550,31 +552,38 @@ export default {
     }
   },
   computed: {
-    activeSearchParams() {
-      return this.$store.state["activeSearchParams"];
-    },
+    ...mapState([
+      "activeSearchParams",
+      "sidebarList",
+      "activeLibrary",
+      "activeSelectionSeries"
+    ]),
+
+    // activeSearchParams() {
+    //   return this.$store.state["activeSearchParams"];
+    // },
 
     tableSearchParameters() {
       return this.$store.state["tableSearchParameters"][
         this.$route.meta.object
       ];
-    },
-
-    sidebarList() {
-      return this.$store.state["sidebarList"];
-    },
-
-    activeLibrary() {
-      if (this.$store.state["activeLibrary"] !== null)
-        return this.$store.state["activeLibrary"];
-      else return "";
-    },
-
-    activeSelectionSeries() {
-      if (this.$store.state["activeSelectionSeries"] !== null)
-        return this.$store.state["activeSelectionSeries"];
-      else return "";
     }
+    //
+    // sidebarList() {
+    //   return this.$store.state["sidebarList"];
+    // },
+    //
+    // activeLibrary() {
+    //   if (this.$store.state["activeLibrary"] !== null)
+    //     return this.$store.state["activeLibrary"];
+    //   else return "";
+    // },
+    //
+    // activeSelectionSeries() {
+    //   if (this.$store.state["activeSelectionSeries"] !== null)
+    //     return this.$store.state["activeSelectionSeries"];
+    //   else return "";
+    // }
   },
   created() {
     if (this.$store.state["activeSearchParams"] !== null) {
@@ -618,12 +627,14 @@ export default {
       let makeActive = true;
 
       if (
-        activeObject === "ACTIVE_LIBRARY" &&
+        activeObject === "setActiveLibrary" &&
+        this.activeLibrary &&
         this.activeLibrary.id === entity.id
       ) {
         makeActive = false;
       } else if (
-        activeObject === "ACTIVE_SELECTION_SERIES" &&
+        activeObject === "setActiveSelectionSeries" &&
+        this.activeSelectionSeries &&
         this.activeSelectionSeries.id === entity.id
       ) {
         makeActive = false;

@@ -129,8 +129,6 @@ export default {
   },
   data() {
     return {
-      activeSite: false,
-      activeSample: false,
       routeLinks: [
         {
           name: "attachment",
@@ -215,8 +213,7 @@ export default {
           title: "sites",
           links: [
             { title: "editSite", path: "/site", icon: "fas fa-globe" },
-            { title: "addSite", path: "/site/add", icon: "far fa-plus-square" },
-            { title: "activeSite", path: "", icon: "fas fa-map-marker-alt" }
+            { title: "addSite", path: "/site/add", icon: "far fa-plus-square" }
           ]
         },
         {
@@ -244,8 +241,7 @@ export default {
               title: "sample",
               path: "/sample/add",
               icon: "far fa-plus-square"
-            },
-            { title: "activeSample", path: "", icon: "fas fa-fill-drip" }
+            }
           ]
         },
         {
@@ -332,31 +328,33 @@ export default {
               });
             }
           } else parentLink.links.splice(2, 1);
+        } else if (parentLink.name === "site") {
+          if (this.activeSite && this.activeSite.id) {
+            if (parentLink.links.length === 2) {
+              parentLink.links.push({
+                title: "activeSite",
+                path: `/site/${this.activeSite.id}`,
+                icon: "fas fa-map-marker-alt"
+              });
+            }
+          } else parentLink.links.splice(2, 1);
+        } else if (parentLink.name === "sample") {
+          if (this.activeSample && this.activeSample.id) {
+            if (parentLink.links.length === 2) {
+              parentLink.links.push({
+                title: "activeSample",
+                path: `/sample/${this.activeSample.id}`,
+                icon: "fas fa-fill-drip"
+              });
+            }
+          } else parentLink.links.splice(2, 1);
         }
         return true;
       });
     },
 
-    ...mapState(["activeProject"]),
+    ...mapState(["activeProject", "activeSite", "activeSample"]),
     ...mapGetters(["isUserAllowedTo"])
-  },
-  created() {
-    // Todo: Add them to store because it needs to be updated
-    this.activeSite = this.$localStorage.get("activeSite");
-    if (this.activeSite) {
-      this.routeLinks
-        .find(linkObject => linkObject.name === "site")
-        ["links"].find(link => link.title === "activeSite").path =
-        "/site/" + this.activeSite;
-    } else this.activeSite = "";
-
-    this.activeSample = this.$localStorage.get("activeSample");
-    if (this.activeSample) {
-      this.routeLinks
-        .find(linkObject => linkObject.name === "sample")
-        ["links"].find(link => link.title === "activeSample").path =
-        "/sample/" + this.activeSample;
-    } else this.activeSample = "";
   },
   methods: {
     changeDrawerState(drawerState) {

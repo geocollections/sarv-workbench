@@ -523,11 +523,10 @@ export default {
     this.loadFullInfo();
   },
   beforeRouteLeave(to, from, next) {
-
-    next()
-  },
-  updated() {
-    this.$localStorage.set("activeSite", this.$data.site.id);
+    if (this.$route.meta.isEdit) {
+      this.$store.dispatch("setActiveSite", this.site);
+    }
+    next();
   },
   methods: {
     setInitialData() {
@@ -766,8 +765,7 @@ export default {
     fetchList(localStorageData) {
       let params =
         this.isNotEmpty(localStorageData) &&
-        localStorageData !== "fallbackValue" &&
-        localStorageData !== "[object Object]"
+        localStorageData !== "fallbackValue"
           ? localStorageData
           : this.searchParameters;
       return new Promise(resolve => {

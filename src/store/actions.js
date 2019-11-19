@@ -123,16 +123,24 @@ export default {
     commit("GET_SHORTCUTS");
   },
 
-  ACTIVE_LIBRARY: ({ commit }, library) => {
+  setActiveLibrary: ({ commit }, library) => {
     commit("SET_ACTIVE_LIBRARY", library);
   },
 
-  ACTIVE_SELECTION_SERIES: ({ commit }, selection_series) => {
+  setActiveSelectionSeries: ({ commit }, selection_series) => {
     commit("SET_ACTIVE_SELECTION_SERIES", selection_series);
   },
 
   setActiveProject: ({ commit }, project) => {
     commit("SET_ACTIVE_PROJECT", project);
+  },
+
+  setActiveSite: ({ commit }, site) => {
+    commit("SET_ACTIVE_SITE", site);
+  },
+
+  setActiveSample: ({ commit }, sample) => {
+    commit("SET_ACTIVE_SAMPLE", sample);
   },
 
   INITIALISE_ACTIVE_OBJECTS: ({ commit }) => {

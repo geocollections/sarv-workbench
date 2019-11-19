@@ -1382,10 +1382,6 @@ export default {
     this.loadFullInfo();
   },
 
-  updated() {
-    this.$localStorage.set("activeSample", this.$data.sample.id);
-  },
-
   beforeDestroy() {
     this.$root.$off(
       "add-new-sample-from-modal",
@@ -1400,6 +1396,9 @@ export default {
 
   beforeRouteLeave(to, from, next) {
     this.$localStorage.set("sampleView", this.isSimpleView);
+    if (this.$route.meta.isEdit) {
+      this.$store.dispatch("setActiveSample", this.sample);
+    }
     next();
   },
 
