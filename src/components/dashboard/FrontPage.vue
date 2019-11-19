@@ -3,7 +3,7 @@
     <!-- NAME -->
     <v-row>
       <v-col class="pb-0">
-        <v-card flat color="#fafafa">
+        <v-card flat>
           <v-card-title class="pl-0">
             <span class="h3 text-capitalize break-word">
               {{
