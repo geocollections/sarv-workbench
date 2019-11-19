@@ -32,7 +32,7 @@
         <v-card elevation="3">
           <v-card-title>
             <span>{{ $t("frontPage.sitesMap") }}&nbsp;</span>
-            <v-icon color="purple lighten-2">fas fa-map-marked-alt</v-icon>
+            <v-icon right color="purple lighten-2">fas fa-map-marked-alt</v-icon>
             <v-spacer></v-spacer>
             <v-btn
               icon
@@ -60,7 +60,7 @@
         <v-card elevation="3">
           <v-card-title>
             <span>{{ $t("frontPage.help") }}&nbsp;</span>
-            <v-icon color="blue darken-2">far fa-question-circle</v-icon>
+            <v-icon right color="blue darken-2">far fa-question-circle</v-icon>
             <v-spacer></v-spacer>
             <v-btn icon @click="block.help = !block.help" color="blue darken-2">
               <v-icon>{{
