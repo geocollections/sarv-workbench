@@ -32,7 +32,9 @@
         <v-card elevation="3">
           <v-card-title>
             <span>{{ $t("frontPage.sitesMap") }}&nbsp;</span>
-            <v-icon right color="purple lighten-2">fas fa-map-marked-alt</v-icon>
+            <v-icon right color="purple lighten-2"
+              >fas fa-map-marked-alt</v-icon
+            >
             <v-spacer></v-spacer>
             <v-btn
               icon

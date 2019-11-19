@@ -147,11 +147,11 @@
     </div>
 
     <div
-      class="d-flex flex-wrap align-items-center col"
+      class="d-flex flex-wrap align-items-center col mx-5"
       v-if="files && arrayOfFiles.length > 0"
     >
       <div
-        class="align-self-center my-2 mx-5"
+        class="align-self-center my-2 mx-9"
         v-for="(file, key) in arrayOfFiles"
         :key="key"
       >
