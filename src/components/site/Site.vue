@@ -413,9 +413,16 @@
     </v-card>
 
     <!-- SAMPLES -->
-    <v-card class="mt-2" id="block-samples" v-if="$route.meta.isEdit && site.id">
+    <v-card
+      class="mt-2"
+      id="block-samples"
+      v-if="$route.meta.isEdit && site.id"
+    >
       <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.samples = !block.samples">
+        <div
+          class="card-title--clickable"
+          @click="block.samples = !block.samples"
+        >
           <span>{{ $t("site.relatedSamples") }}</span>
           <v-icon right>fas fa-vial</v-icon>
         </div>
@@ -427,7 +434,7 @@
         >
           <v-icon>{{
             block.samples ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -435,22 +442,73 @@
         <div v-show="block.samples" class="px-1 pt-1 pb-2">
           <add-new-sample :sendingData="sendingData"></add-new-sample>
 
-          <v-row no-gutters>
-            <v-col cols="12" class="px-1">
+          <!-- ADD NEW and EXPORT -->
+          <v-card class="d-flex flex-row justify-content-start" flat tile>
+            <v-card flat tile class="px-1">
               <v-btn
-                class="mb-2"
-                :to="{ name: 'Sample add', query: { site: JSON.stringify(site) }}"
+                :to="{
+                  name: 'Sample add',
+                  query: { site: JSON.stringify(site) }
+                }"
                 target="newSiteWindow"
                 :color="bodyActiveColor"
                 :dark="isBodyActiveColorDark"
-              >{{ $t("add.new") }}</v-btn>
-            </v-col>
+                >{{ $t("add.new") }}</v-btn
+              >
+            </v-card>
 
-            <linked-sample-table
-              :siteID="$route.params.id"
-              :samples="relatedData.sample"
-              style="margin-right: -10px; margin-left: -10px"
-            ></linked-sample-table>
+            <v-card flat tile class="px-1">
+              <export-buttons
+                filename="sample"
+                :table-data="relatedData.samples.results"
+              ></export-buttons>
+            </v-card>
+          </v-card>
+
+          <!-- PAGINATION -->
+          <div
+            v-if="relatedData.samples.count > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-4 px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters.sample.paginateBy"
+                color="blue"
+                dense
+                :items="paginateByOptionsTranslated"
+                item-color="blue"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters.sample.page"
+                color="blue"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.samples.count /
+                      relatedData.searchParameters.sample.paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <sample-table
+                ref="table"
+                :response="relatedData.samples"
+                :search-parameters="relatedData.searchParameters.sample"
+                v-if="relatedData.samples.count > 0"
+              />
+            </v-col>
           </v-row>
         </div>
       </transition>
@@ -476,22 +534,25 @@ import {
 import MultimediaComponent from "../partial/MultimediaComponent";
 import MapComponent from "../partial/MapComponent";
 import FileTable from "../partial/FileTable";
-import LinkedSampleTable from "../sample/LinkedSampleTable";
 import AddNewSample from "./addNewSampleModal";
 import sidebarMixin from "../../mixins/sidebarMixin";
 import Editor from "../partial/editor/Editor";
+import SampleTable from "../sample/SampleTable";
+import ExportButtons from "../partial/export/ExportButtons";
+import debounce from "lodash/debounce";
 
 export default {
   name: "Site",
   components: {
+    SampleTable,
     Editor,
     AddNewSample,
-    LinkedSampleTable,
     FileTable,
     MapComponent,
     MultimediaComponent,
     Datepicker,
-    Spinner
+    Spinner,
+    ExportButtons
   },
   props: {
     isBodyActiveColorDark: {
@@ -529,6 +590,15 @@ export default {
 
     activeProject() {
       return this.$store.state["activeProject"];
+    },
+
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
+      });
     }
   },
   created() {
@@ -586,7 +656,43 @@ export default {
     }
     next();
   },
+
+  watch: {
+    "$route.params.id": {
+      handler: function() {
+        this.reloadData();
+      }
+    },
+    sidebarUserAction(newVal) {
+      this.$_handleUserAction(newVal, "site", this.site);
+    },
+    "relatedData.searchParameters.sample": {
+      handler(newVal) {
+        if (this.$route.meta.isEdit) {
+          this.searchRelatedData(
+            newVal,
+            this.fetchLinkedSamplesWrapper,
+            "samples"
+          );
+        }
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+
   methods: {
+    fetchLinkedSamplesWrapper() {
+      return new Promise(resolve => {
+        resolve(
+          fetchLinkedSamples(
+            this.relatedData.searchParameters.sample,
+            this.$route.params.id
+          )
+        );
+      });
+    },
+
     setInitialData() {
       return {
         searchHistory: "siteSearchHistory",
@@ -635,7 +741,16 @@ export default {
           description: false,
           files: true,
           samples: true
-        }
+        },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
@@ -672,12 +787,6 @@ export default {
         });
 
         this.loadRelatedData("attachment_link");
-        this.loadRelatedData("sample");
-      } else {
-        // this.block.info = true
-        // this.setLocationDataIfExists();
-        // this.setSiteNameAndProjectIfPreviousExists();
-        // this.loadListOfExistingProjects();
       }
       this.$root.$on(
         "add-or-edit-site-from-modal",
@@ -688,7 +797,10 @@ export default {
     setDefaultRalatedData() {
       return {
         attachment_link: [],
-        sample: [],
+        samples: {
+          count: 0,
+          results: []
+        },
         new: {
           attachment_link: []
         },
@@ -699,7 +811,6 @@ export default {
           attachment_link: 0,
           sample: 0
         },
-        // New format!!! I believe it is better for future updates
         searchParameters: {
           attachment_link: {
             page: 1,
@@ -709,7 +820,8 @@ export default {
           sample: {
             page: 1,
             paginateBy: 25,
-            orderBy: "-id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
         }
       };
@@ -791,15 +903,9 @@ export default {
       let query;
 
       if (object === "attachment_link") {
-        // Todo: update to so that it would use searchParameters object
         query = fetchSiteAttachment(
           this.$route.params.id,
           this.relatedData.page.attachment_link
-        );
-      } else if (object === "sample") {
-        query = fetchLinkedSamples(
-          this.relatedData.searchParameters.sample,
-          this.$route.params.id
         );
       }
       return new Promise(resolve => {
@@ -926,19 +1032,22 @@ export default {
     handleCoordinateChange() {
       this.site.location_accuracy = null;
       this.site.coord_det_method = null;
-    }
-  },
-
-  watch: {
-    "$route.params.id": {
-      handler: function() {
-        this.reloadData();
-      },
-      deep: true
     },
-    sidebarUserAction(newVal) {
-      this.$_handleUserAction(newVal, "site", this.site);
-    }
+
+    searchRelatedData: debounce(function(
+      searchParameters,
+      apiCall,
+      relatedObject
+    ) {
+      apiCall().then(response => {
+        console.log(response);
+        if (response.status === 200) {
+          this.relatedData[relatedObject].count = response.body.count;
+          this.relatedData[relatedObject].results = response.body.results;
+        }
+      });
+    },
+    500)
   }
 };
 </script>

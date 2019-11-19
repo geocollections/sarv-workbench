@@ -1155,6 +1155,7 @@ export function fetchLinkedSamples(data, siteID) {
   let fields =
     "id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en";
   let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
     searchFields += `id__icontains=${data.id}`;
@@ -1181,11 +1182,11 @@ export function fetchLinkedSamples(data, siteID) {
 
   if (searchFields.length > 0) {
     return fetch(
-      `sample/?site__id=${siteID}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `sample/?site__id=${siteID}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
     return fetch(
-      `sample/?site__id=${siteID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`
+      `sample/?site__id=${siteID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
