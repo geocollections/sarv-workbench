@@ -20,20 +20,17 @@
         <v-switch
           class="vuetify-switch mt-0"
           inset
-          v-model="isActiveProject"
+          @change="setActiveProject"
+          :input-value="!!activeProject"
           hide-details
           color="blue"
         >
           <template v-slot:label>
-            <div :class="{ 'green--text': isActiveProject }">
-              <v-icon x-small :class="{ 'green--text': isActiveProject }"
+            <div :class="{ 'green--text': !!activeProject }">
+              <v-icon x-small :class="{ 'green--text': !!activeProject }"
                 >fas fa-tag</v-icon
               >
-              {{
-                isActiveProject
-                  ? $t("frontPage.active")
-                  : $t("frontPage.non_active")
-              }}
+              {{ $t("frontPage.active") }}
             </div>
           </template>
         </v-switch>
@@ -490,20 +487,7 @@ export default {
       return this.$store.state["sidebarUserAction"];
     },
 
-    isActiveProject: {
-      get() {
-        if (this.$store.state["activeProject"] !== null)
-          return this.$store.state["activeProject"].id == this.$route.params.id;
-        else return "";
-      },
-
-      set(newVal) {
-        if (newVal) this.$store.dispatch("ACTIVE_PROJECT", this.project);
-        else this.$store.dispatch("ACTIVE_PROJECT", null);
-      }
-    },
-
-    ...mapState(["currentUser", "databaseId"])
+    ...mapState(["currentUser", "databaseId", "activeProject"])
   },
   created() {
     // USED BY SIDEBAR
@@ -532,6 +516,12 @@ export default {
   },
 
   methods: {
+    setActiveProject(switchValue) {
+      console.log(switchValue);
+      if (switchValue) this.$store.dispatch("setActiveProject", this.project);
+      else this.$store.dispatch("setActiveProject", null);
+    },
+
     setInitialData() {
       return {
         searchHistory: "projectSearchHistory",

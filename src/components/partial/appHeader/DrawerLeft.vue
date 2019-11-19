@@ -50,7 +50,7 @@
 
       <!-- ROUTES -->
       <v-list-group
-        v-if="allowedRouteLinks.length > 0"
+        v-if="filteredRouteLinks.length > 0"
         prepend-icon="fas fa-home"
         append-icon="fas fa-angle-down"
         :color="drawerActiveColor"
@@ -63,7 +63,7 @@
         <v-list-group
           sub-group
           :color="drawerActiveColor"
-          v-for="entity in allowedRouteLinks"
+          v-for="entity in filteredRouteLinks"
           :key="entity.title"
           v-model="entity.state"
         >
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "DrawerLeft",
@@ -207,8 +207,7 @@ export default {
               title: "addProject",
               path: "/project/add",
               icon: "far fa-plus-square"
-            },
-            { title: "activeProject", path: "", icon: "fas fa-globe-americas" }
+            }
           ]
         },
         {
@@ -321,12 +320,24 @@ export default {
       );
     },
 
-    activeProject() {
-      if (this.$store.state["activeProject"] !== null)
-        return this.$store.state["activeProject"];
-      else return "";
+    filteredRouteLinks() {
+      return this.allowedRouteLinks.filter(parentLink => {
+        if (parentLink.name === "project") {
+          if (this.activeProject && this.activeProject.id) {
+            if (parentLink.links.length === 2) {
+              parentLink.links.push({
+                title: "activeProject",
+                path: `/project/${this.activeProject.id}`,
+                icon: "fas fa-globe-americas"
+              });
+            }
+          } else parentLink.links.splice(2, 1);
+        }
+        return true;
+      });
     },
 
+    ...mapState(["activeProject"]),
     ...mapGetters(["isUserAllowedTo"])
   },
   created() {

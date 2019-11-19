@@ -131,7 +131,7 @@ export default {
     commit("SET_ACTIVE_SELECTION_SERIES", selection_series);
   },
 
-  ACTIVE_PROJECT: ({ commit }, project) => {
+  setActiveProject: ({ commit }, project) => {
     commit("SET_ACTIVE_PROJECT", project);
   },
 

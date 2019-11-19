@@ -522,6 +522,10 @@ export default {
 
     this.loadFullInfo();
   },
+  beforeRouteLeave(to, from, next) {
+
+    next()
+  },
   updated() {
     this.$localStorage.set("activeSite", this.$data.site.id);
   },
