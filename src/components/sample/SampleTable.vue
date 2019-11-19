@@ -71,7 +71,7 @@
       <span v-else>{{ item.depth }}</span>
     </template>
 
-    <template v-slot:item.stratigraphy__stratigraphy="{ item }">
+    <template v-slot:item.stratigraphy="{ item }">
       <div>
         <span
           v-translate="{

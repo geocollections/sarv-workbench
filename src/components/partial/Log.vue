@@ -1,29 +1,41 @@
 <template>
-  <fieldset class="log border-top px-2 my-2" v-if="logs.length > 0">
-    <legend
-      class="w-auto my-0 mb-1"
-      :class="{ 'text-primary': !block.logs }"
-      @click="block.logs = !block.logs"
-    >
-      {{ $t("logs.title") }}
-      <i class="fas fa-history"></i>
-    </legend>
+  <v-card class="log mt-2" v-if="logs.length > 0">
+    <v-card-title class="pt-2 pb-1">
+      <div
+        class="card-title--clickable"
+        @click="block.logs = !block.logs"
+      >
+        <span>{{ $t("logs.title") }}</span>
+        <v-icon right>fas fa-history</v-icon>
+      </div>
+      <v-spacer></v-spacer>
+      <v-btn
+        icon
+        @click="block.logs = !block.logs"
+        :color="bodyActiveColor"
+      >
+        <v-icon>{{
+          block.logs ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+      </v-btn>
+    </v-card-title>
 
     <transition name="fade">
-      <div class="row" v-show="block.logs">
-        <div class="col">
-          <div class="table-responsive">
-            <table class="table table-hover table-bordered">
-              <thead class="thead-light">
+      <div v-show="block.logs" class="px-1 pt-1 pb-2">
+        <div class="row no-gutters">
+          <div class="col px-1">
+            <div class="table-responsive mb-0">
+              <table class="table table-hover table-bordered">
+                <thead class="thead-light">
                 <tr>
                   <th>{{ $t("logs.user") }}</th>
                   <th>{{ $t("logs.time") }}</th>
                   <th>{{ $t("logs.command") }}</th>
                   <th>{{ $t("logs.changes") }}</th>
                 </tr>
-              </thead>
+                </thead>
 
-              <tbody>
+                <tbody>
                 <tr v-for="entity in logs" :key="entity.id">
                   <td>
                     <b>{{ entity.user }}</b>
@@ -77,20 +89,37 @@
                     </div>
                   </td>
                 </tr>
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </transition>
-  </fieldset>
+
+  </v-card>
 </template>
 
 <script>
 import { fetchSpecificLogs } from "@/assets/js/api/apiCalls";
 
 export default {
-  props: ["table", "data", "formattedData"],
+  props: {
+      table: {
+        type: String
+      },
+      data: {
+        type: Object
+      },
+      formattedData: {
+        type: Object
+      },
+      bodyActiveColor: {
+        type: String,
+        required: false,
+        default: "deep-orange"
+      }
+  },
   name: "Log",
   data() {
     return {
@@ -164,5 +193,10 @@ export default {
 
 .list-item-old {
   background-color: rgba(220, 53, 69, 0.3);
+}
+
+.card-title--clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 </style>

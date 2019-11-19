@@ -55,11 +55,12 @@
 
     <!-- LOGS -->
     <log
-      v-if="data != null && objectExists"
+      v-if="data && objectExists"
       :table="$route.meta.table"
       :data="data"
       :formatted-data="formattedData"
       :key="logComponentKey"
+      :body-active-color="appSettings.bodyActiveColor"
     ></log>
   </div>
 </template>
