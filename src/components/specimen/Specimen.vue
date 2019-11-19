@@ -1928,6 +1928,7 @@ label {
 .specimen >>> .multiselect__single {
   padding: 0;
   margin-bottom: 0;
+  font-size: 0.875rem;
 }
 
 .specimen >>> .multiselect__placeholder {

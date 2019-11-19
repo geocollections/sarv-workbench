@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="site">
     <spinner
       v-show="sendingData"
       class="loading-overlay"
@@ -10,32 +10,36 @@
     ></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border-top px-2 mb-2" ref="info" id="block-info">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.info }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("site.generalInfo") }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
+    <v-card class="mt-2" id="block-info">
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span>{{ $t("site.generalInfo") }}</span>
+          <v-icon right>fas fa-project-diagram</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.info">
-          <div class="row">
-            <div class="col-md-6">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
+          <!-- NAME and PROJECT -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`name`">{{ $t("site.name") }}:</label>
               <b-form-input
+                size="sm"
                 id="name"
                 v-model="site.name"
                 type="text"
                 maxlength="100"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
-              <!--<label class="p-0">{{ $t('site.name_en') }}:</label>-->
-              <!--<b-form-input id="name_en" v-model="site.name_en" type="text" maxlength="100"></b-form-input>-->
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`project`">{{ $t("site.project") }}:</label>
               <vue-multiselect
                 v-model="site.project"
@@ -58,11 +62,12 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
-          <div class="row">
-            <div class="col-sm-4">
+          <!-- DATE_START and DATE_END -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`date_start`"
                 >{{ $t("site.date_start") }} (yyyy-mm-dd hh:mm):</label
               >
@@ -76,11 +81,11 @@
                 confirm
                 type="datetime"
                 :typeable="true"
-                input-class="form-control"
+                input-class="form-control form-control-sm"
               ></datepicker>
-            </div>
+            </v-col>
 
-            <div class="col-sm-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`date_end`"
                 >{{ $t("site.date_end") }} (yyyy-mm-dd hh:mm):</label
               >
@@ -94,31 +99,48 @@
                 confirm
                 type="datetime"
                 :typeable="true"
-                input-class="form-control"
+                input-class="form-control form-control-sm"
               ></datepicker>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
-    <!-- LOCATION -->
-    <fieldset class="border-top px-2 mb-2" id="block-location">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.location }"
-        @click="block.location = !block.location"
-      >
-        {{ $t("site.location") }}
-        <i class="fas fa-globe"></i>
-      </legend>
+    <!-- LOCALITY INFO -->
+    <v-card class="mt-2" id="block-location">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.location = !block.location"
+        >
+          <span :class="validate('site') ? 'green--text' : 'red--text'">{{
+            $t("site.location")
+          }}</span>
+          <v-icon right :class="validate('site') ? 'green--text' : 'red--text'"
+            >fas fa-globe</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.location = !block.location"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.location ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-if="block.location">
-          <div class="row">
-            <div class="col-md-4">
+      <transition>
+        <div v-show="block.location" class="px-1 pt-1 pb-2">
+          <!-- LATITUDE, LONGITUDE and LOCATION_ACCURACY -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`latitude`">{{ $t("site.latitude") }}:</label>
               <b-form-input
+                size="sm"
                 id="latitude"
                 v-model="site.latitude"
                 :state="isNotEmpty(site.latitude)"
@@ -126,11 +148,12 @@
                 step="0.000001"
                 @input="handleCoordinateChange"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`longitude`">{{ $t("site.longitude") }}:</label>
               <b-form-input
+                size="sm"
                 id="longitude"
                 v-model="site.longitude"
                 :state="isNotEmpty(site.longitude)"
@@ -138,39 +161,37 @@
                 step="0.000001"
                 @input="handleCoordinateChange"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`location_accuracy`"
                 >{{ $t("site.location_accuracy") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="location_accuracy"
                 v-model="site.location_accuracy"
                 type="number"
                 min="0"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
-          <!--          <div class="row">-->
-          <!--            <span class="col ml-3 mt-3 custom-control custom-switch">-->
-          <!--              <input type="checkbox" class="custom-control-input" id="customSwitch" v-model="showCollapseMap">-->
-          <!--              <label class="custom-control-label"-->
-          <!--                     for="customSwitch">{{showCollapseMap ? 'Map enabled' : 'Map disabled'}}</label>-->
-          <!--            </span>-->
-          <!--          </div>-->
-
-          <div class="d-flex justify-content-start mt-3">
-            <div class="align-self-center">
+          <v-card
+            class="d-flex flex-row justify-content-start mt-1 mx-3"
+            flat
+            tile
+          >
+            <v-card flat tile class="align-self-center mr-2">
               <v-switch
                 v-model="showCollapseMap"
                 hide-details
                 id="map-switch"
                 class="vuetify-switch my-1"
               ></v-switch>
-            </div>
-            <div class="align-self-center">
+            </v-card>
+
+            <v-card flat tile class="align-self-center">
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
                 {{
@@ -179,12 +200,12 @@
                     : $t("site.mapDisabled")
                 }}
               </label>
-            </div>
-          </div>
+            </v-card>
+          </v-card>
 
-          <div class="row my-2" v-if="showCollapseMap">
-            <div class="col-lg-12">
-              <b-collapse v-model="showCollapseMap" id="collapseMap">
+          <transition enter-active-class="animated fadeIn faster">
+            <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+              <v-col cols="12" class="px-1">
                 <map-component
                   v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
                   :gps-coords="true"
@@ -197,32 +218,35 @@
                   }"
                   v-on:update-coordinates="updateLocation"
                 />
-              </b-collapse>
-            </div>
-          </div>
+              </v-col>
+            </v-row>
+          </transition>
 
-          <div class="row">
-            <div class="col-md-4">
+          <!-- ELEVATION, ELEVATION_ACCURACY and COORD_DET_METHOD -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`elevation`">{{ $t("site.elevation") }}:</label>
               <b-form-input
+                size="sm"
                 id="elevation"
                 v-model="site.elevation"
                 type="number"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`elevation_accuracy`"
                 >{{ $t("site.elevation_accuracy") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="elevation_accuracy"
                 v-model="site.elevation_accuracy"
                 type="number"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`coord_det_method`"
                 >{{ $t("site.coord_det_method") }}:</label
               >
@@ -243,29 +267,32 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
-          <div class="row">
-            <div class="col-md-4">
+          <!-- EXTENT, DEPTH and LOCALITY -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`extent`">{{ $t("site.extent") }}:</label>
               <b-form-input
+                size="sm"
                 id="extent"
                 v-model="site.extent"
                 type="number"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`depth`">{{ $t("site.depth") }}:</label>
               <b-form-input
+                size="sm"
                 id="depth"
                 v-model="site.depth"
                 type="number"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`locality`">{{ $t("site.locality") }}:</label>
               <vue-multiselect
                 v-model="site.locality"
@@ -294,68 +321,87 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
-          <div class="row">
-            <div class="col-sm-12 mb-2">
+          <!-- REMARKS_LOCATION -->
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`remarks_location`"
                 >{{ $t("site.remarks_location") }}:</label
               >
               <editor :data.sync="site.remarks_location" />
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- DESCRIPTION -->
-    <fieldset class="border-top px-2 mb-2" id="block-description">
-      <legend
-        class="w-auto my-0 mb-1"
-        :class="{ 'text-primary': !block.description }"
-        @click="block.description = !block.description"
-      >
-        {{ $t("site.description") }} | {{ $t("site.remarks") }}
-        <i class="fas fa-pen-fancy"></i>
-      </legend>
-      <transition name="fade">
-        <div v-show="block.description">
-          <div class="row">
-            <div class="col-sm-12 mb-2">
-              <editor :data.sync="site.description" />
-            </div>
-          </div>
+    <v-card class="mt-2" id="block-description">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("site.description") }} | {{ $t("site.remarks") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-          <div class="row">
-            <div class="col-sm-12 mb-2">
+      <transition>
+        <div v-show="block.description" class="px-1 pt-1 pb-2">
+          <v-row no-gutters class="mb-2">
+            <v-col cols="12" class="px-1">
+              <editor :data.sync="site.description" />
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <editor :data.sync="site.remarks" />
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
-    <fieldset
-      class="border-top px-2 mb-2"
-      v-if="$route.meta.isEdit && site.id"
-      id="block-files"
-      ref="files"
-    >
-      <legend
-        class="w-auto my-0 mb-1"
-        @click="block.files = !block.files"
-        :class="{ 'text-primary': !block.files }"
-      >
-        {{ $t("site.files") }}
-        <i class="fas fa-folder-open"></i>
-      </legend>
+    <!-- FILES -->
+    <v-card class="mt-2" id="block-files" v-if="$route.meta.isEdit && site.id">
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("site.files") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.files">
+      <transition>
+        <div v-show="block.files" class="px-1 pt-1 pb-2">
           <multimedia-component
             v-on:file-uploaded="addFiles"
             :recordOptions="true"
+            style="margin-right: -10px; margin-left: -10px"
+            class="multimedia-component"
           />
           <file-table
             :attachments="relatedData.attachment_link"
@@ -364,51 +410,51 @@
           />
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
-    <fieldset
-      class="border-top px-2 mb-2"
-      v-if="$route.meta.isEdit && site.id"
-      id="block-samples"
-      ref="samples"
-    >
-      <legend
-        class="w-auto my-0 mb-1"
-        @click="block.samples = !block.samples"
-        :class="{ 'text-primary': !block.samples }"
-      >
-        {{ $t("site.relatedSamples") }}
-        <i class="fas fa-vial"></i>
-      </legend>
+    <!-- SAMPLES -->
+    <v-card class="mt-2" id="block-samples" v-if="$route.meta.isEdit && site.id">
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.samples = !block.samples">
+          <span>{{ $t("site.relatedSamples") }}</span>
+          <v-icon right>fas fa-vial</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.samples = !block.samples"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.samples ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div class="row" v-show="block.samples">
+      <transition>
+        <div v-show="block.samples" class="px-1 pt-1 pb-2">
           <add-new-sample :sendingData="sendingData"></add-new-sample>
 
-          <div class="col-sm-12 mb-2">
-            <div class="row">
-              <div class="col">
-                <router-link
-                  class="btn btn-outline-primary mb-2"
-                  :to="{
-                    name: 'Sample add',
-                    query: { site: JSON.stringify(site) }
-                  }"
-                  target="_blank"
-                >
-                  {{ $t("add.new") }}
-                </router-link>
-              </div>
-            </div>
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <v-btn
+                class="mb-2"
+                :to="{ name: 'Sample add', query: { site: JSON.stringify(site) }}"
+                target="newSiteWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+              >{{ $t("add.new") }}</v-btn>
+            </v-col>
 
             <linked-sample-table
               :siteID="$route.params.id"
               :samples="relatedData.sample"
+              style="margin-right: -10px; margin-left: -10px"
             ></linked-sample-table>
-          </div>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
   </div>
 </template>
 
@@ -446,6 +492,18 @@ export default {
     MultimediaComponent,
     Datepicker,
     Spinner
+  },
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
   mixins: [
     formManipulation,
@@ -891,8 +949,41 @@ export default {
 }
 
 label {
-  margin: 5px 0 0 0;
-  color: #999;
+  margin: 0;
+  color: #546e7a;
   font-size: 0.8rem;
+}
+
+.card-title--clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Multiselect component size override */
+.site >>> .multiselect {
+  min-height: 31px;
+  height: 31px;
+}
+
+.site >>> .multiselect__tags {
+  min-height: 31px;
+  height: 31px;
+  padding: 4px 40px 4px 8px;
+}
+
+.site >>> .multiselect__select {
+  min-height: 29px;
+  height: 29px;
+}
+
+.site >>> .multiselect__single {
+  padding: 0;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
+.site >>> .multiselect__placeholder {
+  padding: 0;
+  margin-bottom: 0;
 }
 </style>
