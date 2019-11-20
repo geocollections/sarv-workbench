@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="project">
     <spinner
       v-show="sendingData"
       class="loading-overlay"
@@ -49,42 +49,57 @@
     </v-row>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border-top px-2 mb-2" ref="info" id="block-info">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.info }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("project.generalInfo") }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
+    <v-card class="mt-2" id="block-info">
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span :class="validate('project') ? 'green--text' : 'red--text'">{{
+            $t("project.generalInfo")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('project') ? 'green--text' : 'red--text'"
+            >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.info">
-          <div class="row">
-            <div class="col-md-6">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
+          <!-- NAME and NAME_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`name`">{{ $t("project.name") }}:</label>
               <b-form-input
+                size="sm"
                 id="name"
                 v-model="project.name"
                 :state="isNotEmpty(project.name)"
                 type="text"
                 maxlength="100"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`name_en`">{{ $t("project.name_en") }}:</label>
               <b-form-input
+                size="sm"
                 id="name_en"
                 v-model="project.name_en"
                 type="text"
                 maxlength="100"
               ></b-form-input>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-4">
+            </v-col>
+          </v-row>
+
+          <!-- PROJECT_TYPE, OWNER and PARENT_PROJECT -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`type`">{{ $t("project.project_type") }}:</label>
               <vue-multiselect
                 v-model="project.project_type"
@@ -106,9 +121,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`owner`">{{ $t("project.owner") }}:</label>
               <vue-multiselect
                 v-model="project.owner"
@@ -131,9 +146,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-sm-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`parent_project`"
                 >{{ $t("project.parent_project") }}:</label
               >
@@ -158,11 +173,12 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
-          <div class="row">
-            <div class="col-sm-4">
+          <!-- DATE_START, DATE_END and DATE_FREE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`date_start`" class="p-0"
                 >{{ $t("project.date_start") }}:</label
               >
@@ -173,11 +189,11 @@
                 lang="en"
                 :first-day-of-week="1"
                 format="DD MMM YYYY"
-                input-class="form-control"
+                input-class="form-control form-control-sm"
               ></datepicker>
-            </div>
+            </v-col>
 
-            <div class="col-sm-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`date_end`" class="p-0"
                 >{{ $t("project.date_end") }}:</label
               >
@@ -188,238 +204,306 @@
                 lang="en"
                 :first-day-of-week="1"
                 format="DD MMM YYYY"
-                input-class="form-control"
+                input-class="form-control form-control-sm"
               ></datepicker>
-            </div>
+            </v-col>
 
-            <div class="col-sm-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`date_free`" class="p-0"
                 >{{ $t("project.date_free") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="date_free"
                 v-model="project.date_free"
                 type="text"
                 maxlength="10"
               />
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- DESCRIPTION -->
-    <fieldset class="border-top px-2 mb-2" id="block-description">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.description }"
-        @click="block.description = !block.description"
-      >
-        {{ $t("project.description") }} | {{ $t("project.remarks") }}
-        <i class="fas fa-pen-fancy"></i>
-      </legend>
-      <transition name="fade">
-        <div v-show="block.description">
-          <div class="row">
-            <div class="col-sm-12 mb-2">
-              <editor :data.sync="project.description" />
-            </div>
-          </div>
+    <v-card class="mt-2" id="block-description">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span
+            >{{ $t("project.description") }} | {{ $t("project.remarks") }}</span
+          >
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-          <div class="row">
-            <div class="col-sm-12 mb-2">
+      <transition>
+        <div v-show="block.description" class="px-1 pt-1 pb-2">
+          <v-row no-gutters class="mb-2">
+            <v-col cols="12" class="px-1">
+              <editor :data.sync="project.description" />
+            </v-col>
+          </v-row>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <editor :data.sync="project.remarks" />
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- PROJECT MEMBERS -->
-    <fieldset class="border-top px-2 mb-2" id="block-members">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.members }"
-        @click="block.members = !block.members"
-      >
-        {{ $t("project.members") }}
-        <i class="fas fa-user-friends"></i>
-      </legend>
-      <transition name="fade">
-        <div class="row" v-show="block.members">
-          <div class="col-11 mb-2 mr-0">
-            <vue-multiselect
-              v-model="relatedData.projectagent"
-              id="projectagent"
-              label="agent"
-              track-by="id"
-              :multiple="true"
-              :placeholder="$t('add.inputs.autocomplete')"
-              :options="autocomplete.agent"
-              :loading="autocomplete.loaders.projectagent"
-              @search-change="autocompleteProjectAgentSearch"
-              :internal-search="false"
-              :preserve-search="true"
-              :clear-on-select="false"
-              :close-on-select="false"
-              :show-labels="false"
-            >
-              <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
-              >
-            </vue-multiselect>
-          </div>
+    <v-card class="mt-2" id="block-members">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.members = !block.members"
+        >
+          <span>{{ $t("project.members") }}</span>
+          <v-icon right>fas fa-user-friends</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.members = !block.members"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.members ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-          <div class="col-1 mb-2 ml-0 pl-0">
-            <button
-              class="btn btn-outline-danger"
-              :disabled="!isNotEmpty(relatedData.projectagent)"
-              @click="relatedData.projectagent = []"
-            >
-              <i class="far fa-trash-alt"></i>
-            </button>
-          </div>
+      <transition>
+        <div v-show="block.members" class="px-1 pt-1 pb-2">
+          <v-card flat tile class="d-flex flex-row justify-space-between">
+            <v-card flat tile class="px-1 flex-grow-1">
+              <vue-multiselect
+                v-model="relatedData.projectagent"
+                id="projectagent"
+                label="agent"
+                track-by="id"
+                :multiple="true"
+                :placeholder="$t('add.inputs.autocomplete')"
+                :options="autocomplete.agent"
+                :loading="autocomplete.loaders.projectagent"
+                @search-change="autocompleteProjectAgentSearch"
+                :internal-search="false"
+                :preserve-search="true"
+                :clear-on-select="false"
+                :close-on-select="false"
+                :show-labels="false"
+              >
+                <template slot="noResult"
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                >
+              </vue-multiselect>
+            </v-card>
+
+            <v-card flat tile class="px-1">
+              <v-btn
+                icon
+                :disabled="!isNotEmpty(relatedData.projectagent)"
+                @click="relatedData.projectagent = []"
+                color="red"
+              >
+                <v-icon>far fa-trash-alt</v-icon>
+              </v-btn>
+            </v-card>
+          </v-card>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- FILES -->
-    <fieldset
-      class="border-top px-2 mb-2"
-      id="block-files"
-      ref="files"
-      v-if="$route.meta.isEdit"
-    >
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.files }"
-        @click="block.files = !block.files"
-      >
-        {{ $t("project.files") }}
-        <i class="fas fa-folder-open"></i>
-      </legend>
-      <transition name="fade">
-        <div class="row p-3" v-show="block.files">
-          <div class="col-sm-12">
-            <multimedia-component
-              v-on:file-uploaded="addFiles"
-              :recordOptions="false"
-            />
-          </div>
+    <v-card class="mt-2" id="block-files" v-if="$route.meta.isEdit">
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.files = !block.files">
+          <span>{{ $t("project.files") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-          <div class="col-sm-12">
-            <file-table
-              :attachments="relatedData.attachment_link"
-              :object="'project'"
-              v-if="relatedData.attachment_link.length > 0"
-            />
-          </div>
+      <transition>
+        <div v-show="block.files" class="px-1 pt-1 pb-2">
+          <multimedia-component
+            v-on:file-uploaded="addFiles"
+            :recordOptions="false"
+            style="margin-right: -10px; margin-left: -10px"
+            class="multimedia-component"
+          />
+          <file-table
+            :attachments="relatedData.attachment_link"
+            :object="'project'"
+            v-if="relatedData.attachment_link.length > 0"
+          />
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- SITES -->
-    <fieldset
-      class="border-top px-2 mb-2"
-      id="block-sites"
-      ref="sites"
-      v-if="$route.meta.isEdit"
-    >
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.sites }"
-        @click="block.sites = !block.sites"
-      >
-        {{ $t("project.sites") }}
-        <i class="fas fa-globe-americas"></i>
-      </legend>
-      <transition name="fade">
-        <div v-show="block.sites">
-          <div v-if="relatedData.site.length > 0">
-            <!---->
-            <div class="col p-0">
-              <div class="d-flex justify-content-start mt-1 mb-3">
-                <div class="align-self-center">
-                  <v-switch
-                    v-model="showCollapseMap"
-                    hide-details
-                    id="map-switch"
-                    class="vuetify-switch mt-0"
-                  ></v-switch>
-                </div>
-                <div class="align-self-center">
-                  <label class="m-0" :for="`map-switch`">
-                    <i class="far fa-map"></i>
-                    {{
-                      showCollapseMap
-                        ? $t("site.mapEnabled")
-                        : $t("site.mapDisabled")
-                    }}
-                  </label>
-                </div>
-              </div>
+    <v-card class="mt-2" id="block-sites" v-if="$route.meta.isEdit">
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.sites = !block.sites">
+          <span>{{ $t("project.sites") }}</span>
+          <v-icon right>fas fa-globe-americas</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.sites = !block.sites"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.sites ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-              <b-collapse v-model="showCollapseMap" id="collapseMap">
+      <transition>
+        <div v-show="block.sites" class="px-1 pt-1 pb-2">
+          <!-- MAP SWITCH -->
+          <v-card
+            class="d-flex flex-row justify-content-start mt-1 mx-3"
+            flat
+            tile
+          >
+            <v-card flat tile class="align-self-center mr-2">
+              <v-switch
+                v-model="showCollapseMap"
+                hide-details
+                id="map-switch"
+                class="vuetify-switch my-1"
+              ></v-switch>
+            </v-card>
+
+            <v-card flat tile class="align-self-center">
+              <label class="m-0" :for="`map-switch`">
+                <i class="far fa-map"></i>
+                {{
+                  showCollapseMap
+                    ? $t("site.mapEnabled")
+                    : $t("site.mapDisabled")
+                }}
+              </label>
+            </v-card>
+          </v-card>
+
+          <!-- MAP -->
+          <transition enter-active-class="animated fadeIn faster">
+            <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+              <v-col cols="12" class="px-1">
                 <map-component
                   :gps-coords="true"
                   mode="multiple"
                   v-if="showCollapseMap"
                   module="project"
                   v-bind:location="{ lat: null, lng: null }"
-                  v-bind:locations="relatedData.site"
+                  v-bind:locations="relatedData.sites.results"
                 />
-              </b-collapse>
-            </div>
-            <div class="table-responsive-sm col-12 p-0">
-              <table class="table table-hover table-bordered">
-                <thead class="thead-light">
-                  <tr>
-                    <th>ID</th>
-                    <th>{{ $t("site.name") }}</th>
-                    <th>{{ $t("site.date_start") }}</th>
-                    <th>{{ $t("site.date_end") }}</th>
-                  </tr>
-                </thead>
+              </v-col>
+            </v-row>
+          </transition>
 
-                <tbody>
-                  <tr v-for="(site, index) in relatedData.site" :key="index">
-                    <td>
-                      <router-link
-                        :to="{ path: '/site/' + site.id }"
-                        target="_blank"
-                      >
-                        <i class="fas fa-eye"></i>
-                        {{ site.id }}
-                      </router-link>
-                    </td>
-                    <td v-translate="{ et: site.name, en: site.name_en }"></td>
-                    <td>{{ parseDate(site.date_start) }}</td>
-                    <td>{{ parseDate(site.date_end) }}</td>
-                    <!--<td style="min-width: 60px;text-align:right" @click="relatedData.site.splice(index, 1)"><font-awesome-icon icon="times"/></td>-->
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div
-              class="col-sm-12 col-md-6 p-0"
-              v-if="relatedData.count.site > searchParameters.paginateBy"
-            >
-              <b-pagination
-                size="sm"
-                align="right"
-                :limit="5"
-                :hide-ellipsis="true"
-                :total-rows="relatedData.count.site"
-                v-model="relatedData.page.site"
-                :per-page="relatedData.paginateBy.site"
+          <!-- ADD NEW and EXPORT -->
+          <v-card
+            class="d-flex flex-row justify-content-start mt-2 mb-3"
+            flat
+            tile
+          >
+            <v-card flat tile class="px-1">
+              <v-btn
+                :to="{
+                  name: 'Site add',
+                  query: { project: JSON.stringify(project) }
+                }"
+                target="newProjectWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+                >{{ $t("add.new") }}</v-btn
               >
-              </b-pagination>
+            </v-card>
+
+            <v-card flat tile class="px-1">
+              <export-buttons
+                filename="site"
+                :table-data="relatedData.sites.results"
+              ></export-buttons>
+            </v-card>
+          </v-card>
+
+          <!-- PAGINATION -->
+          <div
+            v-if="relatedData.sites.count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters.site.paginateBy"
+                color="blue"
+                dense
+                :items="paginateByOptionsTranslated"
+                item-color="blue"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters.site.page"
+                color="blue"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.sites.count /
+                      relatedData.searchParameters.site.paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
             </div>
           </div>
-          <div v-else>No linked sites</div>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <site-table
+                ref="table"
+                :response="relatedData.sites"
+                :search-parameters="relatedData.searchParameters.site"
+                v-if="relatedData.sites.count > 0"
+              />
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="my-3">
@@ -460,6 +544,9 @@ import MultimediaComponent from "../partial/MultimediaComponent";
 import AddNewSite from "./addOrEditSiteModal";
 import Editor from "../partial/editor/Editor";
 import { mapState } from "vuex";
+import ExportButtons from "../partial/export/ExportButtons";
+import SiteTable from "../site/SiteTable";
+import debounce from "lodash/debounce";
 
 export default {
   name: "Project",
@@ -470,7 +557,21 @@ export default {
     FileTable,
     MapComponent,
     Datepicker,
-    Spinner
+    Spinner,
+    ExportButtons,
+    SiteTable
+  },
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
   mixins: [
     formManipulation,
@@ -483,11 +584,20 @@ export default {
     return this.setInitialData();
   },
   computed: {
+    ...mapState(["currentUser", "databaseId", "activeProject"]),
+
     sidebarUserAction() {
       return this.$store.state["sidebarUserAction"];
     },
 
-    ...mapState(["currentUser", "databaseId", "activeProject"])
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
+      });
+    }
   },
   created() {
     // USED BY SIDEBAR
@@ -515,7 +625,39 @@ export default {
     this.loadFullInfo();
   },
 
+  watch: {
+    "$route.params.id": {
+      handler: function() {
+        this.reloadData();
+      },
+      deep: true
+    },
+    sidebarUserAction(newVal) {
+      this.$_handleUserAction(newVal, "project", this.project);
+    },
+    "relatedData.searchParameters.site": {
+      handler(newVal) {
+        if (this.$route.meta.isEdit) {
+          this.searchRelatedData(newVal, this.fetchLinkedSiteWrapper, "sites");
+        }
+      },
+      immediate: true,
+      deep: true
+    }
+  },
+
   methods: {
+    fetchLinkedSiteWrapper() {
+      return new Promise(resolve => {
+        resolve(
+          fetchLinkedSite(
+            this.relatedData.searchParameters.site,
+            this.$route.params.id
+          )
+        );
+      });
+    },
+
     setActiveProject(switchValue) {
       console.log(switchValue);
       if (switchValue) this.$store.dispatch("setActiveProject", this.project);
@@ -596,7 +738,16 @@ export default {
           members: true,
           files: true,
           sites: true
-        }
+        },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
@@ -632,7 +783,6 @@ export default {
         });
         this.loadRelatedData("projectagent");
         this.loadRelatedData("attachment_link");
-        this.loadRelatedData("site");
       } else {
         //set default user
         this.project.owner = {
@@ -646,10 +796,21 @@ export default {
       return {
         projectagent: [],
         attachment_link: [],
-        site: [],
-        page: { projectagent: 1, attachment_link: 1, site: 1 },
-        paginateBy: { projectagent: 25, attachment_link: 25, site: 100 },
-        count: { projectagent: 0, attachment_link: 0, site: 0 }
+        sites: {
+          count: 0,
+          results: []
+        },
+        searchParameters: {
+          site: {
+            page: 1,
+            paginateBy: 100,
+            sortBy: ["id"],
+            sortDesc: [true]
+          }
+        },
+        page: { projectagent: 1, attachment_link: 1 },
+        paginateBy: { projectagent: 25, attachment_link: 25 },
+        count: { projectagent: 0, attachment_link: 0 }
       };
     },
 
@@ -678,7 +839,6 @@ export default {
       uploadableObject.related_data.agent = this.relatedData.projectagent;
       if (saveRelatedData) {
         uploadableObject.related_data.attachment = this.relatedData.attachment_link;
-        // uploadableObject.related_data.site = this.relatedData.site;
       }
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
@@ -727,12 +887,6 @@ export default {
         query = fetchProjectAttachment(
           this.$route.params.id,
           this.relatedData.page.attachment_link
-        );
-      } else if (object === "site") {
-        query = fetchLinkedSite(
-          this.$route.params.id,
-          this.relatedData.page.site,
-          this.relatedData.paginateBy.site
         );
       }
       return new Promise(() => {
@@ -801,30 +955,72 @@ export default {
 
     addFiles(files) {
       this.addFileAsRelatedDataNew(files, "project");
-    }
-  },
+    },
 
-  watch: {
-    "$route.params.id": {
-      handler: function() {
-        this.reloadData();
-      },
-      deep: true
+    searchRelatedData: debounce(function(
+      searchParameters,
+      apiCall,
+      relatedObject
+    ) {
+      apiCall().then(response => {
+        if (response.status === 200) {
+          this.relatedData[relatedObject].count = response.body.count;
+          this.relatedData[relatedObject].results = response.body.results;
+        }
+      });
     },
-    "relatedData.page.site"() {
-      this.loadRelatedData("site");
-    },
-    sidebarUserAction(newVal) {
-      this.$_handleUserAction(newVal, "project", this.project);
-    }
+    500)
   }
 };
 </script>
 
 <style scoped>
 label {
-  margin: 5px 0 0 0;
-  color: #999;
+  margin: 0;
+  color: #546e7a;
   font-size: 0.8rem;
+}
+
+.card-title--clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+/* Multiselect component size override */
+.project >>> .multiselect {
+  min-height: 31px;
+  /*height: 31px;*/
+}
+
+.project >>> .multiselect__tags {
+  min-height: 31px;
+  /*height: 31px;*/
+  padding: 4px 40px 4px 8px;
+}
+
+.project >>> .multiselect--active > .multiselect__tags {
+  min-height: 40px;
+  height: unset;
+  padding: 8px 40px 0px 8px;
+}
+
+.project >>> .multiselect__select {
+  min-height: 29px;
+  height: 29px;
+}
+
+.project >>> .multiselect__single {
+  padding: 0;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+}
+
+.project >>> .multiselect__placeholder {
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.project >>> .multiselect__tag {
+  margin-bottom: 0;
 }
 </style>

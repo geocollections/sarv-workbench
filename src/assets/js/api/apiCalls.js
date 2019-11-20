@@ -1012,9 +1012,13 @@ export function fetchProjectAttachment(id, page = 1) {
   );
 }
 
-export function fetchLinkedSite(id, page = 1, paginateBy = 25) {
+export function fetchLinkedSite(data, projectId) {
+  let fields =
+    "id,name,name_en,number,project,project__name,project__name_en,date_start,date_end,latitude,longitude";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
   return fetch(
-    `site/?project=${id}&page=${page}&paginate_by=${paginateBy}&fields=id,name,name_en,date_start,date_end,latitude,longitude&format=json`
+    `site/?project=${projectId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
   );
 }
 
@@ -1148,9 +1152,6 @@ export function fetchSiteAttachment(id, page = 1) {
   );
 }
 
-// export function fetchLinkedSamples(id,page=1) {
-//   return fetch(`sample/?site__id=${id}&page=${page}&paginate_by=100&fields=id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en&format=json`)
-// }
 export function fetchLinkedSamples(data, siteID) {
   let fields =
     "id,number,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,depth_interval,depth,rock,rock_en";

@@ -1911,12 +1911,12 @@ label {
 /* Multiselect component size override */
 .specimen >>> .multiselect {
   min-height: 31px;
-  height: 31px;
+  /*height: 31px;*/
 }
 
 .specimen >>> .multiselect__tags {
   min-height: 31px;
-  height: 31px;
+  /*height: 31px;*/
   padding: 4px 40px 4px 8px;
 }
 

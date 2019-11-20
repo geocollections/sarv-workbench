@@ -177,6 +177,7 @@
             </v-col>
           </v-row>
 
+          <!-- MAP SWITCH -->
           <v-card
             class="d-flex flex-row justify-content-start mt-1 mx-3"
             flat
@@ -203,6 +204,7 @@
             </v-card>
           </v-card>
 
+          <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
             <v-row no-gutters v-show="showCollapseMap" class="mt-2">
               <v-col cols="12" class="px-1">
@@ -443,7 +445,7 @@
           <add-new-sample :sendingData="sendingData"></add-new-sample>
 
           <!-- ADD NEW and EXPORT -->
-          <v-card class="d-flex flex-row justify-content-start" flat tile>
+          <v-card class="d-flex flex-row justify-content-start mb-3" flat tile>
             <v-card flat tile class="px-1">
               <v-btn
                 :to="{
@@ -467,8 +469,8 @@
 
           <!-- PAGINATION -->
           <div
-            v-if="relatedData.samples.count > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-4 px-1"
+            v-if="relatedData.samples.count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -1040,7 +1042,6 @@ export default {
       relatedObject
     ) {
       apiCall().then(response => {
-        console.log(response);
         if (response.status === 200) {
           this.relatedData[relatedObject].count = response.body.count;
           this.relatedData[relatedObject].results = response.body.results;
@@ -1071,12 +1072,12 @@ label {
 /* Multiselect component size override */
 .site >>> .multiselect {
   min-height: 31px;
-  height: 31px;
+  /*height: 31px;*/
 }
 
 .site >>> .multiselect__tags {
   min-height: 31px;
-  height: 31px;
+  /*height: 31px;*/
   padding: 4px 40px 4px 8px;
 }
 

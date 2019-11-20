@@ -1,22 +1,15 @@
 <template>
   <v-card class="log mt-2" v-if="logs.length > 0">
     <v-card-title class="pt-2 pb-1">
-      <div
-        class="card-title--clickable"
-        @click="block.logs = !block.logs"
-      >
+      <div class="card-title--clickable" @click="block.logs = !block.logs">
         <span>{{ $t("logs.title") }}</span>
         <v-icon right>fas fa-history</v-icon>
       </div>
       <v-spacer></v-spacer>
-      <v-btn
-        icon
-        @click="block.logs = !block.logs"
-        :color="bodyActiveColor"
-      >
+      <v-btn icon @click="block.logs = !block.logs" :color="bodyActiveColor">
         <v-icon>{{
           block.logs ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
+        }}</v-icon>
       </v-btn>
     </v-card-title>
 
@@ -27,68 +20,70 @@
             <div class="table-responsive mb-0">
               <table class="table table-hover table-bordered">
                 <thead class="thead-light">
-                <tr>
-                  <th>{{ $t("logs.user") }}</th>
-                  <th>{{ $t("logs.time") }}</th>
-                  <th>{{ $t("logs.command") }}</th>
-                  <th>{{ $t("logs.changes") }}</th>
-                </tr>
+                  <tr>
+                    <th>{{ $t("logs.user") }}</th>
+                    <th>{{ $t("logs.time") }}</th>
+                    <th>{{ $t("logs.command") }}</th>
+                    <th>{{ $t("logs.changes") }}</th>
+                  </tr>
                 </thead>
 
                 <tbody>
-                <tr v-for="entity in logs" :key="entity.id">
-                  <td>
-                    <b>{{ entity.user }}</b>
-                  </td>
-                  <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
-                  <td>{{ entity.command }}</td>
-                  <td style="max-width: 25rem; padding:0.3rem; margin: 0;">
-                    <div style="max-height: 10rem !important; overflow: auto;">
+                  <tr v-for="entity in logs" :key="entity.id">
+                    <td>
+                      <b>{{ entity.user }}</b>
+                    </td>
+                    <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
+                    <td>{{ entity.command }}</td>
+                    <td style="max-width: 25rem; padding:0.3rem; margin: 0;">
                       <div
-                        v-for="(changes, field) in handleChanges(
-                          entity.changes
-                        )"
-                        :key="field"
+                        style="max-height: 10rem !important; overflow: auto;"
                       >
-                        <div class="mb-3">
-                          <div class="log-title mb-1">{{ field }}</div>
+                        <div
+                          v-for="(changes, field) in handleChanges(
+                            entity.changes
+                          )"
+                          :key="field"
+                        >
+                          <div class="mb-3">
+                            <div class="log-title mb-1">{{ field }}</div>
 
-                          <div v-for="(item, index) in changes" :key="index">
-                            <div
-                              class="pa-1"
-                              :title="$t('logs.newValue')"
-                              :class="{ 'list-item-new': index === 'new' }"
-                              v-if="index === 'new'"
-                            >
-                              <div class="list-titles">
-                                <div v-if="typeof item === 'object' && item">
-                                  {{ item.join() }}
+                            <div v-for="(item, index) in changes" :key="index">
+                              <div
+                                class="pa-1"
+                                :title="$t('logs.newValue')"
+                                :class="{ 'list-item-new': index === 'new' }"
+                                v-if="index === 'new'"
+                              >
+                                <div class="list-titles">
+                                  <div v-if="typeof item === 'object' && item">
+                                    {{ item.join() }}
+                                  </div>
+
+                                  <div v-else>{{ item }}</div>
                                 </div>
-
-                                <div v-else>{{ item }}</div>
                               </div>
-                            </div>
 
-                            <div
-                              class="pa-1"
-                              :title="$t('logs.oldValue')"
-                              :class="{ 'list-item-old': index === 'old' }"
-                              v-if="index === 'old'"
-                            >
-                              <div class="list-titles">
-                                <div v-if="typeof item === 'object' && item">
-                                  {{ item.join() }}
+                              <div
+                                class="pa-1"
+                                :title="$t('logs.oldValue')"
+                                :class="{ 'list-item-old': index === 'old' }"
+                                v-if="index === 'old'"
+                              >
+                                <div class="list-titles">
+                                  <div v-if="typeof item === 'object' && item">
+                                    {{ item.join() }}
+                                  </div>
+
+                                  <div v-else>{{ item }}</div>
                                 </div>
-
-                                <div v-else>{{ item }}</div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </td>
-                </tr>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -96,7 +91,6 @@
         </div>
       </div>
     </transition>
-
   </v-card>
 </template>
 
@@ -105,20 +99,20 @@ import { fetchSpecificLogs } from "@/assets/js/api/apiCalls";
 
 export default {
   props: {
-      table: {
-        type: String
-      },
-      data: {
-        type: Object
-      },
-      formattedData: {
-        type: Object
-      },
-      bodyActiveColor: {
-        type: String,
-        required: false,
-        default: "deep-orange"
-      }
+    table: {
+      type: String
+    },
+    data: {
+      type: Object
+    },
+    formattedData: {
+      type: Object
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
   name: "Log",
   data() {
