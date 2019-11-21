@@ -46,7 +46,7 @@ export default {
 }
 
 .container {
-  margin-bottom: 56px;
+  margin-bottom: 44px;
 }
 
 /* BOOTSTRAP OVERRIDE, remove after integration */

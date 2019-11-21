@@ -377,6 +377,7 @@
       "save": "Save",
       "saveAndLeave": "Save and leave",
       "saveAndContinue": "Save and continue editing",
+      "saveAsNew": "Save as new",
       "cancelWithoutSaving": "Cancel without saving",
       "cancel": "Cancel file change",
       "saveNewDoi": "Save new DOI",

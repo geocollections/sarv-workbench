@@ -4,7 +4,6 @@
     app
     clipped
     right
-    disable-resize-watcher
     @input="changeDrawerState"
     :dark="isDrawerDark"
     :color="drawerColor"
@@ -469,14 +468,15 @@
           :key="entity.id"
           :color="drawerActiveColor"
           :title="
-            activeSelectionSeries.id === entity.id
+            activeSelectionSeries && activeSelectionSeries.id === entity.id
               ? $t('sidebar.selection_series.inactiveTitle')
               : $t('sidebar.selection_series.activeTitle')
           "
           dense
           @click="toggleActive(entity, 'setActiveSelectionSeries')"
           :class="{
-            'v-list-item--active': activeSelectionSeries.id === entity.id
+            'v-list-item--active':
+              activeSelectionSeries && activeSelectionSeries.id === entity.id
           }"
         >
           <v-list-item-content>

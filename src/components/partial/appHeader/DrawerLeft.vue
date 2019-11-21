@@ -5,7 +5,6 @@
     clipped
     @input="changeDrawerState"
     mobile-break-point="992"
-    disable-resize-watcher
     :dark="isDrawerDark"
     :color="drawerColor"
   >

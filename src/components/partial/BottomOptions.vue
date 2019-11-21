@@ -12,14 +12,20 @@
       <v-btn
         :icon="$vuetify.breakpoint.smAndDown"
         :color="navbarColor"
-        :dark="isNavbarDark"
+        :dark="!previousId ? false : isNavbarDark"
         :disabled="!previousId"
         :to="{ path: `/${object}/${previousId}` }"
         title="Go to previous record"
         v-if="isNavigationShown"
         retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
       >
-        <v-icon>fas fa-angle-double-left</v-icon>
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :left="$vuetify.breakpoint.mdAndUp"
+          >fas fa-angle-double-left</v-icon
+        >
         <span v-show="$vuetify.breakpoint.mdAndUp"
           >&nbsp;{{ $t("buttons.previous") }}</span
         >
@@ -34,8 +40,14 @@
         title="Finish record"
         v-if="object === 'site' && !$route.meta.isEdit"
         retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
       >
-        <v-icon>fas fa-check-double</v-icon>
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :left="$vuetify.breakpoint.mdAndUp"
+          >fas fa-check-double</v-icon
+        >
         <span v-show="$vuetify.breakpoint.mdAndUp"
           >&nbsp;{{ $t("edit.buttons.finish") }}</span
         >
@@ -50,10 +62,16 @@
         title="Save record and go back to list view"
         v-else
         retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
       >
-        <v-icon>fas fa-door-open</v-icon>
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :left="$vuetify.breakpoint.mdAndUp"
+          >fas fa-door-open</v-icon
+        >
         <span v-show="$vuetify.breakpoint.mdAndUp"
-          >&nbsp;{{ $t("edit.buttons.save") }}</span
+          >&nbsp;{{ $t("edit.buttons.saveAndLeave") }}</span
         >
       </v-btn>
 
@@ -62,13 +80,41 @@
         color="green"
         dark
         :loading="sendingData"
-        @click="handleClick('SAVE', 'save')"
+        @click="handleClick('SAVE')"
         title="Save record"
         retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
       >
-        <v-icon>fas fa-save</v-icon>
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :left="$vuetify.breakpoint.mdAndUp"
+          >fas fa-save</v-icon
+        >
         <span v-show="$vuetify.breakpoint.mdAndUp"
           >&nbsp;{{ $t("edit.buttons.save") }}</span
+        >
+      </v-btn>
+
+      <v-btn
+        v-if="$route.meta.isEdit"
+        :icon="$vuetify.breakpoint.smAndDown"
+        color="green"
+        dark
+        :loading="sendingData"
+        @click="handleClick('SAVE_AS_NEW')"
+        title="Save record as new"
+        retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
+      >
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :left="$vuetify.breakpoint.mdAndUp"
+          >far fa-plus-square</v-icon
+        >
+        <span v-show="$vuetify.breakpoint.mdAndUp"
+          >&nbsp;{{ $t("edit.buttons.saveAsNew") }}</span
         >
       </v-btn>
 
@@ -82,8 +128,14 @@
         "
         :title="$route.meta.isEdit ? 'Go back to list view' : 'Clear fields'"
         retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
       >
-        <v-icon>fas fa-ban</v-icon>
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :left="$vuetify.breakpoint.mdAndUp"
+          >fas fa-ban</v-icon
+        >
         <span v-show="$vuetify.breakpoint.mdAndUp">
           &nbsp;{{
             $route.meta.isEdit ? $t("buttons.cancel") : $t("buttons.clear")
@@ -94,17 +146,23 @@
       <v-btn
         :icon="$vuetify.breakpoint.smAndDown"
         :color="navbarColor"
-        :dark="isNavbarDark"
+        :dark="!nextId ? false : isNavbarDark"
         :disabled="!nextId"
         :to="{ path: `/${object}/${nextId}` }"
         title="Go to next record"
         v-if="isNavigationShown"
         retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
       >
         <span v-show="$vuetify.breakpoint.mdAndUp"
           >{{ $t("buttons.next") }}&nbsp;</span
         >
-        <v-icon>fas fa-angle-double-right</v-icon>
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :right="$vuetify.breakpoint.mdAndUp"
+          >fas fa-angle-double-right</v-icon
+        >
       </v-btn>
     </div>
   </div>
@@ -227,11 +285,11 @@ export default {
   width: 100%;
   box-shadow: 0 4px 10px #000;
   z-index: 39000;
-  height: 56px;
+  height: 44px;
 }
 
 .bottom-options-new > div {
-  height: 56px;
+  height: 44px;
 }
 
 .drawer-right-margin-0 {

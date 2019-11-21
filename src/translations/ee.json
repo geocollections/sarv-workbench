@@ -375,8 +375,9 @@
     "isLoading": "Palun oodake!, Otsin...",
     "buttons": {
       "save": "Salvesta",
-      "saveAndLeave": "Salvesta ja mine tagasi",
+      "saveAndLeave": "Salvesta ja lahku",
       "saveAndContinue": "Salvesta ja jätka muutmist",
+      "saveAsNew": "Salvesta uuena",
       "cancelWithoutSaving": "Lahku salvestamata",
       "cancel": "Katkesta faili muutmine",
       "saveNewDoi": "Salvesta uus DOI",

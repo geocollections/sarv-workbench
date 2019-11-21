@@ -177,7 +177,7 @@ const formManipulation = {
       } else return false;
     },
 
-    add(addAnother, object, returnPromise = false) {
+    add(addAnother, object, returnPromise = false, saveAsNew = false) {
       return new Promise(resolve => {
         if (
           this.validate(object) &&
@@ -186,12 +186,12 @@ const formManipulation = {
         ) {
           let objectToUpload = cloneDeep(this[object]);
 
-          let url =
-            typeof objectToUpload.id !== "undefined"
-              ? `change/${object}/${objectToUpload.id}`
-              : `add/${object}/`;
-          if (typeof objectToUpload.id !== "undefined")
-            delete objectToUpload.id;
+          if (saveAsNew) delete objectToUpload.id;
+
+          let url = objectToUpload.id
+            ? `change/${object}/${objectToUpload.id}`
+            : `add/${object}/`;
+          if (objectToUpload.id) delete objectToUpload.id;
 
           const dataToUpload = this.formatDataForUpload(objectToUpload);
           let formData = new FormData();
@@ -897,6 +897,10 @@ const formManipulation = {
 
       if (choice === "SAVE_AND_LEAVE") {
         this.add(false, object);
+      }
+
+      if (choice === "SAVE_AS_NEW") {
+        this.add(true, object, false, true);
       }
 
       if (choice === "CLEAR") {
