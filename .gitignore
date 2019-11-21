@@ -20,6 +20,4 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
-Dockerfile
-.dockerignore
-docker-deploy.sh
+.editorconfig

@@ -17,7 +17,10 @@
       </div>
     </div>
 
-    <scroll-to-links v-show="objectExists" v-if="object !== 'attachment'" />
+    <scroll-to-links
+      v-show="objectExists && $vuetify.breakpoint.xsOnly"
+      v-if="object !== 'attachment'"
+    />
 
     <router-view
       v-show="objectExists"

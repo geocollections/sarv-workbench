@@ -40,7 +40,7 @@
               </v-img>
 
               <v-fade-transition>
-                <v-overlay v-if="hover" absolute color="teal lighten-2">
+                <v-overlay v-if="hover" absolute :color="bodyActiveColor">
                   <span
                     class="font-weight-bold mx-2"
                     v-if="
@@ -67,6 +67,11 @@ export default {
   props: {
     data: {
       type: Array
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   methods: {

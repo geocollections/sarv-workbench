@@ -3,7 +3,7 @@
     <!-- NAME -->
     <v-row>
       <v-col class="pb-0">
-        <v-card flat>
+        <v-card flat color="transparent">
           <v-card-title class="pl-0">
             <span class="h3 text-capitalize break-word">
               {{
@@ -16,7 +16,7 @@
             <v-btn
               icon
               :to="{ path: '/settings' }"
-              color="deep-orange"
+              :color="appSettings.bodyActiveColor"
               :title="$t('header.settings')"
             >
               <v-icon>fas fa-user-cog</v-icon>
@@ -29,17 +29,22 @@
     <!-- MAP -->
     <v-row>
       <v-col class="pb-0">
-        <v-card elevation="3">
-          <v-card-title>
-            <span>{{ $t("frontPage.sitesMap") }}&nbsp;</span>
-            <v-icon right color="purple lighten-2"
-              >fas fa-map-marked-alt</v-icon
-            >
+        <v-card
+          :color="appSettings.bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.map = !block.map">
+              <span>{{ $t("frontPage.sitesMap") }}</span>
+              <v-icon right color="purple lighten-2"
+                >fas fa-map-marked-alt</v-icon
+              >
+            </div>
             <v-spacer></v-spacer>
             <v-btn
               icon
               @click="block.map = !block.map"
-              color="purple lighten-2"
+              :color="appSettings.bodyActiveColor"
             >
               <v-icon>{{
                 block.map ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -59,12 +64,26 @@
     <!-- HELP -->
     <v-row id="block-help">
       <v-col class="py-6">
-        <v-card elevation="3">
-          <v-card-title>
-            <span>{{ $t("frontPage.help") }}&nbsp;</span>
-            <v-icon right color="blue darken-2">far fa-question-circle</v-icon>
+        <v-card
+          :color="appSettings.bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div
+              class="card-title--clickable"
+              @click="block.help = !block.help"
+            >
+              <span>{{ $t("frontPage.help") }}</span>
+              <v-icon right color="blue darken-2"
+                >far fa-question-circle</v-icon
+              >
+            </div>
             <v-spacer></v-spacer>
-            <v-btn icon @click="block.help = !block.help" color="blue darken-2">
+            <v-btn
+              icon
+              @click="block.help = !block.help"
+              :color="appSettings.bodyActiveColor"
+            >
               <v-icon>{{
                 block.help ? "fas fa-angle-up" : "fas fa-angle-down"
               }}</v-icon>
@@ -101,7 +120,11 @@
       </v-col>
     </v-row>
 
-    <recent-activity :user="currentUser.user"></recent-activity>
+    <recent-activity
+      :user="currentUser.user"
+      :body-color="appSettings.bodyColor"
+      :body-active-color="appSettings.bodyActiveColor"
+    ></recent-activity>
   </div>
 </template>
 
@@ -132,13 +155,18 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser"])
+    ...mapState(["currentUser", "appSettings"])
   }
 };
 </script>
 
 <style scoped>
 #block-help a:hover {
+  opacity: 0.8;
+}
+
+.card-title--clickable:hover {
+  cursor: pointer;
   opacity: 0.8;
 }
 </style>

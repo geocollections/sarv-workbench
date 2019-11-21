@@ -7,9 +7,11 @@
         <export-buttons
           :filename="module"
           :table-data="response.results"
+          :body-active-color="appSettings.bodyActiveColor"
         ></export-buttons>
       </div>
 
+      <!-- OPTIONS -->
       <div
         v-if="useListView || useImageView || useAlternativeTableView"
         class="mb-2"
@@ -24,7 +26,7 @@
             value="table"
             class="mb-2"
             :label="$t('references.tableView')"
-            color="blue"
+            :color="appSettings.bodyActiveColor"
           ></v-radio>
           <v-radio
             v-if="useListView"
@@ -36,21 +38,21 @@
                 ? $t('references.labelView')
                 : $t('references.listView')
             "
-            color="blue"
+            :color="appSettings.bodyActiveColor"
           ></v-radio>
           <v-radio
             v-if="useImageView"
             class="mb-2"
             value="image"
             :label="$t('buttons.imageView')"
-            color="blue"
+            :color="appSettings.bodyActiveColor"
           ></v-radio>
           <v-radio
             v-if="useAlternativeTableView"
             class="mb-2"
             value="alternativeTable"
             :label="$t('references.alternativeTableView')"
-            color="blue"
+            :color="appSettings.bodyActiveColor"
           ></v-radio>
         </v-radio-group>
       </div>
@@ -64,7 +66,7 @@
       <div class="mr-3 mb-3">
         <v-select
           v-model="searchParameters.paginateBy"
-          color="blue"
+          :color="appSettings.bodyActiveColor"
           dense
           :items="paginateByOptionsTranslated"
           item-color="blue"
@@ -76,7 +78,7 @@
       <div>
         <v-pagination
           v-model="searchParameters.page"
-          color="blue"
+          :color="appSettings.bodyActiveColor"
           circle
           prev-icon="fas fa-angle-left"
           next-icon="fas fa-angle-right"
@@ -98,7 +100,19 @@
     />
 
     <!-- DATA TABLE -->
-    <v-card class="table-card my-1" :loading="isLoading">
+    <v-card
+      elevation="4"
+      :color="appSettings.bodyColor.split('-')[0] + '-3'"
+      class="table-card my-1"
+      :loading="isLoading"
+    >
+      <template v-slot:progress>
+        <v-progress-linear
+          indeterminate
+          :color="appSettings.bodyColor.split('-')[0] + '-1'"
+        ></v-progress-linear>
+      </template>
+
       <v-card-title class="d-print-none">
         <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
         <span id="table-title">
@@ -114,7 +128,7 @@
           label="Filter records"
           clear-icon="fas fa-times"
           clearable
-          color="deep-orange"
+          :color="appSettings.bodyActiveColor"
         ></v-text-field>
       </v-card-title>
 
@@ -130,6 +144,7 @@
         v-if="isImageView && response.count > 0"
         :module="module"
         :data="response.results"
+        :body-active-color="appSettings.bodyActiveColor"
       />
 
       <router-view
@@ -147,6 +162,8 @@
         "
         v-on:add-item-to-selection-series="addItemToSelectionSeries"
         v-on:toggle-select-all="toggleSelectAll"
+        :body-color="appSettings.bodyColor"
+        :body-active-color="appSettings.bodyActiveColor"
       />
     </v-card>
   </div>
@@ -163,6 +180,7 @@ import {
 import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import debounce from "lodash/debounce";
 import ImageView from "../components/partial/ImageView";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -279,6 +297,8 @@ export default {
   },
 
   computed: {
+    ...mapState(["appSettings"]),
+
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -382,8 +402,6 @@ export default {
       this.$localStorage.set(this.searchHistory, searchParameters);
       this.$emit("search-params-changed", searchParameters);
 
-      console.log(searchParameters);
-
       this.apiCall().then(
         response => {
           if (response.status === 200) {
@@ -399,105 +417,6 @@ export default {
         }
       );
     }, 500),
-
-    changeOrder(orderValue) {
-      if (this.searchParameters.orderBy === orderValue) {
-        if (orderValue.charAt(0) !== "-") {
-          orderValue = "-" + orderValue;
-        } else {
-          orderValue = orderValue.substring(1);
-        }
-      }
-      let searchParametes = this.searchParameters;
-      searchParametes.page = 1;
-      searchParametes.orderBy = orderValue;
-      this.$emit("search-params-changed", searchParametes);
-    },
-
-    /* MULTI ORDERING CODE START */
-
-    changeOrderMulti(field) {
-      let searchParametes = this.searchParameters;
-
-      // Change string to array
-      if (typeof searchParametes.orderBy === "string")
-        searchParametes.orderBy = searchParametes.orderBy.split();
-
-      if (searchParametes.orderBy.includes(field)) {
-        // Ascending
-        this.$set(
-          searchParametes.orderBy,
-          searchParametes.orderBy.indexOf(field),
-          "-" + field
-        );
-      } else if (searchParametes.orderBy.includes("-" + field)) {
-        // Descending
-        this.$set(
-          searchParametes.orderBy,
-          searchParametes.orderBy.indexOf("-" + field),
-          field
-        );
-      } else {
-        if (searchParametes.orderBy.length > 1) {
-          // Removes first and adds field
-          searchParametes.orderBy.shift();
-          searchParametes.orderBy.push(field);
-        } else {
-          // Just adds field
-          searchParametes.orderBy.push(field);
-        }
-      }
-
-      // Move it up if it starts to trigger multiple requests
-      searchParametes.page = 1;
-      this.$emit("search-params-changed", searchParametes);
-    },
-
-    // Returns 1 for ascending, -1 for descending and 0 if not in orderBy
-    isFieldInOrderBy(field) {
-      let searchParametes = this.searchParameters;
-
-      // Change string to array
-      if (typeof searchParametes.orderBy === "string")
-        searchParametes.orderBy = searchParametes.orderBy.split();
-
-      for (const i in searchParametes.orderBy) {
-        if (searchParametes.orderBy[i] === field) {
-          return 1;
-        }
-        if (searchParametes.orderBy[i] === "-" + field) {
-          return -1;
-        }
-      }
-      return 0;
-    },
-
-    removeOrder(field) {
-      let searchParametes = this.searchParameters;
-
-      // Change string to array (this should already be array, but just in case)
-      if (typeof searchParametes.orderBy === "string")
-        searchParametes.orderBy = searchParametes.orderBy.split();
-
-      // Removing is not possible if there is only 1 field
-      if (searchParametes.orderBy.length > 1) {
-        if (searchParametes.orderBy.includes(field)) {
-          searchParametes.orderBy.splice(
-            searchParametes.orderBy.indexOf(field),
-            1
-          );
-          this.$emit("search-params-changed", searchParametes);
-        } else if (searchParametes.orderBy.includes("-" + field)) {
-          searchParametes.orderBy.splice(
-            searchParametes.orderBy.indexOf("-" + field),
-            1
-          );
-          this.$emit("search-params-changed", searchParametes);
-        }
-      }
-    },
-
-    /* MULTI ORDERING CODE END */
 
     setDefaultAlternativeTableControls() {
       return {
@@ -600,51 +519,6 @@ export default {
 };
 </script>
 <style scoped>
-.badge-style > span {
-  padding-left: 0.4em;
-  padding-right: 0.4em;
-}
-
-.font-larger {
-  font-size: larger;
-}
-
-.nowrap {
-  white-space: nowrap;
-}
-
-.break-all-words {
-  word-break: break-all;
-}
-
-.th-sort > th > span {
-  cursor: pointer;
-}
-
-.th-sort > th > span:hover {
-  color: #000;
-}
-
-.fa-sort-up,
-.fa-sort-down {
-  color: #007bff;
-}
-
-/* Fixes table so scrolling happens inside table */
-.fixed-table {
-  max-height: 65vh;
-}
-
-/* Sticky header for responsive table */
-.sticky-header th {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
-  outline: 1px solid #dee2e6;
-  outline-offset: -1px;
-  box-shadow: 0 2px 0 #cfd5db;
-}
-
 .radio-buttons >>> .form-group {
   margin-bottom: unset;
 }

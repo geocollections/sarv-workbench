@@ -13,6 +13,7 @@
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
+    :class="bodyColor.split('-')[0] + '-5'"
   >
     <template v-slot:header.is_estonian_author="{ item }">
       <span> EE <v-icon x-small>fas fa-user</v-icon> </span>
@@ -23,7 +24,8 @@
         :to="{ path: '/reference/' + item.id }"
         :title="$t('editReference.editMessage')"
         class="sarv-link"
-        >{{ item.id }}</router-link
+        :class="`${bodyActiveColor}--text`"
+      >{{ item.id }}</router-link
       >
     </template>
 
@@ -32,6 +34,7 @@
         :to="{ path: '/journal/' + item.journal }"
         :title="$t('editJournal.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
         v-if="item.journal"
       >
         <span v-if="item.journal__journal_name">{{
@@ -54,7 +57,7 @@
         v-if="!item.is_private"
         :href="getGeoDetailUrl({ object: 'reference', id: item.id })"
         :title="$t('editReference.viewMessage')"
-        color="deep-orange"
+        :color="bodyActiveColor"
         target="GeocollectionsWindow"
         icon
       >
@@ -68,6 +71,7 @@
         :href="getDoiUrl(item.doi)"
         :title="getDoiUrl(item.doi)"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
         target="DoiWindow"
         >DOI</a
       >
@@ -78,7 +82,7 @@
         v-if="item.attachment__filename"
         :href="getFileUrl(item.attachment__filename)"
         :title="getFileUrl(item.attachment__filename)"
-        color="deep-orange"
+        :color="bodyActiveColor"
         target="FileWindow"
         icon
       >
@@ -91,7 +95,7 @@
         v-if="item.url && getUrl(item.url)"
         :href="getUrl(item.url)"
         :title="getUrl(item.url)"
-        color="deep-orange"
+        :color="bodyActiveColor"
         target="UrlWindow"
         rel="noopener noreferrer"
         icon
@@ -137,6 +141,16 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   data: () => ({

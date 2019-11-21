@@ -6,7 +6,11 @@
       </span>
     </v-col>
     <v-col class="text-right" align-self="center">
-      <v-btn :to="{ path: buttonPath }" color="deep-orange" dark>
+      <v-btn
+        :to="{ path: buttonPath }"
+        :color="appSettings.bodyActiveColor"
+        :dark="appSettings.bodyActiveColorDark"
+      >
         {{ $t("add.new") }}
       </v-btn>
     </v-col>
@@ -14,6 +18,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "TableViewTitle",
   props: {
@@ -25,6 +31,9 @@ export default {
       type: String,
       required: true
     }
+  },
+  computed: {
+    ...mapState(["appSettings"])
   }
 };
 </script>

@@ -13,12 +13,14 @@
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
+    :class="bodyColor.split('-')[0] + '-5'"
   >
     <template v-slot:item.id="{ item }">
       <router-link
         :to="{ path: '/site/' + item.id }"
         :title="$t('editSite.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.id }}
       </router-link>
@@ -33,6 +35,7 @@
         :to="{ path: '/project/' + item.project }"
         :title="$t('editProject.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
         v-if="item.project"
       >
         <span
@@ -73,6 +76,16 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   data: () => ({

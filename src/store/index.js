@@ -30,7 +30,7 @@ export function createStore() {
         zoom: 1
       },
       appSettings: {
-        bodyColor: "white",
+        bodyColor: "grey lighten-5",
         bodyDark: false,
         bodyActiveColor: "deep-orange",
         bodyActiveColorDark: true,

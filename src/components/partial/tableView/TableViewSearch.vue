@@ -1,15 +1,22 @@
 <template>
   <v-row class="table-view-search d-print-none" v-if="filters.length > 0">
     <v-col class="py-4">
-      <v-card elevation="3">
+      <v-card :color="appSettings.bodyColor.split('-')[0] + '-5'" elevation="4">
         <v-card-title class="pb-0">
-          <span>{{ $t("edit.search") }}&nbsp;</span>
-          <v-icon right color="deep-orange">fas fa-search</v-icon>
+          <div
+            class="card-title--clickable"
+            @click="$emit('update:showSearch', !showSearch)"
+          >
+            <span>{{ $t("edit.search") }}</span>
+            <v-icon right :color="appSettings.bodyActiveColor"
+              >fas fa-search</v-icon
+            >
+          </div>
           <v-spacer></v-spacer>
           <v-btn
             icon
             @click="$emit('update:showSearch', !showSearch)"
-            color="deep-orange"
+            :color="appSettings.bodyActiveColor"
           >
             <v-icon>{{
               showSearch ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -44,7 +51,7 @@
                         v-model="searchParameters[field.id]"
                         :label="$t(field.title)"
                         prepend-inner-icon="far fa-calendar-alt"
-                        color="deep-orange"
+                        :color="appSettings.bodyActiveColor"
                         clearable
                         clear-icon="fas fa-times"
                         readonly
@@ -54,8 +61,8 @@
                     <v-date-picker
                       v-model="searchParameters[field.id]"
                       @input="field.calendarState = false"
-                      color="deep-orange"
-                      header-color="blue"
+                      :color="appSettings.bodyActiveColor"
+                      :header-color="`${appSettings.bodyActiveColor} darken-3`"
                       scrollable
                     ></v-date-picker>
                   </v-menu>
@@ -65,7 +72,7 @@
                     v-else
                     v-model="searchParameters[field.id]"
                     :label="$t(field.title)"
-                    color="deep-orange"
+                    :color="appSettings.bodyActiveColor"
                     hide-details
                     :type="field.type"
                   ></v-text-field>
@@ -84,7 +91,7 @@
                       :label="$t('attachment.photoArchive')"
                       value="2"
                       class="mt-0 pr-6"
-                      color="deep-orange"
+                      :color="appSettings.bodyActiveColor"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
@@ -92,7 +99,7 @@
                       :label="$t('attachment.specimenImage')"
                       value="1"
                       class="mt-0 pr-6"
-                      color="deep-orange"
+                      :color="appSettings.bodyActiveColor"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
@@ -100,7 +107,7 @@
                       :label="$t('attachment.otherFiles')"
                       value="3"
                       class="mt-0 pr-6"
-                      color="deep-orange"
+                      :color="appSettings.bodyActiveColor"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
@@ -108,7 +115,7 @@
                       :label="$t('attachment.digitisedReference')"
                       value="4"
                       class="mt-0"
-                      color="deep-orange"
+                      :color="appSettings.bodyActiveColor"
                       hide-details
                     ></v-checkbox>
                   </v-row>
@@ -126,14 +133,14 @@
                       v-model="searchParameters.isEstonianReference"
                       :label="$t('reference.is_estonian_reference')"
                       class="mt-0 pr-6"
-                      color="deep-orange"
+                      :color="appSettings.bodyActiveColor"
                       hide-details
                     ></v-checkbox>
                     <v-checkbox
                       v-model="searchParameters.isEstonianAuthor"
                       :label="$t('reference.is_estonian_author')"
                       class="mt-0"
-                      color="deep-orange"
+                      :color="appSettings.bodyActiveColor"
                       hide-details
                     ></v-checkbox>
                   </v-row>
@@ -145,7 +152,7 @@
                 <v-col cols="12">
                   <v-btn
                     @click="$emit('reset:searchPreferences', true)"
-                    color="blue"
+                    :color="appSettings.bodyActiveColor"
                     dark
                   >
                     <v-icon left>fas fa-filter</v-icon>
@@ -162,6 +169,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "TableViewSearch",
   props: {
@@ -185,12 +194,20 @@ export default {
   },
   data: () => ({
     calendarMenu: false
-  })
+  }),
+  computed: {
+    ...mapState(["appSettings"])
+  }
 };
 </script>
 
 <style scoped>
 .checkboxes >>> .v-label {
   margin-bottom: 0;
+}
+
+.card-title--clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 </style>

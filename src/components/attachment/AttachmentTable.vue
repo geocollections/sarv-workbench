@@ -13,6 +13,7 @@
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
+    :class="bodyColor.split('-')[0] + '-5'"
   >
     <template v-slot:item.uuid_filename="{ item }">
       <router-link
@@ -53,6 +54,7 @@
         :to="{ path: '/attachment/' + item.id }"
         :title="$t('edit.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.id }}
       </router-link>
@@ -75,6 +77,7 @@
         :to="{ path: '/specimen/' + item.specimen }"
         :title="$t('editSpecimen.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.specimen }}
       </router-link>
@@ -85,6 +88,7 @@
         :to="{ path: '/reference/' + item.reference_id }"
         :title="$t('editReference.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.reference__reference }}
       </router-link>
@@ -111,6 +115,7 @@
         class="mt-0"
         v-model="item.is_private"
         @change="$emit('toggle-privacy-state', item.is_private, item.id)"
+        :color="bodyActiveColor"
       ></v-checkbox>
     </template>
 
@@ -119,7 +124,7 @@
         v-if="!item.is_private"
         :href="getGeoDetailUrl({ object: 'file', id: item.id })"
         :title="$t('editAttachment.viewMessage')"
-        color="deep-orange"
+        :color="bodyActiveColor"
         target="GeocollectionsWindow"
         icon
       >
@@ -149,6 +154,16 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   data: () => ({

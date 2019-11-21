@@ -97,28 +97,6 @@
       </v-btn>
 
       <v-btn
-        v-if="$route.meta.isEdit"
-        :icon="$vuetify.breakpoint.smAndDown"
-        color="green"
-        dark
-        :loading="sendingData"
-        @click="handleClick('SAVE_AS_NEW')"
-        title="Save record as new"
-        retain-focus-on-click
-        :small="$vuetify.breakpoint.mdAndUp"
-        class="text-none"
-      >
-        <v-icon
-          :small="$vuetify.breakpoint.mdAndUp"
-          :left="$vuetify.breakpoint.mdAndUp"
-          >far fa-plus-square</v-icon
-        >
-        <span v-show="$vuetify.breakpoint.mdAndUp"
-          >&nbsp;{{ $t("edit.buttons.saveAsNew") }}</span
-        >
-      </v-btn>
-
-      <v-btn
         :icon="$vuetify.breakpoint.smAndDown"
         color="red"
         dark
@@ -141,6 +119,28 @@
             $route.meta.isEdit ? $t("buttons.cancel") : $t("buttons.clear")
           }}
         </span>
+      </v-btn>
+
+      <v-btn
+        v-if="$route.meta.isEdit"
+        :icon="$vuetify.breakpoint.smAndDown"
+        color="orange"
+        dark
+        :loading="sendingData"
+        @click="handleClick('SAVE_AS_NEW')"
+        title="Save record as new"
+        retain-focus-on-click
+        :small="$vuetify.breakpoint.mdAndUp"
+        class="text-none"
+      >
+        <v-icon
+          :small="$vuetify.breakpoint.mdAndUp"
+          :left="$vuetify.breakpoint.mdAndUp"
+        >far fa-plus-square</v-icon
+        >
+        <span v-show="$vuetify.breakpoint.mdAndUp"
+        >&nbsp;{{ $t("edit.buttons.saveAsNew") }}</span
+        >
       </v-btn>
 
       <v-btn

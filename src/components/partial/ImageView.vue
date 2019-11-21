@@ -4,7 +4,7 @@
       <div class="col">
         <attachment-image-view v-if="module === 'attachment'" :data="data" />
 
-        <specimen-image-view v-if="module === 'specimen'" :data="data" />
+        <specimen-image-view v-if="module === 'specimen'" :data="data" :body-active-color="bodyActiveColor" />
       </div>
     </div>
   </div>
@@ -20,7 +20,7 @@ export default {
     AttachmentImageView,
     SpecimenImageView
   },
-  props: ["module", "data"]
+  props: ["module", "data", "bodyActiveColor"]
 };
 </script>
 

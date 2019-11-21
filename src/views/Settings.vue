@@ -10,145 +10,200 @@
     <floating-settings />
 
     <!-- ACCESSIBILITY -->
-    <fieldset class="border p-2 mt-2">
-      <legend
-        class="w-auto mb-0"
-        :class="{ 'text-primary': !block.accessibility }"
-        @click="block.accessibility = !block.accessibility"
-      >
-        {{ $t("settings.accessibility") }}
-        <i class="fas fa-wrench"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-accessibility"
+      :color="appSettings.bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.accessibility = !block.accessibility"
+        >
+          <span>{{ $t("settings.accessibility") }}</span>
+          <v-icon right>fas fa-wrench</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.accessibility = !block.accessibility"
+          :color="appSettings.bodyActiveColor"
+        >
+          <v-icon>{{
+            block.accessibility ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.accessibility">
+      <transition>
+        <div v-show="block.accessibility" class="px-1 pt-1 pb-2">
           <Accessibility
             :bodyActiveColor="appSettings.bodyActiveColor"
             :bodyDark="appSettings.bodyDark"
           />
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- SHORTCUTS -->
-    <fieldset class="border p-2 mt-2">
-      <legend
-        class="w-auto mb-0"
-        :class="{ 'text-primary': !block.shortcuts }"
-        @click="block.shortcuts = !block.shortcuts"
-      >
-        {{ $t("settings.shortcuts") }}
-        <i class="far fa-share-square"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-shortcuts"
+      :color="appSettings.bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.shortcuts = !block.shortcuts"
+        >
+          <span>{{ $t("settings.shortcuts") }}</span>
+          <v-icon right>fas fa-share-square</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.shortcuts = !block.shortcuts"
+          :color="appSettings.bodyActiveColor"
+        >
+          <v-icon>{{
+            block.shortcuts ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.shortcuts">
+      <transition>
+        <div v-show="block.shortcuts" class="px-1 pt-1 pb-2">
           <shortcuts
             :bodyActiveColor="appSettings.bodyActiveColor"
             :bodyActiveColorDark="appSettings.bodyActiveColorDark"
           />
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- PERMISSIONS -->
-    <fieldset class="border p-2 mt-2">
-      <legend
-        class="w-auto mb-0"
-        :class="{ 'text-primary': !block.permissions }"
-        @click="block.permissions = !block.permissions"
-      >
-        {{ $t("settings.permissions") }}
-        <i class="fas fa-user-lock"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-permissions"
+      :color="appSettings.bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.permissions = !block.permissions"
+        >
+          <span>{{ $t("settings.permissions") }}</span>
+          <v-icon right>fas fa-user-lock</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.permissions = !block.permissions"
+          :color="appSettings.bodyActiveColor"
+        >
+          <v-icon>{{
+            block.permissions ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition
-        name="fade"
-        enter-active-class="animated fadeIn faster"
-        leave-active-class="animated fadeOut faster"
-      >
-        <v-row v-show="block.permissions">
-          <v-col
-            cols="12"
-            sm="6"
-            md="4"
-            xl="3"
-            class="pb-7"
-            v-for="(key, index) in permissions"
-            :key="index"
-          >
-            <v-card>
-              <v-card-title class="font-weight-bold px-3 py-1">
-                <span>
-                  <v-icon small color="black">fas fa-table</v-icon>&nbsp;
-                  <span style="font-size: 1rem">{{ index }}</span>
-                </span>
-              </v-card-title>
+      <transition>
+        <div v-show="block.permissions" class="px-1 pt-1 pb-2">
+          <v-row v-show="block.permissions" class="px-1">
+            <v-col
+              cols="12"
+              sm="6"
+              md="4"
+              xl="3"
+              class="pb-7"
+              v-for="(key, index) in permissions"
+              :key="index"
+            >
+              <v-card>
+                <v-card-title class="font-weight-bold px-3 py-1">
+                  <span>
+                    <v-icon small color="black">fas fa-table</v-icon>&nbsp;
+                    <span style="font-size: 1rem">{{ index }}</span>
+                  </span>
+                </v-card-title>
 
-              <v-divider class="m-0"></v-divider>
+                <v-divider class="m-0"></v-divider>
 
-              <v-card-text class="px-3 py-1">
-                <v-row v-for="(entity, entityIndex) in key" :key="entityIndex">
-                  <v-col>
-                    <!-- ADD -->
-                    <v-btn
-                      v-if="entity === 'add'"
-                      text
-                      :color="
-                        isTableInCorrectList(index, 'add') ? 'green' : 'black'
-                      "
-                      @click="goTo(index, 'add')"
-                    >
-                      <v-icon small left>far fa-plus-square</v-icon>
-                      {{ entity }}
-                    </v-btn>
+                <v-card-text class="px-3 py-1">
+                  <v-row
+                    v-for="(entity, entityIndex) in key"
+                    :key="entityIndex"
+                  >
+                    <v-col>
+                      <!-- ADD -->
+                      <v-btn
+                        v-if="entity === 'add'"
+                        text
+                        :color="
+                          isTableInCorrectList(index, 'add') ? 'green' : 'black'
+                        "
+                        @click="goTo(index, 'add')"
+                      >
+                        <v-icon small left>far fa-plus-square</v-icon>
+                        {{ entity }}
+                      </v-btn>
 
-                    <!-- CHANGE -->
-                    <v-btn
-                      v-else-if="entity === 'change'"
-                      text
-                      :color="
-                        isTableInCorrectList(index, 'change') ? 'blue' : 'black'
-                      "
-                      @click="goTo(index, 'change')"
-                    >
-                      <v-icon small left>far fa-edit</v-icon>
-                      {{ entity }}
-                    </v-btn>
+                      <!-- CHANGE -->
+                      <v-btn
+                        v-else-if="entity === 'change'"
+                        text
+                        :color="
+                          isTableInCorrectList(index, 'change')
+                            ? 'blue'
+                            : 'black'
+                        "
+                        @click="goTo(index, 'change')"
+                      >
+                        <v-icon small left>far fa-edit</v-icon>
+                        {{ entity }}
+                      </v-btn>
 
-                    <!-- DELETE -->
-                    <v-btn
-                      v-else-if="entity === 'delete'"
-                      text
-                      :color="
-                        isTableInCorrectList(index, 'delete') ? 'red' : 'black'
-                      "
-                      @click="goTo(index, 'delete')"
-                    >
-                      <v-icon small left>far fa-minus-square</v-icon>
-                      {{ entity }}
-                    </v-btn>
+                      <!-- DELETE -->
+                      <v-btn
+                        v-else-if="entity === 'delete'"
+                        text
+                        :color="
+                          isTableInCorrectList(index, 'delete')
+                            ? 'red'
+                            : 'black'
+                        "
+                        @click="goTo(index, 'delete')"
+                      >
+                        <v-icon small left>far fa-minus-square</v-icon>
+                        {{ entity }}
+                      </v-btn>
 
-                    <!-- VIEW -->
-                    <v-btn
-                      v-else-if="entity === 'view'"
-                      text
-                      :color="
-                        isTableInCorrectList(index, 'change') ? 'blue' : 'black'
-                      "
-                      @click="goTo(index, 'change')"
-                    >
-                      <v-icon small left>far fa-eye</v-icon>
-                      {{ entity }}
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-        </v-row>
+                      <!-- VIEW -->
+                      <v-btn
+                        v-else-if="entity === 'view'"
+                        text
+                        :color="
+                          isTableInCorrectList(index, 'change')
+                            ? 'blue'
+                            : 'black'
+                        "
+                        @click="goTo(index, 'change')"
+                      >
+                        <v-icon small left>far fa-eye</v-icon>
+                        {{ entity }}
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </div>
       </transition>
-    </fieldset>
+    </v-card>
   </div>
 </template>
 
@@ -182,7 +237,8 @@ export default {
         "analysis",
         "specimen",
         "taxon",
-        "collection"
+        "collection",
+        "selection_series"
       ],
       changeList: [
         "attachment",
@@ -196,7 +252,8 @@ export default {
         "analysis",
         "specimen",
         "taxon",
-        "collection"
+        "collection",
+        "selection_series"
       ],
       deleteList: [],
       block: { shortcuts: true, permissions: true, accessibility: true }
@@ -273,5 +330,10 @@ legend:hover {
 .list-link-delete:hover {
   cursor: pointer;
   font-weight: bold;
+}
+
+.card-title--clickable:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 </style>

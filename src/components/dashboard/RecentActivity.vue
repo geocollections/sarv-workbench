@@ -1,8 +1,8 @@
 <template>
   <v-row class="recent-activity">
     <!-- RECENTLY ADDED -->
-    <v-col cols="12" md="6">
-      <v-card elevation="3">
+    <v-col cols="12" md="6" class="mb-6">
+      <v-card :color="bodyColor.split('-')[0] + '-5'" elevation="4">
         <v-card-title>
           <span>
             {{ $t("logs.recentlyAdded") }}
@@ -13,19 +13,19 @@
 
         <v-simple-table>
           <template v-slot:default>
-            <thead>
+            <thead :class="bodyColor.split('-')[0] + '-5'">
               <tr>
                 <th>ID</th>
                 <th>{{ $t("logs.time") }}</th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody :class="bodyColor.split('-')[0] + '-5'">
               <tr v-for="(entity, index) in recentlyInserted" :key="index">
                 <td>
                   <v-btn
                     text
-                    color="blue"
+                    :color="bodyActiveColor"
                     :to="{
                       path: '/' + entity.table_name + '/' + entity.row_id
                     }"
@@ -43,7 +43,7 @@
 
     <!-- RECENTLY UPDATED -->
     <v-col cols="12" md="6">
-      <v-card elevation="3">
+      <v-card :color="bodyColor.split('-')[0] + '-5'" elevation="4">
         <v-card-title>
           <span>
             {{ $t("logs.recentlyUpdated") }}
@@ -54,19 +54,19 @@
 
         <v-simple-table>
           <template v-slot:default>
-            <thead>
+            <thead :class="bodyColor.split('-')[0] + '-5'">
               <tr>
                 <th>ID</th>
                 <th>{{ $t("logs.time") }}</th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody :class="bodyColor.split('-')[0] + '-5'">
               <tr v-for="(entity, index) in recentlyUpdated" :key="index">
                 <td>
                   <v-btn
                     text
-                    color="blue"
+                    :color="bodyActiveColor"
                     :to="{
                       path: '/' + entity.table_name + '/' + entity.row_id
                     }"
@@ -88,7 +88,7 @@
 import { fetchLatestLogs } from "@/assets/js/api/apiCalls";
 
 export default {
-  props: ["user"],
+  props: ["user", "bodyColor", "bodyActiveColor"],
   name: "recentActivity",
   data() {
     return {

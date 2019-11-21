@@ -18,13 +18,15 @@
       :sort-by.sync="searchParameters.sortBy"
       :sort-desc.sync="searchParameters.sortDesc"
       :server-items-length="response.count"
+      :class="bodyColor.split('-')[0] + '-5'"
     >
       <template v-slot:item.id="{ item }">
         <router-link
           :to="{ path: '/specimen/' + item.id }"
           :title="$t('editSpecimen.editMessage')"
           class="sarv-link"
-          >{{ item.id }}</router-link
+          :class="`${bodyActiveColor}--text`"
+        >{{ item.id }}</router-link
         >
       </template>
 
@@ -71,6 +73,7 @@
           :to="{ path: '/locality/' + item.locality_id }"
           :title="$t('editLocality.editMessage')"
           class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
           v-if="item.locality_id"
         >
           <span
@@ -140,7 +143,7 @@
           v-if="!item.is_private"
           :href="getGeoDetailUrl({ object: 'specimen', id: item.id })"
           :title="$t('editSpecimen.viewMessage')"
-          color="deep-orange"
+          :color="bodyActiveColor"
           target="GeocollectionsWindow"
           icon
         >
@@ -194,6 +197,16 @@ export default {
     },
     activeSelectionSeries: {
       type: Object
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   data: () => ({

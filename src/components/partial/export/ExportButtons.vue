@@ -1,12 +1,12 @@
 <template>
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn color="blue" dark v-on="on">
+      <v-btn :color="bodyActiveColor" dark v-on="on">
         <span>{{ $t("buttons.export") }}</span>
         <v-icon right>fas fa-file-export</v-icon>
       </v-btn>
     </template>
-    <v-list color="blue" dark dense>
+    <v-list :color="bodyActiveColor" dark dense>
       <v-list-item @click="exportToCSV">
         <v-list-item-title>
           {{ $t("buttons.exportTo") }} CSV &nbsp;
@@ -42,6 +42,11 @@ export default {
     },
     tableData: {
       type: Array
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   name: "ExportButtons",

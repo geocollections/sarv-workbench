@@ -12,12 +12,14 @@
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
+    :class="bodyColor.split('-')[0] + '-5'"
   >
     <template v-slot:item.library="{ item }">
       <router-link
         :to="{ path: '/library/' + item.library }"
         :title="$t('editLibrary.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.library }}
       </router-link>
@@ -28,6 +30,7 @@
         :to="{ path: '/library/' + item.library }"
         :title="$t('editLibrary.editMessage')"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.library__title }}
       </router-link>
@@ -41,6 +44,7 @@
         @change="
           $emit('toggle-privacy-state', item.library__is_private, item.library)
         "
+        :color="bodyActiveColor"
       ></v-checkbox>
     </template>
 
@@ -49,7 +53,7 @@
         v-if="!item.is_private"
         :href="getGeoDetailUrl({ object: 'library', id: item.library })"
         :title="$t('editLibrary.viewMessage')"
-        color="deep-orange"
+        :color="bodyActiveColor"
         target="GeocollectionsWindow"
         icon
       >
@@ -79,6 +83,16 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   data: () => ({

@@ -197,7 +197,9 @@
               icon
               :color="drawerActiveColor"
               @click="previousPage"
-              v-if="activeSearchParams.search.page > 1"
+              v-if="
+                activeSearchParams.search && activeSearchParams.search.page > 1
+              "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
             </v-btn>
@@ -212,7 +214,10 @@
               icon
               :color="drawerActiveColor"
               @click="nextPage"
-              v-if="activeSearchParams.search.page < sidebarList.totalPages"
+              v-if="
+                activeSearchParams.search &&
+                  activeSearchParams.search.page < sidebarList.totalPages
+              "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
             </v-btn>
@@ -255,7 +260,9 @@
               :color="drawerActiveColor"
               @click="previousPage"
               v-if="
-                sidebarList.totalPages && activeSearchParams.search.page > 1
+                sidebarList.totalPages &&
+                  activeSearchParams.search &&
+                  activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -273,6 +280,7 @@
               @click="nextPage"
               v-if="
                 sidebarList.totalPages &&
+                  activeSearchParams.search &&
                   activeSearchParams.search.page < sidebarList.totalPages
               "
             >
@@ -330,7 +338,9 @@
               icon
               :color="drawerActiveColor"
               @click="previousPage"
-              v-if="activeSearchParams.search.page > 1"
+              v-if="
+                activeSearchParams.search && activeSearchParams.search.page > 1
+              "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
             </v-btn>
@@ -345,7 +355,10 @@
               icon
               :color="drawerActiveColor"
               @click="nextPage"
-              v-if="activeSearchParams.search.page < sidebarList.totalPages"
+              v-if="
+                activeSearchParams.search &&
+                  activeSearchParams.search.page < sidebarList.totalPages
+              "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
             </v-btn>
@@ -385,7 +398,9 @@
               :color="drawerActiveColor"
               @click="previousPage"
               v-if="
-                sidebarList.totalPages && activeSearchParams.search.page > 1
+                activeSearchParams.search &&
+                  sidebarList.totalPages &&
+                  activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -403,6 +418,7 @@
               @click="nextPage"
               v-if="
                 sidebarList.totalPages &&
+                  activeSearchParams.search &&
                   activeSearchParams.search.page < sidebarList.totalPages
               "
             >
@@ -440,7 +456,9 @@
               icon
               :color="drawerActiveColor"
               @click="previousPage"
-              v-if="activeSearchParams.search.page > 1"
+              v-if="
+                activeSearchParams.search && activeSearchParams.search.page > 1
+              "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
             </v-btn>
@@ -455,7 +473,10 @@
               icon
               :color="drawerActiveColor"
               @click="nextPage"
-              v-if="activeSearchParams.search.page < sidebarList.totalPages"
+              v-if="
+                activeSearchParams.search &&
+                  activeSearchParams.search.page < sidebarList.totalPages
+              "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
             </v-btn>
@@ -495,7 +516,9 @@
               :color="drawerActiveColor"
               @click="previousPage"
               v-if="
-                sidebarList.totalPages && activeSearchParams.search.page > 1
+                activeSearchParams.search &&
+                  sidebarList.totalPages &&
+                  activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -513,6 +536,7 @@
               @click="nextPage"
               v-if="
                 sidebarList.totalPages &&
+                  activeSearchParams.search &&
                   activeSearchParams.search.page < sidebarList.totalPages
               "
             >

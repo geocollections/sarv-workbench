@@ -13,13 +13,15 @@
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
+    :class="bodyColor.split('-')[0] + '-5'"
   >
     <template v-slot:item.id="{ item }">
       <router-link
         :to="{ path: '/taxon/' + item.id }"
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
-        >{{ item.id }}</router-link
+        :class="`${bodyActiveColor}--text`"
+      >{{ item.id }}</router-link
       >
     </template>
 
@@ -28,7 +30,8 @@
         :to="{ path: '/taxon/' + item.id }"
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
-        >{{ item.taxon }}</router-link
+        :class="`${bodyActiveColor}--text`"
+      >{{ item.taxon }}</router-link
       >
     </template>
 
@@ -37,6 +40,7 @@
         v-if="item.reference"
         :to="{ path: '/reference/' + item.reference }"
         class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
       >
         {{ item.author_year }}
       </router-link>
@@ -48,7 +52,8 @@
         :to="{ path: '/taxon/' + item.parent_id }"
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
-        >{{ item.parent__taxon }}</router-link
+        :class="`${bodyActiveColor}--text`"
+      >{{ item.parent__taxon }}</router-link
       >
     </template>
 
@@ -57,7 +62,7 @@
         v-if="!item.is_private"
         :href="getFossilsUrl(item.id)"
         :title="$t('editTaxon.viewMessage')"
-        color="deep-orange"
+        :color="bodyActiveColor"
         target="FossilsWindow"
         icon
       >
@@ -87,6 +92,16 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   data: () => ({
