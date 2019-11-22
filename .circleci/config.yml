@@ -54,7 +54,7 @@ workflows:
   version: 2
   sarv-edit:
     jobs:
-      - install_and_cache:
+      - install_and_cache
       - unit_test:
           requires:
             - install_and_cache
