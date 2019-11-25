@@ -1,5 +1,5 @@
 <template>
-  <v-row class="table-view-title d-print-none">
+  <v-row class="d-print-none">
     <v-col>
       <span class="table-title">
         {{ $t(title) }}
@@ -39,9 +39,6 @@ export default {
 </script>
 
 <style scoped>
-.table-view-title {
-  border-bottom: 1px solid #607d8b;
-}
 .table-title {
   font-size: 2rem;
   font-weight: 500;

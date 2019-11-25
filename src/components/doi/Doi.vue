@@ -1149,7 +1149,10 @@ export default {
           this.loadRelatedData(tab.name);
         });
 
-        this.$emit("related-data-info", this.relatedTabs.map(tab => tab.name));
+        this.$emit(
+          "related-data-info",
+          this.relatedTabs.map(tab => tab.name)
+        );
       } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
         fetchDoiUsingEGF(this.$route.params.id).then(response => {
           if (response) this.assignEgfFieldsToDoiObject(response);

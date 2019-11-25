@@ -1718,7 +1718,10 @@ export default {
 
         this.$on("tab-changed", this.setTab);
 
-        this.$emit("related-data-info", this.relatedTabs.map(tab => tab.name));
+        this.$emit(
+          "related-data-info",
+          this.relatedTabs.map(tab => tab.name)
+        );
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);

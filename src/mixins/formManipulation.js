@@ -58,13 +58,15 @@ const formManipulation = {
      *                      true, false, 1, 0, -1, "foo", [1, 2, 3], { foo: 1 }
      */
     isNotEmpty(value) {
-      return !// null or undefined
-      (
-        value == null ||
-        // has length and it's zero
-        value.length === 0 ||
-        //  is an Object and has no keys
-        (value.constructor === Object && Object.keys(value).length === 0)
+      return !(
+        // null or undefined
+        (
+          value == null ||
+          // has length and it's zero
+          value.length === 0 ||
+          //  is an Object and has no keys
+          (value.constructor === Object && Object.keys(value).length === 0)
+        )
       );
     },
 

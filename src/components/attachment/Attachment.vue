@@ -2998,7 +2998,10 @@
         elevation="4"
       >
         <v-card-title class="pt-2 pb-1">
-          <div class="card-title--clickable" @click="block.changeType = !block.changeType">
+          <div
+            class="card-title--clickable"
+            @click="block.changeType = !block.changeType"
+          >
             <span>{{ $t("attachment.changeType") }}</span>
             <v-icon right>fas fa-exchange-alt</v-icon>
           </div>
@@ -3010,7 +3013,7 @@
           >
             <v-icon>{{
               block.changeType ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
+            }}</v-icon>
           </v-btn>
         </v-card-title>
 
@@ -3023,25 +3026,25 @@
                   <span>{{ $t("attachment.changeType") }}: </span>
                   <span
                     v-if="
-                        currentAttachmentType !==
-                          getAttachmentTypeAsString(
-                            attachment.specimen_image_attachment
-                          )
-                      "
+                      currentAttachmentType !==
+                        getAttachmentTypeAsString(
+                          attachment.specimen_image_attachment
+                        )
+                    "
                   >
-                      <b>{{ $t("attachment." + currentAttachmentType) }} </b>
-                      <i class="fas fa-long-arrow-alt-right"></i>
-                      <b>
-                        {{
-                          $t(
-                            "attachment." +
-                              getAttachmentTypeAsString(
-                                attachment.specimen_image_attachment
-                              )
-                          )
-                        }}</b
-                      >
-                    </span>
+                    <b>{{ $t("attachment." + currentAttachmentType) }} </b>
+                    <i class="fas fa-long-arrow-alt-right"></i>
+                    <b>
+                      {{
+                        $t(
+                          "attachment." +
+                            getAttachmentTypeAsString(
+                              attachment.specimen_image_attachment
+                            )
+                        )
+                      }}</b
+                    >
+                  </span>
                 </label>
                 <b-form-select
                   size="sm"
@@ -3052,22 +3055,22 @@
                   <option
                     :value="2"
                     :disabled="!isValidToChangeTo('photoArchive')"
-                  >{{ $t("attachment.photoArchive") }}</option
+                    >{{ $t("attachment.photoArchive") }}</option
                   >
                   <option
                     :value="1"
                     :disabled="!isValidToChangeTo('specimenImage')"
-                  >{{ $t("attachment.specimenImage") }}</option
+                    >{{ $t("attachment.specimenImage") }}</option
                   >
                   <option
                     :value="3"
                     :disabled="!isValidToChangeTo('otherFile')"
-                  >{{ $t("attachment.otherFiles") }}</option
+                    >{{ $t("attachment.otherFiles") }}</option
                   >
                   <option
                     :value="4"
                     :disabled="!isValidToChangeTo('digitisedReference')"
-                  >{{ $t("attachment.digitisedReference") }}</option
+                    >{{ $t("attachment.digitisedReference") }}</option
                   >
                 </b-form-select>
               </v-col>

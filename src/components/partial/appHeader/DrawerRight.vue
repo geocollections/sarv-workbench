@@ -319,7 +319,12 @@
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="$route.meta.isTableView && $route.meta.object === 'reference' && activeSearchParams && activeSearchParams.search"
+        v-if="
+          $route.meta.isTableView &&
+            $route.meta.object === 'reference' &&
+            activeSearchParams &&
+            activeSearchParams.search
+        "
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -436,7 +441,9 @@
         v-if="
           $route.meta.isTableView &&
             ($route.meta.object === 'specimen' ||
-              $route.meta.object === 'sample') && activeSearchParams && activeSearchParams.search
+              $route.meta.object === 'sample') &&
+            activeSearchParams &&
+            activeSearchParams.search
         "
       >
         <template v-slot:activator>

@@ -45,10 +45,10 @@ jobs:
           command: npm run build
       - run:
           name: Directory update
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd ${PATH_DEV}/script && . directory_update.sh'
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
       - run:
           name: Copy built files to development
-          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:${PATH_DEV}
+          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit-dev
 
 workflows:
   version: 2

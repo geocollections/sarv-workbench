@@ -730,7 +730,8 @@
           <specimen-identification-geology
             v-if="
               specimen.fossil &&
-                (specimen.fossil.id !== 1 && specimen.fossil.id !== 7)
+                specimen.fossil.id !== 1 &&
+                specimen.fossil.id !== 7
             "
             :related-data="relatedData"
             :autocomplete="autocomplete"
@@ -1065,7 +1066,8 @@ export default {
           if (
             this.specimen &&
             this.specimen.fossil &&
-            (this.specimen.fossil.id !== 1 && this.specimen.fossil.id !== 7)
+            this.specimen.fossil.id !== 1 &&
+            this.specimen.fossil.id !== 7
           ) {
             return tab;
           }
@@ -1285,7 +1287,10 @@ export default {
 
         this.$on("tab-changed", this.setTab);
 
-        this.$emit("related-data-info", this.relatedTabs.map(tab => tab.name));
+        this.$emit(
+          "related-data-info",
+          this.relatedTabs.map(tab => tab.name)
+        );
       } else {
         // Set default tab
         if (this.specimen && this.specimen.fossil) {
