@@ -24,14 +24,14 @@
           <v-icon
             right
             :class="validate('keyword') ? 'green--text' : 'red--text'"
-          >fas fa-project-diagram</v-icon
+            >fas fa-project-diagram</v-icon
           >
         </div>
         <v-spacer></v-spacer>
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -68,14 +68,14 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="4" class="px-1">
               <label :for="`keyword_category`"
-              >{{ $t("keyword.keyword_category") }}:</label
+                >{{ $t("keyword.keyword_category") }}:</label
               >
               <vue-multiselect
                 id="keyword_category"
@@ -98,7 +98,7 @@
                   <strong>{{ option[nameLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -108,7 +108,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label :for="`related_keyword`"
-              >{{ $t("keyword.related_keyword") }}:</label
+                >{{ $t("keyword.related_keyword") }}:</label
               >
               <vue-multiselect
                 id="related_keyword"
@@ -128,7 +128,7 @@
                   <strong>{{ option.keyword }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>

@@ -17,21 +17,28 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.requiredFields = !block.requiredFields">
+        <div
+          class="card-title--clickable"
+          @click="block.requiredFields = !block.requiredFields"
+        >
           <span :class="validate('journal') ? 'green--text' : 'red--text'">{{
             $t("journal.generalInfo")
           }}</span>
           <v-icon
             right
             :class="validate('journal') ? 'green--text' : 'red--text'"
-          >fas fa-project-diagram</v-icon
+            >fas fa-project-diagram</v-icon
           >
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.requiredFields = !block.requiredFields" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.requiredFields = !block.requiredFields"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -65,22 +72,15 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <div
-          class="card-title--clickable"
-          @click="block.info = !block.info"
-        >
+        <div class="card-title--clickable" @click="block.info = !block.info">
           <span>{{ $t("journal.generalInfo") }}</span>
           <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.info = !block.info"
-          :color="bodyActiveColor"
-        >
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -99,16 +99,16 @@
               ></v-text-field>
             </v-col>
 
-        <v-col cols="12" md="6" class="pa-1">
-          <v-text-field
-            v-model="journal.publisher"
-            outlined
-            dense
-            hide-details
-            :color="bodyActiveColor"
-            :label="$t('journal.publisher')"
-          ></v-text-field>
-        </v-col>
+            <v-col cols="12" md="6" class="pa-1">
+              <v-text-field
+                v-model="journal.publisher"
+                outlined
+                dense
+                hide-details
+                :color="bodyActiveColor"
+                :label="$t('journal.publisher')"
+              ></v-text-field>
+            </v-col>
           </v-row>
 
           <!-- REMARKS -->
@@ -281,7 +281,7 @@ label {
   font-size: 0.8rem;
 }
 
-  .textarea >>> textarea {
-    margin-top: 0 !important;
-  }
+.textarea >>> textarea {
+  margin-top: 0 !important;
+}
 </style>

@@ -17,21 +17,28 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.requiredFields = !block.requiredFields">
+        <div
+          class="card-title--clickable"
+          @click="block.requiredFields = !block.requiredFields"
+        >
           <span :class="validate('reference') ? 'green--text' : 'red--text'">{{
             $t("specimen.requiredFields")
           }}</span>
           <v-icon
             right
             :class="validate('reference') ? 'green--text' : 'red--text'"
-          >fas fa-project-diagram</v-icon
+            >fas fa-project-diagram</v-icon
           >
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.requiredFields = !block.requiredFields" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.requiredFields = !block.requiredFields"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -102,19 +109,14 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span>{{
-            $t("specimen.generalInfo")
-          }}</span>
-          <v-icon
-            right
-          >fas fa-project-diagram</v-icon
-          >
+          <span>{{ $t("specimen.generalInfo") }}</span>
+          <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -138,7 +140,7 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -158,7 +160,7 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -196,14 +198,14 @@
                   <strong>{{ option.journal_name }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="4" class="px-1">
               <label :for="`journal_additional`"
-              >{{ $t("reference.journalAdditional") }}:</label
+                >{{ $t("reference.journalAdditional") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -248,7 +250,7 @@
 
             <v-col cols="12" md="3" class="px-1">
               <label :for="`book_editor`"
-              >{{ $t("reference.book_editor") }}:</label
+                >{{ $t("reference.book_editor") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -270,7 +272,7 @@
 
             <v-col cols="12" md="3" class="px-1">
               <label :for="`publisher_place`"
-              >{{ $t("reference.publisherPlace") }}:</label
+                >{{ $t("reference.publisherPlace") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -311,7 +313,7 @@
                   <label
                     :for="`check-doi`"
                     style="visibility: hidden; display: block;"
-                  >DOI:</label
+                    >DOI:</label
                   >
                   <v-btn
                     id="check-doi"
@@ -320,7 +322,7 @@
                     class="text-none"
                     :color="bodyActiveColor"
                   >
-                    {{ $t('reference.checkDoi') }}
+                    {{ $t("reference.checkDoi") }}
                   </v-btn>
                 </div>
               </div>
@@ -347,7 +349,7 @@
                 :state="isValidUrl"
               ></b-form-input>
               <b-form-text v-if="!isValidUrl"
-              >{{ $t("add.errors.url") }}.</b-form-text
+                >{{ $t("add.errors.url") }}.</b-form-text
               >
             </div>
           </div>
@@ -364,19 +366,18 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.other = !block.other">
-          <span>{{
-            $t("reference.otherData")
-          }}</span>
-          <v-icon
-            right
-          >fas fa-project-diagram</v-icon
-          >
+          <span>{{ $t("reference.otherData") }}</span>
+          <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.other = !block.other" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.other = !block.other"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.other ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -392,7 +393,7 @@
             <!-- AUTHOR KEYWORDS -->
             <v-col cols="12" class="px-1">
               <label :for="`author_keywords`"
-              >{{ $t("reference.authorKeywords") }}:</label
+                >{{ $t("reference.authorKeywords") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -407,7 +408,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label :for="`title_original`"
-              >{{ $t("reference.titleOriginal") }}:</label
+                >{{ $t("reference.titleOriginal") }}:</label
               >
               <b-form-textarea
                 size="sm"
@@ -422,7 +423,7 @@
             <!-- TITLE TRANSLATED -->
             <v-col cols="12" md="6" class="px-1">
               <label :for="`title_translated`"
-              >{{ $t("reference.titleTranslated") }}:</label
+                >{{ $t("reference.titleTranslated") }}:</label
               >
               <b-form-textarea
                 size="sm"
@@ -439,7 +440,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label :for="`title_translated_language`"
-              >{{ $t("reference.titleTranslatedLanguage") }}:</label
+                >{{ $t("reference.titleTranslatedLanguage") }}:</label
               >
               <vue-multiselect
                 v-model="reference.title_translated_language"
@@ -454,7 +455,7 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -462,7 +463,7 @@
             <!-- BOOK ORIGINAL -->
             <v-col cols="12" md="6" class="px-1">
               <label :for="`book_original`"
-              >{{ $t("reference.bookOriginal") }}:</label
+                >{{ $t("reference.bookOriginal") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -507,20 +508,22 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.description = !block.description">
-          <span>{{
-            $t("reference.description")
-          }}</span>
-          <v-icon
-            right
-          >fas fa-pen-fancy</v-icon
-          >
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("reference.description") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.description = !block.description" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.description ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -530,7 +533,7 @@
           <div class="d-flex justify-content-start flex-wrap px-1">
             <div class="mr-3 flex-grow-1">
               <label :for="`keyword`"
-              >{{ $t("reference.referenceKeyword") }}:</label
+                >{{ $t("reference.referenceKeyword") }}:</label
               >
               <vue-multiselect
                 v-model="relatedData.keyword"
@@ -548,7 +551,7 @@
                 :show-labels="true"
               >
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </div>
@@ -598,7 +601,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="4" class="px-1">
               <label :for="`location_txt`"
-              >{{ $t("reference.location_txt") }}:</label
+                >{{ $t("reference.location_txt") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -623,15 +626,13 @@
                   <strong>{{ option[licenceLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="4" class="px-1">
-              <label :for="`is_oa`"
-              >{{ $t("reference.is_oa") }}:</label
-              >
+              <label :for="`is_oa`">{{ $t("reference.is_oa") }}:</label>
               <v-checkbox
                 v-model="reference.is_oa"
                 id="is_oa"
@@ -680,20 +681,22 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.digital = !block.digital">
-          <span>{{
-            $t("reference.relatedTables.attachmentDigital")
-          }}</span>
-          <v-icon
-            right
-          >fas fa-file-pdf</v-icon
-          >
+        <div
+          class="card-title--clickable"
+          @click="block.digital = !block.digital"
+        >
+          <span>{{ $t("reference.relatedTables.attachmentDigital") }}</span>
+          <v-icon right>fas fa-file-pdf</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.digital = !block.digital" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.digital = !block.digital"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.digital ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -726,19 +729,18 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.files = !block.files">
-          <span>{{
-            $t("reference.relatedTables.attachment")
-          }}</span>
-          <v-icon
-            right
-          >fas fa-folder-open</v-icon
-          >
+          <span>{{ $t("reference.relatedTables.attachment") }}</span>
+          <v-icon right>fas fa-folder-open</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.files = !block.files" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.files = !block.files"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.files ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -747,7 +749,7 @@
           <div class="d-flex justify-content-between px-1">
             <div class="mr-3 flex-grow-1">
               <label :for="`attachment`"
-              >{{ $t("reference.attachments") }}:</label
+                >{{ $t("reference.attachments") }}:</label
               >
               <vue-multiselect
                 v-model="relatedData.attachment"
@@ -766,7 +768,7 @@
                 :show-labels="false"
               >
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </div>
@@ -800,20 +802,22 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.libraries = !block.libraries">
-          <span>{{
-            $t("reference.relatedTables.library")
-          }}</span>
-          <v-icon
-            right
-          >fas fa-book</v-icon
-          >
+        <div
+          class="card-title--clickable"
+          @click="block.libraries = !block.libraries"
+        >
+          <span>{{ $t("reference.relatedTables.library") }}</span>
+          <v-icon right>fas fa-book</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.libraries = !block.libraries" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.libraries = !block.libraries"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.libraries ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -839,7 +843,7 @@
                 :show-labels="false"
               >
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </div>
@@ -959,7 +963,13 @@
     </div>
 
     <!-- IS PRIVATE and IS LOCKED -->
-    <v-card no-gutters class="d-flex flex-row flex-wrap" flat tile :color="bodyColor">
+    <v-card
+      no-gutters
+      class="d-flex flex-row flex-wrap"
+      flat
+      tile
+      :color="bodyColor"
+    >
       <v-card flat tile class="mr-4 mb-2" :color="bodyColor">
         <v-checkbox
           v-model="reference.is_private"

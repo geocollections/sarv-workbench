@@ -257,7 +257,7 @@ export default {
       //ZOOM ACTIVATED
       this.map.on("zoomend", event => (this.zoom = event.target._zoom));
 
-      console.log(this.locations)
+      console.log(this.locations);
 
       if (this.mode === "multiple") this.setMarkers(this.locations);
 
@@ -295,35 +295,34 @@ export default {
     //SET GROUP OF MARKERS
     setMarkers(newVal) {
       if (newVal && newVal.length > 0) {
+        this.markers = [];
 
-      this.markers = [];
-
-      newVal.forEach(entity => {
-        let marker = L.marker(
-          {
-            lat: parseFloat(entity.latitude),
-            lng: parseFloat(entity.longitude)
-          },
-          { icon: this.markerIcon }
-        )
-          .addTo(this.map)
-          .on("click", () =>
-            window.open(
-              location.origin + "/site/" + entity.id,
-              "",
-              "width=800,height=750"
-            )
-          );
-        marker.bindTooltip(entity.name, {
-          permanent: true,
-          direction: "right",
-          offset: [10, -23]
+        newVal.forEach(entity => {
+          let marker = L.marker(
+            {
+              lat: parseFloat(entity.latitude),
+              lng: parseFloat(entity.longitude)
+            },
+            { icon: this.markerIcon }
+          )
+            .addTo(this.map)
+            .on("click", () =>
+              window.open(
+                location.origin + "/site/" + entity.id,
+                "",
+                "width=800,height=750"
+              )
+            );
+          marker.bindTooltip(entity.name, {
+            permanent: true,
+            direction: "right",
+            offset: [10, -23]
+          });
+          this.markers.push(marker);
         });
-        this.markers.push(marker);
-      });
-      let bounds = new L.featureGroup(this.markers).getBounds();
-      this.map.fitBounds(bounds);
-      this.map.setZoom(this.map.getBoundsZoom(bounds) - 2);
+        let bounds = new L.featureGroup(this.markers).getBounds();
+        this.map.fitBounds(bounds);
+        this.map.setZoom(this.map.getBoundsZoom(bounds) - 2);
       }
     },
 
@@ -488,7 +487,7 @@ export default {
     locations: {
       handler: function(newVal) {
         if (newVal && newVal.length > 0) {
-          if (this.mode === "multiple") this.setMarkers(newVal)
+          if (this.mode === "multiple") this.setMarkers(newVal);
         }
       },
       deep: true

@@ -24,14 +24,14 @@
           <v-icon
             right
             :class="validate('locality') ? 'green--text' : 'red--text'"
-          >fas fa-project-diagram</v-icon
+            >fas fa-project-diagram</v-icon
           >
         </div>
         <v-spacer></v-spacer>
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -52,7 +52,7 @@
 
             <v-col cols="12" md="6" class="px-1">
               <label :for="`locality_en`"
-              >{{ $t("locality.locality_en") }}:</label
+                >{{ $t("locality.locality_en") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -102,7 +102,7 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -127,7 +127,7 @@
                   <strong>{{ option[localityLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -137,30 +137,22 @@
     </v-card>
 
     <!-- MAP -->
-    <v-card class="mt-2" id="block-map"
-            :color="bodyColor.split('-')[0] + '-5'"
-            elevation="4">
+    <v-card
+      class="mt-2"
+      id="block-map"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
-        <div
-          class="card-title--clickable"
-          @click="block.map = !block.map"
-        >
-          <span>{{
-            $t("locality.map")
-          }}</span>
-          <v-icon right
-          >fas fa-map</v-icon
-          >
+        <div class="card-title--clickable" @click="block.map = !block.map">
+          <span>{{ $t("locality.map") }}</span>
+          <v-icon right>fas fa-map</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.map = !block.map"
-          :color="bodyActiveColor"
-        >
+        <v-btn icon @click="block.map = !block.map" :color="bodyActiveColor">
           <v-icon>{{
             block.map ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -207,7 +199,11 @@
             :color="bodyColor.split('-')[0] + '-5'"
             tile
           >
-            <v-card flat tile class="align-self-center mr-2"            :color="bodyColor.split('-')[0] + '-5'"
+            <v-card
+              flat
+              tile
+              class="align-self-center mr-2"
+              :color="bodyColor.split('-')[0] + '-5'"
             >
               <v-switch
                 v-model="showCollapseMap"
@@ -217,14 +213,18 @@
               ></v-switch>
             </v-card>
 
-            <v-card flat tile class="align-self-center"            :color="bodyColor.split('-')[0] + '-5'"
+            <v-card
+              flat
+              tile
+              class="align-self-center"
+              :color="bodyColor.split('-')[0] + '-5'"
             >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
                 {{
-                showCollapseMap
-                ? $t("site.mapEnabled")
-                : $t("site.mapDisabled")
+                  showCollapseMap
+                    ? $t("site.mapEnabled")
+                    : $t("site.mapDisabled")
                 }}
               </label>
             </v-card>
@@ -278,7 +278,7 @@
         >
           <v-icon>{{
             block.additionalInfo ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -301,7 +301,7 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -331,7 +331,7 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -341,7 +341,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="4" class="px-1">
               <label :for="`coord_det_precision`"
-              >{{ $t("locality.coord_det_precision") }}:</label
+                >{{ $t("locality.coord_det_precision") }}:</label
               >
               <vue-multiselect
                 v-model="locality.coord_det_precision"
@@ -356,14 +356,14 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="4" class="px-1">
               <label :for="`coord_det_method`"
-              >{{ $t("locality.coord_det_method") }}:</label
+                >{{ $t("locality.coord_det_method") }}:</label
               >
               <vue-multiselect
                 v-model="locality.coord_det_method"
@@ -378,14 +378,14 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="4" class="px-1">
               <label :for="`coord_det_agent`"
-              >{{ $t("locality.coord_det_agent") }}:</label
+                >{{ $t("locality.coord_det_agent") }}:</label
               >
               <vue-multiselect
                 v-model="locality.coord_det_agent"
@@ -405,7 +405,7 @@
                   <strong>{{ option.agent }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -415,7 +415,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label :for="`stratigraphy_top`"
-              >{{ $t("locality.stratigraphy_top") }}:</label
+                >{{ $t("locality.stratigraphy_top") }}:</label
               >
               <vue-multiselect
                 v-model="locality.stratigraphy_top"
@@ -435,14 +435,14 @@
                   <strong>{{ option[stratigraphyLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="6" class="px-1">
               <label :for="`stratigraphy_top_free`"
-              >{{ $t("locality.stratigraphy_top_free") }}:</label
+                >{{ $t("locality.stratigraphy_top_free") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -457,7 +457,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label :for="`stratigraphy_base`"
-              >{{ $t("locality.stratigraphy_base") }}:</label
+                >{{ $t("locality.stratigraphy_base") }}:</label
               >
               <vue-multiselect
                 v-model="locality.stratigraphy_base"
@@ -477,14 +477,14 @@
                   <strong>{{ option[stratigraphyLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="6" class="px-1">
               <label :for="`stratigraphy_base_free`"
-              >{{ $t("locality.stratigraphy_base_free") }}:</label
+                >{{ $t("locality.stratigraphy_base_free") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -499,7 +499,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label :for="`maaamet_pa_id`"
-              >{{ $t("locality.maaamet_pa_id") }}:</label
+                >{{ $t("locality.maaamet_pa_id") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -546,7 +546,7 @@
         >
           <v-icon>{{
             block.description ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -555,7 +555,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="px-1">
               <label :for="`remarks_location`"
-              >{{ $t("locality.remarks_location") }}:</label
+                >{{ $t("locality.remarks_location") }}:</label
               >
               <b-form-textarea
                 id="remarks_location"
@@ -570,15 +570,15 @@
 
           <v-row no-gutters>
             <v-col cols="12" class="px-1">
-                <label :for="`remarks`">{{ $t("locality.remarks") }}:</label>
-                <b-form-textarea
-                  id="remarks"
-                  v-model="locality.remarks"
-                  type="text"
-                  size="sm"
-                  :rows="1"
-                  :max-rows="20"
-                ></b-form-textarea>
+              <label :for="`remarks`">{{ $t("locality.remarks") }}:</label>
+              <b-form-textarea
+                id="remarks"
+                v-model="locality.remarks"
+                type="text"
+                size="sm"
+                :rows="1"
+                :max-rows="20"
+              ></b-form-textarea>
             </v-col>
           </v-row>
         </div>
@@ -1068,9 +1068,13 @@ export default {
         uploadableObject.elevation = objectToUpload.elevation.toFixed(1);
       // Todo: Add else null for lat and long if some errors (04.09.2019)
       if (this.isNotEmpty(objectToUpload.latitude))
-        uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(6);
+        uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(
+          6
+        );
       if (this.isNotEmpty(objectToUpload.longitude))
-        uploadableObject.longitude = parseFloat(objectToUpload.longitude).toFixed(6);
+        uploadableObject.longitude = parseFloat(
+          objectToUpload.longitude
+        ).toFixed(6);
 
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.type))

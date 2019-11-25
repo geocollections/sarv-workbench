@@ -1211,8 +1211,7 @@ export default {
           localityInfo: true,
           details: true,
           description: true
-        },
-
+        }
       };
     },
 

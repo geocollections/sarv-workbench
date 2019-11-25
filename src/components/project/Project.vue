@@ -49,9 +49,12 @@
     </v-row>
 
     <!-- GENERAL INFO -->
-    <v-card class="mt-2" id="block-info"
-            :color="bodyColor.split('-')[0] + '-5'"
-            elevation="4">
+    <v-card
+      class="mt-2"
+      id="block-info"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('project') ? 'green--text' : 'red--text'">{{
@@ -228,9 +231,12 @@
     </v-card>
 
     <!-- DESCRIPTION -->
-    <v-card class="mt-2" id="block-description"
-            :color="bodyColor.split('-')[0] + '-5'"
-            elevation="4">
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -271,9 +277,12 @@
     </v-card>
 
     <!-- PROJECT MEMBERS -->
-    <v-card class="mt-2" id="block-members"
-            :color="bodyColor.split('-')[0] + '-5'"
-            elevation="4">
+    <v-card
+      class="mt-2"
+      id="block-members"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -296,8 +305,18 @@
 
       <transition>
         <div v-show="block.members" class="px-1 pt-1 pb-2">
-          <v-card flat tile class="d-flex flex-row justify-space-between" :color="bodyColor.split('-')[0] + '-5'">
-            <v-card flat tile class="px-1 flex-grow-1" :color="bodyColor.split('-')[0] + '-5'">
+          <v-card
+            flat
+            tile
+            class="d-flex flex-row justify-space-between"
+            :color="bodyColor.split('-')[0] + '-5'"
+          >
+            <v-card
+              flat
+              tile
+              class="px-1 flex-grow-1"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <vue-multiselect
                 v-model="relatedData.projectagent"
                 id="projectagent"
@@ -320,7 +339,12 @@
               </vue-multiselect>
             </v-card>
 
-            <v-card flat tile class="px-1" :color="bodyColor.split('-')[0] + '-5'">
+            <v-card
+              flat
+              tile
+              class="px-1"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <v-btn
                 icon
                 :disabled="!isNotEmpty(relatedData.projectagent)"
@@ -336,9 +360,13 @@
     </v-card>
 
     <!-- FILES -->
-    <v-card class="mt-2" id="block-files" v-if="$route.meta.isEdit"
-            :color="bodyColor.split('-')[0] + '-5'"
-            elevation="4">
+    <v-card
+      class="mt-2"
+      id="block-files"
+      v-if="$route.meta.isEdit"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.files = !block.files">
           <span>{{ $t("project.files") }}</span>
@@ -374,9 +402,13 @@
     </v-card>
 
     <!-- SITES -->
-    <v-card class="mt-2" id="block-sites" v-if="$route.meta.isEdit"
-            :color="bodyColor.split('-')[0] + '-5'"
-            elevation="4">
+    <v-card
+      class="mt-2"
+      id="block-sites"
+      v-if="$route.meta.isEdit"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.sites = !block.sites">
           <span>{{ $t("project.sites") }}</span>
@@ -400,9 +432,15 @@
           <v-card
             class="d-flex flex-row justify-content-start mt-1 mx-3"
             flat
-            tile :color="bodyColor.split('-')[0] + '-5'"
+            tile
+            :color="bodyColor.split('-')[0] + '-5'"
           >
-            <v-card flat tile class="align-self-center mr-2" :color="bodyColor.split('-')[0] + '-5'">
+            <v-card
+              flat
+              tile
+              class="align-self-center mr-2"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <v-switch
                 v-model="showCollapseMap"
                 hide-details
@@ -411,7 +449,12 @@
               ></v-switch>
             </v-card>
 
-            <v-card flat tile class="align-self-center" :color="bodyColor.split('-')[0] + '-5'">
+            <v-card
+              flat
+              tile
+              class="align-self-center"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
                 {{
@@ -446,7 +489,12 @@
             tile
             :color="bodyColor.split('-')[0] + '-5'"
           >
-            <v-card flat tile class="px-1" :color="bodyColor.split('-')[0] + '-5'">
+            <v-card
+              flat
+              tile
+              class="px-1"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <v-btn
                 :to="{
                   name: 'Site add',
@@ -459,7 +507,12 @@
               >
             </v-card>
 
-            <v-card flat tile class="px-1" :color="bodyColor.split('-')[0] + '-5'">
+            <v-card
+              flat
+              tile
+              class="px-1"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <export-buttons
                 filename="site"
                 :table-data="relatedData.sites.results"

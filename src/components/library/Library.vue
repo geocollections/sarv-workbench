@@ -24,14 +24,14 @@
           <v-icon
             right
             :class="validate('library') ? 'green--text' : 'red--text'"
-          >fas fa-project-diagram</v-icon
+            >fas fa-project-diagram</v-icon
           >
         </div>
         <v-spacer></v-spacer>
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -59,7 +59,7 @@
                   <strong>{{ option.agent }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -138,7 +138,9 @@
           <!-- ABSTRACT_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="px-1">
-              <label :for="`abstract_en`">{{ $t("library.abstract_en") }}:</label>
+              <label :for="`abstract_en`"
+                >{{ $t("library.abstract_en") }}:</label
+              >
               <editor :data.sync="library.abstract_en"></editor>
             </v-col>
           </v-row>
@@ -147,9 +149,12 @@
     </v-card>
 
     <!-- LIBRARY MEMBERS -->
-    <v-card class="mt-2" id="block-members"
-            :color="bodyColor.split('-')[0] + '-5'"
-            elevation="4">
+    <v-card
+      class="mt-2"
+      id="block-members"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -166,14 +171,24 @@
         >
           <v-icon>{{
             block.members ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
       <transition>
         <div v-show="block.members" class="px-1 pt-1 pb-2">
-          <v-card flat tile class="d-flex flex-row justify-space-between" :color="bodyColor.split('-')[0] + '-5'">
-            <v-card flat tile class="px-1 flex-grow-1" :color="bodyColor.split('-')[0] + '-5'">
+          <v-card
+            flat
+            tile
+            class="d-flex flex-row justify-space-between"
+            :color="bodyColor.split('-')[0] + '-5'"
+          >
+            <v-card
+              flat
+              tile
+              class="px-1 flex-grow-1"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <vue-multiselect
                 v-model="relatedData.library_agent"
                 id="library_agent"
@@ -191,12 +206,17 @@
                 :show-labels="false"
               >
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-card>
 
-            <v-card flat tile class="px-1" :color="bodyColor.split('-')[0] + '-5'">
+            <v-card
+              flat
+              tile
+              class="px-1"
+              :color="bodyColor.split('-')[0] + '-5'"
+            >
               <v-btn
                 icon
                 :disabled="!isNotEmpty(relatedData.library_agent)"
@@ -519,7 +539,7 @@ export default {
         this.relatedTabs.forEach(tab => {
           // Skips library_reference_list because it is static view
           // if (tab.name !== "library_reference_list")
-            this.loadRelatedData(tab.name);
+          this.loadRelatedData(tab.name);
         });
 
         this.$on("tab-changed", this.setTab);
@@ -698,7 +718,7 @@ export default {
 
 <style>
 label {
-  margin:0;
+  margin: 0;
   color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }

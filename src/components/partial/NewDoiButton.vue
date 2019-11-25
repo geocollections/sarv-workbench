@@ -1,8 +1,14 @@
 <template>
-  <button class="btn btn-primary" :disabled="sendingData" @click="addNewDoi()">
-    <i class="far fa-plus-square"></i>
+  <v-btn
+    class="text-none"
+    :disabled="sendingData"
+    @click="addNewDoi()"
+    color="blue"
+    dark
+  >
+    <v-icon left>far fa-plus-square</v-icon>
     {{ $t("edit.buttons.saveNewDoi") }}
-  </button>
+  </v-btn>
 </template>
 
 <script>

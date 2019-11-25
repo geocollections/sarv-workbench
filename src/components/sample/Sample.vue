@@ -734,10 +734,10 @@
     <template slot="simplified-form">
       <!-- GENERAL INFO SIMPLE -->
       <v-card
-          class="mt-2"
-          id="block-info"
-          :color="bodyColor.split('-')[0] + '-5'"
-          elevation="4"
+        class="mt-2"
+        id="block-info"
+        :color="bodyColor.split('-')[0] + '-5'"
+        elevation="4"
       >
         <v-card-title class="pt-2 pb-1">
           <div class="card-title--clickable" @click="block.info = !block.info">
@@ -745,20 +745,20 @@
               $t("sample.generalInfo")
             }}</span>
             <v-icon
-                right
-                :class="validate('sample') ? 'green--text' : 'red--text'"
-            >fas fa-project-diagram</v-icon
+              right
+              :class="validate('sample') ? 'green--text' : 'red--text'"
+              >fas fa-project-diagram</v-icon
             >
           </div>
           <v-spacer></v-spacer>
           <v-btn
-              icon
-              @click="block.info = !block.info"
-              :color="bodyActiveColor"
+            icon
+            @click="block.info = !block.info"
+            :color="bodyActiveColor"
           >
             <v-icon>{{
               block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
+            }}</v-icon>
           </v-btn>
         </v-card-title>
 
@@ -769,43 +769,43 @@
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`number`">{{ $t("sample.number") }}:</label>
                 <b-form-input
-                    size="sm"
-                    id="number"
-                    v-model="sample.number"
-                    type="text"
+                  size="sm"
+                  id="number"
+                  v-model="sample.number"
+                  type="text"
                 ></b-form-input>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`number_field`"
-                >{{ $t("sample.number_field") }}:</label
+                  >{{ $t("sample.number_field") }}:</label
                 >
                 <b-form-input
-                    size="sm"
-                    id="number_field"
-                    v-model="sample.number_field"
-                    type="text"
+                  size="sm"
+                  id="number_field"
+                  v-model="sample.number_field"
+                  type="text"
                 ></b-form-input>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`sample_purpose`"
-                >{{ $t("sample.sample_purpose") }}:</label
+                  >{{ $t("sample.sample_purpose") }}:</label
                 >
                 <vue-multiselect
-                    v-model="sample.sample_purpose"
-                    id="type"
-                    :options="autocomplete.purpose"
-                    track-by="id"
-                    :label="commonLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
+                  v-model="sample.sample_purpose"
+                  id="type"
+                  :options="autocomplete.purpose"
+                  track-by="id"
+                  :label="commonLabel"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[commonLabel] }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
@@ -816,24 +816,24 @@
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`series`">{{ $t("sample.series") }}:</label>
                 <vue-multiselect
-                    v-model="sample.series"
-                    id="series"
-                    label="name"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.series"
-                    :options="autocomplete.series"
-                    @search-change="autocompleteSampleSeriesSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.series"
+                  id="series"
+                  label="name"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.series"
+                  :options="autocomplete.series"
+                  @search-change="autocompleteSampleSeriesSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.name }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
@@ -841,24 +841,24 @@
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`locality`">{{ $t("sample.locality") }}:</label>
                 <vue-multiselect
-                    v-model="sample.locality"
-                    id="locality"
-                    :label="localityLabel"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.locality"
-                    :options="autocomplete.locality"
-                    @search-change="autocompleteLocalitySearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.locality"
+                  id="locality"
+                  :label="localityLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.locality"
+                  :options="autocomplete.locality"
+                  @search-change="autocompleteLocalitySearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }"
-                  ><strong> {{ option[localityLabel] }}</strong>
+                    ><strong> {{ option[localityLabel] }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
@@ -866,24 +866,24 @@
               <v-col cols="6" md="2" class="px-1">
                 <label :for="`depth`">{{ $t("sample.depth") }}:</label>
                 <b-form-input
-                    size="sm"
-                    id="depth"
-                    v-model="sample.depth"
-                    type="number"
-                    step="0.01"
+                  size="sm"
+                  id="depth"
+                  v-model="sample.depth"
+                  type="number"
+                  step="0.01"
                 ></b-form-input>
               </v-col>
 
               <v-col cols="6" md="2" class="px-1">
                 <label :for="`depth_interval`"
-                >{{ $t("sample.depth_interval") }}:</label
+                  >{{ $t("sample.depth_interval") }}:</label
                 >
                 <b-form-input
-                    size="sm"
-                    id="depth_interval"
-                    v-model="sample.depth_interval"
-                    type="number"
-                    step="0.01"
+                  size="sm"
+                  id="depth_interval"
+                  v-model="sample.depth_interval"
+                  type="number"
+                  step="0.01"
                 ></b-form-input>
               </v-col>
             </v-row>
@@ -892,67 +892,67 @@
             <v-row no-gutters>
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`stratigraphy`"
-                >{{ $t("sample.stratigraphy") }}:</label
+                  >{{ $t("sample.stratigraphy") }}:</label
                 >
                 <vue-multiselect
-                    v-model="sample.stratigraphy"
-                    id="stratigraphy"
-                    :label="stratigraphyLabel"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.stratigraphy"
-                    :options="autocomplete.stratigraphy"
-                    @search-change="autocompleteStratigraphySearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.stratigraphy"
+                  id="stratigraphy"
+                  :label="stratigraphyLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.stratigraphy"
+                  :options="autocomplete.stratigraphy"
+                  @search-change="autocompleteStratigraphySearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[stratigraphyLabel] }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`lithostratigraphy`"
-                >{{ $t("sample.lithostratigraphy") }}:</label
+                  >{{ $t("sample.lithostratigraphy") }}:</label
                 >
                 <vue-multiselect
-                    v-model="sample.lithostratigraphy"
-                    id="lithostratigraphy"
-                    :label="stratigraphyLabel"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.lithostratigraphy"
-                    :options="autocomplete.lithostratigraphy"
-                    @search-change="autocompleteLithostratigraphySearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.lithostratigraphy"
+                  id="lithostratigraphy"
+                  :label="stratigraphyLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.lithostratigraphy"
+                  :options="autocomplete.lithostratigraphy"
+                  @search-change="autocompleteLithostratigraphySearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[stratigraphyLabel] }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`stratigraphy_free`"
-                >{{ $t("sample.stratigraphy_free") }}:</label
+                  >{{ $t("sample.stratigraphy_free") }}:</label
                 >
                 <b-form-input
-                    size="sm"
-                    id="stratigraphy_free"
-                    v-model="sample.stratigraphy_free"
-                    type="text"
+                  size="sm"
+                  id="stratigraphy_free"
+                  v-model="sample.stratigraphy_free"
+                  type="text"
                 ></b-form-input>
               </v-col>
             </v-row>
@@ -961,67 +961,67 @@
             <v-row no-gutters>
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`agent_collected`"
-                >{{ $t("sample.agent_collected") }}:</label
+                  >{{ $t("sample.agent_collected") }}:</label
                 >
                 <vue-multiselect
-                    v-model="sample.agent_collected"
-                    id="agent_collected"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.agent"
-                    :options="autocomplete.agent"
-                    @search-change="autocompleteAgentSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.agent_collected"
+                  id="agent_collected"
+                  label="agent"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.agent"
+                  :options="autocomplete.agent"
+                  @search-change="autocompleteAgentSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.agent }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`date_collected`"
-                >{{ $t("sample.date_collected") }}:</label
+                  >{{ $t("sample.date_collected") }}:</label
                 >
                 <datepicker
-                    id="date_collected"
-                    v-model="sample.date_collected"
-                    use-utc="true "
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    input-class="form-control form-control-sm"
+                  id="date_collected"
+                  v-model="sample.date_collected"
+                  use-utc="true "
+                  lang="en"
+                  :first-day-of-week="1"
+                  format="DD MMM YYYY"
+                  input-class="form-control form-control-sm"
                 ></datepicker>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`owner`">{{ $t("sample.owner") }}:</label>
                 <vue-multiselect
-                    v-model="sample.owner"
-                    id="owner"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.owner"
-                    :options="autocomplete.agent"
-                    @search-change="autocompleteOwnerSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.owner"
+                  id="owner"
+                  label="agent"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.owner"
+                  :options="autocomplete.agent"
+                  @search-change="autocompleteOwnerSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.agent }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
@@ -1031,27 +1031,27 @@
             <v-row no-gutters>
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`classification_rock`"
-                >{{ $t("sample.classification_rock") }}:</label
+                  >{{ $t("sample.classification_rock") }}:</label
                 >
                 <vue-multiselect
-                    v-model="sample.classification_rock"
-                    id="classification_rock"
-                    :label="nameLabel"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.rock"
-                    :options="autocomplete.rock"
-                    @search-change="autocompleteRockSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.classification_rock"
+                  id="classification_rock"
+                  :label="nameLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.rock"
+                  :options="autocomplete.rock"
+                  @search-change="autocompleteRockSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option[nameLabel] }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
@@ -1059,20 +1059,20 @@
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`rock`">{{ $t("sample.rock") }}:</label>
                 <b-form-input
-                    size="sm"
-                    id="rock"
-                    v-model="sample.rock"
-                    type="text"
+                  size="sm"
+                  id="rock"
+                  v-model="sample.rock"
+                  type="text"
                 ></b-form-input>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`fossils`">{{ $t("sample.fossils") }}:</label>
                 <b-form-input
-                    size="sm"
-                    id="fossils"
-                    v-model="sample.fossils"
-                    type="text"
+                  size="sm"
+                  id="fossils"
+                  v-model="sample.fossils"
+                  type="text"
                 ></b-form-input>
               </v-col>
             </v-row>
@@ -1082,28 +1082,28 @@
 
       <!-- RELATIONS -->
       <v-card
-          class="mt-2"
-          id="block-details"
-          :color="bodyColor.split('-')[0] + '-5'"
-          elevation="4"
+        class="mt-2"
+        id="block-details"
+        :color="bodyColor.split('-')[0] + '-5'"
+        elevation="4"
       >
         <v-card-title class="pt-2 pb-1">
           <div
-              class="card-title--clickable"
-              @click="block.relatedInfo = !block.relatedInfo"
+            class="card-title--clickable"
+            @click="block.relatedInfo = !block.relatedInfo"
           >
             <span>{{ $t("sample.relatedInfo") }}</span>
             <v-icon right>fas fa-project-diagram</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn
-              icon
-              @click="block.relatedInfo = !block.relatedInfo"
-              :color="bodyActiveColor"
+            icon
+            @click="block.relatedInfo = !block.relatedInfo"
+            :color="bodyActiveColor"
           >
             <v-icon>{{
               block.relatedInfo ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
+            }}</v-icon>
           </v-btn>
         </v-card-title>
 
@@ -1113,54 +1113,54 @@
             <v-row no-gutters>
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`parent_sample`"
-                >{{ $t("sample.parent_sample") }}:</label
+                  >{{ $t("sample.parent_sample") }}:</label
                 >
                 <vue-multiselect
-                    v-model="sample.parent_sample"
-                    id="parent_sample"
-                    label="number"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.sample"
-                    :options="autocomplete.sample"
-                    @search-change="autocompleteSampleSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.parent_sample"
+                  id="parent_sample"
+                  label="number"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.sample"
+                  :options="autocomplete.sample"
+                  @search-change="autocompleteSampleSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.number }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
 
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`parent_specimen`"
-                >{{ $t("sample.parent_specimen") }}:</label
+                  >{{ $t("sample.parent_specimen") }}:</label
                 >
                 <vue-multiselect
-                    v-model="sample.parent_specimen"
-                    id="parent_specimen"
-                    label="specimen_id"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.specimen"
-                    :options="autocomplete.specimen"
-                    @search-change="autocompleteSpecimenSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.parent_specimen"
+                  id="parent_specimen"
+                  label="specimen_id"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.specimen"
+                  :options="autocomplete.specimen"
+                  @search-change="autocompleteSpecimenSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ option.specimen_id }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
@@ -1168,24 +1168,24 @@
               <v-col cols="12" md="4" class="px-1">
                 <label :for="`site`">{{ $t("sample.parent_site") }}:</label>
                 <vue-multiselect
-                    v-model="sample.site"
-                    id="site"
-                    :custom-label="siteLabel"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="autocomplete.loaders.site"
-                    :options="autocomplete.site"
-                    @search-change="autocompleteSiteSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
+                  v-model="sample.site"
+                  id="site"
+                  :custom-label="siteLabel"
+                  track-by="id"
+                  :placeholder="$t('add.inputs.autocomplete')"
+                  :loading="autocomplete.loaders.site"
+                  :options="autocomplete.site"
+                  @search-change="autocompleteSiteSearch"
+                  :internal-search="false"
+                  :preserve-search="true"
+                  :clear-on-select="false"
+                  :show-labels="false"
                 >
                   <template slot="singleLabel" slot-scope="{ option }">
                     <strong>{{ siteLabel(option) }}</strong>
                   </template>
                   <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                   >
                 </vue-multiselect>
               </v-col>
@@ -1196,28 +1196,28 @@
 
       <!-- DESCRIPTION -->
       <v-card
-          class="mt-2"
-          id="block-description"
-          :color="bodyColor.split('-')[0] + '-5'"
-          elevation="4"
+        class="mt-2"
+        id="block-description"
+        :color="bodyColor.split('-')[0] + '-5'"
+        elevation="4"
       >
         <v-card-title class="pt-2 pb-1">
           <div
-              class="card-title--clickable"
-              @click="block.description = !block.description"
+            class="card-title--clickable"
+            @click="block.description = !block.description"
           >
             <span>{{ $t("sample.description") }}</span>
             <v-icon right>fas fa-pen-fancy</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn
-              icon
-              @click="block.description = !block.description"
-              :color="bodyActiveColor"
+            icon
+            @click="block.description = !block.description"
+            :color="bodyActiveColor"
           >
             <v-icon>{{
               block.description ? "fas fa-angle-up" : "fas fa-angle-down"
-              }}</v-icon>
+            }}</v-icon>
           </v-btn>
         </v-card-title>
 
@@ -1227,15 +1227,15 @@
             <v-row no-gutters>
               <v-col cols="12" class="px-1">
                 <label :for="`remarks_location`"
-                >{{ $t("locality.remarks") }}:</label
+                  >{{ $t("locality.remarks") }}:</label
                 >
                 <b-form-textarea
-                    id="remarks_location"
-                    v-model="sample.remarks"
-                    type="text"
-                    size="sm"
-                    :rows="1"
-                    :max-rows="20"
+                  id="remarks_location"
+                  v-model="sample.remarks"
+                  type="text"
+                  size="sm"
+                  :rows="1"
+                  :max-rows="20"
                 ></b-form-textarea>
               </v-col>
             </v-row>
