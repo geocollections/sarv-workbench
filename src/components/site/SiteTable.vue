@@ -26,10 +26,6 @@
       </router-link>
     </template>
 
-    <template v-slot:item.name="{ item }">
-      <span v-translate="{ et: item.name, en: item.name_en }"></span>
-    </template>
-
     <template v-slot:item.project="{ item }">
       <router-link
         :to="{ path: '/project/' + item.project }"
