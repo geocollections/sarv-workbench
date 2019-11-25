@@ -10,32 +10,48 @@
     ></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border p-2 mb-2" ref="info" id="block-info">
-      <legend
-        class="w-auto"
-        :class="{ 'text-primary': !block.info }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("keyword.generalInfo") }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-info"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span :class="validate('keyword') ? 'green--text' : 'red--text'">{{
+            $t("keyword.generalInfo")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('keyword') ? 'green--text' : 'red--text'"
+          >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-if="block.info">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- KEYWORD, LANGAUGE and KEYWORD CATEGORY -->
-          <div class="row">
-            <div class="col-md-4">
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`keyword`">{{ $t("keyword.keyword") }}:</label>
               <b-form-input
+                size="sm"
                 id="name"
                 v-model="keyword.keyword"
                 :state="isNotEmpty(keyword.keyword)"
                 type="text"
                 maxlength="100"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`language`">{{ $t("keyword.language") }}:</label>
               <vue-multiselect
                 v-model="keyword.language"
@@ -52,14 +68,14 @@
                   <strong>{{ option[commonLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`keyword_category`"
-                >{{ $t("keyword.keyword_category") }}:</label
+              >{{ $t("keyword.keyword_category") }}:</label
               >
               <vue-multiselect
                 id="keyword_category"
@@ -82,17 +98,17 @@
                   <strong>{{ option[nameLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- RELATED KEYWORD and REMARKS -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`related_keyword`"
-                >{{ $t("keyword.related_keyword") }}:</label
+              >{{ $t("keyword.related_keyword") }}:</label
               >
               <vue-multiselect
                 id="related_keyword"
@@ -112,32 +128,34 @@
                   <strong>{{ option.keyword }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`remarks`">{{ $t("keyword.remarks") }}:</label>
               <b-form-input
+                size="sm"
                 id="remarks"
                 v-model="keyword.remarks"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- IS PRIMARY -->
-    <v-row no-gutters class="mt-0">
+    <v-row no-gutters class="mt-2">
       <v-col>
         <v-checkbox
           v-model="keyword.is_primary"
           id="is_primary"
           :label="$t('keyword.is_primary')"
           hide-details
+          :color="bodyActiveColor"
           class="mt-0 vuetify-checkbox"
         ></v-checkbox>
       </v-col>
@@ -156,6 +174,23 @@ export default {
   name: "Keyword",
   components: {
     Spinner
+  },
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
   mixins: [formManipulation, autocompleteMixin],
 

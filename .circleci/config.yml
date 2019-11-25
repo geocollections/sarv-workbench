@@ -45,10 +45,10 @@ jobs:
           command: npm run build
       - run:
           name: Directory update
-          command: echo ${DIRECTORY_UPDATE}
+          command: ${DIRECTORY_UPDATE}
       - run:
           name: Copy built files to development
-          command: echo ${COPY_FILES_DEV_1}
+          command: ${COPY_FILES_DEV_1}
 
 workflows:
   version: 2

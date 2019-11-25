@@ -10,7 +10,9 @@
     ></spinner>
 
     <!-- GENERAL INFO -->
-    <v-card class="mt-2" id="block-info">
+    <v-card class="mt-2" id="block-info"
+            :color="bodyColor.split('-')[0] + '-5'"
+            elevation="4">
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span>{{ $t("site.generalInfo") }}</span>
@@ -108,7 +110,9 @@
     </v-card>
 
     <!-- LOCALITY INFO -->
-    <v-card class="mt-2" id="block-location">
+    <v-card class="mt-2" id="block-location"
+            :color="bodyColor.split('-')[0] + '-5'"
+            elevation="4">
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -182,9 +186,10 @@
             class="d-flex flex-row justify-content-start mt-1 mx-3"
             flat
             tile
-            transparent
+            :color="bodyColor.split('-')[0] + '-5'"
           >
-            <v-card flat tile class="align-self-center mr-2">
+            <v-card flat tile class="align-self-center mr-2"
+                    :color="bodyColor.split('-')[0] + '-5'">
               <v-switch
                 v-model="showCollapseMap"
                 hide-details
@@ -193,7 +198,8 @@
               ></v-switch>
             </v-card>
 
-            <v-card flat tile class="align-self-center">
+            <v-card flat tile class="align-self-center"
+                    :color="bodyColor.split('-')[0] + '-5'">
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
                 {{
@@ -341,7 +347,9 @@
     </v-card>
 
     <!-- DESCRIPTION -->
-    <v-card class="mt-2" id="block-description">
+    <v-card class="mt-2" id="block-description"
+            :color="bodyColor.split('-')[0] + '-5'"
+            elevation="4">
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -380,7 +388,9 @@
     </v-card>
 
     <!-- FILES -->
-    <v-card class="mt-2" id="block-files" v-if="$route.meta.isEdit && site.id">
+    <v-card class="mt-2" id="block-files" v-if="$route.meta.isEdit && site.id"
+            :color="bodyColor.split('-')[0] + '-5'"
+            elevation="4">
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.files = !block.files">
           <span>{{ $t("site.files") }}</span>
@@ -420,7 +430,9 @@
       class="mt-2"
       id="block-samples"
       v-if="$route.meta.isEdit && site.id"
-    >
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4">
+
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -567,6 +579,11 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
     }
   },
   mixins: [
@@ -1061,7 +1078,7 @@ export default {
 
 label {
   margin: 0;
-  color: #546e7a;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
 

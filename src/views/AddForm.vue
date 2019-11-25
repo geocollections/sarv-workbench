@@ -1,6 +1,6 @@
 <template>
   <div class="add-form">
-    <div class="d-flex flex-wrap justify-content-between mt-2">
+    <div class="d-flex flex-wrap justify-content-between mt-2 mb-1">
       <div class="pr-4">
         <p class="h2 mb-1">{{ $t($route.meta.addNew) }}</p>
       </div>
@@ -22,8 +22,6 @@
         </ul>
       </div>
     </div>
-
-    <hr class="mt-1 mb-2 divider" />
 
     <router-view
       :body-color="appSettings.bodyColor"

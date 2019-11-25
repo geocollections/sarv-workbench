@@ -9,25 +9,38 @@
       "
     ></spinner>
 
-    <fieldset class="border p-2 mb-2" id="block-info">
-      <legend
-        class="w-auto"
-        :class="{ 'text-primary': !block.info }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("library.generalInfo") }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
+    <!-- GENERAL INFO -->
+    <v-card
+      class="mt-2"
+      id="block-info"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span :class="validate('library') ? 'green--text' : 'red--text'">{{
+            $t("library.generalInfo")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('library') ? 'green--text' : 'red--text'"
+          >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.info">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- AUTHOR AND YEAR -->
-          <div class="row">
-            <div class="col-sm-2">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`author`">{{ $t("library.author") }}:</label>
-            </div>
-
-            <div class="col-sm-4 mb-2">
               <vue-multiselect
                 id="author"
                 v-model="library.author"
@@ -46,126 +59,121 @@
                   <strong>{{ option.agent }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-sm-2">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`year`">{{ $t("library.year") }}:</label>
-            </div>
-
-            <div class="col-sm-4 mb-2">
               <b-form-input
+                size="sm"
                 id="year"
                 v-model="library.year"
                 type="number"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- AUTHORS -->
-          <div class="row">
-            <div class="col-sm-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`author_txt`">{{ $t("library.author_txt") }}:</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <b-form-input
+                size="sm"
                 id="author_txt"
                 v-model="library.author_txt"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- TITLE -->
-          <div class="row">
-            <div class="col-sm-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`title`">{{ $t("library.title") }}:</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <b-form-input
+                size="sm"
                 id="title"
                 v-model="library.title"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- TITLE_EN -->
-          <div class="row">
-            <div class="col-sm-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`title_en`">{{ $t("library.title_en") }}:</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <b-form-input
+                size="sm"
                 id="title_en"
                 v-model="library.title_en"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- KEYWORDS -->
-          <div class="row">
-            <div class="col-sm-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`keywords`">{{ $t("library.keywords") }}:</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <b-form-input
+                size="sm"
                 id="keywords"
                 v-model="library.keywords"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- ABSTRACT -->
-          <div class="row">
-            <div class="col-sm-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`abstract`">{{ $t("library.abstract") }}:</label>
-            </div>
-
-            <div class="col-sm-10 mb-2">
               <editor :data.sync="library.abstract"></editor>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- ABSTRACT_EN -->
-          <div class="row">
-            <div class="col-sm-2">
-              <label :for="`abstract_en`"
-                >{{ $t("library.abstract_en") }}:</label
-              >
-            </div>
-
-            <div class="col-sm-10 mb-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <label :for="`abstract_en`">{{ $t("library.abstract_en") }}:</label>
               <editor :data.sync="library.abstract_en"></editor>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- LIBRARY MEMBERS -->
-    <fieldset class="border p-2 mb-2" id="block-members">
-      <legend
-        class="w-auto"
-        :class="{ 'text-primary': !block.members }"
-        @click="block.members = !block.members"
-      >
-        {{ $t("library.libraryAgent") }}
-        <i class="fas fa-user-friends"></i>
-      </legend>
+    <v-card class="mt-2" id="block-members"
+            :color="bodyColor.split('-')[0] + '-5'"
+            elevation="4">
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.members = !block.members"
+        >
+          <span>{{ $t("library.libraryAgent") }}</span>
+          <v-icon right>fas fa-user-friends</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.members = !block.members"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.members ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.members">
-          <div class="row">
-            <div class="col-10 col-md-11">
+      <transition>
+        <div v-show="block.members" class="px-1 pt-1 pb-2">
+          <v-card flat tile class="d-flex flex-row justify-space-between" :color="bodyColor.split('-')[0] + '-5'">
+            <v-card flat tile class="px-1 flex-grow-1" :color="bodyColor.split('-')[0] + '-5'">
               <vue-multiselect
                 v-model="relatedData.library_agent"
                 id="library_agent"
@@ -183,141 +191,125 @@
                 :show-labels="false"
               >
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-card>
 
-            <div class="col-2 col-md-1 pl-0">
-              <button
-                class="btn btn-outline-danger"
-                :title="$t('add.inputs.keywordsRemove')"
+            <v-card flat tile class="px-1" :color="bodyColor.split('-')[0] + '-5'">
+              <v-btn
+                icon
                 :disabled="!isNotEmpty(relatedData.library_agent)"
                 @click="relatedData.library_agent = []"
+                color="red"
               >
-                <i class="far fa-trash-alt"></i>
-              </button>
-            </div>
-          </div>
+                <v-icon>far fa-trash-alt</v-icon>
+              </v-btn>
+            </v-card>
+          </v-card>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- SHOWING RELATED_DATA -->
-    <div class="row">
-      <div class="col mt-2">
-        <ul class="nav nav-tabs nav-fill mb-3">
-          <li
-            class="nav-item"
-            v-for="tab in filteredRelatedTabs"
-            :key="tab.name"
-          >
-            <a
-              href="#"
-              @click.prevent="setTab(tab.name)"
-              class="nav-link"
-              :class="{ active: activeTab === tab.name }"
-            >
-              <span>{{ $t("library.relatedTables." + tab.name) }}</span>
-
-              <span>
-                <sup>
-                  <b-badge pill variant="light"
-                    >{{ relatedData[tab.name].length }}&nbsp;</b-badge
-                  >
-                </sup>
-              </span>
-
-              <span><i :class="tab.iconClass"></i></span>
-            </a>
-          </li>
-        </ul>
-
-        <div
-          class="row"
-          v-if="$route.meta.isEdit && activeTab !== 'library_reference_list'"
+    <v-card
+      class="related-tabs mt-2"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-tabs
+        :background-color="bodyColor.split('-')[0] + '-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('-')[0] + '-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in relatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
         >
-          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select
-              v-model="relatedData.searchParameters[activeTab].paginateBy"
-              class="mb-3"
-              size="sm"
-            >
-              <option :value="10">{{
-                this.$t("main.pagination", { num: "10" })
-              }}</option>
-              <option :value="25">{{
-                this.$t("main.pagination", { num: "25" })
-              }}</option>
-              <option :value="50">{{
-                this.$t("main.pagination", { num: "50" })
-              }}</option>
-              <option :value="100">{{
-                this.$t("main.pagination", { num: "100" })
-              }}</option>
-              <option :value="250">{{
-                this.$t("main.pagination", { num: "250" })
-              }}</option>
-              <option :value="500">{{
-                this.$t("main.pagination", { num: "500" })
-              }}</option>
-              <option :value="1000">{{
-                this.$t("main.pagination", { num: "1000" })
-              }}</option>
-            </b-form-select>
-          </div>
-
-          <div class="col-sm-12 col-md-3 export-center">
-            <!-- EXPORT BUTTON? -->
-          </div>
-
-          <div
-            class="col-sm-12 col-md-6 pagination-center"
-            v-if="
-              relatedData[activeTab] !== null &&
-                relatedData[activeTab].length > 0
-            "
+          <span>{{ $t("library.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].length > 0"
+            class="font-weight-bold ml-2"
           >
-            <b-pagination
-              size="sm"
-              align="right"
-              :limit="5"
-              :hide-ellipsis="true"
-              :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.searchParameters[activeTab].page"
-              :per-page="relatedData.searchParameters[activeTab].paginateBy"
-            >
-            </b-pagination>
+            {{ relatedData.count[tab.name] }}
+          </span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items>
+        <v-card class="pt-3 px-1" flat :color="bodyColor.split('-')[0] + '-5'">
+          <library-reference
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+            v-on:order-by-changed="changeOrdering"
+          />
+
+          <library-reference-list-view
+            v-if="$route.meta.isEdit"
+            :data="relatedData.library_reference_list"
+            :active-tab="activeTab"
+          />
+
+          <!-- PAGINATION -->
+          <div
+            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
+                dense
+                :items="paginateByOptionsTranslated"
+                :item-color="bodyActiveColor"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.count[activeTab] /
+                      relatedData.searchParameters[activeTab].paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
           </div>
-        </div>
-
-        <library-reference
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-          v-on:order-by-changed="changeOrdering"
-        />
-
-        <library-reference-list-view
-          v-if="$route.meta.isEdit"
-          :data="relatedData.library_reference_list"
-          :active-tab="activeTab"
-        />
-      </div>
-    </div>
+        </v-card>
+      </v-tabs-items>
+    </v-card>
 
     <!-- IS_PRIVATE -->
-    <v-row no-gutters>
+    <v-row no-gutters class="my-2">
       <v-col>
         <v-checkbox
           v-model="library.is_private"
           id="is_private"
           :label="$t('library.private')"
           hide-details
+          :color="bodyActiveColor"
           class="mt-0 vuetify-checkbox"
         ></v-checkbox>
       </v-col>
@@ -349,6 +341,23 @@ export default {
     LibraryReferenceListView,
     LibraryReference,
     Spinner
+  },
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
   mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
 
@@ -407,6 +416,15 @@ export default {
           if (this.$route.meta.isEdit) return tab;
         } else return tab;
       });
+    },
+
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
+      });
     }
   },
 
@@ -455,7 +473,16 @@ export default {
         requiredFields: [],
         library: {},
         searchParameters: this.setDefaultSearchParameters(),
-        block: { info: true, members: true }
+        block: { info: true, members: true },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
@@ -491,7 +518,7 @@ export default {
         // Load Related Data which is in tabs
         this.relatedTabs.forEach(tab => {
           // Skips library_reference_list because it is static view
-          if (tab.name !== "library_reference_list")
+          // if (tab.name !== "library_reference_list")
             this.loadRelatedData(tab.name);
         });
 
@@ -671,8 +698,8 @@ export default {
 
 <style>
 label {
-  margin: 5px 0 0 0;
-  color: #999;
+  margin:0;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
 </style>

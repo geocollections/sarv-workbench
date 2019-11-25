@@ -1068,9 +1068,9 @@ export default {
         uploadableObject.elevation = objectToUpload.elevation.toFixed(1);
       // Todo: Add else null for lat and long if some errors (04.09.2019)
       if (this.isNotEmpty(objectToUpload.latitude))
-        uploadableObject.latitude = parseInt(objectToUpload.latitude).toFixed(6);
+        uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(6);
       if (this.isNotEmpty(objectToUpload.longitude))
-        uploadableObject.longitude = parseInt(objectToUpload.longitude).toFixed(6);
+        uploadableObject.longitude = parseFloat(objectToUpload.longitude).toFixed(6);
 
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.type))

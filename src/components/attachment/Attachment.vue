@@ -26,86 +26,111 @@
     </template>
 
     <template v-slot:file-input>
-      <multimedia-component
-        :record-options="recordOptions"
-        :record-image="recordImage"
-        :record-video="recordVideo"
-        :record-audio="recordAudio"
-        :acceptable-format="fileInputFormat"
-        :accept-multiple="acceptMultiple"
-        :clear-files="clearFiles"
-        v-on:file-uploaded="addFiles"
-        v-on:metadata-loaded="updateFields"
-        v-on:files-cleared="clearUploadedFiles"
-      />
+      <v-card
+        class="mt-2"
+        id="block-fileInput"
+        :color="bodyColor.split('-')[0] + '-5'"
+        elevation="4">
+        <v-card-title class="pt-2 pb-1">
+          <div class="card-title--clickable" @click="block.fileInput = !block.fileInput">
+          <span>{{ $t("attachment.file") }}</span>
+            <v-icon right>far fa-file</v-icon>
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="block.fileInput = !block.fileInput" :color="bodyActiveColor">
+            <v-icon>{{
+              block.fileInput ? "fas fa-angle-up" : "fas fa-angle-down"
+              }}</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <transition>
+          <div v-show="block.fileInput" class="px-1 pt-1 pb-2">
+            <multimedia-component
+              :record-options="recordOptions"
+              :record-image="recordImage"
+              :record-video="recordVideo"
+              :record-audio="recordAudio"
+              :acceptable-format="fileInputFormat"
+              :accept-multiple="acceptMultiple"
+              :clear-files="clearFiles"
+              v-on:file-uploaded="addFiles"
+              v-on:metadata-loaded="updateFields"
+              v-on:files-cleared="clearUploadedFiles"
+              style="margin-right: -10px; margin-left: -10px"
+            />
+          </div>
+        </transition>
+      </v-card>
     </template>
 
     <template v-slot:file-output>
-      <div class="file-output">
-        <!-- FILE -->
-        <fieldset class="border-top px-2 mb-2" id="block-file">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.file }"
-            @click="block.file = !block.file"
-          >
-            {{ $t("attachment.file") }}
-            <i class="far fa-file"></i>
-          </legend>
+      <v-card
+        class="mt-2"
+        id="block-file"
+        :color="bodyColor.split('-')[0] + '-5'"
+        elevation="4">
+        <v-card-title class="pt-2 pb-1">
+          <div class="card-title--clickable" @click="block.file = !block.file">
+            <span>{{ $t("attachment.file") }}</span>
+            <v-icon right>far fa-file</v-icon>
+          </div>
+          <v-spacer></v-spacer>
+          <v-btn icon @click="block.file = !block.file" :color="bodyActiveColor">
+            <v-icon>{{
+              block.file ? "fas fa-angle-up" : "fas fa-angle-down"
+              }}</v-icon>
+          </v-btn>
+        </v-card-title>
 
-          <transition name="fade">
-            <div v-if="block.file">
-              <div class="row">
-                <div class="col-md-6">
-                  <file-preview :data="rawAttachment" object="attachment" />
-                </div>
+        <transition>
+          <div v-show="block.file" class="px-1 pt-1 pb-2">
+            <v-row no-gutters>
+              <v-col cols="12" md="6" class="px-1">
+                <file-preview :data="rawAttachment" object="attachment" />
+              </v-col>
 
-                <div class="col-md-6">
-                  <file-information :data="rawAttachment" />
-                </div>
-              </div>
-            </div>
-          </transition>
-        </fieldset>
-      </div>
+              <v-col cols="12" md="6" class="px-1">
+                <file-information :data="rawAttachment" />
+              </v-col>
+            </v-row>
+          </div>
+        </transition>
+      </v-card>
     </template>
 
     <template v-slot:photo-archive>
       <div class="photo-archive">
         <!-- REQUIRED INFO -->
-        <fieldset
-          class="border-top px-2 mb-2"
+        <v-card
+          class="mt-2"
           id="block-requiredFields"
-          :style="
-            !validate('attachment', 'photo_archive')
-              ? 'border-color: #dc3545!important;'
-              : ''
-          "
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
         >
-          <legend
-            class="w-auto my-0"
-            :class="{
-              'text-primary': !block.requiredFields,
-              'text-danger': !validate('attachment', 'photo_archive')
-            }"
-            @click="block.requiredFields = !block.requiredFields"
-          >
-            {{ $t("attachment.requiredFields") }}
-            <i
-              v-if="validate('attachment', 'photo_archive')"
-              class="fas fa-check text-success"
-            ></i>
-            <i
-              v-if="!validate('attachment', 'photo_archive')"
-              class="fas fa-exclamation-triangle text-danger"
-            ></i>
-          </legend>
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.requiredFields = !block.requiredFields">
+          <span>{{
+            $t("attachment.requiredFields")
+          }}</span>
+              <v-icon
+                right
+              >fas fa-project-diagram</v-icon
+              >
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.requiredFields = !block.requiredFields" :color="bodyActiveColor">
+              <v-icon>{{
+                block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.requiredFields">
+          <transition>
+            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
               <!-- AUTHOR, AUTHOR FREE and IMAGESET -->
-              <div class="row">
-                <div class="col-md-4">
+              <v-row no-gutters>
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`author`">{{ $t("attachment.author") }}:</label>
                   <vue-multiselect
                     v-model="attachment.author"
@@ -135,16 +160,17 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`author_free`"
-                    >{{ $t("attachment.author_free") }}:</label
+                  >{{ $t("attachment.author_free") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="author_free"
                     v-model="attachment.author_free"
                     :state="
@@ -153,13 +179,13 @@
                     "
                     type="text"
                   ></b-form-input>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <div class="d-flex">
                     <div class="flex-grow-1 mr-3">
                       <label :for="`imageset`"
-                        >{{ $t("attachment.imageset") }}:</label
+                      >{{ $t("attachment.imageset") }}:</label
                       >
                       <vue-multiselect
                         v-model="attachment.imageset"
@@ -183,45 +209,57 @@
                           <strong>{{ option.imageset_number }}</strong>
                         </template>
                         <template slot="noResult"
-                          ><b>{{ $t("messages.inputNoResults") }}</b></template
+                        ><b>{{ $t("messages.inputNoResults") }}</b></template
                         >
                       </vue-multiselect>
                     </div>
 
                     <div class="align-self-end">
-                      <router-link
+                      <v-btn
+                        icon
                         :to="{ path: '/imageset/add' }"
-                        class="btn btn-outline-info"
                         :title="$t('add.inputs.newImageset')"
+                        color="green"
                       >
-                        <i class="fas fa-plus"></i>
-                      </router-link>
+                        <v-icon>fas fa-plus</v-icon>
+                      </v-btn>
                     </div>
                   </div>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- GENERAL INFO -->
-        <fieldset class="border-top px-2 mb-2" id="block-info">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.info }"
-            @click="block.info = !block.info"
-          >
-            {{ $t("attachment.info") }}
-            <i class="fas fa-project-diagram"></i>
-          </legend>
+        <v-card
+          class="mt-2"
+          id="block-info"
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.info = !block.info">
+          <span>{{
+            $t("attachment.info")
+          }}</span>
+              <v-icon right>fas fa-project-diagram</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+              <v-icon>{{
+                block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.info">
+          <transition>
+            <div v-show="block.info" class="px-1 pt-1 pb-2">
               <!-- DATE_CREATED and DATE_CREATED_FREE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`date_created`"
-                    >{{ $t("attachment.dateCreated") }}:</label
+                  >{{ $t("attachment.dateCreated") }}:</label
                   >
                   <datepicker
                     id="date_created"
@@ -229,38 +267,40 @@
                     lang="en"
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
-                    input-class="form-control"
+                    input-class="form-control form-control-sm"
                   ></datepicker>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`date_created_free`"
-                    >{{ $t("attachment.dateCreatedFree") }}:</label
+                  >{{ $t("attachment.dateCreatedFree") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="date_created_free"
                     v-model="attachment.date_created_free"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- IMAGE PLACE and LOCALITY -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_place`"
-                    >{{ $t("attachment.imagePlace") }}:</label
+                  >{{ $t("attachment.imagePlace") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_place"
                     v-model="attachment.image_place"
                     type="text"
                   ></b-form-input>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`locality`"
-                    >{{ $t("attachment.locality") }}:</label
+                  >{{ $t("attachment.locality") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.locality"
@@ -280,91 +320,109 @@
                       <strong>{{ option[localityLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- MAP -->
-        <fieldset class="border-top px-2 mb-2" id="block-map">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.map }"
-            @click="block.map = !block.map"
-          >
-            {{ $t("attachment.map") }}
-            <i class="fas fa-globe-americas"></i>
-          </legend>
+        <v-card class="mt-2" id="block-map"
+                :color="bodyColor.split('-')[0] + '-5'"
+                elevation="4">
+          <v-card-title class="pt-2 pb-1">
+            <div
+              class="card-title--clickable"
+              @click="block.map = !block.map"
+            >
+          <span>{{ $t("attachment.map") }}</span>
+              <v-icon right>fas fa-globe-americas</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click="block.map = !block.map"
+              :color="bodyActiveColor"
+            >
+              <v-icon>{{
+                block.map ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-if="block.map">
+          <transition>
+            <div v-show="block.map" class="px-1 pt-1 pb-2">
               <!-- IMAGE LATITUDE and IMAGE LONGITUDE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_latitude`"
-                    >{{ $t("attachment.imageLatitude") }}:</label
+                  >{{ $t("attachment.imageLatitude") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_latitude"
                     v-model="attachment.image_latitude"
                     type="number"
                     step="0.000001"
                   ></b-form-input>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_longitude`"
-                    >{{ $t("attachment.imageLongitude") }}:</label
+                  >{{ $t("attachment.imageLongitude") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_longitude"
                     v-model="attachment.image_longitude"
                     type="number"
                     step="0.000001"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
-              <!-- MAP TOGGLE BUTTON -->
-              <div class="d-flex justify-content-start my-2">
-                <div class="align-self-center">
+              <!-- MAP SWITCH -->
+              <v-card
+                class="d-flex flex-row justify-content-start mt-1 mx-3"
+                flat
+                tile
+                :color="bodyColor.split('-')[0] + '-5'"
+              >
+                <v-card flat tile class="align-self-center mr-2"
+                        :color="bodyColor.split('-')[0] + '-5'">
                   <v-switch
                     v-model="showCollapseMap"
                     hide-details
                     id="map-switch"
                     class="vuetify-switch my-1"
                   ></v-switch>
-                </div>
-                <div class="align-self-center">
+                </v-card>
+
+                <v-card flat tile class="align-self-center"
+                        :color="bodyColor.split('-')[0] + '-5'">
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                      showCollapseMap
-                        ? $t("site.mapEnabled")
-                        : $t("site.mapDisabled")
+                    showCollapseMap
+                    ? $t("site.mapEnabled")
+                    : $t("site.mapDisabled")
                     }}
                   </label>
-                </div>
-              </div>
+                </v-card>
+              </v-card>
 
               <!-- MAP -->
-              <transition
-                name="fade"
-                enter-active-class="animated fadeIn faster"
-                leave-active-class="animated fadeOut faster"
-              >
-                <div class="row" v-show="showCollapseMap">
-                  <div class="col">
-                    <b-collapse v-model="showCollapseMap" id="collapseMap">
-                      <map-component
-                        mode="single"
-                        module="attachment"
-                        v-bind:locations="[]"
-                        v-bind:location="{
+              <transition enter-active-class="animated fadeIn faster">
+                <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+                  <v-col cols="12" class="px-1">
+                    <map-component
+                      mode="single"
+                      module="attachment"
+                      v-bind:locations="[]"
+                      v-bind:location="{
                           lat: attachment.image_latitude
                             ? attachment.image_latitude.toString()
                             : null,
@@ -372,59 +430,78 @@
                             ? attachment.image_longitude.toString()
                             : null
                         }"
-                        v-on:update-coordinates="updateLocation"
-                      ></map-component>
-                    </b-collapse>
-                  </div>
-                </div>
+                      v-on:update-coordinates="updateLocation"
+                    ></map-component>
+                  </v-col>
+                </v-row>
               </transition>
+
+
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- IMAGE INFO -->
-        <fieldset class="border-top px-2 mb-2" id="block-description">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.description }"
-            @click="block.description = !block.description"
-          >
-            {{ $t("attachment.description") }}
-            <i class="far fa-image"></i>
-          </legend>
+        <v-card
+          class="mt-2"
+          id="block-description"
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div
+              class="card-title--clickable"
+              @click="block.description = !block.description"
+            >
+              <span>{{ $t("attachment.description") }}</span>
+              <v-icon right>fas fa-image</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click="block.description = !block.description"
+              :color="bodyActiveColor"
+            >
+              <v-icon>{{
+                block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.description">
+          <transition>
+            <div v-show="block.description" class="px-1 pt-1 pb-2">
               <!-- OBJECT and PEOPLE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_object`"
-                    >{{ $t("attachment.imageObject") }}:</label
+                  >{{ $t("attachment.imageObject") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_object"
                     v-model="attachment.image_object"
                     type="text"
                   ></b-form-input>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_people`"
-                    >{{ $t("attachment.imagePeople") }}:</label
+                  >{{ $t("attachment.imagePeople") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_people"
                     v-model="attachment.image_people"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- DESCRIPTION -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_description`"
-                    >{{ $t("attachment.imageDescription") }}:</label
+                  >{{ $t("attachment.imageDescription") }}:</label
                   >
                   <b-form-textarea
                     id="image_description"
@@ -435,11 +512,11 @@
                     :rows="3"
                     :max-rows="3"
                   ></b-form-textarea>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_description_en`"
-                    >{{ $t("attachment.imageDescriptionEn") }}:</label
+                  >{{ $t("attachment.imageDescriptionEn") }}:</label
                   >
                   <b-form-textarea
                     id="image_description_en"
@@ -450,14 +527,14 @@
                     :rows="3"
                     :max-rows="3"
                   ></b-form-textarea>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap">
+              <div class="d-flex justify-content-start flex-wrap px-1">
                 <div class="mr-3 flex-grow-1">
                   <label :for="`keyword`"
-                    >{{ $t("attachment.keywords") }}:</label
+                  >{{ $t("attachment.keywords") }}:</label
                   >
                   <vue-multiselect
                     v-model="relatedData.keyword"
@@ -475,42 +552,44 @@
                     :show-labels="true"
                   >
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
                 </div>
 
                 <div class="mr-3 my-1 align-self-end">
-                  <button
-                    class="btn btn-outline-danger"
+                  <v-btn
+                    icon
+                    color="red"
                     :title="$t('add.inputs.keywordsRemove')"
                     :disabled="!isNotEmpty(relatedData.keyword)"
                     @click="relatedData.keyword = null"
                   >
-                    <i class="far fa-trash-alt"></i>
-                  </button>
+                    <v-icon>far fa-trash-alt</v-icon>
+                  </v-btn>
                 </div>
 
                 <div class="mr-2 my-1 align-self-end">
-                  <router-link
-                    class="btn btn-outline-primary"
+                  <v-btn
+                    icon
+                    color="green"
                     :title="$t('add.new')"
                     :to="{
                       name: 'Keyword add',
                       query: { attachment: JSON.stringify(attachment) }
                     }"
-                    target="_blank"
+                    target="newKeywordWindow"
                   >
-                    <i class="fas fa-plus"></i>
-                  </router-link>
+                    <v-icon>fas fa-plus</v-icon>
+                  </v-btn>
                 </div>
               </div>
 
               <!-- LICENCE and COPYRIGHT -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
+                  >{{ $t("attachment.licence") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.licence"
@@ -525,14 +604,14 @@
                       <strong>{{ option[licenceLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
+                  >{{ $t("attachment.copyrightAgent") }}:</label
                   >
                   <vue-multiselect
                     id="copyright_agent"
@@ -552,17 +631,17 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- IMAGE_TYPE and DEVICE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_type`"
-                    >{{ $t("attachment.imageType") }}:</label
+                  >{{ $t("attachment.imageType") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.image_type"
@@ -577,28 +656,29 @@
                       <strong>{{ option[commonLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`device_txt`"
-                    >{{ $t("attachment.deviceTxt") }}:</label
+                  >{{ $t("attachment.deviceTxt") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="device_txt"
                     v-model="attachment.device_txt"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- AGENT, DATE DIGITISED and STARS -->
-              <div class="row">
-                <div class="col-md-4">
+              <v-row no-gutters>
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
+                  >{{ $t("attachment.agentDigitised") }}:</label
                   >
                   <vue-multiselect
                     id="agent_digitised"
@@ -618,14 +698,14 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
+                  >{{ $t("attachment.dateDigitised") }}:</label
                   >
                   <datepicker
                     id="date_digitised"
@@ -634,13 +714,13 @@
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
                     :not-after="new Date()"
-                    input-class="form-control"
+                    input-class="form-control form-control-sm"
                   ></datepicker>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`stars`">{{ $t("attachment.stars") }}:</label>
-                  <b-form-select v-model="attachment.stars">
+                  <b-form-select v-model="attachment.stars" size="sm">
                     <option :value="5">{{ $t("main.rating5") }}</option>
                     <option :value="4">{{ $t("main.rating4") }}</option>
                     <option :value="3">{{ $t("main.rating3") }}</option>
@@ -653,50 +733,46 @@
                     <option :value="-4">{{ $t("main.rating-4") }}</option>
                     <option :value="-5">{{ $t("main.rating-5") }}</option>
                   </b-form-select>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
       </div>
     </template>
 
     <template v-slot:specimen-image>
       <div class="specimen-image">
         <!-- REQUIRED INFO -->
-        <fieldset
-          class="border-top px-2 mb-2"
+        <v-card
+          class="mt-2"
           id="block-requiredFields"
-          :style="
-            !validate('attachment', 'specimen_image')
-              ? 'border-color: #dc3545!important;'
-              : ''
-          "
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
         >
-          <legend
-            class="w-auto my-0"
-            :class="{
-              'text-primary': !block.requiredFields,
-              'text-danger': !validate('attachment', 'specimen_image')
-            }"
-            @click="block.requiredFields = !block.requiredFields"
-          >
-            {{ $t("attachment.requiredFields") }}
-            <i
-              v-if="validate('attachment', 'specimen_image')"
-              class="fas fa-check text-success"
-            ></i>
-            <i
-              v-if="!validate('attachment', 'specimen_image')"
-              class="fas fa-exclamation-triangle text-danger"
-            ></i>
-          </legend>
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.requiredFields = !block.requiredFields">
+          <span>{{
+            $t("attachment.requiredFields")
+          }}</span>
+              <v-icon
+                right
+              >fas fa-project-diagram</v-icon
+              >
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.requiredFields = !block.requiredFields" :color="bodyActiveColor">
+              <v-icon>{{
+                block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.requiredFields">
+          <transition>
+            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
               <!-- AUTHOR and AUTHOR FREE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`author`">{{ $t("attachment.author") }}:</label>
                   <vue-multiselect
                     v-model="attachment.author"
@@ -725,16 +801,17 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`author_free`"
-                    >{{ $t("attachment.author_free") }}:</label
+                  >{{ $t("attachment.author_free") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="author_free"
                     v-model="attachment.author_free"
                     :state="
@@ -743,30 +820,41 @@
                     "
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- GENERAL INFO -->
-        <fieldset class="border-top px-2 mb-2" id="block-info">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.info }"
-            @click="block.info = !block.info"
-          >
-            {{ $t("attachment.info") }}
-            <i class="fas fa-project-diagram"></i>
-          </legend>
+        <v-card
+          class="mt-2"
+          id="block-info"
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.info = !block.info">
+          <span>{{
+            $t("attachment.info")
+          }}</span>
+              <v-icon right>fas fa-project-diagram</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+              <v-icon>{{
+                block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.info">
+          <transition>
+            <div v-show="block.info" class="px-1 pt-1 pb-2">
               <!-- SPECIMEN and SCALEBAR -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`specimen`"
-                    >{{ $t("attachment.specimen") }}:</label
+                  >{{ $t("attachment.specimen") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.specimen"
@@ -792,28 +880,29 @@
                       <strong>{{ customSpecimenLabel(option) }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_scalebar`"
-                    >{{ $t("attachment.imageScalebar") }}:</label
+                  >{{ $t("attachment.imageScalebar") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_scalebar"
                     v-model="attachment.image_scalebar"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- DATE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`date_created`"
-                    >{{ $t("attachment.dateCreated") }}:</label
+                  >{{ $t("attachment.dateCreated") }}:</label
                   >
                   <datepicker
                     id="date_created"
@@ -821,27 +910,28 @@
                     lang="en"
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
-                    input-class="form-control"
+                    input-class="form-control form-control-sm"
                   ></datepicker>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`date_created_free`"
-                    >{{ $t("attachment.dateCreatedFree") }}:</label
+                  >{{ $t("attachment.dateCreatedFree") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="date_created_free"
                     v-model="attachment.date_created_free"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- DESCRIPTION -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_description`"
-                    >{{ $t("attachment.imageDescription") }}:</label
+                  >{{ $t("attachment.imageDescription") }}:</label
                   >
                   <b-form-textarea
                     id="image_description"
@@ -852,11 +942,11 @@
                     :rows="3"
                     :max-rows="3"
                   ></b-form-textarea>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_description_en`"
-                    >{{ $t("attachment.imageDescriptionEn") }}:</label
+                  >{{ $t("attachment.imageDescriptionEn") }}:</label
                   >
                   <b-form-textarea
                     id="image_description_en"
@@ -867,14 +957,14 @@
                     :rows="3"
                     :max-rows="3"
                   ></b-form-textarea>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap">
+              <div class="d-flex justify-content-start flex-wrap px-1">
                 <div class="mr-3 flex-grow-1">
                   <label :for="`keyword`"
-                    >{{ $t("attachment.keywords") }}:</label
+                  >{{ $t("attachment.keywords") }}:</label
                   >
                   <vue-multiselect
                     v-model="relatedData.keyword"
@@ -892,42 +982,44 @@
                     :show-labels="true"
                   >
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
                 </div>
 
                 <div class="mr-3 my-1 align-self-end">
-                  <button
-                    class="btn btn-outline-danger"
+                  <v-btn
+                    icon
+                    color="red"
                     :title="$t('add.inputs.keywordsRemove')"
                     :disabled="!isNotEmpty(relatedData.keyword)"
                     @click="relatedData.keyword = null"
                   >
-                    <i class="far fa-trash-alt"></i>
-                  </button>
+                    <v-icon>far fa-trash-alt</v-icon>
+                  </v-btn>
                 </div>
 
                 <div class="mr-2 my-1 align-self-end">
-                  <router-link
-                    class="btn btn-outline-primary"
+                  <v-btn
+                    icon
+                    color="green"
                     :title="$t('add.new')"
                     :to="{
                       name: 'Keyword add',
                       query: { attachment: JSON.stringify(attachment) }
                     }"
-                    target="_blank"
+                    target="newKeywordWindow"
                   >
-                    <i class="fas fa-plus"></i>
-                  </router-link>
+                    <v-icon>fas fa-plus</v-icon>
+                  </v-btn>
                 </div>
               </div>
 
               <!-- LICENCE and COPYRIGHT -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
+                  >{{ $t("attachment.licence") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.licence"
@@ -942,14 +1034,14 @@
                       <strong>{{ option[licenceLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
+                  >{{ $t("attachment.copyrightAgent") }}:</label
                   >
                   <vue-multiselect
                     id="copyright_agent"
@@ -969,17 +1061,17 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
-              <!-- IMAGE TYPE and DEVICE -->
-              <div class="row">
-                <div class="col-md-6">
+              <!-- IMAGE_TYPE and DEVICE -->
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_type`"
-                    >{{ $t("attachment.imageType") }}:</label
+                  >{{ $t("attachment.imageType") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.image_type"
@@ -994,28 +1086,29 @@
                       <strong>{{ option[commonLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`device_txt`"
-                    >{{ $t("attachment.deviceTxt") }}:</label
+                  >{{ $t("attachment.deviceTxt") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="device_txt"
                     v-model="attachment.device_txt"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- AGENT, DATE DIGITISED and STARS -->
-              <div class="row">
-                <div class="col-md-4">
+              <v-row no-gutters>
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
+                  >{{ $t("attachment.agentDigitised") }}:</label
                   >
                   <vue-multiselect
                     id="agent_digitised"
@@ -1035,14 +1128,14 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
+                  >{{ $t("attachment.dateDigitised") }}:</label
                   >
                   <datepicker
                     id="date_digitised"
@@ -1051,13 +1144,13 @@
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
                     :not-after="new Date()"
-                    input-class="form-control"
+                    input-class="form-control form-control-sm"
                   ></datepicker>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`stars`">{{ $t("attachment.stars") }}:</label>
-                  <b-form-select v-model="attachment.stars">
+                  <b-form-select v-model="attachment.stars" size="sm">
                     <option :value="5">{{ $t("main.rating5") }}</option>
                     <option :value="4">{{ $t("main.rating4") }}</option>
                     <option :value="3">{{ $t("main.rating3") }}</option>
@@ -1070,50 +1163,46 @@
                     <option :value="-4">{{ $t("main.rating-4") }}</option>
                     <option :value="-5">{{ $t("main.rating-5") }}</option>
                   </b-form-select>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
       </div>
     </template>
 
     <template v-slot:other-file>
       <div class="other-file">
         <!-- REQUIRED INFO -->
-        <fieldset
-          class="border-top px-2 mb-2"
+        <v-card
+          class="mt-2"
           id="block-requiredFields"
-          :style="
-            !validate('attachment', 'other_file')
-              ? 'border-color: #dc3545!important;'
-              : ''
-          "
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
         >
-          <legend
-            class="w-auto my-0"
-            :class="{
-              'text-primary': !block.requiredFields,
-              'text-danger': !validate('attachment', 'other_file')
-            }"
-            @click="block.requiredFields = !block.requiredFields"
-          >
-            {{ $t("attachment.requiredFields") }}
-            <i
-              v-if="validate('attachment', 'other_file')"
-              class="fas fa-check text-success"
-            ></i>
-            <i
-              v-if="!validate('attachment', 'other_file')"
-              class="fas fa-exclamation-triangle text-danger"
-            ></i>
-          </legend>
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.requiredFields = !block.requiredFields">
+          <span>{{
+            $t("attachment.requiredFields")
+          }}</span>
+              <v-icon
+                right
+              >fas fa-project-diagram</v-icon
+              >
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.requiredFields = !block.requiredFields" :color="bodyActiveColor">
+              <v-icon>{{
+                block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.requiredFields">
+          <transition>
+            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
               <!-- AUTHOR and AUTHOR FREE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`author`">{{ $t("attachment.author") }}:</label>
                   <vue-multiselect
                     v-model="attachment.author"
@@ -1142,16 +1231,17 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`author_free`"
-                    >{{ $t("attachment.author_free") }}:</label
+                  >{{ $t("attachment.author_free") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="author_free"
                     v-model="attachment.author_free"
                     :state="
@@ -1160,16 +1250,17 @@
                     "
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- DESCRIPTION and DESCRIPTION_EN -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`description`"
-                    >{{ $t("attachment.description") }}:</label
+                  >{{ $t("attachment.description") }}:</label
                   >
                   <b-form-textarea
+                    size="sm"
                     id="description"
                     :state="isNotEmpty(attachment.description)"
                     v-model="attachment.description"
@@ -1180,15 +1271,16 @@
                   ></b-form-textarea>
 
                   <b-form-text v-if="!isNotEmpty(attachment.description)"
-                    >{{ $t("add.errors.emptyField") }}.</b-form-text
+                  >{{ $t("add.errors.emptyField") }}.</b-form-text
                   >
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`description_en`"
-                    >{{ $t("attachment.descriptionEn") }}:</label
+                  >{{ $t("attachment.descriptionEn") }}:</label
                   >
                   <b-form-textarea
+                    size="sm"
                     id="description_en"
                     :state="isNotEmpty(attachment.description_en)"
                     v-model="attachment.description_en"
@@ -1199,32 +1291,43 @@
                   ></b-form-textarea>
 
                   <b-form-text v-if="!isNotEmpty(attachment.description_en)"
-                    >{{ $t("add.errors.emptyField") }}.</b-form-text
+                  >{{ $t("add.errors.emptyField") }}.</b-form-text
                   >
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- GENERAL INFO -->
-        <fieldset class="border-top px-2 mb-2" id="block-info">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.info }"
-            @click="block.info = !block.info"
-          >
-            {{ $t("attachment.info") }}
-            <i class="fas fa-project-diagram"></i>
-          </legend>
+        <v-card
+          class="mt-2"
+          id="block-info"
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.info = !block.info">
+          <span>{{
+            $t("attachment.info")
+          }}</span>
+              <v-icon right>fas fa-project-diagram</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+              <v-icon>{{
+                block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.info">
+          <transition>
+            <div v-show="block.info" class="px-1 pt-1 pb-2">
               <!-- DATE_CREATED, DATE_CREATED_FREE and TYPE -->
-              <div class="row">
-                <div class="col-md-4">
+              <v-row no-gutters>
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`date_created`"
-                    >{{ $t("attachment.dateCreated") }}:</label
+                  >{{ $t("attachment.dateCreated") }}:</label
                   >
                   <datepicker
                     id="date_created"
@@ -1232,22 +1335,23 @@
                     lang="en"
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
-                    input-class="form-control"
+                    input-class="form-control form-control-sm"
                   ></datepicker>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`date_created_free`"
-                    >{{ $t("attachment.dateCreatedFree") }}:</label
+                  >{{ $t("attachment.dateCreatedFree") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="date_created_free"
                     v-model="attachment.date_created_free"
                     type="text"
                   ></b-form-input>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`type`">{{ $t("attachment.type") }}:</label>
                   <vue-multiselect
                     v-model="attachment.type"
@@ -1262,19 +1366,20 @@
                       <strong>{{ option[commonLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- REMARKS -->
-              <div class="row">
-                <div class="col-md-12">
+              <v-row no-gutters>
+                <v-col cols="12" class="px-1">
                   <label :for="`remarks`"
-                    >{{ $t("attachment.remarks") }}:</label
+                  >{{ $t("attachment.remarks") }}:</label
                   >
                   <b-form-textarea
+                    size="sm"
                     id="remarks"
                     v-model="attachment.remarks"
                     type="text"
@@ -1282,88 +1387,106 @@
                     :rows="3"
                     :max-rows="3"
                   ></b-form-textarea>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- MAP -->
-        <fieldset class="border-top px-2 mb-2" id="block-map">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.map }"
-            @click="block.map = !block.map"
-          >
-            {{ $t("attachment.map") }}
-            <i class="fas fa-globe-americas"></i>
-          </legend>
+        <v-card class="mt-2" id="block-map"
+                :color="bodyColor.split('-')[0] + '-5'"
+                elevation="4">
+          <v-card-title class="pt-2 pb-1">
+            <div
+              class="card-title--clickable"
+              @click="block.map = !block.map"
+            >
+              <span>{{ $t("attachment.map") }}</span>
+              <v-icon right>fas fa-globe-americas</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click="block.map = !block.map"
+              :color="bodyActiveColor"
+            >
+              <v-icon>{{
+                block.map ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-if="block.map">
+          <transition>
+            <div v-show="block.map" class="px-1 pt-1 pb-2">
               <!-- IMAGE LATITUDE and IMAGE LONGITUDE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_latitude`"
-                    >{{ $t("attachment.imageLatitude") }}:</label
+                  >{{ $t("attachment.imageLatitude") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_latitude"
                     v-model="attachment.image_latitude"
                     type="number"
                     step="0.000001"
                   ></b-form-input>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_longitude`"
-                    >{{ $t("attachment.imageLongitude") }}:</label
+                  >{{ $t("attachment.imageLongitude") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_longitude"
                     v-model="attachment.image_longitude"
                     type="number"
                     step="0.000001"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
-              <!-- MAP TOGGLE BUTTON -->
-              <div class="d-flex justify-content-start my-2">
-                <div class="align-self-center">
+              <!-- MAP SWITCH -->
+              <v-card
+                class="d-flex flex-row justify-content-start mt-1 mx-3"
+                flat
+                tile
+                :color="bodyColor.split('-')[0] + '-5'"
+              >
+                <v-card flat tile class="align-self-center mr-2"
+                        :color="bodyColor.split('-')[0] + '-5'">
                   <v-switch
                     v-model="showCollapseMap"
                     hide-details
                     id="map-switch"
                     class="vuetify-switch my-1"
                   ></v-switch>
-                </div>
-                <div class="align-self-center">
+                </v-card>
+
+                <v-card flat tile class="align-self-center"
+                        :color="bodyColor.split('-')[0] + '-5'">
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                      showCollapseMap
-                        ? $t("site.mapEnabled")
-                        : $t("site.mapDisabled")
+                    showCollapseMap
+                    ? $t("site.mapEnabled")
+                    : $t("site.mapDisabled")
                     }}
                   </label>
-                </div>
-              </div>
+                </v-card>
+              </v-card>
 
               <!-- MAP -->
-              <transition
-                name="fade"
-                enter-active-class="animated fadeIn faster"
-                leave-active-class="animated fadeOut faster"
-              >
-                <div class="row" v-show="showCollapseMap">
-                  <div class="col">
-                    <b-collapse v-model="showCollapseMap" id="collapseMap">
-                      <map-component
-                        mode="single"
-                        module="attachment"
-                        v-bind:locations="[]"
-                        v-bind:location="{
+              <transition enter-active-class="animated fadeIn faster">
+                <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+                  <v-col cols="12" class="px-1">
+                    <map-component
+                      mode="single"
+                      module="attachment"
+                      v-bind:locations="[]"
+                      v-bind:location="{
                           lat: attachment.image_latitude
                             ? attachment.image_latitude.toString()
                             : null,
@@ -1371,34 +1494,51 @@
                             ? attachment.image_longitude.toString()
                             : null
                         }"
-                        v-on:update-coordinates="updateLocation"
-                      ></map-component>
-                    </b-collapse>
-                  </div>
-                </div>
+                      v-on:update-coordinates="updateLocation"
+                    ></map-component>
+                  </v-col>
+                </v-row>
               </transition>
+
+
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- FILE INFO -->
-        <fieldset class="border-top px-2 mb-2" id="block-description">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.description }"
-            @click="block.description = !block.description"
-          >
-            {{ $t("attachment.description") }}
-            <i class="far fa-file"></i>
-          </legend>
+        <v-card
+          class="mt-2"
+          id="block-description"
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div
+              class="card-title--clickable"
+              @click="block.description = !block.description"
+            >
+              <span>{{ $t("attachment.description") }}</span>
+              <v-icon right>fas fa-image</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click="block.description = !block.description"
+              :color="bodyActiveColor"
+            >
+              <v-icon>{{
+                block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.description">
+          <transition>
+            <div v-show="block.description" class="px-1 pt-1 pb-2">
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap">
+              <div class="d-flex justify-content-start flex-wrap px-1">
                 <div class="mr-3 flex-grow-1">
                   <label :for="`keyword`"
-                    >{{ $t("attachment.keywords") }}:</label
+                  >{{ $t("attachment.keywords") }}:</label
                   >
                   <vue-multiselect
                     v-model="relatedData.keyword"
@@ -1416,42 +1556,44 @@
                     :show-labels="true"
                   >
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
                 </div>
 
                 <div class="mr-3 my-1 align-self-end">
-                  <button
-                    class="btn btn-outline-danger"
+                  <v-btn
+                    icon
+                    color="red"
                     :title="$t('add.inputs.keywordsRemove')"
                     :disabled="!isNotEmpty(relatedData.keyword)"
                     @click="relatedData.keyword = null"
                   >
-                    <i class="far fa-trash-alt"></i>
-                  </button>
+                    <v-icon>far fa-trash-alt</v-icon>
+                  </v-btn>
                 </div>
 
                 <div class="mr-2 my-1 align-self-end">
-                  <router-link
-                    class="btn btn-outline-primary"
+                  <v-btn
+                    icon
+                    color="green"
                     :title="$t('add.new')"
                     :to="{
                       name: 'Keyword add',
                       query: { attachment: JSON.stringify(attachment) }
                     }"
-                    target="_blank"
+                    target="newKeywordWindow"
                   >
-                    <i class="fas fa-plus"></i>
-                  </router-link>
+                    <v-icon>fas fa-plus</v-icon>
+                  </v-btn>
                 </div>
               </div>
 
               <!-- LICENCE and COPYRIGHT -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
+                  >{{ $t("attachment.licence") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.licence"
@@ -1466,14 +1608,14 @@
                       <strong>{{ option[licenceLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
+                  >{{ $t("attachment.copyrightAgent") }}:</label
                   >
                   <vue-multiselect
                     id="copyright_agent"
@@ -1493,17 +1635,17 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- IMAGE_TYPE and DEVICE -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`image_type`"
-                    >{{ $t("attachment.imageType") }}:</label
+                  >{{ $t("attachment.imageType") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.image_type"
@@ -1518,28 +1660,29 @@
                       <strong>{{ option[commonLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`device_txt`"
-                    >{{ $t("attachment.deviceTxt") }}:</label
+                  >{{ $t("attachment.deviceTxt") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="device_txt"
                     v-model="attachment.device_txt"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- AGENT and DATE DIGITISED -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
+                  >{{ $t("attachment.agentDigitised") }}:</label
                   >
                   <vue-multiselect
                     id="agent_digitised"
@@ -1559,14 +1702,14 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
+                  >{{ $t("attachment.dateDigitised") }}:</label
                   >
                   <datepicker
                     id="date_digitised"
@@ -1575,58 +1718,75 @@
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
                     :not-after="new Date()"
-                    input-class="form-control"
+                    input-class="form-control form-control-sm"
                   ></datepicker>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- RELATED DATA -->
-        <fieldset class="border-top px-2 mb-2" id="block-relatedData">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.relatedData }"
-            @click="block.relatedData = !block.relatedData"
-          >
-            {{ $t("attachment.relatedData") }}
-            <i class="fas fa-table"></i>
-          </legend>
+        <v-card
+          class="mt-2"
+          id="block-relatedData"
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div
+              class="card-title--clickable"
+              @click="block.relatedData = !block.relatedData"
+            >
+              <span>{{ $t("attachment.relatedData") }}</span>
+              <v-icon right>fas fa-table</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click="block.relatedData = !block.relatedData"
+              :color="bodyActiveColor"
+            >
+              <v-icon>{{
+                block.relatedData ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.relatedData">
-              <div class="row">
-                <div class="col-md-6">
+          <transition>
+            <div v-show="block.relatedData" class="px-1 pt-1 pb-2">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`related_data`"
-                    >{{ $t("attachment.relatedData") }}:</label
+                  >{{ $t("attachment.relatedData") }}:</label
                   >
                   <b-form-select
+                    size="sm"
                     id="related_data"
                     v-model="selectedRelatedTable"
                     class="mb-3"
                   >
                     <option :value="null">{{
                       $t("attachment.relatedDataDefault")
-                    }}</option>
+                      }}</option>
                     <option
                       v-for="tab in relatedTabs"
                       :key="tab.name"
                       :value="tab.name.split('__')[1]"
                     >
                       {{
-                        $t(
-                          "attachment.relatedTables." + tab.name.split("__")[1]
-                        )
+                      $t(
+                      "attachment.relatedTables." + tab.name.split("__")[1]
+                      )
                       }}
                     </option>
                   </b-form-select>
-                </div>
+                </v-col>
 
-                <div class="col-md-6" v-if="selectedRelatedTable !== null">
+                <v-col cols="12" md="6" class="px-1" v-if="selectedRelatedTable !== null">
                   <label :for="selectedRelatedTable"
-                    >{{
-                      $t("attachment.relatedTables." + selectedRelatedTable)
+                  >{{
+                    $t("attachment.relatedTables." + selectedRelatedTable)
                     }}:</label
                   >
                   <vue-multiselect
@@ -1653,17 +1813,17 @@
                     :show-labels="false"
                   >
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- SHOWING RELATED_DATA -->
-              <div class="row">
+              <v-row no-gutters>
                 <!-- COLLECTION -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__collection &&
                       relatedData.attach_link__collection.length > 0
@@ -1676,53 +1836,53 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("collection.name") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("collection.name") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__collection"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'collection',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
+                        <td>
+                          {{
+                          $i18n.locale === "ee"
+                          ? entity.name
+                          : entity.name_en
+                          }}
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__collection.splice(
                                 index,
                                 1
                               )
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -1730,7 +1890,7 @@
 
                 <!-- SPECIMEN -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__specimen &&
                       relatedData.attach_link__specimen.length > 0
@@ -1743,50 +1903,50 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("specimen.specimenNumber") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("specimen.specimenNumber") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__specimen"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'specimen',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>
+                        <td>
                             <span v-if="entity.coll__number !== null"
-                              >{{ entity.coll__number.split(" ")[0] }}
+                            >{{ entity.coll__number.split(" ")[0] }}
                               {{ entity.specimen_id }}</span
                             >
-                            <span v-else>{{ entity.specimen_id }}</span>
-                          </td>
+                          <span v-else>{{ entity.specimen_id }}</span>
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__specimen.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -1794,7 +1954,7 @@
 
                 <!-- SAMPLE -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__sample &&
                       relatedData.attach_link__sample.length > 0
@@ -1805,44 +1965,44 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("sample.number") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("sample.number") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__sample"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'sample',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>{{ entity.number }}</td>
+                        <td>{{ entity.number }}</td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__sample.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -1850,7 +2010,7 @@
 
                 <!-- SAMPLE_SERIES -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__sample_series &&
                       relatedData.attach_link__sample_series.length > 0
@@ -1863,35 +2023,35 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("sample_series.name") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("sample_series.name") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__sample_series"
-                          :key="index"
-                        >
-                          <td>{{ entity.id }}</td>
+                        :key="index"
+                      >
+                        <td>{{ entity.id }}</td>
 
-                          <td>{{ entity.name }}</td>
+                        <td>{{ entity.name }}</td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__sample_series.splice(
                                 index,
                                 1
                               )
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -1899,7 +2059,7 @@
 
                 <!-- ANALYSIS -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__analysis &&
                       relatedData.attach_link__analysis.length > 0
@@ -1912,53 +2072,53 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("analysis.sample") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("analysis.sample") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__analysis"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'analysis',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>
+                        <td>
                             <span
                               v-if="
                                 entity.sample__number !== null &&
                                   entity.sample__number
                               "
-                              >{{ entity.sample__number }}</span
+                            >{{ entity.sample__number }}</span
                             >
-                            <span v-else>{{ entity.sample__id }}</span>
-                          </td>
+                          <span v-else>{{ entity.sample__id }}</span>
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__analysis.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -1966,7 +2126,7 @@
 
                 <!-- DATASET -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__dataset &&
                       relatedData.attach_link__dataset.length > 0
@@ -1977,50 +2137,50 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("dataset.name") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("dataset.name") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__dataset"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'dataset',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
+                        <td>
+                          {{
+                          $i18n.locale === "ee"
+                          ? entity.name
+                          : entity.name_en
+                          }}
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__dataset.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2028,7 +2188,7 @@
 
                 <!-- DOI -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__doi &&
                       relatedData.attach_link__doi.length > 0
@@ -2039,44 +2199,44 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("doi.identifier") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("doi.identifier") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__doi"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'doi',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>{{ entity.identifier }}</td>
+                        <td>{{ entity.identifier }}</td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__doi.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2084,7 +2244,7 @@
 
                 <!-- LOCALITY -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__locality &&
                       relatedData.attach_link__locality.length > 0
@@ -2097,50 +2257,50 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("locality.locality") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("locality.locality") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__locality"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'locality',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.locality
-                                : entity.locality_en
-                            }}
-                          </td>
+                        <td>
+                          {{
+                          $i18n.locale === "ee"
+                          ? entity.locality
+                          : entity.locality_en
+                          }}
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__locality.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2148,7 +2308,7 @@
 
                 <!-- DRILLCORE -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__drillcore &&
                       relatedData.attach_link__drillcore.length > 0
@@ -2161,53 +2321,53 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("drillcore.drillcore") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("drillcore.drillcore") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__drillcore"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'drillcore',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.drillcore
-                                : entity.drillcore_en
-                            }}
-                          </td>
+                        <td>
+                          {{
+                          $i18n.locale === "ee"
+                          ? entity.drillcore
+                          : entity.drillcore_en
+                          }}
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__drillcore.splice(
                                 index,
                                 1
                               )
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2215,7 +2375,7 @@
 
                 <!-- DRILLCORE_BOX -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__drillcore_box &&
                       relatedData.attach_link__drillcore_box.length > 0
@@ -2228,54 +2388,54 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("drillcore_box.drillcore") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("drillcore_box.drillcore") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__drillcore_box"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'corebox',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.drillcore__drillcore
-                                : entity.drillcore__drillcore_en
-                            }}
-                            - {{ entity.number }}
-                          </td>
+                        <td>
+                          {{
+                          $i18n.locale === "ee"
+                          ? entity.drillcore__drillcore
+                          : entity.drillcore__drillcore_en
+                          }}
+                          - {{ entity.number }}
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__drillcore_box.splice(
                                 index,
                                 1
                               )
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2283,7 +2443,7 @@
 
                 <!-- PREPARATION -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__preparation !== null &&
                       relatedData.attach_link__preparation.length > 0
@@ -2296,47 +2456,47 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("preparation.number") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("preparation.number") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__preparation"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'preparation',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>{{ entity.preparation_number }}</td>
+                        <td>{{ entity.preparation_number }}</td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__preparation.splice(
                                 index,
                                 1
                               )
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2344,7 +2504,7 @@
 
                 <!-- REFERENCE -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__reference !== null &&
                       relatedData.attach_link__reference.length > 0
@@ -2357,47 +2517,47 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("reference.reference") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("reference.reference") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__reference"
-                          :key="index"
-                        >
-                          <td>
-                            <a
-                              href="javascript:void(0)"
-                              @click="
+                        :key="index"
+                      >
+                        <td>
+                          <a
+                            href="javascript:void(0)"
+                            @click="
                                 openGeoInNewWindow({
                                   object: 'reference',
                                   id: entity.id
                                 })
                               "
-                            >
-                              {{ entity.id }}
-                            </a>
-                          </td>
+                          >
+                            {{ entity.id }}
+                          </a>
+                        </td>
 
-                          <td>{{ entity.reference }}</td>
+                        <td>{{ entity.reference }}</td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__reference.splice(
                                 index,
                                 1
                               )
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2405,7 +2565,7 @@
 
                 <!-- STORAGE -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__storage !== null &&
                       relatedData.attach_link__storage.length > 0
@@ -2416,38 +2576,38 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("storage.storage") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("storage.storage") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__storage"
-                          :key="index"
-                        >
-                          <td>{{ entity.id }}</td>
+                        :key="index"
+                      >
+                        <td>{{ entity.id }}</td>
 
-                          <td>
+                        <td>
                             <span v-if="entity.contents !== null"
-                              >{{ entity.location }} -
+                            >{{ entity.location }} -
                               {{ entity.contents }}</span
                             >
-                            <span v-else>{{ entity.location }}</span>
-                          </td>
+                          <span v-else>{{ entity.location }}</span>
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__storage.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2455,7 +2615,7 @@
 
                 <!-- PROJECT -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__project !== null &&
                       relatedData.attach_link__project.length > 0
@@ -2466,43 +2626,43 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("project.name") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("project.name") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__project"
-                          :key="index"
-                        >
-                          <td>
-                            <router-link
-                              :to="{ path: '/project/' + entity.id }"
-                              >{{ entity.id }}</router-link
-                            >
-                          </td>
+                        :key="index"
+                      >
+                        <td>
+                          <router-link
+                            :to="{ path: '/project/' + entity.id }"
+                          >{{ entity.id }}</router-link
+                          >
+                        </td>
 
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
+                        <td>
+                          {{
+                          $i18n.locale === "ee"
+                          ? entity.name
+                          : entity.name_en
+                          }}
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__project.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
@@ -2510,7 +2670,7 @@
 
                 <!-- SITE -->
                 <div
-                  class="col-sm-6"
+                  class="col-sm-6 px-1"
                   v-if="
                     relatedData.attach_link__site !== null &&
                       relatedData.attach_link__site.length > 0
@@ -2521,91 +2681,87 @@
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
                       <thead class="thead-light">
-                        <tr>
-                          <th>ID</th>
-                          <th>{{ $t("site.name") }}</th>
-                          <th></th>
-                        </tr>
+                      <tr>
+                        <th>ID</th>
+                        <th>{{ $t("site.name") }}</th>
+                        <th></th>
+                      </tr>
                       </thead>
 
                       <tbody>
-                        <tr
-                          v-for="(entity,
+                      <tr
+                        v-for="(entity,
                           index) in relatedData.attach_link__site"
-                          :key="index"
-                        >
-                          <td>
-                            <router-link :to="{ path: '/site/' + entity.id }">{{
-                              entity.id
+                        :key="index"
+                      >
+                        <td>
+                          <router-link :to="{ path: '/site/' + entity.id }">{{
+                            entity.id
                             }}</router-link>
-                          </td>
+                        </td>
 
-                          <td>
-                            {{
-                              $i18n.locale === "ee"
-                                ? entity.name
-                                : entity.name_en
-                            }}
-                          </td>
+                        <td>
+                          {{
+                          $i18n.locale === "ee"
+                          ? entity.name
+                          : entity.name_en
+                          }}
+                        </td>
 
-                          <td
-                            class="text-center delete-relation"
-                            @click="
+                        <td
+                          class="text-center delete-relation"
+                          @click="
                               relatedData.attach_link__site.splice(index, 1)
                             "
-                          >
-                            <i class="fas fa-times"></i>
-                          </td>
-                        </tr>
+                        >
+                          <i class="fas fa-times"></i>
+                        </td>
+                      </tr>
                       </tbody>
                     </table>
                   </div>
                 </div>
-              </div>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
       </div>
     </template>
 
     <template v-slot:digitised-reference>
       <div class="digitised-reference">
         <!-- REQUIRED INFO -->
-        <fieldset
-          class="border-top px-2 mb-2"
+        <v-card
+          class="mt-2"
           id="block-requiredFields"
-          :style="
-            !validate('attachment', 'digitised_reference')
-              ? 'border-color: #dc3545!important;'
-              : ''
-          "
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
         >
-          <legend
-            class="w-auto my-0"
-            :class="{
-              'text-primary': !block.requiredFields,
-              'text-danger': !validate('attachment', 'digitised_reference')
-            }"
-            @click="block.requiredFields = !block.requiredFields"
-          >
-            {{ $t("attachment.requiredFields") }}
-            <i
-              v-if="validate('attachment', 'digitised_reference')"
-              class="fas fa-check text-success"
-            ></i>
-            <i
-              v-if="!validate('attachment', 'digitised_reference')"
-              class="fas fa-exclamation-triangle text-danger"
-            ></i>
-          </legend>
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.requiredFields = !block.requiredFields">
+          <span>{{
+            $t("attachment.requiredFields")
+          }}</span>
+              <v-icon
+                right
+              >fas fa-project-diagram</v-icon
+              >
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.requiredFields = !block.requiredFields" :color="bodyActiveColor">
+              <v-icon>{{
+                block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.requiredFields">
-              <!-- REFERENCE -->
-              <div class="row">
-                <div class="col-md-6">
+          <transition>
+            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+              <!-- AUTHOR and AUTHOR FREE -->
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`reference`"
-                    >{{ $t("attachment.reference") }}:</label
+                  >{{ $t("attachment.reference") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.reference"
@@ -2629,33 +2785,44 @@
                       <strong>{{ option.reference }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
 
         <!-- GENERAL INFO -->
-        <fieldset class="border-top px-2 mb-2" id="block-info">
-          <legend
-            class="w-auto my-0"
-            :class="{ 'text-primary': !block.info }"
-            @click="block.info = !block.info"
-          >
-            {{ $t("attachment.info") }}
-            <i class="fas fa-project-diagram"></i>
-          </legend>
+        <v-card
+          class="mt-2"
+          id="block-info"
+          :color="bodyColor.split('-')[0] + '-5'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div class="card-title--clickable" @click="block.info = !block.info">
+          <span>{{
+            $t("attachment.info")
+          }}</span>
+              <v-icon right>fas fa-project-diagram</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+              <v-icon>{{
+                block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+                }}</v-icon>
+            </v-btn>
+          </v-card-title>
 
-          <transition name="fade">
-            <div v-show="block.info">
+          <transition>
+            <div v-show="block.info" class="px-1 pt-1 pb-2">
               <!-- LICENCE and COPYRIGHT -->
-              <div class="row">
-                <div class="col-md-6">
+              <v-row no-gutters>
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
+                  >{{ $t("attachment.licence") }}:</label
                   >
                   <vue-multiselect
                     v-model="attachment.licence"
@@ -2670,14 +2837,14 @@
                       <strong>{{ option[licenceLabel] }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-6">
+                <v-col cols="12" md="6" class="px-1">
                   <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
+                  >{{ $t("attachment.copyrightAgent") }}:</label
                   >
                   <vue-multiselect
                     id="copyright_agent"
@@ -2697,17 +2864,17 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
 
               <!-- AGENT, DATE DIGITISED and DATE DIGITISED FREE -->
-              <div class="row">
-                <div class="col-md-4">
+              <v-row no-gutters>
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
+                  >{{ $t("attachment.agentDigitised") }}:</label
                   >
                   <vue-multiselect
                     id="agent_digitised"
@@ -2727,14 +2894,14 @@
                       <strong>{{ option.agent }}</strong>
                     </template>
                     <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
+                    ><b>{{ $t("messages.inputNoResults") }}</b></template
                     >
                   </vue-multiselect>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
+                  >{{ $t("attachment.dateDigitised") }}:</label
                   >
                   <datepicker
                     id="date_digitised"
@@ -2743,24 +2910,25 @@
                     :first-day-of-week="1"
                     format="DD MMM YYYY"
                     :not-after="new Date()"
-                    input-class="form-control"
+                    input-class="form-control form-control-sm"
                   ></datepicker>
-                </div>
+                </v-col>
 
-                <div class="col-md-4">
+                <v-col cols="12" md="4" class="px-1">
                   <label :for="`date_digitised_free`"
-                    >{{ $t("attachment.dateDigitisedFree") }}:</label
+                  >{{ $t("attachment.dateDigitisedFree") }}:</label
                   >
                   <b-form-input
+                    size="sm"
                     id="image_people"
                     v-model="attachment.date_digitised_free"
                     type="text"
                   ></b-form-input>
-                </div>
-              </div>
+                </v-col>
+              </v-row>
             </div>
           </transition>
-        </fieldset>
+        </v-card>
       </div>
     </template>
 
@@ -2806,6 +2974,7 @@
                     </span>
                   </label>
                   <b-form-select
+                    size="sm"
                     id="specimen_image_attachment"
                     v-model="attachment.specimen_image_attachment"
                     class="mb-3"
@@ -2846,6 +3015,7 @@
           id="is_private"
           :label="$t('specimen.is_private_text')"
           hide-details
+          :color="bodyActiveColor"
           class="mt-0 vuetify-checkbox mr-3"
         ></v-checkbox>
 
@@ -2854,6 +3024,7 @@
           id="is_locked"
           :label="$t('attachment.is_locked_text')"
           hide-details
+          :color="bodyActiveColor"
           class="mt-0 vuetify-checkbox"
         ></v-checkbox>
       </div>
@@ -2861,9 +3032,9 @@
 
     <template v-slot:local-storage>
       <div class="d-flex mt-3">
-        <button class="btn btn-sm btn-warning" @click="clearLocalStorage">
+        <v-btn @click="clearLocalStorage" class="text-none" color="yellow">
           {{ $t("add.buttons.clearLocalStorage") }}
-        </button>
+        </v-btn>
       </div>
     </template>
 
@@ -2936,6 +3107,24 @@ export default {
     Spinner,
     Datepicker,
     MapComponent
+  },
+
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -3313,6 +3502,7 @@ export default {
         rawAttachment: null,
         searchParameters: this.setDefaultSearchParameters(),
         block: {
+          fileInput: true,
           file: true,
           requiredFields: true,
           info: true,
@@ -4041,8 +4231,8 @@ export default {
 
 <style scoped>
 label {
-  margin: 5px 0 0 0;
-  color: #999;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
 

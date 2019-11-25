@@ -10,100 +10,123 @@
     ></spinner>
 
     <!-- REQUIRED INFO -->
-    <fieldset
-      class="border-top px-2 mb-2"
-      :style="!validate('journal') ? 'border-color: #dc3545!important;' : ''"
+    <v-card
+      class="mt-2"
       id="block-requiredFields"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
     >
-      <legend
-        class="w-auto my-0"
-        :class="{
-          'text-primary': !block.requiredFields,
-          'text-danger': !validate('journal')
-        }"
-        @click="block.requiredFields = !block.requiredFields"
-      >
-        {{ $t("journal.requiredFields") }}
-        <i v-if="validate('journal')" class="fas fa-check text-success"></i>
-        <i
-          v-if="!validate('journal')"
-          class="fas fa-exclamation-triangle text-danger"
-        ></i>
-      </legend>
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.requiredFields = !block.requiredFields">
+          <span :class="validate('journal') ? 'green--text' : 'red--text'">{{
+            $t("journal.generalInfo")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('journal') ? 'green--text' : 'red--text'"
+          >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.requiredFields = !block.requiredFields" :color="bodyActiveColor">
+          <v-icon>{{
+            block.requiredFields ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-if="block.requiredFields">
-          <!-- JOURNAL NAME -->
-          <div class="row">
-            <div class="col-sm-12">
-              <label :for="`journal_name`"
-                >{{ $t("journal.journalName") }}:</label
-              >
-              <b-form-input
-                id="journal_name"
+      <transition>
+        <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <v-text-field
                 v-model="journal.journal_name"
-                :state="isNotEmpty(journal.journal_name)"
-                type="text"
-              ></b-form-input>
-            </div>
-          </div>
+                outlined
+                dense
+                hide-details
+                :append-icon="
+                  !isNotEmpty(journal.journal_name) ? 'fas fa-exclamation' : ''
+                "
+                :error="!isNotEmpty(journal.journal_name)"
+                :color="bodyActiveColor"
+                :label="$t('journal.journalName')"
+              ></v-text-field>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- GENERAL INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-info">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.info }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("journal.generalInfo") }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-generalInfo"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.info = !block.info"
+        >
+          <span>{{ $t("journal.generalInfo") }}</span>
+          <v-icon right>fas fa-project-diagram</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.info = !block.info"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.info">
+      <transition>
+        <div v-show="block.info" class="pa-1">
           <!-- JOURNAL SHORT and PUBLISHER -->
-          <div class="row">
-            <div class="col-sm-6">
-              <label :for="`journal_short`"
-                >{{ $t("journal.journalShort") }}:</label
-              >
-              <b-form-input
-                id="journal_short"
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <v-text-field
                 v-model="journal.journal_short"
-                type="text"
-              ></b-form-input>
-            </div>
+                outlined
+                dense
+                hide-details
+                :color="bodyActiveColor"
+                :label="$t('journal.journalShort')"
+              ></v-text-field>
+            </v-col>
 
-            <div class="col-sm-6">
-              <label :for="`publisher`">{{ $t("journal.publisher") }}:</label>
-              <b-form-input
-                id="publisher"
-                v-model="journal.publisher"
-                type="text"
-              ></b-form-input>
-            </div>
-          </div>
+        <v-col cols="12" md="6" class="pa-1">
+          <v-text-field
+            v-model="journal.publisher"
+            outlined
+            dense
+            hide-details
+            :color="bodyActiveColor"
+            :label="$t('journal.publisher')"
+          ></v-text-field>
+        </v-col>
+          </v-row>
 
           <!-- REMARKS -->
-          <div class="row">
-            <div class="col-sm-12">
-              <label :for="`remarks`">{{ $t("journal.remarks") }}:</label>
-              <b-form-textarea
-                id="remarks"
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1 textarea">
+              <v-textarea
                 v-model="journal.remarks"
-                type="text"
-                :no-resize="true"
-                :rows="1"
-                :max-rows="3"
-              ></b-form-textarea>
-            </div>
-          </div>
+                outlined
+                hide-details
+                :color="bodyActiveColor"
+                :label="$t('journal.remarks')"
+                rows="3"
+              ></v-textarea>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
   </div>
 </template>
 
@@ -119,6 +142,24 @@ export default {
 
   components: {
     Spinner
+  },
+
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
 
   mixins: [formManipulation, formSectionsMixin],
@@ -235,8 +276,12 @@ export default {
 
 <style scoped>
 label {
-  margin: 5px 0 0 0;
-  color: #999;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
+
+  .textarea >>> textarea {
+    margin-top: 0 !important;
+  }
 </style>

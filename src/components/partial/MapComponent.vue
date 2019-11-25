@@ -257,6 +257,8 @@ export default {
       //ZOOM ACTIVATED
       this.map.on("zoomend", event => (this.zoom = event.target._zoom));
 
+      console.log(this.locations)
+
       if (this.mode === "multiple") this.setMarkers(this.locations);
 
       if (this.mode === "single") {
@@ -292,6 +294,8 @@ export default {
 
     //SET GROUP OF MARKERS
     setMarkers(newVal) {
+      if (newVal && newVal.length > 0) {
+
       this.markers = [];
 
       newVal.forEach(entity => {
@@ -320,6 +324,7 @@ export default {
       let bounds = new L.featureGroup(this.markers).getBounds();
       this.map.fitBounds(bounds);
       this.map.setZoom(this.map.getBoundsZoom(bounds) - 2);
+      }
     },
 
     // Validates if coordinates exist in correct form.
@@ -478,6 +483,15 @@ export default {
           }
         }
       }
+    },
+
+    locations: {
+      handler: function(newVal) {
+        if (newVal && newVal.length > 0) {
+          if (this.mode === "multiple") this.setMarkers(newVal)
+        }
+      },
+      deep: true
     },
 
     currentLocation: function(newVal, oldVal) {
