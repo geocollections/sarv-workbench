@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen">
+  <div class="specimen red--text f">
     <spinner
       v-show="sendingData"
       class="loading-overlay"
@@ -10,7 +10,12 @@
     ></spinner>
 
     <!-- GENERAL INFO -->
-    <v-card class="mt-2" id="block-info">
+    <v-card
+      class="mt-2"
+      id="block-info"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('specimen') ? 'green--text' : 'red--text'">{{
@@ -109,7 +114,12 @@
     </v-card>
 
     <!-- LOCALITY INFO -->
-    <v-card class="mt-2" id="block-localityInfo">
+    <v-card
+      class="mt-2"
+      id="block-localityInfo"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -415,7 +425,12 @@
     </v-card>
 
     <!-- SPECIMEN DETAILS -->
-    <v-card class="mt-2" id="block-details">
+    <v-card
+      class="mt-2"
+      id="block-details"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -664,14 +679,18 @@
     </v-card>
 
     <!-- RELATED DATA TABS -->
-    <v-card class="related-tabs mt-2">
+    <v-card
+      class="related-tabs mt-2"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-tabs
-        background-color="blue-grey lighten-4"
+        :background-color="bodyColor.split('-')[0] + '-3'"
         show-arrows
         grow
         prev-icon="fas fa-angle-left"
         next-icon="fas fa-angle-right"
-        active-class="active-tab-color"
+        :active-class="bodyColor.split('-')[0] + '-5 black--text'"
         hide-slider
       >
         <v-tab
@@ -686,7 +705,6 @@
           <span
             v-if="relatedData[tab.name].length > 0"
             class="font-weight-bold ml-2"
-            style="font-size: large;"
           >
             {{ relatedData[tab.name].length }}
           </span>
@@ -694,7 +712,7 @@
       </v-tabs>
 
       <v-tabs-items>
-        <v-card class="pt-3 px-1" flat color="blue-grey lighten-5">
+        <v-card class="pt-3 px-1" flat :color="bodyColor.split('-')[0] + '-5'">
           <specimen-identification
             v-if="
               specimen.fossil &&
@@ -784,68 +802,50 @@
           />
 
           <!-- PAGINATION -->
-          <v-row no-gutters v-if="$route.meta.isEdit">
-            <v-col sm="6" md="3" class="pr-3 t-paginate-by-center">
-              <b-form-select
+          <div
+            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
                 v-model="relatedData.searchParameters[activeTab].paginateBy"
-                class="mb-3"
-                size="sm"
-              >
-                <option :value="10">{{
-                  this.$t("main.pagination", { num: "10" })
-                }}</option>
-                <option :value="25">{{
-                  this.$t("main.pagination", { num: "25" })
-                }}</option>
-                <option :value="50">{{
-                  this.$t("main.pagination", { num: "50" })
-                }}</option>
-                <option :value="100">{{
-                  this.$t("main.pagination", { num: "100" })
-                }}</option>
-                <option :value="250">{{
-                  this.$t("main.pagination", { num: "250" })
-                }}</option>
-                <option :value="500">{{
-                  this.$t("main.pagination", { num: "500" })
-                }}</option>
-                <option :value="1000">{{
-                  this.$t("main.pagination", { num: "1000" })
-                }}</option>
-              </b-form-select>
-            </v-col>
+                :color="bodyActiveColor"
+                dense
+                :items="paginateByOptionsTranslated"
+                :item-color="bodyActiveColor"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
 
-            <v-col sm="12" md="3" class="export-center">
-              <!-- EXPORT BUTTON? -->
-            </v-col>
-
-            <v-col
-              sm="12"
-              md="6"
-              class="pagination-center"
-              v-if="
-                relatedData[activeTab] !== null &&
-                  relatedData[activeTab].length > 0
-              "
-            >
-              <b-pagination
-                size="sm"
-                align="right"
-                :limit="5"
-                :hide-ellipsis="true"
-                :total-rows="relatedData.count[activeTab]"
+            <div>
+              <v-pagination
                 v-model="relatedData.searchParameters[activeTab].page"
-                :per-page="relatedData.searchParameters[activeTab].paginateBy"
-              >
-              </b-pagination>
-            </v-col>
-          </v-row>
+                :color="bodyActiveColor"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.count[activeTab] /
+                      relatedData.searchParameters[activeTab].paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
         </v-card>
       </v-tabs-items>
     </v-card>
 
     <!-- REMARKS -->
-    <v-card class="mt-2" id="block-description">
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title class="pt-2 pb-1">
         <div
           class="card-title--clickable"
@@ -967,6 +967,11 @@ export default {
       required: false,
       default: true
     },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
     bodyActiveColor: {
       type: String,
       required: false,
@@ -1065,6 +1070,15 @@ export default {
             return tab;
           }
         } else return tab;
+      });
+    },
+
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
       });
     }
   },
@@ -1197,7 +1211,16 @@ export default {
           localityInfo: true,
           details: true,
           description: true
-        }
+        },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
@@ -1891,7 +1914,7 @@ export default {
 <style scoped>
 label {
   margin: 0;
-  color: #546e7a;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
 
@@ -1899,40 +1922,6 @@ label {
   color: #546e7a;
 }
 .active-tab-color {
-  background-color: #eceff1;
   color: #000000;
-}
-
-.card-title--clickable:hover {
-  cursor: pointer;
-  opacity: 0.8;
-}
-
-/* Multiselect component size override */
-.specimen >>> .multiselect {
-  min-height: 31px;
-  /*height: 31px;*/
-}
-
-.specimen >>> .multiselect__tags {
-  min-height: 31px;
-  /*height: 31px;*/
-  padding: 4px 40px 4px 8px;
-}
-
-.specimen >>> .multiselect__select {
-  min-height: 29px;
-  height: 29px;
-}
-
-.specimen >>> .multiselect__single {
-  padding: 0;
-  margin-bottom: 0;
-  font-size: 0.875rem;
-}
-
-.specimen >>> .multiselect__placeholder {
-  padding: 0;
-  margin-bottom: 0;
 }
 </style>

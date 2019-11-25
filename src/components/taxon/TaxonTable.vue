@@ -21,7 +21,7 @@
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.id }}</router-link
+        >{{ item.id }}</router-link
       >
     </template>
 
@@ -31,7 +31,7 @@
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.taxon }}</router-link
+        >{{ item.taxon }}</router-link
       >
     </template>
 
@@ -53,7 +53,7 @@
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.parent__taxon }}</router-link
+        >{{ item.parent__taxon }}</router-link
       >
     </template>
 

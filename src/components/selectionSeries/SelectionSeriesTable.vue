@@ -21,7 +21,7 @@
         :title="$t('editSelectionSeries.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.id }}</router-link
+        >{{ item.id }}</router-link
       >
     </template>
   </v-data-table>

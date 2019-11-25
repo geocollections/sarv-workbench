@@ -26,7 +26,7 @@
           :title="$t('editSpecimen.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
-        >{{ item.id }}</router-link
+          >{{ item.id }}</router-link
         >
       </template>
 

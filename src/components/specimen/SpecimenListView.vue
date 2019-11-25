@@ -265,7 +265,7 @@ export default {
 
 <style scoped>
 .list-row {
-  margin: 0 15px 15px;
+  margin: 15px;
 }
 
 .label2:hover {

@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-options-new">
+  <div class="bottom-options-new" :class="bodyColor.split('-')[0] + '-5'">
     <div
       class="d-flex justify-content-around align-items-center"
       :class="{
@@ -136,10 +136,10 @@
         <v-icon
           :small="$vuetify.breakpoint.mdAndUp"
           :left="$vuetify.breakpoint.mdAndUp"
-        >far fa-plus-square</v-icon
+          >far fa-plus-square</v-icon
         >
         <span v-show="$vuetify.breakpoint.mdAndUp"
-        >&nbsp;{{ $t("edit.buttons.saveAsNew") }}</span
+          >&nbsp;{{ $t("edit.buttons.saveAsNew") }}</span
         >
       </v-btn>
 
@@ -191,6 +191,11 @@ export default {
       type: String,
       required: false,
       default: "blue-grey"
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
     }
   },
   data() {

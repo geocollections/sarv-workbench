@@ -1,5 +1,10 @@
 <template>
-  <v-card class="log mt-2" v-if="logs.length > 0">
+  <v-card
+    class="log mt-2"
+    v-if="logs.length > 0"
+    :color="bodyColor.split('-')[0] + '-5'"
+    elevation="4"
+  >
     <v-card-title class="pt-2 pb-1">
       <div class="card-title--clickable" @click="block.logs = !block.logs">
         <span>{{ $t("logs.title") }}</span>
@@ -107,6 +112,11 @@ export default {
     },
     formattedData: {
       type: Object
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
     },
     bodyActiveColor: {
       type: String,

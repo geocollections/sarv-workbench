@@ -134,7 +134,7 @@ export default {
 
 <style scoped>
 .list-row {
-  margin: 0 15px;
+  margin: 15px;
 }
 /* STYLES FROM OLD APP */
 .label2 {

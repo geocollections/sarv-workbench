@@ -57,20 +57,20 @@
               leave-active-class="animated fadeOutRight faster"
             >
               <div v-show="showBodySettings">
-<!--                <v-switch-->
-<!--                  v-model="settings.bodyDark"-->
-<!--                  class="mt-2 mx-3"-->
-<!--                  hide-details-->
-<!--                  inset-->
-<!--                  :color="settings.bodyDark ? 'black' : 'white'"-->
-<!--                >-->
-<!--                  <template v-slot:label>-->
-<!--                    <span>-->
-<!--                      <b>{{ settings.bodyDark ? "Dark" : "Light" }}</b>-->
-<!--                      body-->
-<!--                    </span>-->
-<!--                  </template>-->
-<!--                </v-switch>-->
+                <!--                <v-switch-->
+                <!--                  v-model="settings.bodyDark"-->
+                <!--                  class="mt-2 mx-3"-->
+                <!--                  hide-details-->
+                <!--                  inset-->
+                <!--                  :color="settings.bodyDark ? 'black' : 'white'"-->
+                <!--                >-->
+                <!--                  <template v-slot:label>-->
+                <!--                    <span>-->
+                <!--                      <b>{{ settings.bodyDark ? "Dark" : "Light" }}</b>-->
+                <!--                      body-->
+                <!--                    </span>-->
+                <!--                  </template>-->
+                <!--                </v-switch>-->
 
                 <v-radio-group
                   v-model="settings.bodyColor"

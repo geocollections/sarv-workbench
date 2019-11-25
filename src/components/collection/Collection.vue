@@ -10,59 +10,62 @@
     ></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset
-      class="border-top px-2 mb-2"
-      :style="!validate('collection') ? 'border-color: #dc3545!important;' : ''"
+    <v-card
+      class="mt-2"
       id="block-info"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
     >
-      <legend
-        class="w-auto my-0"
-        :class="{
-          'text-primary': !block.info,
-          'text-danger': !validate('collection')
-        }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("collection.generalInfo") }}
-        <i
-          v-if="validate('collection')"
-          class="fas fa-project-diagram text-success"
-        ></i>
-        <i
-          v-if="!validate('collection')"
-          class="fas fa-project-diagram text-danger"
-        ></i>
-      </legend>
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span :class="validate('collection') ? 'green--text' : 'red--text'">{{
+            $t("collection.generalInfo")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('collection') ? 'green--text' : 'red--text'"
+            >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-if="block.info">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- NUMBER, COLLECTION_ID, TYPE  -->
-          <div class="row">
-            <div class="col-md-4">
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`number`"
                 >{{ $t("collection.number_detail") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="number"
                 v-model="collection.number"
                 :state="isNotEmpty(collection.number)"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`collection_id`"
                 >{{ $t("collection.collection_id") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="collection_id"
                 v-model="collection.collection_id"
                 :state="isNotEmpty(collection.collection_id)"
                 type="number"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`type`">{{ $t("collection.type") }}:</label>
               <vue-multiselect
                 v-model="collection.type"
@@ -80,74 +83,94 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- NAME and NAME_EN -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`name`">{{ $t("collection.name") }}:</label>
               <b-form-input
+                size="sm"
                 id="name"
                 v-model="collection.name"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`name_en`">{{ $t("collection.name_en") }}:</label>
               <b-form-input
+                size="sm"
                 id="name_en"
                 v-model="collection.name_en"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- NAME_LONG and NAME_LONG_EN -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`name_long`"
                 >{{ $t("collection.name_long") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="name_long"
                 v-model="collection.name_long"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`name_long_en`"
                 >{{ $t("collection.name_long_en") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="name_long_en"
                 v-model="collection.name_long_en"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- RELATED INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-relatedInfo">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.relatedInfo }"
-        @click="block.relatedInfo = !block.relatedInfo"
-      >
-        {{ $t("collection.relatedInfo") }}
-        <i class="fas fa-sitemap"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-relatedInfo"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.relatedInfo = !block.relatedInfo"
+        >
+          <span>{{ $t("collection.relatedInfo") }}</span>
+          <v-icon right>fas fa-sitemap</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.relatedInfo = !block.relatedInfo"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.relatedInfo ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.relatedInfo">
+      <transition>
+        <div v-show="block.relatedInfo" class="px-1 pt-1 pb-2">
           <!-- CLASSIFICATION and AGENT -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`classification`"
                 >{{ $t("collection.classification") }}:</label
               >
@@ -172,9 +195,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`agent`">{{ $t("collection.agent") }}:</label>
               <vue-multiselect
                 v-model="collection.agent"
@@ -197,12 +220,12 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- LOCALITY, STRATIGRAPHY and REFERENCE -->
-          <div class="row">
-            <div class="col-md-4">
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`locality`">{{ $t("collection.locality") }}:</label>
               <vue-multiselect
                 v-model="collection.locality"
@@ -225,9 +248,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`stratigraphy`"
                 >{{ $t("collection.stratigraphy") }}:</label
               >
@@ -252,9 +275,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`reference`"
                 >{{ $t("collection.reference") }}:</label
               >
@@ -279,90 +302,121 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- REMARKS -->
-    <fieldset class="border-top px-2 mb-2" id="block-description">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.description }"
-        @click="block.description = !block.description"
-      >
-        {{ $t("collection.description") }}
-        <i class="fas fa-pen-fancy"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("collection.description") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.description">
+      <transition>
+        <div v-show="block.description" class="px-1 pt-1 pb-2">
           <!-- REMARKS  -->
-          <div class="row">
-            <div class="col-sm-12">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`remarks`">{{ $t("collection.remarks") }}:</label>
               <editor :data.sync="collection.remarks" />
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- NUMBER_OBJECTS and NUMBER_TYPES -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`number_objects`"
                 >{{ $t("collection.number_objects") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="number_objects"
                 v-model="collection.number_objects"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`number_types`"
                 >{{ $t("collection.number_types") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="number_types"
                 v-model="collection.number_types"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- REMARKS -->
-    <fieldset
-      class="border-top px-2 mb-2"
+    <v-card
+      class="mt-2"
       id="block-specimen"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
       v-if="$route.meta.isEdit && specimens.count > 0"
     >
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.specimen }"
-        @click="block.specimen = !block.specimen"
-      >
-        {{ $t("collection.specimen") }}
-        <i class="fas fa-fish"></i>
-      </legend>
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.specimen = !block.specimen"
+        >
+          <span>{{ $t("collection.specimen") }}</span>
+          <v-icon right>fas fa-fish</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.specimen = !block.specimen"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.specimen ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.specimen">
+      <transition>
+        <div v-show="block.specimen" class="pb-1">
           <!-- PAGINATION -->
           <div
             v-if="specimens.count > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none px-2"
           >
             <div class="mr-3 mb-3">
               <v-select
                 v-model="specimenSearchParameters.paginateBy"
-                color="blue"
+                :color="bodyActiveColor"
                 dense
                 :items="paginateByOptionsTranslated"
-                item-color="blue"
+                :item-color="bodyActiveColor"
                 label="Paginate by"
                 hide-details
               />
@@ -371,7 +425,7 @@
             <div>
               <v-pagination
                 v-model="specimenSearchParameters.page"
-                color="blue"
+                :color="bodyActiveColor"
                 circle
                 prev-icon="fas fa-angle-left"
                 next-icon="fas fa-angle-right"
@@ -385,41 +439,47 @@
             </div>
           </div>
 
-          <v-card class="table-card my-1">
-            <v-card-title class="d-print-none">
-              <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>
-              <span id="table-title" class="text-uppercase">
-                {{ $t("collection.specimen") }}
-                <sup>
-                  <v-chip
-                    color="deep-orange"
-                    small
-                    text-color="#ffffff"
-                    class="font-weight-bold"
-                    >{{ specimens.count }}</v-chip
-                  >
-                </sup>
-              </span>
-              <div class="flex-grow-1"></div>
-              <v-text-field
-                v-model="filterSpecimens"
-                append-outer-icon="fas fa-search"
-                label="Filter records"
-                clear-icon="fas fa-times"
-                clearable
-                color="deep-orange"
-              ></v-text-field>
-            </v-card-title>
+          <v-card
+            class="table-card my-1"
+            flat
+            :color="bodyColor.split('-')[0] + '-5'"
+          >
+            <!--            <v-card-title class="d-print-none">-->
+            <!--              <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>-->
+            <!--              <span id="table-title" class="text-uppercase">-->
+            <!--                {{ $t("collection.specimen") }}-->
+            <!--                <sup>-->
+            <!--                  <v-chip-->
+            <!--                      :color="bodyActiveColor"-->
+            <!--                      small-->
+            <!--                      text-color="#ffffff"-->
+            <!--                      class="font-weight-bold"-->
+            <!--                  >{{ specimens.count }}</v-chip-->
+            <!--                  >-->
+            <!--                </sup>-->
+            <!--              </span>-->
+            <!--              <div class="flex-grow-1"></div>-->
+            <!--              <v-text-field-->
+            <!--                  v-model="filterSpecimens"-->
+            <!--                  append-outer-icon="fas fa-search"-->
+            <!--                  label="Filter records"-->
+            <!--                  clear-icon="fas fa-times"-->
+            <!--                  clearable-->
+            <!--                  :color="bodyActiveColor"-->
+            <!--              ></v-text-field>-->
+            <!--            </v-card-title>-->
 
             <specimen-table
               :response="specimens"
               :search-parameters="specimenSearchParameters"
               :filter="filterSpecimens"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
             />
           </v-card>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
   </div>
 </template>
 
@@ -445,6 +505,19 @@ export default {
     Spinner,
     Editor,
     SpecimenTable
+  },
+
+  props: {
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -734,8 +807,8 @@ export default {
 
 <style scoped>
 label {
-  margin: 5px 0 0 0;
-  color: #999;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
 </style>

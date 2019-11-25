@@ -24,6 +24,7 @@
 
     <router-view
       v-show="objectExists"
+      :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
       :is-body-active-color-dark="appSettings.bodyActiveColorDark"
       v-on:data-loaded="setData"
@@ -36,6 +37,7 @@
     <object-does-not-exist v-if="!objectExists" />
 
     <bottom-options
+      :body-color="appSettings.bodyColor"
       :is-navbar-dark="appSettings.navbarDark"
       :navbar-color="appSettings.navbarColor"
       :object="object"
@@ -63,6 +65,7 @@
       :data="data"
       :formatted-data="formattedData"
       :key="logComponentKey"
+      :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
     ></log>
   </div>

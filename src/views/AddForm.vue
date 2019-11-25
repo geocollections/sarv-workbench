@@ -26,11 +26,13 @@
     <hr class="mt-1 mb-2 divider" />
 
     <router-view
+      :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
       :is-body-active-color-dark="appSettings.bodyActiveColorDark"
     />
 
     <bottom-options
+      :body-color="appSettings.bodyColor"
       :is-navbar-dark="appSettings.navbarDark"
       :navbar-color="appSettings.navbarColor"
       :object="$route.meta.object"

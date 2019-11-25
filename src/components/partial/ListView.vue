@@ -1,8 +1,12 @@
 <template>
-  <div class="list-view">
+  <div class="list-view" :class="bodyColor.split('-')[0] + '-5'">
     <div class="row">
       <div class="col">
-        <reference-list-view v-if="module === 'reference'" :data="data" />
+        <reference-list-view
+          v-if="module === 'reference'"
+          :data="data"
+          :body-active-color="bodyActiveColor"
+        />
 
         <sample-list-view v-if="module === 'sample'" :data="data" />
 
@@ -23,7 +27,7 @@ export default {
     SampleListView,
     SpecimenListView
   },
-  props: ["module", "data"],
+  props: ["module", "data", "bodyColor", "bodyActiveColor"],
   name: "ListView"
 };
 </script>

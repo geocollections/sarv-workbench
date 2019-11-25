@@ -351,8 +351,8 @@ export default {
         .addTo(this.map)
         .on("dragend", event => this.updateCoordinates(event.target._latlng));
 
-      // Uncomment to recenter after every click
-      // this.map.setView(this.marker._latlng, this.zoom);
+      // Recenter after every coordinate change
+      this.map.setView(this.marker._latlng, this.zoom);
     },
 
     trackPosition() {

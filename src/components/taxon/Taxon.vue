@@ -10,54 +10,55 @@
     ></spinner>
 
     <!-- GENERAL INFO -->
-    <fieldset
-      class="border-top px-2 mb-2"
-      :style="!validate('taxon') ? 'border-color: #dc3545!important;' : ''"
+    <v-card
+      class="mt-2"
       id="block-info"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
     >
-      <legend
-        class="w-auto my-0"
-        :class="{
-          'text-primary': !block.info,
-          'text-danger': !validate('taxon')
-        }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("taxon.generalInfo") }}
-        <i
-          v-if="validate('taxon')"
-          class="fas fa-project-diagram text-success"
-        ></i>
-        <i
-          v-if="!validate('taxon')"
-          class="fas fa-project-diagram text-danger"
-        ></i>
-      </legend>
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span :class="validate('taxon') ? 'green--text' : 'red--text'">{{
+            $t("taxon.generalInfo")
+          }}</span>
+          <v-icon right :class="validate('taxon') ? 'green--text' : 'red--text'"
+            >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-if="block.info">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- TAXON, AUTHOR_YEAR and REFERENCE  -->
-          <div class="row">
-            <div class="col-md-4">
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`taxon`">{{ $t("taxon.taxon") }}:</label>
               <b-form-input
+                size="sm"
                 id="taxon"
                 v-model="taxon.taxon"
                 type="text"
                 :state="isNotEmpty(taxon.taxon)"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`author_year`">{{ $t("taxon.author_year") }}:</label>
               <b-form-input
+                size="sm"
                 id="author_year"
                 v-model="taxon.author_year"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`reference`"
                 >{{ $t("taxon.reference_original") }}:</label
               >
@@ -82,12 +83,12 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- RANK, PARENT and TAXON_EPITHET  -->
-          <div class="row">
-            <div class="col-md-4">
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`rank`">{{ $t("taxon.rank") }}:</label>
               <vue-multiselect
                 v-model="taxon.rank"
@@ -105,9 +106,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`parent`">{{ $t("taxon.parent") }}:</label>
               <vue-multiselect
                 id="parent"
@@ -130,34 +131,36 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`taxon_epithet`"
                 >{{ $t("taxon.taxon_epithet") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="taxon_epithet"
                 v-model="taxon.taxon_epithet"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- HIERARCHY_STRING, FOSSIL_GROUP and IS_FOSSIL_GROUP  -->
-          <div class="row">
-            <div class="col-md-4">
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`hierarchy_string`"
                 >{{ $t("taxon.hierarchy_string") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="hierarchy_string"
                 v-model="taxon.hierarchy_string"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-4">
+            <v-col cols="12" md="4" class="px-1">
               <label :for="`fossil_group`"
                 >{{ $t("taxon.fossil_group") }}:</label
               >
@@ -182,9 +185,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-4 checkboxes">
+            <v-col cols="12" md="4" class="px-1 checkboxes">
               <label style="visibility: hidden;" :for="`is_fossil_group`"
                 >{{ $t("taxon.is_fossil_group") }}:</label
               >
@@ -192,41 +195,59 @@
                 v-model="taxon.is_fossil_group"
                 :label="$t('taxon.is_fossil_group')"
                 class="mt-0"
+                :color="bodyActiveColor"
                 hide-details
               ></v-checkbox>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- TAXON INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-details">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.details }"
-        @click="block.details = !block.details"
-      >
-        {{ $t("taxon.details") }}
-        <i class="fas fa-info"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-details"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.details = !block.details"
+        >
+          <span>{{ $t("taxon.details") }}</span>
+          <v-icon right>fas fa-info</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.details = !block.details"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.details ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.details">
+      <transition>
+        <div v-show="block.details" class="px-1 pt-1 pb-2">
           <!-- TAXON_ORIGINAL_NAME and RANK_ORIGINAL -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`taxon_original_name`"
                 >{{ $t("taxon.taxon_original_name") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="taxon_original_name"
                 v-model="taxon.taxon_original_name"
                 type="text"
               ></b-form-input>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`rank_original`"
                 >{{ $t("taxon.rank_original") }}:</label
               >
@@ -246,12 +267,12 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- TYPE_TAXON_ID and TYPE_TAXON -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`type_taxon_id`"
                 >{{ $t("taxon.type_taxon_id") }}:</label
               >
@@ -276,56 +297,61 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`type_taxon`">{{ $t("taxon.type_taxon") }}:</label>
               <b-form-input
+                size="sm"
                 id="type_taxon"
                 v-model="taxon.type_taxon"
                 type="text"
               ></b-form-input>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- IS_FOSSIL, IS_VALID, IN_ESTONIA and IN_BALTOSCANDIA -->
-          <div class="row checkboxes">
-            <div class="col-md-3">
+          <v-row no-gutters class="checkboxes">
+            <v-col cols="12" md="3" class="px-1">
               <v-checkbox
                 v-model="taxon.is_fossil"
                 :label="$t('taxon.is_fossil')"
                 hide-details
+                :color="bodyActiveColor"
               ></v-checkbox>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <v-checkbox
                 v-model="taxon.is_valid"
                 :label="$t('taxon.is_valid')"
                 hide-details
+                :color="bodyActiveColor"
               ></v-checkbox>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <v-checkbox
                 v-model="taxon.in_estonia"
                 :label="$t('taxon.in_estonia')"
                 hide-details
+                :color="bodyActiveColor"
               ></v-checkbox>
-            </div>
+            </v-col>
 
-            <div class="col-md-3">
+            <v-col cols="12" md="3" class="px-1">
               <v-checkbox
                 v-model="taxon.in_baltoscandia"
                 :label="$t('taxon.in_baltoscandia')"
                 hide-details
+                :color="bodyActiveColor"
               ></v-checkbox>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
 
           <!-- STRATIGRAPHY_TOP and STRATIGRAPHY_BASE -->
-          <div class="row">
-            <div class="col-md-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`stratigraphy_top`"
                 >{{ $t("taxon.stratigraphy_top") }}:</label
               >
@@ -350,9 +376,9 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
+            </v-col>
 
-            <div class="col-md-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`stratigraphy_base`"
                 >{{ $t("taxon.stratigraphy_base") }}:</label
               >
@@ -377,340 +403,360 @@
                   ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- ADDITIONAL INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-additionalInfo">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.additionalInfo }"
-        @click="block.additionalInfo = !block.additionalInfo"
-      >
-        {{ $t("taxon.additionalInfo") }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
+    <v-card
+      class="mt-2"
+      id="block-additionalInfo"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.additionalInfo = !block.additionalInfo"
+        >
+          <span>{{ $t("taxon.additionalInfo") }}</span>
+          <v-icon right>fas fa-project-diagram</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.additionalInfo = !block.additionalInfo"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.additionalInfo ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.additionalInfo">
+      <transition>
+        <div v-show="block.details" class="px-1 pt-1 pb-2">
           <!-- TAXON_ID_PBDB, TAXON_ID_PLUTOF, TAXON_ID_TOL, TAXON_ID_EOL and TAXON_ID_NRM -->
-          <v-row class="mt-2">
-            <v-col class="mb-2" cols="12" md="">
+          <v-row no-gutters>
+            <v-col class="mb-2 px-1" cols="12" md="">
               <v-text-field
                 v-model="taxon.taxon_id_pbdb"
                 dense
                 hide-details
                 :label="$t('taxon.taxon_id_pbdb')"
                 outlined
+                :color="bodyActiveColor"
                 type="number"
               ></v-text-field>
             </v-col>
 
-            <v-col class="mb-2" cols="12" md="">
+            <v-col class="mb-2 px-1" cols="12" md="">
               <v-text-field
                 v-model="taxon.taxon_id_plutof"
                 dense
                 hide-details
                 :label="$t('taxon.taxon_id_plutof')"
                 outlined
+                :color="bodyActiveColor"
                 type="number"
               ></v-text-field>
             </v-col>
 
-            <v-col class="mb-2" cols="12" md="">
+            <v-col class="mb-2 px-1" cols="12" md="">
               <v-text-field
                 v-model="taxon.taxon_id_tol"
                 dense
                 hide-details
                 :label="$t('taxon.taxon_id_tol')"
                 outlined
+                :color="bodyActiveColor"
                 type="number"
               ></v-text-field>
             </v-col>
 
-            <v-col class="mb-2" cols="12" md="">
+            <v-col class="mb-2 px-1" cols="12" md="">
               <v-text-field
                 v-model="taxon.taxon_id_eol"
                 dense
                 hide-details
                 :label="$t('taxon.taxon_id_eol')"
                 outlined
+                :color="bodyActiveColor"
                 type="number"
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="">
+            <v-col class="mb-2 px-1" cols="12" md="">
               <v-text-field
                 v-model="taxon.taxon_id_nrm"
                 dense
                 hide-details
                 :label="$t('taxon.taxon_id_nrm')"
                 outlined
+                :color="bodyActiveColor"
                 type="number"
               ></v-text-field>
             </v-col>
           </v-row>
 
           <!-- OWNER, IS_AUTHORIZED, USER_AUTHORIZED, SORT -->
-          <v-row class="mt-2">
-            <v-col class="mb-2" cols="12" md="3">
+          <v-row no-gutters>
+            <v-col class="mb-2 px-1" cols="12" md="3">
               <v-text-field
                 v-model="taxon.owner"
                 :label="$t('taxon.owner')"
                 dense
                 hide-details
                 outlined
+                :color="bodyActiveColor"
               ></v-text-field>
             </v-col>
 
-            <v-col class="mb-2 checkboxes" cols="12" md="3">
+            <v-col class="mb-2 px-1 checkboxes" cols="12" md="3">
               <v-checkbox
                 v-model="taxon.is_authorized"
                 :label="$t('taxon.is_authorized')"
                 class="mt-0"
+                :color="bodyActiveColor"
                 hide-details
               ></v-checkbox>
             </v-col>
 
-            <v-col class="mb-2" cols="12" md="3">
+            <v-col class="mb-2 px-1" cols="12" md="3">
               <v-text-field
                 v-model="taxon.user_authorized"
                 :label="$t('taxon.user_authorized')"
                 dense
                 hide-details
                 outlined
+                :color="bodyActiveColor"
               ></v-text-field>
             </v-col>
 
-            <v-col cols="12" md="3">
+            <v-col class="px-1" cols="12" md="3">
               <v-text-field
                 v-model="taxon.sort"
                 :label="$t('taxon.sort')"
                 dense
                 hide-details
                 outlined
+                :color="bodyActiveColor"
                 type="number"
               ></v-text-field>
             </v-col>
           </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
-    <!-- REMARKS -->
-    <fieldset class="border-top px-2 mb-2" id="block-description">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.description }"
-        @click="block.description = !block.description"
-      >
-        {{ $t("taxon.description") }}
-        <i class="fas fa-pen-fancy"></i>
-      </legend>
+    <!-- REMARKS-->
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("taxon.description") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-show="block.description">
-          <!-- REMARKS -->
-          <div class="row">
-            <div class="col-sm-12">
+      <transition>
+        <div v-show="block.description" class="px-1 pt-1 pb-2">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`remarks`">{{ $t("taxon.remarks") }}:</label>
               <editor :data.sync="taxon.remarks" />
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- RELATED DATA TABS  -->
-    <div class="row mb-2">
-      <div class="col mt-2">
-        <ul class="nav nav-tabs nav-fill mb-3">
-          <li
-            class="nav-item"
-            v-for="tab in filteredRelatedTabs"
-            :key="tab.name"
+    <v-card
+      class="related-tabs mt-2"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-tabs
+        :background-color="bodyColor.split('-')[0] + '-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('-')[0] + '-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in relatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
+        >
+          <span>{{ $t("taxon.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].length > 0"
+            class="font-weight-bold ml-2"
           >
-            <a
-              href="#"
-              @click.prevent="setTab(tab.name)"
-              class="nav-link"
-              :class="{ active: activeTab === tab.name }"
-            >
-              <span>{{ $t("taxon.relatedTables." + tab.name) }}</span>
+            {{ relatedData[tab.name].length }}
+          </span>
+        </v-tab>
+      </v-tabs>
 
-              <v-chip
-                v-if="relatedData[tab.name].length > 0"
-                class="ml-1"
-                color="blue lighten-2"
-                dark
-                outlined
-              >
-                <v-icon left small>{{ tab.iconClass }}</v-icon>
-                <b style="color: black; font-size: larger;">
-                  <span v-if="$route.meta.isEdit">{{
-                    relatedData.count[tab.name]
-                  }}</span>
-                  <span v-else>{{ relatedData[tab.name].length }}</span>
-                </b>
-              </v-chip>
-            </a>
-          </li>
-        </ul>
+      <v-tabs-items>
+        <v-card class="pt-3 px-1" flat :color="bodyColor.split('-')[0] + '-5'">
+          <!-- Todo: Taxon subclass can only be added if taxon already exists (needs backend support because same table) -->
+          <taxon-subclass
+            v-if="$route.meta.isEdit"
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
 
-        <div class="row" v-if="$route.meta.isEdit">
-          <div class="col-sm-6 col-md-3 pl-3 pr-3  t-paginate-by-center">
-            <b-form-select
-              v-model="relatedData.searchParameters[activeTab].paginateBy"
-              class="mb-3"
-              size="sm"
-            >
-              <option :value="10">{{
-                this.$t("main.pagination", { num: "10" })
-              }}</option>
-              <option :value="25">{{
-                this.$t("main.pagination", { num: "25" })
-              }}</option>
-              <option :value="50">{{
-                this.$t("main.pagination", { num: "50" })
-              }}</option>
-              <option :value="100">{{
-                this.$t("main.pagination", { num: "100" })
-              }}</option>
-              <option :value="250">{{
-                this.$t("main.pagination", { num: "250" })
-              }}</option>
-              <option :value="500">{{
-                this.$t("main.pagination", { num: "500" })
-              }}</option>
-              <option :value="1000">{{
-                this.$t("main.pagination", { num: "1000" })
-              }}</option>
-            </b-form-select>
-          </div>
+          <taxon-synonym
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
 
-          <div class="col-sm-12 col-md-3 export-center">
-            <!-- EXPORT BUTTON? -->
-          </div>
+          <taxon-type-specimen
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
 
+          <taxon-occurrence
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <taxon-opinion
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <taxon-common-name
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <taxon-description
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <taxon-page
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <taxon-image
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <!-- PAGINATION -->
           <div
-            class="col-sm-12 col-md-6 pagination-center"
-            v-if="
-              relatedData[activeTab] !== null &&
-                relatedData[activeTab].length > 0
-            "
+            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
           >
-            <b-pagination
-              size="sm"
-              align="right"
-              :limit="5"
-              :hide-ellipsis="true"
-              :total-rows="relatedData.count[activeTab]"
-              v-model="relatedData.searchParameters[activeTab].page"
-              :per-page="relatedData.searchParameters[activeTab].paginateBy"
-            >
-            </b-pagination>
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
+                dense
+                :items="paginateByOptionsTranslated"
+                :item-color="bodyActiveColor"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.count[activeTab] /
+                      relatedData.searchParameters[activeTab].paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
           </div>
-        </div>
-
-        <!-- Todo: Taxon subclass can only be added if taxon already exists (needs backend support because same table) -->
-        <taxon-subclass
-          v-if="$route.meta.isEdit"
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-synonym
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-type-specimen
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-occurrence
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-opinion
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-common-name
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-description
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-page
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-
-        <taxon-image
-          :related-data="relatedData"
-          :autocomplete="autocomplete"
-          :active-tab="activeTab"
-          v-on:add-related-data="addRelatedData"
-          v-on:set-default="setDefault"
-          v-on:edit-row="editRow"
-          v-on:remove-row="removeRow"
-        />
-      </div>
-    </div>
+        </v-card>
+      </v-tabs-items>
+    </v-card>
 
     <!-- IS_PRIVATE -->
-    <v-row>
+    <v-row no-gutters class="mt-2">
       <v-col class="checkboxes">
         <v-checkbox
           v-model="taxon.is_private"
@@ -772,6 +818,19 @@ export default {
     TaxonDescription,
     TaxonPage,
     TaxonImage
+  },
+
+  props: {
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -848,6 +907,15 @@ export default {
         if (!this.$route.meta.isEdit) {
           if (tab.name !== "taxon_subclass") return tab;
         } else return tab;
+      });
+    },
+
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
       });
     }
   },
@@ -958,7 +1026,16 @@ export default {
           details: true,
           additionalInfo: true,
           description: true
-        }
+        },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
@@ -1608,8 +1685,8 @@ export default {
 
 <style scoped>
 label {
-  margin: 5px 0 0 0;
-  color: #999;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
 

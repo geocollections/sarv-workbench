@@ -21,7 +21,7 @@
         :title="$t('editCollection.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.collection_id }}</router-link
+        >{{ item.collection_id }}</router-link
       >
     </template>
 

@@ -69,7 +69,7 @@
           :color="appSettings.bodyActiveColor"
           dense
           :items="paginateByOptionsTranslated"
-          item-color="blue"
+          :item-color="appSettings.bodyActiveColor"
           label="Paginate by"
           hide-details
         />
@@ -137,6 +137,8 @@
         v-if="isListView && response.count > 0"
         :module="module"
         :data="response.results"
+        :body-color="appSettings.bodyColor"
+        :body-active-color="appSettings.bodyActiveColor"
       />
 
       <!-- IMAGE VIEW -->

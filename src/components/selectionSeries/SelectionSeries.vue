@@ -8,7 +8,12 @@
       ></v-progress-circular>
     </v-overlay>
 
-    <v-card class="mt-3" id="block-info">
+    <v-card
+      class="mt-3"
+      id="block-info"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
       <v-card-title>
         <span>{{ $t("selectionSeries.generalInfo") }}</span>
         <v-icon right>fas fa-project-diagram</v-icon>
@@ -20,7 +25,7 @@
         </v-btn>
       </v-card-title>
 
-      <transition enter-active-class="animated zoomIn faster">
+      <transition>
         <div v-show="block.info" class="pa-1">
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
@@ -68,6 +73,11 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
     },
     bodyActiveColor: {
       type: String,

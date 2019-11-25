@@ -182,6 +182,7 @@
             class="d-flex flex-row justify-content-start mt-1 mx-3"
             flat
             tile
+            transparent
           >
             <v-card flat tile class="align-self-center mr-2">
               <v-switch

@@ -9,6 +9,11 @@ body {
   overflow-x: unset !important; /* Todo: Had to insert it after vuetify  */
 }
 
+/* Adding white background to vuetify outlined text-fields in add and edit forms */
+.add-form .v-text-field--outlined, .edit-form .v-text-field--outlined {
+    background-color: #ffffff;
+}
+
 /* Vuetify ul override for tabs in edit and add view */
 ul.nav.nav-tabs.nav-fill {
   padding-left: 0 !important;
@@ -137,7 +142,7 @@ th.sortable > span:after {
 }
 
 .related-table th {
-  background-color: #ECEFF1;
+  /*background-color: #ECEFF1;*/
   border: unset;
   border-bottom: unset !important;
 }
@@ -262,6 +267,41 @@ th.sortable > span:after {
 ul.multiselect__content {
   padding-left: 0;
 }
+
+
+.card-title--clickable:hover {
+    cursor: pointer;
+    opacity: 0.8;
+}
+
+/* Multiselect size to small like bootstrap's START */
+.multiselect {
+    min-height: 31px;
+    /*height: 31px;*/
+}
+
+.multiselect__tags {
+    min-height: 31px;
+    /*height: 31px;*/
+    padding: 4px 40px 4px 8px;
+}
+
+.multiselect__select {
+    min-height: 29px;
+    height: 29px;
+}
+
+.multiselect__single {
+    padding: 0;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+}
+
+.multiselect__placeholder {
+    padding: 0;
+    margin-bottom: 0;
+}
+/* Multiselect size to small like bootstrap's END */
 
 /***************************************
  ***  MULTISELECT CUSTOM STYLES END  ***

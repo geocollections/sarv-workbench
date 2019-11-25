@@ -52,6 +52,7 @@
             :href="getDoiUrl(entity.doi)"
             :title="getDoiUrl(entity.doi)"
             target="DoiWindow"
+            :class="`${bodyActiveColor}--text`"
             >https://doi.org/{{ entity.doi }}
           </a>
         </span>
@@ -91,6 +92,11 @@ export default {
   props: {
     data: {
       type: Array
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
   },
   name: "ReferenceListView",
