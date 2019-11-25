@@ -102,7 +102,17 @@ export default {
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true },
-      searchImages: false
+      searchImages: false,
+      defaultSelectionSeriesParams: {
+        id: null,
+        name: null,
+        remarks: null,
+        user_added: null,
+        page: 1,
+        paginateBy: 50,
+        sortBy: ["id"],
+        sortDesc: [true]
+      }
     };
   },
 
@@ -120,12 +130,14 @@ export default {
       "selectionSeriesSearchHistory",
       "fallbackValue"
     );
+
     let params =
-      typeof searchHistory !== "undefined" &&
-      searchHistory !== null &&
-      searchHistory !== "fallbackValue"
+      searchHistory &&
+      searchHistory !== "fallbackValue" &&
+      Object.entries(searchHistory).length > 0 &&
+      searchHistory.constructor === Object
         ? searchHistory
-        : this.searchParameters;
+        : this.defaultSelectionSeriesParams;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
       searchHistory: "selectionSeriesSearchHistory",
       search: params,

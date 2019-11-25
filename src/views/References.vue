@@ -103,7 +103,18 @@ export default {
         { id: "userAdded", title: "reference.userAdded", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
-      block: { search: true }
+      block: { search: true },
+      defaultLibrarySearchParams: {
+        author_txt: null,
+        year: null,
+        title: null,
+        reference: null,
+        id: null,
+        page: 1,
+        paginateBy: 50,
+        sortBy: ["library"],
+        sortDesc: [true]
+      }
     };
   },
 
@@ -126,11 +137,12 @@ export default {
       "fallbackValue"
     );
     let params =
-      typeof searchHistory !== "undefined" &&
-      searchHistory !== null &&
-      searchHistory !== "fallbackValue"
+      searchHistory &&
+      searchHistory !== "fallbackValue" &&
+      Object.entries(searchHistory).length > 0 &&
+      searchHistory.constructor === Object
         ? searchHistory
-        : this.searchParameters;
+        : this.defaultLibrarySearchParams;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
       searchHistory: "librarySearchHistory",
       search: params,

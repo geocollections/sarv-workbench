@@ -1211,7 +1211,16 @@ export default {
           localityInfo: true,
           details: true,
           description: true
-        }
+        },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
