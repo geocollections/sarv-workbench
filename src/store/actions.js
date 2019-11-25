@@ -73,9 +73,10 @@ export default {
   },
 
   FETCH_DOIS: ({ commit, state }) => {
-    return fetchDois(state.activeSearchParams.search, state.databaseId).then(
-      resp => commit("SET_SIDEBAR_LIST", { resp })
-    );
+    return fetchDois(
+      state.activeSearchParams.search,
+      state.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },
 
   FETCH_SPECIMENS: ({ commit, state }) => {

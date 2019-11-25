@@ -7,8 +7,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2.2-dependencies-{{ checksum "package.json" }}
-            - v2.2-dependencies-
+            - v2.3-dependencies-{{ checksum "package.json" }}
+            - v2.3-dependencies-
       - run:
           name: Install packages
           command: npm install
@@ -16,20 +16,20 @@ jobs:
           paths:
             - node_modules
             - package.json
-          key: v2.2-dependencies-{{ checksum "package.json" }}
+          key: v2.3-dependencies-{{ checksum "package.json" }}
 
-#  unit_test:
-#    docker:
-#      - image: circleci/node:10.16.0
-#    steps:
-#      - checkout
-#      - restore_cache:
-#          keys:
-#            - v2.2-dependencies-{{ checksum "package.json" }}
-#            - v2.2-dependencies-
-#      - run:
-#          name: Unit test application
-#          command: npm run test:unit
+  unit_test:
+    docker:
+      - image: circleci/node:10.16.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2.3-dependencies-{{ checksum "package.json" }}
+            - v2.3-dependencies-
+      - run:
+          name: Unit test application
+          command: npm run test:unit
 
   build_and_deploy:
     docker:
@@ -38,29 +38,29 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2.2-dependencies-{{ checksum "package.json" }}
-            - v2.2-dependencies-
+            - v2.3-dependencies-{{ checksum "package.json" }}
+            - v2.3-dependencies-
       - run:
           name: Build production code
           command: npm run build
       - run:
           name: Directory update
-          command: ${DIRECTORY_UPDATE}
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd ${PATH_DEV}/script && . directory_update.sh'
       - run:
           name: Copy built files to development
-          command: ${COPY_FILES_DEV_1}
+          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:${PATH_DEV}
 
 workflows:
   version: 2
   sarv-edit:
     jobs:
       - install_and_cache
-#      - unit_test:
-#          requires:
-#            - install_and_cache
+      - unit_test:
+          requires:
+            - install_and_cache
       - build_and_deploy:
           requires:
-#            - unit_test
+            - unit_test
             - install_and_cache
           filters:
             branches:
