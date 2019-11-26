@@ -47,6 +47,10 @@ export default {
       type: String,
       required: false,
       default: "deep-orange"
+    },
+    clipboardClass: {
+      type: String,
+      required: false
     }
   },
   name: "ExportButtons",
@@ -99,7 +103,12 @@ export default {
     },
 
     copyToClipboard() {
-      const el = document.getElementsByClassName(`${this.$route.meta.object}-table`);
+      let el;
+      if (this.clipboardClass) {
+        el = document.getElementsByClassName(this.clipboardClass);
+      } else {
+        el = document.getElementsByClassName(`${this.$route.meta.object}-table`);
+      }
 
       let body = document.body, range, sel;
       if (document.createRange && window.getSelection) {

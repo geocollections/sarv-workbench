@@ -512,6 +512,7 @@
               <export-buttons
                 filename="sample"
                 :table-data="relatedData.samples.results"
+                clipboard-class="sample-table"
               ></export-buttons>
             </v-card>
           </v-card>
