@@ -210,48 +210,54 @@ const formManipulation = {
             savedObjectId => {
               console.log("Saved object ID: " + savedObjectId);
 
-              if (this.$route.meta.isEdit)
-                this.$emit("data-loaded", this[object]);
+              if (saveAsNew) {
+                this.$router.push({
+                  path: "/" + object + "/" + savedObjectId
+                });
+              } else {
+                if (this.$route.meta.isEdit)
+                  this.$emit("data-loaded", this[object]);
 
-              if (!returnPromise) {
-                if (addAnother) {
-                  // Save
-                  if (
-                    this.isNotEmpty(savedObjectId) &&
-                    !this.$route.meta.isEdit
-                  ) {
-                    // savedObjectId exists and is add view
-                    if (object === "imageset") {
-                      this.$router.push({
-                        name: "photo_archive add",
-                        params: {
-                          imageset: {
-                            id: savedObjectId,
-                            imageset_number: this[object].imageset_number
+                if (!returnPromise) {
+                  if (addAnother) {
+                    // Save
+                    if (
+                      this.isNotEmpty(savedObjectId) &&
+                      !this.$route.meta.isEdit
+                    ) {
+                      // savedObjectId exists and is add view
+                      if (object === "imageset") {
+                        this.$router.push({
+                          name: "photo_archive add",
+                          params: {
+                            imageset: {
+                              id: savedObjectId,
+                              imageset_number: this[object].imageset_number
+                            }
                           }
-                        }
-                      });
-                    } else if (object === "journal") {
-                      this.$router.push({
-                        name: "reference add",
-                        params: {
-                          journal: {
-                            id: savedObjectId,
-                            journal_name: this[object].journal_name
+                        });
+                      } else if (object === "journal") {
+                        this.$router.push({
+                          name: "reference add",
+                          params: {
+                            journal: {
+                              id: savedObjectId,
+                              journal_name: this[object].journal_name
+                            }
                           }
-                        }
-                      });
-                    } else
-                      this.$router.push({
-                        path: "/" + object + "/" + savedObjectId
-                      });
+                        });
+                      } else
+                        this.$router.push({
+                          path: "/" + object + "/" + savedObjectId
+                        });
+                    }
+                  } else {
+                    // Save and leave
+                    if (this.isNotEmpty(savedObjectId))
+                      this.$router.push({ path: "/" + object });
                   }
-                } else {
-                  // Save and leave
-                  if (this.isNotEmpty(savedObjectId))
-                    this.$router.push({ path: "/" + object });
-                }
-              } else resolve(true);
+                } else resolve(true);
+              }
             },
             () => resolve(false)
           );

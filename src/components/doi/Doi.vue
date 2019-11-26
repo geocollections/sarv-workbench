@@ -113,16 +113,13 @@
                   class="align-self-end pl-2"
                   v-if="!this.$route.meta.isEdit && isNotEmpty(doi.creators)"
                 >
-                  <vs-button
-                    radius
+                  <v-btn
+                    icon
+                    :color="bodyActiveColor"
                     @click="addCreatorsToRelatedData"
-                    :title="$t('doi.addCreators')"
-                    color="primary"
-                    type="line"
-                    icon="fa-user-plus"
-                    icon-pack="fas"
-                  >
-                  </vs-button>
+                    :title="$t('doi.addCreators')">
+                    <v-icon small>fas fa-user-plus</v-icon>
+                  </v-btn>
                 </div>
               </div>
             </v-col>
