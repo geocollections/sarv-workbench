@@ -990,6 +990,7 @@
     "coord_det_method": "Coord. det. method",
     "date_start":"Date start",
     "date_end":"Date end",
+    "date_free":"Txt",
     "description":"Description",
     "remarks":"Remarks",
     "generalInfo": "General info",
@@ -998,7 +999,8 @@
     "addNew": "Add new Site",
     "date": "Date",
     "mapEnabled": "Map enabled",
-    "mapDisabled": "Map disabled"
+    "mapDisabled": "Map disabled",
+    "copyToLocality": "Copy to locality"
   },
   "sample_series": {
     "name": "Name"

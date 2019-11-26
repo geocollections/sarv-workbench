@@ -9,6 +9,21 @@
       "
     ></spinner>
 
+    <!-- CONVERT TO LOCALITY -->
+    <v-row>
+      <v-col cols="12" class="text-right">
+        <v-btn
+          color="blue"
+          dark
+          small
+          @click="$parent.$emit('button-clicked', 'COPY_TO_LOCALITY', 'site')"
+        >
+          <v-icon left small>fas fa-map-marked-alt</v-icon>
+          {{ $t("site.copyToLocality") }}
+        </v-btn>
+      </v-col>
+    </v-row>
+
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"

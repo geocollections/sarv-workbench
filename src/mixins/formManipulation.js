@@ -179,7 +179,7 @@ const formManipulation = {
       } else return false;
     },
 
-    add(addAnother, object, returnPromise = false, saveAsNew = false) {
+    add(addAnother, object, returnPromise = false, saveAsNew = false, saveAsDifferentObject) {
       return new Promise(resolve => {
         if (
           this.validate(object) &&
@@ -189,6 +189,12 @@ const formManipulation = {
           let objectToUpload = cloneDeep(this[object]);
 
           if (saveAsNew) delete objectToUpload.id;
+
+          if (saveAsDifferentObject) {
+            delete objectToUpload.id;
+            object = saveAsDifferentObject;
+            this.updateNewObjectsFields(objectToUpload, saveAsDifferentObject);
+          }
 
           let url = objectToUpload.id
             ? `change/${object}/${objectToUpload.id}`
@@ -208,14 +214,17 @@ const formManipulation = {
 
           this.saveData(object, formData, url).then(
             savedObjectId => {
-              console.log("Saved object ID: " + savedObjectId);
+              console.log(savedObjectId);
+              console.log("^^^^^^ Saved object ID ^^^^^^ ");
 
               if (saveAsNew) {
-                this.$router.push({
-                  path: "/" + object + "/" + savedObjectId
-                });
+                if (this.isNotEmpty(savedObjectId)) {
+                  this.$router.push({
+                    path: "/" + object + "/" + savedObjectId
+                  });
+                }
               } else {
-                if (this.$route.meta.isEdit)
+                if (this.$route.meta.isEdit && !saveAsDifferentObject)
                   this.$emit("data-loaded", this[object]);
 
                 if (!returnPromise) {
@@ -256,7 +265,7 @@ const formManipulation = {
                     if (this.isNotEmpty(savedObjectId))
                       this.$router.push({ path: "/" + object });
                   }
-                } else resolve(true);
+                } else resolve(savedObjectId);
               }
             },
             () => resolve(false)
@@ -412,6 +421,21 @@ const formManipulation = {
       } catch (e) {
         console.log("Attachment cannot be added");
         console.log(e);
+      }
+    },
+
+    updateNewObjectsFields(currentData, object) {
+      if (object === "locality") {
+        let locality = cloneDeep(currentData);
+        delete currentData.date_end;
+        delete currentData.date_start;
+        delete currentData.related_data;
+        delete currentData.elevation_accuracy;
+        delete currentData.location_accuracy;
+        delete currentData.name;
+        delete currentData.name_en;
+        delete currentData.project;
+        currentData.locality.id = locality.name;
       }
     },
 
@@ -919,6 +943,18 @@ const formManipulation = {
       }
 
       if (choice === "CANCEL") this.$router.push({ path: "/" + object });
+
+      if (choice === "COPY_TO_LOCALITY") {
+        this.add(true, object, true, false, 'locality').then(localityId => {
+          console.log(localityId);
+          if (this.isNotEmpty(localityId)) {
+            this[object].locality.id = localityId;
+            this.add(true, object, true).then(() => {
+              this.$router.push({ path: "/locality/" + localityId });
+            });
+          }
+        });
+      }
     },
 
     /**

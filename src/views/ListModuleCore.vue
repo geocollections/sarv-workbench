@@ -121,7 +121,7 @@
           <span>{{ $t("main.records") }}</span>
         </span>
         <div class="flex-grow-1"></div>
-        <!-- Todo: Not working properly with server-items-length -->
+        <!-- Todo: Not working properly with server-items-length #330 -->
 <!--        <v-text-field-->
 <!--          v-if="module === 'reference' && isTableView"-->
 <!--          v-model="filterTable"-->
