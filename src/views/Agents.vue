@@ -1,6 +1,6 @@
 <template>
-  <div class="projects">
-    <table-view-title title="header.projects" buttonPath="/project/add" />
+  <div class="agents">
+    <table-view-title title="header.agents" buttonPath="/agent/add" />
 
     <table-view-search
       :show-search="block.search"
@@ -12,13 +12,12 @@
 
     <!-- SEARCH FIELDS END -->
     <list-module-core
-      module="project"
-      title="titles.editProject"
-      :columns="columns"
+      module="agent"
+      title="titles.editAgent"
       :searchParameters="searchParameters"
-      :api-call="fetchProjects"
-      search-history="projectSearchHistory"
-      view-type="projectViewType"
+      :api-call="fetchAgents"
+      search-history="agentSearchHistory"
+      view-type="agentViewType"
       v-on:search-params-changed="searchParametersChanged"
     ></list-module-core>
   </div>
@@ -26,8 +25,7 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchProjects } from "@/assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { fetchAgents } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
 
@@ -37,52 +35,26 @@ export default {
     TableViewTitle,
     TableViewSearch
   },
-  name: "Projects",
+  name: "Agents",
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "project.id", type: "number" },
-        { id: "name", title: "project.name", type: "text" },
-        { id: "project_type", title: "project.project_type", type: "text" },
-        {
-          id: "date_start",
-          title: "project.date_start",
-          type: "text",
-          isDate: true
-        },
-        {
-          id: "date_end",
-          title: "project.date_end",
-          type: "text",
-          isDate: true
-        },
-        {
-          id: "date_free",
-          title: "project.date_free",
-          type: "text",
-          isDate: true
-        },
-        { id: "owner", title: "project.owner", type: "text" }
-      ],
       filters: [
-        { id: "owner", title: "project.name", type: "text" },
-        { id: "id", title: "project.id", type: "number" }
+        { id: "id", title: "agent.id", type: "number" },
+        { id: "name", title: "agent.name", type: "text" },
+        { id: "forename", title: "agent.forename", type: "text" },
+        { id: "surename", title: "agent.surename", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
-  computed: {
-    ...mapState(["currentUser"])
-  },
-
   watch: {
     searchParameters: {
       handler: function(newVal) {
         this.$store.dispatch("updateSearchParameters", {
-          module: "project",
+          module: "agent",
           filters: this.filters,
           params: newVal
         });
@@ -93,9 +65,9 @@ export default {
   },
 
   methods: {
-    fetchProjects() {
+    fetchAgents() {
       return new Promise(resolve => {
-        resolve(fetchProjects(this.searchParameters, this.currentUser.id));
+        resolve(fetchAgents(this.searchParameters));
       });
     },
     searchParametersChanged(newParams) {
@@ -103,12 +75,14 @@ export default {
     },
     setDefaultSearchParameters() {
       return {
-        owner: null,
         id: null,
+        agent: null,
+        forename: null,
+        surename: null,
         page: 1,
         paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
+        sortBy: ["agent"],
+        sortDesc: [false]
       };
     },
     resetSearchPreferences() {
@@ -116,8 +90,8 @@ export default {
       this.resetSearchParameters();
     },
     resetStorage() {
-      this.$localStorage.remove("projectSearchHistory");
-      this.$localStorage.remove("projectViewType");
+      this.$localStorage.remove("agentSearchHistory");
+      this.$localStorage.remove("agentViewType");
     },
     resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
@@ -126,6 +100,4 @@ export default {
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

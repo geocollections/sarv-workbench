@@ -43,6 +43,8 @@
     "collections": "Kollektsioonid",
     "taxa": "Taksonid",
     "selectionSeries": "Valikud",
+    "agents": "Isikud/asutused",
+    "drillcores": "Puursüdamikud",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -70,6 +72,10 @@
     "editTaxon": "Taksonid",
     "addSelectionSeries": "Lisa valik",
     "editSelectionSeries": "Valikud",
+    "addAgent": "Lisa isik/asutus",
+    "editAgent": "Isikud/asutused",
+    "addDrillcore": "Lisa puursüdamik",
+    "editDrillcore": "Puursüdamikud",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -94,7 +100,9 @@
     "keyword": "Lisa termin",
     "collection": "Lisa kollektsioon",
     "taxon": "Lisa takson",
-    "selectionSerie": "Lisa valik"
+    "selectionSerie": "Lisa valik",
+    "agent": "Lisa isik/asutus",
+    "drillcore": "Lisa puursüdamik"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -300,6 +308,10 @@
     "newTaxon": "Lisa uus takson",
     "selectionSeries": "Valik",
     "newSelectionSeries": "Lisa uus valik",
+    "agent": "Isik/asutus",
+    "newAgent": "Lisa uus isik/asutus",
+    "drillcore": "Puursüdamik",
+    "newDrillcore": "Lisa uus puursüdamik",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -473,6 +485,10 @@
   "editSelectionSeries": {
     "heading": "Valik",
     "editMessage": "Muuda valikut"
+  },
+  "editAgent": {
+    "heading": "Isik/asutus",
+    "editMessage": "Muuda isikut/asutust"
   },
   "attachments": {
     "header": "Minu failid",
@@ -1264,8 +1280,21 @@
     },
     "addNew": "Lisage uus Lokaliteet"
   },
+  "agent": {
+    "id": "ID",
+    "name": "Nimi",
+    "forename": "Eesnimi",
+    "surename": "Perenimi",
+    "institution": "Asutus",
+    "institution__institution": "Kuulub",
+    "remarks": "Märkused",
+    "type": "Tüüp"
+  },
   "drillcore": {
-    "drillcore": "Puursüdamik"
+    "drillcore": "Puursüdamik",
+    "boxes": "Kaste kokku",
+    "locality": "Lokaliteet",
+    "storage": "Hoiukoht"
   },
   "drillcore_box": {
     "drillcore": "Puursüdamik - Nr"

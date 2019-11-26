@@ -312,6 +312,20 @@ new Vue({
       type: String,
       default: "table"
     },
+    agentSearchHistory: {
+      type: Object
+    },
+    agentSeriesViewType: {
+      type: String,
+      default: "table"
+    },
+    drillcoreSeriesSearchHistory: {
+      type: Object
+    },
+    drillcoreSeriesViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

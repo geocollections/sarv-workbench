@@ -304,6 +304,38 @@ export default {
               icon: "far fa-plus-square"
             }
           ]
+        },
+        {
+          name: "agent",
+          title: "agents",
+          links: [
+            {
+              title: "agents",
+              path: "/agent",
+              icon: "fas fa-users"
+            },
+            {
+              title: "agent",
+              path: "/agent/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
+          name: "drillcore",
+          title: "drillcores",
+          links: [
+            {
+              title: "drillcores",
+              path: "/drillcore",
+              icon: "fas fa-boxes"
+            },
+            {
+              title: "drillcore",
+              path: "/drillcore/add",
+              icon: "far fa-plus-square"
+            }
+          ]
         }
       ]
     };

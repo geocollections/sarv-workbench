@@ -1908,6 +1908,93 @@ export function fetchAddItemToSelection(data) {
  ***  SELECTION END  ***
  ***********************/
 
+/*******************
+ *** AGENT START ***
+ *******************/
+
+export function fetchAgents(data) {
+  const fields =
+    "id,agent,forename,surename,institution_name,institution_name_en,institution__agent,institution__institution_name,institution__institution_name_en,remarks,type,type__value,type__value_en";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`;
+  }
+
+  if (data.agent && data.agent.trim().length > 0) {
+    searchFields += `&agent__icontains=${data.agent}`;
+  }
+
+  if (data.forename && data.forename.trim().length > 0) {
+    searchFields += `&forename__icontains=${data.forename}`;
+  }
+
+  if (data.surename && data.surename.trim().length > 0) {
+    searchFields += `&surename__icontains=${data.surename}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/*******************
+ ***  AGENT END  ***
+ *******************/
+
+/***********************
+ *** DRILLCORE START ***
+ ***********************/
+
+export function fetchDrillcores(data) {
+  const fields =
+    "id,drillcore,drillcore_en,depth,boxes,box_numbers,storage,remarks";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.drillcore && data.drillcore.trim().length > 0) {
+    searchFields += `id__icontains=${data.drillcore}`;
+  }
+
+  if (data.boxes && data.boxes.trim().length > 0) {
+    searchFields += `&boxes__gt=${data.boxes}`;
+  }
+
+  if (data.locality && data.locality.trim().length > 0) {
+    searchFields += `&locality__icontains=${data.locality}`;
+  }
+
+  if (data.storage && data.storage.trim().length > 0) {
+    searchFields += `&storage__icontains=${data.storage}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `drillcore/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `drillcore/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+
+/***********************
+ ***  DRILLCORE END  ***
+ ***********************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/

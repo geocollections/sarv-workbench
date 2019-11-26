@@ -43,6 +43,8 @@
     "collections": "Collections",
     "taxa": "Taxa",
     "selectionSeries": "Selection series",
+    "agents": "Agents",
+    "drillcores": "Drill cores",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -70,6 +72,10 @@
     "editTaxon": "Taxa",
     "addSelectionSeries": "Add selection series",
     "editSelectionSeries": "Selection series",
+    "addAgent": "Add agent",
+    "editAgent": "Agents",
+    "addDrillcore": "Add drill core",
+    "editDrillcore": "Drill cores",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -94,7 +100,9 @@
     "keyword": "Add term",
     "collection": "Add collection",
     "taxon": "Add taxon",
-    "selectionSerie": "Add selection series"
+    "selectionSerie": "Add selection series",
+    "agent": "Add agent",
+    "drillcore": "Add drill core"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -300,6 +308,10 @@
     "newTaxon": "Add new taxon",
     "selectionSeries": "Selection series",
     "newSelectionSeries": "Add new selection series",
+    "agent": "Agent",
+    "newAgent": "Add new agent",
+    "drillcore": "Drill core",
+    "newDrillcore": "Add new drill core",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -474,6 +486,10 @@
     "heading": "Selection series",
     "editMessage": "Edit selection series"
   },
+  "editAgent": {
+    "heading": "Agent",
+    "editMessage": "Edit agent"
+  },
   "attachments": {
     "header": "My attachments",
     "file": "File",
@@ -611,8 +627,8 @@
       "dataset": "Dataset",
       "doi": "Doi",
       "locality": "Locality",
-      "drillcore": "Drillcore",
-      "drillcore_box": "Drillcore box",
+      "drillcore": "Drill core",
+      "drillcore_box": "Drill core box",
       "preparation": "Preparation",
       "reference": "Reference",
       "storage": "Storage",
@@ -693,8 +709,8 @@
       "dataset": "Dataset",
       "doi": "Doi",
       "locality": "Locality",
-      "drillcore": "Drillcore",
-      "drillcore_box": "Drillcore box",
+      "drillcore": "Drill core",
+      "drillcore_box": "Drill core box",
       "preparation": "Preparation",
       "reference": "Reference",
       "storage": "Storage",
@@ -1265,11 +1281,24 @@
     },
     "addNew": "Add new Locality"
   },
+  "agent": {
+    "id": "ID",
+    "name": "Name",
+    "forename": "Forename",
+    "surename": "Surname",
+    "institution": "Institution",
+    "institution__institution": "Institution",
+    "remarks": "Remarks",
+    "type": "Type"
+  },
   "drillcore": {
-    "drillcore": "Drillcore"
+    "drillcore": "Drill core",
+    "boxes": "Boxes",
+    "locality": "Locality",
+    "storage": "Storage"
   },
   "drillcore_box": {
-    "drillcore": "Drillcore - No"
+    "drillcore": "Drill core - No"
   },
   "preparation": {
     "number": "Number",

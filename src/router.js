@@ -1283,6 +1283,150 @@ const router = new Router({
               }
             }
           ]
+        },
+        {
+          path: "/agent",
+          component: () => import("./views/Agents.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/agent/AgentTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "agent",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/agent/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/agent/Agent.vue"),
+              meta: {
+                isEdit: true,
+                table: "agent",
+                title: "titles.editAgent",
+                heading: "editAgent.heading",
+                isBottomOptionShown: true,
+                isNavigationShown: true,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: "agent"
+              }
+            }
+          ]
+        },
+        {
+          path: "/agent/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Agent add",
+              component: () =>
+                import("./components/agent/Agent.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addAgent",
+                addNew: "add.newAgent",
+                subForms: [
+                  { path: "/agent/add", name: "add.agent" }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: "agent"
+              }
+            }
+          ]
+        },
+        {
+          path: "/drillcore",
+          component: () => import("./views/Drillcores.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/drillcore/DrillcoreTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "drillcore",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/drillcore/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/drillcore/Drillcore.vue"),
+              meta: {
+                isEdit: true,
+                table: "drillcore",
+                title: "titles.editDrillcore",
+                heading: "editDrillcore.heading",
+                isBottomOptionShown: true,
+                isNavigationShown: true,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: "drillcore"
+              }
+            }
+          ]
+        },
+        {
+          path: "/drillcore/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Drillcore add",
+              component: () =>
+                import("./components/drillcore/Drillcore.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addDrillcore",
+                addNew: "add.newDrillcore",
+                subForms: [
+                  { path: "/drillcore/add", name: "add.drillcore" }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: "drillcore"
+              }
+            }
+          ]
         }
       ]
     }
