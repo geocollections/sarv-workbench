@@ -1427,6 +1427,13 @@ const router = new Router({
               }
             }
           ]
+        },
+        {
+          path: "/test-dev",
+          component: () => import("./components/partial/fileUpload/FileUpload.vue"),
+          meta: {
+            requiresAuth: true
+          }
         }
       ]
     }

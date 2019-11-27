@@ -343,7 +343,9 @@
       "newJournal": "Lisa uus ajakiri",
       "photoInput": "Tee pilt",
       "videoInput": "Filmi video",
-      "audioInput": "Salvesta helifail"
+      "audioInput": "Salvesta helifail",
+      "newFile": "Lisa uus",
+      "existingFile": "Lisa olemasolev"
     },
     "errors": {
       "files": "Lae üles vähemalt 1 fail (max 10). Nimi olgu lühem kui 100 märki ja ilma täpitähtedeta.",
@@ -956,6 +958,7 @@
     "selectionId": "Valiku ID",
     "selection": "Valik",
     "attachment": "Manus",
+    "remarks": "Lisainfo",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",

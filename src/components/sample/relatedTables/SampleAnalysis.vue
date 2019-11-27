@@ -10,6 +10,7 @@
         <table class="table table-hover table-bordered">
           <thead class="thead-light">
             <tr>
+              <th>ID</th>
               <th>{{ $t("analysis.method") }}</th>
               <th>{{ $t("analysis.method_specification") }}</th>
               <th>{{ $t("analysis.mass") }}</th>
@@ -18,7 +19,6 @@
               <th>{{ $t("analysis.date_free") }}</th>
               <th>{{ $t("analysis.agent") }}</th>
               <th>{{ $t("analysis.remarks") }}</th>
-              <th>{{ $t("analysis.location") }}</th>
               <th class="text-center">
                 <i class="fas fa-lock" :title="$t('analysis.is_locked')"></i>
               </th>
@@ -36,6 +36,12 @@
               }"
             >
               <!-- VIEW MODE -->
+              <td v-if="!entity.editMode">
+                <router-link :to="{ path: '/analysis/' + entity.id }">
+                  {{ entity.id }}
+                </router-link>
+              </td>
+
               <td
                 v-if="!entity.editMode"
                 v-translate="{
@@ -58,13 +64,17 @@
 
               <td v-if="!entity.editMode">{{ entity.remarks }}</td>
 
-              <td v-if="!entity.editMode">{{ entity.location }}</td>
-
               <td v-if="!entity.editMode" class="text-center">
                 {{ entity.is_private ? "+" : "-" }}
               </td>
 
               <!-- EDIT MODE -->
+              <td v-if="entity.editMode">
+                <router-link :to="{ path: '/analysis/' + entity.id }">
+                  {{ entity.id }}
+                </router-link>
+              </td>
+
               <td v-if="entity.editMode">
                 <vue-multiselect
                   v-model="entity.new.analysis_method"
@@ -145,10 +155,6 @@
                 <b-form-input v-model="entity.new.remarks" type="text" />
               </td>
 
-              <td v-if="entity.editMode">
-                <b-form-input v-model="entity.new.location" type="text" />
-              </td>
-
               <td v-if="entity.editMode" class="text-center">
                 <b-form-checkbox
                   v-model="entity.new.is_private"
@@ -183,6 +189,8 @@
             </tr>
 
             <tr class="related-input-data">
+              <td></td>
+
               <td>
                 <vue-multiselect
                   v-model="relatedData.insert.analysis.analysis_method"
@@ -270,13 +278,6 @@
               <td>
                 <b-form-input
                   v-model="relatedData.insert.analysis.remarks"
-                  type="text"
-                />
-              </td>
-
-              <td>
-                <b-form-input
-                  v-model="relatedData.insert.analysis.location"
                   type="text"
                 />
               </td>
