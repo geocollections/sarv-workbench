@@ -1,4 +1,6 @@
-<template> </template>
+<template>
+  <div class="agent"></div>
+</template>
 
 <script>
 export default {

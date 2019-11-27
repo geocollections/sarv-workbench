@@ -1,4 +1,6 @@
-<template> </template>
+<template>
+  <div class="drillcore"></div>
+</template>
 
 <script>
 export default {
