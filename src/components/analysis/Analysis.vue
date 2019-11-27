@@ -160,12 +160,37 @@
               <b-form-input size="sm" v-model="analysis.material" type="text" />
             </v-col>
           </v-row>
+        </div>
+      </transition>
+    </v-card>
 
+    <!-- LAB INFO -->
+    <v-card
+      class="mt-2"
+      id="block-labInfo"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.labInfo = !block.labInfo">
+          <span>{{ $t("analysis.labInfo") }}</span>
+          <v-icon right>fas fa-vials</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.labInfo = !block.labInfo" :color="bodyActiveColor">
+          <v-icon>{{
+            block.labInfo ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.labInfo" class="px-1 pt-1 pb-2">
           <!-- DATE_START and DATE_END and DATE_FREE-->
           <v-row no-gutters>
             <v-col cols="12" md="4" class="px-1">
               <label :for="`date_start`" class="p-0"
-                >{{ $t("analysis.date") }}:</label
+              >{{ $t("analysis.date") }}:</label
               >
               <datepicker
                 id="date_start"
@@ -180,7 +205,7 @@
 
             <v-col cols="12" md="4" class="px-1">
               <label :for="`date_end`" class="p-0"
-                >{{ $t("analysis.date_end") }}:</label
+              >{{ $t("analysis.date_end") }}:</label
               >
               <datepicker
                 id="date_end"
@@ -195,7 +220,7 @@
 
             <v-col cols="12" md="4" class="px-1">
               <label :for="`date_free`" class="p-0"
-                >{{ $t("analysis.date_free") }}:</label
+              >{{ $t("analysis.date_free") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -211,7 +236,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`lab`"
-                >{{ $t("analysis.labor") }}:</label
+              >{{ $t("analysis.labor") }}:</label
               >
               <vue-multiselect
                 v-model="analysis.lab"
@@ -226,14 +251,14 @@
                   <strong>{{ option[labLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`labor_txt`"
-                >{{ $t("analysis.labor_txt") }}:</label
+              >{{ $t("analysis.labor_txt") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -248,7 +273,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`labor_sample`"
-                >{{ $t("analysis.labor_sample") }}:</label
+              >{{ $t("analysis.labor_sample") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -259,7 +284,7 @@
 
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`labor_number`"
-                >{{ $t("analysis.labor_number") }}:</label
+              >{{ $t("analysis.labor_number") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -273,7 +298,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`instrument`"
-                >{{ $t("analysis.tool") }}:</label
+              >{{ $t("analysis.tool") }}:</label
               >
               <vue-multiselect
                 v-model="analysis.instrument"
@@ -288,14 +313,14 @@
                   <strong>{{ option[instrumentLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`instrument_txt`"
-                >{{ $t("analysis.tool_txt") }}:</label
+              >{{ $t("analysis.tool_txt") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -310,7 +335,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`analyzer`"
-                >{{ $t("analysis.analyzer") }}:</label
+              >{{ $t("analysis.analyzer") }}:</label
               >
               <vue-multiselect
                 id="agent"
@@ -330,13 +355,13 @@
                   <strong>{{ option.agent }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`agent_txt`"
-                >{{ $t("analysis.analyzer_txt") }}:</label
+              >{{ $t("analysis.analyzer_txt") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -346,12 +371,38 @@
               ></b-form-input>
             </v-col>
           </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- OTHER INFO -->
+    <v-card
+      class="mt-2"
+      id="block-otherInfo"
+      :color="bodyColor.split('-')[0] + '-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.otherInfo = !block.otherInfo">
+          <span>{{ $t("analysis.otherInfo") }}</span>
+          <v-icon right>fas fa-sitemap</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.otherInfo = !block.otherInfo" :color="bodyActiveColor">
+          <v-icon>{{
+            block.otherInfo ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.otherInfo" class="px-1 pt-1 pb-2">
 
           <!-- DATASET and ANALYZER_TXT -->
           <v-row no-gutters>
             <v-col cols="12" md="4" class="px-1">
               <label class="p-0" :for="`dataset`"
-                >{{ $t("analysis.first_dataset") }}:</label
+              >{{ $t("analysis.first_dataset") }}:</label
               >
               <vue-multiselect
                 v-model="analysis.dataset"
@@ -371,13 +422,13 @@
                   <strong>{{ option[nameLabel] }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
             <v-col cols="12" md="4" class="px-1">
               <label class="p-0" :for="`reference`"
-                >{{ $t("analysis.publication") }}:</label
+              >{{ $t("analysis.publication") }}:</label
               >
               <vue-multiselect
                 v-model="analysis.reference"
@@ -397,13 +448,13 @@
                   <strong>{{ option.reference }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
             <v-col cols="12" md="4" class="px-1">
               <label class="p-0" :for="`owner`"
-                >{{ $t("analysis.owner") }}:</label
+              >{{ $t("analysis.owner") }}:</label
               >
               <vue-multiselect
                 id="owner"
@@ -423,7 +474,7 @@
                   <strong>{{ option.agent }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -433,7 +484,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`labor_sample`"
-                >{{ $t("analysis.storage") }}:</label
+              >{{ $t("analysis.storage") }}:</label
               >
               <vue-multiselect
                 v-model="analysis.storage"
@@ -453,14 +504,14 @@
                   <strong>{{ option.location }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
 
             <v-col cols="12" md="6" class="px-1">
               <label class="p-0" :for="`labor_number`"
-                >{{ $t("analysis.location") }}:</label
+              >{{ $t("analysis.location") }}:</label
               >
               <b-form-input size="sm" v-model="analysis.location" type="text" />
             </v-col>
@@ -822,7 +873,7 @@ export default {
         analysis: {},
         searchParameters: this.setDefaultSearchParameters(),
         componentKey: 0,
-        block: { info: true, description: true },
+        block: { info: true, labInfo: true, otherInfo: false, description: true },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
           { text: "main.pagination", value: 25 },

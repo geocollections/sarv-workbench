@@ -1027,7 +1027,7 @@
   },
   "analysis": {
     "header":"Analysis",
-    "generalInfo":"Info",
+    "generalInfo":"General Info",
     "sample": "Sample #",
     "specimen":"Specimen",
     "method_in_eng": "Met. ingl. k.",
@@ -1065,6 +1065,8 @@
     "is_locked": "Is locked?",
     "is_private": "Private",
     "addNew": "Add new analysis",
+    "labInfo": "Lab info",
+    "otherInfo": "Other info",
     "relatedTables": {
       "analysis_results": "Analüüsi tulemused",
       "attachment_link": "Failid",
