@@ -1002,7 +1002,8 @@ export default {
       this.analysis.owner = { id: obj.owner, agent: obj.owner__agent };
       this.analysis.analysis_method = {
         id: obj.analysis_method,
-        analysis_method: obj.analysis_method__analysis_method
+        analysis_method: obj.analysis_method__analysis_method,
+        method_en: obj.analysis_method__method_en
       };
       this.analysis.dataset = {
         id: obj.dataset,
