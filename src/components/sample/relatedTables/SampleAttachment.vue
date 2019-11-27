@@ -11,9 +11,9 @@
           <thead class="thead-light">
             <tr>
               <th>
-                {{ $t("reference.reference") }}<i class="fas fa-link ml-2"></i>
+                {{ $t("sample.attachment") }}<i class="fas fa-link ml-2"></i>
               </th>
-              <th>{{ $t("reference.remarks") }}</th>
+              <th>{{ $t("sample.remarks") }}</th>
               <th class="btn-th"></th>
             </tr>
           </thead>
@@ -29,8 +29,8 @@
             >
               <!-- VIEW MODE -->
               <td v-if="!entity.editMode">
-                <router-link :to="{ path: '/attachment/' + entity.attachment }">
-                  {{ entity.attachment__original_filename }}
+                <router-link :to="{ path: '/attachment/' + entity.id }">
+                  {{ entity.original_filename }}
                 </router-link>
               </td>
 
@@ -151,8 +151,6 @@
       <file-table
         :attachments="relatedData.attachment_link"
         :object="'sample'"
-        prefix="attachment__"
-        table-id="attachment"
         v-if="relatedData.attachment_link.length > 0"
       />
     </div>

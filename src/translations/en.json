@@ -955,6 +955,7 @@
     "site": "Site",
     "selectionId": "Selection ID",
     "selection": "Selection",
+    "attachment": "File",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",

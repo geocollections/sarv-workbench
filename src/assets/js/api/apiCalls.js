@@ -691,7 +691,7 @@ export function fetchTaxonList(id, searchParameters) {
 
 export function fetchLSampleAttachment(id, searchParameters) {
   return fetch(
-    `attachment/?attach_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,original_filename&format=json`
+    `attachment/?attach_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,original_filename,uuid_filename,description,description_en,date_created,remarks&format=json`
   );
 }
 

@@ -955,6 +955,7 @@
     "site": "Vaatluspunkt",
     "selectionId": "Valiku ID",
     "selection": "Valik",
+    "attachment": "Manus",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",
