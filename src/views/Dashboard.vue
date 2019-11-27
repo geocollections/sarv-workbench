@@ -10,6 +10,23 @@
 
     <v-content>
       <v-container fluid>
+        <v-breadcrumbs
+          v-if="showRecentUrls && recentUrls && recentUrls.length > 0"
+          class="p-0"
+          :items="recentUrls"
+          divider="-"
+        >
+          <template v-slot:item="{ item }">
+            <router-link
+              class="sarv-link"
+              :class="appSettings.bodyActiveColor + '--text'"
+              :to="{ path: item.href }"
+            >
+              {{ item.text }}
+            </router-link>
+          </template>
+        </v-breadcrumbs>
+
         <router-view />
       </v-container>
     </v-content>
@@ -31,11 +48,16 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState(["appSettings", "recentUrls", "showRecentUrls"])
   },
   beforeCreate() {
     this.$store.dispatch("INITIALISE_ACTIVE_OBJECTS");
     this.$store.dispatch("INITIALISE_USER_DATA");
+    this.$store.dispatch("initialiseRecentUrls");
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.$store.dispatch("appendRecentUrls", { text: from.path, href: from.path });
+    next();
   }
 };
 </script>

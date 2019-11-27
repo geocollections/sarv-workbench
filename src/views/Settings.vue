@@ -2,7 +2,7 @@
   <div class="settings">
     <div class="row mt-4">
       <div class="col">
-        <p class="h3">{{ $t("header.settings") }}</p>
+        <p class="h3 mb-2">{{ $t("header.settings") }}</p>
       </div>
     </div>
 
@@ -70,8 +70,9 @@
       <transition>
         <div v-show="block.accessibility" class="px-1 pt-1 pb-2">
           <Accessibility
-            :bodyActiveColor="appSettings.bodyActiveColor"
-            :bodyDark="appSettings.bodyDark"
+            :body-active-color="appSettings.bodyActiveColor"
+            :body-dark="appSettings.bodyDark"
+            :show-recent-urls="showRecentUrls"
           />
         </div>
       </transition>
@@ -297,7 +298,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["permissions", "appSettings"])
+    ...mapState(["permissions", "appSettings", "showRecentUrls"])
   },
 
   methods: {

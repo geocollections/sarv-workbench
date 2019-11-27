@@ -44,6 +44,35 @@ export default {
     }
   },
 
+  SET_RECENT_URLS: state => {
+    const recentUrls = Vue.localStorage.get("recentUrls", null);
+
+    if (recentUrls && !isEmpty(recentUrls))
+      Vue.set(state, "recentUrls", recentUrls);
+  },
+
+  UPDATE_RECENT_URLS: (state, urlObject) => {
+    let recentUrls = Vue.localStorage.get("recentUrls", null);
+
+    if (recentUrls && !isEmpty(recentUrls)) {
+      recentUrls.push(urlObject);
+      if (recentUrls.length > 10) recentUrls.shift();
+
+      // If after removing is still over 10 then empty that (I don't want to use loop here);
+      if (recentUrls.length > 10) recentUrls = [];
+    } else {
+      recentUrls = [];
+      recentUrls.push(urlObject);
+    }
+
+    Vue.localStorage.set("recentUrls", recentUrls);
+    Vue.set(state, "recentUrls", recentUrls);
+  },
+
+  TOGGLE_RECENT_URLS: (state, boolValue) => {
+    Vue.set(state, "showRecentUrls", boolValue);
+  },
+
   CREATE_RELATION_OBJECT: (state, { createRelationWith }) => {
     Vue.set(state, "createRelationWith", createRelationWith);
   },

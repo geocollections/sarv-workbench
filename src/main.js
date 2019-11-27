@@ -343,6 +343,9 @@ new Vue({
     },
     SARV_APP_SETTINGS: {
       type: Object
+    },
+    recentUrls: {
+      type: Array
     }
   },
   render: h => h(App)

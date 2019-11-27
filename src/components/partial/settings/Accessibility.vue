@@ -1,6 +1,18 @@
 <template>
   <div class="accessibility">
     <v-row no-gutters>
+      <v-col class="mx-2 vuetify-checkbox">
+        <v-checkbox
+          hide-details class="mt-0 mb-2" :ripple="false" :color="bodyActiveColor" @click="$store.dispatch('toggleRecentUrls', !showRecentUrls)">
+          <template v-slot:label>
+            <span class="mr-1">Show recent URLs:</span>
+            <span class="font-weight-bold">{{ showRecentUrls }}</span>
+          </template>
+        </v-checkbox>
+      </v-col>
+    </v-row>
+
+    <v-row no-gutters>
       <v-col class="mx-2">
         <span
           >Zoom level: <span class="font-weight-bold">{{ zoom }}</span></span
@@ -39,6 +51,10 @@ export default {
       type: String,
       required: false,
       default: "black"
+    },
+    showRecentUrls: {
+      type: Boolean,
+      required: false
     }
   },
   data: () => ({

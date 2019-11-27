@@ -152,6 +152,18 @@ export default {
     commit("SET_CURRENT_USER");
   },
 
+  initialiseRecentUrls: ({ commit }) => {
+    commit("SET_RECENT_URLS");
+  },
+
+  appendRecentUrls: ({ commit }, urlObject) => {
+    commit("UPDATE_RECENT_URLS", urlObject);
+  },
+
+  toggleRecentUrls: ({ commit }, payload) => {
+    commit("TOGGLE_RECENT_URLS", payload);
+  },
+
   SIDEBAR_USER_ACTION: ({ commit }, userAction) => {
     commit("SET_SIDEBAR_USER_ACTION", userAction);
   },

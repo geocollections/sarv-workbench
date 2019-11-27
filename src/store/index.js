@@ -42,7 +42,9 @@ export function createStore() {
         drawerRightColor: "white",
         drawerRightDark: false,
         drawerRightActiveColor: "deep-orange"
-      }
+      },
+      showRecentUrls: false,
+      recentUrls: []
     },
     actions,
     mutations,
