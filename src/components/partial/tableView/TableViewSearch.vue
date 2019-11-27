@@ -55,6 +55,7 @@
                         clearable
                         clear-icon="fas fa-times"
                         readonly
+                        :class="appSettings.bodyActiveColor + '--text'"
                         v-on="on"
                       ></v-text-field>
                     </template>
@@ -74,6 +75,7 @@
                     :label="$t(field.title)"
                     :color="appSettings.bodyActiveColor"
                     hide-details
+                    :class="appSettings.bodyActiveColor + '--text'"
                     :type="field.type"
                   ></v-text-field>
                 </v-col>
@@ -210,4 +212,8 @@ export default {
   cursor: pointer;
   opacity: 0.8;
 }
+
+  .table-view-search >>> .v-text-field__slot input {
+    color: unset;
+  }
 </style>
