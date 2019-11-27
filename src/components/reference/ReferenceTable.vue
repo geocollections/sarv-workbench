@@ -13,7 +13,7 @@
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
-    :class="bodyColor.split('-')[0] + '-5'"
+    :class="bodyColor.split('n-')[0] + 'n-5'"
   >
     <template v-slot:header.is_estonian_author="{ item }">
       <span> EE <v-icon x-small>fas fa-user</v-icon> </span>

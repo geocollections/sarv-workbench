@@ -28,7 +28,7 @@
     <v-card
       class="mt-2"
       id="block-info"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -131,7 +131,7 @@
     <v-card
       class="mt-2"
       id="block-location"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -207,13 +207,13 @@
             class="d-flex flex-row justify-content-start mt-1 mx-3"
             flat
             tile
-            :color="bodyColor.split('-')[0] + '-5'"
+            :color="bodyColor.split('n-')[0] + 'n-5'"
           >
             <v-card
               flat
               tile
               class="align-self-center mr-2"
-              :color="bodyColor.split('-')[0] + '-5'"
+              :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <v-switch
                 v-model="showCollapseMap"
@@ -227,7 +227,7 @@
               flat
               tile
               class="align-self-center"
-              :color="bodyColor.split('-')[0] + '-5'"
+              :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
@@ -379,7 +379,7 @@
     <v-card
       class="mt-2"
       id="block-description"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -424,7 +424,7 @@
       class="mt-2"
       id="block-files"
       v-if="$route.meta.isEdit && site.id"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -466,7 +466,7 @@
       class="mt-2"
       id="block-samples"
       v-if="$route.meta.isEdit && site.id"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">

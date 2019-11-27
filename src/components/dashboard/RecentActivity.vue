@@ -2,7 +2,7 @@
   <v-row class="recent-activity">
     <!-- RECENTLY ADDED -->
     <v-col cols="12" md="6" class="mb-6">
-      <v-card :color="bodyColor.split('-')[0] + '-5'" elevation="4">
+      <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title>
           <span>
             {{ $t("logs.recentlyAdded") }}
@@ -13,25 +13,25 @@
 
         <v-simple-table>
           <template v-slot:default>
-            <thead :class="bodyColor.split('-')[0] + '-5'">
+            <thead :class="bodyColor.split('n-')[0] + 'n-5'">
               <tr>
                 <th>ID</th>
                 <th>{{ $t("logs.time") }}</th>
               </tr>
             </thead>
 
-            <tbody :class="bodyColor.split('-')[0] + '-5'">
+            <tbody :class="bodyColor.split('n-')[0] + 'n-5'">
               <tr v-for="(entity, index) in recentlyInserted" :key="index">
                 <td>
-                  <v-btn
-                    text
-                    :color="bodyActiveColor"
+                  <router-link
+                    class="sarv-link text-capitalize"
+                    :class="bodyActiveColor + '--text'"
                     :to="{
                       path: '/' + entity.table_name + '/' + entity.row_id
                     }"
                   >
                     {{ entity.table_name }}: {{ entity.row_id }}
-                  </v-btn>
+                  </router-link>
                 </td>
                 <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
               </tr>
@@ -43,7 +43,7 @@
 
     <!-- RECENTLY UPDATED -->
     <v-col cols="12" md="6">
-      <v-card :color="bodyColor.split('-')[0] + '-5'" elevation="4">
+      <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title>
           <span>
             {{ $t("logs.recentlyUpdated") }}
@@ -54,25 +54,25 @@
 
         <v-simple-table>
           <template v-slot:default>
-            <thead :class="bodyColor.split('-')[0] + '-5'">
+            <thead :class="bodyColor.split('n-')[0] + 'n-5'">
               <tr>
                 <th>ID</th>
                 <th>{{ $t("logs.time") }}</th>
               </tr>
             </thead>
 
-            <tbody :class="bodyColor.split('-')[0] + '-5'">
+            <tbody :class="bodyColor.split('n-')[0] + 'n-5'">
               <tr v-for="(entity, index) in recentlyUpdated" :key="index">
                 <td>
-                  <v-btn
-                    text
-                    :color="bodyActiveColor"
+                  <router-link
+                    class="sarv-link text-capitalize"
+                    :class="bodyActiveColor + '--text'"
                     :to="{
                       path: '/' + entity.table_name + '/' + entity.row_id
                     }"
                   >
                     {{ entity.table_name }}: {{ entity.row_id }}
-                  </v-btn>
+                  </router-link>
                 </td>
                 <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
               </tr>

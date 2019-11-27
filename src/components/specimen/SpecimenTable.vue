@@ -18,7 +18,7 @@
       :sort-by.sync="searchParameters.sortBy"
       :sort-desc.sync="searchParameters.sortDesc"
       :server-items-length="response.count"
-      :class="bodyColor.split('-')[0] + '-5'"
+      :class="bodyColor.split('n-')[0] + 'n-5'"
     >
       <template v-slot:item.id="{ item }">
         <router-link

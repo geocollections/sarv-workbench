@@ -2,7 +2,12 @@
   <div class="list-view">
     <div class="row">
       <div class="col">
-        <attachment-image-view v-if="module === 'attachment'" :data="data" />
+        <attachment-image-view
+          v-if="module === 'attachment'"
+          :data="data"
+          :body-active-color="bodyActiveColor"
+          :body-color="bodyColor"
+        />
 
         <specimen-image-view
           v-if="module === 'specimen'"
@@ -24,7 +29,7 @@ export default {
     AttachmentImageView,
     SpecimenImageView
   },
-  props: ["module", "data", "bodyActiveColor"]
+  props: ["module", "data", "bodyActiveColor", "bodyColor"]
 };
 </script>
 

@@ -13,7 +13,7 @@
     <v-card
       class="mt-2"
       id="block-info"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -143,7 +143,7 @@
     <v-card
       class="mt-2"
       id="block-relatedInfo"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -312,7 +312,7 @@
     <v-card
       class="mt-2"
       id="block-description"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -379,7 +379,7 @@
     <v-card
       class="mt-2"
       id="block-specimen"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
       v-if="$route.meta.isEdit && specimens.count > 0"
     >
@@ -442,7 +442,7 @@
           <v-card
             class="table-card my-1"
             flat
-            :color="bodyColor.split('-')[0] + '-5'"
+            :color="bodyColor.split('n-')[0] + 'n-5'"
           >
             <!--            <v-card-title class="d-print-none">-->
             <!--              <v-icon class="mr-2" color="#191414" large>fas fa-list</v-icon>-->

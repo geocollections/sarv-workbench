@@ -13,7 +13,7 @@
     <v-card
       class="mt-2"
       id="block-info"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">

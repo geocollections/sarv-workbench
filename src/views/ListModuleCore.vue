@@ -102,14 +102,14 @@
     <!-- DATA TABLE -->
     <v-card
       elevation="4"
-      :color="appSettings.bodyColor.split('-')[0] + '-3'"
+      :color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
       class="table-card my-1"
       :loading="isLoading"
     >
       <template v-slot:progress>
         <v-progress-linear
           indeterminate
-          :color="appSettings.bodyColor.split('-')[0] + '-1'"
+          :color="appSettings.bodyColor.split('n-')[0] + 'n-1'"
         ></v-progress-linear>
       </template>
 
@@ -147,6 +147,7 @@
         v-if="isImageView && response.count > 0"
         :module="module"
         :data="response.results"
+        :body-color="appSettings.bodyColor"
         :body-active-color="appSettings.bodyActiveColor"
       />
 

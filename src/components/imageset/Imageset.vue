@@ -9,37 +9,36 @@
       "
     ></spinner>
 
-    <!-- REQUIRED INFO -->
-    <fieldset
-      class="border-top px-2 mb-2"
-      :style="!validate('imageset') ? 'border-color: #dc3545!important;' : ''"
-      id="block-requiredFields"
+    <!-- GENERAL INFO -->
+    <v-card
+      class="mt-2"
+      id="block-info"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
     >
-      <legend
-        class="w-auto my-0"
-        :class="{
-          'text-primary': !block.requiredFields,
-          'text-danger': !validate('imageset')
-        }"
-        @click="block.requiredFields = !block.requiredFields"
-      >
-        {{ $t("imageset.requiredFields") }}
-        <i v-if="validate('imageset')" class="fas fa-check text-success"></i>
-        <i
-          v-if="!validate('imageset')"
-          class="fas fa-exclamation-triangle text-danger"
-        ></i>
-      </legend>
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span :class="validate('imageset') ? 'green--text' : 'red--text'">{{ $t("imageset.generalInfo") }}</span>
+          <v-icon right :class="validate('imageset') ? 'green--text' : 'red--text'">fas fa-project-diagram</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-      <transition name="fade">
-        <div v-if="block.requiredFields">
+      <transition>
+        <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- NUMBER and AUTHOR -->
-          <div class="row">
-            <div class="col-sm-6">
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`imageset`"
-                >{{ $t("imageset.imagesetNumber") }}:</label
+              >{{ $t("imageset.imagesetNumber") }}:</label
               >
               <b-form-input
+                size="sm"
                 id="imageset"
                 v-model="imageset.imageset_number"
                 :state="
@@ -60,9 +59,9 @@
                 </div>
                 <div v-else>{{ $t("add.errors.imagesetNumber") }}.</div>
               </b-form-text>
-            </div>
+            </v-col>
 
-            <div class="col-sm-6">
+            <v-col cols="12" md="6" class="px-1">
               <label :for="`author`">{{ $t("imageset.author") }}:</label>
               <vue-multiselect
                 v-model="imageset.author"
@@ -86,38 +85,23 @@
                   <strong>{{ option.agent }}</strong>
                 </template>
                 <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
               <b-form-text v-if="!isNotEmpty(imageset.author)"
-                >{{ $t("add.errors.author") }}.</b-form-text
+              >{{ $t("add.errors.author") }}.</b-form-text
               >
-            </div>
-          </div>
-        </div>
-      </transition>
-    </fieldset>
+            </v-col>
+          </v-row>
 
-    <!-- GENERAL INFO -->
-    <fieldset class="border-top px-2 mb-2" id="block-info">
-      <legend
-        class="w-auto my-0"
-        :class="{ 'text-primary': !block.info }"
-        @click="block.info = !block.info"
-      >
-        {{ $t("imageset.generalInfo") }}
-        <i class="fas fa-project-diagram"></i>
-      </legend>
-
-      <transition name="fade">
-        <div v-show="block.info">
           <!-- DESCRIPTION -->
-          <div class="row">
-            <div class="col-sm-12">
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
               <label :for="`description`"
-                >{{ $t("imageset.description") }}:</label
+              >{{ $t("imageset.description") }}:</label
               >
               <b-form-textarea
+                size="sm"
                 id="image_description"
                 v-model="imageset.description"
                 :no-resize="true"
@@ -125,20 +109,20 @@
                 :max-rows="3"
                 type="text"
               ></b-form-textarea>
-            </div>
-          </div>
+            </v-col>
+          </v-row>
         </div>
       </transition>
-    </fieldset>
+    </v-card>
 
     <!-- CLEAR LOCAL STORAGE -->
-    <div class="row mt-3">
-      <div class="col">
-        <button class="btn btn-outline-warning" @click="clearLocalStorage">
+    <v-row no-gutters class="mt-3">
+      <v-col cols="12">
+        <v-btn color="yellow" @click="clearLocalStorage">
           {{ $t("add.buttons.clearLocalStorage") }}
-        </button>
-      </div>
-    </div>
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -157,6 +141,24 @@ export default {
 
   components: {
     Spinner
+  },
+
+  props: {
+    isBodyActiveColorDark: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    }
   },
 
   mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
@@ -203,7 +205,7 @@ export default {
         requiredFields: ["imageset_number", "author"],
         imageset: {},
         imagesetNumberExists: false,
-        block: { requiredFields: true, info: true }
+        block: { info: true }
       };
     },
 

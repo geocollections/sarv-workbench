@@ -13,7 +13,7 @@
     <v-card
       class="mt-2"
       id="block-info"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -117,7 +117,7 @@
     <v-card
       class="mt-2"
       id="block-localityInfo"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -428,7 +428,7 @@
     <v-card
       class="mt-2"
       id="block-details"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -681,16 +681,16 @@
     <!-- RELATED DATA TABS -->
     <v-card
       class="related-tabs mt-2"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-tabs
-        :background-color="bodyColor.split('-')[0] + '-3'"
+        :background-color="bodyColor.split('n-')[0] + 'n-3'"
         show-arrows
         grow
         prev-icon="fas fa-angle-left"
         next-icon="fas fa-angle-right"
-        :active-class="bodyColor.split('-')[0] + '-5 black--text'"
+        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
         hide-slider
       >
         <v-tab
@@ -712,7 +712,7 @@
       </v-tabs>
 
       <v-tabs-items>
-        <v-card class="pt-3 px-1" flat :color="bodyColor.split('-')[0] + '-5'">
+        <v-card class="pt-3 px-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <specimen-identification
             v-if="
               specimen.fossil &&
@@ -844,7 +844,7 @@
     <v-card
       class="mt-2"
       id="block-description"
-      :color="bodyColor.split('-')[0] + '-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">

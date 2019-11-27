@@ -30,7 +30,7 @@
     <v-row>
       <v-col class="pb-0">
         <v-card
-          :color="appSettings.bodyColor.split('-')[0] + '-5'"
+          :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
           elevation="4"
         >
           <v-card-title class="pt-2 pb-1">
@@ -65,7 +65,7 @@
     <v-row id="block-help">
       <v-col class="py-6">
         <v-card
-          :color="appSettings.bodyColor.split('-')[0] + '-5'"
+          :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
           elevation="4"
         >
           <v-card-title class="pt-2 pb-1">

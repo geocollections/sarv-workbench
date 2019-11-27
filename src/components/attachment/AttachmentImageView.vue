@@ -28,12 +28,13 @@
         md="3"
         lg="2"
       >
-        <v-tooltip bottom color="blue darken-3" z-index="51000">
+        <v-tooltip bottom :color="bodyActiveColor" z-index="51000">
           <template v-slot:activator="{ on }">
             <v-card
               flat
               v-on="on"
               class="d-flex image-hover"
+              :class="bodyColor.split('n-')[0] + 'n-3'"
               hover
               :to="{ path: '/attachment/' + image.id }"
               :title="$t('editAttachment.editMessage')"
@@ -62,7 +63,7 @@
               <v-row align="center" v-else>
                 <v-col class="text-center">
                   <div class="py-3">
-                    <v-icon style="font-size: 6rem" color="blue-grey lighten-3"
+                    <v-icon style="font-size: 6rem" :class="bodyActiveColor + '--text'"
                       >far {{ getAttachmentIcon(image) }}</v-icon
                     >
                   </div>
@@ -158,6 +159,16 @@ export default {
   props: {
     data: {
       type: Array
+    },
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
+    },
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
     }
   },
   name: "AttachmentListView",

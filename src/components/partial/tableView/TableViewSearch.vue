@@ -1,7 +1,7 @@
 <template>
   <v-row class="table-view-search d-print-none" v-if="filters.length > 0">
     <v-col class="py-4">
-      <v-card :color="appSettings.bodyColor.split('-')[0] + '-5'" elevation="4">
+      <v-card :color="appSettings.bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title class="pb-0">
           <div
             class="card-title--clickable"
@@ -215,5 +215,6 @@ export default {
 
   .table-view-search >>> .v-text-field__slot input {
     color: unset;
+    font-weight: bold;
   }
 </style>
