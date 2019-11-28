@@ -7,8 +7,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2.3-dependencies-{{ checksum "package.json" }}
-            - v2.3-dependencies-
+            - v2.4-dependencies-{{ checksum "package.json" }}
+            - v2.4-dependencies-
       - run:
           name: Install packages
           command: npm install
@@ -16,7 +16,7 @@ jobs:
           paths:
             - node_modules
             - package.json
-          key: v2.3-dependencies-{{ checksum "package.json" }}
+          key: v2.4-dependencies-{{ checksum "package.json" }}
 
 #  unit_test:
 #    docker:
@@ -38,8 +38,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2.3-dependencies-{{ checksum "package.json" }}
-            - v2.3-dependencies-
+            - v2.4-dependencies-{{ checksum "package.json" }}
+            - v2.4-dependencies-
       - run:
           name: Build production code
           command: npm run build
