@@ -160,8 +160,8 @@ export default {
     commit("UPDATE_RECENT_URLS", urlObject);
   },
 
-  toggleRecentUrls: ({ commit }, payload) => {
-    commit("TOGGLE_RECENT_URLS", payload);
+  updateRecentUrlsState({ commit }, recentUrlsState) {
+    commit("UPDATE_RECENT_URLS_STATE", recentUrlsState);
   },
 
   SIDEBAR_USER_ACTION: ({ commit }, userAction) => {

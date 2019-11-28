@@ -72,7 +72,6 @@
           <Accessibility
             :body-active-color="appSettings.bodyActiveColor"
             :body-dark="appSettings.bodyDark"
-            :show-recent-urls="showRecentUrls"
           />
         </div>
       </transition>

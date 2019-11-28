@@ -349,6 +349,9 @@ new Vue({
     },
     recentUrls: {
       type: Array
+    },
+    recentUrlsState: {
+      type: Boolean
     }
   },
   render: h => h(App)

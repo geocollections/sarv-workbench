@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col class="mx-2 vuetify-checkbox">
         <v-checkbox
-          hide-details class="mt-0 mb-2" :ripple="false" :color="bodyActiveColor" @click="$store.dispatch('toggleRecentUrls', !showRecentUrls)">
+          hide-details class="mt-0 mb-2" :ripple="false" :color="bodyActiveColor" v-model="showRecentUrls">
           <template v-slot:label>
             <span class="mr-1">Show recent URLs:</span>
             <span class="font-weight-bold">{{ showRecentUrls }}</span>
@@ -39,6 +39,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "Accessibility",
   props: {
@@ -51,10 +53,6 @@ export default {
       type: String,
       required: false,
       default: "black"
-    },
-    showRecentUrls: {
-      type: Boolean,
-      required: false
     }
   },
   data: () => ({
@@ -74,6 +72,18 @@ export default {
   created() {
     let zoomLevel = this.$localStorage.get("SARV_APP_ZOOM_LEVEL", 1);
     if (zoomLevel) this.zoom = zoomLevel;
+  },
+  computed: {
+    ...mapState(["recentUrlsState"]),
+    showRecentUrls: {
+      get() {
+        return this.recentUrlsState;
+      },
+
+      set(value) {
+        this.$store.dispatch("updateRecentUrlsState", value);
+      }
+    }
   },
   watch: {
     zoom(newVal) {

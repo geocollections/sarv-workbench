@@ -47,8 +47,8 @@ export function createStore() {
         showMap: true,
         defaultLayer: "OpenStreetMap"
       },
-      showRecentUrls: false,
-      recentUrls: []
+      recentUrls: [],
+      recentUrlsState: false
     },
     actions,
     mutations,

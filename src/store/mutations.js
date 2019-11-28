@@ -46,9 +46,12 @@ export default {
 
   SET_RECENT_URLS: state => {
     const recentUrls = Vue.localStorage.get("recentUrls", null);
+    const recentUrlsState = Vue.localStorage.get("recentUrlsState", false);
 
     if (recentUrls && !isEmpty(recentUrls))
       Vue.set(state, "recentUrls", recentUrls);
+    if (typeof recentUrlsState === "boolean")
+      Vue.set(state, "recentUrlsState", recentUrlsState);
   },
 
   UPDATE_RECENT_URLS: (state, urlObject) => {
@@ -69,8 +72,9 @@ export default {
     Vue.set(state, "recentUrls", recentUrls);
   },
 
-  TOGGLE_RECENT_URLS: (state, boolValue) => {
-    Vue.set(state, "showRecentUrls", boolValue);
+  UPDATE_RECENT_URLS_STATE: (state, boolValue) => {
+    Vue.localStorage.set("recentUrlsState", boolValue);
+    Vue.set(state, "recentUrlsState", boolValue);
   },
 
   CREATE_RELATION_OBJECT: (state, { createRelationWith }) => {
@@ -171,7 +175,7 @@ export default {
   },
 
   UPDATE_APP_SETTINGS(state, settings) {
-    this.$localStorage.set("SARV_APP_SETTINGS", settings);
+    Vue.localStorage.set("SARV_APP_SETTINGS", settings);
     Vue.set(state, "appSettings", settings);
   },
 

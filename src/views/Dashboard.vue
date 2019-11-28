@@ -11,7 +11,7 @@
     <v-content>
       <v-container fluid>
         <v-breadcrumbs
-          v-if="showRecentUrls && recentUrls && recentUrls.length > 0"
+          v-if="recentUrlsState && recentUrls && recentUrls.length > 0"
           class="p-0"
           :items="recentUrls"
           divider="-"
@@ -48,13 +48,14 @@ export default {
     };
   },
   computed: {
-    ...mapState(["appSettings", "recentUrls", "showRecentUrls"])
+    ...mapState(["appSettings", "recentUrls", "recentUrlsState"])
   },
   beforeCreate() {
     this.$store.dispatch("INITIALISE_ACTIVE_OBJECTS");
     this.$store.dispatch("INITIALISE_USER_DATA");
     this.$store.dispatch("initialiseRecentUrls");
     this.$store.dispatch("initialiseMapSettings");
+    this.$store.dispatch("initialiseAppSettings");
   },
   beforeRouteUpdate(to, from, next) {
     this.$store.dispatch("appendRecentUrls", { text: from.path, href: from.path });
