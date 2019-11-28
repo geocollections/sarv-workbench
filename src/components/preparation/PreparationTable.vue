@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    class="drillcore-table"
+    class="preparation-table"
     :headers="translatedHeaders"
     dense
     hide-default-footer
@@ -16,35 +16,66 @@
   >
     <template v-slot:item.id="{ item }">
       <router-link
-        :to="{ path: '/drillcore/' + item.id }"
-        :title="$t('editDrillcore.editMessage')"
+        :to="{ path: '/preparation/' + item.id }"
+        :title="$t('editPreparation.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
         >{{ item.id }}</router-link
       >
     </template>
 
-    <template v-slot:item.drillcore="{ item }">
+    <template v-slot:item.preparation_number="{ item }">
       <router-link
-        :to="{ path: '/drillcore/' + item.id }"
-        :title="$t('editDrillcore.editMessage')"
+        :to="{ path: '/preparation/' + item.id }"
+        :title="$t('editPreparation.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+      >
+        {{ item.preparation_number }}
+      </router-link>
+    </template>
+
+    <template v-slot:item.locality="{ item }">
+      <router-link
+        :to="{ path: '/locality/' + item.sample__locality }"
+        :title="$t('editLocality.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
         <span
           v-translate="{
-            et: item.drillcore,
-            en: item.drillcore_en
+            et: item.sample__locality__locality,
+            en: item.sample__locality__locality_en
           }"
         ></span>
+      </router-link>
+    </template>
+
+    <template v-slot:item.stratigraphy="{ item }">
+      <div
+        v-translate="{
+          et: item.sample__stratigraphy__stratigraphy,
+          en: item.sample__stratigraphy__stratigraphy_en
+        }"
+      ></div>
+    </template>
+
+    <template v-slot:item.agent="{ item }">
+      <router-link
+        :to="{ path: '/agent/' + item.agent }"
+        :title="$t('editAgent.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+      >
+        {{ item.agent__agent }}
       </router-link>
     </template>
 
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'drillcore', id: item.id })"
-        :title="$t('editDrillcore.viewMessage')"
+        :href="getGeoDetailUrl({ object: 'preparation', id: item.id })"
+        :title="$t('editPreparation.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
         icon
@@ -57,7 +88,7 @@
 
 <script>
 export default {
-  name: "DrillcoreTable",
+  name: "PreparationTable",
   props: {
     response: {
       type: Object
@@ -95,15 +126,11 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: "drillcore.id", value: "id" },
-      { text: "drillcore.drillcore", value: "drillcore" },
-      { text: "drillcore.depth", value: "depth" },
-      { text: "drillcore.boxes", value: "boxes" },
-      { text: "drillcore.box_numbers", value: "box_numbers" },
-      { text: "drillcore.location", value: "location" },
-      { text: "drillcore.year", value: "year" },
-      { text: "drillcore.agent", value: "agent__agent" },
-      { text: "drillcore.remarks", value: "remarks" },
+      { text: "preparation.id", value: "id" },
+      { text: "preparation.preparation_number", value: "preparation_number" },
+      { text: "preparation.sample__locality", value: "locality" },
+      { text: "preparation.sample__stratigraphy", value: "stratigraphy" },
+      { text: "preparation.agent", value: "agent" },
       { text: "", value: "link", sortable: false }
     ]
   }),
@@ -126,8 +153,8 @@ export default {
 </script>
 
 <style scoped>
-.drillcore-table.v-data-table td,
-.drillcore-table.v-data-table th {
+.preparation-table.v-data-table td,
+.preparation-table.v-data-table th {
   padding: 0 8px;
 }
 </style>

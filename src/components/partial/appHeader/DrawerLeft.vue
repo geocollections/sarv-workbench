@@ -235,7 +235,7 @@ export default {
           name: "sample",
           title: "samples",
           links: [
-            { title: "samples", path: "/sample", icon: "fas fa-vials" },
+            { title: "samples", path: "/sample", icon: "fas fa-vial" },
             {
               title: "sample",
               path: "/sample/add",
@@ -255,6 +255,22 @@ export default {
             {
               title: "addAnalysis",
               path: "/analysis/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
+          name: "preparation",
+          title: "preparations",
+          links: [
+            {
+              title: "editPreparation",
+              path: "/preparation",
+              icon: "fas fa-vials"
+            },
+            {
+              title: "addPreparation",
+              path: "/preparation/add",
               icon: "far fa-plus-square"
             }
           ]

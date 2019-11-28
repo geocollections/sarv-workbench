@@ -44,6 +44,7 @@
     "taxa": "Taxa",
     "selectionSeries": "Selection series",
     "agents": "Agents",
+    "preparations": "Preparations",
     "drillcores": "Drill cores",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
@@ -76,6 +77,8 @@
     "editAgent": "Agents",
     "addDrillcore": "Add drill core",
     "editDrillcore": "Drill cores",
+    "addPreparation": "Add preparation",
+    "editPreparation": "Preparations",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -102,7 +105,8 @@
     "taxon": "Add taxon",
     "selectionSerie": "Add selection series",
     "agent": "Add agent",
-    "drillcore": "Add drill core"
+    "drillcore": "Add drill core",
+    "preparation": "Add preparation"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -492,6 +496,16 @@
   "editAgent": {
     "heading": "Agent",
     "editMessage": "Edit agent"
+  },
+  "editDrillcore": {
+    "heading": "Drill core",
+    "editMessage": "Edit Drill core",
+    "viewMessage": "View drill core in geocollections portal"
+  },
+  "editPreparation": {
+    "heading": "Preparation",
+    "editMessage": "Edit Preparation",
+    "viewMessage": "View Preparation in geocollections portal"
   },
   "attachments": {
     "header": "My attachments",
@@ -1299,7 +1313,14 @@
     "type": "Type"
   },
   "drillcore": {
+    "id": "ID",
     "drillcore": "Drill core",
+    "depth": "Depth",
+    "box_numbers": "Box numbers",
+    "location": "Location",
+    "year": "Year",
+    "agent": "Agent",
+    "remarks": "Remarks",
     "boxes": "Boxes",
     "locality": "Locality",
     "storage": "Storage"
@@ -1308,12 +1329,16 @@
     "drillcore": "Drill core - No"
   },
   "preparation": {
+    "id": "ID",
     "number": "Number",
     "preparation_number": "Prep. number",
     "fossil_group": "Fossil group",
     "storage": "Storage",
     "remarks": "Remarks",
-    "method_id": "Method ID"
+    "method_id": "Method ID",
+    "sample__locality": "Locality",
+    "sample__stratigraphy": "Stratigraphy",
+    "agent": "Agent"
   },
   "reference": {
     "reference": "Reference",

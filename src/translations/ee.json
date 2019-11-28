@@ -44,6 +44,7 @@
     "taxa": "Taksonid",
     "selectionSeries": "Valikud",
     "agents": "Isikud/asutused",
+    "preparations": "Preparaadid",
     "drillcores": "Puursüdamikud",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
@@ -76,6 +77,8 @@
     "editAgent": "Isikud/asutused",
     "addDrillcore": "Lisa puursüdamik",
     "editDrillcore": "Puursüdamikud",
+    "addPreparation": "Lisa preparaat",
+    "editPreparation": "Preparaadid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -102,7 +105,8 @@
     "taxon": "Lisa takson",
     "selectionSerie": "Lisa valik",
     "agent": "Lisa isik/asutus",
-    "drillcore": "Lisa puursüdamik"
+    "drillcore": "Lisa puursüdamik",
+    "preparation": "Lisa preparaat"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -492,6 +496,16 @@
   "editAgent": {
     "heading": "Isik/asutus",
     "editMessage": "Muuda isikut/asutust"
+  },
+  "editDrillcore": {
+    "heading": "Puursüdamik",
+    "editMessage": "Muuda puursüdamikku",
+    "viewMessage": "Vaata puursüdamikku geokogude portaalis"
+  },
+  "editPreparation": {
+    "heading": "Preparaat",
+    "editMessage": "Muuda preparaati",
+    "viewMessage": "Vaata preparaati geokogude portaalis"
   },
   "attachments": {
     "header": "Minu failid",
@@ -1298,7 +1312,14 @@
     "type": "Tüüp"
   },
   "drillcore": {
+    "id": "ID",
     "drillcore": "Puursüdamik",
+    "depth": "Sügavused",
+    "box_numbers": "Kastinumbrid",
+    "location": "Asukoht",
+    "year": "Puurimise aeg",
+    "agent": "Puurija",
+    "remarks": "Lisainfo",
     "boxes": "Kaste kokku",
     "locality": "Lokaliteet",
     "storage": "Hoiukoht"
@@ -1307,12 +1328,16 @@
     "drillcore": "Puursüdamik - Nr"
   },
   "preparation": {
+    "id": "ID",
     "number": "Number",
     "preparation_number": "Prep. number",
     "fossil_group": "Fossilrühm",
     "storage": "Hoiukoht",
     "remarks": "Lisainfo",
-    "method_id": "Metoodika ID"
+    "method_id": "Metoodika ID",
+    "sample__locality": "Lokaliteet",
+    "sample__stratigraphy": "Stratigraafia",
+    "agent": "Preparaator"
   },
   "reference": {
     "reference": "Viide",

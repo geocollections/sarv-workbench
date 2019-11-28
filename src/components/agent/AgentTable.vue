@@ -1,58 +1,56 @@
 <template>
-  <div>
-    <v-data-table
-      class="agent-table"
-      :headers="translatedHeaders"
-      dense
-      hide-default-footer
-      :items="response.results"
-      :items-per-page="searchParameters.paginateBy"
-      multi-sort
-      :page="searchParameters.page"
-      :search="filter"
-      :sort-by.sync="searchParameters.sortBy"
-      :sort-desc.sync="searchParameters.sortDesc"
-      :server-items-length="response.count"
-      :class="bodyColor.split('n-')[0] + 'n-5'"
-    >
-      <template v-slot:item.id="{ item }">
-        <router-link
-          :to="{ path: '/agent/' + item.id }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-          >{{ item.id }}</router-link
-        >
-      </template>
+  <v-data-table
+    class="agent-table"
+    :headers="translatedHeaders"
+    dense
+    hide-default-footer
+    :items="response.results"
+    :items-per-page="searchParameters.paginateBy"
+    multi-sort
+    :page="searchParameters.page"
+    :search="filter"
+    :sort-by.sync="searchParameters.sortBy"
+    :sort-desc.sync="searchParameters.sortDesc"
+    :server-items-length="response.count"
+    :class="bodyColor.split('n-')[0] + 'n-5'"
+  >
+    <template v-slot:item.id="{ item }">
+      <router-link
+        :to="{ path: '/agent/' + item.id }"
+        :title="$t('editAgent.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+        >{{ item.id }}</router-link
+      >
+    </template>
 
-      <template v-slot:item.institution_name="{ item }">
-        <div
-          v-translate="{
-            et: item.institution_name,
-            en: item.institution_name_en
-          }"
-        ></div>
-      </template>
+    <template v-slot:item.institution_name="{ item }">
+      <div
+        v-translate="{
+          et: item.institution_name,
+          en: item.institution_name_en
+        }"
+      ></div>
+    </template>
 
-      <template v-slot:item.institution__institution_name="{ item }">
-        <div
-          v-translate="{
-            et: item.institution__institution_name,
-            en: item.institution__institution_name_en
-          }"
-        ></div>
-      </template>
+    <template v-slot:item.institution__institution_name="{ item }">
+      <div
+        v-translate="{
+          et: item.institution__institution_name,
+          en: item.institution__institution_name_en
+        }"
+      ></div>
+    </template>
 
-      <template v-slot:item.type="{ item }">
-        <div
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
-          }"
-        ></div>
-      </template>
-    </v-data-table>
-  </div>
+    <template v-slot:item.type="{ item }">
+      <div
+        v-translate="{
+          et: item.type__value,
+          en: item.type__value_en
+        }"
+      ></div>
+    </template>
+  </v-data-table>
 </template>
 
 <script>

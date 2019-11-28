@@ -1969,7 +1969,7 @@ export function fetchAgents(data) {
 
 export function fetchDrillcores(data) {
   const fields =
-    "id,drillcore,drillcore_en,depth,boxes,box_numbers,storage,remarks";
+    "id,drillcore,drillcore_en,depth,boxes,box_numbers,location,year,agent__agent,remarks";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -2002,10 +2002,40 @@ export function fetchDrillcores(data) {
   }
 }
 
-
 /***********************
  ***  DRILLCORE END  ***
  ***********************/
+
+/*************************
+ *** PREPARATION START ***
+ *************************/
+
+export function fetchPreparations(data) {
+  const fields =
+    "id,preparation_number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__stratigraphy__stratigraphy,sample__stratigraphy__stratigraphy_en,agent,agent__agent";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.preparation_number && data.preparation_number.trim().length > 0) {
+    searchFields += `preparation_number__icontains=${data.preparation_number}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `preparation/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `preparation/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/*************************
+ ***  PREPARATION END  ***
+ *************************/
 
 /***********************
  *** UNIVERSAL START ***

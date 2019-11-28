@@ -1429,6 +1429,78 @@ const router = new Router({
           ]
         },
         {
+          path: "/preparation",
+          component: () => import("./views/Preparations.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/preparation/PreparationTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "preparation",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/preparation/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/preparation/Preparation.vue"),
+              meta: {
+                isEdit: true,
+                table: "preparation",
+                title: "titles.editPreparation",
+                heading: "editPreparation.heading",
+                isBottomOptionShown: true,
+                isNavigationShown: true,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: "preparation"
+              }
+            }
+          ]
+        },
+        {
+          path: "/preparation/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Preparation add",
+              component: () =>
+                import("./components/preparation/Preparation.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addPreparation",
+                addNew: "add.newPreparation",
+                subForms: [
+                  { path: "/preparation/add", name: "add.preparation" }
+                ],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: "preparation"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/fileUpload/FileUpload.vue"),
           meta: {

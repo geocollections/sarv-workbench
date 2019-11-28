@@ -1,6 +1,9 @@
 <template>
-  <div class="drillcores">
-    <table-view-title title="header.drillcores" buttonPath="/drillcore/add" />
+  <div class="preparations">
+    <table-view-title
+      title="header.preparations"
+      buttonPath="/preparation/add"
+    />
 
     <table-view-search
       :show-search="block.search"
@@ -12,12 +15,12 @@
 
     <!-- SEARCH FIELDS END -->
     <list-module-core
-      module="drillcore"
-      title="titles.editDrillcore"
+      module="preparation"
+      title="titles.editPreparation"
       :searchParameters="searchParameters"
-      :api-call="fetchDrillcores"
-      search-history="drillcoreSearchHistory"
-      view-type="drillcoreViewType"
+      :api-call="fetchPreparations"
+      search-history="preparationSearchHistory"
+      view-type="preparationViewType"
       v-on:search-params-changed="searchParametersChanged"
     ></list-module-core>
   </div>
@@ -25,9 +28,9 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchDrillcores } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
+import {fetchPreparations} from "../assets/js/api/apiCalls";
 
 export default {
   components: {
@@ -35,15 +38,16 @@ export default {
     TableViewTitle,
     TableViewSearch
   },
-  name: "Drillcores",
+  name: "Preparations",
   data() {
     return {
       response: {},
       filters: [
-        { id: "drillcore", title: "drillcore.drillcore", type: "number" },
-        { id: "boxes", title: "drillcore.boxes", type: "text" },
-        { id: "locality", title: "drillcore.locality", type: "text" },
-        { id: "storage", title: "drillcore.storage", type: "text" }
+        {
+          id: "preparation_number",
+          title: "preparation.preparation_number",
+          type: "text"
+        }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
@@ -53,7 +57,7 @@ export default {
     searchParameters: {
       handler: function(newVal) {
         this.$store.dispatch("updateSearchParameters", {
-          module: "drillcore",
+          module: "preparation",
           filters: this.filters,
           params: newVal
         });
@@ -64,9 +68,9 @@ export default {
   },
 
   methods: {
-    fetchDrillcores() {
+    fetchPreparations() {
       return new Promise(resolve => {
-        resolve(fetchDrillcores(this.searchParameters));
+        resolve(fetchPreparations(this.searchParameters));
       });
     },
     searchParametersChanged(newParams) {
@@ -74,10 +78,7 @@ export default {
     },
     setDefaultSearchParameters() {
       return {
-        drillcore: null,
-        boxes: null,
-        locality: null,
-        storage: null,
+        preparation_number: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],
@@ -89,8 +90,8 @@ export default {
       this.resetSearchParameters();
     },
     resetStorage() {
-      this.$localStorage.remove("drillcoreSearchHistory");
-      this.$localStorage.remove("drillcoreViewType");
+      this.$localStorage.remove("preparationSearchHistory");
+      this.$localStorage.remove("preparationViewType");
     },
     resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();

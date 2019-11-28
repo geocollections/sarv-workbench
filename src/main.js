@@ -315,14 +315,21 @@ new Vue({
     agentSearchHistory: {
       type: Object
     },
-    agentSeriesViewType: {
+    agentViewType: {
       type: String,
       default: "table"
     },
-    drillcoreSeriesSearchHistory: {
+    drillcoreSearchHistory: {
       type: Object
     },
-    drillcoreSeriesViewType: {
+    drillcoreViewType: {
+      type: String,
+      default: "table"
+    },
+    preparationSearchHistory: {
+      type: Object
+    },
+    preparationViewType: {
       type: String,
       default: "table"
     },
