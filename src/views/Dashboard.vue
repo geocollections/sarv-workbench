@@ -10,22 +10,11 @@
 
     <v-content>
       <v-container fluid>
-        <v-breadcrumbs
-          v-if="recentUrlsState && recentUrls && recentUrls.length > 0"
-          class="p-0"
+        <breadcrumbs
+          v-if="recentUrlsState"
           :items="recentUrls"
-          divider="-"
-        >
-          <template v-slot:item="{ item }">
-            <router-link
-              class="sarv-link"
-              :class="appSettings.bodyActiveColor + '--text'"
-              :to="{ path: item.href }"
-            >
-              {{ item.text }}
-            </router-link>
-          </template>
-        </v-breadcrumbs>
+          :body-active-color="appSettings.bodyActiveColor"
+        />
 
         <router-view />
       </v-container>
@@ -36,9 +25,11 @@
 <script>
 import AppHeader from "../components/partial/appHeader/AppHeader";
 import { mapState } from "vuex";
+import Breadcrumbs from "../components/partial/Breadcrumbs";
 
 export default {
   components: {
+    Breadcrumbs,
     AppHeader
   },
   name: "Dashboard",
@@ -58,7 +49,10 @@ export default {
     this.$store.dispatch("initialiseAppSettings");
   },
   beforeRouteUpdate(to, from, next) {
-    this.$store.dispatch("appendRecentUrls", { text: from.path, href: from.path });
+    this.$store.dispatch("appendRecentUrls", {
+      text: from.path,
+      href: from.path
+    });
     next();
   }
 };
