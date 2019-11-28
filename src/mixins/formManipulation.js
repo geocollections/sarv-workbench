@@ -17,7 +17,6 @@ const formManipulation = {
       previousRequest: null,
       sendingData: false,
       editMode: false,
-      showCollapseMap: null,
       isFileAddedAsObject: null
     };
   },
@@ -31,15 +30,6 @@ const formManipulation = {
     // this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
 
     this.$parent.$on("button-clicked", this.bottomOptionClicked);
-  },
-  beforeMount() {
-    //localstorage settings
-    let showCollapseMap = this.$localStorage.get(
-      "mapComponent",
-      "fallbackValue"
-    );
-    if (this.isNotEmpty(showCollapseMap) && showCollapseMap !== "fallbackValue")
-      this.$set(this.$data, "showCollapseMap", showCollapseMap);
   },
   beforeDestroy() {
     this.$parent.$off("button-clicked", this.bottomOptionClicked);
@@ -1036,10 +1026,6 @@ const formManipulation = {
   },
 
   watch: {
-    showCollapseMap(newVal) {
-      if (this.isNotEmpty(newVal))
-        this.$localStorage.set("mapComponent", newVal);
-    },
     attachmentLinkSaved: {
       handler: function(newval) {
         if (newval === 0) {

@@ -187,9 +187,12 @@ export default {
   },
 
   UPDATE_MAP_STATE(state, mapState) {
-    const mapSettings = Vue.localStorage.get("SARV_MAP_SETTINGS", null);
+    let mapSettings = Vue.localStorage.get("SARV_MAP_SETTINGS", null);
 
     if (mapSettings && !isEmpty(mapSettings)) {
+      mapSettings.showMap = mapState;
+    } else {
+      mapSettings = {};
       mapSettings.showMap = mapState;
     }
     Vue.localStorage.set("SARV_MAP_SETTINGS", mapSettings);

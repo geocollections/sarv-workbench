@@ -418,7 +418,7 @@
                   :color="bodyColor.split('n-')[0] + 'n-5'"
                 >
                   <v-switch
-                    v-model="showCollapseMap"
+                    v-model="showMap"
                     hide-details
                     id="map-switch"
                     class="vuetify-switch my-1"
@@ -434,7 +434,7 @@
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                      showCollapseMap
+                    showMap
                         ? $t("site.mapEnabled")
                         : $t("site.mapDisabled")
                     }}
@@ -444,9 +444,10 @@
 
               <!-- MAP -->
               <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+                <v-row no-gutters v-show="showMap" class="mt-2">
                   <v-col cols="12" class="px-1">
                     <map-component
+                      v-if="showMap"
                       mode="single"
                       module="attachment"
                       v-bind:locations="[]"
@@ -1502,7 +1503,7 @@
                   :color="bodyColor.split('n-')[0] + 'n-5'"
                 >
                   <v-switch
-                    v-model="showCollapseMap"
+                    v-model="showMap"
                     hide-details
                     id="map-switch"
                     class="vuetify-switch my-1"
@@ -1518,7 +1519,7 @@
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                      showCollapseMap
+                    showMap
                         ? $t("site.mapEnabled")
                         : $t("site.mapDisabled")
                     }}
@@ -1528,9 +1529,10 @@
 
               <!-- MAP -->
               <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+                <v-row no-gutters v-show="showMap" class="mt-2">
                   <v-col cols="12" class="px-1">
                     <map-component
+                      v-if="showMap"
                       mode="single"
                       module="attachment"
                       v-bind:locations="[]"
@@ -3206,8 +3208,17 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId", "currentUser"]),
+    ...mapState(["databaseId", "currentUser", "mapSettings"]),
     ...mapGetters(["isUserAllowedTo"]),
+
+    showMap: {
+      get() {
+        return this.mapSettings.showMap;
+      },
+      set(value) {
+        this.$store.dispatch("updateMapState", value);
+      }
+    },
 
     isPhotoArchive() {
       return this.$route.meta.isEdit
@@ -3350,7 +3361,6 @@ export default {
 
           let attachmentHistory;
           let keywords;
-          let showMap;
           if (this.isPhotoArchive) {
             attachmentHistory = this.$localStorage.get(
               "photoArchive",
@@ -3360,7 +3370,6 @@ export default {
               "photoArchiveKeywords",
               "fallbackValue"
             );
-            showMap = this.$localStorage.get("mapComponent", "fallbackValue");
           } else if (this.isSpecimenImage) {
             attachmentHistory = this.$localStorage.get(
               "specimenImage",
@@ -3379,7 +3388,6 @@ export default {
               "otherFilesKeywords",
               "fallbackValue"
             );
-            showMap = this.$localStorage.get("mapComponent", "fallbackValue");
           } else if (this.isDigitisedReference)
             attachmentHistory = this.$localStorage.get(
               "digitisedReference",
@@ -3398,8 +3406,6 @@ export default {
             keywords.length > 0
           )
             this.relatedData.keyword = keywords;
-          if (this.isNotEmpty(showMap) && showMap !== "fallbackValue")
-            this.showCollapseMap = showMap;
 
           if (this.isPhotoArchive) {
             if (this.$route.params.imageset) {
@@ -3583,7 +3589,6 @@ export default {
           relatedData: true,
           changeType: false
         },
-        showCollapseMap: null,
         clearFiles: false,
         files: [],
         selectedRelatedTable: null,

@@ -207,6 +207,9 @@ export default {
       if (this.mapSettings && this.mapSettings.defaultLayer) {
         this.map.removeLayer(baseMaps["OpenStreetMap"]);
         this.map.addLayer(baseMaps[this.mapSettings.defaultLayer]);
+        if (this.mapSettings.defaultLayer === "Maaameti fotokaart") {
+          this.map.addLayer(this.overlayMaps[0].leafletObject);
+        }
       }
 
       // FULLSCREEN

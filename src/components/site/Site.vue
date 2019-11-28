@@ -216,7 +216,7 @@
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <v-switch
-                v-model="showCollapseMap"
+                v-model="showMap"
                 hide-details
                 id="map-switch"
                 class="vuetify-switch my-1"
@@ -232,7 +232,7 @@
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
                 {{
-                  showCollapseMap
+                showMap
                     ? $t("site.mapEnabled")
                     : $t("site.mapDisabled")
                 }}
@@ -242,10 +242,10 @@
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+            <v-row no-gutters v-show="showMap" class="mt-2">
               <v-col cols="12" class="px-1">
                 <map-component
-                  v-if="showCollapseMap && !isLatitudeUndefinedInEditView"
+                  v-if="showMap && !isLatitudeUndefinedInEditView"
                   :gps-coords="true"
                   mode="single"
                   module="site"
@@ -592,6 +592,7 @@ import Editor from "../partial/editor/Editor";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
+import {mapState} from "vuex";
 
 export default {
   name: "Site",
@@ -633,8 +634,15 @@ export default {
     return this.setInitialData();
   },
   computed: {
-    sidebarUserAction() {
-      return this.$store.state["sidebarUserAction"];
+    ...mapState(["sidebarUserAction", "mapSettings"]),
+
+    showMap: {
+      get() {
+        return this.mapSettings.showMap;
+      },
+      set(value) {
+        this.$store.dispatch("updateMapState", value);
+      }
     },
 
     // Checks if site object has latitude key and is edit view, using this check while rendering mapComponent,

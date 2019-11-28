@@ -50,7 +50,7 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'analysis', id: item.id })"
+        :href="getGeoDetailUrl({ object: 'locality', id: item.id })"
         :title="$t('editAnalysis.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"

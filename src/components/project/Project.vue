@@ -442,7 +442,7 @@
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <v-switch
-                v-model="showCollapseMap"
+                v-model="showMap"
                 hide-details
                 id="map-switch"
                 class="vuetify-switch my-1"
@@ -458,7 +458,7 @@
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
                 {{
-                  showCollapseMap
+                showMap
                     ? $t("site.mapEnabled")
                     : $t("site.mapDisabled")
                 }}
@@ -468,12 +468,12 @@
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showCollapseMap" class="mt-2">
+            <v-row no-gutters v-show="showMap" class="mt-2">
               <v-col cols="12" class="px-1">
                 <map-component
                   :gps-coords="true"
                   mode="multiple"
-                  v-if="showCollapseMap"
+                  v-if="showMap"
                   module="project"
                   v-bind:location="{ lat: null, lng: null }"
                   :locations="relatedData.sites.results"
@@ -654,7 +654,16 @@ export default {
     return this.setInitialData();
   },
   computed: {
-    ...mapState(["currentUser", "databaseId", "activeProject"]),
+    ...mapState(["currentUser", "databaseId", "activeProject", "mapSettings"]),
+
+    showMap: {
+      get() {
+        return this.mapSettings.showMap;
+      },
+      set(value) {
+        this.$store.dispatch("updateMapState", value);
+      }
+    },
 
     sidebarUserAction() {
       return this.$store.state["sidebarUserAction"];

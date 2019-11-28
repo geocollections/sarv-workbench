@@ -54,7 +54,7 @@
 
           <transition enter-active-class="animated zoomIn faster">
             <div v-show="block.map">
-              <sites-map />
+              <sites-map v-if="block.map" />
             </div>
           </transition>
         </v-card>
