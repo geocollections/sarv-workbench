@@ -54,6 +54,7 @@ export default {
     this.$store.dispatch("INITIALISE_ACTIVE_OBJECTS");
     this.$store.dispatch("INITIALISE_USER_DATA");
     this.$store.dispatch("initialiseRecentUrls");
+    this.$store.dispatch("initialiseMapSettings");
   },
   beforeRouteUpdate(to, from, next) {
     this.$store.dispatch("appendRecentUrls", { text: from.path, href: from.path });

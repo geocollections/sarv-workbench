@@ -135,7 +135,7 @@ export default {
   }),
 
   computed: {
-    ...mapState(["currentUser"])
+    ...mapState(["currentUser", "mapSettings"])
   },
 
   created() {
@@ -203,6 +203,12 @@ export default {
       L.control.layers(baseMaps, overlayMaps).addTo(this.map);
       L.control.scale({ imperial: false }).addTo(this.map);
 
+      // Default layer
+      if (this.mapSettings && this.mapSettings.defaultLayer) {
+        this.map.removeLayer(baseMaps["OpenStreetMap"]);
+        this.map.addLayer(baseMaps[this.mapSettings.defaultLayer]);
+      }
+
       // FULLSCREEN
       this.map.addControl(new window.L.Control.Fullscreen());
 
@@ -213,6 +219,8 @@ export default {
     },
 
     handleLayerChange(event) {
+      this.$store.dispatch("updateMapDefaultLayer", event.name);
+
       if (event.name && event.name === "Maaameti fotokaart") {
         console.log(this.overlayMaps[0].leafletObject);
         this.map.addLayer(this.overlayMaps[0].leafletObject);

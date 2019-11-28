@@ -344,6 +344,9 @@ new Vue({
     SARV_APP_SETTINGS: {
       type: Object
     },
+    SARV_MAP_SETTINGS: {
+      type: Object
+    },
     recentUrls: {
       type: Array
     }

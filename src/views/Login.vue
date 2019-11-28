@@ -5,15 +5,14 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
-          <v-card color="blue-grey">
+          <v-card :color="appSettings.bodyColor.split('n-')[0] + 'n-5'">
             <v-tabs
               v-model="tab"
               class="elevation-6"
-              dark
               grow
-              background-color="blue-grey"
+              :background-color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
               hide-slider
-              active-class="active-tab-color"
+              :active-class="appSettings.bodyColor.split('n-')[0] + 'n-5 black--text'"
             >
               <v-tabs-slider></v-tabs-slider>
 
@@ -22,9 +21,9 @@
               <v-tab class="font-weight-bold">{{ $t("login.password") }}</v-tab>
             </v-tabs>
 
-            <v-tabs-items v-model="tab" class="elevation-6">
+            <v-tabs-items v-model="tab">
               <v-tab-item>
-                <v-card flat>
+                <v-card flat :color="appSettings.bodyColor.split('n-')[0] + 'n-5'">
                   <v-card-text>
                     <v-alert
                       class="mb-0"
@@ -60,7 +59,7 @@
               </v-tab-item>
 
               <v-tab-item>
-                <v-card flat>
+                <v-card flat :color="appSettings.bodyColor.split('n-')[0] + 'n-5'">
                   <v-card-text>
                     <v-alert
                       border="right"
@@ -84,7 +83,7 @@
                         :rules="usernameRules"
                         :label="$t('login.username')"
                         placeholder=""
-                        color="blue-grey"
+                        color="black"
                         outlined
                         dense
                         required
@@ -96,7 +95,7 @@
                         :rules="passwordRules"
                         :label="$t('login.password')"
                         placeholder=""
-                        color="blue-grey"
+                        color="black"
                         outlined
                         dense
                         :type="showPassword ? 'text' : 'password'"
@@ -136,6 +135,7 @@
 <script>
 import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
+import {mapState} from "vuex";
 
 export default {
   name: "Login",
@@ -166,12 +166,20 @@ export default {
     idError: false
   }),
 
+  beforeCreate() {
+    this.$store.dispatch("initialiseAppSettings");
+  },
+
   created() {
     window.addEventListener("keyup", this.handleKeyUp);
   },
 
   beforeDestroy() {
     window.removeEventListener("keyup", this.handleKeyUp);
+  },
+
+  computed: {
+    ...mapState(["appSettings"])
   },
 
   methods: {

@@ -39,6 +39,7 @@ import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
 import "leaflet-measure/dist/leaflet-measure";
+import {mapState} from "vuex";
 
 export default {
   name: "MapComponent",
@@ -204,7 +205,9 @@ export default {
         this.location.lat !== null &&
         this.location.lng !== null
       );
-    }
+    },
+
+    ...mapState(["mapSettings"])
   },
 
   created() {
@@ -243,6 +246,12 @@ export default {
       L.control.layers(baseLayers, overlayMaps).addTo(this.map);
       L.control.scale({ imperial: false }).addTo(this.map);
 
+      // Default layer
+      if (this.mapSettings && this.mapSettings.defaultLayer) {
+        this.map.removeLayer(baseLayers["OpenStreetMap"]);
+        this.map.addLayer(baseLayers[this.mapSettings.defaultLayer]);
+      }
+
       // Fullscreen
       this.map.addControl(new window.L.Control.Fullscreen());
       // LeafletMeasure
@@ -271,6 +280,8 @@ export default {
     },
 
     handleLayerChange(event) {
+      this.$store.dispatch("updateMapDefaultLayer", event.name);
+
       this.tileProviders.forEach(tile => {
         if (tile.name === event.name) {
           this.map.options.minZoom = tile.minZoom;

@@ -194,5 +194,17 @@ export default {
 
   initialiseAppSettings({ commit }) {
     commit("INITIALISE_APP_SETTINGS");
+  },
+
+  updateMapState({ commit }, mapState) {
+    commit("UPDATE_MAP_STATE", mapState);
+  },
+
+  updateMapDefaultLayer({ commit }, layerName) {
+    commit("UPDATE_MAP_DEFAULT_LAYER", layerName);
+  },
+
+  initialiseMapSettings({ commit }) {
+    commit("INITIALISE_MAP_SETTINGS");
   }
 };

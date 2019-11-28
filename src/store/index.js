@@ -43,6 +43,10 @@ export function createStore() {
         drawerRightDark: false,
         drawerRightActiveColor: "deep-orange"
       },
+      mapSettings: {
+        showMap: true,
+        defaultLayer: "OpenStreetMap"
+      },
       showRecentUrls: false,
       recentUrls: []
     },

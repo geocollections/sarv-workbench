@@ -170,7 +170,6 @@ export default {
     ...mapState(["currentUser", "appSettings"])
   },
   beforeCreate: function() {
-    this.$store.dispatch("initialiseAppSettings");
     this.$store.dispatch("GET_SHORTCUTS");
   },
   watch: {

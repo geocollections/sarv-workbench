@@ -171,6 +171,7 @@ export default {
   },
 
   UPDATE_APP_SETTINGS(state, settings) {
+    this.$localStorage.set("SARV_APP_SETTINGS", settings);
     Vue.set(state, "appSettings", settings);
   },
 
@@ -182,6 +183,42 @@ export default {
       settings.constructor === Object
     ) {
       Vue.set(state, "appSettings", settings);
+    }
+  },
+
+  UPDATE_MAP_STATE(state, mapState) {
+    const mapSettings = Vue.localStorage.get("SARV_MAP_SETTINGS", null);
+
+    if (mapSettings && !isEmpty(mapSettings)) {
+      mapSettings.showMap = mapState;
+    }
+    Vue.localStorage.set("SARV_MAP_SETTINGS", mapSettings);
+
+    Vue.set(state.mapSettings, "showMap", mapState);
+  },
+
+  UPDATE_MAP_DEFAULT_LAYER(state, layerName) {
+    let mapSettings = Vue.localStorage.get("SARV_MAP_SETTINGS", null);
+
+    if (mapSettings && !isEmpty(mapSettings)) {
+      mapSettings.defaultLayer = layerName;
+    } else {
+      mapSettings = {};
+      mapSettings.defaultLayer = layerName;
+    }
+    Vue.localStorage.set("SARV_MAP_SETTINGS", mapSettings);
+
+    Vue.set(state.mapSettings, "defaultLayer", layerName);
+  },
+
+  INITIALISE_MAP_SETTINGS(state) {
+    let mapSettings = Vue.localStorage.get("SARV_MAP_SETTINGS");
+    if (
+      mapSettings &&
+      Object.entries(mapSettings).length > 0 &&
+      mapSettings.constructor === Object
+    ) {
+      Vue.set(state, "mapSettings", mapSettings);
     }
   }
 };

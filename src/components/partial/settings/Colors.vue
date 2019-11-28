@@ -351,7 +351,6 @@ export default {
   watch: {
     settings: {
       handler(newVal) {
-        this.$localStorage.set("SARV_APP_SETTINGS", newVal);
         this.$store.dispatch("updateSettings", newVal);
       },
       deep: true
