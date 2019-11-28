@@ -1898,12 +1898,12 @@ export default {
       return {
         idSpecimen: null,
         collNumber: null,
-        classification: null,
         fossil: null,
         mineralRock: null,
         locality: null,
         stratigraphy: null,
         agent_collected: null,
+        storage: null,
         selectionId: null,
         selection: null,
         page: 1,

@@ -1017,7 +1017,7 @@ export default {
 
     setDefaultSearchParameters() {
       return {
-        owner: null,
+        name: null,
         id: null,
         page: 1,
         paginateBy: 50,

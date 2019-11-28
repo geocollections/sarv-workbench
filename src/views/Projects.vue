@@ -14,7 +14,6 @@
     <list-module-core
       module="project"
       title="titles.editProject"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchProjects"
       search-history="projectSearchHistory"
@@ -41,32 +40,8 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "project.id", type: "number" },
-        { id: "name", title: "project.name", type: "text" },
-        { id: "project_type", title: "project.project_type", type: "text" },
-        {
-          id: "date_start",
-          title: "project.date_start",
-          type: "text",
-          isDate: true
-        },
-        {
-          id: "date_end",
-          title: "project.date_end",
-          type: "text",
-          isDate: true
-        },
-        {
-          id: "date_free",
-          title: "project.date_free",
-          type: "text",
-          isDate: true
-        },
-        { id: "owner", title: "project.owner", type: "text" }
-      ],
       filters: [
-        { id: "owner", title: "project.name", type: "text" },
+        { id: "name", title: "project.name", type: "text" },
         { id: "id", title: "project.id", type: "number" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
@@ -103,7 +78,7 @@ export default {
     },
     setDefaultSearchParameters() {
       return {
-        owner: null,
+        name: null,
         id: null,
         page: 1,
         paginateBy: 50,

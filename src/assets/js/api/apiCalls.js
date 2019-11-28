@@ -1029,7 +1029,7 @@ export function fetchProjectType() {
 
 export function fetchProjects(data, agent) {
   const fields =
-    "id,name, name_en,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end," +
+    "id,name,name_en,project_type,project_type__name,project_type__name_en,parent_project,date_start,date_end," +
     "date_free,description,remarks,owner,owner__agent,is_private";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
@@ -1038,12 +1038,8 @@ export function fetchProjects(data, agent) {
     searchFields += `id__icontains=${data.id}`;
   }
 
-  // if (data.name !== null && data.name.trim().length > 0) {
-  //   searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`
-  // }
-
-  if (data.owner !== null && data.owner.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.owner};fields:owner__agent;fields:owner__surename;fields:owner__forename;lookuptype:icontains`;
+  if (data.name !== null && data.name.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
