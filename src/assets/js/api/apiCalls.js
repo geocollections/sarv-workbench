@@ -1355,7 +1355,7 @@ export function fetchSpecimen(id) {
 
 export function fetchSpecimens(data, databaseId) {
   const fields =
-    "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy_id,date_collected,date_collected_free,depth,depth_interval,is_private";
+    "id,coll__number,specimen_id,specimen_nr,locality_id,locality__locality,locality__locality_en,locality_free,depth,depth_interval,stratigraphy_id,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,agent_collected__agent,agent_collected__forename,agent_collected__surename,storage__location,database__name,database__name_en,database__acronym,lithostratigraphy__stratigraphy_en,lithostratigraphy__stratigraphy,lithostratigraphy_id,date_collected,date_collected_free,depth,depth_interval,is_private,storage__location";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -1388,6 +1388,10 @@ export function fetchSpecimens(data, databaseId) {
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
     searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:icontains`;
+  }
+
+  if (data.storage && data.storage.trim().length > 0) {
+    searchFields += `&storage__location__icontains=${data.storage}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
@@ -1450,6 +1454,18 @@ export function fetchSpecimenImages(data, databaseId) {
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
     searchFields += `&multi_search=value:${data.agent_collected};fields:specimen__agent_collected__agent,specimen__agent_collected__forename,specimen__agent_collected__surename,specimen__agent_collected_free;lookuptype:icontains`;
+  }
+
+  if (data.storage && data.storage.trim().length > 0) {
+    searchFields += `&specimen__storage__location__icontains=${data.storage}`;
+  }
+
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&specimen__selection__selection__id__icontains=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&specimen__selection__selection__name__icontains=${data.selection}`;
   }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {

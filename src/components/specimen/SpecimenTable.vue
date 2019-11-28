@@ -219,6 +219,7 @@ export default {
       { text: "specimen.depth", value: "depth" },
       { text: "specimen.stratigraphy", value: "stratigraphy__stratigraphy" },
       { text: "specimen.agent_collected", value: "agent_collected__agent" },
+      { text: "specimen.storage", value: "storage__location" },
       { text: "", value: "link", sortable: false },
       { text: "", value: "selection_series", sortable: false }
     ],

@@ -185,6 +185,7 @@ export default {
         locality: null,
         stratigraphy: null,
         agent_collected: null,
+        storage: null,
         selectionId: null,
         selection: null,
         page: 1,
