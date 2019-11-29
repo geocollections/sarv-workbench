@@ -270,6 +270,11 @@
       "active": "Aktiivne valik",
       "activeTitle": "Tee valik aktiivseks",
       "inactiveTitle": "Tee valik mitteaktiivseks"
+    },
+    "agent": {
+      "info": "Üldinfo",
+      "details": "Muu info",
+      "description": "Kirjeldus"
     }
   },
   "add": {
@@ -1309,7 +1314,29 @@
     "institution": "Asutus",
     "institution__institution": "Kuulub",
     "remarks": "Märkused",
-    "type": "Tüüp"
+    "type": "Tüüp",
+    "agent": "Nimi",
+    "institution_name": "Asututse nimi (ainult asutuse puhul)",
+    "institution_name_en": "Asutuse nimi (EN)",
+    "title": "Tiitle",
+    "profession": "Amet",
+    "profession_en": "Amet (EN)",
+    "address": "Aadress 1. rida",
+    "address1": "Aadress 2. rida",
+    "address2": "Aadress 3. ride",
+    "http": "Koduleht",
+    "orcid": "ORCID",
+    "country": "Riik",
+    "country_txt": "Riik txt.",
+    "phone": "Telefon",
+    "email": "E-post",
+    "date_born": "Sünniaeg",
+    "date_deceased": "Surmaaeg",
+    "old_name": "End. nimi",
+    "new_name": "Uus nimi",
+    "generalInfo": "Üldinfo",
+    "details": "Muu info",
+    "description": "Kirjeldus"
   },
   "drillcore": {
     "id": "ID",

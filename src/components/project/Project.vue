@@ -590,7 +590,6 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import cloneDeep from "lodash/cloneDeep";
 import {
-  fetchProjects,
   fetchProject,
   fetchProjectType,
   fetchProjectAgent,
@@ -997,18 +996,6 @@ export default {
 
       // console.log(JSON.stringify(uploadableObject));
       return JSON.stringify(uploadableObject);
-    },
-
-    fetchList(localStorageData) {
-      let params =
-        this.isNotEmpty(localStorageData) &&
-        localStorageData !== "fallbackValue" &&
-        localStorageData !== "[object Object]"
-          ? localStorageData
-          : this.searchParameters;
-      return new Promise(resolve => {
-        resolve(fetchProjects(params, this.currentUser.id));
-      });
     },
 
     setDefaultSearchParameters() {

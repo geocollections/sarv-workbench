@@ -43,6 +43,9 @@ const autocompleteMixin = {
     rankLabel() {
       return this.$i18n.locale === "ee" ? "rank" : "rank_en";
     },
+    institutionLabel() {
+      return this.$i18n.locale === "ee" ? "institution_name" : "institution_name_en";
+    },
     ...mapState(["currentUser"])
   },
   methods: {
@@ -282,6 +285,9 @@ const autocompleteMixin = {
         2
       );
     },
+    autocompleteInstitutionSearch(value) {
+      this.$_autocompleteMixin_search(value, "institution", "institution", 2);
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -364,7 +370,9 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "agent_digitised":
     case "agent_collected":
     case "copyright_agent":
-      return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,forename,surename`;
+      return `agent/?multi_search=value:${value};fields:id,agent,forename,surename;lookuptype:icontains&fields=id,agent,forename,surename,orcid`;
+    case "institution":
+      return `agent/?multi_search=value:${value};fields:id,agent,institution_name,institution_name_en;lookuptype:icontains&fields=id,agent,institution_name,institution_name_en`;
     case "rock":
       return `rock/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "sample":

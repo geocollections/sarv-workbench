@@ -2,7 +2,7 @@ version: 2
 jobs:
   install_build_deploy:
     docker:
-      - image: circleci/node:13.2.0
+      - image: circleci/node:current
     steps:
       - checkout
       - restore_cache:

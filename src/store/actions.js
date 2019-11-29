@@ -13,7 +13,7 @@ import {
   fetchJournals,
   fetchCollections,
   fetchTaxa,
-  fetchSelectionSeries
+  fetchSelectionSeries, fetchAgents
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -112,6 +112,12 @@ export default {
 
   FETCH_SELECTION_SERIES: ({ commit, state }) => {
     return fetchSelectionSeries(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_AGENTS: ({ commit, state }) => {
+    return fetchAgents(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

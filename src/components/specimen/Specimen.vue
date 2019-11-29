@@ -937,7 +937,6 @@ import {
   fetchSpecimenIdentifications,
   fetchSpecimenLocations,
   fetchSpecimenReferences,
-  fetchSpecimens
 } from "../../assets/js/api/apiCalls";
 import { mapState } from "vuex";
 import SpecimenIdentification from "./relatedTables/SpecimenIdentification";
@@ -1884,18 +1883,6 @@ export default {
       console.log("This object is sent in string format (related_data):");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
-    },
-
-    fetchList(localStorageData) {
-      let params =
-        this.isNotEmpty(localStorageData) &&
-        localStorageData !== "fallbackValue" &&
-        localStorageData !== "[object Object]"
-          ? localStorageData
-          : this.searchParameters;
-      return new Promise(resolve => {
-        resolve(fetchSpecimens(params, this.databaseId));
-      });
     },
 
     setDefaultSearchParameters() {

@@ -1855,10 +1855,19 @@ export function fetchListKeywords() {
  *** AGENT START ***
  *******************/
 
+export function fetchAgent(id) {
+  let fields = `id,agent,type,type__value,type__value_en,forename,surename,institution,institution__agent,institution__institution_name,institution__institution_name_en,institution_name,institution_name_en,title,profession,profession_en,address,address1,address2,http,orcid,country__value,country__value_en,country,country_txt,phone,email,date_born,date_deceased,old_name,new_name,remarks`;
+  return fetch(`agent/?id=${id}&fields=${fields}&format=json`);
+}
+
 export function fetchAgentUsingName(name) {
   return fetch(
     `agent/?multi_search=value:${name};fields:id,agent,forename,surename;lookuptype:icontains&page=1&paginate_by=1&fields=id,agent,institution__institution_name_en,orcid`
   );
+}
+
+export function fetchListAgentType() {
+  return fetch(`agent_type/?format=json`);
 }
 
 /*******************

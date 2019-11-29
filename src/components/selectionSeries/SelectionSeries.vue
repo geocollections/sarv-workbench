@@ -1,12 +1,14 @@
 <template>
   <div class="selectionSeries">
-    <v-overlay :value="sendingData">
-      <v-progress-circular
-        indeterminate
-        size="64"
-        :color="bodyActiveColor"
-      ></v-progress-circular>
-    </v-overlay>
+    <spinner
+      v-show="sendingData"
+      class="loading-overlay"
+      size="massive"
+      :message="
+        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
+      "
+    ></spinner>
+
 
     <v-card
       class="mt-3"

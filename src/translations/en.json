@@ -270,6 +270,11 @@
       "active": "Active selection series",
       "activeTitle": "Make selection series active",
       "inactiveTitle": "Make selection series inactive"
+    },
+    "agent": {
+      "info": "General info",
+      "details": "Other info",
+      "description": "Remarks"
     }
   },
   "add": {
@@ -1310,7 +1315,29 @@
     "institution": "Institution",
     "institution__institution": "Institution",
     "remarks": "Remarks",
-    "type": "Type"
+    "type": "Type",
+    "agent": "Agent",
+    "institution_name": "Institution name",
+    "institution_name_en": "Institution name (EN)",
+    "title": "Title",
+    "profession": "Profession",
+    "profession_en": "Profession (EN)",
+    "address": "Address 1. row",
+    "address1": "Address 2. row",
+    "address2": "Address 3. row",
+    "http": "Homepage",
+    "orcid": "ORCID",
+    "country": "Country",
+    "country_txt": "Country txt.",
+    "phone": "Phone",
+    "email": "E-mail",
+    "date_born": "Date born",
+    "date_deceased": "Date deceased",
+    "old_name": "Old name",
+    "new_name": "New name",
+    "generalInfo": "General info",
+    "details": "Other info",
+    "description": "Remarks"
   },
   "drillcore": {
     "id": "ID",
