@@ -1860,6 +1860,41 @@ export function fetchAgent(id) {
   return fetch(`agent/?id=${id}&fields=${fields}&format=json`);
 }
 
+export function fetchAgents(data) {
+  const fields =
+    "id,agent,forename,surename,institution_name,institution_name_en,institution__agent,institution__institution_name,institution__institution_name_en,remarks,type,type__value,type__value_en";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`;
+  }
+
+  if (data.agent && data.agent.trim().length > 0) {
+    searchFields += `&agent__icontains=${data.agent}`;
+  }
+
+  if (data.forename && data.forename.trim().length > 0) {
+    searchFields += `&forename__icontains=${data.forename}`;
+  }
+
+  if (data.surename && data.surename.trim().length > 0) {
+    searchFields += `&surename__icontains=${data.surename}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
 export function fetchAgentUsingName(name) {
   return fetch(
     `agent/?multi_search=value:${name};fields:id,agent,forename,surename;lookuptype:icontains&page=1&paginate_by=1&fields=id,agent,institution__institution_name_en,orcid`
@@ -1928,49 +1963,6 @@ export function fetchAddItemToSelection(data) {
 /***********************
  ***  SELECTION END  ***
  ***********************/
-
-/*******************
- *** AGENT START ***
- *******************/
-
-export function fetchAgents(data) {
-  const fields =
-    "id,agent,forename,surename,institution_name,institution_name_en,institution__agent,institution__institution_name,institution__institution_name_en,remarks,type,type__value,type__value_en";
-  let searchFields = "";
-  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-
-  if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
-  }
-
-  if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&agent__icontains=${data.agent}`;
-  }
-
-  if (data.forename && data.forename.trim().length > 0) {
-    searchFields += `&forename__icontains=${data.forename}`;
-  }
-
-  if (data.surename && data.surename.trim().length > 0) {
-    searchFields += `&surename__icontains=${data.surename}`;
-  }
-
-  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
-
-  if (searchFields.length > 0) {
-    return fetch(
-      `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  } else {
-    return fetch(
-      `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
-    );
-  }
-}
-
-/*******************
- ***  AGENT END  ***
- *******************/
 
 /***********************
  *** DRILLCORE START ***

@@ -41,7 +41,7 @@ export default {
       response: {},
       filters: [
         { id: "id", title: "agent.id", type: "number" },
-        { id: "name", title: "agent.name", type: "text" },
+        { id: "agent", title: "agent.name", type: "text" },
         { id: "forename", title: "agent.forename", type: "text" },
         { id: "surename", title: "agent.surename", type: "text" }
       ],
