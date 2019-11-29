@@ -123,7 +123,7 @@
       </transition>
     </v-card>
 
-    <!-- SPECIMEN DETAILS -->
+    <!-- OTHER INFO -->
     <v-card
       class="mt-2"
       id="block-details"

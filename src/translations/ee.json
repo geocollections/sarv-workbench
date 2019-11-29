@@ -275,6 +275,11 @@
       "info": "Üldinfo",
       "details": "Muu info",
       "description": "Kirjeldus"
+    },
+    "preparation": {
+      "info": "Üldinfo",
+      "details": "Muu info",
+      "description": "Kirjeldus"
     }
   },
   "add": {
@@ -320,6 +325,8 @@
     "newSelectionSeries": "Lisa uus valik",
     "agent": "Isik/asutus",
     "newAgent": "Lisa uus isik/asutus",
+    "preparation": "Preparaat",
+    "newPreparation": "Lisa uus preparaat",
     "drillcore": "Puursüdamik",
     "newDrillcore": "Lisa uus puursüdamik",
     "overlay": "Palun oodake! Saadan infot...",
@@ -1364,7 +1371,24 @@
     "method_id": "Metoodika ID",
     "sample__locality": "Lokaliteet",
     "sample__stratigraphy": "Stratigraafia",
-    "agent": "Preparaator"
+    "agent": "Preparaator",
+    "sample": "Proov",
+    "sample_number": "Proovi number",
+    "analysis": "Metoodika ID",
+    "taxon": "Fossiilirühm",
+    "agent_txt": "Prep. txt",
+    "identification_txt": "Identifitseerija",
+    "date_prepared": "Prep. kuupäev",
+    "identification_agent": "Identifitseerija",
+    "identification_date": "Det. kuupäev",
+    "date_prepared_txt": "Prep. aeg txt",
+    "identification_remarks": "Det. märkused",
+    "location": "Hoiukoht txt",
+    "owner": "Omanik",
+    "is_private": "Privaatne",
+    "generalInfo": "Üldinfo",
+    "details": "Muu info",
+    "description": "Kirjeldus"
   },
   "reference": {
     "reference": "Viide",

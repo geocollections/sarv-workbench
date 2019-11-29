@@ -275,6 +275,11 @@
       "info": "General info",
       "details": "Other info",
       "description": "Remarks"
+    },
+    "preparation": {
+      "info": "General info",
+      "details": "Other info",
+      "description": "Remarks"
     }
   },
   "add": {
@@ -320,6 +325,8 @@
     "newSelectionSeries": "Add new selection series",
     "agent": "Agent",
     "newAgent": "Add new agent",
+    "preparation": "Preparation",
+    "newPreparation": "Add new preparation",
     "drillcore": "Drill core",
     "newDrillcore": "Add new drill core",
     "overlay": "Please wait! Sending data...",
@@ -1365,7 +1372,24 @@
     "method_id": "Method ID",
     "sample__locality": "Locality",
     "sample__stratigraphy": "Stratigraphy",
-    "agent": "Agent"
+    "agent": "Agent",
+    "sample": "Sample",
+    "sample_number": "Sample number",
+    "analysis": "Method ID",
+    "taxon": "Taxon",
+    "agent_txt": "Agent txt",
+    "identification_txt": "Identification txt",
+    "date_prepared": "Date prepared",
+    "identification_agent": "Identification agent",
+    "identification_date": "Identification date",
+    "date_prepared_txt": "Date prepared txt",
+    "identification_remarks": "Identification remarks",
+    "location": "Location txt",
+    "owner": "Owner",
+    "is_private": "Private",
+    "generalInfo": "General info",
+    "details": "Other info",
+    "description": "Remarks"
   },
   "reference": {
     "reference": "Reference",

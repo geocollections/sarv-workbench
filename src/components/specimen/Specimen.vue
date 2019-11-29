@@ -1913,11 +1913,4 @@ label {
   color: rgba(0, 0, 0, 0.54);
   font-size: 0.8rem;
 }
-
-.related-tabs >>> .related-table > thead {
-  color: #546e7a;
-}
-.active-tab-color {
-  color: #000000;
-}
 </style>

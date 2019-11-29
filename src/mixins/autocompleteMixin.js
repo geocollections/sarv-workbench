@@ -133,6 +133,12 @@ const autocompleteMixin = {
     autocompleteOwnerSearch(value) {
       this.$_autocompleteMixin_search(value, "owner", "agent");
     },
+    autocompleteOwner2Search(value) {
+      this.$_autocompleteMixin_search(value, "owner", "owner");
+    },
+    autocompleteIdentificationAgentSearch(value) {
+      this.$_autocompleteMixin_search(value, "agent", "identification_agent");
+    },
     autocompleteCopyrightAgentSearch(value) {
       this.$_autocompleteMixin_search(
         value,

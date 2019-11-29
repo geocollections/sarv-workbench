@@ -2011,6 +2011,10 @@ export function fetchDrillcores(data) {
  *** PREPARATION START ***
  *************************/
 
+export function fetchPreparation(id) {
+  return fetch(`preparation/?id=${id}&format=json`);
+}
+
 export function fetchPreparations(data) {
   const fields =
     "id,preparation_number,sample__locality,sample__locality__locality,sample__locality__locality_en,sample__stratigraphy__stratigraphy,sample__stratigraphy__stratigraphy_en,agent,agent__agent";
