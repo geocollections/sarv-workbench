@@ -32,6 +32,3 @@ workflows:
   sarv-edit:
     jobs:
       - install_build_deploy
-          filters:
-            branches:
-              only: master
