@@ -276,52 +276,31 @@ export default {
       this.files.push(newVal);
     },
     files: function(newVal) {
-      // this.arrayOfFiles = [];
-      if (Array.isArray(newVal)) {
-        newVal.forEach(file => this.arrayOfFiles.push(file));
-        // this.arrayOfFiles = newVal;
-      } else {
-        // Adding File object to array
-        // because for single file upload only File object is returned
-        if (newVal !== null) {
-          // null check because 'cancel' returns null for single upload
-          this.arrayOfFiles.push(newVal);
-        }
-      }
+      newVal.forEach(file => this.arrayOfFiles.push(file));
 
       if (this.arrayOfFiles.length > 0) {
-        for (let i = 0; i < this.arrayOfFiles.length; i++) {
-          if (!this.arrayOfFiles[i].isAlreadyRead) {
+        this.arrayOfFiles.forEach((file, index) => {
+          if (!file.isAlreadyRead) {
             if (
-              this.arrayOfFiles[i].type.includes("image") ||
-              this.arrayOfFiles[i].type.includes("video") ||
-              this.arrayOfFiles[i].type.includes("audio")
+              file.type.includes("image") ||
+              file.type.includes("video") ||
+              file.type.includes("audio")
             ) {
-              let reader = new FileReader();
+              let fileReader = new FileReader();
 
-              reader.onload = event => {
-                this.$emit(
-                  "file-uploaded",
-                  this.recordedFile.length > 0
-                    ? this.recordedFile
-                    : this.arrayOfFiles
-                );
-
-                // console.log(event.target.result)
-                this.$refs["image" + parseInt(i)][0].src = event.target.result;
+              fileReader.onload = event => {
+                this.$refs["image" + parseInt(index)[0].src] =
+                  event.target.result;
               };
-              reader.readAsDataURL(this.arrayOfFiles[i]);
-            } else if (this.arrayOfFiles[i].type.includes("pdf")) {
-              this.$emit(
-                "file-uploaded",
-                this.recordedFile.length > 0
-                  ? this.recordedFile
-                  : this.arrayOfFiles
-              );
             }
-            this.arrayOfFiles[i].isAlreadyRead = true;
+            file.isAlreadyRead = true;
           }
-        }
+        });
+
+        this.$emit(
+          "file-uploaded",
+          this.recordedFile.length > 0 ? this.recordedFile : newVal
+        );
       }
 
       if (this.arrayOfFiles.length === 1) {
