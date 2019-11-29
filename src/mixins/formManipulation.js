@@ -169,7 +169,13 @@ const formManipulation = {
       } else return false;
     },
 
-    add(addAnother, object, returnPromise = false, saveAsNew = false, saveAsDifferentObject) {
+    add(
+      addAnother,
+      object,
+      returnPromise = false,
+      saveAsNew = false,
+      saveAsDifferentObject
+    ) {
       return new Promise(resolve => {
         if (
           this.validate(object) &&
@@ -936,7 +942,7 @@ const formManipulation = {
       if (choice === "CANCEL") this.$router.push({ path: "/" + object });
 
       if (choice === "COPY_TO_LOCALITY") {
-        this.add(true, object, true, false, 'locality').then(localityId => {
+        this.add(true, object, true, false, "locality").then(localityId => {
           console.log(localityId);
           if (this.isNotEmpty(localityId)) {
             this[object].locality.id = localityId;

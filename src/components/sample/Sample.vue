@@ -2176,7 +2176,9 @@ export default {
         let sample = this.handleResponse(response)[0];
         if (sample) {
           this.sample.number = this.calculateNextName(sample.number);
-          this.sample.number_field = this.calculateNextName(sample.number_field);
+          this.sample.number_field = this.calculateNextName(
+            sample.number_field
+          );
         }
       });
     }

@@ -122,15 +122,15 @@
         </span>
         <div class="flex-grow-1"></div>
         <!-- Todo: Not working properly with server-items-length #330 -->
-<!--        <v-text-field-->
-<!--          v-if="module === 'reference' && isTableView"-->
-<!--          v-model="filterTable"-->
-<!--          append-outer-icon="fas fa-search"-->
-<!--          label="Filter records"-->
-<!--          clear-icon="fas fa-times"-->
-<!--          clearable-->
-<!--          :color="appSettings.bodyActiveColor"-->
-<!--        ></v-text-field>-->
+        <!--        <v-text-field-->
+        <!--          v-if="module === 'reference' && isTableView"-->
+        <!--          v-model="filterTable"-->
+        <!--          append-outer-icon="fas fa-search"-->
+        <!--          label="Filter records"-->
+        <!--          clear-icon="fas fa-times"-->
+        <!--          clearable-->
+        <!--          :color="appSettings.bodyActiveColor"-->
+        <!--        ></v-text-field>-->
       </v-card-title>
 
       <!-- LIST VIEW -->

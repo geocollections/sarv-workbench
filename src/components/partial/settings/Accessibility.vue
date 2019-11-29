@@ -3,7 +3,12 @@
     <v-row no-gutters>
       <v-col class="mx-2 vuetify-checkbox">
         <v-checkbox
-          hide-details class="mt-0 mb-2" :ripple="false" :color="bodyActiveColor" v-model="showRecentUrls">
+          hide-details
+          class="mt-0 mb-2"
+          :ripple="false"
+          :color="bodyActiveColor"
+          v-model="showRecentUrls"
+        >
           <template v-slot:label>
             <span class="mr-1">Show recent URLs:</span>
             <span class="font-weight-bold">{{ showRecentUrls }}</span>
@@ -39,7 +44,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "Accessibility",

@@ -1039,7 +1039,7 @@ export function fetchProjects(data, agent) {
   }
 
   if (data.name !== null && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`
+    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);

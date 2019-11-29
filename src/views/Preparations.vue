@@ -30,7 +30,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
-import {fetchPreparations} from "../assets/js/api/apiCalls";
+import { fetchPreparations } from "../assets/js/api/apiCalls";
 
 export default {
   components: {

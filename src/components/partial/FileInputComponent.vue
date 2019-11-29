@@ -22,7 +22,7 @@
       <div class="mt-2" v-if="files !== null && files.length > 0">
         <div v-if="files.length > 0">
           <ul class="list-unstyled">
-            <li class="mt-2" v-for="(file, key) in files">
+            <li class="mt-2" v-for="(file, key) in files" :key="key">
               <span v-if="file.type.includes('image')">
                 <img
                   v-bind:ref="'image' + parseInt(key)"
@@ -123,6 +123,7 @@ export default {
         fileReader.readAsArrayBuffer(newVal[0]);
         fileReader.onload = event => {
           // TODO: Get thumbnail
+          // eslint-disable-next-line no-undef
           this.fileMetaData = EXIF.readFromBinaryFile(event.target.result);
         };
       }

@@ -29,13 +29,13 @@
         >
           <v-icon>{{
             block.colors ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
       <transition>
         <div v-show="block.colors" class="px-1 pt-1 pb-2">
-          <Colors/>
+          <Colors />
         </div>
       </transition>
     </v-card>
@@ -287,7 +287,12 @@ export default {
         "selection_series"
       ],
       deleteList: [],
-      block: { shortcuts: true, permissions: true, accessibility: true, colors: false }
+      block: {
+        shortcuts: true,
+        permissions: true,
+        accessibility: true,
+        colors: false
+      }
     };
   },
   metaInfo() {

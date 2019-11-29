@@ -265,7 +265,11 @@
       </v-tabs>
 
       <v-tabs-items>
-        <v-card class="pt-3 px-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+        <v-card
+          class="pt-3 px-1"
+          flat
+          :color="bodyColor.split('n-')[0] + 'n-5'"
+        >
           <library-reference
             :related-data="relatedData"
             :autocomplete="autocomplete"

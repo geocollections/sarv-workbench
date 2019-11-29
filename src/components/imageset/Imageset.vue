@@ -18,14 +18,20 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span :class="validate('imageset') ? 'green--text' : 'red--text'">{{ $t("imageset.generalInfo") }}</span>
-          <v-icon right :class="validate('imageset') ? 'green--text' : 'red--text'">fas fa-project-diagram</v-icon>
+          <span :class="validate('imageset') ? 'green--text' : 'red--text'">{{
+            $t("imageset.generalInfo")
+          }}</span>
+          <v-icon
+            right
+            :class="validate('imageset') ? 'green--text' : 'red--text'"
+            >fas fa-project-diagram</v-icon
+          >
         </div>
         <v-spacer></v-spacer>
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
@@ -35,7 +41,7 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="px-1">
               <label :for="`imageset`"
-              >{{ $t("imageset.imagesetNumber") }}:</label
+                >{{ $t("imageset.imagesetNumber") }}:</label
               >
               <b-form-input
                 size="sm"
@@ -85,11 +91,11 @@
                   <strong>{{ option.agent }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
               <b-form-text v-if="!isNotEmpty(imageset.author)"
-              >{{ $t("add.errors.author") }}.</b-form-text
+                >{{ $t("add.errors.author") }}.</b-form-text
               >
             </v-col>
           </v-row>
@@ -98,7 +104,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="px-1">
               <label :for="`description`"
-              >{{ $t("imageset.description") }}:</label
+                >{{ $t("imageset.description") }}:</label
               >
               <b-form-textarea
                 size="sm"

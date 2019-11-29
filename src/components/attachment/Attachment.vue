@@ -434,9 +434,7 @@
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                    showMap
-                        ? $t("site.mapEnabled")
-                        : $t("site.mapDisabled")
+                      showMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
                     }}
                   </label>
                 </v-card>
@@ -1519,9 +1517,7 @@
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                    showMap
-                        ? $t("site.mapEnabled")
-                        : $t("site.mapDisabled")
+                      showMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
                     }}
                   </label>
                 </v-card>

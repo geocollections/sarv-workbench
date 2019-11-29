@@ -107,10 +107,14 @@ export default {
       if (this.clipboardClass) {
         el = document.getElementsByClassName(this.clipboardClass);
       } else {
-        el = document.getElementsByClassName(`${this.$route.meta.object}-table`);
+        el = document.getElementsByClassName(
+          `${this.$route.meta.object}-table`
+        );
       }
 
-      let body = document.body, range, sel;
+      let body = document.body,
+        range,
+        sel;
       if (document.createRange && window.getSelection) {
         range = document.createRange();
         sel = window.getSelection();

@@ -624,7 +624,11 @@
       </v-tabs>
 
       <v-tabs-items>
-        <v-card class="pt-3 px-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+        <v-card
+          class="pt-3 px-1"
+          flat
+          :color="bodyColor.split('n-')[0] + 'n-5'"
+        >
           <!-- Todo: Taxon subclass can only be added if taxon already exists (needs backend support because same table) -->
           <taxon-subclass
             v-if="$route.meta.isEdit"

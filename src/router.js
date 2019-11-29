@@ -1293,8 +1293,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("./components/agent/AgentTable.vue"),
+              component: () => import("./components/agent/AgentTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "agent",
@@ -1313,8 +1312,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("./components/agent/Agent.vue"),
+              component: () => import("./components/agent/Agent.vue"),
               meta: {
                 isEdit: true,
                 table: "agent",
@@ -1339,15 +1337,12 @@ const router = new Router({
             {
               path: "",
               name: "Agent add",
-              component: () =>
-                import("./components/agent/Agent.vue"),
+              component: () => import("./components/agent/Agent.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addAgent",
                 addNew: "add.newAgent",
-                subForms: [
-                  { path: "/agent/add", name: "add.agent" }
-                ],
+                subForms: [{ path: "/agent/add", name: "add.agent" }],
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
@@ -1385,8 +1380,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("./components/drillcore/Drillcore.vue"),
+              component: () => import("./components/drillcore/Drillcore.vue"),
               meta: {
                 isEdit: true,
                 table: "drillcore",
@@ -1411,15 +1405,12 @@ const router = new Router({
             {
               path: "",
               name: "Drillcore add",
-              component: () =>
-                import("./components/drillcore/Drillcore.vue"),
+              component: () => import("./components/drillcore/Drillcore.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addDrillcore",
                 addNew: "add.newDrillcore",
-                subForms: [
-                  { path: "/drillcore/add", name: "add.drillcore" }
-                ],
+                subForms: [{ path: "/drillcore/add", name: "add.drillcore" }],
                 requiresAuth: true,
                 isBottomOptionShown: true,
                 isNavigationShown: false,
@@ -1502,7 +1493,8 @@ const router = new Router({
         },
         {
           path: "/test-dev",
-          component: () => import("./components/partial/fileUpload/FileUpload.vue"),
+          component: () =>
+            import("./components/partial/fileUpload/FileUpload.vue"),
           meta: {
             requiresAuth: true
           }

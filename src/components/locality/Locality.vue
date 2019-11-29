@@ -221,11 +221,7 @@
             >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
-                {{
-                showMap
-                    ? $t("site.mapEnabled")
-                    : $t("site.mapDisabled")
-                }}
+                {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
               </label>
             </v-card>
           </v-card>
@@ -633,7 +629,11 @@
       </v-tabs>
 
       <v-tabs-items>
-        <v-card class="pt-3 px-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+        <v-card
+          class="pt-3 px-1"
+          flat
+          :color="bodyColor.split('n-')[0] + 'n-5'"
+        >
           <locality-reference
             :related-data="relatedData"
             :autocomplete="autocomplete"

@@ -12,7 +12,9 @@
               grow
               :background-color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
               hide-slider
-              :active-class="appSettings.bodyColor.split('n-')[0] + 'n-5 black--text'"
+              :active-class="
+                appSettings.bodyColor.split('n-')[0] + 'n-5 black--text'
+              "
             >
               <v-tabs-slider></v-tabs-slider>
 
@@ -23,7 +25,10 @@
 
             <v-tabs-items v-model="tab">
               <v-tab-item>
-                <v-card flat :color="appSettings.bodyColor.split('n-')[0] + 'n-5'">
+                <v-card
+                  flat
+                  :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+                >
                   <v-card-text>
                     <v-alert
                       class="mb-0"
@@ -59,7 +64,10 @@
               </v-tab-item>
 
               <v-tab-item>
-                <v-card flat :color="appSettings.bodyColor.split('n-')[0] + 'n-5'">
+                <v-card
+                  flat
+                  :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+                >
                   <v-card-text>
                     <v-alert
                       border="right"
@@ -135,7 +143,7 @@
 <script>
 import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "Login",

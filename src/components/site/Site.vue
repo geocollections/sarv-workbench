@@ -231,11 +231,7 @@
             >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
-                {{
-                showMap
-                    ? $t("site.mapEnabled")
-                    : $t("site.mapDisabled")
-                }}
+                {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
               </label>
             </v-card>
           </v-card>
@@ -592,7 +588,7 @@ import Editor from "../partial/editor/Editor";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "Site",

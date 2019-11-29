@@ -39,7 +39,7 @@ import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
 import "leaflet-measure/dist/leaflet-measure";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   name: "MapComponent",
