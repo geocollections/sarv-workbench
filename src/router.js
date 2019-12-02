@@ -1492,6 +1492,73 @@ const router = new Router({
           ]
         },
         {
+          path: "/dataset",
+          component: () => import("./views/Datasets.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/dataset/DatasetTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "dataset",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/dataset/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/dataset/Dataset.vue"),
+              meta: {
+                isEdit: true,
+                table: "dataset",
+                title: "titles.editDataset",
+                heading: "editDataset.heading",
+                isBottomOptionShown: true,
+                isNavigationShown: true,
+                isCopyFormShown: false,
+                requiresAuth: true,
+                object: "dataset"
+              }
+            }
+          ]
+        },
+        {
+          path: "/dataset/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Dataset add",
+              component: () => import("./components/dataset/Dataset.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addDataset",
+                addNew: "add.newDataset",
+                subForms: [{ path: "/dataset/add", name: "add.dataset" }],
+                requiresAuth: true,
+                isBottomOptionShown: true,
+                isNavigationShown: false,
+                object: "dataset"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () =>
             import("./components/partial/fileUpload/FileUpload.vue"),

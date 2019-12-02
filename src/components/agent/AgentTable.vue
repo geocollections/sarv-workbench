@@ -119,7 +119,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .agent-table.v-data-table td,
 .agent-table.v-data-table th {
   padding: 0 8px;

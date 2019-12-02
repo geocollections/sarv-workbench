@@ -125,7 +125,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .drillcore-table.v-data-table td,
 .drillcore-table.v-data-table th {
   padding: 0 8px;

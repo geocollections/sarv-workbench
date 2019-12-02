@@ -46,6 +46,7 @@
     "agents": "Isikud/asutused",
     "preparations": "Preparaadid",
     "drillcores": "Puursüdamikud",
+    "datasets": "Andmesetid",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -79,6 +80,8 @@
     "editDrillcore": "Puursüdamikud",
     "addPreparation": "Lisa preparaat",
     "editPreparation": "Preparaadid",
+    "addDataset": "Lisa andmeset",
+    "editDataset": "Andmesetid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -106,7 +109,8 @@
     "selectionSerie": "Lisa valik",
     "agent": "Lisa isik/asutus",
     "drillcore": "Lisa puursüdamik",
-    "preparation": "Lisa preparaat"
+    "preparation": "Lisa preparaat",
+    "dataset": "Lisa andmeset"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -285,6 +289,9 @@
     "drillcore": {
       "info": "Üldinfo",
       "details": "Muu info"
+    },
+    "dataset": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -523,6 +530,11 @@
     "heading": "Preparaat",
     "editMessage": "Muuda preparaati",
     "viewMessage": "Vaata preparaati geokogude portaalis"
+  },
+  "editDataset": {
+    "heading": "Andmeset",
+    "editMessage": "Muuda andmesetti",
+    "viewMessage": "Vaata andmesetti geokogude portaalis"
   },
   "attachments": {
     "header": "Minu failid",
@@ -1064,6 +1076,7 @@
     "specimen":"Eksemplar",
     "method_in_eng": "Met. ingl. k.",
     "material": "Materjal",
+    "date_txt": "Kuupäev txt",
     "labor": "Labor",
     "labor_txt": "Labor txt",
     "labor_sample": "Labori proovinumber",
@@ -1193,7 +1206,25 @@
     }
   },
   "dataset": {
-    "name": "Nimi"
+    "name": "Nimi",
+    "owner": "Omanik",
+    "date": "Kuupäev",
+    "date_txt": "Aeg txt",
+    "remarks": "Lisainfo",
+    "id": "ID",
+    "database": "Andmebaas",
+    "name_en": "Nimi (EN)",
+    "description": "Kirjeldus",
+    "description_en": "Kirjeldus (EN)",
+    "copyright_agent": "Autoriõigus",
+    "licence": "Litsents",
+    "dataset_html": "HTML andmed",
+    "owner_txt": "Omanik txt",
+    "is_private": "Privaatne",
+    "relatedTables": {
+      "dataset_author": "Autorid",
+      "dataset_reference": "Viited"
+    }
   },
   "doi": {
     "header": "DOI-d",

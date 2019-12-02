@@ -333,6 +333,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    datasetSearchHistory: {
+      type: Object
+    },
+    datasetViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

@@ -352,6 +352,22 @@ export default {
               icon: "far fa-plus-square"
             }
           ]
+        },
+        {
+          name: "dataset",
+          title: "datasets",
+          links: [
+            {
+              title: "datasets",
+              path: "/dataset",
+              icon: "fas fa-database"
+            },
+            {
+              title: "dataset",
+              path: "/dataset/add",
+              icon: "far fa-plus-square"
+            }
+          ]
         }
       ]
     };

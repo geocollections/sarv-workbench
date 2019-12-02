@@ -13,7 +13,7 @@ import {
   fetchJournals,
   fetchCollections,
   fetchTaxa,
-  fetchSelectionSeries, fetchAgents, fetchPreparations, fetchDrillcores
+  fetchSelectionSeries, fetchAgents, fetchPreparations, fetchDrillcores, fetchDatasets
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -130,6 +130,11 @@ export default {
 
   FETCH_DRILLCORES: ({ commit, state }) => {
     return fetchDrillcores(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+  FETCH_DATASETS: ({ commit, state }) => {
+    return fetchDatasets(state.activeSearchParams.search, state.activeSearchParams.databaseId).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

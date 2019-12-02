@@ -46,6 +46,7 @@
     "agents": "Agents",
     "preparations": "Preparations",
     "drillcores": "Drill cores",
+    "datasets": "Datasets",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -79,6 +80,8 @@
     "editDrillcore": "Drill cores",
     "addPreparation": "Add preparation",
     "editPreparation": "Preparations",
+    "addDataset": "Add dataset",
+    "editDataset": "Datasets",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -106,7 +109,8 @@
     "selectionSerie": "Add selection series",
     "agent": "Add agent",
     "drillcore": "Add drill core",
-    "preparation": "Add preparation"
+    "preparation": "Add preparation",
+    "dataset": "Add dataset"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -285,6 +289,9 @@
     "drillcore": {
       "info": "General info",
       "details": "Other info"
+    },
+    "dataset": {
+      "info": "General info"
     }
   },
   "add": {
@@ -523,6 +530,11 @@
     "heading": "Preparation",
     "editMessage": "Edit Preparation",
     "viewMessage": "View Preparation in geocollections portal"
+  },
+  "editDataset": {
+    "heading": "Dataset",
+    "editMessage": "Edit dataset",
+    "viewMessage": "View dataset in geocollections portal"
   },
   "attachments": {
     "header": "My attachments",
@@ -1194,7 +1206,25 @@
     }
   },
   "dataset": {
-    "name": "Name"
+    "name": "Name",
+    "owner": "Owner",
+    "date": "Date",
+    "date_txt": "Date txt",
+    "remarks": "Remarks",
+    "id": "ID",
+    "database": "Database",
+    "name_en": "Name (EN)",
+    "description": "Description",
+    "description_en": "Description (EN)",
+    "copyright_agent": "Copyright",
+    "licence": "Licence",
+    "dataset_html": "HTML data",
+    "owner_txt": "Owner txt",
+    "is_private": "Private",
+    "relatedTables": {
+      "dataset_author": "Authors",
+      "dataset_reference": "References"
+    }
   },
   "doi": {
     "header": "DOIs",

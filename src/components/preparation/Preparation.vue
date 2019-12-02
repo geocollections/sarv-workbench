@@ -7,7 +7,7 @@
       :message="
         $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
       "
-    ></spinner>
+    />
 
     <!-- GENERAL INFO -->
     <v-card
@@ -484,8 +484,12 @@
       <transition>
         <div v-show="block.taxa" class="px-1 pt-1 pb-2">
           <!-- ADD NEW and EXPORT -->
-          <v-card class="d-flex flex-row justify-content-start mb-3" flat tile
-                  :color="bodyColor.split('n-')[0] + 'n-5'">
+          <v-card
+            class="d-flex flex-row justify-content-start mb-3"
+            flat
+            tile
+            :color="bodyColor.split('n-')[0] + 'n-5'"
+          >
             <v-card flat tile class="mx-1">
               <v-btn
                 :to="{
@@ -854,15 +858,15 @@ export default {
       searchParameters,
       apiCall,
       relatedObject
-      ) {
-        apiCall().then(response => {
-          if (response.status === 200) {
-            this.relatedData[relatedObject].count = response.body.count;
-            this.relatedData[relatedObject].results = response.body.results;
-          }
-        });
-      },
-      500)
+    ) {
+      apiCall().then(response => {
+        if (response.status === 200) {
+          this.relatedData[relatedObject].count = response.body.count;
+          this.relatedData[relatedObject].results = response.body.results;
+        }
+      });
+    },
+    500)
   }
 };
 </script>

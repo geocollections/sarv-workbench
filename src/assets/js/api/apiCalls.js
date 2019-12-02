@@ -2105,6 +2105,63 @@ export function fetchLinkedTaxa(data, prepId) {
  ***  PREPARATION END  ***
  *************************/
 
+/*********************
+ *** DATASET START ***
+ *********************/
+
+export function fetchDataset(id) {
+  return fetch(`dataset/?id=${id}&format=json`);
+}
+
+export function fetchDatasets(data, databaseId) {
+  const fields =
+    "id,name,name_en,date,date_txt,owner,owner_txt,owner__agent,database,database__acronym,is_private";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.name && data.name.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`;
+  }
+
+  if (data.owner && data.owner.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.owner};fields:owner__id,owner__agent,owner__forename,owner__surename,owner_txt;lookuptype:icontains`;
+  }
+
+  if (data.date && data.date.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.date};fields:date,date_txt;lookuptype:icontains`;
+  }
+
+  if (data.remarks && data.remarks.trim().length > 0) {
+    searchFields += `&remarks__icontains=${data.remarks}`;
+  }
+
+  if (databaseId) searchFields += `&database__id=${databaseId}`;
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `dataset/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `dataset/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+export function fetchDatasetAuthors(datasetId, searchParameters) {
+  return fetch(`dataset_author/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchDatasetReferences(datasetId, searchParameters) {
+  return fetch(`dataset_reference/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+/*********************
+ ***  DATASET END  ***
+ *********************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/
