@@ -279,7 +279,8 @@
     "preparation": {
       "info": "General info",
       "details": "Other info",
-      "description": "Remarks"
+      "description": "Remarks",
+      "taxa": "Taxa"
     },
     "drillcore": {
       "info": "General info",
@@ -1420,7 +1421,8 @@
     "is_private": "Private",
     "generalInfo": "General info",
     "details": "Other info",
-    "description": "Remarks"
+    "description": "Remarks",
+    "taxa": "Taxa"
   },
   "reference": {
     "reference": "Reference",

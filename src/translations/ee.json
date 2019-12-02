@@ -279,7 +279,8 @@
     "preparation": {
       "info": "Üldinfo",
       "details": "Muu info",
-      "description": "Kirjeldus"
+      "description": "Kirjeldus",
+      "taxa": "Taksonid"
     },
     "drillcore": {
       "info": "Üldinfo",
@@ -1419,7 +1420,8 @@
     "is_private": "Privaatne",
     "generalInfo": "Üldinfo",
     "details": "Muu info",
-    "description": "Kirjeldus"
+    "description": "Kirjeldus",
+    "taxa": "Taksonid"
   },
   "reference": {
     "reference": "Viide",

@@ -490,8 +490,13 @@
           <add-new-sample :sendingData="sendingData"></add-new-sample>
 
           <!-- ADD NEW and EXPORT -->
-          <v-card class="d-flex flex-row justify-content-start mb-3" flat tile>
-            <v-card flat tile class="px-1">
+          <v-card
+            class="d-flex flex-row justify-content-start mb-3"
+            flat
+            tile
+            :color="bodyColor.split('n-')[0] + 'n-5'"
+          >
+            <v-card flat tile class="mx-1">
               <v-btn
                 :to="{
                   name: 'Sample add',
@@ -504,11 +509,12 @@
               >
             </v-card>
 
-            <v-card flat tile class="px-1">
+            <v-card flat tile class="mx-1" v-if="relatedData.samples.count > 0">
               <export-buttons
                 filename="sample"
                 :table-data="relatedData.samples.results"
                 clipboard-class="sample-table"
+                :body-active-color="bodyActiveColor"
               ></export-buttons>
             </v-card>
           </v-card>
@@ -555,6 +561,8 @@
                 :response="relatedData.samples"
                 :search-parameters="relatedData.searchParameters.sample"
                 v-if="relatedData.samples.count > 0"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
               />
             </v-col>
           </v-row>

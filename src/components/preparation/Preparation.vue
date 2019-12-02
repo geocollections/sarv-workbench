@@ -110,7 +110,7 @@
                   <strong>{{ option.id }}</strong>
                 </template>
                 <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                  ><b>{{ $t("messages.inputNoResults") }}</b></template
                 >
               </vue-multiselect>
             </v-col>
@@ -460,6 +460,106 @@
       </transition>
     </v-card>
 
+    <!-- TAXA -->
+    <v-card
+      class="mt-2"
+      id="block-taxa"
+      v-if="$route.meta.isEdit && preparation.id"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.taxa = !block.taxa">
+          <span>{{ $t("preparation.taxa") }}</span>
+          <v-icon right>fas fa-pastafarianism</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.taxa = !block.taxa" :color="bodyActiveColor">
+          <v-icon>{{
+            block.taxa ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.taxa" class="px-1 pt-1 pb-2">
+          <!-- ADD NEW and EXPORT -->
+          <v-card class="d-flex flex-row justify-content-start mb-3" flat tile
+                  :color="bodyColor.split('n-')[0] + 'n-5'">
+            <v-card flat tile class="mx-1">
+              <v-btn
+                :to="{
+                  name: 'Taxon add',
+                  query: { preparation: JSON.stringify(preparation) }
+                }"
+                target="newTaxonWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+                >{{ $t("add.new") }}</v-btn
+              >
+            </v-card>
+
+            <v-card flat tile class="mx-1" v-if="relatedData.taxa.count > 0">
+              <export-buttons
+                filename="preparation"
+                :table-data="relatedData.taxa.results"
+                clipboard-class="taxon-list-table"
+                :body-active-color="bodyActiveColor"
+              ></export-buttons>
+            </v-card>
+          </v-card>
+
+          <!-- PAGINATION -->
+          <div
+            v-if="relatedData.taxa.count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters.taxon.paginateBy"
+                color="blue"
+                dense
+                :items="paginateByOptionsTranslated"
+                item-color="blue"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters.taxon.page"
+                color="blue"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.taxa.count /
+                      relatedData.searchParameters.taxon.paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <taxon-list-table
+                ref="table"
+                :response="relatedData.taxa"
+                :search-parameters="relatedData.searchParameters.taxon"
+                v-if="relatedData.taxa.count > 0"
+                :body-color="bodyColor"
+                :body-active-color="bodyActiveColor"
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
@@ -481,15 +581,23 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import cloneDeep from "lodash/cloneDeep";
-import { fetchPreparation } from "../../assets/js/api/apiCalls";
+import {
+  fetchLinkedTaxa,
+  fetchPreparation
+} from "../../assets/js/api/apiCalls";
 import Editor from "../partial/editor/Editor";
 import Spinner from "vue-simple-spinner";
+import ExportButtons from "../partial/export/ExportButtons";
+import debounce from "lodash/debounce";
+import TaxonListTable from "../taxon/TaxonListTable";
 
 export default {
   name: "Preparation",
   components: {
     Editor,
-    Spinner
+    Spinner,
+    TaxonListTable,
+    ExportButtons
   },
   props: {
     isBodyActiveColorDark: {
@@ -546,13 +654,34 @@ export default {
         this.reloadData();
       },
       deep: true
+    },
+    "relatedData.searchParameters.taxon": {
+      handler(newVal) {
+        if (this.$route.meta.isEdit) {
+          this.searchRelatedData(newVal, this.fetchLinkedTaxaWrapper, "taxa");
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
 
   methods: {
+    fetchLinkedTaxaWrapper() {
+      return new Promise(resolve => {
+        resolve(
+          fetchLinkedTaxa(
+            this.relatedData.searchParameters.taxon,
+            this.$route.params.id
+          )
+        );
+      });
+    },
+
     setInitialData() {
       return {
         searchHistory: "preparationSearchHistory",
+        relatedData: this.setDefaultRalatedData(),
         copyFields: [
           "id",
           "preparation_number",
@@ -597,7 +726,8 @@ export default {
         block: {
           info: true,
           details: true,
-          description: true
+          description: true,
+          taxa: true
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -639,6 +769,26 @@ export default {
           }
         });
       }
+    },
+
+    setDefaultRalatedData() {
+      return {
+        taxa: {
+          count: 0,
+          results: []
+        },
+        count: {
+          sample: 0
+        },
+        searchParameters: {
+          taxon: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true]
+          }
+        }
+      };
     },
 
     formatDataForUpload(objectToUpload) {
@@ -698,7 +848,21 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
-    }
+    },
+
+    searchRelatedData: debounce(function(
+      searchParameters,
+      apiCall,
+      relatedObject
+      ) {
+        apiCall().then(response => {
+          if (response.status === 200) {
+            this.relatedData[relatedObject].count = response.body.count;
+            this.relatedData[relatedObject].results = response.body.results;
+          }
+        });
+      },
+      500)
   }
 };
 </script>

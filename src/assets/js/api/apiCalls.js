@@ -2058,6 +2058,49 @@ export function fetchPreparations(data) {
   }
 }
 
+export function fetchLinkedTaxa(data, prepId) {
+  const fields =
+    "id,taxon,taxon__taxon,taxon__author_year,taxon__taxon_epithet,taxon__parent_id,taxon__parent__taxon,taxon__fossil_group__taxon,taxon__reference";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`;
+  }
+
+  if (data.taxon && data.taxon.trim().length > 0) {
+    searchFields += `&taxon__icontains=${data.taxon}`;
+  }
+
+  if (data.author_year && data.author_year.trim().length > 0) {
+    searchFields += `&author_year__icontains=${data.author_year}`;
+  }
+
+  if (data.parent__taxon && data.parent__taxon.trim().length > 0) {
+    searchFields += `&parent__taxon__icontains=${data.parent__taxon}`;
+  }
+
+  if (data.taxon_epithet && data.taxon_epithet.trim().length > 0) {
+    searchFields += `&taxon_epithet__icontains=${data.taxon_epithet}`;
+  }
+
+  if (data.user_added && data.user_added.trim().length > 0) {
+    searchFields += `&user_added__icontains=${data.user_added}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `taxon_list/?preparation=${prepId}${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `taxon_list/?preparation=${prepId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
 /*************************
  ***  PREPARATION END  ***
  *************************/
