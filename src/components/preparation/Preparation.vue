@@ -38,7 +38,7 @@
 
       <transition>
         <div v-show="block.info" class="px-1 pt-1 pb-2">
-          <!-- NAME, SAMPLE, SAMPLE_NUMBER and ANALYSIS -->
+          <!-- NAME, SAMPLE, SAMPLE_NUMBER and SAMPLE_PALAEONTOLOGY??? -->
           <v-row no-gutters>
             <v-col cols="12" md="3" class="px-1">
               <label :for="`preparation_number`"
@@ -91,8 +91,8 @@
             </v-col>
 
             <v-col cols="12" md="3" class="px-1">
-              <label :for="`analysis`">{{ $t("preparation.analysis") }}:</label>
-              Todo: (Metoodika ID) analysis???
+              <label :for="`analysis`">{{ $t("preparation.sample_palaeontology") }}:</label>
+              Todo: sample_palaeontology???
             </v-col>
           </v-row>
         </div>
@@ -439,6 +439,20 @@
         </div>
       </transition>
     </v-card>
+
+    <!-- IS_PRIVATE -->
+    <v-row no-gutters class="mt-2">
+      <v-col>
+        <v-checkbox
+          v-model="preparation.is_private"
+          id="is_private"
+          :label="$t('preparation.is_private')"
+          hide-details
+          :color="bodyActiveColor"
+          class="mt-0 vuetify-checkbox"
+        ></v-checkbox>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

@@ -280,6 +280,10 @@
       "info": "General info",
       "details": "Other info",
       "description": "Remarks"
+    },
+    "drillcore": {
+      "info": "General info",
+      "details": "Other info"
     }
   },
   "add": {
@@ -1357,10 +1361,37 @@
     "remarks": "Remarks",
     "boxes": "Boxes",
     "locality": "Locality",
-    "storage": "Storage"
+    "storage": "Storage",
+    "drillcore_en": "Drill core (EN)",
+    "depository": "Depository",
+    "number_meters": "Meters in a box",
+    "is_private": "Private",
+    "direction_lr": "Direction L -> R",
+    "generalInfo": "General info",
+    "details": "Other info",
+    "relatedTables": {
+      "drillcore_box": "Drill core box",
+      "drillcore_study": "Drill core study",
+      "attachment": "Attachment"
+    }
   },
   "drillcore_box": {
-    "drillcore": "Drill core - No"
+    "drillcore": "Drill core - No",
+    "number": "Kasti nr.",
+    "depth_start": "Algus, m",
+    "depth_end": "Lõpp, m",
+    "stratigraphy_base": "Strat. alumine",
+    "stratigraphy_top": "Strat. ülemine",
+    "depth_other": "Muud sügavbused",
+    "number_meters": "m kastis",
+    "diameter": "d, mm",
+    "remarks": "Lisainfo"
+  },
+  "drillcore_study": {
+    "date": "Kuupäev",
+    "agent": "Uurija",
+    "aim": "Eesmärk",
+    "remarks": "Lisainfo"
   },
   "preparation": {
     "id": "ID",
@@ -1375,7 +1406,7 @@
     "agent": "Agent",
     "sample": "Sample",
     "sample_number": "Sample number",
-    "analysis": "Method ID",
+    "sample_palaeontology": "Method ID",
     "taxon": "Taxon",
     "agent_txt": "Agent txt",
     "identification_txt": "Identification txt",

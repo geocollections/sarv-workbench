@@ -1968,6 +1968,10 @@ export function fetchAddItemToSelection(data) {
  *** DRILLCORE START ***
  ***********************/
 
+export function fetchDrillcore(id) {
+  return fetch(`drillcore/?id=${id}&format=json`);
+}
+
 export function fetchDrillcores(data) {
   const fields =
     "id,drillcore,drillcore_en,depth,boxes,box_numbers,location,year,agent__agent,remarks";
@@ -2001,6 +2005,22 @@ export function fetchDrillcores(data) {
       `drillcore/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
+}
+
+export function fetchListDrillcoreStorage() {
+  return fetch(`list_drillcore_storage/?format=json`);
+}
+
+export function fetchDrillcoreBoxes(drillcoreId, searchParameters) {
+  return fetch(`drillcore_box/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchDrillcoreStudies(drillcoreId, searchParameters) {
+  return fetch(`drillcore_study/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchDrillcoreAttachments(drillcoreId, searchParameters) {
+  return fetch(`attachment/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
 }
 
 /***********************

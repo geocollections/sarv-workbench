@@ -280,6 +280,10 @@
       "info": "Üldinfo",
       "details": "Muu info",
       "description": "Kirjeldus"
+    },
+    "drillcore": {
+      "info": "Üldinfo",
+      "details": "Muu info"
     }
   },
   "add": {
@@ -1356,10 +1360,37 @@
     "remarks": "Lisainfo",
     "boxes": "Kaste kokku",
     "locality": "Lokaliteet",
-    "storage": "Hoiukoht"
+    "storage": "Hoiukoht",
+    "drillcore_en": "Puursüdamik (EN)",
+    "depository": "Hoidla",
+    "number_meters": "Meetreid kastis",
+    "is_private": "Privaatne",
+    "direction_lr": "Suund V -> P",
+    "generalInfo": "Üldinfo",
+    "details": "Muu info",
+    "relatedTables": {
+      "drillcore_box": "Südamikukastid",
+      "drillcore_study": "Tööd südamikuga",
+      "attachment": "Failid"
+    }
   },
   "drillcore_box": {
-    "drillcore": "Puursüdamik - Nr"
+    "drillcore": "Puursüdamik - Nr",
+    "number": "Box no.",
+    "depth_start": "Depth start",
+    "depth_end": "Depth end",
+    "stratigraphy_base": "Strat. base",
+    "stratigraphy_top": "Strat. top",
+    "depth_other": "Depth other",
+    "number_meters": "m. in a box",
+    "diameter": "d, mm",
+    "remarks": "Remarks"
+  },
+  "drillcore_study": {
+    "date": "Date",
+    "agent": "Agent",
+    "aim": "Aim",
+    "remarks": "Remarks"
   },
   "preparation": {
     "id": "ID",
@@ -1374,7 +1405,7 @@
     "agent": "Preparaator",
     "sample": "Proov",
     "sample_number": "Proovi number",
-    "analysis": "Metoodika ID",
+    "sample_palaeontology": "Metoodika ID",
     "taxon": "Fossiilirühm",
     "agent_txt": "Prep. txt",
     "identification_txt": "Identifitseerija",
