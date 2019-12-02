@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumbs" v-if="items && items.length > 0">
-    <span v-for="(entity, index) in items" :key="index">
+    <span v-for="(entity, index) in reverseHistory" :key="index">
       <router-link
         class="sarv-link"
         :class="bodyActiveColor + '--text'"
@@ -8,7 +8,9 @@
       >
         {{ entity.text }}
       </router-link>
-      <span v-if="index !== items.length - 1" class="mx-2">{{ divider }}</span>
+      <span v-if="index !== items.length - 1" class="mx-1">
+        {{ divider }}
+      </span>
     </span>
   </div>
 </template>
@@ -29,7 +31,12 @@ export default {
     divider: {
       type: String,
       required: false,
-      default: "-"
+      default: "<"
+    }
+  },
+  computed: {
+    reverseHistory() {
+      return this.items.slice(0).reverse();
     }
   }
 };
