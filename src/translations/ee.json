@@ -1405,7 +1405,7 @@
     "agent": "Preparaator",
     "sample": "Proov",
     "sample_number": "Proovi number",
-    "sample_palaeontology": "Metoodika ID",
+    "analysis": "Analüüsi ID",
     "taxon": "Fossiilirühm",
     "agent_txt": "Prep. txt",
     "identification_txt": "Identifitseerija",

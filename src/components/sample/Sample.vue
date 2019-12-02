@@ -8,7 +8,7 @@
         :message="
           $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
         "
-      ></spinner>
+      />
     </template>
 
     <template slot="switch">
@@ -23,7 +23,7 @@
             "
             hide-details
             :color="bodyActiveColor"
-          ></v-switch>
+          />
         </v-col>
 
         <v-col class="text-right">

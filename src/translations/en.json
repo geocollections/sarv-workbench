@@ -1406,7 +1406,7 @@
     "agent": "Agent",
     "sample": "Sample",
     "sample_number": "Sample number",
-    "sample_palaeontology": "Method ID",
+    "analysis": "Analysis ID",
     "taxon": "Taxon",
     "agent_txt": "Agent txt",
     "identification_txt": "Identification txt",

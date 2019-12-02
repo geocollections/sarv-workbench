@@ -38,7 +38,7 @@
 
       <transition>
         <div v-show="block.info" class="px-1 pt-1 pb-2">
-          <!-- NAME, SAMPLE, SAMPLE_NUMBER and SAMPLE_PALAEONTOLOGY??? -->
+          <!-- NAME, SAMPLE, SAMPLE_NUMBER and ANALYSIS -->
           <v-row no-gutters>
             <v-col cols="12" md="3" class="px-1">
               <label :for="`preparation_number`"
@@ -91,8 +91,28 @@
             </v-col>
 
             <v-col cols="12" md="3" class="px-1">
-              <label :for="`analysis`">{{ $t("preparation.sample_palaeontology") }}:</label>
-              Todo: sample_palaeontology???
+              <label :for="`analysis`">{{ $t("preparation.analysis") }}:</label>
+              <vue-multiselect
+                id="analysis"
+                v-model="preparation.analysis"
+                label="id"
+                track-by="id"
+                :placeholder="$t('add.inputs.autocomplete')"
+                :loading="autocomplete.loaders.analysis"
+                :options="autocomplete.analysis"
+                @search-change="autocompleteAnalysisSearch"
+                :internal-search="false"
+                :preserve-search="true"
+                :clear-on-select="false"
+                :show-labels="false"
+              >
+                <template slot="singleLabel" slot-scope="{ option }">
+                  <strong>{{ option.id }}</strong>
+                </template>
+                <template slot="noResult"
+                ><b>{{ $t("messages.inputNoResults") }}</b></template
+                >
+              </vue-multiselect>
             </v-col>
           </v-row>
         </div>
@@ -526,48 +546,13 @@ export default {
         this.reloadData();
       },
       deep: true
-    },
-    "relatedData.searchParameters": {
-      handler: function() {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true
-    }
-  },
-
-  computed: {
-    activeRelatedDataTab() {
-      let tabObject = this.$store.state.activeRelatedDataTab;
-      if (tabObject && tabObject[this.$route.meta.object]) {
-        return tabObject[this.$route.meta.object];
-      } else return null;
-    },
-
-    paginateByOptionsTranslated() {
-      return this.paginateByOptions.map(item => {
-        return {
-          ...item,
-          text: this.$t(item.text, { num: item.value })
-        };
-      });
     }
   },
 
   methods: {
-    setTab(type) {
-      if (type) {
-        this.$store.dispatch("updateActiveTab", {
-          tab: type,
-          object: this.$route.meta.object
-        });
-        this.activeTab = type;
-      }
-    },
-
     setInitialData() {
       return {
         searchHistory: "preparationSearchHistory",
-        activeTab: "taxon",
         copyFields: [
           "id",
           "preparation_number",
@@ -682,11 +667,7 @@ export default {
 
     fillAutocompleteFields(obj) {
       this.preparation.sample = { id: obj.sample, number: obj.sample__number };
-      this.preparation.analysis = {
-        id: obj.analysis__analysis_method,
-        analysis_method: obj.analysis__analysis_method__analysis_method,
-        method_en: obj.analysis__analysis_method__method_en
-      };
+      this.preparation.analysis = { id: obj.analysis };
       this.preparation.taxon = {
         id: obj.taxon,
         taxon: obj.taxon__taxon
