@@ -1,4 +1,11 @@
 {
+  "common": {
+    "id": "ID",
+    "name": "Nimi",
+    "name_en": "Nimi (EN)",
+    "date": "Kuupäev",
+    "date_txt": "Kuupäev txt"
+  },
   "main": {
     "pagination": "Kuva {num} kaupa",
     "rating5": "5 - super",
@@ -341,6 +348,8 @@
     "newPreparation": "Lisa uus preparaat",
     "drillcore": "Puursüdamik",
     "newDrillcore": "Lisa uus puursüdamik",
+    "dataset": "Andmeset",
+    "newDataset": "Lisa uus andmeset",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -1225,6 +1234,14 @@
       "dataset_author": "Autorid",
       "dataset_reference": "Viited"
     }
+  },
+  "dataset_reference": {
+    "reference": "Kirjandus",
+    "remarks": "Lisainfo"
+  },
+  "dataset_author": {
+    "agent": "Isik/Asutus",
+    "remarks": "Lisainfo"
   },
   "doi": {
     "header": "DOI-d",

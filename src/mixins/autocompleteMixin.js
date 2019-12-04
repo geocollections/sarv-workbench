@@ -1,5 +1,6 @@
 import { autocompleteSearch } from "@/assets/js/api/apiCalls";
 import { mapState } from "vuex";
+import debounce from "lodash/debounce";
 
 const autocompleteMixin = {
   computed: {
@@ -44,7 +45,9 @@ const autocompleteMixin = {
       return this.$i18n.locale === "ee" ? "rank" : "rank_en";
     },
     institutionLabel() {
-      return this.$i18n.locale === "ee" ? "institution_name" : "institution_name_en";
+      return this.$i18n.locale === "ee"
+        ? "institution_name"
+        : "institution_name_en";
     },
     ...mapState(["currentUser"])
   },
@@ -140,6 +143,7 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "agent", "identification_agent");
     },
     autocompleteCopyrightAgentSearch(value) {
+      console.log(value);
       this.$_autocompleteMixin_search(
         value,
         "copyright_agent",
@@ -304,7 +308,7 @@ const autocompleteMixin = {
      * @param groupByField {String} - Field used to group results
      * @param clearAutocomplete {Boolean} - If set to false then autocomplete won't get cleared when multiselect field is cleared (needed in reference keywords search)
      */
-    $_autocompleteMixin_search(
+    $_autocompleteMixin_search: debounce(function(
       value,
       type,
       options,
@@ -312,24 +316,27 @@ const autocompleteMixin = {
       groupByField,
       clearAutocomplete = true
     ) {
-      if (value.length < minLength) {
-        if (clearAutocomplete) this.autocomplete[options] = [];
-      } else if (value.length >= minLength) {
-        let query = buildAutocompleteQuery(
-          type,
-          value,
-          this.currentUser,
-          groupByField
-        );
-        if (query.length === 0) return;
+      if (value) {
+        if (value.length < minLength) {
+          if (clearAutocomplete) this.autocomplete[options] = [];
+        } else if (value.length >= minLength) {
+          let query = buildAutocompleteQuery(
+            type,
+            value,
+            this.currentUser,
+            groupByField
+          );
+          if (query.length === 0) return;
 
-        this.autocomplete.loaders[options] = true;
-        autocompleteSearch(query).then(response => {
-          this.autocomplete.loaders[options] = false;
-          this.autocomplete[options] = handleResponse(response);
-        });
+          this.autocomplete.loaders[options] = true;
+          autocompleteSearch(query).then(response => {
+            this.autocomplete.loaders[options] = false;
+            this.autocomplete[options] = handleResponse(response);
+          });
+        }
       }
-    }
+    },
+    500)
   }
 };
 

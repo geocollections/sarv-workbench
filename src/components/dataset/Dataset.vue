@@ -39,42 +39,43 @@
         <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- NAME and NAME_EN -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`name`">{{ $t("dataset.name") }}:</label>
-              <b-form-input
-                size="sm"
-                id="name"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="dataset.name"
-                :state="isNotEmpty(dataset.name)"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.name')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`name_en`">{{ $t("dataset.name_en") }}:</label>
-              <b-form-input
-                size="sm"
-                id="name_en"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="dataset.name_en"
-                :state="isNotEmpty(dataset.name_en)"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.name_en')"
+                use-state
+              />
             </v-col>
           </v-row>
 
           <!-- DESCRIPTION -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`description`"
-                >{{ $t("dataset.description") }}:</label
-              >
-              <editor :data.sync="dataset.description" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="dataset.description"
+                :color="bodyActiveColor"
+                :label="$t('dataset.description')"
+              />
+<!--              <label :for="`description`"-->
+<!--                >{{ $t("dataset.description") }}:</label-->
+<!--              >-->
+<!--              <editor :data.sync="dataset.description" />-->
             </v-col>
           </v-row>
 
           <!-- DESCRIPTION_EN -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
+            <v-col cols="12" class="pa-1 pb-2">
               <label :for="`description_en`"
                 >{{ $t("dataset.description_en") }}:</label
               >
@@ -82,56 +83,80 @@
             </v-col>
           </v-row>
 
+          {{ dataset.copyright_agent }}
+
           <!-- DATE, DATE_TXT, COPYRIGHT_AGENT and LICENCE -->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`date`">{{ $t("dataset.date") }}:</label>
-              <datepicker
-                id="date"
-                v-model="dataset.date"
-                lang="en"
-                :first-day-of-week="1"
-                format="DD MMM YYYY"
-                :not-after="new Date()"
-                input-class="form-control form-control-sm"
-              ></datepicker>
-            </v-col>
-
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`date_txt`">{{ $t("dataset.date_txt") }}:</label>
-              <b-form-input
-                size="sm"
-                id="date_txt"
-                v-model="dataset.date_txt"
-                type="text"
-              ></b-form-input>
-            </v-col>
-
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`copyright_agent`"
-                >{{ $t("dataset.copyright_agent") }}:</label
+            <v-col cols="12" md="3" class="pa-1">
+              <v-menu
+                v-model="dateState"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
               >
-              <vue-multiselect
-                id="copyright_agent"
-                v-model="dataset.copyright_agent"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :loading="autocomplete.loaders.copyright_agent"
-                :options="autocomplete.copyright_agent"
-                @search-change="autocompleteCopyrightAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
+                <template v-slot:activator="{ on }">
+                  <input-wrapper
+                    v-model="dataset.date"
+                    :color="bodyActiveColor"
+                    :label="$t('common.date')"
+                    is-date
+                    v-on="on"
+                  />
                 </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                <v-date-picker
+                  v-model="dataset.date"
+                  @input="dateState = false"
+                  :color="bodyActiveColor"
+                  :header-color="`${bodyActiveColor} darken-3`"
+                  scrollable
+                ></v-date-picker>
+              </v-menu>
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="dataset.date_txt"
+                :color="bodyActiveColor"
+                :label="$t('common.date_txt')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <v-autocomplete
+                v-model="dataset.copyright_agent"
+                background-color="white"
+                :color="bodyActiveColor"
+                chips
+                small-chips
+                deletable-chips
+                dense
+                height="30"
+                hide-details
+                hide-no-data
+                :item-color="bodyActiveColor"
+                item-text="agent"
+                :items="autocomplete.copyright_agent"
+                :label="$t('dataset.copyright_agent')"
+                :loading="autocomplete.loaders.copyright_agent"
+                no-filter
+                return-object
+                rounded
+                @update:search-input="autocompleteCopyrightAgentSearch"
+              >
+                <template v-slot:append-outer>
+                  <v-btn
+                    v-if="dataset.copyright_agent && dataset.copyright_agent.id"
+                    :color="bodyActiveColor"
+                    :to="{ path: '/agent/' + dataset.copyright_agent.id }"
+                    icon
+                    small
+                  >
+                    <v-icon>far fa-eye</v-icon>
+                  </v-btn>
+                </template>
+              </v-autocomplete>
             </v-col>
 
             <v-col cols="12" md="3" class="px-1">
@@ -214,6 +239,103 @@
       </transition>
     </v-card>
 
+    <!-- RELATED DATA TABS -->
+    <v-card
+      class="related-tabs mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-tabs
+        :background-color="bodyColor.split('n-')[0] + 'n-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in relatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
+        >
+          <span>{{ $t("dataset.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].length > 0"
+            class="font-weight-bold ml-2"
+          >
+            {{ relatedData[tab.name].length }}
+          </span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items>
+        <v-card
+          class="pt-3 px-1"
+          flat
+          :color="bodyColor.split('n-')[0] + 'n-5'"
+        >
+          <dataset-author
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <dataset-reference
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <!-- PAGINATION -->
+          <div
+            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
+                dense
+                :items="paginateByOptionsTranslated"
+                :item-color="bodyActiveColor"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.count[activeTab] /
+                      relatedData.searchParameters[activeTab].paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+        </v-card>
+      </v-tabs-items>
+    </v-card>
+
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
@@ -244,15 +366,21 @@ import {
   fetchListLicences
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import Datepicker from "vue2-datepicker";
+import DatasetAuthor from "./relatedTables/DatasetAuthor";
+import DatasetReference from "./relatedTables/DatasetReference";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 
 export default {
   name: "Dataset",
 
   components: {
+    TextareaWrapper,
+    InputWrapper,
     Editor,
     Spinner,
-    Datepicker
+    DatasetAuthor,
+    DatasetReference
   },
 
   props: {
@@ -357,7 +485,7 @@ export default {
       return {
         relatedTabs: [
           { name: "dataset_author", iconClass: "far fa-user" },
-          { name: "dataset_reference", iconClass: "far fa-chart-bar" }
+          { name: "dataset_reference", iconClass: "fas fa-book" }
         ],
         searchHistory: "datasetSearchHistory",
         activeTab: "dataset_author",
@@ -405,7 +533,8 @@ export default {
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
           { text: "main.pagination", value: 1000 }
-        ]
+        ],
+        dateState: false
       };
     },
 

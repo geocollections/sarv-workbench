@@ -1,4 +1,11 @@
 {
+  "common": {
+    "id": "ID",
+    "name": "Name",
+    "name_en": "Name (EN)",
+    "date": "Date",
+    "date_txt": "Date txt"
+  },
   "main": {
     "pagination": "Show {num} results per page",
     "rating5": "5 - superb",
@@ -341,6 +348,8 @@
     "newPreparation": "Add new preparation",
     "drillcore": "Drill core",
     "newDrillcore": "Add new drill core",
+    "dataset": "Dataset",
+    "newDataset": "Add new dataset",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -1225,6 +1234,14 @@
       "dataset_author": "Authors",
       "dataset_reference": "References"
     }
+  },
+  "dataset_reference": {
+    "reference": "Reference",
+    "remarks": "Remarks"
+  },
+  "dataset_author": {
+    "agent": "Agent",
+    "remarks": "Remarks"
   },
   "doi": {
     "header": "DOIs",
