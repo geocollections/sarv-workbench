@@ -58,61 +58,33 @@
             </v-col>
           </v-row>
 
-          <!-- DESCRIPTION -->
+          <!-- DESCRIPTION and DESCRIPTION_EN -->
           <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <textarea-wrapper
                 v-model="dataset.description"
                 :color="bodyActiveColor"
                 :label="$t('dataset.description')"
               />
-<!--              <label :for="`description`"-->
-<!--                >{{ $t("dataset.description") }}:</label-->
-<!--              >-->
-<!--              <editor :data.sync="dataset.description" />-->
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="dataset.description_en"
+                :color="bodyActiveColor"
+                :label="$t('dataset.description_en')"
+              />
             </v-col>
           </v-row>
-
-          <!-- DESCRIPTION_EN -->
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1 pb-2">
-              <label :for="`description_en`"
-                >{{ $t("dataset.description_en") }}:</label
-              >
-              <editor :data.sync="dataset.description_en" />
-            </v-col>
-          </v-row>
-
-          {{ dataset.copyright_agent }}
 
           <!-- DATE, DATE_TXT, COPYRIGHT_AGENT and LICENCE -->
           <v-row no-gutters>
             <v-col cols="12" md="3" class="pa-1">
-              <v-menu
-                v-model="dateState"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <input-wrapper
-                    v-model="dataset.date"
-                    :color="bodyActiveColor"
-                    :label="$t('common.date')"
-                    is-date
-                    v-on="on"
-                  />
-                </template>
-                <v-date-picker
-                  v-model="dataset.date"
-                  @input="dateState = false"
-                  :color="bodyActiveColor"
-                  :header-color="`${bodyActiveColor} darken-3`"
-                  scrollable
-                ></v-date-picker>
-              </v-menu>
+              <date-wrapper
+                v-model="dataset.date"
+                :color="bodyActiveColor"
+                :label="$t('common.date')"
+              />
             </v-col>
 
             <v-col cols="12" md="3" class="pa-1">
@@ -124,115 +96,79 @@
             </v-col>
 
             <v-col cols="12" md="3" class="pa-1">
-              <v-autocomplete
+              <autocomplete-wrapper
                 v-model="dataset.copyright_agent"
-                background-color="white"
                 :color="bodyActiveColor"
-                chips
-                small-chips
-                deletable-chips
-                dense
-                height="30"
-                hide-details
-                hide-no-data
-                :item-color="bodyActiveColor"
-                item-text="agent"
                 :items="autocomplete.copyright_agent"
-                :label="$t('dataset.copyright_agent')"
                 :loading="autocomplete.loaders.copyright_agent"
+                item-text="agent"
+                :label="$t('common.copyright_agent')"
+                v-on:chip:close="dataset.copyright_agent = null"
                 no-filter
-                return-object
-                rounded
+                cache-items
+                is-link
+                route-object="agent"
                 @update:search-input="autocompleteCopyrightAgentSearch"
-              >
-                <template v-slot:append-outer>
-                  <v-btn
-                    v-if="dataset.copyright_agent && dataset.copyright_agent.id"
-                    :color="bodyActiveColor"
-                    :to="{ path: '/agent/' + dataset.copyright_agent.id }"
-                    icon
-                    small
-                  >
-                    <v-icon>far fa-eye</v-icon>
-                  </v-btn>
-                </template>
-              </v-autocomplete>
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`licence`">{{ $t("dataset.licence") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="dataset.licence"
-                id="licence"
-                :options="autocomplete.licence"
-                track-by="id"
-                :label="licenceLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[licenceLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.licence"
+                :loading="autocomplete.loaders.licence"
+                :item-text="licenceLabel"
+                :label="$t('common.licence')"
+                v-on:chip:close="dataset.licence = null"
+              />
             </v-col>
           </v-row>
 
-          <!-- DATASET_HTML -->
+          <!-- DATASET_HTML and REMARKS -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`dataset_html`"
-                >{{ $t("dataset.dataset_html") }}:</label
-              >
-              <editor :data.sync="dataset.dataset_html" />
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="dataset.dataset_html"
+                :color="bodyActiveColor"
+                :label="$t('dataset.dataset_html')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="dataset.remarks"
+                :color="bodyActiveColor"
+                :label="$t('common.remarks')"
+              />
             </v-col>
           </v-row>
 
           <!-- OWNER and OWNER_TXT -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`owner`">{{ $t("dataset.owner") }}:</label>
-              <vue-multiselect
-                id="owner"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="dataset.owner"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.owner"
                 :loading="autocomplete.loaders.owner"
-                :options="autocomplete.owner"
-                @search-change="autocompleteOwner2Search"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('common.owner')"
+                v-on:chip:close="dataset.owner = null"
+                no-filter
+                cache-items
+                is-link
+                route-object="agent"
+                @update:search-input="autocompleteOwner2Search"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`owner_txt`">{{ $t("dataset.owner_txt") }}:</label>
-              <b-form-input
-                size="sm"
-                id="owner_txt"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="dataset.owner_txt"
-                type="text"
-              ></b-form-input>
-            </v-col>
-          </v-row>
-
-          <!-- REMARKS -->
-          <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks`">{{ $t("dataset.remarks") }}:</label>
-              <editor :data.sync="dataset.remarks" />
+                :color="bodyActiveColor"
+                :label="$t('common.owner_txt')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -356,7 +292,6 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import Editor from "../partial/editor/Editor";
 import Spinner from "vue-simple-spinner";
 import { mapState } from "vuex";
 import {
@@ -370,14 +305,17 @@ import DatasetAuthor from "./relatedTables/DatasetAuthor";
 import DatasetReference from "./relatedTables/DatasetReference";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 
 export default {
   name: "Dataset",
 
   components: {
+    AutocompleteWrapper,
+    DateWrapper,
     TextareaWrapper,
     InputWrapper,
-    Editor,
     Spinner,
     DatasetAuthor,
     DatasetReference
@@ -660,19 +598,25 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.dataset.copyright_agent = {
-        id: obj.copyright_agent,
-        agent: obj.copyright_agent__agent
-      };
+      if (this.isNotEmpty(obj.copyright_agent)) {
+        this.dataset.copyright_agent = {
+          id: obj.copyright_agent,
+          agent: obj.copyright_agent__agent
+        };
+        this.autocomplete.copyright_agent.push(this.dataset.copyright_agent);
+      }
       this.dataset.licence = {
-        id: obj.fossil,
+        id: obj.licence,
         licence: obj.licence__licence,
         licence_en: obj.licence__licence_en
       };
-      this.dataset.owner = {
-        id: obj.owner,
-        agent: obj.owner__agent
-      };
+      if (this.isNotEmpty(obj.owner)) {
+        this.dataset.owner = {
+          id: obj.owner,
+          agent: obj.owner__agent
+        };
+        this.autocomplete.owner.push(this.dataset.owner);
+      }
     },
 
     fillRelatedDataAutocompleteFields(obj) {

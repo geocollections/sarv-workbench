@@ -4,7 +4,12 @@
     "name": "Nimi",
     "name_en": "Nimi (EN)",
     "date": "Kuupäev",
-    "date_txt": "Kuupäev txt"
+    "date_txt": "Kuupäev txt",
+    "remarks": "Lisainfo",
+    "owner": "Omanik",
+    "owner_txt": "Omanik txt",
+    "licence": "Litsents",
+    "copyright_agent": "Autoriõigused"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",

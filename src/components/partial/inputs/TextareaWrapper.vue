@@ -5,6 +5,7 @@
       dense
       hide-details
       rounded
+      outlined
       rows="3"
       v-bind="$attrs"
       v-on="$listeners"
@@ -21,11 +22,11 @@ export default {
 <style scoped>
 /* Adding border to input because outlined has fixed height */
 .input-class >>> .v-input {
-  border: 1px solid;
+  /*border: 1px solid;*/
 }
 
 /* Centers text in input */
 .input-class >>> .v-text-field input {
-  padding: 8px 0 8px !important;
+  /*padding: 8px 0 8px !important;*/
 }
 </style>

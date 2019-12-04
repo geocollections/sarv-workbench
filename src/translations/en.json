@@ -4,7 +4,12 @@
     "name": "Name",
     "name_en": "Name (EN)",
     "date": "Date",
-    "date_txt": "Date txt"
+    "date_txt": "Date txt",
+    "remarks": "Remarks",
+    "owner": "Owner",
+    "owner_txt": "Owner txt",
+    "licence": "Licence",
+    "copyright_agent": "Copyright agent"
   },
   "main": {
     "pagination": "Show {num} results per page",
