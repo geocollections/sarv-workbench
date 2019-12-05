@@ -34,170 +34,111 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- TAXON, AUTHOR_YEAR and REFERENCE  -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`taxon`">{{ $t("taxon.taxon") }}:</label>
-              <b-form-input
-                size="sm"
-                id="taxon"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="taxon.taxon"
-                type="text"
-                :state="isNotEmpty(taxon.taxon)"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('taxon.taxon')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`author_year`">{{ $t("taxon.author_year") }}:</label>
-              <b-form-input
-                size="sm"
-                id="author_year"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="taxon.author_year"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('taxon.author_year')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`reference`"
-                >{{ $t("taxon.reference_original") }}:</label
-              >
-              <vue-multiselect
-                id="reference"
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="taxon.reference"
-                label="reference"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.reference"
                 :loading="autocomplete.loaders.reference"
-                :options="autocomplete.reference"
-                @search-change="autocompleteReferenceSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.reference }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="reference"
+                :label="$t('taxon.reference_original')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteReferenceSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- RANK, PARENT and TAXON_EPITHET  -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`rank`">{{ $t("taxon.rank") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="taxon.rank"
-                id="rank"
-                :options="autocomplete.rank"
-                track-by="id"
-                :label="rankLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[rankLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.rank"
+                :loading="autocomplete.loaders.rank"
+                :item-text="rankLabel"
+                :label="$t('taxon.rank')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`parent`">{{ $t("taxon.parent") }}:</label>
-              <vue-multiselect
-                id="parent"
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="taxon.parent"
-                label="taxon"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.parent"
                 :loading="autocomplete.loaders.parent"
-                :options="autocomplete.parent"
-                @search-change="autocompleteTaxonParentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.taxon }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="taxon"
+                :label="$t('taxon.parent')"
+                is-link
+                route-object="taxon"
+                is-searchable
+                v-on:search:items="autocompleteTaxonParentSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`taxon_epithet`"
-                >{{ $t("taxon.taxon_epithet") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="taxon_epithet"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="taxon.taxon_epithet"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('taxon.taxon_epithet')"
+              />
             </v-col>
           </v-row>
 
           <!-- HIERARCHY_STRING, FOSSIL_GROUP and IS_FOSSIL_GROUP  -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`hierarchy_string`"
-                >{{ $t("taxon.hierarchy_string") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="hierarchy_string"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="taxon.hierarchy_string"
-                type="text"
-              ></b-form-input>
-            </v-col>
-
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`fossil_group`"
-                >{{ $t("taxon.fossil_group") }}:</label
-              >
-              <vue-multiselect
-                id="fossil_group"
-                v-model="taxon.fossil_group"
-                label="taxon"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :loading="autocomplete.loaders.fossil_group"
-                :options="autocomplete.fossil_group"
-                @search-change="autocompleteTaxonFossilGroupSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.taxon }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
-            </v-col>
-
-            <v-col cols="12" md="4" class="px-1 checkboxes">
-              <label style="visibility: hidden;" :for="`is_fossil_group`"
-                >{{ $t("taxon.is_fossil_group") }}:</label
-              >
-              <v-checkbox
-                v-model="taxon.is_fossil_group"
-                :label="$t('taxon.is_fossil_group')"
-                class="mt-0"
                 :color="bodyActiveColor"
-                hide-details
-              ></v-checkbox>
+                :label="$t('taxon.hierarchy_string')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="taxon.fossil_group"
+                :color="bodyActiveColor"
+                :items="autocomplete.fossil_group"
+                :loading="autocomplete.loaders.fossil_group"
+                item-text="taxon"
+                :label="$t('taxon.fossil_group')"
+                is-link
+                route-object="taxon"
+                is-searchable
+                v-on:search:items="autocompleteTaxonFossilGroupSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <checkbox-wrapper
+                v-model="taxon.is_fossil_group"
+                :color="bodyActiveColor"
+                :label="$t('taxon.is_fossil_group')"
+                @change="taxon.is_fossil_group = !taxon.is_fossil_group"
+              />
             </v-col>
           </v-row>
         </div>
@@ -232,177 +173,120 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.details" class="px-1 pt-1 pb-2">
+        <div v-show="block.details" class="pa-1">
           <!-- TAXON_ORIGINAL_NAME and RANK_ORIGINAL -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`taxon_original_name`"
-                >{{ $t("taxon.taxon_original_name") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="taxon_original_name"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="taxon.taxon_original_name"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('taxon.taxon_original_name')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`rank_original`"
-                >{{ $t("taxon.rank_original") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="taxon.rank_original"
-                id="rank_original"
-                :options="autocomplete.rank_original"
-                track-by="id"
-                :label="rankLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[rankLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.rank_original"
+                :loading="autocomplete.loaders.rank_original"
+                :item-text="rankLabel"
+                :label="$t('taxon.rank_original')"
+              />
             </v-col>
           </v-row>
 
           <!-- TYPE_TAXON_ID and TYPE_TAXON -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`type_taxon_id`"
-                >{{ $t("taxon.type_taxon_id") }}:</label
-              >
-              <vue-multiselect
-                id="type_taxon_id"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="taxon.type_taxon_id"
-                label="taxon"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.type_taxon_id"
                 :loading="autocomplete.loaders.type_taxon_id"
-                :options="autocomplete.type_taxon_id"
-                @search-change="autocompleteTypeTaxonIdSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.taxon }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="taxon"
+                :label="$t('taxon.type_taxon_id')"
+                is-link
+                route-object="taxon"
+                is-searchable
+                v-on:search:items="autocompleteTypeTaxonIdSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`type_taxon`">{{ $t("taxon.type_taxon") }}:</label>
-              <b-form-input
-                size="sm"
-                id="type_taxon"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="taxon.type_taxon"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('taxon.type_taxon')"
+              />
             </v-col>
           </v-row>
 
           <!-- IS_FOSSIL, IS_VALID, IN_ESTONIA and IN_BALTOSCANDIA -->
-          <v-row no-gutters class="checkboxes">
-            <v-col cols="12" md="3" class="px-1">
-              <v-checkbox
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
                 v-model="taxon.is_fossil"
+                :color="bodyActiveColor"
                 :label="$t('taxon.is_fossil')"
-                hide-details
-                :color="bodyActiveColor"
-              ></v-checkbox>
+                @change="taxon.is_fossil = !taxon.is_fossil"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <v-checkbox
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
                 v-model="taxon.is_valid"
+                :color="bodyActiveColor"
                 :label="$t('taxon.is_valid')"
-                hide-details
-                :color="bodyActiveColor"
-              ></v-checkbox>
+                @change="taxon.is_valid = !taxon.is_valid"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <v-checkbox
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
                 v-model="taxon.in_estonia"
-                :label="$t('taxon.in_estonia')"
-                hide-details
                 :color="bodyActiveColor"
-              ></v-checkbox>
+                :label="$t('taxon.in_estonia')"
+                @change="taxon.in_estonia = !taxon.in_estonia"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <v-checkbox
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
                 v-model="taxon.in_baltoscandia"
-                :label="$t('taxon.in_baltoscandia')"
-                hide-details
                 :color="bodyActiveColor"
-              ></v-checkbox>
+                :label="$t('taxon.in_baltoscandia')"
+                @change="taxon.in_baltoscandia = !taxon.in_baltoscandia"
+              />
             </v-col>
           </v-row>
 
           <!-- STRATIGRAPHY_TOP and STRATIGRAPHY_BASE -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`stratigraphy_top`"
-                >{{ $t("taxon.stratigraphy_top") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="taxon.stratigraphy_top"
-                id="stratigraphy_top"
-                track-by="id"
-                :label="stratigraphyLabel"
-                :options="autocomplete.stratigraphy_top"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                @search-change="autocompleteStratigraphyTopSearch"
+                :color="bodyActiveColor"
+                :items="autocomplete.stratigraphy_top"
                 :loading="autocomplete.loaders.stratigraphy_top"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[stratigraphyLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="stratigraphyLabel"
+                :label="$t('taxon.stratigraphy_top')"
+                is-searchable
+                v-on:search:items="autocompleteStratigraphyTopSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`stratigraphy_base`"
-                >{{ $t("taxon.stratigraphy_base") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="taxon.stratigraphy_base"
-                id="stratigraphy_base"
-                track-by="id"
-                :label="stratigraphyLabel"
-                :options="autocomplete.stratigraphy_base"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                @search-change="autocompleteStratigraphyBaseSearch"
-                :loading="autocomplete.loaders.stratigraphy"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[stratigraphyLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.stratigraphy_base"
+                :loading="autocomplete.loaders.stratigraphy_base"
+                :item-text="stratigraphyLabel"
+                :label="$t('taxon.stratigraphy_base')"
+                is-searchable
+                v-on:search:items="autocompleteStratigraphyBaseSearch"
+              />
             </v-col>
           </v-row>
         </div>
@@ -437,114 +321,89 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.details" class="px-1 pt-1 pb-2">
+        <div v-show="block.details" class="pa-1">
           <!-- TAXON_ID_PBDB, TAXON_ID_PLUTOF, TAXON_ID_TOL, TAXON_ID_EOL and TAXON_ID_NRM -->
           <v-row no-gutters>
-            <v-col class="mb-2 px-1" cols="12" md="">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="">
+              <input-wrapper
                 v-model="taxon.taxon_id_pbdb"
-                dense
-                hide-details
+                :color="bodyActiveColor"
                 :label="$t('taxon.taxon_id_pbdb')"
-                outlined
-                :color="bodyActiveColor"
                 type="number"
-              ></v-text-field>
+              />
             </v-col>
 
-            <v-col class="mb-2 px-1" cols="12" md="">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="">
+              <input-wrapper
                 v-model="taxon.taxon_id_plutof"
-                dense
-                hide-details
+                :color="bodyActiveColor"
                 :label="$t('taxon.taxon_id_plutof')"
-                outlined
-                :color="bodyActiveColor"
                 type="number"
-              ></v-text-field>
+              />
             </v-col>
 
-            <v-col class="mb-2 px-1" cols="12" md="">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="">
+              <input-wrapper
                 v-model="taxon.taxon_id_tol"
-                dense
-                hide-details
+                :color="bodyActiveColor"
                 :label="$t('taxon.taxon_id_tol')"
-                outlined
-                :color="bodyActiveColor"
                 type="number"
-              ></v-text-field>
+              />
             </v-col>
 
-            <v-col class="mb-2 px-1" cols="12" md="">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="">
+              <input-wrapper
                 v-model="taxon.taxon_id_eol"
-                dense
-                hide-details
-                :label="$t('taxon.taxon_id_eol')"
-                outlined
                 :color="bodyActiveColor"
+                :label="$t('taxon.taxon_id_eol')"
                 type="number"
-              ></v-text-field>
+              />
             </v-col>
 
-            <v-col class="mb-2 px-1" cols="12" md="">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="">
+              <input-wrapper
                 v-model="taxon.taxon_id_nrm"
-                dense
-                hide-details
-                :label="$t('taxon.taxon_id_nrm')"
-                outlined
                 :color="bodyActiveColor"
+                :label="$t('taxon.taxon_id_nrm')"
                 type="number"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
 
           <!-- OWNER, IS_AUTHORIZED, USER_AUTHORIZED, SORT -->
           <v-row no-gutters>
-            <v-col class="mb-2 px-1" cols="12" md="3">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="3">
+              <input-wrapper
                 v-model="taxon.owner"
+                :color="bodyActiveColor"
                 :label="$t('taxon.owner')"
-                dense
-                hide-details
-                outlined
-                :color="bodyActiveColor"
-              ></v-text-field>
+              />
             </v-col>
 
-            <v-col class="mb-2 px-1 checkboxes" cols="12" md="3">
-              <v-checkbox
+            <v-col class="pa-1" cols="12" md="3">
+              <checkbox-wrapper
                 v-model="taxon.is_authorized"
+                :color="bodyActiveColor"
                 :label="$t('taxon.is_authorized')"
-                class="mt-0"
-                :color="bodyActiveColor"
-                hide-details
-              ></v-checkbox>
+                @change="taxon.is_authorized = !taxon.is_authorized"
+              />
             </v-col>
 
-            <v-col class="mb-2 px-1" cols="12" md="3">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="3">
+              <input-wrapper
                 v-model="taxon.user_authorized"
-                :label="$t('taxon.user_authorized')"
-                dense
-                hide-details
-                outlined
                 :color="bodyActiveColor"
-              ></v-text-field>
+                :label="$t('taxon.user_authorized')"
+              />
             </v-col>
 
-            <v-col class="px-1" cols="12" md="3">
-              <v-text-field
+            <v-col class="pa-1" cols="12" md="3">
+              <input-wrapper
                 v-model="taxon.sort"
-                :label="$t('taxon.sort')"
-                dense
-                hide-details
-                outlined
                 :color="bodyActiveColor"
+                :label="$t('taxon.sort')"
                 type="number"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
         </div>
@@ -579,11 +438,14 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
+        <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks`">{{ $t("taxon.remarks") }}:</label>
-              <editor :data.sync="taxon.remarks" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="taxon.remarks"
+                :color="bodyActiveColor"
+                :label="$t('common.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -761,13 +623,13 @@
 
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
-      <v-col class="checkboxes">
-        <v-checkbox
+      <v-col>
+        <checkbox-wrapper
           v-model="taxon.is_private"
-          :label="$t('specimen.is_private_text')"
-          class="mt-0"
-          hide-details
-        ></v-checkbox>
+          :color="bodyActiveColor"
+          :label="$t('common.is_private')"
+          @change="taxon.is_private = !taxon.is_private"
+        />
       </v-col>
     </v-row>
   </div>
@@ -796,7 +658,6 @@ import {
   fetchTaxonTypeType
 } from "../../assets/js/api/apiCalls";
 import Spinner from "vue-simple-spinner";
-import Editor from "../partial/editor/Editor";
 import TaxonSubclass from "./relatedTables/TaxonSubclass";
 import TaxonSynonym from "./relatedTables/TaxonSynonym";
 import TaxonTypeSpecimen from "./relatedTables/TaxonTypeSpecimen";
@@ -806,12 +667,19 @@ import TaxonCommonName from "./relatedTables/TaxonCommonName";
 import TaxonDescription from "./relatedTables/TaxonDescription";
 import TaxonPage from "./relatedTables/TaxonPage";
 import TaxonImage from "./relatedTables/TaxonImage";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   name: "Taxon",
 
   components: {
-    Editor,
+    CheckboxWrapper,
+    TextareaWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
     Spinner,
     TaxonSubclass,
     TaxonSynonym,
@@ -1690,14 +1558,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-
-.checkboxes >>> .v-label {
-  margin-bottom: 0;
-}
-</style>
+<style scoped></style>
