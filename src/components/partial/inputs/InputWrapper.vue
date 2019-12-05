@@ -4,7 +4,6 @@
       background-color="white"
       dense
       hide-details
-      rounded
       outlined
       :clearable="isDate"
       clear-icon="fas fa-times"
@@ -13,6 +12,7 @@
       :success="useState ? !!$attrs.value : false"
       v-bind="$attrs"
       v-on="$listeners"
+      :title="$attrs.value"
     >
       <template v-if="isDate" v-slot:prepend-inner>
         <v-icon small>far fa-calendar-alt</v-icon>
@@ -20,7 +20,7 @@
 
       <template v-if="useState" v-slot:append>
         <v-icon small v-if="!$attrs.value" color="red"
-          >fas fa-exclamation</v-icon
+          >fas fa-exclamation-circle</v-icon
         >
         <v-icon small v-else color="green">fas fa-check</v-icon>
       </template>
@@ -57,12 +57,12 @@ export default {
 
 /* Centers append-inner icon in input */
 .input-class >>> .v-input__append-inner {
-  /*margin: auto;*/
+  margin: auto !important;
 }
 
 /* Centers prepend-inner icon in input */
 .input-class >>> .v-input__prepend-inner {
-  /*margin: auto;*/
+  margin: auto !important;
 }
 
 /* Centers append-outer icon in input */

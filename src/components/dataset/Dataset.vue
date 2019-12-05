@@ -36,7 +36,7 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- NAME and NAME_EN -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
@@ -64,7 +64,7 @@
               <textarea-wrapper
                 v-model="dataset.description"
                 :color="bodyActiveColor"
-                :label="$t('dataset.description')"
+                :label="$t('common.description')"
               />
             </v-col>
 
@@ -72,7 +72,7 @@
               <textarea-wrapper
                 v-model="dataset.description_en"
                 :color="bodyActiveColor"
-                :label="$t('dataset.description_en')"
+                :label="$t('common.description_en')"
               />
             </v-col>
           </v-row>
@@ -103,12 +103,10 @@
                 :loading="autocomplete.loaders.copyright_agent"
                 item-text="agent"
                 :label="$t('common.copyright_agent')"
-                v-on:chip:close="dataset.copyright_agent = null"
-                no-filter
-                cache-items
                 is-link
                 route-object="agent"
-                @update:search-input="autocompleteCopyrightAgentSearch"
+                is-searchable
+                v-on:search:items="autocompleteCopyrightAgentSearch"
               />
             </v-col>
 
@@ -120,7 +118,6 @@
                 :loading="autocomplete.loaders.licence"
                 :item-text="licenceLabel"
                 :label="$t('common.licence')"
-                v-on:chip:close="dataset.licence = null"
               />
             </v-col>
           </v-row>
@@ -154,12 +151,10 @@
                 :loading="autocomplete.loaders.owner"
                 item-text="agent"
                 :label="$t('common.owner')"
-                v-on:chip:close="dataset.owner = null"
-                no-filter
-                cache-items
                 is-link
                 route-object="agent"
-                @update:search-input="autocompleteOwner2Search"
+                is-searchable
+                v-on:search:items="autocompleteOwner2Search"
               />
             </v-col>
 
@@ -278,7 +273,7 @@
         <v-checkbox
           v-model="dataset.is_private"
           id="is_private"
-          :label="$t('dataset.is_private')"
+          :label="$t('common.is_private')"
           hide-details
           :color="bodyActiveColor"
           class="mt-0 vuetify-checkbox"
@@ -708,10 +703,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

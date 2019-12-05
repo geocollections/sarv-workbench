@@ -37,86 +37,61 @@
         <div v-show="block.info" class="px-1 pt-1 pb-2">
           <!-- NAME -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`agent`">{{ $t("agent.agent") }}:</label>
-              <b-form-input
-                size="sm"
-                id="agent"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="agent.agent"
-                :state="isNotEmpty(agent.agent)"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.name')"
+                use-state
+              />
             </v-col>
           </v-row>
 
           <!-- TYPE and INSTITUTION -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`type`">{{ $t("agent.type") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="agent.type"
-                id="type"
-                :options="autocomplete.agent_type"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.agent_type"
+                :loading="autocomplete.loaders.agent_type"
+                :item-text="commonLabel"
+                :label="$t('common.type')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`institution`">{{ $t("agent.institution") }}:</label>
-              <vue-multiselect
-                id="agent"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="agent.institution"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.institution"
                 :loading="autocomplete.loaders.institution"
-                :options="autocomplete.institution"
-                @search-change="autocompleteInstitutionSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('agent.institution')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteInstitutionSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- FORENAME and SURENAME -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`forename`">{{ $t("agent.forename") }}:</label>
-              <b-form-input
-                size="sm"
-                id="agent"
+            <v-col cols="12" md="6" class="pa-1 pb-0">
+              <input-wrapper
                 v-model="agent.forename"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.forename')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`surename`">{{ $t("agent.surename") }}:</label>
-              <b-form-input
-                size="sm"
-                id="agent"
+            <v-col cols="12" md="6" class="pa-1 pb-0">
+              <input-wrapper
                 v-model="agent.surename"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.surename')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -151,282 +126,175 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.details" class="px-1 pt-1 pb-2">
+        <div v-show="block.details" class="pa-1">
           <!-- INSTITUTION_NAME and INSTITUTION_NAME_EN -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`institution_name`"
-                >{{ $t("agent.institution_name") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="institution_name"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.institution_name"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.institution_name')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`institution_name_en`"
-                >{{ $t("agent.institution_name_en") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="institution_name_en"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.institution_name_en"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.institution_name_en')"
+              />
             </v-col>
           </v-row>
 
           <!-- TITLE, PROFESSION and PROFESSION_EN -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`title`">{{ $t("agent.title") }}:</label>
-              <b-form-input
-                size="sm"
-                id="title"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="agent.title"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.title')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`profession`">{{ $t("agent.profession") }}:</label>
-              <b-form-input
-                size="sm"
-                id="profession"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="agent.profession"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.profession')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`profession_en`"
-                >{{ $t("agent.profession_en") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="profession_en"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="agent.profession_en"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.profession_en')"
+              />
             </v-col>
           </v-row>
 
           <!-- ADDRESS, ADDRESS1 and ADDRESS2 -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`address`">{{ $t("agent.address") }}:</label>
-              <b-form-input
-                size="sm"
-                id="address"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="agent.address"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.address')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`address1`">{{ $t("agent.address1") }}:</label>
-              <b-form-input
-                size="sm"
-                id="address1"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="agent.address1"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.address1')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`address2`">{{ $t("agent.address2") }}:</label>
-              <b-form-input
-                size="sm"
-                id="address2"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="agent.address2"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.address2')"
+              />
             </v-col>
           </v-row>
 
           <!-- HTTP and ORCID -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`http`">{{ $t("agent.http") }}:</label>
-              <b-form-input
-                size="sm"
-                id="http"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.http"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.http')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`orcid`">{{ $t("agent.orcid") }}:</label>
-              <b-form-input
-                size="sm"
-                id="orcid"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.orcid"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.orcid')"
+              />
             </v-col>
           </v-row>
 
           <!-- COUNTRY and COUNTRY_TXT -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`country`">{{ $t("agent.country") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="agent.country"
-                id="country"
-                :options="autocomplete.list_country"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.list_country"
+                :loading="autocomplete.loaders.list_country"
+                :item-text="commonLabel"
+                :label="$t('agent.country')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`country_txt`">{{ $t("agent.country_txt") }}:</label>
-              <b-form-input
-                size="sm"
-                id="country_txt"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.country_txt"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.country_txt')"
+              />
             </v-col>
           </v-row>
 
           <!-- PHONE and EMAIL -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`phone`">{{ $t("agent.phone") }}:</label>
-              <b-form-input
-                size="sm"
-                id="phone"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.phone"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.phone')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`email`">{{ $t("agent.email") }}:</label>
-              <b-form-input
-                size="sm"
-                id="email"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.email"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.email')"
+              />
             </v-col>
           </v-row>
 
           <!-- DATE_BORN and DATE_DECEASED -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`date_born`">{{ $t("agent.date_born") }}:</label>
-              <v-menu
-                v-model="menuDateBorn"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    hide-details
-                    v-model="agent.date_born"
-                    prepend-inner-icon="far fa-calendar-alt"
-                    :color="bodyActiveColor"
-                    clearable
-                    dense
-                    flat
-                    solo
-                    class="white"
-                    style="border: 1px solid #ced4da !important;"
-                    clear-icon="fas fa-times"
-                    readonly
-                    :class="bodyActiveColor + '--text'"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="agent.date_born"
-                  @input="menuDateBorn = false"
-                  :color="bodyActiveColor"
-                  :header-color="`${bodyActiveColor} darken-3`"
-                  scrollable
-                ></v-date-picker>
-              </v-menu>
+            <v-col cols="12" md="6" class="pa-1">
+              <date-wrapper
+                v-model="agent.date_born"
+                :color="bodyActiveColor"
+                :label="$t('agent.date_born')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`date_deceased`"
-                >{{ $t("agent.date_deceased") }}:</label
-              >
-              <v-menu
-                v-model="menuDateDeceased"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    hide-details
-                    v-model="agent.date_deceased"
-                    prepend-inner-icon="far fa-calendar-alt"
-                    :color="bodyActiveColor"
-                    clearable
-                    dense
-                    flat
-                    solo
-                    class="white"
-                    style="border: 1px solid #ced4da !important;"
-                    clear-icon="fas fa-times"
-                    readonly
-                    :class="bodyActiveColor + '--text'"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="agent.date_deceased"
-                  @input="menuDateDeceased = false"
-                  :color="bodyActiveColor"
-                  :header-color="`${bodyActiveColor} darken-3`"
-                  scrollable
-                ></v-date-picker>
-              </v-menu>
+            <v-col cols="12" md="6" class="pa-1">
+              <date-wrapper
+                v-model="agent.date_deceased"
+                :color="bodyActiveColor"
+                :label="$t('agent.date_deceased')"
+              />
             </v-col>
           </v-row>
 
           <!-- OLD_NAME and NEW_NAME -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`old_name`">{{ $t("agent.old_name") }}:</label>
-              <b-form-input
-                size="sm"
-                id="old_name"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.old_name"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.old_name')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`new_name`">{{ $t("agent.new_name") }}:</label>
-              <b-form-input
-                size="sm"
-                id="new_name"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="agent.new_name"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('agent.new_name')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -461,11 +329,14 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
+        <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks`">{{ $t("agent.remarks") }}:</label>
-              <editor :data.sync="agent.remarks" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="agent.remarks"
+                :color="bodyActiveColor"
+                :label="$t('common.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -480,13 +351,19 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {fetchAgent, fetchListAgentType, fetchListCountry} from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import Editor from "../partial/editor/Editor";
 import Spinner from "vue-simple-spinner";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 
 export default {
   name: "Agent",
   components: {
-    Editor,
+    TextareaWrapper,
+    DateWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
     Spinner
   },
   props: {
@@ -660,10 +537,13 @@ export default {
         value: obj.type__value,
         value_en: obj.type__value_en
       };
-      this.agent.institution = {
-        id: obj.institution,
-        agent: obj.institution__agent
-      };
+      if (this.isNotEmpty(obj.institution)) {
+        this.agent.institution = {
+          id: obj.institution,
+          agent: obj.institution__agent
+        };
+        this.autocomplete.institution.push(this.agent.institution);
+      }
       this.agent.country = {
         id: obj.country,
         value: obj.country__value,
@@ -687,10 +567,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

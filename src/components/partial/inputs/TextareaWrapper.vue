@@ -4,7 +4,6 @@
       background-color="white"
       dense
       hide-details
-      rounded
       outlined
       rows="3"
       v-bind="$attrs"

@@ -36,77 +36,49 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- FOSSIL, SPECIMEN_ID, COLL and SPECIMEN_NR  -->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`fossil`">{{ $t("specimen.fossil") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="specimen.fossil"
-                id="fossil"
-                :options="autocomplete.specimen_kind"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :class="isNotEmpty(specimen.fossil) ? 'valid' : 'invalid'"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.specimen_kind"
+                :loading="autocomplete.loaders.specimen_kind"
+                :item-text="commonLabel"
+                :label="$t('specimen.fossil')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`specimen_id`"
-                >{{ $t("specimen.specimen_id") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="specimen_id"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="specimen.specimen_id"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('specimen.specimen_id')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`coll`">{{ $t("specimen.coll") }}:</label>
-              <vue-multiselect
-                id="copyright_agent"
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="specimen.coll"
-                label="number"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.coll"
                 :loading="autocomplete.loaders.coll"
-                :options="autocomplete.coll"
-                @search-change="autocompleteCollSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.number }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="number"
+                :label="$t('specimen.coll')"
+                is-link
+                route-object="collection"
+                is-searchable
+                v-on:search:items="autocompleteCollSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`specimen_nr`"
-                >{{ $t("specimen.specimen_nr") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="specimen_nr"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="specimen.specimen_nr"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('specimen.specimen_nr')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -947,11 +919,15 @@ import SpecimenAttachment from "./relatedTables/SpecimenAttachment";
 import SpecimenLocation from "./relatedTables/SpecimenLocation";
 import SpecimenHistory from "./relatedTables/SpecimenHistory";
 import SpecimenAnalysis from "./relatedTables/SpecimenAnalysis";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../partial/inputs/InputWrapper";
 
 export default {
   name: "Specimen",
 
   components: {
+    InputWrapper,
+    AutocompleteWrapper,
     SpecimenAnalysis,
     SpecimenHistory,
     SpecimenLocation,
@@ -1597,7 +1573,10 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.specimen.coll = { id: obj.coll, number: obj.coll__number };
+      if (this.isNotEmpty(obj.coll)) {
+        this.specimen.coll = { id: obj.coll, number: obj.coll__number };
+        this.autocomplete.coll.push(this.specimen.coll);
+      }
       this.specimen.fossil = {
         id: obj.fossil,
         value: obj.fossil__value,

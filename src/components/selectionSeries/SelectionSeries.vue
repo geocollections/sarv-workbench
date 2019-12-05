@@ -7,8 +7,7 @@
       :message="
         $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
       "
-    ></spinner>
-
+    />
 
     <v-card
       class="mt-3"
@@ -16,7 +15,7 @@
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
-      <v-card-title>
+      <v-card-title class="pt-2 pb-1">
         <span>{{ $t("selectionSeries.generalInfo") }}</span>
         <v-icon right>fas fa-project-diagram</v-icon>
         <v-spacer></v-spacer>
@@ -31,29 +30,20 @@
         <div v-show="block.info" class="pa-1">
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
-              <v-text-field
+              <input-wrapper
                 v-model="selection_series.name"
-                outlined
-                dense
-                hide-details
-                :append-icon="
-                  !isNotEmpty(selection_series.name) ? 'fas fa-exclamation' : ''
-                "
-                :error="!isNotEmpty(selection_series.name)"
                 :color="bodyActiveColor"
-                :label="$t('selectionSeries.name')"
-              ></v-text-field>
+                :label="$t('common.name')"
+                use-state
+              />
             </v-col>
 
             <v-col cols="12" md="6" class="pa-1">
-              <v-text-field
+              <input-wrapper
                 v-model="selection_series.remarks"
-                outlined
-                dense
-                hide-details
                 :color="bodyActiveColor"
-                :label="$t('selectionSeries.remarks')"
-              ></v-text-field>
+                :label="$t('common.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -66,9 +56,13 @@
 import formManipulation from "../../mixins/formManipulation";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { fetchSelectionSerie } from "../../assets/js/api/apiCalls";
+import Spinner from "vue-simple-spinner";
+import InputWrapper from "../partial/inputs/InputWrapper";
 
 export default {
   name: "SelectionSeries",
+
+  components: {InputWrapper, Spinner },
 
   props: {
     isBodyActiveColorDark: {

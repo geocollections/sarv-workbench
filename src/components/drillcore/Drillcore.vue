@@ -36,104 +36,74 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- DRILLCORE and DRILLCORE_EN -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`drillcore`">{{ $t("drillcore.drillcore") }}:</label>
-              <b-form-input
-                size="sm"
-                id="drillcore"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.drillcore"
-                :state="isNotEmpty(drillcore.drillcore)"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.drillcore')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`drillcore_en`"
-                >{{ $t("drillcore.drillcore_en") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="drillcore_en"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.drillcore_en"
-                :state="isNotEmpty(drillcore.drillcore_en)"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.drillcore_en')"
+                use-state
+              />
             </v-col>
           </v-row>
 
           <!-- LOCALITY, YEAR, AGENT and DEPTH  -->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`locality`">{{ $t("drillcore.locality") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="drillcore.locality"
-                id="locality"
-                :label="localityLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.locality"
                 :loading="autocomplete.loaders.locality"
-                :options="autocomplete.locality"
-                @search-change="autocompleteLocalitySearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[localityLabel] }}</strong>
-                </template>
-                <template slot="noResult">
-                  <b>{{ $t("messages.inputNoResults") }}</b>
-                </template>
-              </vue-multiselect>
+                :item-text="localityLabel"
+                :label="$t('common.locality')"
+                is-link
+                route-object="locality"
+                is-searchable
+                v-on:search:items="autocompleteLocalitySearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`year`">{{ $t("drillcore.year") }}:</label>
-              <b-form-input
-                size="sm"
-                id="year"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.year"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.year')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`agent`">{{ $t("drillcore.agent") }}:</label>
-              <vue-multiselect
-                id="agent"
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="drillcore.agent"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
-                :options="autocomplete.agent"
-                @search-change="autocompleteAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('drillcore.agent')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteAgentSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`depth`">{{ $t("drillcore.depth") }}:</label>
-              <b-form-input
-                size="sm"
-                id="depth"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.depth"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.depth')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -168,109 +138,79 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.details" class="px-1 pt-1 pb-2">
+        <div v-show="block.details" class="pa-1">
           <!-- DEPOSITORY, LOCATION and STORAGE -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`drillcore`"
-                >{{ $t("drillcore.depository") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="drillcore.depository"
-                id="type"
-                :options="autocomplete.list_drillcore_storage"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.list_drillcore_storage"
+                :loading="autocomplete.loaders.list_drillcore_storage"
+                :item-text="commonLabel"
+                :label="$t('drillcore.depository')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`location`">{{ $t("drillcore.location") }}:</label>
-              <b-form-input
-                size="sm"
-                id="location"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.location"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('common.location')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`storage`">{{ $t("drillcore.storage") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="drillcore.storage"
-                id="storage"
-                label="location"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.storage"
                 :loading="autocomplete.loaders.storage"
-                :options="autocomplete.storage"
-                @search-change="autocompleteStorageSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }"
-                  ><strong>{{ option.location }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="location"
+                :label="$t('common.storage')"
+                is-searchable
+                v-on:search:items="autocompleteStorageSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- BOXES, BOX_NUMBERS and NUMBER_METERS -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`boxes`">{{ $t("drillcore.boxes") }}:</label>
-              <b-form-input
-                size="sm"
-                id="boxes"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.boxes"
+                :color="bodyActiveColor"
+                :label="$t('drillcore.boxes')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`box_numbers`"
-                >{{ $t("drillcore.box_numbers") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="box_numbers"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.box_numbers"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('drillcore.box_numbers')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`number_meters`"
-                >{{ $t("drillcore.number_meters") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="number_meters"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="drillcore.number_meters"
+                :color="bodyActiveColor"
+                :label="$t('drillcore.number_meters')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
           </v-row>
 
           <!-- REMARKS -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks`">{{ $t("drillcore.remarks") }}:</label>
-              <editor :data.sync="drillcore.remarks" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="drillcore.remarks"
+                :color="bodyActiveColor"
+                :label="$t('common.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -408,7 +348,6 @@
 </template>
 
 <script>
-import Editor from "../partial/editor/Editor";
 import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -424,12 +363,17 @@ import cloneDeep from "lodash/cloneDeep";
 import DrillcoreBox from "./relatedTables/DrillcoreBox";
 import DrillcoreStudy from "./relatedTables/DrillcoreStudy";
 import DrillcoreAttachment from "./relatedTables/DrillcoreAttachment";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 
 export default {
   name: "Drillcore",
 
   components: {
-    Editor,
+    TextareaWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
     Spinner,
     DrillcoreBox,
     DrillcoreStudy,
@@ -724,24 +668,33 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.drillcore.locality = {
-        id: obj.locality,
-        locality: obj.locality__locality,
-        locality_en: obj.locality__locality_en
-      };
-      this.drillcore.agent = {
-        id: obj.agent,
-        agent: obj.agent__agent
-      };
+      if (this.isNotEmpty(obj.locality)) {
+        this.drillcore.locality = {
+          id: obj.locality,
+          locality: obj.locality__locality,
+          locality_en: obj.locality__locality_en
+        };
+        this.autocomplete.locality.push(this.drillcore.locality);
+      }
+      if (this.isNotEmpty(obj.agent)) {
+        this.drillcore.agent = {
+          id: obj.agent,
+          agent: obj.agent__agent
+        };
+        this.autocomplete.agent.push(this.drillcore.agent);
+      }
       this.drillcore.depository = {
         id: obj.depository,
         value: obj.depository__value,
         value_en: obj.depository__value_en
       };
-      this.drillcore.storage = {
-        id: obj.storage,
-        location: obj.storage__location
-      };
+      if (this.isNotEmpty(obj.storage)) {
+        this.drillcore.storage = {
+          id: obj.storage,
+          location: obj.storage__location
+        };
+        this.autocomplete.storage.push(this.drillcore.storage);
+      }
     },
 
     fillRelatedDataAutocompleteFields(obj) {
@@ -883,10 +836,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

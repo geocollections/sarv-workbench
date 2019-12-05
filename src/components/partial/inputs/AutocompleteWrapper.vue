@@ -2,37 +2,31 @@
   <div class="input-class">
     <v-autocomplete
       background-color="white"
-      chips
-      small-chips
-      deletable-chips
+      clearable
+      clear-icon="fas fa-times"
       dense
       hide-details
       hide-no-data
       outlined
       :item-color="$attrs.color"
-      item-value="id"
-      no-filter
       return-object
-      rounded
+      :cache-items="isSearchable"
       v-bind="$attrs"
       v-on="$listeners"
+      :search-input.sync="search"
+      :title="$attrs.value ? $attrs.value[this.$attrs['item-text']] : ''"
     >
-      <template v-slot:selection="data">
-        <v-chip
-          v-bind="data.attrs"
-          :input-value="data.selected"
-          close
+      <template v-slot:append-outer>
+        <v-btn
+          v-if="isValidLink && $attrs.value && $attrs.value.id"
+          :to="{ path: `/${routeObject}/${$attrs.value.id}` }"
+          :title="`Go to /${routeObject}/${$attrs.value.id}`"
+          icon
+          :color="$attrs.color"
           small
-          :color="isValidLink ? $attrs.color : ''"
-          outlined
-          @click="
-            isValidLink
-              ? openInNewTab(routeObject, data.item.id)
-              : data.selected
-          "
-          @click:close="$emit('chip:close')"
-          >{{ data.item[$attrs["item-text"]] }}</v-chip
         >
+          <v-icon>far fa-eye</v-icon>
+        </v-btn>
       </template>
     </v-autocomplete>
   </div>
@@ -45,8 +39,12 @@ export default {
   props: {
     isLink: Boolean,
     routeObject: String,
-    noFilter: Boolean
+    isSearchable: Boolean,
+    method: Function
   },
+  data: () => ({
+    search: null
+  }),
   computed: {
     isValidLink() {
       if (this.isLink) {
@@ -59,6 +57,24 @@ export default {
       } else return false;
     }
   },
+  watch: {
+    search(newVal, oldVal) {
+      let currentValue = (this.$attrs.value && this.$attrs.value[this.$attrs["item-text"]]);
+
+      // console.log("currentVal: " + currentValue);
+      // console.log("newVal: " + newVal);
+      // console.log("oldVal: " + oldVal);
+      if (
+        this.isSearchable &&
+        newVal &&
+        newVal.length > 0 &&
+        newVal !== currentValue &&
+        newVal !== oldVal
+      ) {
+        this.$emit("search:items", newVal);
+      }
+    }
+  },
   methods: {
     openInNewTab(object, id) {
       let routeData = this.$router.resolve({ path: `/${object}/${id}` });
@@ -69,9 +85,8 @@ export default {
 </script>
 
 <style scoped>
-/* Adding border to input because outlined has fixed height */
-.input-class >>> .v-input {
-  /*border: 1px solid;*/
+.input-class >>> .v-text-field--outlined {
+  background-color: unset;
 }
 
 /* Setting chip height to min-height because long texts wrap and kinda break the chip styles */
