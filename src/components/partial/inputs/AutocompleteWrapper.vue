@@ -15,6 +15,8 @@
       v-on="$listeners"
       :search-input.sync="search"
       :title="$attrs.value ? $attrs.value[this.$attrs['item-text']] : ''"
+      :error="useState ? !$attrs.value : false"
+      :success="useState ? !!$attrs.value : false"
     >
       <template v-slot:append-outer>
         <v-btn
@@ -40,7 +42,8 @@ export default {
     isLink: Boolean,
     routeObject: String,
     isSearchable: Boolean,
-    method: Function
+    method: Function,
+    useState: Boolean
   },
   data: () => ({
     search: null
@@ -110,5 +113,15 @@ export default {
 /* Hover opacity fix, otherwise it would be hard to see  */
 .input-class >>> .v-chip__content > i:hover {
   opacity: 1;
+}
+
+/* Adding margin auto to inner icon (close-icon) */
+.input-class >>> .v-input__append-inner {
+  margin: auto !important;
+}
+
+/* Small size to clear icon */
+.input-class >>> .v-input__append-inner > .v-input__icon--clear > .v-icon {
+  font-size: 20px;
 }
 </style>

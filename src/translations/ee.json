@@ -18,6 +18,7 @@
     "locality": "Lokaliteet",
     "year": "Aasta",
     "depth": "Sügavus",
+    "depth_interval": "Sügavus int",
     "location": "Asukoht",
     "storage": "Hoiukoht",
     "type": "Tüüp",
@@ -25,6 +26,8 @@
     "surename": "Perenimi",
     "stratigraphy": "Stratigraafia",
     "stratigraphy_en": "Stratigraafia (EN)",
+    "stratigraphy_free": "Stratigraafia vaba",
+    "lithostratigraphy": "Litostratigraafia",
     "reference": "Kirjandus"
   },
   "main": {

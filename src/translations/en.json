@@ -18,6 +18,7 @@
     "locality": "Locality",
     "year": "Year",
     "depth": "Depth",
+    "depth_interval": "Depth interval",
     "location": "Location",
     "storage": "Storage",
     "type": "Type",
@@ -25,6 +26,8 @@
     "surename": "Surname",
     "stratigraphy": "Stratigraphy",
     "stratigraphy_en": "Stratigraphy (EN)",
+    "stratigraphy_free": "Stratigraphy free",
+    "lithostratigraphy": "Lithostratigraphy",
     "reference": "Reference"
   },
   "main": {

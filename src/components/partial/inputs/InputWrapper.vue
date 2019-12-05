@@ -73,6 +73,6 @@ export default {
 
 /* Small size to clear icon */
 .input-class >>> .v-input__append-inner > .v-input__icon--clear > .v-icon {
-  /*font-size: 16px;*/
+  font-size: 20px;
 }
 </style>
