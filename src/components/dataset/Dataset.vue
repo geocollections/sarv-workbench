@@ -270,14 +270,12 @@
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="dataset.is_private"
-          id="is_private"
-          :label="$t('common.is_private')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('common.is_private')"
+          @change="dataset.is_private = !dataset.is_private"
+        />
       </v-col>
     </v-row>
   </div>
@@ -302,11 +300,13 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   name: "Dataset",
 
   components: {
+    CheckboxWrapper,
     AutocompleteWrapper,
     DateWrapper,
     TextareaWrapper,

@@ -75,154 +75,95 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- NAME and NAME_EN -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`name`">{{ $t("project.name") }}:</label>
-              <b-form-input
-                size="sm"
-                id="name"
-                v-model="project.name"
-                :state="isNotEmpty(project.name)"
-                type="text"
-                maxlength="100"
-              ></b-form-input>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                  v-model="project.name"
+                  :color="bodyActiveColor"
+                  :label="$t('common.name')"
+                  use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`name_en`">{{ $t("project.name_en") }}:</label>
-              <b-form-input
-                size="sm"
-                id="name_en"
-                v-model="project.name_en"
-                type="text"
-                maxlength="100"
-              ></b-form-input>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                  v-model="project.name_en"
+                  :color="bodyActiveColor"
+                  :label="$t('common.name_en')"
+                  use-state
+              />
             </v-col>
           </v-row>
 
           <!-- PROJECT_TYPE, OWNER and PARENT_PROJECT -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`type`">{{ $t("project.project_type") }}:</label>
-              <vue-multiselect
-                v-model="project.project_type"
-                id="type"
-                :options="autocomplete.project_type"
-                v-bind:class="{
-                  valid: isNotEmpty(project.project_type),
-                  invalid: !isNotEmpty(project.project_type)
-                }"
-                track-by="id"
-                :label="nameLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[nameLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                  v-model="project.project_type"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.project_type"
+                  :loading="autocomplete.loaders.project_type"
+                  :item-text="nameLabel"
+                  :label="$t('project.project_type')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`owner`">{{ $t("project.owner") }}:</label>
-              <vue-multiselect
-                v-model="project.owner"
-                id="owner"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :loading="autocomplete.loaders.owner"
-                :options="autocomplete.agent"
-                @search-change="autocompleteOwnerSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                  v-model="project.owner"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.agent"
+                  :loading="autocomplete.loaders.owner"
+                  item-text="agent"
+                  :label="$t('project.owner')"
+                  is-link
+                  route-object="agent"
+                  is-searchable
+                  v-on:search:items="autocompleteOwnerSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`parent_project`"
-                >{{ $t("project.parent_project") }}:</label
-              >
-              <vue-multiselect
-                v-model="project.parent_project"
-                id="parent_project"
-                :label="nameLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :loading="autocomplete.loaders.parent_project"
-                :options="autocomplete.parent_project"
-                @search-change="autocompleteParentProjectSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }"
-                  ><strong> {{ option[nameLabel] }}</strong></template
-                >
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                  v-model="project.parent_project"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.parent_project"
+                  :loading="autocomplete.loaders.parent_project"
+                  :item-text="nameLabel"
+                  :label="$t('project.parent_project')"
+                  is-link
+                  route-object="project"
+                  is-searchable
+                  v-on:search:items="autocompleteParentProjectSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- DATE_START, DATE_END and DATE_FREE -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_start`" class="p-0"
-                >{{ $t("project.date_start") }}:</label
-              >
-              <datepicker
-                id="date_start"
-                v-model="project.date_start"
-                use-utc="true "
-                lang="en"
-                :first-day-of-week="1"
-                format="DD MMM YYYY"
-                input-class="form-control form-control-sm"
-              ></datepicker>
+            <v-col cols="12" md="4" class="pa-1">
+              <date-wrapper
+                  v-model="project.date_start"
+                  :color="bodyActiveColor"
+                  :label="$t('project.date_start')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_end`" class="p-0"
-                >{{ $t("project.date_end") }}:</label
-              >
-              <datepicker
-                id="date_end"
-                v-model="project.date_end"
-                use-utc="true "
-                lang="en"
-                :first-day-of-week="1"
-                format="DD MMM YYYY"
-                input-class="form-control form-control-sm"
-              ></datepicker>
+            <v-col cols="12" md="4" class="pa-1">
+              <date-wrapper
+                  v-model="project.date_end"
+                  :color="bodyActiveColor"
+                  :label="$t('project.date_end')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_free`" class="p-0"
-                >{{ $t("project.date_free") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="date_free"
-                v-model="project.date_free"
-                type="text"
-                maxlength="10"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                  v-model="project.date_free"
+                  :color="bodyActiveColor"
+                  :label="$t('project.date_free')"
               />
             </v-col>
           </v-row>
@@ -260,16 +201,24 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
-          <v-row no-gutters class="mb-2">
-            <v-col cols="12" class="px-1">
-              <editor :data.sync="project.description" />
+        <div v-show="block.description" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                  v-model="project.description"
+                  :color="bodyActiveColor"
+                  :label="$t('common.description')"
+              />
             </v-col>
           </v-row>
 
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <editor :data.sync="project.remarks" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                  v-model="project.remarks"
+                  :color="bodyActiveColor"
+                  :label="$t('common.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -304,57 +253,25 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.members" class="px-1 pt-1 pb-2">
-          <v-card
-            flat
-            tile
-            class="d-flex flex-row justify-space-between"
-            :color="bodyColor.split('n-')[0] + 'n-5'"
-          >
-            <v-card
-              flat
-              tile
-              class="px-1 flex-grow-1"
-              :color="bodyColor.split('n-')[0] + 'n-5'"
-            >
-              <vue-multiselect
-                v-model="relatedData.projectagent"
-                id="projectagent"
-                label="agent"
-                track-by="id"
-                :multiple="true"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :options="autocomplete.agent"
-                :loading="autocomplete.loaders.projectagent"
-                @search-change="autocompleteProjectAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :close-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
-            </v-card>
-
-            <v-card
-              flat
-              tile
-              class="px-1"
-              :color="bodyColor.split('n-')[0] + 'n-5'"
-            >
-              <v-btn
-                icon
-                :disabled="!isNotEmpty(relatedData.projectagent)"
-                @click="relatedData.projectagent = []"
-                color="red"
-              >
-                <v-icon>far fa-trash-alt</v-icon>
-              </v-btn>
-            </v-card>
-          </v-card>
+        <div v-show="block.members" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <autocomplete-wrapper
+                  v-model="relatedData.projectagent"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.projectagent"
+                  :loading="autocomplete.loaders.projectagent"
+                  item-text="agent"
+                  :label="$t('site.project')"
+                  is-link
+                  route-object="agent"
+                  is-searchable
+                  v-on:search:items="autocompleteProjectAgentSearch"
+                  :multiple="true"
+                  v-on:chip:close="relatedData.projectagent.splice(relatedData.projectagent.indexOf($event), 1)"
+              />
+            </v-col>
+          </v-row>
         </div>
       </transition>
     </v-card>
@@ -558,6 +475,8 @@
                 :response="relatedData.sites"
                 :search-parameters="relatedData.searchParameters.site"
                 v-if="relatedData.sites.count > 0"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
               />
             </v-col>
           </v-row>
@@ -568,14 +487,12 @@
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="my-3">
       <v-col>
-        <v-checkbox
-          v-model="project.is_private"
-          id="is_private"
-          :label="$t('project.is_private')"
-          hide-details
-          :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+        <checkbox-wrapper
+            v-model="project.is_private"
+            :color="bodyActiveColor"
+            :label="$t('common.is_private')"
+            @change="project.is_private = !project.is_private"
+        />
       </v-col>
     </v-row>
   </div>
@@ -583,7 +500,6 @@
 
 <script>
 import Spinner from "vue-simple-spinner";
-import Datepicker from "vue2-datepicker";
 import formManipulation from "../../mixins/formManipulation";
 import sidebarMixin from "../../mixins/sidebarMixin";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -602,21 +518,28 @@ import MapComponent from "../partial/MapComponent";
 import FileTable from "../partial/FileTable";
 import MultimediaComponent from "../partial/MultimediaComponent";
 import AddNewSite from "./addOrEditSiteModal";
-import Editor from "../partial/editor/Editor";
 import { mapState } from "vuex";
 import ExportButtons from "../partial/export/ExportButtons";
 import SiteTable from "../site/SiteTable";
 import debounce from "lodash/debounce";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   name: "Project",
   components: {
-    Editor,
+    CheckboxWrapper,
+    AutocompleteWrapper,
+    DateWrapper,
+    TextareaWrapper,
+    InputWrapper,
     AddNewSite,
     MultimediaComponent,
     FileTable,
     MapComponent,
-    Datepicker,
     Spinner,
     ExportButtons,
     SiteTable
@@ -927,25 +850,31 @@ export default {
       //set current user as default owner
 
       // this.project.owner = this.isNotEmpty(this.project.owner) ? {agent:obj.owner__agent,id:obj.owner} : {agent:this.currentUser.user,id:this.currentUser.id}
-      this.project.owner = { agent: obj.owner__agent, id: obj.owner };
-
-      this.project.parent_project = {
-        name: obj.parent_project__name,
-        name_en: obj.parent_project__name_en,
-        id: obj.parent_project
-      };
+      if (this.isNotEmpty(obj.owner)) {
+        this.project.owner = { agent: obj.owner__agent, id: obj.owner };
+        this.autocomplete.agent.push(this.project.owner);
+      }
+      if (this.isNotEmpty(obj.parent_project)) {
+        this.project.parent_project = {
+          name: obj.parent_project__name,
+          name_en: obj.parent_project__name_en,
+          id: obj.parent_project
+        };
+        this.autocomplete.parent_project.push(this.project.parent_project);
+      }
     },
 
     fillRelatedDataAutocompleteFields(obj, type) {
       let relatedData = cloneDeep(obj);
       obj = [];
       relatedData.forEach(entity => {
-        if (type === "projectagent")
-          obj.push({
+        if (type === "projectagent") {
+          let item = {
             agent: entity.projectagent__agent__agent,
             id: entity.projectagent__agent
-          });
-        else obj.push(entity);
+          };
+          obj.push(item);
+        } else obj.push(entity);
       });
       return obj;
     },
@@ -979,6 +908,10 @@ export default {
             this.relatedData[object],
             object
           );
+
+          if (object === "projectagent") {
+            this.autocomplete.projectagent = cloneDeep(this.relatedData[object]);
+          }
           // if(object === 'site')  this.forceMapRerender()
           this.setBlockVisibility(object, this.relatedData[object].length);
         });

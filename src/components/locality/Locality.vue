@@ -7,7 +7,7 @@
       :message="
         $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
       "
-    ></spinner>
+    />
 
     <!-- GENERAL INFO -->
     <v-card
@@ -36,100 +36,70 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- LOCALITY and LOCALITY ENG -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`locality`">{{ $t("locality.locality") }}:</label>
-              <b-form-input
-                size="sm"
-                id="locality"
-                :state="isNotEmpty(locality.locality)"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="locality.locality"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('locality.locality')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`locality_en`"
-                >{{ $t("locality.locality_en") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="locality_en"
-                :state="isNotEmpty(locality.locality_en)"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="locality.locality_en"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('locality.locality_en')"
+                use-state
+              />
             </v-col>
           </v-row>
 
           <!-- NUMBER, OTHER NUMBER, LOCALITY TYPE and LOCALITY BELONGS-->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`number`">{{ $t("locality.number") }}:</label>
-              <b-form-input
-                size="sm"
-                id="number"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="locality.number"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('locality.number')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`code`">{{ $t("locality.code") }}:</label>
-              <b-form-input
-                size="sm"
-                id="code"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="locality.code"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('locality.code')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`type`">{{ $t("locality.type") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.type"
-                v-if="isNotEmpty(autocomplete.localityTypes)"
-                id="type"
-                :options="autocomplete.localityTypes"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.localityTypes"
+                :loading="autocomplete.loaders.localityTypes"
+                :item-text="commonLabel"
+                :label="$t('locality.type')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`parent`">{{ $t("locality.parent") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.parent"
-                id="parent"
-                :label="localityLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.locality"
                 :loading="autocomplete.loaders.locality"
-                :options="autocomplete.locality"
-                @search-change="autocompleteLocalitySearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[localityLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="localityLabel"
+                :label="$t('locality.parent')"
+                is-link
+                route-object="locality"
+                is-searchable
+                v-on:search:items="autocompleteLocalitySearch"
+              />
             </v-col>
           </v-row>
         </div>
@@ -157,44 +127,41 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.map" class="px-1 pt-1 pb-2">
+        <div v-show="block.map" class="pa-1">
           <!-- LATITUDE, LONGITUDE and ELEVATION -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`latitude`">{{ $t("locality.longitude") }}:</label>
-              <b-form-input
-                size="sm"
-                id="latitude"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="locality.latitude"
+                :color="bodyActiveColor"
+                :label="$t('common.latitude')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`longitude`">{{ $t("locality.longitude") }}:</label>
-              <b-form-input
-                size="sm"
-                id="longitude"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="locality.longitude"
+                :color="bodyActiveColor"
+                :label="$t('common.longitude')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`elevation`">{{ $t("locality.elevation") }}:</label>
-              <b-form-input
-                size="sm"
-                id="elevation"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="locality.elevation"
+                :color="bodyActiveColor"
+                :label="$t('locality.elevation')"
                 type="number"
                 step="0.01"
-              ></b-form-input>
+              />
             </v-col>
           </v-row>
 
           <!-- MAP SWITCH -->
           <v-card
-            class="d-flex flex-row justify-content-start mt-1 mx-3"
+            class="d-flex flex-row justify-content-start mb-1 mx-3"
             flat
             :color="bodyColor.split('n-')[0] + 'n-5'"
             tile
@@ -228,8 +195,8 @@
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap" class="mt-2">
-              <v-col cols="12" class="px-1">
+            <v-row no-gutters v-show="showMap" class="mt-1">
+              <v-col cols="12" class="pa-1">
                 <map-component
                   v-if="showMap"
                   mode="single"
@@ -279,240 +246,146 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.additionalInfo" class="px-1 pt-1 pb-2">
+        <div v-show="block.additionalInfo" class="pa-1">
           <!-- COORDINATE X, EXTENT and COUNTRY-->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`extent`">{{ $t("locality.extent") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.extent"
-                id="extent"
-                :options="autocomplete.extent"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.extent"
+                :loading="autocomplete.loaders.extent"
+                :item-text="commonLabel"
+                :label="$t('locality.extent')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`depth`">{{ $t("locality.depth") }}:</label>
-              <b-form-input
-                size="sm"
-                id="depth"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="locality.depth"
+                :color="bodyActiveColor"
+                :label="$t('common.depth')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`country`">{{ $t("locality.country") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.country"
-                id="country"
-                :options="autocomplete.country"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.country"
+                :loading="autocomplete.loaders.country"
+                :item-text="commonLabel"
+                :label="$t('locality.country')"
+              />
             </v-col>
           </v-row>
 
           <!-- COORD PRECISION, COORD METHOD and COORD AGENT -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`coord_det_precision`"
-                >{{ $t("locality.coord_det_precision") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.coord_det_precision"
-                id="coord_det_precision"
-                :options="autocomplete.coordPrecision"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.coordPrecision"
+                :loading="autocomplete.loaders.coordPrecision"
+                :item-text="commonLabel"
+                :label="$t('locality.coord_det_precision')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`coord_det_method`"
-                >{{ $t("locality.coord_det_method") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.coord_det_method"
-                id="coord_det_method"
-                :options="autocomplete.coordMethod"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.coordMethod"
+                :loading="autocomplete.loaders.coordMethod"
+                :item-text="commonLabel"
+                :label="$t('locality.coord_det_method')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`coord_det_agent`"
-                >{{ $t("locality.coord_det_agent") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.coord_det_agent"
-                id="coord_det_agent"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
-                :options="autocomplete.agent"
-                @search-change="autocompleteAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('locality.coord_det_agent')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteAgentSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- STRAT TOP AND STRAT TOP FREE-->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`stratigraphy_top`"
-                >{{ $t("locality.stratigraphy_top") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.stratigraphy_top"
-                id="stratigraphy_top"
+                :color="bodyActiveColor"
+                :items="autocomplete.stratigraphy_top"
                 :loading="autocomplete.loaders.stratigraphy_top"
-                :label="stratigraphyLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :options="autocomplete.stratigraphy_top"
-                @search-change="autocompleteStratigraphyTopSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[stratigraphyLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="stratigraphyLabel"
+                :label="$t('locality.stratigraphy_top')"
+                is-searchable
+                v-on:search:items="autocompleteStratigraphyTopSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`stratigraphy_top_free`"
-                >{{ $t("locality.stratigraphy_top_free") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="stratigraphy_top_free"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="locality.stratigraphy_top_free"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('locality.stratigraphy_top_free')"
+              />
             </v-col>
           </v-row>
 
           <!-- STRAT LOWER AND STRAT LOWER FREE-->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`stratigraphy_base`"
-                >{{ $t("locality.stratigraphy_base") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="locality.stratigraphy_base"
-                id="stratigraphy_base"
-                :label="stratigraphyLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.stratigraphy_base"
                 :loading="autocomplete.loaders.stratigraphy_base"
-                :options="autocomplete.stratigraphy_base"
-                @search-change="autocompleteStratigraphyBaseSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[stratigraphyLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="stratigraphyLabel"
+                :label="$t('locality.stratigraphy_base')"
+                is-searchable
+                v-on:search:items="autocompleteStratigraphyBaseSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`stratigraphy_base_free`"
-                >{{ $t("locality.stratigraphy_base_free") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="stratigraphy_base_free"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="locality.stratigraphy_base_free"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('locality.stratigraphy_base_free')"
+              />
             </v-col>
           </v-row>
 
           <!-- MAAAMET PA AND EELIS ID -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`maaamet_pa_id`"
-                >{{ $t("locality.maaamet_pa_id") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="maaamet_pa_id"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="locality.maaamet_pa_id"
+                :color="bodyActiveColor"
+                :label="$t('locality.maaamet_pa_id')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`eelis`">{{ $t("locality.eelis") }}:</label>
-              <b-form-input
-                size="sm"
-                id="eelis"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="locality.eelis"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('locality.eelis')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -547,34 +420,24 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
+        <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks_location`"
-                >{{ $t("locality.remarks_location") }}:</label
-              >
-              <b-form-textarea
-                id="remarks_location"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="locality.remarks_location"
-                type="text"
-                size="sm"
-                :rows="1"
-                :max-rows="20"
-              ></b-form-textarea>
+                :color="bodyActiveColor"
+                :label="$t('locality.remarks_location')"
+              />
             </v-col>
           </v-row>
 
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks`">{{ $t("locality.remarks") }}:</label>
-              <b-form-textarea
-                id="remarks"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="locality.remarks"
-                type="text"
-                size="sm"
-                :rows="1"
-                :max-rows="20"
-              ></b-form-textarea>
+                :color="bodyActiveColor"
+                :label="$t('common.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -582,16 +445,14 @@
     </v-card>
 
     <!-- IS_PRIVATE -->
-    <v-row no-gutters class="my-3">
+    <v-row no-gutters class="my-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="locality.is_private"
-          id="is_private"
-          :label="$t('locality.private')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('common.is_private')"
+          @change="locality.is_private = !locality.is_private"
+        />
       </v-col>
     </v-row>
 
@@ -740,11 +601,19 @@ import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
 import MapComponent from "../partial/MapComponent";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 
 export default {
   name: "Locality",
 
   components: {
+    AutocompleteWrapper,
+    CheckboxWrapper,
+    TextareaWrapper,
+    InputWrapper,
     LocalityStratigraphy,
     LocalityAttachment,
     LocalitySynonym,
@@ -1134,11 +1003,14 @@ export default {
         value_en: obj.type__value_en,
         id: obj.type__id
       };
-      this.locality.parent = {
-        locality: obj.parent__locality,
-        locality_en: obj.parent__locality_en,
-        id: obj.parent__id
-      };
+      if (this.isNotEmpty(obj.parent__id)) {
+        this.locality.parent = {
+          locality: obj.parent__locality,
+          locality_en: obj.parent__locality_en,
+          id: obj.parent__id
+        };
+        this.autocomplete.locality.push(this.locality.parent);
+      }
       this.locality.extent = {
         value: obj.extent__value,
         value_en: obj.extent__value_en,
@@ -1154,25 +1026,34 @@ export default {
         value_en: obj.coord_det_method__value_en,
         id: obj.coord_det_method__id
       };
-      this.locality.coord_det_agent = {
-        agent: obj.coord_det_agent__agent,
-        id: obj.coord_det_agent__id
-      };
+      if (this.isNotEmpty(obj.coord_det_agent__id)) {
+        this.locality.coord_det_agent = {
+          agent: obj.coord_det_agent__agent,
+          id: obj.coord_det_agent__id
+        };
+        this.autocomplete.agent.push(this.locality.coord_det_agent);
+      }
       this.locality.country = {
         value: obj.country__value,
         value_en: obj.country__value_en,
         id: obj.country__id
       };
-      this.locality.stratigraphy_top = {
-        stratigraphy: obj.stratigraphy_top__stratigraphy,
-        stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
-        id: obj.stratigraphy_top__id
-      };
-      this.locality.stratigraphy_base = {
-        stratigraphy: obj.stratigraphy_base__stratigraphy,
-        stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
-        id: obj.stratigraphy_base__id
-      };
+      if (this.isNotEmpty(obj.stratigraphy_top__id)) {
+        this.locality.stratigraphy_top = {
+          stratigraphy: obj.stratigraphy_top__stratigraphy,
+          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en,
+          id: obj.stratigraphy_top__id
+        };
+        this.autocomplete.stratigraphy_top.push(this.locality.stratigraphy_top);
+      }
+      if (this.isNotEmpty(obj.stratigraphy_base__id)) {
+        this.locality.stratigraphy_base = {
+          stratigraphy: obj.stratigraphy_base__stratigraphy,
+          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
+          id: obj.stratigraphy_base__id
+        };
+        this.autocomplete.stratigraphy_base.push(this.locality.stratigraphy_base);
+      }
     },
 
     fillRelatedDataAutocompleteFields(obj) {

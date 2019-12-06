@@ -7,10 +7,10 @@
       :message="
         $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
       "
-    ></spinner>
+    />
 
     <!-- CONVERT TO LOCALITY -->
-    <v-row>
+    <v-row v-if="$route.meta.isEdit">
       <v-col cols="12" class="text-right">
         <v-btn
           color="blue"
@@ -36,7 +36,7 @@
           <span>{{ $t("site.generalInfo") }}</span>
           <v-icon right>fas fa-project-diagram</v-icon>
         </div>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -45,82 +45,50 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- NAME and PROJECT -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`name`">{{ $t("site.name") }}:</label>
-              <b-form-input
-                size="sm"
-                id="name"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="site.name"
-                type="text"
-                maxlength="100"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('site.name')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`project`">{{ $t("site.project") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="site.project"
-                id="project"
-                :label="nameLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.project"
                 :loading="autocomplete.loaders.project"
-                :options="autocomplete.project"
-                @search-change="autocompleteProjectSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[nameLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="nameLabel"
+                :label="$t('site.project')"
+                is-link
+                route-object="project"
+                is-searchable
+                v-on:search:items="autocompleteProjectSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- DATE_START and DATE_END -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_start`"
-                >{{ $t("site.date_start") }} (yyyy-mm-dd hh:mm):</label
-              >
-              <datepicker
-                id="date_start"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.date_start"
-                :use-utc="true"
-                lang="en"
-                :first-day-of-week="1"
-                format="YYYY-MM-DD HH:mm"
-                confirm
-                type="datetime"
-                :typeable="true"
-                input-class="form-control form-control-sm"
-              ></datepicker>
+                :color="bodyActiveColor"
+                :label="$t('site.date_start_info')"
+                placeholder="tere"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_end`"
-                >{{ $t("site.date_end") }} (yyyy-mm-dd hh:mm):</label
-              >
-              <datepicker
-                id="date_end"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.date_end"
-                :use-utc="true"
-                lang="en"
-                :first-day-of-week="1"
-                format="YYYY-MM-DD HH:mm"
-                confirm
-                type="datetime"
-                :typeable="true"
-                input-class="form-control form-control-sm"
-              ></datepicker>
+                :color="bodyActiveColor"
+                :label="$t('site.date_end_info')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -146,7 +114,7 @@
             >fas fa-globe</v-icon
           >
         </div>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           icon
           @click="block.location = !block.location"
@@ -159,52 +127,47 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.location" class="px-1 pt-1 pb-2">
+        <div v-show="block.location" class="pa-1">
           <!-- LATITUDE, LONGITUDE and LOCATION_ACCURACY -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`latitude`">{{ $t("site.latitude") }}:</label>
-              <b-form-input
-                size="sm"
-                id="latitude"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.latitude"
-                :state="isNotEmpty(site.latitude)"
+                :color="bodyActiveColor"
+                :label="$t('common.latitude')"
+                use-state
                 type="number"
                 step="0.000001"
                 @input="handleCoordinateChange"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`longitude`">{{ $t("site.longitude") }}:</label>
-              <b-form-input
-                size="sm"
-                id="longitude"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.longitude"
-                :state="isNotEmpty(site.longitude)"
+                :color="bodyActiveColor"
+                :label="$t('common.longitude')"
+                use-state
                 type="number"
                 step="0.000001"
                 @input="handleCoordinateChange"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`location_accuracy`"
-                >{{ $t("site.location_accuracy") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="location_accuracy"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.location_accuracy"
+                :color="bodyActiveColor"
+                :label="$t('site.location_accuracy')"
                 type="number"
                 min="0"
-              ></b-form-input>
+              />
             </v-col>
           </v-row>
 
           <!-- MAP SWITCH -->
           <v-card
-            class="d-flex flex-row justify-content-start mt-1 mx-3"
+            class="d-flex flex-row justify-content-start mb-1 mx-3"
             flat
             tile
             :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -238,8 +201,8 @@
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap" class="mt-2">
-              <v-col cols="12" class="px-1">
+            <v-row no-gutters v-show="showMap" class="mt-1">
+              <v-col cols="12" class="pa-1">
                 <map-component
                   v-if="showMap && !isLatitudeUndefinedInEditView"
                   :gps-coords="true"
@@ -258,113 +221,80 @@
 
           <!-- ELEVATION, ELEVATION_ACCURACY and COORD_DET_METHOD -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`elevation`">{{ $t("site.elevation") }}:</label>
-              <b-form-input
-                size="sm"
-                id="elevation"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.elevation"
+                :color="bodyActiveColor"
+                :label="$t('site.elevation')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`elevation_accuracy`"
-                >{{ $t("site.elevation_accuracy") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="elevation_accuracy"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.elevation_accuracy"
+                :color="bodyActiveColor"
+                :label="$t('site.elevation_accuracy')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`coord_det_method`"
-                >{{ $t("site.coord_det_method") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="site.coord_det_method"
-                id="coord_det_method"
-                :options="autocomplete.coordMethod"
-                track-by="id"
-                class="high-z-index"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.coordMethod"
+                :loading="autocomplete.loaders.coordMethod"
+                :item-text="commonLabel"
+                :label="$t('site.coord_det_method')"
+              />
             </v-col>
           </v-row>
 
           <!-- EXTENT, DEPTH and LOCALITY -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`extent`">{{ $t("site.extent") }}:</label>
-              <b-form-input
-                size="sm"
-                id="extent"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.extent"
+                :color="bodyActiveColor"
+                :label="$t('site.extent')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`depth`">{{ $t("site.depth") }}:</label>
-              <b-form-input
-                size="sm"
-                id="depth"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="site.depth"
+                :color="bodyActiveColor"
+                :label="$t('site.depth')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`locality`">{{ $t("site.locality") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="site.locality"
-                id="locality"
-                :label="localityLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.locality"
                 :loading="autocomplete.loaders.locality"
-                :options="autocomplete.locality"
-                @search-change="autocompleteLocalitySearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }"
-                  ><strong>
-                    {{
-                      $i18n.locale === "ee"
-                        ? option.locality
-                        : option.locality_en
-                    }}</strong
-                  ></template
-                >
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="localityLabel"
+                :label="$t('site.locality')"
+                is-link
+                route-object="locality"
+                is-searchable
+                v-on:search:items="autocompleteLocalitySearch"
+              />
             </v-col>
           </v-row>
 
           <!-- REMARKS_LOCATION -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks_location`"
-                >{{ $t("site.remarks_location") }}:</label
-              >
-              <editor :data.sync="site.remarks_location" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="site.remarks_location"
+                :color="bodyActiveColor"
+                :label="$t('site.remarks_location')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -399,16 +329,24 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
-          <v-row no-gutters class="mb-2">
-            <v-col cols="12" class="px-1">
-              <editor :data.sync="site.description" />
+        <div v-show="block.description" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="site.description"
+                :color="bodyActiveColor"
+                :label="$t('site.description')"
+              />
             </v-col>
           </v-row>
 
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <editor :data.sync="site.remarks" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="site.remarks"
+                :color="bodyActiveColor"
+                :label="$t('site.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -441,7 +379,7 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.files" class="px-1 pt-1 pb-2">
+        <div v-show="block.files" class="pa-1">
           <multimedia-component
             v-on:file-uploaded="addFiles"
             :recordOptions="true"
@@ -486,7 +424,7 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.samples" class="px-1 pt-1 pb-2">
+        <div v-show="block.samples" class="pa-1">
           <add-new-sample :sendingData="sendingData"></add-new-sample>
 
           <!-- ADD NEW and EXPORT -->
@@ -574,7 +512,6 @@
 
 <script>
 import Spinner from "vue-simple-spinner";
-import Datepicker from "vue2-datepicker";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -591,22 +528,28 @@ import MapComponent from "../partial/MapComponent";
 import FileTable from "../partial/FileTable";
 import AddNewSample from "./addNewSampleModal";
 import sidebarMixin from "../../mixins/sidebarMixin";
-import Editor from "../partial/editor/Editor";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
 import { mapState } from "vuex";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+// eslint-disable-next-line no-unused-vars
+import moment from "moment";
+import { toastInfo } from "../../assets/js/iziToast/iziToast";
 
 export default {
   name: "Site",
   components: {
+    TextareaWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
     SampleTable,
-    Editor,
     AddNewSample,
     FileTable,
     MapComponent,
     MultimediaComponent,
-    Datepicker,
     Spinner,
     ExportButtons
   },
@@ -692,7 +635,7 @@ export default {
       });
     } else {
       // Add view
-      this.$set(this.site, "date_start", new Date());
+      this.$set(this.site, "date_start", this.getCurrentFormattedDate());
 
       if (this.activeProject) {
         this.site.project = {
@@ -898,17 +841,20 @@ export default {
     formatDataForUpload(objectToUpload, saveRelatedData = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.date_start))
-        uploadableObject.date_start = this.formatDateForUpload(
-          objectToUpload.date_start,
-          false
-        );
-      if (this.isNotEmpty(objectToUpload.date_end))
-        uploadableObject.date_end = this.formatDateForUpload(
-          objectToUpload.date_end,
-          false
-        );
-
+      if (this.isNotEmpty(uploadableObject.date_start)) {
+        if (!this.isValidDateTime(uploadableObject.date_start)) {
+          this.site.date_start = null;
+          delete uploadableObject.date_start;
+          toastInfo({ text: "Field 'Date start' is invalid" });
+        }
+      }
+      if (this.isNotEmpty(uploadableObject.date_end)) {
+        if (!this.isValidDateTime(uploadableObject.date_end)) {
+          this.site.date_end = null;
+          delete uploadableObject.date_end;
+          toastInfo({ text: "Field 'Date end' is invalid" });
+        }
+      }
       if (this.isNotEmpty(objectToUpload.location_accuracy))
         uploadableObject.location_accuracy =
           typeof uploadableObject.location_accuracy === "string"
@@ -940,21 +886,27 @@ export default {
       return JSON.stringify(uploadableObject);
     },
     fillAutocompleteFields(obj) {
-      this.site.project = {
-        name: obj.project__name,
-        name_en: obj.project__name_en,
-        id: obj.project
-      };
+      if (this.isNotEmpty(obj.project)) {
+        this.site.project = {
+          name: obj.project__name,
+          name_en: obj.project__name_en,
+          id: obj.project
+        };
+        this.autocomplete.project.push(this.site.project);
+      }
       this.site.coord_det_method = {
         value: obj.coord_det_method__value,
         value_en: obj.coord_det_method__value_en,
         id: obj.coord_det_method
       };
-      this.site.locality = {
-        id: obj.locality__id,
-        locality_en: obj.locality__locality_en,
-        locality: obj.locality__locality
-      };
+      if (this.isNotEmpty(obj.locality__id)) {
+        this.site.locality = {
+          id: obj.locality__id,
+          locality_en: obj.locality__locality_en,
+          locality: obj.locality__locality
+        };
+        this.autocomplete.locality.push(this.site.locality);
+      }
     },
 
     fillRelatedDataAutocompleteFields(obj, type) {
@@ -1061,7 +1013,7 @@ export default {
           if (resp && resp.length > 0) {
             let newName = this.calculateNextName(resp[0].name);
             this.$set(this.site, "name", newName);
-            this.$set(this.site, "date_start", new Date());
+            this.$set(this.site, "date_start", this.getCurrentFormattedDate());
             this.$set(this.site, "project", {
               name: project.name,
               name_en: project.name_en,

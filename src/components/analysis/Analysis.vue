@@ -30,134 +30,91 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- SAMPLE and SPECIMEN -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`agent`"
-                >{{ $t("analysis.sample") }}:</label
-              >
-              <vue-multiselect
-                id="sample"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.sample"
-                label="number"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.sample"
                 :loading="autocomplete.loaders.sample"
-                :options="autocomplete.sample"
-                @search-change="autocompleteSampleSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.number }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="number"
+                :label="$t('analysis.sample')"
+                is-link
+                route-object="sample"
+                is-searchable
+                v-on:search:items="autocompleteSampleSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`specimen`"
-                >{{ $t("analysis.specimen") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.specimen"
-                id="specimen"
-                label="specimen_id"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.specimen"
                 :loading="autocomplete.loaders.specimen"
-                :options="autocomplete.specimen"
-                @search-change="autocompleteSpecimenSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.specimen_id }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="specimen_id"
+                :label="$t('analysis.specimen')"
+                is-link
+                route-object="specimen"
+                is-searchable
+                v-on:search:items="autocompleteSpecimenSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- ANALYSIS_METHOD and MASS -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`analysis_method`"
-                >{{ $t("analysis.method") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.analysis_method"
-                id="analysis_method"
-                :options="autocomplete.analysis_methods"
-                track-by="id"
-                :label="analysisMethodLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[analysisMethodLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.analysis_methods"
+                :loading="autocomplete.loaders.analysis_methods"
+                :item-text="analysisMethodLabel"
+                :label="$t('analysis.method')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`mass`"
-                >{{ $t("analysis.mass") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="mass"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.mass"
+                :color="bodyActiveColor"
+                :label="$t('analysis.mass')"
                 type="number"
                 step="0.1"
-              ></b-form-input>
+              />
             </v-col>
           </v-row>
 
           <!-- MET.DETAILS and MET.ING.K -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`method_specification`"
-                >{{ $t("analysis.method_specification") }}:</label
-              >
-              <b-form-input
-                size="sm"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.method_details"
-                type="text"
+                :color="bodyActiveColor"
+                :label="$t('analysis.method_specification')"
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`method_in_eng`"
-                >{{ $t("analysis.method_in_eng") }}:</label
-              >
-              <b-form-input
-                size="sm"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.method_details_en"
-                type="text"
+                :color="bodyActiveColor"
+                :label="$t('analysis.method_in_eng')"
               />
             </v-col>
           </v-row>
 
           <!-- MATERIAL -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label class="p-0" :for="`material`"
-                >{{ $t("analysis.material") }}:</label
-              >
-              <b-form-input size="sm" v-model="analysis.material" type="text" />
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="analysis.material"
+                :color="bodyActiveColor"
+                :label="$t('analysis.material')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -192,190 +149,119 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.labInfo" class="px-1 pt-1 pb-2">
+        <div v-show="block.labInfo" class="pa-1">
           <!-- DATE_START and DATE_END and DATE_FREE-->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_start`" class="p-0"
-                >{{ $t("analysis.date") }}:</label
-              >
-              <datepicker
-                id="date_start"
+            <v-col cols="12" md="4" class="pa-1">
+              <date-wrapper
                 v-model="analysis.date"
-                use-utc="true "
-                lang="en"
-                :first-day-of-week="1"
-                format="DD MMM YYYY"
-                input-class="form-control form-control-sm"
-              ></datepicker>
+                :color="bodyActiveColor"
+                :label="$t('analysis.date')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_end`" class="p-0"
-                >{{ $t("analysis.date_end") }}:</label
-              >
-              <datepicker
-                id="date_end"
+            <v-col cols="12" md="4" class="pa-1">
+              <date-wrapper
                 v-model="analysis.date_end"
-                use-utc="true "
-                lang="en"
-                :first-day-of-week="1"
-                format="DD MMM YYYY"
-                input-class="form-control form-control-sm"
-              ></datepicker>
+                :color="bodyActiveColor"
+                :label="$t('analysis.date_end')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_free`" class="p-0"
-                >{{ $t("analysis.date_free") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="date_free"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="analysis.date_free"
-                type="text"
-                maxlength="10"
+                :color="bodyActiveColor"
+                :label="$t('analysis.date_free')"
               />
             </v-col>
           </v-row>
 
           <!-- LABOR and LABOR TXT -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`lab`"
-                >{{ $t("analysis.labor") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.lab"
-                id="lab"
-                :options="autocomplete.labs"
-                track-by="id"
-                :label="labLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[labLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.labs"
+                :loading="autocomplete.loaders.labs"
+                :item-text="labLabel"
+                :label="$t('analysis.labor')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`labor_txt`"
-                >{{ $t("analysis.labor_txt") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="labor_txt"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.lab_txt"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('analysis.labor_txt')"
+              />
             </v-col>
           </v-row>
 
           <!-- LAB. SAMPLE and LAB.NUMBER -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`labor_sample`"
-                >{{ $t("analysis.labor_sample") }}:</label
-              >
-              <b-form-input
-                size="sm"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.lab_sample_number"
-                type="text"
+                :color="bodyActiveColor"
+                :label="$t('analysis.labor_sample')"
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`labor_number`"
-                >{{ $t("analysis.labor_number") }}:</label
-              >
-              <b-form-input
-                size="sm"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.lab_analysis_number"
-                type="text"
+                :color="bodyActiveColor"
+                :label="$t('analysis.labor_number')"
               />
             </v-col>
           </v-row>
 
           <!-- ANALYSIS_METHOD and MASS -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`instrument`"
-                >{{ $t("analysis.tool") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.instrument"
-                id="instrument"
-                :options="autocomplete.instruments"
-                track-by="id"
-                :label="instrumentLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[instrumentLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.instruments"
+                :loading="autocomplete.loaders.instruments"
+                :item-text="instrumentLabel"
+                :label="$t('analysis.tool')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`instrument_txt`"
-                >{{ $t("analysis.tool_txt") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="tool_txt"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.instrument_txt"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('analysis.tool_txt')"
+              />
             </v-col>
           </v-row>
 
           <!-- ANALYZER and ANALYZER_TXT -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`analyzer`"
-                >{{ $t("analysis.analyzer") }}:</label
-              >
-              <vue-multiselect
-                id="agent"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.agent"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
-                :options="autocomplete.agent"
-                @search-change="autocompleteAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('analysis.analyzer')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteAgentSearch"
+              />
             </v-col>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`agent_txt`"
-                >{{ $t("analysis.analyzer_txt") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="analyzer_txt"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="analysis.agent_txt"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('analysis.analyzer_txt')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -410,123 +296,74 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.otherInfo" class="px-1 pt-1 pb-2">
+        <div v-show="block.otherInfo" class="pa-1">
           <!-- DATASET and ANALYZER_TXT -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label class="p-0" :for="`dataset`"
-                >{{ $t("analysis.first_dataset") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.dataset"
-                id="dataset"
-                :label="nameLabel"
-                track-by="id"
-                placeholder="dataset search..."
+                :color="bodyActiveColor"
+                :items="autocomplete.dataset"
                 :loading="autocomplete.loaders.dataset"
-                :options="autocomplete.dataset"
-                @search-change="autocompleteDatasetSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[nameLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="nameLabel"
+                :label="$t('analysis.first_dataset')"
+                is-link
+                route-object="dataset"
+                is-searchable
+                v-on:search:items="autocompleteDatasetSearch"
+              />
             </v-col>
-            <v-col cols="12" md="4" class="px-1">
-              <label class="p-0" :for="`reference`"
-                >{{ $t("analysis.publication") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.reference"
-                id="reference"
-                label="reference"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.reference"
                 :loading="autocomplete.loaders.reference"
-                :options="autocomplete.reference"
-                @search-change="autocompleteReferenceSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.reference }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="reference"
+                :label="$t('analysis.publication')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteReferenceSearch"
+              />
             </v-col>
-            <v-col cols="12" md="4" class="px-1">
-              <label class="p-0" :for="`owner`"
-                >{{ $t("analysis.owner") }}:</label
-              >
-              <vue-multiselect
-                id="owner"
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.owner"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.owner"
-                :options="autocomplete.agent"
-                @search-change="autocompleteOwnerSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('analysis.owner')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteOwnerSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- STORAGE and LOCATION -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`labor_sample`"
-                >{{ $t("analysis.storage") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="analysis.storage"
-                id="storage"
-                label="location"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.storage"
                 :loading="autocomplete.loaders.storage"
-                :options="autocomplete.storage"
-                @search-change="autocompleteStorageSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.location }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="location"
+                :label="$t('common.storage')"
+                is-searchable
+                v-on:search:items="autocompleteStorageSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="p-0" :for="`labor_number`"
-                >{{ $t("analysis.location") }}:</label
-              >
-              <b-form-input size="sm" v-model="analysis.location" type="text" />
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="analysis.location"
+                :color="bodyActiveColor"
+                :label="$t('analysis.location')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -561,19 +398,14 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
+        <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label class="mt-0" :for="`remarks`"
-                >{{ $t("analysis.remarks") }}:</label
-              >
-              <b-form-textarea
-                id="remarks"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="analysis.remarks"
-                type="text"
-                :rows="1"
-                :max-rows="20"
-              ></b-form-textarea>
+                :color="bodyActiveColor"
+                :label="$t('analysis.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -680,14 +512,12 @@
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="analysis.is_private"
-          id="is_private"
-          :label="$t('analysis.is_private')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('common.is_private')"
+          @change="analysis.is_private = !analysis.is_private"
+        />
       </v-col>
     </v-row>
   </div>
@@ -695,7 +525,6 @@
 
 <script>
 import Spinner from "vue-simple-spinner";
-import Datepicker from "vue2-datepicker";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
@@ -711,12 +540,21 @@ import AnalysisFiles from "./relatedTables/AnalysisFiles";
 import AnalysisResults from "./relatedTables/AnalysisResults";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   components: {
+    CheckboxWrapper,
+    DateWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
+    TextareaWrapper,
     AnalysisResults,
     AnalysisFiles,
-    Datepicker,
     Spinner
   },
 
@@ -1069,20 +907,52 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      console.log(obj);
-      this.analysis.sample = { id: obj.sample, number: obj.sample__number };
-      this.analysis.agent = { id: obj.agent, agent: obj.agent__agent };
-      this.analysis.owner = { id: obj.owner, agent: obj.owner__agent };
-      this.analysis.analysis_method = {
-        id: obj.analysis_method,
-        analysis_method: obj.analysis_method__analysis_method,
-        method_en: obj.analysis_method__method_en
-      };
-      this.analysis.dataset = {
-        id: obj.dataset,
-        name: obj.dataset__name,
-        name_en: obj.dataset__name_en
-      };
+      if (this.isNotEmpty(obj.sample)) {
+        this.analysis.sample = { id: obj.sample, number: obj.sample__number };
+        this.autocomplete.sample.push(this.analysis.sample);
+      }
+      if (this.isNotEmpty(obj.agent)) {
+        this.analysis.agent = { id: obj.agent, agent: obj.agent__agent };
+        this.autocomplete.agent.push(this.analysis.agent);
+      }
+      if (this.isNotEmpty(obj.owner)) {
+        this.analysis.owner = { id: obj.owner, agent: obj.owner__agent };
+        this.autocomplete.owner.push(this.analysis.owner);
+      }
+        this.analysis.analysis_method = {
+          id: obj.analysis_method,
+          analysis_method: obj.analysis_method__analysis_method,
+          method_en: obj.analysis_method__method_en
+        };
+      if (this.isNotEmpty(obj.dataset)) {
+        this.analysis.dataset = {
+          id: obj.dataset,
+          name: obj.dataset__name,
+          name_en: obj.dataset__name_en
+        };
+        this.autocomplete.dataset.push(this.analysis.dataset);
+      }
+      if (this.isNotEmpty(obj.specimen)) {
+        this.analysis.specimen = {
+          id: obj.specimen,
+          specimen_id: obj.specimen__specimen_id
+        };
+        this.autocomplete.specimen.push(this.analysis.specimen);
+      }
+      if (this.isNotEmpty(obj.reference)) {
+        this.analysis.reference = {
+          id: obj.reference,
+          reference: obj.reference__reference
+        };
+        this.autocomplete.reference.push(this.analysis.reference);
+      }
+      if (this.isNotEmpty(obj.storage)) {
+        this.analysis.storage = {
+          location: obj.storage__location,
+          id: obj.storage
+        };
+        this.autocomplete.storage.push(this.analysis.storage);
+      }
       this.analysis.lab = {
         id: obj.lab,
         lab: obj.lab__lab,
@@ -1092,18 +962,6 @@ export default {
         id: obj.instrument,
         instrument: obj.instrument__instrument,
         instrument_en: obj.instrument__instrument_en
-      };
-      this.analysis.specimen = {
-        id: obj.specimen,
-        specimen_id: obj.specimen__specimen_id
-      };
-      this.analysis.reference = {
-        id: obj.reference,
-        reference: obj.reference__reference
-      };
-      this.analysis.storage = {
-        location: obj.storage__location,
-        id: obj.storage
       };
     },
 

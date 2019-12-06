@@ -1189,6 +1189,7 @@ export default {
           id: obj.reference,
           reference: obj.reference__reference
         };
+        this.autocomplete.reference.push(this.taxon.reference);
       }
       if (this.isNotEmpty(obj.rank)) {
         this.taxon.rank = {
@@ -1206,18 +1207,21 @@ export default {
       }
       if (this.isNotEmpty(obj.parent)) {
         this.taxon.parent = { id: obj.parent, taxon: obj.parent__taxon };
+        this.autocomplete.parent.push(this.taxon.parent);
       }
       if (this.isNotEmpty(obj.fossil_group)) {
         this.taxon.fossil_group = {
           id: obj.fossil_group,
           taxon: obj.fossil_group__taxon
         };
+        this.autocomplete.fossil_group.push(this.taxon.fossil_group);
       }
       if (this.isNotEmpty(obj.type_taxon_id)) {
         this.taxon.type_taxon_id = {
           id: obj.type_taxon_id,
           taxon: obj.type_taxon
         };
+        this.autocomplete.type_taxon_id.push(this.taxon.type_taxon_id);
       }
       if (this.isNotEmpty(obj.stratigraphy_top)) {
         this.taxon.stratigraphy_top = {
@@ -1225,6 +1229,7 @@ export default {
           stratigraphy: obj.stratigraphy_top__stratigraphy,
           stratigraphy_en: obj.stratigraphy_top__stratigraphy_en
         };
+        this.autocomplete.stratigraphy_top.push(this.taxon.stratigraphy_top);
       }
       if (this.isNotEmpty(obj.stratigraphy_base)) {
         this.taxon.stratigraphy_base = {
@@ -1232,6 +1237,7 @@ export default {
           stratigraphy: obj.stratigraphy_base__stratigraphy,
           stratigraphy_en: obj.stratigraphy_base__stratigraphy_en
         };
+        this.autocomplete.stratigraphy_base.push(this.taxon.stratigraphy_base);
       }
     },
 

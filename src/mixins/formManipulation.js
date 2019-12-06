@@ -432,6 +432,7 @@ const formManipulation = {
         delete currentData.name;
         delete currentData.name_en;
         delete currentData.project;
+        currentData.locality = {};
         currentData.locality.id = locality.name;
       }
     },
@@ -920,7 +921,7 @@ const formManipulation = {
       if (choice === "SAVE") this.add(true, object);
 
       if (choice === "FINISH") {
-        this[object].date_end = new Date();
+        this[object].date_end = this.getCurrentFormattedDate();
         this.add(false, object);
       }
 
@@ -1029,6 +1030,17 @@ const formManipulation = {
       if (typeof response.body.error !== "undefined") {
         toastError({ text: response.body.error });
       }
+    },
+
+    isValidDateTime(dateTime) {
+      return (
+        moment(dateTime, "YYYY-MM-DD hh:mm:ss", true).isValid() ||
+        moment(dateTime, "YYYY-MM-DD hh:mm", true).isValid()
+      );
+    },
+
+    getCurrentFormattedDate() {
+      return moment().format("YYYY-MM-DD hh:mm:ss");
     }
   },
 

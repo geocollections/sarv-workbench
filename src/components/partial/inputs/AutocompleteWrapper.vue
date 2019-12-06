@@ -8,6 +8,7 @@
       hide-details
       hide-no-data
       outlined
+      :placeholder="$t('add.inputs.autocomplete')"
       :item-color="$attrs.color"
       return-object
       :cache-items="isSearchable"
@@ -17,6 +18,8 @@
       :title="$attrs.value ? $attrs.value[this.$attrs['item-text']] : ''"
       :error="useState ? !$attrs.value : false"
       :success="useState ? !!$attrs.value : false"
+      :small-chips="!!$attrs.multiple"
+      :deletable-chips="!!$attrs.multiple"
     >
       <template v-slot:append-outer>
         <v-btn
@@ -29,6 +32,24 @@
         >
           <v-icon>far fa-eye</v-icon>
         </v-btn>
+      </template>
+
+      <template v-if="!!$attrs.multiple" v-slot:selection="data">
+        <v-chip
+          v-bind="data.attrs"
+          :input-value="data.selected"
+          close
+          small
+          :color="isValidLink ? $attrs.color : ''"
+          outlined
+          @click="
+            isValidLink
+              ? openInNewTab(routeObject, data.item.id)
+              : data.selected
+          "
+          @click:close="$emit('chip:close', data.item)"
+        >{{ data.item[$attrs["item-text"]] }}</v-chip
+        >
       </template>
     </v-autocomplete>
   </div>
@@ -90,11 +111,6 @@ export default {
 <style scoped>
 .input-class >>> .v-text-field--outlined {
   background-color: unset;
-}
-
-/* Setting chip height to min-height because long texts wrap and kinda break the chip styles */
-.input-class >>> .v-select__selections {
-  height: 32px;
 }
 
 /* Adding margin right to chip content because delete button has absolute position and otherwise it would overlap */

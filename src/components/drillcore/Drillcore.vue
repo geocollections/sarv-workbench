@@ -326,23 +326,18 @@
 
     <!-- DIRECTION_LR and IS_PRIVATE -->
     <div class="d-flex flex-wrap mt-2">
-      <v-checkbox
+      <checkbox-wrapper
         v-model="drillcore.direction_lr"
-        id="direction_lr"
+        :color="bodyActiveColor"
         :label="$t('drillcore.direction_lr')"
-        hide-details
-        :color="bodyActiveColor"
-        class="mt-0 vuetify-checkbox mr-3"
-      ></v-checkbox>
-
-      <v-checkbox
+        @change="drillcore.direction_lr = !drillcore.direction_lr"
+      />
+      <checkbox-wrapper
         v-model="drillcore.is_private"
-        id="is_private"
-        :label="$t('drillcore.is_private')"
-        hide-details
         :color="bodyActiveColor"
-        class="mt-0 vuetify-checkbox"
-      ></v-checkbox>
+        :label="$t('common.is_private')"
+        @change="drillcore.is_private = !drillcore.is_private"
+      />
     </div>
   </div>
 </template>
@@ -366,11 +361,13 @@ import DrillcoreAttachment from "./relatedTables/DrillcoreAttachment";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   name: "Drillcore",
 
   components: {
+    CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,

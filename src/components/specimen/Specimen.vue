@@ -149,13 +149,12 @@
             </v-col>
 
             <v-col cols="12" md="3" class="pa-1">
-              <v-checkbox
+              <checkbox-wrapper
                 v-model="specimen.locality_is_private"
-                :label="$t('specimen.is_private_text')"
-                hide-details
                 :color="bodyActiveColor"
-                class="mt-0 vuetify-checkbox"
-              ></v-checkbox>
+                :label="$t('specimen.locality_is_private')"
+                @change="specimen.locality_is_private = !specimen.locality_is_private"
+              />
             </v-col>
           </v-row>
 
@@ -670,14 +669,12 @@
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="specimen.is_private"
-          id="is_private"
-          :label="$t('specimen.is_private_text')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('common.is_private')"
+          @change="specimen.is_private = !specimen.is_private"
+        />
       </v-col>
     </v-row>
   </div>
@@ -723,11 +720,13 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   name: "Specimen",
 
   components: {
+    CheckboxWrapper,
     DateWrapper,
     TextareaWrapper,
     InputWrapper,

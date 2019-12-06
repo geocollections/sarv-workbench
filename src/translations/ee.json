@@ -28,7 +28,9 @@
     "stratigraphy_en": "Stratigraafia (EN)",
     "stratigraphy_free": "Stratigraafia vaba",
     "lithostratigraphy": "Litostratigraafia",
-    "reference": "Kirjandus"
+    "reference": "Kirjandus",
+    "latitude": "Laiuskraad",
+    "longitude": "Pikkuskraad"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -1086,7 +1088,9 @@
     "extent": "Ulatus",
     "coord_det_method": "Koord. meetod",
     "date_start":"Algus",
+    "date_start_info":"Algus (yyyy-mm-dd hh:mm:ss)",
     "date_end":"Lõpp",
+    "date_end_info":"Lõpp (yyyy-mm-dd hh:mm:ss)",
     "date_free":"Txt",
     "description":"Kirjeldus",
     "remarks":"Lisainfo",

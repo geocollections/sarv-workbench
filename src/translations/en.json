@@ -28,7 +28,9 @@
     "stratigraphy_en": "Stratigraphy (EN)",
     "stratigraphy_free": "Stratigraphy free",
     "lithostratigraphy": "Lithostratigraphy",
-    "reference": "Reference"
+    "reference": "Reference",
+    "latitude": "latitude",
+    "longitude": "Longitude"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -1086,7 +1088,9 @@
     "extent": "Extent",
     "coord_det_method": "Coord. det. method",
     "date_start":"Date start",
+    "date_start_info":"Date start (yyyy-mm-dd hh:mm:ss)",
     "date_end":"Date end",
+    "date_end_info":"Date end (yyyy-mm-dd hh:mm:ss)",
     "date_free":"Txt",
     "description":"Description",
     "remarks":"Remarks",
@@ -1119,7 +1123,7 @@
     "analyzer": "Analüüsija",
     "analyzer_txt": "Analüüsija txt",
     "first_dataset": "Esmane andmeset",
-    "publication": "Esmanepublikatsioon",
+    "publication": "Esmane publikatsioon",
     "owner": "Owner",
     "storage": "Storage",
     "sample__id": "Sample ID",

@@ -9,6 +9,16 @@ body {
   overflow-x: unset !important; /* Todo: Had to insert it after vuetify  */
 }
 
+/* AUTOCOMPLETE MENU */
+.v-autocomplete__content {
+  z-index: 1500 !important;
+}
+.v-autocomplete__content .v-list-item__mask {
+  color: black !important;
+  background: yellow !important;
+}
+
+
 /* Adding white background to vuetify outlined text-fields in add and edit forms */
 .add-form .v-text-field--outlined, .edit-form .v-text-field--outlined {
     background-color: #ffffff;

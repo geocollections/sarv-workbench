@@ -6,6 +6,7 @@
       hide-details
       outlined
       :clearable="isDate"
+      placeholder=" "
       clear-icon="fas fa-times"
       :readonly="isDate"
       :error="useState ? !$attrs.value : false"

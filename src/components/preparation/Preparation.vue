@@ -37,82 +37,54 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- NAME, SAMPLE, SAMPLE_NUMBER and ANALYSIS -->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`preparation_number`"
-                >{{ $t("preparation.preparation_number") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="preparation_number"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="preparation.preparation_number"
-                :state="isNotEmpty(preparation.preparation_number)"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('preparation.preparation_number')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`sample`">{{ $t("preparation.sample") }}:</label>
-              <vue-multiselect
-                id="sample"
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="preparation.sample"
-                label="number"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.sample"
                 :loading="autocomplete.loaders.sample"
-                :options="autocomplete.sample"
-                @search-change="autocompleteSampleSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.number }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="number"
+                :label="$t('preparation.sample')"
+                is-link
+                route-object="sample"
+                is-searchable
+                v-on:search:items="autocompleteSampleSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`sample_number`"
-                >{{ $t("preparation.sample_number") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="sample_number"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="preparation.sample_number"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('preparation.sample_number')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`analysis`">{{ $t("preparation.analysis") }}:</label>
-              <vue-multiselect
-                id="analysis"
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="preparation.analysis"
-                label="id"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.analysis"
                 :loading="autocomplete.loaders.analysis"
-                :options="autocomplete.analysis"
-                @search-change="autocompleteAnalysisSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.id }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="id"
+                :label="$t('preparation.analysis')"
+                is-link
+                route-object="analysis"
+                is-searchable
+                v-on:search:items="autocompleteAnalysisSearch"
+              />
             </v-col>
           </v-row>
         </div>
@@ -147,274 +119,140 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.details" class="px-1 pt-1 pb-2">
+        <div v-show="block.details" class="pa-1">
           <!-- TAXON -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`taxon`">{{ $t("preparation.taxon") }}:</label>
-              <vue-multiselect
-                id="taxon"
+            <v-col cols="12" class="pa-1">
+              <autocomplete-wrapper
                 v-model="preparation.taxon"
-                label="taxon"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.taxon"
                 :loading="autocomplete.loaders.taxon"
-                :options="autocomplete.taxon"
-                @search-change="autocompleteTaxonSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.taxon }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="taxon"
+                :label="$t('preparation.taxon')"
+                is-link
+                route-object="taxon"
+                is-searchable
+                v-on:search:items="autocompleteTaxonSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- AGENT, AGENT_TXT and IDENTIFICATION_AGENT -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`agent`">{{ $t("preparation.agent") }}:</label>
-              <vue-multiselect
-                id="agent"
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="preparation.agent"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
-                :options="autocomplete.agent"
-                @search-change="autocompleteAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('preparation.agent')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteAgentSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`agent_txt`"
-                >{{ $t("preparation.agent_txt") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="agent_txt"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="preparation.agent_txt"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('preparation.agent_txt')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`identification_agent`"
-                >{{ $t("preparation.identification_agent") }}:</label
-              >
-              <vue-multiselect
-                id="identification_agent"
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="preparation.identification_agent"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.identification_agent"
                 :loading="autocomplete.loaders.identification_agent"
-                :options="autocomplete.identification_agent"
-                @search-change="autocompleteIdentificationAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('preparation.identification_agent')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteIdentificationAgentSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- DATE_PREPARED and IDENTIFICATION_DATE -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`date_prepared`"
-                >{{ $t("preparation.date_prepared") }}:</label
-              >
-              <v-menu
-                v-model="menuDatePrepared"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    hide-details
-                    v-model="preparation.date_prepared"
-                    prepend-inner-icon="far fa-calendar-alt"
-                    :color="bodyActiveColor"
-                    clearable
-                    dense
-                    flat
-                    solo
-                    class="white"
-                    style="border: 1px solid #ced4da !important;"
-                    clear-icon="fas fa-times"
-                    readonly
-                    :class="bodyActiveColor + '--text'"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="preparation.date_prepared"
-                  @input="menuDatePrepared = false"
-                  :color="bodyActiveColor"
-                  :header-color="`${bodyActiveColor} darken-3`"
-                  scrollable
-                ></v-date-picker>
-              </v-menu>
+            <v-col cols="12" md="6" class="pa-1">
+              <date-wrapper
+                v-model="preparation.date_prepared"
+                :color="bodyActiveColor"
+                :label="$t('preparation.date_prepared')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`identification_date`"
-                >{{ $t("preparation.identification_date") }}:</label
-              >
-              <v-menu
-                v-model="menuIdentificationDate"
-                :close-on-content-click="false"
-                :nudge-right="40"
-                transition="scale-transition"
-                offset-y
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    hide-details
-                    v-model="preparation.identification_date"
-                    prepend-inner-icon="far fa-calendar-alt"
-                    :color="bodyActiveColor"
-                    clearable
-                    dense
-                    flat
-                    solo
-                    class="white"
-                    style="border: 1px solid #ced4da !important;"
-                    clear-icon="fas fa-times"
-                    readonly
-                    :class="bodyActiveColor + '--text'"
-                    v-on="on"
-                  ></v-text-field>
-                </template>
-                <v-date-picker
-                  v-model="preparation.identification_date"
-                  @input="menuIdentificationDate = false"
-                  :color="bodyActiveColor"
-                  :header-color="`${bodyActiveColor} darken-3`"
-                  scrollable
-                ></v-date-picker>
-              </v-menu>
+            <v-col cols="12" md="6" class="pa-1">
+              <date-wrapper
+                v-model="preparation.identification_date"
+                :color="bodyActiveColor"
+                :label="$t('preparation.identification_date')"
+              />
             </v-col>
           </v-row>
 
           <!-- DATE_PREPARED_TXT and IDENTIFICATION_REMARKS -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`date_prepared_txt`"
-                >{{ $t("preparation.date_prepared_txt") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="date_prepared_txt"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="preparation.date_prepared_txt"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('preparation.date_prepared_txt')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`identification_remarks`"
-                >{{ $t("preparation.identification_remarks") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="identification_remarks"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="preparation.identification_remarks"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('preparation.identification_remarks')"
+              />
             </v-col>
           </v-row>
 
           <!-- LOCATION, STORAGE and OWNER -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`location`">{{ $t("preparation.location") }}:</label>
-              <b-form-input
-                size="sm"
-                id="location"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="preparation.location"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('preparation.location')"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`storage`">{{ $t("preparation.storage") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="preparation.storage"
-                id="storage"
-                label="location"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.storage"
                 :loading="autocomplete.loaders.storage"
-                :options="autocomplete.storage"
-                @search-change="autocompleteStorageSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }"
-                  ><strong>{{ option.location }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="location"
+                :label="$t('common.storage')"
+                is-searchable
+                v-on:search:items="autocompleteStorageSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`date_prepared_txt`"
-                >{{ $t("preparation.owner") }}:</label
-              >
-              <vue-multiselect
-                id="owner"
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="preparation.owner"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.owner"
                 :loading="autocomplete.loaders.owner"
-                :options="autocomplete.owner"
-                @search-change="autocompleteOwner2Search"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('common.owner')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteOwner2Search"
+              />
             </v-col>
           </v-row>
         </div>
@@ -449,11 +287,14 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
+        <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks`">{{ $t("preparation.remarks") }}:</label>
-              <editor :data.sync="preparation.remarks" />
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="preparation.remarks"
+                :color="bodyActiveColor"
+                :label="$t('preparation.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -482,7 +323,7 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.taxa" class="px-1 pt-1 pb-2">
+        <div v-show="block.taxa" class="pa-1">
           <!-- ADD NEW and EXPORT -->
           <v-card
             class="d-flex flex-row justify-content-start mb-3"
@@ -549,7 +390,7 @@
           </div>
 
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
+            <v-col cols="12" class="pa-1">
               <taxon-list-table
                 ref="table"
                 :response="relatedData.taxa"
@@ -567,14 +408,12 @@
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="preparation.is_private"
-          id="is_private"
-          :label="$t('preparation.is_private')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('common.is_private')"
+          @change="preparation.is_private = !preparation.is_private"
+        />
       </v-col>
     </v-row>
   </div>
@@ -589,16 +428,24 @@ import {
   fetchLinkedTaxa,
   fetchPreparation
 } from "../../assets/js/api/apiCalls";
-import Editor from "../partial/editor/Editor";
 import Spinner from "vue-simple-spinner";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
 import TaxonListTable from "../taxon/TaxonListTable";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 
 export default {
   name: "Preparation",
   components: {
-    Editor,
+    TextareaWrapper,
+    DateWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
+    CheckboxWrapper,
     Spinner,
     TaxonListTable,
     ExportButtons
@@ -741,9 +588,7 @@ export default {
           { text: "main.pagination", value: 250 },
           { text: "main.pagination", value: 500 },
           { text: "main.pagination", value: 1000 }
-        ],
-        menuDatePrepared: false,
-        menuIdentificationDate: false
+        ]
       };
     },
 
@@ -820,28 +665,54 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.preparation.sample = { id: obj.sample, number: obj.sample__number };
-      this.preparation.analysis = { id: obj.analysis };
-      this.preparation.taxon = {
-        id: obj.taxon,
-        taxon: obj.taxon__taxon
-      };
-      this.preparation.agent = {
-        id: obj.agent,
-        agent: obj.agent__agent
-      };
-      this.preparation.identification_agent = {
-        id: obj.identification_agent,
-        agent: obj.identification_agent__agent
-      };
-      this.preparation.storage = {
-        id: obj.storage,
-        location: obj.storage__location
-      };
-      this.preparation.owner = {
-        id: obj.owner,
-        agent: obj.owner__agent
-      };
+      if (this.isNotEmpty(obj.sample)) {
+        this.preparation.sample = {
+          id: obj.sample,
+          number: obj.sample__number
+        };
+        this.autocomplete.sample.push(this.preparation.sample);
+      }
+      if (this.isNotEmpty(obj.analysis)) {
+        this.preparation.analysis = { id: obj.analysis };
+        this.autocomplete.analysis.push(this.preparation.analysis);
+      }
+      if (this.isNotEmpty(obj.taxon)) {
+        this.preparation.taxon = {
+          id: obj.taxon,
+          taxon: obj.taxon__taxon
+        };
+        this.autocomplete.taxon.push(this.preparation.taxon);
+      }
+      if (this.isNotEmpty(obj.agent)) {
+        this.preparation.agent = {
+          id: obj.agent,
+          agent: obj.agent__agent
+        };
+        this.autocomplete.agent.push(this.preparation.agent);
+      }
+      if (this.isNotEmpty(obj.identification_agent)) {
+        this.preparation.identification_agent = {
+          id: obj.identification_agent,
+          agent: obj.identification_agent__agent
+        };
+        this.autocomplete.identification_agent.push(
+          this.preparation.identification_agent
+        );
+      }
+      if (this.isNotEmpty(obj.storage)) {
+        this.preparation.storage = {
+          id: obj.storage,
+          location: obj.storage__location
+        };
+        this.autocomplete.storage.push(this.preparation.storage);
+      }
+      if (this.isNotEmpty(obj.owner)) {
+        this.preparation.owner = {
+          id: obj.owner,
+          agent: obj.owner__agent
+        };
+        this.autocomplete.owner.push(this.preparation.owner);
+      }
     },
 
     setDefaultSearchParameters() {

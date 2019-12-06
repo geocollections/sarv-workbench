@@ -158,7 +158,7 @@ const autocompleteMixin = {
       );
     },
     autocompleteProjectAgentSearch(value) {
-      this.$_autocompleteMixin_search(value, "projectagent", "agent");
+      this.$_autocompleteMixin_search(value, "projectagent", "projectagent");
     },
     autocompleteLibraryAgentSearch(value) {
       this.$_autocompleteMixin_search(
