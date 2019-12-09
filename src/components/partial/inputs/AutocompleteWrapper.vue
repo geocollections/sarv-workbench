@@ -11,13 +11,13 @@
       :placeholder="$t('add.inputs.autocomplete')"
       :item-color="$attrs.color"
       return-object
-      :cache-items="isSearchable"
+      :cache-items="noCache ? false : isSearchable"
       v-bind="$attrs"
       v-on="$listeners"
       :search-input.sync="search"
       :title="$attrs.value ? $attrs.value[this.$attrs['item-text']] : ''"
-      :error="useState ? !$attrs.value : false"
-      :success="useState ? !!$attrs.value : false"
+      :error="useCustomState ? $attrs.error : (useState ? !$attrs.value : false)"
+      :success="useCustomState ? $attrs.success : (useState ? !!$attrs.value : false)"
       :small-chips="!!$attrs.multiple"
       :deletable-chips="!!$attrs.multiple"
     >
@@ -30,7 +30,7 @@
           :color="$attrs.color"
           small
         >
-          <v-icon>far fa-eye</v-icon>
+          <v-icon>fas fa-external-link-square-alt</v-icon>
         </v-btn>
       </template>
 
@@ -64,7 +64,9 @@ export default {
     routeObject: String,
     isSearchable: Boolean,
     method: Function,
-    useState: Boolean
+    useState: Boolean,
+    useCustomState: Boolean,
+    noCache: Boolean
   },
   data: () => ({
     search: null

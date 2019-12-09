@@ -36,112 +36,97 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- AUTHOR AND YEAR -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`author`">{{ $t("library.author") }}:</label>
-              <vue-multiselect
-                id="author"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="library.author"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
-                :options="autocomplete.agent"
-                @search-change="autocompleteAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('library.author')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteAgentSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`year`">{{ $t("library.year") }}:</label>
-              <b-form-input
-                size="sm"
-                id="year"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="library.year"
+                :color="bodyActiveColor"
+                :label="$t('library.year')"
                 type="number"
-              ></b-form-input>
+              />
             </v-col>
           </v-row>
 
           <!-- AUTHORS -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`author_txt`">{{ $t("library.author_txt") }}:</label>
-              <b-form-input
-                size="sm"
-                id="author_txt"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="library.author_txt"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('library.author_txt')"
+              />
             </v-col>
           </v-row>
 
           <!-- TITLE -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`title`">{{ $t("library.title") }}:</label>
-              <b-form-input
-                size="sm"
-                id="title"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="library.title"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('library.title')"
+              />
             </v-col>
           </v-row>
 
           <!-- TITLE_EN -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`title_en`">{{ $t("library.title_en") }}:</label>
-              <b-form-input
-                size="sm"
-                id="title_en"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="library.title_en"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('library.title_en')"
+              />
             </v-col>
           </v-row>
 
           <!-- KEYWORDS -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`keywords`">{{ $t("library.keywords") }}:</label>
-              <b-form-input
-                size="sm"
-                id="keywords"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="library.keywords"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('library.keywords')"
+              />
             </v-col>
           </v-row>
 
           <!-- ABSTRACT -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`abstract`">{{ $t("library.abstract") }}:</label>
-              <editor :data.sync="library.abstract"></editor>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="library.abstract"
+                :color="bodyActiveColor"
+                :label="$t('library.abstract')"
+              />
             </v-col>
           </v-row>
 
           <!-- ABSTRACT_EN -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`abstract_en`"
-                >{{ $t("library.abstract_en") }}:</label
-              >
-              <editor :data.sync="library.abstract_en"></editor>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="library.abstract_en"
+                :color="bodyActiveColor"
+                :label="$t('library.abstract_en')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -176,57 +161,25 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.members" class="px-1 pt-1 pb-2">
-          <v-card
-            flat
-            tile
-            class="d-flex flex-row justify-space-between"
-            :color="bodyColor.split('n-')[0] + 'n-5'"
-          >
-            <v-card
-              flat
-              tile
-              class="px-1 flex-grow-1"
-              :color="bodyColor.split('n-')[0] + 'n-5'"
-            >
-              <vue-multiselect
+        <div v-show="block.members" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <autocomplete-wrapper
                 v-model="relatedData.library_agent"
-                id="library_agent"
-                label="agent"
-                track-by="id"
-                :multiple="true"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :options="autocomplete.library_agent"
+                :color="bodyActiveColor"
+                :items="autocomplete.library_agent"
                 :loading="autocomplete.loaders.library_agent"
-                @search-change="autocompleteLibraryAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :close-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
-            </v-card>
-
-            <v-card
-              flat
-              tile
-              class="px-1"
-              :color="bodyColor.split('n-')[0] + 'n-5'"
-            >
-              <v-btn
-                icon
-                :disabled="!isNotEmpty(relatedData.library_agent)"
-                @click="relatedData.library_agent = []"
-                color="red"
-              >
-                <v-icon>far fa-trash-alt</v-icon>
-              </v-btn>
-            </v-card>
-          </v-card>
+                item-text="agent"
+                :label="$t('library.libraryAgent')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteLibraryAgentSearch"
+                :multiple="true"
+                v-on:chip:close="relatedData.library_agent.splice(relatedData.library_agent.indexOf($event), 1)"
+              />
+            </v-col>
+          </v-row>
         </div>
       </transition>
     </v-card>
@@ -328,14 +281,12 @@
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="my-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="library.is_private"
-          id="is_private"
-          :label="$t('library.private')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('common.is_private')"
+          @change="library.is_private = !library.is_private"
+        />
       </v-col>
     </v-row>
   </div>
@@ -355,13 +306,19 @@ import copyForm from "../../mixins/copyForm";
 import LibraryReference from "./relatedTables/LibraryReference";
 import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import Editor from "../partial/editor/Editor";
 import { mapState } from "vuex";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   name: "Library",
   components: {
-    Editor,
+    CheckboxWrapper,
+    AutocompleteWrapper,
+    TextareaWrapper,
+    InputWrapper,
     LibraryReferenceListView,
     LibraryReference,
     Spinner
@@ -566,6 +523,9 @@ export default {
             id: entity.agent
           };
         });
+        if (this.isNotEmpty(this.relatedData.library_agent)) {
+          this.autocomplete.library_agent = this.relatedData.library_agent;
+        }
       });
     },
 
@@ -641,7 +601,10 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.library.author = { agent: obj.author__agent, id: obj.author };
+      if (this.isNotEmpty(obj.author)) {
+        this.library.author = { agent: obj.author__agent, id: obj.author };
+        this.autocomplete.agent.push(this.library.author);
+      }
     },
 
     fillRelatedDataAutocompleteFields(obj) {
@@ -723,10 +686,4 @@ export default {
 };
 </script>
 
-<style>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

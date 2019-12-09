@@ -910,7 +910,7 @@ export default {
           );
 
           if (object === "projectagent") {
-            this.autocomplete.projectagent = cloneDeep(this.relatedData[object]);
+            this.autocomplete.projectagent = this.relatedData[object];
           }
           // if(object === 'site')  this.forceMapRerender()
           this.setBlockVisibility(object, this.relatedData[object].length);

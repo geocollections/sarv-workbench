@@ -10,10 +10,10 @@ body {
 }
 
 /* AUTOCOMPLETE MENU */
-.v-autocomplete__content {
-  z-index: 1500 !important;
+.v-menu__content {
+  z-index: 40000 !important;
 }
-.v-autocomplete__content .v-list-item__mask {
+.v-menu__content .v-list-item__mask {
   color: black !important;
   background: yellow !important;
 }

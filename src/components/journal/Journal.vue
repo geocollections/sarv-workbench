@@ -43,21 +43,15 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+        <div v-show="block.requiredFields" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <v-text-field
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="journal.journal_name"
-                outlined
-                dense
-                hide-details
-                :append-icon="
-                  !isNotEmpty(journal.journal_name) ? 'fas fa-exclamation' : ''
-                "
-                :error="!isNotEmpty(journal.journal_name)"
                 :color="bodyActiveColor"
                 :label="$t('journal.journalName')"
-              ></v-text-field>
+                use-state
+              />
             </v-col>
           </v-row>
         </div>
@@ -89,39 +83,30 @@
           <!-- JOURNAL SHORT and PUBLISHER -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
-              <v-text-field
+              <input-wrapper
                 v-model="journal.journal_short"
-                outlined
-                dense
-                hide-details
                 :color="bodyActiveColor"
                 :label="$t('journal.journalShort')"
-              ></v-text-field>
+              />
             </v-col>
 
             <v-col cols="12" md="6" class="pa-1">
-              <v-text-field
+              <input-wrapper
                 v-model="journal.publisher"
-                outlined
-                dense
-                hide-details
                 :color="bodyActiveColor"
                 :label="$t('journal.publisher')"
-              ></v-text-field>
+              />
             </v-col>
           </v-row>
 
           <!-- REMARKS -->
           <v-row no-gutters>
-            <v-col cols="12" class="pa-1 textarea">
-              <v-textarea
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="journal.remarks"
-                outlined
-                hide-details
                 :color="bodyActiveColor"
                 :label="$t('journal.remarks')"
-                rows="3"
-              ></v-textarea>
+              />
             </v-col>
           </v-row>
         </div>
@@ -136,11 +121,15 @@ import formManipulation from "../../mixins/formManipulation";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import { fetchJournal } from "../../assets/js/api/apiCalls";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 
 export default {
   name: "Journal",
 
   components: {
+    TextareaWrapper,
+    InputWrapper,
     Spinner
   },
 
@@ -274,14 +263,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-
-.textarea >>> textarea {
-  margin-top: 0 !important;
-}
-</style>
+<style scoped></style>

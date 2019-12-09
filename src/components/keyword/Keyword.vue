@@ -7,7 +7,7 @@
       :message="
         $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
       "
-    ></spinner>
+    />
 
     <!-- GENERAL INFO -->
     <v-card
@@ -36,111 +36,65 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- KEYWORD, LANGAUGE and KEYWORD CATEGORY -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`keyword`">{{ $t("keyword.keyword") }}:</label>
-              <b-form-input
-                size="sm"
-                id="name"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="keyword.keyword"
-                :state="isNotEmpty(keyword.keyword)"
-                type="text"
-                maxlength="100"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('keyword.keyword')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`language`">{{ $t("keyword.language") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="keyword.language"
-                id="project"
-                :options="autocomplete.language"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :class="isNotEmpty(keyword.language) ? 'valid' : 'invalid'"
-                :allow-empty="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.language"
+                :loading="autocomplete.loaders.language"
+                :item-text="commonLabel"
+                :label="$t('keyword.language')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`keyword_category`"
-                >{{ $t("keyword.keyword_category") }}:</label
-              >
-              <vue-multiselect
-                id="keyword_category"
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
                 v-model="keyword.keyword_category"
-                :label="nameLabel"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.keyword_category"
                 :loading="autocomplete.loaders.keyword_category"
-                :options="autocomplete.keyword_category"
-                :class="
-                  isNotEmpty(keyword.keyword_category) ? 'valid' : 'invalid'
-                "
-                @search-change="autocompleteKeywordCategorySearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[nameLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="nameLabel"
+                :label="$t('keyword.keyword_category')"
+                is-searchable
+                v-on:search:items="autocompleteKeywordCategorySearch"
+              />
             </v-col>
           </v-row>
 
           <!-- RELATED KEYWORD and REMARKS -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`related_keyword`"
-                >{{ $t("keyword.related_keyword") }}:</label
-              >
-              <vue-multiselect
-                id="related_keyword"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="keyword.related_keyword"
-                label="keyword"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.related_keyword"
                 :loading="autocomplete.loaders.related_keyword"
-                :options="autocomplete.related_keyword"
-                @search-change="autocompleteRelatedKeywordSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.keyword }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="keyword"
+                :label="$t('keyword.related_keyword')"
+                is-searchable
+                v-on:search:items="autocompleteRelatedKeywordSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`remarks`">{{ $t("keyword.remarks") }}:</label>
-              <b-form-input
-                size="sm"
-                id="remarks"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="keyword.remarks"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('keyword.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -150,14 +104,12 @@
     <!-- IS PRIMARY -->
     <v-row no-gutters class="mt-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="keyword.is_primary"
-          id="is_primary"
-          :label="$t('keyword.is_primary')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('keyword.is_primary')"
+          @change="keyword.is_primary = !keyword.is_primary"
+        />
       </v-col>
     </v-row>
   </div>
@@ -169,10 +121,16 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import { fetchListLanguages, fetchKeyword } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../partial/inputs/InputWrapper";
 
 export default {
   name: "Keyword",
   components: {
+    InputWrapper,
+    AutocompleteWrapper,
+    CheckboxWrapper,
     Spinner
   },
   props: {
@@ -347,10 +305,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 5px 0 0 0;
-  color: #999;
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

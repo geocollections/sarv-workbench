@@ -36,85 +36,51 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- NUMBER and AUTHOR -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`imageset`"
-                >{{ $t("imageset.imagesetNumber") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="imageset"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="imageset.imageset_number"
-                :state="
-                  isNotEmpty(imageset.imageset_number) && !imagesetNumberExists
-                "
-                type="text"
-              ></b-form-input>
-              <b-form-text
-                v-if="
-                  !(
-                    isNotEmpty(imageset.imageset_number) &&
-                    !imagesetNumberExists
-                  )
-                "
-              >
+                :color="bodyActiveColor"
+                :label="$t('imageset.imagesetNumber')"
+                use-custom-state
+                :error="!(isNotEmpty(imageset.imageset_number) && !imagesetNumberExists)"
+                :success="isNotEmpty(imageset.imageset_number) && !imagesetNumberExists"
+              />
+              <div class="m-0 caption" v-if="!(isNotEmpty(imageset.imageset_number) &&!imagesetNumberExists)">
                 <div v-if="imagesetNumberExists">
                   {{ $t("add.errors.imagesetNumberExists") }}.
                 </div>
                 <div v-else>{{ $t("add.errors.imagesetNumber") }}.</div>
-              </b-form-text>
+              </div>
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`author`">{{ $t("imageset.author") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="imageset.author"
-                id="author"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
-                :options="autocomplete.agent"
-                @search-change="autocompleteAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                v-bind:class="{
-                  valid: isNotEmpty(imageset.author),
-                  invalid: !isNotEmpty(imageset.author)
-                }"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
-              <b-form-text v-if="!isNotEmpty(imageset.author)"
-                >{{ $t("add.errors.author") }}.</b-form-text
-              >
+                item-text="agent"
+                :label="$t('imageset.author')"
+                use-state
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteAgentSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- DESCRIPTION -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`description`"
-                >{{ $t("imageset.description") }}:</label
-              >
-              <b-form-textarea
-                size="sm"
-                id="image_description"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="imageset.description"
-                :no-resize="true"
-                :rows="3"
-                :max-rows="3"
-                type="text"
-              ></b-form-textarea>
+                :color="bodyActiveColor"
+                :label="$t('imageset.description')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -141,11 +107,17 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import { fetchIsImagesetNumberInImageset } from "../../assets/js/api/apiCalls";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 
 export default {
   name: "Imageset",
 
   components: {
+    TextareaWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
     Spinner
   },
 

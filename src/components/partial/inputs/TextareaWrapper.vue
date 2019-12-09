@@ -7,15 +7,27 @@
       placeholder=" "
       outlined
       rows="3"
+      :error="useState ? !$attrs.value : false"
+      :success="useState ? !!$attrs.value : false"
       v-bind="$attrs"
       v-on="$listeners"
-    />
+    >
+      <template v-if="useState" v-slot:append>
+        <v-icon small v-if="!$attrs.value" color="red"
+        >fas fa-exclamation-circle</v-icon
+        >
+        <v-icon small v-else color="green">fas fa-check</v-icon>
+      </template>
+    </v-textarea>
   </div>
 </template>
 
 <script>
 export default {
-  name: "TextareaWrapper"
+  name: "TextareaWrapper",
+  props: {
+    useState: Boolean
+  }
 };
 </script>
 

@@ -6,11 +6,11 @@
       hide-details
       outlined
       :clearable="isDate"
-      placeholder=" "
+      :placeholder="!!$attrs.placeholder ? $attrs.placeholder : ' '"
       clear-icon="fas fa-times"
-      :readonly="isDate"
-      :error="useState ? !$attrs.value : false"
-      :success="useState ? !!$attrs.value : false"
+      :readonly="isDate || !!$attrs.readonly"
+      :error="useCustomState ? $attrs.error : (useState ? !$attrs.value : false)"
+      :success="useCustomState ? $attrs.success : (useState ? !!$attrs.value : false)"
       v-bind="$attrs"
       v-on="$listeners"
       :title="$attrs.value"
@@ -25,6 +25,13 @@
         >
         <v-icon small v-else color="green">fas fa-check</v-icon>
       </template>
+
+      <template v-else-if="useCustomState" v-slot:append>
+        <v-icon small v-if="$attrs.error" color="red"
+        >fas fa-exclamation-circle</v-icon
+        >
+        <v-icon small v-else color="green">fas fa-check</v-icon>
+      </template>
     </v-text-field>
   </div>
 </template>
@@ -35,7 +42,8 @@ export default {
   inheritAttrs: false,
   props: {
     isDate: Boolean,
-    useState: Boolean
+    useState: Boolean,
+    useCustomState: Boolean
   }
 };
 </script>

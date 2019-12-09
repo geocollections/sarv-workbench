@@ -14,7 +14,7 @@
         :message="
           $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
         "
-      ></spinner>
+      />
     </template>
 
     <template v-slot:locked-info>
@@ -53,7 +53,7 @@
         </v-card-title>
 
         <transition>
-          <div v-show="block.fileInput" class="px-1 pt-1 pb-2">
+          <div v-show="block.fileInput" class="pa-1">
             <multimedia-component
               :record-options="recordOptions"
               :record-image="recordImage"
@@ -97,13 +97,13 @@
         </v-card-title>
 
         <transition>
-          <div v-show="block.file" class="px-1 pt-1 pb-2">
+          <div v-show="block.file" class="pa-1">
             <v-row no-gutters>
-              <v-col cols="12" md="6" class="px-1">
+              <v-col cols="12" md="6" class="pa-1">
                 <file-preview :data="rawAttachment" object="attachment" />
               </v-col>
 
-              <v-col cols="12" md="6" class="px-1">
+              <v-col cols="12" md="6" class="pa-1">
                 <file-information :data="rawAttachment" />
               </v-col>
             </v-row>
@@ -142,91 +142,69 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+            <div v-show="block.requiredFields" class="pa-1">
               <!-- AUTHOR, AUTHOR FREE and IMAGESET -->
               <v-row no-gutters>
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`author`">{{ $t("attachment.author") }}:</label>
-                  <vue-multiselect
+                <v-col cols="12" md="4" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.author"
-                    id="author"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
-                    :options="autocomplete.agent"
-                    :class="{
-                      valid:
-                        isNotEmpty(attachment.author) ||
-                        isNotEmpty(attachment.author_free),
-                      invalid: !(
+                    item-text="agent"
+                    :label="$t('attachment.author')"
+                    use-custom-state
+                    :error="
+                      !(
                         isNotEmpty(attachment.author) ||
                         isNotEmpty(attachment.author_free)
                       )
-                    }"
-                    @search-change="autocompleteAgentSearch"
-                    @input="resetImageset"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    "
+                    :success="
+                      isNotEmpty(attachment.author) ||
+                        isNotEmpty(attachment.author_free)
+                    "
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`author_free`"
-                    >{{ $t("attachment.author_free") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="author_free"
+                <v-col cols="12" md="4" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.author_free"
-                    :state="
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.author_free')"
+                    use-custom-state
+                    :error="
+                      !(
+                        isNotEmpty(attachment.author_free) ||
+                        isNotEmpty(attachment.author)
+                      )
+                    "
+                    :success="
                       isNotEmpty(attachment.author_free) ||
                         isNotEmpty(attachment.author)
                     "
-                    type="text"
-                  ></b-form-input>
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
+                <v-col cols="12" md="4" class="pa-1">
                   <div class="d-flex">
                     <div class="flex-grow-1 mr-3">
-                      <label :for="`imageset`"
-                        >{{ $t("attachment.imageset") }}:</label
-                      >
-                      <vue-multiselect
+                      <autocomplete-wrapper
                         v-model="attachment.imageset"
-                        id="imageset"
-                        label="imageset_number"
-                        track-by="id"
-                        :placeholder="$t('add.inputs.autocomplete')"
+                        :color="bodyActiveColor"
+                        :items="autocomplete.imageset"
                         :loading="autocomplete.loaders.imageset"
-                        :options="autocomplete.imageset"
-                        :class="{
-                          valid: isNotEmpty(attachment.imageset),
-                          invalid: !isNotEmpty(attachment.imageset)
-                        }"
-                        @search-change="autocompleteImagesetSearch"
-                        :internal-search="false"
-                        :preserve-search="true"
-                        :clear-on-select="false"
-                        :show-labels="false"
-                      >
-                        <template slot="singleLabel" slot-scope="{ option }">
-                          <strong>{{ option.imageset_number }}</strong>
-                        </template>
-                        <template slot="noResult"
-                          ><b>{{ $t("messages.inputNoResults") }}</b></template
-                        >
-                      </vue-multiselect>
+                        item-text="imageset_number"
+                        :label="$t('attachment.imageset')"
+                        is-link
+                        route-object="imageset"
+                        is-searchable
+                        v-on:search:items="autocompleteImagesetSearch"
+                      />
                     </div>
 
                     <div class="align-self-end">
@@ -274,75 +252,49 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.info" class="px-1 pt-1 pb-2">
+            <div v-show="block.info" class="pa-1">
               <!-- DATE_CREATED and DATE_CREATED_FREE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`date_created`"
-                    >{{ $t("attachment.dateCreated") }}:</label
-                  >
-                  <datepicker
-                    id="date_created"
+                <v-col cols="12" md="6" class="pa-1">
+                  <date-wrapper
                     v-model="attachment.date_created"
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    input-class="form-control form-control-sm"
-                  ></datepicker>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateCreated')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`date_created_free`"
-                    >{{ $t("attachment.dateCreatedFree") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="date_created_free"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.date_created_free"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateCreatedFree')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- IMAGE PLACE and LOCALITY -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_place`"
-                    >{{ $t("attachment.imagePlace") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_place"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_place"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imagePlace')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`locality`"
-                    >{{ $t("attachment.locality") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.locality"
-                    id="locality"
-                    :label="localityLabel"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.locality"
                     :loading="autocomplete.loaders.locality"
-                    :options="autocomplete.locality"
-                    @search-change="autocompleteLocalitySearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[localityLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :item-text="localityLabel"
+                    :label="$t('attachment.locality')"
+                    is-link
+                    route-object="locality"
+                    is-searchable
+                    v-on:search:items="autocompleteLocalitySearch"
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -374,39 +326,33 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.map" class="px-1 pt-1 pb-2">
+            <div v-show="block.map" class="pa-1">
               <!-- IMAGE LATITUDE and IMAGE LONGITUDE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_latitude`"
-                    >{{ $t("attachment.imageLatitude") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_latitude"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_latitude"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageLatitude')"
                     type="number"
                     step="0.000001"
-                  ></b-form-input>
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_longitude`"
-                    >{{ $t("attachment.imageLongitude") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_longitude"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_longitude"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageLongitude')"
                     type="number"
                     step="0.000001"
-                  ></b-form-input>
+                  />
                 </v-col>
               </v-row>
 
               <!-- MAP SWITCH -->
               <v-card
-                class="d-flex flex-row justify-content-start mt-1 mx-3"
+                class="d-flex flex-row justify-content-start mb-1 mx-3"
                 flat
                 tile
                 :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -442,8 +388,8 @@
 
               <!-- MAP -->
               <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="showMap" class="mt-2">
-                  <v-col cols="12" class="px-1">
+                <v-row no-gutters v-show="showMap" class="mt-1">
+                  <v-col cols="12" class="pa-1">
                     <map-component
                       v-if="showMap"
                       mode="single"
@@ -494,104 +440,67 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.description" class="px-1 pt-1 pb-2">
+            <div v-show="block.description" class="pa-1">
               <!-- OBJECT and PEOPLE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_object`"
-                    >{{ $t("attachment.imageObject") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_object"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_object"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageObject')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_people`"
-                    >{{ $t("attachment.imagePeople") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_people"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_people"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imagePeople')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- DESCRIPTION -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_description`"
-                    >{{ $t("attachment.imageDescription") }}:</label
-                  >
-                  <b-form-textarea
-                    id="image_description"
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
                     v-model="attachment.image_description"
-                    type="text"
-                    size="sm"
-                    :no-resize="true"
-                    :rows="3"
-                    :max-rows="3"
-                  ></b-form-textarea>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageDescription')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_description_en`"
-                    >{{ $t("attachment.imageDescriptionEn") }}:</label
-                  >
-                  <b-form-textarea
-                    id="image_description_en"
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
                     v-model="attachment.image_description_en"
-                    type="text"
-                    size="sm"
-                    :no-resize="true"
-                    :rows="3"
-                    :max-rows="3"
-                  ></b-form-textarea>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageDescriptionEn')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap px-1">
+              <div class="d-flex justify-content-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
-                  <label :for="`keyword`"
-                    >{{ $t("attachment.keywords") }}:</label
-                  >
-                  <vue-multiselect
+                  <autocomplete-wrapper
                     v-model="relatedData.keyword"
-                    id="keyword"
-                    label="keyword"
-                    track-by="id"
-                    :multiple="true"
-                    :placeholder="$t('add.inputs.keywords')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.keyword"
                     :loading="autocomplete.loaders.keyword"
-                    :options="autocomplete.keyword"
-                    @search-change="autocompleteKeywordSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :close-on-select="false"
-                    :show-labels="true"
-                  >
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
-                </div>
-
-                <div class="mr-3 my-1 align-self-end">
-                  <v-btn
-                    icon
-                    color="red"
-                    :title="$t('add.inputs.keywordsRemove')"
-                    :disabled="!isNotEmpty(relatedData.keyword)"
-                    @click="relatedData.keyword = null"
-                  >
-                    <v-icon>far fa-trash-alt</v-icon>
-                  </v-btn>
+                    item-text="keyword"
+                    :label="$t('attachment.keywords')"
+                    is-link
+                    route-object="keyword"
+                    is-searchable
+                    v-on:search:items="autocompleteKeywordSearch"
+                    :multiple="true"
+                    v-on:chip:close="
+                      relatedData.keyword.splice(
+                        relatedData.keyword.indexOf($event),
+                        1
+                      )
+                    "
+                  />
                 </div>
 
                 <div class="mr-2 my-1 align-self-end">
@@ -612,138 +521,81 @@
 
               <!-- LICENCE and COPYRIGHT -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.licence"
-                    id="licence"
-                    :options="autocomplete.licence"
-                    track-by="id"
-                    :label="licenceLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[licenceLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.licence"
+                    :loading="autocomplete.loaders.licence"
+                    :item-text="licenceLabel"
+                    :label="$t('attachment.licence')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
-                  >
-                  <vue-multiselect
-                    id="copyright_agent"
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.copyright_agent"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.copyright_agent"
                     :loading="autocomplete.loaders.copyright_agent"
-                    :options="autocomplete.copyright_agent"
-                    @search-change="autocompleteCopyrightAgentSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.copyrightAgent')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteCopyrightAgentSearch"
+                  />
                 </v-col>
               </v-row>
 
               <!-- IMAGE_TYPE and DEVICE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_type`"
-                    >{{ $t("attachment.imageType") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.image_type"
-                    id="image_type"
-                    :options="autocomplete.image_type"
-                    track-by="id"
-                    :label="commonLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[commonLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.image_type"
+                    :loading="autocomplete.loaders.image_type"
+                    :item-text="commonLabel"
+                    :label="$t('attachment.imageType')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`device_txt`"
-                    >{{ $t("attachment.deviceTxt") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="device_txt"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.device_txt"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.deviceTxt')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- AGENT, DATE DIGITISED and STARS -->
               <v-row no-gutters>
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
-                  >
-                  <vue-multiselect
-                    id="agent_digitised"
+                <v-col cols="12" md="4" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.agent_digitised"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent_digitised"
                     :loading="autocomplete.loaders.agent_digitised"
-                    :options="autocomplete.agent_digitised"
-                    @search-change="autocompleteAgentDigitisedSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.agentDigitised')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentDigitisedSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
-                  >
-                  <datepicker
-                    id="date_digitised"
+                <v-col cols="12" md="4" class="pa-1">
+                  <date-wrapper
                     v-model="attachment.date_digitised"
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    :not-after="new Date()"
-                    input-class="form-control form-control-sm"
-                  ></datepicker>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateDigitised')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
+                <v-col cols="12" md="4" class="pa-1">
                   <label :for="`stars`">{{ $t("attachment.stars") }}:</label>
                   <b-form-select v-model="attachment.stars" size="sm">
                     <option :value="5">{{ $t("main.rating5") }}</option>
@@ -796,57 +648,52 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+            <div v-show="block.requiredFields" class="pa-1">
               <!-- AUTHOR and AUTHOR FREE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`author`">{{ $t("attachment.author") }}:</label>
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.author"
-                    id="author"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
-                    :options="autocomplete.agent"
-                    :class="{
-                      valid:
-                        isNotEmpty(attachment.author) ||
-                        isNotEmpty(attachment.author_free),
-                      invalid: !(
+                    item-text="agent"
+                    :label="$t('attachment.author')"
+                    use-custom-state
+                    :error="
+                      !(
                         isNotEmpty(attachment.author) ||
                         isNotEmpty(attachment.author_free)
                       )
-                    }"
-                    @search-change="autocompleteAgentSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    "
+                    :success="
+                      isNotEmpty(attachment.author) ||
+                        isNotEmpty(attachment.author_free)
+                    "
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`author_free`"
-                    >{{ $t("attachment.author_free") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="author_free"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.author_free"
-                    :state="
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.author_free')"
+                    use-custom-state
+                    :error="
+                      !(
+                        isNotEmpty(attachment.author_free) ||
+                        isNotEmpty(attachment.author)
+                      )
+                    "
+                    :success="
                       isNotEmpty(attachment.author_free) ||
                         isNotEmpty(attachment.author)
                     "
-                    type="text"
-                  ></b-form-input>
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -881,154 +728,100 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.info" class="px-1 pt-1 pb-2">
+            <div v-show="block.info" class="pa-1">
               <!-- SPECIMEN and SCALEBAR -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`specimen`"
-                    >{{ $t("attachment.specimen") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.specimen"
-                    id="specimen"
-                    :custom-label="customSpecimenLabel"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
-                    :options="autocomplete.specimen"
-                    :class="{
-                      valid:
-                        $route.meta.isEdit && isNotEmpty(attachment.specimen),
-                      invalid:
-                        $route.meta.isEdit && !isNotEmpty(attachment.specimen)
-                    }"
-                    @search-change="autocompleteSpecimenSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ customSpecimenLabel(option) }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="specimen_id"
+                    :label="$t('attachment.specimen')"
+                    use-custom-state
+                    :error="
+                      !($route.meta.isEdit && isNotEmpty(attachment.specimen))
+                    "
+                    :success="
+                      $route.meta.isEdit && isNotEmpty(attachment.specimen)
+                    "
+                    is-link
+                    route-object="specimen"
+                    is-searchable
+                    v-on:search:items="autocompleteSpecimenSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_scalebar`"
-                    >{{ $t("attachment.imageScalebar") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_scalebar"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_scalebar"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageScalebar')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- DATE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`date_created`"
-                    >{{ $t("attachment.dateCreated") }}:</label
-                  >
-                  <datepicker
-                    id="date_created"
+                <v-col cols="12" md="6" class="pa-1">
+                  <date-wrapper
                     v-model="attachment.date_created"
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    input-class="form-control form-control-sm"
-                  ></datepicker>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateCreated')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`date_created_free`"
-                    >{{ $t("attachment.dateCreatedFree") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="date_created_free"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.date_created_free"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateCreatedFree')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- DESCRIPTION -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_description`"
-                    >{{ $t("attachment.imageDescription") }}:</label
-                  >
-                  <b-form-textarea
-                    id="image_description"
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
                     v-model="attachment.image_description"
-                    type="text"
-                    size="sm"
-                    :no-resize="true"
-                    :rows="3"
-                    :max-rows="3"
-                  ></b-form-textarea>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageDescription')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_description_en`"
-                    >{{ $t("attachment.imageDescriptionEn") }}:</label
-                  >
-                  <b-form-textarea
-                    id="image_description_en"
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
                     v-model="attachment.image_description_en"
-                    type="text"
-                    size="sm"
-                    :no-resize="true"
-                    :rows="3"
-                    :max-rows="3"
-                  ></b-form-textarea>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageDescriptionEn')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap px-1">
+              <div class="d-flex justify-content-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
-                  <label :for="`keyword`"
-                    >{{ $t("attachment.keywords") }}:</label
-                  >
-                  <vue-multiselect
+                  <autocomplete-wrapper
                     v-model="relatedData.keyword"
-                    id="keyword"
-                    label="keyword"
-                    track-by="id"
-                    :multiple="true"
-                    :placeholder="$t('add.inputs.keywords')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.keyword"
                     :loading="autocomplete.loaders.keyword"
-                    :options="autocomplete.keyword"
-                    @search-change="autocompleteKeywordSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :close-on-select="false"
-                    :show-labels="true"
-                  >
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
-                </div>
-
-                <div class="mr-3 my-1 align-self-end">
-                  <v-btn
-                    icon
-                    color="red"
-                    :title="$t('add.inputs.keywordsRemove')"
-                    :disabled="!isNotEmpty(relatedData.keyword)"
-                    @click="relatedData.keyword = null"
-                  >
-                    <v-icon>far fa-trash-alt</v-icon>
-                  </v-btn>
+                    item-text="keyword"
+                    :label="$t('attachment.keywords')"
+                    is-link
+                    route-object="keyword"
+                    is-searchable
+                    v-on:search:items="autocompleteKeywordSearch"
+                    :multiple="true"
+                    v-on:chip:close="
+                      relatedData.keyword.splice(
+                        relatedData.keyword.indexOf($event),
+                        1
+                      )
+                    "
+                  />
                 </div>
 
                 <div class="mr-2 my-1 align-self-end">
@@ -1049,138 +842,81 @@
 
               <!-- LICENCE and COPYRIGHT -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.licence"
-                    id="licence"
-                    :options="autocomplete.licence"
-                    track-by="id"
-                    :label="licenceLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[licenceLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.licence"
+                    :loading="autocomplete.loaders.licence"
+                    :item-text="licenceLabel"
+                    :label="$t('attachment.licence')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
-                  >
-                  <vue-multiselect
-                    id="copyright_agent"
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.copyright_agent"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.copyright_agent"
                     :loading="autocomplete.loaders.copyright_agent"
-                    :options="autocomplete.copyright_agent"
-                    @search-change="autocompleteCopyrightAgentSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.copyrightAgent')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteCopyrightAgentSearch"
+                  />
                 </v-col>
               </v-row>
 
               <!-- IMAGE_TYPE and DEVICE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_type`"
-                    >{{ $t("attachment.imageType") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.image_type"
-                    id="image_type"
-                    :options="autocomplete.image_type"
-                    track-by="id"
-                    :label="commonLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[commonLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.image_type"
+                    :loading="autocomplete.loaders.image_type"
+                    :item-text="commonLabel"
+                    :label="$t('attachment.imageType')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`device_txt`"
-                    >{{ $t("attachment.deviceTxt") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="device_txt"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.device_txt"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.deviceTxt')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- AGENT, DATE DIGITISED and STARS -->
               <v-row no-gutters>
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
-                  >
-                  <vue-multiselect
-                    id="agent_digitised"
+                <v-col cols="12" md="4" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.agent_digitised"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent_digitised"
                     :loading="autocomplete.loaders.agent_digitised"
-                    :options="autocomplete.agent_digitised"
-                    @search-change="autocompleteAgentDigitisedSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.agentDigitised')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentDigitisedSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
-                  >
-                  <datepicker
-                    id="date_digitised"
+                <v-col cols="12" md="4" class="pa-1">
+                  <date-wrapper
                     v-model="attachment.date_digitised"
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    :not-after="new Date()"
-                    input-class="form-control form-control-sm"
-                  ></datepicker>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateDigitised')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
+                <v-col cols="12" md="4" class="pa-1">
                   <label :for="`stars`">{{ $t("attachment.stars") }}:</label>
                   <b-form-select v-model="attachment.stars" size="sm">
                     <option :value="5">{{ $t("main.rating5") }}</option>
@@ -1233,100 +969,73 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+            <div v-show="block.requiredFields" class="pa-1">
               <!-- AUTHOR and AUTHOR FREE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`author`">{{ $t("attachment.author") }}:</label>
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.author"
-                    id="author"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent"
                     :loading="autocomplete.loaders.agent"
-                    :options="autocomplete.agent"
-                    :class="{
-                      valid:
-                        isNotEmpty(attachment.author) ||
-                        isNotEmpty(attachment.author_free),
-                      invalid: !(
+                    item-text="agent"
+                    :label="$t('attachment.author')"
+                    use-custom-state
+                    :error="
+                      !(
                         isNotEmpty(attachment.author) ||
                         isNotEmpty(attachment.author_free)
                       )
-                    }"
-                    @search-change="autocompleteAgentSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    "
+                    :success="
+                      isNotEmpty(attachment.author) ||
+                        isNotEmpty(attachment.author_free)
+                    "
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`author_free`"
-                    >{{ $t("attachment.author_free") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="author_free"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.author_free"
-                    :state="
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.author_free')"
+                    use-custom-state
+                    :error="
+                      !(
+                        isNotEmpty(attachment.author_free) ||
+                        isNotEmpty(attachment.author)
+                      )
+                    "
+                    :success="
                       isNotEmpty(attachment.author_free) ||
                         isNotEmpty(attachment.author)
                     "
-                    type="text"
-                  ></b-form-input>
+                  />
                 </v-col>
               </v-row>
 
               <!-- DESCRIPTION and DESCRIPTION_EN -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`description`"
-                    >{{ $t("attachment.description") }}:</label
-                  >
-                  <b-form-textarea
-                    size="sm"
-                    id="description"
-                    :state="isNotEmpty(attachment.description)"
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
                     v-model="attachment.description"
-                    type="text"
-                    :no-resize="true"
-                    :rows="3"
-                    :max-rows="3"
-                  ></b-form-textarea>
-
-                  <b-form-text v-if="!isNotEmpty(attachment.description)"
-                    >{{ $t("add.errors.emptyField") }}.</b-form-text
-                  >
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.description')"
+                    use-state
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`description_en`"
-                    >{{ $t("attachment.descriptionEn") }}:</label
-                  >
-                  <b-form-textarea
-                    size="sm"
-                    id="description_en"
-                    :state="isNotEmpty(attachment.description_en)"
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
                     v-model="attachment.description_en"
-                    type="text"
-                    :no-resize="true"
-                    :rows="3"
-                    :max-rows="3"
-                  ></b-form-textarea>
-
-                  <b-form-text v-if="!isNotEmpty(attachment.description_en)"
-                    >{{ $t("add.errors.emptyField") }}.</b-form-text
-                  >
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.descriptionEn')"
+                    use-state
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -1361,71 +1070,45 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.info" class="px-1 pt-1 pb-2">
+            <div v-show="block.info" class="pa-1">
               <!-- DATE_CREATED, DATE_CREATED_FREE and TYPE -->
               <v-row no-gutters>
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`date_created`"
-                    >{{ $t("attachment.dateCreated") }}:</label
-                  >
-                  <datepicker
-                    id="date_created"
+                <v-col cols="12" md="4" class="pa-1">
+                  <date-wrapper
                     v-model="attachment.date_created"
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    input-class="form-control form-control-sm"
-                  ></datepicker>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateCreated')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`date_created_free`"
-                    >{{ $t("attachment.dateCreatedFree") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="date_created_free"
+                <v-col cols="12" md="4" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.date_created_free"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateCreatedFree')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`type`">{{ $t("attachment.type") }}:</label>
-                  <vue-multiselect
+                <v-col cols="12" md="4" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.type"
-                    id="type"
-                    :options="autocomplete.type"
-                    track-by="id"
-                    :label="commonLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[commonLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.type"
+                    :loading="autocomplete.loaders.type"
+                    :item-text="commonLabel"
+                    :label="$t('attachment.type')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- REMARKS -->
               <v-row no-gutters>
-                <v-col cols="12" class="px-1">
-                  <label :for="`remarks`"
-                    >{{ $t("attachment.remarks") }}:</label
-                  >
-                  <b-form-textarea
-                    size="sm"
-                    id="remarks"
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
                     v-model="attachment.remarks"
-                    type="text"
-                    :no-resize="true"
-                    :rows="3"
-                    :max-rows="3"
-                  ></b-form-textarea>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.remarks')"
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -1457,39 +1140,33 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.map" class="px-1 pt-1 pb-2">
+            <div v-show="block.map" class="pa-1">
               <!-- IMAGE LATITUDE and IMAGE LONGITUDE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_latitude`"
-                    >{{ $t("attachment.imageLatitude") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_latitude"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_latitude"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageLatitude')"
                     type="number"
                     step="0.000001"
-                  ></b-form-input>
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_longitude`"
-                    >{{ $t("attachment.imageLongitude") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_longitude"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.image_longitude"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.imageLongitude')"
                     type="number"
                     step="0.000001"
-                  ></b-form-input>
+                  />
                 </v-col>
               </v-row>
 
               <!-- MAP SWITCH -->
               <v-card
-                class="d-flex flex-row justify-content-start mt-1 mx-3"
+                class="d-flex flex-row justify-content-start mb-1 mx-3"
                 flat
                 tile
                 :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -1525,8 +1202,8 @@
 
               <!-- MAP -->
               <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="showMap" class="mt-2">
-                  <v-col cols="12" class="px-1">
+                <v-row no-gutters v-show="showMap" class="mt-1">
+                  <v-col cols="12" class="pa-1">
                     <map-component
                       v-if="showMap"
                       mode="single"
@@ -1577,44 +1254,29 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.description" class="px-1 pt-1 pb-2">
+            <div v-show="block.description" class="pa-1">
               <!-- KEYWORDS -->
-              <div class="d-flex justify-content-start flex-wrap px-1">
+              <div class="d-flex justify-content-start flex-wrap pa-1">
                 <div class="mr-3 flex-grow-1">
-                  <label :for="`keyword`"
-                    >{{ $t("attachment.keywords") }}:</label
-                  >
-                  <vue-multiselect
+                  <autocomplete-wrapper
                     v-model="relatedData.keyword"
-                    id="keyword"
-                    label="keyword"
-                    track-by="id"
-                    :multiple="true"
-                    :placeholder="$t('add.inputs.keywords')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.keyword"
                     :loading="autocomplete.loaders.keyword"
-                    :options="autocomplete.keyword"
-                    @search-change="autocompleteKeywordSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :close-on-select="false"
-                    :show-labels="true"
-                  >
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
-                </div>
-
-                <div class="mr-3 my-1 align-self-end">
-                  <v-btn
-                    icon
-                    color="red"
-                    :title="$t('add.inputs.keywordsRemove')"
-                    :disabled="!isNotEmpty(relatedData.keyword)"
-                    @click="relatedData.keyword = null"
-                  >
-                    <v-icon>far fa-trash-alt</v-icon>
-                  </v-btn>
+                    item-text="keyword"
+                    :label="$t('attachment.keywords')"
+                    is-link
+                    route-object="keyword"
+                    is-searchable
+                    v-on:search:items="autocompleteKeywordSearch"
+                    :multiple="true"
+                    v-on:chip:close="
+                      relatedData.keyword.splice(
+                        relatedData.keyword.indexOf($event),
+                        1
+                      )
+                    "
+                  />
                 </div>
 
                 <div class="mr-2 my-1 align-self-end">
@@ -1635,135 +1297,78 @@
 
               <!-- LICENCE and COPYRIGHT -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.licence"
-                    id="licence"
-                    :options="autocomplete.licence"
-                    track-by="id"
-                    :label="licenceLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[licenceLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.licence"
+                    :loading="autocomplete.loaders.licence"
+                    :item-text="licenceLabel"
+                    :label="$t('attachment.licence')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
-                  >
-                  <vue-multiselect
-                    id="copyright_agent"
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.copyright_agent"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.copyright_agent"
                     :loading="autocomplete.loaders.copyright_agent"
-                    :options="autocomplete.copyright_agent"
-                    @search-change="autocompleteCopyrightAgentSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.copyrightAgent')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteCopyrightAgentSearch"
+                  />
                 </v-col>
               </v-row>
 
               <!-- IMAGE_TYPE and DEVICE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`image_type`"
-                    >{{ $t("attachment.imageType") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.image_type"
-                    id="image_type"
-                    :options="autocomplete.image_type"
-                    track-by="id"
-                    :label="commonLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[commonLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.image_type"
+                    :loading="autocomplete.loaders.image_type"
+                    :item-text="commonLabel"
+                    :label="$t('attachment.imageType')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`device_txt`"
-                    >{{ $t("attachment.deviceTxt") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="device_txt"
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.device_txt"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.deviceTxt')"
+                  />
                 </v-col>
               </v-row>
 
               <!-- AGENT and DATE DIGITISED -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
-                  >
-                  <vue-multiselect
-                    id="agent_digitised"
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.agent_digitised"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent_digitised"
                     :loading="autocomplete.loaders.agent_digitised"
-                    :options="autocomplete.agent_digitised"
-                    @search-change="autocompleteAgentDigitisedSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.agentDigitised')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentDigitisedSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
-                  >
-                  <datepicker
-                    id="date_digitised"
+                <v-col cols="12" md="6" class="pa-1">
+                  <date-wrapper
                     v-model="attachment.date_digitised"
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    :not-after="new Date()"
-                    input-class="form-control form-control-sm"
-                  ></datepicker>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateDigitised')"
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -1797,10 +1402,19 @@
             </v-btn>
           </v-card-title>
 
+          {{selectedRelatedTable}}
+
           <transition>
-            <div v-show="block.relatedData" class="px-1 pt-1 pb-2">
+            <div v-show="block.relatedData" class="pa-1">
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
+                <v-col cols="12" md="6" class="pa-1">
+                  <select-wrapper
+                    v-model="selectedRelatedTable"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.relatedData')"
+                    :items="relatedTabs"
+                    item-text="name_short"
+                  />
                   <label :for="`related_data`"
                     >{{ $t("attachment.relatedData") }}:</label
                   >
@@ -1830,9 +1444,24 @@
                 <v-col
                   cols="12"
                   md="6"
-                  class="px-1"
-                  v-if="selectedRelatedTable !== null"
+                  class="pa-1"
+                  v-if="selectedRelatedTable"
                 >
+                  <autocomplete-wrapper
+                    v-model="relatedData['attach_link__' + selectedRelatedTable]"
+                    :color="bodyActiveColor"
+                    :items="autocomplete['attach_link__' + selectedRelatedTable]"
+                    :loading="autocomplete.loaders['attach_link__' + selectedRelatedTable]"
+                    :item-text="customLabelForRelatedDataUpdated()"
+                    :label="$t('attachment.relatedTables.' + selectedRelatedTable)"
+                    :no-cache="true"
+                    is-link
+                    is-searchable
+                    :route-object="selectedRelatedTable"
+                    v-on:search:items="autocompleteRelatedDataSearch($event, selectedRelatedTable)"
+                    :multiple="true"
+                    v-on:chip:close="relatedData['attach_link__' + selectedRelatedTable].splice(relatedData['attach_link__' + selectedRelatedTable].indexOf($event), 1)"
+                  />
                   <label :for="selectedRelatedTable"
                     >{{
                       $t("attachment.relatedTables." + selectedRelatedTable)
@@ -1872,7 +1501,7 @@
               <v-row no-gutters>
                 <!-- COLLECTION -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__collection &&
                       relatedData.attach_link__collection.length > 0
@@ -1939,7 +1568,7 @@
 
                 <!-- SPECIMEN -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__specimen &&
                       relatedData.attach_link__specimen.length > 0
@@ -2003,7 +1632,7 @@
 
                 <!-- SAMPLE -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__sample &&
                       relatedData.attach_link__sample.length > 0
@@ -2059,7 +1688,7 @@
 
                 <!-- SAMPLE_SERIES -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__sample_series &&
                       relatedData.attach_link__sample_series.length > 0
@@ -2108,7 +1737,7 @@
 
                 <!-- ANALYSIS -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__analysis &&
                       relatedData.attach_link__analysis.length > 0
@@ -2175,7 +1804,7 @@
 
                 <!-- DATASET -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__dataset &&
                       relatedData.attach_link__dataset.length > 0
@@ -2237,7 +1866,7 @@
 
                 <!-- DOI -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__doi &&
                       relatedData.attach_link__doi.length > 0
@@ -2293,7 +1922,7 @@
 
                 <!-- LOCALITY -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__locality &&
                       relatedData.attach_link__locality.length > 0
@@ -2357,7 +1986,7 @@
 
                 <!-- DRILLCORE -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__drillcore &&
                       relatedData.attach_link__drillcore.length > 0
@@ -2424,7 +2053,7 @@
 
                 <!-- DRILLCORE_BOX -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__drillcore_box &&
                       relatedData.attach_link__drillcore_box.length > 0
@@ -2492,7 +2121,7 @@
 
                 <!-- PREPARATION -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__preparation !== null &&
                       relatedData.attach_link__preparation.length > 0
@@ -2553,7 +2182,7 @@
 
                 <!-- REFERENCE -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__reference !== null &&
                       relatedData.attach_link__reference.length > 0
@@ -2614,7 +2243,7 @@
 
                 <!-- STORAGE -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__storage !== null &&
                       relatedData.attach_link__storage.length > 0
@@ -2664,7 +2293,7 @@
 
                 <!-- PROJECT -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__project !== null &&
                       relatedData.attach_link__project.length > 0
@@ -2719,7 +2348,7 @@
 
                 <!-- SITE -->
                 <div
-                  class="col-sm-6 px-1"
+                  class="col-sm-6 pa-1"
                   v-if="
                     relatedData.attach_link__site !== null &&
                       relatedData.attach_link__site.length > 0
@@ -2807,38 +2436,32 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+            <div v-show="block.requiredFields" class="pa-1">
               <!-- AUTHOR and AUTHOR FREE -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`reference`"
-                    >{{ $t("attachment.reference") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.reference"
-                    id="reference"
-                    label="reference"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
-                    :options="autocomplete.reference"
-                    :class="{
-                      valid: isNotEmpty(attachment.reference),
-                      invalid: !isNotEmpty(attachment.reference)
-                    }"
-                    @search-change="autocompleteReferenceSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.reference }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="reference"
+                    :label="$t('attachment.reference')"
+                    use-state
+                    is-link
+                    route-object="reference"
+                    is-searchable
+                    v-on:search:items="autocompleteReferenceSearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="attachment.author_free"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.author_free')"
+                    use-state
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -2873,113 +2496,67 @@
           </v-card-title>
 
           <transition>
-            <div v-show="block.info" class="px-1 pt-1 pb-2">
+            <div v-show="block.info" class="pa-1">
               <!-- LICENCE and COPYRIGHT -->
               <v-row no-gutters>
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`licence`"
-                    >{{ $t("attachment.licence") }}:</label
-                  >
-                  <vue-multiselect
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.licence"
-                    id="licence"
-                    :options="autocomplete.licence"
-                    track-by="id"
-                    :label="licenceLabel"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option[licenceLabel] }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    :color="bodyActiveColor"
+                    :items="autocomplete.licence"
+                    :loading="autocomplete.loaders.licence"
+                    :item-text="licenceLabel"
+                    :label="$t('attachment.licence')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="6" class="px-1">
-                  <label :for="`copyright_agent`"
-                    >{{ $t("attachment.copyrightAgent") }}:</label
-                  >
-                  <vue-multiselect
-                    id="copyright_agent"
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.copyright_agent"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.copyright_agent"
                     :loading="autocomplete.loaders.copyright_agent"
-                    :options="autocomplete.copyright_agent"
-                    @search-change="autocompleteCopyrightAgentSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.copyrightAgent')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteCopyrightAgentSearch"
+                  />
                 </v-col>
               </v-row>
 
               <!-- AGENT, DATE DIGITISED and DATE DIGITISED FREE -->
               <v-row no-gutters>
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`agent_digitised`"
-                    >{{ $t("attachment.agentDigitised") }}:</label
-                  >
-                  <vue-multiselect
-                    id="agent_digitised"
+                <v-col cols="12" md="4" class="pa-1">
+                  <autocomplete-wrapper
                     v-model="attachment.agent_digitised"
-                    label="agent"
-                    track-by="id"
-                    :placeholder="$t('add.inputs.autocomplete')"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.agent_digitised"
                     :loading="autocomplete.loaders.agent_digitised"
-                    :options="autocomplete.agent_digitised"
-                    @search-change="autocompleteAgentDigitisedSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :clear-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="singleLabel" slot-scope="{ option }">
-                      <strong>{{ option.agent }}</strong>
-                    </template>
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
+                    item-text="agent"
+                    :label="$t('attachment.agentDigitised')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentDigitisedSearch"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`date_digitised`"
-                    >{{ $t("attachment.dateDigitised") }}:</label
-                  >
-                  <datepicker
-                    id="date_digitised"
+                <v-col cols="12" md="4" class="pa-1">
+                  <date-wrapper
                     v-model="attachment.date_digitised"
-                    lang="en"
-                    :first-day-of-week="1"
-                    format="DD MMM YYYY"
-                    :not-after="new Date()"
-                    input-class="form-control form-control-sm"
-                  ></datepicker>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateDigitised')"
+                  />
                 </v-col>
 
-                <v-col cols="12" md="4" class="px-1">
-                  <label :for="`date_digitised_free`"
-                    >{{ $t("attachment.dateDigitisedFree") }}:</label
-                  >
-                  <b-form-input
-                    size="sm"
-                    id="image_people"
+                <v-col cols="12" md="4" class="pa-1">
+                  <input-wrapper
                     v-model="attachment.date_digitised_free"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.dateDigitisedFree')"
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -3016,10 +2593,10 @@
         </v-card-title>
 
         <transition>
-          <div v-show="block.changeType" class="px-1 pt-1 pb-2">
+          <div v-show="block.changeType" class="pa-1">
             <!-- CHANGE TYPE -->
             <v-row no-gutters>
-              <v-col cols="12" md="6" class="px-1">
+              <v-col cols="12" md="6" class="pa-1">
                 <label :for="`specimen_image_attachment`">
                   <span>{{ $t("attachment.changeType") }}: </span>
                   <span
@@ -3080,23 +2657,23 @@
 
     <template v-slot:checkbox>
       <div class="d-flex flex-wrap mt-2">
-        <v-checkbox
-          v-model="attachment.is_private"
-          id="is_private"
-          :label="$t('specimen.is_private_text')"
-          hide-details
-          :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox mr-3"
-        ></v-checkbox>
+        <div class="pr-2">
+          <checkbox-wrapper
+            v-model="attachment.is_private"
+            :color="bodyActiveColor"
+            :label="$t('common.is_private')"
+            @change="attachment.is_private = !attachment.is_private"
+          />
+        </div>
 
-        <v-checkbox
-          v-model="attachment.is_locked"
-          id="is_locked"
-          :label="$t('attachment.is_locked_text')"
-          hide-details
-          :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+        <div>
+          <checkbox-wrapper
+            v-model="attachment.is_locked"
+            :color="bodyActiveColor"
+            :label="$t('attachment.is_locked_text')"
+            @change="attachment.is_locked = !attachment.is_locked"
+          />
+        </div>
       </div>
     </template>
 
@@ -3129,7 +2706,6 @@
 
 <script>
 import Spinner from "vue-simple-spinner";
-import Datepicker from "vue2-datepicker";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -3164,18 +2740,29 @@ import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import FileInformation from "../partial/FileInformation";
 import FilePreview from "../partial/FilePreview";
 import NewDoiButton from "../partial/NewDoiButton";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import DateWrapper from "../partial/inputs/DateWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import SelectWrapper from "../partial/inputs/SelectWrapper";
 
 export default {
   name: "AttachmentNew",
 
   components: {
+    SelectWrapper,
+    TextareaWrapper,
+    DateWrapper,
+    InputWrapper,
+    AutocompleteWrapper,
+    CheckboxWrapper,
     NewDoiButton,
     FilePreview,
     FileInformation,
     MultimediaComponent,
     AttachmentWrapper,
     Spinner,
-    Datepicker,
     MapComponent
   },
 
@@ -3447,24 +3034,25 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "attach_link__collection", iconClass: "fas fa-server" },
-          { name: "attach_link__specimen", iconClass: "fas fa-flask" },
-          { name: "attach_link__sample", iconClass: "fas fa-vial" },
-          { name: "attach_link__sample_series", iconClass: "fas fa-vials" },
-          { name: "attach_link__analysis", iconClass: "fas fa-chart-pie" },
-          { name: "attach_link__dataset", iconClass: "fas fa-server" },
-          { name: "attach_link__doi", iconClass: "fas fa-database" },
-          { name: "attach_link__locality", iconClass: "fas fa-map-marker-alt" },
-          { name: "attach_link__drillcore", iconClass: "fas fa-tools" },
-          { name: "attach_link__drillcore_box", iconClass: "fas fa-boxes" },
+          { name: "attach_link__collection", name_short: "collection", iconClass: "fas fa-server" },
+          { name: "attach_link__specimen", name_short: "specimen", iconClass: "fas fa-flask" },
+          { name: "attach_link__sample", name_short: "sample",iconClass: "fas fa-vial" },
+          { name: "attach_link__sample_series", name_short: "sample_series", iconClass: "fas fa-vials" },
+          { name: "attach_link__analysis", name_short: "analysis", iconClass: "fas fa-chart-pie" },
+          { name: "attach_link__dataset", name_short: "dataset", iconClass: "fas fa-server" },
+          { name: "attach_link__doi", name_short: "doi", iconClass: "fas fa-database" },
+          { name: "attach_link__locality", name_short: "locality", iconClass: "fas fa-map-marker-alt" },
+          { name: "attach_link__drillcore", name_short: "drillcore", iconClass: "fas fa-tools" },
+          { name: "attach_link__drillcore_box", name_short: "drillcore_box", iconClass: "fas fa-boxes" },
           {
             name: "attach_link__preparation",
+            name_short: "preparation",
             iconClass: "fas fa-prescription-bottle"
           },
-          { name: "attach_link__reference", iconClass: "fas fa-book" },
-          { name: "attach_link__storage", iconClass: "fas fa-archive" },
-          { name: "attach_link__project", iconClass: "fas fa-project-diagram" },
-          { name: "attach_link__site", iconClass: "fas fa-map-pin" }
+          { name: "attach_link__reference", name_short: "reference", iconClass: "fas fa-book" },
+          { name: "attach_link__storage", name_short: "storage", iconClass: "fas fa-archive" },
+          { name: "attach_link__project", name_short: "project", iconClass: "fas fa-project-diagram" },
+          { name: "attach_link__site", name_short: "site", iconClass: "fas fa-map-pin" }
         ],
         searchHistory: "attachmentSearchHistory",
         activeTab: "specimen_identification",
@@ -4250,6 +3838,43 @@ export default {
             return `${option.id} - (${option.location} - ${option.contents})`;
         default:
           return `${option.id}`;
+      }
+    },
+
+    customLabelForRelatedDataUpdated() {
+      switch (this.selectedRelatedTable) {
+        case "collection":
+        case "dataset":
+        case "project":
+        case "site":
+          if (this.$i18n.locale === "ee") return "name";
+          else return "name_en";
+        case "specimen":
+          return "specimen_id";
+        case "sample":
+          return "number";
+        case "sample_series":
+          return "name";
+        case "analysis":
+          return "id";
+        case "doi":
+          return "identifier";
+        case "locality":
+          if (this.$i18n.locale === "ee") return "locality";
+          else return "locality_en";
+        case "drillcore":
+          if (this.$i18n.locale === "ee") return "drillcore";
+          else return "drillcore_en";
+        case "drillcore_box":
+            return "number";
+        case "preparation":
+          return "preparation_number";
+        case "reference":
+          return "reference";
+        case "storage":
+          return "location";
+        default:
+          return "id";
       }
     },
 

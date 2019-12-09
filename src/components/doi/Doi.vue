@@ -7,7 +7,7 @@
       :message="
         $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
       "
-    ></spinner>
+    />
 
     <!-- REQUIRED INFO -->
     <v-card
@@ -41,72 +41,55 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.requiredFields" class="px-1 pt-1 pb-2">
+        <div v-show="block.requiredFields" class="pa-1">
           <!-- DOI, RESOURCE TYPE and RESOURCE -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`identifier`">{{ $t("doi.identifier") }}:</label>
-              <b-form-input
-                size="sm"
-                id="identifier"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="doi.identifier"
-                type="text"
+                :color="bodyActiveColor"
+                :label="$t('doi.identifier')"
                 :placeholder="
                   $route.meta.isEdit ? '' : $t('doi.identifierPlaceholder')
                 "
-                :disabled="true"
-              ></b-form-input>
+                disabled
+              />
             </v-col>
 
             <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`resource_type`"
-                >{{ $t("doi.resourceTypeGeneral") }}:</label
-              >
-              <vue-multiselect
-                v-model="doi.resource_type"
-                id="resource_type"
-                :options="autocomplete.resource_type"
-                track-by="id"
-                label="value"
-                :class="isNotEmpty(doi.resource_type) ? 'valid' : 'invalid'"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.value }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="doi.fossil"
+                :color="bodyActiveColor"
+                :items="autocomplete.resource_type"
+                :loading="autocomplete.loaders.resource_type"
+                item-text="value"
+                :label="$t('doi.resourceTypeGeneral')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`resource`">{{ $t("doi.resource") }}:</label>
-              <b-form-input
-                size="sm"
-                id="resource"
-                :state="isNotEmpty(doi.resource)"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="doi.resource"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.resource')"
+                use-state
+              />
             </v-col>
           </v-row>
 
           <!-- CREATORS, YEAR and PUBLISHER -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="px-1">
+            <v-col cols="12" md="4" class="pa-1">
               <div class="d-flex">
                 <div class="flex-fill">
-                  <label :for="`creators`">{{ $t("doi.creators") }}:</label>
-                  <b-form-input
-                    size="sm"
-                    id="creators"
-                    :state="isNotEmpty(doi.creators)"
+                  <input-wrapper
                     v-model="doi.creators"
-                    type="text"
-                  ></b-form-input>
+                    :color="bodyActiveColor"
+                    :label="$t('doi.creators')"
+                    use-state
+                  />
                 </div>
 
                 <div
@@ -125,40 +108,34 @@
               </div>
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`publication_year`">{{ $t("doi.year") }}:</label>
-              <b-form-input
-                size="sm"
-                id="publication_year"
-                :state="isNotEmpty(doi.publication_year)"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="doi.publication_year"
-                type="number"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.year')"
+                use-state
+              />
             </v-col>
 
-            <v-col cols="12" md="4" class="px-1">
-              <label :for="`publisher`">{{ $t("doi.publisher") }}:</label>
-              <b-form-input
-                size="sm"
-                id="publisher"
-                :state="isNotEmpty(doi.publisher)"
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
                 v-model="doi.publisher"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.publisher')"
+                use-state
+              />
             </v-col>
           </v-row>
 
           <!-- TITLE -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`title`">{{ $t("doi.title") }}:</label>
-              <b-form-input
-                size="sm"
-                id="title"
-                :state="isNotEmpty(doi.title)"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="doi.title"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.title')"
+                use-state
+              />
             </v-col>
           </v-row>
         </div>
@@ -186,227 +163,152 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.info" class="px-1 pt-1 pb-2">
+        <div v-show="block.info" class="pa-1">
           <!-- TITLE ALTERNATIVE -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`title_alternative`"
-                >{{ $t("doi.title_alternative") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="title_alternative"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
                 v-model="doi.title_alternative"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.title_alternative')"
+              />
             </v-col>
           </v-row>
 
           <!-- TITLE TRANSLATED and TITLE TRANSLATED LANGUAGE -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`title_translated`"
-                >{{ $t("doi.title_translated") }}:</label
-              >
-              <b-form-input
-                size="sm"
-                id="title_translated"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="doi.title_translated"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.title_translated')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`title_translated_language`"
-                >{{ $t("doi.title_translated_language") }}:</label
-              >
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="doi.title_translated_language"
-                id="title_translated_language"
-                :options="autocomplete.language"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{
-                    $i18n.locale === "ee" ? option.value : option.value_en
-                  }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.language"
+                :loading="autocomplete.loaders.language"
+                :item-text="commonLabel"
+                :label="$t('doi.title_translated_language')"
+              />
             </v-col>
           </v-row>
 
           <!-- LANGUAGE, VERSION, FORMATS and SIZES -->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`language`">{{ $t("doi.language") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
                 v-model="doi.language"
-                id="language"
-                :options="autocomplete.language"
-                track-by="id"
-                :label="commonLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[commonLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.language"
+                :loading="autocomplete.loaders.language"
+                :item-text="commonLabel"
+                :label="$t('doi.language')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`version`">{{ $t("doi.version") }}:</label>
-              <b-form-input
-                size="sm"
-                id="version"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="doi.version"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.version')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`formats`">{{ $t("doi.formats") }}:</label>
-              <b-form-input
-                size="sm"
-                id="formats"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="doi.formats"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.formats')"
+              />
             </v-col>
 
-            <v-col cols="12" md="3" class="px-1">
-              <label :for="`sizes`">{{ $t("doi.sizes") }}:</label>
-              <b-form-input
-                size="sm"
-                id="sizes"
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
                 v-model="doi.sizes"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.sizes')"
+              />
             </v-col>
           </v-row>
 
           <!-- SUBJECTS and OWNER (agent)-->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`subjects`">{{ $t("doi.subjects") }}:</label>
-              <b-form-input
-                size="sm"
-                id="subjects"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-model="doi.subjects"
-                type="text"
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.subjects')"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`agent`">{{ $t("doi.copyright_agent") }}:</label>
-              <vue-multiselect
-                id="agent"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="doi.owner"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
-                :options="autocomplete.agent"
-                @search-change="autocompleteAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('doi.copyright_agent')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteAgentSearch"
+              />
             </v-col>
           </v-row>
 
           <!-- ABSTRACT -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`abstract`">{{ $t("doi.abstract") }}:</label>
-              <b-form-textarea
-                id="abstract"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="doi.abstract"
-                type="text"
-                :rows="1"
-                :max-rows="20"
-                size="sm"
-              ></b-form-textarea>
+                :color="bodyActiveColor"
+                :label="$t('doi.abstract')"
+              />
             </v-col>
           </v-row>
 
           <!-- METHODS -->
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`methods`">{{ $t("doi.methods") }}:</label>
-              <b-form-textarea
-                id="methods"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="doi.methods"
-                type="text"
-                :rows="1"
-                :max-rows="20"
-                size="sm"
-              ></b-form-textarea>
+                :color="bodyActiveColor"
+                :label="$t('doi.methods')"
+              />
             </v-col>
           </v-row>
 
           <!-- COPYRIGHT_AGENT (copyright) and LICENCE -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`copyright_agent`">{{ $t("doi.copyright") }}:</label>
-              <vue-multiselect
-                id="copyright_agent"
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="doi.copyright_agent"
-                label="agent"
-                track-by="id"
-                :placeholder="$t('add.inputs.autocomplete')"
+                :color="bodyActiveColor"
+                :items="autocomplete.copyright_agent"
                 :loading="autocomplete.loaders.copyright_agent"
-                :options="autocomplete.copyright_agent"
-                @search-change="autocompleteCopyrightAgentSearch"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.agent }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                item-text="agent"
+                :label="$t('doi.copyright')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteCopyrightAgentSearch"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label :for="`licence`">{{ $t("doi.licence") }}:</label>
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="doi.licence"
-                id="licence"
-                :options="autocomplete.licence"
-                track-by="id"
-                :label="licenceLabel"
-                :placeholder="$t('add.inputs.autocomplete')"
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option[licenceLabel] }}</strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :color="bodyActiveColor"
+                :items="autocomplete.licence"
+                :loading="autocomplete.loaders.licence"
+                :item-text="licenceLabel"
+                :label="$t('doi.licence')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -441,95 +343,37 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.referenceAndDataset" class="px-1 pt-1 pb-2">
+        <div v-show="block.referenceAndDataset" class="pa-1">
           <!-- REFERENCE and DATASET -->
           <v-row no-gutters>
-            <v-col cols="11" md="5" class="px-1">
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="relatedData.reference"
-                id="reference"
-                track-by="id"
-                :options="autocomplete.reference"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :close-on-select="true"
-                @search-change="autocompleteDoiReferenceSearch"
-                :custom-label="customLabelForReference"
+                :color="bodyActiveColor"
+                :items="autocomplete.reference"
                 :loading="autocomplete.loaders.reference"
-                placeholder="reference search..."
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong
-                    >{{ option.id + " - (" + option.reference + ")" }}
-                  </strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
+                :item-text="customLabelForReference"
+                :label="$t('doi.resourceTypeGeneral')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteDoiReferenceSearch"
+              />
             </v-col>
 
-            <v-col cols="1" class="px-1">
-              <v-btn
-                v-if="relatedData.reference !== null"
-                icon
-                @click="
-                  windowOpenNewTab(
-                    'reference',
-                    '/reference/' + relatedData.reference.id
-                  )
-                "
-                :color="bodyActiveColor"
-              >
-                <v-icon>fas fa-link</v-icon>
-              </v-btn>
-            </v-col>
-
-            <v-col cols="11" md="5" class="px-1">
-              <vue-multiselect
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
                 v-model="relatedData.dataset"
-                id="dataset"
-                track-by="id"
-                :options="autocomplete.dataset"
-                :internal-search="false"
-                :preserve-search="true"
-                :clear-on-select="false"
-                :close-on-select="true"
-                @search-change="autocompleteDatasetSearch"
-                :custom-label="customLabelForDataset"
-                :loading="autocomplete.loaders.dataset"
-                placeholder="dataset search..."
-                :show-labels="false"
-              >
-                <template slot="singleLabel" slot-scope="{ option }">
-                  <strong>{{ option.id }} - (</strong>
-                  <strong
-                    v-translate="{ et: option.name, en: option.name_en }"
-                  ></strong>
-                  <strong>) </strong>
-                </template>
-                <template slot="noResult"
-                  ><b>{{ $t("messages.inputNoResults") }}</b></template
-                >
-              </vue-multiselect>
-            </v-col>
-
-            <v-col cols="1" class="px-1">
-              <v-btn
-                v-if="relatedData.dataset !== null"
-                icon
-                @click="
-                  openGeoInNewWindow({
-                    object: 'dataset',
-                    id: relatedData.dataset.id
-                  })
-                "
                 :color="bodyActiveColor"
-              >
-                <v-icon>fas fa-link</v-icon>
-              </v-btn>
+                :items="autocomplete.dataset"
+                :loading="autocomplete.loaders.dataset"
+                :item-text="customLabelForDataset"
+                :label="$t('doi.resourceTypeGeneral')"
+                is-link
+                route-object="dataset"
+                is-searchable
+                v-on:search:items="autocompleteDatasetSearch"
+              />
             </v-col>
           </v-row>
         </div>
@@ -564,18 +408,14 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.description" class="px-1 pt-1 pb-2">
+        <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <label :for="`remarks`">{{ $t("doi.remarks") }}:</label>
-              <b-form-textarea
-                id="remarks"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
                 v-model="doi.remarks"
-                type="text"
-                :rows="1"
-                :max-rows="20"
-                size="sm"
-              ></b-form-textarea>
+                :color="bodyActiveColor"
+                :label="$t('doi.remarks')"
+              />
             </v-col>
           </v-row>
         </div>
@@ -738,52 +578,44 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.datacite" class="px-1 pt-1 pb-2">
+        <div v-show="block.datacite" class="pa-1">
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="px-1">
-              <label class="mt-0" :for="`datacite_created`"
-                >{{ $t("doi.dataciteCreated") }}:</label
-              >
-              <b-form-input
-                size="sm"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-if="doi.datacite_created"
-                id="datacite_created"
                 :value="
                   doi.datacite_created | moment('ddd, MMM Do YYYY, HH:mm:ss')
                 "
-                type="text"
-                disabled
-              ></b-form-input>
-              <b-form-input
-                size="sm"
+                :color="bodyActiveColor"
+                :label="$t('doi.dataciteCreated')"
+                :readonly="true"
+              />
+              <input-wrapper
                 v-else
                 v-model="doi.datacite_created"
-                type="text"
-                disabled
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.dataciteCreated')"
+                :readonly="true"
+              />
             </v-col>
 
-            <v-col cols="12" md="6" class="px-1">
-              <label class="mt-0" :for="`datacite_updated`"
-                >{{ $t("doi.dataciteUpdated") }}:</label
-              >
-              <b-form-input
-                size="sm"
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
                 v-if="doi.datacite_updated"
-                id="datacite_updated"
                 :value="
                   doi.datacite_updated | moment('ddd, MMM Do YYYY, HH:mm:ss')
                 "
-                type="text"
-                disabled
-              ></b-form-input>
-              <b-form-input
-                size="sm"
+                :color="bodyActiveColor"
+                :label="$t('doi.dataciteUpdated')"
+                :readonly="true"
+              />
+              <input-wrapper
                 v-else
                 v-model="doi.datacite_updated"
-                type="text"
-                disabled
-              ></b-form-input>
+                :color="bodyActiveColor"
+                :label="$t('doi.dataciteUpdated')"
+                :readonly="true"
+              />
             </v-col>
           </v-row>
         </div>
@@ -793,14 +625,12 @@
     <!-- IS_PRIVATE -->
     <v-row no-gutters class="mt-2">
       <v-col>
-        <v-checkbox
+        <checkbox-wrapper
           v-model="doi.is_private"
-          id="is_private"
-          :label="$t('doi.private')"
-          hide-details
           :color="bodyActiveColor"
-          class="mt-0 vuetify-checkbox"
-        ></v-checkbox>
+          :label="$t('common.is_private')"
+          @change="doi.is_private = !doi.is_private"
+        />
       </v-col>
     </v-row>
 
@@ -891,9 +721,17 @@ import {
 } from "../../assets/js/iziToast/iziToast";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 
 export default {
   components: {
+    CheckboxWrapper,
+    TextareaWrapper,
+    AutocompleteWrapper,
+    InputWrapper,
     DoiDate,
     DoiGeolocation,
     DoiRelatedIdentifier,
@@ -1434,16 +1272,22 @@ export default {
         value: obj.title_translated_language__value,
         value_en: obj.title_translated_language__value_en
       };
-      this.doi.owner = { id: obj.owner, agent: obj.owner__agent };
+      if (this.isNotEmpty(obj.owner)) {
+        this.doi.owner = { id: obj.owner, agent: obj.owner__agent };
+        this.autocomplete.agent.push(this.doi.owner);
+      }
       this.doi.language = {
         id: obj.language,
         value: obj.language__value,
         value_en: obj.language__value_en
       };
-      this.doi.copyright_agent = {
-        id: obj.copyright_agent,
-        agent: obj.copyright_agent__agent
-      };
+      if (this.isNotEmpty(obj.copyright_agent)) {
+        this.doi.copyright_agent = {
+          id: obj.copyright_agent,
+          agent: obj.copyright_agent__agent
+        };
+        this.autocomplete.copyright_agent.push(this.doi.copyright_agent);
+      }
       this.doi.licence = {
         id: obj.licence,
         licence: obj.licence__licence,
@@ -2190,21 +2034,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-
-.link:hover {
-  cursor: pointer;
-}
-
-@media (min-width: 768px) {
-  .px-15px {
-    padding-left: 30px;
-    padding-right: 30px;
-  }
-}
-</style>
+<style scoped></style>
