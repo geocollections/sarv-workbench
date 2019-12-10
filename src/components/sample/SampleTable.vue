@@ -95,7 +95,7 @@
         target="GeocollectionsWindow"
         icon
       >
-        <v-icon>far fa-eye</v-icon>
+        <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
 
