@@ -247,6 +247,12 @@ export function fetchRecentImages(currentUserId) {
   );
 }
 
+export function fetchRecentFiles(currentUserId, paginateBy) {
+  return fetch(
+    `attachment/?author_id=${currentUserId}&order_by=-id&paginate_by=${paginateBy}`
+  );
+}
+
 /*************************
  ***  ATTACHMENTS END  ***
  *************************/

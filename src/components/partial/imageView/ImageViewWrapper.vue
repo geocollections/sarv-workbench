@@ -1,24 +1,6 @@
 <template>
-  <div class="attachment-image-view mx-3 mb-3" v-if="data.length > 0">
-    <v-row>
-      <v-col class="vuetify-switch">
-        <v-switch
-          inset
-          color="blue"
-          v-model="isFancyImageList"
-          :label="
-            isFancyImageList
-              ? $t('attachments.fancyView')
-              : $t('attachments.regularView')
-          "
-          class="mx-3 mt-0 mb-2"
-          hide-details
-        ></v-switch>
-      </v-col>
-    </v-row>
-
-    <!-- FANCY VIEW -->
-    <v-row v-if="isFancyImageList" class="mx-0">
+  <div class="image-view-wrapper mx-3" v-if="data && data.length > 0">
+    <v-row class="mx-0">
       <v-col
         v-for="(image, index) in data"
         :key="index"
@@ -32,12 +14,12 @@
           <template v-slot:activator="{ on }">
             <v-card
               flat
-              v-on="on"
               class="d-flex image-hover"
+              v-on="on"
               :class="bodyColor.split('n-')[0] + 'n-3'"
               hover
-              :to="{ path: '/attachment/' + image.id }"
-              :title="$t('editAttachment.editMessage')"
+              :title="$t(editMessage)"
+              :to="{ path: `/${object}/${image[idField]}` }"
             >
               <v-img
                 max-height="400"
@@ -55,7 +37,7 @@
                     <v-progress-circular
                       indeterminate
                       color="grey lighten-5"
-                    ></v-progress-circular>
+                    />
                   </v-row>
                 </template>
               </v-img>
@@ -74,7 +56,7 @@
             </v-card>
           </template>
 
-          <span>
+          <span v-if="object === 'attachment'">
             <b>ID:</b> {{ image.id }}<br />
             <span v-if="image.date_created || image.date_created_free">
               <b>Date:</b> {{ image.date_created }} |
@@ -97,70 +79,33 @@
               <br />
             </span>
           </span>
+
+          <span v-else-if="object === 'specimen'">
+            <span
+              v-if="
+                image.specimen__database__acronym && image.specimen__specimen_id
+              "
+            >
+              {{ image.specimen__database__acronym }}
+              {{ image.specimen__specimen_id }}
+            </span>
+          </span>
         </v-tooltip>
       </v-col>
     </v-row>
-
-    <!-- OLD VIEW -->
-    <div v-if="!isFancyImageList" class="row mb-3 mx-3">
-      <div class="preview" v-for="(entity, index) in data" :key="index">
-        <div :id="'icon-' + index" class="">
-          <router-link
-            v-if="entity.uuid_filename !== null"
-            :title="$t('edit.editMessage')"
-            :to="{ path: '/attachment/' + entity.id }"
-          >
-            <img
-              class="image-preview"
-              v-if="
-                entity.uuid_filename.endsWith('jpg') ||
-                  entity.uuid_filename.endsWith('jpeg') ||
-                  entity.uuid_filename.endsWith('png')
-              "
-              :src="composeFileUrl(entity.uuid_filename)"
-            />
-            <i v-else class="ico far fa-file fa-6x" />
-          </router-link>
-
-          <router-link
-            :title="$t('edit.editMessage')"
-            :to="{ path: '/attachment/' + entity.id }"
-          >
-            <i
-              v-if="entity.uuid_filename === null"
-              class=" far fa-file fa-5x"
-            />
-          </router-link>
-        </div>
-
-        <b-tooltip :target="'icon-' + index" placement="auto">
-          <b>ID:</b> {{ entity.id }}<br />
-          <span v-if="entity.date_created || entity.date_created_free"
-            ><b>Date:</b> {{ entity.date_created }} |
-            {{ entity.date_created_free }}<br
-          /></span>
-          <span v-if="entity.author__agent"
-            ><b>Author:</b> {{ entity.author__agent }}<br
-          /></span>
-          <span v-if="entity.image_number"
-            ><b>Photo:</b> {{ entity.image_number }}<br
-          /></span>
-          <span v-if="entity.original_filename"
-            ><b>Filename:</b> {{ entity.original_filename }}<br
-          /></span>
-        </b-tooltip>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
-import formManipulation from "../../mixins/formManipulation";
-
 export default {
+  name: "ImageViewWrapper",
   props: {
     data: {
       type: Array
+    },
+    object: {
+      type: String,
+      default: "attachment"
     },
     bodyActiveColor: {
       type: String,
@@ -173,28 +118,15 @@ export default {
       default: "grey lighten-4"
     }
   },
-  name: "AttachmentListView",
-  mixins: [formManipulation],
-  data() {
-    return {
-      isFancyImageList: true
-    };
-  },
   computed: {
-    isAudioFile() {
-      return !!(
-        this.data.attachment_format__value &&
-        this.data.attachment_format__value.includes("audio")
-      );
+    editMessage() {
+      if (this.object === "specimen") return "editSpecimen.editMessage";
+      else return "editAttachment.editMessage";
     },
 
-    isVideoFile() {
-      if (this.data.attachment_format__value) {
-        return !!this.data.attachment_format__value.includes("video");
-      } else {
-        // As of 18.09.2019 total of 1508 attachments are without attachment_format__value and only 1 is webm
-        return !!this.data.uuid_filename.split(".")[1].includes("webm");
-      }
+    idField() {
+      if (this.object === "specimen") return "specimen_id";
+      else return "id";
     }
   },
   methods: {
@@ -262,46 +194,5 @@ export default {
 <style scoped>
 .image-hover:hover {
   opacity: 0.7;
-}
-
-@media (max-width: 575.98px) {
-  .image-preview {
-    max-height: 150px;
-    max-width: 150px;
-  }
-
-  .custom-size {
-    max-height: 130px;
-    max-width: 130px;
-  }
-}
-
-@media (min-width: 576px) {
-  .image-preview {
-    max-height: 200px;
-    max-width: 200px;
-  }
-
-  .custom-size {
-    max-height: 200px;
-    max-width: 200px;
-  }
-}
-
-.image-preview {
-  padding: 0.25rem;
-  background-color: #fff;
-  border: 1px solid #dee2e6;
-  border-radius: 0.25rem;
-  padding: 0.2rem;
-  margin: 0.2rem 0.4rem;
-  max-height: 120px;
-}
-
-.preview .ico {
-  padding: 0.2rem;
-  margin: 0.2rem 0.4rem;
-  max-height: 120px;
-  color: #999;
 }
 </style>

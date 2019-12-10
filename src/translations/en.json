@@ -159,6 +159,7 @@
     "collapseLibrary": "Library",
     "collapseFindFast":"Find fast",
     "help": "Help",
+    "files": "Recent files",
     "sitesMap": "Recently visited/inserted objects",
     "buttons": {
       "photoArchive": "Add photo",

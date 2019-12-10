@@ -61,6 +61,86 @@
       </v-col>
     </v-row>
 
+    <!-- IMAGES/FILES -->
+    <v-row class="py-6">
+      <v-col class="pb-0">
+        <v-card
+          :color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
+          elevation="4"
+        >
+          <v-card-title class="pt-2 pb-1">
+            <div
+              class="card-title--clickable"
+              @click="block.files = !block.files"
+            >
+              <span>{{ $t("frontPage.files") }}</span>
+              <v-icon right color="teal lighten-1">far fa-folder-open</v-icon>
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn
+              icon
+              @click="block.files = !block.files"
+              :color="appSettings.bodyActiveColor"
+            >
+              <v-icon>{{
+                block.files ? "fas fa-angle-up" : "fas fa-angle-down"
+              }}</v-icon>
+            </v-btn>
+          </v-card-title>
+
+          <transition enter-active-class="animated zoomIn faster">
+            <div v-show="block.files">
+              <v-row no-gutters class="mx-3">
+                <v-col cols="12" class="pa-1">
+                  <v-radio-group
+                    v-model="recentFilesPaginateBy"
+                    row
+                    dense
+                    hide-details
+                    label="Number of recent files: "
+                    class="mt-0 radio-buttons"
+                  >
+                    <v-radio
+                      label="6"
+                      :value="6"
+                      :color="appSettings.bodyActiveColor"
+                    />
+                    <v-radio
+                      label="12"
+                      :value="12"
+                      :color="appSettings.bodyActiveColor"
+                    />
+                    <v-radio
+                      label="24"
+                      :value="24"
+                      :color="appSettings.bodyActiveColor"
+                    />
+                    <v-radio
+                      label="36"
+                      :value="36"
+                      :color="appSettings.bodyActiveColor"
+                    />
+                  </v-radio-group>
+                </v-col>
+              </v-row>
+
+              <image-view-wrapper
+                :data="recentFiles"
+                :body-active-color="appSettings.bodyActiveColor"
+                :body-color="appSettings.bodyColor"
+              />
+            </div>
+          </transition>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <recent-activity
+      :user="currentUser.user"
+      :body-color="appSettings.bodyColor"
+      :body-active-color="appSettings.bodyActiveColor"
+    />
+
     <!-- HELP -->
     <v-row id="block-help">
       <v-col class="py-6">
@@ -119,12 +199,6 @@
         </v-card>
       </v-col>
     </v-row>
-
-    <recent-activity
-      :user="currentUser.user"
-      :body-color="appSettings.bodyColor"
-      :body-active-color="appSettings.bodyActiveColor"
-    ></recent-activity>
   </div>
 </template>
 
@@ -133,9 +207,12 @@ import RecentActivity from "./RecentActivity";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import SitesMap from "./SitesMap";
+import ImageViewWrapper from "../partial/imageView/ImageViewWrapper";
+import { fetchRecentFiles } from "../../assets/js/api/apiCalls";
 
 export default {
   components: {
+    ImageViewWrapper,
     RecentActivity,
     SitesMap
   },
@@ -148,14 +225,34 @@ export default {
     };
   },
 
-  data() {
-    return {
-      block: { map: true, help: true }
-    };
-  },
+  data: () => ({
+    block: { map: true, help: true, files: true },
+    recentFilesPaginateBy: 12,
+    recentFiles: null
+  }),
 
   computed: {
     ...mapState(["currentUser", "appSettings"])
+  },
+
+  watch: {
+    recentFilesPaginateBy: {
+      handler(newVal) {
+        this.getRecentFiles(newVal);
+      },
+      immediate: true
+    }
+  },
+
+  methods: {
+    getRecentFiles(paginateBy) {
+      fetchRecentFiles(this.currentUser.id, paginateBy).then(response => {
+        if (response.status === 200) {
+          if (response.body.count > 0) this.recentFiles = response.body.results;
+          else this.recentFiles = [];
+        }
+      });
+    }
   }
 };
 </script>
@@ -168,5 +265,9 @@ export default {
 .card-title--clickable:hover {
   cursor: pointer;
   opacity: 0.8;
+}
+
+.radio-buttons >>> label {
+  margin-bottom: 0;
 }
 </style>

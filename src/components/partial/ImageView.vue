@@ -1,18 +1,12 @@
 <template>
-  <div class="list-view">
+  <div class="image-view">
     <div class="row">
       <div class="col">
-        <attachment-image-view
-          v-if="module === 'attachment'"
+        <image-view-wrapper
+          :object="module"
           :data="data"
           :body-active-color="bodyActiveColor"
           :body-color="bodyColor"
-        />
-
-        <specimen-image-view
-          v-if="module === 'specimen'"
-          :data="data"
-          :body-active-color="bodyActiveColor"
         />
       </div>
     </div>
@@ -20,15 +14,11 @@
 </template>
 
 <script>
-import AttachmentImageView from "../attachment/AttachmentImageView";
-import SpecimenImageView from "../specimen/SpecimenImageView";
+import ImageViewWrapper from "./imageView/ImageViewWrapper";
 
 export default {
   name: "ImageView",
-  components: {
-    AttachmentImageView,
-    SpecimenImageView
-  },
+  components: { ImageViewWrapper },
   props: ["module", "data", "bodyActiveColor", "bodyColor"]
 };
 </script>
