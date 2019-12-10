@@ -65,7 +65,7 @@
     <v-row class="py-6">
       <v-col class="pb-0">
         <v-card
-          :color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
+          :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
           elevation="4"
         >
           <v-card-title class="pt-2 pb-1">
@@ -128,6 +128,7 @@
                 :data="recentFiles"
                 :body-active-color="appSettings.bodyActiveColor"
                 :body-color="appSettings.bodyColor"
+                clear-item-background
               />
             </div>
           </transition>

@@ -16,7 +16,7 @@
               flat
               class="d-flex image-hover"
               v-on="on"
-              :class="bodyColor.split('n-')[0] + 'n-3'"
+              :class="clearItemBackground ? bodyColor.split('n-')[0] + 'n-5' : bodyColor.split('n-')[0] + 'n-3'"
               hover
               :title="$t(editMessage)"
               :to="{ path: `/${object}/${image[idField]}` }"
@@ -116,7 +116,8 @@ export default {
       type: String,
       required: false,
       default: "grey lighten-4"
-    }
+    },
+    clearItemBackground: Boolean
   },
   computed: {
     editMessage() {

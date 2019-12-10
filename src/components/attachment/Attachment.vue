@@ -54,6 +54,24 @@
 
         <transition>
           <div v-show="block.fileInput" class="pa-1">
+
+            <!-- Todo: Implement new file upload component -->
+            <!-- NEW -->
+            <file-upload
+              v-if="false"
+              show-existing
+              :record-options="recordOptions"
+              :record-image="recordImage"
+              :record-video="recordVideo"
+              :record-audio="recordAudio"
+              accept-multiple
+              :acceptable-format="fileInputFormat"
+              v-on:file-uploaded="addFiles"
+              v-on:metadata-loaded="updateFields"
+              v-on:files-cleared="clearUploadedFiles"
+            />
+
+            <!-- OLD -->
             <multimedia-component
               :record-options="recordOptions"
               :record-image="recordImage"
@@ -2662,11 +2680,13 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import SelectWrapper from "../partial/inputs/SelectWrapper";
+import FileUpload from "../partial/fileUpload/FileUpload";
 
 export default {
   name: "AttachmentNew",
 
   components: {
+    FileUpload,
     SelectWrapper,
     TextareaWrapper,
     DateWrapper,
