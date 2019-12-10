@@ -1039,8 +1039,13 @@ const formManipulation = {
       );
     },
 
-    getCurrentFormattedDate() {
-      return moment().format("YYYY-MM-DD hh:mm:ss");
+    isValidDate(date) {
+      return moment(date, "YYYY-MM-DD", true).isValid()
+    },
+
+    getCurrentFormattedDate(format) {
+      if (format) return moment().format(format);
+      else return moment().format("YYYY-MM-DD hh:mm:ss");
     }
   },
 

@@ -1,10 +1,10 @@
 <template>
   <div class="lang-buttons pa-2">
     <v-btn text dark @click="changeLang('ee')" large class="font-weight-bold">
-      EST &nbsp;<span class="flag flag-ee flag-squared flag-circle"></span>
+      EST <span class="flag flag-ee flag-squared flag-circle ml-1"></span>
     </v-btn>
     <v-btn text dark @click="changeLang('en')" large class="font-weight-bold">
-      ENG &nbsp;<span class="flag flag-en flag-squared flag-circle"></span>
+      ENG<span class="flag flag-en flag-squared flag-circle ml-1"></span>
     </v-btn>
   </div>
 </template>

@@ -596,20 +596,15 @@
                 </v-col>
 
                 <v-col cols="12" md="4" class="pa-1">
-                  <label :for="`stars`">{{ $t("attachment.stars") }}:</label>
-                  <b-form-select v-model="attachment.stars" size="sm">
-                    <option :value="5">{{ $t("main.rating5") }}</option>
-                    <option :value="4">{{ $t("main.rating4") }}</option>
-                    <option :value="3">{{ $t("main.rating3") }}</option>
-                    <option :value="2">{{ $t("main.rating2") }}</option>
-                    <option :value="1">{{ $t("main.rating1") }}</option>
-                    <option :value="0">{{ $t("main.rating0") }}</option>
-                    <option :value="-1">{{ $t("main.rating-1") }}</option>
-                    <option :value="-2">{{ $t("main.rating-2") }}</option>
-                    <option :value="-3">{{ $t("main.rating-3") }}</option>
-                    <option :value="-4">{{ $t("main.rating-4") }}</option>
-                    <option :value="-5">{{ $t("main.rating-5") }}</option>
-                  </b-form-select>
+                  <select-wrapper
+                    v-model="attachment.stars"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.stars')"
+                    :items="ratings"
+                    item-text="value"
+                    translation-prefix="main.rating"
+                    :clearable="false"
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -917,20 +912,15 @@
                 </v-col>
 
                 <v-col cols="12" md="4" class="pa-1">
-                  <label :for="`stars`">{{ $t("attachment.stars") }}:</label>
-                  <b-form-select v-model="attachment.stars" size="sm">
-                    <option :value="5">{{ $t("main.rating5") }}</option>
-                    <option :value="4">{{ $t("main.rating4") }}</option>
-                    <option :value="3">{{ $t("main.rating3") }}</option>
-                    <option :value="2">{{ $t("main.rating2") }}</option>
-                    <option :value="1">{{ $t("main.rating1") }}</option>
-                    <option :value="0">{{ $t("main.rating0") }}</option>
-                    <option :value="-1">{{ $t("main.rating-1") }}</option>
-                    <option :value="-2">{{ $t("main.rating-2") }}</option>
-                    <option :value="-3">{{ $t("main.rating-3") }}</option>
-                    <option :value="-4">{{ $t("main.rating-4") }}</option>
-                    <option :value="-5">{{ $t("main.rating-5") }}</option>
-                  </b-form-select>
+                  <select-wrapper
+                    v-model="attachment.stars"
+                    :color="bodyActiveColor"
+                    :label="$t('attachment.stars')"
+                    :items="ratings"
+                    item-text="value"
+                    translation-prefix="main.rating"
+                    :clearable="false"
+                  />
                 </v-col>
               </v-row>
             </div>
@@ -1402,8 +1392,6 @@
             </v-btn>
           </v-card-title>
 
-          {{selectedRelatedTable}}
-
           <transition>
             <div v-show="block.relatedData" class="pa-1">
               <v-row no-gutters>
@@ -1414,31 +1402,8 @@
                     :label="$t('attachment.relatedData')"
                     :items="relatedTabs"
                     item-text="name_short"
+                    translation-prefix="attachment.relatedTables."
                   />
-                  <label :for="`related_data`"
-                    >{{ $t("attachment.relatedData") }}:</label
-                  >
-                  <b-form-select
-                    size="sm"
-                    id="related_data"
-                    v-model="selectedRelatedTable"
-                    class="mb-3"
-                  >
-                    <option :value="null">{{
-                      $t("attachment.relatedDataDefault")
-                    }}</option>
-                    <option
-                      v-for="tab in relatedTabs"
-                      :key="tab.name"
-                      :value="tab.name.split('__')[1]"
-                    >
-                      {{
-                        $t(
-                          "attachment.relatedTables." + tab.name.split("__")[1]
-                        )
-                      }}
-                    </option>
-                  </b-form-select>
                 </v-col>
 
                 <v-col
@@ -1462,38 +1427,6 @@
                     :multiple="true"
                     v-on:chip:close="relatedData['attach_link__' + selectedRelatedTable].splice(relatedData['attach_link__' + selectedRelatedTable].indexOf($event), 1)"
                   />
-                  <label :for="selectedRelatedTable"
-                    >{{
-                      $t("attachment.relatedTables." + selectedRelatedTable)
-                    }}:</label
-                  >
-                  <vue-multiselect
-                    v-model="
-                      relatedData['attach_link__' + selectedRelatedTable]
-                    "
-                    :id="selectedRelatedTable"
-                    :custom-label="customLabelForRelatedData"
-                    track-by="id"
-                    :multiple="true"
-                    :placeholder="$t('add.inputs.autocomplete')"
-                    :loading="
-                      autocomplete.loaders[
-                        'attach_link__' + selectedRelatedTable
-                      ]
-                    "
-                    :options="
-                      autocomplete['attach_link__' + selectedRelatedTable]
-                    "
-                    @search-change="autocompleteRelatedDataSearch"
-                    :internal-search="false"
-                    :preserve-search="true"
-                    :close-on-select="false"
-                    :show-labels="false"
-                  >
-                    <template slot="noResult"
-                      ><b>{{ $t("messages.inputNoResults") }}</b></template
-                    >
-                  </vue-multiselect>
                 </v-col>
               </v-row>
 
@@ -2597,16 +2530,27 @@
             <!-- CHANGE TYPE -->
             <v-row no-gutters>
               <v-col cols="12" md="6" class="pa-1">
-                <label :for="`specimen_image_attachment`">
-                  <span>{{ $t("attachment.changeType") }}: </span>
-                  <span
-                    v-if="
+                <select-wrapper
+                  v-model="attachment.specimen_image_attachment"
+                  :color="bodyActiveColor"
+                  :label="$t('attachment.changeType')"
+                  :items="computedChangeType"
+                  item-text="name"
+                  item-value="value"
+                  translation-prefix="attachment."
+                  :clearable="false"
+                />
+              </v-col>
+
+              <v-col cols="12" md="6" class="pa-1 align-self-center">
+                <span class="subtitle-1"
+                  v-if="
                       currentAttachmentType !==
                         getAttachmentTypeAsString(
                           attachment.specimen_image_attachment
                         )
                     "
-                  >
+                >
                     <b>{{ $t("attachment." + currentAttachmentType) }} </b>
                     <i class="fas fa-long-arrow-alt-right"></i>
                     <b>
@@ -2620,34 +2564,6 @@
                       }}</b
                     >
                   </span>
-                </label>
-                <b-form-select
-                  size="sm"
-                  id="specimen_image_attachment"
-                  v-model="attachment.specimen_image_attachment"
-                  class="mb-3"
-                >
-                  <option
-                    :value="2"
-                    :disabled="!isValidToChangeTo('photoArchive')"
-                    >{{ $t("attachment.photoArchive") }}</option
-                  >
-                  <option
-                    :value="1"
-                    :disabled="!isValidToChangeTo('specimenImage')"
-                    >{{ $t("attachment.specimenImage") }}</option
-                  >
-                  <option
-                    :value="3"
-                    :disabled="!isValidToChangeTo('otherFile')"
-                    >{{ $t("attachment.otherFiles") }}</option
-                  >
-                  <option
-                    :value="4"
-                    :disabled="!isValidToChangeTo('digitisedReference')"
-                    >{{ $t("attachment.digitisedReference") }}</option
-                  >
-                </b-form-select>
               </v-col>
             </v-row>
           </div>
@@ -2908,6 +2824,11 @@ export default {
             .includes("pdf");
         }
       } else return false;
+    },
+
+    computedChangeType() {
+      this.changeType.forEach(type => type.disabled = !this.isValidToChangeTo(type.name));
+      return this.changeType;
     }
   },
 
@@ -3053,6 +2974,25 @@ export default {
           { name: "attach_link__storage", name_short: "storage", iconClass: "fas fa-archive" },
           { name: "attach_link__project", name_short: "project", iconClass: "fas fa-project-diagram" },
           { name: "attach_link__site", name_short: "site", iconClass: "fas fa-map-pin" }
+        ],
+        ratings: [
+          { value: 5 },
+          { value: 4 },
+          { value: 3 },
+          { value: 2 },
+          { value: 1 },
+          { value: 0 },
+          { value: -1 },
+          { value: -2 },
+          { value: -3 },
+          { value: -4 },
+          { value: -5 }
+        ],
+        changeType: [
+          { name: "specimenImage", value: 1, disabled: false },
+          { name: "photoArchive", value: 2, disabled: false },
+          { name: "otherFile", value: 3, disabled: false },
+          { name: "digitisedReference", value: 4, disabled: false }
         ],
         searchHistory: "attachmentSearchHistory",
         activeTab: "specimen_identification",
@@ -3481,14 +3421,20 @@ export default {
         uploadableObject.author = uploadableObject.author.id;
       if (this.isNotEmpty(uploadableObject.copyright_agent))
         uploadableObject.copyright_agent = uploadableObject.copyright_agent.id;
-      if (this.isNotEmpty(uploadableObject.date_created))
-        uploadableObject.date_created = this.formatDateForUpload(
-          uploadableObject.date_created
-        );
-      if (this.isNotEmpty(uploadableObject.date_digitised))
-        uploadableObject.date_digitised = this.formatDateForUpload(
-          uploadableObject.date_digitised
-        );
+      if (this.isNotEmpty(uploadableObject.date_created)) {
+        if (!this.isValidDate(uploadableObject.date_created)) {
+          this.attachment.date_created = null;
+          delete uploadableObject.date_created;
+          toastInfo({ text: "Field 'Date created' is invalid" });
+        }
+      }
+      if (this.isNotEmpty(uploadableObject.date_digitised)) {
+        if (!this.isValidDate(uploadableObject.date_digitised)) {
+          this.attachment.date_digitised = null;
+          delete uploadableObject.date_digitised;
+          toastInfo({ text: "Field 'Date digitised' is invalid" });
+        }
+      }
       if (this.isNotEmpty(uploadableObject.image_type))
         uploadableObject.image_type = uploadableObject.image_type.id;
       if (this.isNotEmpty(uploadableObject.imageset))
@@ -3634,18 +3580,10 @@ export default {
       if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
         // DATE
         if (metadata.DateTimeOriginal) {
-          let formattedDate = this.$moment(
-            metadata.DateTimeOriginal,
-            "YYYY:MM:DD HH:mm:ss"
-          );
-          this.attachment.date_created = formattedDate.toDate();
+          this.attachment.date_created = this.$moment(metadata.DateTimeOriginal, "YYYY-MM-DD");
         } else if (metadata.DateTime) {
-          let formattedDate = this.$moment(
-            metadata.DateTime,
-            "YYYY:MM:DD HH:mm:ss"
-          );
-          this.attachment.date_created = formattedDate.toDate();
-        } else this.attachment.date_created = new Date();
+          this.attachment.date_created = this.$moment(metadata.DateTime, "YYYY-MM-DD");
+        } else this.attachment.date_created = this.getCurrentFormattedDate("YYYY-MM-DD");
 
         // DEVICE_TXT
         if (metadata.Model) this.attachment.device_txt = metadata.Model;
@@ -3880,7 +3818,7 @@ export default {
 
     setDefaultAttachmentFields() {
       let defaultFields = {
-        date_created: new Date(),
+        date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
         image_type: {
           id: 5,
           value: "digipilt",

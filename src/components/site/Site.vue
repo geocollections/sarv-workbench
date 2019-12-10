@@ -79,7 +79,6 @@
                 v-model="site.date_start"
                 :color="bodyActiveColor"
                 :label="$t('site.date_start_info')"
-                placeholder="tere"
               />
             </v-col>
 

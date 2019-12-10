@@ -5,10 +5,9 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
-          <v-card :color="appSettings.bodyColor.split('n-')[0] + 'n-5'">
+          <v-card :color="appSettings.bodyColor.split('n-')[0] + 'n-5'" elevation="8">
             <v-tabs
               v-model="tab"
-              class="elevation-6"
               grow
               :background-color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
               hide-slider
@@ -47,7 +46,7 @@
                     </v-alert>
                   </v-card-text>
 
-                  <v-card-actions class="justify-center">
+                  <v-card-actions class="justify-center pa-4 pt-2">
                     <v-btn
                       id="login-id"
                       @click="authenticate('id')"
@@ -55,9 +54,8 @@
                       color="green darken-3"
                       dark
                     >
-                      {{ $t("login.loginButton") }} &nbsp;<i
-                        class="fas fa-id-card"
-                      ></i>
+                      {{ $t("login.loginButton") }}
+                      <v-icon small right>fas fa-id-card</v-icon>
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -123,9 +121,8 @@
                           color="green darken-3"
                           :dark="valid"
                         >
-                          {{ $t("login.loginButton") }} &nbsp;<i
-                            class="fas fa-sign-in-alt"
-                          ></i>
+                          {{ $t("login.loginButton") }}
+                          <v-icon small right>fas fa-sign-in-alt</v-icon>
                         </v-btn>
                       </div>
                     </v-form>
