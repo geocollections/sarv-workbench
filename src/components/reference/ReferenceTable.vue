@@ -61,7 +61,7 @@
         target="GeocollectionsWindow"
         icon
       >
-        <v-icon>fas fa-external-link-alt</v-icon>
+        <v-icon small>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
 

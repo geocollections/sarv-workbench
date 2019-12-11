@@ -16,7 +16,6 @@
         </label>
 
         <v-file-input
-          v-model="files"
           id="file-input"
           class="d-none"
           :multiple="acceptMultiple"
@@ -40,6 +39,7 @@
           :color="appSettings.bodyActiveColor"
           :dark="appSettings.bodyActiveColorDark"
           :title="$t('add.inputs.photoInput')"
+          @click="trigger('photoUpload')"
         >
           <v-icon
             :left="$vuetify.breakpoint.lgAndUp"
@@ -50,6 +50,14 @@
             $t("add.inputs.photoInput")
           }}</span>
         </v-btn>
+
+        <v-file-input
+          ref="photoUpload"
+          class="d-none"
+          :multiple="acceptMultiple"
+          accept="image/*;capture=camera"
+          @change="addFile"
+        />
       </div>
 
       <div class="ma-1" v-if="recordOptions && recordVideo">
@@ -59,6 +67,7 @@
           :color="appSettings.bodyActiveColor"
           :dark="appSettings.bodyActiveColorDark"
           :title="$t('add.inputs.videoInput')"
+          @click="trigger('videoUpload')"
         >
           <v-icon
             :left="$vuetify.breakpoint.lgAndUp"
@@ -69,6 +78,14 @@
             $t("add.inputs.videoInput")
           }}</span>
         </v-btn>
+
+        <v-file-input
+          ref="videoUpload"
+          class="d-none"
+          :multiple="acceptMultiple"
+          accept="video/*;capture=camcorder"
+          @change="addFile"
+        />
       </div>
 
       <div class="ma-1" v-if="recordOptions && recordAudio">
@@ -78,6 +95,7 @@
           :color="appSettings.bodyActiveColor"
           :dark="appSettings.bodyActiveColorDark"
           :title="$t('add.inputs.audioInput')"
+          @click="trigger('audioUpload')"
         >
           <v-icon
             :left="$vuetify.breakpoint.lgAndUp"
@@ -88,6 +106,14 @@
             $t("add.inputs.audioInput")
           }}</span>
         </v-btn>
+
+        <v-file-input
+          ref="audioUpload"
+          class="d-none"
+          :multiple="acceptMultiple"
+          accept="audio/*;capture=microphone"
+          @change="addFile"
+        />
       </div>
 
       <div class="ma-1" v-if="showExisting">
@@ -155,6 +181,115 @@
         />
       </v-col>
     </v-row>
+
+    <!-- NEW FILES -->
+    <v-row no-gutters v-if="files && files.length > 0">
+      <v-col cols="12" class="pa-1">
+        <div class="image-view-wrapper mx-3">
+          <v-row class="mx-0">
+            <v-col
+              v-for="(file, key) in files"
+              :key="key"
+              class="d-flex child-flex my-3"
+              cols="6"
+              sm="4"
+              md="3"
+              lg="2"
+            >
+              <v-tooltip
+                bottom
+                :color="appSettings.bodyActiveColor"
+                z-index="51000"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-card
+                    flat
+                    class="d-flex"
+                    v-on="on"
+                    :class="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+                    hover
+                  >
+                    <!-- AUDIO -->
+                    <audio
+                      v-if="file.type.includes('audio')"
+                      :ref="'file' + parseInt(key)"
+                      controls
+                    >
+                      Your browser does not support the audio element.
+                      <i class="far fa-file-audio fa-5x" />
+                    </audio>
+
+                    <!-- VIDEO -->
+                    <video
+                      v-else-if="file.type.includes('video')"
+                      :ref="'file' + parseInt(key)"
+                      type="video"
+                      style="max-height: 12rem"
+                      controls
+                    >
+                      Your browser does not support the video element.
+                      <i class="far fa-file-video fa-5x" />
+                    </video>
+
+                    <!-- IMAGE -->
+                    <v-img
+                      v-else-if="file.type.includes('image')"
+                      max-height="400"
+                      :ref="'file' + parseInt(key)"
+                      class="grey lighten-2"
+                    >
+                      <template v-slot:placeholder>
+                        <v-row
+                          class="fill-height ma-0"
+                          align="center"
+                          justify="center"
+                        >
+                          <v-progress-circular
+                            indeterminate
+                            color="grey lighten-5"
+                          />
+                        </v-row>
+                      </template>
+                    </v-img>
+
+                    <!-- ICON -->
+                    <v-row align="center" v-else>
+                      <v-col class="text-center">
+                        <div class="py-3">
+                          <v-icon
+                            style="font-size: 6rem"
+                            :class="appSettings.bodyActiveColor + '--text'"
+                            >far {{ getAttachmentIcon(file) }}</v-icon
+                          >
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </v-card>
+                </template>
+
+                <span>
+                  <b>Name:</b> {{ file.name }}<br />
+                  <b>Size:</b> {{ getSizeAsMB(file.size) }}<br />
+                  <b>Type:</b> {{ file.type }}<br />
+                  <b>Last modified:</b> {{ getFormattedDate(file.lastModifiedDate) }}<br />
+                </span>
+              </v-tooltip>
+            </v-col>
+          </v-row>
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row no-gutters v-if="files && files.length > 0">
+      <v-col cols="12" class="pa-1"> Files length: {{ files.length }} </v-col>
+
+      <v-col cols="12" class="pa-1">
+        <div v-for="(file, key) in files" :key="key">
+          <!-- IMAGE -->
+          <img :ref="'file' + parseInt(key)" alt="Image preview..." />
+        </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -164,6 +299,9 @@ import AutocompleteWrapper from "../inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../inputs/CheckboxWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../imageView/ImageViewWrapper";
+import EXIF from "exif-js";
+// eslint-disable-next-line no-unused-vars
+import moment from "moment";
 
 export default {
   name: "FileUpload",
@@ -217,21 +355,73 @@ export default {
     "$route.path"() {
       this.resetData();
       this.$emit("files-cleared");
+    },
+    files(newVal) {
+      console.log(newVal)
+      this.readFile(newVal);
     }
   },
   methods: {
     dropFile(event) {
-      console.log(event);
+      if (event.dataTransfer && event.dataTransfer.items) {
+        let listOfFiles = [];
+        event.dataTransfer.files.forEach(file => listOfFiles.push(file));
+
+        if (this.files) listOfFiles.forEach(item => this.files.push(item));
+        else this.files = listOfFiles;
+      }
+      this.isDragging = false;
     },
 
     addFile(file) {
-      console.log(file);
+      if (this.files) file.forEach(item => this.files.push(item));
+      else this.files = file;
+    },
+
+    readFile(listOfFiles) {
+      if (listOfFiles && listOfFiles.length > 0) {
+        listOfFiles.forEach((file, index) => {
+          if (!file.isAlreadyRead) this.readFileSrc(file, index);
+        });
+        this.$emit("file-uploaded", listOfFiles);
+
+        if (listOfFiles.length === 1) this.readFileMetaData(listOfFiles[0]);
+      }
+    },
+
+    readFileSrc(file, index) {
+      if (
+        file.type.includes("image") ||
+        file.type.includes("video") ||
+        file.type.includes("audio")
+      ) {
+        let reader = new FileReader();
+        reader.onload = event => {
+          this.$refs[`file${index}`][0].src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+      file.isAlreadyRead = true;
+    },
+
+    readFileMetaData(file) {
+      let reader = new FileReader();
+      reader.onload = event => {
+        let fileMetaData = EXIF.readFromBinaryFile(event.target.result);
+        this.$emit("metadata-loaded", fileMetaData);
+      };
+      reader.readAsArrayBuffer(file);
     },
 
     clearFile() {
       this.files = null;
       this.existingFiles = null;
       this.$emit("files-cleared");
+    },
+
+    trigger(fileInputRef) {
+      // Getting file icon and clicking it
+      this.$refs[fileInputRef].$el.children[0].children[0].children[0].click();
     },
 
     resetData() {
@@ -243,6 +433,33 @@ export default {
         attachment: [],
         loaders: { attachment: false }
       };
+    },
+
+    getAttachmentIcon(file) {
+      if (file.type) {
+        let fileType = file.type;
+        if (fileType.includes("application")) {
+          if (fileType.includes("docx")) return "fa-file-word";
+          else if (fileType.includes("pdf")) return "fa-file-pdf";
+          else if (fileType.includes("xlsx") || fileType.includes("ods"))
+            return "fa-file-excel";
+          else if (fileType.includes("zip")) return "fa-file-archive";
+          else return "fa-file";
+        } else if (fileType.includes("audio")) return "fa-file-audio";
+        else if (fileType.includes("image")) return "fa-file-image";
+        else if (fileType.includes("text")) return "fa-file-alt";
+        else if (fileType.includes("video")) return "fa-file-video";
+        else return "fa-file";
+      } else return "fa-file";
+    },
+
+    getSizeAsMB(size) {
+      if (size) return (size / 1000000).toFixed(2) + " MB";
+    },
+
+    getFormattedDate(date) {
+      if (date) return moment(date).format("YYYY-MM-DD HH:mm");
+      else return "";
     }
   }
 };
