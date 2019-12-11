@@ -168,7 +168,7 @@ import ImageViewWrapper from "../imageView/ImageViewWrapper";
 export default {
   name: "FileUpload",
   mixins: [autocompleteMixin],
-  components: {ImageViewWrapper, CheckboxWrapper, AutocompleteWrapper },
+  components: { ImageViewWrapper, CheckboxWrapper, AutocompleteWrapper },
   props: {
     recordOptions: Boolean,
     recordImage: {

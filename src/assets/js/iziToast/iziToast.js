@@ -7,7 +7,7 @@ export function toastSuccess(data) {
   if (data.timeout === undefined) data.timeout = 2000;
 
   Vue.prototype.toast.success(data.text, "OK", {
-    position: "bottomRight",
+    position: "topCenter",
     timeout: data.timeout,
     pauseOnHover: false
   });
@@ -17,7 +17,7 @@ export function toastError(data) {
   if (data.timeout === undefined) data.timeout = 5000;
 
   Vue.prototype.toast.error(data.text, "Error", {
-    position: "bottomRight",
+    position: "topCenter",
     timeout: data.timeout,
     closeOnEscape: true,
     pauseOnHover: false,
@@ -29,7 +29,7 @@ export function toastInfo(data) {
   if (data.timeout === undefined) data.timeout = 2000;
 
   Vue.prototype.toast.info(data.text, "Info", {
-    position: "bottomRight",
+    position: "topCenter",
     timeout: data.timeout,
     pauseOnHover: false
   });

@@ -2934,6 +2934,7 @@ export default {
           if (this.isPhotoArchive) {
             if (this.$route.params.imageset) {
               this.attachment.imageset = this.$route.params.imageset;
+              this.autocomplete.imageset.push(this.attachment.imageset);
             }
           }
 
@@ -2944,6 +2945,7 @@ export default {
               forename: this.currentUser.forename,
               surename: this.currentUser.surename
             };
+            this.autocomplete.agent.push(this.attachment.author);
           }
 
           // Universal attachment object
@@ -3211,6 +3213,7 @@ export default {
               id: entity.keyword
             };
           });
+          this.autocomplete.keyword = this.relatedData.keyword;
         });
 
         fetchAttachmentLinkCollections(this.$route.params.id).then(response => {
@@ -3222,6 +3225,7 @@ export default {
               name_en: entity.collection__name_en
             };
           });
+          this.autocomplete.attach_link__collection = this.relatedData.attach_link__collection;
         });
         fetchAttachmentLinkSpecimens(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3232,6 +3236,7 @@ export default {
               coll__number: entity.specimen__coll__number
             };
           });
+          this.autocomplete.attach_link__specimen = this.relatedData.attach_link__specimen;
         });
         fetchAttachmentLinkSamples(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3241,6 +3246,7 @@ export default {
               number: entity.sample__number
             };
           });
+          this.autocomplete.attach_link__sample = this.relatedData.attach_link__sample;
         });
         fetchAttachmentLinkSampleSeries(this.$route.params.id).then(
           response => {
@@ -3253,6 +3259,8 @@ export default {
                 };
               }
             );
+            this.autocomplete.attach_link__sample_series = this.relatedData.attach_link__sample_series;
+
           }
         );
         fetchAttachmentLinkAnalyses(this.$route.params.id).then(response => {
@@ -3263,6 +3271,7 @@ export default {
               sample__number: entity.analysis__sample__number
             };
           });
+          this.autocomplete.attach_link__analysis = this.relatedData.attach_link__analysis;
         });
         fetchAttachmentLinkDatasets(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3273,6 +3282,7 @@ export default {
               name_en: entity.dataset__name_en
             };
           });
+          this.autocomplete.attach_link__dataset = this.relatedData.attach_link__dataset;
         });
         fetchAttachmentLinkLocalities(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3283,6 +3293,7 @@ export default {
               locality_en: entity.locality__locality_en
             };
           });
+          this.autocomplete.attach_link__locality = this.relatedData.attach_link__locality;
         });
         fetchAttachmentLinkDrillcores(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3293,6 +3304,7 @@ export default {
               drillcore_en: entity.drillcore__drillcore_en
             };
           });
+          this.autocomplete.attach_link__drillcore = this.relatedData.attach_link__drillcore;
         });
         fetchAttachmentLinkDrillcoreBoxes(this.$route.params.id).then(
           response => {
@@ -3308,6 +3320,7 @@ export default {
                 };
               }
             );
+          this.autocomplete.attach_link__drillcore_box = this.relatedData.attach_link__drillcore_box;
           }
         );
         fetchAttachmentLinkPreparations(this.$route.params.id).then(
@@ -3321,6 +3334,7 @@ export default {
                 };
               }
             );
+          this.autocomplete.attach_link__preparation = this.relatedData.attach_link__preparation;
           }
         );
         fetchAttachmentLinkReferences(this.$route.params.id).then(response => {
@@ -3331,6 +3345,7 @@ export default {
               reference: entity.reference__reference
             };
           });
+          this.autocomplete.attach_link__reference = this.relatedData.attach_link__reference;
         });
         fetchAttachmentLinkDois(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3340,6 +3355,7 @@ export default {
               identifier: entity.doi_identifier
             };
           });
+          this.autocomplete.attach_link__doi = this.relatedData.attach_link__doi;
         });
         fetchAttachmentLinkStorages(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3350,6 +3366,7 @@ export default {
               contents: entity.storage__contents
             };
           });
+          this.autocomplete.attach_link__storage = this.relatedData.attach_link__storage;
         });
         fetchAttachmentLinkProjects(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3360,6 +3377,7 @@ export default {
               name_en: entity.project__name_en
             };
           });
+          this.autocomplete.attach_link__project = this.relatedData.attach_link__project;
         });
         fetchAttachmentLinkSites(this.$route.params.id).then(response => {
           let collections = this.handleResponse(response);
@@ -3370,6 +3388,7 @@ export default {
               name_en: entity.site__name_en
             };
           });
+          this.autocomplete.attach_link__site = this.relatedData.attach_link__site;
         });
       }
     },
@@ -3516,18 +3535,21 @@ export default {
           id: obj.agent_digitised__id,
           agent: obj.agent_digitised__agent
         });
+        this.autocomplete.agent_digitised.push(this.attachment.agent_digitised);
       }
       if (this.isNotEmpty(obj.author_id)) {
         this.$set(this.attachment, "author", {
           id: obj.author_id,
           agent: obj.author__agent
         });
+        this.autocomplete.agent.push(this.attachment.author);
       }
       if (this.isNotEmpty(obj.copyright_agent__id)) {
         this.$set(this.attachment, "copyright_agent", {
           id: obj.copyright_agent__id,
           agent: obj.copyright_agent__agent
         });
+        this.autocomplete.copyright_agent.push(this.attachment.copyright_agent);
       }
       if (this.isNotEmpty(obj.image_type__id)) {
         this.$set(this.attachment, "image_type", {
@@ -3541,6 +3563,7 @@ export default {
           id: obj.imageset__id,
           imageset_number: obj.imageset__imageset_number
         });
+        this.autocomplete.imageset.push(this.attachment.imageset);
       }
       if (this.isNotEmpty(obj.licence__id)) {
         this.$set(this.attachment, "licence", {
@@ -3555,6 +3578,7 @@ export default {
           locality: obj.locality__locality,
           locality_en: obj.locality__locality_en
         });
+        this.autocomplete.locality.push(this.attachment.locality);
       }
       if (this.isNotEmpty(obj.specimen__id)) {
         this.$set(this.attachment, "specimen", {
@@ -3562,12 +3586,14 @@ export default {
           specimen_id: obj.specimen_id,
           coll__number: obj.specimen__coll__number
         });
+        this.autocomplete.specimen.push(this.attachment.specimen);
       }
       if (this.isNotEmpty(obj.reference)) {
         this.$set(this.attachment, "reference", {
           id: obj.reference,
           reference: obj.reference__reference
         });
+        this.autocomplete.reference.push(this.attachment.reference);
       }
       if (this.isNotEmpty(obj.type)) {
         this.$set(this.attachment, "type", {
