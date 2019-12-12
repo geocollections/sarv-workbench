@@ -23,6 +23,7 @@
             >
               <v-img
                 max-height="400"
+                aspect-ratio="1"
                 v-if="isImageFile(image)"
                 :src="getFileUrl(image.uuid_filename, 'small')"
                 :lazy-src="getFileUrl(image.uuid_filename, 'small')"

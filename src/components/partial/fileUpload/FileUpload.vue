@@ -220,8 +220,8 @@
                     <!-- IMAGE -->
                     <v-img
                       v-if="file.type.includes('image')"
-                      height="200"
-                      width="200"
+                      max-height="400"
+                      aspect-ratio="1"
                       :ref="'file' + parseInt(key)"
                       class="grey lighten-2"
                       :src="sourceList[key]"

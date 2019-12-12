@@ -57,8 +57,7 @@
             <!-- Todo: Implement new file upload component -->
             <!-- NEW -->
             <file-upload
-              v-if="false"
-              show-existing
+              v-if="true"
               :record-options="recordOptions"
               :record-image="recordImage"
               :record-video="recordVideo"
