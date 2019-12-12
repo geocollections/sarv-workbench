@@ -57,32 +57,14 @@
             <!-- Todo: Implement new file upload component -->
             <!-- NEW -->
             <file-upload
-              v-if="true"
-              :record-options="recordOptions"
-              :record-image="recordImage"
-              :record-video="recordVideo"
-              :record-audio="recordAudio"
-              accept-multiple
-              :acceptable-format="fileInputFormat"
-              v-on:file-uploaded="addFiles"
-              v-on:metadata-loaded="updateFields"
-              v-on:files-cleared="clearUploadedFiles"
-            />
-
-            <!-- OLD -->
-            <multimedia-component
-              v-if="false"
               :record-options="recordOptions"
               :record-image="recordImage"
               :record-video="recordVideo"
               :record-audio="recordAudio"
               :acceptable-format="fileInputFormat"
-              :accept-multiple="acceptMultiple"
-              :clear-files="clearFiles"
               v-on:file-uploaded="addFiles"
               v-on:metadata-loaded="updateFields"
               v-on:files-cleared="clearUploadedFiles"
-              style="margin-right: -10px; margin-left: -10px"
             />
           </div>
         </transition>
@@ -2687,7 +2669,6 @@ import {
   fetchListLicences
 } from "../../assets/js/api/apiCalls";
 import AttachmentWrapper from "./AttachmentWrapper";
-import MultimediaComponent from "../partial/MultimediaComponent";
 import MapComponent from "../partial/MapComponent";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import FileInformation from "../partial/FileInformation";
@@ -2715,7 +2696,6 @@ export default {
     NewDoiButton,
     FilePreview,
     FileInformation,
-    MultimediaComponent,
     AttachmentWrapper,
     Spinner,
     MapComponent
@@ -3697,7 +3677,7 @@ export default {
       }
     },
 
-    /* MultimediaComponent Events START */
+    /* FileUpload Events START */
     addFiles(files) {
       this.files = files;
     },
@@ -3802,7 +3782,7 @@ export default {
       }
       return decimalDegrees;
     },
-    /* MultimediaComponent Events END */
+    /* FileUpload Events END */
 
     /* MapComponent Event START */
     updateLocation(location) {

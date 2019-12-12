@@ -173,7 +173,9 @@
     <!-- EXISTING FILES -->
     <v-row no-gutters v-if="existingFiles && existingFiles.length > 0">
       <v-col cols="12" class="pa-1">
-        <div class="title">{{ $t("messages.existingFiles") }}: <b>{{ existingFiles.length }}</b></div>
+        <div class="title">
+          {{ $t("messages.existingFiles") }}: <b>{{ existingFiles.length }}</b>
+        </div>
       </v-col>
 
       <v-col cols="12" class="pa-1">
@@ -189,7 +191,9 @@
     <!-- NEW FILES -->
     <v-row no-gutters v-if="files && files.length > 0">
       <v-col cols="12" class="pa-1" v-if="showExisting">
-        <div class="title">{{ $t("messages.newFiles") }}: <b>{{ files.length }}</b></div>
+        <div class="title">
+          {{ $t("messages.newFiles") }}: <b>{{ files.length }}</b>
+        </div>
       </v-col>
 
       <v-col cols="12" class="pa-1">
@@ -199,10 +203,10 @@
               v-for="(file, key) in files"
               :key="key"
               class="d-flex child-flex my-3"
-              cols="6"
-              sm="4"
-              md="3"
-              lg="2"
+              :cols="realSize ? 12 : 6"
+              :sm="realSize ? 12 : 4"
+              :md="realSize ? 12 : 3"
+              :lg="realSize ? 12 : 2"
             >
               <v-tooltip
                 bottom
@@ -220,8 +224,7 @@
                     <!-- IMAGE -->
                     <v-img
                       v-if="file.type.includes('image')"
-                      max-height="400"
-                      aspect-ratio="1"
+                      :aspect-ratio="realSize ? '' : 1"
                       :ref="'file' + parseInt(key)"
                       class="grey lighten-2"
                       :src="sourceList[key]"
@@ -260,7 +263,8 @@
                   <b>Name:</b> {{ file.name }}<br />
                   <b>Size:</b> {{ getSizeAsMB(file.size) }}<br />
                   <b>Type:</b> {{ file.type }}<br />
-                  <b>Last modified:</b> {{ getFormattedDate(file.lastModifiedDate) }}<br />
+                  <b>Last modified:</b>
+                  {{ getFormattedDate(file.lastModifiedDate) }}<br />
                 </span>
               </v-tooltip>
             </v-col>
@@ -278,8 +282,8 @@ import CheckboxWrapper from "../inputs/CheckboxWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../imageView/ImageViewWrapper";
 import EXIF from "exif-js";
-// eslint-disable-next-line no-unused-vars
 import moment from "moment";
+import { toastError } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   name: "FileUpload",
@@ -307,7 +311,8 @@ export default {
       validator: value => {
         return value.includes("/");
       }
-    }
+    },
+    realSize: Boolean
   },
   computed: {
     ...mapState(["appSettings"]),
@@ -336,10 +341,10 @@ export default {
       this.$emit("files-cleared");
     },
     files(newVal) {
-      console.log(newVal)
       this.readFile(newVal);
     }
   },
+  /* Todo: When not multiple then do not push to files!!! */
   methods: {
     dropFile(event) {
       if (event.dataTransfer && event.dataTransfer.items) {
@@ -362,7 +367,14 @@ export default {
         listOfFiles.forEach((file, index, object) => {
           if (!file.isAlreadyRead) {
             if (this.isValidFormat(file)) this.readFileSrc(file);
-            else object.splice(index, 1);
+            else {
+              object.splice(index, 1);
+              toastError({
+                text: this.$t("messages.validFileFormat", {
+                  file: file.name
+                })
+              });
+            }
           }
         });
         this.$emit("file-uploaded", listOfFiles);
@@ -457,10 +469,16 @@ export default {
     },
 
     isValidFormat(file) {
-      console.log(file);
-      console.log("File type: " + file.type);
-      console.log("Acceptable type: " + this.acceptableFormat);
-      return true;
+      let fileMimeType = file.type.split("/");
+      let acceptableMimeType = this.acceptableFormat.split("/");
+
+      if (acceptableMimeType[0] === "*") return true;
+      else if (
+        acceptableMimeType[0] === fileMimeType[0] &&
+        acceptableMimeType[1] === "*"
+      )
+        return true;
+      else return file.type === this.acceptableFormat;
     }
   }
 };
