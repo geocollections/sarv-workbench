@@ -41,8 +41,6 @@
       :is-navbar-dark="appSettings.navbarDark"
       :navbar-color="appSettings.navbarColor"
       :object="object"
-      :is-navigation-shown="$route.meta.isNavigationShown"
-      v-if="$route.meta.isBottomOptionShown"
     />
 
     <save-as-new-modal

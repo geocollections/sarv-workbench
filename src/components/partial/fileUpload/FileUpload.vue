@@ -171,7 +171,11 @@
     </v-row>
 
     <!-- EXISTING FILES -->
-    <v-row no-gutters v-if="existingFiles">
+    <v-row no-gutters v-if="existingFiles && existingFiles.length > 0">
+      <v-col cols="12" class="pa-1">
+        <div class="title">{{ $t("messages.existingFiles") }}: <b>{{ existingFiles.length }}</b></div>
+      </v-col>
+
       <v-col cols="12" class="pa-1">
         <image-view-wrapper
           :data="existingFiles"
@@ -184,6 +188,10 @@
 
     <!-- NEW FILES -->
     <v-row no-gutters v-if="files && files.length > 0">
+      <v-col cols="12" class="pa-1" v-if="showExisting">
+        <div class="title">{{ $t("messages.newFiles") }}: <b>{{ files.length }}</b></div>
+      </v-col>
+
       <v-col cols="12" class="pa-1">
         <div class="image-view-wrapper mx-3">
           <v-row class="mx-0">
@@ -209,34 +217,15 @@
                     :class="appSettings.bodyColor.split('n-')[0] + 'n-5'"
                     hover
                   >
-                    <!-- AUDIO -->
-                    <audio
-                      v-if="file.type.includes('audio')"
-                      :ref="'file' + parseInt(key)"
-                      controls
-                    >
-                      Your browser does not support the audio element.
-                      <i class="far fa-file-audio fa-5x" />
-                    </audio>
-
-                    <!-- VIDEO -->
-                    <video
-                      v-else-if="file.type.includes('video')"
-                      :ref="'file' + parseInt(key)"
-                      type="video"
-                      style="max-height: 12rem"
-                      controls
-                    >
-                      Your browser does not support the video element.
-                      <i class="far fa-file-video fa-5x" />
-                    </video>
-
                     <!-- IMAGE -->
                     <v-img
-                      v-else-if="file.type.includes('image')"
-                      max-height="400"
+                      v-if="file.type.includes('image')"
+                      height="200"
+                      width="200"
                       :ref="'file' + parseInt(key)"
                       class="grey lighten-2"
+                      :src="sourceList[key]"
+                      :lazy-src="sourceList[key]"
                     >
                       <template v-slot:placeholder>
                         <v-row
@@ -276,17 +265,6 @@
               </v-tooltip>
             </v-col>
           </v-row>
-        </div>
-      </v-col>
-    </v-row>
-
-    <v-row no-gutters v-if="files && files.length > 0">
-      <v-col cols="12" class="pa-1"> Files length: {{ files.length }} </v-col>
-
-      <v-col cols="12" class="pa-1">
-        <div v-for="(file, key) in files" :key="key">
-          <!-- IMAGE -->
-          <img :ref="'file' + parseInt(key)" alt="Image preview..." />
         </div>
       </v-col>
     </v-row>
@@ -349,7 +327,8 @@ export default {
     autocomplete: {
       attachment: [],
       loaders: { attachment: false }
-    }
+    },
+    sourceList: []
   }),
   watch: {
     "$route.path"() {
@@ -380,8 +359,11 @@ export default {
 
     readFile(listOfFiles) {
       if (listOfFiles && listOfFiles.length > 0) {
-        listOfFiles.forEach((file, index) => {
-          if (!file.isAlreadyRead) this.readFileSrc(file, index);
+        listOfFiles.forEach((file, index, object) => {
+          if (!file.isAlreadyRead) {
+            if (this.isValidFormat(file)) this.readFileSrc(file);
+            else object.splice(index, 1);
+          }
         });
         this.$emit("file-uploaded", listOfFiles);
 
@@ -389,7 +371,7 @@ export default {
       }
     },
 
-    readFileSrc(file, index) {
+    readFileSrc(file) {
       if (
         file.type.includes("image") ||
         file.type.includes("video") ||
@@ -397,7 +379,8 @@ export default {
       ) {
         let reader = new FileReader();
         reader.onload = event => {
-          this.$refs[`file${index}`][0].src = event.target.result;
+          file.src = event.target.result;
+          this.sourceList.push(event.target.result);
         };
         reader.readAsDataURL(file);
       }
@@ -416,6 +399,7 @@ export default {
     clearFile() {
       this.files = null;
       this.existingFiles = null;
+      this.sourceList = [];
       this.$emit("files-cleared");
     },
 
@@ -433,6 +417,7 @@ export default {
         attachment: [],
         loaders: { attachment: false }
       };
+      this.sourceList = [];
     },
 
     getAttachmentIcon(file) {
@@ -460,6 +445,22 @@ export default {
     getFormattedDate(date) {
       if (date) return moment(date).format("YYYY-MM-DD HH:mm");
       else return "";
+    },
+
+    /**
+     * Methods takes one argument: file's MIME type and returns file's type and subtype in an Array
+     * @param mimeType {String}. File's MIME type --> application/pdf etc.
+     * @returns {Array} of type and subtype --> [type, subtype]
+     */
+    getTypeAndSubtype(mimeType) {
+      return mimeType.split("/");
+    },
+
+    isValidFormat(file) {
+      console.log(file);
+      console.log("File type: " + file.type);
+      console.log("Acceptable type: " + this.acceptableFormat);
+      return true;
     }
   }
 };

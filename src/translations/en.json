@@ -1688,7 +1688,9 @@
     "ObjectDoesNotExist2": "with an ID:",
     "ObjectDoesNotExist3": "doesn't exist!",
     "ObjectDoesNotExist4": "Back to",
-    "ObjectDoesNotExist5": "search"
+    "ObjectDoesNotExist5": "search",
+    "existingFiles": "Existing files",
+    "newFiles": "New files"
   },
   "titles": {
     "main": "Geocollections Data Management",

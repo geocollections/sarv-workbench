@@ -24,11 +24,6 @@ const formManipulation = {
     VueMultiselect
   },
   mounted() {
-    // Root event for confirmation modal which is emitted when user tries to leave the TAB without saving.
-    // commented on 04.09.2019
-    // this.$root.$on('user-choice', this.handleUserChoice);
-    // this.$root.$on('sidebar-user-choice', this.handleSidebarUserChoice);
-
     this.$parent.$on("button-clicked", this.bottomOptionClicked);
   },
   beforeDestroy() {
@@ -112,10 +107,6 @@ const formManipulation = {
      * @returns {boolean} True if required fields are OK and false if they are not.
      */
     validate(object, child = null) {
-      // Made for debugging
-      // return true
-      // REMOVE!!!!!!!!!!
-
       let isValid = true;
       let isValidOptional = false;
 
@@ -355,7 +346,7 @@ const formManipulation = {
             author: file.type.includes("pdf") ? null : this.currentUser.id,
             date_created: file.type.includes("pdf")
               ? null
-              : this.formatDateForUpload(new Date()),
+              : this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: !this[relatedObject].is_oa,
             specimen_image_attachment: relatedObject === "reference" ? 4 : 3,
             [relatedObject]: this[relatedObject].id
@@ -400,7 +391,7 @@ const formManipulation = {
               ": " +
               this[relatedObject].id,
             author: this.currentUser.id,
-            date_created: this.formatDateForUpload(new Date()),
+            date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: true,
             related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
           })
@@ -445,7 +436,7 @@ const formManipulation = {
           JSON.stringify({
             description: file.type + " for " + object + ": " + this[object].id,
             author: this.currentUser.id,
-            date_created: this.formatDateForUpload(new Date()),
+            date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
             is_private: true
           })
         );

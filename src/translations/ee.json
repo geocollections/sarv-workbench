@@ -1688,7 +1688,10 @@
     "ObjectDoesNotExist2": "objekti, mille ID on",
     "ObjectDoesNotExist3": "ei eksisteeri!",
     "ObjectDoesNotExist4": "Tagasi",
-    "ObjectDoesNotExist5": "otsingusse"  },
+    "ObjectDoesNotExist5": "otsingusse",
+    "existingFiles": "Olemasolevad failid",
+    "newFiles": "Uued failid"
+  },
   "titles": {
     "main": "Geokogude andmehaldus",
     "dashboard": "Geokogude andmehaldus: Pealeht",

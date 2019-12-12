@@ -440,7 +440,6 @@
                 :loading="autocomplete.loaders.keyword"
                 item-text="keyword"
                 :label="$t('reference.referenceKeyword')"
-                use-state
                 is-link
                 route-object="keyword"
                 is-searchable
@@ -1326,7 +1325,7 @@ export default {
           id: obj.journal__id,
           journal_name: obj.journal__journal_name
         };
-        this.autocomplete.journal.push(this.reference.journal);
+        this.autocomplete.journals.push(this.reference.journal);
       }
       this.reference.title_translated_language = {
         id: obj.title_translated_language,

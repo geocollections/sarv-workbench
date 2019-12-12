@@ -1,6 +1,7 @@
 <template>
   <div class="input-class">
     <v-textarea
+      auto-grow
       background-color="white"
       dense
       hide-details

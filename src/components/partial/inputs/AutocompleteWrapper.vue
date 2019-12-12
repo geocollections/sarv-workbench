@@ -20,6 +20,7 @@
       :success="useCustomState ? $attrs.success : (useState ? !!$attrs.value : false)"
       :small-chips="!!$attrs.multiple"
       :deletable-chips="!!$attrs.multiple"
+      @change="resetSearchInput"
     >
       <template v-slot:append-outer>
         <v-btn
@@ -105,6 +106,12 @@ export default {
     openInNewTab(object, id) {
       let routeData = this.$router.resolve({ path: `/${object}/${id}` });
       window.open(routeData.href, "AutocompleteWindow");
+    },
+
+    resetSearchInput() {
+      if (this.search && this.search.length > 0) {
+        this.search = null;
+      }
     }
   }
 };

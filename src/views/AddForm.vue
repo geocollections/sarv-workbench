@@ -34,8 +34,6 @@
       :is-navbar-dark="appSettings.navbarDark"
       :navbar-color="appSettings.navbarColor"
       :object="$route.meta.object"
-      :is-navigation-shown="$route.meta.isNavigationShown"
-      v-if="$route.meta.isBottomOptionShown"
     />
   </div>
 </template>

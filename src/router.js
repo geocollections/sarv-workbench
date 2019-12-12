@@ -89,8 +89,6 @@ const router = new Router({
                 table: "attachment",
                 title: "titles.editAttachment",
                 heading: "editAttachment.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "attachment"
@@ -133,8 +131,6 @@ const router = new Router({
                   }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "attachment"
               }
             },
@@ -165,8 +161,6 @@ const router = new Router({
                   }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "attachment",
                 child: "photo_archive"
               }
@@ -197,8 +191,6 @@ const router = new Router({
                   }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "attachment",
                 child: "specimen_image"
               }
@@ -229,8 +221,6 @@ const router = new Router({
                   }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "attachment",
                 child: "other_file"
               }
@@ -261,8 +251,6 @@ const router = new Router({
                   }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "attachment",
                 child: "digitised_reference"
               }
@@ -305,9 +293,6 @@ const router = new Router({
                 table: "reference",
                 title: "titles.editReference",
                 heading: "editReference.heading",
-                isBottomOptionShown: true,
-                // isSidebarShown: true,
-                isNavigationShown: true,
 
                 isCopyFormShown: false,
                 requiresAuth: true,
@@ -338,8 +323,6 @@ const router = new Router({
                   }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "reference"
               }
             }
@@ -361,8 +344,6 @@ const router = new Router({
                 addNew: "add.newImageset",
                 subForms: [{ path: "/imageset/add", name: "add.imageset" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "imageset"
               }
             }
@@ -402,8 +383,6 @@ const router = new Router({
                 table: "journal",
                 title: "titles.editJournal",
                 heading: "editJournal.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: true,
                 requiresAuth: true,
                 object: "journal"
@@ -427,8 +406,6 @@ const router = new Router({
                 addNew: "add.newJournal",
                 subForms: [{ path: "/journal/add", name: "add.journal" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "journal"
               }
             }
@@ -469,8 +446,6 @@ const router = new Router({
                 table: "locality",
                 title: "titles.editLocality",
                 heading: "editLocality.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: true,
                 requiresAuth: true,
                 object: "locality"
@@ -494,8 +469,6 @@ const router = new Router({
                 addNew: "add.newLocality",
                 subForms: [{ path: "/locality/add", name: "add.locality" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "locality"
               }
             }
@@ -537,8 +510,6 @@ const router = new Router({
                 table: "sample",
                 title: "titles.editSample",
                 heading: "editSample.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: true,
                 requiresAuth: true,
                 object: "sample"
@@ -563,8 +534,6 @@ const router = new Router({
                 addNew: "add.newSample",
                 subForms: [{ path: "/sample/add", name: "add.sample" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "sample"
               }
             }
@@ -613,8 +582,6 @@ const router = new Router({
                       { path: "/project/add", name: "editProject.heading" }
                     ],
                     requiresAuth: true,
-                    isBottomOptionShown: true,
-                    isNavigationShown: false,
                     object: "project"
                   }
                 }
@@ -644,8 +611,6 @@ const router = new Router({
                     table: "project",
                     title: "titles.editProject",
                     heading: "editProject.heading",
-                    isBottomOptionShown: true,
-                    isNavigationShown: true,
                     isCopyFormShown: false,
                     // isSidebarShown: true,
                     requiresAuth: true,
@@ -691,8 +656,6 @@ const router = new Router({
                 table: "site",
                 title: "titles.editSite",
                 heading: "editSite.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 // isSidebarShown: true,
                 requiresAuth: true,
@@ -718,8 +681,6 @@ const router = new Router({
                 addNew: "add.newSite",
                 subForms: [{ path: "/site/add", name: "editSite.heading" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "site"
               }
             }
@@ -759,8 +720,6 @@ const router = new Router({
                 table: "library",
                 title: "titles.editLibrary",
                 heading: "editLibrary.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "library"
@@ -784,8 +743,6 @@ const router = new Router({
                 addNew: "add.newLibrary",
                 subForms: [{ path: "/library/add", name: "add.library" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "library"
               }
             }
@@ -825,8 +782,6 @@ const router = new Router({
                 table: "doi",
                 title: "titles.editDoi",
                 heading: "editDoi.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "doi"
@@ -850,8 +805,6 @@ const router = new Router({
                 addNew: "add.newDoi",
                 subForms: [{ path: "/doi/add", name: "add.doi" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "doi"
               },
               children: [
@@ -865,8 +818,6 @@ const router = new Router({
                     addNew: "add.newDoiEgf",
                     subForms: [{ path: "/doi/add", name: "add.doi" }],
                     requiresAuth: true,
-                    isBottomOptionShown: true,
-                    isNavigationShown: false,
                     object: "doi"
                   }
                 }
@@ -909,8 +860,6 @@ const router = new Router({
                 table: "analysis",
                 title: "titles.editAnalysis",
                 heading: "editAnalysis.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "analysis"
@@ -935,8 +884,6 @@ const router = new Router({
                 addNew: "add.newAnalysis",
                 subForms: [{ path: "/analysis/add", name: "add.analysis" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "analysis"
               }
             }
@@ -977,8 +924,6 @@ const router = new Router({
                 table: "specimen",
                 title: "titles.editSpecimen",
                 heading: "editSpecimen.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "specimen"
@@ -1003,8 +948,6 @@ const router = new Router({
                 addNew: "add.newSpecimen",
                 subForms: [{ path: "/specimen/add", name: "add.specimen" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "specimen"
               }
             }
@@ -1044,8 +987,6 @@ const router = new Router({
                 table: "keyword",
                 title: "titles.editKeyword",
                 heading: "editKeyword.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "keyword"
@@ -1070,8 +1011,6 @@ const router = new Router({
                 addNew: "add.newKeyword",
                 subForms: [{ path: "/keyword/add", name: "add.keyword" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "keyword"
               }
             }
@@ -1112,8 +1051,6 @@ const router = new Router({
                 table: "collection",
                 title: "titles.editCollection",
                 heading: "editCollection.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "collection"
@@ -1138,8 +1075,6 @@ const router = new Router({
                 addNew: "add.newCollection",
                 subForms: [{ path: "/collection/add", name: "add.collection" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "collection"
               }
             }
@@ -1179,8 +1114,6 @@ const router = new Router({
                 table: "taxon",
                 title: "titles.editTaxon",
                 heading: "editTaxon.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "taxon"
@@ -1205,8 +1138,6 @@ const router = new Router({
                 addNew: "add.newTaxon",
                 subForms: [{ path: "/taxon/add", name: "add.taxon" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "taxon"
               }
             }
@@ -1248,8 +1179,6 @@ const router = new Router({
                 table: "selection_series",
                 title: "titles.editSelectionSeries",
                 heading: "editSelectionSeries.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "selection_series"
@@ -1277,8 +1206,6 @@ const router = new Router({
                   { path: "/selection_series/add", name: "add.selectionSeries" }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "selection_series"
               }
             }
@@ -1318,8 +1245,6 @@ const router = new Router({
                 table: "agent",
                 title: "titles.editAgent",
                 heading: "editAgent.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "agent"
@@ -1344,8 +1269,6 @@ const router = new Router({
                 addNew: "add.newAgent",
                 subForms: [{ path: "/agent/add", name: "add.agent" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "agent"
               }
             }
@@ -1386,8 +1309,6 @@ const router = new Router({
                 table: "drillcore",
                 title: "titles.editDrillcore",
                 heading: "editDrillcore.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "drillcore"
@@ -1412,8 +1333,6 @@ const router = new Router({
                 addNew: "add.newDrillcore",
                 subForms: [{ path: "/drillcore/add", name: "add.drillcore" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "drillcore"
               }
             }
@@ -1455,8 +1374,6 @@ const router = new Router({
                 table: "preparation",
                 title: "titles.editPreparation",
                 heading: "editPreparation.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "preparation"
@@ -1484,8 +1401,6 @@ const router = new Router({
                   { path: "/preparation/add", name: "add.preparation" }
                 ],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "preparation"
               }
             }
@@ -1525,8 +1440,6 @@ const router = new Router({
                 table: "dataset",
                 title: "titles.editDataset",
                 heading: "editDataset.heading",
-                isBottomOptionShown: true,
-                isNavigationShown: true,
                 isCopyFormShown: false,
                 requiresAuth: true,
                 object: "dataset"
@@ -1551,8 +1464,6 @@ const router = new Router({
                 addNew: "add.newDataset",
                 subForms: [{ path: "/dataset/add", name: "add.dataset" }],
                 requiresAuth: true,
-                isBottomOptionShown: true,
-                isNavigationShown: false,
                 object: "dataset"
               }
             }

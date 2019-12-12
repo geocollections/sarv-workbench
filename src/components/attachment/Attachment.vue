@@ -54,7 +54,6 @@
 
         <transition>
           <div v-show="block.fileInput" class="pa-1">
-
             <!-- Todo: Implement new file upload component -->
             <!-- NEW -->
             <file-upload
@@ -73,6 +72,7 @@
 
             <!-- OLD -->
             <multimedia-component
+              v-if="false"
               :record-options="recordOptions"
               :record-image="recordImage"
               :record-video="recordVideo"
@@ -218,6 +218,7 @@
                         :loading="autocomplete.loaders.imageset"
                         item-text="imageset_number"
                         :label="$t('attachment.imageset')"
+                        use-state
                         is-link
                         route-object="imageset"
                         is-searchable
@@ -752,13 +753,7 @@
                     :loading="autocomplete.loaders.specimen"
                     item-text="specimen_id"
                     :label="$t('attachment.specimen')"
-                    use-custom-state
-                    :error="
-                      !($route.meta.isEdit && isNotEmpty(attachment.specimen))
-                    "
-                    :success="
-                      $route.meta.isEdit && isNotEmpty(attachment.specimen)
-                    "
+                    use-state
                     is-link
                     route-object="specimen"
                     is-searchable
@@ -1431,19 +1426,43 @@
                   v-if="selectedRelatedTable"
                 >
                   <autocomplete-wrapper
-                    v-model="relatedData['attach_link__' + selectedRelatedTable]"
+                    v-model="
+                      relatedData['attach_link__' + selectedRelatedTable]
+                    "
                     :color="bodyActiveColor"
-                    :items="autocomplete['attach_link__' + selectedRelatedTable]"
-                    :loading="autocomplete.loaders['attach_link__' + selectedRelatedTable]"
+                    :items="
+                      autocomplete['attach_link__' + selectedRelatedTable]
+                    "
+                    :loading="
+                      autocomplete.loaders[
+                        'attach_link__' + selectedRelatedTable
+                      ]
+                    "
                     :item-text="customLabelForRelatedDataUpdated()"
-                    :label="$t('attachment.relatedTables.' + selectedRelatedTable)"
+                    :label="
+                      $t('attachment.relatedTables.' + selectedRelatedTable)
+                    "
                     :no-cache="true"
                     is-link
                     is-searchable
                     :route-object="selectedRelatedTable"
-                    v-on:search:items="autocompleteRelatedDataSearch($event, selectedRelatedTable)"
+                    v-on:search:items="
+                      autocompleteRelatedDataSearch(
+                        $event,
+                        selectedRelatedTable
+                      )
+                    "
                     :multiple="true"
-                    v-on:chip:close="relatedData['attach_link__' + selectedRelatedTable].splice(relatedData['attach_link__' + selectedRelatedTable].indexOf($event), 1)"
+                    v-on:chip:close="
+                      relatedData[
+                        'attach_link__' + selectedRelatedTable
+                      ].splice(
+                        relatedData[
+                          'attach_link__' + selectedRelatedTable
+                        ].indexOf($event),
+                        1
+                      )
+                    "
                   />
                 </v-col>
               </v-row>
@@ -2561,27 +2580,28 @@
               </v-col>
 
               <v-col cols="12" md="6" class="pa-1 align-self-center">
-                <span class="subtitle-1"
+                <span
+                  class="subtitle-1"
                   v-if="
-                      currentAttachmentType !==
-                        getAttachmentTypeAsString(
-                          attachment.specimen_image_attachment
-                        )
-                    "
+                    currentAttachmentType !==
+                      getAttachmentTypeAsString(
+                        attachment.specimen_image_attachment
+                      )
+                  "
                 >
-                    <b>{{ $t("attachment." + currentAttachmentType) }} </b>
-                    <i class="fas fa-long-arrow-alt-right"></i>
-                    <b>
-                      {{
-                        $t(
-                          "attachment." +
-                            getAttachmentTypeAsString(
-                              attachment.specimen_image_attachment
-                            )
-                        )
-                      }}</b
-                    >
-                  </span>
+                  <b>{{ $t("attachment." + currentAttachmentType) }} </b>
+                  <i class="fas fa-long-arrow-alt-right"></i>
+                  <b>
+                    {{
+                      $t(
+                        "attachment." +
+                          getAttachmentTypeAsString(
+                            attachment.specimen_image_attachment
+                          )
+                      )
+                    }}</b
+                  >
+                </span>
               </v-col>
             </v-row>
           </div>
@@ -2847,7 +2867,9 @@ export default {
     },
 
     computedChangeType() {
-      this.changeType.forEach(type => type.disabled = !this.isValidToChangeTo(type.name));
+      this.changeType.forEach(
+        type => (type.disabled = !this.isValidToChangeTo(type.name))
+      );
       return this.changeType;
     }
   },
@@ -2923,36 +2945,50 @@ export default {
             attachmentHistory !== "fallbackValue"
           ) {
             this.attachment = attachmentHistory;
+            if (this.isNotEmpty(this.attachment.specimen)) {
+              this.autocomplete.specimen.push(this.attachment.specimen);
+            }
+            if (this.isNotEmpty(this.attachment.agent_digitised)) {
+              this.autocomplete.agent_digitised.push(this.attachment.agent_digitised);
+            }
+            if (this.isNotEmpty(this.attachment.copyright_agent)) {
+              this.autocomplete.copyright_agent.push(this.attachment.copyright_agent);
+            }
+            if (this.isNotEmpty(this.attachment.imageset)) {
+              this.autocomplete.imageset.push(this.attachment.imageset);
+            }
+            if (this.isNotEmpty(this.attachment.locality)) {
+              this.autocomplete.locality.push(this.attachment.locality);
+            }
+            if (this.isNotEmpty(this.attachment.reference)) {
+              this.autocomplete.reference.push(this.attachment.reference);
+            }
           }
           if (
             this.isNotEmpty(keywords) &&
             keywords !== "fallbackValue" &&
             keywords.length > 0
-          )
+          ) {
             this.relatedData.keyword = keywords;
+            this.autocomplete.keyword = this.relatedData.keyword;
+          }
 
           if (this.isPhotoArchive) {
             if (this.$route.params.imageset) {
-              this.attachment.imageset = this.$route.params.imageset;
+              this.$set(this.attachment, "imageset", this.$route.params.imageset);
               this.autocomplete.imageset.push(this.attachment.imageset);
             }
           }
 
           if (!this.isDigitisedReference) {
-            this.attachment.author = {
+            this.$set(this.attachment, "author", {
               id: this.currentUser.id,
               agent: this.currentUser.agent,
               forename: this.currentUser.forename,
               surename: this.currentUser.surename
-            };
+            });
             this.autocomplete.agent.push(this.attachment.author);
           }
-
-          // Universal attachment object
-          // const attachmentHistory = this.$localStorage.get('attachment', 'fallbackValue');
-          // if (attachmentHistory !== 'fallbackValue' && Object.keys(attachmentHistory).length !== 0 && attachmentHistory.constructor === Object) {
-          //   this.attachment = attachmentHistory
-          // }
         }
       },
       immediate: true
@@ -2977,25 +3013,81 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "attach_link__collection", name_short: "collection", iconClass: "fas fa-server" },
-          { name: "attach_link__specimen", name_short: "specimen", iconClass: "fas fa-flask" },
-          { name: "attach_link__sample", name_short: "sample",iconClass: "fas fa-vial" },
-          { name: "attach_link__sample_series", name_short: "sample_series", iconClass: "fas fa-vials" },
-          { name: "attach_link__analysis", name_short: "analysis", iconClass: "fas fa-chart-pie" },
-          { name: "attach_link__dataset", name_short: "dataset", iconClass: "fas fa-server" },
-          { name: "attach_link__doi", name_short: "doi", iconClass: "fas fa-database" },
-          { name: "attach_link__locality", name_short: "locality", iconClass: "fas fa-map-marker-alt" },
-          { name: "attach_link__drillcore", name_short: "drillcore", iconClass: "fas fa-tools" },
-          { name: "attach_link__drillcore_box", name_short: "drillcore_box", iconClass: "fas fa-boxes" },
+          {
+            name: "attach_link__collection",
+            name_short: "collection",
+            iconClass: "fas fa-server"
+          },
+          {
+            name: "attach_link__specimen",
+            name_short: "specimen",
+            iconClass: "fas fa-flask"
+          },
+          {
+            name: "attach_link__sample",
+            name_short: "sample",
+            iconClass: "fas fa-vial"
+          },
+          {
+            name: "attach_link__sample_series",
+            name_short: "sample_series",
+            iconClass: "fas fa-vials"
+          },
+          {
+            name: "attach_link__analysis",
+            name_short: "analysis",
+            iconClass: "fas fa-chart-pie"
+          },
+          {
+            name: "attach_link__dataset",
+            name_short: "dataset",
+            iconClass: "fas fa-server"
+          },
+          {
+            name: "attach_link__doi",
+            name_short: "doi",
+            iconClass: "fas fa-database"
+          },
+          {
+            name: "attach_link__locality",
+            name_short: "locality",
+            iconClass: "fas fa-map-marker-alt"
+          },
+          {
+            name: "attach_link__drillcore",
+            name_short: "drillcore",
+            iconClass: "fas fa-tools"
+          },
+          {
+            name: "attach_link__drillcore_box",
+            name_short: "drillcore_box",
+            iconClass: "fas fa-boxes"
+          },
           {
             name: "attach_link__preparation",
             name_short: "preparation",
             iconClass: "fas fa-prescription-bottle"
           },
-          { name: "attach_link__reference", name_short: "reference", iconClass: "fas fa-book" },
-          { name: "attach_link__storage", name_short: "storage", iconClass: "fas fa-archive" },
-          { name: "attach_link__project", name_short: "project", iconClass: "fas fa-project-diagram" },
-          { name: "attach_link__site", name_short: "site", iconClass: "fas fa-map-pin" }
+          {
+            name: "attach_link__reference",
+            name_short: "reference",
+            iconClass: "fas fa-book"
+          },
+          {
+            name: "attach_link__storage",
+            name_short: "storage",
+            iconClass: "fas fa-archive"
+          },
+          {
+            name: "attach_link__project",
+            name_short: "project",
+            iconClass: "fas fa-project-diagram"
+          },
+          {
+            name: "attach_link__site",
+            name_short: "site",
+            iconClass: "fas fa-map-pin"
+          }
         ],
         ratings: [
           { value: 5 },
@@ -3017,7 +3109,6 @@ export default {
           { name: "digitisedReference", value: 4, disabled: false }
         ],
         searchHistory: "attachmentSearchHistory",
-        activeTab: "specimen_identification",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "agent_digitised",
@@ -3260,7 +3351,6 @@ export default {
               }
             );
             this.autocomplete.attach_link__sample_series = this.relatedData.attach_link__sample_series;
-
           }
         );
         fetchAttachmentLinkAnalyses(this.$route.params.id).then(response => {
@@ -3320,7 +3410,7 @@ export default {
                 };
               }
             );
-          this.autocomplete.attach_link__drillcore_box = this.relatedData.attach_link__drillcore_box;
+            this.autocomplete.attach_link__drillcore_box = this.relatedData.attach_link__drillcore_box;
           }
         );
         fetchAttachmentLinkPreparations(this.$route.params.id).then(
@@ -3334,7 +3424,7 @@ export default {
                 };
               }
             );
-          this.autocomplete.attach_link__preparation = this.relatedData.attach_link__preparation;
+            this.autocomplete.attach_link__preparation = this.relatedData.attach_link__preparation;
           }
         );
         fetchAttachmentLinkReferences(this.$route.params.id).then(response => {
@@ -3426,8 +3516,6 @@ export default {
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
-
-      // Todo: Remove unnecessary fields from object which does not need them, for example only digitised reference needs reference field
 
       if (!this.$route.meta.isEdit) {
         if (this.isPhotoArchive) {
@@ -3531,82 +3619,82 @@ export default {
 
     fillAutocompleteFields(obj) {
       if (this.isNotEmpty(obj.agent_digitised__id)) {
-        this.$set(this.attachment, "agent_digitised", {
+        this.attachment.agent_digitised = {
           id: obj.agent_digitised__id,
           agent: obj.agent_digitised__agent
-        });
+        };
         this.autocomplete.agent_digitised.push(this.attachment.agent_digitised);
       }
       if (this.isNotEmpty(obj.author_id)) {
-        this.$set(this.attachment, "author", {
+        this.attachment.author = {
           id: obj.author_id,
           agent: obj.author__agent
-        });
+        };
         this.autocomplete.agent.push(this.attachment.author);
       }
       if (this.isNotEmpty(obj.copyright_agent__id)) {
-        this.$set(this.attachment, "copyright_agent", {
+        this.attachmentcopyright_agent = {
           id: obj.copyright_agent__id,
           agent: obj.copyright_agent__agent
-        });
+        };
         this.autocomplete.copyright_agent.push(this.attachment.copyright_agent);
       }
       if (this.isNotEmpty(obj.image_type__id)) {
-        this.$set(this.attachment, "image_type", {
+        this.attachment.image_type = {
           id: obj.image_type__id,
           value: obj.image_type__value,
           value_en: obj.image_type__value_en
-        });
+        };
       }
       if (this.isNotEmpty(obj.imageset__id)) {
-        this.$set(this.attachment, "imageset", {
+        this.attachment.imageset = {
           id: obj.imageset__id,
           imageset_number: obj.imageset__imageset_number
-        });
+        };
         this.autocomplete.imageset.push(this.attachment.imageset);
       }
       if (this.isNotEmpty(obj.licence__id)) {
-        this.$set(this.attachment, "licence", {
+        this.attachment.licence = {
           id: obj.licence__id,
           licence: obj.licence__licence,
           licence_en: obj.licence__licence_en
-        });
+        };
       }
       if (this.isNotEmpty(obj.locality)) {
-        this.$set(this.attachment, "locality", {
+        this.attachment.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
           locality_en: obj.locality__locality_en
-        });
+        };
         this.autocomplete.locality.push(this.attachment.locality);
       }
       if (this.isNotEmpty(obj.specimen__id)) {
-        this.$set(this.attachment, "specimen", {
+        this.attachment.specimen = {
           id: obj.specimen__id,
           specimen_id: obj.specimen_id,
           coll__number: obj.specimen__coll__number
-        });
+        };
         this.autocomplete.specimen.push(this.attachment.specimen);
       }
       if (this.isNotEmpty(obj.reference)) {
-        this.$set(this.attachment, "reference", {
+        this.attachment.reference = {
           id: obj.reference,
           reference: obj.reference__reference
-        });
+        };
         this.autocomplete.reference.push(this.attachment.reference);
       }
       if (this.isNotEmpty(obj.type)) {
-        this.$set(this.attachment, "type", {
+        this.attachment.type = {
           id: obj.type,
           value: obj.type__value,
           value_en: obj.type__value_en
-        });
+        };
       }
       if (this.isNotEmpty(obj.coll)) {
-        this.$set(this.attachment, "coll", {
+        this.attachment.coll = {
           id: obj.coll,
           number: obj.coll__number
-        });
+        };
       }
     },
 
@@ -3626,22 +3714,25 @@ export default {
       if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
         // DATE
         if (metadata.DateTimeOriginal) {
-          this.attachment.date_created = this.$moment(metadata.DateTimeOriginal, "YYYY-MM-DD");
+          let formattedMetadataDate = this.formatMetadataDate(metadata.DateTimeOriginal);
+          this.$set(this.attachment, "date_created", formattedMetadataDate);
         } else if (metadata.DateTime) {
-          this.attachment.date_created = this.$moment(metadata.DateTime, "YYYY-MM-DD");
-        } else this.attachment.date_created = this.getCurrentFormattedDate("YYYY-MM-DD");
+          let formattedMetadataDate = this.formatMetadataDate(metadata.DateTime);
+          this.$set(this.attachment, "date_created", formattedMetadataDate);
+        } else
+          this.$set(this.attachment, "date_created", this.getCurrentFormattedDate("YYYY-MM-DD"));
 
         // DEVICE_TXT
-        if (metadata.Model) this.attachment.device_txt = metadata.Model;
-        else if (metadata.Make) this.attachment.device_txt = metadata.Make;
+        if (metadata.Model) this.$set(this.attachment, "device_txt", metadata.Model);
+        else if (metadata.Make) this.$set(this.attachment, "device_txt", metadata.Make);
 
         // IMAGE DIMENSIONS
         if (metadata.PixelXDimension)
-          this.attachment.image_width = metadata.PixelXDimension;
-        else this.attachment.image_width = null;
+          this.$set(this.attachment, "image_width", metadata.PixelXDimension);
+        else this.$set(this.attachment, "image_width", null);
         if (metadata.PixelYDimension)
-          this.attachment.image_height = metadata.PixelYDimension;
-        else this.attachment.image_height = null;
+          this.$set(this.attachment, "image_height", metadata.PixelYDimension);
+        else this.$set(this.attachment, "image_height", null);
 
         if (this.isSpecimenImage) {
           // DESCRIPTION
@@ -3649,7 +3740,7 @@ export default {
             metadata.ImageDescription &&
             metadata.ImageDescription.trim().length > 0
           ) {
-            this.attachment.image_description_en = metadata.ImageDescription.trim();
+            this.$set(this.attachment, "image_description_en", metadata.ImageDescription.trim());
           }
         } else {
           // DESCRIPTION
@@ -3657,7 +3748,7 @@ export default {
             metadata.ImageDescription &&
             metadata.ImageDescription.trim().length > 0
           ) {
-            this.attachment.description_en = metadata.ImageDescription.trim();
+            this.$set(this.attachment, "description_en", metadata.ImageDescription.trim());
           }
         }
 
@@ -3679,9 +3770,8 @@ export default {
               seconds,
               metadata.GPSLatitudeRef
             );
-
-            this.attachment.image_latitude = latitude.toFixed(6);
-          } else this.attachment.image_latitude = null;
+            this.$set(this.attachment, "image_latitude", latitude.toFixed(6));
+          } else this.$set(this.attachment, "image_latitude", null);
           if (metadata.GPSLongitude) {
             const degrees =
               metadata.GPSLongitude[0].numerator /
@@ -3699,8 +3789,8 @@ export default {
               metadata.GPSLatitudeRef
             );
 
-            this.attachment.image_longitude = longitude.toFixed(6);
-          } else this.attachment.image_longitude = null;
+            this.$set(this.attachment, "image_longitude", longitude.toFixed(6));
+          } else this.$set(this.attachment, "image_longitude", null);
         }
       }
     },
@@ -3850,7 +3940,7 @@ export default {
           if (this.$i18n.locale === "ee") return "drillcore";
           else return "drillcore_en";
         case "drillcore_box":
-            return "number";
+          return "number";
         case "preparation":
           return "preparation_number";
         case "reference":
@@ -3906,6 +3996,21 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
+    },
+
+    formatMetadataDate(dateFromMetadata) {
+      if (dateFromMetadata && dateFromMetadata.length > 0) {
+        // Metadata format: YYYY:MM:DD hh:mm:ss
+        let date = dateFromMetadata.split(" ")[0];
+        let dateList = date.split(":");
+
+        let year = dateList[0];
+        let month = dateList[1];
+        let day = dateList[2];
+
+        return year + "-" + month + "-" + day;
+      }
+      return null;
     }
   }
 };

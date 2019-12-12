@@ -16,7 +16,6 @@
         :disabled="!previousId"
         :to="{ path: `/${object}/${previousId}` }"
         title="Go to previous record"
-        v-if="isNavigationShown"
         retain-focus-on-click
         :small="$vuetify.breakpoint.mdAndUp"
         class="text-none"
@@ -150,7 +149,6 @@
         :disabled="!nextId"
         :to="{ path: `/${object}/${nextId}` }"
         title="Go to next record"
-        v-if="isNavigationShown"
         retain-focus-on-click
         :small="$vuetify.breakpoint.mdAndUp"
         class="text-none"
@@ -177,10 +175,6 @@ export default {
     object: {
       type: String,
       default: "attachment"
-    },
-    isNavigationShown: {
-      type: Boolean,
-      default: false
     },
     isNavbarDark: {
       type: Boolean,
