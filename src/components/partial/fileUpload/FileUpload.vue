@@ -342,9 +342,13 @@ export default {
     },
     files(newVal) {
       this.readFile(newVal);
+    },
+    existingFiles(newVal) {
+      // Todo: Emit event when user chooses existing files
+      console.log(newVal);
     }
   },
-  /* Todo: When not multiple then do not push to files!!! */
+  // Todo: When not multiple then add only ONE!!!
   methods: {
     dropFile(event) {
       if (event.dataTransfer && event.dataTransfer.items) {

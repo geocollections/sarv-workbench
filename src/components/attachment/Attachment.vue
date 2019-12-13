@@ -508,10 +508,7 @@
                     icon
                     color="green"
                     :title="$t('add.new')"
-                    :to="{
-                      name: 'Keyword add',
-                      query: { attachment: JSON.stringify(attachment) }
-                    }"
+                    @click="windowOpenNewTab('/keyword/add', { attachment: JSON.stringify(attachment) })"
                     target="newKeywordWindow"
                   >
                     <v-icon>fas fa-plus</v-icon>

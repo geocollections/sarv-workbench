@@ -535,13 +535,15 @@ const formManipulation = {
       this.$router.push({ path: "/" + object });
     },
 
-    windowOpenNewTab(name, path, query = {}, meta) {
+    windowOpenNewTab(path, query = {}, meta) {
       let routeData = this.$router.resolve({
         path: path,
         query: query,
         meta: meta
       });
-      window.open(routeData.href, "_blank");
+      let height = window.screen.height;
+      let top = height ? (height / 2) - 364 : 176;
+      window.open(routeData.href, "PopupWindow", `top=${top},left=325,width=786,height=600`);
     },
 
     openGeoInNewWindow(params) {
