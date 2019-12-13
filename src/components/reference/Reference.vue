@@ -319,11 +319,12 @@
           <!-- ABSTRACT and AUTHOR KEYWORDS -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <textarea-wrapper
-                v-model="reference.abstract"
-                :color="bodyActiveColor"
-                :label="$t('reference.abstract')"
-              />
+              <editor :data.sync="reference.abstract"/>
+<!--              <textarea-wrapper-->
+<!--                v-model="reference.abstract"-->
+<!--                :color="bodyActiveColor"-->
+<!--                :label="$t('reference.abstract')"-->
+<!--              />-->
             </v-col>
 
             <!-- AUTHOR KEYWORDS -->
@@ -843,10 +844,12 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import Editor from "../partial/editor/Editor";
 
 export default {
   name: "Reference",
   components: {
+    Editor,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
