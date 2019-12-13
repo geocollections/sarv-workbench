@@ -148,6 +148,7 @@
                   v-model="project.date_start"
                   :color="bodyActiveColor"
                   :label="$t('project.date_start')"
+                  v-on:date:clear="project.date_start = null"
               />
             </v-col>
 
@@ -156,6 +157,7 @@
                   v-model="project.date_end"
                   :color="bodyActiveColor"
                   :label="$t('project.date_end')"
+                  v-on:date:clear="project.date_end = null"
               />
             </v-col>
 
@@ -814,14 +816,14 @@ export default {
     formatDataForUpload(objectToUpload, saveRelatedData = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.date_start))
-        uploadableObject.date_start = this.formatDateForUpload(
-          objectToUpload.date_start
-        );
-      if (this.isNotEmpty(objectToUpload.date_end))
-        uploadableObject.date_end = this.formatDateForUpload(
-          objectToUpload.date_end
-        );
+      // if (this.isNotEmpty(objectToUpload.date_start))
+      //   uploadableObject.date_start = this.formatDateForUpload(
+      //     objectToUpload.date_start
+      //   );
+      // if (this.isNotEmpty(objectToUpload.date_end))
+      //   uploadableObject.date_end = this.formatDateForUpload(
+      //     objectToUpload.date_end
+      //   );
 
       //autocomplete fields
       if (this.isNotEmpty(objectToUpload.project_type))

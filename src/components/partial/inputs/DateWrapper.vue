@@ -8,7 +8,12 @@
     min-width="290px"
   >
     <template v-slot:activator="{ on }">
-      <input-wrapper v-bind="$attrs" is-date v-on="on" />
+      <input-wrapper
+        v-bind="$attrs"
+        is-date
+        v-on="on"
+        v-on:date:clear="$emit('date:clear')"
+      />
     </template>
     <v-date-picker
       @input="menuState = false"

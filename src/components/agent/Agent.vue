@@ -267,6 +267,7 @@
                 v-model="agent.date_born"
                 :color="bodyActiveColor"
                 :label="$t('agent.date_born')"
+                v-on:date:clear="agent.date_born = null"
               />
             </v-col>
 
@@ -275,6 +276,7 @@
                 v-model="agent.date_deceased"
                 :color="bodyActiveColor"
                 :label="$t('agent.date_deceased')"
+                v-on:date:clear="agent.date_deceased = null"
               />
             </v-col>
           </v-row>

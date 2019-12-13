@@ -279,6 +279,7 @@
                   v-model="sample.date_collected"
                   :color="bodyActiveColor"
                   :label="$t('sample.date_collected')"
+                  v-on:date:clear="sample.date_collected = null"
                 />
               </v-col>
 
@@ -687,6 +688,7 @@
                   v-model="sample.date_collected"
                   :color="bodyActiveColor"
                   :label="$t('sample.date_collected')"
+                  v-on:date:clear="sample.date_collected = null"
                 />
               </v-col>
 
@@ -1485,10 +1487,10 @@ export default {
         uploadableObject.latitude1 = objectToUpload.latitude1.toFixed(6);
       if (this.isNotEmpty(objectToUpload.longitude1))
         uploadableObject.longitude1 = objectToUpload.longitude1.toFixed(6);
-      if (this.isNotEmpty(objectToUpload.date_collected))
-        uploadableObject.date_collected = this.formatDateForUpload(
-          objectToUpload.date_collected
-        );
+      // if (this.isNotEmpty(objectToUpload.date_collected))
+      //   uploadableObject.date_collected = this.formatDateForUpload(
+      //     objectToUpload.date_collected
+      //   );
       if (this.isNotEmpty(objectToUpload.depth))
         uploadableObject.depth = parseFloat(objectToUpload.depth);
       if (this.isNotEmpty(objectToUpload.depth_interval))

@@ -1500,17 +1500,17 @@ export default {
           ? uploadableObject.date_type.id
           : uploadableObject.date_type;
       }
-      if (this.isNotEmpty(uploadableObject.datacite_updated))
-        uploadableObject.datacite_updated = this.formatDateForUpload(
-          objectToUpload.datacite_updated,
-          false
-        );
-
-      if (this.isNotEmpty(uploadableObject.datacite_created))
-        uploadableObject.datacite_created = this.formatDateForUpload(
-          objectToUpload.datacite_created,
-          false
-        );
+      // if (this.isNotEmpty(uploadableObject.datacite_updated))
+      //   uploadableObject.datacite_updated = this.formatDateForUpload(
+      //     objectToUpload.datacite_updated,
+      //     false
+      //   );
+      //
+      // if (this.isNotEmpty(uploadableObject.datacite_created))
+      //   uploadableObject.datacite_created = this.formatDateForUpload(
+      //     objectToUpload.datacite_created,
+      //     false
+      //   );
 
       console.log("This object is sent in string format (related_data):");
       console.log(uploadableObject);

@@ -1033,7 +1033,7 @@ const formManipulation = {
     },
 
     isValidDate(date) {
-      return moment(date, "YYYY-MM-DD", true).isValid()
+      return moment(date, "YYYY-MM-DD", true).isValid();
     },
 
     getCurrentFormattedDate(format) {

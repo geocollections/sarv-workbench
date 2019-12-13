@@ -186,6 +186,7 @@
                 v-model="preparation.date_prepared"
                 :color="bodyActiveColor"
                 :label="$t('preparation.date_prepared')"
+                v-on:date:clear="preparation.date_prepared = null"
               />
             </v-col>
 
@@ -194,6 +195,7 @@
                 v-model="preparation.identification_date"
                 :color="bodyActiveColor"
                 :label="$t('preparation.identification_date')"
+                v-on:date:clear="preparation.identification_date = null"
               />
             </v-col>
           </v-row>

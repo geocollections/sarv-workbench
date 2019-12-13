@@ -260,6 +260,7 @@
                     v-model="attachment.date_created"
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateCreated')"
+                    v-on:date:clear="attachment.date_created = null"
                   />
                 </v-col>
 
@@ -589,6 +590,7 @@
                     v-model="attachment.date_digitised"
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
+                    v-on:date:clear="attachment.date_digitised = null"
                   />
                 </v-col>
 
@@ -755,6 +757,7 @@
                     v-model="attachment.date_created"
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateCreated')"
+                    v-on:date:clear="attachment.date_created = null"
                   />
                 </v-col>
 
@@ -899,6 +902,7 @@
                     v-model="attachment.date_digitised"
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
+                    v-on:date:clear="attachment.date_digitised = null"
                   />
                 </v-col>
 
@@ -1059,6 +1063,7 @@
                     v-model="attachment.date_created"
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateCreated')"
+                    v-on:date:clear="attachment.date_created = null"
                   />
                 </v-col>
 
@@ -1349,6 +1354,7 @@
                     v-model="attachment.date_digitised"
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
+                    v-on:date:clear="attachment.date_digitised = null"
                   />
                 </v-col>
               </v-row>
@@ -2496,6 +2502,7 @@
                     v-model="attachment.date_digitised"
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
+                    v-on:date:clear="attachment.date_digitised = null"
                   />
                 </v-col>
 
@@ -3224,7 +3231,6 @@ export default {
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
         this.$emit("set-object", "attachment");
-        // fetchAttachment(this.$route.params.id).then(
         fetchAttachment(this.$route.params.id, this.currentUser).then(
           response => {
             let handledResponse = this.handleResponse(response);
@@ -3526,20 +3532,20 @@ export default {
         uploadableObject.author = uploadableObject.author.id;
       if (this.isNotEmpty(uploadableObject.copyright_agent))
         uploadableObject.copyright_agent = uploadableObject.copyright_agent.id;
-      if (this.isNotEmpty(uploadableObject.date_created)) {
-        if (!this.isValidDate(uploadableObject.date_created)) {
-          this.attachment.date_created = null;
-          delete uploadableObject.date_created;
-          toastInfo({ text: "Field 'Date created' is invalid" });
-        }
-      }
-      if (this.isNotEmpty(uploadableObject.date_digitised)) {
-        if (!this.isValidDate(uploadableObject.date_digitised)) {
-          this.attachment.date_digitised = null;
-          delete uploadableObject.date_digitised;
-          toastInfo({ text: "Field 'Date digitised' is invalid" });
-        }
-      }
+      // if (this.isNotEmpty(uploadableObject.date_created)) {
+      //   if (!this.isValidDate(uploadableObject.date_created)) {
+      //     this.attachment.date_created = null;
+      //     delete uploadableObject.date_created;
+      //     toastInfo({ text: "Field 'Date created' is invalid" });
+      //   }
+      // }
+      // if (this.isNotEmpty(uploadableObject.date_digitised)) {
+      //   if (!this.isValidDate(uploadableObject.date_digitised)) {
+      //     this.attachment.date_digitised = null;
+      //     delete uploadableObject.date_digitised;
+      //     toastInfo({ text: "Field 'Date digitised' is invalid" });
+      //   }
+      // }
       if (this.isNotEmpty(uploadableObject.image_type))
         uploadableObject.image_type = uploadableObject.image_type.id;
       if (this.isNotEmpty(uploadableObject.imageset))

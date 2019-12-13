@@ -5,9 +5,7 @@
       dense
       hide-details
       outlined
-      :clearable="isDate"
       :placeholder="!!$attrs.placeholder ? $attrs.placeholder : ' '"
-      clear-icon="fas fa-times"
       :readonly="isDate || !!$attrs.readonly"
       :error="useCustomState ? $attrs.error : (useState ? !$attrs.value : false)"
       :success="useCustomState ? $attrs.success : (useState ? !!$attrs.value : false)"
@@ -19,11 +17,16 @@
         <v-icon small>far fa-calendar-alt</v-icon>
       </template>
 
-      <template v-if="useState" v-slot:append>
-        <v-icon small v-if="!$attrs.value" color="red"
+      <template v-if="useState || isDate" v-slot:append>
+        <div class="v-input__icon v-input__icon--clear" style="cursor: pointer;" v-if="isDate">
+          <v-icon @click="$emit('date:clear')">fas fa-times</v-icon>
+        </div>
+        <div v-else>
+          <v-icon small v-if="!$attrs.value" color="red"
           >fas fa-exclamation-circle</v-icon
-        >
-        <v-icon small v-else color="green">fas fa-check</v-icon>
+          >
+          <v-icon small v-else color="green">fas fa-check</v-icon>
+        </div>
       </template>
 
       <template v-else-if="useCustomState" v-slot:append>

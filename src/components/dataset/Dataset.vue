@@ -84,6 +84,7 @@
                 v-model="dataset.date"
                 :color="bodyActiveColor"
                 :label="$t('common.date')"
+                v-on:date:clear="dataset.date = null"
               />
             </v-col>
 
@@ -562,8 +563,8 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.date))
-        uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
+      // if (this.isNotEmpty(objectToUpload.date))
+      //   uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
 
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.copyright_agent))

@@ -279,6 +279,7 @@
                 v-model="specimen.date_collected"
                 :color="bodyActiveColor"
                 :label="$t('specimen.date_collected')"
+                v-on:date:clear="specimen.date_collected = null"
               />
             </v-col>
 
@@ -1314,10 +1315,10 @@ export default {
       if (!this.$route.meta.isEdit)
         this.$localStorage.set("specimen", objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.date_collected))
-        uploadableObject.date_collected = this.formatDateForUpload(
-          objectToUpload.date_collected
-        );
+      // if (this.isNotEmpty(objectToUpload.date_collected))
+      //   uploadableObject.date_collected = this.formatDateForUpload(
+      //     objectToUpload.date_collected
+      //   );
 
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.coll))

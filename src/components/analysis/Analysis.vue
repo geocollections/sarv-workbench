@@ -157,6 +157,7 @@
                 v-model="analysis.date"
                 :color="bodyActiveColor"
                 :label="$t('analysis.date')"
+                v-on:date:clear="analysis.date = null"
               />
             </v-col>
 
@@ -165,6 +166,7 @@
                 v-model="analysis.date_end"
                 :color="bodyActiveColor"
                 :label="$t('analysis.date_end')"
+                v-on:date:clear="analysis.date_end = null"
               />
             </v-col>
 
@@ -857,12 +859,12 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.date))
-        uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
-      if (this.isNotEmpty(objectToUpload.date_end))
-        uploadableObject.date_end = this.formatDateForUpload(
-          objectToUpload.date_end
-        );
+      // if (this.isNotEmpty(objectToUpload.date))
+      //   uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
+      // if (this.isNotEmpty(objectToUpload.date_end))
+      //   uploadableObject.date_end = this.formatDateForUpload(
+      //     objectToUpload.date_end
+      //   );
 
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.sample))
