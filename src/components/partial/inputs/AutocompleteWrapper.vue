@@ -10,6 +10,7 @@
       outlined
       :placeholder="$t('add.inputs.autocomplete')"
       :item-color="$attrs.color"
+      item-value="id"
       return-object
       :cache-items="noCache ? false : isSearchable"
       v-bind="$attrs"

@@ -3224,12 +3224,14 @@ export default {
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
         this.$emit("set-object", "attachment");
+        // fetchAttachment(this.$route.params.id).then(
         fetchAttachment(this.$route.params.id, this.currentUser).then(
           response => {
             let handledResponse = this.handleResponse(response);
 
             if (handledResponse.length > 0) {
               this.$emit("object-exists", true);
+              // this.$set(this, "attachment", this.handleResponse(response)[0])
               this.attachment = this.handleResponse(response)[0];
               this.rawAttachment = cloneDeep(this.handleResponse(response)[0]);
               this.fillAutocompleteFields(this.attachment);
@@ -3595,82 +3597,82 @@ export default {
 
     fillAutocompleteFields(obj) {
       if (this.isNotEmpty(obj.agent_digitised__id)) {
-        this.attachment.agent_digitised = {
+        this.$set(this.attachment, "agent_digitised", {
           id: obj.agent_digitised__id,
           agent: obj.agent_digitised__agent
-        };
+        });
         this.autocomplete.agent_digitised.push(this.attachment.agent_digitised);
       }
       if (this.isNotEmpty(obj.author_id)) {
-        this.attachment.author = {
+        this.$set(this.attachment, "author", {
           id: obj.author_id,
           agent: obj.author__agent
-        };
+        });
         this.autocomplete.agent.push(this.attachment.author);
       }
       if (this.isNotEmpty(obj.copyright_agent__id)) {
-        this.attachmentcopyright_agent = {
+        this.$set(this.attachment, "copyright_agent", {
           id: obj.copyright_agent__id,
           agent: obj.copyright_agent__agent
-        };
+        });
         this.autocomplete.copyright_agent.push(this.attachment.copyright_agent);
       }
       if (this.isNotEmpty(obj.image_type__id)) {
-        this.attachment.image_type = {
+        this.$set(this.attachment, "image_type", {
           id: obj.image_type__id,
           value: obj.image_type__value,
           value_en: obj.image_type__value_en
-        };
+        });
       }
       if (this.isNotEmpty(obj.imageset__id)) {
-        this.attachment.imageset = {
+        this.$set(this.attachment, "imageset", {
           id: obj.imageset__id,
           imageset_number: obj.imageset__imageset_number
-        };
+        });
         this.autocomplete.imageset.push(this.attachment.imageset);
       }
       if (this.isNotEmpty(obj.licence__id)) {
-        this.attachment.licence = {
+        this.$set(this.attachment, "licence", {
           id: obj.licence__id,
           licence: obj.licence__licence,
           licence_en: obj.licence__licence_en
-        };
+        });
       }
       if (this.isNotEmpty(obj.locality)) {
-        this.attachment.locality = {
+        this.$set(this.attachment, "locality", {
           id: obj.locality,
           locality: obj.locality__locality,
           locality_en: obj.locality__locality_en
-        };
+        });
         this.autocomplete.locality.push(this.attachment.locality);
       }
       if (this.isNotEmpty(obj.specimen__id)) {
-        this.attachment.specimen = {
+        this.$set(this.attachment, "specimen", {
           id: obj.specimen__id,
           specimen_id: obj.specimen_id,
           coll__number: obj.specimen__coll__number
-        };
+        });
         this.autocomplete.specimen.push(this.attachment.specimen);
       }
       if (this.isNotEmpty(obj.reference)) {
-        this.attachment.reference = {
+        this.$set(this.attachment, "reference", {
           id: obj.reference,
           reference: obj.reference__reference
-        };
+        });
         this.autocomplete.reference.push(this.attachment.reference);
       }
       if (this.isNotEmpty(obj.type)) {
-        this.attachment.type = {
+        this.$set(this.attachment, "type", {
           id: obj.type,
           value: obj.type__value,
           value_en: obj.type__value_en
-        };
+        });
       }
       if (this.isNotEmpty(obj.coll)) {
-        this.attachment.coll = {
+        this.$set(this.attachment, "coll", {
           id: obj.coll,
           number: obj.coll__number
-        };
+        });
       }
     },
 
