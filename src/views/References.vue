@@ -22,7 +22,6 @@
       :multi-ordering="true"
       :export-buttons="true"
       :use-list-view="true"
-      :use-alternative-table-view="true"
       :is-library-active="isLibraryActive"
       v-on:search-params-changed="searchParametersChanged"
       v-on:add-reference-to-active-library="addReferenceToActiveLibrary"

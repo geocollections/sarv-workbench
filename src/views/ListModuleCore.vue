@@ -13,7 +13,7 @@
 
       <!-- OPTIONS -->
       <div
-        v-if="useListView || useImageView || useAlternativeTableView"
+        v-if="useListView || useImageView"
         class="mb-2"
       >
         <v-radio-group
@@ -45,13 +45,6 @@
             class="mb-2"
             value="image"
             :label="$t('buttons.imageView')"
-            :color="appSettings.bodyActiveColor"
-          ></v-radio>
-          <v-radio
-            v-if="useAlternativeTableView"
-            class="mb-2"
-            value="alternativeTable"
-            :label="$t('references.alternativeTableView')"
             :color="appSettings.bodyActiveColor"
           ></v-radio>
         </v-radio-group>
@@ -87,17 +80,6 @@
         />
       </div>
     </div>
-
-    <!-- ALTERNATIVE TABLE CONTROLS -->
-    <alternative-table-controls
-      class="mt-3"
-      v-if="isAlternativeTable && response.results.length > 0"
-      :columns="Object.keys(response.results[0])"
-      :alternativeTableControls="alternativeTableControls"
-      v-on:set-default-controls="
-        setDefaultAlternativeTableControlsFromResetButton
-      "
-    />
 
     <!-- DATA TABLE -->
     <v-card
@@ -176,7 +158,6 @@
 <script>
 import ExportButtons from "../components/partial/export/ExportButtons";
 import ListView from "../components/partial/ListView";
-import AlternativeTableControls from "../components/reference/AlternativeTableControls";
 import {
   fetchAddItemToSelection,
   fetchChangePrivacyState
@@ -188,7 +169,6 @@ import { mapState } from "vuex";
 
 export default {
   components: {
-    AlternativeTableControls,
     ExportButtons,
     ListView,
     ImageView
@@ -248,11 +228,6 @@ export default {
       default: false
     },
 
-    useAlternativeTableView: {
-      type: Boolean,
-      default: false
-    },
-
     combinedView: {
       type: Boolean,
       default: false
@@ -289,8 +264,7 @@ export default {
         count: 0,
         results: []
       },
-      currentView: "table",
-      alternativeTableControls: this.setDefaultAlternativeTableControls()
+      currentView: "table"
     };
   },
 
@@ -329,10 +303,6 @@ export default {
 
     isImageView() {
       return this.currentView === "image";
-    },
-
-    isAlternativeTable() {
-      return this.currentView === "alternativeTable";
     },
 
     // Special use case for references (choosing reference to active library).
@@ -421,24 +391,6 @@ export default {
         }
       );
     }, 500),
-
-    setDefaultAlternativeTableControls() {
-      return {
-        height: "4",
-        width: "8",
-        size: "14",
-        fields:
-          this.response &&
-          this.response.results &&
-          this.response.results.length > 0
-            ? Object.keys(this.response.results[0])
-            : []
-      };
-    },
-
-    setDefaultAlternativeTableControlsFromResetButton() {
-      this.alternativeTableControls = this.setDefaultAlternativeTableControls();
-    },
 
     changeObjectsPrivacyState(state, id) {
       let formData = new FormData();

@@ -1,5 +1,5 @@
 <template>
-  <div class="list-view" :class="bodyColor.split('-')[0] + '-5'">
+  <div class="list-view" :class="bodyColor.split('n-')[0] + 'n-5'">
     <div class="row">
       <div class="col">
         <reference-list-view
