@@ -432,8 +432,8 @@
       <transition>
         <div v-show="block.description" class="pa-1">
           <!-- REFERENCE KEYWORDS -->
-          <v-row no-gutters>
-            <v-col cols="10" sm="11" class="pa-1">
+          <div class="d-flex justify-content-start flex-wrap pa-1">
+            <div class="mr-3 flex-grow-1">
               <autocomplete-wrapper
                 v-model="relatedData.keyword"
                 :color="bodyActiveColor"
@@ -448,23 +448,20 @@
                 :multiple="true"
                 v-on:chip:close="relatedData.keyword.splice(relatedData.keyword.indexOf($event), 1)"
               />
-            </v-col>
+            </div>
 
-            <v-col cols="2" sm="1" class="pa-1 text-right">
+            <div class="mr-2 my-1 align-self-end">
               <v-btn
                 icon
                 :title="$t('add.new')"
-                :to="{
-                  name: 'Keyword add',
-                  query: { reference: JSON.stringify(reference) }
-                }"
+                @click="windowOpenNewTab('/keyword/add', { attachment: JSON.stringify(reference) })"
                 target="newKeywordWindow"
                 color="green"
               >
                 <v-icon>fas fa-plus</v-icon>
               </v-btn>
-            </v-col>
-          </v-row>
+            </div>
+          </div>
 
           <!-- REMARKS -->
           <v-row no-gutters>

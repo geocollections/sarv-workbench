@@ -1265,6 +1265,8 @@ export default {
         } else uploadableObject.related_data.doi_date = null;
       }
 
+      // this.fillMissingFieldsWithNull(this.copyFields);
+
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
