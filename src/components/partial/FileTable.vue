@@ -90,7 +90,7 @@
             variant="outline-primary"
             title="Open file detail view"
             @click="
-              windowOpenNewTab('attachment', '/attachment/' + file[tableId])
+              windowOpenNewTab('/attachment/' + file[tableId])
             "
           >
             <i class="fas fa-eye"></i>
