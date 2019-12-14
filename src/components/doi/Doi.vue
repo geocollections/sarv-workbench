@@ -59,7 +59,7 @@
             <!-- TODO: Find a way to change vue-multiselect size like b-form-input size -->
             <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
-                v-model="doi.fossil"
+                v-model="doi.resource_type"
                 :color="bodyActiveColor"
                 :items="autocomplete.resource_type"
                 :loading="autocomplete.loaders.resource_type"
@@ -353,7 +353,7 @@
                 :items="autocomplete.reference"
                 :loading="autocomplete.loaders.reference"
                 :item-text="customLabelForReference"
-                :label="$t('doi.resourceTypeGeneral')"
+                :label="$t('doi.primaryReference')"
                 is-link
                 route-object="reference"
                 is-searchable
@@ -368,7 +368,7 @@
                 :items="autocomplete.dataset"
                 :loading="autocomplete.loaders.dataset"
                 :item-text="customLabelForDataset"
-                :label="$t('doi.resourceTypeGeneral')"
+                :label="$t('doi.primaryDataset')"
                 is-link
                 route-object="dataset"
                 is-searchable
