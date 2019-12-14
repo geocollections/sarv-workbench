@@ -7,7 +7,7 @@
       hide-details
       placeholder=" "
       outlined
-      rows="3"
+      rows="1"
       :error="useState ? !$attrs.value : false"
       :success="useState ? !!$attrs.value : false"
       v-bind="$attrs"
