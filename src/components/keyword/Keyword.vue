@@ -276,15 +276,21 @@ export default {
         value: obj.language__value,
         value_en: obj.language__value_en
       };
-      this.keyword.keyword_category = {
-        id: obj.keyword_category,
-        name: obj.keyword_category__name,
-        name_en: obj.keyword_category__name_en
-      };
-      this.keyword.related_keyword = {
-        id: obj.related_keyword,
-        keyword: obj.related_keyword__keyword
-      };
+      if (this.isNotEmpty(obj.keyword_category)) {
+        this.keyword.keyword_category = {
+          id: obj.keyword_category,
+          name: obj.keyword_category__name,
+          name_en: obj.keyword_category__name_en
+        };
+        this.autocomplete.keyword_category.push(this.keyword.keyword_category);
+      }
+      if (this.isNotEmpty(obj.keyword_category)) {
+        this.keyword.related_keyword = {
+          id: obj.related_keyword,
+          keyword: obj.related_keyword__keyword
+        };
+        this.autocomplete.related_keyword.push(this.keyword.related_keyword);
+      }
     },
 
     setDefaultSearchParameters() {
