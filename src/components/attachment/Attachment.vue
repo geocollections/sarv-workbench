@@ -3703,8 +3703,7 @@ export default {
         } else if (metadata.DateTime) {
           let formattedMetadataDate = this.formatMetadataDate(metadata.DateTime);
           this.$set(this.attachment, "date_created", formattedMetadataDate);
-        } else
-          this.$set(this.attachment, "date_created", this.getCurrentFormattedDate("YYYY-MM-DD"));
+        }
 
         // DEVICE_TXT
         if (metadata.Model) this.$set(this.attachment, "device_txt", metadata.Model);
@@ -3713,10 +3712,8 @@ export default {
         // IMAGE DIMENSIONS
         if (metadata.PixelXDimension)
           this.$set(this.attachment, "image_width", metadata.PixelXDimension);
-        else this.$set(this.attachment, "image_width", null);
         if (metadata.PixelYDimension)
           this.$set(this.attachment, "image_height", metadata.PixelYDimension);
-        else this.$set(this.attachment, "image_height", null);
 
         if (this.isSpecimenImage) {
           // DESCRIPTION
@@ -3755,7 +3752,7 @@ export default {
               metadata.GPSLatitudeRef
             );
             this.$set(this.attachment, "image_latitude", latitude.toFixed(6));
-          } else this.$set(this.attachment, "image_latitude", null);
+          }
           if (metadata.GPSLongitude) {
             const degrees =
               metadata.GPSLongitude[0].numerator /
@@ -3774,7 +3771,7 @@ export default {
             );
 
             this.$set(this.attachment, "image_longitude", longitude.toFixed(6));
-          } else this.$set(this.attachment, "image_longitude", null);
+          }
         }
       }
     },
