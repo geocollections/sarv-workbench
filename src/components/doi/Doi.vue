@@ -1394,6 +1394,7 @@ export default {
           id: doi.reference__id,
           reference: doi.reference__reference
         };
+        this.autocomplete.reference.push(this.relatedData[object]);
         this.setBlockVisibility(object, this.relatedData.count[object]);
         return;
       } else if (
@@ -1408,6 +1409,7 @@ export default {
           name: doi.dataset__name,
           name_en: doi.dataset__name_en
         };
+        this.autocomplete.dataset.push(this.relatedData[object]);
         this.setBlockVisibility(object, this.relatedData.count[object]);
         return;
       } else if (object === "attachment_link") {
