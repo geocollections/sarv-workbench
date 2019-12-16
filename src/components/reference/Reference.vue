@@ -559,19 +559,12 @@
 
       <transition>
         <div v-show="block.digital" class="pa-1">
-          <multimedia-component
-            v-if="attachment.length === 0"
+          <file-upload
+            :files-from-object="attachment"
             v-on:file-uploaded="addPDF"
-            :recordOptions="false"
             acceptable-format="application/pdf"
-            style="margin-right: -10px; margin-left: -10px"
-            :accept-multiple="false"
-            :show-try-again-button="true"
-          />
-          <file-table
-            :attachments="attachment"
-            object="reference"
-            v-if="attachment.length > 0"
+            :is-clearable="false"
+            :is-draggable="!(attachment && attachment.length > 0)"
           />
         </div>
       </transition>
@@ -605,28 +598,15 @@
         <div v-show="block.files" class="pa-1">
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <autocomplete-wrapper
-                v-model="relatedData.attachment"
-                :color="bodyActiveColor"
-                :items="autocomplete.attachment"
-                :loading="autocomplete.loaders.attachment3"
-                item-text="original_filename"
-                :label="$t('reference.attachments')"
-                is-link
-                route-object="attachment"
-                is-searchable
-                v-on:search:items="autocompleteAttachmentSearch3"
-                :multiple="true"
-                v-on:chip:close="relatedData.attachment.splice(relatedData.attachment.indexOf($event), 1)"
+              <file-upload
+                show-existing
+                :files-from-object="relatedData.attachment"
+                v-on:update:existing-files="addExistingFiles"
+                v-on:file-uploaded="addFiles"
+                accept-multiple
               />
             </v-col>
           </v-row>
-
-          <file-table
-            :attachments="relatedData.attachment"
-            object="reference"
-            v-if="relatedData.attachment.length > 0"
-          />
         </div>
       </transition>
     </v-card>
@@ -831,8 +811,6 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import copyForm from "../../mixins/copyForm";
 import LocalityReference from "./relatedTables/LocalityReference";
-import FileTable from "../partial/FileTable";
-import MultimediaComponent from "../partial/MultimediaComponent";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapGetters, mapState } from "vuex";
@@ -842,20 +820,20 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import Editor from "../partial/editor/Editor";
+import FileUpload from "../partial/fileUpload/FileUpload";
 
 export default {
   name: "Reference",
   components: {
+    FileUpload,
     Editor,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
     NewDoiButton,
-    MultimediaComponent,
     Spinner,
-    LocalityReference,
-    FileTable
+    LocalityReference
   },
   props: {
     isBodyActiveColorDark: {
@@ -1617,6 +1595,14 @@ export default {
 
     addPDF(fileData) {
       this.addFileAsObject(fileData, "reference");
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "reference");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment = files;
     }
   }
 };

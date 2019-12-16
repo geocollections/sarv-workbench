@@ -57,6 +57,7 @@
             <!-- Todo: Implement new file upload component -->
             <!-- NEW -->
             <file-upload
+              accept-multiple
               :record-options="recordOptions"
               :record-image="recordImage"
               :record-video="recordVideo"

@@ -1,9 +1,9 @@
 <template>
-  <div class="mt-2">
-    <v-row no-gutters>
+  <div>
+    <v-row no-gutters v-if="isDraggable">
       <v-col cols="12" class="pa-1">
         <label
-          :for="`file-input`"
+          :for="`${id}`"
           :class="isDragging ? 'dragging upload-icon py-3' : 'py-5'"
           v-on:dragover.stop.prevent="isDragging = true"
           v-on:dragleave.stop.prevent="isDragging = false"
@@ -16,17 +16,13 @@
         </label>
 
         <v-file-input
-          id="file-input"
+          :id="`${id}`"
           class="d-none"
           :multiple="acceptMultiple"
           :accept="acceptableFormat"
           @change="addFile"
+          :disabled="isDisabled"
         />
-
-        <div class="grey--text mt-1" style="font-size: 0.8rem">
-          <div v-if="acceptMultiple">{{ $t("add.errors.files") }}.</div>
-          <div v-else>{{ $t("add.errors.files2") }}.</div>
-        </div>
       </v-col>
     </v-row>
 
@@ -127,7 +123,7 @@
 
       <div class="flex-grow-1"></div>
 
-      <div class="ma-1" v-if="userHasInsertedFiles">
+      <div class="ma-1" v-if="userHasInsertedFiles && isClearable">
         <v-btn
           :icon="$vuetify.breakpoint.mdAndDown"
           class="text-none"
@@ -158,21 +154,20 @@
           :loading="autocomplete.loaders.attachment"
           item-text="original_filename"
           :label="$t('reference.attachments')"
-          is-link
+          :is-link="!isDisabled"
           route-object="attachment"
           is-searchable
           v-on:search:items="autocompleteAttachmentSearch"
-          :multiple="true"
-          v-on:chip:close="
-            existingFiles.splice(existingFiles.indexOf($event), 1)
-          "
+          :multiple="acceptMultiple"
+          v-on:chip:close="existingFiles.splice(existingFiles.indexOf($event), 1)"
+          :disabled="isDisabled"
         />
       </v-col>
     </v-row>
 
     <!-- EXISTING FILES -->
-    <v-row no-gutters v-if="existingFiles && existingFiles.length > 0">
-      <v-col cols="12" class="pa-1">
+    <v-row no-gutters v-if="isExistingFilesValid">
+      <v-col cols="12" class="pa-1" v-if="showExisting && this.existingFiles.length > 0">
         <div class="title">
           {{ $t("messages.existingFiles") }}: <b>{{ existingFiles.length }}</b>
         </div>
@@ -180,7 +175,7 @@
 
       <v-col cols="12" class="pa-1">
         <image-view-wrapper
-          :data="existingFiles"
+          :data="Array.isArray(existingFiles) ? existingFiles : [existingFiles]"
           :body-color="appSettings.bodyColor"
           :body-active-color="appSettings.bodyActiveColor"
           clear-item-background
@@ -189,7 +184,7 @@
     </v-row>
 
     <!-- NEW FILES -->
-    <v-row no-gutters v-if="files && files.length > 0">
+    <v-row no-gutters v-if="isFilesValid">
       <v-col cols="12" class="pa-1" v-if="showExisting">
         <div class="title">
           {{ $t("messages.newFiles") }}: <b>{{ files.length }}</b>
@@ -283,7 +278,7 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../imageView/ImageViewWrapper";
 import EXIF from "exif-js";
 import moment from "moment";
-import { toastError } from "../../../assets/js/iziToast/iziToast";
+import { toastError, toastInfo } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   name: "FileUpload",
@@ -312,16 +307,36 @@ export default {
         return value.includes("/");
       }
     },
-    realSize: Boolean
+    realSize: Boolean,
+    filesFromObject: {
+      type: Array
+    },
+    isClearable: {
+      type: Boolean,
+      default: true
+    },
+    isDraggable: {
+      type: Boolean,
+      default: true
+    }
   },
   computed: {
     ...mapState(["appSettings"]),
 
+    isFilesValid() {
+      return this.files && this.files.length > 0;
+    },
+
+    isExistingFilesValid() {
+      return !!this.existingFiles;
+    },
+
     userHasInsertedFiles() {
-      return (
-        (this.files && this.files.length > 0) ||
-        (this.existingFiles && this.existingFiles.length > 0)
-      );
+      return this.isFilesValid || this.isExistingFilesValid;
+    },
+
+    isDisabled() {
+      return !this.acceptMultiple && this.userHasInsertedFiles;
     }
   },
   data: () => ({
@@ -333,8 +348,12 @@ export default {
       attachment: [],
       loaders: { attachment: false }
     },
-    sourceList: []
+    sourceList: [],
+    id: null
   }),
+  mounted() {
+    this.id = this._uid;
+  },
   watch: {
     "$route.path"() {
       this.resetData();
@@ -343,27 +362,48 @@ export default {
     files(newVal) {
       this.readFile(newVal);
     },
+    filesFromObject: {
+      handler(newVal) {
+        if (newVal && newVal.length > 0) {
+          this.existingFiles = newVal;
+          this.autocomplete.attachment = newVal;
+          if (this.showExisting) this.useExisting = true;
+        }
+      },
+      deep: true
+    },
     existingFiles(newVal) {
-      // Todo: Emit event when user chooses existing files
-      console.log(newVal);
+      if (newVal) {
+        if (this.acceptMultiple) this.$emit("update:existing-files", newVal);
+        else this.$emit("update:existing-files", [newVal]);
+      } else this.$emit("update:existing-files", []);
     }
   },
-  // Todo: When not multiple then add only ONE!!!
   methods: {
     dropFile(event) {
-      if (event.dataTransfer && event.dataTransfer.items) {
-        let listOfFiles = [];
-        event.dataTransfer.files.forEach(file => listOfFiles.push(file));
+      if (!this.isDisabled) {
+        if (event.dataTransfer && event.dataTransfer.files) {
+          let listOfFiles = [];
+          event.dataTransfer.files.forEach(file => listOfFiles.push(file));
 
-        if (this.files) listOfFiles.forEach(item => this.files.push(item));
-        else this.files = listOfFiles;
-      }
+          if (!this.acceptMultiple && listOfFiles.length > 1) {
+            listOfFiles.splice(1);
+          }
+
+          if (this.files) listOfFiles.forEach(item => this.files.push(item));
+          else this.files = listOfFiles;
+        }
+      } else this.showDisabledError();
       this.isDragging = false;
     },
 
     addFile(file) {
-      if (this.files) file.forEach(item => this.files.push(item));
-      else this.files = file;
+      if (this.acceptMultiple) {
+        if (this.files) file.forEach(item => this.files.push(item));
+        else this.files = file;
+      } else if (this.userHasInsertedFiles) {
+        this.showDisabledError();
+      } else this.files = file;
     },
 
     readFile(listOfFiles) {
@@ -381,7 +421,8 @@ export default {
             }
           }
         });
-        this.$emit("file-uploaded", listOfFiles);
+
+        if (listOfFiles.length > 0) this.$emit("file-uploaded", listOfFiles);
 
         if (listOfFiles.length === 1) this.readFileMetaData(listOfFiles[0]);
       }
@@ -483,6 +524,14 @@ export default {
       )
         return true;
       else return file.type === this.acceptableFormat;
+    },
+
+    showDisabledError() {
+      if (this.isFilesValid) {
+        toastInfo({ text: "You have already uploaded one file." });
+      } else if (this.isExistingFilesValid) {
+        toastInfo({ text: "You have already added one existing file." });
+      } else toastInfo({ text: "You have already uploaded one file." });
     }
   }
 };

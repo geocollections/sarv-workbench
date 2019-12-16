@@ -449,7 +449,7 @@
 
       <v-tabs-items>
         <v-card
-          class="pt-3 px-1"
+          class="pa-1"
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
@@ -463,15 +463,15 @@
             v-on:remove-row="removeRow"
           />
 
-          <analysis-files
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
-          />
+          <div v-show="activeTab === 'attachment_link'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.attachment_link"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+            />
+          </div>
 
           <!-- PAGINATION -->
           <div
@@ -538,7 +538,6 @@ import {
   fetchAnalysisResults,
   fetchAnalysisMethod
 } from "../../assets/js/api/apiCalls";
-import AnalysisFiles from "./relatedTables/AnalysisFiles";
 import AnalysisResults from "./relatedTables/AnalysisResults";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
@@ -547,16 +546,17 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import FileUpload from "../partial/fileUpload/FileUpload";
 
 export default {
   components: {
+    FileUpload,
     CheckboxWrapper,
     DateWrapper,
     AutocompleteWrapper,
     InputWrapper,
     TextareaWrapper,
     AnalysisResults,
-    AnalysisFiles,
     Spinner
   },
 
@@ -901,6 +901,9 @@ export default {
               tab.name
             ];
         });
+      } else {
+        // uploadableObject.related_data = {};
+        // uploadableObject.related_data.attachment_link = this.relatedData.attachment_link;
       }
 
       console.log("This object is sent in string format:");
@@ -1040,6 +1043,14 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "analysis");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment_link = files;
     }
   }
 };

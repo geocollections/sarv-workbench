@@ -305,16 +305,12 @@
 
       <transition>
         <div v-show="block.files" class="px-1 pt-1 pb-2">
-          <multimedia-component
+          <file-upload
+            show-existing
+            :files-from-object="relatedData.attachment_link"
+            v-on:update:existing-files="addExistingFiles"
             v-on:file-uploaded="addFiles"
-            :recordOptions="false"
-            style="margin-right: -10px; margin-left: -10px"
-            class="multimedia-component"
-          />
-          <file-table
-            :attachments="relatedData.attachment_link"
-            :object="'project'"
-            v-if="relatedData.attachment_link.length > 0"
+            accept-multiple
           />
         </div>
       </transition>
@@ -517,8 +513,6 @@ import {
 
 import MapComponent from "../partial/MapComponent";
 
-import FileTable from "../partial/FileTable";
-import MultimediaComponent from "../partial/MultimediaComponent";
 import AddNewSite from "./addOrEditSiteModal";
 import { mapState } from "vuex";
 import ExportButtons from "../partial/export/ExportButtons";
@@ -529,18 +523,18 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import FileUpload from "../partial/fileUpload/FileUpload";
 
 export default {
   name: "Project",
   components: {
+    FileUpload,
     CheckboxWrapper,
     AutocompleteWrapper,
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
     AddNewSite,
-    MultimediaComponent,
-    FileTable,
     MapComponent,
     Spinner,
     ExportButtons,
@@ -813,7 +807,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveRelatedData = false) {
+    formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       // if (this.isNotEmpty(objectToUpload.date_start))
@@ -836,9 +830,8 @@ export default {
       //add related data
       uploadableObject.related_data = {};
       uploadableObject.related_data.agent = this.relatedData.projectagent;
-      if (saveRelatedData) {
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
-      }
+      uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
@@ -914,6 +907,9 @@ export default {
           if (object === "projectagent") {
             this.autocomplete.projectagent = this.relatedData[object];
           }
+          if (object === "attachment_link") {
+            this.autocomplete.attachment = this.relatedData[object];
+          }
           // if(object === 'site')  this.forceMapRerender()
           this.setBlockVisibility(object, this.relatedData[object].length);
         });
@@ -952,6 +948,10 @@ export default {
 
     addFiles(files) {
       this.addFileAsRelatedDataNew(files, "project");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment_link = files;
     },
 
     searchRelatedData: debounce(function(

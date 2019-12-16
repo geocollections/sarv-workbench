@@ -375,29 +375,32 @@ const formManipulation = {
 
       let formData = new FormData();
       files.forEach((file, index) => {
-        formData.append(
-          "data",
-          JSON.stringify({
-            description:
-              file.type +
-              " for " +
-              relatedObject +
-              ": " +
-              this[relatedObject].id,
-            description_en:
-              file.type +
-              " for " +
-              relatedObject +
-              ": " +
-              this[relatedObject].id,
-            author: this.currentUser.id,
-            date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
-            is_private: true,
-            related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
-          })
-        );
+        if (!file.isAlreadyUploaded) {
+          formData.append(
+            "data",
+            JSON.stringify({
+              description:
+                file.type +
+                " for " +
+                relatedObject +
+                ": " +
+                this[relatedObject].id,
+              description_en:
+                file.type +
+                " for " +
+                relatedObject +
+                ": " +
+                this[relatedObject].id,
+              author: this.currentUser.id,
+              date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
+              is_private: true,
+              related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
+            })
+          );
+          formData.append("file" + [index], file);
 
-        formData.append("file" + [index], file);
+          file.isAlreadyUploaded = true;
+        }
       });
 
       try {

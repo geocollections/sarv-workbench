@@ -143,9 +143,15 @@
       <file-table
         :attachments="relatedData.attachment_link"
         :object="'analysis'"
-        prefix="attachment__"
-        table-id="attachment"
         v-if="relatedData.attachment_link.length > 0"
+      />
+    </div>
+
+    <div class="col-12"
+         v-if="activeTab === 'attachment_link' && $route.meta.isEdit && false">
+      <image-view-wrapper
+        :data="relatedData.attachment_link"
+        clear-item-background
       />
     </div>
   </div>
@@ -155,9 +161,11 @@
 import FileTable from "../../partial/FileTable";
 import formManipulation from "../../../mixins/formManipulation";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import ImageViewWrapper from "../../partial/imageView/ImageViewWrapper";
 
 export default {
   components: {
+    ImageViewWrapper,
     FileTable
   },
   name: "AnalysisFiles",

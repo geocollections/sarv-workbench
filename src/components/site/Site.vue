@@ -379,16 +379,12 @@
 
       <transition>
         <div v-show="block.files" class="pa-1">
-          <multimedia-component
+          <file-upload
+            show-existing
+            :files-from-object="relatedData.attachment_link"
+            v-on:update:existing-files="addExistingFiles"
             v-on:file-uploaded="addFiles"
-            :recordOptions="true"
-            style="margin-right: -10px; margin-left: -10px"
-            class="multimedia-component"
-          />
-          <file-table
-            :attachments="relatedData.attachment_link"
-            :object="'site'"
-            v-if="relatedData.attachment_link.length > 0"
+            accept-multiple
           />
         </div>
       </transition>
@@ -522,9 +518,7 @@ import {
   fetchLinkedSamples,
   fetchLastSiteName
 } from "../../assets/js/api/apiCalls";
-import MultimediaComponent from "../partial/MultimediaComponent";
 import MapComponent from "../partial/MapComponent";
-import FileTable from "../partial/FileTable";
 import AddNewSample from "./addNewSampleModal";
 import sidebarMixin from "../../mixins/sidebarMixin";
 import SampleTable from "../sample/SampleTable";
@@ -537,18 +531,18 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 // eslint-disable-next-line no-unused-vars
 import moment from "moment";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
+import FileUpload from "../partial/fileUpload/FileUpload";
 
 export default {
   name: "Site",
   components: {
+    FileUpload,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
     SampleTable,
     AddNewSample,
-    FileTable,
     MapComponent,
-    MultimediaComponent,
     Spinner,
     ExportButtons
   },
@@ -837,20 +831,20 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload, saveRelatedData = false) {
+    formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (this.isNotEmpty(uploadableObject.date_start)) {
         if (!this.isValidDateTime(uploadableObject.date_start)) {
           this.site.date_start = null;
-          delete uploadableObject.date_start;
+          uploadableObject.date_start = null;
           toastInfo({ text: "Field 'Date start' is invalid" });
         }
       }
       if (this.isNotEmpty(uploadableObject.date_end)) {
         if (!this.isValidDateTime(uploadableObject.date_end)) {
           this.site.date_end = null;
-          delete uploadableObject.date_end;
+          uploadableObject.date_end = null;
           toastInfo({ text: "Field 'Date end' is invalid" });
         }
       }
@@ -875,10 +869,8 @@ export default {
           objectToUpload.longitude
         ).toFixed(6);
 
-      if (saveRelatedData) {
-        uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
-      }
+      uploadableObject.related_data = {};
+      uploadableObject.related_data.attachment = this.relatedData.attachment_link;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -931,6 +923,10 @@ export default {
         query.then(response => {
           this.relatedData.count[object] = response.body.count;
           this.relatedData[object] = this.handleResponse(response);
+
+          if (object === "attachment_link") {
+            this.autocomplete.attachment = this.relatedData[object];
+          }
           // this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
           resolve(true);
         });
@@ -992,6 +988,10 @@ export default {
 
     addFiles(files) {
       this.addFileAsRelatedDataNew(files, "site");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment_link = files;
     },
 
     setSiteName(projectId) {
