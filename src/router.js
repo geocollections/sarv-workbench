@@ -89,7 +89,6 @@ const router = new Router({
                 table: "attachment",
                 title: "titles.editAttachment",
                 heading: "editAttachment.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "attachment"
               }
@@ -294,7 +293,6 @@ const router = new Router({
                 title: "titles.editReference",
                 heading: "editReference.heading",
 
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "reference"
               }
@@ -383,7 +381,6 @@ const router = new Router({
                 table: "journal",
                 title: "titles.editJournal",
                 heading: "editJournal.heading",
-                isCopyFormShown: true,
                 requiresAuth: true,
                 object: "journal"
               }
@@ -446,7 +443,6 @@ const router = new Router({
                 table: "locality",
                 title: "titles.editLocality",
                 heading: "editLocality.heading",
-                isCopyFormShown: true,
                 requiresAuth: true,
                 object: "locality"
               }
@@ -510,7 +506,6 @@ const router = new Router({
                 table: "sample",
                 title: "titles.editSample",
                 heading: "editSample.heading",
-                isCopyFormShown: true,
                 requiresAuth: true,
                 object: "sample"
               }
@@ -611,7 +606,6 @@ const router = new Router({
                     table: "project",
                     title: "titles.editProject",
                     heading: "editProject.heading",
-                    isCopyFormShown: false,
                     // isSidebarShown: true,
                     requiresAuth: true,
                     object: "project"
@@ -656,7 +650,6 @@ const router = new Router({
                 table: "site",
                 title: "titles.editSite",
                 heading: "editSite.heading",
-                isCopyFormShown: false,
                 // isSidebarShown: true,
                 requiresAuth: true,
                 object: "site"
@@ -720,7 +713,6 @@ const router = new Router({
                 table: "library",
                 title: "titles.editLibrary",
                 heading: "editLibrary.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "library"
               }
@@ -782,7 +774,6 @@ const router = new Router({
                 table: "doi",
                 title: "titles.editDoi",
                 heading: "editDoi.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "doi"
               }
@@ -860,7 +851,6 @@ const router = new Router({
                 table: "analysis",
                 title: "titles.editAnalysis",
                 heading: "editAnalysis.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "analysis"
               }
@@ -924,7 +914,6 @@ const router = new Router({
                 table: "specimen",
                 title: "titles.editSpecimen",
                 heading: "editSpecimen.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "specimen"
               }
@@ -987,7 +976,6 @@ const router = new Router({
                 table: "keyword",
                 title: "titles.editKeyword",
                 heading: "editKeyword.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "keyword"
               }
@@ -1051,7 +1039,6 @@ const router = new Router({
                 table: "collection",
                 title: "titles.editCollection",
                 heading: "editCollection.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "collection"
               }
@@ -1114,7 +1101,6 @@ const router = new Router({
                 table: "taxon",
                 title: "titles.editTaxon",
                 heading: "editTaxon.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "taxon"
               }
@@ -1179,7 +1165,6 @@ const router = new Router({
                 table: "selection_series",
                 title: "titles.editSelectionSeries",
                 heading: "editSelectionSeries.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "selection_series"
               }
@@ -1245,7 +1230,6 @@ const router = new Router({
                 table: "agent",
                 title: "titles.editAgent",
                 heading: "editAgent.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "agent"
               }
@@ -1309,7 +1293,6 @@ const router = new Router({
                 table: "drillcore",
                 title: "titles.editDrillcore",
                 heading: "editDrillcore.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "drillcore"
               }
@@ -1374,7 +1357,6 @@ const router = new Router({
                 table: "preparation",
                 title: "titles.editPreparation",
                 heading: "editPreparation.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "preparation"
               }
@@ -1440,7 +1422,6 @@ const router = new Router({
                 table: "dataset",
                 title: "titles.editDataset",
                 heading: "editDataset.heading",
-                isCopyFormShown: false,
                 requiresAuth: true,
                 object: "dataset"
               }
@@ -1465,6 +1446,68 @@ const router = new Router({
                 subForms: [{ path: "/dataset/add", name: "add.dataset" }],
                 requiresAuth: true,
                 object: "dataset"
+              }
+            }
+          ]
+        },
+        {
+          path: "/stratigraphy",
+          component: () => import("./views/Stratigraphies.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/stratigraphy/StratigraphyTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "stratigraphy",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/stratigraphy/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/stratigraphy/Stratigraphy.vue"),
+              meta: {
+                isEdit: true,
+                table: "stratigraphy",
+                title: "titles.editStratigraphy",
+                heading: "editStratigraphy.heading",
+                requiresAuth: true,
+                object: "stratigraphy"
+              }
+            }
+          ]
+        },
+        {
+          path: "/stratigraphy/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Stratigraphy add",
+              component: () => import("./components/stratigraphy/Stratigraphy.vue"),
+              meta: {
+                isEdit: false,
+                title: "titles.addStratigraphy",
+                addNew: "add.newStratigraphy",
+                subForms: [{ path: "/stratigraphy/add", name: "add.stratigraphy" }],
+                requiresAuth: true,
+                object: "stratigraphy"
               }
             }
           ]

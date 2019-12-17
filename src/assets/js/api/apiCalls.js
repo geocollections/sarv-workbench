@@ -2168,6 +2168,77 @@ export function fetchDatasetReferences(datasetId, searchParameters) {
  ***  DATASET END  ***
  *********************/
 
+/**************************
+ *** STRATIGRAPHY START ***
+ **************************/
+
+export function fetchStratigraphy(id) {
+  return fetch(`stratigraphy/?id=${id}&format=json`);
+}
+
+export function fetchStratigraphies(data) {
+  const fields =
+    "id,stratigraphy,stratigraphy_en,type,type__value,type__value_en,rank,rank__value,rank__value_en,scope,scope__value,scope__value_en,parent,parent__stratigraphy,parent__stratigraphy_en,is_private";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__icontains=${data.id}`;
+  }
+
+  if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy,stratigraphy_en;lookuptype:icontains`;
+  }
+
+  if (data.type && data.type.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.type};fields:type__value,type__value_en;lookuptype:icontains`;
+  }
+
+  if (data.rank && data.rank.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.rank};fields:rank__value,rank__value_en;lookuptype:icontains`;
+  }
+
+  if (data.scope && data.scope.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.scope};fields:scope__value,scope__value_en;lookuptype:icontains`;
+  }
+
+  if (data.parent && data.parent.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.parent};fields:parent__stratigraphy,parent__stratigraphy_en;lookuptype:icontains`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return fetch(
+      `stratigraphy/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return fetch(
+      `stratigraphy/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+export function fetchListStratigraphyType() {
+  return fetch(`list_stratigraphy_type/?format=json`);
+}
+
+export function fetchListStratigraphyRank() {
+  return fetch(`list_stratigraphy_rank/?format=json`);
+}
+
+export function fetchListStratigraphyScope() {
+  return fetch(`list_stratigraphy_scope/?format=json`);
+}
+
+export function fetchListStratigraphyStatus() {
+  return fetch(`list_stratigraphy_status/?format=json`);
+}
+
+/**************************
+ ***  STRATIGRAPHY END  ***
+ **************************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/

@@ -1,6 +1,9 @@
 <template>
-  <div class="sites">
-    <table-view-title title="header.sites" buttonPath="/site/add" />
+  <div class="stratigraphies">
+    <table-view-title
+      title="header.stratigraphies"
+      buttonPath="/stratigraphy/add"
+    />
 
     <table-view-search
       :show-search="block.search"
@@ -12,13 +15,13 @@
     />
 
     <list-module-core
-      module="site"
-      title="titles.editSite"
+      module="stratigraphy"
+      title="titles.editStratigraphy"
       :show-filters="false"
       :searchParameters="searchParameters"
-      :api-call="fetchSites"
-      search-history="siteSearchHistory"
-      view-type="siteViewType"
+      :api-call="fetchStratigraphies"
+      search-history="stratigraphySearchHistory"
+      view-type="stratigraphyViewType"
       v-on:search-params-changed="searchParametersChanged"
     ></list-module-core>
   </div>
@@ -26,53 +29,30 @@
 
 <script>
 import ListModuleCore from "./ListModuleCore";
-import { fetchSites } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
-
+import {fetchStratigraphies} from "../assets/js/api/apiCalls";
 export default {
+  name: "Stratigraphies",
   components: {
     ListModuleCore,
     TableViewTitle,
     TableViewSearch
   },
-  name: "Sites",
-  props: {
-    project: {
-      type: String,
-      default: null
-    },
-
-    page: {
-      type: Number,
-      default: 1
-    }
-  },
   data() {
     return {
       response: {},
-      sites: [],
       filters: [
-        { id: "id", title: "site.id", type: "number" },
-        { id: "name", title: "site.name", type: "text" },
-        { id: "number", title: "site.number", type: "text" },
-        { id: "project", title: "site.relatedProject", type: "text" },
+        { id: "id", title: "stratigraphy.id", type: "number" },
         {
-          id: "date_start",
-          title: "site.date_start",
-          type: "text",
-          isDate: true,
-          calendarState: false,
-          calendarStateDrawer: false
+          id: "stratigraphy",
+          title: "stratigraphy.stratigraphy",
+          type: "text"
         },
-        {
-          id: "date_end",
-          title: "site.date_end",
-          type: "text",
-          isDate: true,
-          calendarState: false,
-          calendarStateDrawer: false
-        }
+        { id: "type", title: "stratigraphy.type", type: "text" },
+        { id: "rank", title: "stratigraphy.rank", type: "text" },
+        { id: "scope", title: "stratigraphy.scope", type: "text" },
+        { id: "parent", title: "stratigraphy.parent", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
@@ -83,7 +63,7 @@ export default {
     searchParameters: {
       handler: function(newVal) {
         this.$store.dispatch("updateSearchParameters", {
-          module: "site",
+          module: "stratigraphy",
           filters: this.filters,
           params: newVal
         });
@@ -94,9 +74,9 @@ export default {
   },
 
   methods: {
-    fetchSites() {
+    fetchStratigraphies() {
       return new Promise(resolve => {
-        resolve(fetchSites(this.searchParameters));
+        resolve(fetchStratigraphies(this.searchParameters));
       });
     },
     searchParametersChanged(newParams) {
@@ -107,8 +87,8 @@ export default {
       this.resetSearchParameters();
     },
     resetStorage() {
-      this.$localStorage.remove("siteSearchHistory");
-      this.$localStorage.remove("siteViewType");
+      this.$localStorage.remove("stratigraphySearchHistory");
+      this.$localStorage.remove("stratigraphyViewType");
     },
     resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
@@ -116,11 +96,11 @@ export default {
     setDefaultSearchParameters() {
       return {
         id: null,
-        name: null,
-        number: null,
-        project: null,
-        date_start: null,
-        date_end: null,
+        stratigraphy: null,
+        type: null,
+        rank: null,
+        scope: null,
+        parent: null,
         page: 1,
         paginateBy: 10,
         sortBy: ["id"],

@@ -809,7 +809,6 @@ import cloneDeep from "lodash/cloneDeep";
 import { toastError } from "@/assets/js/iziToast/iziToast";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import copyForm from "../../mixins/copyForm";
 import LocalityReference from "./relatedTables/LocalityReference";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -854,7 +853,6 @@ export default {
   },
   mixins: [
     formManipulation,
-    copyForm,
     autocompleteMixin,
     sidebarMixin,
     formSectionsMixin

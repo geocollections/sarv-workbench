@@ -19,7 +19,6 @@
     <list-module-core
       module="specimen"
       title="titles.editSpecimen"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchSpecimens"
       search-history="specimenSearchHistory"
@@ -53,33 +52,6 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "specimen.id", type: "number" },
-        { id: "specimen_id", title: "specimen.number", type: "text" },
-        { id: "name", title: "specimen.name", type: "text", orderBy: false },
-        {
-          id: "locality__locality_en",
-          title: "specimen.locality",
-          type: "text"
-        },
-        { id: "depth", title: "specimen.depth", type: "number" },
-        {
-          id: "stratigraphy__stratigraphy_en",
-          title: "specimen.stratigraphy",
-          type: "text"
-        },
-        {
-          id: "agent_collected__agent",
-          title: "specimen.agent_collected",
-          type: "text"
-        },
-        {
-          id: "specimen",
-          title: "specimen.specimen",
-          type: "text",
-          orderBy: false
-        }
-      ],
       filters: [
         { id: "idSpecimen", title: "specimen.idSpecimen", type: "text" },
         { id: "collNumber", title: "specimen.coll__number", type: "text" },

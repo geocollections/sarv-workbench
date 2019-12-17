@@ -578,7 +578,6 @@
 
 <script>
 import Spinner from "vue-simple-spinner";
-import copyForm from "../../mixins/copyForm";
 import {
   fetchListLocalityTypes,
   fetchListLocalityExtent,
@@ -636,7 +635,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
 
   data() {
     return this.setInitialData();

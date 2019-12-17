@@ -232,6 +232,22 @@ export default {
           ]
         },
         {
+          name: "stratigraphy",
+          title: "stratigraphies",
+          links: [
+            {
+              title: "stratigraphies",
+              path: "/stratigraphy",
+              icon: "fas fa-layer-group"
+            },
+            {
+              title: "stratigraphy",
+              path: "/stratigraphy/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
           name: "sample",
           title: "samples",
           links: [

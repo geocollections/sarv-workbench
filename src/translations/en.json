@@ -80,6 +80,7 @@
     "preparations": "Preparations",
     "drillcores": "Drill cores",
     "datasets": "Datasets",
+    "stratigraphies": "Stratigraphy",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -143,7 +144,8 @@
     "agent": "Add agent",
     "drillcore": "Add drill core",
     "preparation": "Add preparation",
-    "dataset": "Add dataset"
+    "dataset": "Add dataset",
+    "stratigraphy": "Add stratigraphy"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -377,6 +379,8 @@
     "newDrillcore": "Add new drill core",
     "dataset": "Dataset",
     "newDataset": "Add new dataset",
+    "stratigraphy": "Stratigraphy",
+    "newStratigraphy": "Add new stratigraphy",
     "overlay": "Please wait! Sending data...",
     "buttons": {
       "resetFile": "Reset file | Reset files",
@@ -1582,7 +1586,12 @@
     "remarks":"Remarks"
   },
   "stratigraphy": {
+    "id":"ID",
     "stratigraphy":"Stratigraphy",
+    "type":"Type",
+    "rank":"Rank",
+    "scope":"Scope",
+    "parent":"Parent",
     "base":"Lower boundary (m)",
     "top":"Upper boundary (m)",
     "reference":"Link",

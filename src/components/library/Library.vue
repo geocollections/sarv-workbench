@@ -302,7 +302,6 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import copyForm from "../../mixins/copyForm";
 import LibraryReference from "./relatedTables/LibraryReference";
 import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -340,7 +339,7 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
 
   data() {
     return this.setInitialData();

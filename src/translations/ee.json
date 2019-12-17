@@ -80,6 +80,7 @@
     "preparations": "Preparaadid",
     "drillcores": "Puursüdamikud",
     "datasets": "Andmesetid",
+    "stratigraphies": "Stratigraafia",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -143,7 +144,8 @@
     "agent": "Lisa isik/asutus",
     "drillcore": "Lisa puursüdamik",
     "preparation": "Lisa preparaat",
-    "dataset": "Lisa andmeset"
+    "dataset": "Lisa andmeset",
+    "stratigraphy": "Lisa stratigraafia"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -377,6 +379,8 @@
     "newDrillcore": "Lisa uus puursüdamik",
     "dataset": "Andmeset",
     "newDataset": "Lisa uus andmeset",
+    "stratigraphy": "Stratigraafia",
+    "newStratigraphy": "Lisa uus stratigraafia",
     "overlay": "Palun oodake! Saadan infot...",
     "buttons": {
       "resetFile": "Eemalda fail | Eemalda failid",
@@ -1582,7 +1586,12 @@
     "remarks":"Lisainfo"
   },
   "stratigraphy": {
-    "stratigraphy":"Stratigraafia",
+    "id":"ID",
+    "stratigraphy":"Stratigraphy",
+    "type":"Tüüp",
+    "rank":"Tase",
+    "scope":"Skoop",
+    "parent":" Ülemine",
     "base":"Alum. piir (m)",
     "top":"Ülem. piir (m)",
     "reference":"Viide",

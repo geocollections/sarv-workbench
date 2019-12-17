@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <v-data-table
+  <v-data-table
       class="specimen-table"
       :headers="translatedHeaders"
       dense
@@ -163,7 +162,6 @@
         </v-btn>
       </template>
     </v-data-table>
-  </div>
 </template>
 
 <script>

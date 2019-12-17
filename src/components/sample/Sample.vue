@@ -1033,7 +1033,6 @@ import {
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
-import copyForm from "../../mixins/copyForm";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import SampleReference from "./relatedTables/SampleReference";
 import SampleAnalysis from "./relatedTables/SampleAnalysis";
@@ -1080,7 +1079,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, copyForm, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
 
   data() {
     return this.setInitialData();
