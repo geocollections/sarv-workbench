@@ -112,7 +112,7 @@
         />
       </div>
 
-      <div class="ma-1" v-if="showExisting">
+      <div class="ma-1" v-if="showExisting && isDraggable">
         <checkbox-wrapper
           v-model="useExisting"
           color="amber"
@@ -272,8 +272,8 @@
 
 <script>
 import { mapState } from "vuex";
-import AutocompleteWrapper from "../inputs/AutocompleteWrapper";
-import CheckboxWrapper from "../inputs/CheckboxWrapper";
+import AutocompleteWrapper from "./AutocompleteWrapper";
+import CheckboxWrapper from "./CheckboxWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../imageView/ImageViewWrapper";
 import EXIF from "exif-js";
@@ -377,6 +377,12 @@ export default {
         if (this.acceptMultiple) this.$emit("update:existing-files", newVal);
         else this.$emit("update:existing-files", [newVal]);
       } else this.$emit("update:existing-files", []);
+    },
+    isDraggable: {
+      handler() {
+        if (this.isDraggable === false) this.useExisting = true;
+      },
+      immediate: true
     }
   },
   methods: {

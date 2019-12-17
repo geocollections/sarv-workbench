@@ -56,13 +56,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.router-link-exact-active {
-  color: #fff;
-  background-color: #007bff;
-}
-
-.divider {
-  border-color: #999;
-}
-</style>
+<style scoped></style>

@@ -252,7 +252,7 @@
 
       <v-tabs-items>
         <v-card
-          class="pt-3 px-1"
+          class="pa-1"
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
@@ -276,15 +276,16 @@
             v-on:remove-row="removeRow"
           />
 
-          <drillcore-attachment
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
-          />
+          <div v-show="activeTab === 'attachment_link'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.attachment_link"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
 
           <!-- PAGINATION -->
           <div
@@ -357,24 +358,24 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import DrillcoreBox from "./relatedTables/DrillcoreBox";
 import DrillcoreStudy from "./relatedTables/DrillcoreStudy";
-import DrillcoreAttachment from "./relatedTables/DrillcoreAttachment";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "Drillcore",
 
   components: {
+    FileUpload,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
     Spinner,
     DrillcoreBox,
-    DrillcoreStudy,
-    DrillcoreAttachment
+    DrillcoreStudy
   },
 
   props: {
@@ -477,7 +478,7 @@ export default {
         relatedTabs: [
           { name: "drillcore_box", iconClass: "fas fa-box" },
           { name: "drillcore_study", iconClass: "fas fa-school" },
-          { name: "attachment", iconClass: "far fa-folder-open" }
+          { name: "attachment_link", iconClass: "far fa-folder-open" }
         ],
         searchHistory: "drillcoreSearchHistory",
         activeTab: "drillcore_box",
@@ -592,11 +593,10 @@ export default {
       return {
         drillcore_box: [],
         drillcore_study: [],
-        attachment: [],
+        attachment_link: [],
         new: {
           drillcore_box: [],
-          drillcore_study: [],
-          attachment: []
+          drillcore_study: []
         },
         copyFields: {
           drillcore_box: [
@@ -611,7 +611,7 @@ export default {
             "remarks"
           ],
           drillcore_study: ["date", "agent", "aim", "remarks"],
-          attachment: ["attachment", "remarks"]
+          attachment_link: ["attachment", "remarks"]
         },
         insert: this.setDefaultInsertRelatedData(),
         searchParameters: {
@@ -625,7 +625,7 @@ export default {
             paginateBy: 10,
             orderBy: "id"
           },
-          attachment: {
+          attachment_link: {
             page: 1,
             paginateBy: 10,
             orderBy: "original_filename"
@@ -634,7 +634,7 @@ export default {
         count: {
           drillcore_box: 0,
           drillcore_study: 0,
-          attachment: 0
+          attachment_link: 0
         }
       };
     },
@@ -643,7 +643,7 @@ export default {
       return {
         drillcore_box: {},
         drillcore_study: {},
-        attachment: {}
+        attachment_link: {}
       };
     },
 
@@ -658,6 +658,25 @@ export default {
         uploadableObject.depository = objectToUpload.depository.id;
       if (this.isNotEmpty(objectToUpload.storage))
         uploadableObject.storage = objectToUpload.storage.id;
+
+      // Adding related data only on add view
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.related_data = {};
+
+        this.relatedTabs.forEach(tab => {
+          if (this.isNotEmpty(this.relatedData[tab.name]))
+            if (tab.name === "attachment_link") {
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+            } else {
+              uploadableObject.related_data[tab.name] = this.relatedData[
+                tab.name
+                ];
+            }
+        });
+      } else {
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -764,10 +783,10 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.drillcore_study
         );
-      } else if (object === "attachment") {
+      } else if (object === "attachment_link") {
         query = fetchDrillcoreAttachments(
           this.$route.params.id,
-          this.relatedData.searchParameters.attachment
+          this.relatedData.searchParameters.attachment_link
         );
       }
 
@@ -828,6 +847,14 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "drillcore");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment_link = files;
     }
   }
 };

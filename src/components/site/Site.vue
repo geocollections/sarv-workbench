@@ -531,7 +531,7 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 // eslint-disable-next-line no-unused-vars
 import moment from "moment";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
-import FileUpload from "../partial/fileUpload/FileUpload";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "Site",

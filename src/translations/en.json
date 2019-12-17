@@ -1449,7 +1449,7 @@
     "relatedTables": {
       "drillcore_box": "Drill core box",
       "drillcore_study": "Drill core study",
-      "attachment": "Attachment"
+      "attachment_link": "Attachment"
     }
   },
   "drillcore_box": {

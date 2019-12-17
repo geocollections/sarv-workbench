@@ -491,7 +491,7 @@
 
       <v-tabs-items>
         <v-card
-          class="pt-3 px-1"
+          class="pa-1"
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
@@ -515,15 +515,16 @@
             v-on:remove-row="removeRow"
           />
 
-          <locality-attachment
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
-          />
+          <div v-show="activeTab === 'attachment_link'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.attachment_link"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
 
           <locality-stratigraphy
             :related-data="relatedData"
@@ -596,7 +597,6 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import LocalityReference from "./relatedTables/LocalityReference";
 import LocalitySynonym from "./relatedTables/LocalitySynonym";
-import LocalityAttachment from "./relatedTables/LocalityAttachment";
 import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
 import MapComponent from "../partial/MapComponent";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -605,17 +605,18 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "Locality",
 
   components: {
+    FileUpload,
     AutocompleteWrapper,
     CheckboxWrapper,
     TextareaWrapper,
     InputWrapper,
     LocalityStratigraphy,
-    LocalityAttachment,
     LocalitySynonym,
     LocalityReference,
     Spinner,
@@ -986,10 +987,17 @@ export default {
 
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ];
+            if (tab.name === "attachment_link") {
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+            } else {
+              uploadableObject.related_data[tab.name] = this.relatedData[
+                tab.name
+                ];
+            }
         });
+      } else {
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
       }
 
       console.log("This object is sent in string format:");
@@ -1193,6 +1201,14 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "locality");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment_link = files;
     }
   }
 };

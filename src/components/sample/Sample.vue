@@ -921,7 +921,7 @@
 
         <v-tabs-items>
           <v-card
-            class="pt-3 px-1"
+            class="pa-1"
             flat
             :color="bodyColor.split('n-')[0] + 'n-5'"
           >
@@ -955,15 +955,16 @@
               v-on:remove-row="removeRow"
             />
 
-            <sample-attachment
-              :related-data="relatedData"
-              :autocomplete="autocomplete"
-              :active-tab="activeTab"
-              v-on:add-related-data="addRelatedData"
-              v-on:set-default="setDefault"
-              v-on:edit-row="editRow"
-              v-on:remove-row="removeRow"
-            />
+            <div v-show="activeTab === 'attachment_link'">
+              <file-upload
+                show-existing
+                :files-from-object="relatedData.attachment_link"
+                v-on:update:existing-files="addExistingFiles"
+                v-on:file-uploaded="addFiles"
+                accept-multiple
+                :is-draggable="$route.meta.isEdit"
+              />
+            </div>
 
             <sample-reference
               :related-data="relatedData"
@@ -1035,7 +1036,6 @@ import formManipulation from "../../mixins/formManipulation";
 import copyForm from "../../mixins/copyForm";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import SampleReference from "./relatedTables/SampleReference";
-import SampleAttachment from "./relatedTables/SampleAttachment";
 import SampleAnalysis from "./relatedTables/SampleAnalysis";
 import SamplePreparation from "./relatedTables/SamplePreparation";
 import SampleTaxonList from "./relatedTables/SampleTaxonList";
@@ -1047,11 +1047,13 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "Sample",
 
   components: {
+    FileUpload,
     TextareaWrapper,
     DateWrapper,
     AutocompleteWrapper,
@@ -1061,7 +1063,6 @@ export default {
     SampleTaxonList,
     SamplePreparation,
     SampleAnalysis,
-    SampleAttachment,
     SampleReference,
     Spinner
   },
@@ -1538,10 +1539,17 @@ export default {
 
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ];
+            if (tab.name === "attachment_link") {
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+            } else {
+              uploadableObject.related_data[tab.name] = this.relatedData[
+                tab.name
+                ];
+            }
         });
+      } else {
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
       }
 
       console.log("This object is sent in string format:");
@@ -1851,6 +1859,14 @@ export default {
           );
         }
       });
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "sample");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment_link = files;
     }
   }
 };

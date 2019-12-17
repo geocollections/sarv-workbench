@@ -2685,7 +2685,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import SelectWrapper from "../partial/inputs/SelectWrapper";
-import FileUpload from "../partial/fileUpload/FileUpload";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "AttachmentNew",

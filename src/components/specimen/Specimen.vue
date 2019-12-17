@@ -486,7 +486,7 @@
 
       <v-tabs-items>
         <v-card
-          class="pt-3 px-1"
+          class="pa-1"
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
@@ -539,15 +539,16 @@
             v-on:remove-row="removeRow"
           />
 
-          <specimen-attachment
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
-          />
+          <div v-show="activeTab === 'attachment'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.attachment"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
 
           <specimen-location
             :related-data="relatedData"
@@ -713,7 +714,6 @@ import SpecimenIdentification from "./relatedTables/SpecimenIdentification";
 import SpecimenIdentificationGeology from "./relatedTables/SpecimenIdentificationGeology";
 import SpecimenReference from "./relatedTables/SpecimenReference";
 import SpecimenDescription from "./relatedTables/SpecimenDescription";
-import SpecimenAttachment from "./relatedTables/SpecimenAttachment";
 import SpecimenLocation from "./relatedTables/SpecimenLocation";
 import SpecimenHistory from "./relatedTables/SpecimenHistory";
 import SpecimenAnalysis from "./relatedTables/SpecimenAnalysis";
@@ -722,11 +722,13 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "Specimen",
 
   components: {
+    FileUpload,
     CheckboxWrapper,
     DateWrapper,
     TextareaWrapper,
@@ -735,7 +737,6 @@ export default {
     SpecimenAnalysis,
     SpecimenHistory,
     SpecimenLocation,
-    SpecimenAttachment,
     SpecimenDescription,
     SpecimenReference,
     SpecimenIdentificationGeology,
@@ -1367,6 +1368,9 @@ export default {
               tab.name
             ];
         });
+      } else {
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.attachment = this.relatedData.attachment;
       }
 
       console.log("This object is sent in string format:");
@@ -1709,6 +1713,14 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "specimen");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment = files;
     }
   }
 };

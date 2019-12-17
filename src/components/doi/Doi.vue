@@ -457,19 +457,20 @@
 
       <v-tabs-items>
         <v-card
-          class="pt-3 px-1"
+          class="pa-1"
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
-          <doi-files
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
-          />
+          <div v-show="activeTab === 'attachment_link'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.attachment_link"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
 
           <doi-related-identifier
             :related-data="relatedData"
@@ -710,7 +711,6 @@ import {
   fetchAgentUsingName
 } from "../../assets/js/api/apiCalls";
 import DoiAgent from "./relatedTables/DoiAgent";
-import DoiFiles from "./relatedTables/DoiFiles";
 import DoiRelatedIdentifier from "./relatedTables/DoiRelatedIdentifier";
 import DoiGeolocation from "./relatedTables/DoiGeolocation";
 import DoiDate from "./relatedTables/DoiDate";
@@ -725,9 +725,11 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   components: {
+    FileUpload,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
@@ -735,7 +737,6 @@ export default {
     DoiDate,
     DoiGeolocation,
     DoiRelatedIdentifier,
-    DoiFiles,
     DoiAgent,
     Spinner
   },
@@ -1197,17 +1198,7 @@ export default {
         } else uploadableObject.related_data.doi_agent = null;
 
         if (this.isNotEmpty(this.relatedData.attachment_link)) {
-          let clonedData = cloneDeep(this.relatedData.attachment_link);
-          uploadableObject.related_data.attachment = clonedData
-            .filter(entity => this.isNotEmpty(entity.attachment))
-            .map(entity => {
-              return {
-                id: entity.attachment,
-                remarks: entity.remarks ? entity.remarks : null
-              };
-            });
-          if (uploadableObject.related_data.attachment.length === 0)
-            uploadableObject.related_data.attachment = null;
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link;
         } else uploadableObject.related_data.attachment = null;
 
         if (this.isNotEmpty(this.relatedData.doi_geolocation)) {
@@ -1263,6 +1254,9 @@ export default {
           if (uploadableObject.related_data.doi_date.length === 0)
             uploadableObject.related_data.doi_date = null;
         } else uploadableObject.related_data.doi_date = null;
+      } else {
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
       }
 
       // this.fillMissingFieldsWithNull(this.copyFields);
@@ -2041,6 +2035,14 @@ export default {
       } else {
         this.relatedData["doi_agent"] = [];
       }
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "doi");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachment_link = files;
     }
   }
 };

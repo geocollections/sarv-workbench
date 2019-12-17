@@ -820,7 +820,7 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import Editor from "../partial/editor/Editor";
-import FileUpload from "../partial/fileUpload/FileUpload";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "Reference",

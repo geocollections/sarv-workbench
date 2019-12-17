@@ -1449,7 +1449,7 @@
     "relatedTables": {
       "drillcore_box": "Südamikukastid",
       "drillcore_study": "Tööd südamikuga",
-      "attachment": "Failid"
+      "attachment_link": "Failid"
     }
   },
   "drillcore_box": {

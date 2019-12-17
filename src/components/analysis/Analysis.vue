@@ -470,6 +470,7 @@
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
+              :is-draggable="$route.meta.isEdit"
             />
           </div>
 
@@ -546,7 +547,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileUpload from "../partial/fileUpload/FileUpload";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   components: {
@@ -897,13 +898,17 @@ export default {
 
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ];
+            if (tab.name === "attachment_link") {
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+            } else {
+              uploadableObject.related_data[tab.name] = this.relatedData[
+                tab.name
+                ];
+            }
         });
       } else {
-        // uploadableObject.related_data = {};
-        // uploadableObject.related_data.attachment_link = this.relatedData.attachment_link;
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
       }
 
       console.log("This object is sent in string format:");

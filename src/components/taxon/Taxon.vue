@@ -487,7 +487,7 @@
 
       <v-tabs-items>
         <v-card
-          class="pt-3 px-1"
+          class="pa-1"
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
@@ -573,15 +573,16 @@
             v-on:remove-row="removeRow"
           />
 
-          <taxon-image
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
-          />
+          <div v-show="activeTab === 'taxon_image'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.taxon_image"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
 
           <!-- PAGINATION -->
           <div
@@ -666,16 +667,17 @@ import TaxonOpinion from "./relatedTables/TaxonOpinion";
 import TaxonCommonName from "./relatedTables/TaxonCommonName";
 import TaxonDescription from "./relatedTables/TaxonDescription";
 import TaxonPage from "./relatedTables/TaxonPage";
-import TaxonImage from "./relatedTables/TaxonImage";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "Taxon",
 
   components: {
+    FileUpload,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
@@ -688,8 +690,7 @@ export default {
     TaxonOpinion,
     TaxonCommonName,
     TaxonDescription,
-    TaxonPage,
-    TaxonImage
+    TaxonPage
   },
 
   props: {
@@ -1112,7 +1113,7 @@ export default {
           },
           taxon_image: {
             page: 1,
-            paginateBy: 10,
+            paginateBy: 100,
             orderBy: "id"
           }
         },
@@ -1172,10 +1173,17 @@ export default {
 
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
-            uploadableObject.related_data[tab.name] = this.relatedData[
-              tab.name
-            ];
+            if (tab.name === "taxon_image") {
+              uploadableObject.related_data.attachment = this.relatedData.taxon_image;
+            } else {
+              uploadableObject.related_data[tab.name] = this.relatedData[
+                tab.name
+                ];
+            }
         });
+      } else {
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.attachment = this.relatedData.taxon_image;
       }
 
       console.log("This object is sent in string format:");
@@ -1448,11 +1456,33 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.taxon_image
         );
+      } else if (object === "taxon_image") {
+        query = fetchTaxonImage(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon_image
+        );
       }
 
       return new Promise(resolve => {
         query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
+          if (object === "taxon_image") {
+            let taxonImageResponse = this.handleResponse(response);
+
+            this.relatedData.taxon_image = taxonImageResponse.map(image => {
+              return {
+                id: image.attachment,
+                author__agent: image.attachment__author__agent,
+                original_filename: image.attachment__original_filename,
+                description: image.attachment__description,
+                description_en: image.attachment__description_en,
+                remarks: image.attachment__remarks,
+                uuid_filename: image.attachment__uuid_filename,
+                attachment_format__value: image.attachment__attachment_format__value
+              };
+            });
+          } else {
+            this.relatedData[object] = this.handleResponse(response);
+          }
           this.relatedData.count[object] = response.body.count;
           resolve(true);
         });
@@ -1559,6 +1589,14 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "taxon");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.taxon_image = files;
     }
   }
 };

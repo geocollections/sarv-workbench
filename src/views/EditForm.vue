@@ -30,7 +30,6 @@
       v-on:data-loaded="setData"
       v-on:set-object="setObject"
       v-on:related-data-info="setRelatedData"
-      v-on:save-as-new="saveAsNew"
       v-on:object-exists="toggleObjectState"
     />
 
@@ -43,19 +42,6 @@
       :object="object"
     />
 
-    <save-as-new-modal
-      v-if="data !== null"
-      :title-extra="'Some title'"
-      :related-data="relatedData"
-      :object="object"
-      :object-id="data.id"
-    />
-    <!--      commented on 04.09.2019-->
-    <!--      <confirm-tab-close title="TAB"/>-->
-    <confirm-page-close
-      :title="$t($route.meta.heading) + ': ' + $route.params.id"
-    />
-
     <!-- LOGS -->
     <log
       v-if="data && objectExists"
@@ -65,15 +51,13 @@
       :key="logComponentKey"
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
-    ></log>
+    />
   </div>
 </template>
 
 <script>
 import BottomOptions from "../components/partial/BottomOptions";
 import Log from "@/components/partial/Log.vue";
-import SaveAsNewModal from "../components/partial/SaveAsNewModal";
-import ConfirmPageClose from "../components/partial/modals/ConfirmPageClose";
 import ScrollToLinks from "../components/partial/ScrollToLinks";
 import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist";
 import { mapState } from "vuex";
@@ -83,9 +67,7 @@ export default {
   components: {
     ObjectDoesNotExist,
     ScrollToLinks,
-    ConfirmPageClose,
     BottomOptions,
-    SaveAsNewModal,
     Log
   },
   data() {
@@ -112,10 +94,6 @@ export default {
   },
 
   methods: {
-    saveAsNew() {
-      this.$emit("show-save-as-new-modal", true);
-    },
-
     setData(data) {
       this.data = data;
       if (this.data !== null) this.formattedData = data;
@@ -137,12 +115,6 @@ export default {
       this.logComponentKey += 1;
     }
   },
-  // TODO: Trigger modal here only if user has unsaved data
-  beforeRouteUpdate(to, from, next) {
-    // console.log(this.$bvModal.show('confirm-page-close'))
-    next();
-  },
-  // TODO: Trigger modal also here only if user has unsaved data
   beforeRouteLeave(to, from, next) {
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", null);
     next();
