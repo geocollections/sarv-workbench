@@ -459,6 +459,25 @@ export function fetchListLocalityReferenceType() {
   return fetch(`list_locality_reference_type/?format=json`);
 }
 
+export function fetchLinkedStratigraphyReference(data, referenceID) {
+  let fields =
+    "id,reference,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy__type,stratigraphy__type__value,stratigraphy__type__value_en,stratigraphy__rank,stratigraphy__rank__value,stratigraphy__rank__value_en,stratigraphy__scope,stratigraphy__scope__value,stratigraphy__scope__value_en";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  return fetch(
+    `stratigraphy_reference/?reference=${referenceID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  );
+}
+
+export function fetchLinkedTaxonReference(data, referenceID) {
+  const fields =
+    "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+  return fetch(
+    `taxon/?reference=${referenceID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  );
+}
+
 /************************
  ***  REFERENCES END  ***
  ************************/

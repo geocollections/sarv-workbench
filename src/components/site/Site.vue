@@ -420,8 +420,6 @@
 
       <transition>
         <div v-show="block.samples" class="pa-1">
-          <add-new-sample :sendingData="sendingData"></add-new-sample>
-
           <!-- ADD NEW and EXPORT -->
           <v-card
             class="d-flex flex-row justify-content-start mb-3"
@@ -519,7 +517,6 @@ import {
   fetchLastSiteName
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
-import AddNewSample from "./addNewSampleModal";
 import sidebarMixin from "../../mixins/sidebarMixin";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
@@ -541,7 +538,6 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     SampleTable,
-    AddNewSample,
     MapComponent,
     Spinner,
     ExportButtons

@@ -271,7 +271,10 @@
                 use-custom-state
                 :error="!isValidUrl"
               />
-              <p class="m-0 caption" v-if="!isValidUrl">{{ $t("add.errors.url") }}. (e.g., <b>https://www.google.com</b>)</p>
+              <p class="m-0 caption" v-if="!isValidUrl">
+                {{ $t("add.errors.url") }}. (e.g.,
+                <b>https://www.google.com</b>)
+              </p>
             </div>
 
             <div class="pa-1" v-if="reference.url && isValidUrl">
@@ -319,12 +322,12 @@
           <!-- ABSTRACT and AUTHOR KEYWORDS -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="reference.abstract"/>
-<!--              <textarea-wrapper-->
-<!--                v-model="reference.abstract"-->
-<!--                :color="bodyActiveColor"-->
-<!--                :label="$t('reference.abstract')"-->
-<!--              />-->
+              <editor :data.sync="reference.abstract" />
+              <!--              <textarea-wrapper-->
+              <!--                v-model="reference.abstract"-->
+              <!--                :color="bodyActiveColor"-->
+              <!--                :label="$t('reference.abstract')"-->
+              <!--              />-->
             </v-col>
 
             <!-- AUTHOR KEYWORDS -->
@@ -446,7 +449,12 @@
                 is-searchable
                 v-on:search:items="autocompleteKeywordSearch"
                 :multiple="true"
-                v-on:chip:close="relatedData.keyword.splice(relatedData.keyword.indexOf($event), 1)"
+                v-on:chip:close="
+                  relatedData.keyword.splice(
+                    relatedData.keyword.indexOf($event),
+                    1
+                  )
+                "
               />
             </div>
 
@@ -454,7 +462,11 @@
               <v-btn
                 icon
                 :title="$t('add.new')"
-                @click="windowOpenNewTab('/keyword/add', { attachment: JSON.stringify(reference) })"
+                @click="
+                  windowOpenNewTab('/keyword/add', {
+                    attachment: JSON.stringify(reference)
+                  })
+                "
                 target="newKeywordWindow"
                 color="green"
               >
@@ -512,7 +524,9 @@
                 v-model="reference.is_estonian_reference"
                 :color="bodyActiveColor"
                 :label="$t('reference.is_estonian_reference')"
-                @change="reference.is_estonian_reference = !reference.is_estonian_reference"
+                @change="
+                  reference.is_estonian_reference = !reference.is_estonian_reference
+                "
               />
             </div>
 
@@ -521,7 +535,9 @@
                 v-model="reference.is_estonian_author"
                 :color="bodyActiveColor"
                 :label="$t('reference.is_estonian_author')"
-                @change="reference.is_estonian_author = !reference.is_estonian_author"
+                @change="
+                  reference.is_estonian_author = !reference.is_estonian_author
+                "
               />
             </div>
           </div>
@@ -654,7 +670,236 @@
                 is-searchable
                 v-on:search:items="autocompleteLibraryAgentSearch2"
                 :multiple="true"
-                v-on:chip:close="relatedData.library.splice(relatedData.library.indexOf($event), 1)"
+                v-on:chip:close="
+                  relatedData.library.splice(
+                    relatedData.library.indexOf($event),
+                    1
+                  )
+                "
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- STRATIGRAPHY -->
+    <v-card
+      class="mt-2"
+      id="block-stratigraphy"
+      v-if="$route.meta.isEdit && reference.id"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.stratigraphy = !block.stratigraphy"
+        >
+          <span>{{ $t("reference.relatedTables.stratigraphy") }}</span>
+          <v-icon right>fas fa-layer-group</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.stratigraphy = !block.stratigraphy"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.stratigraphy ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.stratigraphy" class="pa-1">
+          <!-- ADD NEW and EXPORT -->
+          <v-card
+            class="d-flex flex-row justify-content-start mb-3"
+            flat
+            tile
+            :color="bodyColor.split('n-')[0] + 'n-5'"
+          >
+            <v-card flat tile class="mx-1">
+              <v-btn
+                :to="{
+                  name: 'Stratigraphy add',
+                  query: { reference: JSON.stringify(reference) }
+                }"
+                target="newStratigraphyWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+                >{{ $t("add.new") }}</v-btn
+              >
+            </v-card>
+
+            <v-card
+              flat
+              tile
+              class="mx-1"
+              v-if="relatedData.stratigraphy.count > 0"
+            >
+              <export-buttons
+                filename="stratigraphy"
+                :table-data="relatedData.stratigraphy.results"
+                clipboard-class="stratigraphy-table"
+                :body-active-color="bodyActiveColor"
+              ></export-buttons>
+            </v-card>
+          </v-card>
+
+          <!-- PAGINATION -->
+          <div
+            v-if="relatedData.stratigraphy.count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters.stratigraphy.paginateBy"
+                color="blue"
+                dense
+                :items="paginateByOptionsTranslated"
+                item-color="blue"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters.stratigraphy.page"
+                color="blue"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.stratigraphy.count /
+                      relatedData.searchParameters.stratigraphy.paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <stratigraphy-table
+                ref="table"
+                :response="stratigraphyList"
+                :search-parameters="relatedData.searchParameters.stratigraphy"
+                v-if="relatedData.stratigraphy.count > 0"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- TAXA -->
+    <v-card
+      class="mt-2"
+      id="block-taxon"
+      v-if="$route.meta.isEdit && reference.id"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.taxon = !block.taxon">
+          <span>{{ $t("reference.relatedTables.taxon") }}</span>
+          <v-icon right>fas fa-pastafarianism</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.taxon = !block.taxon"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.taxon ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.taxon" class="pa-1">
+          <!-- ADD NEW and EXPORT -->
+          <v-card
+            class="d-flex flex-row justify-content-start mb-3"
+            flat
+            tile
+            :color="bodyColor.split('n-')[0] + 'n-5'"
+          >
+            <v-card flat tile class="mx-1">
+              <v-btn
+                :to="{
+                  name: 'Taxon add',
+                  query: { reference: JSON.stringify(reference) }
+                }"
+                target="newTaxonWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+                >{{ $t("add.new") }}</v-btn
+              >
+            </v-card>
+
+            <v-card flat tile class="mx-1" v-if="relatedData.taxon.count > 0">
+              <export-buttons
+                filename="taxon"
+                :table-data="relatedData.taxon.results"
+                clipboard-class="taxon-table"
+                :body-active-color="bodyActiveColor"
+              ></export-buttons>
+            </v-card>
+          </v-card>
+
+          <!-- PAGINATION -->
+          <div
+            v-if="relatedData.taxon.count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters.taxon.paginateBy"
+                color="blue"
+                dense
+                :items="paginateByOptionsTranslated"
+                item-color="blue"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters.taxon.page"
+                color="blue"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.taxon.count /
+                      relatedData.searchParameters.taxon.paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+
+          <v-row no-gutters>
+            <v-col cols="12" class="px-1">
+              <taxon-table
+                ref="table"
+                :response="relatedData.taxon"
+                :search-parameters="relatedData.searchParameters.taxon"
+                v-if="relatedData.taxon.count > 0"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
               />
             </v-col>
           </v-row>
@@ -803,7 +1048,9 @@ import {
   fetchLibrariesForReference,
   fetchListLocalityReferenceType,
   fetchListLicences,
-  fetchJournalForReference
+  fetchJournalForReference,
+  fetchLinkedTaxonReference,
+  fetchLinkedStratigraphyReference
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import { toastError } from "@/assets/js/iziToast/iziToast";
@@ -820,10 +1067,16 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import Editor from "../partial/editor/Editor";
 import FileUpload from "../partial/inputs/FileInput";
+import ExportButtons from "../partial/export/ExportButtons";
+import StratigraphyTable from "../stratigraphy/StratigraphyTable";
+import TaxonTable from "../taxon/TaxonTable";
 
 export default {
   name: "Reference",
   components: {
+    TaxonTable,
+    StratigraphyTable,
+    ExportButtons,
     FileUpload,
     Editor,
     CheckboxWrapper,
@@ -886,6 +1139,28 @@ export default {
           text: this.$t(item.text, { num: item.value })
         };
       });
+    },
+
+    stratigraphyList() {
+      let stratigraphy = this.relatedData.stratigraphy.results;
+      let mappedList = stratigraphy.map(item => ({
+        id: item.stratigraphy,
+        stratigraphy: item.stratigraphy__stratigraphy,
+        stratigraphy_en: item.stratigraphy__stratigraphy_en,
+        type: item.stratigraphy__type,
+        type__value: item.stratigraphy__type__value,
+        type__value_en: item.stratigraphy__type__value_en,
+        rank: item.stratigraphy__rank,
+        rank__value: item.stratigraphy__rank__value,
+        rank__value_en: item.stratigraphy__rank__value_en,
+        scope: item.stratigraphy__scope,
+        scope__value: item.stratigraphy__scope__value,
+        scope__value_en: item.stratigraphy__scope__value_en
+      }));
+      return {
+        count: this.relatedData.stratigraphy.count,
+        results: mappedList
+      };
     }
   },
 
@@ -932,6 +1207,28 @@ export default {
       },
       deep: true
     },
+    "relatedData.searchParameters.stratigraphy": {
+      handler(newVal) {
+        if (this.$route.meta.isEdit) {
+          this.searchRelatedData(
+            newVal,
+            this.fetchLinkedStratigraphyWrapper,
+            "stratigraphy"
+          );
+        }
+      },
+      immediate: true,
+      deep: true
+    },
+    "relatedData.searchParameters.taxon": {
+      handler(newVal) {
+        if (this.$route.meta.isEdit) {
+          this.searchRelatedData(newVal, this.fetchLinkedTaxonWrapper, "taxon");
+        }
+      },
+      immediate: true,
+      deep: true
+    },
     // This value is changed in formManipulation.js when file upload is successful (value will be savedObjectsId)
     isFileAddedAsObject: {
       handler: function(newVal) {
@@ -944,6 +1241,28 @@ export default {
   },
 
   methods: {
+    fetchLinkedStratigraphyWrapper() {
+      return new Promise(resolve => {
+        resolve(
+          fetchLinkedStratigraphyReference(
+            this.relatedData.searchParameters.stratigraphy,
+            this.$route.params.id
+          )
+        );
+      });
+    },
+
+    fetchLinkedTaxonWrapper() {
+      return new Promise(resolve => {
+        resolve(
+          fetchLinkedTaxonReference(
+            this.relatedData.searchParameters.taxon,
+            this.$route.params.id
+          )
+        );
+      });
+    },
+
     setTab(type) {
       this.activeTab = type;
     },
@@ -1035,7 +1354,9 @@ export default {
           digital: true,
           files: true,
           libraries: true,
-          localities: true
+          localities: true,
+          stratigraphy: true,
+          taxon: true
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -1176,6 +1497,14 @@ export default {
         keyword: [],
         locality: [],
         library: [],
+        stratigraphy: {
+          count: 0,
+          results: []
+        },
+        taxon: {
+          count: 0,
+          results: []
+        },
         copyFields: {
           locality_reference: [
             "locality",
@@ -1206,6 +1535,18 @@ export default {
             page: 1,
             paginateBy: 10,
             orderBy: "id"
+          },
+          stratigraphy: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true]
+          },
+          taxon: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true]
           }
         },
         count: {
@@ -1606,19 +1947,18 @@ export default {
 
     addExistingFiles(files) {
       this.relatedData.attachment = files;
+    },
+
+    searchRelatedData(searchParameters, apiCall, relatedObject) {
+      apiCall().then(response => {
+        if (response.status === 200) {
+          this.relatedData[relatedObject].count = response.body.count;
+          this.relatedData[relatedObject].results = response.body.results;
+        }
+      });
     }
   }
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-
-.link:hover {
-  cursor: pointer;
-}
-</style>
+<style scoped></style>

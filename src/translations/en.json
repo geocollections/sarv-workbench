@@ -241,7 +241,9 @@
       "digital": "Digital version (pdf)",
       "files": "Related data files",
       "libraries": "Related libraries",
-      "localities": "Locality"
+      "localities": "Locality",
+      "stratigraphy": "Stratigraphy",
+      "taxon": "Taxon"
     },
     "library": {
       "info": "General info",
@@ -1579,7 +1581,9 @@
       "locality": "Locality",
       "reference_keyword": "User keywords",
       "locality_reference": "Locality references",
-      "library": "Related libraries"
+      "library": "Related libraries",
+      "stratigraphy": "Stratigraphy",
+      "taxon": "Taxon"
     }
   },
   "synonym": {

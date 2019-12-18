@@ -241,7 +241,9 @@
       "digital": "Digitaalne versioon (pdf)",
       "files": "Seotud andmefailid",
       "libraries": "Seotud kogumikud",
-      "localities": "Lokaliteet"
+      "localities": "Lokaliteet",
+      "stratigraphy": "Stratigraafia",
+      "taxon": "Taksonid"
     },
     "library": {
       "info": "Üldinfo",
@@ -1579,7 +1581,9 @@
       "locality": "Lokaliteet",
       "reference_keyword": "Kasutaja märksõnad",
       "locality_reference": "Kirjeldatud lokaliteedid",
-      "library": "Seotud kogumikud"
+      "library": "Seotud kogumikud",
+      "stratigraphy": "Stratigraafia",
+      "taxon": "Taksonid"
     }
   },
   "synonym": {
