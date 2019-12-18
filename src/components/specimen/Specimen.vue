@@ -1324,37 +1324,53 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.coll))
         uploadableObject.coll = objectToUpload.coll.id;
+      else uploadableObject.coll = null;
       if (this.isNotEmpty(objectToUpload.fossil))
         uploadableObject.fossil = objectToUpload.fossil.id;
+      else uploadableObject.fossil = null;
       if (this.isNotEmpty(objectToUpload.type))
         uploadableObject.type = objectToUpload.type.id;
+      else uploadableObject.type = null;
       if (this.isNotEmpty(objectToUpload.locality))
         uploadableObject.locality = objectToUpload.locality.id;
+      else uploadableObject.locality = null;
       if (this.isNotEmpty(objectToUpload.sample))
         uploadableObject.sample = objectToUpload.sample.id;
+      else uploadableObject.sample = null;
       if (this.isNotEmpty(objectToUpload.stratigraphy))
         uploadableObject.stratigraphy = objectToUpload.stratigraphy.id;
+      else uploadableObject.stratigraphy = null;
       if (this.isNotEmpty(objectToUpload.lithostratigraphy))
         uploadableObject.lithostratigraphy =
           objectToUpload.lithostratigraphy.id;
+      else uploadableObject.lithostratigraphy = null;
       if (this.isNotEmpty(objectToUpload.presence))
         uploadableObject.presence = objectToUpload.presence.id;
+      else uploadableObject.presence = null;
       if (this.isNotEmpty(objectToUpload.storage))
         uploadableObject.storage = objectToUpload.storage.id;
+      else uploadableObject.storage = null;
       if (this.isNotEmpty(objectToUpload.classification))
         uploadableObject.classification = objectToUpload.classification.id;
+      else uploadableObject.classification = null;
       if (this.isNotEmpty(objectToUpload.accession))
         uploadableObject.accession = objectToUpload.accession.id;
+      else uploadableObject.accession = null;
       if (this.isNotEmpty(objectToUpload.deaccession))
         uploadableObject.deaccession = objectToUpload.deaccession.id;
+      else uploadableObject.deaccession = null;
       if (this.isNotEmpty(objectToUpload.agent_collected))
         uploadableObject.agent_collected = objectToUpload.agent_collected.id;
+      else uploadableObject.agent_collected = null;
       if (this.isNotEmpty(objectToUpload.status))
         uploadableObject.status = objectToUpload.status.id;
+      else uploadableObject.status = null;
       if (this.isNotEmpty(objectToUpload.original_status))
         uploadableObject.original_status = objectToUpload.original_status.id;
+      else uploadableObject.original_status = null;
       if (this.isNotEmpty(objectToUpload.parent))
         uploadableObject.parent = objectToUpload.parent.id;
+      else uploadableObject.parent = null;
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 

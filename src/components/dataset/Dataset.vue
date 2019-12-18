@@ -569,10 +569,13 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.copyright_agent))
         uploadableObject.copyright_agent = objectToUpload.copyright_agent.id;
+      else uploadableObject.copyright_agent = null;
       if (this.isNotEmpty(objectToUpload.licence))
         uploadableObject.licence = objectToUpload.licence.id;
+      else uploadableObject.licence = null;
       if (this.isNotEmpty(objectToUpload.owner))
         uploadableObject.owner = objectToUpload.owner.id;
+      else uploadableObject.owner = null;
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 

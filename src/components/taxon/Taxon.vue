@@ -1151,21 +1151,29 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.reference))
         uploadableObject.reference = objectToUpload.reference.id;
+      else uploadableObject.reference = null;
       if (this.isNotEmpty(objectToUpload.rank))
         uploadableObject.rank = objectToUpload.rank.id;
+      else uploadableObject.rank = null;
       if (this.isNotEmpty(objectToUpload.parent))
         uploadableObject.parent = objectToUpload.parent.id;
+      else uploadableObject.parent = null;
       if (this.isNotEmpty(objectToUpload.fossil_group))
         uploadableObject.fossil_group = objectToUpload.fossil_group.id;
+      else uploadableObject.fossil_group = null;
       if (this.isNotEmpty(objectToUpload.rank_original))
         uploadableObject.rank_original = objectToUpload.rank_original.id;
+      else uploadableObject.rank_original = null;
       if (this.isNotEmpty(objectToUpload.type_taxon_id))
         uploadableObject.type_taxon_id = objectToUpload.type_taxon_id.id;
+      else uploadableObject.type_taxon_id = null;
       if (this.isNotEmpty(objectToUpload.stratigraphy_top))
         uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id;
+      else uploadableObject.stratigraphy_top = null;
       if (this.isNotEmpty(objectToUpload.stratigraphy_base))
         uploadableObject.stratigraphy_base =
           objectToUpload.stratigraphy_base.id;
+      else uploadableObject.stratigraphy_base = null;
 
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {

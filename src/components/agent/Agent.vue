@@ -523,10 +523,13 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.type))
         uploadableObject.type = objectToUpload.type.id;
+      else uploadableObject.type = null;
       if (this.isNotEmpty(objectToUpload.institution))
         uploadableObject.institution = objectToUpload.institution.id;
+      else uploadableObject.institution = null;
       if (this.isNotEmpty(objectToUpload.country))
         uploadableObject.country = objectToUpload.country.id;
+      else uploadableObject.country = null;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

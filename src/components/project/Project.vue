@@ -822,10 +822,13 @@ export default {
       //autocomplete fields
       if (this.isNotEmpty(objectToUpload.project_type))
         uploadableObject.project_type = objectToUpload.project_type.id;
+      else uploadableObject.project_type = null;
       if (this.isNotEmpty(objectToUpload.parent_project))
         uploadableObject.parent_project = objectToUpload.parent_project.id;
+      else uploadableObject.parent_project = null;
       if (this.isNotEmpty(objectToUpload.owner))
         uploadableObject.owner = objectToUpload.owner.id;
+      else uploadableObject.owner = null;
 
       //add related data
       uploadableObject.related_data = {};

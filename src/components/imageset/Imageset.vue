@@ -194,9 +194,8 @@ export default {
         this.$localStorage.set("imageset", uploadableObject);
 
       if (this.isNotEmpty(uploadableObject.author))
-        uploadableObject.author = uploadableObject.author.id
-          ? uploadableObject.author.id
-          : uploadableObject.author;
+        uploadableObject.author = uploadableObject.author.id;
+      else uploadableObject.author = null;
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 

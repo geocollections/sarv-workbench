@@ -1485,49 +1485,66 @@ export default {
 
       if (this.isNotEmpty(objectToUpload.latitude1))
         uploadableObject.latitude1 = objectToUpload.latitude1.toFixed(6);
+      else uploadableObject.latitude1 = null;
       if (this.isNotEmpty(objectToUpload.longitude1))
         uploadableObject.longitude1 = objectToUpload.longitude1.toFixed(6);
+      else uploadableObject.longitude1 = null;
       // if (this.isNotEmpty(objectToUpload.date_collected))
       //   uploadableObject.date_collected = this.formatDateForUpload(
       //     objectToUpload.date_collected
       //   );
       if (this.isNotEmpty(objectToUpload.depth))
         uploadableObject.depth = parseFloat(objectToUpload.depth);
+      else uploadableObject.depth = null;
       if (this.isNotEmpty(objectToUpload.depth_interval))
         uploadableObject.depth_interval = parseFloat(
           objectToUpload.depth_interval
         );
+      else uploadableObject.depth_interval = null;
 
       //autocomplete fields
       if (this.isNotEmpty(objectToUpload.series))
         uploadableObject.series = objectToUpload.series.id;
+      else uploadableObject.series = null;
       if (this.isNotEmpty(objectToUpload.sample_purpose))
         uploadableObject.sample_purpose = objectToUpload.sample_purpose.id;
+      else uploadableObject.sample_purpose = null;
       if (this.isNotEmpty(objectToUpload.parent_sample))
         uploadableObject.parent_sample = objectToUpload.parent_sample.id;
+      else uploadableObject.parent_sample = null;
       if (this.isNotEmpty(objectToUpload.parent_specimen))
         uploadableObject.parent_specimen = objectToUpload.parent_specimen.id;
+      else uploadableObject.parent_specimen = null;
       if (this.isNotEmpty(objectToUpload.locality))
         uploadableObject.locality = objectToUpload.locality.id;
+      else uploadableObject.locality = null;
       if (this.isNotEmpty(objectToUpload.stratigraphy))
         uploadableObject.stratigraphy = objectToUpload.stratigraphy.id;
+      else uploadableObject.stratigraphy = null;
       if (this.isNotEmpty(objectToUpload.lithostratigraphy))
         uploadableObject.lithostratigraphy =
           objectToUpload.lithostratigraphy.id;
+      else uploadableObject.lithostratigraphy = null;
       if (this.isNotEmpty(objectToUpload.agent_collected))
         uploadableObject.agent_collected = objectToUpload.agent_collected.id;
+      else uploadableObject.agent_collected = null;
       if (this.isNotEmpty(objectToUpload.classification_rock))
         uploadableObject.classification_rock =
           objectToUpload.classification_rock.id;
+      else uploadableObject.classification_rock = null;
       if (this.isNotEmpty(objectToUpload.owner))
         uploadableObject.owner = objectToUpload.owner.id;
+      else uploadableObject.owner = null;
       if (this.isNotEmpty(objectToUpload.storage))
         uploadableObject.storage = objectToUpload.storage.id;
+      else uploadableObject.storage = null;
       if (this.isNotEmpty(objectToUpload.storage_additional))
         uploadableObject.storage_additional =
           objectToUpload.storage_additional.id;
+      else uploadableObject.storage_additional = null;
       if (this.isNotEmpty(objectToUpload.site))
         uploadableObject.site = objectToUpload.site.id;
+      else uploadableObject.site = null;
 
       if (this.isNotEmpty(this.databaseId))
         uploadableObject.database = this.databaseId;

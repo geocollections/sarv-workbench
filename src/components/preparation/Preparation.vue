@@ -647,19 +647,26 @@ export default {
 
       if (this.isNotEmpty(objectToUpload.sample))
         uploadableObject.sample = objectToUpload.sample.id;
+      else uploadableObject.sample = null;
       if (this.isNotEmpty(objectToUpload.analysis))
         uploadableObject.analysis = objectToUpload.analysis.id;
+      else uploadableObject.analysis = null;
       if (this.isNotEmpty(objectToUpload.taxon))
         uploadableObject.taxon = objectToUpload.taxon.id;
+      else uploadableObject.taxon = null;
       if (this.isNotEmpty(objectToUpload.agent))
         uploadableObject.agent = objectToUpload.agent.id;
+      else uploadableObject.agent = null;
       if (this.isNotEmpty(objectToUpload.identification_agent))
         uploadableObject.identification_agent =
           objectToUpload.identification_agent.id;
+      else uploadableObject.identification_agent = null;
       if (this.isNotEmpty(objectToUpload.storage))
         uploadableObject.storage = objectToUpload.storage.id;
+      else uploadableObject.storage = null;
       if (this.isNotEmpty(objectToUpload.owner))
         uploadableObject.owner = objectToUpload.owner.id;
+      else uploadableObject.owner = null;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

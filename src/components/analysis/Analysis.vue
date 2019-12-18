@@ -870,25 +870,34 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.sample))
         uploadableObject.sample = objectToUpload.sample.id;
+      else uploadableObject.sample = null;
       if (this.isNotEmpty(objectToUpload.analysis_method))
         uploadableObject.analysis_method = objectToUpload.analysis_method.id;
+      else uploadableObject.analysis_method = null;
       if (this.isNotEmpty(objectToUpload.specimen))
         uploadableObject.specimen = objectToUpload.specimen.id;
+      else uploadableObject.specimen = null;
       if (this.isNotEmpty(objectToUpload.lab))
         uploadableObject.lab = objectToUpload.lab.id;
+      else uploadableObject.lab = null;
       if (this.isNotEmpty(objectToUpload.instrument))
         uploadableObject.instrument = objectToUpload.instrument.id;
+      else uploadableObject.instrument = null;
       if (this.isNotEmpty(objectToUpload.agent))
         uploadableObject.agent = objectToUpload.agent.id;
+      else uploadableObject.agent = null;
       if (this.isNotEmpty(objectToUpload.owner))
         uploadableObject.owner = objectToUpload.owner.id;
+      else uploadableObject.owner = null;
       if (this.isNotEmpty(objectToUpload.storage))
         uploadableObject.storage = objectToUpload.storage.id;
-
+      else uploadableObject.storage = null;
       if (this.isNotEmpty(objectToUpload.reference))
         uploadableObject.reference = objectToUpload.reference.id;
+      else uploadableObject.reference = null;
       if (this.isNotEmpty(objectToUpload.dataset))
         uploadableObject.dataset = objectToUpload.dataset.id;
+      else uploadableObject.dataset = null;
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 

@@ -640,16 +640,22 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.type))
         uploadableObject.type = objectToUpload.type.id;
+      else uploadableObject.type = null;
       if (this.isNotEmpty(objectToUpload.classification))
         uploadableObject.classification = objectToUpload.classification.id;
+      else uploadableObject.classification = null;
       if (this.isNotEmpty(objectToUpload.agent))
         uploadableObject.agent = objectToUpload.agent.id;
+      else uploadableObject.agent = null;
       if (this.isNotEmpty(objectToUpload.locality))
         uploadableObject.locality = objectToUpload.locality.id;
+      else uploadableObject.locality = null;
       if (this.isNotEmpty(objectToUpload.stratigraphy))
         uploadableObject.stratigraphy = objectToUpload.stratigraphy.id;
+      else uploadableObject.stratigraphy = null;
       if (this.isNotEmpty(objectToUpload.reference))
         uploadableObject.reference = objectToUpload.reference.id;
+      else uploadableObject.reference = null;
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 

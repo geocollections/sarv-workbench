@@ -652,12 +652,16 @@ export default {
 
       if (this.isNotEmpty(objectToUpload.locality))
         uploadableObject.locality = objectToUpload.locality.id;
+      else uploadableObject.locality = null;
       if (this.isNotEmpty(objectToUpload.agent))
         uploadableObject.agent = objectToUpload.agent.id;
+      else uploadableObject.agent = null;
       if (this.isNotEmpty(objectToUpload.depository))
         uploadableObject.depository = objectToUpload.depository.id;
+      else uploadableObject.depository = null;
       if (this.isNotEmpty(objectToUpload.storage))
         uploadableObject.storage = objectToUpload.storage.id;
+      else uploadableObject.storage = null;
 
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {

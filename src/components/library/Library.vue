@@ -568,6 +568,7 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.author))
         uploadableObject.author = objectToUpload.author.id;
+      else uploadableObject.author = null;
 
       // if (this.databaseId) uploadableObject.database = this.databaseId;
 
