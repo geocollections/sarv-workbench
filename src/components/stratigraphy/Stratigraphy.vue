@@ -481,7 +481,7 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
+            v-if="relatedData.count[tab.name] > 0"
             class="font-weight-bold ml-2"
           >
             {{ relatedData.count[tab.name] }}
@@ -491,7 +491,7 @@
 
       <v-tabs-items>
         <v-card
-          class="pt-3 px-1"
+          class="pa-1"
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
@@ -516,6 +516,7 @@
           />
 
           <stratigraphy-synonym
+            v-if="false"
             :related-data="relatedData"
             :autocomplete="autocomplete"
             :active-tab="activeTab"
@@ -525,10 +526,22 @@
             v-on:remove-row="removeRow"
           />
 
+          <stratigraphy-synonym-table
+            v-if="activeTab === 'stratigraphy_synonym'"
+            :response="{count: relatedData.count.stratigraphy_synonym, results: relatedData.stratigraphy_synonym}"
+            :autocomplete="autocomplete"
+            :search-parameters="relatedData.searchParameters.stratigraphy_synonym"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:fill-autocompletes="fillRelatedDataAutocompleteFields"
+          />
+
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -603,11 +616,13 @@ import cloneDeep from "lodash/cloneDeep";
 import StratigraphyReference from "./relatedTables/StratigraphyReference";
 import StratigraphyStratotype from "./relatedTables/StratigraphyStratotype";
 import StratigraphySynonym from "./relatedTables/StratigraphySynonym";
+import StratigraphySynonymTable from "./relatedTables/StratigraphySynonymTable";
 
 export default {
   name: "Stratigraphy",
 
   components: {
+    StratigraphySynonymTable,
     StratigraphySynonym,
     StratigraphyStratotype,
     StratigraphyReference,
@@ -705,6 +720,14 @@ export default {
   },
 
   methods: {
+    addRelatedItem(payload) {
+      console.log(payload)
+    },
+
+    editRelatedItem(payload) {
+      console.log(payload)
+    },
+
     setTab(type) {
       if (type) {
         this.$store.dispatch("updateActiveTab", {
@@ -1061,17 +1084,21 @@ export default {
     },
 
     fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.reference))
+      if (this.isNotEmpty(obj.reference)){
         obj.reference = {
           id: obj.reference,
           reference: obj.reference__reference
         };
-      if (this.isNotEmpty(obj.locality))
+        this.autocomplete.reference.push(obj.reference);
+      }
+      if (this.isNotEmpty(obj.locality)) {
         obj.locality = {
           id: obj.locality,
           locality: obj.locality__locality,
           locality_en: obj.locality__locality_en
         };
+        this.autocomplete.locality.push(obj.locality);
+      }
       if (this.isNotEmpty(obj.stratotype_type))
         obj.stratotype_type = {
           id: obj.stratotype_type,

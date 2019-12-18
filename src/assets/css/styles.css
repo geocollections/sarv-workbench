@@ -11,7 +11,7 @@ body {
 
 /* AUTOCOMPLETE MENU */
 .v-menu__content {
-  z-index: 40000 !important;
+  z-index: 51000 !important;
 }
 .v-menu__content .v-list-item__mask {
   color: black !important;
