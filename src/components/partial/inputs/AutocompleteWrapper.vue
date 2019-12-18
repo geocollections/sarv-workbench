@@ -22,6 +22,7 @@
       :small-chips="!!$attrs.multiple"
       :deletable-chips="!!$attrs.multiple"
       @change="resetSearchInput"
+      autocomplete="off"
     >
       <template v-slot:append-outer>
         <v-btn

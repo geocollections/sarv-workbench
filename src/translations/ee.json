@@ -328,6 +328,9 @@
     },
     "dataset": {
       "info": "Üldinfo"
+    },
+    "stratigraphy": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -1597,7 +1600,71 @@
     "reference":"Viide",
     "author":"Autor",
     "year":"Autor",
-    "is_preferred":"Eelistatud"
+    "is_preferred":"Eelistatud",
+    "stratigraphy_en": "Stratigraafia (EN)",
+    "stratigraphy_original": "Orig. name",
+    "author_free": "Autor(id)",
+    "etymon": "Etüümon",
+    "etymon_en": "Etüümon (EN)",
+    "original_locality": "Orig. koht",
+    "original_rank": "Orig. tase",
+    "index_main": "Indeks",
+    "index_main_html": "Indeks (html)",
+    "index_additional": "Indeks, alt",
+    "index_additional_html": "Indeks, alt (html)",
+    "color_code_cgmw": "CGMW värvikood",
+    "color_code_additional": "Värv (kohalik)",
+    "age_chronostratigraphy": "Vanus",
+    "hierarchy_string": "Hierarhia kood",
+    "region": "Regioon",
+    "region_en": "Regioon (EN)",
+    "lithology": "Litoloogia",
+    "lithology_en": "Litoloogia (EN)",
+    "max_thickness": "Max. paksus m.",
+    "description": "Kirjeldus",
+    "description_en": "Kirjeldus (EN)",
+    "definition": "Definitsioon",
+    "definition_en": "Definitsioon (EN)",
+    "age_base": "vanus alum.",
+    "age_top": "Vanus ülem.",
+    "age_precision": "Vanus täpsus",
+    "age_reference": "Vanus viide",
+    "sort_within_parent": "Sorteering",
+    "approved_ics": "ICS kinnitatud",
+    "approved_esk": "ESK kinnitatud",
+    "remarks": "Lisainfo",
+    "status": "Staatus",
+    "relatedTables": {
+      "stratigraphy_reference": "Viited",
+      "stratigraphy_stratotype": "Stratotüübid",
+      "stratigraphy_synonym": "Sünonüümid ja nimekirjad"
+    }
+  },
+  "stratigraphy_reference": {
+    "reference": "Viide",
+    "content": "Sisu",
+    "content_en": "Sisu (EN)",
+    "age_base": "Alum. vanus",
+    "age_base_error": "Täpsus",
+    "age_top": "Ülem. vanus",
+    "is_preferred_age": "Eelistatud vanus",
+    "pages": "Lk.",
+    "figures": "Joon.",
+    "remarks": "Lisainfo"
+  },
+  "stratigraphy_stratotype": {
+    "locality": "Lokaliteet",
+    "stratotype_type": "Tüüp",
+    "depth_base": "Alum. sügavus",
+    "depth_top": "Ülem. sügavus",
+    "reference": "Viide",
+    "remarks": "Lisainfo"
+  },
+  "stratigraphy_synonym": {
+    "synonym": "Sünonüüm",
+    "language": "Keel",
+    "reference": "Viide",
+    "remarks": "Lisainfo"
   },
   "journal": {
     "header": "Ajakiri",

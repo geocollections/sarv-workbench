@@ -328,6 +328,9 @@
     },
     "dataset": {
       "info": "General info"
+    },
+    "stratigraphy": {
+      "info": "General info"
     }
   },
   "add": {
@@ -1597,7 +1600,71 @@
     "reference":"Link",
     "author":"Author",
     "year":"Year",
-    "is_preferred":"Is preferred?"
+    "is_preferred":"Preferred",
+    "stratigraphy_en": "Stratigraphy (EN)",
+    "stratigraphy_original": "Orig. name",
+    "author_free": "Author(s)",
+    "etymon": "Etymon",
+    "etymon_en": "Etymon (EN)",
+    "original_locality": "Orig. locality",
+    "original_rank": "Orig. rank",
+    "index_main": "Index",
+    "index_main_html": "Index (html)",
+    "index_additional": "Index, alt",
+    "index_additional_html": "Index, alt (html)",
+    "color_code_cgmw": "CGMW color",
+    "color_code_additional": "Color (local)",
+    "age_chronostratigraphy": "Age",
+    "hierarchy_string": "Hierarchy string",
+    "region": "Region",
+    "region_en": "Region (EN)",
+    "lithology": "Lithology",
+    "lithology_en": "Lithology (EN)",
+    "max_thickness": "Max. thickness m.",
+    "description": "Description",
+    "description_en": "Description (EN)",
+    "definition": "Definition",
+    "definition_en": "Definition (EN)",
+    "age_base": "Age base",
+    "age_top": "Age top",
+    "age_precision": "Age precision",
+    "age_reference": "Age reference",
+    "sort_within_parent": "Sort",
+    "approved_ics": "ICS approved",
+    "approved_esk": "ESK approved",
+    "remarks": "Remarks",
+    "status": "Status",
+    "relatedTables": {
+      "stratigraphy_reference": "References",
+      "stratigraphy_stratotype": "Stratotypes",
+      "stratigraphy_synonym": "Synonyms"
+    }
+  },
+  "stratigraphy_reference": {
+    "reference": "Reference",
+    "content": "Content",
+    "content_en": "Content (EN)",
+    "age_base": "Age base",
+    "age_base_error": "Precision",
+    "age_top": "Age top",
+    "is_preferred_age": "Preferred age",
+    "pages": "Pages",
+    "figures": "Figures",
+    "remarks": "Remarks"
+  },
+  "stratigraphy_stratotype": {
+    "locality": "Locality",
+    "stratotype_type": "Type",
+    "depth_base": "Depth base",
+    "depth_top": "Depth top",
+    "reference": "Reference",
+    "remarks": "Remarks"
+  },
+  "stratigraphy_synonym": {
+    "synonym": "Synonym",
+    "language": "Language",
+    "reference": "Reference",
+    "remarks": "Remarks"
   },
   "journal": {
     "header": "Journal",

@@ -298,6 +298,12 @@ const autocompleteMixin = {
     autocompleteInstitutionSearch(value) {
       this.$_autocompleteMixin_search(value, "institution", "institution", 2);
     },
+    autocompleteStratigraphyParentSearch(value) {
+      this.$_autocompleteMixin_search(value, "stratigraphy", "parent_stratigraphy", 2);
+    },
+    autocompleteAgeChronostratigraphySearch(value) {
+      this.$_autocompleteMixin_search(value, "stratigraphy", "age_chronostratigraphy", 2);
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.

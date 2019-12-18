@@ -9,316 +9,613 @@
       "
     />
 
-    <!--    &lt;!&ndash; GENERAL INFO &ndash;&gt;-->
-    <!--    <v-card-->
-    <!--      class="mt-2"-->
-    <!--      id="block-info"-->
-    <!--      :color="bodyColor.split('n-')[0] + 'n-5'"-->
-    <!--      elevation="4"-->
-    <!--    >-->
-    <!--      <v-card-title class="pt-2 pb-1">-->
-    <!--        <div class="card-title&#45;&#45;clickable" @click="block.info = !block.info">-->
-    <!--          <span :class="validate('dataset') ? 'green&#45;&#45;text' : 'red&#45;&#45;text'">{{-->
-    <!--            $t("preparation.generalInfo")-->
-    <!--          }}</span>-->
-    <!--          <v-icon-->
-    <!--            right-->
-    <!--            :class="validate('dataset') ? 'green&#45;&#45;text' : 'red&#45;&#45;text'"-->
-    <!--          >fas fa-project-diagram</v-icon-->
-    <!--          >-->
-    <!--        </div>-->
-    <!--        <v-spacer></v-spacer>-->
-    <!--        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">-->
-    <!--          <v-icon>{{-->
-    <!--            block.info ? "fas fa-angle-up" : "fas fa-angle-down"-->
-    <!--            }}</v-icon>-->
-    <!--        </v-btn>-->
-    <!--      </v-card-title>-->
+    <!-- GENERAL INFO -->
+    <v-card
+      class="mt-2"
+      id="block-info"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.info = !block.info">
+          <span
+            :class="validate('stratigraphy') ? 'green--text' : 'red--text'"
+            >{{ $t("preparation.generalInfo") }}</span
+          >
+          <v-icon
+            right
+            :class="validate('stratigraphy') ? 'green--text' : 'red--text'"
+            >fas fa-project-diagram</v-icon
+          >
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
+          <v-icon>{{
+            block.info ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
 
-    <!--      <transition>-->
-    <!--        <div v-show="block.info" class="pa-1">-->
-    <!--          &lt;!&ndash; NAME and NAME_EN &ndash;&gt;-->
-    <!--          <v-row no-gutters>-->
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <input-wrapper-->
-    <!--                v-model="dataset.name"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.name')"-->
-    <!--                use-state-->
-    <!--              />-->
-    <!--            </v-col>-->
+      <transition>
+        <div v-show="block.info" class="pa-1">
+          <!-- STRATIGRAPHY and STRATIGRAPHY_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.stratigraphy"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.stratigraphy')"
+                use-state
+              />
+            </v-col>
 
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <input-wrapper-->
-    <!--                v-model="dataset.name_en"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.name_en')"-->
-    <!--                use-state-->
-    <!--              />-->
-    <!--            </v-col>-->
-    <!--          </v-row>-->
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.stratigraphy_en"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.stratigraphy_en')"
+                use-state
+              />
+            </v-col>
+          </v-row>
 
-    <!--          &lt;!&ndash; DESCRIPTION and DESCRIPTION_EN &ndash;&gt;-->
-    <!--          <v-row no-gutters>-->
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <textarea-wrapper-->
-    <!--                v-model="dataset.description"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.description')"-->
-    <!--              />-->
-    <!--            </v-col>-->
+          <!-- STRATIGRAPHY_ORIGINAL, AUTHOR_FREE and YEAR -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.stratigraphy_original"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.stratigraphy_original')"
+              />
+            </v-col>
 
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <textarea-wrapper-->
-    <!--                v-model="dataset.description_en"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.description_en')"-->
-    <!--              />-->
-    <!--            </v-col>-->
-    <!--          </v-row>-->
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.author_free"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.author_free')"
+              />
+            </v-col>
 
-    <!--          &lt;!&ndash; DATE, DATE_TXT, COPYRIGHT_AGENT and LICENCE &ndash;&gt;-->
-    <!--          <v-row no-gutters>-->
-    <!--            <v-col cols="12" md="3" class="pa-1">-->
-    <!--              <date-wrapper-->
-    <!--                v-model="dataset.date"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.date')"-->
-    <!--                v-on:date:clear="dataset.date = null"-->
-    <!--              />-->
-    <!--            </v-col>-->
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.year"
+                :color="bodyActiveColor"
+                :label="$t('common.year')"
+                type="number"
+              />
+            </v-col>
+          </v-row>
 
-    <!--            <v-col cols="12" md="3" class="pa-1">-->
-    <!--              <input-wrapper-->
-    <!--                v-model="dataset.date_txt"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.date_txt')"-->
-    <!--              />-->
-    <!--            </v-col>-->
+          <!-- ETYMON and ETYMON_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.etymon"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.etymon')"
+              />
+            </v-col>
 
-    <!--            <v-col cols="12" md="3" class="pa-1">-->
-    <!--              <autocomplete-wrapper-->
-    <!--                v-model="dataset.copyright_agent"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :items="autocomplete.copyright_agent"-->
-    <!--                :loading="autocomplete.loaders.copyright_agent"-->
-    <!--                item-text="agent"-->
-    <!--                :label="$t('common.copyright_agent')"-->
-    <!--                is-link-->
-    <!--                route-object="agent"-->
-    <!--                is-searchable-->
-    <!--                v-on:search:items="autocompleteCopyrightAgentSearch"-->
-    <!--              />-->
-    <!--            </v-col>-->
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.etymon_en"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.etymon_en')"
+              />
+            </v-col>
+          </v-row>
 
-    <!--            <v-col cols="12" md="3" class="pa-1">-->
-    <!--              <autocomplete-wrapper-->
-    <!--                v-model="dataset.licence"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :items="autocomplete.licence"-->
-    <!--                :loading="autocomplete.loaders.licence"-->
-    <!--                :item-text="licenceLabel"-->
-    <!--                :label="$t('common.licence')"-->
-    <!--              />-->
-    <!--            </v-col>-->
-    <!--          </v-row>-->
+          <!-- ORIGINAL_LOCALITY and ORIGINAL_RANK -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.original_locality"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.original_locality')"
+              />
+            </v-col>
 
-    <!--          &lt;!&ndash; DATASET_HTML and REMARKS &ndash;&gt;-->
-    <!--          <v-row no-gutters>-->
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <textarea-wrapper-->
-    <!--                v-model="dataset.dataset_html"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('dataset.dataset_html')"-->
-    <!--              />-->
-    <!--            </v-col>-->
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.original_rank"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.original_rank')"
+              />
+            </v-col>
+          </v-row>
 
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <textarea-wrapper-->
-    <!--                v-model="dataset.remarks"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.remarks')"-->
-    <!--              />-->
-    <!--            </v-col>-->
-    <!--          </v-row>-->
+          <!-- INDEX_MAIN, INDEX_MAIN_HMTL, INDEX_ADDITIONAL and INDEX_ADDITIONAL_HTML -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.index_main"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.index_main')"
+              />
+            </v-col>
 
-    <!--          &lt;!&ndash; OWNER and OWNER_TXT &ndash;&gt;-->
-    <!--          <v-row no-gutters>-->
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <autocomplete-wrapper-->
-    <!--                v-model="dataset.owner"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :items="autocomplete.owner"-->
-    <!--                :loading="autocomplete.loaders.owner"-->
-    <!--                item-text="agent"-->
-    <!--                :label="$t('common.owner')"-->
-    <!--                is-link-->
-    <!--                route-object="agent"-->
-    <!--                is-searchable-->
-    <!--                v-on:search:items="autocompleteOwner2Search"-->
-    <!--              />-->
-    <!--            </v-col>-->
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.index_main_html"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.index_main_html')"
+              />
+            </v-col>
 
-    <!--            <v-col cols="12" md="6" class="pa-1">-->
-    <!--              <input-wrapper-->
-    <!--                v-model="dataset.owner_txt"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                :label="$t('common.owner_txt')"-->
-    <!--              />-->
-    <!--            </v-col>-->
-    <!--          </v-row>-->
-    <!--        </div>-->
-    <!--      </transition>-->
-    <!--    </v-card>-->
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.index_additional"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.index_additional')"
+              />
+            </v-col>
 
-    <!--    &lt;!&ndash; RELATED DATA TABS &ndash;&gt;-->
-    <!--    <v-card-->
-    <!--      class="related-tabs mt-2"-->
-    <!--      :color="bodyColor.split('n-')[0] + 'n-5'"-->
-    <!--      elevation="4"-->
-    <!--    >-->
-    <!--      <v-tabs-->
-    <!--        :background-color="bodyColor.split('n-')[0] + 'n-3'"-->
-    <!--        show-arrows-->
-    <!--        grow-->
-    <!--        prev-icon="fas fa-angle-left"-->
-    <!--        next-icon="fas fa-angle-right"-->
-    <!--        :active-class="bodyColor.split('n-')[0] + 'n-5 black&#45;&#45;text'"-->
-    <!--        hide-slider-->
-    <!--      >-->
-    <!--        <v-tab-->
-    <!--          v-for="tab in relatedTabs"-->
-    <!--          :key="tab.name"-->
-    <!--          @click.prevent="setTab(tab.name)"-->
-    <!--        >-->
-    <!--          <span>{{ $t("dataset.relatedTables." + tab.name) }}</span>-->
-    <!--          <span class="ml-1">-->
-    <!--            <v-icon small>{{ tab.iconClass }}</v-icon>-->
-    <!--          </span>-->
-    <!--          <span-->
-    <!--            v-if="relatedData[tab.name].length > 0"-->
-    <!--            class="font-weight-bold ml-2"-->
-    <!--          >-->
-    <!--            {{ relatedData[tab.name].length }}-->
-    <!--          </span>-->
-    <!--        </v-tab>-->
-    <!--      </v-tabs>-->
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.index_additional_html"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.index_additional_html')"
+              />
+            </v-col>
+          </v-row>
 
-    <!--      <v-tabs-items>-->
-    <!--        <v-card-->
-    <!--          class="pt-3 px-1"-->
-    <!--          flat-->
-    <!--          :color="bodyColor.split('n-')[0] + 'n-5'"-->
-    <!--        >-->
-    <!--          <dataset-author-->
-    <!--            :related-data="relatedData"-->
-    <!--            :autocomplete="autocomplete"-->
-    <!--            :active-tab="activeTab"-->
-    <!--            v-on:add-related-data="addRelatedData"-->
-    <!--            v-on:set-default="setDefault"-->
-    <!--            v-on:edit-row="editRow"-->
-    <!--            v-on:remove-row="removeRow"-->
-    <!--          />-->
+          <!-- COLOR_CODE_CGMW and COLOR_CODE_ADDITIONAL -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.color_code_cgmw"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.color_code_cgmw')"
+              />
+            </v-col>
 
-    <!--          <dataset-reference-->
-    <!--            :related-data="relatedData"-->
-    <!--            :autocomplete="autocomplete"-->
-    <!--            :active-tab="activeTab"-->
-    <!--            v-on:add-related-data="addRelatedData"-->
-    <!--            v-on:set-default="setDefault"-->
-    <!--            v-on:edit-row="editRow"-->
-    <!--            v-on:remove-row="removeRow"-->
-    <!--          />-->
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.color_code_additional"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.color_code_additional')"
+              />
+            </v-col>
+          </v-row>
 
-    <!--          &lt;!&ndash; PAGINATION &ndash;&gt;-->
-    <!--          <div-->
-    <!--            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"-->
-    <!--            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"-->
-    <!--          >-->
-    <!--            <div class="mr-3 mb-3">-->
-    <!--              <v-select-->
-    <!--                v-model="relatedData.searchParameters[activeTab].paginateBy"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                dense-->
-    <!--                :items="paginateByOptionsTranslated"-->
-    <!--                :item-color="bodyActiveColor"-->
-    <!--                label="Paginate by"-->
-    <!--                hide-details-->
-    <!--              />-->
-    <!--            </div>-->
+          <!-- PARENT, AGE_CHRONOSTRATIGRAPHY and HIERARCHY_STRING -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="stratigraphy.parent"
+                :color="bodyActiveColor"
+                :items="autocomplete.parent_stratigraphy"
+                :loading="autocomplete.loaders.parent_stratigraphy"
+                :item-text="stratigraphyLabel"
+                :label="$t('stratigraphy.parent')"
+                is-link
+                route-object="stratigraphy"
+                is-searchable
+                v-on:search:items="autocompleteStratigraphyParentSearch"
+              />
+            </v-col>
 
-    <!--            <div>-->
-    <!--              <v-pagination-->
-    <!--                v-model="relatedData.searchParameters[activeTab].page"-->
-    <!--                :color="bodyActiveColor"-->
-    <!--                circle-->
-    <!--                prev-icon="fas fa-angle-left"-->
-    <!--                next-icon="fas fa-angle-right"-->
-    <!--                :length="-->
-    <!--                  Math.ceil(-->
-    <!--                    relatedData.count[activeTab] /-->
-    <!--                      relatedData.searchParameters[activeTab].paginateBy-->
-    <!--                  )-->
-    <!--                "-->
-    <!--                :total-visible="5"-->
-    <!--              />-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </v-card>-->
-    <!--      </v-tabs-items>-->
-    <!--    </v-card>-->
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="stratigraphy.age_chronostratigraphy"
+                :color="bodyActiveColor"
+                :items="autocomplete.age_chronostratigraphy"
+                :loading="autocomplete.loaders.age_chronostratigraphy"
+                :item-text="stratigraphyLabel"
+                :label="$t('stratigraphy.age_chronostratigraphy')"
+                is-link
+                route-object="stratigraphy"
+                is-searchable
+                v-on:search:items="autocompleteAgeChronostratigraphySearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.hierarchy_string"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.hierarchy_string')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- TYPE and RANK -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="stratigraphy.type"
+                :color="bodyActiveColor"
+                :items="autocomplete.list_stratigraphy_type"
+                :loading="autocomplete.loaders.list_stratigraphy_type"
+                :item-text="commonLabel"
+                :label="$t('stratigraphy.type')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="stratigraphy.rank"
+                :color="bodyActiveColor"
+                :items="autocomplete.list_stratigraphy_rank"
+                :loading="autocomplete.loaders.list_stratigraphy_rank"
+                :item-text="commonLabel"
+                :label="$t('stratigraphy.rank')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- SCOPE and STATUS -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="stratigraphy.scope"
+                :color="bodyActiveColor"
+                :items="autocomplete.list_stratigraphy_scope"
+                :loading="autocomplete.loaders.list_stratigraphy_scope"
+                :item-text="commonLabel"
+                :label="$t('stratigraphy.scope')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="stratigraphy.status"
+                :color="bodyActiveColor"
+                :items="autocomplete.list_stratigraphy_status"
+                :loading="autocomplete.loaders.list_stratigraphy_status"
+                :item-text="commonLabel"
+                :label="$t('stratigraphy.status')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- REGION and REGION_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.region"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.region')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.region_en"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.region_en')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- LITHOLOGY and LITHOLOGY_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.lithology"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.lithology')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.lithology_en"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.lithology_en')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- MAX_THICKNESS -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.max_thickness"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.max_thickness')"
+                type="number"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- DESCRIPTION and DESCRIPTION_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="stratigraphy.description"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.description')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="stratigraphy.description_en"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.description_en')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- DEFINITION and DEFINITION_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="stratigraphy.definition"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.definition')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <textarea-wrapper
+                v-model="stratigraphy.definition_en"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.definition_en')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- AGE_BASE, AGE_TOP, AGE_PRECISION and AGE_REFERENCE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.age_base"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.age_base')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.age_top"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.age_top')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.age_precision"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.age_precision')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
+                v-model="stratigraphy.age_reference"
+                :color="bodyActiveColor"
+                :items="autocomplete.reference"
+                :loading="autocomplete.loaders.reference"
+                item-text="reference"
+                :label="$t('stratigraphy.age_reference')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteReferenceSearch"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- IS_PRIVATE, SORT_WITHIN_PARENT, APPROVED_ICS and APPROVED_ESK -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
+                v-model="stratigraphy.is_private"
+                :color="bodyActiveColor"
+                :label="$t('common.is_private')"
+                @change="stratigraphy.is_private = !stratigraphy.is_private"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.sort_within_parent"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.sort_within_parent')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
+                v-model="stratigraphy.approved_ics"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.approved_ics')"
+                @change="stratigraphy.approved_ics = !stratigraphy.approved_ics"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
+                v-model="stratigraphy.approved_esk"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.approved_esk')"
+                @change="stratigraphy.approved_esk = !stratigraphy.approved_esk"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- REMARKS -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="stratigraphy.remarks"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.remarks')"
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- RELATED DATA TABS -->
+    <v-card
+      class="related-tabs mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-tabs
+        :background-color="bodyColor.split('n-')[0] + 'n-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in relatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
+        >
+          <span>{{ $t("stratigraphy.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].length > 0"
+            class="font-weight-bold ml-2"
+          >
+            {{ relatedData.count[tab.name] }}
+          </span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items>
+        <v-card
+          class="pt-3 px-1"
+          flat
+          :color="bodyColor.split('n-')[0] + 'n-5'"
+        >
+          <stratigraphy-reference
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <stratigraphy-stratotype
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <stratigraphy-synonym
+            :related-data="relatedData"
+            :autocomplete="autocomplete"
+            :active-tab="activeTab"
+            v-on:add-related-data="addRelatedData"
+            v-on:set-default="setDefault"
+            v-on:edit-row="editRow"
+            v-on:remove-row="removeRow"
+          />
+
+          <!-- PAGINATION -->
+          <div
+            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
+                dense
+                :items="paginateByOptionsTranslated"
+                :item-color="bodyActiveColor"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.count[activeTab] /
+                      relatedData.searchParameters[activeTab].paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+        </v-card>
+      </v-tabs-items>
+    </v-card>
 
     <!-- IS_PRIVATE -->
-    <v-row no-gutters class="mt-2">
-      <v-col>
-        <checkbox-wrapper
-          v-model="stratigraphy.is_private"
-          :color="bodyActiveColor"
-          :label="$t('common.is_private')"
-          @change="stratigraphy.is_private = !stratigraphy.is_private"
-        />
-      </v-col>
-    </v-row>
+    <!--    <v-row no-gutters class="mt-2">-->
+    <!--      <v-col>-->
+    <!--        <checkbox-wrapper-->
+    <!--          v-model="stratigraphy.is_private"-->
+    <!--          :color="bodyActiveColor"-->
+    <!--          :label="$t('common.is_private')"-->
+    <!--          @change="stratigraphy.is_private = !stratigraphy.is_private"-->
+    <!--        />-->
+    <!--      </v-col>-->
+    <!--    </v-row>-->
   </div>
 </template>
 
 <script>
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-// import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-// import DateWrapper from "../partial/inputs/DateWrapper";
-// import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-// import InputWrapper from "../partial/inputs/InputWrapper";
-// import Spinner from "vue-simple-spinner";
-// import DatasetAuthor from "../dataset/relatedTables/DatasetAuthor";
-// import DatasetReference from "../dataset/relatedTables/DatasetReference";
+import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import InputWrapper from "../partial/inputs/InputWrapper";
+import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import {
+  fetchListLanguages,
   fetchListStratigraphyRank,
   fetchListStratigraphyScope,
   fetchListStratigraphyStatus,
   fetchListStratigraphyType,
-  fetchStratigraphy
+  fetchListStratotypeType,
+  fetchStratigraphy,
+  fetchStratigraphyReferences,
+  fetchStratigraphyStratotypes,
+  fetchStratigraphySynonyms
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
+import StratigraphyReference from "./relatedTables/StratigraphyReference";
+import StratigraphyStratotype from "./relatedTables/StratigraphyStratotype";
+import StratigraphySynonym from "./relatedTables/StratigraphySynonym";
 
 export default {
   name: "Stratigraphy",
 
-  // components: {
-  //   CheckboxWrapper,
-  //   AutocompleteWrapper,
-  //   DateWrapper,
-  //   TextareaWrapper,
-  //   InputWrapper,
-  //   Spinner,
-  //   DatasetAuthor,
-  //   DatasetReference
-  // },
   components: {
-    CheckboxWrapper
+    StratigraphySynonym,
+    StratigraphyStratotype,
+    StratigraphyReference,
+    CheckboxWrapper,
+    AutocompleteWrapper,
+    TextareaWrapper,
+    InputWrapper,
+    Spinner
   },
 
   props: {
@@ -421,12 +718,12 @@ export default {
     setInitialData() {
       return {
         relatedTabs: [
-          { name: "stratigraphy_reference", iconClass: "far fa-book" },
+          { name: "stratigraphy_reference", iconClass: "fas fa-book" },
           { name: "stratigraphy_stratotype", iconClass: "fas fa-cut" },
           { name: "stratigraphy_synonym", iconClass: "fas fa-list-ol" }
         ],
         searchHistory: "stratigraphySearchHistory",
-        activeTab: "stratigraphy__reference",
+        activeTab: "stratigraphy_reference",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
@@ -478,16 +775,20 @@ export default {
             list_stratigraphy_rank: false,
             list_stratigraphy_scope: false,
             list_stratigraphy_status: false,
-            age_reference: false,
-            age_chronostratigraphy: false
+            reference: false,
+            age_chronostratigraphy: false,
+            locality: false,
+            list_language: false
           },
           parent_stratigraphy: [],
           list_stratigraphy_type: [],
           list_stratigraphy_rank: [],
           list_stratigraphy_scope: [],
           list_stratigraphy_status: [],
-          age_reference: [],
-          age_chronostratigraphy: []
+          reference: [],
+          age_chronostratigraphy: [],
+          locality: [],
+          list_language: []
         },
         requiredFields: ["stratigraphy", "stratigraphy_en"],
         stratigraphy: {},
@@ -513,7 +814,7 @@ export default {
     },
 
     loadFullInfo() {
-      this.loadAutocompleteFields(true);
+      this.loadAutocompleteFields(true, true);
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
@@ -547,7 +848,10 @@ export default {
       }
     },
 
-    loadAutocompleteFields(regularAutocompleteFields = true) {
+    loadAutocompleteFields(
+      regularAutocompleteFields = true,
+      relatedDataAutocompleteFields = false
+    ) {
       if (regularAutocompleteFields) {
         fetchListStratigraphyType().then(
           response =>
@@ -574,6 +878,19 @@ export default {
             ))
         );
       }
+
+      if (relatedDataAutocompleteFields) {
+        fetchListStratotypeType().then(
+          response =>
+            (this.autocomplete.list_stratotype_type = this.handleResponse(
+              response
+            ))
+        );
+        fetchListLanguages().then(
+          response =>
+            (this.autocomplete.list_language = this.handleResponse(response))
+        );
+      }
     },
 
     setDefaultRelatedData() {
@@ -587,9 +904,27 @@ export default {
           stratigraphy_synonym: []
         },
         copyFields: {
-          stratigraphy_reference: ["reference"],
-          stratigraphy_stratotype: ["locality"],
-          stratigraphy_synonym: ["synonym"]
+          stratigraphy_reference: [
+            "reference",
+            "content",
+            "content_en",
+            "age_base",
+            "age_base_error",
+            "age_top",
+            "is_preferred_age",
+            "pages",
+            "figures",
+            "remarks"
+          ],
+          stratigraphy_stratotype: [
+            "locality",
+            "stratotype_type",
+            "depth_base",
+            "depth_top",
+            "reference",
+            "remarks"
+          ],
+          stratigraphy_synonym: ["synonym","language","reference","remarks"]
         },
         insert: this.setDefaultInsertRelatedData(),
         searchParameters: {
@@ -683,7 +1018,7 @@ export default {
           id: obj.age_reference,
           reference: obj.age_reference__reference
         };
-        this.autocomplete.age_reference.push(this.stratigraphy.age_reference);
+        this.autocomplete.reference.push(this.stratigraphy.age_reference);
       }
       if (this.isNotEmpty(obj.age_chronostratigraphy)) {
         this.stratigraphy.age_chronostratigraphy = {
@@ -737,6 +1072,18 @@ export default {
           locality: obj.locality__locality,
           locality_en: obj.locality__locality_en
         };
+      if (this.isNotEmpty(obj.stratotype_type))
+        obj.stratotype_type = {
+          id: obj.stratotype_type,
+          value: obj.stratotype_type__value,
+          value_en: obj.stratotype_type__value_en
+        };
+      if (this.isNotEmpty(obj.language))
+        obj.language = {
+          id: obj.language,
+          value: obj.language__value,
+          value_en: obj.language__value_en
+        };
 
       return obj;
     },
@@ -755,6 +1102,16 @@ export default {
         newObject.reference = obj.reference.id;
         newObject.reference__reference = obj.reference.reference;
       }
+      if (this.isNotEmpty(obj.stratotype_type)) {
+        newObject.stratotype_type = obj.stratotype_type.id;
+        newObject.stratotype_type__value = obj.stratotype_type.value;
+        newObject.stratotype_type__value_en = obj.stratotype_type.value_en;
+      }
+      if (this.isNotEmpty(obj.language)) {
+        newObject.language = obj.language.id;
+        newObject.language__value = obj.language.value;
+        newObject.language__value_en = obj.language.value_en;
+      }
 
       return newObject;
     },
@@ -763,20 +1120,20 @@ export default {
       let query;
 
       if (object === "stratigraphy_reference") {
-        // query = fetchStratigraphyReferences(
-        //   this.$route.params.id,
-        //   this.relatedData.searchParameters.stratigraphy_reference
-        // );
+        query = fetchStratigraphyReferences(
+          this.$route.params.id,
+          this.relatedData.searchParameters.stratigraphy_reference
+        );
       } else if (object === "stratigraphy_stratotype") {
-        // query = fetchStratigraphyStratotypes(
-        //   this.$route.params.id,
-        //   this.relatedData.searchParameters.stratigraphy_stratotype
-        // );
+        query = fetchStratigraphyStratotypes(
+          this.$route.params.id,
+          this.relatedData.searchParameters.stratigraphy_stratotype
+        );
       } else if (object === "stratigraphy_synonym") {
-        // query = fetchStratigraphySynonyms(
-        //   this.$route.params.id,
-        //   this.relatedData.searchParameters.stratigraphy_synonym
-        // );
+        query = fetchStratigraphySynonyms(
+          this.$route.params.id,
+          this.relatedData.searchParameters.stratigraphy_synonym
+        );
       }
 
       return new Promise(resolve => {
@@ -801,6 +1158,16 @@ export default {
         uploadableObject.reference = uploadableObject.reference.id
           ? uploadableObject.reference.id
           : uploadableObject.reference;
+      }
+      if (this.isNotEmpty(uploadableObject.stratotype_type)) {
+        uploadableObject.stratotype_type = uploadableObject.stratotype_type.id
+          ? uploadableObject.stratotype_type.id
+          : uploadableObject.stratotype_type;
+      }
+      if (this.isNotEmpty(uploadableObject.language)) {
+        uploadableObject.language = uploadableObject.language.id
+          ? uploadableObject.language.id
+          : uploadableObject.language;
       }
 
       console.log("This object is sent in string format (related_data):");

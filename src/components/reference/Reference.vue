@@ -1229,15 +1229,20 @@ export default {
       // Autocomplete fields
       if (this.isNotEmpty(objectToUpload.type))
         uploadableObject.type = objectToUpload.type.id;
+      else uploadableObject.type = null;
       if (this.isNotEmpty(objectToUpload.language))
         uploadableObject.language = objectToUpload.language.id;
+      else uploadableObject.language = null;
       if (this.isNotEmpty(objectToUpload.journal))
         uploadableObject.journal = objectToUpload.journal.id;
+      else uploadableObject.journal = null;
       if (this.isNotEmpty(objectToUpload.title_translated_language))
         uploadableObject.title_translated_language =
           objectToUpload.title_translated_language.id;
+      else uploadableObject.title_translated_language = null;
       if (this.isNotEmpty(objectToUpload.licence))
         uploadableObject.licence = objectToUpload.licence.id;
+      else uploadableObject.licence = null;
 
       // Adding related data
       uploadableObject.related_data = {};

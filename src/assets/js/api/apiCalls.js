@@ -2235,6 +2235,22 @@ export function fetchListStratigraphyStatus() {
   return fetch(`list_stratigraphy_status/?format=json`);
 }
 
+export function fetchListStratotypeType() {
+  return fetch(`list_stratotype_type/?format=json`);
+}
+
+export function fetchStratigraphyReferences(id, searchParameters) {
+  return fetch(`stratigraphy_reference/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchStratigraphyStratotypes(id, searchParameters) {
+  return fetch(`stratigraphy_stratotype/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
+export function fetchStratigraphySynonyms(id, searchParameters) {
+  return fetch(`stratigraphy_synonym/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+}
+
 /**************************
  ***  STRATIGRAPHY END  ***
  **************************/

@@ -340,6 +340,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    stratigraphySearchHistory: {
+      type: Object
+    },
+    stratigraphyViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },
