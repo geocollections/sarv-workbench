@@ -30,7 +30,9 @@
     "lithostratigraphy": "Lithostratigraphy",
     "reference": "Reference",
     "latitude": "latitude",
-    "longitude": "Longitude"
+    "longitude": "Longitude",
+    "actions": "Actions",
+    "new": "New"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -145,7 +147,8 @@
     "drillcore": "Add drill core",
     "preparation": "Add preparation",
     "dataset": "Add dataset",
-    "stratigraphy": "Add stratigraphy"
+    "stratigraphy": "Add stratigraphy",
+    "stratigraphy_synonym": "Stratigraphy Synonym"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -1802,6 +1805,10 @@
   "buttons": {
     "deletePreferences": "Clear filters and ordering",
     "cancel": "Cancel",
+    "edit": "Edit",
+    "add": "Add",
+    "delete": "Delete",
+    "add_new": "Add new",
     "next": "Next",
     "previous": "Previous",
     "clear": "Clear",

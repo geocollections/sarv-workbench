@@ -1,5 +1,5 @@
 <template>
-  <div class="stratigraphy-synonym-table">
+  <div class="stratigraphy-stratotype-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -174,13 +174,13 @@
 </template>
 
 <script>
-import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../../partial/inputs/InputWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
-import { cloneDeep } from "lodash";
+import {cloneDeep} from "lodash";
+
 export default {
-  name: "StratigraphySynonymTable",
+  name: "StratigraphyStratotypeTable",
 
   components: { AutocompleteWrapper, InputWrapper },
 
@@ -241,6 +241,7 @@ export default {
       reference: null,
       remarks: ""
     },
+    copyFields: ["synonym", "language", "reference", "remarks"],
     isNewItem: true,
     autocomplete: {
       language: [],
@@ -325,15 +326,19 @@ export default {
         };
       } else this.item.language = item.language;
 
-      if (typeof item.reference !== "object" && item.reference !== null) {
+      if (typeof item.language !== "object" && item.language !== null) {
         this.item.reference = {
           id: item.reference,
           reference: item.reference__reference
         };
-        this.autocomplete.reference.push(this.item.reference);
+        if (this.autocomplete.reference.length === 0) {
+          this.autocomplete.reference.push(this.item.reference);
+        }
       } else {
         this.item.reference = item.reference;
-        this.autocomplete.reference.push(this.item.reference);
+        if (this.autocomplete.reference.length === 0) {
+          this.autocomplete.reference.push(this.item.reference);
+        }
       }
 
       this.item.remarks = item.remarks;
@@ -352,12 +357,12 @@ export default {
     fillListAutocompletes() {
       if (this.autocomplete.language.length === 0) {
         this.autocomplete.loaders.language = true;
-        fetchListLanguages().then(response => {
-          if (response.status === 200) {
-            this.autocomplete.language =
-              response.body.count > 0 ? response.body.results : [];
-          }
-        });
+        // fetchListLanguages().then(response => {
+        //   if (response.status === 200) {
+        //     this.autocomplete.language =
+        //       response.body.count > 0 ? response.body.results : [];
+        //   }
+        // });
         this.autocomplete.loaders.language = false;
       }
     },

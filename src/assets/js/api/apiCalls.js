@@ -2259,15 +2259,18 @@ export function fetchListStratotypeType() {
 }
 
 export function fetchStratigraphyReferences(id, searchParameters) {
-  return fetch(`stratigraphy_reference/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  return fetch(`stratigraphy_reference/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
 }
 
 export function fetchStratigraphyStratotypes(id, searchParameters) {
-  return fetch(`stratigraphy_stratotype/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  return fetch(`stratigraphy_stratotype/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
 }
 
 export function fetchStratigraphySynonyms(id, searchParameters) {
-  return fetch(`stratigraphy_synonym/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  return fetch(`stratigraphy_synonym/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
 }
 
 /**************************

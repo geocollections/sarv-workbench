@@ -431,59 +431,6 @@ const formManipulation = {
       }
     },
 
-    addFileAsRelatedData(data, object) {
-      let formData = new FormData();
-      data.forEach((file, index) => {
-        formData.append(
-          "data",
-          JSON.stringify({
-            description: file.type + " for " + object + ": " + this[object].id,
-            author: this.currentUser.id,
-            date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
-            is_private: true
-          })
-        );
-
-        formData.append("file" + [index], file);
-      });
-
-      try {
-        this.saveData("attachment", formData, "add/attachment/").then(
-          savedObjectId => {
-            console.log(savedObjectId);
-            if (savedObjectId === undefined || savedObjectId === false) return;
-            let vm = this;
-            this.attachmentLinkSaved =
-              savedObjectId.length > 0 ? savedObjectId.length : 1;
-
-            function createRelation(vm, object, file) {
-              vm.addRelationBetweenAnyObjectAndAttachment(
-                file,
-                "attachment_link",
-                {
-                  object: object,
-                  id: vm[object].id
-                }
-              ).then(() => {
-                vm.attachmentLinkSaved -= 1;
-              });
-            }
-
-            if (this.attachmentLinkSaved === 1)
-              createRelation(vm, object, savedObjectId);
-            else {
-              savedObjectId.forEach(file => {
-                createRelation(vm, object, file);
-              });
-            }
-          }
-        );
-      } catch (e) {
-        console.log("Attachment cannot not be added");
-        console.log(e);
-      }
-    },
-
     addRelationBetweenAnyObjectAndAttachment(
       attachmentId,
       object,
@@ -630,34 +577,6 @@ const formManipulation = {
       });
       return object;
     },
-
-    // Todo: Update TAB code
-    // handleUserChoice(choice) {
-    //   this.$bvModal.hide('confirm-tab-close')
-    //
-    //   if (choice === 'LEAVE') {
-    //     this.setActiveTab(this.nextTab, false)
-    //   } else if (choice === 'SAVE') {
-    //     this.addRelatedData(this.activeTab, true);
-    //     this.setActiveTab(this.nextTab, false);
-    //   }
-    // },
-    //
-    // setActiveTab(type, isWarning = true) {
-    //   // If user clicks on currently active tab then do nothing
-    //   if (this.activeTab === type) return
-    //
-    //   this.nextTab = type;
-    //   if (isWarning && this.isNotEmpty(this.relatedData.insert[this.activeTab])) {
-    //     this.$bvModal.show('confirm-tab-close')
-    //   } else {
-    //     // CLEAR PREVIOUS TAB DATA BECAUSE IT SHOULD BE SAVED
-    //     this.relatedData.insert[this.activeTab] = {};
-    //     // this.activeTab = type;
-    //     this.$emit('tab-changed', type);
-    //     this.loadRelatedData(type);
-    //   }
-    // },
 
     /**************************
      *** RELATED DATA START ***
@@ -1042,19 +961,6 @@ const formManipulation = {
     getCurrentFormattedDate(format) {
       if (format) return moment().format(format);
       else return moment().format("YYYY-MM-DD hh:mm:ss");
-    }
-  },
-
-  watch: {
-    attachmentLinkSaved: {
-      handler: function(newval) {
-        if (newval === 0) {
-          this.$root.$emit("attachment-loading-status", true);
-          this.loadRelatedData("attachment_link");
-          this.attachmentLinkSaved = -1;
-        }
-      },
-      deep: true
     }
   }
 };

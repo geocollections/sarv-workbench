@@ -734,7 +734,6 @@ export default {
         previousRecord: {},
         nextRecord: {},
         searchParameters: this.setDefaultSearchParameters(),
-        attachmentLinkSaved: -1,
         block: {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,

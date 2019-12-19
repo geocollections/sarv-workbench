@@ -723,7 +723,6 @@ export default {
           }
         ],
         isActive: false,
-        attachmentLinkSaved: -1,
         watchedSite: null,
         block: {
           info: true,

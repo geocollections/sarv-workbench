@@ -30,7 +30,9 @@
     "lithostratigraphy": "Litostratigraafia",
     "reference": "Kirjandus",
     "latitude": "Laiuskraad",
-    "longitude": "Pikkuskraad"
+    "longitude": "Pikkuskraad",
+    "actions": "Toimingud",
+    "new": "Uus"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -145,7 +147,8 @@
     "drillcore": "Lisa puursüdamik",
     "preparation": "Lisa preparaat",
     "dataset": "Lisa andmeset",
-    "stratigraphy": "Lisa stratigraafia"
+    "stratigraphy": "Lisa stratigraafia",
+    "stratigraphy_synonym": "Stratigraafia Sünonüüm"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -1803,6 +1806,10 @@
   "buttons": {
     "deletePreferences": "Tühista filtrid ja sorteerimine",
     "cancel": "Katkesta",
+    "edit": "Muuda",
+    "add": "Lisa",
+    "delete": "Kustuta",
+    "add_new": "Lisa uus",
     "next": "Järgmine",
     "previous": "Eelmine",
     "clear": "Puhasta",

@@ -1,5 +1,5 @@
 <template>
-  <div class="stratigraphy-synonym-table">
+  <div class="stratigraphy-reference-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -34,32 +34,6 @@
         >
       </template>
 
-      <template v-slot:item.language="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.language__value,
-              en: item.language__value_en
-            }"
-          />
-          <span
-            v-else-if="item.language"
-            v-translate="{
-              et: item.language.value,
-              en: item.language.value_en
-            }"
-          />
-        </div>
-        <div
-          v-else
-          v-translate="{
-            et: item.language__value,
-            en: item.language__value_en
-          }"
-        ></div>
-      </template>
-
       <template v-slot:item.reference="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
@@ -91,6 +65,11 @@
           {{ item.reference__reference }}
         </router-link>
       </template>
+
+      <template v-slot:is_preferred_age="{ item }">
+        <v-icon v-if="item.is_preferred_age">fas fa-plus</v-icon>
+        <v-icon v-else>fas fa-minus</v-icon>
+      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -110,25 +89,6 @@
           <v-card-text>
             <v-container>
               <v-row>
-                {{ item }}
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.synonym"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_synonym.synonym')"
-                    use-state
-                  />
-                </v-col>
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.language"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.language"
-                    :loading="autocomplete.loaders.language"
-                    :item-text="commonLabel"
-                    :label="$t('stratigraphy_synonym.language')"
-                  />
-                </v-col>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.reference"
@@ -136,18 +96,87 @@
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
                     item-text="reference"
-                    :label="$t('stratigraphy_synonym.reference')"
+                    :label="$t('stratigraphy_reference.reference')"
                     is-link
                     route-object="reference"
                     is-searchable
                     v-on:search:items="autocompleteReferenceSearch"
                   />
                 </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.content"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.content')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.content_en"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.content_en')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.age_base"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.age_base')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.age_base_error"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.age_base_error')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.age_top"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.age_top')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <checkbox-wrapper
+                    v-model="item.is_preferred_age"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.is_preferred_age')"
+                    @change="item.is_preferred_age = !item.is_preferred_age"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.pages"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.pages')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.figures"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_reference.figures')"
+                  />
+                </v-col>
+
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_synonym.remarks')"
+                    :label="$t('stratigraphy_reference.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -174,15 +203,16 @@
 </template>
 
 <script>
-import InputWrapper from "../../partial/inputs/InputWrapper";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-export default {
-  name: "StratigraphySynonymTable",
+import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 
-  components: { AutocompleteWrapper, InputWrapper },
+export default {
+  name: "StratigraphyReferenceTable",
+
+  components: { CheckboxWrapper, AutocompleteWrapper, InputWrapper },
 
   mixins: [autocompleteMixin],
 
@@ -223,10 +253,22 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "stratigraphy_synonym.synonym", value: "synonym" },
-      { text: "stratigraphy_synonym.language", value: "language" },
-      { text: "stratigraphy_synonym.reference", value: "reference" },
-      { text: "stratigraphy_synonym.remarks", value: "remarks" },
+      { text: "stratigraphy_reference.reference", value: "reference" },
+      { text: "stratigraphy_reference.content", value: "content" },
+      { text: "stratigraphy_reference.content_en", value: "content_en" },
+      { text: "stratigraphy_reference.age_base", value: "age_base" },
+      {
+        text: "stratigraphy_reference.age_base_error",
+        value: "age_base_error"
+      },
+      { text: "stratigraphy_reference.age_top", value: "age_top" },
+      {
+        text: "stratigraphy_reference.is_preferred_age",
+        value: "is_preferred_age"
+      },
+      { text: "stratigraphy_reference.pages", value: "pages" },
+      { text: "stratigraphy_reference.figures", value: "figures" },
+      { text: "stratigraphy_reference.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -236,17 +278,21 @@ export default {
     ],
     dialog: false,
     item: {
-      synonym: "",
-      language: null,
       reference: null,
+      content: "",
+      content_en: "",
+      age_base: "",
+      age_base_error: "",
+      age_top: "",
+      is_preferred_age: false,
+      pages: "",
+      figures: "",
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      language: [],
       reference: [],
       loaders: {
-        language: false,
         reference: false
       }
     }
@@ -263,13 +309,9 @@ export default {
     },
 
     isItemValid() {
-      return this.item.synonym.length > 0;
-    }
-  },
-
-  watch: {
-    dialog() {
-      this.fillListAutocompletes();
+      return (
+        typeof this.item.reference === "object" && this.item.reference !== null
+      );
     }
   },
 
@@ -282,9 +324,15 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        synonym: "",
-        language: null,
         reference: null,
+        content: "",
+        content_en: "",
+        age_base: "",
+        age_base_error: "",
+        age_top: "",
+        is_preferred_age: false,
+        pages: "",
+        figures: "",
         remarks: ""
       };
     },
@@ -295,13 +343,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "stratigraphy_synonym",
+          table: "stratigraphy_reference",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "stratigraphy_synonym",
+          table: "stratigraphy_reference",
           item: formattedItem,
           rawItem: this.item
         });
@@ -315,16 +363,6 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      this.item.synonym = item.synonym;
-
-      if (typeof item.language !== "object" && item.language !== null) {
-        this.item.language = {
-          id: item.language,
-          value: item.language__value,
-          value_en: item.language__value_en
-        };
-      } else this.item.language = item.language;
-
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
@@ -336,6 +374,14 @@ export default {
         this.autocomplete.reference.push(this.item.reference);
       }
 
+      this.item.content = item.content;
+      this.item.content_en = item.content_en;
+      this.item.age_base = item.age_base;
+      this.item.age_base_error = item.age_base_error;
+      this.item.age_top = item.age_top;
+      this.item.is_preferred_age = item.is_preferred_age;
+      this.item.pages = item.pages;
+      this.item.figures = item.figures;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -347,19 +393,6 @@ export default {
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
-    },
-
-    fillListAutocompletes() {
-      if (this.autocomplete.language.length === 0) {
-        this.autocomplete.loaders.language = true;
-        fetchListLanguages().then(response => {
-          if (response.status === 200) {
-            this.autocomplete.language =
-              response.body.count > 0 ? response.body.results : [];
-          }
-        });
-        this.autocomplete.loaders.language = false;
-      }
     },
 
     formatItem(item) {
