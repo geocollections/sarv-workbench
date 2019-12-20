@@ -426,8 +426,10 @@ export function fetchAttachmentLink(id) {
 }
 
 export function fetchLocalityReferenceForReference(id, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+
   return fetch(
-    `locality_reference/?reference=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `locality_reference/?reference=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
@@ -459,7 +461,7 @@ export function fetchListLocalityReferenceType() {
   return fetch(`list_locality_reference_type/?format=json`);
 }
 
-export function fetchLinkedStratigraphyReference(data, referenceID) {
+export function fetchLinkedStratigraphyReference(referenceID, data) {
   let fields =
     "id,reference,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy__type,stratigraphy__type__value,stratigraphy__type__value_en,stratigraphy__rank,stratigraphy__rank__value,stratigraphy__rank__value_en,stratigraphy__scope,stratigraphy__scope__value,stratigraphy__scope__value_en";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
@@ -469,7 +471,7 @@ export function fetchLinkedStratigraphyReference(data, referenceID) {
   );
 }
 
-export function fetchLinkedTaxonReference(data, referenceID) {
+export function fetchLinkedTaxonReference(referenceID, data) {
   const fields =
     "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);

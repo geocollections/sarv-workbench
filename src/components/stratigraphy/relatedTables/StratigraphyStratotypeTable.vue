@@ -16,22 +16,25 @@
       :class="bodyColor.split('n-')[0] + 'n-5'"
     >
       <template v-slot:item.action="{ item }">
-        <v-icon
-          small
-          class="mr-2"
+        <v-btn
+          icon
           @click="editItem(item)"
           color="green"
           :title="$t('buttons.edit')"
-          >far fa-edit</v-icon
-        >
-        <v-icon
-          v-if="!$route.meta.isEdit"
           small
+        >
+          <v-icon small>far fa-edit</v-icon>
+        </v-btn>
+        <v-btn
+          v-if="!$route.meta.isEdit"
+          icon
           @click="deleteItem(item)"
           color="red"
           :title="$t('buttons.delete')"
-          >far fa-trash-alt</v-icon
+          small
         >
+          <v-icon small>far fa-trash-alt</v-icon>
+        </v-btn>
       </template>
 
       <template v-slot:item.locality="{ item }">
@@ -437,7 +440,7 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "stratigraphy_synonym",
+        table: "stratigraphy_stratotype",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });

@@ -14,7 +14,7 @@
         :color="navbarColor"
         :dark="!previousId ? false : isNavbarDark"
         :disabled="!previousId"
-        :to="{ path: `/${object}/${previousId}` }"
+        :to="{ path: `/${$route.meta.object}/${previousId}` }"
         title="Go to previous record"
         retain-focus-on-click
         :small="$vuetify.breakpoint.mdAndUp"
@@ -37,7 +37,7 @@
         :loading="sendingData"
         @click="handleClick('FINISH')"
         title="Finish record"
-        v-if="object === 'site' && !$route.meta.isEdit"
+        v-if="$route.meta.object === 'site' && !$route.meta.isEdit"
         retain-focus-on-click
         :small="$vuetify.breakpoint.mdAndUp"
         class="text-none"
@@ -147,7 +147,7 @@
         :color="navbarColor"
         :dark="!nextId ? false : isNavbarDark"
         :disabled="!nextId"
-        :to="{ path: `/${object}/${nextId}` }"
+        :to="{ path: `/${$route.meta.object}/${nextId}` }"
         title="Go to next record"
         retain-focus-on-click
         :small="$vuetify.breakpoint.mdAndUp"
@@ -172,10 +172,6 @@ import { mapState } from "vuex";
 export default {
   name: "BottomOptions",
   props: {
-    object: {
-      type: String,
-      default: "attachment"
-    },
     isNavbarDark: {
       type: Boolean,
       required: false,
@@ -231,7 +227,7 @@ export default {
   methods: {
     async handleClick(action) {
       this.sendingData = true;
-      await this.$parent.$emit("button-clicked", action, this.object);
+      await this.$parent.$emit("button-clicked", action, this.$route.meta.object);
       setTimeout(() => {
         // will run after $emit is done in 500ms
         this.sendingData = false;
@@ -240,7 +236,7 @@ export default {
 
     initNavigationButtons(list) {
       this.listOfIDs = list.map(item => {
-        if (this.object === "library") return item.library;
+        if (this.$route.meta.object === "library") return item.library;
         else return item.id;
       });
       this.previousId = this.calculatePreviousId(

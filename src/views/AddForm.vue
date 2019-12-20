@@ -45,11 +45,6 @@ import { mapState } from "vuex";
 export default {
   name: "AddForm",
   components: { BottomOptions },
-  metaInfo() {
-    return {
-      title: this.$t(this.$route.meta.title)
-    };
-  },
   computed: {
     ...mapState(["appSettings"])
   }

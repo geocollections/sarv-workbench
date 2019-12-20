@@ -150,7 +150,8 @@
     "stratigraphy": "Lisa stratigraafia",
     "stratigraphy_synonym": "Stratigraafia Sünonüüm",
     "stratigraphy_stratotype": "Stratigraafia Stratotüüp",
-    "stratigraphy_reference": "Stratigraafia Viide"
+    "stratigraphy_reference": "Stratigraafia Viide",
+    "locality_reference": "Kirjeldatud Lokaliteet"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",

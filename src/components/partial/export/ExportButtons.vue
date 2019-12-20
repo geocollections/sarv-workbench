@@ -1,9 +1,9 @@
 <template>
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <v-btn :color="bodyActiveColor" dark v-on="on">
+      <v-btn :color="bodyActiveColor" dark v-on="on" :small="small">
         <span>{{ $t("buttons.export") }}</span>
-        <v-icon right>fas fa-file-export</v-icon>
+        <v-icon :small="small" right>fas fa-file-export</v-icon>
       </v-btn>
     </template>
     <v-list :color="bodyActiveColor" dark dense>
@@ -51,7 +51,8 @@ export default {
     clipboardClass: {
       type: String,
       required: false
-    }
+    },
+    small: Boolean
   },
   name: "ExportButtons",
 

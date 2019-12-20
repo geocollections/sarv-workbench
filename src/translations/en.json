@@ -150,7 +150,8 @@
     "stratigraphy": "Add stratigraphy",
     "stratigraphy_synonym": "Stratigraphy Synonym",
     "stratigraphy_stratotype": "Stratigraphy Stratotype",
-    "stratigraphy_reference": "Stratigraphy Reference"
+    "stratigraphy_reference": "Stratigraphy Reference",
+    "locality_reference": "Locality Reference"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",

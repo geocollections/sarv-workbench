@@ -627,286 +627,6 @@
       </transition>
     </v-card>
 
-    <!-- RELATED LIBRARIES -->
-    <v-card
-      class="mt-2"
-      id="block-libraries"
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      elevation="4"
-    >
-      <v-card-title class="pt-2 pb-1">
-        <div
-          class="card-title--clickable"
-          @click="block.libraries = !block.libraries"
-        >
-          <span>{{ $t("reference.relatedTables.library") }}</span>
-          <v-icon right>fas fa-book</v-icon>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.libraries = !block.libraries"
-          :color="bodyActiveColor"
-        >
-          <v-icon>{{
-            block.libraries ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.libraries" class="pa-1">
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
-              <autocomplete-wrapper
-                v-model="relatedData.library"
-                :color="bodyActiveColor"
-                :items="autocomplete.library"
-                :loading="autocomplete.loaders.library"
-                :item-text="libraryTitle"
-                :label="$t('reference.libraries')"
-                is-link
-                route-object="library"
-                is-searchable
-                v-on:search:items="autocompleteLibraryAgentSearch2"
-                :multiple="true"
-                v-on:chip:close="
-                  relatedData.library.splice(
-                    relatedData.library.indexOf($event),
-                    1
-                  )
-                "
-              />
-            </v-col>
-          </v-row>
-        </div>
-      </transition>
-    </v-card>
-
-    <!-- STRATIGRAPHY -->
-    <v-card
-      class="mt-2"
-      id="block-stratigraphy"
-      v-if="$route.meta.isEdit && reference.id"
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      elevation="4"
-    >
-      <v-card-title class="pt-2 pb-1">
-        <div
-          class="card-title--clickable"
-          @click="block.stratigraphy = !block.stratigraphy"
-        >
-          <span>{{ $t("reference.relatedTables.stratigraphy") }}</span>
-          <v-icon right>fas fa-layer-group</v-icon>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.stratigraphy = !block.stratigraphy"
-          :color="bodyActiveColor"
-        >
-          <v-icon>{{
-            block.stratigraphy ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.stratigraphy" class="pa-1">
-          <!-- ADD NEW and EXPORT -->
-          <v-card
-            class="d-flex flex-row justify-content-start mb-3"
-            flat
-            tile
-            :color="bodyColor.split('n-')[0] + 'n-5'"
-          >
-            <v-card flat tile class="mx-1">
-              <v-btn
-                :to="{
-                  name: 'Stratigraphy add',
-                  query: { reference: JSON.stringify(reference) }
-                }"
-                target="newStratigraphyWindow"
-                :color="bodyActiveColor"
-                :dark="isBodyActiveColorDark"
-                >{{ $t("add.new") }}</v-btn
-              >
-            </v-card>
-
-            <v-card
-              flat
-              tile
-              class="mx-1"
-              v-if="relatedData.stratigraphy.count > 0"
-            >
-              <export-buttons
-                filename="stratigraphy"
-                :table-data="relatedData.stratigraphy.results"
-                clipboard-class="stratigraphy-table"
-                :body-active-color="bodyActiveColor"
-              ></export-buttons>
-            </v-card>
-          </v-card>
-
-          <!-- PAGINATION -->
-          <div
-            v-if="relatedData.stratigraphy.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="relatedData.searchParameters.stratigraphy.paginateBy"
-                color="blue"
-                dense
-                :items="paginateByOptionsTranslated"
-                item-color="blue"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="relatedData.searchParameters.stratigraphy.page"
-                color="blue"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    relatedData.stratigraphy.count /
-                      relatedData.searchParameters.stratigraphy.paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
-
-          <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <stratigraphy-table
-                ref="table"
-                :response="stratigraphyList"
-                :search-parameters="relatedData.searchParameters.stratigraphy"
-                v-if="relatedData.stratigraphy.count > 0"
-                :body-active-color="bodyActiveColor"
-                :body-color="bodyColor"
-              />
-            </v-col>
-          </v-row>
-        </div>
-      </transition>
-    </v-card>
-
-    <!-- TAXA -->
-    <v-card
-      class="mt-2"
-      id="block-taxon"
-      v-if="$route.meta.isEdit && reference.id"
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      elevation="4"
-    >
-      <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.taxon = !block.taxon">
-          <span>{{ $t("reference.relatedTables.taxon") }}</span>
-          <v-icon right>fas fa-pastafarianism</v-icon>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.taxon = !block.taxon"
-          :color="bodyActiveColor"
-        >
-          <v-icon>{{
-            block.taxon ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.taxon" class="pa-1">
-          <!-- ADD NEW and EXPORT -->
-          <v-card
-            class="d-flex flex-row justify-content-start mb-3"
-            flat
-            tile
-            :color="bodyColor.split('n-')[0] + 'n-5'"
-          >
-            <v-card flat tile class="mx-1">
-              <v-btn
-                :to="{
-                  name: 'Taxon add',
-                  query: { reference: JSON.stringify(reference) }
-                }"
-                target="newTaxonWindow"
-                :color="bodyActiveColor"
-                :dark="isBodyActiveColorDark"
-                >{{ $t("add.new") }}</v-btn
-              >
-            </v-card>
-
-            <v-card flat tile class="mx-1" v-if="relatedData.taxon.count > 0">
-              <export-buttons
-                filename="taxon"
-                :table-data="relatedData.taxon.results"
-                clipboard-class="taxon-table"
-                :body-active-color="bodyActiveColor"
-              ></export-buttons>
-            </v-card>
-          </v-card>
-
-          <!-- PAGINATION -->
-          <div
-            v-if="relatedData.taxon.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="relatedData.searchParameters.taxon.paginateBy"
-                color="blue"
-                dense
-                :items="paginateByOptionsTranslated"
-                item-color="blue"
-                label="Paginate by"
-                hide-details
-              />
-            </div>
-
-            <div>
-              <v-pagination
-                v-model="relatedData.searchParameters.taxon.page"
-                color="blue"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    relatedData.taxon.count /
-                      relatedData.searchParameters.taxon.paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
-            </div>
-          </div>
-
-          <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <taxon-table
-                ref="table"
-                :response="relatedData.taxon"
-                :search-parameters="relatedData.searchParameters.taxon"
-                v-if="relatedData.taxon.count > 0"
-                :body-active-color="bodyActiveColor"
-                :body-color="bodyColor"
-              />
-            </v-col>
-          </v-row>
-        </div>
-      </transition>
-    </v-card>
-
     <!-- SHOWING RELATED_DATA -->
     <v-card
       class="related-tabs mt-2"
@@ -932,34 +652,128 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
+            v-if="relatedData[tab.name].count > 0"
             class="font-weight-bold ml-2"
           >
-            {{ relatedData[tab.name].length }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
 
       <v-tabs-items>
-        <v-card
-          class="pt-3 px-1"
-          flat
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-        >
-          <locality-reference
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+
+          <v-row v-show="activeTab === 'library'" no-gutters>
+              <v-col cols="12" class="pa-1">
+                <autocomplete-wrapper
+                  v-model="relatedData.library.results"
+                  :color="bodyActiveColor"
+                  :items="autocomplete.library"
+                  :loading="autocomplete.loaders.library"
+                  :item-text="libraryTitle"
+                  :label="$t('reference.libraries')"
+                  is-link
+                  route-object="library"
+                  is-searchable
+                  v-on:search:items="autocompleteLibraryAgentSearch2"
+                  :multiple="true"
+                  v-on:chip:close="
+                  relatedData.library.results.splice(
+                    relatedData.library.results.indexOf($event),
+                    1
+                  )
+                "
+                />
+              </v-col>
+            </v-row>
+
+          <div v-show="activeTab === 'stratigraphy'">
+            <v-row no-gutters>
+              <v-col cols="12" class="px-1">
+                <stratigraphy-table
+                  :response="stratigraphyList"
+                  :search-parameters="relatedData.searchParameters.stratigraphy"
+                  :body-active-color="bodyActiveColor"
+                  :body-color="bodyColor"
+                />
+              </v-col>
+            </v-row>
+
+            <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
+              <v-btn
+                class="mr-2"
+                small
+                :to="{
+                  name: 'Stratigraphy add',
+                  query: { reference: JSON.stringify(reference) }
+                }"
+                target="newStratigraphyWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+              >{{ $t("add.new") }}</v-btn>
+              <export-buttons
+                v-if="relatedData.stratigraphy.count > 0"
+                filename="stratigraphy"
+                :table-data="relatedData.stratigraphy.results"
+                clipboard-class="stratigraphy-table"
+                :body-active-color="bodyActiveColor"
+                small
+              />
+            </v-toolbar>
+          </div>
+
+          <div v-show="activeTab === 'taxon'">
+            <v-row no-gutters>
+              <v-col cols="12" class="px-1">
+                <taxon-table
+                  :response="relatedData.taxon"
+                  :search-parameters="relatedData.searchParameters.taxon"
+                  :body-active-color="bodyActiveColor"
+                  :body-color="bodyColor"
+                />
+              </v-col>
+            </v-row>
+
+            <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
+              <v-btn
+                class="mr-2"
+                small
+                :to="{
+                  name: 'Taxon add',
+                  query: { reference: JSON.stringify(reference) }
+                }"
+                target="newTaxonWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+              >{{ $t("add.new") }}</v-btn>
+              <export-buttons
+                v-if="relatedData.taxon.count > 0"
+                filename="taxon"
+                :table-data="relatedData.taxon.results"
+                clipboard-class="taxon-table"
+                :body-active-color="bodyActiveColor"
+                small
+              />
+            </v-toolbar>
+          </div>
+
+          <locality-reference-table
+            v-show="activeTab === 'locality_reference'"
+            :response="relatedData.locality_reference"
+            :search-parameters="
+              relatedData.searchParameters.locality_reference
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -982,7 +796,7 @@
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.count[activeTab] /
+                    relatedData[activeTab].count /
                       relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
@@ -1035,7 +849,6 @@
 
 <script>
 import Spinner from "vue-simple-spinner";
-import sidebarMixin from "../../mixins/sidebarMixin";
 import {
   fetchReference,
   fetchListReferenceTypes,
@@ -1056,7 +869,6 @@ import cloneDeep from "lodash/cloneDeep";
 import { toastError } from "@/assets/js/iziToast/iziToast";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import LocalityReference from "./relatedTables/LocalityReference";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapGetters, mapState } from "vuex";
@@ -1070,10 +882,13 @@ import FileUpload from "../partial/inputs/FileInput";
 import ExportButtons from "../partial/export/ExportButtons";
 import StratigraphyTable from "../stratigraphy/StratigraphyTable";
 import TaxonTable from "../taxon/TaxonTable";
+import LocalityReferenceTable from "./relatedTables/LocalityReferenceTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   name: "Reference",
   components: {
+    LocalityReferenceTable,
     TaxonTable,
     StratigraphyTable,
     ExportButtons,
@@ -1084,8 +899,7 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     NewDoiButton,
-    Spinner,
-    LocalityReference
+    Spinner
   },
   props: {
     isBodyActiveColorDark: {
@@ -1104,11 +918,12 @@ export default {
       default: "deep-orange"
     }
   },
+
   mixins: [
     formManipulation,
     autocompleteMixin,
-    sidebarMixin,
-    formSectionsMixin
+    formSectionsMixin,
+    requestsMixin
   ],
 
   data() {
@@ -1116,10 +931,6 @@ export default {
   },
 
   computed: {
-    sidebarUserAction() {
-      return this.$store.state["sidebarUserAction"];
-    },
-
     isValidUrl() {
       if (this.reference.url && this.reference.url.length > 0) {
         let regex = RegExp(
@@ -1143,24 +954,26 @@ export default {
 
     stratigraphyList() {
       let stratigraphy = this.relatedData.stratigraphy.results;
-      let mappedList = stratigraphy.map(item => ({
-        id: item.stratigraphy,
-        stratigraphy: item.stratigraphy__stratigraphy,
-        stratigraphy_en: item.stratigraphy__stratigraphy_en,
-        type: item.stratigraphy__type,
-        type__value: item.stratigraphy__type__value,
-        type__value_en: item.stratigraphy__type__value_en,
-        rank: item.stratigraphy__rank,
-        rank__value: item.stratigraphy__rank__value,
-        rank__value_en: item.stratigraphy__rank__value_en,
-        scope: item.stratigraphy__scope,
-        scope__value: item.stratigraphy__scope__value,
-        scope__value_en: item.stratigraphy__scope__value_en
-      }));
-      return {
-        count: this.relatedData.stratigraphy.count,
-        results: mappedList
-      };
+      if (stratigraphy && stratigraphy.length > 0) {
+        let mappedList = stratigraphy.map(item => ({
+          id: item.stratigraphy,
+          stratigraphy: item.stratigraphy__stratigraphy,
+          stratigraphy_en: item.stratigraphy__stratigraphy_en,
+          type: item.stratigraphy__type,
+          type__value: item.stratigraphy__type__value,
+          type__value_en: item.stratigraphy__type__value_en,
+          rank: item.stratigraphy__rank,
+          rank__value: item.stratigraphy__rank__value,
+          rank__value_en: item.stratigraphy__rank__value_en,
+          scope: item.stratigraphy__scope,
+          scope__value: item.stratigraphy__scope__value,
+          scope__value_en: item.stratigraphy__scope__value_en
+        }));
+        return {
+          count: this.relatedData.stratigraphy.count,
+          results: mappedList
+        };
+      } else return this.relatedData.stratigraphy;
     }
   },
 
@@ -1203,30 +1016,10 @@ export default {
     },
     "relatedData.searchParameters": {
       handler: function() {
-        this.loadRelatedData(this.activeTab);
-      },
-      deep: true
-    },
-    "relatedData.searchParameters.stratigraphy": {
-      handler(newVal) {
         if (this.$route.meta.isEdit) {
-          this.searchRelatedData(
-            newVal,
-            this.fetchLinkedStratigraphyWrapper,
-            "stratigraphy"
-          );
+          this.loadRelatedData(this.activeTab);
         }
       },
-      immediate: true,
-      deep: true
-    },
-    "relatedData.searchParameters.taxon": {
-      handler(newVal) {
-        if (this.$route.meta.isEdit) {
-          this.searchRelatedData(newVal, this.fetchLinkedTaxonWrapper, "taxon");
-        }
-      },
-      immediate: true,
       deep: true
     },
     // This value is changed in formManipulation.js when file upload is successful (value will be savedObjectsId)
@@ -1241,39 +1034,26 @@ export default {
   },
 
   methods: {
-    fetchLinkedStratigraphyWrapper() {
-      return new Promise(resolve => {
-        resolve(
-          fetchLinkedStratigraphyReference(
-            this.relatedData.searchParameters.stratigraphy,
-            this.$route.params.id
-          )
-        );
-      });
-    },
-
-    fetchLinkedTaxonWrapper() {
-      return new Promise(resolve => {
-        resolve(
-          fetchLinkedTaxonReference(
-            this.relatedData.searchParameters.taxon,
-            this.$route.params.id
-          )
-        );
-      });
-    },
-
     setTab(type) {
-      this.activeTab = type;
+      if (type) {
+        this.$store.dispatch("updateActiveTab", {
+          tab: type,
+          object: this.$route.meta.object
+        });
+        this.activeTab = type;
+      }
     },
 
     setInitialData() {
       return {
         relatedTabs: [
+          { name: "library", iconClass: "fas fa-book" },
+          { name: "stratigraphy", iconClass: "fas fa-layer-group" },
+          { name: "taxon", iconClass: "fas fa-pastafarianism" },
           { name: "locality_reference", iconClass: "fas fa-globe" }
         ],
         searchHistory: "referenceSearchHistory",
-        activeTab: "locality_reference",
+        activeTab: "library",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "id",
@@ -1380,8 +1160,6 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "reference");
-
         fetchReference(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -1401,19 +1179,7 @@ export default {
 
         this.loadAutocompleteFields(false, true);
 
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => {
-          this.loadRelatedData(tab.name);
-        });
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
-
-        this.setTab("locality_reference");
+        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       }
     },
 
@@ -1429,9 +1195,6 @@ export default {
           response =>
             (this.autocomplete.languages = this.handleResponse(response))
         );
-        // fetchListKeywords().then(response => this.autocomplete.keyword = this.handleResponse(response));
-        // fetchListLibraries(this.currentUser.id).then(response => this.autocomplete.library = this.handleResponse(response));
-        // Related data autocomplete list
         fetchListLocalityReferenceType().then(
           response =>
             (this.autocomplete.locality_reference_type = this.handleResponse(
@@ -1492,11 +1255,13 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        locality_reference: [],
         attachment: [],
         keyword: [],
         locality: [],
-        library: [],
+        library: {
+          count: 0,
+          results: []
+        },
         stratigraphy: {
           count: 0,
           results: []
@@ -1505,21 +1270,16 @@ export default {
           count: 0,
           results: []
         },
-        copyFields: {
-          locality_reference: [
-            "locality",
-            "type",
-            "pages",
-            "figures",
-            "remarks"
-          ]
+        locality_reference: {
+          count: 0,
+          results: []
         },
-        insert: this.setDefaultInsertRelatedData(),
         searchParameters: {
           locality_reference: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["locality"],
+            sortDesc: [true]
           },
           attachment: {
             page: 1,
@@ -1548,42 +1308,23 @@ export default {
             sortBy: ["id"],
             sortDesc: [true]
           }
-        },
-        count: {
-          locality_reference: 0,
-          attachment: 0,
-          keyword: 0,
-          locality: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        locality_reference: {}
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.type))
-        uploadableObject.type = objectToUpload.type.id;
-      else uploadableObject.type = null;
-      if (this.isNotEmpty(objectToUpload.language))
-        uploadableObject.language = objectToUpload.language.id;
-      else uploadableObject.language = null;
-      if (this.isNotEmpty(objectToUpload.journal))
-        uploadableObject.journal = objectToUpload.journal.id;
-      else uploadableObject.journal = null;
-      if (this.isNotEmpty(objectToUpload.title_translated_language))
-        uploadableObject.title_translated_language =
-          objectToUpload.title_translated_language.id;
-      else uploadableObject.title_translated_language = null;
-      if (this.isNotEmpty(objectToUpload.licence))
-        uploadableObject.licence = objectToUpload.licence.id;
-      else uploadableObject.licence = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       // Adding related data
       uploadableObject.related_data = {};
@@ -1661,80 +1402,26 @@ export default {
       };
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.locality)) {
-        obj.locality = {
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en,
-          id: obj.locality
-        };
-      }
-      if (this.isNotEmpty(obj.type)) {
-        obj.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en
-        };
-      }
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.locality)) {
-        newObject.locality = obj.locality.id;
-        newObject.locality__locality = obj.locality.locality;
-        newObject.locality__locality_en = obj.locality.locality_en;
-      }
-      if (this.isNotEmpty(obj.type)) {
-        newObject.type = obj.type.id;
-        newObject.type__value = obj.type.value;
-        newObject.type__value_en = obj.type.value_en;
-      }
-
-      return newObject;
-    },
-
-    // TODO: Put request here, which are currently in loadFullInfo method + blockVisibility
     loadRelatedData(object) {
       let query;
 
-      if (object === "locality_reference") {
+      if (object === "library") {
+        query = fetchLibrariesForReference(this.$route.params.id);
+      } else if (object === "stratigraphy") {
+        query = fetchLinkedStratigraphyReference(this.$route.params.id, this.relatedData.searchParameters.stratigraphy);
+      } else if (object === "taxon") {
+        query = fetchLinkedTaxonReference(this.$route.params.id, this.relatedData.searchParameters.taxon);
+      } else if (object === "locality_reference") {
         query = fetchLocalityReferenceForReference(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_reference
         );
       }
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+
+      query.then(response => {
+        this.relatedData[object].count = response.body.count;
+        this.relatedData[object].results = response.body.results;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.reference = this.reference.id;
-
-      if (this.isNotEmpty(uploadableObject.locality)) {
-        uploadableObject.locality = uploadableObject.locality.id
-          ? uploadableObject.locality.id
-          : uploadableObject.locality;
-      }
-      if (this.isNotEmpty(uploadableObject.type)) {
-        uploadableObject.type = uploadableObject.type.id
-          ? uploadableObject.type.id
-          : uploadableObject.type;
-      }
-
-      console.log("This object is sent in string format (related data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {
@@ -1948,15 +1635,6 @@ export default {
     addExistingFiles(files) {
       this.relatedData.attachment = files;
     },
-
-    searchRelatedData(searchParameters, apiCall, relatedObject) {
-      apiCall().then(response => {
-        if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.body.count;
-          this.relatedData[relatedObject].results = response.body.results;
-        }
-      });
-    }
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="stratigraphy-synonym-table">
+  <div class="locality-reference-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -37,61 +37,50 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.language="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.language__value,
-              en: item.language__value_en
-            }"
-          />
-          <span
-            v-else-if="item.language"
-            v-translate="{
-              et: item.language.value,
-              en: item.language.value_en
-            }"
-          />
-        </div>
-        <div
-          v-else
-          v-translate="{
-            et: item.language__value,
-            en: item.language__value_en
-          }"
-        ></div>
-      </template>
-
-      <template v-slot:item.reference="{ item }">
+      <template v-slot:item.locality="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
+            :to="{ path: '/locality/' + item.locality }"
+            :title="$t('editLocality.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.reference__reference }}
+            <span
+              v-translate="{
+                et: item.locality__locality,
+                en: item.locality__locality_en
+              }"
+            ></span>
           </router-link>
           <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
+            v-else-if="item.locality"
+            :to="{ path: '/locality/' + item.locality.id }"
+            :title="$t('editLocality.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.reference.reference }}
+            <span
+              v-translate="{
+                et: item.locality.locality,
+                en: item.locality.locality_en
+              }"
+            ></span>
           </router-link>
         </div>
         <router-link
           v-else
-          :to="{ path: '/reference/' + item.reference }"
-          :title="$t('editReference.editMessage')"
+          :to="{ path: '/locality/' + item.locality }"
+          :title="$t('editLocality.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.reference__reference }}
+          <span
+            v-translate="{
+              et: item.locality__locality,
+              en: item.locality__locality_en
+            }"
+          ></span>
         </router-link>
       </template>
     </v-data-table>
@@ -106,7 +95,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.stratigraphy_synonym")}`
+              `${$t("common.new")} ${$t("header.locality_reference")}`
             }}</span>
           </v-card-title>
 
@@ -114,42 +103,41 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.synonym"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_synonym.synonym')"
-                    use-state
-                  />
-                </v-col>
-                <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.language"
+                    v-model="item.locality"
                     :color="bodyActiveColor"
-                    :items="autocomplete.language"
-                    :loading="autocomplete.loaders.language"
-                    :item-text="commonLabel"
-                    :label="$t('stratigraphy_synonym.language')"
-                  />
-                </v-col>
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.reference"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.reference"
-                    :loading="autocomplete.loaders.reference"
-                    item-text="reference"
-                    :label="$t('stratigraphy_synonym.reference')"
+                    :items="autocomplete.locality"
+                    :loading="autocomplete.loaders.locality"
+                    :item-text="localityLabel"
+                    :label="$t('locality.locality')"
                     is-link
-                    route-object="reference"
+                    route-object="locality"
                     is-searchable
-                    v-on:search:items="autocompleteReferenceSearch"
+                    v-on:search:items="autocompleteLocalitySearch"
                   />
                 </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.pages"
+                    :color="bodyActiveColor"
+                    :label="$t('reference.pages')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.figures"
+                    :color="bodyActiveColor"
+                    :label="$t('reference.figures')"
+                  />
+                </v-col>
+
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_synonym.remarks')"
+                    :label="$t('reference.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -176,13 +164,13 @@
 </template>
 
 <script>
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
-import { cloneDeep } from "lodash";
+import {cloneDeep} from "lodash";
+
 export default {
-  name: "StratigraphySynonymTable",
+  name: "LocalityReferenceTable",
 
   components: { AutocompleteWrapper, InputWrapper },
 
@@ -225,10 +213,10 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "stratigraphy_synonym.synonym", value: "synonym" },
-      { text: "stratigraphy_synonym.language", value: "language" },
-      { text: "stratigraphy_synonym.reference", value: "reference" },
-      { text: "stratigraphy_synonym.remarks", value: "remarks" },
+      { text: "locality.locality", value: "locality" },
+      { text: "reference.pages", value: "pages" },
+      { text: "reference.figures", value: "figures" },
+      { text: "reference.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -238,18 +226,16 @@ export default {
     ],
     dialog: false,
     item: {
-      synonym: "",
-      language: null,
-      reference: null,
+      locality: null,
+      pages: "",
+      figures: "",
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      language: [],
-      reference: [],
+      locality: [],
       loaders: {
-        language: false,
-        reference: false
+        locality: false
       }
     }
   }),
@@ -265,13 +251,9 @@ export default {
     },
 
     isItemValid() {
-      return this.item.synonym.length > 0;
-    }
-  },
-
-  watch: {
-    dialog() {
-      this.fillListAutocompletes();
+      return (
+        typeof this.item.locality === "object" && this.item.locality !== null
+      );
     }
   },
 
@@ -280,9 +262,9 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        synonym: "",
-        language: null,
-        reference: null,
+        locality: null,
+        pages: "",
+        figures: "",
         remarks: ""
       };
     },
@@ -293,13 +275,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "stratigraphy_synonym",
+          table: "locality_reference",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "stratigraphy_synonym",
+          table: "locality_reference",
           item: formattedItem,
           rawItem: this.item
         });
@@ -313,27 +295,20 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      this.item.synonym = item.synonym;
-
-      if (typeof item.language !== "object" && item.language !== null) {
-        this.item.language = {
-          id: item.language,
-          value: item.language__value,
-          value_en: item.language__value_en
+      if (typeof item.locality !== "object" && item.locality !== null) {
+        this.item.locality = {
+          id: item.locality,
+          locality: item.locality__locality,
+          locality_en: item.locality__locality_en,
         };
-      } else this.item.language = item.language;
-
-      if (typeof item.reference !== "object" && item.reference !== null) {
-        this.item.reference = {
-          id: item.reference,
-          reference: item.reference__reference
-        };
-        this.autocomplete.reference.push(this.item.reference);
+        this.autocomplete.locality.push(this.item.locality);
       } else {
-        this.item.reference = item.reference;
-        this.autocomplete.reference.push(this.item.reference);
+        this.item.locality = item.locality;
+        this.autocomplete.locality.push(this.item.locality);
       }
 
+      this.item.pages = item.pages;
+      this.item.figures = item.figures;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -341,23 +316,10 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "stratigraphy_synonym",
+        table: "locality_reference",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
-    },
-
-    fillListAutocompletes() {
-      if (this.autocomplete.language.length === 0) {
-        this.autocomplete.loaders.language = true;
-        fetchListLanguages().then(response => {
-          if (response.status === 200) {
-            this.autocomplete.language =
-              response.body.count > 0 ? response.body.results : [];
-          }
-        });
-        this.autocomplete.loaders.language = false;
-      }
     },
 
     formatItem(item) {

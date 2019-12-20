@@ -533,7 +533,7 @@
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
@@ -580,7 +580,6 @@ import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
 import {
   fetchListLanguages,
   fetchListStratigraphyRank,
@@ -687,15 +686,6 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
-
-    activeRelatedDataTab() {
-      let tabObject = this.$store.state.activeRelatedDataTab;
-      if (tabObject && tabObject[this.$route.meta.object]) {
-        return tabObject[this.$route.meta.object];
-      } else return null;
-    },
-
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -820,7 +810,6 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "stratigraphy");
         fetchStratigraphy(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -838,15 +827,7 @@ export default {
           }
         });
 
-        // Load Related Data which is in tabs
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
       }
     },
 
@@ -900,29 +881,6 @@ export default {
         stratigraphy_reference: { count: 0, results: [] },
         stratigraphy_stratotype: { count: 0, results: [] },
         stratigraphy_synonym: { count: 0, results: [] },
-        copyFields: {
-          stratigraphy_reference: [
-            "reference",
-            "content",
-            "content_en",
-            "age_base",
-            "age_base_error",
-            "age_top",
-            "is_preferred_age",
-            "pages",
-            "figures",
-            "remarks"
-          ],
-          stratigraphy_stratotype: [
-            "locality",
-            "stratotype_type",
-            "depth_base",
-            "depth_top",
-            "reference",
-            "remarks"
-          ],
-          stratigraphy_synonym: ["synonym", "language", "reference", "remarks"]
-        },
         searchParameters: {
           stratigraphy_reference: {
             page: 1,
@@ -1033,64 +991,6 @@ export default {
       }
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.reference)) {
-        obj.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference
-        };
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        obj.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
-        };
-      }
-      if (this.isNotEmpty(obj.stratotype_type))
-        obj.stratotype_type = {
-          id: obj.stratotype_type,
-          value: obj.stratotype_type__value,
-          value_en: obj.stratotype_type__value_en
-        };
-      if (this.isNotEmpty(obj.language))
-        obj.language = {
-          id: obj.language,
-          value: obj.language__value,
-          value_en: obj.language__value_en
-        };
-
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.locality)) {
-        newObject.locality = obj.locality.id;
-        newObject.locality__locality = obj.locality.locality;
-        newObject.locality__locality_en = obj.locality.locality_en;
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-      if (this.isNotEmpty(obj.stratotype_type)) {
-        newObject.stratotype_type = obj.stratotype_type.id;
-        newObject.stratotype_type__value = obj.stratotype_type.value;
-        newObject.stratotype_type__value_en = obj.stratotype_type.value_en;
-      }
-      if (this.isNotEmpty(obj.language)) {
-        newObject.language = obj.language.id;
-        newObject.language__value = obj.language.value;
-        newObject.language__value_en = obj.language.value_en;
-      }
-
-      return newObject;
-    },
-
     loadRelatedData(object) {
       let query;
 
@@ -1115,26 +1015,6 @@ export default {
         this.relatedData[object].count = response.body.count;
         this.relatedData[object].results = response.body.results;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.stratigraphy = this.stratigraphy.id;
-
-      Object.keys(uploadableObject).forEach(key => {
-        if (
-          typeof uploadableObject[key] === "object" &&
-          uploadableObject[key] !== null
-        ) {
-          uploadableObject[key] = uploadableObject[key].id
-            ? uploadableObject[key].id
-            : null;
-        }
-      });
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {

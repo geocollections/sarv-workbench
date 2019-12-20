@@ -17,9 +17,11 @@
       </div>
     </div>
 
+    <object-does-not-exist v-if="!objectExists" />
+
     <scroll-to-links
       v-show="objectExists && $vuetify.breakpoint.xsOnly"
-      v-if="object !== 'attachment'"
+      v-if="$route.meta.object !== 'attachment'"
     />
 
     <router-view
@@ -28,27 +30,20 @@
       :body-active-color="appSettings.bodyActiveColor"
       :is-body-active-color-dark="appSettings.bodyActiveColorDark"
       v-on:data-loaded="setData"
-      v-on:set-object="setObject"
-      v-on:related-data-info="setRelatedData"
       v-on:object-exists="toggleObjectState"
     />
-
-    <object-does-not-exist v-if="!objectExists" />
 
     <bottom-options
       :body-color="appSettings.bodyColor"
       :is-navbar-dark="appSettings.navbarDark"
       :navbar-color="appSettings.navbarColor"
-      :object="object"
     />
 
     <!-- LOGS -->
     <log
-      v-if="data && objectExists"
+      v-if="typeof data === 'object' && data !== null && objectExists"
       :table="$route.meta.table"
-      :data="data"
-      :formatted-data="formattedData"
-      :key="logComponentKey"
+      :object-data="data"
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
     />
@@ -73,19 +68,7 @@ export default {
   data() {
     return {
       data: null,
-      agent: null,
-      object: null,
-      relatedData: [],
-      formattedData: null,
-      isConfirmation: false,
-      logComponentKey: 0,
       objectExists: true
-    };
-  },
-
-  metaInfo() {
-    return {
-      title: this.$t(this.$route.meta.title) + " " + this.$route.params.id
     };
   },
 
@@ -95,24 +78,12 @@ export default {
 
   methods: {
     setData(data) {
+      this.$set(this, "data", data);
       this.data = data;
-      if (this.data !== null) this.formattedData = data;
-      this.forceRerender();
-    },
-    setObject(object) {
-      this.object = object;
-    },
-
-    setRelatedData(data) {
-      this.relatedData = data;
     },
 
     toggleObjectState(state) {
       this.objectExists = state;
-    },
-
-    forceRerender() {
-      this.logComponentKey += 1;
     }
   },
   beforeRouteLeave(to, from, next) {

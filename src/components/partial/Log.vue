@@ -107,10 +107,7 @@ export default {
     table: {
       type: String
     },
-    data: {
-      type: Object
-    },
-    formattedData: {
+    objectData: {
       type: Object
     },
     bodyColor: {
@@ -132,7 +129,7 @@ export default {
     };
   },
   watch: {
-    formattedData: {
+    objectData: {
       handler: function() {
         this.getLogs();
       },
@@ -143,7 +140,7 @@ export default {
     getLogs() {
       fetchSpecificLogs({
         table_name: this.table,
-        row_id: this.data.id,
+        row_id: this.objectData.id,
         order_by: "-id"
       }).then(response => {
         if (response.status === 200) {
