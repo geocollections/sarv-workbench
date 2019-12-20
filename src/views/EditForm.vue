@@ -44,6 +44,7 @@
       v-if="typeof data === 'object' && data !== null && objectExists"
       :table="$route.meta.table"
       :object-data="data"
+      :key="logComponentKey"
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
     />
@@ -68,6 +69,7 @@ export default {
   data() {
     return {
       data: null,
+      logComponentKey: 0,
       objectExists: true
     };
   },
@@ -78,8 +80,12 @@ export default {
 
   methods: {
     setData(data) {
-      this.$set(this, "data", data);
       this.data = data;
+      this.forceRerender();
+    },
+
+    forceRerender() {
+      this.logComponentKey += 1;
     },
 
     toggleObjectState(state) {
