@@ -222,8 +222,6 @@ export default {
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "journal");
-
         fetchJournal(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 

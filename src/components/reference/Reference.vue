@@ -654,6 +654,7 @@
           <span
             v-if="relatedData[tab.name].count > 0"
             class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
             {{ relatedData[tab.name].count }}
           </span>
@@ -1337,9 +1338,9 @@ export default {
         uploadableObject.related_data.attachment = this.relatedData.attachment;
       else uploadableObject.related_data.attachment = null;
 
-      if (this.isNotEmpty(this.relatedData.library)) {
+      if (this.relatedData.library.count > 0) {
         uploadableObject.related_data.library = cloneDeep(
-          this.relatedData.library
+          this.relatedData.library.results
         );
         uploadableObject.related_data.library.forEach((library, index) => {
           uploadableObject.related_data.library[index] = {
@@ -1351,12 +1352,12 @@ export default {
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {
         if (this.isNotEmpty(this.relatedData.locality_reference)) {
-          let clonedLocalities = cloneDeep(this.relatedData.locality_reference);
+          let clonedLocalities = cloneDeep(this.relatedData.locality_reference.results);
           uploadableObject.related_data.locality = clonedLocalities
             .filter(entity => this.isNotEmpty(entity.locality))
             .map(loc_ref => {
               return {
-                id: loc_ref.locality,
+                id: loc_ref.locality.id,
                 pages: loc_ref.pages ? loc_ref.pages : null,
                 figures: loc_ref.figures ? loc_ref.figures : null,
                 remarks: loc_ref.remarks ? loc_ref.remarks : null
@@ -1419,8 +1420,10 @@ export default {
       }
 
       query.then(response => {
-        this.relatedData[object].count = response.body.count;
-        this.relatedData[object].results = response.body.results;
+        this.$set(this.relatedData[object], "count", response.body.count);
+        this.$set(this.relatedData[object], "results", response.body.results);
+        // this.relatedData[object].count = response.body.count;
+        // this.relatedData[object].results = response.body.results;
       });
     },
 

@@ -110,6 +110,7 @@
                     :loading="autocomplete.loaders.locality"
                     :item-text="localityLabel"
                     :label="$t('locality.locality')"
+                    use-state
                     is-link
                     route-object="locality"
                     is-searchable

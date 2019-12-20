@@ -839,8 +839,9 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
 }
 
 export function fetchLibraryReference(id, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `library_reference/?library=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `library_reference/?library=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

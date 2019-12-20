@@ -235,8 +235,6 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "keyword");
-
         fetchKeyword(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {

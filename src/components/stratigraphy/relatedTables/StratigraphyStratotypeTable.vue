@@ -168,6 +168,7 @@
                     :loading="autocomplete.loaders.locality"
                     :item-text="localityLabel"
                     :label="$t('stratigraphy_stratotype.locality')"
+                    use-state
                     is-link
                     route-object="locality"
                     is-searchable
@@ -315,8 +316,8 @@ export default {
     item: {
       locality: null,
       stratotype_type: null,
-      depth_base: "",
-      depth_top: "",
+      depth_base: null,
+      depth_top: null,
       reference: null,
       remarks: ""
     },
@@ -363,8 +364,8 @@ export default {
       this.item = {
         locality: null,
         stratotype_type: null,
-        depth_base: "",
-        depth_top: "",
+        depth_base: null,
+        depth_top: null,
         reference: null,
         remarks: ""
       };

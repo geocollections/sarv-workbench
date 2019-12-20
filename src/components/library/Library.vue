@@ -209,10 +209,11 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
+            v-if="relatedData[tab.name].count > 0"
             class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
-            {{ relatedData.count[tab.name] }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
@@ -223,20 +224,22 @@
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
-          <library-reference
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
-            v-on:order-by-changed="changeOrdering"
+          <library-reference-table
+            v-show="activeTab === 'library_reference'"
+            :response="relatedData.library_reference"
+            :search-parameters="
+              relatedData.searchParameters.library_reference
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <library-reference-list-view
             v-if="$route.meta.isEdit"
-            :data="relatedData.library_reference_list"
+            :data="relatedData.library_reference_list.results"
             :active-tab="activeTab"
           />
 
@@ -302,7 +305,6 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import LibraryReference from "./relatedTables/LibraryReference";
 import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
@@ -310,16 +312,18 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import LibraryReferenceTable from "./relatedTables/LibraryReferenceTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   name: "Library",
   components: {
+    LibraryReferenceTable,
     CheckboxWrapper,
     AutocompleteWrapper,
     TextareaWrapper,
     InputWrapper,
     LibraryReferenceListView,
-    LibraryReference,
     Spinner
   },
   props: {
@@ -339,7 +343,7 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
 
   data() {
     return this.setInitialData();
@@ -381,7 +385,9 @@ export default {
     },
     "relatedData.searchParameters": {
       handler: function() {
-        this.loadRelatedData(this.activeTab);
+        if (this.$route.meta.isEdit) {
+          this.loadRelatedData(this.activeTab);
+        }
       },
       deep: true
     }
@@ -474,8 +480,6 @@ export default {
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "library");
-
         fetchLibrary(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -495,21 +499,7 @@ export default {
 
         this.loadAutocompleteFields();
 
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => {
-          // Skips library_reference_list because it is static view
-          // if (tab.name !== "library_reference_list")
-          this.loadRelatedData(tab.name);
-        });
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
-
-        this.setTab("library_reference");
+        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       }
     },
 
@@ -530,18 +520,21 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        library_reference: [],
-        library_reference_list: [],
-        library_agent: [],
-        copyFields: {
-          library_reference: ["reference", "keywords", "remarks", "sort"]
+        library_reference: {
+          count: 0,
+          results: []
         },
-        insert: this.setDefaultInsertRelatedData(),
+        library_reference_list: {
+          count: 0,
+          results: []
+        },
+        library_agent: [],
         searchParameters: {
           library_reference: {
             page: 1,
             paginateBy: 25,
-            orderBy: "-sort"
+            sortBy: ["sort"],
+            sortDesc: [true]
           },
           library_reference_list: {
             page: 1,
@@ -550,27 +543,24 @@ export default {
           }
         },
         count: {
-          library_reference: 0,
           library_agent: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        library_reference: {}
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.author))
-        uploadableObject.author = objectToUpload.author.id;
-      else uploadableObject.author = null;
-
-      // if (this.databaseId) uploadableObject.database = this.databaseId;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       // Adding related data
       if (!this.$route.meta.isEdit) {
@@ -581,10 +571,10 @@ export default {
 
         this.relatedTabs.forEach(tab => {
           if (tab.name !== "library_reference_list") {
-            if (this.isNotEmpty(this.relatedData[tab.name]))
+            if (this.isNotEmpty(this.relatedData[tab.name].count > 0))
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-              ];
+              ].results;
           }
         });
       } else {
@@ -607,27 +597,6 @@ export default {
       }
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      obj.reference = {
-        reference: obj.reference__reference,
-        id: obj.reference
-      };
-      // obj.library_agent = { agent: obj.agent__agent, id: obj.agent }
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-
-      return newObject;
-    },
 
     loadRelatedData(object) {
       let query;
@@ -645,28 +614,10 @@ export default {
         );
       }
 
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+      query.then(response => {
+        this.relatedData[object].count = response.body.count;
+        this.relatedData[object].results = response.body.results;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.library = this.library.id;
-
-      if (this.isNotEmpty(uploadableObject.reference)) {
-        uploadableObject.reference = uploadableObject.reference.id
-          ? uploadableObject.reference.id
-          : uploadableObject.reference;
-      }
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {

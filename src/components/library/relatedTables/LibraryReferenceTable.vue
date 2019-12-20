@@ -1,5 +1,5 @@
 <template>
-  <div class="stratigraphy-reference-table">
+  <div class="library-reference-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -68,11 +68,6 @@
           {{ item.reference__reference }}
         </router-link>
       </template>
-
-      <template v-slot:is_preferred_age="{ item }">
-        <v-icon v-if="item.is_preferred_age">fas fa-plus</v-icon>
-        <v-icon v-else>fas fa-minus</v-icon>
-      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -85,7 +80,9 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.stratigraphy_reference")}`
+              `${$t("common.new")} ${$t(
+                "library.relatedTables.library_reference"
+              )}`
             }}</span>
           </v-card-title>
 
@@ -99,7 +96,7 @@
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
                     item-text="reference"
-                    :label="$t('stratigraphy_reference.reference')"
+                    :label="$t('reference.reference')"
                     use-state
                     is-link
                     route-object="reference"
@@ -110,69 +107,9 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.content"
+                    v-model="item.keywords"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.content')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.content_en"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.content_en')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.age_base"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.age_base')"
-                    type="number"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.age_base_error"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.age_base_error')"
-                    type="number"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.age_top"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.age_top')"
-                    type="number"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <checkbox-wrapper
-                    v-model="item.is_preferred_age"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.is_preferred_age')"
-                    @change="item.is_preferred_age = !item.is_preferred_age"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.pages"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.pages')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.figures"
-                    :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.figures')"
+                    :label="$t('reference.keywords')"
                   />
                 </v-col>
 
@@ -180,7 +117,15 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.remarks')"
+                    :label="$t('reference.remarks')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.sort"
+                    :color="bodyActiveColor"
+                    :label="$t('reference.sort')"
                   />
                 </v-col>
               </v-row>
@@ -207,16 +152,15 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import { cloneDeep } from "lodash";
-import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 
 export default {
-  name: "StratigraphyReferenceTable",
+  name: "LibraryReferenceTable",
 
-  components: { CheckboxWrapper, AutocompleteWrapper, InputWrapper },
+  components: { AutocompleteWrapper, InputWrapper },
 
   mixins: [autocompleteMixin],
 
@@ -257,22 +201,10 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "stratigraphy_reference.reference", value: "reference" },
-      { text: "stratigraphy_reference.content", value: "content" },
-      { text: "stratigraphy_reference.content_en", value: "content_en" },
-      { text: "stratigraphy_reference.age_base", value: "age_base" },
-      {
-        text: "stratigraphy_reference.age_base_error",
-        value: "age_base_error"
-      },
-      { text: "stratigraphy_reference.age_top", value: "age_top" },
-      {
-        text: "stratigraphy_reference.is_preferred_age",
-        value: "is_preferred_age"
-      },
-      { text: "stratigraphy_reference.pages", value: "pages" },
-      { text: "stratigraphy_reference.figures", value: "figures" },
-      { text: "stratigraphy_reference.remarks", value: "remarks" },
+      { text: "reference.reference", value: "reference" },
+      { text: "reference.keywords", value: "keywords" },
+      { text: "reference.remarks", value: "remarks" },
+      { text: "reference.sort", value: "sort" },
       {
         text: "common.actions",
         value: "action",
@@ -283,15 +215,9 @@ export default {
     dialog: false,
     item: {
       reference: null,
-      content: "",
-      content_en: "",
-      age_base: null,
-      age_base_error: null,
-      age_top: null,
-      is_preferred_age: false,
-      pages: "",
-      figures: "",
-      remarks: ""
+      keywords: null,
+      remarks: null,
+      sort: null
     },
     isNewItem: true,
     autocomplete: {
@@ -325,15 +251,9 @@ export default {
       this.isNewItem = true;
       this.item = {
         reference: null,
-        content: "",
-        content_en: "",
-        age_base: null,
-        age_base_error: null,
-        age_top: null,
-        is_preferred_age: false,
-        pages: "",
-        figures: "",
-        remarks: ""
+        keywords: null,
+        remarks: null,
+        sort: null
       };
     },
 
@@ -343,13 +263,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "stratigraphy_reference",
+          table: "library_reference",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "stratigraphy_reference",
+          table: "library_reference",
           item: formattedItem,
           rawItem: this.item
         });
@@ -374,22 +294,16 @@ export default {
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      this.item.content = item.content;
-      this.item.content_en = item.content_en;
-      this.item.age_base = item.age_base;
-      this.item.age_base_error = item.age_base_error;
-      this.item.age_top = item.age_top;
-      this.item.is_preferred_age = item.is_preferred_age;
-      this.item.pages = item.pages;
-      this.item.figures = item.figures;
+      this.item.keywords = item.keywords;
       this.item.remarks = item.remarks;
+      this.item.sort = item.sort;
 
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "stratigraphy_reference",
+        table: "library_reference",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
