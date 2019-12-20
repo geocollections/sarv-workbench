@@ -34,28 +34,75 @@
         >
       </template>
 
-      <template v-slot:item.language="{ item }">
+      <template v-slot:item.locality="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <router-link
+            v-if="$route.meta.isEdit"
+            :to="{ path: '/locality/' + item.locality }"
+            :title="$t('editLocality.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <span
+              v-translate="{
+                et: item.locality__locality,
+                en: item.locality__locality_en
+              }"
+            ></span>
+          </router-link>
+          <router-link
+            v-else-if="item.locality"
+            :to="{ path: '/locality/' + item.locality.id }"
+            :title="$t('editLocality.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <span
+              v-translate="{
+                et: item.locality.locality,
+                en: item.locality.locality_en
+              }"
+            ></span>
+          </router-link>
+        </div>
+        <router-link
+          v-else
+          :to="{ path: '/locality/' + item.locality }"
+          :title="$t('editLocality.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.locality__locality,
+              en: item.locality__locality_en
+            }"
+          ></span>
+        </router-link>
+      </template>
+
+      <template v-slot:item.stratotype_type="{ item }">
         <div v-if="isUsedAsRelatedData">
           <span
             v-if="$route.meta.isEdit"
             v-translate="{
-              et: item.language__value,
-              en: item.language__value_en
+              et: item.stratotype_type__value,
+              en: item.stratotype_type__value_en
             }"
           />
           <span
-            v-else-if="item.language"
+            v-else-if="item.stratotype_type"
             v-translate="{
-              et: item.language.value,
-              en: item.language.value_en
+              et: item.stratotype_type.value,
+              en: item.stratotype_type.value_en
             }"
           />
         </div>
         <div
           v-else
           v-translate="{
-            et: item.language__value,
-            en: item.language__value_en
+            et: item.stratotype_type__value,
+            en: item.stratotype_type__value_en
           }"
         ></div>
       </template>
@@ -103,30 +150,51 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.stratigraphy_synonym")}`
+              `${$t("common.new")} ${$t("header.stratigraphy_stratotype")}`
             }}</span>
           </v-card-title>
 
           <v-card-text>
             <v-container>
               <v-row>
-                {{ item }}
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.synonym"
+                  <autocomplete-wrapper
+                    v-model="item.locality"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_synonym.synonym')"
-                    use-state
+                    :items="autocomplete.locality"
+                    :loading="autocomplete.loaders.locality"
+                    :item-text="localityLabel"
+                    :label="$t('stratigraphy_stratotype.locality')"
+                    is-link
+                    route-object="locality"
+                    is-searchable
+                    v-on:search:items="autocompleteLocalitySearch"
                   />
                 </v-col>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.language"
+                    v-model="item.stratotype_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.language"
-                    :loading="autocomplete.loaders.language"
+                    :items="autocomplete.stratotype_type"
+                    :loading="autocomplete.loaders.stratotype_type"
                     :item-text="commonLabel"
-                    :label="$t('stratigraphy_synonym.language')"
+                    :label="$t('stratigraphy_stratotype.stratotype_type')"
+                  />
+                </v-col>
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_base"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_stratotype.depth_base')"
+                    type="number"
+                  />
+                </v-col>
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_top"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy_stratotype.depth_top')"
+                    type="number"
                   />
                 </v-col>
                 <v-col cols="12" md="6" class="pa-1">
@@ -136,7 +204,7 @@
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
                     item-text="reference"
-                    :label="$t('stratigraphy_synonym.reference')"
+                    :label="$t('stratigraphy_stratotype.reference')"
                     is-link
                     route-object="reference"
                     is-searchable
@@ -147,7 +215,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_synonym.remarks')"
+                    :label="$t('stratigraphy_stratotype.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -177,7 +245,8 @@
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import {cloneDeep} from "lodash";
+import { cloneDeep } from "lodash";
+import { fetchListStratotypeType } from "../../../assets/js/api/apiCalls";
 
 export default {
   name: "StratigraphyStratotypeTable",
@@ -223,10 +292,15 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "stratigraphy_synonym.synonym", value: "synonym" },
-      { text: "stratigraphy_synonym.language", value: "language" },
-      { text: "stratigraphy_synonym.reference", value: "reference" },
-      { text: "stratigraphy_synonym.remarks", value: "remarks" },
+      { text: "stratigraphy_stratotype.locality", value: "locality" },
+      {
+        text: "stratigraphy_stratotype.stratotype_type",
+        value: "stratotype_type"
+      },
+      { text: "stratigraphy_stratotype.depth_base", value: "depth_base" },
+      { text: "stratigraphy_stratotype.depth_top", value: "depth_top" },
+      { text: "stratigraphy_stratotype.reference", value: "reference" },
+      { text: "stratigraphy_stratotype.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -236,18 +310,21 @@ export default {
     ],
     dialog: false,
     item: {
-      synonym: "",
-      language: null,
+      locality: null,
+      stratotype_type: null,
+      depth_base: "",
+      depth_top: "",
       reference: null,
       remarks: ""
     },
-    copyFields: ["synonym", "language", "reference", "remarks"],
     isNewItem: true,
     autocomplete: {
-      language: [],
+      locality: [],
+      stratotype_type: [],
       reference: [],
       loaders: {
-        language: false,
+        locality: false,
+        stratotype_type: false,
         reference: false
       }
     }
@@ -264,7 +341,9 @@ export default {
     },
 
     isItemValid() {
-      return this.item.synonym.length > 0;
+      return (
+        typeof this.item.locality === "object" && this.item.locality !== null
+      );
     }
   },
 
@@ -275,16 +354,14 @@ export default {
   },
 
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
-    },
-
     cancel() {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        synonym: "",
-        language: null,
+        locality: null,
+        stratotype_type: null,
+        depth_base: "",
+        depth_top: "",
         reference: null,
         remarks: ""
       };
@@ -296,13 +373,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "stratigraphy_synonym",
+          table: "stratigraphy_stratotype",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "stratigraphy_synonym",
+          table: "stratigraphy_stratotype",
           item: formattedItem,
           rawItem: this.item
         });
@@ -316,29 +393,41 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      this.item.synonym = item.synonym;
-
-      if (typeof item.language !== "object" && item.language !== null) {
-        this.item.language = {
-          id: item.language,
-          value: item.language__value,
-          value_en: item.language__value_en
+      if (typeof item.locality !== "object" && item.locality !== null) {
+        this.item.locality = {
+          id: item.locality,
+          locality: item.locality__locality,
+          locality_en: item.locality__locality_en
         };
-      } else this.item.language = item.language;
+        this.autocomplete.locality.push(this.item.locality);
+      } else {
+        this.item.locality = item.locality;
+        this.autocomplete.locality.push(this.item.locality);
+      }
 
-      if (typeof item.language !== "object" && item.language !== null) {
+      if (
+        typeof item.stratotype_type !== "object" &&
+        item.stratotype_type !== null
+      ) {
+        this.item.stratotype_type = {
+          id: item.stratotype_type,
+          value: item.stratotype_type__value,
+          value_en: item.stratotype_type__value_en
+        };
+      } else this.item.stratotype_type = item.stratotype_type;
+
+      this.item.depth_base = item.depth_base;
+      this.item.depth_top = item.depth_top;
+
+      if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
           reference: item.reference__reference
         };
-        if (this.autocomplete.reference.length === 0) {
-          this.autocomplete.reference.push(this.item.reference);
-        }
+        this.autocomplete.reference.push(this.item.reference);
       } else {
         this.item.reference = item.reference;
-        if (this.autocomplete.reference.length === 0) {
-          this.autocomplete.reference.push(this.item.reference);
-        }
+        this.autocomplete.reference.push(this.item.reference);
       }
 
       this.item.remarks = item.remarks;
@@ -355,15 +444,15 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.language.length === 0) {
-        this.autocomplete.loaders.language = true;
-        // fetchListLanguages().then(response => {
-        //   if (response.status === 200) {
-        //     this.autocomplete.language =
-        //       response.body.count > 0 ? response.body.results : [];
-        //   }
-        // });
-        this.autocomplete.loaders.language = false;
+      if (this.autocomplete.stratotype_type.length === 0) {
+        this.autocomplete.loaders.stratotype_type = true;
+        fetchListStratotypeType().then(response => {
+          if (response.status === 200) {
+            this.autocomplete.stratotype_type =
+              response.body.count > 0 ? response.body.results : [];
+          }
+        });
+        this.autocomplete.loaders.stratotype_type = false;
       }
     },
 

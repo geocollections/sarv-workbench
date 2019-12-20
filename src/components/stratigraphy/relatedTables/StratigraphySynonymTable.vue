@@ -110,7 +110,6 @@
           <v-card-text>
             <v-container>
               <v-row>
-                {{ item }}
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
                     v-model="item.synonym"
@@ -274,10 +273,6 @@ export default {
   },
 
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
-    },
-
     cancel() {
       this.dialog = false;
       this.isNewItem = true;

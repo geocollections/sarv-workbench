@@ -148,7 +148,9 @@
     "preparation": "Lisa preparaat",
     "dataset": "Lisa andmeset",
     "stratigraphy": "Lisa stratigraafia",
-    "stratigraphy_synonym": "Stratigraafia Sünonüüm"
+    "stratigraphy_synonym": "Stratigraafia Sünonüüm",
+    "stratigraphy_stratotype": "Stratigraafia Stratotüüp",
+    "stratigraphy_reference": "Stratigraafia Viide"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",

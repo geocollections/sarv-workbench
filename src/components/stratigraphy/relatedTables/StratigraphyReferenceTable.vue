@@ -82,7 +82,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.stratigraphy_synonym")}`
+              `${$t("common.new")} ${$t("header.stratigraphy_reference")}`
             }}</span>
           </v-card-title>
 
@@ -316,10 +316,6 @@ export default {
   },
 
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
-    },
-
     cancel() {
       this.dialog = false;
       this.isNewItem = true;

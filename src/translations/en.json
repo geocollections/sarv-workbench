@@ -148,7 +148,9 @@
     "preparation": "Add preparation",
     "dataset": "Add dataset",
     "stratigraphy": "Add stratigraphy",
-    "stratigraphy_synonym": "Stratigraphy Synonym"
+    "stratigraphy_synonym": "Stratigraphy Synonym",
+    "stratigraphy_stratotype": "Stratigraphy Stratotype",
+    "stratigraphy_reference": "Stratigraphy Reference"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
