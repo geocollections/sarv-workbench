@@ -37,7 +37,7 @@
 
     <template v-slot:item.author_year="{ item }">
       <router-link
-        v-if="item.reference"
+        v-if="item.reference && $route.meta.object !== 'reference'"
         :to="{ path: '/reference/' + item.reference }"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"

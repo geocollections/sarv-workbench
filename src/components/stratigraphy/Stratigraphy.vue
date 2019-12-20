@@ -484,6 +484,7 @@
           <span
             v-if="relatedData[tab.name].count > 0"
             class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text-field`"
           >
             {{ relatedData[tab.name].count }}
           </span>

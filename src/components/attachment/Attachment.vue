@@ -3231,7 +3231,6 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "attachment");
         fetchAttachment(this.$route.params.id, this.currentUser).then(
           response => {
             let handledResponse = this.handleResponse(response);
@@ -3254,11 +3253,6 @@ export default {
         );
 
         this.loadAutocompleteFields(false, true);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(entity => entity.name)
-        );
       }
     },
 
@@ -3526,54 +3520,16 @@ export default {
         // this.$localStorage.set('attachment', objectToUpload);
       }
 
-      // Autocomplete fields
-      if (this.isNotEmpty(uploadableObject.agent_digitised))
-        uploadableObject.agent_digitised = uploadableObject.agent_digitised.id;
-      else uploadableObject.agent_digitised = null;
-      if (this.isNotEmpty(uploadableObject.author))
-        uploadableObject.author = uploadableObject.author.id;
-      else uploadableObject.author = null;
-      if (this.isNotEmpty(uploadableObject.copyright_agent))
-        uploadableObject.copyright_agent = uploadableObject.copyright_agent.id;
-      else uploadableObject.copyright_agent = null;
-      // if (this.isNotEmpty(uploadableObject.date_created)) {
-      //   if (!this.isValidDate(uploadableObject.date_created)) {
-      //     this.attachment.date_created = null;
-      //     delete uploadableObject.date_created;
-      //     toastInfo({ text: "Field 'Date created' is invalid" });
-      //   }
-      // }
-      // if (this.isNotEmpty(uploadableObject.date_digitised)) {
-      //   if (!this.isValidDate(uploadableObject.date_digitised)) {
-      //     this.attachment.date_digitised = null;
-      //     delete uploadableObject.date_digitised;
-      //     toastInfo({ text: "Field 'Date digitised' is invalid" });
-      //   }
-      // }
-      if (this.isNotEmpty(uploadableObject.image_type))
-        uploadableObject.image_type = uploadableObject.image_type.id;
-      else uploadableObject.image_type = null;
-      if (this.isNotEmpty(uploadableObject.imageset))
-        uploadableObject.imageset = uploadableObject.imageset.id;
-      else uploadableObject.imageset = null;
-      if (this.isNotEmpty(uploadableObject.licence))
-        uploadableObject.licence = uploadableObject.licence.id;
-      else uploadableObject.licence = null;
-      if (this.isNotEmpty(uploadableObject.locality))
-        uploadableObject.locality = uploadableObject.locality.id;
-      else uploadableObject.locality = null;
-      if (this.isNotEmpty(uploadableObject.specimen))
-        uploadableObject.specimen = uploadableObject.specimen.id;
-      else uploadableObject.specimen = null;
-      if (this.isNotEmpty(uploadableObject.reference))
-        uploadableObject.reference = uploadableObject.reference.id;
-      else uploadableObject.reference = null;
-      if (this.isNotEmpty(uploadableObject.type))
-        uploadableObject.type = uploadableObject.type.id;
-      else uploadableObject.type = null;
-      if (this.isNotEmpty(uploadableObject.coll))
-        uploadableObject.coll = uploadableObject.coll.id;
-      else uploadableObject.coll = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       /* Related Data START */
       uploadableObject.related_data = {};
