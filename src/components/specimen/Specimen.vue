@@ -1018,7 +1018,6 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "specimen");
         fetchSpecimen(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -1064,15 +1063,7 @@ export default {
           }
         });
 
-        // Load Related Data which is in tabs
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
       } else {
         // Set default tab
         if (this.specimen && this.specimen.fossil) {

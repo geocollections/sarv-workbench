@@ -488,7 +488,6 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "agent");
         fetchAgent(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 

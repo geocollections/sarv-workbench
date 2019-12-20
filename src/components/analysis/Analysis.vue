@@ -439,10 +439,11 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
+            v-if="relatedData[tab.name].count > 0"
             class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
-            {{ relatedData[tab.name].length }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
@@ -453,14 +454,17 @@
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
-          <analysis-results
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <analysis-results-table
+            v-show="activeTab === 'analysis_results'"
+            :response="relatedData.analysis_results"
+            :search-parameters="
+              relatedData.searchParameters.analysis_results
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <div v-show="activeTab === 'attachment_link'">
@@ -476,8 +480,8 @@
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+            v-if="$route.meta.isEdit && activeTab !== 'attachment_link' && relatedData[activeTab].count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -500,7 +504,7 @@
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.count[activeTab] /
+                    relatedData[activeTab].count /
                       relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
@@ -539,7 +543,6 @@ import {
   fetchAnalysisResults,
   fetchAnalysisMethod
 } from "../../assets/js/api/apiCalls";
-import AnalysisResults from "./relatedTables/AnalysisResults";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -548,16 +551,18 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import AnalysisResultsTable from "./relatedTables/AnalysisResultsTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   components: {
+    AnalysisResultsTable,
     FileUpload,
     CheckboxWrapper,
     DateWrapper,
     AutocompleteWrapper,
     InputWrapper,
     TextareaWrapper,
-    AnalysisResults,
     Spinner
   },
 
@@ -574,7 +579,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
 
   name: "Analysis",
 
@@ -759,8 +764,6 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        this.$emit("set-object", "analysis");
-
         fetchAnalysis(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -778,17 +781,7 @@ export default {
           }
         });
 
-        // Load Related Data which is in tabs
-        this.relatedTabs.forEach(tab => {
-          this.loadRelatedData(tab.name);
-        });
-
-        this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
+        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
@@ -814,23 +807,10 @@ export default {
     setDefaultRelatedData() {
       return {
         attachment_link: [],
-        analysis_results: [],
-        new: {
-          attachment: [],
-          analysis_results: []
+        analysis_results: {
+          count: 0,
+          results: []
         },
-        copyFields: {
-          attachment_link: ["attachment", "remarks"],
-          analysis_results: [
-            "name",
-            "value",
-            "value_max",
-            "value_min",
-            "value_bin",
-            "value_txt"
-          ]
-        },
-        insert: this.setDefaultInsertRelatedData(),
         searchParameters: {
           attachment_link: {
             page: 1,
@@ -840,64 +820,26 @@ export default {
           analysis_results: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
-        },
-        count: {
-          attachment_link: 0,
-          analysis_results: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        attachment_link: {},
-        analysis_results: {}
       };
     },
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // if (this.isNotEmpty(objectToUpload.date))
-      //   uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
-      // if (this.isNotEmpty(objectToUpload.date_end))
-      //   uploadableObject.date_end = this.formatDateForUpload(
-      //     objectToUpload.date_end
-      //   );
-
-      // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.sample))
-        uploadableObject.sample = objectToUpload.sample.id;
-      else uploadableObject.sample = null;
-      if (this.isNotEmpty(objectToUpload.analysis_method))
-        uploadableObject.analysis_method = objectToUpload.analysis_method.id;
-      else uploadableObject.analysis_method = null;
-      if (this.isNotEmpty(objectToUpload.specimen))
-        uploadableObject.specimen = objectToUpload.specimen.id;
-      else uploadableObject.specimen = null;
-      if (this.isNotEmpty(objectToUpload.lab))
-        uploadableObject.lab = objectToUpload.lab.id;
-      else uploadableObject.lab = null;
-      if (this.isNotEmpty(objectToUpload.instrument))
-        uploadableObject.instrument = objectToUpload.instrument.id;
-      else uploadableObject.instrument = null;
-      if (this.isNotEmpty(objectToUpload.agent))
-        uploadableObject.agent = objectToUpload.agent.id;
-      else uploadableObject.agent = null;
-      if (this.isNotEmpty(objectToUpload.owner))
-        uploadableObject.owner = objectToUpload.owner.id;
-      else uploadableObject.owner = null;
-      if (this.isNotEmpty(objectToUpload.storage))
-        uploadableObject.storage = objectToUpload.storage.id;
-      else uploadableObject.storage = null;
-      if (this.isNotEmpty(objectToUpload.reference))
-        uploadableObject.reference = objectToUpload.reference.id;
-      else uploadableObject.reference = null;
-      if (this.isNotEmpty(objectToUpload.dataset))
-        uploadableObject.dataset = objectToUpload.dataset.id;
-      else uploadableObject.dataset = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 
@@ -912,7 +854,7 @@ export default {
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ];
+                ].results;
             }
         });
       } else {
@@ -984,29 +926,7 @@ export default {
       };
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.attachment))
-        obj.attachment = {
-          id: obj.attachment,
-          original_filename: obj.attachment__original_filename
-        };
 
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.attachment)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.attachment__original_filename =
-          obj.attachment.original_filename;
-      }
-
-      return newObject;
-    },
 
     loadRelatedData(object) {
       let query;
@@ -1023,28 +943,12 @@ export default {
         );
       }
 
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+      query.then(response => {
+        if (object !== "attachment_link") {
+          this.relatedData[object].count = response.body.count;
+          this.relatedData[object].results = response.body.results;
+        } else this.relatedData[object] = this.handleResponse(response);
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.analysis = this.analysis.id;
-
-      if (this.isNotEmpty(uploadableObject.attachment)) {
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      }
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {
@@ -1070,10 +974,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>
