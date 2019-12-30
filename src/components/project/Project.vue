@@ -809,25 +809,16 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // if (this.isNotEmpty(objectToUpload.date_start))
-      //   uploadableObject.date_start = this.formatDateForUpload(
-      //     objectToUpload.date_start
-      //   );
-      // if (this.isNotEmpty(objectToUpload.date_end))
-      //   uploadableObject.date_end = this.formatDateForUpload(
-      //     objectToUpload.date_end
-      //   );
-
-      //autocomplete fields
-      if (this.isNotEmpty(objectToUpload.project_type))
-        uploadableObject.project_type = objectToUpload.project_type.id;
-      else uploadableObject.project_type = null;
-      if (this.isNotEmpty(objectToUpload.parent_project))
-        uploadableObject.parent_project = objectToUpload.parent_project.id;
-      else uploadableObject.parent_project = null;
-      if (this.isNotEmpty(objectToUpload.owner))
-        uploadableObject.owner = objectToUpload.owner.id;
-      else uploadableObject.owner = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       //add related data
       uploadableObject.related_data = {};
@@ -837,6 +828,7 @@ export default {
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
+
     fillAutocompleteFields(obj) {
       this.project.project_type = {
         name: obj.project_type__name,

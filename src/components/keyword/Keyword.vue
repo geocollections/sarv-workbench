@@ -256,15 +256,16 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.language))
-        uploadableObject.language = objectToUpload.language.id;
-      else uploadableObject.language = null;
-      if (this.isNotEmpty(objectToUpload.keyword_category))
-        uploadableObject.keyword_category = objectToUpload.keyword_category.id;
-      else uploadableObject.keyword_category = null;
-      if (this.isNotEmpty(objectToUpload.related_keyword))
-        uploadableObject.related_keyword = objectToUpload.related_keyword.id;
-      else uploadableObject.related_keyword = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

@@ -563,19 +563,16 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // if (this.isNotEmpty(objectToUpload.date))
-      //   uploadableObject.date = this.formatDateForUpload(objectToUpload.date);
-
-      // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.copyright_agent))
-        uploadableObject.copyright_agent = objectToUpload.copyright_agent.id;
-      else uploadableObject.copyright_agent = null;
-      if (this.isNotEmpty(objectToUpload.licence))
-        uploadableObject.licence = objectToUpload.licence.id;
-      else uploadableObject.licence = null;
-      if (this.isNotEmpty(objectToUpload.owner))
-        uploadableObject.owner = objectToUpload.owner.id;
-      else uploadableObject.owner = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 

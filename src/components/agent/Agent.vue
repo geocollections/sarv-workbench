@@ -519,16 +519,16 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.type))
-        uploadableObject.type = objectToUpload.type.id;
-      else uploadableObject.type = null;
-      if (this.isNotEmpty(objectToUpload.institution))
-        uploadableObject.institution = objectToUpload.institution.id;
-      else uploadableObject.institution = null;
-      if (this.isNotEmpty(objectToUpload.country))
-        uploadableObject.country = objectToUpload.country.id;
-      else uploadableObject.country = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

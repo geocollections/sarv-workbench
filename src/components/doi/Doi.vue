@@ -1145,32 +1145,16 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.resource_type))
-        uploadableObject.resource_type = objectToUpload.resource_type.id;
-      else uploadableObject.resource_type = null;
-      if (this.isNotEmpty(objectToUpload.title_translated_language))
-        uploadableObject.title_translated_language =
-          objectToUpload.title_translated_language.id;
-      else uploadableObject.title_translated_language = null;
-      if (this.isNotEmpty(objectToUpload.owner))
-        uploadableObject.owner = objectToUpload.owner.id;
-      else uploadableObject.owner = null;
-      if (this.isNotEmpty(objectToUpload.language))
-        uploadableObject.language = objectToUpload.language.id;
-      else uploadableObject.language = null;
-      if (this.isNotEmpty(objectToUpload.copyright_agent))
-        uploadableObject.copyright_agent = objectToUpload.copyright_agent.id;
-      else uploadableObject.copyright_agent = null;
-      if (this.isNotEmpty(objectToUpload.licence))
-        uploadableObject.licence = objectToUpload.licence.id;
-      else uploadableObject.licence = null;
-      if (this.isNotEmpty(this.relatedData.reference))
-        uploadableObject.reference = this.relatedData.reference.id;
-      else uploadableObject.reference = null;
-      if (this.isNotEmpty(this.relatedData.dataset))
-        uploadableObject.dataset = this.relatedData.dataset.id;
-      else uploadableObject.dataset = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 

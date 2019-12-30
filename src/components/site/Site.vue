@@ -849,16 +849,6 @@ export default {
             ? parseFloat(objectToUpload.location_accuracy).toFixed(2)
             : objectToUpload.location_accuracy.toFixed(2);
       else uploadableObject.location_accuracy = null;
-
-      if (this.isNotEmpty(objectToUpload.project))
-        uploadableObject.project = objectToUpload.project.id;
-      else uploadableObject.project = null;
-      if (this.isNotEmpty(objectToUpload.coord_det_method))
-        uploadableObject.coord_det_method = objectToUpload.coord_det_method.id;
-      else uploadableObject.coord_det_method = null;
-      if (this.isNotEmpty(objectToUpload.locality))
-        uploadableObject.locality = objectToUpload.locality.id;
-      else uploadableObject.locality = null;
       if (this.isNotEmpty(objectToUpload.latitude))
         uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(
           6
@@ -869,6 +859,17 @@ export default {
           objectToUpload.longitude
         ).toFixed(6);
       else uploadableObject.longitude = null;
+
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       uploadableObject.related_data = {};
       uploadableObject.related_data.attachment = this.relatedData.attachment_link;

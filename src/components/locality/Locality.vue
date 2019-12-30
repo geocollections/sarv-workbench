@@ -944,50 +944,32 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      if (this.isNotEmpty(objectToUpload.elevation))
-        uploadableObject.elevation = objectToUpload.elevation.toFixed(1);
+      if (this.isNotEmpty(uploadableObject.elevation))
+        uploadableObject.elevation = parseFloat(
+          uploadableObject.elevation
+        ).toFixed(1);
       else uploadableObject.elevation = null;
-      if (this.isNotEmpty(objectToUpload.latitude))
-        uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(
-          6
-        );
+      if (this.isNotEmpty(uploadableObject.latitude))
+        uploadableObject.latitude = parseFloat(
+          uploadableObject.latitude
+        ).toFixed(6);
       else uploadableObject.latitude = null;
-      if (this.isNotEmpty(objectToUpload.longitude))
+      if (this.isNotEmpty(uploadableObject.longitude))
         uploadableObject.longitude = parseFloat(
-          objectToUpload.longitude
+          uploadableObject.longitude
         ).toFixed(6);
       else uploadableObject.longitude = null;
 
-      // Autocomplete fields
-      if (this.isNotEmpty(objectToUpload.type))
-        uploadableObject.type = objectToUpload.type.id;
-      else uploadableObject.type = null;
-      if (this.isNotEmpty(objectToUpload.parent))
-        uploadableObject.parent = objectToUpload.parent.id;
-      else uploadableObject.parent = null;
-      if (this.isNotEmpty(objectToUpload.extent))
-        uploadableObject.extent = objectToUpload.extent.id;
-      else uploadableObject.extent = null;
-      if (this.isNotEmpty(objectToUpload.coord_det_precision))
-        uploadableObject.coord_det_precision =
-          objectToUpload.coord_det_precision.id;
-      else uploadableObject.coord_det_precision = null;
-      if (this.isNotEmpty(objectToUpload.coord_det_method))
-        uploadableObject.coord_det_method = objectToUpload.coord_det_method.id;
-      else uploadableObject.coord_det_method = null;
-      if (this.isNotEmpty(objectToUpload.coord_det_agent))
-        uploadableObject.coord_det_agent = objectToUpload.coord_det_agent.id;
-      else uploadableObject.coord_det_agent = null;
-      if (this.isNotEmpty(objectToUpload.country))
-        uploadableObject.country = objectToUpload.country.id;
-      else uploadableObject.country = null;
-      if (this.isNotEmpty(objectToUpload.stratigraphy_top))
-        uploadableObject.stratigraphy_top = objectToUpload.stratigraphy_top.id;
-      else uploadableObject.stratigraphy_top = null;
-      if (this.isNotEmpty(objectToUpload.stratigraphy_base))
-        uploadableObject.stratigraphy_base =
-          objectToUpload.stratigraphy_base.id;
-      else uploadableObject.stratigraphy_base = null;
+      Object.keys(uploadableObject).forEach(key => {
+        if (
+          typeof uploadableObject[key] === "object" &&
+          uploadableObject[key] !== null
+        ) {
+          uploadableObject[key] = uploadableObject[key].id
+            ? uploadableObject[key].id
+            : null;
+        }
+      });
 
       // if (this.databaseId) uploadableObject.database = this.databaseId;
 
