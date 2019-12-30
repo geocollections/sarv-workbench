@@ -581,6 +581,7 @@
             acceptable-format="application/pdf"
             :is-clearable="false"
             :is-draggable="!(attachment && attachment.length > 0)"
+            open-file
           />
         </div>
       </transition>

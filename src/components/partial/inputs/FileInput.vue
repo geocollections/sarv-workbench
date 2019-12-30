@@ -179,6 +179,7 @@
           :body-color="appSettings.bodyColor"
           :body-active-color="appSettings.bodyActiveColor"
           clear-item-background
+          :open-file="openFile"
         />
       </v-col>
     </v-row>
@@ -318,7 +319,8 @@ export default {
     isDraggable: {
       type: Boolean,
       default: true
-    }
+    },
+    openFile: Boolean
   },
   computed: {
     ...mapState(["appSettings"]),

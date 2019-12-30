@@ -16,10 +16,18 @@
               flat
               class="d-flex image-hover"
               v-on="on"
-              :class="clearItemBackground ? bodyColor.split('n-')[0] + 'n-5' : bodyColor.split('n-')[0] + 'n-3'"
+              :class="
+                clearItemBackground
+                  ? bodyColor.split('n-')[0] + 'n-5'
+                  : bodyColor.split('n-')[0] + 'n-3'
+              "
               hover
               :title="$t(editMessage)"
-              :to="{ path: `/${object}/${image[idField]}` }"
+              @click="
+                openFile
+                  ? openFileInNewWindow(image)
+                  : $router.push({ path: `/${object}/${image[idField]}` })
+              "
             >
               <v-img
                 max-height="400"
@@ -35,10 +43,7 @@
                     align="center"
                     justify="center"
                   >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey lighten-5"
-                    />
+                    <v-progress-circular indeterminate color="grey lighten-5" />
                   </v-row>
                 </template>
               </v-img>
@@ -118,7 +123,8 @@ export default {
       required: false,
       default: "grey lighten-4"
     },
-    clearItemBackground: Boolean
+    clearItemBackground: Boolean,
+    openFile: Boolean
   },
   computed: {
     editMessage() {
@@ -132,6 +138,18 @@ export default {
     }
   },
   methods: {
+    openFileInNewWindow(file) {
+      if (typeof file !== "undefined" && file !== null) {
+        let url = "";
+        if (this.isImageFile(file)) {
+          url = this.getFileUrl(file.uuid_filename, "large");
+        } else {
+          url = this.getFileUrl(file.uuid_filename);
+        }
+        window.open(url, "FileWindow", "width=800,height=750");
+      }
+    },
+
     getFileUrl(uuid, size = null) {
       if (size) {
         return `https://files.geocollections.info/${size}/${uuid.substring(
