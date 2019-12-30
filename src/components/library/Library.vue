@@ -111,7 +111,10 @@
           <!-- ABSTRACT -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
+              <editor :data.sync="library.abstract" />
+
               <textarea-wrapper
+                v-if="false"
                 v-model="library.abstract"
                 :color="bodyActiveColor"
                 :label="$t('library.abstract')"
@@ -122,7 +125,10 @@
           <!-- ABSTRACT_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
+              <editor :data.sync="library.abstract_en" />
+
               <textarea-wrapper
+                v-if="false"
                 v-model="library.abstract_en"
                 :color="bodyActiveColor"
                 :label="$t('library.abstract_en')"
@@ -200,7 +206,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in relatedTabs"
+          v-for="tab in computedRelatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -314,10 +320,12 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import LibraryReferenceTable from "./relatedTables/LibraryReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
+import Editor from "../partial/editor/Editor";
 
 export default {
   name: "Library",
   components: {
+    Editor,
     LibraryReferenceTable,
     CheckboxWrapper,
     AutocompleteWrapper,
@@ -410,6 +418,14 @@ export default {
           ...item,
           text: this.$t(item.text, { num: item.value })
         };
+      });
+    },
+
+    computedRelatedTabs() {
+      return this.relatedTabs.filter(tab => {
+        if (tab.name === "library_reference_list") {
+          if (this.$route.meta.isEdit) return tab;
+        } else return tab;
       });
     }
   },

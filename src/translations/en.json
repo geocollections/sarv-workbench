@@ -267,8 +267,8 @@
       "datacite": "Datacite"
     },
     "analysis": {
-      "info": "General info",
-      "description": "Remarks"
+      "labInfo": "Lab info",
+      "otherInfo": "Other info"
     },
     "sample": {
       "info": "General info",

@@ -267,8 +267,8 @@
       "datacite": "Datacite"
     },
     "analysis": {
-      "info": "Üldinfo",
-      "description": "Lisainfo"
+      "labInfo": "Labori andmed",
+      "otherInfo": "Muu info"
     },
     "sample": {
       "info": "Üldinfo",

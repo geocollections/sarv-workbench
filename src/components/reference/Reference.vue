@@ -1026,12 +1026,14 @@ export default {
       deep: true
     },
     // This value is changed in formManipulation.js when file upload is successful (value will be savedObjectsId)
+    // Do not remember why was it done. Commenting it cause of #382 https://github.com/geocollections/sarv-edit/issues/382
     isFileAddedAsObject: {
       handler: function(newVal) {
-        if (this.isNotEmpty(newVal))
-          fetchAttachmentForReference(this.$route.params.id).then(
-            response => (this.attachment = this.handleResponse(response))
-          );
+        if (this.isNotEmpty(newVal)) {
+          // fetchAttachmentForReference(this.$route.params.id).then(
+          //   response => (this.attachment = this.handleResponse(response))
+          // );
+        }
       }
     }
   },

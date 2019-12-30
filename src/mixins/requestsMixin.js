@@ -39,6 +39,7 @@ const requestsMixin = {
         let formData = new FormData();
         let uploadableObject = cloneDeep(payload.item);
         delete uploadableObject.id;
+        console.log(JSON.stringify(uploadableObject));
         formData.append("data", JSON.stringify(uploadableObject));
 
         this.httpRequestWrapper(url, formData).then(response => {
