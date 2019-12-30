@@ -3520,6 +3520,17 @@ export default {
         // this.$localStorage.set('attachment', objectToUpload);
       }
 
+      if (this.isNotEmpty(uploadableObject.image_latitude))
+        uploadableObject.image_latitude = parseFloat(
+          uploadableObject.image_latitude
+        ).toFixed(6);
+      else uploadableObject.image_latitude = null;
+      if (this.isNotEmpty(uploadableObject.image_longitude))
+        uploadableObject.image_longitude = parseFloat(
+          uploadableObject.image_longitude
+        ).toFixed(6);
+      else uploadableObject.image_longitude = null;
+
       Object.keys(uploadableObject).forEach(key => {
         if (
           typeof uploadableObject[key] === "object" &&
