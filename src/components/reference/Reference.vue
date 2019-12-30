@@ -621,6 +621,7 @@
                 v-on:update:existing-files="addExistingFiles"
                 v-on:file-uploaded="addFiles"
                 accept-multiple
+                open-file
               />
             </v-col>
           </v-row>
