@@ -1328,10 +1328,11 @@ export default {
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
         ) {
-          console.log(uploadableObject[key])
           uploadableObject[key] = uploadableObject[key].id
             ? uploadableObject[key].id
             : null;
+        } else if (typeof uploadableObject[key] === "undefined") {
+          uploadableObject[key] = null;
         }
       });
 

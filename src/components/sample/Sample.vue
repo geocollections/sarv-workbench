@@ -1506,6 +1506,8 @@ export default {
           uploadableObject[key] = uploadableObject[key].id
             ? uploadableObject[key].id
             : null;
+        } else if (typeof uploadableObject[key] === "undefined") {
+          uploadableObject[key] = null;
         }
       });
 
