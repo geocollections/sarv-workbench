@@ -665,30 +665,29 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-
           <v-row v-show="activeTab === 'library'" no-gutters>
-              <v-col cols="12" class="pa-1">
-                <autocomplete-wrapper
-                  v-model="relatedData.library.results"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.library"
-                  :loading="autocomplete.loaders.library"
-                  :item-text="libraryTitle"
-                  :label="$t('reference.libraries')"
-                  is-link
-                  route-object="library"
-                  is-searchable
-                  v-on:search:items="autocompleteLibraryAgentSearch2"
-                  :multiple="true"
-                  v-on:chip:close="
+            <v-col cols="12" class="pa-1">
+              <autocomplete-wrapper
+                v-model="relatedData.library.results"
+                :color="bodyActiveColor"
+                :items="autocomplete.library"
+                :loading="autocomplete.loaders.library"
+                :item-text="libraryTitle"
+                :label="$t('reference.libraries')"
+                is-link
+                route-object="library"
+                is-searchable
+                v-on:search:items="autocompleteLibraryAgentSearch2"
+                :multiple="true"
+                v-on:chip:close="
                   relatedData.library.results.splice(
                     relatedData.library.results.indexOf($event),
                     1
                   )
                 "
-                />
-              </v-col>
-            </v-row>
+              />
+            </v-col>
+          </v-row>
 
           <div v-show="activeTab === 'stratigraphy'">
             <v-row no-gutters>
@@ -713,7 +712,8 @@
                 target="newStratigraphyWindow"
                 :color="bodyActiveColor"
                 :dark="isBodyActiveColorDark"
-              >{{ $t("add.new") }}</v-btn>
+                >{{ $t("add.new") }}</v-btn
+              >
               <export-buttons
                 v-if="relatedData.stratigraphy.count > 0"
                 filename="stratigraphy"
@@ -748,7 +748,8 @@
                 target="newTaxonWindow"
                 :color="bodyActiveColor"
                 :dark="isBodyActiveColorDark"
-              >{{ $t("add.new") }}</v-btn>
+                >{{ $t("add.new") }}</v-btn
+              >
               <export-buttons
                 v-if="relatedData.taxon.count > 0"
                 filename="taxon"
@@ -763,9 +764,7 @@
           <locality-reference-table
             v-show="activeTab === 'locality_reference'"
             :response="relatedData.locality_reference"
-            :search-parameters="
-              relatedData.searchParameters.locality_reference
-            "
+            :search-parameters="relatedData.searchParameters.locality_reference"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -1249,9 +1248,13 @@ export default {
           response => (this.attachment = this.handleResponse(response))
         );
         fetchLibrariesForReference(this.$route.params.id).then(response => {
-          this.relatedData.library = this.handleResponse(response);
-          if (this.isNotEmpty(this.relatedData.library)) {
-            this.autocomplete.library = this.relatedData.library;
+          let handledResponse = this.handleResponse(response);
+          this.relatedData.library = {
+            count: handledResponse.length,
+            results: handledResponse
+          };
+          if (this.relatedData.library.count > 0) {
+            this.autocomplete.library = this.relatedData.library.results;
           }
         });
         // fetchListLocalityReferenceType().then(response => this.autocomplete.locality_reference_type = this.handleResponse(response))
@@ -1325,6 +1328,7 @@ export default {
           typeof uploadableObject[key] === "object" &&
           uploadableObject[key] !== null
         ) {
+          console.log(uploadableObject[key])
           uploadableObject[key] = uploadableObject[key].id
             ? uploadableObject[key].id
             : null;
@@ -1342,7 +1346,11 @@ export default {
         uploadableObject.related_data.attachment = this.relatedData.attachment;
       else uploadableObject.related_data.attachment = null;
 
-      if (this.relatedData.library.count > 0) {
+      if (
+        typeof this.relatedData.library.results !== "undefined" &&
+        this.relatedData.library.results !== null &&
+        this.relatedData.library.results.length > 0
+      ) {
         uploadableObject.related_data.library = cloneDeep(
           this.relatedData.library.results
         );
@@ -1356,7 +1364,9 @@ export default {
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {
         if (this.isNotEmpty(this.relatedData.locality_reference)) {
-          let clonedLocalities = cloneDeep(this.relatedData.locality_reference.results);
+          let clonedLocalities = cloneDeep(
+            this.relatedData.locality_reference.results
+          );
           uploadableObject.related_data.locality = clonedLocalities
             .filter(entity => this.isNotEmpty(entity.locality))
             .map(loc_ref => {
@@ -1413,9 +1423,15 @@ export default {
       if (object === "library") {
         query = fetchLibrariesForReference(this.$route.params.id);
       } else if (object === "stratigraphy") {
-        query = fetchLinkedStratigraphyReference(this.$route.params.id, this.relatedData.searchParameters.stratigraphy);
+        query = fetchLinkedStratigraphyReference(
+          this.$route.params.id,
+          this.relatedData.searchParameters.stratigraphy
+        );
       } else if (object === "taxon") {
-        query = fetchLinkedTaxonReference(this.$route.params.id, this.relatedData.searchParameters.taxon);
+        query = fetchLinkedTaxonReference(
+          this.$route.params.id,
+          this.relatedData.searchParameters.taxon
+        );
       } else if (object === "locality_reference") {
         query = fetchLocalityReferenceForReference(
           this.$route.params.id,
@@ -1424,10 +1440,13 @@ export default {
       }
 
       query.then(response => {
-        this.$set(this.relatedData[object], "count", response.body.count);
-        this.$set(this.relatedData[object], "results", response.body.results);
-        // this.relatedData[object].count = response.body.count;
-        // this.relatedData[object].results = response.body.results;
+        if (object === "library") {
+          this.relatedData[object].count = response.body.count;
+          this.relatedData[object].results = response.body.results;
+        } else {
+          this.$set(this.relatedData[object], "count", response.body.count);
+          this.$set(this.relatedData[object], "results", response.body.results);
+        }
       });
     },
 
@@ -1641,7 +1660,7 @@ export default {
 
     addExistingFiles(files) {
       this.relatedData.attachment = files;
-    },
+    }
   }
 };
 </script>
