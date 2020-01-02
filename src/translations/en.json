@@ -158,7 +158,9 @@
     "specimen_description": "Specimen Description",
     "specimen_location": "Specimen Location",
     "specimen_history": "Specimen History",
-    "specimen_analysis": "Specimen Analysis"
+    "specimen_analysis": "Specimen Analysis",
+    "dataset_author": "Dataset Author",
+    "dataset_reference": "Dataset Reference"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",

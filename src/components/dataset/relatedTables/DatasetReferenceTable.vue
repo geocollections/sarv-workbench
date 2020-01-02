@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen-description-table">
+  <div class="dataset-reference-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,30 +38,36 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.type="{ item }">
+      <template v-slot:item.reference="{ item }">
         <div v-if="isUsedAsRelatedData">
-          <span
+          <router-link
             v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type__value,
-              en: item.type__value_en
-            }"
-          />
-          <span
-            v-else-if="item.type"
-            v-translate="{
-              et: item.type.value,
-              en: item.type.value_en
-            }"
-          />
+            :to="{ path: '/reference/' + item.reference }"
+            :title="$t('editReference.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.reference__reference }}
+          </router-link>
+          <router-link
+            v-else-if="item.reference"
+            :to="{ path: '/reference/' + item.reference.id }"
+            :title="$t('editReference.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.reference.reference }}
+          </router-link>
         </div>
-        <div
+        <router-link
           v-else
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
-          }"
-        ></div>
+          :to="{ path: '/reference/' + item.reference }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference__reference }}
+        </router-link>
       </template>
     </v-data-table>
 
@@ -75,7 +81,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.specimen_history")}`
+              `${$t("common.new")} ${$t("header.dataset_reference")}`
             }}</span>
           </v-card-title>
 
@@ -84,38 +90,17 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.type"
+                    v-model="item.reference"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
-                    :item-text="commonLabel"
-                    :label="$t('specimen_history.type')"
+                    :items="autocomplete.reference"
+                    :loading="autocomplete.loaders.reference"
+                    item-text="reference"
+                    :label="$t('dataset_reference.reference')"
                     use-state
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.value_old"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_history.value_old')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.value_new"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_history.value_new')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <date-wrapper
-                    v-model="item.date"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_history.date')"
-                    v-on:date:clear="item.date = null"
+                    is-link
+                    route-object="reference"
+                    is-searchable
+                    v-on:search:items="autocompleteReferenceSearch"
                   />
                 </v-col>
 
@@ -123,7 +108,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_history.remarks')"
+                    :label="$t('dataset_reference.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -154,16 +139,11 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import DateWrapper from "../../partial/inputs/DateWrapper";
-import {
-  fetchListHistoryType,
-} from "../../../assets/js/api/apiCalls";
 
 export default {
-  name: "SpecimenHistoryTable",
+  name: "DatasetReferenceTable",
 
   components: {
-    DateWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
@@ -207,11 +187,8 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "specimen_history.type", value: "type" },
-      { text: "specimen_history.value_old", value: "value_old" },
-      { text: "specimen_history.value_new", value: "value_new" },
-      { text: "specimen_history.date", value: "date" },
-      { text: "specimen_history.remarks", value: "remarks" },
+      { text: "dataset_reference.reference", value: "reference" },
+      { text: "dataset_reference.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -221,17 +198,14 @@ export default {
     ],
     dialog: false,
     item: {
-      type: null,
-      value_old: "",
-      value_new: "",
-      date: null,
+      reference: null,
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      type: [],
+      reference: [],
       loaders: {
-        type: false
+        reference: false
       }
     }
   }),
@@ -247,13 +221,9 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.type !== "undefined" && this.item.type !== null;
-    }
-  },
-
-  watch: {
-    dialog() {
-      this.fillListAutocompletes();
+      return (
+        typeof this.item.reference === "object" && this.item.reference !== null
+      );
     }
   },
 
@@ -262,10 +232,7 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        type: null,
-        value_old: "",
-        value_new: "",
-        date: null,
+        reference: null,
         remarks: ""
       };
     },
@@ -276,13 +243,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "specimen_history",
+          table: "dataset_reference",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "specimen_history",
+          table: "dataset_reference",
           item: formattedItem,
           rawItem: this.item
         });
@@ -296,17 +263,17 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en
+      if (typeof item.reference !== "object" && item.reference !== null) {
+        this.item.reference = {
+          id: item.reference,
+          reference: item.reference__reference
         };
+        this.autocomplete.reference.push(this.item.reference);
+      } else if (item.reference !== null) {
+        this.item.reference = item.reference;
+        this.autocomplete.reference.push(this.item.reference);
       }
 
-      this.item.value_old = item.value_old;
-      this.item.value_new = item.value_new;
-      this.item.date = item.date;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -314,23 +281,10 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "specimen_history",
+        table: "dataset_reference",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
-    },
-
-    fillListAutocompletes() {
-      if (this.autocomplete.type.length === 0) {
-        this.autocomplete.loaders.type = true;
-        fetchListHistoryType().then(response => {
-          if (response.status === 200) {
-            this.autocomplete.type =
-              response.body.count > 0 ? response.body.results : [];
-          }
-        });
-        this.autocomplete.loaders.type = false;
-      }
     },
 
     formatItem(item) {

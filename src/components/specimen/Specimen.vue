@@ -479,7 +479,7 @@
           </span>
           <span
             v-if="relatedData[tab.name].count > 0"
-            class="font-weight-bold ml-2"
+            class="font-weight-bold ml-2 blue--text"
           >
             {{ relatedData[tab.name].count }}
           </span>

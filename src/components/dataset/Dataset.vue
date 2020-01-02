@@ -196,10 +196,10 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
-            class="font-weight-bold ml-2"
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2 blue--text"
           >
-            {{ relatedData[tab.name].length }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
@@ -210,30 +210,32 @@
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
-          <dataset-author
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <dataset-author-table
+            v-show="activeTab === 'dataset_author'"
+            :response="relatedData.dataset_author"
+            :search-parameters="relatedData.searchParameters.dataset_author"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <dataset-reference
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <dataset-reference-table
+            v-show="activeTab === 'dataset_reference'"
+            :response="relatedData.dataset_reference"
+            :search-parameters="relatedData.searchParameters.dataset_reference"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -256,7 +258,7 @@
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.count[activeTab] /
+                    relatedData[activeTab].count /
                       relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
@@ -295,26 +297,27 @@ import {
   fetchListLicences
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import DatasetAuthor from "./relatedTables/DatasetAuthor";
-import DatasetReference from "./relatedTables/DatasetReference";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
+import DatasetAuthorTable from "./relatedTables/DatasetAuthorTable";
+import DatasetReferenceTable from "./relatedTables/DatasetReferenceTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   name: "Dataset",
 
   components: {
+    DatasetReferenceTable,
+    DatasetAuthorTable,
     CheckboxWrapper,
     AutocompleteWrapper,
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
-    Spinner,
-    DatasetAuthor,
-    DatasetReference
+    Spinner
   },
 
   props: {
@@ -335,7 +338,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -478,7 +486,7 @@ export default {
     },
 
     loadFullInfo() {
-      this.loadAutocompleteFields(true);
+      this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
@@ -512,51 +520,30 @@ export default {
       }
     },
 
-    loadAutocompleteFields(regularAutocompleteFields = true) {
-      if (regularAutocompleteFields) {
-        fetchListLicences().then(
-          response =>
-            (this.autocomplete.licence = this.handleResponse(response))
-        );
-      }
+    loadAutocompleteFields() {
+      fetchListLicences().then(
+        response => (this.autocomplete.licence = this.handleResponse(response))
+      );
     },
 
     setDefaultRelatedData() {
       return {
-        dataset_author: [],
-        dataset_reference: [],
-        new: {
-          dataset_author: [],
-          dataset_reference: []
-        },
-        copyFields: {
-          dataset_author: ["agent", "remarks"],
-          dataset_reference: ["reference", "remarks"]
-        },
-        insert: this.setDefaultInsertRelatedData(),
+        dataset_author: { count: 0, results: [] },
+        dataset_reference: { count: 0, results: [] },
         searchParameters: {
           dataset_author: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           dataset_reference: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
-        },
-        count: {
-          dataset_author: 0,
-          dataset_reference: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        dataset_author: {},
-        dataset_reference: {}
       };
     },
 
@@ -586,7 +573,7 @@ export default {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             uploadableObject.related_data[tab.name] = this.relatedData[
               tab.name
-            ];
+            ].results;
         });
       }
 
@@ -617,35 +604,6 @@ export default {
       }
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.agent))
-        obj.agent = { id: obj.agent, agent: obj.agent__agent };
-      if (this.isNotEmpty(obj.reference))
-        obj.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference
-        };
-
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-
-      return newObject;
-    },
-
     loadRelatedData(object) {
       let query;
 
@@ -661,33 +619,10 @@ export default {
         );
       }
 
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+      query.then(response => {
+        this.relatedData[object].count = response.body.count;
+        this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.dataset = this.dataset.id;
-
-      if (this.isNotEmpty(uploadableObject.agent)) {
-        uploadableObject.agent = uploadableObject.agent.id
-          ? uploadableObject.agent.id
-          : uploadableObject.agent;
-      }
-      if (this.isNotEmpty(uploadableObject.reference)) {
-        uploadableObject.reference = uploadableObject.reference.id
-          ? uploadableObject.reference.id
-          : uploadableObject.reference;
-      }
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {

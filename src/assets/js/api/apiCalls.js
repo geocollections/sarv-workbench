@@ -2188,11 +2188,13 @@ export function fetchDatasets(data, databaseId) {
 }
 
 export function fetchDatasetAuthors(datasetId, searchParameters) {
-  return fetch(`dataset_author/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  return fetch(`dataset_author/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
 }
 
 export function fetchDatasetReferences(datasetId, searchParameters) {
-  return fetch(`dataset_reference/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  return fetch(`dataset_reference/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
 }
 
 /*********************

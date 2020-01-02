@@ -158,7 +158,9 @@
     "specimen_description": "Eksemplari Kirjeldus",
     "specimen_location": "Eksemplati Asukoht",
     "specimen_history": "Eksemplari Ajalugu",
-    "specimen_analysis": "Eksemplari Analüüs"
+    "specimen_analysis": "Eksemplari Analüüs",
+    "dataset_author": "Andmeseti Autor",
+    "dataset_reference": "Andmeseti Kirjandus"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
