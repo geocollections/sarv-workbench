@@ -151,7 +151,14 @@
     "stratigraphy_synonym": "Stratigraphy Synonym",
     "stratigraphy_stratotype": "Stratigraphy Stratotype",
     "stratigraphy_reference": "Stratigraphy Reference",
-    "locality_reference": "Locality Reference"
+    "locality_reference": "Locality Reference",
+    "specimen_identification": "Specimen Identification",
+    "specimen_identification_geology": "Specimen Identification Geology",
+    "specimen_reference": "Specimen Reference",
+    "specimen_description": "Specimen Description",
+    "specimen_location": "Specimen Location",
+    "specimen_history": "Specimen History",
+    "specimen_analysis": "Specimen Analysis"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",

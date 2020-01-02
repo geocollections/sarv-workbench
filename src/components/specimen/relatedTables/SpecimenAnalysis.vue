@@ -6,7 +6,7 @@
           <thead>
             <tr>
               <th>{{ $t("analysis.analysis_method") }}</th>
-              <th>{{ $t("analysis.method_specification") }}</th>
+              <th>{{ $t("analysis.analysis_method") }}</th>
               <th>{{ $t("analysis.mass") }}</th>
               <th>{{ $t("analysis.date") }}</th>
               <th>{{ $t("analysis.date_end") }}</th>

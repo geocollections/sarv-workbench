@@ -151,7 +151,14 @@
     "stratigraphy_synonym": "Stratigraafia Sünonüüm",
     "stratigraphy_stratotype": "Stratigraafia Stratotüüp",
     "stratigraphy_reference": "Stratigraafia Viide",
-    "locality_reference": "Kirjeldatud Lokaliteet"
+    "locality_reference": "Kirjeldatud Lokaliteet",
+    "specimen_identification": "Eksemplari Määrang",
+    "specimen_identification_geology": "Eksemplari Määrang",
+    "specimen_reference": "Eksemplati Kirjandus",
+    "specimen_description": "Eksemplari Kirjeldus",
+    "specimen_location": "Eksemplati Asukoht",
+    "specimen_history": "Eksemplari Ajalugu",
+    "specimen_analysis": "Eksemplari Analüüs"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",

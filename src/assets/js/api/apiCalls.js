@@ -1545,9 +1545,10 @@ export function fetchDeaccession() {
 }
 
 export function fetchSpecimenIdentifications(specimenId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   if (searchParameters) {
     return fetch(
-      `specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+      `specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
 }
@@ -1556,9 +1557,10 @@ export function fetchSpecimenIdentificationGeologies(
   specimenId,
   searchParameters
 ) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   if (searchParameters) {
     return fetch(
-      `specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+      `specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
 }
@@ -1579,38 +1581,44 @@ export function fetchSpecimenIdentificationGeologiesList(listOfIds) {
 }
 
 export function fetchSpecimenReferences(specimenId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `specimen_reference/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `specimen_reference/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenDescriptions(specimenId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `specimen_description/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `specimen_description/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenAttachments(specimenId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `attachment/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `attachment/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenLocations(specimenId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `specimen_location/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `specimen_location/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenHistory(specimenId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `specimen_history/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `specimen_history/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenAnalyses(specimenId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `analysis/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `analysis/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

@@ -153,7 +153,9 @@
                 v-model="specimen.locality_is_private"
                 :color="bodyActiveColor"
                 :label="$t('specimen.locality_is_private')"
-                @change="specimen.locality_is_private = !specimen.locality_is_private"
+                @change="
+                  specimen.locality_is_private = !specimen.locality_is_private
+                "
               />
             </v-col>
           </v-row>
@@ -476,73 +478,79 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
+            v-if="relatedData[tab.name].count > 0"
             class="font-weight-bold ml-2"
           >
-            {{ relatedData[tab.name].length }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
 
       <v-tabs-items>
-        <v-card
-          class="pa-1"
-          flat
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-        >
-          <specimen-identification
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <specimen-identification-table
             v-if="
               specimen.fossil &&
-                (specimen.fossil.id === 1 || specimen.fossil.id === 7)
+                (specimen.fossil.id === 1 || specimen.fossil.id === 7) &&
+                activeTab === 'specimen_identification'
             "
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+            :response="relatedData.specimen_identification"
+            :search-parameters="
+              relatedData.searchParameters.specimen_identification
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <specimen-identification-geology
+          <specimen-identification-geology-table
             v-if="
               specimen.fossil &&
                 specimen.fossil.id !== 1 &&
-                specimen.fossil.id !== 7
+                specimen.fossil.id !== 7 &&
+                activeTab === 'specimen_identification_geology'
             "
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+            :response="relatedData.specimen_identification_geology"
+            :search-parameters="
+              relatedData.searchParameters.specimen_identification_geology
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <specimen-reference
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <specimen-reference-table
+            v-show="activeTab === 'specimen_reference'"
+            :response="relatedData.specimen_reference"
+            :search-parameters="relatedData.searchParameters.specimen_reference"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <specimen-description
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <specimen-description-table
+            v-show="activeTab === 'specimen_description'"
+            :response="relatedData.specimen_description"
+            :search-parameters="
+              relatedData.searchParameters.specimen_description
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <div v-show="activeTab === 'attachment'">
             <file-upload
               show-existing
-              :files-from-object="relatedData.attachment"
+              :files-from-object="relatedData.attachment.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -550,40 +558,49 @@
             />
           </div>
 
-          <specimen-location
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <specimen-location-table
+            v-show="activeTab === 'specimen_location'"
+            :response="relatedData.specimen_location"
+            :search-parameters="
+              relatedData.searchParameters.specimen_location
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <specimen-history
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <specimen-history-table
+            v-show="activeTab === 'specimen_history'"
+            :response="relatedData.specimen_history"
+            :search-parameters="
+              relatedData.searchParameters.specimen_history
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <specimen-analysis
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <specimen-analysis-table
+            v-show="activeTab === 'analysis'"
+            :response="relatedData.analysis"
+            :search-parameters="
+              relatedData.searchParameters.analysis
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -606,7 +623,7 @@
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.count[activeTab] /
+                    relatedData[activeTab].count /
                       relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
@@ -691,14 +708,11 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchAccession,
   fetchDeaccession,
-  fetchListHistoryType,
-  fetchListIdentificationType,
   fetchListSpecimenKind,
   fetchListSpecimenOriginalStatus,
   fetchListSpecimenPresence,
   fetchListSpecimenStatus,
   fetchListSpecimenType,
-  fetchListUnit,
   fetchSpecimen,
   fetchSpecimenAnalyses,
   fetchSpecimenAttachments,
@@ -710,37 +724,38 @@ import {
   fetchSpecimenReferences
 } from "../../assets/js/api/apiCalls";
 import { mapState } from "vuex";
-import SpecimenIdentification from "./relatedTables/SpecimenIdentification";
-import SpecimenIdentificationGeology from "./relatedTables/SpecimenIdentificationGeology";
-import SpecimenReference from "./relatedTables/SpecimenReference";
-import SpecimenDescription from "./relatedTables/SpecimenDescription";
-import SpecimenLocation from "./relatedTables/SpecimenLocation";
-import SpecimenHistory from "./relatedTables/SpecimenHistory";
-import SpecimenAnalysis from "./relatedTables/SpecimenAnalysis";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import requestsMixin from "../../mixins/requestsMixin";
+import SpecimenIdentificationTable from "./relatedTables/SpecimenIdentificationTable";
+import SpecimenIdentificationGeologyTable from "./relatedTables/SpecimenIdentificationGeologyTable";
+import SpecimenReferenceTable from "./relatedTables/SpecimenReferenceTable";
+import SpecimenDescriptionTable from "./relatedTables/SpecimenDescriptionTable";
+import SpecimenLocationTable from "./relatedTables/SpecimenLocationTable";
+import SpecimenHistoryTable from "./relatedTables/SpecimenHistoryTable";
+import SpecimenAnalysisTable from "./relatedTables/SpecimenAnalysisTable";
 
 export default {
   name: "Specimen",
 
   components: {
+    SpecimenAnalysisTable,
+    SpecimenHistoryTable,
+    SpecimenLocationTable,
+    SpecimenDescriptionTable,
+    SpecimenReferenceTable,
+    SpecimenIdentificationGeologyTable,
+    SpecimenIdentificationTable,
     FileUpload,
     CheckboxWrapper,
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
     AutocompleteWrapper,
-    SpecimenAnalysis,
-    SpecimenHistory,
-    SpecimenLocation,
-    SpecimenDescription,
-    SpecimenReference,
-    SpecimenIdentificationGeology,
-    SpecimenIdentification,
     Spinner
   },
 
@@ -762,7 +777,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -1014,7 +1034,7 @@ export default {
     },
 
     loadFullInfo() {
-      this.loadAutocompleteFields(true, true);
+      this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
@@ -1091,211 +1111,99 @@ export default {
       }
     },
 
-    loadAutocompleteFields(
-      regularAutocompleteFields = true,
-      relatedDataAutocompleteFields = false
-    ) {
-      if (regularAutocompleteFields) {
-        fetchListSpecimenKind().then(
-          response =>
-            (this.autocomplete.specimen_kind = this.handleResponse(response))
-        );
-        fetchListSpecimenOriginalStatus().then(
-          response =>
-            (this.autocomplete.specimen_original_status = this.handleResponse(
-              response
-            ))
-        );
-        fetchListSpecimenPresence().then(
-          response =>
-            (this.autocomplete.specimen_presence = this.handleResponse(
-              response
-            ))
-        );
-        fetchListSpecimenStatus().then(
-          response =>
-            (this.autocomplete.specimen_status = this.handleResponse(response))
-        );
-        fetchListSpecimenType().then(
-          response =>
-            (this.autocomplete.specimen_type = this.handleResponse(response))
-        );
-        fetchAccession().then(
-          response =>
-            (this.autocomplete.accession = this.handleResponse(response))
-        );
-        fetchDeaccession().then(
-          response =>
-            (this.autocomplete.deaccession = this.handleResponse(response))
-        );
-      }
-
-      if (relatedDataAutocompleteFields) {
-        fetchListIdentificationType().then(
-          response =>
-            (this.autocomplete.list_identification_type = this.handleResponse(
-              response
-            ))
-        );
-        fetchListUnit().then(
-          response =>
-            (this.autocomplete.list_unit = this.handleResponse(response))
-        );
-        fetchListSpecimenType().then(
-          response =>
-            (this.autocomplete.list_specimen_type = this.handleResponse(
-              response
-            ))
-        );
-        fetchListHistoryType().then(
-          response =>
-            (this.autocomplete.list_history_type = this.handleResponse(
-              response
-            ))
-        );
-      }
+    loadAutocompleteFields() {
+      fetchListSpecimenKind().then(
+        response =>
+          (this.autocomplete.specimen_kind = this.handleResponse(response))
+      );
+      fetchListSpecimenOriginalStatus().then(
+        response =>
+          (this.autocomplete.specimen_original_status = this.handleResponse(
+            response
+          ))
+      );
+      fetchListSpecimenPresence().then(
+        response =>
+          (this.autocomplete.specimen_presence = this.handleResponse(response))
+      );
+      fetchListSpecimenStatus().then(
+        response =>
+          (this.autocomplete.specimen_status = this.handleResponse(response))
+      );
+      fetchListSpecimenType().then(
+        response =>
+          (this.autocomplete.specimen_type = this.handleResponse(response))
+      );
+      fetchAccession().then(
+        response =>
+          (this.autocomplete.accession = this.handleResponse(response))
+      );
+      fetchDeaccession().then(
+        response =>
+          (this.autocomplete.deaccession = this.handleResponse(response))
+      );
     },
 
     setDefaultRelatedData() {
       return {
-        specimen_identification: [],
-        specimen_identification_geology: [],
-        specimen_reference: [],
-        specimen_description: [],
-        attachment: [],
-        specimen_location: [],
-        specimen_history: [],
-        analysis: [],
-        new: {
-          specimen_identification: [],
-          specimen_identification_geology: [],
-          specimen_reference: [],
-          specimen_description: [],
-          attachment: [],
-          specimen_location: [],
-          specimen_history: [],
-          analysis: []
-        },
-        copyFields: {
-          specimen_identification: [
-            "taxon",
-            "name",
-            "agent",
-            "reference",
-            "date_identified",
-            "type",
-            "current"
-          ],
-          specimen_identification_geology: [
-            "rock",
-            "name",
-            "name_en",
-            "agent",
-            "reference",
-            "date_identified",
-            "type",
-            "current"
-          ],
-          specimen_reference: ["reference", "pages", "figures", "remarks"],
-          specimen_description: [
-            "length",
-            "width",
-            "height",
-            "unit",
-            "mass",
-            "description",
-            "agent",
-            "date",
-            "remarks"
-          ],
-          attachment: ["attachment", "remarks"],
-          specimen_location: ["number", "type", "part", "storage", "remarks"],
-          specimen_history: [
-            "type",
-            "value_old",
-            "value_new",
-            "date",
-            "remarks"
-          ],
-          analysis: [
-            "analysis_method",
-            "method_details",
-            "mass",
-            "date",
-            "date_end",
-            "date_free",
-            "agent",
-            "remarks",
-            "storage",
-            "is_private"
-          ]
-        },
-        insert: this.setDefaultInsertRelatedData(),
+        specimen_identification: { count: 0, results: [] },
+        specimen_identification_geology: { count: 0, results: [] },
+        specimen_reference: { count: 0, results: [] },
+        specimen_description: { count: 0, results: [] },
+        attachment: { count: 0, results: [] },
+        specimen_location: { count: 0, results: [] },
+        specimen_history: { count: 0, results: [] },
+        analysis: { count: 0, results: [] },
         searchParameters: {
           specimen_identification: {
             page: 1,
             paginateBy: 10,
-            orderBy: "taxon__taxon,current"
+            sortBy: ["taxon", "current"],
+            sortDesc: [true, true]
           },
           specimen_identification_geology: {
             page: 1,
             paginateBy: 10,
-            orderBy: "rock__name,rock__name_en,current"
+            sortBy: ["rock", "current"],
+            sortDesc: [true, true]
           },
           specimen_reference: {
             page: 1,
             paginateBy: 10,
-            orderBy: "reference__reference"
+            sortBy: ["reference"],
+            sortDesc: [true]
           },
           specimen_description: {
             page: 1,
             paginateBy: 10,
-            orderBy: "length"
+            sortBy: ["length"],
+            sortDesc: [true]
           },
           attachment: {
             page: 1,
             paginateBy: 10,
-            orderBy: "original_filename"
+            sortBy: ["original_filename"],
+            sortDesc: [true]
           },
           specimen_location: {
             page: 1,
             paginateBy: 10,
-            orderBy: "number"
+            sortBy: ["number"],
+            sortDesc: [true]
           },
           specimen_history: {
             page: 1,
             paginateBy: 10,
-            orderBy: "type"
+            sortBy: ["type"],
+            sortDesc: [true]
           },
           analysis: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
-        },
-        count: {
-          specimen_identification: 0,
-          specimen_identification_geology: 0,
-          specimen_reference: 0,
-          specimen_description: 0,
-          attachment: 0,
-          specimen_location: 0,
-          specimen_history: 0,
-          analysis: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        specimen_identification: {},
-        specimen_identification_geology: {},
-        specimen_reference: {},
-        specimen_description: {},
-        attachment: {},
-        specimen_location: {},
-        specimen_history: {},
-        analysis: {}
       };
     },
 
@@ -1328,7 +1236,7 @@ export default {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             uploadableObject.related_data[tab.name] = this.relatedData[
               tab.name
-            ];
+            ].results;
         });
       } else {
         uploadableObject.related_data = {};
@@ -1439,101 +1347,6 @@ export default {
       }
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.taxon))
-        obj.taxon = { id: obj.taxon, taxon: obj.taxon__taxon };
-      if (this.isNotEmpty(obj.agent))
-        obj.agent = { id: obj.agent, agent: obj.agent__agent };
-      if (this.isNotEmpty(obj.reference))
-        obj.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference
-        };
-      if (this.isNotEmpty(obj.type))
-        obj.type = {
-          id: obj.type,
-          value: obj.type__value,
-          value_en: obj.type__value_en
-        };
-      if (this.isNotEmpty(obj.rock))
-        obj.rock = {
-          id: obj.rock,
-          name: obj.rock__name,
-          name_en: obj.rock__name_en
-        };
-      if (this.isNotEmpty(obj.unit))
-        obj.unit = {
-          id: obj.unit,
-          value: obj.unit__value,
-          value_en: obj.unit__value_en
-        };
-      if (this.isNotEmpty(obj.original_filename))
-        obj.attachment = {
-          id: obj.id,
-          original_filename: obj.original_filename
-        };
-      if (this.isNotEmpty(obj.storage))
-        obj.storage = { id: obj.storage, location: obj.storage__location };
-      if (this.isNotEmpty(obj.analysis_method))
-        obj.analysis_method = {
-          id: obj.analysis_method,
-          analysis_method: obj.analysis_method__analysis_method,
-          method_en: obj.analysis_method__method_en
-        };
-
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.taxon)) {
-        newObject.taxon = obj.taxon.id;
-        newObject.taxon__taxon = obj.taxon.taxon;
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-      if (this.isNotEmpty(obj.type)) {
-        newObject.type = obj.type.id;
-        newObject.type__value = obj.type.value;
-        newObject.type__value_en = obj.type.value_en;
-      }
-      if (this.isNotEmpty(obj.rock)) {
-        newObject.rock = obj.rock.id;
-        newObject.rock__name = obj.rock.name;
-        newObject.rock__name_en = obj.rock.name_en;
-      }
-      if (this.isNotEmpty(obj.unit)) {
-        newObject.unit = obj.unit.id;
-        newObject.unit__value = obj.unit.value;
-        newObject.unit__value_en = obj.unit.value_en;
-      }
-      if (this.isNotEmpty(obj.original_filename)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.original_filename = obj.attachment.original_filename;
-      }
-      if (this.isNotEmpty(obj.storage)) {
-        newObject.storage = obj.storage.id;
-        newObject.storage__location = obj.storage.location;
-      }
-      if (this.isNotEmpty(obj.analysis_method)) {
-        newObject.analysis_method = obj.analysis_method.id;
-        newObject.analysis_method__analysis_method =
-          obj.analysis_method.analysis_method;
-        newObject.analysis_method__method_en = obj.analysis_method.method_en;
-      }
-
-      return newObject;
-    },
-
     loadRelatedData(object) {
       let query;
 
@@ -1579,83 +1392,10 @@ export default {
         );
       }
 
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+      query.then(response => {
+        this.relatedData[object].count = response.body.count;
+        this.relatedData[object].results = response.body.results;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.specimen = this.specimen.id;
-
-      // Todo: Use foreach because DRY basically
-
-      if (this.isNotEmpty(uploadableObject.taxon)) {
-        uploadableObject.taxon = uploadableObject.taxon.id
-          ? uploadableObject.taxon.id
-          : uploadableObject.taxon;
-      }
-      if (this.isNotEmpty(uploadableObject.agent)) {
-        uploadableObject.agent = uploadableObject.agent.id
-          ? uploadableObject.agent.id
-          : uploadableObject.agent;
-      }
-      if (this.isNotEmpty(uploadableObject.reference)) {
-        uploadableObject.reference = uploadableObject.reference.id
-          ? uploadableObject.reference.id
-          : uploadableObject.reference;
-      }
-      if (this.isNotEmpty(uploadableObject.date_identified)) {
-        uploadableObject.date_identified = this.formatDateForUpload(
-          uploadableObject.date_identified
-        );
-      }
-      if (this.isNotEmpty(uploadableObject.type)) {
-        uploadableObject.type = uploadableObject.type.id
-          ? uploadableObject.type.id
-          : uploadableObject.type;
-      }
-      if (this.isNotEmpty(uploadableObject.rock)) {
-        uploadableObject.rock = uploadableObject.rock.id
-          ? uploadableObject.rock.id
-          : uploadableObject.rock;
-      }
-      if (this.isNotEmpty(uploadableObject.unit)) {
-        uploadableObject.unit = uploadableObject.unit.id
-          ? uploadableObject.unit.id
-          : uploadableObject.unit;
-      }
-      if (this.isNotEmpty(uploadableObject.date)) {
-        uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
-      }
-      if (this.isNotEmpty(uploadableObject.date_end)) {
-        uploadableObject.date_end = this.formatDateForUpload(
-          uploadableObject.date_end
-        );
-      }
-      if (this.isNotEmpty(uploadableObject.attachment)) {
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      }
-      if (this.isNotEmpty(uploadableObject.storage)) {
-        uploadableObject.storage = uploadableObject.storage.id
-          ? uploadableObject.storage.id
-          : uploadableObject.storage;
-      }
-      if (this.isNotEmpty(uploadableObject.analysis_method)) {
-        uploadableObject.analysis_method = uploadableObject.analysis_method.id
-          ? uploadableObject.analysis_method.id
-          : uploadableObject.analysis_method;
-      }
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {
