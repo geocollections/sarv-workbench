@@ -242,10 +242,10 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData.count[tab.name] > 0"
-            class="font-weight-bold ml-2"
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2 blue--text"
           >
-            {{ relatedData.count[tab.name] }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
@@ -256,30 +256,35 @@
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
-          <drillcore-box
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+
+          <drillcore-box-table
+            v-if="false"
+            v-show="activeTab === 'drillcore_box'"
+            :response="relatedData.drillcore_box"
+            :search-parameters="relatedData.searchParameters.drillcore_box"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <drillcore-study
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <drillcore-study-table
+            v-if="false"
+            v-show="activeTab === 'drillcore_study'"
+            :response="relatedData.drillcore_study"
+            :search-parameters="relatedData.searchParameters.drillcore_study"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <div v-show="activeTab === 'attachment_link'">
             <file-upload
               show-existing
-              :files-from-object="relatedData.attachment_link"
+              :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -289,7 +294,7 @@
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
             class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
           >
             <div class="mr-3 mb-3">
@@ -313,7 +318,7 @@
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.count[activeTab] /
+                    relatedData[activeTab].count /
                       relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
@@ -356,26 +361,27 @@ import {
   fetchListDrillcoreStorage
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import DrillcoreBox from "./relatedTables/DrillcoreBox";
-import DrillcoreStudy from "./relatedTables/DrillcoreStudy";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import DrillcoreBoxTable from "./relatedTables/DrillcoreBoxTable";
+import DrillcoreStudyTable from "./relatedTables/DrillcoreStudyTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   name: "Drillcore",
 
   components: {
+    DrillcoreStudyTable,
+    DrillcoreBoxTable,
     FileUpload,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
     Spinner,
-    DrillcoreBox,
-    DrillcoreStudy
   },
 
   props: {
@@ -396,7 +402,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
 
   data() {
     return this.setInitialData();
@@ -544,7 +550,7 @@ export default {
     },
 
     loadFullInfo() {
-      this.loadAutocompleteFields(true, true);
+      this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
@@ -578,72 +584,39 @@ export default {
       }
     },
 
-    loadAutocompleteFields(regularAutocompleteFields = true) {
-      if (regularAutocompleteFields) {
-        fetchListDrillcoreStorage().then(
-          response =>
-            (this.autocomplete.list_drillcore_storage = this.handleResponse(
-              response
-            ))
-        );
-      }
+    loadAutocompleteFields() {
+      fetchListDrillcoreStorage().then(
+        response =>
+          (this.autocomplete.list_drillcore_storage = this.handleResponse(
+            response
+          ))
+      );
     },
 
     setDefaultRelatedData() {
       return {
-        drillcore_box: [],
-        drillcore_study: [],
-        attachment_link: [],
-        new: {
-          drillcore_box: [],
-          drillcore_study: []
-        },
-        copyFields: {
-          drillcore_box: [
-            "number",
-            "depth_start",
-            "depth_end",
-            "stratigraphy_base",
-            "stratigraphy_top",
-            "depth_other",
-            "number_meters",
-            "diameter",
-            "remarks"
-          ],
-          drillcore_study: ["date", "agent", "aim", "remarks"],
-          attachment_link: ["attachment", "remarks"]
-        },
-        insert: this.setDefaultInsertRelatedData(),
+        drillcore_box: { count: 0, results: [] },
+        drillcore_study: { count: 0, results: [] },
+        attachment_link: { count: 0, results: [] },
         searchParameters: {
           drillcore_box: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           drillcore_study: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           attachment_link: {
             page: 1,
             paginateBy: 10,
             orderBy: "original_filename"
           }
-        },
-        count: {
-          drillcore_box: 0,
-          drillcore_study: 0,
-          attachment_link: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        drillcore_box: {},
-        drillcore_study: {},
-        attachment_link: {}
       };
     },
 
@@ -670,16 +643,16 @@ export default {
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ];
+                ].results;
             }
         });
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
       }
 
       console.log("This object is sent in string format:");
@@ -717,63 +690,6 @@ export default {
       }
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.stratigraphy_base))
-        obj.stratigraphy_base = {
-          id: obj.stratigraphy_base,
-          stratigraphy: obj.stratigraphy_base__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en
-        };
-
-      if (this.isNotEmpty(obj.stratigraphy_top))
-        obj.stratigraphy_top = {
-          id: obj.stratigraphy_top,
-          stratigraphy: obj.stratigraphy_top__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en
-        };
-
-      if (this.isNotEmpty(obj.agent))
-        obj.agent = {
-          id: obj.agent,
-          agent: obj.agent__agent
-        };
-
-      if (this.isNotEmpty(obj.original_filename))
-        obj.attachment = {
-          id: obj.id,
-          original_filename: obj.original_filename
-        };
-
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-      if (this.isNotEmpty(obj.stratigraphy_base)) {
-        newObject.stratigraphy_base = obj.stratigraphy_base.id;
-        newObject.stratigraphy_base__stratigraphy = obj.stratigraphy_base.stratigraphy;
-        newObject.stratigraphy_base__stratigraphy_en = obj.stratigraphy_base.stratigraphy_en;
-      }
-      if (this.isNotEmpty(obj.stratigraphy_top)) {
-        newObject.stratigraphy_top = obj.stratigraphy_top.id;
-        newObject.stratigraphy_top__stratigraphy = obj.stratigraphy_top.stratigraphy;
-        newObject.stratigraphy_top__stratigraphy_en = obj.stratigraphy_top.stratigraphy_en;
-      }
-      if (this.isNotEmpty(obj.original_filename)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.original_filename = obj.attachment.original_filename;
-      }
-
-      return newObject;
-    },
-
     loadRelatedData(object) {
       let query;
 
@@ -794,50 +710,10 @@ export default {
         );
       }
 
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+      query.then(response => {
+        this.relatedData[object] = this.handleResponse(response);
+        this.relatedData.count[object] = response.body.count;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.drillcore = this.drillcore.id;
-
-      // Todo: Use foreach because DRY basically
-
-      if (this.isNotEmpty(uploadableObject.stratigraphy_base)) {
-        uploadableObject.stratigraphy_base = uploadableObject.stratigraphy_base
-          .id
-          ? uploadableObject.stratigraphy_base.id
-          : uploadableObject.stratigraphy_base;
-      }
-      if (this.isNotEmpty(uploadableObject.stratigraphy_top)) {
-        uploadableObject.stratigraphy_top = uploadableObject.stratigraphy_top.id
-          ? uploadableObject.stratigraphy_top.id
-          : uploadableObject.stratigraphy_top;
-      }
-      if (this.isNotEmpty(uploadableObject.attachment)) {
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      }
-      if (this.isNotEmpty(uploadableObject.agent)) {
-        uploadableObject.agent = uploadableObject.agent.id
-          ? uploadableObject.agent.id
-          : uploadableObject.agent;
-      }
-      if (this.isNotEmpty(uploadableObject.date))
-        uploadableObject.date = this.formatDateForUpload(
-          uploadableObject.date
-        );
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {
