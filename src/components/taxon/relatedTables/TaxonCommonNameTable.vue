@@ -1,5 +1,5 @@
 <template>
-  <div class="taxon-subclass-table">
+  <div class="taxon-common-name-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,36 +38,35 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.taxon="{ item }">
+      <template v-slot:item.language="{ item }">
         <div v-if="isUsedAsRelatedData">
-          <router-link
+          <span
             v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon.taxon }}
-          </router-link>
+            v-translate="{
+              et: item.language__value,
+              en: item.language__value_en
+            }"
+          />
+          <span
+            v-else-if="item.language"
+            v-translate="{
+              et: item.language.value,
+              en: item.language.value_en
+            }"
+          />
         </div>
-        <router-link
+        <div
           v-else
-          :to="{ path: '/taxon/' + item.id }"
-          :title="$t('editTaxon.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.taxon }}
-        </router-link>
+          v-translate="{
+            et: item.language__value,
+            en: item.language__value_en
+          }"
+        ></div>
+      </template>
+
+      <template v-slot:item.is_preferred="{ item }">
+        <v-icon v-if="item.is_preferred" small>fas fa-check</v-icon>
+        <v-icon v-else small>fas fa-times</v-icon>
       </template>
     </v-data-table>
 
@@ -89,26 +88,31 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.taxon"
+                  <input-wrapper
+                    v-model="item.name"
                     :color="bodyActiveColor"
-                    :items="autocomplete.taxon"
-                    :loading="autocomplete.loaders.taxon"
-                    item-text="taxon"
-                    :label="$t('taxon.taxon')"
+                    :label="$t('taxon.name')"
                     use-state
-                    is-link
-                    route-object="taxon"
-                    is-searchable
-                    v-on:search:items="autocompleteTaxonSearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.author_year"
+                  <autocomplete-wrapper
+                    v-model="item.language"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.author_year')"
+                    :items="autocomplete.language"
+                    :loading="autocomplete.loaders.language"
+                    :item-text="commonLabel"
+                    :label="$t('taxon.language')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <checkbox-wrapper
+                    v-model="item.is_preferred"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.is_preferred')"
+                    @change="item.is_preferred = !item.is_preferred"
                   />
                 </v-col>
 
@@ -143,15 +147,18 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 
 export default {
-  name: "TaxonSubclassTable",
+  name: "TaxonCommonNameTable",
 
   components: {
+    CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
@@ -195,8 +202,9 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "taxon.taxon", value: "taxon" },
-      { text: "taxon.author_year", value: "author_year" },
+      { text: "taxon.name", value: "name" },
+      { text: "taxon.language", value: "language" },
+      { text: "taxon.is_preferred", value: "is_preferred" },
       { text: "taxon.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -207,15 +215,16 @@ export default {
     ],
     dialog: false,
     item: {
-      taxon: null,
-      author_year: "",
+      name: "",
+      language: null,
+      is_preferred: false,
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      taxon: [],
+      language: [],
       loaders: {
-        taxon: false
+        language: false
       }
     }
   }),
@@ -231,7 +240,13 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.taxon !== "undefined" && this.item.taxon !== null;
+      return this.item.name !== null && this.item.name.length > 0;
+    }
+  },
+
+  watch: {
+    dialog() {
+      this.fillListAutocompletes();
     }
   },
 
@@ -240,8 +255,9 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        taxon: null,
-        author_year: "",
+        name: "",
+        language: null,
+        is_preferred: false,
         remarks: ""
       };
     },
@@ -252,13 +268,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "taxon_subclass",
+          table: "taxon_common_name",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "taxon_subclass",
+          table: "taxon_common_name",
           item: formattedItem,
           rawItem: this.item
         });
@@ -272,18 +288,16 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.taxon !== "object" && item.taxon !== null) {
-        this.item.taxon = {
-          id: item.id,
-          taxon: item.taxon
+      if (typeof item.language !== "object" && item.language !== null) {
+        this.item.language = {
+          id: item.language,
+          value: item.language__value,
+          value_en: item.language__value_en
         };
-        this.autocomplete.taxon.push(this.item.taxon);
-      } else if (item.taxon !== null) {
-        this.item.taxon = item.taxon;
-        this.autocomplete.taxon.push(this.item.taxon);
-      }
+      } else this.item.language = item.language;
 
-      this.item.author_year = item.author_year;
+      this.item.name = item.name;
+      this.item.is_preferred = item.is_preferred === true;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -291,10 +305,23 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "taxon_subclass",
+        table: "taxon_common_name",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
+    },
+
+    fillListAutocompletes() {
+      if (this.autocomplete.language.length === 0) {
+        this.autocomplete.loaders.language = true;
+        fetchListLanguages().then(response => {
+          if (response.status === 200) {
+            this.autocomplete.language =
+              response.body.count > 0 ? response.body.results : [];
+          }
+        });
+        this.autocomplete.loaders.language = false;
+      }
     },
 
     formatItem(item) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen-identification-table">
+  <div class="taxon-opinion-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,67 +38,61 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.taxon="{ item }">
+      <template v-slot:item.opinion_type="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <span
+            v-if="$route.meta.isEdit"
+            v-translate="{
+              et: item.opinion_type__value,
+              en: item.opinion_type__value_en
+            }"
+          />
+          <span
+            v-else-if="item.opinion_type"
+            v-translate="{
+              et: item.opinion_type.value,
+              en: item.opinion_type.value_en
+            }"
+          />
+        </div>
+        <div
+          v-else
+          v-translate="{
+            et: item.opinion_type__value,
+            en: item.opinion_type__value_en
+          }"
+        ></div>
+      </template>
+
+      <template v-slot:item.other_taxon="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.taxon }"
+            :to="{ path: '/taxon/' + item.other_taxon }"
             :title="$t('editTaxon.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.taxon__taxon }}
+            {{ item.other_taxon__taxon }}
           </router-link>
           <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.taxon.id }"
+            v-else-if="item.other_taxon"
+            :to="{ path: '/taxon/' + item.other_taxon.id }"
             :title="$t('editTaxon.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.taxon.taxon }}
+            {{ item.other_taxon.taxon }}
           </router-link>
         </div>
         <router-link
           v-else
-          :to="{ path: '/taxon/' + item.taxon }"
+          :to="{ path: '/taxon/' + item.other_taxon }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.taxon__taxon }}
-        </router-link>
-      </template>
-
-      <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent__agent }}
+          {{ item.other_taxon__taxon }}
         </router-link>
       </template>
 
@@ -134,35 +128,9 @@
         </router-link>
       </template>
 
-      <template v-slot:item.type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type__value,
-              en: item.type__value_en
-            }"
-          />
-          <span
-            v-else-if="item.type"
-            v-translate="{
-              et: item.type.value,
-              en: item.type.value_en
-            }"
-          />
-        </div>
-        <div
-          v-else
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
-          }"
-        ></div>
-      </template>
-
-      <template v-slot:item.current="{ item }">
-        <v-icon v-if="item.current">fas fa-plus</v-icon>
-        <v-icon v-else>fas fa-minus</v-icon>
+      <template v-slot:item.is_preferred="{ item }">
+        <v-icon v-if="item.is_preferred" small>fas fa-check</v-icon>
+        <v-icon v-else small>fas fa-times</v-icon>
       </template>
     </v-data-table>
 
@@ -176,7 +144,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.specimen_identification")}`
+              `${$t("common.new")} ${$t("header.dataset_reference")}`
             }}</span>
           </v-card-title>
 
@@ -185,40 +153,28 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.taxon"
+                    v-model="item.opinion_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.taxon"
-                    :loading="autocomplete.loaders.taxon"
-                    item-text="taxon"
-                    :label="$t('specimen_identification.taxon')"
+                    :items="autocomplete.opinion_type"
+                    :loading="autocomplete.loaders.opinion_type"
+                    :item-text="commonLabel"
+                    :label="$t('taxon.opinion')"
                     use-state
-                    is-link
-                    route-object="taxon"
-                    is-searchable
-                    v-on:search:items="autocompleteTaxonSearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.name"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_identification.name')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.agent"
+                    v-model="item.other_taxon"
                     :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
-                    item-text="agent"
-                    :label="$t('specimen_identification.agent')"
+                    :items="autocomplete.taxon"
+                    :loading="autocomplete.loaders.taxon"
+                    item-text="taxon"
+                    :label="$t('taxon.other_taxon')"
                     is-link
-                    route-object="agent"
+                    route-object="taxon"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
+                    v-on:search:items="autocompleteTaxonSearch"
                   />
                 </v-col>
 
@@ -229,7 +185,7 @@
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
                     item-text="reference"
-                    :label="$t('specimen_identification.reference')"
+                    :label="$t('taxon.reference')"
                     is-link
                     route-object="reference"
                     is-searchable
@@ -238,31 +194,43 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <date-wrapper
-                    v-model="item.date_identified"
+                  <input-wrapper
+                    v-model="item.pages"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification.date')"
-                    v-on:date:clear="item.date_identified = null"
+                    :label="$t('taxon.pages')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.type"
+                  <input-wrapper
+                    v-model="item.author"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
-                    :item-text="commonLabel"
-                    :label="$t('specimen_identification.type')"
+                    :label="$t('taxon.author')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.year"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.year')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
-                    v-model="item.current"
+                    v-model="item.is_preferred"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification.current')"
-                    @change="item.current = !item.current"
+                    :label="$t('taxon.is_preferred_opinion')"
+                    @change="item.is_preferred = !item.is_preferred"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.remarks"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -289,19 +257,17 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import { fetchTaxonOpinionType } from "../../../assets/js/api/apiCalls";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
-import DateWrapper from "../../partial/inputs/DateWrapper";
-import {fetchListIdentificationType} from "../../../assets/js/api/apiCalls";
 
 export default {
-  name: "SpecimenIdentificationTable",
+  name: "TaxonOpinionTable",
 
   components: {
-    DateWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper
@@ -346,19 +312,14 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "specimen_identification.taxon", value: "taxon" },
-      { text: "specimen_identification.name", value: "name" },
-      { text: "specimen_identification.agent", value: "agent" },
-      { text: "specimen_identification.reference", value: "reference" },
-      {
-        text: "specimen_identification.date",
-        value: "date_identified"
-      },
-      { text: "specimen_identification.type", value: "type" },
-      {
-        text: "specimen_identification.current",
-        value: "current"
-      },
+      { text: "taxon.opinion", value: "opinion_type" },
+      { text: "taxon.other_taxon", value: "other_taxon" },
+      { text: "taxon.reference", value: "reference" },
+      { text: "taxon.pages", value: "pages" },
+      { text: "taxon.author", value: "author" },
+      { text: "taxon.year", value: "year" },
+      { text: "taxon.is_preferred_opinion", value: "is_preferred" },
+      { text: "taxon.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -368,25 +329,24 @@ export default {
     ],
     dialog: false,
     item: {
-      taxon: null,
-      name: "",
-      agent: null,
+      opinion_type: null,
+      other_taxon: null,
       reference: null,
-      date_identified: null,
-      type: null,
-      current: false
+      pages: "",
+      author: "",
+      year: "",
+      is_preferred: false,
+      remarks: ""
     },
     isNewItem: true,
     autocomplete: {
+      opinion_type: [],
       taxon: [],
-      agent: [],
       reference: [],
-      type: [],
       loaders: {
+        opinion_type: false,
         taxon: false,
-        agent: false,
-        reference: false,
-        type: false
+        reference: false
       }
     }
   }),
@@ -402,7 +362,10 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.taxon === "object" && this.item.taxon !== null;
+      return (
+        typeof this.item.opinion_type !== "undefined" &&
+        this.item.opinion_type !== null
+      );
     }
   },
 
@@ -417,13 +380,14 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        taxon: null,
-        name: "",
-        agent: null,
+        opinion_type: null,
+        other_taxon: null,
         reference: null,
-        date_identified: null,
-        type: null,
-        current: false
+        pages: "",
+        author: "",
+        year: "",
+        is_preferred: false,
+        remarks: ""
       };
     },
 
@@ -433,13 +397,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "specimen_identification",
+          table: "taxon_opinion",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "specimen_identification",
+          table: "taxon_opinion",
           item: formattedItem,
           rawItem: this.item
         });
@@ -453,36 +417,6 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.taxon !== "object" && item.taxon !== null) {
-        this.item.taxon = {
-          id: item.taxon,
-          taxon: item.taxon__taxon
-        };
-        this.autocomplete.taxon.push(this.item.taxon);
-      } else if (item.taxon !== null) {
-        this.item.taxon = item.taxon;
-        this.autocomplete.taxon.push(this.item.taxon);
-      }
-
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
-        this.item.agent = item.agent;
-        this.autocomplete.agent.push(this.item.agent);
-      }
-
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en
-        };
-      }
-
       if (typeof item.reference !== "object" && item.reference !== null) {
         this.item.reference = {
           id: item.reference,
@@ -494,31 +428,52 @@ export default {
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      this.item.name = item.name;
-      this.item.date_identified = item.date_identified;
-      this.item.current = item.current === true;
+      if (typeof item.other_taxon !== "object" && item.other_taxon !== null) {
+        this.item.other_taxon = {
+          id: item.other_taxon,
+          taxon: item.other_taxon__taxon
+        };
+        this.autocomplete.taxon.push(this.item.other_taxon);
+      } else if (item.other_taxon !== null) {
+        this.item.other_taxon = item.other_taxon;
+        this.autocomplete.taxon.push(this.item.other_taxon);
+      }
+
+      if (typeof item.opinion_type !== "object" && item.opinion_type !== null) {
+        this.item.opinion_type = {
+          id: item.opinion_type,
+          value: item.opinion_type__value,
+          value_en: item.opinion_type__value_en
+        };
+      } else this.item.opinion_type = item.opinion_type;
+
+      this.item.pages = item.pages;
+      this.item.author = item.author;
+      this.item.year = item.year;
+      this.item.is_preferred = item.is_preferred === true;
+      this.item.remarks = item.remarks;
 
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "specimen_identification",
+        table: "taxon_opinion",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.type.length === 0) {
-        this.autocomplete.loaders.type = true;
-        fetchListIdentificationType().then(response => {
+      if (this.autocomplete.opinion_type.length === 0) {
+        this.autocomplete.loaders.opinion_type = true;
+        fetchTaxonOpinionType().then(response => {
           if (response.status === 200) {
-            this.autocomplete.type =
+            this.autocomplete.opinion_type =
               response.body.count > 0 ? response.body.results : [];
           }
         });
-        this.autocomplete.loaders.type = false;
+        this.autocomplete.loaders.opinion_type = false;
       }
     },
 

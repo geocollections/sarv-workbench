@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen-identification-geology-table">
+  <div class="taxon-type-specimen-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,61 +38,61 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.rock="{ item }">
+      <template v-slot:item.type_type="{ item }">
         <div v-if="isUsedAsRelatedData">
           <span
             v-if="$route.meta.isEdit"
             v-translate="{
-              et: item.rock__name,
-              en: item.rock__name_en
+              et: item.type_type__value,
+              en: item.type_type__value_en
             }"
           />
           <span
-            v-else-if="item.rock"
+            v-else-if="item.type_type"
             v-translate="{
-              et: item.rock.name,
-              en: item.rock.name_en
+              et: item.type_type.value,
+              en: item.type_type.value_en
             }"
           />
         </div>
         <div
           v-else
           v-translate="{
-            et: item.rock__name,
-            en: item.rock__name_en
+            et: item.type_type__value,
+            en: item.type_type__value_en
           }"
         ></div>
       </template>
 
-      <template v-slot:item.agent="{ item }">
+      <template v-slot:item.specimen="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
+            :to="{ path: '/specimen/' + item.specimen }"
+            :title="$t('editSpecimen.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.agent__agent }}
+            {{ item.specimen__specimen_id }}
           </router-link>
           <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
+            v-else-if="item.specimen"
+            :to="{ path: '/specimen/' + item.specimen.id }"
+            :title="$t('editSpecimen.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.agent.agent }}
+            {{ item.specimen.specimen_id }}
           </router-link>
         </div>
         <router-link
           v-else
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
+          :to="{ path: '/specimen/' + item.specimen }"
+          :title="$t('editSpecimen.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.agent__agent }}
+          {{ item.specimen__specimen_id }}
         </router-link>
       </template>
 
@@ -128,35 +128,98 @@
         </router-link>
       </template>
 
-      <template v-slot:item.type="{ item }">
+      <template v-slot:item.locality="{ item }">
         <div v-if="isUsedAsRelatedData">
-          <span
+          <router-link
             v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type__value,
-              en: item.type__value_en
-            }"
-          />
-          <span
-            v-else-if="item.type"
-            v-translate="{
-              et: item.type.value,
-              en: item.type.value_en
-            }"
-          />
+            :to="{ path: '/locality/' + item.locality }"
+            :title="$t('editLocality.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <span
+              v-translate="{
+                et: item.locality__locality,
+                en: item.locality__locality_en
+              }"
+            />
+          </router-link>
+          <router-link
+            v-else-if="item.locality"
+            :to="{ path: '/locality/' + item.locality.id }"
+            :title="$t('editLocality.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <span
+              v-translate="{
+                et: item.locality.locality,
+                en: item.locality.locality_en
+              }"
+            />
+          </router-link>
         </div>
-        <div
+        <router-link
           v-else
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
-          }"
-        ></div>
+          :to="{ path: '/locality/' + item.locality }"
+          :title="$t('editLocality.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.locality__locality,
+              en: item.locality__locality_en
+            }"
+          />
+        </router-link>
       </template>
 
-      <template v-slot:item.current="{ item }">
-        <v-icon v-if="item.current">fas fa-plus</v-icon>
-        <v-icon v-else>fas fa-minus</v-icon>
+      <template v-slot:item.stratigraphy="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <router-link
+            v-if="$route.meta.isEdit"
+            :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+            :title="$t('editStratigraphy.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <span
+              v-translate="{
+                et: item.stratigraphy__stratigraphy,
+                en: item.stratigraphy__stratigraphy_en
+              }"
+            />
+          </router-link>
+          <router-link
+            v-else-if="item.stratigraphy"
+            :to="{ path: '/stratigraphy/' + item.stratigraphy.id }"
+            :title="$t('editStratigraphy.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <span
+              v-translate="{
+                et: item.stratigraphy.stratigraphy,
+                en: item.stratigraphy.stratigraphy_en
+              }"
+            />
+          </router-link>
+        </div>
+        <router-link
+          v-else
+          :to="{ path: '/stratigraphy/' + item.stratigraphy }"
+          :title="$t('editStratigraphy.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-translate="{
+              et: item.stratigraphy__stratigraphy,
+              en: item.stratigraphy__stratigraphy_en
+            }"
+          />
+        </router-link>
       </template>
     </v-data-table>
 
@@ -170,9 +233,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t(
-                "header.specimen_identification_geology"
-              )}`
+              `${$t("common.new")} ${$t("header.dataset_reference")}`
             }}</span>
           </v-card-title>
 
@@ -181,46 +242,44 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.rock"
+                    v-model="item.type_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.rock"
-                    :loading="autocomplete.loaders.rock"
-                    :item-text="nameLabel"
-                    :label="$t('specimen_identification_geology.rock')"
+                    :items="autocomplete.type_type"
+                    :loading="autocomplete.loaders.type_type"
+                    :item-text="commonLabel"
+                    :label="$t('taxon.type_type')"
                     use-state
-                    is-searchable
-                    v-on:search:items="autocompleteRockSearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.name"
+                    v-model="item.repository"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification_geology.name')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.name_en"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_identification_geology.name_en')"
+                    :label="$t('taxon.repository')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.agent"
+                    v-model="item.specimen"
                     :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
-                    item-text="agent"
-                    :label="$t('specimen_identification_geology.agent')"
+                    :items="autocomplete.specimen"
+                    :loading="autocomplete.loaders.specimen"
+                    item-text="specimen_id"
+                    :label="$t('taxon.specimen_sarv')"
                     is-link
-                    route-object="agent"
+                    route-object="specimen"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
+                    v-on:search:items="autocompleteSpecimenSearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.specimen_number"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.specimen_number')"
                   />
                 </v-col>
 
@@ -231,7 +290,7 @@
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
                     item-text="reference"
-                    :label="$t('specimen_identification_geology.reference')"
+                    :label="$t('taxon.reference')"
                     is-link
                     route-object="reference"
                     is-searchable
@@ -240,31 +299,40 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <date-wrapper
-                    v-model="item.date_identified"
+                  <autocomplete-wrapper
+                    v-model="item.locality"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification_geology.date')"
-                    v-on:date:clear="item.date_identified = null"
+                    :items="autocomplete.locality"
+                    :loading="autocomplete.loaders.locality"
+                    :item-text="localityLabel"
+                    :label="$t('taxon.locality')"
+                    is-link
+                    route-object="locality"
+                    is-searchable
+                    v-on:search:items="autocompleteLocalitySearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.type"
+                    v-model="item.stratigraphy"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
-                    :item-text="commonLabel"
-                    :label="$t('specimen_identification_geology.type')"
+                    :items="autocomplete.stratigraphy"
+                    :loading="autocomplete.loaders.stratigraphy"
+                    :item-text="stratigraphyLabel"
+                    :label="$t('taxon.stratigraphy')"
+                    is-link
+                    route-object="stratigraphy"
+                    is-searchable
+                    v-on:search:items="autocompleteStratigraphySearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <checkbox-wrapper
-                    v-model="item.current"
+                  <input-wrapper
+                    v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification_geology.current')"
-                    @change="item.current = !item.current"
+                    :label="$t('taxon.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -291,20 +359,16 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
-import DateWrapper from "../../partial/inputs/DateWrapper";
-import { fetchListIdentificationType } from "../../../assets/js/api/apiCalls";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import { fetchTaxonTypeType } from "../../../assets/js/api/apiCalls";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
 export default {
-  name: "SpecimenIdentificationGeologyTable",
+  name: "TaxonTypeSpecimenTable",
 
   components: {
-    DateWrapper,
-    CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
@@ -348,20 +412,14 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "specimen_identification_geology.rock", value: "rock" },
-      { text: "specimen_identification_geology.name", value: "name" },
-      { text: "specimen_identification_geology.name_en", value: "name_en" },
-      { text: "specimen_identification_geology.agent", value: "agent" },
-      { text: "specimen_identification_geology.reference", value: "reference" },
-      {
-        text: "specimen_identification_geology.date",
-        value: "date_identified"
-      },
-      { text: "specimen_identification_geology.type", value: "type" },
-      {
-        text: "specimen_identification_geology.current",
-        value: "current"
-      },
+      { text: "taxon.type_type", value: "type_type" },
+      { text: "taxon.repository", value: "repository" },
+      { text: "taxon.specimen_sarv", value: "specimen" },
+      { text: "taxon.specimen_number", value: "specimen_number" },
+      { text: "taxon.reference", value: "reference" },
+      { text: "taxon.locality", value: "locality" },
+      { text: "taxon.stratigraphy", value: "stratigraphy" },
+      { text: "taxon.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -371,26 +429,28 @@ export default {
     ],
     dialog: false,
     item: {
-      rock: null,
-      name: "",
-      name_en: "",
-      agent: null,
+      type_type: null,
+      repository: "",
+      specimen: null,
+      specimen_number: "",
       reference: null,
-      date_identified: null,
-      type: null,
-      current: false
+      locality: null,
+      stratigraphy: null,
+      remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      rock: [],
-      agent: [],
+      type_type: [],
+      specimen: [],
       reference: [],
-      type: [],
+      locality: [],
+      stratigraphy: [],
       loaders: {
-        rock: false,
-        agent: false,
+        type_type: false,
+        specimen: false,
         reference: false,
-        type: false
+        locality: false,
+        stratigraphy: false
       }
     }
   }),
@@ -406,7 +466,10 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.rock === "object" && this.item.rock !== null;
+      return (
+        typeof this.item.type_type !== "undefined" &&
+        this.item.type_type !== null
+      );
     }
   },
 
@@ -421,14 +484,14 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        rock: null,
-        name: "",
-        name_en: "",
-        agent: null,
+        type_type: null,
+        repository: "",
+        specimen: null,
+        specimen_number: "",
         reference: null,
-        date_identified: null,
-        type: null,
-        current: false
+        locality: null,
+        stratigraphy: null,
+        remarks: ""
       };
     },
 
@@ -438,13 +501,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "specimen_identification_geology",
+          table: "taxon_type_specimen",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "specimen_identification_geology",
+          table: "taxon_type_specimen",
           item: formattedItem,
           rawItem: this.item
         });
@@ -458,35 +521,15 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.rock !== "object" && item.rock !== null) {
-        this.item.rock = {
-          id: item.rock,
-          name: item.rock__name,
-          name_ne: item.rock__name_en
+      if (typeof item.specimen !== "object" && item.specimen !== null) {
+        this.item.specimen = {
+          id: item.specimen,
+          specimen_id: item.specimen__specimen_id
         };
-        this.autocomplete.rock.push(this.item.rock);
-      } else if (item.rock !== null) {
-        this.item.rock = item.rock;
-        this.autocomplete.rock.push(this.item.rock);
-      }
-
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent
-        };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
-        this.item.agent = item.agent;
-        this.autocomplete.agent.push(this.item.agent);
-      }
-
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en
-        };
+        this.autocomplete.specimen.push(this.item.specimen);
+      } else if (item.specimen !== null) {
+        this.item.specimen = item.specimen;
+        this.autocomplete.specimen.push(this.item.specimen);
       }
 
       if (typeof item.reference !== "object" && item.reference !== null) {
@@ -500,32 +543,63 @@ export default {
         this.autocomplete.reference.push(this.item.reference);
       }
 
-      this.item.name = item.name;
-      this.item.name_en = item.name_en;
-      this.item.date_identified = item.date_identified;
-      this.item.current = item.current === true;
+      if (typeof item.locality !== "object" && item.locality !== null) {
+        this.item.locality = {
+          id: item.locality,
+          locality: item.locality__locality,
+          locality_en: item.locality__locality_en
+        };
+        this.autocomplete.locality.push(this.item.locality);
+      } else if (item.locality !== null) {
+        this.item.locality = item.locality;
+        this.autocomplete.locality.push(this.item.locality);
+      }
+
+      if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
+        this.item.stratigraphy = {
+          id: item.stratigraphy,
+          stratigraphy: item.stratigraphy__stratigraphy,
+          stratigraphy_en: item.stratigraphy__stratigraphy_en
+        };
+        this.autocomplete.stratigraphy.push(this.item.stratigraphy);
+      } else if (item.stratigraphy !== null) {
+        this.item.stratigraphy = item.stratigraphy;
+        this.autocomplete.stratigraphy.push(this.item.stratigraphy);
+      }
+
+      if (typeof item.type_type !== "object" && item.type_type !== null) {
+        this.item.type_type = {
+          id: item.type_type,
+          value: item.type_type__value,
+          value_en: item.type_type__value_en
+        };
+      } else this.item.type_type = item.type_type;
+
+      this.item.repository = item.repository;
+      this.item.specimen_number = item.specimen_number;
+      this.item.remarks = item.remarks;
 
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "specimen_identification_geology",
+        table: "taxon_type_specimen",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.type.length === 0) {
-        this.autocomplete.loaders.type = true;
-        fetchListIdentificationType().then(response => {
+      if (this.autocomplete.type_type.length === 0) {
+        this.autocomplete.loaders.type_type = true;
+        fetchTaxonTypeType().then(response => {
           if (response.status === 200) {
-            this.autocomplete.type =
+            this.autocomplete.type_type =
               response.body.count > 0 ? response.body.results : [];
           }
         });
-        this.autocomplete.loaders.type = false;
+        this.autocomplete.loaders.type_type = false;
       }
     },
 

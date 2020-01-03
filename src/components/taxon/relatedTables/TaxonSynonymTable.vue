@@ -1,5 +1,5 @@
 <template>
-  <div class="taxon-subclass-table">
+  <div class="taxon-synonym-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -37,38 +37,6 @@
           <v-icon small>far fa-trash-alt</v-icon>
         </v-btn>
       </template>
-
-      <template v-slot:item.taxon="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon.taxon }}
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/taxon/' + item.id }"
-          :title="$t('editTaxon.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.taxon }}
-        </router-link>
-      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -89,26 +57,44 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.taxon"
+                  <input-wrapper
+                    v-model="item.taxon_synonym"
                     :color="bodyActiveColor"
-                    :items="autocomplete.taxon"
-                    :loading="autocomplete.loaders.taxon"
-                    item-text="taxon"
-                    :label="$t('taxon.taxon')"
+                    :label="$t('taxon.synonym')"
                     use-state
-                    is-link
-                    route-object="taxon"
-                    is-searchable
-                    v-on:search:items="autocompleteTaxonSearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.author_year"
+                    v-model="item.author"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.author_year')"
+                    :label="$t('taxon.author')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.year"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.year')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.pages"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.pages')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.figures"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.figures')"
                   />
                 </v-col>
 
@@ -143,20 +129,15 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 
 export default {
-  name: "TaxonSubclassTable",
+  name: "TaxonSynonymTable",
 
   components: {
-    AutocompleteWrapper,
     InputWrapper
   },
-
-  mixins: [autocompleteMixin],
 
   props: {
     response: {
@@ -195,8 +176,11 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "taxon.taxon", value: "taxon" },
-      { text: "taxon.author_year", value: "author_year" },
+      { text: "taxon.synonym", value: "taxon_synonym" },
+      { text: "taxon.author", value: "author" },
+      { text: "taxon.year", value: "year" },
+      { text: "taxon.pages", value: "pages" },
+      { text: "taxon.figures", value: "figures" },
       { text: "taxon.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -207,17 +191,14 @@ export default {
     ],
     dialog: false,
     item: {
-      taxon: null,
-      author_year: "",
+      taxon_synonym: "",
+      author: "",
+      year: "",
+      pages: "",
+      figures: "",
       remarks: ""
     },
-    isNewItem: true,
-    autocomplete: {
-      taxon: [],
-      loaders: {
-        taxon: false
-      }
-    }
+    isNewItem: true
   }),
 
   computed: {
@@ -231,7 +212,9 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.taxon !== "undefined" && this.item.taxon !== null;
+      return (
+        this.item.taxon_synonym !== null && this.item.taxon_synonym.length > 0
+      );
     }
   },
 
@@ -240,8 +223,11 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        taxon: null,
-        author_year: "",
+        taxon_synonym: "",
+        author: "",
+        year: "",
+        pages: "",
+        figures: "",
         remarks: ""
       };
     },
@@ -252,13 +238,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "taxon_subclass",
+          table: "taxon_synonym",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "taxon_subclass",
+          table: "taxon_synonym",
           item: formattedItem,
           rawItem: this.item
         });
@@ -272,18 +258,11 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.taxon !== "object" && item.taxon !== null) {
-        this.item.taxon = {
-          id: item.id,
-          taxon: item.taxon
-        };
-        this.autocomplete.taxon.push(this.item.taxon);
-      } else if (item.taxon !== null) {
-        this.item.taxon = item.taxon;
-        this.autocomplete.taxon.push(this.item.taxon);
-      }
-
-      this.item.author_year = item.author_year;
+      this.item.taxon_synonym = item.taxon_synonym;
+      this.item.author = item.author;
+      this.item.year = item.year;
+      this.item.pages = item.pages;
+      this.item.figures = item.figures;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -291,7 +270,7 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "taxon_subclass",
+        table: "taxon_synonym",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });

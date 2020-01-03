@@ -468,7 +468,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in relatedTabs"
+          v-for="tab in filteredRelatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -487,86 +487,94 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <!-- Todo: Taxon subclass can only be added if taxon already exists (needs backend support because same table) -->
-          <taxon-subclass
+
+          <taxon-subclass-table
             v-if="$route.meta.isEdit"
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+            v-show="activeTab === 'taxon_subclass'"
+            :response="relatedData.taxon_subclass"
+            :search-parameters="relatedData.searchParameters.taxon_subclass"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <taxon-synonym
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <taxon-synonym-table
+            v-show="activeTab === 'taxon_synonym'"
+            :response="relatedData.taxon_synonym"
+            :search-parameters="relatedData.searchParameters.taxon_synonym"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <taxon-type-specimen
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <taxon-type-specimen-table
+            v-show="activeTab === 'taxon_type_specimen'"
+            :response="relatedData.taxon_type_specimen"
+            :search-parameters="relatedData.searchParameters.taxon_type_specimen"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <taxon-occurrence
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <taxon-occurrence-table
+            v-show="activeTab === 'taxon_occurrence'"
+            :response="relatedData.taxon_occurrence"
+            :search-parameters="relatedData.searchParameters.taxon_occurrence"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <taxon-opinion
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <taxon-opinion-table
+            v-show="activeTab === 'taxon_opinion'"
+            :response="relatedData.taxon_opinion"
+            :search-parameters="relatedData.searchParameters.taxon_opinion"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <taxon-common-name
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <taxon-common-name-table
+            v-show="activeTab === 'taxon_common_name'"
+            :response="relatedData.taxon_common_name"
+            :search-parameters="relatedData.searchParameters.taxon_common_name"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <taxon-description
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <taxon-description-table
+            v-show="activeTab === 'taxon_description'"
+            :response="relatedData.taxon_description"
+            :search-parameters="relatedData.searchParameters.taxon_description"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <taxon-page
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <taxon-page-table
+            v-show="activeTab === 'taxon_page'"
+            :response="relatedData.taxon_page"
+            :search-parameters="relatedData.searchParameters.taxon_page"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <div v-show="activeTab === 'taxon_image'">
@@ -639,7 +647,6 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import cloneDeep from "lodash/cloneDeep";
 import {
-  fetchListLanguages,
   fetchTaxon,
   fetchTaxonSubclass,
   fetchTaxonCommonName,
@@ -647,46 +654,45 @@ import {
   fetchTaxonImage,
   fetchTaxonOccurrence,
   fetchTaxonOpinion,
-  fetchTaxonOpinionType,
   fetchTaxonPage,
   fetchTaxonRank,
   fetchTaxonSynonym,
-  fetchTaxonTypeSpecimen,
-  fetchTaxonTypeType
+  fetchTaxonTypeSpecimen
 } from "../../assets/js/api/apiCalls";
 import Spinner from "vue-simple-spinner";
-import TaxonSubclass from "./relatedTables/TaxonSubclass";
-import TaxonSynonym from "./relatedTables/TaxonSynonym";
-import TaxonTypeSpecimen from "./relatedTables/TaxonTypeSpecimen";
-import TaxonOccurrence from "./relatedTables/TaxonOccurrence";
-import TaxonOpinion from "./relatedTables/TaxonOpinion";
-import TaxonCommonName from "./relatedTables/TaxonCommonName";
-import TaxonDescription from "./relatedTables/TaxonDescription";
-import TaxonPage from "./relatedTables/TaxonPage";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import TaxonSubclassTable from "./relatedTables/TaxonSubclassTable";
+import TaxonSynonymTable from "./relatedTables/TaxonSynonymTable";
+import requestsMixin from "../../mixins/requestsMixin";
+import TaxonTypeSpecimenTable from "./relatedTables/TaxonTypeSpecimenTable";
+import TaxonOccurrenceTable from "./relatedTables/TaxonOccurrenceTable";
+import TaxonOpinionTable from "./relatedTables/TaxonOpinionTable";
+import TaxonCommonNameTable from "./relatedTables/TaxonCommonNameTable";
+import TaxonDescriptionTable from "./relatedTables/TaxonDescriptionTable";
+import TaxonPageTable from "./relatedTables/TaxonPageTable";
 
 export default {
   name: "Taxon",
 
   components: {
+    TaxonPageTable,
+    TaxonDescriptionTable,
+    TaxonCommonNameTable,
+    TaxonOpinionTable,
+    TaxonOccurrenceTable,
+    TaxonTypeSpecimenTable,
+    TaxonSynonymTable,
+    TaxonSubclassTable,
     FileUpload,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    Spinner,
-    TaxonSubclass,
-    TaxonSynonym,
-    TaxonTypeSpecimen,
-    TaxonOccurrence,
-    TaxonOpinion,
-    TaxonCommonName,
-    TaxonDescription,
-    TaxonPage
+    Spinner
   },
 
   props: {
@@ -702,7 +708,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
 
   data() {
     return this.setInitialData();
@@ -914,7 +920,7 @@ export default {
     },
 
     loadFullInfo() {
-      this.loadAutocompleteFields(true, true);
+      this.loadAutocompleteFields( );
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
@@ -943,33 +949,11 @@ export default {
       }
     },
 
-    loadAutocompleteFields(
-      regularAutocompleteFields = true,
-      relatedDataAutocompleteFields = false
-    ) {
-      if (regularAutocompleteFields) {
+    loadAutocompleteFields() {
         fetchTaxonRank().then(response => {
           this.autocomplete.rank = this.handleResponse(response);
           this.autocomplete.rank_original = this.handleResponse(response);
         });
-      }
-
-      if (relatedDataAutocompleteFields) {
-        fetchTaxonTypeType().then(
-          response =>
-            (this.autocomplete.taxon_type_type = this.handleResponse(response))
-        );
-
-        fetchTaxonOpinionType().then(
-          response =>
-            (this.autocomplete.opinion_type = this.handleResponse(response))
-        );
-
-        fetchListLanguages().then(
-          response =>
-            (this.autocomplete.language = this.handleResponse(response))
-        );
-      }
     },
 
     setDefaultRelatedData() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="taxon-subclass-table">
+  <div class="taxon-page-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -37,38 +37,6 @@
           <v-icon small>far fa-trash-alt</v-icon>
         </v-btn>
       </template>
-
-      <template v-slot:item.taxon="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon.taxon }}
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/taxon/' + item.id }"
-          :title="$t('editTaxon.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.taxon }}
-        </router-link>
-      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -89,34 +57,59 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.taxon"
+                  <input-wrapper
+                    v-model="item.language"
                     :color="bodyActiveColor"
-                    :items="autocomplete.taxon"
-                    :loading="autocomplete.loaders.taxon"
-                    item-text="taxon"
-                    :label="$t('taxon.taxon')"
+                    :label="$t('taxon.language')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.frontpage"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.frontpage')"
                     use-state
-                    is-link
-                    route-object="taxon"
-                    is-searchable
-                    v-on:search:items="autocompleteTaxonSearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.author_year"
+                    v-model="item.frontpage_title"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.author_year')"
+                    :label="$t('taxon.frontpage_title')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.remarks"
+                    v-model="item.title"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('taxon.title')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.author"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.author')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.author_txt"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.author_txt')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.date_txt"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.year')"
                   />
                 </v-col>
               </v-row>
@@ -143,20 +136,15 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 
 export default {
-  name: "TaxonSubclassTable",
+  name: "TaxonPageTable",
 
   components: {
-    AutocompleteWrapper,
     InputWrapper
   },
-
-  mixins: [autocompleteMixin],
 
   props: {
     response: {
@@ -195,9 +183,13 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "taxon.taxon", value: "taxon" },
-      { text: "taxon.author_year", value: "author_year" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "taxon.language", value: "language" },
+      { text: "taxon.frontpage", value: "frontpage" },
+      { text: "taxon.frontpage_title", value: "frontpage_title" },
+      { text: "taxon.title", value: "title" },
+      { text: "taxon.author", value: "author" },
+      { text: "taxon.author_txt", value: "author_txt" },
+      { text: "taxon.year", value: "date_txt" },
       {
         text: "common.actions",
         value: "action",
@@ -207,17 +199,15 @@ export default {
     ],
     dialog: false,
     item: {
-      taxon: null,
-      author_year: "",
-      remarks: ""
+      language: "",
+      frontpage: "",
+      frontpage_title: "",
+      title: "",
+      author: "",
+      author_txt: "",
+      date_txt: ""
     },
-    isNewItem: true,
-    autocomplete: {
-      taxon: [],
-      loaders: {
-        taxon: false
-      }
-    }
+    isNewItem: true
   }),
 
   computed: {
@@ -231,7 +221,9 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.taxon !== "undefined" && this.item.taxon !== null;
+      return (
+        this.item.frontpage !== null && this.item.frontpage.length > 0
+      );
     }
   },
 
@@ -240,9 +232,13 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        taxon: null,
-        author_year: "",
-        remarks: ""
+        language: "",
+        frontpage: "",
+        frontpage_title: "",
+        title: "",
+        author: "",
+        author_txt: "",
+        date_txt: ""
       };
     },
 
@@ -252,13 +248,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "taxon_subclass",
+          table: "taxon_page",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "taxon_subclass",
+          table: "taxon_page",
           item: formattedItem,
           rawItem: this.item
         });
@@ -272,26 +268,20 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.taxon !== "object" && item.taxon !== null) {
-        this.item.taxon = {
-          id: item.id,
-          taxon: item.taxon
-        };
-        this.autocomplete.taxon.push(this.item.taxon);
-      } else if (item.taxon !== null) {
-        this.item.taxon = item.taxon;
-        this.autocomplete.taxon.push(this.item.taxon);
-      }
-
-      this.item.author_year = item.author_year;
-      this.item.remarks = item.remarks;
+      this.item.language = item.language;
+      this.item.frontpage = item.frontpage;
+      this.item.frontpage_title = item.frontpage_title;
+      this.item.title = item.title;
+      this.item.author = item.author;
+      this.item.author_txt = item.author_txt;
+      this.item.date_txt = item.date_txt;
 
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "taxon_subclass",
+        table: "taxon_page",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
