@@ -2929,6 +2929,7 @@ export default {
             attachmentHistory !== "fallbackValue"
           ) {
             this.attachment = attachmentHistory;
+            this.removeUnnecessaryFields(this.attachment, this.copyFields);
             if (this.isNotEmpty(this.attachment.specimen)) {
               this.autocomplete.specimen.push(this.attachment.specimen);
             }
@@ -3231,7 +3232,8 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        fetchAttachment(this.$route.params.id, this.currentUser).then(
+        fetchAttachment(this.$route.params.id).then(
+        // fetchAttachment(this.$route.params.id, this.currentUser).then(
           response => {
             let handledResponse = this.handleResponse(response);
 
@@ -3543,6 +3545,8 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      if (this.databaseId) uploadableObject.database = this.databaseId;
 
       /* Related Data START */
       uploadableObject.related_data = {};

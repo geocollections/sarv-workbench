@@ -258,7 +258,6 @@
         >
 
           <drillcore-box-table
-            v-if="false"
             v-show="activeTab === 'drillcore_box'"
             :response="relatedData.drillcore_box"
             :search-parameters="relatedData.searchParameters.drillcore_box"
@@ -270,7 +269,6 @@
           />
 
           <drillcore-study-table
-            v-if="false"
             v-show="activeTab === 'drillcore_study'"
             :response="relatedData.drillcore_study"
             :search-parameters="relatedData.searchParameters.drillcore_study"
