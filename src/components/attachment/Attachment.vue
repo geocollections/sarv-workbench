@@ -3232,8 +3232,8 @@ export default {
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        fetchAttachment(this.$route.params.id).then(
-        // fetchAttachment(this.$route.params.id, this.currentUser).then(
+        // fetchAttachment(this.$route.params.id).then(
+        fetchAttachment(this.$route.params.id, this.currentUser).then(
           response => {
             let handledResponse = this.handleResponse(response);
 

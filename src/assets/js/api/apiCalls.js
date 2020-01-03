@@ -1760,56 +1760,65 @@ export function fetchTaxonRank() {
 
 export function fetchTaxonSubclass(taxonId, searchParameters) {
   let fields = "id,taxon,parent_id,parent__taxon,author_year,remarks";
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon/?parent_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=${fields}&format=json`
+    `taxon/?parent_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
   );
 }
 
 export function fetchTaxonSynonym(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_synonym/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_synonym/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonTypeSpecimen(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_type_specimen/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_type_specimen/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonOccurrence(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_occurrence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_occurrence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonOpinion(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_opinion/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_opinion/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonCommonName(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_common_name/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_common_name/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonDescription(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_description/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_description/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonPage(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonImage(taxonId, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `taxon_image/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `taxon_image/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

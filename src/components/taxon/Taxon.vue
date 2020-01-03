@@ -477,20 +477,16 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
-            class="font-weight-bold ml-2"
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2 blue--text"
           >
-            {{ relatedData[tab.name].length }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
 
       <v-tabs-items>
-        <v-card
-          class="pa-1"
-          flat
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-        >
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <!-- Todo: Taxon subclass can only be added if taxon already exists (needs backend support because same table) -->
           <taxon-subclass
             v-if="$route.meta.isEdit"
@@ -576,7 +572,7 @@
           <div v-show="activeTab === 'taxon_image'">
             <file-upload
               show-existing
-              :files-from-object="relatedData.taxon_image"
+              :files-from-object="relatedData.taxon_image.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -586,7 +582,7 @@
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
             class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
           >
             <div class="mr-3 mb-3">
@@ -610,7 +606,7 @@
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.count[activeTab] /
+                    relatedData[activeTab].count /
                       relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
@@ -944,11 +940,6 @@ export default {
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
 
         this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
       }
     },
 
@@ -983,165 +974,71 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        taxon_subclass: [],
-        taxon_synonym: [],
-        taxon_type_specimen: [],
-        taxon_occurrence: [],
-        taxon_opinion: [],
-        taxon_common_name: [],
-        taxon_description: [],
-        taxon_page: [],
-        taxon_image: [],
-        new: {
-          taxon_subclass: [],
-          taxon_synonym: [],
-          taxon_type_specimen: [],
-          taxon_occurrence: [],
-          taxon_opinion: [],
-          taxon_common_name: [],
-          taxon_description: [],
-          taxon_page: [],
-          taxon_image: []
-        },
-        copyFields: {
-          taxon_subclass: ["taxon", "author_year", "remarks"],
-          taxon_synonym: [
-            "taxon_synonym",
-            "author",
-            "year",
-            "pages",
-            "figures",
-            "remarks"
-          ],
-          taxon_type_specimen: [
-            "type_type",
-            "repository",
-            "specimen",
-            "specimen_number",
-            "reference",
-            "locality",
-            "stratigraphy",
-            "remarks"
-          ],
-          taxon_occurrence: [
-            "reference",
-            "locality",
-            "locality_free",
-            "stratigraphy_base",
-            "stratigraphy_top",
-            "remarks"
-          ],
-          taxon_opinion: [
-            "opinion_type",
-            "other_taxon",
-            "reference",
-            "pages",
-            "author",
-            "year",
-            "is_preferred",
-            "remarks"
-          ],
-          taxon_common_name: ["name", "language", "is_preferred", "remarks"],
-          taxon_description: [
-            "reference",
-            "agent",
-            "author_free",
-            "date_free",
-            "language",
-            "description",
-            "remarks"
-          ],
-          taxon_page: [
-            "language",
-            "frontpage",
-            "frontpage_title",
-            "title",
-            "author",
-            "author_txt",
-            "date_txt"
-          ],
-          taxon_image: [
-            "attachment",
-            "link",
-            "title",
-            "title_en",
-            "sort",
-            "remarks"
-          ]
-        },
-        insert: this.setDefaultInsertRelatedData(),
+        taxon_subclass: { count: 0, results: [] },
+        taxon_synonym: { count: 0, results: [] },
+        taxon_type_specimen: { count: 0, results: [] },
+        taxon_occurrence: { count: 0, results: [] },
+        taxon_opinion: { count: 0, results: [] },
+        taxon_common_name: { count: 0, results: [] },
+        taxon_description: { count: 0, results: [] },
+        taxon_page: { count: 0, results: [] },
+        taxon_image: { count: 0, results: [] },
         searchParameters: {
           taxon_subclass: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_synonym: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_type_specimen: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_occurrence: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_opinion: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_common_name: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_description: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_page: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_image: {
             page: 1,
             paginateBy: 100,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
-        },
-        count: {
-          taxon_subclass: 0,
-          taxon_synonym: 0,
-          taxon_type_specimen: 0,
-          taxon_occurrence: 0,
-          taxon_opinion: 0,
-          taxon_common_name: 0,
-          taxon_description: 0,
-          taxon_page: 0,
-          taxon_image: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        taxon_subclass: {},
-        taxon_synonym: {},
-        taxon_type_specimen: {},
-        taxon_occurrence: {},
-        taxon_opinion: {},
-        taxon_common_name: {},
-        taxon_description: {},
-        taxon_page: {},
-        taxon_image: {}
       };
     },
 
@@ -1168,16 +1065,16 @@ export default {
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "taxon_image") {
-              uploadableObject.related_data.attachment = this.relatedData.taxon_image;
+              uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ];
+              ].results;
             }
         });
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.taxon_image;
+        uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
       }
 
       console.log("This object is sent in string format:");
@@ -1243,165 +1140,6 @@ export default {
       }
     },
 
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.type_type))
-        obj.type_type = {
-          id: obj.type_type,
-          value: obj.type_type__value,
-          value_en: obj.type_type__value_en
-        };
-      if (this.isNotEmpty(obj.specimen))
-        obj.specimen = {
-          id: obj.specimen,
-          specimen_id: obj.specimen__specimen_id
-        };
-      if (this.isNotEmpty(obj.reference))
-        obj.reference = {
-          id: obj.reference,
-          reference: obj.reference__reference
-        };
-      if (this.isNotEmpty(obj.locality))
-        obj.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
-        };
-      if (this.isNotEmpty(obj.stratigraphy))
-        obj.stratigraphy = {
-          id: obj.stratigraphy,
-          stratigraphy: obj.stratigraphy__stratigraphy,
-          stratigraphy_en: obj.stratigraphy__stratigraphy_en
-        };
-      if (this.isNotEmpty(obj.opinion_type))
-        obj.opinion_type = {
-          id: obj.opinion_type,
-          value: obj.opinion_type__value,
-          value_en: obj.opinion_type__value_en
-        };
-      if (this.isNotEmpty(obj.other_taxon))
-        obj.other_taxon = {
-          id: obj.other_taxon,
-          taxon: obj.other_taxon__taxon
-        };
-      if (this.isNotEmpty(obj.language) && this.activeTab !== "taxon_page")
-        obj.language = {
-          id: obj.language,
-          value: obj.language__value,
-          value_en: obj.language__value_en
-        };
-      if (this.isNotEmpty(obj.agent))
-        obj.agent = {
-          id: obj.agent,
-          agent: obj.agent__agent
-        };
-      if (this.isNotEmpty(obj.attachment))
-        obj.attachment = {
-          id: obj.attachment,
-          original_filename: obj.attachment__original_filename
-        };
-      if (this.isNotEmpty(obj.link))
-        obj.link = {
-          id: obj.link,
-          taxon: obj.link__taxon
-        };
-      if (this.isNotEmpty(obj.stratigraphy_base))
-        obj.stratigraphy_base = {
-          id: obj.stratigraphy_base,
-          stratigraphy: obj.stratigraphy_base__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_base__stratigraphy_en
-        };
-      if (this.isNotEmpty(obj.stratigraphy_top))
-        obj.stratigraphy_top = {
-          id: obj.stratigraphy_top,
-          stratigraphy: obj.stratigraphy_top__stratigraphy,
-          stratigraphy_en: obj.stratigraphy_top__stratigraphy_en
-        };
-      if (this.isNotEmpty(obj.taxon) && this.activeTab === "taxon_subclass")
-        obj.taxon = {
-          id: obj.id,
-          taxon: obj.taxon
-        };
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.type_type)) {
-        newObject.type_type = obj.type_type.id;
-        newObject.type_type__value = obj.type_type.value;
-        newObject.type_type__value_en = obj.type_type.value_en;
-      }
-      if (this.isNotEmpty(obj.specimen)) {
-        newObject.specimen = obj.specimen.id;
-        newObject.specimen__specimen_id = obj.specimen.specimen_id;
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        newObject.locality = obj.locality.id;
-        newObject.locality__locality = obj.locality.locality;
-        newObject.locality__locality_en = obj.locality.locality_en;
-      }
-      if (this.isNotEmpty(obj.stratigraphy)) {
-        newObject.stratigraphy = obj.stratigraphy.id;
-        newObject.stratigraphy__stratigraphy = obj.stratigraphy.stratigraphy;
-        newObject.stratigraphy__stratigraphy_en =
-          obj.stratigraphy.stratigraphy_en;
-      }
-      if (this.isNotEmpty(obj.opinion_type)) {
-        newObject.opinion_type = obj.opinion_type.id;
-        newObject.opinion_type__value = obj.opinion_type.value;
-        newObject.opinion_type__value_en = obj.opinion_type.value_en;
-      }
-      if (this.isNotEmpty(obj.other_taxon)) {
-        newObject.other_taxon = obj.other_taxon.id;
-        newObject.other_taxon__taxon = obj.other_taxon.taxon;
-      }
-      if (this.isNotEmpty(obj.language) && this.activeTab !== "taxon_page") {
-        newObject.language = obj.language.id;
-        newObject.language__value = obj.language.value;
-        newObject.language__value_en = obj.language.value_en;
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-      if (this.isNotEmpty(obj.attachment)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.attachment__original_filename =
-          obj.attachment.original_filename;
-      }
-      if (this.isNotEmpty(obj.link)) {
-        newObject.link = obj.link.id;
-        newObject.link__taxon = obj.link.taxon;
-      }
-      if (this.isNotEmpty(obj.stratigraphy_base)) {
-        newObject.stratigraphy_base = obj.stratigraphy_base.id;
-        newObject.stratigraphy_base__stratigraphy =
-          obj.stratigraphy_base.stratigraphy;
-        newObject.stratigraphy_base__stratigraphy_en =
-          obj.stratigraphy_base.stratigraphy_en;
-      }
-      if (this.isNotEmpty(obj.stratigraphy_top)) {
-        newObject.stratigraphy_top = obj.stratigraphy_top.id;
-        newObject.stratigraphy_top__stratigraphy =
-          obj.stratigraphy_top.stratigraphy;
-        newObject.stratigraphy_top__stratigraphy_en =
-          obj.stratigraphy_top.stratigraphy_en;
-      }
-      if (this.isNotEmpty(obj.taxon) && this.activeTab === "taxon_subclass") {
-        newObject.id = obj.taxon.id;
-        newObject.taxon = obj.taxon.taxon;
-      }
-
-      return newObject;
-    },
-
     loadRelatedData(object) {
       let query;
 
@@ -1450,19 +1188,14 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.taxon_image
         );
-      } else if (object === "taxon_image") {
-        query = fetchTaxonImage(
-          this.$route.params.id,
-          this.relatedData.searchParameters.taxon_image
-        );
       }
 
-      return new Promise(resolve => {
-        query.then(response => {
-          if (object === "taxon_image") {
-            let taxonImageResponse = this.handleResponse(response);
+      query.then(response => {
+        if (object === "taxon_image") {
+          let taxonImageResponse = this.handleResponse(response);
 
-            this.relatedData.taxon_image = taxonImageResponse.map(image => {
+          this.relatedData.taxon_image.results = taxonImageResponse.map(
+            image => {
               return {
                 id: image.attachment,
                 author__agent: image.attachment__author__agent,
@@ -1471,104 +1204,16 @@ export default {
                 description_en: image.attachment__description_en,
                 remarks: image.attachment__remarks,
                 uuid_filename: image.attachment__uuid_filename,
-                attachment_format__value: image.attachment__attachment_format__value
+                attachment_format__value:
+                  image.attachment__attachment_format__value
               };
-            });
-          } else {
-            this.relatedData[object] = this.handleResponse(response);
-          }
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+            }
+          );
+        } else {
+          this.relatedData[object].results = this.handleResponse(response);
+        }
+        this.relatedData[object].count = response.body.count;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      console.log(objectToUpload);
-      let uploadableObject = cloneDeep(objectToUpload);
-      if (this.activeTab === "taxon_subclass") {
-        console.log(this.taxon.id);
-        console.log(uploadableObject);
-        uploadableObject.parent = this.taxon.id;
-      } else {
-        uploadableObject.taxon = this.taxon.id;
-      }
-
-      if (this.isNotEmpty(uploadableObject.type_type)) {
-        uploadableObject.type_type = uploadableObject.type_type.id
-          ? uploadableObject.type_type.id
-          : uploadableObject.type_type;
-      }
-      if (this.isNotEmpty(uploadableObject.specimen)) {
-        uploadableObject.specimen = uploadableObject.specimen.id
-          ? uploadableObject.specimen.id
-          : uploadableObject.specimen;
-      }
-      if (this.isNotEmpty(uploadableObject.reference)) {
-        uploadableObject.reference = uploadableObject.reference.id
-          ? uploadableObject.reference.id
-          : uploadableObject.reference;
-      }
-      if (this.isNotEmpty(uploadableObject.locality)) {
-        uploadableObject.locality = uploadableObject.locality.id
-          ? uploadableObject.locality.id
-          : uploadableObject.locality;
-      }
-      if (this.isNotEmpty(uploadableObject.stratigraphy)) {
-        uploadableObject.stratigraphy = uploadableObject.stratigraphy.id
-          ? uploadableObject.stratigraphy.id
-          : uploadableObject.stratigraphy;
-      }
-      if (this.isNotEmpty(uploadableObject.opinion_type))
-        uploadableObject.opinion_type = uploadableObject.opinion_type.id
-          ? uploadableObject.opinion_type.id
-          : uploadableObject.opinion_type;
-      if (this.isNotEmpty(uploadableObject.other_taxon))
-        uploadableObject.other_taxon = uploadableObject.other_taxon.id
-          ? uploadableObject.other_taxon.id
-          : uploadableObject.other_taxon;
-      if (
-        this.isNotEmpty(uploadableObject.language) &&
-        this.activeTab !== "taxon_page"
-      )
-        uploadableObject.language = uploadableObject.language.id
-          ? uploadableObject.language.id
-          : uploadableObject.language;
-      if (this.isNotEmpty(uploadableObject.agent))
-        uploadableObject.agent = uploadableObject.agent.id
-          ? uploadableObject.agent.id
-          : uploadableObject.agent;
-      if (this.isNotEmpty(uploadableObject.attachment))
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      if (this.isNotEmpty(uploadableObject.link))
-        uploadableObject.link = uploadableObject.link.id
-          ? uploadableObject.link.id
-          : uploadableObject.link;
-      if (this.isNotEmpty(uploadableObject.stratigraphy_base)) {
-        uploadableObject.stratigraphy_base = uploadableObject.stratigraphy_base
-          .id
-          ? uploadableObject.stratigraphy_base.id
-          : uploadableObject.stratigraphy_base;
-      }
-      if (this.isNotEmpty(uploadableObject.stratigraphy_top)) {
-        uploadableObject.stratigraphy_top = uploadableObject.stratigraphy_top.id
-          ? uploadableObject.stratigraphy_top.id
-          : uploadableObject.stratigraphy_top;
-      }
-      if (
-        this.isNotEmpty(uploadableObject.taxon) &&
-        this.activeTab === "taxon_subclass"
-      ) {
-        uploadableObject.taxon = uploadableObject.taxon.id
-          ? uploadableObject.taxon.id
-          : uploadableObject.taxon;
-      }
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {
@@ -1590,7 +1235,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.taxon_image = files;
+      this.relatedData.taxon_image.count = files.length;
+      this.relatedData.taxon_image.results = files;
     }
   }
 };

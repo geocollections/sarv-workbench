@@ -17,7 +17,7 @@
 
           <tbody>
             <tr
-              v-for="(entity, index) in relatedData.taxon_subclass"
+              v-for="(entity, index) in relatedData.taxon_subclass.results"
               :key="entity.id"
               :class="{
                 'allow-remove': entity.allowRemove,
