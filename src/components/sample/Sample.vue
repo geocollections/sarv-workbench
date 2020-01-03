@@ -19,7 +19,9 @@
             inset
             v-model="isSimpleView"
             :label="
-              isSimpleView ? 'Current view: ' + $t('sample.simpleForm') : 'Current view: ' + $t('sample.basicForm')
+              isSimpleView
+                ? 'Current view: ' + $t('sample.simpleForm')
+                : 'Current view: ' + $t('sample.basicForm')
             "
             hide-details
             :color="bodyActiveColor"
@@ -911,28 +913,26 @@
               <v-icon small>{{ tab.iconClass }}</v-icon>
             </span>
             <span
-              v-if="relatedData[tab.name].length > 0"
-              class="font-weight-bold ml-2"
+              v-if="relatedData[tab.name].count > 0"
+              class="font-weight-bold ml-2 blue--text"
             >
-              {{ relatedData[tab.name].length }}
+              {{ relatedData[tab.name].count }}
             </span>
           </v-tab>
         </v-tabs>
 
         <v-tabs-items>
-          <v-card
-            class="pa-1"
-            flat
-            :color="bodyColor.split('n-')[0] + 'n-5'"
-          >
-            <sample-analysis
-              :related-data="relatedData"
-              :autocomplete="autocomplete"
-              :active-tab="activeTab"
-              v-on:add-related-data="addRelatedData"
-              v-on:set-default="setDefault"
-              v-on:edit-row="editRow"
-              v-on:remove-row="removeRow"
+          <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+
+            <sample-analysis-table
+              v-show="activeTab === 'analysis'"
+              :response="relatedData.analysis"
+              :search-parameters="relatedData.searchParameters.analysis"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
             />
 
             <sample-preparation
@@ -958,7 +958,7 @@
             <div v-show="activeTab === 'attachment_link'">
               <file-upload
                 show-existing
-                :files-from-object="relatedData.attachment_link"
+                :files-from-object="relatedData.attachment_link.results"
                 v-on:update:existing-files="addExistingFiles"
                 v-on:file-uploaded="addFiles"
                 accept-multiple
@@ -978,7 +978,7 @@
 
             <!-- PAGINATION -->
             <div
-              v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+              v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
               class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
             >
               <div class="mr-3 mb-3">
@@ -1002,7 +1002,7 @@
                   next-icon="fas fa-angle-right"
                   :length="
                     Math.ceil(
-                      relatedData.count[activeTab] /
+                      relatedData[activeTab].count /
                         relatedData.searchParameters[activeTab].paginateBy
                     )
                   "
@@ -1025,8 +1025,6 @@ import {
   fetchLSampleAttachment,
   fetchSampleReference,
   fetchSampleAnalysis,
-  fetchAnalysisMethod,
-  fetchFossilGroup,
   fetchSamplePreparation,
   fetchTaxonList,
   fetchLatestSampleInSite
@@ -1035,7 +1033,6 @@ import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import SampleReference from "./relatedTables/SampleReference";
-import SampleAnalysis from "./relatedTables/SampleAnalysis";
 import SamplePreparation from "./relatedTables/SamplePreparation";
 import SampleTaxonList from "./relatedTables/SampleTaxonList";
 import SampleWrapper from "./SampleWrapper";
@@ -1047,11 +1044,14 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import SampleAnalysisTable from "./relatedTables/SampleAnalysisTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   name: "Sample",
 
   components: {
+    SampleAnalysisTable,
     FileUpload,
     TextareaWrapper,
     DateWrapper,
@@ -1061,7 +1061,6 @@ export default {
     SampleWrapper,
     SampleTaxonList,
     SamplePreparation,
-    SampleAnalysis,
     SampleReference,
     Spinner
   },
@@ -1079,7 +1078,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
 
   data() {
     return this.setInitialData();
@@ -1322,7 +1321,7 @@ export default {
     },
 
     loadFullInfo() {
-      this.loadAutocompleteFields(true, true);
+      this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
@@ -1351,132 +1350,57 @@ export default {
         });
 
         this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
       else this.setTab("analysis");
-
-      this.$root.$on(
-        "add-new-sample-from-modal",
-        this.handleUserChoiceFromModal
-      );
     },
 
-    loadAutocompleteFields(
-      regularAutocompleteFields = true,
-      relatedDataAutocompleteFields = false
-    ) {
-      if (regularAutocompleteFields) {
-        fetchSamplePurpose().then(
-          response =>
-            (this.autocomplete.purpose = this.handleResponse(response))
-        );
-      }
-
-      if (relatedDataAutocompleteFields) {
-        fetchAnalysisMethod().then(
-          response =>
-            (this.autocomplete.analysis_method = this.handleResponse(response))
-        );
-        fetchFossilGroup().then(
-          response =>
-            (this.autocomplete.fossil_group = this.handleResponse(response))
-        );
-      }
+    loadAutocompleteFields() {
+      fetchSamplePurpose().then(
+        response => (this.autocomplete.purpose = this.handleResponse(response))
+      );
     },
 
     setDefaultRelatedData() {
       return {
-        sample_reference: [],
-        attachment_link: [],
-        analysis: [],
-        preparation: [],
-        taxon_list: [],
-        copyFields: {
-          sample_reference: ["reference", "remarks"],
-          attachment_link: ["attachment"],
-          analysis: [
-            "analysis_method",
-            "method_details",
-            "mass",
-            "date",
-            "date_end",
-            "date_free",
-            "agent",
-            "remarks",
-            "location",
-            "is_private"
-          ],
-          preparation: [
-            "preparation_number",
-            "taxon",
-            "storage",
-            "remarks",
-            "analysis",
-            "is_private"
-          ],
-          taxon_list: [
-            "taxon",
-            "name",
-            "frequency",
-            "agent_identified",
-            "date_identified",
-            "extra",
-            "preparation",
-            "is_private",
-            "remarks"
-          ]
-        },
-        insert: this.setDefaultInsertRelatedData(),
+        sample_reference: { count: 0, results: [] },
+        attachment_link: { count: 0, results: [] },
+        analysis: { count: 0, results: [] },
+        preparation: { count: 0, results: [] },
+        taxon_list: { count: 0, results: [] },
         searchParameters: {
           sample_reference: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           attachment_link: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           analysis: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           preparation: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           taxon_list: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
-        },
-        count: {
-          sample_reference: 0,
-          attachment_link: 0,
-          analysis: 0,
-          preparation: 0,
-          taxon_list: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        sample_reference: {},
-        attachment_link: {},
-        analysis: {},
-        preparation: {},
-        taxon_list: {}
       };
     },
 
@@ -1521,22 +1445,23 @@ export default {
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ];
+              ].results;
             }
         });
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
       }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
+
     fillAutocompleteFields(obj) {
       if (this.isNotEmpty(obj.series_id)) {
         this.sample.series = { name: obj.series__name, id: obj.series_id };
@@ -1616,90 +1541,14 @@ export default {
           location: obj.storage_additional__location,
           id: obj.storage_additional
         };
-        this.autocomplete.storage_additional.push(this.sample.storage_additional);
+        this.autocomplete.storage_additional.push(
+          this.sample.storage_additional
+        );
       }
       if (this.isNotEmpty(obj.site)) {
         this.sample.site = { id: obj.site, name: obj.site__name };
         this.autocomplete.site.push(this.sample.site);
       }
-    },
-
-    fillRelatedDataAutocompleteFields(obj) {
-      obj.analysis_method = {
-        analysis_method: obj.analysis_method__analysis_method,
-        method_en: obj.analysis_method__method_en,
-        id: obj.analysis_method
-      };
-      obj.agent = { agent: obj.agent__agent, id: obj.agent };
-      obj.fossil_group = { taxon: obj.taxon__taxon, id: obj.taxon };
-      obj.storage = { location: obj.storage__location, id: obj.storage };
-      obj.analysis = { id: obj.analysis };
-      obj.taxon = { taxon: obj.taxon__taxon, id: obj.taxon };
-      obj.agent_identified = {
-        agent: obj.agent_identified__agent,
-        id: obj.agent_identified
-      };
-      obj.preparation = {
-        id: obj.preparation,
-        preparation_number: obj.preparation_number
-      };
-      obj.reference = {
-        reference: obj.reference__reference,
-        id: obj.reference
-      };
-
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.analysis_method)) {
-        newObject.analysis_method = obj.analysis_method.id;
-        newObject.analysis_method__analysis_method =
-          obj.analysis_method.analysis_method;
-        newObject.analysis_method__method_en = obj.analysis_method.method_en;
-      }
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-      if (this.isNotEmpty(obj.fossil_group)) {
-        newObject.fossil_group = obj.fossil_group.id;
-        newObject.fossil_group__taxon = obj.fossil_group.taxon;
-      }
-      if (this.isNotEmpty(obj.storage)) {
-        newObject.storage = obj.storage.id;
-        newObject.storage__location = obj.storage.location;
-      }
-      if (this.isNotEmpty(obj.analysis)) {
-        newObject.analysis = obj.analysis.id;
-      }
-      if (this.isNotEmpty(obj.taxon)) {
-        newObject.taxon = obj.taxon.id;
-        newObject.taxon__taxon = obj.taxon.taxon;
-      }
-      if (this.isNotEmpty(obj.agent_identified)) {
-        newObject.agent_identified = obj.agent_identified.id;
-        newObject.agent_identified__agent = obj.agent_identified.agent;
-      }
-      if (this.isNotEmpty(obj.preparation)) {
-        newObject.preparation = obj.preparation.id;
-        newObject.preparation_number = obj.preparation.preparation_number;
-      }
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-      if (this.isNotEmpty(obj.attachment)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.attachment__original_filename =
-          obj.attachment.original_filename;
-      }
-
-      return newObject;
     },
 
     loadRelatedData(object) {
@@ -1731,56 +1580,10 @@ export default {
           this.relatedData.searchParameters.attachment_link
         );
       }
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[object] = this.handleResponse(response);
-          this.relatedData.count[object] = response.body.count;
-          resolve(true);
-        });
+      query.then(response => {
+        this.relatedData[object].results = this.handleResponse(response);
+        this.relatedData[object].count = response.body.count;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.sample = this.sample.id;
-
-      if (this.isNotEmpty(uploadableObject.attachment))
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      if (this.isNotEmpty(uploadableObject.reference))
-        uploadableObject.reference = uploadableObject.reference.id
-          ? uploadableObject.reference.id
-          : uploadableObject.reference;
-      if (this.isNotEmpty(uploadableObject.analysis_method))
-        uploadableObject.analysis_method = uploadableObject.analysis_method.id;
-      if (this.isNotEmpty(uploadableObject.agent))
-        uploadableObject.agent = uploadableObject.agent.id;
-      if (this.isNotEmpty(uploadableObject.agent_identified))
-        uploadableObject.agent_identified =
-          uploadableObject.agent_identified.id;
-      if (this.isNotEmpty(uploadableObject.date))
-        uploadableObject.date = this.formatDateForUpload(uploadableObject.date);
-      if (this.isNotEmpty(uploadableObject.date_end))
-        uploadableObject.date_end = this.formatDateForUpload(
-          uploadableObject.date_end
-        );
-      if (this.isNotEmpty(uploadableObject.date_identified))
-        uploadableObject.date_identified = this.formatDateForUpload(
-          uploadableObject.date_identified
-        );
-      if (this.isNotEmpty(uploadableObject.taxon))
-        uploadableObject.taxon = uploadableObject.taxon.id;
-      if (this.isNotEmpty(uploadableObject.storage))
-        uploadableObject.storage = uploadableObject.storage.id;
-      if (this.isNotEmpty(uploadableObject.analysis))
-        uploadableObject.analysis = uploadableObject.analysis.id;
-      if (this.isNotEmpty(uploadableObject.preparation))
-        uploadableObject.preparation = uploadableObject.preparation.id;
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {
@@ -1802,17 +1605,6 @@ export default {
       };
     },
 
-    handleUserChoiceFromModal(choice) {
-      console.log(choice);
-      let vm = this;
-      if (choice === "SAVE_AND_LEAVE") {
-        this.add(false, "sample", true).then(() => {
-          vm.$root.$emit("close-new-sample-modal");
-        });
-      } else if (choice === "SAVE") {
-        this.add(true, "sample");
-      }
-    },
     siteLabel(option) {
       if (option.id === null) return;
       return `id: ${option.id} - ${option.name}`;
@@ -1847,7 +1639,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
+      this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.results = files;
     }
   }
 };
