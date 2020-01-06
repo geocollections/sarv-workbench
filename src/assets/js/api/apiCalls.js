@@ -576,26 +576,30 @@ export function fetchLocality(id) {
 }
 
 export function fetchLocalityReference(id, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `locality_reference/?locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `locality_reference/?locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLocalitySynonym(id, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `locality_synonym/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `locality_synonym/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLocalityAttachment(id, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLocalityStratigraphy(id, searchParameters) {
+  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
   return fetch(
-    `locality_stratigraphy/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+    `locality_stratigraphy/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

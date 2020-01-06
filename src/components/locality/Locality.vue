@@ -481,44 +481,42 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
-            class="font-weight-bold ml-2"
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2 blue--text"
           >
-            {{ relatedData[tab.name].length }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
 
       <v-tabs-items>
-        <v-card
-          class="pa-1"
-          flat
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-        >
-          <locality-reference
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <locality-reference-table
+            v-show="activeTab === 'locality_reference'"
+            :response="relatedData.locality_reference"
+            :search-parameters="relatedData.searchParameters.locality_reference"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <locality-synonym
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <locality-synonym-table
+            v-show="activeTab === 'locality_synonym'"
+            :response="relatedData.locality_synonym"
+            :search-parameters="relatedData.searchParameters.locality_synonym"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <div v-show="activeTab === 'attachment_link'">
             <file-upload
               show-existing
-              :files-from-object="relatedData.attachment_link"
+              :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -526,19 +524,22 @@
             />
           </div>
 
-          <locality-stratigraphy
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <locality-stratigraphy-table
+            v-show="activeTab === 'locality_stratigraphy'"
+            :response="relatedData.locality_stratigraphy"
+            :search-parameters="
+              relatedData.searchParameters.locality_stratigraphy
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData.count[activeTab] > 0"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
             class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
           >
             <div class="mr-3 mb-3">
@@ -562,7 +563,7 @@
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.count[activeTab] /
+                    relatedData[activeTab].count /
                       relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
@@ -589,14 +590,10 @@ import {
   fetchLocalitySynonym,
   fetchLocalityAttachment,
   fetchLocalityStratigraphy,
-  fetchLocalities
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import LocalityReference from "./relatedTables/LocalityReference";
-import LocalitySynonym from "./relatedTables/LocalitySynonym";
-import LocalityStratigraphy from "./relatedTables/LocalityStratigraphy";
 import MapComponent from "../partial/MapComponent";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
@@ -605,19 +602,23 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import LocalityReferenceTable from "./relatedTables/LocalityReferenceTable";
+import LocalitySynonymTable from "./relatedTables/LocalitySynonymTable";
+import LocalityStratigraphyTable from "./relatedTables/LocalityStratigraphyTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   name: "Locality",
 
   components: {
+    LocalityStratigraphyTable,
+    LocalitySynonymTable,
+    LocalityReferenceTable,
     FileUpload,
     AutocompleteWrapper,
     CheckboxWrapper,
     TextareaWrapper,
     InputWrapper,
-    LocalityStratigraphy,
-    LocalitySynonym,
-    LocalityReference,
     Spinner,
     MapComponent
   },
@@ -635,7 +636,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
 
   data() {
     return this.setInitialData();
@@ -845,99 +846,65 @@ export default {
         });
 
         this.$on("tab-changed", this.setTab);
-
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);
       else this.setTab("locality_reference");
     },
 
-    loadAutocompleteFields(regularAutocompleteFields = true) {
-      if (regularAutocompleteFields) {
-        fetchListLocalityTypes().then(
-          response =>
-            (this.autocomplete.localityTypes = this.handleResponse(response))
-        );
-        fetchListLocalityExtent().then(
-          response => (this.autocomplete.extent = this.handleResponse(response))
-        );
-        fetchListCoordinateMethod().then(
-          response =>
-            (this.autocomplete.coordMethod = this.handleResponse(response))
-        );
-        fetchListCoordinatePrecision().then(
-          response =>
-            (this.autocomplete.coordPrecision = this.handleResponse(response))
-        );
-        fetchListCountry().then(
-          response =>
-            (this.autocomplete.country = this.handleResponse(response))
-        );
-      }
+    loadAutocompleteFields() {
+      fetchListLocalityTypes().then(
+        response =>
+          (this.autocomplete.localityTypes = this.handleResponse(response))
+      );
+      fetchListLocalityExtent().then(
+        response => (this.autocomplete.extent = this.handleResponse(response))
+      );
+      fetchListCoordinateMethod().then(
+        response =>
+          (this.autocomplete.coordMethod = this.handleResponse(response))
+      );
+      fetchListCoordinatePrecision().then(
+        response =>
+          (this.autocomplete.coordPrecision = this.handleResponse(response))
+      );
+      fetchListCountry().then(
+        response => (this.autocomplete.country = this.handleResponse(response))
+      );
     },
 
     setDefaultRelatedData() {
       return {
-        locality_reference: [],
-        locality_synonym: [],
-        attachment_link: [],
-        locality_stratigraphy: [],
-        copyFields: {
-          locality_reference: ["reference", "pages", "figures", "remarks"],
-          locality_synonym: ["synonym", "reference", "pages", "remarks"],
-          attachment_link: ["attachment", "remarks"],
-          locality_stratigraphy: [
-            "stratigraphy",
-            "depth_base",
-            "depth_top",
-            "reference",
-            "agent",
-            "year",
-            "current"
-          ]
-        },
-        insert: this.setDefaultInsertRelatedData(),
+        locality_reference: { count: 0, results: [] },
+        locality_synonym: { count: 0, results: [] },
+        attachment_link: { count: 0, results: [] },
+        locality_stratigraphy: { count: 0, results: [] },
         searchParameters: {
           locality_reference: {
             page: 1,
             paginateBy: 25,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           locality_synonym: {
             page: 1,
             paginateBy: 25,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           attachment_link: {
             page: 1,
             paginateBy: 25,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           locality_stratigraphy: {
             page: 1,
             paginateBy: 25,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
-        },
-        count: {
-          locality_reference: 0,
-          locality_synonym: 0,
-          attachment_link: 0,
-          locality_stratigraphy: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        locality_reference: {},
-        locality_synonym: {},
-        attachment_link: {},
-        locality_stratigraphy: {}
       };
     },
 
@@ -982,16 +949,16 @@ export default {
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ];
+              ].results;
             }
         });
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
       }
 
       console.log("This object is sent in string format:");
@@ -1054,54 +1021,10 @@ export default {
           stratigraphy_en: obj.stratigraphy_base__stratigraphy_en,
           id: obj.stratigraphy_base__id
         };
-        this.autocomplete.stratigraphy_base.push(this.locality.stratigraphy_base);
+        this.autocomplete.stratigraphy_base.push(
+          this.locality.stratigraphy_base
+        );
       }
-    },
-
-    fillRelatedDataAutocompleteFields(obj) {
-      obj.reference = {
-        reference: obj.reference__reference,
-        id: obj.reference
-      };
-      obj.stratigraphy = {
-        stratigraphy: obj.stratigraphy__stratigraphy,
-        stratigraphy_en: obj.stratigraphy__stratigraphy_en,
-        id: obj.stratigraphy__id
-      };
-      obj.agent = { agent: obj.agent__agent, id: obj.agent };
-
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.reference)) {
-        newObject.reference = obj.reference.id;
-        newObject.reference__reference = obj.reference.reference;
-      }
-
-      if (this.isNotEmpty(obj.stratigraphy)) {
-        newObject.stratigraphy = obj.stratigraphy.id;
-        newObject.stratigraphy__stratigraphy = obj.stratigraphy.stratigraphy;
-        newObject.stratigraphy__stratigraphy_en =
-          obj.stratigraphy.stratigraphy_en;
-      }
-
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-
-      if (this.isNotEmpty(obj.attachment)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.attachment__original_filename =
-          obj.attachment.original_filename;
-      }
-
-      return newObject;
     },
 
     loadRelatedData(type) {
@@ -1129,57 +1052,15 @@ export default {
         );
       }
 
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData[type] = this.handleResponse(response);
-          this.relatedData.count[type] = response.body.count;
-          resolve(true);
-        });
+      query.then(response => {
+        this.relatedData[type] = this.handleResponse(response);
+        this.relatedData.count[type] = response.body.count;
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.locality = this.locality.id;
-      if (this.isNotEmpty(uploadableObject.reference)) {
-        uploadableObject.reference = uploadableObject.reference.id
-          ? uploadableObject.reference.id
-          : uploadableObject.reference;
-      }
-      if (this.isNotEmpty(uploadableObject.attachment)) {
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      }
-      if (this.isNotEmpty(uploadableObject.stratigraphy)) {
-        uploadableObject.stratigraphy = uploadableObject.stratigraphy.id
-          ? uploadableObject.stratigraphy.id
-          : uploadableObject.stratigraphy;
-      }
-      if (this.isNotEmpty(uploadableObject.agent)) {
-        uploadableObject.agent = uploadableObject.agent.id
-          ? uploadableObject.agent.id
-          : uploadableObject.agent;
-      }
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     updateLocation(location) {
       this.locality.latitude = location.lat.toFixed(6);
       this.locality.longitude = location.lng.toFixed(6);
-    },
-    fetchList(localStorageData) {
-      let params =
-        this.isNotEmpty(localStorageData) &&
-        localStorageData !== "fallbackValue"
-          ? localStorageData
-          : this.searchParameters;
-      return new Promise(resolve => {
-        resolve(fetchLocalities(params));
-      });
     },
 
     setDefaultSearchParameters() {
@@ -1202,7 +1083,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
+      this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.reuslts = files;
     }
   }
 };
