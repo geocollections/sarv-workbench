@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen-location-table">
+  <div class="sample-reference-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,38 +38,36 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.type="{ item }">
+      <template v-slot:item.reference="{ item }">
         <div v-if="isUsedAsRelatedData">
-          <span
+          <router-link
             v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type__value,
-              en: item.type__value_en
-            }"
-          />
-          <span
-            v-else-if="item.type"
-            v-translate="{
-              et: item.type.value,
-              en: item.type.value_en
-            }"
-          />
+            :to="{ path: '/reference/' + item.reference }"
+            :title="$t('editReference.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.reference__reference }}
+          </router-link>
+          <router-link
+            v-else-if="item.reference"
+            :to="{ path: '/reference/' + item.reference.id }"
+            :title="$t('editReference.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.reference.reference }}
+          </router-link>
         </div>
-        <div
+        <router-link
           v-else
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
-          }"
-        ></div>
-      </template>
-
-      <template v-slot:item.storage="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div v-if="$route.meta.isEdit">{{ item.storage__location }}</div>
-          <div v-else-if="item.storage">{{ item.storage.location }}</div>
-        </div>
-        <div v-else>{{ item.storage__location }}</div>
+          :to="{ path: '/reference/' + item.reference }"
+          :title="$t('editReference.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.reference__reference }}
+        </router-link>
       </template>
     </v-data-table>
 
@@ -83,7 +81,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.specimen_location")}`
+              `${$t("common.new")} ${$t("header.specimen_reference")}`
             }}</span>
           </v-card-title>
 
@@ -91,43 +89,18 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.number"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_location.number')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.type"
+                    v-model="item.reference"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
-                    :item-text="commonLabel"
-                    :label="$t('specimen_location.type')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.part"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_location.part')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.storage"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.storage"
-                    :loading="autocomplete.loaders.storage"
-                    item-text="location"
-                    :label="$t('specimen_location.storage')"
+                    :items="autocomplete.reference"
+                    :loading="autocomplete.loaders.reference"
+                    item-text="reference"
+                    :label="$t('reference.reference')"
                     use-state
+                    is-link
+                    route-object="reference"
                     is-searchable
-                    v-on:search:items="autocompleteStorageSearch"
+                    v-on:search:items="autocompleteReferenceSearch"
                   />
                 </v-col>
 
@@ -135,7 +108,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_location.remarks')"
+                    :label="$t('reference.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -166,10 +139,9 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import {fetchListSpecimenType} from "../../../assets/js/api/apiCalls";
 
 export default {
-  name: "SpecimenLocationTable",
+  name: "SampleReferenceTable",
 
   components: {
     AutocompleteWrapper,
@@ -215,11 +187,8 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "specimen_location.number", value: "number" },
-      { text: "specimen_location.type", value: "type" },
-      { text: "specimen_location.part", value: "part" },
-      { text: "specimen_location.storage", value: "storage" },
-      { text: "specimen_location.remarks", value: "remarks" },
+      { text: "reference.reference", value: "reference" },
+      { text: "reference.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -229,19 +198,14 @@ export default {
     ],
     dialog: false,
     item: {
-      number: "",
-      type: null,
-      part: "",
-      storage: null,
+      reference: null,
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      type: [],
-      storage: [],
+      reference: [],
       loaders: {
-        type: false,
-        storage: false
+        reference: false
       }
     }
   }),
@@ -258,14 +222,8 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.storage === "object" && this.item.storage !== null
+        typeof this.item.reference === "object" && this.item.reference !== null
       );
-    }
-  },
-
-  watch: {
-    dialog() {
-      this.fillListAutocompletes();
     }
   },
 
@@ -274,10 +232,7 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        number: "",
-        type: null,
-        part: "",
-        storage: null,
+        reference: null,
         remarks: ""
       };
     },
@@ -288,13 +243,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "specimen_location",
+          table: "sample_reference",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "specimen_location",
+          table: "sample_reference",
           item: formattedItem,
           rawItem: this.item
         });
@@ -308,27 +263,17 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.storage !== "object" && item.storage !== null) {
-        this.item.storage = {
-          id: item.storage,
-          location: item.storage__location
+      if (typeof item.reference !== "object" && item.reference !== null) {
+        this.item.reference = {
+          id: item.reference,
+          reference: item.reference__reference
         };
-        this.autocomplete.storage.push(this.item.storage);
-      } else if (item.storage !== null) {
-        this.item.storage = item.storage;
-        this.autocomplete.storage.push(this.item.storage);
+        this.autocomplete.reference.push(this.item.reference);
+      } else if (item.reference !== null) {
+        this.item.reference = item.reference;
+        this.autocomplete.reference.push(this.item.reference);
       }
 
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en
-        };
-      }
-
-      this.item.number = item.number;
-      this.item.part = item.part;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -336,23 +281,10 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "specimen_location",
+        table: "sample_reference",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
-    },
-
-    fillListAutocompletes() {
-      if (this.autocomplete.type.length === 0) {
-        this.autocomplete.loaders.type = true;
-        fetchListSpecimenType().then(response => {
-          if (response.status === 200) {
-            this.autocomplete.type =
-              response.body.count > 0 ? response.body.results : [];
-          }
-        });
-        this.autocomplete.loaders.type = false;
-      }
     },
 
     formatItem(item) {

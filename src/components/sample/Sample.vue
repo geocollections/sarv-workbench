@@ -935,24 +935,26 @@
               v-on:related:delete="deleteRelatedItem"
             />
 
-            <sample-preparation
-              :related-data="relatedData"
-              :autocomplete="autocomplete"
-              :active-tab="activeTab"
-              v-on:add-related-data="addRelatedData"
-              v-on:set-default="setDefault"
-              v-on:edit-row="editRow"
-              v-on:remove-row="removeRow"
+            <sample-preparation-table
+              v-show="activeTab === 'preparation'"
+              :response="relatedData.preparation"
+              :search-parameters="relatedData.searchParameters.preparation"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
             />
 
-            <sample-taxon-list
-              :related-data="relatedData"
-              :autocomplete="autocomplete"
-              :active-tab="activeTab"
-              v-on:add-related-data="addRelatedData"
-              v-on:set-default="setDefault"
-              v-on:edit-row="editRow"
-              v-on:remove-row="removeRow"
+            <sample-taxon-list-table
+              v-show="activeTab === 'taxon_list'"
+              :response="relatedData.taxon_list"
+              :search-parameters="relatedData.searchParameters.taxon_list"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
             />
 
             <div v-show="activeTab === 'attachment_link'">
@@ -966,14 +968,15 @@
               />
             </div>
 
-            <sample-reference
-              :related-data="relatedData"
-              :autocomplete="autocomplete"
-              :active-tab="activeTab"
-              v-on:add-related-data="addRelatedData"
-              v-on:set-default="setDefault"
-              v-on:edit-row="editRow"
-              v-on:remove-row="removeRow"
+            <sample-reference-table
+              v-show="activeTab === 'sample_reference'"
+              :response="relatedData.sample_reference"
+              :search-parameters="relatedData.searchParameters.sample_reference"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
             />
 
             <!-- PAGINATION -->
@@ -1032,9 +1035,6 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import SampleReference from "./relatedTables/SampleReference";
-import SamplePreparation from "./relatedTables/SamplePreparation";
-import SampleTaxonList from "./relatedTables/SampleTaxonList";
 import SampleWrapper from "./SampleWrapper";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
@@ -1046,11 +1046,17 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import FileUpload from "../partial/inputs/FileInput";
 import SampleAnalysisTable from "./relatedTables/SampleAnalysisTable";
 import requestsMixin from "../../mixins/requestsMixin";
+import SamplePreparationTable from "./relatedTables/SamplePreparationTable";
+import SampleTaxonListTable from "./relatedTables/SamplesTaxonListTable";
+import SampleReferenceTable from "./relatedTables/SampleReferenceTable";
 
 export default {
   name: "Sample",
 
   components: {
+    SampleReferenceTable,
+    SampleTaxonListTable,
+    SamplePreparationTable,
     SampleAnalysisTable,
     FileUpload,
     TextareaWrapper,
@@ -1059,9 +1065,6 @@ export default {
     InputWrapper,
     CheckboxWrapper,
     SampleWrapper,
-    SampleTaxonList,
-    SamplePreparation,
-    SampleReference,
     Spinner
   },
 

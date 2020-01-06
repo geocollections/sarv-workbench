@@ -1,5 +1,5 @@
 <template>
-  <div class="taxon-opinion-table">
+  <div class="sample-analysis-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer

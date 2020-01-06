@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen-location-table">
+  <div class="sample-preparation-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,30 +38,36 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.type="{ item }">
+      <template v-slot:item.taxon="{ item }">
         <div v-if="isUsedAsRelatedData">
-          <span
+          <router-link
             v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.type__value,
-              en: item.type__value_en
-            }"
-          />
-          <span
-            v-else-if="item.type"
-            v-translate="{
-              et: item.type.value,
-              en: item.type.value_en
-            }"
-          />
+            :to="{ path: '/taxon/' + item.id }"
+            :title="$t('editTaxon.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.fossil_group }}
+          </router-link>
+          <router-link
+            v-else-if="item.fossil_group"
+            :to="{ path: '/taxon/' + item.id }"
+            :title="$t('editTaxon.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.fossil_group.taxon }}
+          </router-link>
         </div>
-        <div
+        <router-link
           v-else
-          v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
-          }"
-        ></div>
+          :to="{ path: '/taxon/' + item.id }"
+          :title="$t('editTaxon.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.fossil_group }}
+        </router-link>
       </template>
 
       <template v-slot:item.storage="{ item }">
@@ -83,7 +89,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.specimen_location")}`
+              `${$t("common.new")} ${$t("header.dataset_reference")}`
             }}</span>
           </v-card-title>
 
@@ -92,28 +98,25 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.number"
+                    v-model="item.preparation_number"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_location.number')"
+                    :label="$t('preparation.preparation_number')"
+                    use-state
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.type"
+                    v-model="item.fossil_group"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
-                    :item-text="commonLabel"
-                    :label="$t('specimen_location.type')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.part"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_location.part')"
+                    :items="autocomplete.taxon"
+                    :loading="autocomplete.loaders.taxon"
+                    item-text="taxon"
+                    :label="$t('preparation.fossil_group')"
+                    is-link
+                    route-object="taxon"
+                    is-searchable
+                    v-on:search:items="autocompleteTaxonSearch"
                   />
                 </v-col>
 
@@ -124,8 +127,7 @@
                     :items="autocomplete.storage"
                     :loading="autocomplete.loaders.storage"
                     item-text="location"
-                    :label="$t('specimen_location.storage')"
-                    use-state
+                    :label="$t('preparation.storage')"
                     is-searchable
                     v-on:search:items="autocompleteStorageSearch"
                   />
@@ -135,7 +137,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_location.remarks')"
+                    :label="$t('preparation.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -162,14 +164,13 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import {fetchListSpecimenType} from "../../../assets/js/api/apiCalls";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
 export default {
-  name: "SpecimenLocationTable",
+  name: "SamplePreparationTable",
 
   components: {
     AutocompleteWrapper,
@@ -215,11 +216,10 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "specimen_location.number", value: "number" },
-      { text: "specimen_location.type", value: "type" },
-      { text: "specimen_location.part", value: "part" },
-      { text: "specimen_location.storage", value: "storage" },
-      { text: "specimen_location.remarks", value: "remarks" },
+      { text: "preparation.preparation_number", value: "preparation_number" },
+      { text: "preparation.fossil_group", value: "taxon" },
+      { text: "preparation.storage", value: "storage" },
+      { text: "preparation.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",
@@ -229,18 +229,17 @@ export default {
     ],
     dialog: false,
     item: {
-      number: "",
-      type: null,
-      part: "",
+      preparation_number: "",
+      fossil_group: null,
       storage: null,
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      type: [],
+      taxon: [],
       storage: [],
       loaders: {
-        type: false,
+        taxon: false,
         storage: false
       }
     }
@@ -258,14 +257,9 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.storage === "object" && this.item.storage !== null
+        this.item.preparation_number !== null &&
+        this.item.preparation_number.length > 0
       );
-    }
-  },
-
-  watch: {
-    dialog() {
-      this.fillListAutocompletes();
     }
   },
 
@@ -274,9 +268,8 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        number: "",
-        type: null,
-        part: "",
+        preparation_number: "",
+        fossil_group: null,
         storage: null,
         remarks: ""
       };
@@ -288,13 +281,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "specimen_location",
+          table: "preparation",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "specimen_location",
+          table: "preparation",
           item: formattedItem,
           rawItem: this.item
         });
@@ -308,6 +301,17 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
+      if (typeof item.fossil_group !== "object" && item.fossil_group !== null) {
+        this.item.fossil_group = {
+          id: item.id,
+          taxon: item.taxon
+        };
+        this.autocomplete.taxon.push(this.item.fossil_group);
+      } else if (item.fossil_group !== null) {
+        this.item.fossil_group = item.fossil_group;
+        this.autocomplete.taxon.push(this.item.fossil_group);
+      }
+
       if (typeof item.storage !== "object" && item.storage !== null) {
         this.item.storage = {
           id: item.storage,
@@ -319,16 +323,7 @@ export default {
         this.autocomplete.storage.push(this.item.storage);
       }
 
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en
-        };
-      }
-
-      this.item.number = item.number;
-      this.item.part = item.part;
+      this.item.preparation_number = item.preparation_number;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -336,23 +331,10 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "specimen_location",
+        table: "preparation",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
-    },
-
-    fillListAutocompletes() {
-      if (this.autocomplete.type.length === 0) {
-        this.autocomplete.loaders.type = true;
-        fetchListSpecimenType().then(response => {
-          if (response.status === 200) {
-            this.autocomplete.type =
-              response.body.count > 0 ? response.body.results : [];
-          }
-        });
-        this.autocomplete.loaders.type = false;
-      }
     },
 
     formatItem(item) {
