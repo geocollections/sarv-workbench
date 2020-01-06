@@ -447,24 +447,20 @@
             <v-icon small>{{ tab.iconClass }}</v-icon>
           </span>
           <span
-            v-if="relatedData[tab.name].length > 0"
-            class="font-weight-bold ml-2"
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2 blue--text"
           >
-            {{ relatedData[tab.name].length }}
+            {{ relatedData[tab.name].count }}
           </span>
         </v-tab>
       </v-tabs>
 
       <v-tabs-items>
-        <v-card
-          class="pa-1"
-          flat
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-        >
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <div v-show="activeTab === 'attachment_link'">
             <file-upload
               show-existing
-              :files-from-object="relatedData.attachment_link"
+              :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -472,44 +468,48 @@
             />
           </div>
 
-          <doi-related-identifier
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <doi-related-identifier-table
+            v-show="activeTab === 'doi_related_identifier'"
+            :response="relatedData.doi_related_identifier"
+            :search-parameters="relatedData.searchParameters.doi_related_identifier"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <doi-geolocation
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <doi-geolocation-table
+            v-show="activeTab === 'doi_geolocation'"
+            :response="relatedData.doi_geolocation"
+            :search-parameters="relatedData.searchParameters.doi_geolocation"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <doi-agent
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <doi-agent-table
+            v-show="activeTab === 'doi_agent'"
+            :response="relatedData.doi_agent"
+            :search-parameters="relatedData.searchParameters.doi_agent"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
-          <doi-date
-            :related-data="relatedData"
-            :autocomplete="autocomplete"
-            :active-tab="activeTab"
-            v-on:add-related-data="addRelatedData"
-            v-on:set-default="setDefault"
-            v-on:edit-row="editRow"
-            v-on:remove-row="removeRow"
+          <doi-date-table
+            v-show="activeTab === 'doi_date'"
+            :response="relatedData.doi_date"
+            :search-parameters="relatedData.searchParameters.doi_date"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
           />
 
           <!-- PAGINATION -->
@@ -710,10 +710,6 @@ import {
   fetchDoiUsingEGF,
   fetchAgentUsingName
 } from "../../assets/js/api/apiCalls";
-import DoiAgent from "./relatedTables/DoiAgent";
-import DoiRelatedIdentifier from "./relatedTables/DoiRelatedIdentifier";
-import DoiGeolocation from "./relatedTables/DoiGeolocation";
-import DoiDate from "./relatedTables/DoiDate";
 import {
   toastSuccess,
   toastError,
@@ -726,18 +722,23 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import DoiRelatedIdentifierTable from "./relatedTables/DoiRelatedIdentifierTable";
+import DoiGeolocationTable from "./relatedTables/DoiGeolocationTable";
+import DoiAgentTable from "./relatedTables/DoiAgentTable";
+import DoiDateTable from "./relatedTables/DoiDateTable";
+import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   components: {
+    DoiDateTable,
+    DoiAgentTable,
+    DoiGeolocationTable,
+    DoiRelatedIdentifierTable,
     FileUpload,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    DoiDate,
-    DoiGeolocation,
-    DoiRelatedIdentifier,
-    DoiAgent,
     Spinner
   },
 
@@ -759,7 +760,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
 
   name: "Doi",
 
@@ -1056,89 +1057,47 @@ export default {
       return {
         reference: null,
         dataset: null,
-        attachment_link: [],
-        doi_agent: [],
-        doi_related_identifier: [],
-        doi_geolocation: [],
-        doi_date: [],
-        new: {
-          attachment: [],
-          agent_type: [],
-          identifier_type: [],
-          relation_type: [],
-          locality: [],
-          date_type: []
-        },
-        copyFields: {
-          attachment_link: ["attachment", "remarks"],
-          doi_related_identifier: [
-            "identifier_type",
-            "relation_type",
-            "value",
-            "remarks"
-          ],
-          doi_geolocation: [
-            "locality",
-            "place",
-            "point_longitude",
-            "point_latitude",
-            "polygon"
-          ],
-          doi_agent: ["name", "affiliation", "agent_type", "orcid", "agent"],
-          doi_date: ["date", "date_type", "remarks"]
-        },
-        insert: this.setDefaultInsertRelatedData(),
+        attachment_link: { count: 0, results: [] },
+        doi_agent: { count: 0, results: [] },
+        doi_related_identifier: { count: 0, results: [] },
+        doi_geolocation: { count: 0, results: [] },
+        doi_date: { count: 0, results: [] },
         searchParameters: {
           attachment_link: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           doi_related_identifier: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           doi_geolocation: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           doi_agent: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           },
           doi_date: {
             page: 1,
             paginateBy: 10,
-            orderBy: "id"
+            sortBy: ["id"],
+            sortDesc: [true]
           }
         },
         count: {
           reference: 0,
-          dataset: 0,
-          attachment_link: 0,
-          doi_related_identifier: 0,
-          doi_geolocation: 0,
-          doi_agent: 0,
-          doi_date: 0
+          dataset: 0
         }
-      };
-    },
-
-    setDefaultInsertRelatedData() {
-      return {
-        attachment_link: {},
-        doi_related_identifier: {},
-        doi_geolocation: {},
-        doi_agent: {
-          agent_type: {
-            id: 1,
-            value: "Creator"
-          }
-        },
-        doi_date: {}
       };
     },
 
@@ -1166,8 +1125,8 @@ export default {
       if (!this.$route.meta.isEdit) {
         uploadableObject.related_data = {};
 
-        if (this.isNotEmpty(this.relatedData.doi_agent)) {
-          let clonedData = cloneDeep(this.relatedData.doi_agent);
+        if (this.relatedData.doi_agent.results.length > 0) {
+          let clonedData = cloneDeep(this.relatedData.doi_agent.results);
           uploadableObject.related_data.doi_agent = clonedData
             .filter(entity => this.isNotEmpty(entity.name))
             .map(entity => {
@@ -1183,12 +1142,12 @@ export default {
             uploadableObject.related_data.doi_agent = null;
         } else uploadableObject.related_data.doi_agent = null;
 
-        if (this.isNotEmpty(this.relatedData.attachment_link)) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
         } else uploadableObject.related_data.attachment = null;
 
-        if (this.isNotEmpty(this.relatedData.doi_geolocation)) {
-          let clonedData = cloneDeep(this.relatedData.doi_geolocation);
+        if (this.relatedData.doi_geolocation.results.length > 0) {
+          let clonedData = cloneDeep(this.relatedData.doi_geolocation.results);
           uploadableObject.related_data.doi_geolocation = clonedData
             // .filter(entity => this.isNotEmpty(entity.locality))
             .map(entity => {
@@ -1208,8 +1167,10 @@ export default {
             uploadableObject.related_data.doi_geolocation = null;
         } else uploadableObject.related_data.doi_geolocation = null;
 
-        if (this.isNotEmpty(this.relatedData.doi_related_identifier)) {
-          let clonedData = cloneDeep(this.relatedData.doi_related_identifier);
+        if (this.relatedData.doi_related_identifier.results.length > 0) {
+          let clonedData = cloneDeep(
+            this.relatedData.doi_related_identifier.results
+          );
           uploadableObject.related_data.doi_related_identifier = clonedData
             .filter(entity => this.isNotEmpty(entity.identifier_type))
             .map(entity => {
@@ -1226,8 +1187,8 @@ export default {
             uploadableObject.related_data.doi_related_identifier = null;
         } else uploadableObject.related_data.doi_related_identifier = null;
 
-        if (this.isNotEmpty(this.relatedData.doi_date)) {
-          let clonedData = cloneDeep(this.relatedData.doi_date);
+        if (this.relatedData.doi_date.results.length > 0) {
+          let clonedData = cloneDeep(this.relatedData.doi_date.results);
           uploadableObject.related_data.doi_date = clonedData
             // .filter(entity => this.isNotEmpty(entity.date))
             .map(entity => {
@@ -1242,10 +1203,8 @@ export default {
         } else uploadableObject.related_data.doi_date = null;
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
       }
-
-      // this.fillMissingFieldsWithNull(this.copyFields);
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -1295,79 +1254,6 @@ export default {
         name: obj.dataset__name,
         name_en: obj.dataset__name_en
       };
-    },
-
-    fillRelatedDataAutocompleteFields(obj) {
-      if (this.isNotEmpty(obj.attachment))
-        obj.attachment = {
-          id: obj.attachment,
-          original_filename: obj.attachment__original_filename
-        };
-      if (this.isNotEmpty(obj.agent_type))
-        obj.agent_type = { id: obj.agent_type, value: obj.agent_type__value };
-      if (this.isNotEmpty(obj.agent))
-        obj.agent = { id: obj.agent, agent: obj.agent__agent };
-      if (this.isNotEmpty(obj.identifier_type))
-        obj.identifier_type = {
-          id: obj.identifier_type,
-          value: obj.identifier_type__value
-        };
-      if (this.isNotEmpty(obj.relation_type))
-        obj.relation_type = {
-          id: obj.relation_type,
-          value: obj.relation_type__value
-        };
-      if (this.isNotEmpty(obj.locality))
-        obj.locality = {
-          id: obj.locality,
-          locality: obj.locality__locality,
-          locality_en: obj.locality__locality_en
-        };
-      if (this.isNotEmpty(obj.date_type))
-        obj.date_type = { id: obj.date_type, value: obj.date_type__value };
-
-      return obj;
-    },
-
-    unformatRelatedDataAutocompleteFields(obj, objectID) {
-      let newObject = cloneDeep(obj);
-
-      if (objectID) newObject.id = objectID;
-
-      if (this.isNotEmpty(obj.attachment)) {
-        newObject.attachment = obj.attachment.id;
-        newObject.attachment__original_filename =
-          obj.attachment.original_filename;
-      }
-
-      if (this.isNotEmpty(obj.agent_type)) {
-        newObject.agent_type = obj.agent_type.id;
-        newObject.agent_type__value = obj.agent_type.value;
-      }
-
-      if (this.isNotEmpty(obj.agent)) {
-        newObject.agent = obj.agent.id;
-        newObject.agent__agent = obj.agent.agent;
-      }
-      if (this.isNotEmpty(obj.identifier_type)) {
-        newObject.identifier_type = obj.identifier_type.id;
-        newObject.identifier_type__value = obj.identifier_type.value;
-      }
-      if (this.isNotEmpty(obj.relation_type)) {
-        newObject.relation_type = obj.relation_type.id;
-        newObject.relation_type__value = obj.relation_type.value;
-      }
-      if (this.isNotEmpty(obj.locality)) {
-        newObject.locality = obj.locality.id;
-        newObject.locality__locality = obj.locality.locality;
-        newObject.locality__locality_en = obj.locality.locality_en;
-      }
-      if (this.isNotEmpty(obj.date_type)) {
-        newObject.date_type = obj.date_type.id;
-        newObject.date_type__value = obj.date_type.value;
-      }
-
-      return newObject;
     },
 
     loadRelatedData(object, doi = null) {
@@ -1431,12 +1317,9 @@ export default {
 
       // Dataset and Reference are direct links and do not need extra request.
       if (object !== "dataset" && object !== "reference") {
-        return new Promise(resolve => {
-          query.then(response => {
-            this.relatedData.count[object] = response.body.count;
-            this.relatedData[object] = this.handleResponse(response);
-            resolve(true);
-          });
+        query.then(response => {
+          this.relatedData[object].count = response.body.count;
+          this.relatedData[object].results = this.handleResponse(response);
         });
       }
     },
@@ -1451,62 +1334,6 @@ export default {
       if (tab === "doi_agent") {
         return !this.isNotEmpty(tabData.name);
       }
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.doi = this.doi.id;
-
-      if (this.isNotEmpty(uploadableObject.attachment)) {
-        uploadableObject.attachment = uploadableObject.attachment.id
-          ? uploadableObject.attachment.id
-          : uploadableObject.attachment;
-      }
-      if (this.isNotEmpty(uploadableObject.agent_type)) {
-        uploadableObject.agent_type = uploadableObject.agent_type.id
-          ? uploadableObject.agent_type.id
-          : uploadableObject.agent_type;
-      }
-      if (this.isNotEmpty(uploadableObject.agent)) {
-        uploadableObject.agent = uploadableObject.agent.id
-          ? uploadableObject.agent.id
-          : uploadableObject.agent;
-      }
-      if (this.isNotEmpty(uploadableObject.identifier_type)) {
-        uploadableObject.identifier_type = uploadableObject.identifier_type.id
-          ? uploadableObject.identifier_type.id
-          : uploadableObject.identifier_type;
-      }
-      if (this.isNotEmpty(uploadableObject.relation_type)) {
-        uploadableObject.relation_type = uploadableObject.relation_type.id
-          ? uploadableObject.relation_type.id
-          : uploadableObject.relation_type;
-      }
-      if (this.isNotEmpty(uploadableObject.locality)) {
-        uploadableObject.locality = uploadableObject.locality.id
-          ? uploadableObject.locality.id
-          : uploadableObject.locality;
-      }
-      if (this.isNotEmpty(uploadableObject.date_type)) {
-        uploadableObject.date_type = uploadableObject.date_type.id
-          ? uploadableObject.date_type.id
-          : uploadableObject.date_type;
-      }
-      // if (this.isNotEmpty(uploadableObject.datacite_updated))
-      //   uploadableObject.datacite_updated = this.formatDateForUpload(
-      //     objectToUpload.datacite_updated,
-      //     false
-      //   );
-      //
-      // if (this.isNotEmpty(uploadableObject.datacite_created))
-      //   uploadableObject.datacite_created = this.formatDateForUpload(
-      //     objectToUpload.datacite_created,
-      //     false
-      //   );
-
-      console.log("This object is sent in string format (related_data):");
-      console.log(uploadableObject);
-      return JSON.stringify(uploadableObject);
     },
 
     customLabelForReference(option) {
@@ -1819,7 +1646,8 @@ export default {
             let formattedName = `${lastName.trim()}, ${firstName.trim()}`;
             formattedCreatorsList.push(formattedName);
 
-            this.relatedData.doi_agent.push({
+            this.relatedData.doi_agent.count++;
+            this.relatedData.doi_agent.results.push({
               name: formattedName,
               agent_type: 1,
               agent_type__value: "Creator"
@@ -1869,7 +1697,8 @@ export default {
           else funderList.push(egfDoiObject.funder);
 
           funderList.forEach(funder => {
-            this.relatedData.doi_agent.push({
+            this.relatedData.doi_agent.count++;
+            this.relatedData.doi_agent.results.push({
               name: funder,
               agent_type: 22,
               agent_type__value: "Sponsor"
@@ -1883,7 +1712,8 @@ export default {
           else performerList.push(egfDoiObject.performer);
 
           performerList.forEach(performer => {
-            this.relatedData.doi_agent.push({
+            this.relatedData.doi_agent.count++;
+            this.relatedData.doi_agent.results.push({
               name: performer,
               agent_type: 12,
               agent_type__value: "Producer"
@@ -1933,12 +1763,14 @@ export default {
               let coordinates = JSON.stringify(
                 egfDoiObject.geometry.coordinates[0]
               );
-              this.relatedData.doi_geolocation.push({
+              this.relatedData.doi_geolocation.count++;
+              this.relatedData.doi_geolocation.results.push({
                 polygon: coordinates
               });
             } else if (egfDoiObject.geometry.type === "MultiPolygon") {
               egfDoiObject.geometry.coordinates.forEach(coordinates => {
-                this.relatedData.doi_geolocation.push({
+                this.relatedData.doi_geolocation.count++;
+                this.relatedData.doi_geolocation.results.push({
                   polygon: JSON.stringify(coordinates[0])
                 });
               });
@@ -1970,32 +1802,40 @@ export default {
                   doiAgentObject.orcid = agentObject.orcid;
                   doiAgentObject.affiliation =
                     agentObject.institution__institution_name_en;
-                  doiAgentObject.agent = agentObject.id;
-                  doiAgentObject.agent__agent = agentObject.agent;
-                  doiAgentObject.agent_type = 1;
-                  doiAgentObject.agent_type__value = "Creator";
+                  doiAgentObject.agent = {
+                    id: agentObject.id,
+                    agent: agentObject.agent
+                  };
+                  doiAgentObject.agent_type = {
+                    id: 1,
+                    value: "Creator"
+                  };
                   if (
-                    !this.relatedData["doi_agent"].find(
+                    !this.relatedData["doi_agent"].results.find(
                       agent =>
                         agent.id === doiAgentObject.agent ||
                         agent.name === doiAgentObject.name
                     )
                   ) {
-                    this.relatedData["doi_agent"].push(doiAgentObject);
+                    this.relatedData["doi_agent"].count++;
+                    this.relatedData["doi_agent"].results.push(doiAgentObject);
                   } else
                     toastError({
                       text: `Author(s) with the same information already exists!`
                     });
                 } else {
                   doiAgentObject.name = creator.trim();
-                  doiAgentObject.agent_type = 1;
-                  doiAgentObject.agent_type__value = "Creator";
+                  doiAgentObject.agent_type = {
+                    id: 1,
+                    value: "Creator"
+                  };
                   if (
-                    !this.relatedData["doi_agent"].find(
+                    !this.relatedData["doi_agent"].results.find(
                       agent => agent.name === doiAgentObject.name
                     )
                   ) {
-                    this.relatedData["doi_agent"].push(doiAgentObject);
+                    this.relatedData["doi_agent"].count++;
+                    this.relatedData["doi_agent"].results.push(doiAgentObject);
                   } else
                     toastError({
                       text: `Author(s) with the same name already exists!`
@@ -2005,11 +1845,12 @@ export default {
               () => {
                 doiAgentObject.name = creator.trim();
                 if (
-                  !this.relatedData["doi_agent"].find(
+                  !this.relatedData["doi_agent"].results.find(
                     agent => agent.name === doiAgentObject.name
                   )
                 ) {
-                  this.relatedData["doi_agent"].push(doiAgentObject);
+                  this.relatedData["doi_agent"].count++;
+                  this.relatedData["doi_agent"].results.push(doiAgentObject);
                 } else
                   toastError({
                     text: `Author(s) with the same name already exists!`
@@ -2019,7 +1860,8 @@ export default {
           }
         });
       } else {
-        this.relatedData["doi_agent"] = [];
+        this.relatedData["doi_agent"].count = 0;
+        this.relatedData["doi_agent"].results = [];
       }
     },
 
@@ -2028,7 +1870,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
+      this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.results = files;
     }
   }
 };

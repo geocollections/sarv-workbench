@@ -1302,6 +1302,7 @@
     "creators": "Autor",
     "year": "Aasta",
     "title": "Pealkiri",
+    "orcid": "ORCID",
     "title_alternative": "Pealkiri, alt",
     "title_translated": "Pealkiri, tõlgitud",
     "title_translated_language": "Tõlgitud, pealkiri keel",

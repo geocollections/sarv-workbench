@@ -1302,6 +1302,7 @@
     "creators": "Author",
     "year": "Year",
     "title": "Title",
+    "orcid": "ORCID",
     "title_alternative": "Title, alt",
     "title_translated": "Title, translated",
     "title_translated_language": "Trans, title lang",
