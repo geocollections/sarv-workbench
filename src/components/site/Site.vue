@@ -664,7 +664,7 @@ export default {
       }
     },
     sidebarUserAction(newVal) {
-      this.$_handleUserAction(newVal, "site", this.site);
+      this.handleUserAction(newVal, "site", this.site);
     },
     "relatedData.searchParameters.sample": {
       handler(newVal) {

@@ -1,4 +1,3 @@
-import VueMultiselect from "vue-multiselect";
 import cloneDeep from "lodash/cloneDeep";
 import moment from "moment";
 import {
@@ -19,9 +18,6 @@ const formManipulation = {
       editMode: false,
       isFileAddedAsObject: null
     };
-  },
-  components: {
-    VueMultiselect
   },
   mounted() {
     this.$parent.$on("button-clicked", this.bottomOptionClicked);
@@ -53,29 +49,6 @@ const formManipulation = {
           (value.constructor === Object && Object.keys(value).length === 0)
         )
       );
-    },
-
-    /**
-     * Returns date in string format
-     * onlyDate = true --> API has DateField type in Models
-     * onlyDate = false --> API has DateTimeField type in Models
-     *
-     * @param {object} date - Date object
-     * @param {boolean} [onlyDate=true] - If set to true then returns only date part of datetime.
-     * @returns {string} Date which can be only date part or full datetime
-     */
-    formatDateForUpload(date, onlyDate = true) {
-      date = new Date(date);
-      let tzoffset = new Date().getTimezoneOffset() * 60000; //offset in milliseconds
-      let localISOTime =
-        new Date(date - tzoffset).toISOString().split(".")[0] + "Z"; // Without fractions
-      // let localISOTime = (new Date(date - tzoffset)).toISOString();
-
-      if (onlyDate)
-        return typeof date === "string"
-          ? date.split("T")[0]
-          : localISOTime.split("T")[0];
-      return localISOTime;
     },
 
     /**
@@ -431,37 +404,6 @@ const formManipulation = {
       }
     },
 
-    addRelationBetweenAnyObjectAndAttachment(
-      attachmentId,
-      object,
-      createRelationWith = null
-    ) {
-      let formData = new FormData();
-      let uploadableObject = {
-        attachment: attachmentId
-      };
-      if (createRelationWith !== null) {
-        uploadableObject[createRelationWith.object] = createRelationWith.id;
-      } else
-        uploadableObject[
-          this.$store.state["createRelationWith"].object
-        ] = this.$store.state["createRelationWith"].data.id;
-
-      const dataToUpload = JSON.stringify(uploadableObject);
-      formData.append("data", dataToUpload);
-
-      let url = "add/" + object + "/";
-      return new Promise(resolve => {
-        this.saveData(object, formData, url).then(() => {
-          console.log(
-            "Relation created with locality id: " +
-              this.$store.state["createRelationWith"].id
-          );
-          resolve(true);
-        });
-      });
-    },
-
     reset(object, isEdit) {
       console.log("reset");
       if (
@@ -475,14 +417,6 @@ const formManipulation = {
         toastInfo({ text: this.$t("messages.fieldsCleared") });
       }
       // isEdit ? this.$router.push({ path: '/' + object }) : this[object] = {};
-    },
-
-    leaveFromEditView(object) {
-      console.log(this.createRelationWith);
-      if (this.createRelationWith.object !== null) {
-        window.close();
-      }
-      this.$router.push({ path: "/" + object });
     },
 
     windowOpenNewTab(path, query = {}, meta) {
@@ -578,252 +512,6 @@ const formManipulation = {
       return object;
     },
 
-    /**************************
-     *** RELATED DATA START ***
-     **************************/
-
-    /**
-     * Adds related data. Changing related data in edit view will send an add request to API.
-     * In add view and for DOI, data will be sent in related_data field.
-     *
-     * @param {string} tab - Current active tab which is being changed.
-     * @param {boolean} checkForDuplicates - if true then we need to check that user won't enter duplicates
-     */
-    addRelatedData(tab, checkForDuplicates = false) {
-      if (!this.isNotEmpty(tab)) tab = this.activeTab;
-
-      if (this.isNotEmpty(this.relatedData.insert[tab])) {
-        if (!this.recordAlreadyExists(tab, checkForDuplicates)) {
-          if (this.$route.meta.isEdit) {
-            let formData = new FormData();
-
-            if (
-              this.$route.meta.object === "doi" &&
-              this.checkRequiredFields(tab, this.relatedData.insert[tab])
-            ) {
-              toastError({ text: this.$t("messages.checkForm") });
-              return;
-            }
-
-            // Special use case for taxon
-            let url = "/add/" + tab + "/";
-            if (tab === "taxon_subclass") url = "/add/taxon/";
-
-            formData.append(
-              "data",
-              this.formatRelatedData(this.relatedData.insert[tab])
-            );
-            this.saveData(tab, formData, url).then(isSuccessfullySaved => {
-              console.log(isSuccessfullySaved);
-              this.loadRelatedData(tab);
-              this.$set(
-                this.relatedData,
-                "insert",
-                this.setDefaultInsertRelatedData()
-              );
-            });
-          } else {
-            if (
-              this.$route.meta.object === "doi" &&
-              this.checkRequiredFields(tab, this.relatedData.insert[tab])
-            ) {
-              toastError({ text: this.$t("messages.checkForm") });
-              return;
-            }
-            this.removeUnnecessaryFields(
-              this.relatedData.insert[tab],
-              this.relatedData.copyFields[tab]
-            );
-            this.relatedData[tab].push(
-              this.unformatRelatedDataAutocompleteFields(
-                this.relatedData.insert[tab]
-              )
-            );
-            this.$set(
-              this.relatedData,
-              "insert",
-              this.setDefaultInsertRelatedData()
-            );
-          }
-        } else toastError({ text: this.$t("messages.checkFormDuplicate") });
-      } else {
-        toastError({ text: this.$t("messages.checkFormEmpty") });
-      }
-    },
-
-    /**
-     * Setting all insert values to default. Can implement so it would only set activeTab's insert
-     * data to default, but this is can be done in the future if really needed.
-     */
-    setDefault() {
-      this.$set(this.relatedData, "insert", this.setDefaultInsertRelatedData());
-    },
-
-    /**
-     * Main function is to edit related data. Firstly if allowRemove is enabled it disables it.
-     * Secondly on click it enables editMode where user can edit data.
-     * After data is changed user can click the button to send new data to API. API request is only done for edit views,
-     * for add views data is always sent in related_data field.
-     *
-     * @param {object} entity - item from related data array.
-     * @param {int} index -  item's index in array which is used to replace it with new one.
-     */
-    editRow(entity, index) {
-      if (entity.allowRemove) {
-        this.$set(entity, "allowRemove", false);
-      } else if (!entity.editMode) {
-        this.$set(entity, "editMode", true);
-        this.$set(
-          entity,
-          "new",
-          this.fillRelatedDataAutocompleteFields(cloneDeep(entity))
-        );
-      } else {
-        if (this.$route.meta.isEdit) {
-          if (this.isNotEmpty(entity.new)) {
-            let formData = new FormData();
-            if (
-              this.$route.meta.object === "doi" &&
-              this.checkRequiredFields(this.activeTab, entity.new)
-            ) {
-              toastError({ text: this.$t("messages.checkForm") });
-              return;
-            }
-
-            let editableObject = this.removeUnnecessaryFields(
-              entity.new,
-              this.relatedData.copyFields[this.activeTab]
-            );
-            formData.append("data", this.formatRelatedData(editableObject));
-
-            let tab = this.activeTab;
-            // Special use case for taxon
-            if (this.activeTab === "taxon_subclass") tab = "taxon";
-
-            this.saveData(
-              this.activeTab,
-              formData,
-              "change/" + tab + "/" + entity.id
-            ).then(isSuccessfullySaved => {
-              console.log(isSuccessfullySaved);
-              //  UPDATE ROW DATA
-              this.$set(
-                this.relatedData[this.activeTab],
-                index,
-                this.unformatRelatedDataAutocompleteFields(
-                  entity.new,
-                  entity.id
-                )
-              );
-              this.$set(entity, "editMode", false);
-              this.$set(entity, "new", {});
-            });
-          }
-        } else {
-          if (this.isNotEmpty(entity.new)) {
-            if (
-              this.$route.meta.object === "doi" &&
-              this.checkRequiredFields(this.activeTab, entity.new)
-            ) {
-              toastError({ text: this.$t("messages.checkForm") });
-              return;
-            }
-
-            this.removeUnnecessaryFields(
-              entity.new,
-              this.relatedData.copyFields[this.activeTab]
-            );
-            this.$set(
-              this.relatedData[this.activeTab],
-              index,
-              this.unformatRelatedDataAutocompleteFields(entity.new, entity.id)
-            );
-            this.$set(entity, "editMode", false);
-            this.$set(entity, "new", {});
-          }
-        }
-      }
-    },
-
-    /**
-     * Main function is to remove item from related data.
-     * First of all if editMode is activated then it disables it.
-     * Secondly if user presses delete button then allowRemove parameter is activated
-     * and user can see which row can be deleted, this is because of accidental misclicks.
-     * Lastly if isEdit then related data should be sent via API with DELETE request.
-     * Add view must always send data via related_data field, because main object doesn't exist in database yet.
-     *
-     * @param {object} entity - item from related data array.
-     * @param {int} index -  item's index in array which is used to remove it from array.
-     */
-    removeRow(entity, index) {
-      if (entity.editMode) {
-        this.$set(entity, "editMode", false);
-      } else if (!entity.allowRemove) {
-        this.$set(entity, "allowRemove", true);
-      } else {
-        if (this.$route.meta.isEdit) {
-          // Todo: Else send remove request to api
-          console.log("DELETE: " + JSON.stringify(entity));
-        } else {
-          this.relatedData[this.activeTab].splice(index, 1);
-          if (this.$route.meta.isEdit)
-            toastSuccess({
-              text: `Removed record with an ID: <b>${entity.id}</b> from <b>${this.activeTab}</b>`
-            });
-        }
-      }
-    },
-
-    /**
-     * Changes ordering.
-     *
-     * @param {object} entity - Contains active tab name and new orderBy field.
-     */
-    changeOrdering(entity) {
-      if (this.$route.meta.isEdit)
-        this.$set(
-          this.relatedData.searchParameters[entity.tab],
-          "order_by",
-          entity.orderBy
-        );
-    },
-
-    recordAlreadyExists(tab, checkForDuplicates) {
-      if (checkForDuplicates) {
-        if (tab === "doi_agent") {
-          if (this.relatedData[tab].length > 0) {
-            let name = this.relatedData.insert[tab].name;
-            let agent = this.relatedData.insert[tab].agent;
-
-            for (let entity in this.relatedData[tab]) {
-              console.log(this.relatedData[tab][entity].agent);
-              console.log(agent);
-
-              if (
-                this.relatedData[tab][entity].name &&
-                name &&
-                this.relatedData[tab][entity].name === name
-              )
-                return true;
-              else if (
-                this.relatedData[tab][entity].agent &&
-                agent &&
-                this.relatedData[tab][entity].agent === agent.id
-              )
-                return true;
-            }
-          }
-        }
-      }
-
-      return false;
-    },
-
-    /**************************
-     ***  RELATED DATA END  ***
-     **************************/
-
     /**
      * Handles user's bottom options button click by calling add method, route leave or resetting object.
      *
@@ -871,41 +559,6 @@ const formManipulation = {
     },
 
     /**
-     * Returns file's url.
-     *
-     * @param filename - String value of file's name
-     * @param size - can be small, medium, large or original.
-     * @returns {string} - file's url
-     */
-    composeFileUrl(filename, size = "small") {
-      if (filename) {
-        if (size === "small" || size === "medium" || size === "large") {
-          return (
-            this.fileUrl +
-            "/" +
-            size +
-            "/" +
-            filename.substring(0, 2) +
-            "/" +
-            filename.substring(2, 4) +
-            "/" +
-            filename
-          );
-        } else {
-          return (
-            this.fileUrl +
-            "/" +
-            filename.substring(0, 2) +
-            "/" +
-            filename.substring(2, 4) +
-            "/" +
-            filename
-          );
-        }
-      }
-    },
-
-    /**
      * Calculates next name, for example 'Test site 1' --> 'Test site 2'
      *
      * @param {string} previousName - It will be used to calculate next name.
@@ -922,28 +575,9 @@ const formManipulation = {
             (parseInt(lastToken) + 1);
     },
 
-    getActiveProject() {
-      let activeProject = this.$localStorage.get(
-        "activeProject",
-        "fallbackValue"
-      );
-      if (this.isNotEmpty(activeProject) && activeProject !== "fallbackValue")
-        return activeProject[0];
-      return null;
-    },
-
     parseDate(date) {
       if (date) {
         return moment(String(date)).format("DD-MM-YYYY HH:mm");
-      }
-    },
-
-    toastResponseMessages(response) {
-      if (typeof response.body.message !== "undefined") {
-        toastSuccess({ text: response.body.message });
-      }
-      if (typeof response.body.error !== "undefined") {
-        toastError({ text: response.body.error });
       }
     },
 
@@ -952,10 +586,6 @@ const formManipulation = {
         moment(dateTime, "YYYY-MM-DD hh:mm:ss", true).isValid() ||
         moment(dateTime, "YYYY-MM-DD hh:mm", true).isValid()
       );
-    },
-
-    isValidDate(date) {
-      return moment(date, "YYYY-MM-DD", true).isValid();
     },
 
     getCurrentFormattedDate(format) {

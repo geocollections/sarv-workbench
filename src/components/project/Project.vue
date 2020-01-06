@@ -626,7 +626,7 @@ export default {
       deep: true
     },
     sidebarUserAction(newVal) {
-      this.$_handleUserAction(newVal, "project", this.project);
+      this.handleUserAction(newVal, "project", this.project);
     },
     "relatedData.searchParameters.site": {
       handler(newVal) {

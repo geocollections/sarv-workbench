@@ -9,7 +9,7 @@ const sidebarMixin = {
      * @param objectName {String} - Data's name which will be sent e.g., 'sample'
      * @param objectData {Object} - Data to be sent e.g., 'sample' object.
      */
-    $_handleUserAction(userAction, objectName, objectData) {
+    handleUserAction(userAction, objectName, objectData) {
       this.$router.push({
         name: userAction.userAction.choice + " " + userAction.userAction.action,
         params: { [objectName]: objectData }
