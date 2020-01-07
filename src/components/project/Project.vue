@@ -12,11 +12,6 @@
     <!-- ACTIVE PROJECT and NEW SITE -->
     <v-row v-if="$route.meta.isEdit">
       <v-col>
-        <add-new-site
-          :sendingData="sendingData"
-          :site="watchedSite"
-        ></add-new-site>
-
         <v-switch
           class="vuetify-switch mt-0"
           inset
@@ -518,7 +513,6 @@ import {
 
 import MapComponent from "../partial/MapComponent";
 
-import AddNewSite from "./addOrEditSiteModal";
 import { mapState } from "vuex";
 import ExportButtons from "../partial/export/ExportButtons";
 import SiteTable from "../site/SiteTable";
@@ -539,7 +533,6 @@ export default {
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
-    AddNewSite,
     MapComponent,
     Spinner,
     ExportButtons,

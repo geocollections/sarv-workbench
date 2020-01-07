@@ -857,17 +857,11 @@
             <!-- REMARKS_LOCATION-->
             <v-row no-gutters>
               <v-col cols="12" class="pa-1">
-                <label :for="`remarks_location`"
-                  >{{ $t("locality.remarks") }}:</label
-                >
-                <b-form-textarea
-                  id="remarks_location"
+                <textarea-wrapper
                   v-model="sample.remarks"
-                  type="text"
-                  size="sm"
-                  :rows="1"
-                  :max-rows="20"
-                ></b-form-textarea>
+                  :color="bodyActiveColor"
+                  :label="$t('common.remarks')"
+                />
               </v-col>
             </v-row>
           </div>

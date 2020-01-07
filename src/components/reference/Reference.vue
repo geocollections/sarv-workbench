@@ -1136,11 +1136,7 @@ export default {
           other: true,
           description: true,
           digital: true,
-          files: true,
-          libraries: true,
-          localities: true,
-          stratigraphy: true,
-          taxon: true
+          files: true
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },

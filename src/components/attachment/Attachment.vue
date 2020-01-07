@@ -19,9 +19,15 @@
 
     <template v-slot:locked-info>
       <div class="locked-info">
-        <b-alert show variant="info" class="text-center">{{
-          $t("messages.lockedForm")
-        }}</b-alert>
+        <v-alert
+          class="text-center mb-0"
+          border="left"
+          elevation="3"
+          prominent
+          :color="bodyColor.split('n-')[0] + 'n-3'"
+        >
+          <b>{{ $t("messages.lockedForm") }}</b>
+        </v-alert>
       </div>
     </template>
 

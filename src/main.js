@@ -2,7 +2,6 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import VueLocalStorage from "vue-localstorage"; // VueLocalStorage for using local storage
-import BootstrapVue from "bootstrap-vue"; // Bootstrap
 import VueIziToast from "vue-izitoast"; // Pop-up messages
 import VueI18n from "vue-i18n"; // Translations
 import VueCookies from "vue-cookies";
@@ -16,7 +15,6 @@ Vue.use(CKEditor);
 
 // Bootstrap css
 import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import "izitoast/dist/css/iziToast.min.css"; // Pop-up messages style
 import "leaflet/dist/leaflet.css"; // Leaflet css
@@ -25,7 +23,6 @@ import "@/assets/css/styles.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 Vue.use(VueLocalStorage);
-Vue.use(BootstrapVue);
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
 Vue.use(VueCookies);

@@ -8,18 +8,26 @@
         activeSearchParams.block !== null
     "
   >
-    <b-button-group size="sm" class="d-block">
-      <b-button
+    <v-btn-toggle
+      dense
+      borderless
+      tile
+      class="flex-wrap"
+      style="background: unset"
+    >
+      <v-btn
         v-for="(value, name) in activeSearchParams.block"
-        class="scroll-to-button"
+        class="scroll-to-button text-none"
         :key="name"
-        variant="light"
         v-scroll-to="'#block-' + name"
+        x-small
       >
-        <i :class="getIconPack(name) + ' ' + getIcon(name)"></i>
+        <v-icon x-small left>{{
+          getIconPack(name) + " " + getIcon(name)
+        }}</v-icon>
         {{ $t("sidebar." + $route.meta.table + "." + name) }}
-      </b-button>
-    </b-button-group>
+      </v-btn>
+    </v-btn-toggle>
   </div>
 </template>
 
@@ -34,6 +42,7 @@ export default {
   methods: {
     getIcon(name) {
       if (name === "info") return "fa-project-diagram";
+      if (name === "other") return "fa-project-diagram";
       if (name === "description") return "fa-pen-fancy";
       if (name === "members") return "fa-user-friends";
       if (name === "files") return "fa-folder-open";
