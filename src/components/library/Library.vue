@@ -182,7 +182,12 @@
                 is-searchable
                 v-on:search:items="autocompleteLibraryAgentSearch"
                 :multiple="true"
-                v-on:chip:close="relatedData.library_agent.splice(relatedData.library_agent.indexOf($event), 1)"
+                v-on:chip:close="
+                  relatedData.library_agent.splice(
+                    relatedData.library_agent.indexOf($event),
+                    1
+                  )
+                "
               />
             </v-col>
           </v-row>
@@ -233,9 +238,7 @@
           <library-reference-table
             v-show="activeTab === 'library_reference'"
             :response="relatedData.library_reference"
-            :search-parameters="
-              relatedData.searchParameters.library_reference
-            "
+            :search-parameters="relatedData.searchParameters.library_reference"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -351,7 +354,12 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -615,7 +623,6 @@ export default {
       }
     },
 
-
     loadRelatedData(object) {
       let query;
 
@@ -633,8 +640,8 @@ export default {
       }
 
       query.then(response => {
-        this.relatedData[object].count = response.body.count;
-        this.relatedData[object].results = response.body.results;
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = response.data.results;
       });
     },
 

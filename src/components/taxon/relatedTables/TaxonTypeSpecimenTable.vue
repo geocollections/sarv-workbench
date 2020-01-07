@@ -596,7 +596,7 @@ export default {
         fetchTaxonTypeType().then(response => {
           if (response.status === 200) {
             this.autocomplete.type_type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.type_type = false;

@@ -62,7 +62,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 export default {
   name: "SelectionSeries",
 
-  components: {InputWrapper, Spinner },
+  components: { InputWrapper, Spinner },
 
   props: {
     isBodyActiveColorDark: {

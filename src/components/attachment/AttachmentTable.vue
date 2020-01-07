@@ -66,9 +66,7 @@
     </template>
 
     <template v-slot:item.date_created="{ item }">
-      <span v-if="item.date_created">{{
-        item.date_created | moment("ddd, MMM Do YYYY")
-      }}</span>
+      <span v-if="item.date_created">{{ item.date_created }}</span>
       <span v-else>{{ item.date_created_free }}</span>
     </template>
 

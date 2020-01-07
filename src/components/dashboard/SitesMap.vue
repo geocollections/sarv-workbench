@@ -176,11 +176,11 @@ export default {
     returnResponseResults(apiResponse) {
       if (apiResponse && apiResponse.status === 200) {
         if (
-          apiResponse.body &&
-          apiResponse.body.count &&
-          apiResponse.body.count > 0
+          apiResponse.data &&
+          apiResponse.data.count &&
+          apiResponse.data.count > 0
         ) {
-          return apiResponse.body.results;
+          return apiResponse.data.results;
         } else return null;
       } else return null;
     },

@@ -376,7 +376,10 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.stratigraphy === "object" && this.item.stratigraphy !== null;
+      return (
+        typeof this.item.stratigraphy === "object" &&
+        this.item.stratigraphy !== null
+      );
     }
   },
 
@@ -421,10 +424,7 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (
-        typeof item.stratigraphy !== "object" &&
-        item.stratigraphy !== null
-      ) {
+      if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
         this.item.stratigraphy = {
           id: item.stratigraphy,
           stratigraphy: item.stratigraphy__stratigraphy,

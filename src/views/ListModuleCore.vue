@@ -12,10 +12,7 @@
       </div>
 
       <!-- OPTIONS -->
-      <div
-        v-if="useListView || useImageView"
-        class="mb-2"
-      >
+      <div v-if="useListView || useImageView" class="mb-2">
         <v-radio-group
           class="radio-buttons mt-0"
           v-model="currentView"
@@ -379,10 +376,10 @@ export default {
       this.apiCall().then(
         response => {
           if (response.status === 200) {
-            if (response.body.count === 0) this.noResults = true;
-            if (response.body.count > 0) this.noResults = false;
-            this.response.count = response.body.count;
-            this.response.results = response.body.results;
+            if (response.data.count === 0) this.noResults = true;
+            if (response.data.count > 0) this.noResults = false;
+            this.response.count = response.data.count;
+            this.response.results = response.data.results;
           }
           this.isLoading = false;
         },
@@ -398,23 +395,23 @@ export default {
 
       fetchChangePrivacyState(this.module, id, formData).then(
         response => {
-          if (response && response.body) {
+          if (response && response.data) {
             if (this.$i18n.locale === "ee") {
-              if (response.body.message_et)
-                toastSuccess({ text: response.body.message_et });
-              else if (response.body.error_et)
-                toastError({ text: response.body.error_et });
+              if (response.data.message_et)
+                toastSuccess({ text: response.data.message_et });
+              else if (response.data.error_et)
+                toastError({ text: response.data.error_et });
             } else {
-              if (response.body.message)
-                toastSuccess({ text: response.body.message });
-              else if (response.body.error)
-                toastError({ text: response.body.error });
+              if (response.data.message)
+                toastSuccess({ text: response.data.message });
+              else if (response.data.error)
+                toastError({ text: response.data.error });
             }
           }
         },
         errResponse => {
-          if (errResponse && errResponse.body && errResponse.body.error)
-            toastError({ text: errResponse.body.error });
+          if (errResponse && errResponse.data && errResponse.data.error)
+            toastError({ text: errResponse.data.error });
           toastError({ text: this.$t("messages.uploadError") });
         }
       );
@@ -433,31 +430,31 @@ export default {
 
         fetchAddItemToSelection(formData).then(
           response => {
-            if (typeof response.body.message !== "undefined") {
+            if (typeof response.data.message !== "undefined") {
               if (
                 this.$i18n.locale === "ee" &&
-                typeof response.body.message_et !== "undefined"
+                typeof response.data.message_et !== "undefined"
               ) {
-                toastSuccess({ text: response.body.message_et });
+                toastSuccess({ text: response.data.message_et });
               } else {
-                toastSuccess({ text: response.body.message });
+                toastSuccess({ text: response.data.message });
               }
             }
-            if (typeof response.body.error !== "undefined") {
+            if (typeof response.data.error !== "undefined") {
               if (
                 this.$i18n &&
                 this.$i18n.locale === "ee" &&
-                typeof response.body.error_et !== "undefined"
+                typeof response.data.error_et !== "undefined"
               ) {
-                toastError({ text: response.body.error_et });
+                toastError({ text: response.data.error_et });
               } else {
-                toastError({ text: response.body.error });
+                toastError({ text: response.data.error });
               }
             }
           },
           errResponse => {
-            if (typeof errResponse.body.error !== "undefined")
-              toastError({ text: errResponse.body.error });
+            if (typeof errResponse.data.error !== "undefined")
+              toastError({ text: errResponse.data.error });
             toastError({ text: this.$t("messages.uploadError") });
           }
         );

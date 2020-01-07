@@ -230,7 +230,7 @@ import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import DateWrapper from "../../partial/inputs/DateWrapper";
-import {fetchListUnit} from "../../../assets/js/api/apiCalls";
+import { fetchListUnit } from "../../../assets/js/api/apiCalls";
 
 export default {
   name: "SpecimenDescriptionTable",
@@ -427,7 +427,7 @@ export default {
         fetchListUnit().then(response => {
           if (response.status === 200) {
             this.autocomplete.unit =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.unit = false;

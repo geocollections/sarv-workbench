@@ -351,7 +351,11 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {fetchAgent, fetchListAgentType, fetchListCountry} from "../../assets/js/api/apiCalls";
+import {
+  fetchAgent,
+  fetchListAgentType,
+  fetchListCountry
+} from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import Spinner from "vue-simple-spinner";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -513,7 +517,10 @@ export default {
           (this.autocomplete.list_country = this.handleResponse(response))
       );
 
-      fetchListAgentType().then(response => this.autocomplete.agent_type = this.handleResponse(response))
+      fetchListAgentType().then(
+        response =>
+          (this.autocomplete.agent_type = this.handleResponse(response))
+      );
     },
 
     formatDataForUpload(objectToUpload) {

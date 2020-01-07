@@ -168,7 +168,7 @@
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
-import {cloneDeep} from "lodash";
+import { cloneDeep } from "lodash";
 
 export default {
   name: "LocalityReferenceTable",
@@ -300,7 +300,7 @@ export default {
         this.item.locality = {
           id: item.locality,
           locality: item.locality__locality,
-          locality_en: item.locality__locality_en,
+          locality_en: item.locality__locality_en
         };
         this.autocomplete.locality.push(this.item.locality);
       } else {

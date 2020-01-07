@@ -1459,7 +1459,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/stratigraphy/StratigraphyTable.vue"),
+              component: () =>
+                import("./components/stratigraphy/StratigraphyTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "stratigraphy",
@@ -1478,7 +1479,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/stratigraphy/Stratigraphy.vue"),
+              component: () =>
+                import("./components/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: true,
                 table: "stratigraphy",
@@ -1500,12 +1502,15 @@ const router = new Router({
             {
               path: "",
               name: "Stratigraphy add",
-              component: () => import("./components/stratigraphy/Stratigraphy.vue"),
+              component: () =>
+                import("./components/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: false,
                 title: "titles.addStratigraphy",
                 addNew: "add.newStratigraphy",
-                subForms: [{ path: "/stratigraphy/add", name: "add.stratigraphy" }],
+                subForms: [
+                  { path: "/stratigraphy/add", name: "add.stratigraphy" }
+                ],
                 requiresAuth: true,
                 object: "stratigraphy"
               }
@@ -1514,8 +1519,7 @@ const router = new Router({
         },
         {
           path: "/test-dev",
-          component: () =>
-            import("./components/partial/test/Test.vue"),
+          component: () => import("./components/partial/test/Test.vue"),
           meta: {
             requiresAuth: true
           }
@@ -1580,8 +1584,8 @@ router.beforeEach(async (to, from, next) => {
 function checkCookiesAndStorage(user) {
   if (user.length > 0) {
     // Getting user data from cookies and storage
-    let csrftoken = Vue.cookies.get("csrftoken");
-    let csrftokenLocalhost = Vue.cookies.get("csrftokenLocalhost");
+    let csrftoken = Vue.$cookies.get("csrftoken");
+    let csrftokenLocalhost = Vue.$cookies.get("csrftokenLocalhost");
     let authUser = Vue.localStorage.get("authUser");
 
     if ((csrftoken || csrftokenLocalhost) && authUser) {
@@ -1594,8 +1598,8 @@ function checkCookiesAndStorage(user) {
 
 function removeBrowserDataAndLogout() {
   // Deleting cookies and local storage
-  Vue.cookies.remove("csrftokenLocalhost", null, "localhost");
-  Vue.cookies.remove("csrftoken", null, "geocollections.info");
+  Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
+  Vue.$cookies.remove("csrftoken", null, "geocollections.info");
   Vue.localStorage.remove("authUser");
 
   // Sending logout request to API
@@ -1616,17 +1620,17 @@ function removeBrowserDataAndLogout() {
 function handleResponse(response) {
   if (response.status === 200) {
     if (
-      response.body &&
-      response.body.results &&
-      response.body.results.success
+      response.data &&
+      response.data.results &&
+      response.data.results.success
     ) {
-      return response.body.results.success;
+      return response.data.results.success;
     } else return false;
   } else return false;
 }
 
 function getLoggedInUser(response) {
-  if (handleResponse(response)) return response.body.results.user;
+  if (handleResponse(response)) return response.data.results.user;
   else return "";
 }
 

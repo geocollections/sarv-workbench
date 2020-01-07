@@ -21,7 +21,7 @@
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.taxon }}</router-link
+        >{{ item.taxon }}</router-link
       >
     </template>
 
@@ -31,7 +31,7 @@
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.taxon__taxon }}</router-link
+        >{{ item.taxon__taxon }}</router-link
       >
     </template>
 
@@ -53,7 +53,7 @@
         :title="$t('editTaxon.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
-      >{{ item.taxon__parent__taxon }}</router-link
+        >{{ item.taxon__parent__taxon }}</router-link
       >
     </template>
 
@@ -73,71 +73,74 @@
 </template>
 
 <script>
-  export default {
-    name: "TaxonListTable",
-    props: {
-      response: {
-        type: Object
-      },
-      filter: {
-        type: String,
-        required: false
-      },
-      searchParameters: {
-        type: Object,
-        required: true,
-        default: function() {
-          return {
-            page: 1,
-            paginateBy: 25
-          };
-        }
-      },
-      bodyColor: {
-        type: String,
-        required: false,
-        default: "grey lighten-4"
-      },
-      bodyActiveColor: {
-        type: String,
-        required: false,
-        default: "deep-orange"
+export default {
+  name: "TaxonListTable",
+  props: {
+    response: {
+      type: Object
+    },
+    filter: {
+      type: String,
+      required: false
+    },
+    searchParameters: {
+      type: Object,
+      required: true,
+      default: function() {
+        return {
+          page: 1,
+          paginateBy: 25
+        };
       }
     },
-    data: () => ({
-      expanded: [],
-      headers: [
-        { text: "taxon.id", value: "taxon" },
-        { text: "taxon.taxon", value: "taxon__taxon" },
-        { text: "taxon.author_year", value: "taxon__author_year" },
-        { text: "taxon.taxon_epithet", value: "taxon__taxon_epithet" },
-        { text: "taxon.parent__taxon", value: "taxon__parent__taxon" },
-        { text: "taxon.fossil_group__taxon", value: "taxon__fossil_group__taxon" },
-        { text: "", value: "link", sortable: false }
-      ],
-      names: []
-    }),
-    computed: {
-      translatedHeaders() {
-        return this.headers.map(header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        });
-      }
+    bodyColor: {
+      type: String,
+      required: false,
+      default: "grey lighten-4"
     },
-    methods: {
-      getFossilsUrl(id) {
-        return `https://fossiilid.info/${id}`;
-      }
+    bodyActiveColor: {
+      type: String,
+      required: false,
+      default: "deep-orange"
     }
-  };
+  },
+  data: () => ({
+    expanded: [],
+    headers: [
+      { text: "taxon.id", value: "taxon" },
+      { text: "taxon.taxon", value: "taxon__taxon" },
+      { text: "taxon.author_year", value: "taxon__author_year" },
+      { text: "taxon.taxon_epithet", value: "taxon__taxon_epithet" },
+      { text: "taxon.parent__taxon", value: "taxon__parent__taxon" },
+      {
+        text: "taxon.fossil_group__taxon",
+        value: "taxon__fossil_group__taxon"
+      },
+      { text: "", value: "link", sortable: false }
+    ],
+    names: []
+  }),
+  computed: {
+    translatedHeaders() {
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
+    }
+  },
+  methods: {
+    getFossilsUrl(id) {
+      return `https://fossiilid.info/${id}`;
+    }
+  }
+};
 </script>
 
 <style>
-  .taxon-table.v-data-table td,
-  .taxon-table.v-data-table th {
-    padding: 0 8px;
-  }
+.taxon-table.v-data-table td,
+.taxon-table.v-data-table th {
+  padding: 0 8px;
+}
 </style>

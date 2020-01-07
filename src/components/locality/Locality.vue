@@ -589,7 +589,7 @@ import {
   fetchLocalityReference,
   fetchLocalitySynonym,
   fetchLocalityAttachment,
-  fetchLocalityStratigraphy,
+  fetchLocalityStratigraphy
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
@@ -636,7 +636,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -1054,7 +1059,7 @@ export default {
 
       query.then(response => {
         this.relatedData[type] = this.handleResponse(response);
-        this.relatedData.count[type] = response.body.count;
+        this.relatedData.count[type] = response.data.count;
       });
     },
 

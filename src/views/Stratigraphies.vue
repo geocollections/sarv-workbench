@@ -31,7 +31,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
-import {fetchStratigraphies} from "../assets/js/api/apiCalls";
+import { fetchStratigraphies } from "../assets/js/api/apiCalls";
 export default {
   name: "Stratigraphies",
   components: {

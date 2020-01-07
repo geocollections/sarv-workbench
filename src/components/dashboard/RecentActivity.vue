@@ -33,7 +33,9 @@
                     {{ entity.table_name }}: {{ entity.row_id }}
                   </router-link>
                 </td>
-                <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
+                <td>
+                  {{ parseDate(entity.time) }}
+                </td>
               </tr>
             </tbody>
           </template>
@@ -74,7 +76,9 @@
                     {{ entity.table_name }}: {{ entity.row_id }}
                   </router-link>
                 </td>
-                <td>{{ entity.time | moment("DD.MM.YYYY | HH:mm:ss") }}</td>
+                <td>
+                  {{ parseDate(entity.time) }}
+                </td>
               </tr>
             </tbody>
           </template>
@@ -86,6 +90,7 @@
 
 <script>
 import { fetchLatestLogs } from "@/assets/js/api/apiCalls";
+import moment from "moment";
 
 export default {
   props: ["user", "bodyColor", "bodyActiveColor"],
@@ -108,8 +113,8 @@ export default {
         command: "INSERT"
       }).then(response => {
         if (response.status === 200) {
-          if (response.body.count > 0) {
-            this.recentlyInserted = response.body.results;
+          if (response.data.count > 0) {
+            this.recentlyInserted = response.data.results;
           } else {
             this.recentlyInserted = [];
           }
@@ -123,13 +128,17 @@ export default {
         command: "UPDATE"
       }).then(response => {
         if (response.status === 200) {
-          if (response.body.count > 0) {
-            this.recentlyUpdated = response.body.results;
+          if (response.data.count > 0) {
+            this.recentlyUpdated = response.data.results;
           } else {
             this.recentlyUpdated = [];
           }
         }
       });
+    },
+
+    parseDate(date) {
+      moment(date).format("DD.MM.YYYY | HH:mm:ss");
     }
   }
 };

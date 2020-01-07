@@ -295,7 +295,7 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 import DateWrapper from "../../partial/inputs/DateWrapper";
-import {fetchListIdentificationType} from "../../../assets/js/api/apiCalls";
+import { fetchListIdentificationType } from "../../../assets/js/api/apiCalls";
 
 export default {
   name: "SpecimenIdentificationTable",
@@ -515,7 +515,7 @@ export default {
         fetchListIdentificationType().then(response => {
           if (response.status === 200) {
             this.autocomplete.type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.type = false;

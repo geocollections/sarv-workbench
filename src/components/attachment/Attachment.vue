@@ -510,7 +510,11 @@
                     icon
                     color="green"
                     :title="$t('add.new')"
-                    @click="windowOpenNewTab('/keyword/add', { attachment: JSON.stringify(attachment) })"
+                    @click="
+                      windowOpenNewTab('/keyword/add', {
+                        attachment: JSON.stringify(attachment)
+                      })
+                    "
                     target="newKeywordWindow"
                   >
                     <v-icon>fas fa-plus</v-icon>
@@ -2934,10 +2938,14 @@ export default {
               this.autocomplete.specimen.push(this.attachment.specimen);
             }
             if (this.isNotEmpty(this.attachment.agent_digitised)) {
-              this.autocomplete.agent_digitised.push(this.attachment.agent_digitised);
+              this.autocomplete.agent_digitised.push(
+                this.attachment.agent_digitised
+              );
             }
             if (this.isNotEmpty(this.attachment.copyright_agent)) {
-              this.autocomplete.copyright_agent.push(this.attachment.copyright_agent);
+              this.autocomplete.copyright_agent.push(
+                this.attachment.copyright_agent
+              );
             }
             if (this.isNotEmpty(this.attachment.imageset)) {
               this.autocomplete.imageset.push(this.attachment.imageset);
@@ -2960,7 +2968,11 @@ export default {
 
           if (this.isPhotoArchive) {
             if (this.$route.params.imageset) {
-              this.$set(this.attachment, "imageset", this.$route.params.imageset);
+              this.$set(
+                this.attachment,
+                "imageset",
+                this.$route.params.imageset
+              );
               this.autocomplete.imageset.push(this.attachment.imageset);
             }
           }
@@ -3683,16 +3695,22 @@ export default {
       if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
         // DATE
         if (metadata.DateTimeOriginal) {
-          let formattedMetadataDate = this.formatMetadataDate(metadata.DateTimeOriginal);
+          let formattedMetadataDate = this.formatMetadataDate(
+            metadata.DateTimeOriginal
+          );
           this.$set(this.attachment, "date_created", formattedMetadataDate);
         } else if (metadata.DateTime) {
-          let formattedMetadataDate = this.formatMetadataDate(metadata.DateTime);
+          let formattedMetadataDate = this.formatMetadataDate(
+            metadata.DateTime
+          );
           this.$set(this.attachment, "date_created", formattedMetadataDate);
         }
 
         // DEVICE_TXT
-        if (metadata.Model) this.$set(this.attachment, "device_txt", metadata.Model);
-        else if (metadata.Make) this.$set(this.attachment, "device_txt", metadata.Make);
+        if (metadata.Model)
+          this.$set(this.attachment, "device_txt", metadata.Model);
+        else if (metadata.Make)
+          this.$set(this.attachment, "device_txt", metadata.Make);
 
         // IMAGE DIMENSIONS
         if (metadata.PixelXDimension)
@@ -3706,7 +3724,11 @@ export default {
             metadata.ImageDescription &&
             metadata.ImageDescription.trim().length > 0
           ) {
-            this.$set(this.attachment, "image_description_en", metadata.ImageDescription.trim());
+            this.$set(
+              this.attachment,
+              "image_description_en",
+              metadata.ImageDescription.trim()
+            );
           }
         } else {
           // DESCRIPTION
@@ -3714,7 +3736,11 @@ export default {
             metadata.ImageDescription &&
             metadata.ImageDescription.trim().length > 0
           ) {
-            this.$set(this.attachment, "description_en", metadata.ImageDescription.trim());
+            this.$set(
+              this.attachment,
+              "description_en",
+              metadata.ImageDescription.trim()
+            );
           }
         }
 

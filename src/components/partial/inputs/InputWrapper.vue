@@ -7,8 +7,10 @@
       outlined
       :placeholder="!!$attrs.placeholder ? $attrs.placeholder : ' '"
       :readonly="isDate || !!$attrs.readonly"
-      :error="useCustomState ? $attrs.error : (useState ? !$attrs.value : false)"
-      :success="useCustomState ? $attrs.success : (useState ? !!$attrs.value : false)"
+      :error="useCustomState ? $attrs.error : useState ? !$attrs.value : false"
+      :success="
+        useCustomState ? $attrs.success : useState ? !!$attrs.value : false
+      "
       v-bind="$attrs"
       v-on="$listeners"
       :title="$attrs.value"
@@ -18,12 +20,16 @@
       </template>
 
       <template v-if="useState || isDate" v-slot:append>
-        <div class="v-input__icon v-input__icon--clear" style="cursor: pointer;" v-if="isDate">
+        <div
+          class="v-input__icon v-input__icon--clear"
+          style="cursor: pointer;"
+          v-if="isDate"
+        >
           <v-icon @click="$emit('date:clear')">fas fa-times</v-icon>
         </div>
         <div v-else>
           <v-icon small v-if="!$attrs.value" color="red"
-          >fas fa-exclamation-circle</v-icon
+            >fas fa-exclamation-circle</v-icon
           >
           <v-icon small v-else color="green">fas fa-check</v-icon>
         </div>
@@ -31,7 +37,7 @@
 
       <template v-else-if="useCustomState" v-slot:append>
         <v-icon small v-if="$attrs.error" color="red"
-        >fas fa-exclamation-circle</v-icon
+          >fas fa-exclamation-circle</v-icon
         >
         <v-icon small v-else color="green">fas fa-check</v-icon>
       </template>

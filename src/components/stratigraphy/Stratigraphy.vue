@@ -1015,8 +1015,8 @@ export default {
       }
 
       query.then(response => {
-        this.relatedData[object].count = response.body.count;
-        this.relatedData[object].results = response.body.results;
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = response.data.results;
       });
     },
 

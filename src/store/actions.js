@@ -13,7 +13,12 @@ import {
   fetchJournals,
   fetchCollections,
   fetchTaxa,
-  fetchSelectionSeries, fetchAgents, fetchPreparations, fetchDrillcores, fetchDatasets, fetchStratigraphies
+  fetchSelectionSeries,
+  fetchAgents,
+  fetchPreparations,
+  fetchDrillcores,
+  fetchDatasets,
+  fetchStratigraphies
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -135,7 +140,10 @@ export default {
   },
 
   FETCH_DATASETS: ({ commit, state }) => {
-    return fetchDatasets(state.activeSearchParams.search, state.activeSearchParams.databaseId).then(resp => {
+    return fetchDatasets(
+      state.activeSearchParams.search,
+      state.activeSearchParams.databaseId
+    ).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

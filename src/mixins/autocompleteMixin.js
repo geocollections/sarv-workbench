@@ -299,10 +299,20 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "institution", "institution", 2);
     },
     autocompleteStratigraphyParentSearch(value) {
-      this.$_autocompleteMixin_search(value, "stratigraphy", "parent_stratigraphy", 2);
+      this.$_autocompleteMixin_search(
+        value,
+        "stratigraphy",
+        "parent_stratigraphy",
+        2
+      );
     },
     autocompleteAgeChronostratigraphySearch(value) {
-      this.$_autocompleteMixin_search(value, "stratigraphy", "age_chronostratigraphy", 2);
+      this.$_autocompleteMixin_search(
+        value,
+        "stratigraphy",
+        "age_chronostratigraphy",
+        2
+      );
     },
 
     /**
@@ -353,7 +363,7 @@ const autocompleteMixin = {
  */
 function handleResponse(response) {
   if (response.status === 200)
-    return response.body.count > 0 ? response.body.results : [];
+    return response.data.count > 0 ? response.data.results : [];
 }
 
 /**

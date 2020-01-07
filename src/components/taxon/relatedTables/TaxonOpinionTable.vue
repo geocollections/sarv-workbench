@@ -470,7 +470,7 @@ export default {
         fetchTaxonOpinionType().then(response => {
           if (response.status === 200) {
             this.autocomplete.opinion_type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.opinion_type = false;

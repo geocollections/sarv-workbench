@@ -205,9 +205,9 @@ export default {
         if (listOfKeywordIDs.length > 0) {
           fetchKeywords(this.searchParameters, listOfKeywordIDs).then(
             response => {
-              this.count = response.body.count;
-              this.keywordResults = response.body.results
-                ? response.body.results
+              this.count = response.data.count;
+              this.keywordResults = response.data.results
+                ? response.data.results
                 : [];
             }
           );
@@ -217,9 +217,9 @@ export default {
       } else {
         // Todo: If some other object like attachment etc. then should add if clause or use regular keywords table (table in database needs update)
         fetchKeywords(this.searchParameters).then(response => {
-          this.count = response.body.count;
-          this.keywordResults = response.body.results
-            ? response.body.results
+          this.count = response.data.count;
+          this.keywordResults = response.data.results
+            ? response.data.results
             : [];
         });
       }
@@ -233,11 +233,11 @@ export default {
     getListOfKeywordIDs(keywordObject) {
       if (keywordObject && keywordObject.status === 200) {
         if (
-          keywordObject.body &&
-          keywordObject.body.results &&
-          keywordObject.body.results.length > 0
+          keywordObject.data &&
+          keywordObject.data.results &&
+          keywordObject.data.results.length > 0
         ) {
-          return keywordObject.body.results.map(item => item.keyword);
+          return keywordObject.data.results.map(item => item.keyword);
         } else return [];
       } else return [];
     },

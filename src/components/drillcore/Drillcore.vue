@@ -251,12 +251,7 @@
       </v-tabs>
 
       <v-tabs-items>
-        <v-card
-          class="pa-1"
-          flat
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-        >
-
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <drillcore-box-table
             v-show="activeTab === 'drillcore_box'"
             :response="relatedData.drillcore_box"
@@ -379,7 +374,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    Spinner,
+    Spinner
   },
 
   props: {
@@ -400,7 +395,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -645,7 +645,7 @@ export default {
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ].results;
+              ].results;
             }
         });
       } else {
@@ -710,7 +710,7 @@ export default {
 
       query.then(response => {
         this.relatedData[object] = this.handleResponse(response);
-        this.relatedData.count[object] = response.body.count;
+        this.relatedData.count[object] = response.data.count;
       });
     },
 

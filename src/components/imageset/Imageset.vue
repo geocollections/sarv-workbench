@@ -45,10 +45,25 @@
                 :color="bodyActiveColor"
                 :label="$t('imageset.imagesetNumber')"
                 use-custom-state
-                :error="!(isNotEmpty(imageset.imageset_number) && !imagesetNumberExists)"
-                :success="isNotEmpty(imageset.imageset_number) && !imagesetNumberExists"
+                :error="
+                  !(
+                    isNotEmpty(imageset.imageset_number) &&
+                    !imagesetNumberExists
+                  )
+                "
+                :success="
+                  isNotEmpty(imageset.imageset_number) && !imagesetNumberExists
+                "
               />
-              <div class="m-0 caption" v-if="!(isNotEmpty(imageset.imageset_number) &&!imagesetNumberExists)">
+              <div
+                class="m-0 caption"
+                v-if="
+                  !(
+                    isNotEmpty(imageset.imageset_number) &&
+                    !imagesetNumberExists
+                  )
+                "
+              >
                 <div v-if="imagesetNumberExists">
                   {{ $t("add.errors.imagesetNumberExists") }}.
                 </div>
@@ -208,8 +223,8 @@ export default {
     isInImagesetTable(query) {
       fetchIsImagesetNumberInImageset(query).then(response => {
         if (response.status === 200) {
-          console.log(response.body.count > 0);
-          this.imagesetNumberExists = response.body.count > 0;
+          console.log(response.data.count > 0);
+          this.imagesetNumberExists = response.data.count > 0;
         }
       });
     },

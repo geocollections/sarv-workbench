@@ -421,7 +421,7 @@ export default {
         fetchAnalysisMethod().then(response => {
           if (response.status === 200) {
             this.autocomplete.analysis_method =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.analysis_method = false;

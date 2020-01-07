@@ -58,14 +58,14 @@ export default {
 
           fetchAddDoi(doiFormData).then(
             response => {
-              if (response && response.body) {
-                if (typeof response.body.message !== "undefined")
-                  toastSuccess({ text: response.body.message });
-                else if (typeof response.body.error !== "undefined")
-                  toastError({ text: response.body.error });
+              if (response && response.data) {
+                if (typeof response.data.message !== "undefined")
+                  toastSuccess({ text: response.data.message });
+                else if (typeof response.data.error !== "undefined")
+                  toastError({ text: response.data.error });
 
-                if (response.body.id)
-                  this.$router.push({ path: "/doi/" + response.body.id });
+                if (response.data.id)
+                  this.$router.push({ path: "/doi/" + response.data.id });
               }
             },
             () => {

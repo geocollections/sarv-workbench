@@ -369,7 +369,7 @@ export default {
         fetchDoiAgentType().then(response => {
           if (response.status === 200) {
             this.autocomplete.agent_type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.agent_type = false;

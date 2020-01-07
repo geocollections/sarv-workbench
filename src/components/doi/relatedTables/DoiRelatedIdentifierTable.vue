@@ -332,7 +332,7 @@ export default {
         fetchDoiRelatedIdentifierType().then(response => {
           if (response.status === 200) {
             this.autocomplete.relation_type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.relation_type = false;
@@ -342,7 +342,7 @@ export default {
         fetchDoiRelationType().then(response => {
           if (response.status === 200) {
             this.autocomplete.identifier_type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.identifier_type = false;

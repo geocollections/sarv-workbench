@@ -166,7 +166,7 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import {fetchListSpecimenType} from "../../../assets/js/api/apiCalls";
+import { fetchListSpecimenType } from "../../../assets/js/api/apiCalls";
 
 export default {
   name: "SpecimenLocationTable",
@@ -348,7 +348,7 @@ export default {
         fetchListSpecimenType().then(response => {
           if (response.status === 200) {
             this.autocomplete.type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.type = false;

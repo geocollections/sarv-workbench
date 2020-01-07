@@ -17,8 +17,10 @@
       v-on="$listeners"
       :search-input.sync="search"
       :title="$attrs.value ? $attrs.value[this.$attrs['item-text']] : ''"
-      :error="useCustomState ? $attrs.error : (useState ? !$attrs.value : false)"
-      :success="useCustomState ? $attrs.success : (useState ? !!$attrs.value : false)"
+      :error="useCustomState ? $attrs.error : useState ? !$attrs.value : false"
+      :success="
+        useCustomState ? $attrs.success : useState ? !!$attrs.value : false
+      "
       :small-chips="!!$attrs.multiple"
       :deletable-chips="!!$attrs.multiple"
       @change="resetSearchInput"
@@ -51,7 +53,7 @@
               : data.selected
           "
           @click:close="$emit('chip:close', data.item)"
-        >{{ data.item[$attrs["item-text"]] }}</v-chip
+          >{{ data.item[$attrs["item-text"]] }}</v-chip
         >
       </template>
     </v-autocomplete>
@@ -88,7 +90,8 @@ export default {
   },
   watch: {
     search(newVal, oldVal) {
-      let currentValue = (this.$attrs.value && this.$attrs.value[this.$attrs["item-text"]]);
+      let currentValue =
+        this.$attrs.value && this.$attrs.value[this.$attrs["item-text"]];
 
       // console.log("currentVal: " + currentValue);
       // console.log("newVal: " + newVal);

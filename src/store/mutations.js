@@ -97,9 +97,9 @@ export default {
   SET_SIDEBAR_LIST: (state, { resp }) => {
     /* false means page not found */
     Vue.set(state, "sidebarList", {
-      results: resp.body.results || false,
-      page: resp.body.page,
-      totalPages: resp.body.page ? resp.body.page.split(" of ")[1] : undefined
+      results: resp.data.results || false,
+      page: resp.data.page,
+      totalPages: resp.data.page ? resp.data.page.split(" of ")[1] : undefined
     });
   },
 

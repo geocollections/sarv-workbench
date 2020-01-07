@@ -6,6 +6,7 @@ import {
   toastError
 } from "../assets/js/iziToast/iziToast";
 import { mapState } from "vuex";
+import { postRequest } from "../assets/js/api/apiCalls";
 
 const formManipulation = {
   data() {
@@ -13,7 +14,6 @@ const formManipulation = {
       fileUrl: "https://files.geocollections.info",
       apiUrl: "https://rwapi.geocollections.info/",
       loadingPercent: 0,
-      previousRequest: null,
       sendingData: false,
       editMode: false,
       isFileAddedAsObject: null
@@ -52,14 +52,6 @@ const formManipulation = {
     },
 
     /**
-     * Cancels request which was just made, for example user tries uploading a large file
-     * but decides to cancel it then this method gets called.
-     */
-    cancelRequest() {
-      this.previousRequest.abort();
-    },
-
-    /**
      * Handles request's response by returning results list or empty list.
      *
      * @param {object} response - This comes straight from API and is handled here.
@@ -67,7 +59,7 @@ const formManipulation = {
      */
     handleResponse(response) {
       if (response.status === 200) {
-        return response.body.count > 0 ? response.body.results : [];
+        return response.data.count > 0 ? response.data.results : [];
       }
     },
 
@@ -253,53 +245,44 @@ const formManipulation = {
       this.sendingData = true;
       this.loadingPercent = 0;
 
-      this.$http
-        .post(this.apiUrl + url, formData, {
-          before(request) {
-            this.previousRequest = request;
-          },
-          progress: e => {
-            if (e.lengthComputable)
-              this.loadingPercent = Math.round((e.loaded / e.total) * 100);
-          }
-        })
-        .then(
-          response => {
-            this.sendingData = false;
-            if (response.status === 200) {
-              if (response.body) {
-                if (this.$i18n.locale === "ee") {
-                  if (response.body.message_et)
-                    toastSuccess({ text: response.body.message_et });
-                  else if (response.body.message)
-                    toastSuccess({ text: response.body.message });
-                  else if (response.body.error_et)
-                    toastError({ text: response.body.error_et });
-                  else if (response.body.error)
-                    toastError({ text: response.body.error });
-                } else {
-                  if (response.body.message)
-                    toastSuccess({ text: response.body.message });
-                  else if (response.body.error)
-                    toastError({ text: response.body.error });
-                }
+      postRequest(url, formData).then(
+        response => {
+          console.log(response);
+          this.sendingData = false;
+          if (response.status === 200) {
+            if (response.data) {
+              if (this.$i18n.locale === "ee") {
+                if (response.data.message_et)
+                  toastSuccess({ text: response.data.message_et });
+                else if (response.data.message)
+                  toastSuccess({ text: response.data.message });
+                else if (response.data.error_et)
+                  toastError({ text: response.data.error_et });
+                else if (response.data.error)
+                  toastError({ text: response.data.error });
+              } else {
+                if (response.data.message)
+                  toastSuccess({ text: response.data.message });
+                else if (response.data.error)
+                  toastError({ text: response.data.error });
+              }
 
-                if (object === "attachment" && response.body.attachments_ids) {
-                  if (response.body.attachments_ids.length > 1)
-                    resolve(response.body.attachments_ids);
-                  resolve(response.body.attachments_ids[0]);
-                } else if (response.body.id) resolve(response.body.id);
-                else resolve(undefined);
-              } else resolve(undefined);
+              if (object === "attachment" && response.data.attachments_ids) {
+                if (response.data.attachments_ids.length > 1)
+                  resolve(response.data.attachments_ids);
+                resolve(response.data.attachments_ids[0]);
+              } else if (response.data.id) resolve(response.data.id);
+              else resolve(undefined);
             } else resolve(undefined);
-          },
-          errResponse => {
-            this.sendingData = false;
-            console.log("ERROR: " + JSON.stringify(errResponse));
-            toastError({ text: this.$t("messages.uploadError") });
-            resolve(undefined);
-          }
-        );
+          } else resolve(undefined);
+        },
+        errResponse => {
+          this.sendingData = false;
+          console.log("ERROR: " + JSON.stringify(errResponse));
+          toastError({ text: this.$t("messages.uploadError") });
+          resolve(undefined);
+        }
+      );
     },
 
     addFileAsObject(files, relatedObject) {
@@ -426,8 +409,12 @@ const formManipulation = {
         meta: meta
       });
       let height = window.screen.height;
-      let top = height ? (height / 2) - 364 : 176;
-      window.open(routeData.href, "PopupWindow", `top=${top},left=325,width=786,height=600`);
+      let top = height ? height / 2 - 364 : 176;
+      window.open(
+        routeData.href,
+        "PopupWindow",
+        `top=${top},left=325,width=786,height=600`
+      );
     },
 
     openGeoInNewWindow(params) {

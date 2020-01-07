@@ -1,5 +1,6 @@
 import cloneDeep from "lodash/cloneDeep";
 import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
+import { postRequest } from "../assets/js/api/apiCalls";
 
 const requestsMixin = {
   data: () => ({
@@ -65,12 +66,12 @@ const requestsMixin = {
     },
 
     httpRequest(url, formData, resolve) {
-      this.$http.post(this.apiUrl + url, formData).then(
+      postRequest(url, formData).then(
         response => {
           if (response.status === 200) {
             this.toastResponseMessage(response);
-            if (!!response.body && !!response.body.id) {
-              resolve(response.body.id);
+            if (!!response.data && !!response.data.id) {
+              resolve(response.data.id);
             } else resolve(false);
           } else resolve(false);
         },
@@ -84,17 +85,17 @@ const requestsMixin = {
 
     toastResponseMessage(response) {
       if (this.$i18n.locale === "ee") {
-        if (response.body.message_et)
-          toastSuccess({ text: response.body.message_et });
-        else if (response.body.message)
-          toastSuccess({ text: response.body.message });
-        else if (response.body.error_et)
-          toastError({ text: response.body.error_et });
-        else if (response.body.error) toastError({ text: response.body.error });
+        if (response.data.message_et)
+          toastSuccess({ text: response.data.message_et });
+        else if (response.data.message)
+          toastSuccess({ text: response.data.message });
+        else if (response.data.error_et)
+          toastError({ text: response.data.error_et });
+        else if (response.data.error) toastError({ text: response.data.error });
       } else {
-        if (response.body.message)
-          toastSuccess({ text: response.body.message });
-        else if (response.body.error) toastError({ text: response.body.error });
+        if (response.data.message)
+          toastSuccess({ text: response.data.message });
+        else if (response.data.error) toastError({ text: response.data.error });
       }
     }
   }

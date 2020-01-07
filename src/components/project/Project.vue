@@ -80,19 +80,19 @@
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                  v-model="project.name"
-                  :color="bodyActiveColor"
-                  :label="$t('common.name')"
-                  use-state
+                v-model="project.name"
+                :color="bodyActiveColor"
+                :label="$t('common.name')"
+                use-state
               />
             </v-col>
 
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                  v-model="project.name_en"
-                  :color="bodyActiveColor"
-                  :label="$t('common.name_en')"
-                  use-state
+                v-model="project.name_en"
+                :color="bodyActiveColor"
+                :label="$t('common.name_en')"
+                use-state
               />
             </v-col>
           </v-row>
@@ -101,42 +101,42 @@
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
-                  v-model="project.project_type"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.project_type"
-                  :loading="autocomplete.loaders.project_type"
-                  :item-text="nameLabel"
-                  :label="$t('project.project_type')"
+                v-model="project.project_type"
+                :color="bodyActiveColor"
+                :items="autocomplete.project_type"
+                :loading="autocomplete.loaders.project_type"
+                :item-text="nameLabel"
+                :label="$t('project.project_type')"
               />
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
-                  v-model="project.owner"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.agent"
-                  :loading="autocomplete.loaders.owner"
-                  item-text="agent"
-                  :label="$t('project.owner')"
-                  is-link
-                  route-object="agent"
-                  is-searchable
-                  v-on:search:items="autocompleteOwnerSearch"
+                v-model="project.owner"
+                :color="bodyActiveColor"
+                :items="autocomplete.agent"
+                :loading="autocomplete.loaders.owner"
+                item-text="agent"
+                :label="$t('project.owner')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteOwnerSearch"
               />
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
-                  v-model="project.parent_project"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.parent_project"
-                  :loading="autocomplete.loaders.parent_project"
-                  :item-text="nameLabel"
-                  :label="$t('project.parent_project')"
-                  is-link
-                  route-object="project"
-                  is-searchable
-                  v-on:search:items="autocompleteParentProjectSearch"
+                v-model="project.parent_project"
+                :color="bodyActiveColor"
+                :items="autocomplete.parent_project"
+                :loading="autocomplete.loaders.parent_project"
+                :item-text="nameLabel"
+                :label="$t('project.parent_project')"
+                is-link
+                route-object="project"
+                is-searchable
+                v-on:search:items="autocompleteParentProjectSearch"
               />
             </v-col>
           </v-row>
@@ -145,27 +145,27 @@
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
               <date-wrapper
-                  v-model="project.date_start"
-                  :color="bodyActiveColor"
-                  :label="$t('project.date_start')"
-                  v-on:date:clear="project.date_start = null"
+                v-model="project.date_start"
+                :color="bodyActiveColor"
+                :label="$t('project.date_start')"
+                v-on:date:clear="project.date_start = null"
               />
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
               <date-wrapper
-                  v-model="project.date_end"
-                  :color="bodyActiveColor"
-                  :label="$t('project.date_end')"
-                  v-on:date:clear="project.date_end = null"
+                v-model="project.date_end"
+                :color="bodyActiveColor"
+                :label="$t('project.date_end')"
+                v-on:date:clear="project.date_end = null"
               />
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
-                  v-model="project.date_free"
-                  :color="bodyActiveColor"
-                  :label="$t('project.date_free')"
+                v-model="project.date_free"
+                :color="bodyActiveColor"
+                :label="$t('project.date_free')"
               />
             </v-col>
           </v-row>
@@ -207,9 +207,9 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <textarea-wrapper
-                  v-model="project.description"
-                  :color="bodyActiveColor"
-                  :label="$t('common.description')"
+                v-model="project.description"
+                :color="bodyActiveColor"
+                :label="$t('common.description')"
               />
             </v-col>
           </v-row>
@@ -217,9 +217,9 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <textarea-wrapper
-                  v-model="project.remarks"
-                  :color="bodyActiveColor"
-                  :label="$t('common.remarks')"
+                v-model="project.remarks"
+                :color="bodyActiveColor"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>
@@ -259,18 +259,23 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <autocomplete-wrapper
-                  v-model="relatedData.projectagent"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.projectagent"
-                  :loading="autocomplete.loaders.projectagent"
-                  item-text="agent"
-                  :label="$t('site.project')"
-                  is-link
-                  route-object="agent"
-                  is-searchable
-                  v-on:search:items="autocompleteProjectAgentSearch"
-                  :multiple="true"
-                  v-on:chip:close="relatedData.projectagent.splice(relatedData.projectagent.indexOf($event), 1)"
+                v-model="relatedData.projectagent"
+                :color="bodyActiveColor"
+                :items="autocomplete.projectagent"
+                :loading="autocomplete.loaders.projectagent"
+                item-text="agent"
+                :label="$t('site.project')"
+                is-link
+                route-object="agent"
+                is-searchable
+                v-on:search:items="autocompleteProjectAgentSearch"
+                :multiple="true"
+                v-on:chip:close="
+                  relatedData.projectagent.splice(
+                    relatedData.projectagent.indexOf($event),
+                    1
+                  )
+                "
               />
             </v-col>
           </v-row>
@@ -486,10 +491,10 @@
     <v-row no-gutters class="my-3">
       <v-col>
         <checkbox-wrapper
-            v-model="project.is_private"
-            :color="bodyActiveColor"
-            :label="$t('common.is_private')"
-            @change="project.is_private = !project.is_private"
+          v-model="project.is_private"
+          :color="bodyActiveColor"
+          :label="$t('common.is_private')"
+          @change="project.is_private = !project.is_private"
         />
       </v-col>
     </v-row>
@@ -890,11 +895,11 @@ export default {
         query.then(response => {
           //projectagent do not have count value
           if (response.status === 200)
-            this.relatedData[object] = response.body.results
-              ? response.body.results
+            this.relatedData[object] = response.data.results
+              ? response.data.results
               : [];
 
-          this.relatedData.count[object] = response.body.count;
+          this.relatedData.count[object] = response.data.count;
           this.relatedData[object] = this.fillRelatedDataAutocompleteFields(
             this.relatedData[object],
             object
@@ -957,8 +962,8 @@ export default {
     ) {
       apiCall().then(response => {
         if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.body.count;
-          this.relatedData[relatedObject].results = response.body.results;
+          this.relatedData[relatedObject].count = response.data.count;
+          this.relatedData[relatedObject].results = response.data.results;
         }
       });
     },

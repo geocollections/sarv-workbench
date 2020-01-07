@@ -449,7 +449,10 @@ export default {
         this.autocomplete.taxon.push(this.item.taxon);
       }
 
-      if (typeof item.agent_identified !== "object" && item.agent_identified !== null) {
+      if (
+        typeof item.agent_identified !== "object" &&
+        item.agent_identified !== null
+      ) {
         this.item.agent_identified = {
           id: item.agent_identified,
           agent: item.agent_identified__agent

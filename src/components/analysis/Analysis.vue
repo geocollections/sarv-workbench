@@ -449,17 +449,11 @@
       </v-tabs>
 
       <v-tabs-items>
-        <v-card
-          class="pa-1"
-          flat
-          :color="bodyColor.split('n-')[0] + 'n-5'"
-        >
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <analysis-results-table
             v-show="activeTab === 'analysis_results'"
             :response="relatedData.analysis_results"
-            :search-parameters="
-              relatedData.searchParameters.analysis_results
-            "
+            :search-parameters="relatedData.searchParameters.analysis_results"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -480,7 +474,11 @@
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && activeTab !== 'attachment_link' && relatedData[activeTab].count > 10"
+            v-if="
+              $route.meta.isEdit &&
+                activeTab !== 'attachment_link' &&
+                relatedData[activeTab].count > 10
+            "
             class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
@@ -579,7 +577,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   name: "Analysis",
 
@@ -856,7 +859,7 @@ export default {
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ].results;
+              ].results;
             }
         });
       } else {
@@ -882,11 +885,11 @@ export default {
         this.analysis.owner = { id: obj.owner, agent: obj.owner__agent };
         this.autocomplete.owner.push(this.analysis.owner);
       }
-        this.analysis.analysis_method = {
-          id: obj.analysis_method,
-          analysis_method: obj.analysis_method__analysis_method,
-          method_en: obj.analysis_method__method_en
-        };
+      this.analysis.analysis_method = {
+        id: obj.analysis_method,
+        analysis_method: obj.analysis_method__analysis_method,
+        method_en: obj.analysis_method__method_en
+      };
       if (this.isNotEmpty(obj.dataset)) {
         this.analysis.dataset = {
           id: obj.dataset,
@@ -928,8 +931,6 @@ export default {
       };
     },
 
-
-
     loadRelatedData(object) {
       let query;
 
@@ -947,8 +948,8 @@ export default {
 
       query.then(response => {
         if (object !== "attachment_link") {
-          this.relatedData[object].count = response.body.count;
-          this.relatedData[object].results = response.body.results;
+          this.relatedData[object].count = response.data.count;
+          this.relatedData[object].results = response.data.results;
         } else this.relatedData[object] = this.handleResponse(response);
       });
     },

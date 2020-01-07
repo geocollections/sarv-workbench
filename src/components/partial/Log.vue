@@ -2,7 +2,7 @@
   <v-card
     class="log mt-2"
     v-if="logs.length > 0"
-    :color="bodyColor.split('-')[0] + '-5'"
+    :color="bodyColor.split('n-')[0] + 'n-5'"
     elevation="4"
   >
     <v-card-title class="pt-2 pb-1">
@@ -144,8 +144,8 @@ export default {
         order_by: "-id"
       }).then(response => {
         if (response.status === 200) {
-          if (response.body.count > 0) {
-            this.logs = response.body.results;
+          if (response.data.count > 0) {
+            this.logs = response.data.results;
           } else {
             this.logs = [];
           }

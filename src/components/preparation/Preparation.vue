@@ -731,8 +731,8 @@ export default {
     ) {
       apiCall().then(response => {
         if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.body.count;
-          this.relatedData[relatedObject].results = response.body.results;
+          this.relatedData[relatedObject].count = response.data.count;
+          this.relatedData[relatedObject].results = response.data.results;
         }
       });
     },

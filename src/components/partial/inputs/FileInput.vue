@@ -159,7 +159,9 @@
           is-searchable
           v-on:search:items="autocompleteAttachmentSearch"
           :multiple="acceptMultiple"
-          v-on:chip:close="existingFiles.splice(existingFiles.indexOf($event), 1)"
+          v-on:chip:close="
+            existingFiles.splice(existingFiles.indexOf($event), 1)
+          "
           :disabled="isDisabled"
         />
       </v-col>
@@ -167,7 +169,11 @@
 
     <!-- EXISTING FILES -->
     <v-row no-gutters v-if="isExistingFilesValid">
-      <v-col cols="12" class="pa-1" v-if="showExisting && this.existingFiles.length > 0">
+      <v-col
+        cols="12"
+        class="pa-1"
+        v-if="showExisting && this.existingFiles.length > 0"
+      >
         <div class="title">
           {{ $t("messages.existingFiles") }}: <b>{{ existingFiles.length }}</b>
         </div>

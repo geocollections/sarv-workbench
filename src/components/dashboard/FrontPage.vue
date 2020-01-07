@@ -249,7 +249,7 @@ export default {
     getRecentFiles(paginateBy) {
       fetchRecentFiles(this.currentUser.id, paginateBy).then(response => {
         if (response.status === 200) {
-          if (response.body.count > 0) this.recentFiles = response.body.results;
+          if (response.data.count > 0) this.recentFiles = response.data.results;
           else this.recentFiles = [];
         }
       });

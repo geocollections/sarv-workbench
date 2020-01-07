@@ -471,7 +471,9 @@
           <doi-related-identifier-table
             v-show="activeTab === 'doi_related_identifier'"
             :response="relatedData.doi_related_identifier"
-            :search-parameters="relatedData.searchParameters.doi_related_identifier"
+            :search-parameters="
+              relatedData.searchParameters.doi_related_identifier
+            "
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -760,7 +762,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   name: "Doi",
 
@@ -1318,7 +1325,7 @@ export default {
       // Dataset and Reference are direct links and do not need extra request.
       if (object !== "dataset" && object !== "reference") {
         query.then(response => {
-          this.relatedData[object].count = response.body.count;
+          this.relatedData[object].count = response.data.count;
           this.relatedData[object].results = this.handleResponse(response);
         });
       }
@@ -1389,7 +1396,7 @@ export default {
      */
     handleCheckDoiResponse(response) {
       if (response.status === 200) {
-        let dataCiteResponse = response.body.results;
+        let dataCiteResponse = response.data.results;
 
         if (
           typeof dataCiteResponse !== "undefined" &&
@@ -1474,15 +1481,15 @@ export default {
             response => {
               if (response.status === 200) {
                 if (
-                  typeof response.body.results !== "undefined" &&
-                  response.body.results.length > 0
+                  typeof response.data.results !== "undefined" &&
+                  response.data.results.length > 0
                 ) {
-                  if (response.body.results[0].success) {
+                  if (response.data.results[0].success) {
                     toastSuccess({
                       text:
                         this.$t("doi.dataciteMetadataUpdated") +
                         " DataCite response: " +
-                        response.body.results[0].content,
+                        response.data.results[0].content,
                       timeout: 5000
                     });
                     this.setCurrentTimeToDataCiteDateFields();
@@ -1518,15 +1525,15 @@ export default {
             response => {
               if (response.status === 200) {
                 if (
-                  typeof response.body.results !== "undefined" &&
-                  response.body.results.length > 0
+                  typeof response.data.results !== "undefined" &&
+                  response.data.results.length > 0
                 ) {
-                  if (response.body.results[0].success) {
+                  if (response.data.results[0].success) {
                     toastSuccess({
                       text:
                         this.$t("doi.dataciteUrlUpdated") +
                         " DataCite response: " +
-                        response.body.results[0].content,
+                        response.data.results[0].content,
                       timeout: 5000
                     });
                     this.showDoiUrlButton = false;
@@ -1550,31 +1557,31 @@ export default {
       fetchCheckMetadataInDataCite(this.$route.params.id).then(response => {
         if (response.status === 200) {
           if (
-            typeof response.body.results !== "undefined" &&
-            response.body.results.length > 0
+            typeof response.data.results !== "undefined" &&
+            response.data.results.length > 0
           ) {
-            if (response.body.results[0].success) {
-              if (response.body.results[0].doi_metadata_needs_update) {
+            if (response.data.results[0].success) {
+              if (response.data.results[0].doi_metadata_needs_update) {
                 this.showMetadataButton = true;
                 this.showMetadataUpdateMessage = true;
-                this.sarvXML = response.body.results[0].sarv_xml;
-                this.dataciteXML = response.body.results[0].datacite_xml;
+                this.sarvXML = response.data.results[0].sarv_xml;
+                this.dataciteXML = response.data.results[0].datacite_xml;
                 toastInfo({ text: this.$t("doi.dataciteMetadataNeedsUpdate") });
               } else {
                 this.showMetadataButton = false;
                 this.showMetadataUpdateMessage = false;
-                this.sarvXML = response.body.results[0].sarv_xml;
-                this.dataciteXML = response.body.results[0].datacite_xml;
+                this.sarvXML = response.data.results[0].sarv_xml;
+                this.dataciteXML = response.data.results[0].datacite_xml;
                 if (
-                  typeof response.body.results[0].error !== "undefined" &&
-                  response.body.results[0].error_et !== "undefined"
+                  typeof response.data.results[0].error !== "undefined" &&
+                  response.data.results[0].error_et !== "undefined"
                 ) {
                   if (this.$i18n.locale === "ee")
-                    toastInfo({ text: response.body.results[0].error_et });
-                  else toastInfo({ text: response.body.results[0].error });
+                    toastInfo({ text: response.data.results[0].error_et });
+                  else toastInfo({ text: response.data.results[0].error });
                 }
               }
-            } else if (response.body.results[0].error_code === 404) {
+            } else if (response.data.results[0].error_code === 404) {
               this.showMetadataButton = true;
               this.showMetadataUpdateMessage = false;
             } else {
@@ -1591,17 +1598,17 @@ export default {
       fetchCheckDoiUrlInDataCite(this.$route.params.id).then(response => {
         if (response.status === 200) {
           if (
-            typeof response.body.results !== "undefined" &&
-            response.body.results.length > 0
+            typeof response.data.results !== "undefined" &&
+            response.data.results.length > 0
           ) {
-            if (response.body.results[0].success) {
-              if (response.body.results[0].doi_url_needs_update) {
+            if (response.data.results[0].success) {
+              if (response.data.results[0].doi_url_needs_update) {
                 this.showDoiUrlButton = true;
                 this.showDoiUrlUpdateMessage = true;
-                this.doiURL = response.body.results[0].doi_url;
-                this.dataciteURL = response.body.results[0].datacite_url;
+                this.doiURL = response.data.results[0].doi_url;
+                this.dataciteURL = response.data.results[0].datacite_url;
               }
-            } else if (response.body.results[0].error_code === 204) {
+            } else if (response.data.results[0].error_code === 204) {
               this.showDoiUrlButton = true;
               this.showDoiUrlUpdateMessage = false;
             } else {

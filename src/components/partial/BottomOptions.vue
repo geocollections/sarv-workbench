@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-options-new" :class="bodyColor.split('-')[0] + '-5'">
+  <div class="bottom-options-new" :class="bodyColor.split('n-')[0] + 'n-5'">
     <div
       class="d-flex justify-content-around align-items-center"
       :class="{
@@ -227,7 +227,11 @@ export default {
   methods: {
     async handleClick(action) {
       this.sendingData = true;
-      await this.$parent.$emit("button-clicked", action, this.$route.meta.object);
+      await this.$parent.$emit(
+        "button-clicked",
+        action,
+        this.$route.meta.object
+      );
       setTimeout(() => {
         // will run after $emit is done in 500ms
         this.sendingData = false;

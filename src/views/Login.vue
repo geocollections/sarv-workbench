@@ -5,7 +5,10 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
-          <v-card :color="appSettings.bodyColor.split('n-')[0] + 'n-5'" elevation="8">
+          <v-card
+            :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+            elevation="8"
+          >
             <v-tabs
               v-model="tab"
               grow

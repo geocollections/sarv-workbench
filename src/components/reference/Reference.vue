@@ -1442,11 +1442,11 @@ export default {
 
       query.then(response => {
         if (object === "library") {
-          this.relatedData[object].count = response.body.count;
-          this.relatedData[object].results = response.body.results;
+          this.relatedData[object].count = response.data.count;
+          this.relatedData[object].results = response.data.results;
         } else {
-          this.$set(this.relatedData[object], "count", response.body.count);
-          this.$set(this.relatedData[object], "results", response.body.results);
+          this.$set(this.relatedData[object], "count", response.data.count);
+          this.$set(this.relatedData[object], "results", response.data.results);
         }
       });
     },
@@ -1496,8 +1496,8 @@ export default {
         response => {
           this.sendingData = false;
           if (response.status === 200) {
-            if (response.body.status === "ok") {
-              this.updateFieldsUsingDoi(response.body.message);
+            if (response.data.status === "ok") {
+              this.updateFieldsUsingDoi(response.data.message);
             }
           }
         },

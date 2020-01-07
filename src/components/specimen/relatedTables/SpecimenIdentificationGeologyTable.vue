@@ -522,7 +522,7 @@ export default {
         fetchListIdentificationType().then(response => {
           if (response.status === 200) {
             this.autocomplete.type =
-              response.body.count > 0 ? response.body.results : [];
+              response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.type = false;

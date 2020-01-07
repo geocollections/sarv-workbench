@@ -923,7 +923,6 @@
 
         <v-tabs-items>
           <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-
             <sample-analysis-table
               v-show="activeTab === 'analysis'"
               :response="relatedData.analysis"
@@ -1081,7 +1080,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -1585,7 +1589,7 @@ export default {
       }
       query.then(response => {
         this.relatedData[object].results = this.handleResponse(response);
-        this.relatedData[object].count = response.body.count;
+        this.relatedData[object].count = response.data.count;
       });
     },
 

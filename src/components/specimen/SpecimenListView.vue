@@ -177,8 +177,8 @@ export default {
           let taxonList = [];
           let rockList = [];
 
-          if (taxonResponse.body.count > 0) {
-            taxonList = taxonResponse.body.results.map(entity => {
+          if (taxonResponse.data.count > 0) {
+            taxonList = taxonResponse.data.results.map(entity => {
               return {
                 id: entity.specimen_id,
                 name: entity.taxon__taxon ? entity.taxon__taxon : entity.name,
@@ -190,8 +190,8 @@ export default {
             });
           }
 
-          if (rockResponse.body.count > 0) {
-            rockList = rockResponse.body.results.map(entity => {
+          if (rockResponse.data.count > 0) {
+            rockList = rockResponse.data.results.map(entity => {
               let name = "";
               let name_en = "";
 

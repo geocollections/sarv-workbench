@@ -221,9 +221,7 @@ export default {
     },
 
     isItemValid() {
-      return (
-        this.item.frontpage !== null && this.item.frontpage.length > 0
-      );
+      return this.item.frontpage !== null && this.item.frontpage.length > 0;
     }
   },
 

@@ -1,7 +1,8 @@
 import Vue from "vue";
-import VueResource from "vue-resource";
+import qs from "qs";
+import router from "../../../router";
 
-Vue.use(VueResource);
+const axios = require("axios");
 
 const api = {
   url: "https://rwapi.geocollections.info/",
@@ -9,39 +10,98 @@ const api = {
   solrUrl: "https://api.geocollections.info/solr/"
 };
 
+// Add a request interceptor
+axios.interceptors.request.use(function(config) {
+  if (config.url.includes("rwapi")) {
+    let csrftoken = Vue.$cookies.get("csrftoken");
+    config.withCredentials = true;
+    config.headers["X-CSRFTOKEN"] = csrftoken;
+  }
+
+  return config;
+});
+
+// Add a response interceptor
+axios.interceptors.response.use(function(response) {
+  if (response.status === 200 && response.config.url.includes("rwapi")) {
+    // Showing Missing permissions message
+    if (response.data.error_permissions) {
+      Vue.prototype.toast.error(
+        response.data.error_permissions,
+        "Missing permissions",
+        {
+          position: "bottomRight",
+          timeout: 5000,
+          closeOnEscape: true,
+          pauseOnHover: false,
+          displayMode: "replace"
+        }
+      );
+    }
+
+    // Destroying session and redirecting to login view
+    if (response.data.error_not_logged_in) {
+      Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
+      Vue.$cookies.remove("csrftoken", null, "geocollections.info");
+      Vue.localStorage.remove("authUser");
+      Vue.prototype.toast.error("Please log back in", "Session expired", {
+        position: "bottomRight",
+        timeout: 5000,
+        closeOnEscape: true,
+        pauseOnHover: false,
+        displayMode: "replace"
+      });
+      router.push({ path: "/" });
+    }
+
+    // Showing link error message
+    if (response.data.link_error) {
+      Vue.prototype.toast.error(response.data.link_error, "Error", {
+        position: "bottomRight",
+        timeout: 99999999999,
+        pauseOnHover: false,
+        displayMode: "replace"
+      });
+    }
+  }
+
+  return response;
+});
+
 async function get(child = "", customUrl) {
   let url = api.url + child;
   if (customUrl) url = customUrl + child;
 
-  const response = await window.fetch(url, { method: "GET" });
-  if (response.ok) return await response.json();
+  try {
+    return await axios.get(url);
+  } catch (error) {
+    return error.request();
+  }
 }
 
-function fetch(child, url = 0, headers = {}) {
-  let queryUrl = api.url;
-  if (url !== 0) queryUrl = url;
+async function post(child, data) {
+  let url = api.url + child;
+  let useLoginOptions = false;
+  let loginOptions;
 
-  return new Promise((resolve, reject) => {
-    Vue.http.get(queryUrl + child, headers).then(
-      response => {
-        // console.log(response)
-        resolve(response);
+  if (child.includes("login")) {
+    useLoginOptions = true;
+    loginOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
       },
-      errResponse => {
-        console.log("ERROR: " + JSON.stringify(errResponse));
-        reject(errResponse);
-      }
-    );
-  });
-}
+      data: qs.stringify(data),
+      url
+    };
+  }
 
-function fetchPost(child, postData, config) {
-  return new Promise((resolve, reject) => {
-    Vue.http.post(api.url + child, postData, config).then(
-      response => resolve(response),
-      errResponse => reject(errResponse)
-    );
-  });
+  try {
+    if (useLoginOptions) return await axios(loginOptions);
+    else return await axios.post(url, data);
+  } catch (error) {
+    return error.request();
+  }
 }
 
 /*******************
@@ -49,24 +109,28 @@ function fetchPost(child, postData, config) {
  *******************/
 
 export function fetchLogin(userData) {
-  return fetchPost(`login/`, userData, { emulateJSON: true });
+  return post(`login/`, userData);
 }
 
 export function fetchLoginId() {
-  return fetch(`loginid/`);
+  return get(`loginid/`);
 }
 
 export function fetchLogout() {
-  return fetch(`logout/`);
+  return get(`logout/`);
 }
 
 export function fetchIsLoggedIn() {
-  return fetch("is_logged_in/login_state");
+  return get(`is_logged_in/login_state`);
 }
 
 /*******************
  ***  LOGIN END  ***
  *******************/
+
+export function postRequest(url, data) {
+  return post(url, data);
+}
 
 /*************************
  *** ATTACHMENTS START ***
@@ -119,136 +183,136 @@ export function fetchAttachments(data, author) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `attachment/?${searchFields}&or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
-    // return fetch(`attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // return get(`attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
-    return fetch(
+    return get(
       `attachment/?or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
-    // return fetch(`attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    // return get(`attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 
 export function fetchAttachment(id, author) {
   if (author)
-    return fetch(
+    return get(
       `attachment/?id=${id}&or_search=author_id:${author.id};user_added:${author.user};user_changed:${author.user}&format=json`
     );
-  else return fetch(`attachment/?id=${id}&format=json`);
+  else return get(`attachment/?id=${id}&format=json`);
 }
 
 export function fetchListImageType() {
-  return fetch(`list_image_type/?format=json`);
+  return get(`list_image_type/?format=json`);
 }
 
 export function fetchAttachmentKeyword(id) {
-  return fetch(`attachment_keyword/?attachment=${id}&format=json`);
+  return get(`attachment_keyword/?attachment=${id}&format=json`);
 }
 
 export function fetchListAttachmentType() {
-  return fetch(`list_attachment_type/?format=json`);
+  return get(`list_attachment_type/?format=json`);
 }
 
 export function fetchAttachmentLinkCollections(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&collection__isnull=false&fields=collection,collection__name,collection__name_en&format=json`
   );
 }
 
 export function fetchAttachmentLinkSpecimens(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&specimen__isnull=false&fields=specimen,specimen_id,specimen__coll__number&format=json`
   );
 }
 
 export function fetchAttachmentLinkSamples(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&sample__isnull=false&fields=sample,sample__number&format=json`
   );
 }
 
 export function fetchAttachmentLinkSampleSeries(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&sample_series__isnull=false&fields=sample_series,sample_series__name&format=json`
   );
 }
 
 export function fetchAttachmentLinkAnalyses(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&analysis__isnull=false&fields=analysis,analysis__sample__number&format=json`
   );
 }
 
 export function fetchAttachmentLinkDatasets(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&dataset__isnull=false&fields=dataset,dataset__name,dataset__name_en&format=json`
   );
 }
 
 export function fetchAttachmentLinkDois(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&doi__isnull=false&fields=doi,doi__identifier&format=json`
   );
 }
 
 export function fetchAttachmentLinkLocalities(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&locality__isnull=false&fields=locality,locality__locality,locality__locality_en&format=json`
   );
 }
 
 export function fetchAttachmentLinkDrillcores(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&drillcore__isnull=false&fields=drillcore,drillcore__drillcore,drillcore__drillcore_en&format=json`
   );
 }
 
 export function fetchAttachmentLinkDrillcoreBoxes(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&drillcore_box__isnull=false&fields=drillcore_box,drillcore_box__drillcore__drillcore,drillcore_box__drillcore__drillcore_en&format=json`
   );
 }
 
 export function fetchAttachmentLinkPreparations(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&preparation__isnull=false&fields=preparation,preparation__preparation_number&format=json`
   );
 }
 
 export function fetchAttachmentLinkReferences(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&reference__isnull=false&fields=reference,reference__reference&format=json`
   );
 }
 
 export function fetchAttachmentLinkStorages(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&storage__isnull=false&fields=storage,storage__location,storage__contents&format=json`
   );
 }
 
 export function fetchAttachmentLinkProjects(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&project__isnull=false&fields=project,project__name,project__name_en&format=json`
   );
 }
 
 export function fetchAttachmentLinkSites(id) {
-  return fetch(
+  return get(
     `attachment_link/?attachment=${id}&site__isnull=false&fields=site,site__name,site__name_en&format=json`
   );
 }
 
 export function fetchRecentImages(currentUserId) {
-  return fetch(
+  return get(
     `attachment/?author_id=${currentUserId}&image_latitude!=null&order_by=-id&paginate_by=30&fields=image_latitude,image_longitude,id,image_place`
   );
 }
 
 export function fetchRecentFiles(currentUserId, paginateBy) {
-  return fetch(
+  return get(
     `attachment/?author_id=${currentUserId}&order_by=-id&paginate_by=${paginateBy}`
   );
 }
@@ -262,7 +326,7 @@ export function fetchRecentFiles(currentUserId, paginateBy) {
  ************************/
 
 export function fetchReference(id) {
-  return fetch(`reference/?id=${id}&format=json`);
+  return get(`reference/?id=${id}&format=json`);
 }
 
 export async function fetchReferences(data) {
@@ -270,7 +334,7 @@ export async function fetchReferences(data) {
   // This (solr search) overrides regular search fields
   if (data.solrSearch && data.solrSearch.trim().length > 0) {
     let start = (data.page - 1) * data.paginateBy;
-    return fetch(
+    return get(
       `reference/?q=${data.solrSearch}&rows=${data.paginateBy}&start=${start}&format=json`,
       api.solrUrl
     );
@@ -284,16 +348,16 @@ export async function fetchReferences(data) {
     ).then(response => {
       if (
         response &&
-        response.body &&
-        response.body.results &&
-        response.body.results.length > 0
+        response.data &&
+        response.data.results &&
+        response.data.results.length > 0
       ) {
-        return response.body.results.map(reference_keyword => {
+        return response.data.results.map(reference_keyword => {
           return reference_keyword.reference;
         });
       } else return [314159265];
     });
-    return fetch(
+    return get(
       `reference/?id__in=${listOfReferenceIDs}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
@@ -349,14 +413,14 @@ export async function fetchReferences(data) {
 
   if (searchFields.length > 0) {
     // Not using 'fields' because of alternative table
-    // return fetch(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return fetch(
+    // return get(`reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return get(
       `reference/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   } else {
     // Not using 'fields' because of alternative table
-    // return fetch(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
-    return fetch(
+    // return get(`reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
+    return get(
       `reference/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
@@ -412,53 +476,54 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
   }
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
-  return fetch(
-    `reference_keyword/?${searchFields}&fields=reference&format=json`
-  );
+  return get(`reference_keyword/?${searchFields}&fields=reference&format=json`);
 }
 
 export function fetchReferenceKeyword(id) {
-  return fetch(`reference_keyword/?reference=${id}&format=json`);
+  return get(`reference_keyword/?reference=${id}&format=json`);
 }
 
 export function fetchAttachmentLink(id) {
-  return fetch(`attachment_link/?reference=${id}&format=json`);
+  return get(`attachment_link/?reference=${id}&format=json`);
 }
 
 export function fetchLocalityReferenceForReference(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
 
-  return fetch(
+  return get(
     `locality_reference/?reference=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchListReferenceTypes() {
-  return fetch(`list_reference_type/?format=json`);
+  return get(`list_reference_type/?format=json`);
 }
 
 export function fetchListLanguages() {
-  return fetch(`list_language/?format=json`);
+  return get(`list_language/?format=json`);
 }
 
 export function fetchAttachmentForReference(id) {
-  return fetch(
+  return get(
     `attachment/?reference=${id}&fields=id,uuid_filename,original_filename&format=json`
   );
 }
 
 export function fetchLibrariesForReference(id) {
-  return fetch(
+  return get(
     `library_reference/?reference=${id}&fields=library,library__title,library__title_en&format=json`
   );
 }
 
 export function fetchAddReferenceToLibrary(data) {
-  return fetchPost(`add/library_reference/`, data);
+  return post(`add/library_reference/`, data);
 }
 
 export function fetchListLocalityReferenceType() {
-  return fetch(`list_locality_reference_type/?format=json`);
+  return get(`list_locality_reference_type/?format=json`);
 }
 
 export function fetchLinkedStratigraphyReference(referenceID, data) {
@@ -466,7 +531,7 @@ export function fetchLinkedStratigraphyReference(referenceID, data) {
     "id,reference,stratigraphy,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy__type,stratigraphy__type__value,stratigraphy__type__value_en,stratigraphy__rank,stratigraphy__rank__value,stratigraphy__rank__value_en,stratigraphy__scope,stratigraphy__scope__value,stratigraphy__scope__value_en";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
-  return fetch(
+  return get(
     `stratigraphy_reference/?reference=${referenceID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
   );
 }
@@ -475,7 +540,7 @@ export function fetchLinkedTaxonReference(referenceID, data) {
   const fields =
     "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
-  return fetch(
+  return get(
     `taxon/?reference=${referenceID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
   );
 }
@@ -489,13 +554,13 @@ export function fetchLinkedTaxonReference(referenceID, data) {
  ******************/
 
 export function fetchSpecificLogs(data) {
-  return fetch(
+  return get(
     `log/?table_name=${data.table_name}&row_id=${data.row_id}&order_by=${data.order_by}&format=json`
   );
 }
 
 export function fetchLatestLogs(data) {
-  return fetch(
+  return get(
     `log/?user=${data.user}&command=${data.command}&order_by=-id&paginate_by=10&fields=time,user,command,changes,table_name,row_id`
   );
 }
@@ -537,68 +602,80 @@ export function fetchLocalities(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `locality/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `locality/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchListLocalityTypes() {
-  return fetch(`list_locality_type/?format=json`);
+  return get(`list_locality_type/?format=json`);
 }
 
 export function fetchListLocalityExtent() {
-  return fetch(`list_locality_extent/?format=json`);
+  return get(`list_locality_extent/?format=json`);
 }
 
 export function fetchListCoordinateMethod() {
-  return fetch(`list_coordinate_method/?format=json`);
+  return get(`list_coordinate_method/?format=json`);
 }
 
 export function fetchListCoordinatePrecision() {
-  return fetch(`list_coordinate_precision/?format=json`);
+  return get(`list_coordinate_precision/?format=json`);
 }
 
 export function fetchListCountry() {
-  return fetch(`list_country/?format=json`);
+  return get(`list_country/?format=json`);
 }
 
 export function autocompleteSearch(query) {
-  return fetch(`${query}&format=json`);
+  return get(`${query}&format=json`);
 }
 
 export function fetchLocality(id) {
-  return fetch(`locality/?id=${id}&format=json`);
+  return get(`locality/?id=${id}&format=json`);
 }
 
 export function fetchLocalityReference(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `locality_reference/?locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLocalitySynonym(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `locality_synonym/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLocalityAttachment(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLocalityStratigraphy(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `locality_stratigraphy/?locality_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
@@ -611,27 +688,27 @@ export function fetchLocalityStratigraphy(id, searchParameters) {
  ***  SAMPLES START  ***
  ************************/
 export function fetchSample(id) {
-  return fetch(`sample/?id=${id}&format=json`);
+  return get(`sample/?id=${id}&format=json`);
 }
 
 export function fetchSamplePurpose() {
-  return fetch(`list_sample_purpose/?order_by=value&format=json`);
+  return get(`list_sample_purpose/?order_by=value&format=json`);
 }
 
 export function fetchFossilGroup() {
-  return fetch(`taxon/?fields=taxon,id&is_fossil_group=1&format=json`);
+  return get(`taxon/?fields=taxon,id&is_fossil_group=1&format=json`);
 }
 
 export function fetchSampleRelatedAnalysis(id) {
-  return fetch(`analysis/?sample=${id}&fields=id&format=json`);
+  return get(`analysis/?sample=${id}&fields=id&format=json`);
 }
 
 export function fetchSampleRelatedPreparation(id) {
-  return fetch(`preparation/?sample=${id}&fields=id&format=json`);
+  return get(`preparation/?sample=${id}&fields=id&format=json`);
 }
 
 export function fetchAnalysisMethod() {
-  return fetch(`analysis_method/?order_by=analysis_method&format=json`);
+  return get(`analysis_method/?order_by=analysis_method&format=json`);
 }
 
 export function fetchSamples(data, agent, databaseId) {
@@ -692,59 +769,74 @@ export function fetchSamples(data, agent, databaseId) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `sample/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `sample/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchSampleAnalysis(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `analysis/?sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSamplePreparation(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `preparation/?sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonList(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_list/?sample=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLSampleAttachment(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `attachment/?attach_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=id,original_filename,uuid_filename,description,description_en,date_created,remarks&format=json`
   );
 }
 
 export function fetchSampleReference(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `sample_reference/?sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLatestSampleInSite(siteId) {
-  return fetch(
+  return get(
     `sample/?site__id=${siteId}&order_by=-id&paginate_by=1&format=json`
   );
 }
 
 export function fetchRecentSamples(currentUserId) {
-  return fetch(
+  return get(
     `sample/?agent_collected__id=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
   );
 }
@@ -758,7 +850,7 @@ export function fetchRecentSamples(currentUserId) {
  ***********************/
 
 export function fetchLibrary(id) {
-  return fetch(`library/?id=${id}&format=json`);
+  return get(`library/?id=${id}&format=json`);
 }
 
 export function fetchLibraries(data) {
@@ -785,11 +877,11 @@ export function fetchLibraries(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `library/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `library/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
@@ -837,33 +929,36 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `library_agent/?agent=${agent.id}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `library_agent/?agent=${agent.id}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchLibraryReference(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `library_reference/?library=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchLibraryAgent(id) {
-  return fetch(`library_agent/?library=${id}&format=json`);
+  return get(`library_agent/?library=${id}&format=json`);
 }
 
 export function fetchListLibraries(id) {
-  return fetch(`library_agent/?agent=${id}&format=json`);
+  return get(`library_agent/?agent=${id}&format=json`);
 }
 
 export function fetchChangeLibraryState(id, data) {
-  return fetchPost(`change/library/${id}`, data);
+  return post(`change/library/${id}`, data);
 }
 
 /***********************
@@ -906,18 +1001,18 @@ export function fetchDois(data, databaseId) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `doi/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `doi/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchDoi(id) {
-  return fetch(`doi/?id=${id}&format=json`);
+  return get(`doi/?id=${id}&format=json`);
 }
 
 export function fetchDoiUsingEGF(id) {
@@ -925,98 +1020,113 @@ export function fetchDoiUsingEGF(id) {
 }
 
 export function fetchDoiResourceType() {
-  return fetch(`doi_resource_type/?format=json`);
+  return get(`doi_resource_type/?format=json`);
 }
 
 // export function fetchListTitleTranslatedLanguages() {
-//   return fetch(`title_translated_language/?format=json`)
+//   return get(`title_translated_language/?format=json`)
 // }
 
 export function fetchListLicences() {
-  return fetch(`list_licence/?format=json`);
+  return get(`list_licence/?format=json`);
 }
 
 export function fetchDoiCheck(doi) {
-  return fetch(doi, api.checkDoiUrl);
+  return get(doi, api.checkDoiUrl);
 }
 
 export function fetchDoiAttachment(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `attachment_link/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks&format=json`
   );
 }
 
 export function fetchDoiAgent(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `doi_agent/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchDoiAgentType() {
-  return fetch(`doi_agent_type/?format=json`);
+  return get(`doi_agent_type/?format=json`);
 }
 
 export function fetchDoiRelatedIdentifier(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `doi_related_identifier/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchDoiGeolocation(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `doi_geolocation/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchDoiDate(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `doi_date/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchDoiRelatedIdentifierType() {
-  return fetch(`doi_related_identifier_type/?format=json`);
+  return get(`doi_related_identifier_type/?format=json`);
 }
 
 export function fetchDoiRelationType() {
-  return fetch(`doi_relation_type/?format=json`);
+  return get(`doi_relation_type/?format=json`);
 }
 
 export function fetchDoiDateType() {
-  return fetch(`doi_date_type/?format=json`);
+  return get(`doi_date_type/?format=json`);
 }
 
 export function fetchAddDoi(data) {
-  return fetchPost(`add/doi/`, data);
+  return post(`add/doi/`, data);
 }
 
 export function fetchAddDoiGeolocation(data) {
-  return fetchPost(`add/doi_geolocation/`, data);
+  return post(`add/doi_geolocation/`, data);
 }
 
 export function fetchAddDoiAgent(data) {
-  return fetchPost(`add/doi_agent/`, data);
+  return post(`add/doi_agent/`, data);
 }
 
 export function fetchCheckMetadataInDataCite(id) {
-  return fetch(`datacite/check_metadata/${id}`);
+  return get(`datacite/check_metadata/${id}`);
 }
 
 export function fetchCheckDoiUrlInDataCite(id) {
-  return fetch(`datacite/check_doi/${id}`);
+  return get(`datacite/check_doi/${id}`);
 }
 
 export function fetchRegisterMetadataToDataCite(id) {
-  return fetch(`datacite/register_metadata/${id}`);
+  return get(`datacite/register_metadata/${id}`);
 }
 
 export function fetchRegisterDoiUrlToDataCite(id) {
-  return fetch(`datacite/register_doi/${id}`);
+  return get(`datacite/register_doi/${id}`);
 }
 
 /*****************
@@ -1028,7 +1138,7 @@ export function fetchRegisterDoiUrlToDataCite(id) {
  *****************************/
 
 export function fetchAddAttachmentLink(data) {
-  return fetchPost(`add/attachment_link/`, data);
+  return post(`add/attachment_link/`, data);
 }
 
 /*****************************
@@ -1040,17 +1150,17 @@ export function fetchAddAttachmentLink(data) {
  **********************/
 
 export function fetchProject(id) {
-  return fetch(`project/?id=${id}&format=json`);
+  return get(`project/?id=${id}&format=json`);
 }
 
 export function fetchProjectAgent(id) {
-  return fetch(
+  return get(
     `project/${id}?fields=id,projectagent__agent,projectagent__agent__agent&format=json`
   );
 }
 
 export function fetchProjectAttachment(id, page = 1) {
-  return fetch(
+  return get(
     `attachment/?attach_link__project__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename&format=json`
   );
 }
@@ -1060,13 +1170,13 @@ export function fetchLinkedSite(data, projectId) {
     "id,name,name_en,number,project,project__name,project__name_en,date_start,date_end,latitude,longitude";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
-  return fetch(
+  return get(
     `site/?project=${projectId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
   );
 }
 
 export function fetchProjectType() {
-  return fetch(`project_type/?order_by=name&format=json`);
+  return get(`project_type/?order_by=name&format=json`);
 }
 
 export function fetchProjects(data, agent) {
@@ -1086,18 +1196,18 @@ export function fetchProjects(data, agent) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `project/?projectagent__agent=${agent}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `project/?projectagent__agent=${agent}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchActiveProjects(projectIds) {
-  return fetch(
+  return get(
     `project/?id__in=${projectIds}&fields=id,name,name_en&format=json`
   );
 }
@@ -1168,25 +1278,25 @@ export function fetchSites(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    // return data.coords_not_null === true ? fetch(`site/?${searchFields}&order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
-    return fetch(
+    // return data.coords_not_null === true ? get(`site/?${searchFields}&order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
+    return get(
       `site/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    // return data.coords_not_null === true ? fetch(`site/?order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
+    // return data.coords_not_null === true ? get(`site/?order_by=${data.orderBy}&fields=id, latitude, longitude&format=json`):
 
-    return fetch(
+    return get(
       `site/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchSite(id) {
-  return fetch(`site/?id=${id}&format=json`);
+  return get(`site/?id=${id}&format=json`);
 }
 
 export function fetchSiteAttachment(id, page = 1) {
-  return fetch(
+  return get(
     `attachment/?attach_link__site__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`
   );
 }
@@ -1221,24 +1331,24 @@ export function fetchLinkedSamples(data, siteID) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `sample/?site__id=${siteID}&${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `sample/?site__id=${siteID}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchLastSiteName(projectId) {
-  return fetch(
+  return get(
     `site/?project=${projectId}&fields=name&order_by=-id&paginate_by=1&format=json`
   );
 }
 
 export function fetchRecentSites(currentUserId) {
-  return fetch(
+  return get(
     `site/?project__projectagent__agent=${currentUserId}&order_by=-id&paginate_by=30&fields=name,latitude,longitude,id`
   );
 }
@@ -1252,15 +1362,15 @@ export function fetchRecentSites(currentUserId) {
  ***************************/
 
 export function fetchAnalysis(id) {
-  return fetch(`analysis/?id=${id}&format=json`);
+  return get(`analysis/?id=${id}&format=json`);
 }
 
 export function fetchLabs() {
-  return fetch(`lab/?format=json`);
+  return get(`lab/?format=json`);
 }
 
 export function fetchInstruments() {
-  return fetch(`lab_instrument/?format=json`);
+  return get(`lab_instrument/?format=json`);
 }
 
 export function fetchAnalyses(data, agent, databaseId) {
@@ -1292,25 +1402,28 @@ export function fetchAnalyses(data, agent, databaseId) {
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `analysis/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `analysis/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchAnalysisAttachment(id, searchParameters) {
-  return fetch(
+  return get(
     `attachment/?attach_link__analysis__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`
   );
 }
 
 export function fetchAnalysisResults(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `analysis_results/?analysis=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
@@ -1324,7 +1437,7 @@ export function fetchAnalysisResults(id, searchParameters) {
  *********************/
 
 export function fetchJournal(id) {
-  return fetch(`journal/?id=${id}&format=json`);
+  return get(`journal/?id=${id}&format=json`);
 }
 
 export function fetchJournals(data) {
@@ -1348,18 +1461,18 @@ export function fetchJournals(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `journal/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `journal/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchJournalForReference(name) {
-  return fetch(
+  return get(
     `journal/?multi_search=value:${name};fields:journal_name,journal_short,journal_long,journal_original,journal_abbr;lookuptype:iexact`
   );
 }
@@ -1373,11 +1486,11 @@ export function fetchJournalForReference(name) {
  **********************/
 
 export function fetchAddImageset(data) {
-  return fetchPost(`add/imageset/`, data);
+  return post(`add/imageset/`, data);
 }
 
 export function fetchIsImagesetNumberInImageset(imagesetNumber) {
-  return fetch(`imageset/?imageset_number=${imagesetNumber}&format=json`);
+  return get(`imageset/?imageset_number=${imagesetNumber}&format=json`);
 }
 
 /**********************
@@ -1389,7 +1502,7 @@ export function fetchIsImagesetNumberInImageset(imagesetNumber) {
  **********************/
 
 export function fetchSpecimen(id) {
-  return fetch(`specimen/?id=${id}&format=json`);
+  return get(`specimen/?id=${id}&format=json`);
 }
 
 export function fetchSpecimens(data, databaseId) {
@@ -1448,11 +1561,11 @@ export function fetchSpecimens(data, databaseId) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `specimen/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `specimen/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
@@ -1516,52 +1629,55 @@ export function fetchSpecimenImages(data, databaseId) {
   orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `attachment/?${searchFields}&specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `attachment/?specimen_image_attachment=1&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchListSpecimenKind() {
-  return fetch(`list_specimen_kind/?format=json`);
+  return get(`list_specimen_kind/?format=json`);
 }
 
 export function fetchListSpecimenOriginalStatus() {
-  return fetch(`list_specimen_original_status/?format=json`);
+  return get(`list_specimen_original_status/?format=json`);
 }
 
 export function fetchListSpecimenPresence() {
-  return fetch(`list_specimen_presence/?format=json`);
+  return get(`list_specimen_presence/?format=json`);
 }
 
 export function fetchListSpecimenStatus() {
-  return fetch(`list_specimen_status/?format=json`);
+  return get(`list_specimen_status/?format=json`);
 }
 
 export function fetchListSpecimenType() {
-  return fetch(`list_specimen_type/?format=json`);
+  return get(`list_specimen_type/?format=json`);
 }
 
 export function fetchListHistoryType() {
-  return fetch(`list_history_type/?format=json`);
+  return get(`list_history_type/?format=json`);
 }
 
 export function fetchAccession() {
-  return fetch(`accession/?format=json`);
+  return get(`accession/?format=json`);
 }
 
 export function fetchDeaccession() {
-  return fetch(`deaccession/?format=json`);
+  return get(`deaccession/?format=json`);
 }
 
 export function fetchSpecimenIdentifications(specimenId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   if (searchParameters) {
-    return fetch(
+    return get(
       `specimen_identification/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
@@ -1571,9 +1687,12 @@ export function fetchSpecimenIdentificationGeologies(
   specimenId,
   searchParameters
 ) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   if (searchParameters) {
-    return fetch(
+    return get(
       `specimen_identification_geology/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
@@ -1581,7 +1700,7 @@ export function fetchSpecimenIdentificationGeologies(
 
 export function fetchSpecimenIdentificationsList(listOfIds) {
   let fields = "taxon__taxon,taxon_id,specimen_id";
-  return fetch(
+  return get(
     `specimen_identification/?specimen_id__in=${listOfIds}&current=true&fields=${fields}&format=json`
   );
 }
@@ -1589,63 +1708,81 @@ export function fetchSpecimenIdentificationsList(listOfIds) {
 export function fetchSpecimenIdentificationGeologiesList(listOfIds) {
   let fields =
     "name,name_en,rock__name,rock__name_en,rock__formula_html,rock_id,specimen_id";
-  return fetch(
+  return get(
     `specimen_identification_geology/?specimen_id__in=${listOfIds}&current=true&fields=${fields}&order_by=name&format=json`
   );
 }
 
 export function fetchSpecimenReferences(specimenId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `specimen_reference/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenDescriptions(specimenId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `specimen_description/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenAttachments(specimenId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `attachment/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenLocations(specimenId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `specimen_location/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenHistory(specimenId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `specimen_history/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchSpecimenAnalyses(specimenId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `analysis/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchListIdentificationType() {
-  return fetch(`list_identification_type/?format=json`);
+  return get(`list_identification_type/?format=json`);
 }
 
 export function fetchListUnit() {
-  return fetch(`list_unit/?format=json`);
+  return get(`list_unit/?format=json`);
 }
 
 export function fetchRecentSpecimens(currentUserId) {
-  return fetch(
+  return get(
     `specimen/?agent_collected__id=${currentUserId}&locality__id!=null&order_by=-id&paginate_by=30&fields=locality__locality,locality__latitude,locality__longitude,locality__id`
   );
 }
@@ -1695,22 +1832,22 @@ export function fetchCollections(data, databaseId) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `collection/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `collection/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchCollection(id) {
-  return fetch(`collection/?id=${id}&format=json`);
+  return get(`collection/?id=${id}&format=json`);
 }
 
 export function fetchListCollectionType() {
-  return fetch(`list_collection_type/?format=json`);
+  return get(`list_collection_type/?format=json`);
 }
 
 /************************
@@ -1754,94 +1891,121 @@ export function fetchTaxa(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `taxon/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `taxon/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchTaxon(id) {
-  return fetch(`taxon/?id=${id}&format=json`);
+  return get(`taxon/?id=${id}&format=json`);
 }
 
 export function fetchTaxonRank() {
-  return fetch(`taxon_rank/?format=json`);
+  return get(`taxon_rank/?format=json`);
 }
 
 export function fetchTaxonSubclass(taxonId, searchParameters) {
   let fields = "id,taxon,parent_id,parent__taxon,author_year,remarks";
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon/?parent_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
   );
 }
 
 export function fetchTaxonSynonym(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_synonym/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonTypeSpecimen(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_type_specimen/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonOccurrence(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_occurrence/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonOpinion(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_opinion/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonCommonName(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_common_name/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonDescription(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_description/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonPage(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonImage(taxonId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
     `taxon_image/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchTaxonTypeType() {
-  return fetch(`taxon_type_type/?format=json`);
+  return get(`taxon_type_type/?format=json`);
 }
 
 export function fetchTaxonOpinionType() {
-  return fetch(`taxon_opinion_type/?format=json`);
+  return get(`taxon_opinion_type/?format=json`);
 }
 
 /*******************
@@ -1853,7 +2017,7 @@ export function fetchTaxonOpinionType() {
  *********************/
 
 export function fetchKeyword(id) {
-  return fetch(`keyword/?id=${id}&format=json`);
+  return get(`keyword/?id=${id}&format=json`);
 }
 
 export function fetchKeywords(data, listOfIDs) {
@@ -1887,24 +2051,24 @@ export function fetchKeywords(data, listOfIDs) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `keyword/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `keyword/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchReferenceKeywordIDs(referenceID) {
-  return fetch(
+  return get(
     `reference_keyword/?reference=${referenceID}&fields=keyword&format=json`
   );
 }
 
 export function fetchListKeywords() {
-  return fetch(`keyword/?format=json`);
+  return get(`keyword/?format=json`);
 }
 
 /*********************
@@ -1917,7 +2081,7 @@ export function fetchListKeywords() {
 
 export function fetchAgent(id) {
   let fields = `id,agent,type,type__value,type__value_en,forename,surename,institution,institution__agent,institution__institution_name,institution__institution_name_en,institution_name,institution_name_en,title,profession,profession_en,address,address1,address2,http,orcid,country__value,country__value_en,country,country_txt,phone,email,date_born,date_deceased,old_name,new_name,remarks`;
-  return fetch(`agent/?id=${id}&fields=${fields}&format=json`);
+  return get(`agent/?id=${id}&fields=${fields}&format=json`);
 }
 
 export function fetchAgents(data) {
@@ -1945,24 +2109,24 @@ export function fetchAgents(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `agent/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `agent/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchAgentUsingName(name) {
-  return fetch(
+  return get(
     `agent/?multi_search=value:${name};fields:id,agent,forename,surename;lookuptype:icontains&page=1&paginate_by=1&fields=id,agent,institution__institution_name_en,orcid`
   );
 }
 
 export function fetchListAgentType() {
-  return fetch(`agent_type/?format=json`);
+  return get(`agent_type/?format=json`);
 }
 
 /*******************
@@ -1994,18 +2158,18 @@ export function fetchSelectionSeries(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `selection_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `selection_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchSelectionSerie(id) {
-  return fetch(`selection_series/?id=${id}&format=json`);
+  return get(`selection_series/?id=${id}&format=json`);
 }
 
 /******************************
@@ -2017,7 +2181,7 @@ export function fetchSelectionSerie(id) {
  ***********************/
 
 export function fetchAddItemToSelection(data) {
-  return fetchPost(`add/selection/`, data);
+  return post(`add/selection/`, data);
 }
 
 /***********************
@@ -2029,7 +2193,7 @@ export function fetchAddItemToSelection(data) {
  ***********************/
 
 export function fetchDrillcore(id) {
-  return fetch(`drillcore/?id=${id}&format=json`);
+  return get(`drillcore/?id=${id}&format=json`);
 }
 
 export function fetchDrillcores(data) {
@@ -2057,30 +2221,36 @@ export function fetchDrillcores(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `drillcore/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `drillcore/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchListDrillcoreStorage() {
-  return fetch(`list_drillcore_storage/?format=json`);
+  return get(`list_drillcore_storage/?format=json`);
 }
 
 export function fetchDrillcoreBoxes(drillcoreId, searchParameters) {
-  return fetch(`drillcore_box/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return get(
+    `drillcore_box/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchDrillcoreStudies(drillcoreId, searchParameters) {
-  return fetch(`drillcore_study/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return get(
+    `drillcore_study/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 export function fetchDrillcoreAttachments(drillcoreId, searchParameters) {
-  return fetch(`attachment/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`);
+  return get(
+    `attachment/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&format=json`
+  );
 }
 
 /***********************
@@ -2092,7 +2262,7 @@ export function fetchDrillcoreAttachments(drillcoreId, searchParameters) {
  *************************/
 
 export function fetchPreparation(id) {
-  return fetch(`preparation/?id=${id}&format=json`);
+  return get(`preparation/?id=${id}&format=json`);
 }
 
 export function fetchPreparations(data) {
@@ -2108,11 +2278,11 @@ export function fetchPreparations(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `preparation/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `preparation/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
@@ -2151,11 +2321,11 @@ export function fetchLinkedTaxa(data, prepId) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `taxon_list/?preparation=${prepId}${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `taxon_list/?preparation=${prepId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
@@ -2170,7 +2340,7 @@ export function fetchLinkedTaxa(data, prepId) {
  *********************/
 
 export function fetchDataset(id) {
-  return fetch(`dataset/?id=${id}&format=json`);
+  return get(`dataset/?id=${id}&format=json`);
 }
 
 export function fetchDatasets(data, databaseId) {
@@ -2200,24 +2370,34 @@ export function fetchDatasets(data, databaseId) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `dataset/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `dataset/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchDatasetAuthors(datasetId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(`dataset_author/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `dataset_author/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
 }
 
 export function fetchDatasetReferences(datasetId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(`dataset_reference/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `dataset_reference/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
 }
 
 /*********************
@@ -2229,7 +2409,7 @@ export function fetchDatasetReferences(datasetId, searchParameters) {
  **************************/
 
 export function fetchStratigraphy(id) {
-  return fetch(`stratigraphy/?id=${id}&format=json`);
+  return get(`stratigraphy/?id=${id}&format=json`);
 }
 
 export function fetchStratigraphies(data) {
@@ -2265,49 +2445,64 @@ export function fetchStratigraphies(data) {
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
-    return fetch(
+    return get(
       `stratigraphy/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   } else {
-    return fetch(
+    return get(
       `stratigraphy/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
   }
 }
 
 export function fetchListStratigraphyType() {
-  return fetch(`list_stratigraphy_type/?format=json`);
+  return get(`list_stratigraphy_type/?format=json`);
 }
 
 export function fetchListStratigraphyRank() {
-  return fetch(`list_stratigraphy_rank/?format=json`);
+  return get(`list_stratigraphy_rank/?format=json`);
 }
 
 export function fetchListStratigraphyScope() {
-  return fetch(`list_stratigraphy_scope/?format=json`);
+  return get(`list_stratigraphy_scope/?format=json`);
 }
 
 export function fetchListStratigraphyStatus() {
-  return fetch(`list_stratigraphy_status/?format=json`);
+  return get(`list_stratigraphy_status/?format=json`);
 }
 
 export function fetchListStratotypeType() {
-  return fetch(`list_stratotype_type/?format=json`);
+  return get(`list_stratotype_type/?format=json`);
 }
 
 export function fetchStratigraphyReferences(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(`stratigraphy_reference/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `stratigraphy_reference/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
 }
 
 export function fetchStratigraphyStratotypes(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(`stratigraphy_stratotype/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `stratigraphy_stratotype/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
 }
 
 export function fetchStratigraphySynonyms(id, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
-  return fetch(`stratigraphy_synonym/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `stratigraphy_synonym/?stratigraphy=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
 }
 
 /**************************
@@ -2319,7 +2514,7 @@ export function fetchStratigraphySynonyms(id, searchParameters) {
  ***********************/
 
 export function fetchChangePrivacyState(table, id, stateData) {
-  return fetchPost("change/" + table + "/" + id, stateData);
+  return post("change/" + table + "/" + id, stateData);
 }
 
 /***********************

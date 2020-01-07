@@ -2,7 +2,9 @@
   <div class="input-class">
     <v-select
       background-color="white"
-      :clearable="typeof $attrs.clearable !== 'undefined' ? $attrs.clearable : true"
+      :clearable="
+        typeof $attrs.clearable !== 'undefined' ? $attrs.clearable : true
+      "
       clear-icon="fas fa-times"
       dense
       hide-details
@@ -21,7 +23,9 @@
       </template>
 
       <template v-slot:selection="data">
-        <div class="v-select__selection">{{ $t(translationPrefix + data.item[$attrs["item-text"]]) }}</div>
+        <div class="v-select__selection">
+          {{ $t(translationPrefix + data.item[$attrs["item-text"]]) }}
+        </div>
       </template>
     </v-select>
   </div>

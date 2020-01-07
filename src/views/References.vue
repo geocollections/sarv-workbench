@@ -217,31 +217,31 @@ export default {
 
       fetchAddReferenceToLibrary(formData).then(
         response => {
-          if (typeof response.body.message !== "undefined") {
+          if (typeof response.data.message !== "undefined") {
             if (
               this.$i18n.locale === "ee" &&
-              typeof response.body.message_et !== "undefined"
+              typeof response.data.message_et !== "undefined"
             ) {
-              toastSuccess({ text: response.body.message_et });
+              toastSuccess({ text: response.data.message_et });
             } else {
-              toastSuccess({ text: response.body.message });
+              toastSuccess({ text: response.data.message });
             }
           }
-          if (typeof response.body.error !== "undefined") {
+          if (typeof response.data.error !== "undefined") {
             if (
               this.$i18n &&
               this.$i18n.locale === "ee" &&
-              typeof response.body.error_et !== "undefined"
+              typeof response.data.error_et !== "undefined"
             ) {
-              toastError({ text: response.body.error_et });
+              toastError({ text: response.data.error_et });
             } else {
-              toastError({ text: response.body.error });
+              toastError({ text: response.data.error });
             }
           }
         },
         errResponse => {
-          if (typeof errResponse.body.error !== "undefined")
-            toastError({ text: errResponse.body.error });
+          if (typeof errResponse.data.error !== "undefined")
+            toastError({ text: errResponse.data.error });
           toastError({ text: this.$t("messages.uploadError") });
         }
       );

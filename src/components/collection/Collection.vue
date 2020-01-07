@@ -620,8 +620,8 @@ export default {
     getSpecimensBelongingToCollection() {
       fetchSpecimens(this.specimenSearchParameters).then(response => {
         if (response.status === 200) {
-          this.specimens.count = response.body.count;
-          this.specimens.results = response.body.results;
+          this.specimens.count = response.data.count;
+          this.specimens.results = response.data.results;
         }
       });
     },

@@ -76,10 +76,10 @@ export default {
         let url = URL.createObjectURL(file);
         a.href = url;
         a.download = this.filename + ".csv";
-        document.body.appendChild(a);
+        document.data.appendChild(a);
         a.click();
         setTimeout(function() {
-          document.body.removeChild(a);
+          document.data.removeChild(a);
           window.URL.revokeObjectURL(url);
         }, 0);
       }
@@ -157,10 +157,10 @@ export default {
         let url = URL.createObjectURL(file);
         a.href = url;
         a.download = this.filename + ".ris";
-        document.body.appendChild(a);
+        document.data.appendChild(a);
         a.click();
         setTimeout(function() {
-          document.body.removeChild(a);
+          document.data.removeChild(a);
           window.URL.revokeObjectURL(url);
         }, 0);
       }

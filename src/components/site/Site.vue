@@ -925,7 +925,7 @@ export default {
       }
       return new Promise(resolve => {
         query.then(response => {
-          this.relatedData.count[object] = response.body.count;
+          this.relatedData.count[object] = response.data.count;
           this.relatedData[object] = this.handleResponse(response);
 
           if (object === "attachment_link") {
@@ -1000,8 +1000,8 @@ export default {
 
     setSiteName(projectId) {
       fetchLastSiteName(projectId).then(response => {
-        if (response.body.results && response.body.results.length > 0) {
-          let newName = this.calculateNextName(response.body.results[0].name);
+        if (response.data.results && response.data.results.length > 0) {
+          let newName = this.calculateNextName(response.data.results[0].name);
           this.$set(this.site, "name", newName);
         }
       });
@@ -1012,7 +1012,7 @@ export default {
         if (this.createRelationWith.data === null) resolve(false);
         let project = this.createRelationWith.data;
         fetchLastSiteName(project.id).then(response => {
-          let resp = response.body.results;
+          let resp = response.data.results;
           if (resp && resp.length > 0) {
             let newName = this.calculateNextName(resp[0].name);
             this.$set(this.site, "name", newName);
@@ -1053,8 +1053,8 @@ export default {
     ) {
       apiCall().then(response => {
         if (response.status === 200) {
-          this.relatedData[relatedObject].count = response.body.count;
-          this.relatedData[relatedObject].results = response.body.results;
+          this.relatedData[relatedObject].count = response.data.count;
+          this.relatedData[relatedObject].results = response.data.results;
         }
       });
     },

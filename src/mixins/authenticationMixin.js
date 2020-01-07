@@ -91,9 +91,9 @@ const authenticationMixin = {
       authenticationType
     ) {
       if (response.status === 200) {
-        if (response.body.user != null) {
+        if (response.data.user != null) {
           let date = new Date();
-          response.body.expires = date.setDate(date.getDate() + 7);
+          response.data.expires = date.setDate(date.getDate() + 7);
 
           // Cookie for localhost
           this.$cookies.set(
@@ -103,7 +103,7 @@ const authenticationMixin = {
             null,
             "localhost"
           );
-          this.$localStorage.set("authUser", response.body);
+          this.$localStorage.set("authUser", response.data);
 
           if (this.$route.query.from) {
             this.$router.push({ path: this.$route.query.from });
@@ -156,9 +156,9 @@ const authenticationMixin = {
  * @param locale - Current language preference
  */
 function toastSuccessMessage(response, locale) {
-  if (locale === "ee" && response.body.message_et)
-    toastSuccess({ text: response.body.message_et });
-  else toastSuccess({ text: response.body.message });
+  if (locale === "ee" && response.data.message_et)
+    toastSuccess({ text: response.data.message_et });
+  else toastSuccess({ text: response.data.message });
 }
 
 /**
@@ -168,12 +168,12 @@ function toastSuccessMessage(response, locale) {
  * @returns {String} - Message to show why request failed
  */
 function getErrorMessage(response, locale) {
-  if (locale === "ee" && response.body.message_et) {
-    toastError({ text: response.body.message_et });
-    return response.body.message_et;
+  if (locale === "ee" && response.data.message_et) {
+    toastError({ text: response.data.message_et });
+    return response.data.message_et;
   } else {
-    toastError({ text: response.body.message });
-    return response.body.message;
+    toastError({ text: response.data.message });
+    return response.data.message;
   }
 }
 

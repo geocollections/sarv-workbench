@@ -487,7 +487,6 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-
           <taxon-subclass-table
             v-if="$route.meta.isEdit"
             v-show="activeTab === 'taxon_subclass'"
@@ -514,7 +513,9 @@
           <taxon-type-specimen-table
             v-show="activeTab === 'taxon_type_specimen'"
             :response="relatedData.taxon_type_specimen"
-            :search-parameters="relatedData.searchParameters.taxon_type_specimen"
+            :search-parameters="
+              relatedData.searchParameters.taxon_type_specimen
+            "
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -708,7 +709,12 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, requestsMixin],
+  mixins: [
+    formManipulation,
+    autocompleteMixin,
+    formSectionsMixin,
+    requestsMixin
+  ],
 
   data() {
     return this.setInitialData();
@@ -920,7 +926,7 @@ export default {
     },
 
     loadFullInfo() {
-      this.loadAutocompleteFields( );
+      this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
@@ -950,10 +956,10 @@ export default {
     },
 
     loadAutocompleteFields() {
-        fetchTaxonRank().then(response => {
-          this.autocomplete.rank = this.handleResponse(response);
-          this.autocomplete.rank_original = this.handleResponse(response);
-        });
+      fetchTaxonRank().then(response => {
+        this.autocomplete.rank = this.handleResponse(response);
+        this.autocomplete.rank_original = this.handleResponse(response);
+      });
     },
 
     setDefaultRelatedData() {
@@ -1196,7 +1202,7 @@ export default {
         } else {
           this.relatedData[object].results = this.handleResponse(response);
         }
-        this.relatedData[object].count = response.body.count;
+        this.relatedData[object].count = response.data.count;
       });
     },
 

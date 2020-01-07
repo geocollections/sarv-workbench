@@ -561,9 +561,7 @@
           <specimen-location-table
             v-show="activeTab === 'specimen_location'"
             :response="relatedData.specimen_location"
-            :search-parameters="
-              relatedData.searchParameters.specimen_location
-            "
+            :search-parameters="relatedData.searchParameters.specimen_location"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -574,9 +572,7 @@
           <specimen-history-table
             v-show="activeTab === 'specimen_history'"
             :response="relatedData.specimen_history"
-            :search-parameters="
-              relatedData.searchParameters.specimen_history
-            "
+            :search-parameters="relatedData.searchParameters.specimen_history"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -587,9 +583,7 @@
           <specimen-analysis-table
             v-show="activeTab === 'analysis'"
             :response="relatedData.analysis"
-            :search-parameters="
-              relatedData.searchParameters.analysis
-            "
+            :search-parameters="relatedData.searchParameters.analysis"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -1395,8 +1389,8 @@ export default {
       }
 
       query.then(response => {
-        this.relatedData[object].count = response.body.count;
-        this.relatedData[object].results = response.body.results;
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = response.data.results;
       });
     },
 

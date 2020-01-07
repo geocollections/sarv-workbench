@@ -1,16 +1,13 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import VueResource from "vue-resource"; // VueResource for HTTP requests
 import VueLocalStorage from "vue-localstorage"; // VueLocalStorage for using local storage
 import BootstrapVue from "bootstrap-vue"; // Bootstrap
 import VueIziToast from "vue-izitoast"; // Pop-up messages
 import VueI18n from "vue-i18n"; // Translations
-import VueMoment from "vue-moment";
 import VueCookies from "vue-cookies";
 import { createStore } from "./store";
 import VueScrollTo from "vue-scrollto";
-import Vue2TouchEvents from "vue2-touch-events";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import animated from "animate.css";
 import vuetify from "./plugins/vuetify";
@@ -22,19 +19,15 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import "izitoast/dist/css/iziToast.min.css"; // Pop-up messages style
-import "vue-multiselect/dist/vue-multiselect.min.css"; // Select input
-import "material-icons/iconfont/material-icons.css";
 import "leaflet/dist/leaflet.css"; // Leaflet css
 // Custom css
 import "@/assets/css/styles.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-Vue.use(VueResource);
 Vue.use(VueLocalStorage);
 Vue.use(BootstrapVue);
 Vue.use(VueIziToast);
 Vue.use(VueI18n);
-Vue.use(VueMoment);
 Vue.use(VueCookies);
 Vue.use(VueScrollTo, {
   container: "body",
@@ -49,8 +42,8 @@ Vue.use(VueScrollTo, {
   x: false,
   y: true
 });
-Vue.use(Vue2TouchEvents);
 Vue.use(animated);
+Vue.use(require("vue-moment"));
 
 Vue.config.productionTip = false;
 
@@ -77,62 +70,6 @@ const i18n = new VueI18n({
 /******************************
  ***  TRANSLATION CODE END  ***
  ******************************/
-
-// This adds csrf token to request | MUST BE BEFORE new Vue()
-Vue.http.interceptors.push((request, next) => {
-  // Only our rwapi needs csrftoken
-  if (request.url.includes("rwapi")) {
-    let csrftoken = Vue.cookies.get("csrftoken");
-
-    request.credentials = true;
-    request.headers.set("X-CSRFTOKEN", csrftoken);
-
-    next(res => {
-      if (res.status === 200) {
-        if (res.body.error_permissions) {
-          Vue.prototype.toast.error(
-            res.body.error_permissions,
-            "Missing permissions",
-            {
-              position: "bottomRight",
-              timeout: 5000,
-              closeOnEscape: true,
-              pauseOnHover: false,
-              displayMode: "replace"
-            }
-          );
-        }
-
-        /**
-         * If user is not logged in then session is destroyed
-         * and user is redirected to login view.
-         */
-        if (res.body.error_not_logged_in) {
-          Vue.cookies.remove("csrftokenLocalhost", null, "localhost");
-          Vue.cookies.remove("csrftoken", null, "geocollections.info");
-          Vue.localStorage.remove("authUser");
-          Vue.prototype.toast.error("Please log back in", "Session expired", {
-            position: "bottomRight",
-            timeout: 5000,
-            closeOnEscape: true,
-            pauseOnHover: false,
-            displayMode: "replace"
-          });
-          router.push({ path: "/" });
-        }
-
-        if (res.body.link_error) {
-          Vue.prototype.toast.error(res.body.link_error, "Error", {
-            position: "bottomRight",
-            timeout: 99999999999,
-            pauseOnHover: false,
-            displayMode: "replace"
-          });
-        }
-      }
-    });
-  }
-});
 
 Vue.directive("translate", function(el, binding) {
   let value = i18n.locale === "ee" ? binding.value.et : binding.value.en;
