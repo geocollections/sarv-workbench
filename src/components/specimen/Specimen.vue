@@ -1418,7 +1418,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment = files;
+      this.relatedData.attachment.count = files.length;
+      this.relatedData.attachment.results = files;
     }
   }
 };
