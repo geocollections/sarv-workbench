@@ -1176,7 +1176,7 @@ export default {
           attachment: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["original_filename"],
+            sortBy: ["id"],
             sortDesc: [true]
           },
           specimen_location: {
@@ -1390,7 +1390,20 @@ export default {
 
       query.then(response => {
         this.relatedData[object].count = response.data.count;
-        this.relatedData[object].results = response.data.results;
+        if (object === "attachment") {
+          this.relatedData[object].results = response.data.results.map(
+            attachment => {
+              return {
+                id: attachment.attachment,
+                specimen: attachment.specimen,
+                uuid_filename: attachment.attachment__uuid_filename,
+                description: attachment.attachment__description,
+                description_en: attachment.attachment__description_en,
+                original_filename: attachment.attachment__original_filename
+              };
+            }
+          );
+        } else this.relatedData[object].results = response.data.results;
       });
     },
 

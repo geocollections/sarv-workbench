@@ -1739,7 +1739,7 @@ export function fetchSpecimenAttachments(specimenId, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `attachment_link/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
