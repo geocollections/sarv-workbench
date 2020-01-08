@@ -11,6 +11,7 @@
     <v-content>
       <v-container fluid>
         <breadcrumbs
+          class="d-print-none"
           v-if="recentUrlsState"
           :items="recentUrls"
           :body-active-color="appSettings.bodyActiveColor"

@@ -7,8 +7,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v2.9-dependencies-{{ checksum "package.json" }}
-            - v2.9-dependencies-
+            - v3.0-dependencies-{{ checksum "package.json" }}
+            - v3.0-dependencies-
       - run:
           name: Install packages
           command: npm install
@@ -25,7 +25,7 @@ jobs:
           paths:
             - node_modules
             - package.json
-          key: v2.9-dependencies-{{ checksum "package.json" }}
+          key: v3.0-dependencies-{{ checksum "package.json" }}
 
 workflows:
   version: 2

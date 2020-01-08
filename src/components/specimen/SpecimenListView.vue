@@ -1,5 +1,5 @@
 <template>
-  <div class="row list-row" v-if="data.length > 0">
+  <div class="list-row" v-if="data.length > 0">
     <router-link
       class="label2"
       v-for="entity in data"

@@ -1,6 +1,16 @@
 {
-  "name": "sarv-file-upload",
-  "version": "1.0.0",
+  "name": "sarv-edit",
+  "version": "2.0.1",
+  "description": "Application to work with SARV data.",
+  "homepage": "https://edit.geocollections.info/",
+  "bugs": {
+    "url": "https://github.com/geocollections/sarv-edit/issues",
+    "email": "olle.hints@taltech.ee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geocollections/sarv-edit.git"
+  },
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
