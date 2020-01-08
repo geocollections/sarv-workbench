@@ -1229,14 +1229,14 @@ export default {
         uploadableObject.related_data = {};
 
         this.relatedTabs.forEach(tab => {
-          if (this.isNotEmpty(this.relatedData[tab.name]))
+          if (this.relatedData[tab.name].results.length > 0)
             uploadableObject.related_data[tab.name] = this.relatedData[
               tab.name
             ].results;
         });
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment;
+        uploadableObject.related_data.attachment = this.relatedData.attachment.results;
       }
 
       console.log("This object is sent in string format:");
