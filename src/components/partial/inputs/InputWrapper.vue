@@ -6,6 +6,7 @@
       hide-details
       outlined
       :placeholder="!!$attrs.placeholder ? $attrs.placeholder : ' '"
+      :readonly="isDate || !!$attrs.readonly"
       :error="useCustomState ? $attrs.error : useState ? !$attrs.value : false"
       :success="
         useCustomState ? $attrs.success : useState ? !!$attrs.value : false
