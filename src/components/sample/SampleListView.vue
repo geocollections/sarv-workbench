@@ -1,6 +1,6 @@
 <template>
   <div class="row list-row" v-if="data.length > 0">
-    <div class="label2" v-for="(entity, index) in data" :key="index">
+    <div class="label2" v-for="entity in data" :key="entity.id">
       <div class="label2_head">
         <div
           style="float: left; font-size: 90%"
@@ -21,31 +21,46 @@
         class="label2_row_name"
         style="font-size: 1.4em; font-weight: bold;text-align: right; "
       >
-        {{ entity.number }}
+        <span v-if="entity.number">{{ entity.number }}</span>
+        <span v-else-if="entity.number_additional">{{
+          entity.number_additional
+        }}</span>
+        <span v-else>{{ entity.number_field }}</span>
       </div>
 
       <div class="label2_row2">
-        <div>
+        <div
+          :class="getFontSizeUsingLength(entity) !== '1.1em' ? 'd-inline' : ''"
+        >
           <b>Loc. </b>
           <span
             v-if="entity.locality__locality || entity.locality__locality_en"
-            style="font-size: 1.1em;"
+            :style="{ 'font-size': getFontSizeUsingLength(entity) }"
             v-translate="{
               et: entity.locality__locality,
               en: entity.locality__locality_en
             }"
-          ></span>
-          <span v-else style="font-size: 1.1em;">{{
-            entity.locality_free
-          }}</span>
+          />
+          <span
+            v-else
+            :style="{ 'font-size': getFontSizeUsingLength(entity) }"
+            >{{ entity.locality_free }}</span
+          >
         </div>
 
-        <div>
-          <span style="font-size: 1.1em; font-weight: normal;">
-            <span v-if="entity.depth && entity.depth_interval"
-              >{{ entity.depth }} - {{ entity.depth_interval }} m</span
+        <div
+          :class="getFontSizeUsingLength(entity) !== '1.1em' ? 'd-inline' : ''"
+        >
+          <span
+            :style="{
+              'font-size': getFontSizeUsingLength(entity),
+              'font-weight': 'normal'
+            }"
+          >
+            <span v-if="entity.depth && entity.depth_interval">
+              {{ entity.depth }} - {{ entity.depth_interval }} m</span
             >
-            <span v-else-if="entity.depth">{{ entity.depth }} m</span>
+            <span v-else-if="entity.depth"> {{ entity.depth }} m</span>
           </span>
         </div>
       </div>
@@ -128,6 +143,30 @@ export default {
   }),
   created() {
     setTimeout(() => (this.showQRCode = true), 1);
+  },
+  methods: {
+    getFontSizeUsingLength(item) {
+      if (item) {
+        let nameLength = item.locality__locality
+          ? item.locality__locality.length
+          : 0;
+        let nameLengthEn = item.locality__locality_en
+          ? item.locality__locality_en.length
+          : 0;
+
+        if (this.$i18n.locale === "ee") {
+          if (nameLength > 75) return "0.9em";
+          else if (nameLength > 50) return "0.95em";
+          else if (nameLength > 25) return "1em";
+          else return "1.1em";
+        } else {
+          if (nameLengthEn > 75) return "0.9em";
+          else if (nameLengthEn > 50) return "0.95em";
+          else if (nameLengthEn > 25) return "1em";
+          else return "1.1em";
+        }
+      } else return "1em";
+    }
   }
 };
 </script>
@@ -135,6 +174,12 @@ export default {
 <style scoped>
 .list-row {
   margin: 15px;
+}
+
+.label2:hover {
+  cursor: pointer;
+  /*opacity: 0.7;*/
+  background-color: rgba(255, 87, 34, 0.1);
 }
 /* STYLES FROM OLD APP */
 .label2 {

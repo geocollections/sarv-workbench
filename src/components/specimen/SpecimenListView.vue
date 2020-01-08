@@ -2,8 +2,8 @@
   <div class="row list-row" v-if="data.length > 0">
     <router-link
       class="label2"
-      v-for="(entity, index) in data"
-      :key="index"
+      v-for="entity in data"
+      :key="entity.id"
       :to="{ path: '/specimen/' + entity.id }"
       :title="$t('editSpecimen.editMessage')"
     >
