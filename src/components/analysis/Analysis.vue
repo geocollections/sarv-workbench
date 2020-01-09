@@ -74,6 +74,7 @@
                 :loading="autocomplete.loaders.analysis_methods"
                 :item-text="analysisMethodLabel"
                 :label="$t('analysis.method')"
+                use-state
               />
             </v-col>
 
@@ -735,7 +736,7 @@ export default {
           analysis_methods: [],
           attachment: []
         },
-        requiredFields: [],
+        requiredFields: ["analysis_method"],
         analysis: {},
         searchParameters: this.setDefaultSearchParameters(),
         componentKey: 0,
@@ -845,6 +846,10 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      if (typeof uploadableObject.mass === "string" && uploadableObject.mass.length === 0) {
+        uploadableObject.mass = null;
+      }
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 
