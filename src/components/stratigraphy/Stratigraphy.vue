@@ -921,6 +921,10 @@ export default {
         }
       });
 
+      if (!this.isNotEmpty(uploadableObject.age_base)) uploadableObject.age_base = null;
+      if (!this.isNotEmpty(uploadableObject.age_top)) uploadableObject.age_top = null;
+      if (!this.isNotEmpty(uploadableObject.age_precision)) uploadableObject.age_precision = null;
+
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {
         uploadableObject.related_data = {};

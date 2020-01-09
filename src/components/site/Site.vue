@@ -843,17 +843,27 @@ export default {
           toastInfo({ text: "Field 'Date end' is invalid" });
         }
       }
+
       if (this.isNotEmpty(objectToUpload.location_accuracy))
         uploadableObject.location_accuracy =
           typeof uploadableObject.location_accuracy === "string"
             ? parseFloat(objectToUpload.location_accuracy).toFixed(2)
             : objectToUpload.location_accuracy.toFixed(2);
       else uploadableObject.location_accuracy = null;
+
+      if (this.isNotEmpty(objectToUpload.elevation_accuracy))
+        uploadableObject.elevation_accuracy =
+          typeof uploadableObject.elevation_accuracy === "string"
+            ? parseFloat(objectToUpload.elevation_accuracy).toFixed(2)
+            : objectToUpload.elevation_accuracy.toFixed(2);
+      else uploadableObject.elevation_accuracy = null;
+
       if (this.isNotEmpty(objectToUpload.latitude))
         uploadableObject.latitude = parseFloat(objectToUpload.latitude).toFixed(
           6
         );
       else uploadableObject.latitude = null;
+
       if (this.isNotEmpty(objectToUpload.longitude))
         uploadableObject.longitude = parseFloat(
           objectToUpload.longitude

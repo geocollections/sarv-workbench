@@ -849,9 +849,7 @@ export default {
         }
       });
 
-      if (typeof uploadableObject.mass === "string" && uploadableObject.mass.length === 0) {
-        uploadableObject.mass = null;
-      }
+      if (!this.isNotEmpty(uploadableObject.mass)) uploadableObject.mass = null;
 
       if (this.databaseId) uploadableObject.database = this.databaseId;
 
