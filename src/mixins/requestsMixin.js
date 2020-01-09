@@ -27,7 +27,16 @@ const requestsMixin = {
           }
         });
       } else {
-        this.relatedData[payload.table].results.push(payload.rawItem);
+        let clonedRawItem = cloneDeep(payload.rawItem);
+
+        // Changes every empty string to null (is needed for float fields which give error on add #384)
+        Object.keys(clonedRawItem).forEach(key => {
+          if (typeof clonedRawItem[key] === "string" && clonedRawItem[key].length === 0) {
+            clonedRawItem[key] = null;
+          }
+        });
+
+        this.relatedData[payload.table].results.push(clonedRawItem);
         this.relatedData[payload.table].count += 1;
       }
     },

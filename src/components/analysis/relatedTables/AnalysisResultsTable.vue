@@ -71,6 +71,7 @@
                     v-model="item.value"
                     :color="bodyActiveColor"
                     :label="$t('analysis.relatedTables.result_value')"
+                    type="number"
                   />
                 </v-col>
 
@@ -79,6 +80,7 @@
                     v-model="item.value_max"
                     :color="bodyActiveColor"
                     :label="$t('analysis.relatedTables.result_max')"
+                    type="number"
                   />
                 </v-col>
 
@@ -87,14 +89,16 @@
                     v-model="item.value_min"
                     :color="bodyActiveColor"
                     :label="$t('analysis.relatedTables.result_min')"
+                    type="number"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                  <checkbox-wrapper
                     v-model="item.value_bin"
                     :color="bodyActiveColor"
                     :label="$t('analysis.relatedTables.result_bin')"
+                    @change="item.value_bin = !item.value_bin"
                   />
                 </v-col>
 
@@ -131,11 +135,12 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 
 export default {
   name: "AnalysisResultsTable",
 
-  components: { InputWrapper },
+  components: {CheckboxWrapper, InputWrapper },
 
   props: {
     response: {
@@ -276,6 +281,8 @@ export default {
       Object.keys(item).forEach(key => {
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
+        } else if (typeof item[key] === "string" && item[key].length === 0) {
+          item[key] = null;
         }
       });
       return item;

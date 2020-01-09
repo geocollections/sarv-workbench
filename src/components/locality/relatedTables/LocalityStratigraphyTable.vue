@@ -193,6 +193,7 @@
                     v-model="item.depth_base"
                     :color="bodyActiveColor"
                     :label="$t('stratigraphy.base')"
+                    type="number"
                   />
                 </v-col>
 
@@ -201,6 +202,7 @@
                     v-model="item.depth_top"
                     :color="bodyActiveColor"
                     :label="$t('stratigraphy.top')"
+                    type="number"
                   />
                 </v-col>
 
@@ -478,6 +480,8 @@ export default {
       Object.keys(item).forEach(key => {
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
+        } else if (typeof item[key] === "string" && item[key].length === 0) {
+          item[key] = null;
         }
       });
       return item;

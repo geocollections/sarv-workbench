@@ -132,6 +132,7 @@
                     v-model="item.point_longitude"
                     :color="bodyActiveColor"
                     :label="$t('doi.pointLongitude')"
+                    type="number"
                   />
                 </v-col>
 
@@ -140,6 +141,7 @@
                     v-model="item.point_latitude"
                     :color="bodyActiveColor"
                     :label="$t('doi.pointLatitude')"
+                    type="number"
                   />
                 </v-col>
 
@@ -343,6 +345,8 @@ export default {
       Object.keys(item).forEach(key => {
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
+        } else if (typeof item[key] === "string" && item[key].length === 0) {
+          item[key] = null;
         }
       });
       return item;
