@@ -268,7 +268,9 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateCreated')"
                     v-on:date:clear="attachment.date_created = null"
-                    v-on:date:update="updateUserInputtedDate('date_created', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_created', $event)
+                    "
                   />
                 </v-col>
 
@@ -603,7 +605,9 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
                     v-on:date:clear="attachment.date_digitised = null"
-                    v-on:date:update="updateUserInputtedDate('date_digitised', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_digitised', $event)
+                    "
                   />
                 </v-col>
 
@@ -771,7 +775,9 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateCreated')"
                     v-on:date:clear="attachment.date_created = null"
-                    v-on:date:update="updateUserInputtedDate('date_created', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_created', $event)
+                    "
                   />
                 </v-col>
 
@@ -917,7 +923,9 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
                     v-on:date:clear="attachment.date_digitised = null"
-                    v-on:date:update="updateUserInputtedDate('date_digitised', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_digitised', $event)
+                    "
                   />
                 </v-col>
 
@@ -1079,7 +1087,9 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateCreated')"
                     v-on:date:clear="attachment.date_created = null"
-                    v-on:date:update="updateUserInputtedDate('date_created', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_created', $event)
+                    "
                   />
                 </v-col>
 
@@ -1371,7 +1381,9 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
                     v-on:date:clear="attachment.date_digitised = null"
-                    v-on:date:update="updateUserInputtedDate('date_digitised', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_digitised', $event)
+                    "
                   />
                 </v-col>
               </v-row>
@@ -2520,7 +2532,9 @@
                     :color="bodyActiveColor"
                     :label="$t('attachment.dateDigitised')"
                     v-on:date:clear="attachment.date_digitised = null"
-                    v-on:date:update="updateUserInputtedDate('date_digitised', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_digitised', $event)
+                    "
                   />
                 </v-col>
 

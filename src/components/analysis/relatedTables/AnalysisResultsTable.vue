@@ -140,7 +140,7 @@ import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 export default {
   name: "AnalysisResultsTable",
 
-  components: {CheckboxWrapper, InputWrapper },
+  components: { CheckboxWrapper, InputWrapper },
 
   props: {
     response: {

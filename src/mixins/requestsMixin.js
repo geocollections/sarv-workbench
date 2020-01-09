@@ -31,7 +31,10 @@ const requestsMixin = {
 
         // Changes every empty string to null (is needed for float fields which give error on add #384)
         Object.keys(clonedRawItem).forEach(key => {
-          if (typeof clonedRawItem[key] === "string" && clonedRawItem[key].length === 0) {
+          if (
+            typeof clonedRawItem[key] === "string" &&
+            clonedRawItem[key].length === 0
+          ) {
             clonedRawItem[key] = null;
           }
         });

@@ -161,7 +161,9 @@
                     :color="bodyActiveColor"
                     :label="$t('analysis.date_end')"
                     v-on:date:clear="item.date_end = null"
-                    v-on:date:update="updateUserInputtedDate('date_end', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_end', $event)
+                    "
                   />
                 </v-col>
 

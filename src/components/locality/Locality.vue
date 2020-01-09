@@ -945,7 +945,8 @@ export default {
         }
       });
 
-      if (!this.isNotEmpty(uploadableObject.depth)) uploadableObject.depth = null;
+      if (!this.isNotEmpty(uploadableObject.depth))
+        uploadableObject.depth = null;
 
       // if (this.databaseId) uploadableObject.database = this.databaseId;
 

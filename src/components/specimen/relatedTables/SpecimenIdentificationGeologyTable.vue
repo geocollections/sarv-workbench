@@ -245,7 +245,9 @@
                     :color="bodyActiveColor"
                     :label="$t('specimen_identification_geology.date')"
                     v-on:date:clear="item.date_identified = null"
-                    v-on:date:update="updateUserInputtedDate('date_identified', $event)"
+                    v-on:date:update="
+                      updateUserInputtedDate('date_identified', $event)
+                    "
                   />
                 </v-col>
 
