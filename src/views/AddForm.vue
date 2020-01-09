@@ -5,22 +5,21 @@
         <p class="h2 mb-1">{{ $t($route.meta.addNew) }}</p>
       </div>
 
-      <div class="mb-1" v-if="$route.meta.object === 'attachment'">
-        <ul
-          class="nav nav-pills nav-fill"
-          v-if="$route.meta.object === 'attachment'"
+      <v-tabs
+        v-if="$route.meta.object === 'attachment'"
+        :color="appSettings.bodyActiveColor"
+        :background-color="appSettings.bodyColor"
+        right
+        show-arrows
+      >
+        <v-tab
+          v-for="(item, index) in $route.meta.subForms"
+          :key="index"
+          :to="{ path: item.path }"
+          class="text-none"
+          >{{ $t(item.name) }}</v-tab
         >
-          <li
-            class="nav-item"
-            v-for="(item, index) in $route.meta.subForms"
-            :key="index"
-          >
-            <router-link class="nav-link" :to="{ path: item.path }">{{
-              $t(item.name)
-            }}</router-link>
-          </li>
-        </ul>
-      </div>
+      </v-tabs>
     </div>
 
     <router-view
