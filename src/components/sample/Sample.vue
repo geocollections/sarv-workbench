@@ -282,6 +282,7 @@
                   :color="bodyActiveColor"
                   :label="$t('sample.date_collected')"
                   v-on:date:clear="sample.date_collected = null"
+                  v-on:date:update="updateUserInputtedDate('date_collected', $event)"
                 />
               </v-col>
 
@@ -691,6 +692,7 @@
                   :color="bodyActiveColor"
                   :label="$t('sample.date_collected')"
                   v-on:date:clear="sample.date_collected = null"
+                  v-on:date:update="updateUserInputtedDate('date_collected', $event)"
                 />
               </v-col>
 

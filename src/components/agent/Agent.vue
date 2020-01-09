@@ -268,6 +268,7 @@
                 :color="bodyActiveColor"
                 :label="$t('agent.date_born')"
                 v-on:date:clear="agent.date_born = null"
+                v-on:date:update="updateUserInputtedDate('date_born', $event)"
               />
             </v-col>
 
@@ -277,6 +278,7 @@
                 :color="bodyActiveColor"
                 :label="$t('agent.date_deceased')"
                 v-on:date:clear="agent.date_deceased = null"
+                v-on:date:update="updateUserInputtedDate('date_deceased', $event)"
               />
             </v-col>
           </v-row>

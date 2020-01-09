@@ -245,6 +245,7 @@
                     :color="bodyActiveColor"
                     :label="$t('specimen_identification_geology.date')"
                     v-on:date:clear="item.date_identified = null"
+                    v-on:date:update="updateUserInputtedDate('date_identified', $event)"
                   />
                 </v-col>
 
@@ -536,6 +537,14 @@ export default {
         }
       });
       return item;
+    },
+
+    updateUserInputtedDate(fieldToBeUpdated, date) {
+      if (typeof date !== "undefined" && date !== null && date.length > 0) {
+        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+          this.item[fieldToBeUpdated] = date;
+        }
+      }
     }
   }
 };

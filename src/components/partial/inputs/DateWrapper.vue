@@ -13,6 +13,7 @@
         is-date
         v-on="on"
         v-on:date:clear="$emit('date:clear')"
+        @input="$emit('date:update', $event)"
       />
     </template>
     <v-date-picker

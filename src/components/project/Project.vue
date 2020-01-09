@@ -144,6 +144,7 @@
                 :color="bodyActiveColor"
                 :label="$t('project.date_start')"
                 v-on:date:clear="project.date_start = null"
+                v-on:date:update="updateUserInputtedDate('date_start', $event)"
               />
             </v-col>
 
@@ -153,6 +154,7 @@
                 :color="bodyActiveColor"
                 :label="$t('project.date_end')"
                 v-on:date:clear="project.date_end = null"
+                v-on:date:update="updateUserInputtedDate('date_end', $event)"
               />
             </v-col>
 

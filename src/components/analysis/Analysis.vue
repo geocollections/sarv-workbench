@@ -159,6 +159,7 @@
                 :color="bodyActiveColor"
                 :label="$t('analysis.date')"
                 v-on:date:clear="analysis.date = null"
+                v-on:date:update="updateUserInputtedDate('date', $event)"
               />
             </v-col>
 
@@ -168,6 +169,7 @@
                 :color="bodyActiveColor"
                 :label="$t('analysis.date_end')"
                 v-on:date:clear="analysis.date_end = null"
+                v-on:date:update="updateUserInputtedDate('date_end', $event)"
               />
             </v-col>
 

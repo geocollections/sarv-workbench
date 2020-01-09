@@ -156,6 +156,7 @@
                     :color="bodyActiveColor"
                     :label="$t('analysis.date')"
                     v-on:date:clear="item.date = null"
+                    v-on:date:update="updateUserInputtedDate('date', $event)"
                   />
                 </v-col>
 
@@ -165,6 +166,7 @@
                     :color="bodyActiveColor"
                     :label="$t('analysis.date_end')"
                     v-on:date:clear="item.date_end = null"
+                    v-on:date:update="updateUserInputtedDate('date_end', $event)"
                   />
                 </v-col>
 
@@ -467,6 +469,14 @@ export default {
         }
       });
       return item;
+    },
+
+    updateUserInputtedDate(fieldToBeUpdated, date) {
+      if (typeof date !== "undefined" && date !== null && date.length > 0) {
+        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+          this.item[fieldToBeUpdated] = date;
+        }
+      }
     }
   }
 };

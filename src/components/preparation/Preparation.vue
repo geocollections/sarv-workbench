@@ -187,6 +187,7 @@
                 :color="bodyActiveColor"
                 :label="$t('preparation.date_prepared')"
                 v-on:date:clear="preparation.date_prepared = null"
+                v-on:date:update="updateUserInputtedDate('date_prepared', $event)"
               />
             </v-col>
 
@@ -196,6 +197,7 @@
                 :color="bodyActiveColor"
                 :label="$t('preparation.identification_date')"
                 v-on:date:clear="preparation.identification_date = null"
+                v-on:date:update="updateUserInputtedDate('identification_date', $event)"
               />
             </v-col>
           </v-row>

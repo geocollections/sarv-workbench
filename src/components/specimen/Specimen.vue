@@ -282,6 +282,9 @@
                 :color="bodyActiveColor"
                 :label="$t('specimen.date_collected')"
                 v-on:date:clear="specimen.date_collected = null"
+                v-on:date:update="
+                  updateUserInputtedDate('date_collected', $event)
+                "
               />
             </v-col>
 

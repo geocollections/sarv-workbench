@@ -578,6 +578,14 @@ const formManipulation = {
     getCurrentFormattedDate(format) {
       if (format) return moment().format(format);
       else return moment().format("YYYY-MM-DD hh:mm:ss");
+    },
+
+    updateUserInputtedDate(fieldToBeUpdated, date) {
+      if (typeof date !== "undefined" && date !== null && date.length > 0) {
+        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+          this[this.$route.meta.object][fieldToBeUpdated] = date;
+        }
+      }
     }
   }
 };

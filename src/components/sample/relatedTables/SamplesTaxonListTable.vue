@@ -216,6 +216,7 @@
                     :color="bodyActiveColor"
                     :label="$t('taxon.det_date')"
                     v-on:date:clear="item.date_identified = null"
+                    v-on:date:update="updateUserInputtedDate('date_identified', $event)"
                   />
                 </v-col>
 
@@ -500,6 +501,14 @@ export default {
         }
       });
       return item;
+    },
+
+    updateUserInputtedDate(fieldToBeUpdated, date) {
+      if (typeof date !== "undefined" && date !== null && date.length > 0) {
+        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
+          this.item[fieldToBeUpdated] = date;
+        }
+      }
     }
   }
 };

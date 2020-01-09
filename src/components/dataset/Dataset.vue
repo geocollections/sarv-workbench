@@ -85,6 +85,7 @@
                 :color="bodyActiveColor"
                 :label="$t('common.date')"
                 v-on:date:clear="dataset.date = null"
+                v-on:date:update="updateUserInputtedDate('date', $event)"
               />
             </v-col>
 
