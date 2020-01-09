@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen-description-table">
+  <div class="specimen-analysis-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -384,13 +384,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "specimen_analysis",
+          table: "analysis",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "specimen_analysis",
+          table: "analysis",
           item: formattedItem,
           rawItem: this.item
         });
@@ -454,7 +454,7 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "specimen_analysis",
+        table: "analysis",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });

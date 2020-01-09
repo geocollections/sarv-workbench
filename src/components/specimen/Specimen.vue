@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen red--text f">
+  <div class="specimen">
     <spinner
       v-show="sendingData"
       class="loading-overlay"
@@ -469,7 +469,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in computedRelatedTabs"
+          v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -489,7 +489,7 @@
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <specimen-identification-table
-            v-if="
+            v-show="
               specimen.fossil &&
                 (specimen.fossil.id === 1 || specimen.fossil.id === 7) &&
                 activeTab === 'specimen_identification'
@@ -506,7 +506,7 @@
           />
 
           <specimen-identification-geology-table
-            v-if="
+            v-show="
               specimen.fossil &&
                 specimen.fossil.id !== 1 &&
                 specimen.fossil.id !== 7 &&
@@ -1045,7 +1045,10 @@ export default {
             this.sendingData = false;
 
             // Set default tab
-            if (this.specimen && this.specimen.fossil) {
+            if (
+              this.isNotEmpty(this.specimen) &&
+              this.isNotEmpty(this.specimen.fossil)
+            ) {
               if (
                 this.specimen.fossil.id === 1 ||
                 this.specimen.fossil.id === 7
@@ -1080,7 +1083,10 @@ export default {
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       } else {
         // Set default tab
-        if (this.specimen && this.specimen.fossil) {
+        if (
+          this.isNotEmpty(this.specimen) &&
+          this.isNotEmpty(this.specimen.fossil)
+        ) {
           if (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7) {
             if (
               this.activeRelatedDataTab &&
@@ -1391,18 +1397,20 @@ export default {
       query.then(response => {
         this.relatedData[object].count = response.data.count;
         if (object === "attachment") {
-          this.relatedData[object].results = response.data.results.map(
-            attachment => {
-              return {
-                id: attachment.attachment,
-                specimen: attachment.specimen,
-                uuid_filename: attachment.attachment__uuid_filename,
-                description: attachment.attachment__description,
-                description_en: attachment.attachment__description_en,
-                original_filename: attachment.attachment__original_filename
-              };
-            }
-          );
+          if (response.data.count > 0) {
+            this.relatedData[object].results = response.data.results.map(
+              attachment => {
+                return {
+                  id: attachment.attachment,
+                  specimen: attachment.specimen,
+                  uuid_filename: attachment.attachment__uuid_filename,
+                  description: attachment.attachment__description,
+                  description_en: attachment.attachment__description_en,
+                  original_filename: attachment.attachment__original_filename
+                };
+              }
+            );
+          } else this.relatedData[object].results = response.data.results;
         } else this.relatedData[object].results = response.data.results;
       });
     },

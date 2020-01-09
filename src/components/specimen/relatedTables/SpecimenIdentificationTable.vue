@@ -161,8 +161,8 @@
       </template>
 
       <template v-slot:item.current="{ item }">
-        <v-icon v-if="item.current">fas fa-plus</v-icon>
-        <v-icon v-else>fas fa-minus</v-icon>
+        <v-icon v-if="item.current" small>fas fa-plus</v-icon>
+        <v-icon v-else small>fas fa-minus</v-icon>
       </template>
     </v-data-table>
 

@@ -888,13 +888,13 @@ export default {
           locality_reference: {
             page: 1,
             paginateBy: 25,
-            sortBy: ["id"],
+            sortBy: ["reference"],
             sortDesc: [true]
           },
           locality_synonym: {
             page: 1,
             paginateBy: 25,
-            sortBy: ["id"],
+            sortBy: ["synonym"],
             sortDesc: [true]
           },
           attachment_link: {
@@ -906,7 +906,7 @@ export default {
           locality_stratigraphy: {
             page: 1,
             paginateBy: 25,
-            sortBy: ["id"],
+            sortBy: ["stratigraphy"],
             sortDesc: [true]
           }
         }
@@ -1058,8 +1058,8 @@ export default {
       }
 
       query.then(response => {
-        this.relatedData[type] = this.handleResponse(response);
-        this.relatedData.count[type] = response.data.count;
+        this.relatedData[type].count = response.data.count;
+        this.relatedData[type].results = this.handleResponse(response);
       });
     },
 

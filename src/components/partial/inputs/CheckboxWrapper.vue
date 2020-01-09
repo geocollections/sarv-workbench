@@ -1,6 +1,12 @@
 <template>
   <div class="input-class">
-    <v-checkbox class="ma-1" hide-details v-bind="$attrs" v-on="$listeners" />
+    <v-checkbox
+      class="ma-1"
+      hide-details
+      v-bind="$attrs"
+      :input-value="$attrs.value"
+      v-on="$listeners"
+    />
   </div>
 </template>
 
