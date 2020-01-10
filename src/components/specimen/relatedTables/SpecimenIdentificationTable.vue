@@ -134,28 +134,28 @@
         </router-link>
       </template>
 
-      <template v-slot:item.type="{ item }">
+      <template v-slot:item.identification_type="{ item }">
         <div v-if="isUsedAsRelatedData">
           <span
             v-if="$route.meta.isEdit"
             v-translate="{
-              et: item.type__value,
-              en: item.type__value_en
+              et: item.identification_type__value,
+              en: item.identification_type__value_en
             }"
           />
           <span
-            v-else-if="item.type"
+            v-else-if="item.identification_type"
             v-translate="{
-              et: item.type.value,
-              en: item.type.value_en
+              et: item.identification_type.value,
+              en: item.identification_type.value_en
             }"
           />
         </div>
         <div
           v-else
           v-translate="{
-            et: item.type__value,
-            en: item.type__value_en
+            et: item.identification_type__value,
+            en: item.identification_type__value_en
           }"
         ></div>
       </template>
@@ -251,10 +251,10 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.type"
+                    v-model="item.identification_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.type"
-                    :loading="autocomplete.loaders.type"
+                    :items="autocomplete.identification_type"
+                    :loading="autocomplete.loaders.identification_type"
                     :item-text="commonLabel"
                     :label="$t('specimen_identification.type')"
                   />
@@ -357,7 +357,7 @@ export default {
         text: "specimen_identification.date",
         value: "date_identified"
       },
-      { text: "specimen_identification.type", value: "type" },
+      { text: "specimen_identification.type", value: "identification_type" },
       {
         text: "specimen_identification.current",
         value: "current"
@@ -376,7 +376,7 @@ export default {
       agent: null,
       reference: null,
       date_identified: null,
-      type: null,
+      identification_type: null,
       current: false
     },
     isNewItem: true,
@@ -384,12 +384,12 @@ export default {
       taxon: [],
       agent: [],
       reference: [],
-      type: [],
+      identification_type: [],
       loaders: {
         taxon: false,
         agent: false,
         reference: false,
-        type: false
+        identification_type: false
       }
     }
   }),
@@ -425,7 +425,7 @@ export default {
         agent: null,
         reference: null,
         date_identified: null,
-        type: null,
+        identification_type: null,
         current: false
       };
     },
@@ -478,11 +478,11 @@ export default {
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      if (typeof item.type !== "object" && item.type !== null) {
-        this.item.type = {
-          id: item.type,
-          value: item.type__value,
-          value_en: item.type__value_en
+      if (typeof item.identification_type !== "object" && item.identification_type !== null) {
+        this.item.identification_type = {
+          id: item.identification_type,
+          value: item.identification_type__value,
+          value_en: item.identification_type__value_en
         };
       }
 
@@ -513,15 +513,15 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.type.length === 0) {
-        this.autocomplete.loaders.type = true;
+      if (this.autocomplete.identification_type.length === 0) {
+        this.autocomplete.loaders.identification_type = true;
         fetchListIdentificationType().then(response => {
           if (response.status === 200) {
-            this.autocomplete.type =
+            this.autocomplete.identification_type =
               response.data.count > 0 ? response.data.results : [];
           }
         });
-        this.autocomplete.loaders.type = false;
+        this.autocomplete.loaders.identification_type = false;
       }
     },
 
