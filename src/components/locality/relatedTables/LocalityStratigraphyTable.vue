@@ -426,9 +426,11 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
+      console.log(item)
+
       if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
         this.item.stratigraphy = {
-          id: item.stratigraphy,
+          id: item.stratigraphy_id,
           stratigraphy: item.stratigraphy__stratigraphy,
           stratigraphy_en: item.stratigraphy__stratigraphy_en
         };
