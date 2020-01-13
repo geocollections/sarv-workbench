@@ -482,7 +482,8 @@
           </span>
           <span
             v-if="relatedData[tab.name].count > 0"
-            class="font-weight-bold ml-2 blue--text"
+            class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
             {{ relatedData[tab.name].count }}
           </span>
@@ -540,7 +541,7 @@
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none px-1"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1"
           >
             <div class="mr-3 mb-3">
               <v-select
@@ -906,8 +907,8 @@ export default {
           locality_stratigraphy: {
             page: 1,
             paginateBy: 25,
-            sortBy: ["stratigraphy"],
-            sortDesc: [true]
+            sortBy: ["depth_base", "depth_top"],
+            sortDesc: [false, false]
           }
         }
       };

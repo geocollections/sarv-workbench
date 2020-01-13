@@ -164,9 +164,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{
-              `${$t("common.new")} ${$t("header.specimen_identification")}`
-            }}</span>
+            <span class="headline">{{$t("header.locality_stratigraphy")}}</span>
           </v-card-title>
 
           <v-card-text>
@@ -207,6 +205,50 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_base_min"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.depth_base_min')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_base_max"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.depth_base_max')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_top_min"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.depth_top_min')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_top_max"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.depth_top_max')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.thickness"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.thickness')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.reference"
                     :color="bodyActiveColor"
@@ -238,6 +280,14 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
+                    v-model="item.author_free"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.author_free')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="item.year"
                     :color="bodyActiveColor"
                     :label="$t('stratigraphy.year')"
@@ -250,6 +300,23 @@
                     :color="bodyActiveColor"
                     :label="$t('stratigraphy.is_preferred')"
                     @change="item.current = !item.current"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.remarks"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.remarks')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <checkbox-wrapper
+                    v-model="item.is_private"
+                    :color="bodyActiveColor"
+                    :label="$t('stratigraphy.is_private')"
+                    @change="item.is_private = !item.is_private"
                   />
                 </v-col>
               </v-row>
@@ -334,7 +401,7 @@ export default {
       { text: "stratigraphy.base", value: "depth_base" },
       { text: "stratigraphy.top", value: "depth_top" },
       { text: "stratigraphy.reference", value: "reference" },
-      { text: "stratigraphy.agent", value: "agent" },
+      { text: "stratigraphy.author", value: "agent" },
       { text: "stratigraphy.year", value: "year" },
       { text: "stratigraphy.is_preferred", value: "current" },
       {
@@ -349,10 +416,18 @@ export default {
       stratigraphy: null,
       depth_base: "",
       depth_top: "",
+      depth_base_min: "",
+      depth_base_max: "",
+      depth_top_min: "",
+      depth_top_max: "",
+      thickness: "",
       reference: null,
       agent: null,
+      author_free: "",
       year: "",
-      current: false
+      current: false,
+      remarks: "",
+      is_private: false
     },
     isNewItem: true,
     autocomplete: {
@@ -393,10 +468,18 @@ export default {
         stratigraphy: null,
         depth_base: "",
         depth_top: "",
+        depth_base_min: "",
+        depth_base_max: "",
+        depth_top_min: "",
+        depth_top_max: "",
+        thickness: "",
         reference: null,
         agent: null,
+        author_free: "",
         year: "",
-        current: false
+        current: false,
+        remarks: "",
+        is_private: false
       };
     },
 
@@ -425,8 +508,6 @@ export default {
 
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      console.log(item)
 
       if (typeof item.stratigraphy !== "object" && item.stratigraphy !== null) {
         this.item.stratigraphy = {
@@ -464,8 +545,16 @@ export default {
 
       this.item.depth_base = item.depth_base;
       this.item.depth_top = item.depth_top;
+      this.item.depth_base_min = item.depth_base_min;
+      this.item.depth_base_max = item.depth_base_max;
+      this.item.depth_top_min = item.depth_top_min;
+      this.item.depth_top_max = item.depth_top_max;
+      this.item.thickness = item.thickness;
+      this.item.author_free = item.author_free;
       this.item.year = item.year;
       this.item.current = item.current === true;
+      this.item.remarks = item.remarks;
+      this.item.is_private = item.is_private === true;
 
       this.dialog = true;
     },

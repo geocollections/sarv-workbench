@@ -160,7 +160,8 @@
     "specimen_history": "Eksemplari Ajalugu",
     "specimen_analysis": "Eksemplari Analüüs",
     "dataset_author": "Andmeseti Autor",
-    "dataset_reference": "Andmeseti Kirjandus"
+    "dataset_reference": "Andmeseti Kirjandus",
+    "locality_stratigraphy": "Stratigraafilised piirid"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
@@ -1623,7 +1624,7 @@
     "is_preferred":"Eelistatud",
     "stratigraphy_en": "Stratigraafia (EN)",
     "stratigraphy_original": "Orig. name",
-    "author_free": "Autor(id)",
+    "author_free": "Autor txt",
     "etymon": "Etüümon",
     "etymon_en": "Etüümon (EN)",
     "original_locality": "Orig. koht",
@@ -1647,6 +1648,12 @@
     "definition_en": "Definitsioon (EN)",
     "age_base": "vanus alum.",
     "age_top": "Vanus ülem.",
+    "age_base_min": "Vanus alum. min",
+    "age_base_max": "Vanus alum. max",
+    "age_top_min": "Vanus ülem. min",
+    "age_top_max": "Vanus ülem. max",
+    "thickness": "Paksus",
+    "is_private": "Privaatne",
     "age_precision": "Vanus täpsus",
     "age_reference": "Vanus viide",
     "sort_within_parent": "Sorteering",

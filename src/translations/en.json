@@ -160,7 +160,8 @@
     "specimen_history": "Specimen History",
     "specimen_analysis": "Specimen Analysis",
     "dataset_author": "Dataset Author",
-    "dataset_reference": "Dataset Reference"
+    "dataset_reference": "Dataset Reference",
+    "locality_stratigraphy": "Stratigraphic boundaries"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",
@@ -1623,7 +1624,7 @@
     "is_preferred":"Preferred",
     "stratigraphy_en": "Stratigraphy (EN)",
     "stratigraphy_original": "Orig. name",
-    "author_free": "Author(s)",
+    "author_free": "Author free",
     "etymon": "Etymon",
     "etymon_en": "Etymon (EN)",
     "original_locality": "Orig. locality",
@@ -1647,6 +1648,12 @@
     "definition_en": "Definition (EN)",
     "age_base": "Age base",
     "age_top": "Age top",
+    "age_base_min": "Age base min",
+    "age_base_max": "Age base max",
+    "age_top_min": "Age top min",
+    "age_top_max": "Age top max",
+    "thickness": "Thickness",
+    "is_private": "Private",
     "age_precision": "Age precision",
     "age_reference": "Age reference",
     "sort_within_parent": "Sort",
