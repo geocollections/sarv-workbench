@@ -612,7 +612,8 @@ export default {
           attachment_link: {
             page: 1,
             paginateBy: 10,
-            orderBy: "original_filename"
+            sortBy: ["original_filename"],
+            sortDesc: [true]
           }
         }
       };
@@ -711,8 +712,8 @@ export default {
       }
 
       query.then(response => {
-        this.relatedData[object] = this.handleResponse(response);
-        this.relatedData.count[object] = response.data.count;
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = this.handleResponse(response);
       });
     },
 
@@ -734,7 +735,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
+      this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.results = files;
     }
   }
 };
