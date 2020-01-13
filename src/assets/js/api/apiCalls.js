@@ -10,6 +10,9 @@ const api = {
   solrUrl: "https://api.geocollections.info/solr/"
 };
 
+const attachmentFields =
+  "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number";
+
 // Add a request interceptor
 axios.interceptors.request.use(function(config) {
   if (config.url.includes("rwapi")) {
@@ -508,7 +511,7 @@ export function fetchListLanguages() {
 
 export function fetchAttachmentForReference(id) {
   return get(
-    `attachment/?reference=${id}&fields=id,uuid_filename,original_filename&format=json`
+    `attachment/?reference=${id}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -666,7 +669,7 @@ export function fetchLocalityAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `attachment/?attach_link__locality__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -815,7 +818,7 @@ export function fetchLSampleAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment/?attach_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=id,original_filename,uuid_filename,description,description_en,date_created,remarks&format=json`
+    `attachment/?attach_link__sample__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1041,7 +1044,7 @@ export function fetchDoiAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment_link/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks,doi&format=json`
+    `attachment/?attach_link__doi__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1161,7 +1164,7 @@ export function fetchProjectAgent(id) {
 
 export function fetchProjectAttachment(id, page = 1) {
   return get(
-    `attachment/?attach_link__project__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename&format=json`
+    `attachment/?attach_link__project__id=${id}&page=${page}&paginate_by=100&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1297,7 +1300,7 @@ export function fetchSite(id) {
 
 export function fetchSiteAttachment(id, page = 1) {
   return get(
-    `attachment/?attach_link__site__id=${id}&page=${page}&paginate_by=100&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`
+    `attachment/?attach_link__site__id=${id}&page=${page}&paginate_by=100&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1413,8 +1416,12 @@ export function fetchAnalyses(data, agent, databaseId) {
 }
 
 export function fetchAnalysisAttachment(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `attachment/?attach_link__analysis__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${searchParameters.orderBy}&fields=id,author__agent,original_filename,description,description_en,uuid_filename,date_created&format=json`
+    `attachment/?attach_link__analysis__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1739,7 +1746,7 @@ export function fetchSpecimenAttachments(specimenId, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment_link/?specimen_id=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `attachment/?specimen=${specimenId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -2236,23 +2243,32 @@ export function fetchListDrillcoreStorage() {
 }
 
 export function fetchDrillcoreBoxes(drillcoreId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
     `drillcore_box/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchDrillcoreStudies(drillcoreId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
     `drillcore_study/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
 export function fetchDrillcoreAttachments(drillcoreId, searchParameters) {
-  let orderBy = buildOrderBy(searchParameters.sortBy, searchParameters.sortDesc);
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `attachment/?drillcore=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `attachment/?attach_link__drillcore__id=${drillcoreId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 

@@ -1049,9 +1049,8 @@ export default {
       });
 
       // Adding related data only on add view
+      uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "taxon_image") {
@@ -1063,8 +1062,9 @@ export default {
             }
         });
       } else {
-        uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
+        if (this.relatedData.taxon_image.results) {
+          uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
+        } else uploadableObject.related_data.attachment = null;
       }
 
       console.log("This object is sent in string format:");

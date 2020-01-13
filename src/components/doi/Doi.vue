@@ -994,10 +994,6 @@ export default {
           this.loadRelatedData(tab.name);
         });
 
-        this.$emit(
-          "related-data-info",
-          this.relatedTabs.map(tab => tab.name)
-        );
       } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
         fetchDoiUsingEGF(this.$route.params.id).then(response => {
           if (response) this.assignEgfFieldsToDoiObject(response);
@@ -1093,10 +1089,13 @@ export default {
 
       if (this.$route.meta.isEGF) uploadableObject.egf = this.$route.params.id;
 
-      // Adding related data only on add view
-      if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
+      // Adding related data
+      uploadableObject.related_data = {};
+      if (this.relatedData.attachment_link.results.length > 0) {
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+      }
 
+      if (!this.$route.meta.isEdit) {
         if (this.relatedData.doi_agent.results.length > 0) {
           let clonedData = cloneDeep(this.relatedData.doi_agent.results);
           uploadableObject.related_data.doi_agent = clonedData
@@ -1113,10 +1112,6 @@ export default {
           if (uploadableObject.related_data.doi_agent.length === 0)
             uploadableObject.related_data.doi_agent = null;
         } else uploadableObject.related_data.doi_agent = null;
-
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
-        } else uploadableObject.related_data.attachment = null;
 
         if (this.relatedData.doi_geolocation.results.length > 0) {
           let clonedData = cloneDeep(this.relatedData.doi_geolocation.results);
@@ -1173,11 +1168,6 @@ export default {
           if (uploadableObject.related_data.doi_date.length === 0)
             uploadableObject.related_data.doi_date = null;
         } else uploadableObject.related_data.doi_date = null;
-      } else {
-        uploadableObject.related_data = {};
-        if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
-        }
       }
 
       console.log("This object is sent in string format:");
@@ -1293,24 +1283,7 @@ export default {
       if (object !== "dataset" && object !== "reference") {
         query.then(response => {
           this.relatedData[object].count = response.data.count;
-          if (object === "attachment_link") {
-            if (response.data.count > 0) {
-              this.relatedData[object].results = response.data.results.map(
-                attachment => {
-                  return {
-                    id: attachment.attachment,
-                    doi: attachment.doi,
-                    uuid_filename: attachment.attachment__uuid_filename,
-                    description: attachment.attachment__description,
-                    description_en: attachment.attachment__description_en,
-                    original_filename: attachment.attachment__original_filename,
-                    date_created: attachment.attachment__date_created
-                  };
-                }
-              );
-            } else this.relatedData[object].results = response.data.results;
-          } else
-            this.relatedData[object].results = this.handleResponse(response);
+          this.relatedData[object].results = this.handleResponse(response);
         });
       }
     },

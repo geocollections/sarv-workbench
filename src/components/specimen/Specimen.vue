@@ -1239,9 +1239,8 @@ export default {
       if (this.databaseId) uploadableObject.database = this.databaseId;
 
       // Adding related data only on add view
+      uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
         this.relatedTabs.forEach(tab => {
           if (this.relatedData[tab.name].results.length > 0)
             uploadableObject.related_data[tab.name] = this.relatedData[
@@ -1249,8 +1248,9 @@ export default {
             ].results;
         });
       } else {
-        uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment.results;
+        if (this.relatedData.attachment.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment.results;
+        } else uploadableObject.related_data.attachment = null;
       }
 
       console.log("This object is sent in string format:");
@@ -1404,22 +1404,7 @@ export default {
 
       query.then(response => {
         this.relatedData[object].count = response.data.count;
-        if (object === "attachment") {
-          if (response.data.count > 0) {
-            this.relatedData[object].results = response.data.results.map(
-              attachment => {
-                return {
-                  id: attachment.attachment,
-                  specimen: attachment.specimen,
-                  uuid_filename: attachment.attachment__uuid_filename,
-                  description: attachment.attachment__description,
-                  description_en: attachment.attachment__description_en,
-                  original_filename: attachment.attachment__original_filename
-                };
-              }
-            );
-          } else this.relatedData[object].results = response.data.results;
-        } else this.relatedData[object].results = response.data.results;
+        this.relatedData[object].results = response.data.results;
       });
     },
 

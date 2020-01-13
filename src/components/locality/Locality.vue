@@ -951,9 +951,8 @@ export default {
       // if (this.databaseId) uploadableObject.database = this.databaseId;
 
       // Adding related data only on add view
+      uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment_link") {
@@ -965,8 +964,9 @@ export default {
             }
         });
       } else {
-        uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        } else uploadableObject.related_data.attachment = null;
       }
 
       console.log("This object is sent in string format:");
@@ -1092,7 +1092,7 @@ export default {
 
     addExistingFiles(files) {
       this.relatedData.attachment_link.count = files.length;
-      this.relatedData.attachment_link.reuslts = files;
+      this.relatedData.attachment_link.results = files;
     }
   }
 };

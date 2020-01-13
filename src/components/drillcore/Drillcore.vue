@@ -243,7 +243,8 @@
           </span>
           <span
             v-if="relatedData[tab.name].count > 0"
-            class="font-weight-bold ml-2 blue--text"
+            class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
             {{ relatedData[tab.name].count }}
           </span>
@@ -636,9 +637,8 @@ export default {
       });
 
       // Adding related data only on add view
+      uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment_link") {
@@ -650,7 +650,6 @@ export default {
             }
         });
       } else {
-        uploadableObject.related_data = {};
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
         } else uploadableObject.related_data.attachment = null;

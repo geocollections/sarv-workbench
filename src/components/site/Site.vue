@@ -933,17 +933,13 @@ export default {
           this.relatedData.page.attachment_link
         );
       }
-      return new Promise(resolve => {
-        query.then(response => {
-          this.relatedData.count[object] = response.data.count;
-          this.relatedData[object] = this.handleResponse(response);
+      query.then(response => {
+        this.relatedData.count[object] = response.data.count;
+        this.relatedData[object] = this.handleResponse(response);
 
-          if (object === "attachment_link") {
-            this.autocomplete.attachment = this.relatedData[object];
-          }
-          // this.relatedData[object] = this.fillRelatedDataAutocompleteFields(this.relatedData[object], object);
-          resolve(true);
-        });
+        if (object === "attachment_link") {
+          this.autocomplete.attachment = this.relatedData[object];
+        }
       });
     },
 

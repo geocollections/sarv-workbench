@@ -467,7 +467,7 @@
           <div v-show="activeTab === 'attachment_link'">
             <file-upload
               show-existing
-              :files-from-object="relatedData.attachment_link"
+              :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -854,22 +854,22 @@ export default {
       if (this.databaseId) uploadableObject.database = this.databaseId;
 
       // Adding related data only on add view
+      uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-              ].results;
+                ].results;
             }
         });
       } else {
-        uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        } else uploadableObject.related_data.attachment = null;
       }
 
       console.log("This object is sent in string format:");
@@ -952,10 +952,8 @@ export default {
       }
 
       query.then(response => {
-        if (object !== "attachment_link") {
-          this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = response.data.results;
-        } else this.relatedData[object] = this.handleResponse(response);
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = response.data.results;
       });
     },
 
@@ -976,7 +974,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
+      this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.results = files;
     }
   }
 };
