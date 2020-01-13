@@ -89,8 +89,12 @@ const autocompleteMixin = {
     autocompleteStratigraphySearch(value) {
       this.$_autocompleteMixin_search(value, "stratigraphy", "stratigraphy");
     },
-    autocompleteStratigraphySearch2(value) {
-      this.$_autocompleteMixin_search(value, "stratigraphy", "stratigraphy");
+    autocompleteStratigraphyOnlyChronoSearch(value) {
+      this.$_autocompleteMixin_search(
+        value,
+        "stratigraphy_chrono",
+        "stratigraphy"
+      );
     },
     autocompleteLithostratigraphySearch(value) {
       this.$_autocompleteMixin_search(
@@ -386,6 +390,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "storage":
       return `location/?multi_search=value:${value};fields:location;lookuptype:icontains&fields=id,location`;
     case "stratigraphy":
+      return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&fields=id,stratigraphy,stratigraphy_en`;
+    case "stratigraphy_chrono":
       return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=chronostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
     case "lithostratigraphy":
       return `stratigraphy/?multi_search=value:${value};fields:id,stratigraphy,stratigraphy_en;lookuptype:icontains&type__value_en=lithostratigraphy&fields=id,stratigraphy,stratigraphy_en`;
