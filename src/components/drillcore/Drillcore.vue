@@ -650,7 +650,9 @@ export default {
         });
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        } else uploadableObject.related_data.attachment = null;
       }
 
       console.log("This object is sent in string format:");

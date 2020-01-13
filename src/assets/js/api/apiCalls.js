@@ -1041,7 +1041,7 @@ export function fetchDoiAttachment(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `attachment_link/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks&format=json`
+    `attachment_link/?doi=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=id,attachment,attachment__original_filename,attachment__description,attachment__description_en,attachment__uuid_filename,attachment__date_created,remarks,doi&format=json`
   );
 }
 

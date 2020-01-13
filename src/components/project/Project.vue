@@ -824,8 +824,12 @@ export default {
 
       //add related data
       uploadableObject.related_data = {};
-      uploadableObject.related_data.agent = this.relatedData.projectagent;
-      uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+      if (this.relatedData.projectagent.length > 0) {
+        uploadableObject.related_data.agent = this.relatedData.projectagent;
+      } else uploadableObject.related_data.agent = null;
+      if (this.relatedData.attachment_link.length > 0) {
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+      } else uploadableObject.related_data.attachment = null;
 
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);

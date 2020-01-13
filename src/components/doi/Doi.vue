@@ -698,13 +698,9 @@ import {
   fetchListLicences,
   fetchDoiAttachment,
   fetchDoiAgent,
-  fetchDoiAgentType,
   fetchDoiRelatedIdentifier,
   fetchDoiGeolocation,
   fetchDoiDate,
-  fetchDoiRelatedIdentifierType,
-  fetchDoiRelationType,
-  fetchDoiDateType,
   fetchCheckMetadataInDataCite,
   fetchCheckDoiUrlInDataCite,
   fetchRegisterMetadataToDataCite,
@@ -1016,48 +1012,17 @@ export default {
       else this.setTab("doi_agent");
     },
 
-    // TODO: Optimization possible, i.e., fetch requests only if user has clicked certain related data TAB.
-    loadAutocompleteFields(
-      regularAutocompleteFields = true,
-      relatedDataAutocompleteFields = false
-    ) {
-      if (regularAutocompleteFields) {
-        fetchDoiResourceType().then(
-          response =>
-            (this.autocomplete.resource_type = this.handleResponse(response))
-        );
-        fetchListLanguages().then(
-          response =>
-            (this.autocomplete.language = this.handleResponse(response))
-        );
-        fetchListLicences().then(
-          response =>
-            (this.autocomplete.licence = this.handleResponse(response))
-        );
-      }
-
-      if (relatedDataAutocompleteFields) {
-        fetchDoiAgentType().then(
-          response =>
-            (this.autocomplete.doi_agent_type = this.handleResponse(response))
-        );
-        fetchDoiRelatedIdentifierType().then(
-          response =>
-            (this.autocomplete.doi_related_identifier_type = this.handleResponse(
-              response
-            ))
-        );
-        fetchDoiRelationType().then(
-          response =>
-            (this.autocomplete.doi_relation_type = this.handleResponse(
-              response
-            ))
-        );
-        fetchDoiDateType().then(
-          response =>
-            (this.autocomplete.doi_date_type = this.handleResponse(response))
-        );
-      }
+    loadAutocompleteFields() {
+      fetchDoiResourceType().then(
+        response =>
+          (this.autocomplete.resource_type = this.handleResponse(response))
+      );
+      fetchListLanguages().then(
+        response => (this.autocomplete.language = this.handleResponse(response))
+      );
+      fetchListLicences().then(
+        response => (this.autocomplete.licence = this.handleResponse(response))
+      );
     },
 
     setDefaultRelatedData() {
@@ -1210,7 +1175,9 @@ export default {
         } else uploadableObject.related_data.doi_date = null;
       } else {
         uploadableObject.related_data = {};
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        }
       }
 
       console.log("This object is sent in string format:");
@@ -1326,7 +1293,24 @@ export default {
       if (object !== "dataset" && object !== "reference") {
         query.then(response => {
           this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = this.handleResponse(response);
+          if (object === "attachment_link") {
+            if (response.data.count > 0) {
+              this.relatedData[object].results = response.data.results.map(
+                attachment => {
+                  return {
+                    id: attachment.attachment,
+                    doi: attachment.doi,
+                    uuid_filename: attachment.attachment__uuid_filename,
+                    description: attachment.attachment__description,
+                    description_en: attachment.attachment__description_en,
+                    original_filename: attachment.attachment__original_filename,
+                    date_created: attachment.attachment__date_created
+                  };
+                }
+              );
+            } else this.relatedData[object].results = response.data.results;
+          } else
+            this.relatedData[object].results = this.handleResponse(response);
         });
       }
     },
