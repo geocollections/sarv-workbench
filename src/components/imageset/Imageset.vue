@@ -19,7 +19,7 @@
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('imageset') ? 'green--text' : 'red--text'">{{
-            $t("imageset.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon
             right
@@ -78,7 +78,7 @@
                 :items="autocomplete.agent"
                 :loading="autocomplete.loaders.agent"
                 item-text="agent"
-                :label="$t('imageset.author')"
+                :label="$t('common.author')"
                 use-state
                 is-link
                 route-object="agent"
@@ -94,7 +94,7 @@
               <textarea-wrapper
                 v-model="imageset.description"
                 :color="bodyActiveColor"
-                :label="$t('imageset.description')"
+                :label="$t('common.description')"
               />
             </v-col>
           </v-row>
@@ -106,7 +106,7 @@
     <v-row no-gutters class="mt-3">
       <v-col cols="12">
         <v-btn color="yellow" @click="clearLocalStorage">
-          {{ $t("add.buttons.clearLocalStorage") }}
+          {{ $t("buttons.clearLocalStorage") }}
         </v-btn>
       </v-col>
     </v-row>

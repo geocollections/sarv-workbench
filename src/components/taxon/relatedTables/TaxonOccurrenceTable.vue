@@ -302,7 +302,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -381,12 +381,12 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "taxon.reference", value: "reference" },
+      { text: "common.reference", value: "reference" },
       { text: "taxon.locality", value: "locality" },
       { text: "taxon.locality_free", value: "locality_free" },
       { text: "taxon.stratigraphy_base", value: "stratigraphy_base" },
       { text: "taxon.stratigraphy_top", value: "stratigraphy_top" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

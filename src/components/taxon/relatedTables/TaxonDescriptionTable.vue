@@ -188,7 +188,7 @@
                   <input-wrapper
                     v-model="item.date_free"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.year')"
+                    :label="$t('common.year')"
                     type="number"
                   />
                 </v-col>
@@ -208,7 +208,7 @@
                   <input-wrapper
                     v-model="item.description"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.description')"
+                    :label="$t('common.description')"
                     use-state
                   />
                 </v-col>
@@ -217,7 +217,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -300,10 +300,10 @@ export default {
       { text: "taxon.reference", value: "reference" },
       { text: "taxon.author", value: "agent" },
       { text: "taxon.author", value: "author_free" },
-      { text: "taxon.year", value: "date_free" },
+      { text: "common.year", value: "date_free" },
       { text: "taxon.language", value: "language" },
-      { text: "taxon.description", value: "description" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "common.description", value: "description" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

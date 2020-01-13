@@ -168,13 +168,13 @@ export default {
     expanded: [],
     headers: [
       { text: "attachment.file", value: "uuid_filename", align: "center" },
-      { text: "attachment.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "attachment.format", value: "attachment_format__value" },
       { text: "attachment.imageNumber_short", value: "image_number" },
       { text: "attachment.author", value: "author__agent" },
-      { text: "attachment.date", value: "date_created" },
+      { text: "common.date", value: "date_created" },
       { text: "attachment.specimen_short", value: "specimen" },
-      { text: "attachment.reference", value: "reference__reference" },
+      { text: "common.reference", value: "reference__reference" },
       {
         text: "attachment.specimenImageAttachment",
         value: "specimen_image_attachment"

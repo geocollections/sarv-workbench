@@ -149,7 +149,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_synonym.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -227,8 +227,8 @@ export default {
     headers: [
       { text: "stratigraphy_synonym.synonym", value: "synonym" },
       { text: "stratigraphy_synonym.language", value: "language" },
-      { text: "stratigraphy_synonym.reference", value: "reference" },
-      { text: "stratigraphy_synonym.remarks", value: "remarks" },
+      { text: "common.reference", value: "reference" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

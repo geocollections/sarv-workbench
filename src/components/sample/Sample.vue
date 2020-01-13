@@ -55,7 +55,7 @@
         <v-card-title class="pt-2 pb-1">
           <div class="card-title--clickable" @click="block.info = !block.info">
             <span :class="validate('sample') ? 'green--text' : 'red--text'">{{
-              $t("sample.generalInfo")
+              $t("common.generalInfo")
             }}</span>
             <v-icon
               right
@@ -215,7 +215,7 @@
                   :items="autocomplete.stratigraphy"
                   :loading="autocomplete.loaders.stratigraphy"
                   :item-text="stratigraphyLabel"
-                  :label="$t('sample.stratigraphy')"
+                  :label="$t('common.stratigraphy')"
                   is-searchable
                   v-on:search:items="autocompleteStratigraphySearch"
                 />
@@ -384,7 +384,7 @@
                   :items="autocomplete.agent"
                   :loading="autocomplete.loaders.owner"
                   item-text="agent"
-                  :label="$t('sample.owner')"
+                  :label="$t('common.owner')"
                   is-link
                   route-object="agent"
                   is-searchable
@@ -488,7 +488,7 @@
             class="card-title--clickable"
             @click="block.description = !block.description"
           >
-            <span>{{ $t("sample.description") }}</span>
+            <span>{{ $t("common.description") }}</span>
             <v-icon right>fas fa-pen-fancy</v-icon>
           </div>
           <v-spacer></v-spacer>
@@ -531,7 +531,7 @@
         <v-card-title class="pt-2 pb-1">
           <div class="card-title--clickable" @click="block.info = !block.info">
             <span :class="validate('sample') ? 'green--text' : 'red--text'">{{
-              $t("sample.generalInfo")
+              $t("common.generalInfo")
             }}</span>
             <v-icon
               right
@@ -643,7 +643,7 @@
                   :items="autocomplete.stratigraphy"
                   :loading="autocomplete.loaders.stratigraphy"
                   :item-text="stratigraphyLabel"
-                  :label="$t('sample.stratigraphy')"
+                  :label="$t('common.stratigraphy')"
                   is-searchable
                   v-on:search:items="autocompleteStratigraphySearch"
                 />
@@ -843,7 +843,7 @@
             class="card-title--clickable"
             @click="block.description = !block.description"
           >
-            <span>{{ $t("sample.description") }}</span>
+            <span>{{ $t("common.description") }}</span>
             <v-icon right>fas fa-pen-fancy</v-icon>
           </div>
           <v-spacer></v-spacer>

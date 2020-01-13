@@ -12,14 +12,12 @@
 
     <list-module-core
       module="library"
-      title="titles.editLibrary"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchLibraries"
       search-history="librarySearchHistory"
       view-type="libraryViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -40,29 +38,11 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "library", title: "library.id", type: "number" },
-        { id: "library__title", title: "library.title", type: "text" },
-        { id: "agent__agent", title: "library.author_txt", type: "text" },
-
-        {
-          id: "library__is_private",
-          title: "library.private",
-          type: "text",
-          isPrivate: true
-        },
-        {
-          id: "reference",
-          title: "library.reference",
-          type: "text",
-          orderBy: false
-        }
-      ],
       filters: [
         { id: "author_txt", title: "library.author_txt", type: "text" },
-        { id: "year", title: "library.year", type: "number" },
+        { id: "year", title: "common.year", type: "number" },
         { id: "title", title: "library.title", type: "text" },
-        { id: "reference", title: "library.reference", type: "text" }
+        { id: "reference", title: "common.reference", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }

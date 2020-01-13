@@ -84,7 +84,7 @@ export default {
     headers: [
       { text: "doi.identifier", value: "id" },
       { text: "doi.creators", value: "creators" },
-      { text: "doi.year", value: "publication_year" },
+      { text: "common.year", value: "publication_year" },
       { text: "doi.title", value: "title" },
       { text: "doi.resource_type", value: "resource_type__value" },
       { text: "doi.datacite_created", value: "datacite_created" },

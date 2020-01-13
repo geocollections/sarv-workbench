@@ -93,17 +93,17 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: "agent.id", value: "id" },
-      { text: "agent.name", value: "agent" },
-      { text: "agent.forename", value: "forename" },
-      { text: "agent.surename", value: "surename" },
+      { text: "common.id", value: "id" },
+      { text: "common.name", value: "agent" },
+      { text: "common.forename", value: "forename" },
+      { text: "common.surename", value: "surename" },
       { text: "agent.institution", value: "institution_name" },
       {
         text: "agent.institution__institution",
         value: "institution__institution_name"
       },
-      { text: "agent.remarks", value: "remarks" },
-      { text: "agent.type", value: "type" }
+      { text: "common.remarks", value: "remarks" },
+      { text: "common.type", value: "type" }
     ]
   }),
   computed: {

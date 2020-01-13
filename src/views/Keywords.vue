@@ -13,14 +13,12 @@
 
     <list-module-core
       module="keyword"
-      title="titles.editKeyword"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchKeywords"
       search-history="keywordSearchHistory"
       view-type="keywordViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -40,24 +38,8 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "keyword.id", type: "number" },
-        { id: "keyword", title: "keyword.keyword", type: "text" },
-        { id: "language", title: "keyword.language", type: "text" },
-        {
-          id: "keyword_category",
-          title: "keyword.keyword_category",
-          type: "text"
-        },
-        {
-          id: "related_keyword",
-          title: "keyword.related_keyword",
-          type: "text"
-        },
-        { id: "is_primary", title: "keyword.is_primary", type: "text" }
-      ],
       filters: [
-        { id: "id", title: "keyword.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         { id: "term", title: "keyword.keyword", type: "text" },
         { id: "language", title: "keyword.language", type: "text" },
         {

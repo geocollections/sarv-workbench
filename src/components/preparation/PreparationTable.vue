@@ -126,7 +126,7 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: "preparation.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "preparation.preparation_number", value: "preparation_number" },
       { text: "preparation.sample__locality", value: "locality" },
       { text: "preparation.sample__stratigraphy", value: "stratigraphy" },

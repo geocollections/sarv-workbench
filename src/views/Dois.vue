@@ -12,14 +12,12 @@
 
     <list-module-core
       module="doi"
-      title="titles.editDoi"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchDois"
       search-history="doiSearchHistory"
       view-type="doiViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -41,30 +39,10 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "doi.identifier", type: "number" },
-        { id: "creators", title: "doi.creators", type: "text" },
-        { id: "publication_year", title: "doi.year", type: "text" },
-        { id: "title", title: "doi.title", type: "text" },
-        {
-          id: "resource_type__value",
-          title: "doi.resource_type",
-          type: "text"
-        },
-        {
-          id: "datacite_created",
-          title: "doi.datacite_created",
-          type: "text",
-          orderBy: false,
-          showHeader: true
-        },
-        { id: "id", title: "", type: "text", orderBy: false }
-        // {id:"identifier",title:"",type:"text", orderBy: false},
-      ],
       filters: [
         { id: "identifier", title: "doi.identifier", type: "text" },
         { id: "creators", title: "doi.creators", type: "text" },
-        { id: "publication_year", title: "doi.year", type: "number" },
+        { id: "publication_year", title: "common.year", type: "number" },
         { id: "title", title: "doi.title", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),

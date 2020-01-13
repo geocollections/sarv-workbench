@@ -4,7 +4,10 @@
     "name": "Nimi",
     "name_en": "Nimi (EN)",
     "date": "Kuupäev",
+    "date_start": "Kuupäev algus",
+    "date_end": "Kuupäev lõpp",
     "date_txt": "Kuupäev txt",
+    "date_identified": "Kuupäev tuvastatud",
     "remarks": "Lisainfo",
     "owner": "Omanik",
     "owner_txt": "Omanik txt",
@@ -32,7 +35,9 @@
     "latitude": "Laiuskraad",
     "longitude": "Pikkuskraad",
     "actions": "Toimingud",
-    "new": "Uus"
+    "new": "Uus",
+    "generalInfo": "Üldinfo",
+    "requiredFields": "Kohustuslikud väljad"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -167,52 +172,12 @@
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",
     "ttuLink": "TalTech Geoloogia Instituut"
   },
-  "frontPage":{
+  "frontPage": {
     "welcome": "Tere",
-    "info": "Siin saab geokogude infosüsteemi kasutaja lisada ja parandada geoloogia ja kollektsioonidega seotud faile: fotoarhiivi pilte, kollektsioonieksemplaride pilte, skaneeritud publikatsioone, tabelkujul andmefaile jms. Kõik failid on seotud konkreetse kasutaja ning asutusega. Järk-järgult lisanduvad siia funktsioonid ka muude andmeobjektide haldamiseks. Iga kasutaja saab esialgu näha ja muuta ainult enda autorlusega ja/või enda sisestatud andmeid, aga kõik kirjed, mis ei ole märgitud privaatseks, muutuvad avalikult nähtavaks geokogude portaalis",
-    "collapseFiles": "Failid",
-    "collapseReference": "Kirjandus",
-    "collapseLocality": "Lokaliteet",
-    "collapseSample": "Proov",
-    "collapseLibrary": "Kogumik",
-    "collapseFindFast":"Leia kiirelt",
     "help": "Abi",
     "files": "Hiljutised failid",
     "sitesMap": "Viimati külastatud/sisestatud objektid",
-    "buttons": {
-      "photoArchive": "Lisa pilt",
-      "specimenImage": "Lisa eksemplari pilt",
-      "otherFiles": "Lisa fail",
-      "digitisedReference": "Lisa kirjanduse pdf",
-      "reference": "Lisa kirjandus",
-      "myFiles": "Minu failid",
-      "myReferences": "Kirjandus",
-      "locality": "Lisa lokaliteet",
-      "localities": "Lokaliteedid",
-      "sample": "Lisa proov",
-      "samples": "Proovid",
-      "library": "Lisa kogumik",
-      "libraries": "Kogumikud",
-      "doi": "Lisa DOI",
-      "imageset": "Lisa pildiseeria",
-      "journals": "Ajakirjad",
-      "journal": "Lisa ajakiri",
-      "specimen": "Lisa eksemplar",
-      "specimens": "Eksemplarid",
-      "activeProject": "Minu aktiivne projekt",
-      "activeSite": "Viimati külastatud vaatluspunkt",
-      "activeSample": "Minu viimane proov",
-      "keywords": "Terminid",
-      "keyword": "Lisa termin"
-    },
-    "developmentSettings": {
-      "button": "Kustuta kõik vaikimisi väärtused",
-      "message": "Kustutab kõik vaikimisi väärtused, võib aidata kui midagi ei lae/tööta korralikult (ainult arenduse käigus)"
-    },
-    "added_date":"Lisatud",
-    "changed_date":"Muudetud",
-    "active":"Aktiivne",
-    "non_active":"Mitte aktiivne"
+    "active":"Aktiivne"
   },
   "settings": {
     "permissions": "Minu õigused",
@@ -624,7 +589,7 @@
   },
   "references": {
     "header": "Kirjandus",
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "author": "Autor(id)",
     "year": "Aasta",
     "title": "Pealkiri",
@@ -964,7 +929,7 @@
     "taxon": "Takson registrist",
     "name": "Nimi",
     "agent": "Det.",
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "date": "Det. aeg",
     "type": "Määrangu tüüp",
     "current": "Kehtiv"
@@ -974,13 +939,13 @@
     "name": "Nimi",
     "name_en": "Nimi en",
     "agent": "Det.",
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "date": "Det. aeg",
     "type": "Määrangu tüüp",
     "current": "Kehtiv"
   },
   "specimen_reference": {
-    "reference": "Publikatsioon",
+    "reference": "Kirjandus",
     "pages": "Leheküljed",
     "figures": "Joonised",
     "remarks": "Lisainfo"
@@ -1073,26 +1038,11 @@
     }
   },
   "project":{
-    "header": "Minu projektid",
-    "id":"ID",
-    "name":"Nimi",
-    "name_en":"Nimi (ENG)",
     "parent_project":"Parent",
-    "project_type":"Type",
-    "date":"Kuupäev",
-    "date_start":"Algus",
-    "date_end":"Lõpp",
-    "date_free":"Vaba tekst",
-    "description":"Kirjeldus",
-    "remarks":"Lisainfo",
-    "owner":"Owner",
-    "is_private":"Privaatne",
     "newSite": "Uus vaatluspunkt",
-    "generalInfo": "Üldinfo",
     "members": "Projekti liikmed",
     "files": "Projekti failid",
-    "sites": "Vaatluspunktid",
-    "addNew": "Lisage uus Projekt"
+    "sites": "Vaatluspunktid"
   },
   "site":{
     "header": "Vaatluspunktid",
@@ -1244,7 +1194,7 @@
     "stratigraphy": "Stratigraafia",
     "opinion": "Arvamus",
     "other_taxon": "Teine takson",
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "is_preferred_opinion": "Eelistatud arvamus",
     "name": "Nimi",
     "language": "Keel",
@@ -1527,7 +1477,7 @@
     "taxa": "Taksonid"
   },
   "reference": {
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "author": "Autor(id)",
     "type": "Tüüp",
     "language": "Keel",
@@ -1605,7 +1555,7 @@
   },
   "synonym": {
     "synonym":"Sünonüüm",
-    "reference":"Viide",
+    "reference":"Kirjandus",
     "pages":"Lk.",
     "remarks":"Lisainfo"
   },
@@ -1618,7 +1568,7 @@
     "parent":" Ülemine",
     "base":"Alum. piir (m)",
     "top":"Ülem. piir (m)",
-    "reference":"Viide",
+    "reference":"Kirjandus",
     "author":"Autor",
     "year":"Autor",
     "is_preferred":"Eelistatud",
@@ -1668,7 +1618,7 @@
     }
   },
   "stratigraphy_reference": {
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "content": "Sisu",
     "content_en": "Sisu (EN)",
     "age_base": "Alum. vanus",
@@ -1684,13 +1634,13 @@
     "stratotype_type": "Tüüp",
     "depth_base": "Alum. sügavus",
     "depth_top": "Ülem. sügavus",
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "remarks": "Lisainfo"
   },
   "stratigraphy_synonym": {
     "synonym": "Sünonüüm",
     "language": "Keel",
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "remarks": "Lisainfo"
   },
   "journal": {
@@ -1718,7 +1668,7 @@
     "year": "Aasta",
     "title": "Pealkiri",
     "title_en": "Pealkiri (ENG)",
-    "reference": "Viide",
+    "reference": "Kirjandus",
     "isPrivate": "Avalik",
     "id": "ID",
     "addNew": "Lisage uus Kogumik",
@@ -1842,7 +1792,8 @@
     "downloadRIS": "Ekspordi RIS",
     "search": "Otsi",
     "listView": "Loendivaade",
-    "imageView": "Pildid"
+    "imageView": "Pildid",
+    "clearLocalStorage": "Eemalda vaikimisi väärtused"
   },
   "confirmation": {
     "question": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",

@@ -81,7 +81,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "keyword.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "keyword.keyword", value: "keyword" },
       { text: "keyword.language", value: "language__value" },
       { text: "keyword.keyword_category", value: "keyword_category__name" },

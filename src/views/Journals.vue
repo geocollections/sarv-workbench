@@ -13,14 +13,12 @@
 
     <list-module-core
       module="journal"
-      title="titles.editJournal"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchJournals"
       search-history="journalSearchHistory"
       view-type="journalViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -40,18 +38,6 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "journal.id", type: "number" },
-        { id: "journal_name", title: "journal.journalName", type: "text" },
-        { id: "journal_short", title: "journal.journalShort", type: "text" },
-        {
-          id: "journal_original",
-          title: "journal.journalOriginal",
-          type: "text"
-        },
-        { id: "publisher", title: "journal.publisher", type: "text" },
-        { id: "remarks", title: "journal.remarks", type: "text" }
-      ],
       filters: [
         { id: "journal", title: "journal.journalFilter", type: "text" },
         { id: "publisher", title: "journal.publisherFilter", type: "text" },

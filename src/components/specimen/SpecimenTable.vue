@@ -208,12 +208,12 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "specimen.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "specimen.number", value: "specimen_id" },
-      { text: "specimen.name", value: "name", sortable: false },
+      { text: "common.name", value: "name", sortable: false },
       { text: "specimen.locality", value: "locality__locality" },
-      { text: "specimen.depth", value: "depth" },
-      { text: "specimen.stratigraphy", value: "stratigraphy__stratigraphy" },
+      { text: "common.depth", value: "depth" },
+      { text: "common.stratigraphy", value: "stratigraphy__stratigraphy" },
       { text: "specimen.agent_collected", value: "agent_collected__agent" },
       { text: "specimen.storage", value: "storage__location" },
       { text: "", value: "link", sortable: false },

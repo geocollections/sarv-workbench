@@ -20,7 +20,7 @@
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span
             :class="validate('preparation') ? 'green--text' : 'red--text'"
-            >{{ $t("preparation.generalInfo") }}</span
+            >{{ $t("common.generalInfo") }}</span
           >
           <v-icon
             right
@@ -279,7 +279,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("preparation.description") }}</span>
+          <span>{{ $t("common.description") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -301,7 +301,7 @@
               <textarea-wrapper
                 v-model="preparation.remarks"
                 :color="bodyActiveColor"
-                :label="$t('preparation.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>

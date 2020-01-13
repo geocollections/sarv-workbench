@@ -74,12 +74,12 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "journal.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "journal.journalName", value: "journal_name" },
       { text: "journal.journalShort", value: "journal_short" },
       { text: "journal.journalOriginal", value: "journal_original" },
       { text: "journal.publisher", value: "publisher" },
-      { text: "journal.remarks", value: "remarks" }
+      { text: "common.remarks", value: "remarks" }
     ],
     names: []
   }),

@@ -97,7 +97,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "locality.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "locality.locality", value: "locality" },
       { text: "locality.number", value: "number" },
       { text: "locality.country", value: "country__value" },

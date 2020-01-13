@@ -34,11 +34,6 @@ export default {
     AppHeader
   },
   name: "Dashboard",
-  metaInfo() {
-    return {
-      title: this.$t("titles.dashboard")
-    };
-  },
   computed: {
     ...mapState(["appSettings", "recentUrls", "recentUrlsState"])
   },

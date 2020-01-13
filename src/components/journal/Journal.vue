@@ -22,7 +22,7 @@
           @click="block.requiredFields = !block.requiredFields"
         >
           <span :class="validate('journal') ? 'green--text' : 'red--text'">{{
-            $t("journal.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon
             right
@@ -67,7 +67,7 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span>{{ $t("journal.generalInfo") }}</span>
+          <span>{{ $t("common.generalInfo") }}</span>
           <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -105,7 +105,7 @@
               <textarea-wrapper
                 v-model="journal.remarks"
                 :color="bodyActiveColor"
-                :label="$t('journal.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>

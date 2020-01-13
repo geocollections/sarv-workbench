@@ -102,8 +102,8 @@ export default {
     expanded: [],
     headers: [
       { text: "common.id", value: "id" },
-      { text: "stratigraphy.stratigraphy", value: "stratigraphy" },
-      { text: "stratigraphy.type", value: "type" },
+      { text: "common.stratigraphy", value: "stratigraphy" },
+      { text: "common.type", value: "type" },
       { text: "stratigraphy.rank", value: "rank" },
       { text: "stratigraphy.scope", value: "scope" },
       { text: "", value: "link", sortable: false }

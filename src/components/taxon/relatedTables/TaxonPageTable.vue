@@ -109,7 +109,7 @@
                   <input-wrapper
                     v-model="item.date_txt"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.year')"
+                    :label="$t('common.year')"
                   />
                 </v-col>
               </v-row>
@@ -189,7 +189,7 @@ export default {
       { text: "taxon.title", value: "title" },
       { text: "taxon.author", value: "author" },
       { text: "taxon.author_txt", value: "author_txt" },
-      { text: "taxon.year", value: "date_txt" },
+      { text: "common.year", value: "date_txt" },
       {
         text: "common.actions",
         value: "action",

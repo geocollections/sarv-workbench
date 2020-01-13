@@ -114,7 +114,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('doi.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -200,7 +200,7 @@ export default {
       { text: "doi.relatedType", value: "relation_type" },
       { text: "doi.identifierType", value: "identifier_type" },
       { text: "doi.value", value: "value" },
-      { text: "doi.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

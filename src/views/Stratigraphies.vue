@@ -16,14 +16,12 @@
 
     <list-module-core
       module="stratigraphy"
-      title="titles.editStratigraphy"
-      :show-filters="false"
       :searchParameters="searchParameters"
       :api-call="fetchStratigraphies"
       search-history="stratigraphySearchHistory"
       view-type="stratigraphyViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -43,13 +41,13 @@ export default {
     return {
       response: {},
       filters: [
-        { id: "id", title: "stratigraphy.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         {
           id: "stratigraphy",
-          title: "stratigraphy.stratigraphy",
+          title: "common.stratigraphy",
           type: "text"
         },
-        { id: "type", title: "stratigraphy.type", type: "text" },
+        { id: "type", title: "common.type", type: "text" },
         { id: "rank", title: "stratigraphy.rank", type: "text" },
         { id: "scope", title: "stratigraphy.scope", type: "text" },
         { id: "parent", title: "stratigraphy.parent", type: "text" }

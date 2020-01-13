@@ -13,13 +13,12 @@
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="agent"
-      title="titles.editAgent"
       :searchParameters="searchParameters"
       :api-call="fetchAgents"
       search-history="agentSearchHistory"
       view-type="agentViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -40,10 +39,10 @@ export default {
     return {
       response: {},
       filters: [
-        { id: "id", title: "agent.id", type: "number" },
-        { id: "agent", title: "agent.name", type: "text" },
-        { id: "forename", title: "agent.forename", type: "text" },
-        { id: "surename", title: "agent.surename", type: "text" }
+        { id: "id", title: "common.id", type: "number" },
+        { id: "agent", title: "common.name", type: "text" },
+        { id: "forename", title: "common.forename", type: "text" },
+        { id: "surename", title: "common.surename", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }

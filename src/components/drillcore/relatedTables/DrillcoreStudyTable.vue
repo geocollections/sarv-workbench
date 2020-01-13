@@ -92,7 +92,7 @@
                   <date-wrapper
                     v-model="item.date"
                     :color="bodyActiveColor"
-                    :label="$t('drillcore_study.date')"
+                    :label="$t('common.date')"
                     v-on:date:clear="item.date = null"
                     v-on:date:update="updateUserInputtedDate('date', $event)"
                   />
@@ -126,7 +126,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('drillcore_study.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -207,10 +207,10 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "drillcore_study.date", value: "date" },
+      { text: "common.date", value: "date" },
       { text: "drillcore_study.agent", value: "agent" },
       { text: "drillcore_study.aim", value: "aim" },
-      { text: "drillcore_study.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

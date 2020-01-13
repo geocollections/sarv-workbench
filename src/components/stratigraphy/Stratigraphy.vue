@@ -20,7 +20,7 @@
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span
             :class="validate('stratigraphy') ? 'green--text' : 'red--text'"
-            >{{ $t("preparation.generalInfo") }}</span
+            >{{ $t("common.generalInfo") }}</span
           >
           <v-icon
             right
@@ -44,7 +44,7 @@
               <input-wrapper
                 v-model="stratigraphy.stratigraphy"
                 :color="bodyActiveColor"
-                :label="$t('stratigraphy.stratigraphy')"
+                :label="$t('common.stratigraphy')"
                 use-state
               />
             </v-col>
@@ -229,7 +229,7 @@
                 :items="autocomplete.list_stratigraphy_type"
                 :loading="autocomplete.loaders.list_stratigraphy_type"
                 :item-text="commonLabel"
-                :label="$t('stratigraphy.type')"
+                :label="$t('common.type')"
               />
             </v-col>
 
@@ -326,7 +326,7 @@
               <textarea-wrapper
                 v-model="stratigraphy.description"
                 :color="bodyActiveColor"
-                :label="$t('stratigraphy.description')"
+                :label="$t('common.description')"
               />
             </v-col>
 
@@ -334,7 +334,7 @@
               <textarea-wrapper
                 v-model="stratigraphy.description_en"
                 :color="bodyActiveColor"
-                :label="$t('stratigraphy.description_en')"
+                :label="$t('common.description_en')"
               />
             </v-col>
           </v-row>
@@ -448,7 +448,7 @@
               <textarea-wrapper
                 v-model="stratigraphy.remarks"
                 :color="bodyActiveColor"
-                :label="$t('stratigraphy.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>

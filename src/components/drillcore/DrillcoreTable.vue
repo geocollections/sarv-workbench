@@ -95,15 +95,15 @@ export default {
   },
   data: () => ({
     headers: [
-      { text: "drillcore.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "drillcore.drillcore", value: "drillcore" },
-      { text: "drillcore.depth", value: "depth" },
+      { text: "common.depth", value: "depth" },
       { text: "drillcore.boxes", value: "boxes" },
       { text: "drillcore.box_numbers", value: "box_numbers" },
       { text: "drillcore.location", value: "location" },
-      { text: "drillcore.year", value: "year" },
+      { text: "common.year", value: "year" },
       { text: "drillcore.agent", value: "agent__agent" },
-      { text: "drillcore.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       { text: "", value: "link", sortable: false }
     ]
   }),

@@ -16,15 +16,13 @@
 
     <list-module-core
       module="attachment"
-      title="titles.editAttachment"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchAttachments"
       search-history="attachmentSearchHistory"
       view-type="attachmentViewType"
       :use-image-view="true"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -46,48 +44,6 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        {
-          id: "file",
-          title: "attachment.file",
-          type: "number",
-          orderBy: false,
-          showHeader: true
-        },
-        { id: "id", title: "attachment.id", type: "text" },
-        {
-          id: "format",
-          title: "attachment.format",
-          type: "text",
-          orderBy: false,
-          showHeader: true
-        },
-        {
-          id: "image_number",
-          title: "attachment.imageNumber_short",
-          type: "text"
-        },
-        { id: "author__agent", title: "attachment.author", type: "text" },
-        { id: "date_created", title: "attachment.date", type: "text" },
-        { id: "specimen", title: "attachment.specimen_short", type: "text" },
-        {
-          id: "reference__reference",
-          title: "attachment.reference",
-          type: "text"
-        },
-        {
-          id: "specimen_image_attachment",
-          title: "attachment.specimenImageAttachment",
-          type: "text"
-        },
-        {
-          id: "is_private",
-          title: "attachment.is_private_text_short",
-          type: "text",
-          isPrivate: true
-        },
-        { id: "attachment__filename", title: "", type: "text", orderBy: false }
-      ],
       filters: [
         { id: "image_number", title: "attachment.imageNumber", type: "text" },
         { id: "filename", title: "attachment.filename", type: "text" },

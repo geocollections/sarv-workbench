@@ -12,14 +12,12 @@
 
     <list-module-core
       module="locality"
-      title="titles.editLocality"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchLocalities"
       search-history="localitySearchHistory"
       view-type="localityViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -39,15 +37,8 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "locality.id", type: "number" },
-        { id: "locality", title: "locality.locality", type: "text" },
-        { id: "number", title: "locality.number", type: "text" },
-        { id: "country", title: "locality.country", type: "text" },
-        { id: "agent", title: "locality.agent", type: "text" }
-      ],
       filters: [
-        { id: "id", title: "locality.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         { id: "locality", title: "locality.locality", type: "text" },
         { id: "number", title: "locality.number", type: "text" },
         { id: "country", title: "locality.country", type: "text" },

@@ -62,9 +62,9 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "selectionSeries.id", value: "id" },
-      { text: "selectionSeries.name", value: "name" },
-      { text: "selectionSeries.remarks", value: "remarks" },
+      { text: "common.id", value: "id" },
+      { text: "common.name", value: "name" },
+      { text: "common.remarks", value: "remarks" },
       { text: "selectionSeries.user_added", value: "user_added" }
     ],
     names: []

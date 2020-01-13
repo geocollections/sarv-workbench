@@ -203,7 +203,7 @@
                   <input-wrapper
                     v-model="item.name"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification.name')"
+                    :label="$t('common.name')"
                   />
                 </v-col>
 
@@ -241,7 +241,7 @@
                   <date-wrapper
                     v-model="item.date_identified"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification.date')"
+                    :label="$t('common.date')"
                     v-on:date:clear="item.date_identified = null"
                     v-on:date:update="
                       updateUserInputtedDate('date_identified', $event)
@@ -256,7 +256,7 @@
                     :items="autocomplete.identification_type"
                     :loading="autocomplete.loaders.identification_type"
                     :item-text="commonLabel"
-                    :label="$t('specimen_identification.type')"
+                    :label="$t('common.type')"
                   />
                 </v-col>
 
@@ -350,14 +350,14 @@ export default {
   data: () => ({
     headers: [
       { text: "specimen_identification.taxon", value: "taxon" },
-      { text: "specimen_identification.name", value: "name" },
+      { text: "common.name", value: "name" },
       { text: "specimen_identification.agent", value: "agent" },
-      { text: "specimen_identification.reference", value: "reference" },
+      { text: "common.reference", value: "reference" },
       {
-        text: "specimen_identification.date",
+        text: "common.date",
         value: "date_identified"
       },
-      { text: "specimen_identification.type", value: "identification_type" },
+      { text: "common.type", value: "identification_type" },
       {
         text: "specimen_identification.current",
         value: "current"

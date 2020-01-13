@@ -94,7 +94,7 @@ export default {
     expanded: [],
     headers: [
       { text: "collection.number", value: "collection_id" },
-      { text: "collection.name", value: "name" },
+      { text: "common.name", value: "name" },
       { text: "collection.name_long", value: "name_long" },
       { text: "collection.database", value: "database__acronym" },
       { text: "", value: "link", sortable: false }

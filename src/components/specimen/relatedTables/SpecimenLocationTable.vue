@@ -105,7 +105,7 @@
                     :items="autocomplete.type"
                     :loading="autocomplete.loaders.type"
                     :item-text="commonLabel"
-                    :label="$t('specimen_location.type')"
+                    :label="$t('common.type')"
                   />
                 </v-col>
 
@@ -135,7 +135,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_location.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -216,10 +216,10 @@ export default {
   data: () => ({
     headers: [
       { text: "specimen_location.number", value: "number" },
-      { text: "specimen_location.type", value: "type" },
+      { text: "common.type", value: "type" },
       { text: "specimen_location.part", value: "part" },
       { text: "specimen_location.storage", value: "storage" },
-      { text: "specimen_location.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

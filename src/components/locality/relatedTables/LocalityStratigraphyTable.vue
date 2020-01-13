@@ -177,7 +177,7 @@
                     :items="autocomplete.stratigraphy"
                     :loading="autocomplete.loaders.stratigraphy"
                     :item-text="stratigraphyLabel"
-                    :label="$t('stratigraphy.stratigraphy')"
+                    :label="$t('common.stratigraphy')"
                     use-state
                     is-link
                     route-object="stratigraphy"
@@ -290,7 +290,7 @@
                   <input-wrapper
                     v-model="item.year"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy.year')"
+                    :label="$t('common.year')"
                   />
                 </v-col>
 
@@ -307,7 +307,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
 
@@ -315,7 +315,7 @@
                   <checkbox-wrapper
                     v-model="item.is_private"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy.is_private')"
+                    :label="$t('common.is_private')"
                     @change="item.is_private = !item.is_private"
                   />
                 </v-col>
@@ -397,12 +397,12 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "stratigraphy.stratigraphy", value: "stratigraphy" },
+      { text: "common.stratigraphy", value: "stratigraphy" },
       { text: "stratigraphy.base", value: "depth_base" },
       { text: "stratigraphy.top", value: "depth_top" },
-      { text: "stratigraphy.reference", value: "reference" },
+      { text: "common.reference", value: "reference" },
       { text: "stratigraphy.author", value: "agent" },
-      { text: "stratigraphy.year", value: "year" },
+      { text: "common.year", value: "year" },
       { text: "stratigraphy.is_preferred", value: "current" },
       {
         text: "common.actions",

@@ -116,7 +116,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -197,7 +197,7 @@ export default {
     headers: [
       { text: "taxon.taxon", value: "taxon" },
       { text: "taxon.author_year", value: "author_year" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

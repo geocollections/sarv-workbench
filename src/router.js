@@ -87,7 +87,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "attachment",
-                title: "titles.editAttachment",
                 heading: "editAttachment.heading",
                 requiresAuth: true,
                 object: "attachment"
@@ -109,7 +108,6 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addAttachment",
                 addNew: "add.newAttachment",
                 subForms: [
                   {
@@ -139,7 +137,6 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addAttachment",
                 addNew: "add.newAttachment",
                 subForms: [
                   {
@@ -169,7 +166,6 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addAttachment",
                 addNew: "add.newAttachment",
                 subForms: [
                   {
@@ -199,7 +195,6 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addAttachment",
                 addNew: "add.newAttachment",
                 subForms: [
                   {
@@ -229,7 +224,6 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addAttachment",
                 addNew: "add.newAttachment",
                 subForms: [
                   {
@@ -290,7 +284,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "reference",
-                title: "titles.editReference",
                 heading: "editReference.heading",
 
                 requiresAuth: true,
@@ -312,12 +305,11 @@ const router = new Router({
               component: () => import("./components/reference/Reference.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addReference",
                 addNew: "add.newReference",
                 subForms: [
                   {
                     path: "/reference/add",
-                    name: "add.reference"
+                    name: "common.reference"
                   }
                 ],
                 requiresAuth: true,
@@ -338,7 +330,6 @@ const router = new Router({
               component: () => import("./components/imageset/Imageset.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addImageset",
                 addNew: "add.newImageset",
                 subForms: [{ path: "/imageset/add", name: "add.imageset" }],
                 requiresAuth: true,
@@ -379,7 +370,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "journal",
-                title: "titles.editJournal",
                 heading: "editJournal.heading",
                 requiresAuth: true,
                 object: "journal"
@@ -399,7 +389,6 @@ const router = new Router({
               component: () => import("./components/journal/Journal.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addJournal",
                 addNew: "add.newJournal",
                 subForms: [{ path: "/journal/add", name: "add.journal" }],
                 requiresAuth: true,
@@ -441,7 +430,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "locality",
-                title: "titles.editLocality",
                 heading: "editLocality.heading",
                 requiresAuth: true,
                 object: "locality"
@@ -461,7 +449,6 @@ const router = new Router({
               component: () => import("./components/locality/Locality.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addLocality",
                 addNew: "add.newLocality",
                 subForms: [{ path: "/locality/add", name: "add.locality" }],
                 requiresAuth: true,
@@ -504,7 +491,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "sample",
-                title: "titles.editSample",
                 heading: "editSample.heading",
                 requiresAuth: true,
                 object: "sample"
@@ -525,7 +511,6 @@ const router = new Router({
               component: () => import("./components/sample/Sample.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addSample",
                 addNew: "add.newSample",
                 subForms: [{ path: "/sample/add", name: "add.sample" }],
                 requiresAuth: true,
@@ -571,7 +556,6 @@ const router = new Router({
                   //belongs to project
                   meta: {
                     isEdit: false,
-                    title: "titles.addProject",
                     addNew: "add.newProject",
                     subForms: [
                       { path: "/project/add", name: "editProject.heading" }
@@ -604,7 +588,6 @@ const router = new Router({
                   meta: {
                     isEdit: true,
                     table: "project",
-                    title: "titles.editProject",
                     heading: "editProject.heading",
                     // isSidebarShown: true,
                     requiresAuth: true,
@@ -648,7 +631,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "site",
-                title: "titles.editSite",
                 heading: "editSite.heading",
                 // isSidebarShown: true,
                 requiresAuth: true,
@@ -670,7 +652,6 @@ const router = new Router({
               component: () => import("./components/site/Site.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addSite",
                 addNew: "add.newSite",
                 subForms: [{ path: "/site/add", name: "editSite.heading" }],
                 requiresAuth: true,
@@ -711,7 +692,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "library",
-                title: "titles.editLibrary",
                 heading: "editLibrary.heading",
                 requiresAuth: true,
                 object: "library"
@@ -731,7 +711,6 @@ const router = new Router({
               component: () => import("./components/library/Library.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addLibrary",
                 addNew: "add.newLibrary",
                 subForms: [{ path: "/library/add", name: "add.library" }],
                 requiresAuth: true,
@@ -772,7 +751,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "doi",
-                title: "titles.editDoi",
                 heading: "editDoi.heading",
                 requiresAuth: true,
                 object: "doi"
@@ -792,7 +770,6 @@ const router = new Router({
               component: () => import("./components/doi/Doi.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addDoi",
                 addNew: "add.newDoi",
                 subForms: [{ path: "/doi/add", name: "add.doi" }],
                 requiresAuth: true,
@@ -805,7 +782,6 @@ const router = new Router({
                   meta: {
                     isEdit: false,
                     isEGF: true,
-                    title: "titles.addDoi",
                     addNew: "add.newDoiEgf",
                     subForms: [{ path: "/doi/add", name: "add.doi" }],
                     requiresAuth: true,
@@ -849,7 +825,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "analysis",
-                title: "titles.editAnalysis",
                 heading: "editAnalysis.heading",
                 requiresAuth: true,
                 object: "analysis"
@@ -870,7 +845,6 @@ const router = new Router({
               component: () => import("./components/analysis/Analysis.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addAnalysis",
                 addNew: "add.newAnalysis",
                 subForms: [{ path: "/analysis/add", name: "add.analysis" }],
                 requiresAuth: true,
@@ -912,7 +886,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "specimen",
-                title: "titles.editSpecimen",
                 heading: "editSpecimen.heading",
                 requiresAuth: true,
                 object: "specimen"
@@ -933,7 +906,6 @@ const router = new Router({
               component: () => import("./components/specimen/Specimen.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addSpecimen",
                 addNew: "add.newSpecimen",
                 subForms: [{ path: "/specimen/add", name: "add.specimen" }],
                 requiresAuth: true,
@@ -974,7 +946,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "keyword",
-                title: "titles.editKeyword",
                 heading: "editKeyword.heading",
                 requiresAuth: true,
                 object: "keyword"
@@ -995,7 +966,6 @@ const router = new Router({
               component: () => import("./components/keyword/Keyword.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addKeyword",
                 addNew: "add.newKeyword",
                 subForms: [{ path: "/keyword/add", name: "add.keyword" }],
                 requiresAuth: true,
@@ -1037,7 +1007,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "collection",
-                title: "titles.editCollection",
                 heading: "editCollection.heading",
                 requiresAuth: true,
                 object: "collection"
@@ -1058,7 +1027,6 @@ const router = new Router({
               component: () => import("./components/collection/Collection.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addCollection",
                 addNew: "add.newCollection",
                 subForms: [{ path: "/collection/add", name: "add.collection" }],
                 requiresAuth: true,
@@ -1099,7 +1067,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "taxon",
-                title: "titles.editTaxon",
                 heading: "editTaxon.heading",
                 requiresAuth: true,
                 object: "taxon"
@@ -1120,7 +1087,6 @@ const router = new Router({
               component: () => import("./components/taxon/Taxon.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addTaxon",
                 addNew: "add.newTaxon",
                 subForms: [{ path: "/taxon/add", name: "add.taxon" }],
                 requiresAuth: true,
@@ -1163,7 +1129,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "selection_series",
-                title: "titles.editSelectionSeries",
                 heading: "editSelectionSeries.heading",
                 requiresAuth: true,
                 object: "selection_series"
@@ -1185,7 +1150,6 @@ const router = new Router({
                 import("./components/selectionSeries/SelectionSeries.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addSelectionSeries",
                 addNew: "add.newSelectionSeries",
                 subForms: [
                   { path: "/selection_series/add", name: "add.selectionSeries" }
@@ -1228,7 +1192,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "agent",
-                title: "titles.editAgent",
                 heading: "editAgent.heading",
                 requiresAuth: true,
                 object: "agent"
@@ -1249,7 +1212,6 @@ const router = new Router({
               component: () => import("./components/agent/Agent.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addAgent",
                 addNew: "add.newAgent",
                 subForms: [{ path: "/agent/add", name: "add.agent" }],
                 requiresAuth: true,
@@ -1291,7 +1253,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "drillcore",
-                title: "titles.editDrillcore",
                 heading: "editDrillcore.heading",
                 requiresAuth: true,
                 object: "drillcore"
@@ -1312,7 +1273,6 @@ const router = new Router({
               component: () => import("./components/drillcore/Drillcore.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addDrillcore",
                 addNew: "add.newDrillcore",
                 subForms: [{ path: "/drillcore/add", name: "add.drillcore" }],
                 requiresAuth: true,
@@ -1355,7 +1315,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "preparation",
-                title: "titles.editPreparation",
                 heading: "editPreparation.heading",
                 requiresAuth: true,
                 object: "preparation"
@@ -1377,7 +1336,6 @@ const router = new Router({
                 import("./components/preparation/Preparation.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addPreparation",
                 addNew: "add.newPreparation",
                 subForms: [
                   { path: "/preparation/add", name: "add.preparation" }
@@ -1420,7 +1378,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "dataset",
-                title: "titles.editDataset",
                 heading: "editDataset.heading",
                 requiresAuth: true,
                 object: "dataset"
@@ -1441,7 +1398,6 @@ const router = new Router({
               component: () => import("./components/dataset/Dataset.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addDataset",
                 addNew: "add.newDataset",
                 subForms: [{ path: "/dataset/add", name: "add.dataset" }],
                 requiresAuth: true,
@@ -1484,7 +1440,6 @@ const router = new Router({
               meta: {
                 isEdit: true,
                 table: "stratigraphy",
-                title: "titles.editStratigraphy",
                 heading: "editStratigraphy.heading",
                 requiresAuth: true,
                 object: "stratigraphy"
@@ -1506,7 +1461,6 @@ const router = new Router({
                 import("./components/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: false,
-                title: "titles.addStratigraphy",
                 addNew: "add.newStratigraphy",
                 subForms: [
                   { path: "/stratigraphy/add", name: "add.stratigraphy" }

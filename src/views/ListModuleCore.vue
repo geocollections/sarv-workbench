@@ -174,17 +174,7 @@ export default {
     apiCall: {
       type: Function
     },
-    columns: {
-      type: Array,
-      default: function() {
-        return [];
-      }
-    },
     module: {
-      type: String,
-      default: null
-    },
-    title: {
       type: String,
       default: null
     },
@@ -200,16 +190,6 @@ export default {
       default: null
     },
 
-    showFilters: {
-      type: Boolean,
-      default: false
-    },
-
-    multiOrdering: {
-      type: Boolean,
-      default: false
-    },
-
     exportButtons: {
       type: Boolean,
       default: true
@@ -221,11 +201,6 @@ export default {
     },
 
     useImageView: {
-      type: Boolean,
-      default: false
-    },
-
-    combinedView: {
       type: Boolean,
       default: false
     },
@@ -265,12 +240,6 @@ export default {
     };
   },
 
-  metaInfo() {
-    return {
-      title: this.$t(this.title)
-    };
-  },
-
   computed: {
     ...mapState(["appSettings"]),
 
@@ -300,20 +269,6 @@ export default {
 
     isImageView() {
       return this.currentView === "image";
-    },
-
-    // Special use case for references (choosing reference to active library).
-    activeColumns() {
-      return this.columns.filter(column => {
-        if (column.type !== "ACTIVE_LIBRARY_HEADER") {
-          return column;
-        } else if (
-          column.type === "ACTIVE_LIBRARY_HEADER" &&
-          this.isLibraryActive
-        ) {
-          return column;
-        }
-      });
     }
   },
   watch: {

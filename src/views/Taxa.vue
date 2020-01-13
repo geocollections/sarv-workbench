@@ -18,16 +18,12 @@
 
     <list-module-core
       module="taxon"
-      title="titles.editTaxon"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchTaxa"
       search-history="taxonSearchHistory"
       view-type="taxonViewType"
-      :multi-ordering="true"
-      :export-buttons="true"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -47,15 +43,8 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "taxon.id", type: "number" },
-        { id: "taxon", title: "taxon.taxon", type: "text" },
-        { id: "author_year", title: "taxon.author_year", type: "text" },
-        { id: "taxon_epithet", title: "taxon.taxon_epithet", type: "text" },
-        { id: "parent__taxon", title: "taxon.parent__taxon", type: "text" }
-      ],
       filters: [
-        { id: "id", title: "taxon.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         { id: "taxon", title: "taxon.taxon", type: "text" },
         { id: "author_year", title: "taxon.author_year", type: "text" },
         { id: "parent__taxon", title: "taxon.parent__taxon", type: "text" },

@@ -18,16 +18,12 @@
 
     <list-module-core
       module="collection"
-      title="titles.editCollection"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchCollections"
       search-history="collectionSearchHistory"
       view-type="collectionViewType"
-      :multi-ordering="true"
-      :export-buttons="true"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -48,19 +44,13 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "number", title: "collection.number", type: "text" },
-        { id: "name", title: "collection.name", type: "text" },
-        { id: "name_long", title: "collection.name_long", type: "text" },
-        { id: "database__acronym", title: "collection.database", type: "text" }
-      ],
       filters: [
-        { id: "id", title: "collection.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         { id: "number", title: "collection.number", type: "number" },
-        { id: "name", title: "collection.name", type: "text" },
+        { id: "name", title: "common.name", type: "text" },
         { id: "agent", title: "collection.agent", type: "text" },
         { id: "locality", title: "collection.locality", type: "text" },
-        { id: "reference", title: "collection.reference", type: "text" }
+        { id: "reference", title: "common.reference", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }

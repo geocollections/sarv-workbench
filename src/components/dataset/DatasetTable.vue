@@ -105,10 +105,10 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "dataset.id", value: "id" },
-      { text: "dataset.name", value: "name" },
-      { text: "dataset.date", value: "date" },
-      { text: "dataset.owner", value: "owner" },
+      { text: "common.id", value: "id" },
+      { text: "common.name", value: "name" },
+      { text: "common.date", value: "date" },
+      { text: "common.owner", value: "owner" },
       { text: "dataset.database", value: "database__acronym" },
       { text: "", value: "link", sortable: false }
     ],

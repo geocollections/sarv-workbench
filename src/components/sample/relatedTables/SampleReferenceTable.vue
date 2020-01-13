@@ -108,7 +108,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('reference.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -187,8 +187,8 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "reference.reference", value: "reference" },
-      { text: "reference.remarks", value: "remarks" },
+      { text: "common.reference", value: "reference" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

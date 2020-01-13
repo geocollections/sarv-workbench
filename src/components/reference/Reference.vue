@@ -22,7 +22,7 @@
           @click="block.requiredFields = !block.requiredFields"
         >
           <span :class="validate('reference') ? 'green--text' : 'red--text'">{{
-            $t("specimen.requiredFields")
+            $t("common.requiredFields")
           }}</span>
           <v-icon
             right
@@ -59,7 +59,7 @@
               <input-wrapper
                 v-model="reference.year"
                 :color="bodyActiveColor"
-                :label="$t('reference.year')"
+                :label="$t('common.year')"
                 use-state
                 type="number"
               />
@@ -100,7 +100,7 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span>{{ $t("specimen.generalInfo") }}</span>
+          <span>{{ $t("common.generalInfo") }}</span>
           <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -122,7 +122,7 @@
                 :items="autocomplete.types"
                 :loading="autocomplete.loaders.types"
                 :item-text="commonLabel"
-                :label="$t('reference.type')"
+                :label="$t('common.type')"
               />
             </v-col>
 
@@ -417,7 +417,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("reference.description") }}</span>
+          <span>{{ $t("common.description") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -481,7 +481,7 @@
               <input-wrapper
                 v-model="reference.remarks"
                 :color="bodyActiveColor"
-                :label="$t('reference.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>
@@ -503,7 +503,7 @@
                 :items="autocomplete.licence"
                 :loading="autocomplete.loaders.licence"
                 :item-text="licenceLabel"
-                :label="$t('reference.licence')"
+                :label="$t('common.licence')"
               />
             </v-col>
 

@@ -16,7 +16,7 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <span>{{ $t("selectionSeries.generalInfo") }}</span>
+        <span>{{ $t("common.generalInfo") }}</span>
         <v-icon right>fas fa-project-diagram</v-icon>
         <v-spacer></v-spacer>
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">

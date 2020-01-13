@@ -19,7 +19,7 @@
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('locality') ? 'green--text' : 'red--text'">{{
-            $t("locality.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon
             right
@@ -83,7 +83,7 @@
                 :items="autocomplete.localityTypes"
                 :loading="autocomplete.loaders.localityTypes"
                 :item-text="commonLabel"
-                :label="$t('locality.type')"
+                :label="$t('common.type')"
               />
             </v-col>
 
@@ -404,7 +404,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("locality.description") }}</span>
+          <span>{{ $t("common.description") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>

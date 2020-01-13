@@ -22,7 +22,7 @@
           @click="block.requiredFields = !block.requiredFields"
         >
           <span :class="validate('doi') ? 'green--text' : 'red--text'">{{
-            $t("doi.requiredFields")
+            $t("common.requiredFields")
           }}</span>
           <v-icon right :class="validate('doi') ? 'green--text' : 'red--text'"
             >fas fa-project-diagram</v-icon
@@ -112,7 +112,7 @@
               <input-wrapper
                 v-model="doi.publication_year"
                 :color="bodyActiveColor"
-                :label="$t('doi.year')"
+                :label="$t('common.year')"
                 use-state
               />
             </v-col>
@@ -151,7 +151,7 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span>{{ $t("doi.generalInfo") }}</span>
+          <span>{{ $t("common.generalInfo") }}</span>
           <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -307,7 +307,7 @@
                 :items="autocomplete.licence"
                 :loading="autocomplete.loaders.licence"
                 :item-text="licenceLabel"
-                :label="$t('doi.licence')"
+                :label="$t('common.licence')"
               />
             </v-col>
           </v-row>
@@ -392,7 +392,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("doi.remarks") }}</span>
+          <span>{{ $t("common.remarks") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -414,7 +414,7 @@
               <textarea-wrapper
                 v-model="doi.remarks"
                 :color="bodyActiveColor"
-                :label="$t('doi.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>

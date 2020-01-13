@@ -87,12 +87,12 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "site.id", value: "id" },
-      { text: "site.name", value: "name" },
+      { text: "common.id", value: "id" },
+      { text: "common.name", value: "name" },
       { text: "site.number", value: "number" },
       { text: "site.project", value: "project" },
-      { text: "site.date_start", value: "date_start" },
-      { text: "site.date_end", value: "date_end" }
+      { text: "common.date_start", value: "date_start" },
+      { text: "common.date_end", value: "date_end" }
     ],
     names: []
   }),

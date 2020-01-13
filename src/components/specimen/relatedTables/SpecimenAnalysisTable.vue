@@ -154,7 +154,7 @@
                   <date-wrapper
                     v-model="item.date"
                     :color="bodyActiveColor"
-                    :label="$t('analysis.date')"
+                    :label="$t('common.date')"
                     v-on:date:clear="item.date = null"
                     v-on:date:update="updateUserInputtedDate('date', $event)"
                   />
@@ -199,7 +199,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_description.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
 
@@ -220,7 +220,7 @@
                   <checkbox-wrapper
                     v-model="item.is_private"
                     :color="bodyActiveColor"
-                    :label="$t('analysis.is_private')"
+                    :label="$t('common.is_private')"
                     @change="item.is_private = !item.is_private"
                   />
                 </v-col>
@@ -307,11 +307,11 @@ export default {
       { text: "analysis.analysis_method", value: "analysis_method" },
       { text: "analysis.analysis_method", value: "analysis_method" },
       { text: "analysis.mass", value: "mass" },
-      { text: "analysis.date", value: "date" },
-      { text: "analysis.date_end", value: "date_end" },
+      { text: "common.date", value: "date" },
+      { text: "common.date_end", value: "date_end" },
       { text: "analysis.date_free", value: "date_free" },
       { text: "analysis.agent", value: "agent" },
-      { text: "analysis.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       { text: "analysis.storage", value: "storage" },
       {
         text: "common.actions",

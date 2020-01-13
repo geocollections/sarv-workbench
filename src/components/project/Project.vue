@@ -53,7 +53,7 @@
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('project') ? 'green--text' : 'red--text'">{{
-            $t("project.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon
             right
@@ -101,7 +101,7 @@
                 :items="autocomplete.project_type"
                 :loading="autocomplete.loaders.project_type"
                 :item-text="nameLabel"
-                :label="$t('project.project_type')"
+                :label="$t('common.type')"
               />
             </v-col>
 
@@ -112,7 +112,7 @@
                 :items="autocomplete.agent"
                 :loading="autocomplete.loaders.owner"
                 item-text="agent"
-                :label="$t('project.owner')"
+                :label="$t('common.owner')"
                 is-link
                 route-object="agent"
                 is-searchable
@@ -142,7 +142,7 @@
               <date-wrapper
                 v-model="project.date_start"
                 :color="bodyActiveColor"
-                :label="$t('project.date_start')"
+                :label="$t('common.date_start')"
                 v-on:date:clear="project.date_start = null"
                 v-on:date:update="updateUserInputtedDate('date_start', $event)"
               />
@@ -152,7 +152,7 @@
               <date-wrapper
                 v-model="project.date_end"
                 :color="bodyActiveColor"
-                :label="$t('project.date_end')"
+                :label="$t('common.date_end')"
                 v-on:date:clear="project.date_end = null"
                 v-on:date:update="updateUserInputtedDate('date_end', $event)"
               />
@@ -162,7 +162,7 @@
               <input-wrapper
                 v-model="project.date_free"
                 :color="bodyActiveColor"
-                :label="$t('project.date_free')"
+                :label="$t('common.date_txt')"
               />
             </v-col>
           </v-row>
@@ -183,7 +183,7 @@
           @click="block.description = !block.description"
         >
           <span
-            >{{ $t("project.description") }} | {{ $t("project.remarks") }}</span
+            >{{ $t("common.description") }} | {{ $t("common.remarks") }}</span
           >
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
@@ -700,18 +700,18 @@ export default {
         nextRecord: {},
         searchParameters: this.setDefaultSearchParameters(),
         columns: [
-          { id: "id", title: "site.id", type: "number" },
-          { id: "name", title: "site.name", type: "text" },
+          { id: "id", title: "common.id", type: "number" },
+          { id: "name", title: "common.name", type: "text" },
           { id: "project", title: "site.project", type: "text" },
           {
             id: "date_start",
-            title: "site.date_start",
+            title: "common.date_start",
             type: "text",
             isDate: true
           },
           {
             id: "date_end",
-            title: "site.date_end",
+            title: "common.date_end",
             type: "text",
             isDate: true
           },

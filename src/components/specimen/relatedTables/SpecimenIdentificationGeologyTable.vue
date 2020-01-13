@@ -197,7 +197,7 @@
                   <input-wrapper
                     v-model="item.name"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification_geology.name')"
+                    :label="$t('common.name')"
                   />
                 </v-col>
 
@@ -205,7 +205,7 @@
                   <input-wrapper
                     v-model="item.name_en"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification_geology.name_en')"
+                    :label="$t('common.name_en')"
                   />
                 </v-col>
 
@@ -243,7 +243,7 @@
                   <date-wrapper
                     v-model="item.date_identified"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_identification_geology.date')"
+                    :label="$t('common.date')"
                     v-on:date:clear="item.date_identified = null"
                     v-on:date:update="
                       updateUserInputtedDate('date_identified', $event)
@@ -258,7 +258,7 @@
                     :items="autocomplete.type"
                     :loading="autocomplete.loaders.type"
                     :item-text="commonLabel"
-                    :label="$t('specimen_identification_geology.type')"
+                    :label="$t('common.type')"
                   />
                 </v-col>
 
@@ -352,15 +352,15 @@ export default {
   data: () => ({
     headers: [
       { text: "specimen_identification_geology.rock", value: "rock" },
-      { text: "specimen_identification_geology.name", value: "name" },
-      { text: "specimen_identification_geology.name_en", value: "name_en" },
+      { text: "common.name", value: "name" },
+      { text: "common.name_en", value: "name_en" },
       { text: "specimen_identification_geology.agent", value: "agent" },
-      { text: "specimen_identification_geology.reference", value: "reference" },
+      { text: "common.reference", value: "reference" },
       {
-        text: "specimen_identification_geology.date",
+        text: "common.date",
         value: "date_identified"
       },
-      { text: "specimen_identification_geology.type", value: "type" },
+      { text: "common.type", value: "type" },
       {
         text: "specimen_identification_geology.current",
         value: "current"

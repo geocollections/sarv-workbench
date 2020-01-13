@@ -213,7 +213,7 @@
                   <input-wrapper
                     v-model="item.year"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.year')"
+                    :label="$t('common.year')"
                   />
                 </v-col>
 
@@ -230,7 +230,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -314,12 +314,12 @@ export default {
     headers: [
       { text: "taxon.opinion", value: "opinion_type" },
       { text: "taxon.other_taxon", value: "other_taxon" },
-      { text: "taxon.reference", value: "reference" },
+      { text: "common.reference", value: "reference" },
       { text: "taxon.pages", value: "pages" },
       { text: "taxon.author", value: "author" },
-      { text: "taxon.year", value: "year" },
+      { text: "common.year", value: "year" },
       { text: "taxon.is_preferred_opinion", value: "is_preferred" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

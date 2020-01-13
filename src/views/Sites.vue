@@ -13,14 +13,12 @@
 
     <list-module-core
       module="site"
-      title="titles.editSite"
-      :show-filters="false"
       :searchParameters="searchParameters"
       :api-call="fetchSites"
       search-history="siteSearchHistory"
       view-type="siteViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -53,13 +51,13 @@ export default {
       response: {},
       sites: [],
       filters: [
-        { id: "id", title: "site.id", type: "number" },
-        { id: "name", title: "site.name", type: "text" },
+        { id: "id", title: "common.id", type: "number" },
+        { id: "name", title: "common.name", type: "text" },
         { id: "number", title: "site.number", type: "text" },
         { id: "project", title: "site.relatedProject", type: "text" },
         {
           id: "date_start",
-          title: "site.date_start",
+          title: "common.date_start",
           type: "text",
           isDate: true,
           calendarState: false,
@@ -67,7 +65,7 @@ export default {
         },
         {
           id: "date_end",
-          title: "site.date_end",
+          title: "common.date_end",
           type: "text",
           isDate: true,
           calendarState: false,

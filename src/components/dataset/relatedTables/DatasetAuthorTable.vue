@@ -108,7 +108,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('dataset_author.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -188,7 +188,7 @@ export default {
   data: () => ({
     headers: [
       { text: "dataset_author.agent", value: "agent" },
-      { text: "dataset_author.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

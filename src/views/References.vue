@@ -13,19 +13,15 @@
 
     <list-module-core
       module="reference"
-      title="titles.editReference"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchReferences"
       search-history="referenceSearchHistory"
       view-type="referenceViewType"
-      :multi-ordering="true"
-      :export-buttons="true"
       :use-list-view="true"
       :is-library-active="isLibraryActive"
       v-on:search-params-changed="searchParametersChanged"
       v-on:add-reference-to-active-library="addReferenceToActiveLibrary"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -48,42 +44,9 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "reference.id", type: "number" },
-        { id: "author", title: "reference.author", type: "text" },
-        { id: "year", title: "reference.year", type: "number" },
-        { id: "title", title: "reference.title", type: "text" },
-        { id: "journal", title: "reference.journal", type: "text" },
-        { id: "volume", title: "reference.volume", type: "text" },
-        { id: "pages", title: "reference.pages_short", type: "text" },
-        {
-          id: "is_estonian_reference",
-          title: "reference.is_estonian_reference_short",
-          type: "text",
-          isEstonianReference: true
-        },
-        {
-          id: "is_estonian_author",
-          title: "reference.is_estonian_author_short",
-          type: "text",
-          isEstonianAuthor: true
-        },
-        // {id: "is_private", title: "reference.is_private", type: "text", isPrivate: true},
-        { id: "id", title: "", type: "text", orderBy: false },
-        { id: "doi", title: "reference.doi", type: "text" },
-        { id: "attachment__filename", title: "reference.pdf", type: "text" },
-        { id: "url", title: "reference.url", type: "text" },
-        {
-          id: "",
-          title: "reference.library_short",
-          type: "ACTIVE_LIBRARY_HEADER",
-          orderBy: false,
-          showHeader: true
-        }
-      ],
       filters: [
         { id: "author", title: "reference.author", type: "text" },
-        { id: "year", title: "reference.year", type: "number" },
+        { id: "year", title: "common.year", type: "number" },
         { id: "title", title: "reference.title", type: "text" },
         { id: "bookJournal", title: "reference.bookJournal", type: "text" },
         {
@@ -92,7 +55,7 @@ export default {
           type: "text"
         },
         { id: "keywords", title: "reference.keywordsSearch", type: "text" },
-        { id: "id", title: "reference.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         {
           id: "libraryAuthorIdTitle",
           title: "reference.libraryAuthorIdTitle",

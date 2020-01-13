@@ -165,7 +165,7 @@
                   <input-wrapper
                     v-model="item.description"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_description.description')"
+                    :label="$t('common.description')"
                     use-state
                   />
                 </v-col>
@@ -189,7 +189,7 @@
                   <date-wrapper
                     v-model="item.date"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_description.date')"
+                    :label="$t('common.date')"
                     v-on:date:clear="item.date = null"
                     v-on:date:update="updateUserInputtedDate('date', $event)"
                   />
@@ -199,7 +199,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_description.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -286,10 +286,10 @@ export default {
       { text: "specimen_description.height", value: "height" },
       { text: "specimen_description.unit", value: "unit" },
       { text: "specimen_description.mass", value: "mass" },
-      { text: "specimen_description.description", value: "description" },
+      { text: "common.description", value: "description" },
       { text: "specimen_description.agent", value: "agent" },
-      { text: "specimen_description.date", value: "date" },
-      { text: "specimen_description.remarks", value: "remarks" },
+      { text: "common.date", value: "date" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

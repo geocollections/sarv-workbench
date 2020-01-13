@@ -19,7 +19,7 @@
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('keyword') ? 'green--text' : 'red--text'">{{
-            $t("keyword.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon
             right
@@ -93,7 +93,7 @@
               <input-wrapper
                 v-model="keyword.remarks"
                 :color="bodyActiveColor"
-                :label="$t('keyword.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>

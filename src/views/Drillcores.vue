@@ -13,13 +13,12 @@
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="drillcore"
-      title="titles.editDrillcore"
       :searchParameters="searchParameters"
       :api-call="fetchDrillcores"
       search-history="drillcoreSearchHistory"
       view-type="drillcoreViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 

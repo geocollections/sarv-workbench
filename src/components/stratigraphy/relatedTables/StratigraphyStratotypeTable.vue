@@ -219,7 +219,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_stratotype.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -303,8 +303,8 @@ export default {
       },
       { text: "stratigraphy_stratotype.depth_base", value: "depth_base" },
       { text: "stratigraphy_stratotype.depth_top", value: "depth_top" },
-      { text: "stratigraphy_stratotype.reference", value: "reference" },
-      { text: "stratigraphy_stratotype.remarks", value: "remarks" },
+      { text: "common.reference", value: "reference" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

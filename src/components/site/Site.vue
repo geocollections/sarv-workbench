@@ -33,7 +33,7 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span>{{ $t("site.generalInfo") }}</span>
+          <span>{{ $t("common.generalInfo") }}</span>
           <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer />
@@ -52,7 +52,7 @@
               <input-wrapper
                 v-model="site.name"
                 :color="bodyActiveColor"
-                :label="$t('site.name')"
+                :label="$t('common.name')"
               />
             </v-col>
 
@@ -265,7 +265,7 @@
               <input-wrapper
                 v-model="site.depth"
                 :color="bodyActiveColor"
-                :label="$t('site.depth')"
+                :label="$t('common.depth')"
                 type="number"
               />
             </v-col>
@@ -312,7 +312,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("site.description") }} | {{ $t("site.remarks") }}</span>
+          <span>{{ $t("common.description") }} | {{ $t("common.remarks") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -334,7 +334,7 @@
               <textarea-wrapper
                 v-model="site.description"
                 :color="bodyActiveColor"
-                :label="$t('site.description')"
+                :label="$t('common.description')"
               />
             </v-col>
           </v-row>
@@ -344,7 +344,7 @@
               <textarea-wrapper
                 v-model="site.remarks"
                 :color="bodyActiveColor"
-                :label="$t('site.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>

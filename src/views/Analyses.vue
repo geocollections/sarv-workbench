@@ -14,14 +14,12 @@
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="analysis"
-      title="titles.editDoi"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchAnalyses_"
       search-history="analysisSearchHistory"
       view-type="analysisViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -43,31 +41,8 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "analysis.id", type: "number" },
-        { id: "sample__id", title: "analysis.sample__id", type: "text" },
-        {
-          id: "sample__number",
-          title: "analysis.sample__number",
-          type: "text"
-        },
-        {
-          id: "sample__locality__locality",
-          title: "analysis.sample__locality",
-          type: "text"
-        },
-        { id: "sample__depth", title: "analysis.sample__depth", type: "text" },
-        {
-          id: "analysis_method__analysis_method",
-          title: "analysis.analysis_method",
-          type: "text"
-        },
-        { id: "date", title: "analysis.date_", type: "date" },
-        { id: "lab_txt", title: "analysis.labor_txt", type: "text" },
-        { id: "agent__agent", title: "analysis.agent", type: "text" }
-      ],
       filters: [
-        { id: "id", title: "analysis.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         {
           id: "analysis_method",
           title: "analysis.analysis_method",

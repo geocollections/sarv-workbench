@@ -132,7 +132,7 @@
               class="card-title--clickable"
               @click="block.requiredFields = !block.requiredFields"
             >
-              <span>{{ $t("attachment.requiredFields") }}</span>
+              <span>{{ $t("common.requiredFields") }}</span>
               <v-icon right>fas fa-project-diagram</v-icon>
             </div>
             <v-spacer></v-spacer>
@@ -435,7 +435,7 @@
               class="card-title--clickable"
               @click="block.description = !block.description"
             >
-              <span>{{ $t("attachment.description") }}</span>
+              <span>{{ $t("common.description") }}</span>
               <v-icon right>fas fa-image</v-icon>
             </div>
             <v-spacer></v-spacer>
@@ -540,7 +540,7 @@
                     :items="autocomplete.licence"
                     :loading="autocomplete.loaders.licence"
                     :item-text="licenceLabel"
-                    :label="$t('attachment.licence')"
+                    :label="$t('common.licence')"
                   />
                 </v-col>
 
@@ -643,7 +643,7 @@
               class="card-title--clickable"
               @click="block.requiredFields = !block.requiredFields"
             >
-              <span>{{ $t("attachment.requiredFields") }}</span>
+              <span>{{ $t("common.requiredFields") }}</span>
               <v-icon right>fas fa-project-diagram</v-icon>
             </div>
             <v-spacer></v-spacer>
@@ -858,7 +858,7 @@
                     :items="autocomplete.licence"
                     :loading="autocomplete.loaders.licence"
                     :item-text="licenceLabel"
-                    :label="$t('attachment.licence')"
+                    :label="$t('common.licence')"
                   />
                 </v-col>
 
@@ -961,7 +961,7 @@
               class="card-title--clickable"
               @click="block.requiredFields = !block.requiredFields"
             >
-              <span>{{ $t("attachment.requiredFields") }}</span>
+              <span>{{ $t("common.requiredFields") }}</span>
               <v-icon right>fas fa-project-diagram</v-icon>
             </div>
             <v-spacer></v-spacer>
@@ -1032,7 +1032,7 @@
                   <textarea-wrapper
                     v-model="attachment.description"
                     :color="bodyActiveColor"
-                    :label="$t('attachment.description')"
+                    :label="$t('common.description')"
                     use-state
                   />
                 </v-col>
@@ -1041,7 +1041,7 @@
                   <textarea-wrapper
                     v-model="attachment.description_en"
                     :color="bodyActiveColor"
-                    :label="$t('attachment.descriptionEn')"
+                    :label="$t('common.description_en')"
                     use-state
                   />
                 </v-col>
@@ -1108,7 +1108,7 @@
                     :items="autocomplete.type"
                     :loading="autocomplete.loaders.type"
                     :item-text="commonLabel"
-                    :label="$t('attachment.type')"
+                    :label="$t('common.type')"
                   />
                 </v-col>
               </v-row>
@@ -1119,7 +1119,7 @@
                   <textarea-wrapper
                     v-model="attachment.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('attachment.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -1250,7 +1250,7 @@
               class="card-title--clickable"
               @click="block.description = !block.description"
             >
-              <span>{{ $t("attachment.description") }}</span>
+              <span>{{ $t("common.description") }}</span>
               <v-icon right>fas fa-image</v-icon>
             </div>
             <v-spacer></v-spacer>
@@ -1316,7 +1316,7 @@
                     :items="autocomplete.licence"
                     :loading="autocomplete.loaders.licence"
                     :item-text="licenceLabel"
-                    :label="$t('attachment.licence')"
+                    :label="$t('common.licence')"
                   />
                 </v-col>
 
@@ -1499,7 +1499,7 @@
                       <thead class="thead-light">
                         <tr>
                           <th>ID</th>
-                          <th>{{ $t("collection.name") }}</th>
+                          <th>{{ $t("common.name") }}</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -1686,7 +1686,7 @@
                       <thead class="thead-light">
                         <tr>
                           <th>ID</th>
-                          <th>{{ $t("sample_series.name") }}</th>
+                          <th>{{ $t("common.name") }}</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -1800,7 +1800,7 @@
                       <thead class="thead-light">
                         <tr>
                           <th>ID</th>
-                          <th>{{ $t("dataset.name") }}</th>
+                          <th>{{ $t("common.name") }}</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -2172,7 +2172,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.reference") }}
+                    {{ $t("common.reference") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2180,7 +2180,7 @@
                       <thead class="thead-light">
                         <tr>
                           <th>ID</th>
-                          <th>{{ $t("reference.reference") }}</th>
+                          <th>{{ $t("common.reference") }}</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -2289,7 +2289,7 @@
                       <thead class="thead-light">
                         <tr>
                           <th>ID</th>
-                          <th>{{ $t("project.name") }}</th>
+                          <th>{{ $t("common.name") }}</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -2344,7 +2344,7 @@
                       <thead class="thead-light">
                         <tr>
                           <th>ID</th>
-                          <th>{{ $t("site.name") }}</th>
+                          <th>{{ $t("common.name") }}</th>
                           <th></th>
                         </tr>
                       </thead>
@@ -2403,7 +2403,7 @@
               class="card-title--clickable"
               @click="block.requiredFields = !block.requiredFields"
             >
-              <span>{{ $t("attachment.requiredFields") }}</span>
+              <span>{{ $t("common.requiredFields") }}</span>
               <v-icon right>fas fa-project-diagram</v-icon>
             </div>
             <v-spacer></v-spacer>
@@ -2489,7 +2489,7 @@
                     :items="autocomplete.licence"
                     :loading="autocomplete.loaders.licence"
                     :item-text="licenceLabel"
-                    :label="$t('attachment.licence')"
+                    :label="$t('common.licence')"
                   />
                 </v-col>
 
@@ -2651,7 +2651,7 @@
     <template v-slot:local-storage>
       <div class="d-flex mt-3">
         <v-btn @click="clearLocalStorage" class="text-none" color="yellow">
-          {{ $t("add.buttons.clearLocalStorage") }}
+          {{ $t("buttons.clearLocalStorage") }}
         </v-btn>
       </div>
     </template>

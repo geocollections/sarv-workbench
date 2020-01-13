@@ -13,13 +13,12 @@
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="project"
-      title="titles.editProject"
       :searchParameters="searchParameters"
       :api-call="fetchProjects"
       search-history="projectSearchHistory"
       view-type="projectViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -41,8 +40,8 @@ export default {
     return {
       response: {},
       filters: [
-        { id: "name", title: "project.name", type: "text" },
-        { id: "id", title: "project.id", type: "number" }
+        { id: "name", title: "common.name", type: "text" },
+        { id: "id", title: "common.id", type: "number" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }

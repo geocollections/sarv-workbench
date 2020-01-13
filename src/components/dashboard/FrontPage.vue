@@ -220,12 +220,6 @@ export default {
   name: "front-page",
   mixins: [formSectionsMixin],
 
-  metaInfo() {
-    return {
-      title: this.$t("titles.dashboard")
-    };
-  },
-
   data: () => ({
     block: { map: true, help: true, files: true },
     recentFilesPaginateBy: 12,

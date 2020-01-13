@@ -295,11 +295,6 @@ export default {
       }
     };
   },
-  metaInfo() {
-    return {
-      title: this.$t("titles.settings")
-    };
-  },
 
   computed: {
     ...mapState(["permissions", "appSettings", "showRecentUrls"])

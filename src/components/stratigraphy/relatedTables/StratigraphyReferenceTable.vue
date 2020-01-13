@@ -180,7 +180,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('stratigraphy_reference.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -257,7 +257,7 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "stratigraphy_reference.reference", value: "reference" },
+      { text: "common.reference", value: "reference" },
       { text: "stratigraphy_reference.content", value: "content" },
       { text: "stratigraphy_reference.content_en", value: "content_en" },
       { text: "stratigraphy_reference.age_base", value: "age_base" },
@@ -272,7 +272,7 @@ export default {
       },
       { text: "stratigraphy_reference.pages", value: "pages" },
       { text: "stratigraphy_reference.figures", value: "figures" },
-      { text: "stratigraphy_reference.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

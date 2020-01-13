@@ -320,7 +320,7 @@
                     :items="autocomplete.stratigraphy"
                     :loading="autocomplete.loaders.stratigraphy"
                     :item-text="stratigraphyLabel"
-                    :label="$t('taxon.stratigraphy')"
+                    :label="$t('common.stratigraphy')"
                     is-link
                     route-object="stratigraphy"
                     is-searchable
@@ -332,7 +332,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -416,10 +416,10 @@ export default {
       { text: "taxon.repository", value: "repository" },
       { text: "taxon.specimen_sarv", value: "specimen" },
       { text: "taxon.specimen_number", value: "specimen_number" },
-      { text: "taxon.reference", value: "reference" },
+      { text: "common.reference", value: "reference" },
       { text: "taxon.locality", value: "locality" },
-      { text: "taxon.stratigraphy", value: "stratigraphy" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "common.stratigraphy", value: "stratigraphy" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

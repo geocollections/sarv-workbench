@@ -250,7 +250,7 @@
                   <checkbox-wrapper
                     v-model="item.is_private"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.is_private')"
+                    :label="$t('common.is_private')"
                     @change="item.is_private = !item.is_private"
                   />
                 </v-col>
@@ -259,7 +259,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('preparation.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -349,8 +349,8 @@ export default {
       { text: "taxon.det_date", value: "date_identified" },
       { text: "taxon.extra", value: "extra" },
       { text: "taxon.preparation", value: "preparation" },
-      { text: "taxon.is_private", value: "is_private" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "common.is_private", value: "is_private" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

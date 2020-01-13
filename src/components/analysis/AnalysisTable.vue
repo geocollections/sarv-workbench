@@ -104,7 +104,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "analysis.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "analysis.sample__id", value: "sample" },
       { text: "analysis.sample__number", value: "sample__number" },
       {

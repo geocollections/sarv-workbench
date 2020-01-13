@@ -237,7 +237,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('drillcore_box.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -324,7 +324,7 @@ export default {
       { text: "drillcore_box.depth_other", value: "depth_other" },
       { text: "drillcore_box.number_meters", value: "number_meters" },
       { text: "drillcore_box.diameter", value: "diameter" },
-      { text: "drillcore_box.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

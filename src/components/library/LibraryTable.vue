@@ -98,7 +98,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "library.id", value: "library" },
+      { text: "common.id", value: "library" },
       { text: "library.title", value: "library__title" },
       { text: "library.author_txt", value: "agent__agent" },
       { text: "library.private", value: "library__is_private" },

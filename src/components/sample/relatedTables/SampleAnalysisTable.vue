@@ -149,7 +149,7 @@
                   <date-wrapper
                     v-model="item.date"
                     :color="bodyActiveColor"
-                    :label="$t('analysis.date')"
+                    :label="$t('common.date')"
                     v-on:date:clear="item.date = null"
                     v-on:date:update="updateUserInputtedDate('date', $event)"
                   />
@@ -194,7 +194,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -279,11 +279,11 @@ export default {
       { text: "analysis.method", value: "method" },
       { text: "analysis.method_specification", value: "method_details" },
       { text: "analysis.mass", value: "mass" },
-      { text: "analysis.date", value: "date" },
-      { text: "analysis.date_end", value: "date_end" },
+      { text: "common.date", value: "date" },
+      { text: "common.date_end", value: "date_end" },
       { text: "analysis.date_free", value: "date_free" },
       { text: "analysis.agent", value: "agent" },
-      { text: "analysis.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

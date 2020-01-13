@@ -152,10 +152,10 @@ export default {
     expanded: [],
     headers: [
       { text: "sample.numberSlashId", value: "number" },
-      { text: "sample.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "sample.locality", value: "locality" },
-      { text: "sample.depth", value: "depth" },
-      { text: "sample.stratigraphy", value: "stratigraphy" },
+      { text: "common.depth", value: "depth" },
+      { text: "common.stratigraphy", value: "stratigraphy" },
       { text: "sample.agent_collected", value: "agent_collected__agent" },
       { text: "sample.storage", value: "storage__location" },
       { text: "", value: "link", sortable: false },

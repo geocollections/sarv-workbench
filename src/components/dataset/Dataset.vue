@@ -19,7 +19,7 @@
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('dataset') ? 'green--text' : 'red--text'">{{
-            $t("preparation.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon
             right

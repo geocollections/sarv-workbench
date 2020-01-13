@@ -100,7 +100,7 @@
                   <input-wrapper
                     v-model="item.name"
                     :color="bodyActiveColor"
-                    :label="$t('doi.name')"
+                    :label="$t('common.name')"
                     use-state
                   />
                 </v-col>
@@ -224,7 +224,7 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "doi.name", value: "name" },
+      { text: "common.name", value: "name" },
       { text: "doi.affiliation", value: "affiliation" },
       { text: "doi.agent_type", value: "agent_type" },
       { text: "doi.orcid", value: "orcid" },

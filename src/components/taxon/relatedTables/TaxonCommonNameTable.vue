@@ -91,7 +91,7 @@
                   <input-wrapper
                     v-model="item.name"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.name')"
+                    :label="$t('common.name')"
                     use-state
                   />
                 </v-col>
@@ -120,7 +120,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('taxon.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -202,10 +202,10 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "taxon.name", value: "name" },
+      { text: "common.name", value: "name" },
       { text: "taxon.language", value: "language" },
       { text: "taxon.is_preferred", value: "is_preferred" },
-      { text: "taxon.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

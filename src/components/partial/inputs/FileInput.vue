@@ -11,7 +11,7 @@
           class="d-flex justify-content-center align-items-center file-upload mb-0"
         >
           <span :class="{ 'd-none': isDragging }">
-            {{ $t("add.inputs.fileInput") }}
+            {{ $t("add.file") }}
           </span>
         </label>
 
@@ -43,7 +43,7 @@
             >fas fa-camera-retro</v-icon
           >
           <span v-show="$vuetify.breakpoint.lgAndUp">{{
-            $t("add.inputs.photoInput")
+            $t("add.photo")
           }}</span>
         </v-btn>
 
@@ -71,7 +71,7 @@
             >fas fa-video</v-icon
           >
           <span v-show="$vuetify.breakpoint.lgAndUp">{{
-            $t("add.inputs.videoInput")
+            $t("add.video")
           }}</span>
         </v-btn>
 
@@ -99,7 +99,7 @@
             >fas fa-microphone</v-icon
           >
           <span v-show="$vuetify.breakpoint.lgAndUp">{{
-            $t("add.inputs.audioInput")
+            $t("add.audio")
           }}</span>
         </v-btn>
 

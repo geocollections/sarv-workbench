@@ -19,7 +19,7 @@
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('collection') ? 'green--text' : 'red--text'">{{
-            $t("collection.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon
             right
@@ -65,7 +65,7 @@
                 :items="autocomplete.type"
                 :loading="autocomplete.loaders.type"
                 :item-text="commonLabel"
-                :label="$t('collection.type')"
+                :label="$t('common.type')"
               />
             </v-col>
           </v-row>
@@ -232,7 +232,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("collection.description") }}</span>
+          <span>{{ $t("common.description") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>

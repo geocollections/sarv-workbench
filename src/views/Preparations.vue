@@ -16,13 +16,12 @@
     <!-- SEARCH FIELDS END -->
     <list-module-core
       module="preparation"
-      title="titles.editPreparation"
       :searchParameters="searchParameters"
       :api-call="fetchPreparations"
       search-history="preparationSearchHistory"
       view-type="preparationViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 

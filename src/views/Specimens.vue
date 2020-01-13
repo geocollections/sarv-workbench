@@ -18,20 +18,17 @@
 
     <list-module-core
       module="specimen"
-      title="titles.editSpecimen"
       :searchParameters="searchParameters"
       :api-call="fetchSpecimens"
       search-history="specimenSearchHistory"
       view-type="specimenViewType"
-      :multi-ordering="true"
       :use-list-view="true"
       :use-image-view="true"
-      :export-buttons="true"
       :is-selection-series-active="isSelectionSeriesActive"
       :active-selection-series="activeSelectionSeries"
       v-on:search-params-changed="searchParametersChanged"
       v-on:search:specimenImages="searchSpecimenImages"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -58,7 +55,7 @@ export default {
         { id: "fossil", title: "specimen.fossilSearch", type: "text" },
         { id: "mineralRock", title: "specimen.mineralRock", type: "text" },
         { id: "locality", title: "specimen.locality", type: "text" },
-        { id: "stratigraphy", title: "specimen.stratigraphy", type: "text" },
+        { id: "stratigraphy", title: "common.stratigraphy", type: "text" },
         {
           id: "agent_collected",
           title: "specimen.agent_collected",

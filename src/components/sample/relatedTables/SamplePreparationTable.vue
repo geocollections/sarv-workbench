@@ -137,7 +137,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('preparation.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -219,7 +219,7 @@ export default {
       { text: "preparation.preparation_number", value: "preparation_number" },
       { text: "preparation.fossil_group", value: "taxon" },
       { text: "preparation.storage", value: "storage" },
-      { text: "preparation.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

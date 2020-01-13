@@ -18,18 +18,15 @@
 
     <list-module-core
       module="sample"
-      title="titles.editSample"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchSamples"
       :use-list-view="true"
-      :export-buttons="true"
       :is-selection-series-active="isSelectionSeriesActive"
       :active-selection-series="activeSelectionSeries"
       search-history="sampleSearchHistory"
       view-type="sampleViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -50,21 +47,12 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "number", title: "sample.numberSlashId", type: "text" },
-        { id: "id", title: "sample.id", type: "number" },
-        { id: "locality", title: "sample.locality", type: "text" },
-        { id: "depth", title: "sample.depth", type: "text" },
-        { id: "stratigraphy", title: "sample.stratigraphy", type: "text" },
-        { id: "agent", title: "sample.agent_collected", type: "text" },
-        { id: "storage", title: "sample.storage", type: "text" }
-      ],
       filters: [
         { id: "number", title: "sample.number", type: "text" },
-        { id: "id", title: "sample.id", type: "number" },
+        { id: "id", title: "common.id", type: "number" },
         { id: "locality", title: "sample.locality", type: "text" },
-        { id: "depth", title: "sample.depth", type: "text" },
-        { id: "stratigraphy", title: "sample.stratigraphy", type: "text" },
+        { id: "depth", title: "common.depth", type: "text" },
+        { id: "stratigraphy", title: "common.stratigraphy", type: "text" },
         { id: "agent", title: "sample.agent_collected", type: "text" },
         { id: "storage", title: "sample.storage", type: "text" },
         { id: "site", title: "sample.site", type: "text" },

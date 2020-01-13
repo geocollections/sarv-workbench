@@ -68,7 +68,7 @@
                   <input-wrapper
                     v-model="item.date"
                     :color="bodyActiveColor"
-                    :label="$t('doi.date')"
+                    :label="$t('common.date')"
                   />
                 </v-col>
 
@@ -88,7 +88,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('doi.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -168,9 +168,9 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "doi.date", value: "date" },
+      { text: "common.date", value: "date" },
       { text: "doi.dateType", value: "date_type" },
-      { text: "doi.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

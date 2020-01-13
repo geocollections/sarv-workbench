@@ -18,16 +18,13 @@
 
     <list-module-core
       module="selectionSeries"
-      title="titles.editSelectionSeries"
-      :columns="columns"
       :searchParameters="searchParameters"
       :api-call="fetchSelectionSeries"
       search-history="selectionSeriesSearchHistory"
       view-type="selectionSeriesViewType"
       :multi-ordering="true"
-      :export-buttons="true"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -47,16 +44,10 @@ export default {
   data() {
     return {
       response: {},
-      columns: [
-        { id: "id", title: "selectionSeries.id", type: "number" },
-        { id: "name", title: "selectionSeries.name", type: "text" },
-        { id: "remarks", title: "selectionSeries.remarks", type: "text" },
-        { id: "user_added", title: "selectionSeries.user_added", type: "text" }
-      ],
       filters: [
-        { id: "id", title: "selectionSeries.id", type: "number" },
-        { id: "name", title: "selectionSeries.name", type: "text" },
-        { id: "remarks", title: "selectionSeries.remarks", type: "text" },
+        { id: "id", title: "common.id", type: "number" },
+        { id: "name", title: "common.name", type: "text" },
+        { id: "remarks", title: "common.remarks", type: "text" },
         { id: "user_added", title: "selectionSeries.user_added", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),

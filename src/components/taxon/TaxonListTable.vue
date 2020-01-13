@@ -107,7 +107,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "taxon.id", value: "taxon" },
+      { text: "common.id", value: "taxon" },
       { text: "taxon.taxon", value: "taxon__taxon" },
       { text: "taxon.author_year", value: "taxon__author_year" },
       { text: "taxon.taxon_epithet", value: "taxon__taxon_epithet" },

@@ -89,7 +89,7 @@
                     :items="autocomplete.type"
                     :loading="autocomplete.loaders.type"
                     :item-text="commonLabel"
-                    :label="$t('specimen_history.type')"
+                    :label="$t('common.type')"
                     use-state
                   />
                 </v-col>
@@ -114,7 +114,7 @@
                   <date-wrapper
                     v-model="item.date"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_history.date')"
+                    :label="$t('common.date')"
                     v-on:date:clear="item.date = null"
                     v-on:date:update="updateUserInputtedDate('date', $event)"
                   />
@@ -124,7 +124,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_history.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -206,11 +206,11 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "specimen_history.type", value: "type" },
+      { text: "common.type", value: "type" },
       { text: "specimen_history.value_old", value: "value_old" },
       { text: "specimen_history.value_new", value: "value_new" },
-      { text: "specimen_history.date", value: "date" },
-      { text: "specimen_history.remarks", value: "remarks" },
+      { text: "common.date", value: "date" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

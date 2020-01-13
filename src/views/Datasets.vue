@@ -12,13 +12,12 @@
 
     <list-module-core
       module="dataset"
-      title="titles.editDataset"
       :searchParameters="searchParameters"
       :api-call="fetchDatasets"
       search-history="datasetSearchHistory"
       view-type="datasetViewType"
       v-on:search-params-changed="searchParametersChanged"
-    ></list-module-core>
+    />
   </div>
 </template>
 
@@ -41,10 +40,10 @@ export default {
     return {
       response: {},
       filters: [
-        { id: "name", title: "dataset.name", type: "text" },
-        { id: "owner", title: "dataset.owner", type: "text" },
-        { id: "date", title: "dataset.date", type: "text" },
-        { id: "remarks", title: "dataset.remarks", type: "text" }
+        { id: "name", title: "common.name", type: "text" },
+        { id: "owner", title: "common.owner", type: "text" },
+        { id: "date", title: "common.date", type: "text" },
+        { id: "remarks", title: "common.remarks", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }

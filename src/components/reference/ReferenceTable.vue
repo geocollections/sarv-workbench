@@ -156,9 +156,9 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
-      { text: "reference.id", value: "id" },
+      { text: "common.id", value: "id" },
       { text: "reference.author", value: "author" },
-      { text: "reference.year", value: "year" },
+      { text: "common.year", value: "year" },
       { text: "reference.title", value: "title" },
       { text: "reference.journal", value: "journal" },
       { text: "reference.volume", value: "volume" },

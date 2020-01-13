@@ -138,7 +138,7 @@
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
-                    :label="$t('reference.remarks')"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -217,7 +217,7 @@ export default {
       { text: "locality.locality", value: "locality" },
       { text: "reference.pages", value: "pages" },
       { text: "reference.figures", value: "figures" },
-      { text: "reference.remarks", value: "remarks" },
+      { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
         value: "action",

@@ -19,7 +19,7 @@
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
           <span :class="validate('taxon') ? 'green--text' : 'red--text'">{{
-            $t("taxon.generalInfo")
+            $t("common.generalInfo")
           }}</span>
           <v-icon right :class="validate('taxon') ? 'green--text' : 'red--text'"
             >fas fa-project-diagram</v-icon
@@ -376,7 +376,7 @@
               <input-wrapper
                 v-model="taxon.owner"
                 :color="bodyActiveColor"
-                :label="$t('taxon.owner')"
+                :label="$t('common.owner')"
               />
             </v-col>
 
@@ -422,7 +422,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("taxon.description") }}</span>
+          <span>{{ $t("common.description") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>

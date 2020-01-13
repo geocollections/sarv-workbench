@@ -18,7 +18,7 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span>{{ $t("analysis.generalInfo") }}</span>
+          <span>{{ $t("common.generalInfo") }}</span>
           <v-icon right>fas fa-project-diagram</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -157,7 +157,7 @@
               <date-wrapper
                 v-model="analysis.date"
                 :color="bodyActiveColor"
-                :label="$t('analysis.date')"
+                :label="$t('common.date')"
                 v-on:date:clear="analysis.date = null"
                 v-on:date:update="updateUserInputtedDate('date', $event)"
               />
@@ -339,7 +339,7 @@
                 :items="autocomplete.agent"
                 :loading="autocomplete.loaders.owner"
                 item-text="agent"
-                :label="$t('analysis.owner')"
+                :label="$t('common.owner')"
                 is-link
                 route-object="agent"
                 is-searchable
@@ -387,7 +387,7 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("analysis.remarks") }}</span>
+          <span>{{ $t("common.remarks") }}</span>
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -409,7 +409,7 @@
               <textarea-wrapper
                 v-model="analysis.remarks"
                 :color="bodyActiveColor"
-                :label="$t('analysis.remarks')"
+                :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>
