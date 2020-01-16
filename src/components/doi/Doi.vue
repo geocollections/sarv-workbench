@@ -586,7 +586,7 @@
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
                 v-if="doi.datacite_created"
-                :value="doi.datacite_created"
+                :value="doi.datacite_created | moment('YYYY-MM-DD hh:mm:ss')"
                 :color="bodyActiveColor"
                 :label="$t('doi.dataciteCreated')"
                 :readonly="true"
@@ -603,7 +603,7 @@
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
                 v-if="doi.datacite_updated"
-                :value="doi.datacite_updated"
+                :value="doi.datacite_updated | moment('YYYY-MM-DD hh:mm:ss')"
                 :color="bodyActiveColor"
                 :label="$t('doi.dataciteUpdated')"
                 :readonly="true"
@@ -1416,7 +1416,7 @@ export default {
     /* DOI METADATA START */
 
     setCurrentTimeToDataCiteDateFields() {
-      let currentDate = this.getCurrentFormattedDate();
+      let currentDate = new Date().toISOString();
       if (!this.doi.datacite_created) this.doi.datacite_created = currentDate;
       this.doi.datacite_updated = currentDate;
     },
