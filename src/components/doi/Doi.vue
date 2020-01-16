@@ -625,17 +625,22 @@
       </transition>
     </v-card>
 
-    <!-- IS_PRIVATE -->
-    <v-row no-gutters class="mt-2">
-      <v-col>
-        <checkbox-wrapper
-          v-model="doi.is_private"
-          :color="bodyActiveColor"
-          :label="$t('common.is_private')"
-          @change="doi.is_private = !doi.is_private"
-        />
-      </v-col>
-    </v-row>
+    <!-- IS_PRIVATE and IS_LOCKED -->
+    <div class="d-flex flex-wrap mt-2">
+      <checkbox-wrapper
+        class="mr-1"
+        v-model="doi.is_private"
+        :color="bodyActiveColor"
+        :label="$t('common.is_private')"
+        @change="doi.is_private = !doi.is_private"
+      />
+      <checkbox-wrapper
+        v-model="doi.is_locked"
+        :color="bodyActiveColor"
+        :label="$t('common.is_locked')"
+        @change="doi.is_locked = !doi.is_locked"
+      />
+    </div>
 
     <!-- DOI METADATA REGISTER and UPDATE BUTTONS -->
     <div class="row mt-3">
@@ -881,6 +886,7 @@ export default {
           "remarks",
           "owner",
           "is_private",
+          "is_locked",
           "datacite_created",
           "datacite_updated"
         ],

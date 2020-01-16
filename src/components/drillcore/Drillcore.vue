@@ -327,6 +327,7 @@
     <!-- DIRECTION_LR and IS_PRIVATE -->
     <div class="d-flex flex-wrap mt-2">
       <checkbox-wrapper
+        class="mr-1"
         v-model="drillcore.direction_lr"
         :color="bodyActiveColor"
         :label="$t('drillcore.direction_lr')"

@@ -14,6 +14,7 @@
     "licence": "Litsents",
     "copyright_agent": "Autoriõigused",
     "is_private": "Privaatne",
+    "is_locked": "Lukus",
     "description": "Kirjeldus",
     "description_en": "Kirjeldus (EN)",
     "drillcore": "Puursüdamik",

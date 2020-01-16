@@ -14,6 +14,7 @@
     "licence": "Licence",
     "copyright_agent": "Copyright agent",
     "is_private": "Private",
+    "is_locked": "Locked",
     "description": "Description",
     "description_en": "Description (EN)",
     "drillcore": "Drillcore",
