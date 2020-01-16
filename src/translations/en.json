@@ -322,6 +322,10 @@
       "imagesetNumber": "This field can't be empty",
       "imagesetNumberExists": "This imageset already exists",
       "url": "Please use correct url format"
+    },
+    "inputs": {
+      "autocomplete": "search...",
+      "existingFile": "Add existing"
     }
   },
   "edit": {
