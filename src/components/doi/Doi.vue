@@ -1094,7 +1094,7 @@ export default {
       uploadableObject.related_data = {};
       if (this.relatedData.attachment_link.results.length > 0) {
         uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
-      }
+      } else uploadableObject.related_data.attachment = null;
 
       if (!this.$route.meta.isEdit) {
         if (this.relatedData.doi_agent.results.length > 0) {
