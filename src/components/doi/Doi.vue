@@ -586,9 +586,7 @@
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
                 v-if="doi.datacite_created"
-                :value="
-                  doi.datacite_created | moment('ddd, MMM Do YYYY, HH:mm:ss')
-                "
+                :value="doi.datacite_created"
                 :color="bodyActiveColor"
                 :label="$t('doi.dataciteCreated')"
                 :readonly="true"
@@ -605,9 +603,7 @@
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
                 v-if="doi.datacite_updated"
-                :value="
-                  doi.datacite_updated | moment('ddd, MMM Do YYYY, HH:mm:ss')
-                "
+                :value="doi.datacite_updated"
                 :color="bodyActiveColor"
                 :label="$t('doi.dataciteUpdated')"
                 :readonly="true"
@@ -999,7 +995,6 @@ export default {
         this.relatedTabs.forEach(tab => {
           this.loadRelatedData(tab.name);
         });
-
       } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
         fetchDoiUsingEGF(this.$route.params.id).then(response => {
           if (response) this.assignEgfFieldsToDoiObject(response);
@@ -1421,9 +1416,9 @@ export default {
     /* DOI METADATA START */
 
     setCurrentTimeToDataCiteDateFields() {
-      let ISOString = new Date().toISOString();
-      if (!this.doi.datacite_created) this.doi.datacite_created = ISOString;
-      this.doi.datacite_updated = ISOString;
+      let currentDate = this.getCurrentFormattedDate();
+      if (!this.doi.datacite_created) this.doi.datacite_created = currentDate;
+      this.doi.datacite_updated = currentDate;
     },
 
     /**
@@ -1458,15 +1453,17 @@ export default {
                     this.setCurrentTimeToDataCiteDateFields();
                     this.showMetadataButton = false;
                     this.showMetadataUpdateMessage = false;
+                    this.sendingData = false;
+                    this.add(true, "doi");
                     this.checkDoiUrl();
                   } else {
                     toastError({
                       text: this.$t("doi.dataciteMetadataUpdateFailed")
                     });
+                    this.sendingData = false;
                   }
                 }
               }
-              this.sendingData = false;
             }
           );
         } else toastInfo({ text: this.$t("messages.userCancelled") });
