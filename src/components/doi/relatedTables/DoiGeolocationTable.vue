@@ -95,9 +95,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{
-              `${$t("common.new")} ${$t("header.dataset_reference")}`
-            }}</span>
+            <span class="headline">{{ $t("header.doi_geolocation") }}</span>
           </v-card-title>
 
           <v-card-text>
@@ -116,6 +114,7 @@
                     route-object="locality"
                     is-searchable
                     v-on:search:items="autocompleteLocalitySearch"
+                    @change="updateFieldsAccordingToLocality"
                   />
                 </v-col>
 
@@ -150,6 +149,7 @@
                     v-model="item.polygon"
                     :color="bodyActiveColor"
                     :label="$t('doi.polygon')"
+                    readonly
                   />
                 </v-col>
               </v-row>
@@ -245,7 +245,7 @@ export default {
       locality: null,
       place: "",
       point_longitude: "",
-      pint_latitude: "",
+      point_latitude: "",
       polygon: ""
     },
     isNewItem: true,
@@ -275,6 +275,13 @@ export default {
   },
 
   methods: {
+    updateFieldsAccordingToLocality(locality) {
+      if (typeof locality !== "undefined" && locality !== null) {
+        this.item.point_longitude = locality.longitude;
+        this.item.point_latitude = locality.latitude;
+      }
+    },
+
     cancel() {
       this.dialog = false;
       this.isNewItem = true;
@@ -282,7 +289,7 @@ export default {
         locality: null,
         place: "",
         point_longitude: "",
-        pint_latitude: "",
+        point_latitude: "",
         polygon: ""
       };
     },

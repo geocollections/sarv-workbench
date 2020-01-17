@@ -167,7 +167,11 @@
     "specimen_analysis": "Eksemplari Analüüs",
     "dataset_author": "Andmeseti Autor",
     "dataset_reference": "Andmeseti Kirjandus",
-    "locality_stratigraphy": "Stratigraafilised piirid"
+    "locality_stratigraphy": "Stratigraafilised piirid",
+    "doi_agent": "Doi isik/asutus",
+    "doi_date": "Doi kuupäev",
+    "doi_geolocation": "Doi lokaliteet",
+    "doi_related_identifier": "Doi identifikaator"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints",

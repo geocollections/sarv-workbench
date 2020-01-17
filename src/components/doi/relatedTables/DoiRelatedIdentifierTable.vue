@@ -71,7 +71,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t("header.dataset_reference")}`
+              $t("header.doi_related_identifier")
             }}</span>
           </v-card-title>
 

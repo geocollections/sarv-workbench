@@ -167,7 +167,11 @@
     "specimen_analysis": "Specimen Analysis",
     "dataset_author": "Dataset Author",
     "dataset_reference": "Dataset Reference",
-    "locality_stratigraphy": "Stratigraphic boundaries"
+    "locality_stratigraphy": "Stratigraphic boundaries",
+    "doi_agent": "Doi agent",
+    "doi_date": "Doi date",
+    "doi_geolocation": "Doi geolocation",
+    "doi_related_identifier": "Doi related identifier"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints",

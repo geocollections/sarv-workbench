@@ -1086,6 +1086,14 @@ export default {
         }
       });
 
+      if (this.isNotEmpty(this.relatedData.reference)) {
+        uploadableObject.reference = this.relatedData.reference.id;
+      } else uploadableObject.reference = null;
+
+      if (this.isNotEmpty(this.relatedData.dataset)) {
+        uploadableObject.dataset = this.relatedData.dataset.id;
+      } else uploadableObject.dataset = null;
+
       if (this.databaseId) uploadableObject.database = this.databaseId;
 
       if (this.$route.meta.isEGF) uploadableObject.egf = this.$route.params.id;
