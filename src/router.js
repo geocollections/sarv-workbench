@@ -108,23 +108,23 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newAttachment",
+                addNew: "header.addAttachment",
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "add.photoArchive"
+                    name: "header.photoArchive"
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "add.specimenImage"
+                    name: "header.specimenImage"
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "add.otherFiles"
+                    name: "header.otherFiles"
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "add.digitisedReference"
+                    name: "header.digitisedReference"
                   }
                 ],
                 requiresAuth: true,
@@ -137,23 +137,23 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newAttachment",
+                addNew: "header.addAttachment",
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "add.photoArchive"
+                    name: "header.photoArchive"
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "add.specimenImage"
+                    name: "header.specimenImage"
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "add.otherFiles"
+                    name: "header.otherFiles"
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "add.digitisedReference"
+                    name: "header.digitisedReference"
                   }
                 ],
                 requiresAuth: true,
@@ -166,23 +166,23 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newAttachment",
+                addNew: "header.addAttachment",
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "add.photoArchive"
+                    name: "header.photoArchive"
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "add.specimenImage"
+                    name: "header.specimenImage"
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "add.otherFiles"
+                    name: "header.otherFiles"
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "add.digitisedReference"
+                    name: "header.digitisedReference"
                   }
                 ],
                 requiresAuth: true,
@@ -195,23 +195,23 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newAttachment",
+                addNew: "header.addAttachment",
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "add.photoArchive"
+                    name: "header.photoArchive"
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "add.specimenImage"
+                    name: "header.specimenImage"
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "add.otherFiles"
+                    name: "header.otherFiles"
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "add.digitisedReference"
+                    name: "header.digitisedReference"
                   }
                 ],
                 requiresAuth: true,
@@ -224,23 +224,23 @@ const router = new Router({
               component: () => import("./components/attachment/Attachment.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newAttachment",
+                addNew: "header.addAttachment",
                 subForms: [
                   {
                     path: "/attachment/add/photo_archive",
-                    name: "add.photoArchive"
+                    name: "header.photoArchive"
                   },
                   {
                     path: "/attachment/add/specimen_image",
-                    name: "add.specimenImage"
+                    name: "header.specimenImage"
                   },
                   {
                     path: "/attachment/add/other_file",
-                    name: "add.otherFiles"
+                    name: "header.otherFiles"
                   },
                   {
                     path: "/attachment/add/digitised_reference",
-                    name: "add.digitisedReference"
+                    name: "header.digitisedReference"
                   }
                 ],
                 requiresAuth: true,
@@ -305,7 +305,7 @@ const router = new Router({
               component: () => import("./components/reference/Reference.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newReference",
+                addNew: "header.addReference",
                 subForms: [
                   {
                     path: "/reference/add",
@@ -330,8 +330,8 @@ const router = new Router({
               component: () => import("./components/imageset/Imageset.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newImageset",
-                subForms: [{ path: "/imageset/add", name: "add.imageset" }],
+                addNew: "header.addImageset",
+                subForms: [{ path: "/imageset/add", name: "header.imageset" }],
                 requiresAuth: true,
                 object: "imageset"
               }
@@ -389,8 +389,8 @@ const router = new Router({
               component: () => import("./components/journal/Journal.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newJournal",
-                subForms: [{ path: "/journal/add", name: "add.journal" }],
+                addNew: "header.journal",
+                subForms: [{ path: "/journal/add", name: "header.journal" }],
                 requiresAuth: true,
                 object: "journal"
               }
@@ -449,8 +449,8 @@ const router = new Router({
               component: () => import("./components/locality/Locality.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newLocality",
-                subForms: [{ path: "/locality/add", name: "add.locality" }],
+                addNew: "header.addLocality",
+                subForms: [{ path: "/locality/add", name: "header.locality" }],
                 requiresAuth: true,
                 object: "locality"
               }
@@ -511,8 +511,8 @@ const router = new Router({
               component: () => import("./components/sample/Sample.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newSample",
-                subForms: [{ path: "/sample/add", name: "add.sample" }],
+                addNew: "header.addSample",
+                subForms: [{ path: "/sample/add", name: "header.sample" }],
                 requiresAuth: true,
                 object: "sample"
               }
@@ -556,7 +556,7 @@ const router = new Router({
                   //belongs to project
                   meta: {
                     isEdit: false,
-                    addNew: "add.newProject",
+                    addNew: "header.addProject",
                     subForms: [
                       { path: "/project/add", name: "editProject.heading" }
                     ],
@@ -652,7 +652,7 @@ const router = new Router({
               component: () => import("./components/site/Site.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newSite",
+                addNew: "header.addSite",
                 subForms: [{ path: "/site/add", name: "editSite.heading" }],
                 requiresAuth: true,
                 object: "site"
@@ -711,8 +711,8 @@ const router = new Router({
               component: () => import("./components/library/Library.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newLibrary",
-                subForms: [{ path: "/library/add", name: "add.library" }],
+                addNew: "header.library",
+                subForms: [{ path: "/library/add", name: "header.library" }],
                 requiresAuth: true,
                 object: "library"
               }
@@ -770,8 +770,8 @@ const router = new Router({
               component: () => import("./components/doi/Doi.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newDoi",
-                subForms: [{ path: "/doi/add", name: "add.doi" }],
+                addNew: "header.addDoi",
+                subForms: [{ path: "/doi/add", name: "header.doi" }],
                 requiresAuth: true,
                 object: "doi"
               },
@@ -782,8 +782,8 @@ const router = new Router({
                   meta: {
                     isEdit: false,
                     isEGF: true,
-                    addNew: "add.newDoiEgf",
-                    subForms: [{ path: "/doi/add", name: "add.doi" }],
+                    addNew: "header.addDoiEgf",
+                    subForms: [{ path: "/doi/add", name: "header.doi" }],
                     requiresAuth: true,
                     object: "doi"
                   }
@@ -845,8 +845,8 @@ const router = new Router({
               component: () => import("./components/analysis/Analysis.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newAnalysis",
-                subForms: [{ path: "/analysis/add", name: "add.analysis" }],
+                addNew: "header.addAnalysis",
+                subForms: [{ path: "/analysis/add", name: "header.analysis" }],
                 requiresAuth: true,
                 object: "analysis"
               }
@@ -906,8 +906,8 @@ const router = new Router({
               component: () => import("./components/specimen/Specimen.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newSpecimen",
-                subForms: [{ path: "/specimen/add", name: "add.specimen" }],
+                addNew: "header.addSpecimen",
+                subForms: [{ path: "/specimen/add", name: "header.specimen" }],
                 requiresAuth: true,
                 object: "specimen"
               }
@@ -966,8 +966,8 @@ const router = new Router({
               component: () => import("./components/keyword/Keyword.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newKeyword",
-                subForms: [{ path: "/keyword/add", name: "add.keyword" }],
+                addNew: "header.addKeyword",
+                subForms: [{ path: "/keyword/add", name: "header.keyword" }],
                 requiresAuth: true,
                 object: "keyword"
               }
@@ -1027,8 +1027,8 @@ const router = new Router({
               component: () => import("./components/collection/Collection.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newCollection",
-                subForms: [{ path: "/collection/add", name: "add.collection" }],
+                addNew: "header.addCollection",
+                subForms: [{ path: "/collection/add", name: "header.collection" }],
                 requiresAuth: true,
                 object: "collection"
               }
@@ -1087,8 +1087,8 @@ const router = new Router({
               component: () => import("./components/taxon/Taxon.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newTaxon",
-                subForms: [{ path: "/taxon/add", name: "add.taxon" }],
+                addNew: "header.addTaxon",
+                subForms: [{ path: "/taxon/add", name: "header.taxon" }],
                 requiresAuth: true,
                 object: "taxon"
               }
@@ -1150,9 +1150,9 @@ const router = new Router({
                 import("./components/selectionSeries/SelectionSeries.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newSelectionSeries",
+                addNew: "header.addSelectionSeries",
                 subForms: [
-                  { path: "/selection_series/add", name: "add.selectionSeries" }
+                  { path: "/selection_series/add", name: "header.selectionSeries" }
                 ],
                 requiresAuth: true,
                 object: "selection_series"
@@ -1212,8 +1212,8 @@ const router = new Router({
               component: () => import("./components/agent/Agent.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newAgent",
-                subForms: [{ path: "/agent/add", name: "add.agent" }],
+                addNew: "header.addAgent",
+                subForms: [{ path: "/agent/add", name: "header.agent" }],
                 requiresAuth: true,
                 object: "agent"
               }
@@ -1273,8 +1273,8 @@ const router = new Router({
               component: () => import("./components/drillcore/Drillcore.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newDrillcore",
-                subForms: [{ path: "/drillcore/add", name: "add.drillcore" }],
+                addNew: "header.addDrillcore",
+                subForms: [{ path: "/drillcore/add", name: "header.drillcore" }],
                 requiresAuth: true,
                 object: "drillcore"
               }
@@ -1336,9 +1336,9 @@ const router = new Router({
                 import("./components/preparation/Preparation.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newPreparation",
+                addNew: "header.addPreparation",
                 subForms: [
-                  { path: "/preparation/add", name: "add.preparation" }
+                  { path: "/preparation/add", name: "header.preparation" }
                 ],
                 requiresAuth: true,
                 object: "preparation"
@@ -1398,8 +1398,8 @@ const router = new Router({
               component: () => import("./components/dataset/Dataset.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newDataset",
-                subForms: [{ path: "/dataset/add", name: "add.dataset" }],
+                addNew: "header.addDataset",
+                subForms: [{ path: "/dataset/add", name: "header.dataset" }],
                 requiresAuth: true,
                 object: "dataset"
               }
@@ -1461,9 +1461,9 @@ const router = new Router({
                 import("./components/stratigraphy/Stratigraphy.vue"),
               meta: {
                 isEdit: false,
-                addNew: "add.newStratigraphy",
+                addNew: "header.stratigraphy",
                 subForms: [
-                  { path: "/stratigraphy/add", name: "add.stratigraphy" }
+                  { path: "/stratigraphy/add", name: "header.stratigraphy" }
                 ],
                 requiresAuth: true,
                 object: "stratigraphy"

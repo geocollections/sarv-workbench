@@ -98,7 +98,7 @@
                       class="mt-0 pr-6"
                       :color="appSettings.bodyActiveColor"
                       hide-details
-                    ></v-checkbox>
+                    />
                     <v-checkbox
                       v-model="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.specimenImage')"
@@ -106,7 +106,7 @@
                       class="mt-0 pr-6"
                       :color="appSettings.bodyActiveColor"
                       hide-details
-                    ></v-checkbox>
+                    />
                     <v-checkbox
                       v-model="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.otherFiles')"
@@ -114,7 +114,7 @@
                       class="mt-0 pr-6"
                       :color="appSettings.bodyActiveColor"
                       hide-details
-                    ></v-checkbox>
+                    />
                     <v-checkbox
                       v-model="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.digitisedReference')"
@@ -122,7 +122,7 @@
                       class="mt-0"
                       :color="appSettings.bodyActiveColor"
                       hide-details
-                    ></v-checkbox>
+                    />
                   </v-row>
                 </v-col>
               </v-row>

@@ -34,7 +34,7 @@
           class="text-none"
           :color="appSettings.bodyActiveColor"
           :dark="appSettings.bodyActiveColorDark"
-          :title="$t('add.inputs.photoInput')"
+          :title="$t('add.photo')"
           @click="trigger('photoUpload')"
         >
           <v-icon
@@ -62,7 +62,7 @@
           class="text-none"
           :color="appSettings.bodyActiveColor"
           :dark="appSettings.bodyActiveColorDark"
-          :title="$t('add.inputs.videoInput')"
+          :title="$t('add.video')"
           @click="trigger('videoUpload')"
         >
           <v-icon
@@ -90,7 +90,7 @@
           class="text-none"
           :color="appSettings.bodyActiveColor"
           :dark="appSettings.bodyActiveColorDark"
-          :title="$t('add.inputs.audioInput')"
+          :title="$t('add.audio')"
           @click="trigger('audioUpload')"
         >
           <v-icon
@@ -116,7 +116,7 @@
         <checkbox-wrapper
           v-model="useExisting"
           color="amber"
-          :label="$t('add.inputs.existingFile')"
+          :label="$t('add.existingFile')"
           @change="useExisting = !useExisting"
         />
       </div>

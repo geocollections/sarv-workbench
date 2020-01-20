@@ -38,7 +38,8 @@
     "actions": "Actions",
     "new": "New",
     "generalInfo": "General info",
-    "requiredFields": "Required fields"
+    "requiredFields": "Required fields",
+    "author": "Author"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -106,6 +107,8 @@
     "editProject": "Projects",
     "addDoi": "Add new DOI",
     "editDoi": "DOIs",
+    "addImageset": "Add new imageset",
+    "editImageset": "Imagesets",
     "addSpecimen": "Add specimen",
     "editSpecimen": "Specimens",
     "addKeyword": "Add term",
@@ -174,8 +177,7 @@
     "doi_related_identifier": "Doi related identifier"
   },
   "footer": {
-    "info": "Questions and comments about the database and website: Olle Hints",
-    "ttuLink": "Institute of Geology at Tallinn University of Technology"
+    "info": "Questions and comments about the database and website: Olle Hints"
   },
   "frontPage": {
     "welcome": "Welcome",
@@ -322,18 +324,16 @@
     "photo": "Capture a picture",
     "video": "Film a video",
     "audio": "Record an audio",
+    "autocomplete": "search...",
+    "existingFile": "Add existing",
+    "overlay": "Please wait! Sending data...",
     "errors": {
       "imagesetNumber": "This field can't be empty",
       "imagesetNumberExists": "This imageset already exists",
       "url": "Please use correct url format"
-    },
-    "inputs": {
-      "autocomplete": "search...",
-      "existingFile": "Add existing"
     }
   },
   "edit": {
-    "heading": "File ID",
     "link": "View file in Geocollections",
     "referenceLink": "View reference in Geocollections",
     "imageNumber": "Image number",
@@ -348,15 +348,9 @@
     "user_added": "User added",
     "date_changed": "Date changed",
     "user_changed": "User changed",
-    "specimen": "Specimen",
-    "imageInfo": "Image info",
-    "locality": "Locality",
-    "view": "View",
-    "viewMessage": "View file in geocollections portal",
     "editMessage": "Edit file",
-    "overlay": "Please wait! Changing data...",
     "overlayLoading": "Please wait! Loading data...",
-    "isLoading": "Please wait!, Searching...",
+    "search": "Search",
     "buttons": {
       "save": "Save",
       "saveAndLeave": "Save and leave",
@@ -370,13 +364,7 @@
       "updateUrl": "Update DOI URL",
       "registerUrl": "Register DOI URL",
       "finish": "Finish"
-    },
-    "locked": "This file is locked and can't be changed",
-    "photoArchive": "Photo archive",
-    "specimenImage": "Specimen images",
-    "otherFiles": "Other files",
-    "digitisedReference": "Digitised reference",
-    "search": "Search"
+    }
   },
   "editReference": {
     "heading": "Reference ID",
@@ -431,7 +419,8 @@
     "editMessage": "Edit specimen"
   },
   "editKeyword": {
-    "heading": "Term"
+    "heading": "Term",
+    "editMessage": "Edit term"
   },
   "editJournal": {
     "heading": "Journal",
@@ -475,56 +464,13 @@
     "editMessage": "Edit dataset",
     "viewMessage": "View dataset in geocollections portal"
   },
-  "attachments": {
-    "header": "My attachments",
-    "file": "File",
-    "format": "Format",
-    "number": "Number",
-    "author": "Author",
-    "specimen": "Specimen",
-    "reference": "Reference",
-    "specimenImageAttachment": "Type",
-    "photoArchiveFile": "Photo",
-    "specimenFile": "Specimen",
-    "digitisedReferenceFile": "Reference",
-    "otherFile": "File",
-    "edit": "Edit",
-    "fancyView": "Fancy view",
-    "regularView": "Old view",
-    "toggleFancyImageList": "Change image display",
-    "errors": {
-      "noFiles1": "Unfortunately we didn't find any files. Go to",
-      "noFiles2": "and start uploading."
-    },
-    "link":"Link",
-    "remarks":"Remarks"
-  },
   "references": {
-    "header": "My references",
-    "reference": "Reference",
-    "author": "Author(s)",
-    "title": "Title",
-    "book": "Book",
-    "journal": "Journal",
-    "volume": "Volume",
-    "pages": "Pages",
-    "errors": {
-      "noFiles1": "Unfortunately we didn't find any references. Go to",
-      "noFiles2": "and start uploading."
-    },
-    "toggleViewLabel": "Toggle between table and list view",
     "tableView": "Table view",
     "listView": "List view",
-    "labelView": "Label view",
-    "alternativeTableView": "Alternative table view",
-    "alternativeTableHeight": "Height",
-    "alternativeTableWidth": "Width",
-    "alternativeTableSize": "Size",
-    "alternativeTableResetButton": "Reset controls"
+    "labelView": "Label view"
   },
   "attachment": {
     "info": "General info",
-    "header": "My attachments",
     "imageNumber": "Image number",
     "imageNumber_short": "Pildi no.",
     "filename": "Filename",
@@ -534,7 +480,6 @@
     "locality": "Locality",
     "file": "File",
     "format": "Format",
-    "number": "Number",
     "author": "Author",
     "author_free": "Author vaba",
     "imageset": "Pildiseeria",
@@ -548,16 +493,9 @@
     "specimenImage": "Specimen images",
     "otherFiles": "Other files",
     "digitisedReference": "Digitised reference",
-    "edit": "Edit",
-    "addNew": "Add new file",
     "changeType": "Change type",
-    "doiConfirmation": "Are you sure you want to register a new DOI for this attachment? DOI-s cannot be deleted.",
-    "is_private_text": "Private",
     "is_private_text_short": "Pvte.",
-    "is_public_text": "Public",
     "is_locked_text": "Locked",
-    "is_unlocked_text": "Unlocked",
-    "authorFree": "Author free",
     "dateCreated": "Date created",
     "dateCreatedFree": "Date created free",
     "imageType": "Image type",
@@ -565,53 +503,28 @@
     "deviceTxt": "Device",
     "agentDigitised": "Agent digitised",
     "dateDigitised": "Date digitised",
-    "deviceDigitised": "Device digitised",
     "imageScalebar": "Image scalebar",
-    "descriptionEn": "Description en",
     "keywords": "Keywords",
     "stars": "Rating",
     "copyrightAgent": "Copyright agent",
-    "preferred": "Preferred",
-    "private": "Private",
-    "locked": "Locked",
-    "remarks": "Remarks",
-    "latitude": "Latitude",
-    "longitude": "Longitude",
     "relatedData": "Related data",
-    "relatedDataDefault": "Choose related table",
     "relatedTables": {
-      "collection": "Collection",
-      "specimen": "Specimen",
-      "sample": "Sample",
-      "sample_series": "Sample series",
-      "analysis": "Analysis",
-      "dataset": "Dataset",
-      "doi": "Doi",
-      "locality": "Locality",
-      "drillcore": "Drill core",
-      "drillcore_box": "Drill core box",
-      "preparation": "Preparation",
-      "reference": "Reference",
-      "storage": "Storage",
-      "attachment": "Attachment",
-      "project": "Project",
-      "site": "Site",
-      "attach_link__collection": "Kollektsioon",
-      "attach_link__specimen": "Eksemplar",
-      "attach_link__sample": "Proov",
-      "attach_link__sample_series": "Proovi seeria",
-      "attach_link__analysis": "Analüüs",
-      "attach_link__dataset": "Andmestik",
+      "attach_link__collection": "Collection",
+      "attach_link__specimen": "Specimen",
+      "attach_link__sample": "Sample",
+      "attach_link__sample_series": "Sample series",
+      "attach_link__analysis": "Analysis",
+      "attach_link__dataset": "Dataset",
       "attach_link__doi": "DOI",
-      "attach_link__locality": "Lokaliteet",
-      "attach_link__drillcore": "Puursüdamik",
-      "attach_link__drillcore_box": "Puursüdamiku kast",
-      "attach_link__preparation": "Preparaat",
-      "attach_link__reference": "Kirjandus",
-      "attach_link__storage": "Hoidla",
-      "attach_link__attachment": "Fail",
-      "attach_link__project": "Projekt",
-      "attach_link__site": "Vaatluspunkt"
+      "attach_link__locality": "Locality",
+      "attach_link__drillcore": "Drill core",
+      "attach_link__drillcore_box": "Drill core box",
+      "attach_link__preparation": "Preparation",
+      "attach_link__reference": "Reference",
+      "attach_link__storage": "Storage",
+      "attach_link__attachment": "Attachment",
+      "attach_link__project": "Project",
+      "attach_link__site": "Site"
     },
     "imagesetId": "Imageset ID",
     "imagePlace": "Image place",
@@ -635,33 +548,27 @@
     "name_long_en": "Name long (EN)",
     "agent": "Agent",
     "locality": "Locality",
-    "reference": "Reference",
     "database": "Database",
     "collection_id": "Number",
     "number_detail": "Number with acronym",
     "relatedInfo": "Related info",
     "classification": "Classification",
-    "remarks": "Remarks",
     "number_objects": "Objects",
     "number_types": "Originals",
     "specimen": "Specimens"
   },
   "specimen": {
     "specimenNumber": "Specimen no",
-    "header": "Specimens",
     "number": "Number",
-    "identification": "Identification",
     "locality": "Locality",
     "coll__number": "Collection no.",
     "specimen_nr": "Old no.",
     "agent_collected": "Collector",
     "storage": "Storage",
     "idSpecimen": "ID or specimen no",
-    "class": "Classification",
     "mineralRock": "Mineral or Rock",
     "editMessage": "Edit specimen",
     "viewMessage": "View specimen in geocollections portal",
-    "addNew": "Add new Specimen",
     "specimen_id": "Number",
     "coll": "Collection",
     "number_field": "Field number",
@@ -682,16 +589,12 @@
     "date_collected": "Coll. date",
     "date_collected_free": "Coll. time",
     "presence": "Presence",
-    "classified": "Private",
     "accession": "Accession",
     "deaccession": "Deaccession",
     "status": "Status",
     "original_status": "Orig. status",
-    "remarks": "Remarks public",
     "remarks_internal": "Remarks internal",
     "tags": "Tags",
-    "is_private_text": "Private",
-    "is_public_text": "Public",
     "localityInfo": "Locality and stratigraphy",
     "details": "Specimen details",
     "selectionId": "Selection ID",
@@ -722,8 +625,7 @@
   "specimen_reference": {
     "reference": "Reference",
     "pages": "Pages",
-    "figures": "Figures",
-    "remarks": "Remarks"
+    "figures": "Figures"
   },
   "specimen_description": {
     "length": "Length",
@@ -731,22 +633,18 @@
     "height": "Height",
     "unit": "Unit",
     "mass": "Mass",
-    "agent": "Agent",
-    "remarks": "Remarks"
+    "agent": "Agent"
   },
   "specimen_location": {
     "number": "Number",
     "part": "Part",
-    "storage": "Storage",
-    "remarks": "Remarks"
+    "storage": "Storage"
   },
   "specimen_history": {
     "value_old": "Old value",
-    "value_new": "New value",
-    "remarks": "Remarks"
+    "value_new": "New value"
   },
   "sample": {
-    "header": "My samples",
     "number": "Number",
     "numberSlashId": "Number / ID",
     "number_additional": "Old number",
@@ -756,11 +654,8 @@
     "sample_type": "Type",
     "parent_sample": "Related sample",
     "parent_specimen": "Specimen",
-    "parent_site": "Site",
     "locality": "Locality",
     "locality_free": "Loc. txt",
-    "latitude": "Lat",
-    "longitude": "Long",
     "lithostratigraphy": "Litostrat.",
     "stratigraphy_free": "Stratigraphy txt",
     "stratigraphy_bed": "Strat. bed",
@@ -772,25 +667,14 @@
     "rock": "Rock txt",
     "rock_en": "Rock EN",
     "fossils": "Fossils",
-    "palaeontology": "Micropal.",
-    "analysis": "Ananlyses",
     "mass": "Weight (g)",
     "storage": "Storage",
     "storage_additional": "Storage 2",
-    "user_added": "Added by",
-    "date_added": "Added",
-    "user_changed": "Changed by",
-    "date_changed": "Changed",
-    "addNew": "Add new Sample",
     "relatedInfo": "Relations",
     "simpleForm": "Simple view",
     "basicForm": "Full view",
     "addAnalysis": "Add analysis",
     "site": "Site",
-    "selectionId": "Selection ID",
-    "selection": "Selection",
-    "attachment": "File",
-    "remarks": "Remarks",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",
@@ -807,13 +691,10 @@
     "sites": "Linked sites"
   },
   "site": {
-    "header": "Sites",
     "project":"Project",
     "relatedProject":"Related project",
     "number":"Number",
     "location":"Location",
-    "latitude":"Latitude",
-    "longitude": "Longitude",
     "locality": "Locality",
     "location_accuracy": "Location accuracy",
     "remarks_location": "Location remarks",
@@ -826,18 +707,13 @@
     "date_end":"Date end",
     "date_end_info":"Date end (yyyy-mm-dd hh:mm:ss)",
     "date_free":"Txt",
-    "remarks":"Remarks",
     "files": "Files",
     "relatedSamples": "Related samples",
-    "addNew": "Add new Site",
     "mapEnabled": "Map enabled",
     "mapDisabled": "Map disabled",
     "copyToLocality": "Copy to locality"
   },
-  "sample_series": {
-  },
   "analysis": {
-    "header":"Analysis",
     "sample": "Sample #",
     "specimen":"Specimen",
     "method_in_eng": "Met. ingl. k.",
@@ -867,10 +743,7 @@
     "date_end": "Date end",
     "date_free": "Date free",
     "agent": "Analyzed by",
-    "remarks": "Remarks",
     "location": "Location",
-    "is_locked": "Is locked?",
-    "addNew": "Add new analysis",
     "labInfo": "Lab info",
     "otherInfo": "Other info",
     "relatedTables": {
@@ -896,7 +769,6 @@
     "det_date": "Det. date",
     "extra": "Extra",
     "preparation": "Preparation",
-    "remarks": "Remarks",
     "details": "Taxon details",
     "additionalInfo": "Additional info",
     "description_html": "Description (html)",
@@ -944,8 +816,6 @@
     "frontpage_title": "Front page title",
     "author_txt": "Author txt",
     "title": "Title",
-    "title_en": "Title (EN)",
-    "attachment": "Attachment",
     "locality_free": "Locality txt",
     "relatedTables": {
       "taxon_subclass": "Subtaxa",
@@ -961,10 +831,7 @@
   },
   "dataset": {
     "date_txt": "Date txt",
-    "remarks": "Remarks",
     "database": "Database",
-    "description_en": "Description (EN)",
-    "copyright_agent": "Copyright",
     "dataset_html": "HTML data",
     "relatedTables": {
       "dataset_author": "Authors",
@@ -972,15 +839,12 @@
     }
   },
   "dataset_reference": {
-    "reference": "Reference",
-    "remarks": "Remarks"
+    "reference": "Reference"
   },
   "dataset_author": {
-    "agent": "Agent",
-    "remarks": "Remarks"
+    "agent": "Agent"
   },
   "doi": {
-    "header": "DOIs",
     "identifier": "DOI",
     "creators": "Author",
     "title": "Title",
@@ -990,7 +854,6 @@
     "title_translated_language": "Trans, title lang",
     "resource_type": "Type",
     "datacite_created": "DataCite registration",
-    "addNew": "Add new DOI",
     "resourceTypeGeneral": "Resource type general",
     "resource": "Resource type",
     "publisher": "Publisher",
@@ -1003,12 +866,9 @@
     "abstract": "Abstract",
     "methods": "Methods",
     "copyright": "Copyright",
-    "remarks": "Remarks",
-    "private": "Private",
     "primaryReference": "Primary reference",
     "reference": "Reference",
     "primaryDataset": "Primary dataset",
-    "dataset": "Dataset",
     "datacite": "Datacite",
     "dataciteCreated": "Datacite reg.",
     "dataciteUpdated": "Datacite updated",
@@ -1021,15 +881,10 @@
     "pointLongitude": "Point long.",
     "pointLatitude": "Point lat.",
     "polygon": "Polygon",
-    "boxWLongitude": "Box (W long)",
-    "boxELongitude": "Box (E long)",
-    "boxSLatitude": "Box (S lat)",
-    "boxNLatitude": "Box (N lat)",
     "place": "Place name",
     "locality": "Locality from database",
     "primaryRefAndDat": "Reference and Dataset",
     "dateType": "Date type",
-    "link": "Link",
     "identifierPlaceholder": "This field is filled automatically",
     "doiDataCiteRegisterConfirmation": "Are you sure, you would like to register DOI to DataCite server?",
     "doiDataCiteUpdateConfirmation": "Are you sure, you would like to update DOI in DataCite server?",
@@ -1050,7 +905,6 @@
   },
   "locality": {
     "agent": "Creator",
-    "header": "My localities",
     "locality": "Locality (Est)",
     "locality_en": "Locality",
     "number": "Number",
@@ -1060,18 +914,10 @@
     "longitude": "Longitude",
     "elevation": "Height, m",
     "extent": "Extent",
-    "coordx": "X(N), m",
-    "coordy": "Y(S), m",
-    "coord_system": "Coord. system",
     "coord_det_precision": "Coord. accuracy",
     "coord_det_method": "Coord. method",
     "coord_det_agent": "Coord. assigner",
     "country": "Country",
-    "county": "County",
-    "county_search": "County",
-    "country_search": "Country",
-    "parish": "Parish",
-    "area": "Aria",
     "stratigraphy_top": "Strat. top",
     "stratigraphy_top_free": "Strat. top free",
     "stratigraphy_base": "Strat. lower",
@@ -1079,8 +925,6 @@
     "maaamet_pa_id": "Maa-amet pa. ID",
     "eelis": "EELIS ID",
     "remarks_location": "Locality description",
-    "remarks": "Additional information",
-    "private": "Private",
     "map": "Map",
     "additionalInfo": "Additional info",
     "relatedTables": {
@@ -1088,13 +932,11 @@
       "locality_synonym": "Synonyms",
       "attachment_link": "Attachment",
       "locality_stratigraphy": "Stratigraphy"
-    },
-    "addNew": "Add new Locality"
+    }
   },
   "agent": {
     "institution": "Institution",
     "institution__institution": "Institution",
-    "remarks": "Remarks",
     "agent": "Agent",
     "institution_name": "Institution name",
     "institution_name_en": "Institution name (EN)",
@@ -1121,7 +963,6 @@
     "box_numbers": "Box numbers",
     "location": "Location",
     "agent": "Agent",
-    "remarks": "Remarks",
     "boxes": "Boxes",
     "locality": "Locality",
     "storage": "Storage",
@@ -1145,21 +986,17 @@
     "stratigraphy_top": "Strat. ülemine",
     "depth_other": "Muud sügavbused",
     "number_meters": "m kastis",
-    "diameter": "d, mm",
-    "remarks": "Lisainfo"
+    "diameter": "d, mm"
   },
   "drillcore_study": {
     "agent": "Uurija",
-    "aim": "Eesmärk",
-    "remarks": "Lisainfo"
+    "aim": "Eesmärk"
   },
   "preparation": {
     "number": "Number",
     "preparation_number": "Prep. number",
     "fossil_group": "Fossil group",
     "storage": "Storage",
-    "remarks": "Remarks",
-    "method_id": "Method ID",
     "sample__locality": "Locality",
     "sample__stratigraphy": "Stratigraphy",
     "agent": "Agent",
@@ -1202,9 +1039,6 @@
     "referenceKeyword": "Reference keywords",
     "abstract": "Abstract",
     "authorKeywords": "Keywords",
-    "remarks": "Remarks",
-    "journalTxt": "Journal text",
-    "relatedFile": "Related file(s)",
     "is_oa": "OpenAccess",
     "is_locked": "Locked",
     "keywords": "Author keywords",
@@ -1212,13 +1046,9 @@
     "abstractRemarks": "Abstract or remarks",
     "keywordsSearch": "Keywords",
     "libraryAuthorIdTitle": "Library author, ID or title",
-    "header": "Reference",
-    "addNew": "Add new Reference",
     "sort": "Sort",
     "solrSearch": "Fast search",
-    "info": "General info",
     "otherData":"Abstract and other info",
-    "doiConfirmation": "Are you sure you want to register a new DOI for this reference? DOI-s cannot be deleted.",
     "doiCheckSuccessful": "DOI check successful, fields updated",
     "doiCheckUnsuccessful": "DOI check failed!",
     "library": "Library",
@@ -1227,13 +1057,10 @@
     "pdf": "PDF",
     "url": "URL",
     "addReferenceToLibrary": "Add reference to active library",
-    "chooseActiveLibrary": "Choose active library",
     "is_estonian_reference": "Estonian reference",
     "is_estonian_reference_short": "EE",
     "is_estonian_author": "Estonian author",
     "is_estonian_author_short": "EE",
-    "link": "Link",
-    "localities": "Localities",
     "libraries": "Kogumikud",
     "attachments": "Attachments",
     "userAdded": "User added",
@@ -1245,14 +1072,12 @@
       "reference_keyword": "User keywords",
       "locality_reference": "Locality references",
       "library": "Related libraries",
-      "taxon": "Taxon"
+      "taxon": "Taxon",
+      "stratigraphy": "Stratigraphy"
     }
   },
   "synonym": {
-    "synonym":"Synonym",
-    "reference":"Reference",
-    "pages":"Page",
-    "remarks":"Remarks"
+    "synonym":"Synonym"
   },
   "stratigraphy": {
     "rank":"Rank",
@@ -1298,8 +1123,11 @@
     "sort_within_parent": "Sort",
     "approved_ics": "ICS approved",
     "approved_esk": "ESK approved",
-    "remarks": "Remarks",
     "status": "Status",
+    "depth_base_min": "Depth base min",
+    "depth_base_max": "Depth base max",
+    "depth_top_min": "Depth top min",
+    "depth_top_max": "Depth top max",
     "relatedTables": {
       "stratigraphy_reference": "References",
       "stratigraphy_stratotype": "Stratotypes",
@@ -1315,104 +1143,69 @@
     "age_top": "Age top",
     "is_preferred_age": "Preferred age",
     "pages": "Pages",
-    "figures": "Figures",
-    "remarks": "Remarks"
+    "figures": "Figures"
   },
   "stratigraphy_stratotype": {
     "locality": "Locality",
     "stratotype_type": "Type",
     "depth_base": "Depth base",
     "depth_top": "Depth top",
-    "reference": "Reference",
-    "remarks": "Remarks"
+    "reference": "Reference"
   },
   "stratigraphy_synonym": {
     "synonym": "Synonym",
     "language": "Language",
-    "reference": "Reference",
-    "remarks": "Remarks"
+    "reference": "Reference"
   },
   "journal": {
-    "header": "Journal",
     "journalName": "Journal name",
     "journalShort": "Journal short",
     "journalOriginal": "Journal orig.",
     "journalFilter": "Journal",
     "publisherFilter": "Publisher",
     "remarksFilter": "Remarks",
-    "publisher": "Publisher",
-    "remarks": "Remarks",
-    "addNew": "Add new Journal"
+    "publisher": "Publisher"
   },
   "storage": {
     "storage": "Storage"
   },
   "library": {
-    "header": "My Libraries",
     "author": "Author",
     "author_txt": "Author txt",
     "title": "Title",
     "title_en": "Title (ENG)",
-    "reference": "Reference",
-    "isPrivate": "Public",
-    "addNew": "Add new Library",
     "keywords": "Keywords",
     "abstract": "Abstract",
     "abstract_en": "Abstract (ENG)",
-    "private": "Private",
     "remove": "Remove",
     "libraryAgent": "Library members",
-    "showListView": "List view",
     "relatedTables": {
-      "libraryReference": "References",
-      "libraryReferenceList": "References list view",
       "library_reference": "References",
       "library_reference_list": "References list view"
     }
   },
   "keyword": {
-    "header": "Terms",
     "keyword": "Term",
     "language": "Languge",
     "keyword_category": "Category",
     "related_keyword": "Related term",
-    "remarks": "Remarks",
-    "is_primary": "Primary",
-    "editMessage": "Edit term",
-    "addNew": "Add new Term"
+    "is_primary": "Primary"
   },
   "selectionSeries": {
-    "header": "Selection series",
-    "remarks": "Remarks",
     "user_added": "User added"
   },
   "messages": {
     "langChange": "Changed language!",
     "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@taltech.ee",
     "checkForm": "Make sure everything is correct!",
-    "checkFormEmpty": "You can't input empty record!",
-    "checkFormDuplicate": "Similar record already exists!",
     "lockedForm": "Given attachment is locked and cannot be changed!",
     "loginError": "Something went wrong!",
     "loginIdError": "Something went wrong! Try restarting your browser and make sure that ID-card is connected to a computer.",
     "uploadError": "Upload failed!",
-    "inputNoResults": "No results!",
     "defaultsRemoved": "Defaults removed!",
-    "editError": "Couldn't get data!",
-    "cancelRequest": "Cancel",
     "validFileFormat": "File '{file}' is not in correct format and was removed!",
-    "useCorrectFormat": "Please use the following format: '{format}'",
-    "onlyOneFile": "Only first file was added!",
-    "localityAttachmentInfo":"Choose attachment link or add new",
-    "localityAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise lokaliteediga '{ data }'. Lõpetamiseks mine tagasi lokaliteedi vormile",
-    "sampleAttachmentRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise prooviga {data}. Lõpetamiseks mine tagasi proovi vormile",
-    "siteSampleRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise SITE-ga {data}.",
-    "projectSiteRelationInfo":"Hoiatus! Pärast vormi salvestamist luuakse seos järgmise projektiga {data}.",
-    "solrSearchInfo": "Using this field will not use other fields",
-    "combinedViewChangeSize": "Change combined view size using this slider",
     "userCancelled": "Action cancelled",
     "fieldsCleared": "Fields cleared!",
-    "mapUsingGPS": "GPS is enabled!",
     "ObjectDoesNotExist1": "Unfortunately",
     "ObjectDoesNotExist2": "with an ID:",
     "ObjectDoesNotExist3": "doesn't exist!",
@@ -1442,13 +1235,9 @@
     "next": "Next",
     "previous": "Previous",
     "clear": "Clear",
-    "homePage": "Home page",
-    "lockSidebar": "Lock sidebar",
-    "unlockSidebar": "Unlock sidebar",
     "export": "Export",
     "exportTo": "Export to",
     "copy": "Copy to Clipboard",
-    "downloadRIS": "Export to RIS",
     "search": "Search",
     "listView": "List view",
     "imageView": "Image view",

@@ -218,7 +218,7 @@
                       <v-btn
                         icon
                         :to="{ path: '/imageset/add' }"
-                        :title="$t('add.inputs.newImageset')"
+                        :title="$t('header.addImageset')"
                         color="green"
                       >
                         <v-icon>fas fa-plus</v-icon>
@@ -1491,7 +1491,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.collection") }}
+                    {{ $t("attachment.relatedTables.attach_link__collection") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1558,7 +1558,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.specimen") }}
+                    {{ $t("attachment.relatedTables.attach_link__specimen") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1678,7 +1678,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.sample_series") }}
+                    {{ $t("attachment.relatedTables.attach_link__sample_series") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1727,7 +1727,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.analysis") }}
+                    {{ $t("attachment.relatedTables.attach_link__analysis") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1793,7 +1793,7 @@
                       relatedData.attach_link__dataset.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.dataset") }}</p>
+                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__dataset") }}</p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -1855,7 +1855,7 @@
                       relatedData.attach_link__doi.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.doi") }}</p>
+                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__doi") }}</p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -1912,7 +1912,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.locality") }}
+                    {{ $t("attachment.relatedTables.attach_link__locality") }}
                   </p>
 
                   <div class="table-responsive">
@@ -1976,7 +1976,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.drillcore") }}
+                    {{ $t("attachment.relatedTables.attach_link__drillcore") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2043,7 +2043,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.drillcore_box") }}
+                    {{ $t("attachment.relatedTables.attach_link__drillcore_box") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2111,7 +2111,7 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.preparation") }}
+                    {{ $t("attachment.relatedTables.attach_link__preparation") }}
                   </p>
 
                   <div class="table-responsive">
@@ -2232,7 +2232,7 @@
                       relatedData.attach_link__storage.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.storage") }}</p>
+                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__storage") }}</p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -2282,7 +2282,7 @@
                       relatedData.attach_link__project.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.project") }}</p>
+                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__project") }}</p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -2337,7 +2337,7 @@
                       relatedData.attach_link__site.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.site") }}</p>
+                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__site") }}</p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">

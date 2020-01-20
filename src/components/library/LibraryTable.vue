@@ -101,7 +101,7 @@ export default {
       { text: "common.id", value: "library" },
       { text: "library.title", value: "library__title" },
       { text: "library.author_txt", value: "agent__agent" },
-      { text: "library.private", value: "library__is_private" },
+      { text: "common.is_private", value: "library__is_private" },
       { text: "", value: "link", sortable: false }
     ],
     names: []

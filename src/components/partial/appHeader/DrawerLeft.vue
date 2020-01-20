@@ -22,7 +22,7 @@
       </v-list-item>
     </template>
 
-    <v-divider class="mt-0"></v-divider>
+    <v-divider class="mt-0" />
 
     <v-list expand dense>
       <!-- USER SHORTCUTS -->
@@ -43,7 +43,7 @@
           :to="{ path: entity.path }"
           :color="drawerActiveColor"
         >
-          <v-list-item-title v-text="entity.title"></v-list-item-title>
+          <v-list-item-title v-text="entity.title" />
         </v-list-item>
       </v-list-group>
 
@@ -67,9 +67,7 @@
           v-model="entity.state"
         >
           <template v-slot:activator>
-            <v-list-item-title
-              v-text="$t(`header.${entity.title}`)"
-            ></v-list-item-title>
+            <v-list-item-title v-text="$t(`header.${entity.title}`)" />
           </template>
 
           <v-list-item
@@ -82,9 +80,9 @@
             <v-list-item-title
               style="white-space: unset"
               v-text="$t(`header.${link.title}`)"
-            ></v-list-item-title>
+            />
             <v-list-item-icon>
-              <v-icon v-text="link.icon"></v-icon>
+              <v-icon v-text="link.icon" />
             </v-list-item-icon>
           </v-list-item>
         </v-list-group>
@@ -443,4 +441,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped />

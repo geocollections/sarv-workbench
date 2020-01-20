@@ -8,7 +8,7 @@
       hide-details
       hide-no-data
       outlined
-      :placeholder="$t('add.inputs.autocomplete')"
+      :placeholder="$t('add.autocomplete')"
       :item-color="$attrs.color"
       item-value="id"
       return-object

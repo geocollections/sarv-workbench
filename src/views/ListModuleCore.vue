@@ -1,5 +1,10 @@
 <template>
   <div class="list-module-core">
+    <ScrollToTop
+      v-if="$route.meta.isTableView"
+      :body-active-color="appSettings.bodyActiveColor"
+    />
+
     <!-- EXPORT and OPTIONS -->
     <v-row align="center" justify="start" class="px-4 d-print-none">
       <!-- EXPORT -->
@@ -8,7 +13,7 @@
           :filename="module"
           :table-data="response.results"
           :body-active-color="appSettings.bodyActiveColor"
-        ></export-buttons>
+        />
       </div>
 
       <!-- OPTIONS -->
@@ -24,7 +29,7 @@
             class="mb-2"
             :label="$t('references.tableView')"
             :color="appSettings.bodyActiveColor"
-          ></v-radio>
+          />
           <v-radio
             v-if="useListView"
             class="mb-2"
@@ -36,14 +41,14 @@
                 : $t('references.listView')
             "
             :color="appSettings.bodyActiveColor"
-          ></v-radio>
+          />
           <v-radio
             v-if="useImageView"
             class="mb-2"
             value="image"
             :label="$t('buttons.imageView')"
             :color="appSettings.bodyActiveColor"
-          ></v-radio>
+          />
         </v-radio-group>
       </div>
     </v-row>
@@ -163,9 +168,11 @@ import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import debounce from "lodash/debounce";
 import ImageView from "../components/partial/ImageView";
 import { mapState } from "vuex";
+import ScrollToTop from "../components/partial/ScrollToTop";
 
 export default {
   components: {
+    ScrollToTop,
     ExportButtons,
     ListView,
     ImageView
