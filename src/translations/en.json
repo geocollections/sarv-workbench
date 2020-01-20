@@ -90,6 +90,8 @@
     "drillcores": "Drill cores",
     "datasets": "Datasets",
     "stratigraphies": "Stratigraphy",
+    "areas": "Alad",
+    "area": "Lisa Ala",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -316,6 +318,9 @@
     },
     "stratigraphy": {
       "info": "General info"
+    },
+    "area": {
+      "info": "General info"
     }
   },
   "add": {
@@ -463,6 +468,10 @@
     "heading": "Dataset",
     "editMessage": "Edit dataset",
     "viewMessage": "View dataset in geocollections portal"
+  },
+  "editArea": {
+    "heading": "Area",
+    "editMessage": "Edit area"
   },
   "references": {
     "tableView": "Table view",
@@ -1193,6 +1202,14 @@
   },
   "selectionSeries": {
     "user_added": "User added"
+  },
+  "area": {
+    "maardla": "Deposit",
+    "eelis": "Eelis",
+    "area_ha": "Area (ha)",
+    "deposit_area_ha": "Deposit (ha)",
+    "maakond": "County",
+    "egf": "Area EGF"
   },
   "messages": {
     "langChange": "Changed language!",

@@ -90,6 +90,8 @@
     "drillcores": "Puursüdamikud",
     "datasets": "Andmesetid",
     "stratigraphies": "Stratigraafia",
+    "areas": "Areas",
+    "area": "Add area",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -316,6 +318,9 @@
     },
     "stratigraphy": {
       "info": "Üldinfo"
+    },
+    "area": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -463,6 +468,10 @@
     "heading": "Andmeset",
     "editMessage": "Muuda andmesetti",
     "viewMessage": "Vaata andmesetti geokogude portaalis"
+  },
+  "editArea": {
+    "heading": "Ala",
+    "editMessage": "Muuda ala"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1193,6 +1202,14 @@
   },
   "selectionSeries": {
     "user_added": "Kasutaja"
+  },
+  "area": {
+    "maardla": "Maardla",
+    "eelis": "Eelis",
+    "area_ha": "Ala (ha)",
+    "deposit_area_ha": "Maardla (ha)",
+    "maakond": "Maakond",
+    "egf": "Ala EGF"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

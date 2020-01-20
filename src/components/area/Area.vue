@@ -1,5 +1,5 @@
 <template>
-  <div class="keyword">
+  <div class="area">
     <spinner
       v-show="sendingData"
       class="loading-overlay"
@@ -18,12 +18,10 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span :class="validate('keyword') ? 'green--text' : 'red--text'">{{
+          <span :class="validate('area') ? 'green--text' : 'red--text'">{{
             $t("common.generalInfo")
           }}</span>
-          <v-icon
-            right
-            :class="validate('keyword') ? 'green--text' : 'red--text'"
+          <v-icon right :class="validate('area') ? 'green--text' : 'red--text'"
             >fas fa-project-diagram</v-icon
           >
         </div>
@@ -37,81 +35,134 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
-          <!-- KEYWORD, LANGAUGE and KEYWORD CATEGORY -->
+          <!-- NAME, NAME_EN and AREA_TYPE -->
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
-                v-model="keyword.keyword"
+                v-model="area.name"
                 :color="bodyActiveColor"
-                :label="$t('keyword.keyword')"
+                :label="$t('common.name')"
                 use-state
               />
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
-              <autocomplete-wrapper
-                v-model="keyword.language"
+              <input-wrapper
+                v-model="area.name_en"
                 :color="bodyActiveColor"
-                :items="autocomplete.language"
-                :loading="autocomplete.loaders.language"
-                :item-text="commonLabel"
-                :label="$t('keyword.language')"
-                use-state
+                :label="$t('common.name_en')"
               />
             </v-col>
 
             <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
-                v-model="keyword.keyword_category"
+                v-model="area.area_type"
                 :color="bodyActiveColor"
-                :items="autocomplete.keyword_category"
-                :loading="autocomplete.loaders.keyword_category"
+                :items="autocomplete.area_type"
+                :loading="autocomplete.loaders.area_type"
                 :item-text="nameLabel"
-                :label="$t('keyword.keyword_category')"
-                is-searchable
-                v-on:search:items="autocompleteKeywordCategorySearch"
+                :label="$t('common.type')"
               />
             </v-col>
           </v-row>
 
-          <!-- RELATED KEYWORD and REMARKS -->
+          <!-- EELIS -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <autocomplete-wrapper
-                v-model="keyword.related_keyword"
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="area.eelis"
                 :color="bodyActiveColor"
-                :items="autocomplete.related_keyword"
-                :loading="autocomplete.loaders.related_keyword"
-                item-text="keyword"
-                :label="$t('keyword.related_keyword')"
-                is-searchable
-                v-on:search:items="autocompleteRelatedKeywordSearch"
+                :label="$t('area.eelis')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- EGF -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="area.egf"
+                :color="bodyActiveColor"
+                :label="$t('area.egf')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- MAARDLA, AREA_HA, DEPOSIT_AREA_HA and MAAKOND -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="area.maardla"
+                :color="bodyActiveColor"
+                :label="$t('area.maardla')"
+                type="number"
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
-                v-model="keyword.remarks"
+                v-model="area.area_ha"
+                :color="bodyActiveColor"
+                :label="$t('area.area_ha')"
+                type="number"
+                step="0.01"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="area.deposit_area_ha"
+                :color="bodyActiveColor"
+                :label="$t('area.deposit_area_ha')"
+                type="number"
+                step="0.01"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
+                v-model="area.maakond"
+                :color="bodyActiveColor"
+                :items="autocomplete.maakond"
+                :loading="autocomplete.loaders.maakond"
+                :item-text="maakondLabel"
+                :label="$t('area.maakond')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- DESCRIPTION -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <editor :data.sync="area.description" />
+            </v-col>
+          </v-row>
+
+          <!-- REMARKS -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="area.remarks"
                 :color="bodyActiveColor"
                 :label="$t('common.remarks')"
               />
             </v-col>
           </v-row>
+
+          <!-- POLYGON -->
+          <!--          <v-row no-gutters>-->
+          <!--            <v-col cols="12" class="pa-1">-->
+          <!--              <textarea-wrapper-->
+          <!--                v-model="area.polygon"-->
+          <!--                :color="bodyActiveColor"-->
+          <!--                :label="$t('area.polygon')"-->
+          <!--                readonly-->
+          <!--              />-->
+          <!--            </v-col>-->
+          <!--          </v-row>-->
         </div>
       </transition>
     </v-card>
-
-    <!-- IS PRIMARY -->
-    <v-row no-gutters class="mt-2">
-      <v-col>
-        <checkbox-wrapper
-          v-model="keyword.is_primary"
-          :color="bodyActiveColor"
-          :label="$t('keyword.is_primary')"
-          @change="keyword.is_primary = !keyword.is_primary"
-        />
-      </v-col>
-    </v-row>
   </div>
 </template>
 
@@ -119,20 +170,27 @@
 import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { fetchListLanguages, fetchKeyword } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
-
+import {
+  fetchArea,
+  fetchListAreaTypes,
+  fetchListMaakond
+} from "../../assets/js/api/apiCalls";
+import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import Editor from "../partial/editor/Editor";
 export default {
-  name: "Keyword",
+  name: "Area",
+
   components: {
+    Editor,
+    TextareaWrapper,
     InputWrapper,
     AutocompleteWrapper,
-    CheckboxWrapper,
     Spinner
   },
+
   props: {
     isBodyActiveColorDark: {
       type: Boolean,
@@ -150,6 +208,7 @@ export default {
       default: "deep-orange"
     }
   },
+
   mixins: [formManipulation, autocompleteMixin],
 
   data() {
@@ -167,15 +226,14 @@ export default {
         searchHistory && searchHistory !== "fallbackValue"
           ? searchHistory
           : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
       this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "keywordSearchHistory",
+        searchHistory: "areaSearchHistory",
         defaultSearch: this.setDefaultSearchParameters(),
         search: params,
-        request: "FETCH_KEYWORDS",
-        title: "header.keywords",
-        object: "keyword",
-        field: "keyword",
+        request: "FETCH_AREAS",
+        title: "header.areas",
+        object: "area",
+        field: "name",
         databaseId: this.databaseId,
         block: this.block
       });
@@ -187,6 +245,7 @@ export default {
   watch: {
     "$route.params.id": {
       handler: function() {
+        this.setInitialData();
         this.reloadData();
       },
       deep: true
@@ -199,30 +258,29 @@ export default {
         searchHistory: "keywordSearchHistory",
         copyFields: [
           "id",
-          "keyword",
-          "language",
-          "keyword_category",
-          "related_keyword",
-          "remarks",
-          "is_primary"
+          "name",
+          "area_type",
+          "maardla",
+          "eelis",
+          "egf",
+          "area_ha",
+          "deposit_area_ha",
+          "maakond",
+          "description",
+          "remarks"
+          // "polygon"
         ],
         autocomplete: {
           loaders: {
-            keyword_category: false,
-            related_keyword: false
+            area_type: false,
+            maakond: false
           },
           language: [],
-          keyword_category: [],
-          related_keyword: []
+          area_type: [],
+          maakond: []
         },
-        requiredFields: ["keyword", "language", "keyword_category"],
-        keyword: {
-          language: {
-            id: 1,
-            value: "inglise",
-            value_en: "English"
-          }
-        },
+        requiredFields: ["name"],
+        area: {},
         searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
@@ -236,21 +294,25 @@ export default {
     },
 
     loadFullInfo() {
-      fetchListLanguages().then(response => {
-        this.autocomplete.language = this.handleResponse(response);
+      fetchListAreaTypes().then(response => {
+        this.autocomplete.area_type = this.handleResponse(response);
+      });
+
+      fetchListMaakond().then(response => {
+        this.autocomplete.maakond = this.handleResponse(response);
       });
 
       if (this.$route.meta.isEdit) {
         this.sendingData = true;
-        fetchKeyword(this.$route.params.id).then(response => {
+        fetchArea(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.keyword = this.handleResponse(response)[0];
-            this.fillAutocompleteFields(this.keyword);
-            this.removeUnnecessaryFields(this.keyword, this.copyFields);
+            this.area = this.handleResponse(response)[0];
+            this.fillAutocompleteFields(this.area);
+            this.removeUnnecessaryFields(this.area, this.copyFields);
 
-            this.$emit("data-loaded", this.keyword);
+            this.$emit("data-loaded", this.area);
             this.sendingData = false;
           } else {
             this.sendingData = false;
@@ -282,39 +344,27 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.keyword.language = {
-        id: obj.language,
-        value: obj.language__value,
-        value_en: obj.language__value_en
+      this.area.area_type = {
+        id: obj.area_type,
+        name: obj.area_type__name,
+        name_en: obj.area_type__name_en
       };
-      if (this.isNotEmpty(obj.keyword_category)) {
-        this.keyword.keyword_category = {
-          id: obj.keyword_category,
-          name: obj.keyword_category__name,
-          name_en: obj.keyword_category__name_en
-        };
-        this.autocomplete.keyword_category.push(this.keyword.keyword_category);
-      }
-      if (this.isNotEmpty(obj.keyword_category)) {
-        this.keyword.related_keyword = {
-          id: obj.related_keyword,
-          keyword: obj.related_keyword__keyword
-        };
-        this.autocomplete.related_keyword.push(this.keyword.related_keyword);
-      }
+      this.area.maakond = {
+        id: obj.maakond,
+        maakond: obj.maakond__maakond,
+        maakond_en: obj.maakond__maakond_en
+      };
     },
 
     setDefaultSearchParameters() {
       return {
-        id: null,
-        term: null,
-        language: null,
-        keyword_category: null,
-        related_keyword: null,
-        is_primary: null,
+        name: null,
+        type: null,
+        area_ha: null,
+        maakond: null,
         page: 1,
         paginateBy: 10,
-        sortBy: ["id"],
+        sortBy: ["name"],
         sortDesc: [true]
       };
     }
@@ -322,4 +372,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped />

@@ -281,6 +281,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    areaSearchHistory: {
+      type: Object
+    },
+    areaViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

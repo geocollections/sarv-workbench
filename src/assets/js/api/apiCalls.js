@@ -2528,6 +2528,61 @@ export function fetchStratigraphySynonyms(id, searchParameters) {
  ***  STRATIGRAPHY END  ***
  **************************/
 
+/******************
+ *** AREA START ***
+ ******************/
+
+export function fetchArea(id) {
+  return get(`area/?id=${id}&format=json`);
+}
+
+export function fetchAreas(data) {
+  const fields =
+    "id,name,name_en,area_type,area_type__name,area_type__name_en,maardla,eelis,egf,area_ha,deposit_area_ha,maakond,maakond__maakond,maakond__maakond_en,description,remarks";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.name && data.name.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`;
+  }
+
+  if (data.type && data.type.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.type};fields:area_type__name,area_type__name_en;lookuptype:icontains`;
+  }
+
+  if (data.area_ha && data.area_ha.trim().length > 0) {
+    searchFields += `&area_ha__icontains=${data.area_ha}`;
+  }
+
+  if (data.maakond && data.maakond.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.maakond};fields:maakond__maakond,maakond__maakond_en;lookuptype:icontains`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `area/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `area/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+export function fetchListAreaTypes() {
+  return get(`area_type`);
+}
+
+export function fetchListMaakond() {
+  return get(`list_maakond`);
+}
+
+/******************
+ ***  AREA END  ***
+ ******************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/

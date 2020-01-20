@@ -382,6 +382,22 @@ export default {
               icon: "far fa-plus-square"
             }
           ]
+        },
+        {
+          name: "area",
+          title: "areas",
+          links: [
+            {
+              title: "areas",
+              path: "/area",
+              icon: "fas fa-chart-area"
+            },
+            {
+              title: "area",
+              path: "/area/add",
+              icon: "far fa-plus-square"
+            }
+          ]
         }
       ]
     };

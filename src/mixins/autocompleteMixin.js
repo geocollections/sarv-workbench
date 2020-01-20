@@ -31,6 +31,9 @@ const autocompleteMixin = {
     classLabel() {
       return this.$i18n.locale === "ee" ? "class_field" : "class_en";
     },
+    maakondLabel() {
+      return this.$i18n.locale === "ee" ? "maakond" : "maakond_en";
+    },
     keywordCategoryLabel() {
       return this.$i18n.locale === "ee"
         ? "keyword_category__name"

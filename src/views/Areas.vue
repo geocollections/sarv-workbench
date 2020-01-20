@@ -1,57 +1,46 @@
 <template>
-  <div class="keywords">
-    <table-view-title title="header.keywords" buttonPath="/keyword/add" />
+  <div class="areas">
+    <table-view-title title="header.areas" buttonPath="/area/add" />
 
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
-      :col-size="4"
+      :col-size="3"
       v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
-      module="keyword"
+      module="area"
       :searchParameters="searchParameters"
-      :api-call="fetchKeywords"
-      search-history="keywordSearchHistory"
-      view-type="keywordViewType"
+      :api-call="fetchAreas"
+      search-history="areaSearchHistory"
+      view-type="areaViewType"
       v-on:search-params-changed="searchParametersChanged"
     />
   </div>
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
-import { fetchKeywords } from "../assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
+import ListModuleCore from "./ListModuleCore";
+import { fetchAreas } from "../assets/js/api/apiCalls";
 
 export default {
-  name: "Keyword",
-  components: {
-    ListModuleCore,
-    TableViewSearch,
-    TableViewTitle
-  },
+  name: "Areas",
+
+  components: { ListModuleCore, TableViewSearch, TableViewTitle },
+
   data() {
     return {
       response: {},
       filters: [
-        { id: "id", title: "common.id", type: "number" },
-        { id: "term", title: "keyword.keyword", type: "text" },
-        { id: "language", title: "keyword.language", type: "text" },
-        {
-          id: "keyword_category",
-          title: "keyword.keyword_category",
-          type: "text"
-        },
-        {
-          id: "related_keyword",
-          title: "keyword.related_keyword",
-          type: "text"
-        }
+        { id: "name", title: "common.name", type: "text" },
+        { id: "type", title: "common.type", type: "text" },
+        { id: "area_ha", title: "area.area_ha", type: "text" },
+        { id: "maakond", title: "area.maakond", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
@@ -62,7 +51,7 @@ export default {
     searchParameters: {
       handler: function(newVal) {
         this.$store.dispatch("updateSearchParameters", {
-          module: "keyword",
+          module: "area",
           filters: this.filters,
           params: newVal
         });
@@ -73,9 +62,9 @@ export default {
   },
 
   methods: {
-    fetchKeywords() {
+    fetchAreas() {
       return new Promise(resolve => {
-        resolve(fetchKeywords(this.searchParameters));
+        resolve(fetchAreas(this.searchParameters));
       });
     },
 
@@ -85,26 +74,27 @@ export default {
 
     setDefaultSearchParameters() {
       return {
-        id: null,
-        term: null,
-        language: null,
-        keyword_category: null,
-        related_keyword: null,
-        is_primary: null,
+        name: null,
+        type: null,
+        area_ha: null,
+        maakond: null,
         page: 1,
         paginateBy: 10,
-        sortBy: ["id"],
+        sortBy: ["name"],
         sortDesc: [true]
       };
     },
+
     resetSearchPreferences() {
       this.resetStorage();
       this.resetSearchParameters();
     },
+
     resetStorage() {
-      this.$localStorage.remove("keywordSearchHistory");
-      this.$localStorage.remove("keywordViewType");
+      this.$localStorage.remove("areaSearchHistory");
+      this.$localStorage.remove("areaViewType");
     },
+
     resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
     }
@@ -112,4 +102,4 @@ export default {
 };
 </script>
 
-<style scoped />
+<style scoped></style>

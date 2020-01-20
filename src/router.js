@@ -1028,7 +1028,9 @@ const router = new Router({
               meta: {
                 isEdit: false,
                 addNew: "header.addCollection",
-                subForms: [{ path: "/collection/add", name: "header.collection" }],
+                subForms: [
+                  { path: "/collection/add", name: "header.collection" }
+                ],
                 requiresAuth: true,
                 object: "collection"
               }
@@ -1152,7 +1154,10 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.addSelectionSeries",
                 subForms: [
-                  { path: "/selection_series/add", name: "header.selectionSeries" }
+                  {
+                    path: "/selection_series/add",
+                    name: "header.selectionSeries"
+                  }
                 ],
                 requiresAuth: true,
                 object: "selection_series"
@@ -1274,7 +1279,9 @@ const router = new Router({
               meta: {
                 isEdit: false,
                 addNew: "header.addDrillcore",
-                subForms: [{ path: "/drillcore/add", name: "header.drillcore" }],
+                subForms: [
+                  { path: "/drillcore/add", name: "header.drillcore" }
+                ],
                 requiresAuth: true,
                 object: "drillcore"
               }
@@ -1467,6 +1474,66 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 object: "stratigraphy"
+              }
+            }
+          ]
+        },
+        {
+          path: "/area",
+          component: () => import("./views/Areas.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/area/AreaTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "area",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/area/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/area/Area.vue"),
+              meta: {
+                isEdit: true,
+                table: "area",
+                heading: "editArea.heading",
+                requiresAuth: true,
+                object: "area"
+              }
+            }
+          ]
+        },
+        {
+          path: "/area/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Area add",
+              component: () => import("./components/area/Area.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.area",
+                subForms: [{ path: "/area/add", name: "header.area" }],
+                requiresAuth: true,
+                object: "area"
               }
             }
           ]

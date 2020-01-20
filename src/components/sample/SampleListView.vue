@@ -1,6 +1,12 @@
 <template>
   <div class="list-row" v-if="data.length > 0">
-    <div class="label2" v-for="entity in data" :key="entity.id">
+    <router-link
+      class="label2"
+      v-for="entity in data"
+      :key="entity.id"
+      :to="{ path: '/sample/' + entity.id }"
+      :title="$t('editSample.editMessage')"
+    >
       <div class="label2_head">
         <div
           style="float: left; font-size: 90%"
@@ -121,7 +127,7 @@
           </transition>
         </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
