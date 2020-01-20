@@ -515,9 +515,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
         type.split("__")[1]
       }/?multi_search=value:${value};fields:id,reference;lookuptype:icontains&fields=id,reference`;
     case "attach_link__storage":
-      return `${
-        type.split("__")[1]
-      }/?multi_search=value:${value};fields:id,location,contents;lookuptype:icontains&fields=id,location,contents`;
+      return `location/?multi_search=value:${value};fields:id,location,contents;lookuptype:icontains&fields=id,location,contents`;
     default:
       return "";
   }

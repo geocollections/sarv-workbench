@@ -1428,7 +1428,7 @@
                     :label="$t('attachment.relatedData')"
                     :items="relatedTabs"
                     item-text="name_short"
-                    translation-prefix="attachment.relatedTables."
+                    translation-prefix="attachment.relatedTables.attach_link__"
                   />
                 </v-col>
 
@@ -1451,9 +1451,12 @@
                         'attach_link__' + selectedRelatedTable
                       ]
                     "
-                    :item-text="customLabelForRelatedDataUpdated()"
+                    :item-text="customLabelForRelatedData"
                     :label="
-                      $t('attachment.relatedTables.' + selectedRelatedTable)
+                      $t(
+                        'attachment.relatedTables.attach_link__' +
+                          selectedRelatedTable
+                      )
                     "
                     :no-cache="true"
                     is-link
@@ -1465,6 +1468,7 @@
                         selectedRelatedTable
                       )
                     "
+                    attachment-related-data
                     :multiple="true"
                     v-on:chip:close="
                       relatedData[
@@ -1621,7 +1625,7 @@
                       relatedData.attach_link__sample.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.sample") }}</p>
+                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__sample") }}</p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -1678,7 +1682,9 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__sample_series") }}
+                    {{
+                      $t("attachment.relatedTables.attach_link__sample_series")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -1793,7 +1799,9 @@
                       relatedData.attach_link__dataset.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__dataset") }}</p>
+                  <p class="h4">
+                    {{ $t("attachment.relatedTables.attach_link__dataset") }}
+                  </p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -1855,7 +1863,9 @@
                       relatedData.attach_link__doi.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__doi") }}</p>
+                  <p class="h4">
+                    {{ $t("attachment.relatedTables.attach_link__doi") }}
+                  </p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -2043,7 +2053,9 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__drillcore_box") }}
+                    {{
+                      $t("attachment.relatedTables.attach_link__drillcore_box")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -2111,7 +2123,9 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__preparation") }}
+                    {{
+                      $t("attachment.relatedTables.attach_link__preparation")
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -2232,7 +2246,9 @@
                       relatedData.attach_link__storage.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__storage") }}</p>
+                  <p class="h4">
+                    {{ $t("attachment.relatedTables.attach_link__storage") }}
+                  </p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -2282,7 +2298,9 @@
                       relatedData.attach_link__project.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__project") }}</p>
+                  <p class="h4">
+                    {{ $t("attachment.relatedTables.attach_link__project") }}
+                  </p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -2337,7 +2355,9 @@
                       relatedData.attach_link__site.length > 0
                   "
                 >
-                  <p class="h4">{{ $t("attachment.relatedTables.attach_link__site") }}</p>
+                  <p class="h4">
+                    {{ $t("attachment.relatedTables.attach_link__site") }}
+                  </p>
 
                   <div class="table-responsive">
                     <table class="table table-hover table-bordered">
@@ -2428,7 +2448,7 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.reference"
                     :loading="autocomplete.loaders.reference"
-                    item-text="reference"
+                    :item-text="customLabelForReference"
                     :label="$t('attachment.reference')"
                     use-state
                     is-link
@@ -3882,6 +3902,10 @@ export default {
       }
     },
 
+    customLabelForReference(option) {
+      return `${option.id} - (${option.reference})`;
+    },
+
     customLabelForRelatedData(option) {
       switch (this.selectedRelatedTable) {
         case "collection":
@@ -3892,12 +3916,14 @@ export default {
             return `${option.id} - (${option.name})`;
           return `${option.id} - (${option.name_en})`;
         case "specimen":
-          if (option.coll__number === null)
-            return `${option.specimen_id} (${option.id})`;
-          else
+          if (
+            typeof option.coll__number !== "undefined" &&
+            option.coll__number !== null
+          ) {
             return `${option.coll__number.split(" ")[0]} ${
               option.specimen_id
             } (${option.id})`;
+          } else return `${option.specimen_id} (${option.id})`;
         case "sample":
           return `${option.id} - (${option.number})`;
         case "sample_series":
@@ -3931,43 +3957,6 @@ export default {
             return `${option.id} - (${option.location} - ${option.contents})`;
         default:
           return `${option.id}`;
-      }
-    },
-
-    customLabelForRelatedDataUpdated() {
-      switch (this.selectedRelatedTable) {
-        case "collection":
-        case "dataset":
-        case "project":
-        case "site":
-          if (this.$i18n.locale === "ee") return "name";
-          else return "name_en";
-        case "specimen":
-          return "specimen_id";
-        case "sample":
-          return "number";
-        case "sample_series":
-          return "name";
-        case "analysis":
-          return "id";
-        case "doi":
-          return "identifier";
-        case "locality":
-          if (this.$i18n.locale === "ee") return "locality";
-          else return "locality_en";
-        case "drillcore":
-          if (this.$i18n.locale === "ee") return "drillcore";
-          else return "drillcore_en";
-        case "drillcore_box":
-          return "number";
-        case "preparation":
-          return "preparation_number";
-        case "reference":
-          return "reference";
-        case "storage":
-          return "location";
-        default:
-          return "id";
       }
     },
 

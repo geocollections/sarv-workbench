@@ -53,8 +53,12 @@
               : data.selected
           "
           @click:close="$emit('chip:close', data.item)"
-          >{{ data.item[$attrs["item-text"]] }}</v-chip
         >
+          <span v-if="attachmentRelatedData">{{
+            attachmentRelatedDataLabel(data, $attrs)
+          }}</span>
+          <span v-else>{{ data.item[$attrs["item-text"]] }}</span>
+        </v-chip>
       </template>
     </v-autocomplete>
   </div>
@@ -71,7 +75,8 @@ export default {
     method: Function,
     useState: Boolean,
     useCustomState: Boolean,
-    noCache: Boolean
+    noCache: Boolean,
+    attachmentRelatedData: Boolean
   },
   data: () => ({
     search: null
@@ -93,9 +98,6 @@ export default {
       let currentValue =
         this.$attrs.value && this.$attrs.value[this.$attrs["item-text"]];
 
-      // console.log("currentVal: " + currentValue);
-      // console.log("newVal: " + newVal);
-      // console.log("oldVal: " + oldVal);
       if (
         this.isSearchable &&
         newVal &&
@@ -108,6 +110,76 @@ export default {
     }
   },
   methods: {
+    attachmentRelatedDataLabel(option, attrs) {
+      console.log(attrs);
+
+      switch (attrs.label) {
+        case "Collection":
+        case "Kollektsioon":
+        case "Dataset":
+        case "Andmestik":
+        case "Project":
+        case "Projekt":
+        case "Site":
+        case "Vaatluspunkt":
+          if (this.$i18n.locale === "ee")
+            return `${option.item.id} - (${option.item.name})`;
+          return `${option.item.id} - (${option.item.name_en})`;
+        case "Specimen":
+        case "Eksemplar":
+          if (
+            typeof option.item.coll__number !== "undefined" &&
+            option.item.coll__number !== null
+          ) {
+            return `${option.item.coll__number.split(" ")[0]} ${
+              option.item.specimen_id
+            } (${option.item.id})`;
+          } else return `${option.item.specimen_id} (${option.item.id})`;
+        case "Sample":
+        case "Proov":
+          return `${option.item.id} - (${option.item.number})`;
+        case "Sample series":
+        case "Proovi seeria":
+          return `${option.item.id} - (${option.item.name})`;
+        case "Analysis":
+        case "Analüüs":
+          if (option.item.sample__number)
+            return `${option.item.id} - (${option.item.sample__number})`;
+          else return `${option.item.id}`;
+        case "DOI":
+          return `${option.item.id} - (${option.item.identifier})`;
+        case "Locality":
+        case "Lokaliteet":
+          if (this.$i18n.locale === "ee")
+            return `${option.item.id} - (${option.item.locality})`;
+          return `${option.item.id} - (${option.item.locality_en})`;
+        case "Drill core":
+        case "Puursüdamik":
+          if (this.$i18n.locale === "ee")
+            return `${option.item.id} - (${option.item.drillcore})`;
+          return `${option.item.id} - (${option.item.drillcore_en})`;
+        case "Drill core box":
+        case "Puursüdamiku kast":
+          if (this.$i18n.locale === "ee")
+            return `${option.item.id} - (${option.item.drillcore__drillcore} - ${option.item.number})`;
+          return `${option.item.id} - (${option.item.drillcore__drillcore_en} - ${option.item.number})`;
+        case "Preparation":
+        case "Preparaat":
+          return `${option.item.id} - (${option.item.preparation_number})`;
+        case "Reference":
+        case "Kirjandus":
+          return `${option.item.id} - (${option.item.reference})`;
+        case "Storage":
+        case "Hoidla":
+          if (option.item.contents === null)
+            return `${option.item.id} - (${option.item.location})`;
+          else
+            return `${option.item.id} - (${option.item.location} - ${option.item.contents})`;
+        default:
+          return `${option.item.id}`;
+      }
+    },
+
     openInNewTab(object, id) {
       let routeData = this.$router.resolve({ path: `/${object}/${id}` });
       window.open(routeData.href, "AutocompleteWindow");
