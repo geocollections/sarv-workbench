@@ -46,9 +46,9 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
-          <!-- NAME and PROJECT -->
+          <!-- NAME, AREA and PROJECT -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="site.name"
                 :color="bodyActiveColor"
@@ -56,7 +56,22 @@
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="site.area"
+                :color="bodyActiveColor"
+                :items="autocomplete.area"
+                :loading="autocomplete.loaders.area"
+                :item-text="nameLabel"
+                :label="$t('site.area')"
+                is-link
+                route-object="area"
+                is-searchable
+                v-on:search:items="autocompleteAreaSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
                 v-model="site.project"
                 :color="bodyActiveColor"
@@ -715,19 +730,22 @@ export default {
           "depth",
           "remarks_location",
           "description",
-          "remarks"
+          "remarks",
+          "area"
         ],
         autocomplete: {
           loaders: {
             project: false,
             attachment: false,
             coordMethod: false,
-            locality: false
+            locality: false,
+            area: false
           },
           project: [],
           attachment: [],
           coordMethod: [],
-          locality: []
+          locality: [],
+          area: []
         },
         requiredFields: ["latitude", "longitude"],
         site: {},
@@ -891,6 +909,14 @@ export default {
       return JSON.stringify(uploadableObject);
     },
     fillAutocompleteFields(obj) {
+      if (this.isNotEmpty(obj.area)) {
+        this.site.area = {
+          name: obj.area__name,
+          name_en: obj.area__name_en,
+          id: obj.area
+        };
+        this.autocomplete.project.push(this.site.project);
+      }
       if (this.isNotEmpty(obj.project)) {
         this.site.project = {
           name: obj.project__name,

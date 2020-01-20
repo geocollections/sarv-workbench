@@ -71,6 +71,9 @@ const autocompleteMixin = {
     autocompleteProjectSearch(value) {
       this.$_autocompleteMixin_search(value, "project", "project");
     },
+    autocompleteAreaSearch(value) {
+      this.$_autocompleteMixin_search(value, "area", "area");
+    },
     autocompleteLocalitySearch(value) {
       this.$_autocompleteMixin_search(value, "locality", "locality");
     },
@@ -434,6 +437,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "project":
     case "parent_project":
       return `project/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
+    case "area":
+      return `area/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "library":
       return `library/?multi_search=value:${value};fields:id,title,title_en;lookuptype:icontains&author=${currentUser.id}&fields=id,title,title_en`;
     case "journals":

@@ -701,6 +701,7 @@
   },
   "site": {
     "project":"Project",
+    "area":"Area",
     "relatedProject":"Related project",
     "number":"Number",
     "location":"Location",
