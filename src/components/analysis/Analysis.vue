@@ -812,7 +812,10 @@ export default {
 
     setDefaultRelatedData() {
       return {
-        attachment_link: [],
+        attachment_link: {
+          count: 0,
+          results: []
+        },
         analysis_results: {
           count: 0,
           results: []
@@ -857,7 +860,7 @@ export default {
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
         this.relatedTabs.forEach(tab => {
-          if (this.isNotEmpty(this.relatedData[tab.name]))
+          if (this.isNotEmpty(this.relatedData[tab.name].results))
             if (tab.name === "attachment_link") {
               uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
             } else {
@@ -867,8 +870,9 @@ export default {
             }
         });
       } else {
+        console.log(this.relatedData)
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
         } else uploadableObject.related_data.attachment = null;
       }
 
@@ -953,7 +957,7 @@ export default {
 
       query.then(response => {
         this.relatedData[object].count = response.data.count;
-        this.relatedData[object].results = response.data.results;
+        this.relatedData[object].results = this.handleResponse(response);
       });
     },
 

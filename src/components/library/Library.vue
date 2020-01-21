@@ -641,7 +641,7 @@ export default {
 
       query.then(response => {
         this.relatedData[object].count = response.data.count;
-        this.relatedData[object].results = response.data.results;
+        this.relatedData[object].results = this.handleResponse(response);
       });
     },
 

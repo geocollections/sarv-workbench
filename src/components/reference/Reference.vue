@@ -1439,10 +1439,10 @@ export default {
       query.then(response => {
         if (object === "library") {
           this.relatedData[object].count = response.data.count;
-          this.relatedData[object].results = response.data.results;
+          this.relatedData[object].results = this.handleResponse(response);
         } else {
           this.$set(this.relatedData[object], "count", response.data.count);
-          this.$set(this.relatedData[object], "results", response.data.results);
+          this.$set(this.relatedData[object], "results", this.handleResponse(response));
         }
       });
     },
