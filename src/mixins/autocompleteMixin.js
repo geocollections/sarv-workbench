@@ -47,6 +47,9 @@ const autocompleteMixin = {
     rankLabel() {
       return this.$i18n.locale === "ee" ? "rank" : "rank_en";
     },
+    drillcoreLabel() {
+      return this.$i18n.locale === "ee" ? "drillcore" : "drillcore_en";
+    },
     institutionLabel() {
       return this.$i18n.locale === "ee"
         ? "institution_name"
@@ -242,6 +245,9 @@ const autocompleteMixin = {
     },
     autocompleteCollSearch(value) {
       this.$_autocompleteMixin_search(value, "coll", "coll", 2);
+    },
+    autocompleteDrillcoreSearch(value) {
+      this.$_autocompleteMixin_search(value, "drillcore", "drillcore");
     },
     autocompleteAgentCollectedSearch(value) {
       this.$_autocompleteMixin_search(
@@ -465,6 +471,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `keyword/?keyword__icontains=${value}&fields=id,keyword`;
     case "analysis_method":
       return `analysis_method/?multi_search=value:${value};fields:analysis_method,method_en;lookuptype:icontains&fields=id,analysis_method,method_en`;
+    case "drillcore":
+      return `drillcore/?multi_search=value:${value};fields:drillcore,drillcore_en;lookuptype:icontains&fields=id,drillcore,drillcore_en`;
     case "imageset":
       return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
     case "attach_link__collection":

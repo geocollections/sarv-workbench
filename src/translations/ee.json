@@ -88,10 +88,12 @@
     "agents": "Isikud/asutused",
     "preparations": "Preparaadid",
     "drillcores": "Puursüdamikud",
+    "drillcoreBoxes": "Puursüdamiku kastid",
+    "drillcoreBox": "Lisa puursüdamiku kast",
     "datasets": "Andmesetid",
     "stratigraphies": "Stratigraafia",
-    "areas": "Areas",
-    "area": "Add area",
+    "areas": "Alad",
+    "area": "Lisa ala",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -248,6 +250,8 @@
       "datacite": "Datacite"
     },
     "analysis": {
+      "info": "Üldinfo",
+      "description": "Lisainfo",
       "labInfo": "Labori andmed",
       "otherInfo": "Muu info"
     },
@@ -320,6 +324,9 @@
       "info": "Üldinfo"
     },
     "area": {
+      "info": "Üldinfo"
+    },
+    "drillcore_box": {
       "info": "Üldinfo"
     }
   },
@@ -472,6 +479,11 @@
   "editArea": {
     "heading": "Ala",
     "editMessage": "Muuda ala"
+  },
+  "editDrillcoreBox": {
+    "heading": "Puursüdamiku kast",
+    "editMessage": "Muuda puursüdamiku kasti",
+    "viewMessage": "Vaata puursüdamikku geokogude portaalis"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -993,10 +1005,14 @@
     "depth_start": "Depth start",
     "depth_end": "Depth end",
     "stratigraphy_base": "Strat. base",
+    "stratigraphy_base_free": "Strat. base free",
     "stratigraphy_top": "Strat. top",
+    "stratigraphy_top_free": "Strat. top free",
+    "stratigraphy_free": "Strat. free",
     "depth_other": "Depth other",
     "number_meters": "m. in a box",
-    "diameter": "d, mm"
+    "diameter": "d, mm",
+    "location": "Location"
   },
   "drillcore_study": {
     "agent": "Agent",

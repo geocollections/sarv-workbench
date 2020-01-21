@@ -1107,7 +1107,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("./components/selectionSeries/SelectionSeriesTable.vue"),
+                import("./components/selection_series/SelectionSeriesTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "selection_series",
@@ -1127,7 +1127,7 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("./components/selectionSeries/SelectionSeries.vue"),
+                import("./components/selection_series/SelectionSeries.vue"),
               meta: {
                 isEdit: true,
                 table: "selection_series",
@@ -1149,7 +1149,7 @@ const router = new Router({
               path: "",
               name: "Selection series add",
               component: () =>
-                import("./components/selectionSeries/SelectionSeries.vue"),
+                import("./components/selection_series/SelectionSeries.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.addSelectionSeries",
@@ -1534,6 +1534,66 @@ const router = new Router({
                 subForms: [{ path: "/area/add", name: "header.area" }],
                 requiresAuth: true,
                 object: "area"
+              }
+            }
+          ]
+        },
+        {
+          path: "/drillcore_box",
+          component: () => import("./views/DrillcoreBoxes.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/drillcore_box/DrillcoreBoxTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "drillcore_box",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/drillcore_box/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/drillcore_box/DrillcoreBox.vue"),
+              meta: {
+                isEdit: true,
+                table: "drillcore_box",
+                heading: "editDrillcoreBox.heading",
+                requiresAuth: true,
+                object: "drillcore_box"
+              }
+            }
+          ]
+        },
+        {
+          path: "/drillcore_box/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Drillcore box add",
+              component: () => import("./components/drillcore_box/DrillcoreBox.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.drillcoreBox",
+                subForms: [{ path: "/drillcore_box/add", name: "header.drillcore_box" }],
+                requiresAuth: true,
+                object: "drillcore_box"
               }
             }
           ]

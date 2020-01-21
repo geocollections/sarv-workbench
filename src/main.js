@@ -288,6 +288,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    drillcoreBoxSearchHistory: {
+      type: Object
+    },
+    drillcoreBoxViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

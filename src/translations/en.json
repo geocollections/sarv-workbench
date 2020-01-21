@@ -88,10 +88,12 @@
     "agents": "Agents",
     "preparations": "Preparations",
     "drillcores": "Drill cores",
+    "drillcoreBoxes": "Drill core boxes",
+    "drillcoreBox": "Add drill core box",
     "datasets": "Datasets",
     "stratigraphies": "Stratigraphy",
-    "areas": "Alad",
-    "area": "Lisa Ala",
+    "areas": "Areas",
+    "area": "Add Area",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -248,6 +250,8 @@
       "datacite": "Datacite"
     },
     "analysis": {
+      "info": "General info",
+      "description": "Description",
       "labInfo": "Lab info",
       "otherInfo": "Other info"
     },
@@ -320,6 +324,9 @@
       "info": "General info"
     },
     "area": {
+      "info": "General info"
+    },
+    "drillcore_box": {
       "info": "General info"
     }
   },
@@ -472,6 +479,11 @@
   "editArea": {
     "heading": "Area",
     "editMessage": "Edit area"
+  },
+  "editDrillcoreBox": {
+    "heading": "Drill core box",
+    "editMessage": "Edit Drill core box",
+    "viewMessage": "View drill core box in geocollections portal"
   },
   "references": {
     "tableView": "Table view",
@@ -993,10 +1005,14 @@
     "depth_start": "Algus, m",
     "depth_end": "Lõpp, m",
     "stratigraphy_base": "Strat. alumine",
+    "stratigraphy_base_free": "Strat. alumine txt",
     "stratigraphy_top": "Strat. ülemine",
+    "stratigraphy_top_free": "Strat. ülemine txt",
+    "stratigraphy_free": "Piirid jms",
     "depth_other": "Muud sügavbused",
     "number_meters": "m kastis",
-    "diameter": "d, mm"
+    "diameter": "d, mm",
+    "location": "Asukoht"
   },
   "drillcore_study": {
     "agent": "Uurija",

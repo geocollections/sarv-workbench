@@ -358,11 +358,21 @@ export default {
             {
               title: "drillcores",
               path: "/drillcore",
-              icon: "fas fa-boxes"
+              icon: "fas fa-box"
             },
             {
               title: "drillcore",
               path: "/drillcore/add",
+              icon: "far fa-plus-square"
+            },
+            {
+              title: "drillcoreBoxes",
+              path: "/drillcore_box",
+              icon: "fas fa-boxes"
+            },
+            {
+              title: "drillcoreBox",
+              path: "/drillcore_box/add",
               icon: "far fa-plus-square"
             }
           ]

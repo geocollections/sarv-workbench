@@ -2242,7 +2242,7 @@ export function fetchListDrillcoreStorage() {
   return get(`list_drillcore_storage/?format=json`);
 }
 
-export function fetchDrillcoreBoxes(drillcoreId, searchParameters) {
+export function fetchRelatedDrillcoreBoxes(drillcoreId, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
     searchParameters.sortDesc
@@ -2275,6 +2275,46 @@ export function fetchDrillcoreAttachments(drillcoreId, searchParameters) {
 /***********************
  ***  DRILLCORE END  ***
  ***********************/
+
+/***************************
+ *** DRILLCORE BOX START ***
+ ***************************/
+
+export function fetchDrillcoreBox(id) {
+  return get(`drillcore_box/?id=${id}&format=json`);
+}
+
+export function fetchDrillcoreBoxes(data) {
+  const fields =
+    "id,drillcore,drillcore__drillcore,drillcore__drillcore_en,number,number_meters,depth_start,depth_end,depth_other,stratigraphy_base,stratigraphy_base__stratigraphy,stratigraphy_base__stratigraphy_en,stratigraphy_top,stratigraphy_top__stratigraphy,stratigraphy_top__stratigraphy_en,stratigraphy_free,remarks";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.storage && data.storage.trim().length > 0) {
+    searchFields += `storage__location__icontains=${data.storage}`;
+  }
+
+  if (data.drillcore && data.drillcore.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.drillcore};fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:icontains`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `drillcore_box/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `drillcore_box/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+
+/***************************
+ ***  DRILLCORE BOX END  ***
+ ***************************/
 
 /*************************
  *** PREPARATION START ***

@@ -255,7 +255,7 @@ export default {
   methods: {
     setInitialData() {
       return {
-        searchHistory: "keywordSearchHistory",
+        searchHistory: "areaSearchHistory",
         copyFields: [
           "id",
           "name",

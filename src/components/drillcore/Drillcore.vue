@@ -351,9 +351,9 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import {
   fetchDrillcore,
   fetchDrillcoreAttachments,
-  fetchDrillcoreBoxes,
   fetchDrillcoreStudies,
-  fetchListDrillcoreStorage
+  fetchListDrillcoreStorage,
+  fetchRelatedDrillcoreBoxes
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -695,7 +695,7 @@ export default {
       let query;
 
       if (object === "drillcore_box") {
-        query = fetchDrillcoreBoxes(
+        query = fetchRelatedDrillcoreBoxes(
           this.$route.params.id,
           this.relatedData.searchParameters.drillcore_box
         );

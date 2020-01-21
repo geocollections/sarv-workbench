@@ -86,7 +86,7 @@ export default {
       searchHistory: "selectionSeriesSearchHistory",
       search: params,
       request: "FETCH_SELECTION_SERIES",
-      title: "header.selectionSeries",
+      title: "header.selection_series",
       object: "selection_series",
       field: "name",
       agent: this.currentUser

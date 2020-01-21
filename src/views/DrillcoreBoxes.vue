@@ -1,64 +1,56 @@
 <template>
-  <div class="selectionSeries">
+  <div class="drillcoreBoxes">
     <table-view-title
-      title="header.selectionSeries"
-      buttonPath="/selection_series/add"
-      class="d-print-none"
+      title="header.drillcoreBoxes"
+      buttonPath="/drillcore_box/add"
     />
 
     <table-view-search
-      class="d-print-none"
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
-      :col-size="3"
       v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
     <list-module-core
-      module="selectionSeries"
+      module="drillcore_box"
       :searchParameters="searchParameters"
-      :api-call="fetchSelectionSeries"
-      search-history="selectionSeriesSearchHistory"
-      view-type="selectionSeriesViewType"
-      :multi-ordering="true"
+      :api-call="fetchDrillcoreBoxes"
+      search-history="drillcoreBoxSearchHistory"
+      view-type="drillcoreBoxViewType"
       v-on:search-params-changed="searchParametersChanged"
     />
   </div>
 </template>
 
 <script>
-import ListModuleCore from "./ListModuleCore";
-import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
-import { fetchSelectionSeries } from "../assets/js/api/apiCalls";
-
+import TableViewTitle from "../components/partial/tableView/TableViewTitle";
+import ListModuleCore from "./ListModuleCore";
+import { fetchDrillcoreBoxes } from "../assets/js/api/apiCalls";
 export default {
-  name: "SelectionSeries",
-  components: {
-    ListModuleCore,
-    TableViewTitle,
-    TableViewSearch
-  },
+  name: "DrillcoreBoxes",
+
+  components: { ListModuleCore, TableViewTitle, TableViewSearch },
+
   data() {
     return {
       response: {},
       filters: [
-        { id: "id", title: "common.id", type: "number" },
-        { id: "name", title: "common.name", type: "text" },
-        { id: "remarks", title: "common.remarks", type: "text" },
-        { id: "user_added", title: "selectionSeries.user_added", type: "text" }
+        { id: "storage", title: "drillcore.storage", type: "text" },
+        { id: "drillcore", title: "drillcore.drillcore", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
+
   watch: {
     searchParameters: {
       handler: function(newVal) {
         this.$store.dispatch("updateSearchParameters", {
-          module: "selection_series",
+          module: "drillcore_box",
           filters: this.filters,
           params: newVal
         });
@@ -67,35 +59,39 @@ export default {
       immediate: true
     }
   },
+
   methods: {
-    fetchSelectionSeries() {
+    fetchDrillcoreBoxes() {
       return new Promise(resolve => {
-        resolve(fetchSelectionSeries(this.searchParameters));
+        resolve(fetchDrillcoreBoxes(this.searchParameters));
       });
     },
+
     searchParametersChanged(newParams) {
       this.searchParameters = newParams;
     },
+
     setDefaultSearchParameters() {
       return {
-        id: null,
-        name: null,
-        remarks: null,
-        user_added: null,
+        storage: null,
+        drillcore: null,
         page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
+        paginateBy: 10,
+        sortBy: ["drillcore"],
         sortDesc: [true]
       };
     },
+
     resetSearchPreferences() {
       this.resetStorage();
       this.resetSearchParameters();
     },
+
     resetStorage() {
-      this.$localStorage.remove("selectionSeriesSearchHistory");
-      this.$localStorage.remove("selectionSeriesViewType");
+      this.$localStorage.remove("drillcoreBoxSearchHistory");
+      this.$localStorage.remove("drillcoreBoxViewType");
     },
+
     resetSearchParameters() {
       this.searchParameters = this.setDefaultSearchParameters();
     }
@@ -103,4 +99,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped />
