@@ -2459,6 +2459,16 @@ export function fetchDatasetReferences(datasetId, searchParameters) {
   );
 }
 
+export function fetchDatasetAnalyses(datasetId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `dataset_analysis/?dataset=${datasetId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
 /*********************
  ***  DATASET END  ***
  *********************/

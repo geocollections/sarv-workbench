@@ -314,8 +314,8 @@
         <div v-show="block.specimen" class="pb-1">
           <!-- PAGINATION -->
           <div
-            v-if="specimens.count > 0"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none px-2"
+            v-if="specimens.count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between mt-3 d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select

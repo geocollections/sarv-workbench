@@ -244,6 +244,7 @@
       "inactiveTitle": "Tee kogumik mitteaktiivseks"
     },
     "doi": {
+      "requiredFields": "Kohustuslikud väljad",
       "info": "Täiendavad metaandmed",
       "referenceAndDataset": "Kirjandus ja Andmekogum",
       "description": "Lisainfo ja märksõnad",
@@ -857,7 +858,8 @@
     "dataset_html": "HTML andmed",
     "relatedTables": {
       "dataset_author": "Autorid",
-      "dataset_reference": "Viited"
+      "dataset_reference": "Viited",
+      "dataset_analysis": "Analüüsid"
     }
   },
   "dataset_reference": {

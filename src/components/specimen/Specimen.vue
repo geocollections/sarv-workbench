@@ -596,7 +596,7 @@
 
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">

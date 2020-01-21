@@ -233,9 +233,17 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <dataset-analysis-table
+            v-show="activeTab === 'dataset_analysis'"
+            :response="relatedData.dataset_analysis"
+            :search-parameters="relatedData.searchParameters.dataset_analysis"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+          />
+
           <!-- PAGINATION -->
           <div
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 0"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
             class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
@@ -292,7 +300,7 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import Spinner from "vue-simple-spinner";
 import { mapState } from "vuex";
 import {
-  fetchDataset,
+  fetchDataset, fetchDatasetAnalyses,
   fetchDatasetAuthors,
   fetchDatasetReferences,
   fetchListLicences
@@ -306,11 +314,13 @@ import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import DatasetAuthorTable from "./relatedTables/DatasetAuthorTable";
 import DatasetReferenceTable from "./relatedTables/DatasetReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
+import DatasetAnalysisTable from "./relatedTables/DatasetAnalysisTable";
 
 export default {
   name: "Dataset",
 
   components: {
+    DatasetAnalysisTable,
     DatasetReferenceTable,
     DatasetAuthorTable,
     CheckboxWrapper,
@@ -428,7 +438,8 @@ export default {
       return {
         relatedTabs: [
           { name: "dataset_author", iconClass: "far fa-user" },
-          { name: "dataset_reference", iconClass: "fas fa-book" }
+          { name: "dataset_reference", iconClass: "fas fa-book" },
+          { name: "dataset_analysis", iconClass: "far fa-chart-bar" }
         ],
         searchHistory: "datasetSearchHistory",
         activeTab: "dataset_author",
@@ -531,6 +542,7 @@ export default {
       return {
         dataset_author: { count: 0, results: [] },
         dataset_reference: { count: 0, results: [] },
+        dataset_analysis: { count: 0, results: [] },
         searchParameters: {
           dataset_author: {
             page: 1,
@@ -542,6 +554,12 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["id"],
+            sortDesc: [true]
+          },
+          dataset_analysis: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["analysis"],
             sortDesc: [true]
           }
         }
@@ -617,6 +635,11 @@ export default {
         query = fetchDatasetReferences(
           this.$route.params.id,
           this.relatedData.searchParameters.dataset_reference
+        );
+      } else if (object === "dataset_analysis") {
+        query = fetchDatasetAnalyses(
+          this.$route.params.id,
+          this.relatedData.searchParameters.dataset_analysis
         );
       }
 

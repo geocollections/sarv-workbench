@@ -436,7 +436,7 @@
           <!-- PAGINATION -->
           <div
             v-if="relatedData.sites.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between px-1"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select

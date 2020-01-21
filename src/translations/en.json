@@ -244,6 +244,7 @@
       "inactiveTitle": "Make library inactive"
     },
     "doi": {
+      "requiredFields": "Required fields",
       "info": "Additional metadata",
       "referenceAndDataset": "Reference ja Dataset",
       "description": "Remarks",
@@ -857,7 +858,8 @@
     "dataset_html": "HTML data",
     "relatedTables": {
       "dataset_author": "Authors",
-      "dataset_reference": "References"
+      "dataset_reference": "References",
+      "dataset_analysis": "Analyses"
     }
   },
   "dataset_reference": {
