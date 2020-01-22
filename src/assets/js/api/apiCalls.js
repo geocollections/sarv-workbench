@@ -2191,6 +2191,34 @@ export function fetchAddItemToSelection(data) {
   return post(`add/selection/`, data);
 }
 
+export function fetchSelectedSpecimens(selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&specimen!=null&format=json`);
+}
+
+export function fetchSelectedSamples(selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&sample!=null&format=json`);
+}
+
+export function fetchSelectedAttachments(selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&attachment!=null&format=json`);
+}
+
+export function fetchSelectedLocalities(selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&locality!=null&format=json`);
+}
+
+export function fetchSelectedReferences(selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&reference!=null&format=json`);
+}
+
+export function fetchSelectedTaxa(selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&taxon!=null&format=json`);
+}
+
+export function fetchSelectedAnalyses(selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&analysis!=null&format=json`);
+}
+
 /***********************
  ***  SELECTION END  ***
  ***********************/

@@ -1220,7 +1220,16 @@
     "is_primary": "Esmane"
   },
   "selectionSeries": {
-    "user_added": "Kasutaja"
+    "user_added": "Kasutaja",
+    "relatedTables": {
+      "specimen": "Eksemplarid",
+      "sample": "Proovid",
+      "attachment": "Failid",
+      "locality": "Lokaliteedid",
+      "reference": "Kirjandus",
+      "taxon": "Taksonid",
+      "analysis": "Analüüsid"
+    }
   },
   "area": {
     "maardla": "Maardla",

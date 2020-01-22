@@ -28,7 +28,7 @@
             >fas fa-project-diagram</v-icon
           >
         </div>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn icon @click="block.info = !block.info" :color="bodyActiveColor">
           <v-icon>{{
             block.info ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -1045,4 +1045,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped />

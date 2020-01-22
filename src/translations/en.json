@@ -1220,7 +1220,16 @@
     "is_primary": "Primary"
   },
   "selectionSeries": {
-    "user_added": "User added"
+    "user_added": "User added",
+    "relatedTables": {
+      "specimen": "Specimens",
+      "sample": "Samples",
+      "attachment": "Attachments",
+      "locality": "Localities",
+      "reference": "References",
+      "taxon": "Taxa",
+      "analysis": "Analyses"
+    }
   },
   "area": {
     "maardla": "Deposit",
