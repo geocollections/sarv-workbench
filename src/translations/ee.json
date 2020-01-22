@@ -735,7 +735,12 @@
     "relatedSamples": "Seotud proovid",
     "mapEnabled": "Kaart nähtaval",
     "mapDisabled": "Kaart peidetud",
-    "copyToLocality": "Copy to locality"
+    "copyToLocality": "Copy to locality",
+    "relatedTables": {
+      "attachment_link": "Failid",
+      "samples": "Seotud proovid",
+      "locality_description": "Lokaliteedi kirjeldused"
+    }
   },
   "analysis": {
     "sample": "Proov #",

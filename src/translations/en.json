@@ -735,7 +735,12 @@
     "relatedSamples": "Related samples",
     "mapEnabled": "Map enabled",
     "mapDisabled": "Map disabled",
-    "copyToLocality": "Copy to locality"
+    "copyToLocality": "Copy to locality",
+    "relatedTables": {
+      "attachment_link": "Files",
+      "samples": "Related samples",
+      "locality_description": "Locality descriptions"
+    }
   },
   "analysis": {
     "sample": "Sample #",

@@ -327,7 +327,9 @@
           class="card-title--clickable"
           @click="block.description = !block.description"
         >
-          <span>{{ $t("common.description") }} | {{ $t("common.remarks") }}</span>
+          <span
+            >{{ $t("common.description") }} | {{ $t("common.remarks") }}</span
+          >
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
@@ -367,116 +369,126 @@
       </transition>
     </v-card>
 
-    <!-- FILES -->
+    <!-- RELATED DATA TABS -->
     <v-card
-      class="mt-2"
-      id="block-files"
-      v-if="$route.meta.isEdit && site.id"
+      class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
-      <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.files = !block.files">
-          <span>{{ $t("site.files") }}</span>
-          <v-icon right>fas fa-folder-open</v-icon>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.files = !block.files"
-          :color="bodyActiveColor"
+      <v-tabs
+        :background-color="bodyColor.split('n-')[0] + 'n-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in relatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
         >
-          <v-icon>{{
-            block.files ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.files" class="pa-1">
-          <file-upload
-            show-existing
-            :files-from-object="relatedData.attachment_link"
-            v-on:update:existing-files="addExistingFiles"
-            v-on:file-uploaded="addFiles"
-            accept-multiple
-          />
-        </div>
-      </transition>
-    </v-card>
-
-    <!-- SAMPLES -->
-    <v-card
-      class="mt-2"
-      id="block-samples"
-      v-if="$route.meta.isEdit && site.id"
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      elevation="4"
-    >
-      <v-card-title class="pt-2 pb-1">
-        <div
-          class="card-title--clickable"
-          @click="block.samples = !block.samples"
-        >
-          <span>{{ $t("site.relatedSamples") }}</span>
-          <v-icon right>fas fa-vial</v-icon>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.samples = !block.samples"
-          :color="bodyActiveColor"
-        >
-          <v-icon>{{
-            block.samples ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.samples" class="pa-1">
-          <!-- ADD NEW and EXPORT -->
-          <v-card
-            class="d-flex flex-row justify-content-start mb-3"
-            flat
-            tile
-            :color="bodyColor.split('n-')[0] + 'n-5'"
+          <span>{{ $t("site.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
-            <v-card flat tile class="mx-1">
-              <v-btn
-                :to="{
-                  name: 'Sample add',
-                  query: { site: JSON.stringify(site) }
-                }"
-                target="newSiteWindow"
-                :color="bodyActiveColor"
-                :dark="isBodyActiveColorDark"
-                >{{ $t("add.new") }}</v-btn
+            {{ relatedData[tab.name].count }}
+          </span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items>
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <div v-show="activeTab === 'attachment_link'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.attachment_link.results"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
+
+          <div v-show="activeTab === 'samples'" class="pa-1">
+            <!-- ADD NEW and EXPORT -->
+            <v-card
+              class="d-flex flex-row justify-content-start mb-3"
+              flat
+              tile
+              :color="bodyColor.split('n-')[0] + 'n-5'"
+            >
+              <v-card flat tile class="mx-1">
+                <v-btn
+                  :to="{
+                    name: 'Sample add',
+                    query: { site: JSON.stringify(site) }
+                  }"
+                  target="newSiteWindow"
+                  :color="bodyActiveColor"
+                  :dark="isBodyActiveColorDark"
+                  >{{ $t("add.new") }}</v-btn
+                >
+              </v-card>
+
+              <v-card
+                flat
+                tile
+                class="mx-1"
+                v-if="relatedData.samples.count > 0"
               >
+                <export-buttons
+                  filename="sample"
+                  :table-data="relatedData.samples.results"
+                  clipboard-class="sample-table"
+                  :body-active-color="bodyActiveColor"
+                />
+              </v-card>
             </v-card>
 
-            <v-card flat tile class="mx-1" v-if="relatedData.samples.count > 0">
-              <export-buttons
-                filename="sample"
-                :table-data="relatedData.samples.results"
-                clipboard-class="sample-table"
-                :body-active-color="bodyActiveColor"
-              ></export-buttons>
-            </v-card>
-          </v-card>
+            <v-row no-gutters>
+              <v-col cols="12" class="px-1">
+                <sample-table
+                  ref="table"
+                  :response="relatedData.samples"
+                  :search-parameters="relatedData.searchParameters.sample"
+                  v-if="relatedData.samples.count > 0"
+                  :body-active-color="bodyActiveColor"
+                  :body-color="bodyColor"
+                />
+              </v-col>
+            </v-row>
+          </div>
+
+          <!--          <specimen-history-table-->
+          <!--            v-show="activeTab === 'specimen_history'"-->
+          <!--            :response="relatedData.specimen_history"-->
+          <!--            :search-parameters="relatedData.searchParameters.specimen_history"-->
+          <!--            :body-color="bodyColor"-->
+          <!--            :body-active-color="bodyActiveColor"-->
+          <!--            v-on:related:add="addRelatedItem"-->
+          <!--            v-on:related:edit="editRelatedItem"-->
+          <!--            v-on:related:delete="deleteRelatedItem"-->
+          <!--          />-->
 
           <!-- PAGINATION -->
           <div
-            v-if="relatedData.samples.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
-                v-model="relatedData.searchParameters.sample.paginateBy"
-                color="blue"
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
                 dense
                 :items="paginateByOptionsTranslated"
-                item-color="blue"
+                :item-color="bodyActiveColor"
                 label="Paginate by"
                 hide-details
               />
@@ -484,36 +496,23 @@
 
             <div>
               <v-pagination
-                v-model="relatedData.searchParameters.sample.page"
-                color="blue"
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
                 circle
                 prev-icon="fas fa-angle-left"
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.samples.count /
-                      relatedData.searchParameters.sample.paginateBy
+                    relatedData[activeTab].count /
+                      relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
                 :total-visible="5"
               />
             </div>
           </div>
-
-          <v-row no-gutters>
-            <v-col cols="12" class="px-1">
-              <sample-table
-                ref="table"
-                :response="relatedData.samples"
-                :search-parameters="relatedData.searchParameters.sample"
-                v-if="relatedData.samples.count > 0"
-                :body-active-color="bodyActiveColor"
-                :body-color="bodyColor"
-              />
-            </v-col>
-          </v-row>
-        </div>
-      </transition>
+        </v-card>
+      </v-tabs-items>
     </v-card>
   </div>
 </template>
@@ -529,7 +528,8 @@ import {
   fetchListCoordinateMethod,
   fetchSiteAttachment,
   fetchLinkedSamples,
-  fetchLastSiteName
+  fetchLastSiteName,
+  fetchSiteLocalityDescriptions
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
 import sidebarMixin from "../../mixins/sidebarMixin";
@@ -681,37 +681,37 @@ export default {
     sidebarUserAction(newVal) {
       this.handleUserAction(newVal, "site", this.site);
     },
-    "relatedData.searchParameters.sample": {
-      handler(newVal) {
+    "relatedData.searchParameters": {
+      handler: function() {
         if (this.$route.meta.isEdit) {
-          this.searchRelatedData(
-            newVal,
-            this.fetchLinkedSamplesWrapper,
-            "samples"
-          );
+          this.loadRelatedData(this.activeTab);
         }
       },
-      immediate: true,
       deep: true
     }
   },
 
   methods: {
-    fetchLinkedSamplesWrapper() {
-      return new Promise(resolve => {
-        resolve(
-          fetchLinkedSamples(
-            this.relatedData.searchParameters.sample,
-            this.$route.params.id
-          )
-        );
-      });
+    setTab(type) {
+      if (type) {
+        this.$store.dispatch("updateActiveTab", {
+          tab: type,
+          object: this.$route.meta.object
+        });
+        this.activeTab = type;
+      }
     },
 
     setInitialData() {
       return {
+        relatedTabs: [
+          { name: "attachment_link", iconClass: "fas fa-folder-open" },
+          { name: "samples", iconClass: "fas fa-vial" },
+          { name: "locality_description", iconClass: "fas fa-align-left" }
+        ],
+        activeTab: "attachment_link",
+        relatedData: this.setDefaultRelatedData(),
         searchHistory: "siteSearchHistory",
-        relatedData: this.setDefaultRalatedData(),
         copyFields: [
           "id",
           "name",
@@ -749,15 +749,11 @@ export default {
         },
         requiredFields: ["latitude", "longitude"],
         site: {},
-        previousRecord: {},
-        nextRecord: {},
         searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,
-          description: false,
-          files: true,
-          samples: true
+          description: false
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -793,17 +789,15 @@ export default {
             this.fillAutocompleteFields(this.site);
             this.removeUnnecessaryFields(this.site, this.copyFields);
 
-            this.site.related_data = {};
             this.$emit("data-loaded", this.site);
             this.sendingData = false;
-            // this.getListRecords('site')
           } else {
             this.sendingData = false;
             this.$emit("object-exists", false);
           }
         });
 
-        this.loadRelatedData("attachment_link");
+        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       }
       this.$root.$on(
         "add-or-edit-site-from-modal",
@@ -811,22 +805,19 @@ export default {
       );
     },
 
-    setDefaultRalatedData() {
+    setDefaultRelatedData() {
       return {
-        attachment_link: [],
+        attachment_link: {
+          count: 0,
+          results: []
+        },
         samples: {
           count: 0,
           results: []
         },
-        new: {
-          attachment_link: []
-        },
-        page: {
-          attachment_link: 1
-        },
-        count: {
-          attachment_link: 0,
-          sample: 0
+        locality_description: {
+          count: 0,
+          results: []
         },
         searchParameters: {
           attachment_link: {
@@ -835,6 +826,12 @@ export default {
             orderBy: "-id"
           },
           sample: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true]
+          },
+          locality_description: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
@@ -901,13 +898,32 @@ export default {
         }
       });
 
+      // Adding related data only on add view
       uploadableObject.related_data = {};
-      uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+      if (!this.$route.meta.isEdit) {
+        this.relatedTabs.forEach(tab => {
+          if (this.isNotEmpty(this.relatedData[tab.name]))
+            if (tab.name !== "samples") {
+              if (tab.name === "attachment_link") {
+                uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+              } else {
+                uploadableObject.related_data[tab.name] = this.relatedData[
+                  tab.name
+                  ].results;
+              }
+            }
+        });
+      } else {
+        if (this.relatedData.attachment_link.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        } else uploadableObject.related_data.attachment = null;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },
+
     fillAutocompleteFields(obj) {
       if (this.isNotEmpty(obj.area)) {
         this.site.area = {
@@ -940,41 +956,30 @@ export default {
       }
     },
 
-    fillRelatedDataAutocompleteFields(obj, type) {
-      if (obj === undefined) return;
-      let relatedData = cloneDeep(obj);
-      obj = [];
-      relatedData.forEach(entity => {
-        if (type === "attachment_link" || type === "sample") obj.push(entity);
-      });
-      return obj;
-    },
-
     loadRelatedData(object) {
       let query;
 
       if (object === "attachment_link") {
         query = fetchSiteAttachment(
           this.$route.params.id,
-          this.relatedData.page.attachment_link
+          this.relatedData.searchParameters.attachment_link
+        );
+      } else if (object === "samples") {
+        query = fetchLinkedSamples(
+          this.relatedData.searchParameters.sample,
+          this.$route.params.id
+        );
+      } else if (object === "locality_description") {
+        query = fetchSiteLocalityDescriptions(
+          this.$route.params.id,
+          this.relatedData.searchParameters.locality_description
         );
       }
+
       query.then(response => {
-        this.relatedData.count[object] = response.data.count;
-        this.relatedData[object] = this.handleResponse(response);
-
-        if (object === "attachment_link") {
-          this.autocomplete.attachment = this.relatedData[object];
-        }
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    formatRelatedData(objectToUpload) {
-      let uploadableObject = cloneDeep(objectToUpload);
-      uploadableObject.site = this.site.id;
-
-      // console.log(JSON.stringify(uploadableObject));
-      return JSON.stringify(uploadableObject);
     },
 
     setDefaultSearchParameters() {
@@ -996,17 +1001,9 @@ export default {
         : `${option.id} - (${option.description_en}) (${option.author__agent})`;
     },
 
-    addRelatedDataAttachment(option) {
-      if (typeof this.relatedData.attachment_link === "undefined")
-        this.relatedData.attachment_link = [];
-      this.relatedData.attachment_link.push(option);
-    },
-
     updateLocation(location, method, GPSPosition) {
       this.$set(this.site, "latitude", location.lat.toFixed(6));
       this.$set(this.site, "longitude", location.lng.toFixed(6));
-      // this.site.latitude = location.lat.toFixed(6);
-      // this.site.longitude = location.lng.toFixed(6);
 
       // If user chooses coordinates from map by clicking or dragging the marker then reset gps accuracy and coord_det_method
       if (method === "GPS") {
@@ -1027,7 +1024,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.attachment_link = files;
+      this.relatedData.attachment_link.count = files.length;
+      this.relatedData.attachment_link.results = files;
     },
 
     setSiteName(projectId) {
@@ -1036,27 +1034,6 @@ export default {
           let newName = this.calculateNextName(response.data.results[0].name);
           this.$set(this.site, "name", newName);
         }
-      });
-    },
-
-    setSiteNameAndProjectIfPreviousExists() {
-      return new Promise(resolve => {
-        if (this.createRelationWith.data === null) resolve(false);
-        let project = this.createRelationWith.data;
-        fetchLastSiteName(project.id).then(response => {
-          let resp = response.data.results;
-          if (resp && resp.length > 0) {
-            let newName = this.calculateNextName(resp[0].name);
-            this.$set(this.site, "name", newName);
-            this.$set(this.site, "date_start", this.getCurrentFormattedDate());
-            this.$set(this.site, "project", {
-              name: project.name,
-              name_en: project.name_en,
-              id: project.id
-            });
-            resolve(true);
-          } else resolve(false);
-        });
       });
     },
 

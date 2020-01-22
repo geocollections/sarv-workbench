@@ -1298,9 +1298,13 @@ export function fetchSite(id) {
   return get(`site/?id=${id}&format=json`);
 }
 
-export function fetchSiteAttachment(id, page = 1) {
+export function fetchSiteAttachment(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `attachment/?attach_link__site__id=${id}&page=${page}&paginate_by=100&fields=${attachmentFields}&format=json`
+    `attachment/?attach_link__site__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 
@@ -1353,6 +1357,16 @@ export function fetchLastSiteName(projectId) {
 export function fetchRecentSites(currentUserId) {
   return get(
     `site/?project__projectagent__agent=${currentUserId}&order_by=-id&paginate_by=30&fields=name,latitude,longitude,id`
+  );
+}
+
+export function fetchSiteLocalityDescriptions(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `locality_description/?site=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

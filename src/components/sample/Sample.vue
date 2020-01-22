@@ -1619,16 +1619,21 @@ export default {
 
     addSiteDataToSampleObject(site) {
       this.sample.locality = site.locality;
-      this.sample.site = { id: site.id, name: site.name };
+      if (typeof site.id !== "undefined" && site.id !== null) {
+        this.sample.site = { id: site.id, name: site.name };
+        this.autocomplete.site.push(this.sample.site);
+      }
       this.sample.agent_collected = {
         id: this.currentUser.id,
         agent: this.currentUser.user
       };
+      this.autocomplete.agent.push(this.sample.agent_collected);
       this.sample.date_collected = new Date();
       this.sample.owner = {
         id: this.currentUser.id,
         agent: this.currentUser.user
       };
+      this.autocomplete.agent.push(this.sample.owner);
 
       fetchLatestSampleInSite(site.id).then(response => {
         let sample = this.handleResponse(response)[0];
