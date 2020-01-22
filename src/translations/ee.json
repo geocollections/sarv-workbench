@@ -68,6 +68,7 @@
   },
   "header": {
     "title": "SARV2",
+    "attachment": "Fail",
     "attachments": "Failid",
     "files": "Failid",
     "references": "Kirjandus",
@@ -1014,7 +1015,14 @@
     "depth_other": "Depth other",
     "number_meters": "m. in a box",
     "diameter": "d, mm",
-    "location": "Location"
+    "location": "Location",
+    "attachment": "Image",
+    "is_preferred": "Preferred",
+    "is_wet": "Wet",
+    "relatedTables": {
+      "attachment": "Failid (vaata/muuda)",
+      "add_attachment": "Failid (lisa/kustuta)"
+    }
   },
   "drillcore_study": {
     "agent": "Agent",
@@ -1253,7 +1261,7 @@
     "fieldsCleared": "Väljad puhastatud!",
     "ObjectDoesNotExist1": "Kahjuks",
     "ObjectDoesNotExist2": "objekti, mille ID on",
-    "ObjectDoesNotExist3": "ei eksisteeri!",
+    "ObjectDoesNotExist3": "ei eksisteeri / ei ole luba näha!",
     "ObjectDoesNotExist4": "Tagasi",
     "ObjectDoesNotExist5": "otsingusse",
     "existingFiles": "Olemasolevad failid",

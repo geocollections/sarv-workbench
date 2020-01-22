@@ -216,6 +216,100 @@
         </div>
       </transition>
     </v-card>
+
+    <!-- RELATED DATA TABS -->
+    <v-card
+      class="related-tabs mt-2"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-tabs
+        :background-color="bodyColor.split('n-')[0] + 'n-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in computedRelatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
+        >
+          <span>{{ $t("drillcore_box.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text-field`"
+          >
+            {{ relatedData[tab.name].count }}
+          </span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items>
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <drillcore-box-attachment-table
+            v-show="activeTab === 'attachment'"
+            :response="relatedData.attachment"
+            :search-parameters="relatedData.searchParameters.attachment"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:edit="editRelatedItem"
+          />
+
+          <div v-show="activeTab === 'add_attachment'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.add_attachment.results"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
+
+          <!-- PAGINATION -->
+          <div
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
+                dense
+                :items="paginateByOptionsTranslated"
+                :item-color="bodyActiveColor"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData[activeTab].count /
+                      relatedData.searchParameters[activeTab].paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+        </v-card>
+      </v-tabs-items>
+    </v-card>
   </div>
 </template>
 
@@ -226,13 +320,21 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
-import { fetchDrillcoreBox } from "../../assets/js/api/apiCalls";
+import {
+  fetchDrillcoreBox,
+  fetchDrillcoreBoxAttachments
+} from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import requestsMixin from "../../mixins/requestsMixin";
+import FileUpload from "../partial/inputs/FileInput";
+import DrillcoreBoxAttachmentTable from "./related_tables/DrillcoreBoxAttachmentTable";
 
 export default {
   name: "DrillcoreBox",
 
   components: {
+    DrillcoreBoxAttachmentTable,
+    FileUpload,
     TextareaWrapper,
     InputWrapper,
     AutocompleteWrapper,
@@ -257,7 +359,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [formManipulation, autocompleteMixin, requestsMixin],
 
   data() {
     return this.setInitialData();
@@ -297,12 +399,54 @@ export default {
         this.reloadData();
       },
       deep: true
+    },
+    "relatedData.searchParameters": {
+      handler: function() {
+        if (this.$route.meta.isEdit) {
+          this.loadRelatedData(this.activeTab);
+        }
+      },
+      deep: true
+    }
+  },
+
+  computed: {
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
+      });
+    },
+
+    computedRelatedTabs() {
+      return this.relatedTabs.filter(tab => {
+        if (this.$route.meta.isEdit) return tab;
+        else if (tab.name !== "attachment") return tab;
+      });
     }
   },
 
   methods: {
+    setTab(type) {
+      if (type) {
+        this.$store.dispatch("updateActiveTab", {
+          tab: type,
+          object: this.$route.meta.object
+        });
+        this.activeTab = type;
+      }
+    },
+
     setInitialData() {
       return {
+        relatedTabs: [
+          { name: "attachment", iconClass: "fas fa-image" },
+          { name: "add_attachment", iconClass: "fas fa-file" }
+        ],
+        activeTab: "attachment",
+        relatedData: this.setDefaultRelatedData(),
         searchHistory: "drillcoreBoxSearchHistory",
         copyFields: [
           "id",
@@ -339,7 +483,16 @@ export default {
         searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
-        }
+        },
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
@@ -366,7 +519,9 @@ export default {
             this.$emit("object-exists", false);
           }
         });
-      }
+
+        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+      } else this.setTab("add_attachment");
     },
 
     formatDataForUpload(objectToUpload) {
@@ -384,6 +539,27 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      // Adding related data only on add view
+      uploadableObject.related_data = {};
+      if (!this.$route.meta.isEdit) {
+        this.relatedTabs.forEach(tab => {
+          if (this.isNotEmpty(this.relatedData[tab.name]))
+            if (tab.name !== "attachment") {
+              if (tab.name === "add_attachment") {
+                uploadableObject.related_data.attachment = this.relatedData.add_attachment.results;
+              } else {
+                uploadableObject.related_data[tab.name] = this.relatedData[
+                  tab.name
+                ].results;
+              }
+            }
+        });
+      } else {
+        if (this.relatedData.add_attachment.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.add_attachment.results;
+        } else uploadableObject.related_data.attachment = null;
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -426,6 +602,57 @@ export default {
           this.drillcore_box.stratigraphy_base
         );
       }
+    },
+
+    setDefaultRelatedData() {
+      return {
+        attachment: { count: 0, results: [] },
+        add_attachment: { count: 0, results: [] },
+        searchParameters: {
+          attachment: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["is_preferred"],
+            sortDesc: [true]
+          },
+          add_attachment: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["is_preferred"],
+            sortDesc: [true]
+          }
+        }
+      };
+    },
+
+    loadRelatedData(object) {
+      let query;
+
+      if (object === "attachment") {
+        query = fetchDrillcoreBoxAttachments(
+          this.$route.params.id,
+          this.relatedData.searchParameters.attachment
+        );
+      } else if (object === "add_attachment") {
+        query = fetchDrillcoreBoxAttachments(
+          this.$route.params.id,
+          this.relatedData.searchParameters.add_attachment
+        );
+      }
+
+      query.then(response => {
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = this.handleResponse(response);
+      });
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "drillcore_box");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.add_attachment.count = files.length;
+      this.relatedData.add_attachment.results = files;
     },
 
     setDefaultSearchParameters() {

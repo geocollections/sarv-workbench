@@ -68,6 +68,7 @@
   },
   "header": {
     "title": "SARV2",
+    "attachment": "File",
     "attachments": "Files",
     "files": "Files",
     "references": "References",
@@ -1014,7 +1015,14 @@
     "depth_other": "Muud sügavbused",
     "number_meters": "m kastis",
     "diameter": "d, mm",
-    "location": "Asukoht"
+    "location": "Asukoht",
+    "attachment": "Pilt",
+    "is_preferred": "Eelistatud",
+    "is_wet": "Märg",
+    "relatedTables": {
+      "attachment": "Files (view/edit)",
+      "add_attachment": "Files (add/delete)"
+    }
   },
   "drillcore_study": {
     "agent": "Uurija",
@@ -1253,7 +1261,7 @@
     "fieldsCleared": "Fields cleared!",
     "ObjectDoesNotExist1": "Unfortunately",
     "ObjectDoesNotExist2": "with an ID:",
-    "ObjectDoesNotExist3": "doesn't exist!",
+    "ObjectDoesNotExist3": "doesn't exist / missing permissions!",
     "ObjectDoesNotExist4": "Back to",
     "ObjectDoesNotExist5": "search",
     "existingFiles": "Existing files",

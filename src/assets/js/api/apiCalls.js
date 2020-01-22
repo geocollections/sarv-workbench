@@ -2192,31 +2192,45 @@ export function fetchAddItemToSelection(data) {
 }
 
 export function fetchSelectedSpecimens(selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&specimen!=null&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&specimen!=null&format=json`
+  );
 }
 
 export function fetchSelectedSamples(selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&sample!=null&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&sample!=null&format=json`
+  );
 }
 
 export function fetchSelectedAttachments(selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&attachment!=null&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&attachment!=null&format=json`
+  );
 }
 
 export function fetchSelectedLocalities(selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&locality!=null&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&locality!=null&format=json`
+  );
 }
 
 export function fetchSelectedReferences(selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&reference!=null&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&reference!=null&format=json`
+  );
 }
 
 export function fetchSelectedTaxa(selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&taxon!=null&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&taxon!=null&format=json`
+  );
 }
 
 export function fetchSelectedAnalyses(selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&analysis!=null&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&analysis!=null&format=json`
+  );
 }
 
 /***********************
@@ -2339,6 +2353,17 @@ export function fetchDrillcoreBoxes(data) {
   }
 }
 
+export function fetchDrillcoreBoxAttachments(drillcoreBoxId, searchParameters) {
+  let fields =
+    "id,uuid_filename,description,description_en,original_filename,date_created,attachment_format__value,author__agent,image_number,is_preferred";
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `attachment/?attach_link__drillcore_box__id=${drillcoreBoxId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  );
+}
 
 /***************************
  ***  DRILLCORE BOX END  ***
