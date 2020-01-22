@@ -1101,7 +1101,14 @@ export default {
       // Adding related data
       uploadableObject.related_data = {};
       if (this.relatedData.attachment_link.results.length > 0) {
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
+          item => {
+            return {
+              ...item,
+              is_locked: true
+            };
+          }
+        );
       } else uploadableObject.related_data.attachment = null;
 
       if (!this.$route.meta.isEdit) {

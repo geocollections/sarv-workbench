@@ -350,6 +350,7 @@ const formManipulation = {
               author: this.currentUser.id,
               date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
               is_private: true,
+              is_locked: relatedObject === "doi",
               related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
             })
           );
