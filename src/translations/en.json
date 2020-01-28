@@ -15,6 +15,7 @@
     "copyright_agent": "Copyright agent",
     "is_private": "Private",
     "is_locked": "Locked",
+    "is_preferred": "Preferred",
     "description": "Description",
     "description_en": "Description (EN)",
     "drillcore": "Drillcore",
@@ -179,7 +180,8 @@
     "doi_agent": "Doi agent",
     "doi_date": "Doi date",
     "doi_geolocation": "Doi geolocation",
-    "doi_related_identifier": "Doi related identifier"
+    "doi_related_identifier": "Doi related identifier",
+    "locality_description": "Locality description"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -736,6 +738,10 @@
     "mapEnabled": "Map enabled",
     "mapDisabled": "Map disabled",
     "copyToLocality": "Copy to locality",
+    "depth_base": "Depth base (m)",
+    "depth_top": "Depth top (m)",
+    "rock": "Rock",
+    "rock_name": "Rock txt",
     "relatedTables": {
       "attachment_link": "Files",
       "samples": "Related samples",

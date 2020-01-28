@@ -13,7 +13,7 @@
     <v-row v-if="$route.meta.isEdit">
       <v-col cols="12" class="text-right">
         <v-btn
-          color="blue"
+          :color="bodyActiveColor"
           dark
           small
           @click="$parent.$emit('button-clicked', 'COPY_TO_LOCALITY', 'site')"
@@ -197,7 +197,7 @@
                 hide-details
                 id="map-switch"
                 class="vuetify-switch my-1"
-              ></v-switch>
+              />
             </v-card>
 
             <v-card
@@ -207,7 +207,7 @@
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <label class="m-0" :for="`map-switch`">
-                <i class="far fa-map"></i>
+                <i class="far fa-map" />
                 {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
               </label>
             </v-card>
@@ -332,7 +332,7 @@
           >
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-btn
           icon
           @click="block.description = !block.description"
@@ -466,16 +466,16 @@
             </v-row>
           </div>
 
-          <!--          <specimen-history-table-->
-          <!--            v-show="activeTab === 'specimen_history'"-->
-          <!--            :response="relatedData.specimen_history"-->
-          <!--            :search-parameters="relatedData.searchParameters.specimen_history"-->
-          <!--            :body-color="bodyColor"-->
-          <!--            :body-active-color="bodyActiveColor"-->
-          <!--            v-on:related:add="addRelatedItem"-->
-          <!--            v-on:related:edit="editRelatedItem"-->
-          <!--            v-on:related:delete="deleteRelatedItem"-->
-          <!--          />-->
+          <site-locality-description-table
+            v-show="activeTab === 'locality_description'"
+            :response="relatedData.locality_description"
+            :search-parameters="relatedData.searchParameters.v"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <!-- PAGINATION -->
           <div
@@ -540,14 +540,15 @@ import { mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-// eslint-disable-next-line no-unused-vars
-import moment from "moment";
 import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import FileUpload from "../partial/inputs/FileInput";
+import requestsMixin from "../../mixins/requestsMixin";
+import SiteLocalityDescriptionTable from "./relatedTables/SiteLocalityDescriptionTable";
 
 export default {
   name: "Site",
   components: {
+    SiteLocalityDescriptionTable,
     FileUpload,
     TextareaWrapper,
     AutocompleteWrapper,
@@ -578,7 +579,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    sidebarMixin
+    sidebarMixin,
+    requestsMixin
   ],
   data() {
     return this.setInitialData();

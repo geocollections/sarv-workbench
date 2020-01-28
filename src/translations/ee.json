@@ -15,6 +15,7 @@
     "copyright_agent": "Autoriõigused",
     "is_private": "Privaatne",
     "is_locked": "Lukus",
+    "is_preferred": "Eelistatud",
     "description": "Kirjeldus",
     "description_en": "Kirjeldus (EN)",
     "drillcore": "Puursüdamik",
@@ -179,7 +180,8 @@
     "doi_agent": "Doi isik/asutus",
     "doi_date": "Doi kuupäev",
     "doi_geolocation": "Doi lokaliteet",
-    "doi_related_identifier": "Doi identifikaator"
+    "doi_related_identifier": "Doi identifikaator",
+    "locality_description": "Lokaliteedi kirjeldus"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -736,6 +738,10 @@
     "mapEnabled": "Kaart nähtaval",
     "mapDisabled": "Kaart peidetud",
     "copyToLocality": "Copy to locality",
+    "depth_base": "Alum. piir (m)",
+    "depth_top": "Ülem. piir (m)",
+    "rock": "Kivim",
+    "rock_name": "Kivim txt",
     "relatedTables": {
       "attachment_link": "Failid",
       "samples": "Seotud proovid",
