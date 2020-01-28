@@ -570,10 +570,8 @@ const formManipulation = {
     },
 
     isValidDateTime(dateTime) {
-      return (
-        moment(dateTime, "YYYY-MM-DD hh:mm:ss", true).isValid() ||
-        moment(dateTime, "YYYY-MM-DD hh:mm", true).isValid()
-      );
+      const formats = ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm"];
+      return moment(dateTime, formats, true).isValid();
     },
 
     formatDateForUpload(date) {
