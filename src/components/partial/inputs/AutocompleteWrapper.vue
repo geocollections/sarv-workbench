@@ -111,8 +111,6 @@ export default {
   },
   methods: {
     attachmentRelatedDataLabel(option, attrs) {
-      console.log(attrs);
-
       switch (attrs.label) {
         case "Collection":
         case "Kollektsioon":
