@@ -1,9 +1,9 @@
 import cloneDeep from "lodash/cloneDeep";
 import moment from "moment";
 import {
+  toastError,
   toastInfo,
-  toastSuccess,
-  toastError
+  toastSuccess
 } from "../assets/js/iziToast/iziToast";
 import { mapState } from "vuex";
 import { postRequest } from "../assets/js/api/apiCalls";
@@ -574,6 +574,24 @@ const formManipulation = {
         moment(dateTime, "YYYY-MM-DD hh:mm:ss", true).isValid() ||
         moment(dateTime, "YYYY-MM-DD hh:mm", true).isValid()
       );
+    },
+
+    formatDateForUpload(date) {
+      date = new Date(date);
+
+      let tzoffset = new Date().getTimezoneOffset() * 60000;
+
+      return new Date(date - tzoffset).toISOString().split(".")[0] + "Z"; // Without fractions
+    },
+
+    unformatDateISOString(date, format = "YYYY-MM-DD hh:mm:ss") {
+      if (typeof date !== "undefined" && date !== null) {
+        let tzoffset = new Date().getTimezoneOffset() * 60000;
+
+        date = new Date(date);
+
+        return moment(date - -tzoffset).format(format);
+      } else return null;
     },
 
     getCurrentFormattedDate(format) {

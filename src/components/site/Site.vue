@@ -789,6 +789,8 @@ export default {
             this.fillAutocompleteFields(this.site);
             this.removeUnnecessaryFields(this.site, this.copyFields);
 
+            this.updateDateFields(this.site);
+
             this.$emit("data-loaded", this.site);
             this.sendingData = false;
           } else {
@@ -845,14 +847,22 @@ export default {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (this.isNotEmpty(uploadableObject.date_start)) {
-        if (!this.isValidDateTime(uploadableObject.date_start)) {
+        if (this.isValidDateTime(uploadableObject.date_start)) {
+          uploadableObject.date_start = this.formatDateForUpload(
+            uploadableObject.date_start
+          );
+        } else {
           this.site.date_start = null;
           uploadableObject.date_start = null;
           toastInfo({ text: "Field 'Date start' is invalid" });
         }
       }
       if (this.isNotEmpty(uploadableObject.date_end)) {
-        if (!this.isValidDateTime(uploadableObject.date_end)) {
+        if (this.isValidDateTime(uploadableObject.date_end)) {
+          uploadableObject.date_end = this.formatDateForUpload(
+            uploadableObject.date_end
+          );
+        } else {
           this.site.date_end = null;
           uploadableObject.date_end = null;
           toastInfo({ text: "Field 'Date end' is invalid" });
@@ -909,7 +919,7 @@ export default {
               } else {
                 uploadableObject.related_data[tab.name] = this.relatedData[
                   tab.name
-                  ].results;
+                ].results;
               }
             }
         });
@@ -1053,6 +1063,11 @@ export default {
     handleCoordinateChange() {
       this.site.location_accuracy = null;
       this.site.coord_det_method = null;
+    },
+
+    updateDateFields(site) {
+      site.date_start = this.unformatDateISOString(site.date_start);
+      site.date_end = this.unformatDateISOString(site.date_end);
     },
 
     searchRelatedData: debounce(function(
