@@ -455,6 +455,7 @@
                     1
                   )
                 "
+                :menu-props="{ maxHeight: 208 }"
               />
             </div>
 

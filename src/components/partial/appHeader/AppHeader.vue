@@ -19,7 +19,7 @@
       :dark="appSettings.navbarDark"
       dense
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
 
       <v-toolbar-items>
         <v-btn
@@ -120,9 +120,7 @@
         </v-menu>
       </v-toolbar-items>
 
-      <v-app-bar-nav-icon
-        @click.stop="drawerRight = !drawerRight"
-      ></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
     </v-app-bar>
 
     <drawer-right
