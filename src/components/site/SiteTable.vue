@@ -41,11 +41,11 @@
     </template>
 
     <template v-slot:item.date_start="{ item }">
-      <span>{{ parseDate(item.date_start) }}</span>
+      <span>{{ item.date_start | moment("YYYY-DD-MM HH:mm") }}</span>
     </template>
 
     <template v-slot:item.date_end="{ item }">
-      <span>{{ parseDate(item.date_end) }}</span>
+      <span>{{ item.date_end | moment("YYYY-DD-MM HH:mm") }}</span>
     </template>
   </v-data-table>
 </template>
@@ -109,11 +109,6 @@ export default {
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
-    },
-    parseDate(date) {
-      if (date) {
-        return moment(String(date)).format("DD.MM.YYYY HH:mm");
-      }
     }
   }
 };

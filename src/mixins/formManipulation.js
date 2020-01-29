@@ -563,12 +563,6 @@ const formManipulation = {
             (parseInt(lastToken) + 1);
     },
 
-    parseDate(date) {
-      if (date) {
-        return moment(String(date)).format("DD-MM-YYYY HH:mm");
-      }
-    },
-
     isValidDateTime(dateTime) {
       const formats = ["YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm"];
       return moment(dateTime, formats, true).isValid();

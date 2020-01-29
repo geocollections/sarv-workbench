@@ -54,7 +54,7 @@
 
           <transition enter-active-class="animated zoomIn faster">
             <div v-show="block.map">
-              <sites-map v-if="block.map" />
+              <sites-map />
             </div>
           </transition>
         </v-card>
@@ -125,6 +125,7 @@
               </v-row>
 
               <image-view-wrapper
+                class="pb-3"
                 :data="recentFiles"
                 :body-active-color="appSettings.bodyActiveColor"
                 :body-color="appSettings.bodyColor"

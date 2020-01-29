@@ -27,7 +27,7 @@
     </template>
 
     <template v-slot:item.datacite_created="{ item }">
-      <span>{{ parseDate(item.datacite_created) }}</span>
+      <span>{{ item.datacite_created | moment("YYYY-DD-MM HH:mm") }}</span>
     </template>
 
     <template v-slot:item.link="{ item }">
@@ -106,12 +106,6 @@ export default {
     getSarvDoiUrl(doiIdentifier) {
       if (doiIdentifier)
         return "https://doi.geocollections.info/" + doiIdentifier;
-    },
-
-    parseDate(date) {
-      if (date) {
-        return moment(String(date)).format("DD.MM.YYYY HH:mm");
-      }
     }
   }
 };

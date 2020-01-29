@@ -24,6 +24,7 @@
               <tr v-for="(entity, index) in recentlyInserted" :key="index">
                 <td>
                   <router-link
+                    v-if="isUserAllowedTo('change', entity.table_name)"
                     class="sarv-link text-capitalize"
                     :class="bodyActiveColor + '--text'"
                     :to="{
@@ -32,9 +33,10 @@
                   >
                     {{ entity.table_name }}: {{ entity.row_id }}
                   </router-link>
+                  <div v-else>{{ entity.table_name }}: {{ entity.row_id }}</div>
                 </td>
                 <td>
-                  {{ parseDate(entity.time) }}
+                  {{ entity.time | moment("YYYY-DD-MM HH:mm") }}
                 </td>
               </tr>
             </tbody>
@@ -67,6 +69,7 @@
               <tr v-for="(entity, index) in recentlyUpdated" :key="index">
                 <td>
                   <router-link
+                    v-if="isUserAllowedTo('change', entity.table_name)"
                     class="sarv-link text-capitalize"
                     :class="bodyActiveColor + '--text'"
                     :to="{
@@ -75,9 +78,10 @@
                   >
                     {{ entity.table_name }}: {{ entity.row_id }}
                   </router-link>
+                  <div v-else>{{ entity.table_name }}: {{ entity.row_id }}</div>
                 </td>
                 <td>
-                  {{ parseDate(entity.time) }}
+                  {{ entity.time | moment("YYYY-DD-MM HH:mm") }}
                 </td>
               </tr>
             </tbody>
@@ -91,6 +95,7 @@
 <script>
 import { fetchLatestLogs } from "@/assets/js/api/apiCalls";
 import moment from "moment";
+import { mapGetters } from "vuex";
 
 export default {
   props: ["user", "bodyColor", "bodyActiveColor"],
@@ -100,6 +105,10 @@ export default {
       recentlyInserted: [],
       recentlyUpdated: []
     };
+  },
+
+  computed: {
+    ...mapGetters(["isUserAllowedTo"])
   },
 
   created: function() {
@@ -135,10 +144,6 @@ export default {
           }
         }
       });
-    },
-
-    parseDate(date) {
-      moment(date).format("DD.MM.YYYY | HH:mm:ss");
     }
   }
 };
