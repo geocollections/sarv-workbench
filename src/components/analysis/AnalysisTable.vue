@@ -9,7 +9,11 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
+    :show-select="isSelectionSeriesActive"
+    @item-selected="$emit('add-item-to-selection-series', $event, 'analysis')"
+    @toggle-select-all="$emit('toggle-select-all', $event, 'analysis')"
     expand-icon="fas fa-caret-down"
+    :value="selected"
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
@@ -66,6 +70,18 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
+
+    <template v-slot:item.selection_series="{ item }">
+      <v-btn
+        v-if="isSelectionSeriesActive"
+        @click="$emit('add-item-to-selection-series', item.id, 'analysis')"
+        title="Add analysis to selection series"
+        color="amber"
+        icon
+      >
+        <v-icon>fas fa-plus-square</v-icon>
+      </v-btn>
+    </template>
   </v-data-table>
 </template>
 
@@ -89,6 +105,12 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    isSelectionSeriesActive: {
+      type: Boolean
+    },
+    activeSelectionSeries: {
+      type: Object
     },
     bodyColor: {
       type: String,
@@ -119,18 +141,25 @@ export default {
       { text: "analysis.date_", value: "date" },
       { text: "analysis.labor_txt", value: "lab_txt" },
       { text: "analysis.agent", value: "agent__agent" },
-      { text: "", value: "link", sortable: false }
+      { text: "", value: "link", sortable: false },
+      { text: "", value: "selection_series", sortable: false }
     ],
-    names: []
+    // Todo: Get all item from active selection series
+    selected: []
   }),
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(item => {
+          if (this.isSelectionSeriesActive) return item;
+          else if (item.value !== "selection_series") return item;
+        });
     }
   },
   methods: {

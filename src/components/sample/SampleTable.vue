@@ -13,6 +13,7 @@
     @item-selected="$emit('add-item-to-selection-series', $event, 'sample')"
     @toggle-select-all="$emit('toggle-select-all', $event, 'sample')"
     expand-icon="fas fa-caret-down"
+    :value="selected"
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
@@ -43,7 +44,7 @@
             et: item.locality__locality,
             en: item.locality__locality_en
           }"
-        ></span>
+        />
       </router-link>
 
       <span v-else-if="item.locality_free">{{ item.locality_free }}</span>
@@ -64,7 +65,7 @@
             et: item.locality__locality,
             en: item.locality__locality_en
           }"
-        ></span>
+        />
       </router-link>
     </template>
 
@@ -82,7 +83,7 @@
             et: item.stratigraphy__stratigraphy,
             en: item.stratigraphy__stratigraphy_en
           }"
-        ></span>
+        />
       </div>
     </template>
 
@@ -104,7 +105,7 @@
         v-if="isSelectionSeriesActive"
         @click="$emit('add-item-to-selection-series', item.id, 'sample')"
         title="Add sample to selection series"
-        color="green"
+        color="amber"
         icon
       >
         <v-icon>fas fa-plus-square</v-icon>
@@ -137,6 +138,9 @@ export default {
     isSelectionSeriesActive: {
       type: Boolean
     },
+    activeSelectionSeries: {
+      type: Object
+    },
     bodyColor: {
       type: String,
       required: false,
@@ -161,7 +165,8 @@ export default {
       { text: "", value: "link", sortable: false },
       { text: "", value: "selection_series", sortable: false }
     ],
-    names: []
+    // Todo: Get all item from active selection series
+    selected: []
   }),
   computed: {
     translatedHeaders() {

@@ -43,7 +43,7 @@
               et: names.find(specimen => specimen.id === item.id).name,
               en: names.find(specimen => specimen.id === item.id).name_en
             }"
-          ></i>
+          />
         </div>
 
         <div v-else-if="names.find(specimen => specimen.id === item.id).rockId">
@@ -52,7 +52,7 @@
               et: names.find(specimen => specimen.id === item.id).name,
               en: names.find(specimen => specimen.id === item.id).name_en
             }"
-          ></i>
+          />
         </div>
 
         <i
@@ -61,7 +61,7 @@
             et: names.find(specimen => specimen.id === item.id).name,
             en: names.find(specimen => specimen.id === item.id).name_en
           }"
-        ></i>
+        />
       </div>
     </template>
 
@@ -78,7 +78,7 @@
             et: item.locality__locality,
             en: item.locality__locality_en
           }"
-        ></span>
+        />
       </router-link>
     </template>
 
@@ -108,7 +108,7 @@
             et: item.stratigraphy__stratigraphy,
             en: item.stratigraphy__stratigraphy_en
           }"
-        ></span>
+        />
         <!--        </a>-->
         <span v-if="item.stratigraphy_id && item.lithostratigraphy_id">
           |
@@ -130,7 +130,7 @@
             et: item.lithostratigraphy__stratigraphy,
             en: item.lithostratigraphy__stratigraphy_en
           }"
-        ></span>
+        />
         <!--        </a>-->
       </div>
     </template>
@@ -153,7 +153,7 @@
         v-if="isSelectionSeriesActive"
         @click="$emit('add-item-to-selection-series', item.id, 'specimen')"
         title="Add specimen to selection series"
-        color="green"
+        color="amber"
         icon
       >
         <v-icon>fas fa-plus-square</v-icon>

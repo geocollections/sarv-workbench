@@ -9,7 +9,11 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
+    :show-select="isSelectionSeriesActive"
+    @item-selected="$emit('add-item-to-selection-series', $event, 'locality')"
+    @toggle-select-all="$emit('toggle-select-all', $event, 'locality')"
     expand-icon="fas fa-caret-down"
+    :value="selected"
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
@@ -59,6 +63,18 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
+
+    <template v-slot:item.selection_series="{ item }">
+      <v-btn
+        v-if="isSelectionSeriesActive"
+        @click="$emit('add-item-to-selection-series', item.id, 'locality')"
+        title="Add locality to selection series"
+        color="amber"
+        icon
+      >
+        <v-icon>fas fa-plus-square</v-icon>
+      </v-btn>
+    </template>
   </v-data-table>
 </template>
 
@@ -83,6 +99,12 @@ export default {
         };
       }
     },
+    isSelectionSeriesActive: {
+      type: Boolean
+    },
+    activeSelectionSeries: {
+      type: Object
+    },
     bodyColor: {
       type: String,
       required: false,
@@ -102,18 +124,26 @@ export default {
       { text: "locality.number", value: "number" },
       { text: "locality.country", value: "country__value" },
       { text: "locality.agent", value: "user_added" },
-      { text: "", value: "link", sortable: false }
+      { text: "", value: "link", sortable: false },
+      { text: "", value: "selection_series", sortable: false }
     ],
-    names: []
+    names: [],
+    // Todo: Get all item from active selection series
+    selected: []
   }),
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(item => {
+          if (this.isSelectionSeriesActive) return item;
+          else if (item.value !== "selection_series") return item;
+        });
     }
   },
   methods: {

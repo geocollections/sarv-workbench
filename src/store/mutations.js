@@ -94,9 +94,22 @@ export default {
     Vue.set(state, "activeSearchParams", params);
   },
 
+  SET_ACTIVE_SEARCH_PARAMS_2: (state, params) => {
+    Vue.set(state, "activeSearchParams2", params);
+  },
+
   SET_SIDEBAR_LIST: (state, { resp }) => {
     /* false means page not found */
     Vue.set(state, "sidebarList", {
+      results: resp.data.results || false,
+      page: resp.data.page,
+      totalPages: resp.data.page ? resp.data.page.split(" of ")[1] : undefined
+    });
+  },
+
+  SET_SIDEBAR_LIST_2: (state, { resp }) => {
+    /* false means page not found */
+    Vue.set(state, "sidebarList2", {
       results: resp.data.results || false,
       page: resp.data.page,
       totalPages: resp.data.page ? resp.data.page.split(" of ")[1] : undefined

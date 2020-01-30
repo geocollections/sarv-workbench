@@ -9,7 +9,11 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
+    :show-select="isSelectionSeriesActive"
+    @item-selected="$emit('add-item-to-selection-series', $event, 'attachment')"
+    @toggle-select-all="$emit('toggle-select-all', $event, 'attachment')"
     expand-icon="fas fa-caret-down"
+    :value="selected"
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
@@ -32,7 +36,7 @@
               <v-progress-circular
                 indeterminate
                 color="grey lighten-5"
-              ></v-progress-circular>
+              />
             </v-row>
           </template>
         </v-img>
@@ -114,7 +118,7 @@
         v-model="item.is_private"
         @change="$emit('toggle-privacy-state', item.is_private, item.id)"
         :color="bodyActiveColor"
-      ></v-checkbox>
+      />
     </template>
 
     <template v-slot:item.link="{ item }">
@@ -127,6 +131,18 @@
         icon
       >
         <v-icon>fas fa-external-link-alt</v-icon>
+      </v-btn>
+    </template>
+
+    <template v-slot:item.selection_series="{ item }">
+      <v-btn
+        v-if="isSelectionSeriesActive"
+        @click="$emit('add-item-to-selection-series', item.id, 'attachment')"
+        title="Add attachment to selection series"
+        color="amber"
+        icon
+      >
+        <v-icon>fas fa-plus-square</v-icon>
       </v-btn>
     </template>
   </v-data-table>
@@ -152,6 +168,12 @@ export default {
           paginateBy: 25
         };
       }
+    },
+    isSelectionSeriesActive: {
+      type: Boolean
+    },
+    activeSelectionSeries: {
+      type: Object
     },
     bodyColor: {
       type: String,
@@ -180,18 +202,25 @@ export default {
         value: "specimen_image_attachment"
       },
       { text: "attachment.is_private_text_short", value: "is_private" },
-      { text: "", value: "link", sortable: false }
+      { text: "", value: "link", sortable: false },
+      { text: "", value: "selection_series", sortable: false }
     ],
-    names: []
+    // Todo: Get all item from active selection series
+    selected: []
   }),
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(item => {
+          if (this.isSelectionSeriesActive) return item;
+          else if (item.value !== "selection_series") return item;
+        });
     }
   },
   methods: {

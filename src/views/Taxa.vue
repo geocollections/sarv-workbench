@@ -20,6 +20,8 @@
       module="taxon"
       :searchParameters="searchParameters"
       :api-call="fetchTaxa"
+      :is-selection-series-active="isSelectionSeriesActive"
+      :active-selection-series="activeSelectionSeries"
       search-history="taxonSearchHistory"
       view-type="taxonViewType"
       v-on:search-params-changed="searchParametersChanged"
@@ -32,6 +34,7 @@ import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/tableView/TableViewTitle";
 import TableViewSearch from "../components/partial/tableView/TableViewSearch";
 import { fetchTaxa } from "../assets/js/api/apiCalls";
+import {mapState} from "vuex";
 
 export default {
   name: "Taxons",
@@ -49,11 +52,30 @@ export default {
         { id: "author_year", title: "taxon.author_year", type: "text" },
         { id: "parent__taxon", title: "taxon.parent__taxon", type: "text" },
         { id: "taxon_epithet", title: "taxon.taxon_epithet", type: "text" },
-        { id: "user_added", title: "taxon.user_added", type: "text" }
+        { id: "user_added", title: "taxon.user_added", type: "text" },
+        { id: "selectionId", title: "specimen.selectionId", type: "number" },
+        { id: "selection", title: "specimen.selection", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
-      block: { search: true }
+      block: { search: true },
+      defaultSelectionSeriesParams: {
+        id: null,
+        name: null,
+        remarks: null,
+        user_added: null,
+        page: 1,
+        paginateBy: 50,
+        sortBy: ["id"],
+        sortDesc: [true]
+      }
     };
+  },
+  computed: {
+    isSelectionSeriesActive() {
+      return !!this.activeSelectionSeries;
+    },
+
+    ...mapState(["activeSelectionSeries"])
   },
   watch: {
     searchParameters: {
@@ -67,6 +89,28 @@ export default {
       deep: true,
       immediate: true
     }
+  },
+  created() {
+    // Used by sidebar
+    const searchHistory = this.$localStorage.get(
+      "selectionSeriesSearchHistory",
+      "fallbackValue"
+    );
+    let params =
+      typeof searchHistory !== "undefined" &&
+      searchHistory !== null &&
+      searchHistory !== "fallbackValue"
+        ? searchHistory
+        : this.defaultSelectionSeriesParams;
+    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
+      searchHistory: "selectionSeriesSearchHistory",
+      search: params,
+      request: "FETCH_SELECTION_SERIES",
+      title: "header.selection_series",
+      object: "selection_series",
+      field: "name",
+      agent: this.currentUser
+    });
   },
   methods: {
     fetchTaxa() {
@@ -84,6 +128,8 @@ export default {
         author_year: null,
         taxon_epithet: null,
         parent__taxon: null,
+        selectionId: null,
+        selection: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

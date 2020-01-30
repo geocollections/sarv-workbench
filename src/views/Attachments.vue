@@ -51,10 +51,22 @@ export default {
         { id: "filename", title: "attachment.filename", type: "text" },
         { id: "specimen", title: "attachment.specimen", type: "text" },
         { id: "imageInfo", title: "attachment.imageInfo", type: "text" },
-        { id: "locality", title: "attachment.locality", type: "text" }
+        { id: "locality", title: "attachment.locality", type: "text" },
+        { id: "selectionId", title: "specimen.selectionId", type: "number" },
+        { id: "selection", title: "specimen.selection", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
-      block: { search: true }
+      block: { search: true },
+      defaultSelectionSeriesParams: {
+        id: null,
+        name: null,
+        remarks: null,
+        user_added: null,
+        page: 1,
+        paginateBy: 50,
+        sortBy: ["id"],
+        sortDesc: [true]
+      }
     };
   },
 
@@ -77,7 +89,7 @@ export default {
       searchHistory !== null &&
       searchHistory !== "fallbackValue"
         ? searchHistory
-        : this.searchParameters;
+        : this.defaultSelectionSeriesParams;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
       searchHistory: "selectionSeriesSearchHistory",
       search: params,
@@ -119,6 +131,8 @@ export default {
         specimen: null,
         imageInfo: null,
         locality: null,
+        selectionId: null,
+        selection: null,
         specimen_image_attachment: ["2", "1", "3", "4"],
         page: 1,
         paginateBy: 50,

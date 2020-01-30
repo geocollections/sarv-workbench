@@ -16,6 +16,8 @@
       module="analysis"
       :searchParameters="searchParameters"
       :api-call="fetchAnalyses_"
+      :is-selection-series-active="isSelectionSeriesActive"
+      :active-selection-series="activeSelectionSeries"
       search-history="analysisSearchHistory"
       view-type="analysisViewType"
       v-on:search-params-changed="searchParametersChanged"
@@ -48,15 +50,31 @@ export default {
           title: "analysis.analysis_method",
           type: "text"
         },
-        { id: "agentAndLab", title: "analysis.agentAndLab", type: "text" }
+        { id: "agentAndLab", title: "analysis.agentAndLab", type: "text" },
+        { id: "selectionId", title: "specimen.selectionId", type: "number" },
+        { id: "selection", title: "specimen.selection", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
-      block: { search: true }
+      block: { search: true },
+      defaultSelectionSeriesParams: {
+        id: null,
+        name: null,
+        remarks: null,
+        user_added: null,
+        page: 1,
+        paginateBy: 50,
+        sortBy: ["id"],
+        sortDesc: [true]
+      }
     };
   },
 
   computed: {
-    ...mapState(["currentUser", "databaseId"])
+    isSelectionSeriesActive() {
+      return !!this.activeSelectionSeries;
+    },
+
+    ...mapState(["currentUser", "databaseId", "activeSelectionSeries"])
   },
 
   watch: {
@@ -72,6 +90,29 @@ export default {
       deep: true,
       immediate: true
     }
+  },
+
+  created() {
+    // Used by sidebar
+    const searchHistory = this.$localStorage.get(
+      "selectionSeriesSearchHistory",
+      "fallbackValue"
+    );
+    let params =
+      typeof searchHistory !== "undefined" &&
+      searchHistory !== null &&
+      searchHistory !== "fallbackValue"
+        ? searchHistory
+        : this.defaultSelectionSeriesParams;
+    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
+      searchHistory: "selectionSeriesSearchHistory",
+      search: params,
+      request: "FETCH_SELECTION_SERIES",
+      title: "header.selection_series",
+      object: "selection_series",
+      field: "name",
+      agent: this.currentUser
+    });
   },
 
   methods: {
@@ -94,6 +135,8 @@ export default {
         id: null,
         analysis_method: null,
         agentAndLab: null,
+        selectionId: null,
+        selection: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

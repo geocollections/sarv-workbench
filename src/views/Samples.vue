@@ -60,7 +60,17 @@ export default {
         { id: "selection", title: "specimen.selection", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
-      block: { search: true }
+      block: { search: true },
+      defaultSelectionSeriesParams: {
+        id: null,
+        name: null,
+        remarks: null,
+        user_added: null,
+        page: 1,
+        paginateBy: 50,
+        sortBy: ["id"],
+        sortDesc: [true]
+      }
     };
   },
   computed: {
@@ -81,7 +91,7 @@ export default {
       searchHistory !== null &&
       searchHistory !== "fallbackValue"
         ? searchHistory
-        : this.searchParameters;
+        : this.defaultSelectionSeriesParams;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
       searchHistory: "selectionSeriesSearchHistory",
       search: params,
