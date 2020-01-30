@@ -88,18 +88,17 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <!--          <stratigraphy-reference-table-->
-          <!--            v-show="activeTab === 'stratigraphy_reference'"-->
-          <!--            :response="relatedData.stratigraphy_reference"-->
-          <!--            :search-parameters="-->
-          <!--              relatedData.searchParameters.stratigraphy_reference-->
-          <!--            "-->
-          <!--            :body-color="bodyColor"-->
-          <!--            :body-active-color="bodyActiveColor"-->
-          <!--            v-on:related:add="addRelatedItem"-->
-          <!--            v-on:related:edit="editRelatedItem"-->
-          <!--            v-on:related:delete="deleteRelatedItem"-->
-          <!--          />-->
+          <div v-for="tab in relatedTabs" :key="tab.name">
+            <selection-series-data-table
+              v-show="activeTab === tab.name"
+              :headers="[{ text: 'ID', value: tab.name, align: 'center' }]"
+              :response="relatedData[tab.name]"
+              :object="tab.name"
+              :search-parameters="relatedData.searchParameters[tab.name]"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+            />
+          </div>
 
           <!-- PAGINATION -->
           <div
@@ -157,11 +156,12 @@ import {
 import Spinner from "vue-simple-spinner";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
+import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
 
 export default {
   name: "SelectionSeries",
 
-  components: { InputWrapper, Spinner },
+  components: { SelectionSeriesDataTable, InputWrapper, Spinner },
 
   props: {
     isBodyActiveColorDark: {
@@ -335,43 +335,43 @@ export default {
           specimen: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["specimen"],
             sortDesc: [true]
           },
           sample: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["sample"],
             sortDesc: [true]
           },
           attachment: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["attachment"],
             sortDesc: [true]
           },
           locality: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["locality"],
             sortDesc: [true]
           },
           reference: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["reference"],
             sortDesc: [true]
           },
           taxon: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["taxon"],
             sortDesc: [true]
           },
           analysis: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["analysis"],
             sortDesc: [true]
           }
         }

@@ -2243,45 +2243,73 @@ export function fetchAddItemToSelection(data) {
   return post(`add/selection/`, data);
 }
 
-export function fetchSelectedSpecimens(selectionSeriesId) {
+export function fetchSelectedSpecimens(selectionSeriesId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `selection/?selection=${selectionSeriesId}&specimen!=null&format=json`
+    `selection/?selection=${selectionSeriesId}&specimen!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
-export function fetchSelectedSamples(selectionSeriesId) {
+export function fetchSelectedSamples(selectionSeriesId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `selection/?selection=${selectionSeriesId}&sample!=null&format=json`
+    `selection/?selection=${selectionSeriesId}&sample!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
-export function fetchSelectedAttachments(selectionSeriesId) {
+export function fetchSelectedAttachments(selectionSeriesId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `selection/?selection=${selectionSeriesId}&attachment!=null&format=json`
+    `selection/?selection=${selectionSeriesId}&attachment!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
-export function fetchSelectedLocalities(selectionSeriesId) {
+export function fetchSelectedLocalities(selectionSeriesId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `selection/?selection=${selectionSeriesId}&locality!=null&format=json`
+    `selection/?selection=${selectionSeriesId}&locality!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
-export function fetchSelectedReferences(selectionSeriesId) {
+export function fetchSelectedReferences(selectionSeriesId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `selection/?selection=${selectionSeriesId}&reference!=null&format=json`
+    `selection/?selection=${selectionSeriesId}&reference!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
-export function fetchSelectedTaxa(selectionSeriesId) {
+export function fetchSelectedTaxa(selectionSeriesId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `selection/?selection=${selectionSeriesId}&taxon!=null&format=json`
+    `selection/?selection=${selectionSeriesId}&taxon!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
-export function fetchSelectedAnalyses(selectionSeriesId) {
+export function fetchSelectedAnalyses(selectionSeriesId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
   return get(
-    `selection/?selection=${selectionSeriesId}&analysis!=null&format=json`
+    `selection/?selection=${selectionSeriesId}&analysis!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 
