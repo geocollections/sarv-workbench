@@ -576,7 +576,7 @@ const formManipulation = {
       return new Date(date - tzoffset).toISOString().split(".")[0] + "Z"; // Without fractions
     },
 
-    unformatDateISOString(date, format = "YYYY-MM-DD hh:mm:ss") {
+    unformatDateISOString(date, format = "YYYY-MM-DD HH:mm:ss") {
       if (typeof date !== "undefined" && date !== null) {
         let tzoffset = new Date().getTimezoneOffset() * 60000;
 
@@ -588,7 +588,7 @@ const formManipulation = {
 
     getCurrentFormattedDate(format) {
       if (format) return moment().format(format);
-      else return moment().format("YYYY-MM-DD hh:mm:ss");
+      else return moment().format("YYYY-MM-DD HH:mm:ss");
     },
 
     updateUserInputtedDate(fieldToBeUpdated, date) {

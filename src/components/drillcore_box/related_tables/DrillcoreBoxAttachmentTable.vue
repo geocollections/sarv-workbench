@@ -28,7 +28,7 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.id="{ item }">
+      <template v-slot:item.id="{ item, value }">
         <!--        <router-link-->
         <!--          v-if="item.id"-->
         <!--          :title="$t('edit.editMessage')"-->
@@ -40,11 +40,12 @@
           title="View original image"
         >
           <v-img
+            :id="item.id"
             v-if="!!item.attachment_format__value.includes('image')"
             :src="getFileUrl(item.uuid_filename, 'small')"
             :lazy-src="getFileUrl(item.uuid_filename, 'small')"
             class="grey lighten-2 attachment-table-image-preview my-1"
-            max-width="70vw"
+            :max-width="widths[value]"
           >
             <template v-slot:placeholder>
               <v-row class="fill-height ma-0" align="center" justify="center">
@@ -181,7 +182,8 @@ export default {
     item: {
       is_preferred: false,
       is_wet: false
-    }
+    },
+    widths: {}
   }),
 
   computed: {
@@ -192,6 +194,19 @@ export default {
           text: this.$t(header.text)
         };
       });
+    }
+  },
+
+  watch: {
+    "response.results": {
+      handler(newVal) {
+        if (newVal.length > 0) {
+          newVal.forEach(item =>
+            this.getImageWidth(item.uuid_filename, item.id)
+          );
+        }
+      },
+      deep: true
     }
   },
 
@@ -249,6 +264,23 @@ export default {
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
       }
+    },
+
+    getMeta(url) {
+      return new Promise((resolve, reject) => {
+        let img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = reject;
+        img.src = url;
+      });
+    },
+
+    async getImageWidth(uuid, id) {
+      if (uuid) {
+        let img = await this.getMeta(this.getFileUrl(uuid, "small"));
+        if (img.width) this.$set(this.widths, id, img.width);
+        else this.$set(this.widths, id, 400);
+      } else this.$set(this.widths, id, 400);
     }
   }
 };

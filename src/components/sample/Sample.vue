@@ -1628,7 +1628,7 @@ export default {
         agent: this.currentUser.user
       };
       this.autocomplete.agent.push(this.sample.agent_collected);
-      this.sample.date_collected = new Date();
+      this.sample.date_collected = this.getCurrentFormattedDate("YYYY-MM-DD");
       this.sample.owner = {
         id: this.currentUser.id,
         agent: this.currentUser.user
