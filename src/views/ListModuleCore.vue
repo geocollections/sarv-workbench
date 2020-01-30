@@ -415,7 +415,7 @@ export default {
             }
           },
           errResponse => {
-            if (typeof errResponse.data.error !== "undefined")
+            if (typeof errResponse.data !== "undefined" && typeof errResponse.data.error !== "undefined")
               toastError({ text: errResponse.data.error });
             toastError({ text: this.$t("messages.uploadError") });
           }

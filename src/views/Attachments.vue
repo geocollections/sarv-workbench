@@ -18,6 +18,8 @@
       module="attachment"
       :searchParameters="searchParameters"
       :api-call="fetchAttachments"
+      :is-selection-series-active="isSelectionSeriesActive"
+      :active-selection-series="activeSelectionSeries"
       search-history="attachmentSearchHistory"
       view-type="attachmentViewType"
       :use-image-view="true"
@@ -57,7 +59,34 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser"])
+    isSelectionSeriesActive() {
+      return !!this.activeSelectionSeries;
+    },
+
+    ...mapState(["currentUser", "activeSelectionSeries"])
+  },
+
+  created() {
+    // Used by sidebar
+    const searchHistory = this.$localStorage.get(
+      "selectionSeriesSearchHistory",
+      "fallbackValue"
+    );
+    let params =
+      typeof searchHistory !== "undefined" &&
+      searchHistory !== null &&
+      searchHistory !== "fallbackValue"
+        ? searchHistory
+        : this.searchParameters;
+    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
+      searchHistory: "selectionSeriesSearchHistory",
+      search: params,
+      request: "FETCH_SELECTION_SERIES",
+      title: "header.selection_series",
+      object: "selection_series",
+      field: "name",
+      agent: this.currentUser
+    });
   },
 
   watch: {

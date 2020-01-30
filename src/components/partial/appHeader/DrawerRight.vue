@@ -441,7 +441,12 @@
         v-if="
           $route.meta.isTableView &&
             ($route.meta.object === 'specimen' ||
-              $route.meta.object === 'sample') &&
+              $route.meta.object === 'sample' ||
+              $route.meta.object === 'attachment' ||
+              $route.meta.object === 'locality' ||
+              $route.meta.object === 'reference' ||
+              $route.meta.object === 'taxon' ||
+              $route.meta.object === 'analysis') &&
             activeSearchParams &&
             activeSearchParams.search
         "

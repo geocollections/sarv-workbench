@@ -38,6 +38,17 @@
         </v-btn>
       </template>
 
+      <template v-slot:item.number="{ item }">
+        <router-link
+          :to="{ path: '/drillcore_box/' + item.number }"
+          :title="$t('editDrillcoreBox.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.number }}
+        </router-link>
+      </template>
+
       <template v-slot:item.stratigraphy_base="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
@@ -52,7 +63,7 @@
                 et: item.stratigraphy_base__stratigraphy,
                 en: item.stratigraphy_base__stratigraphy_en
               }"
-            ></span>
+            />
           </router-link>
           <router-link
             v-else-if="item.stratigraphy_base"
@@ -66,7 +77,7 @@
                 et: item.stratigraphy_base.stratigraphy,
                 en: item.stratigraphy_base.stratigraphy_en
               }"
-            ></span>
+            />
           </router-link>
         </div>
         <router-link
@@ -81,7 +92,7 @@
               et: item.stratigraphy_base__stratigraphy,
               en: item.stratigraphy_base__stratigraphy_en
             }"
-          ></span>
+          />
         </router-link>
       </template>
 
@@ -99,7 +110,7 @@
                 et: item.stratigraphy_top__stratigraphy,
                 en: item.stratigraphy_top__stratigraphy_en
               }"
-            ></span>
+            />
           </router-link>
           <router-link
             v-else-if="item.stratigraphy_top"
@@ -113,7 +124,7 @@
                 et: item.stratigraphy_top.stratigraphy,
                 en: item.stratigraphy_top.stratigraphy_en
               }"
-            ></span>
+            />
           </router-link>
         </div>
         <router-link
@@ -128,7 +139,7 @@
               et: item.stratigraphy_top__stratigraphy,
               en: item.stratigraphy_top__stratigraphy_en
             }"
-          ></span>
+          />
         </router-link>
       </template>
     </v-data-table>
