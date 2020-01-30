@@ -738,8 +738,7 @@ export function fetchAnalysisMethod() {
 
 export function fetchSamples(data, agent, databaseId) {
   const fields =
-    "id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional," +
-    "number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval,storage__location,is_private";
+    "id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval,storage__location,is_private,site,site__name,site__name_en";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -752,7 +751,7 @@ export function fetchSamples(data, agent, databaseId) {
   }
 
   if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:locality__locality_en,locality__locality,locality_free;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${data.locality};fields:locality__locality_en,locality__locality,locality_free,site__name,site__name_en,site__id;lookuptype:icontains`;
   }
 
   if (data.depth !== null && data.depth.trim().length > 0) {
