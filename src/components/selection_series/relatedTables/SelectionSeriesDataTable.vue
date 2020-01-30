@@ -19,9 +19,14 @@
           <router-link
             :to="{ path: `/${object}/${item[object]}` }"
             class="sarv-link"
-            :title="$t(`edit${object.charAt(0).toUpperCase() + object.slice(1)}.editMessage`)"
+            :title="
+              $t(
+                `edit${object.charAt(0).toUpperCase() +
+                  object.slice(1)}.editMessage`
+              )
+            "
             :class="`${bodyActiveColor}--text`"
-          >{{ item[object] }}</router-link
+            >{{ item[object] }}</router-link
           >
         </td>
       </tr>
