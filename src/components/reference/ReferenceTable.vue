@@ -9,11 +9,7 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
-    :show-select="isSelectionSeriesActive"
-    @item-selected="$emit('add-item-to-selection-series', $event, 'reference')"
-    @toggle-select-all="$emit('toggle-select-all', $event, 'reference')"
     expand-icon="fas fa-caret-down"
-    :value="selected"
     :sort-by.sync="searchParameters.sortBy"
     :sort-desc.sync="searchParameters.sortDesc"
     :server-items-length="response.count"
@@ -119,18 +115,6 @@
         <v-icon>far fa-plus-square</v-icon>
       </v-btn>
     </template>
-
-    <template v-slot:item.selection_series="{ item }">
-      <v-btn
-        v-if="isSelectionSeriesActive"
-        @click="$emit('add-item-to-selection-series', item.id, 'reference')"
-        title="Add reference to selection series"
-        color="amber"
-        icon
-      >
-        <v-icon>fas fa-plus-square</v-icon>
-      </v-btn>
-    </template>
   </v-data-table>
 </template>
 
@@ -157,12 +141,6 @@ export default {
           paginateBy: 25
         };
       }
-    },
-    isSelectionSeriesActive: {
-      type: Boolean
-    },
-    activeSelectionSeries: {
-      type: Object
     },
     bodyColor: {
       type: String,
@@ -197,11 +175,8 @@ export default {
       { text: "reference.doi", value: "doi" },
       { text: "reference.pdf", value: "attachment__filename" },
       { text: "reference.url", value: "url" },
-      { text: "reference.library_short", value: "library", sortable: false },
-      { text: "", value: "selection_series", sortable: false }
-    ],
-    // Todo: Get all item from active selection series
-    selected: []
+      { text: "reference.library_short", value: "library", sortable: false }
+    ]
   }),
   computed: {
     translatedHeaders() {
@@ -215,10 +190,6 @@ export default {
         .filter(item => {
           if (this.isLibraryActive) return item;
           else if (item.value !== "library") return item;
-        })
-        .filter(item => {
-          if (this.isSelectionSeriesActive) return item;
-          else if (item.value !== "selection_series") return item;
         });
     }
   },

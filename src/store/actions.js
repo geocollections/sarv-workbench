@@ -123,12 +123,6 @@ export default {
     });
   },
 
-  FETCH_SELECTION_SERIES_2: ({ commit, state }) => {
-    return fetchSelectionSeries(state.activeSearchParams2.search).then(resp => {
-      commit("SET_SIDEBAR_LIST_2", { resp });
-    });
-  },
-
   FETCH_AGENTS: ({ commit, state }) => {
     return fetchAgents(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });

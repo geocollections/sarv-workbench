@@ -107,15 +107,6 @@ export default {
     });
   },
 
-  SET_SIDEBAR_LIST_2: (state, { resp }) => {
-    /* false means page not found */
-    Vue.set(state, "sidebarList2", {
-      results: resp.data.results || false,
-      page: resp.data.page,
-      totalPages: resp.data.page ? resp.data.page.split(" of ")[1] : undefined
-    });
-  },
-
   SET_SIDEBAR_USER_ACTION: (state, userAction) => {
     Vue.set(state, "sidebarUserAction", userAction);
   },

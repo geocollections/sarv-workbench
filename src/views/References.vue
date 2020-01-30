@@ -15,8 +15,6 @@
       module="reference"
       :searchParameters="searchParameters"
       :api-call="fetchReferences"
-      :is-selection-series-active="isSelectionSeriesActive"
-      :active-selection-series="activeSelectionSeries"
       search-history="referenceSearchHistory"
       view-type="referenceViewType"
       :use-list-view="true"
@@ -64,9 +62,7 @@ export default {
           type: "text"
         },
         // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
-        { id: "userAdded", title: "reference.userAdded", type: "text" },
-        { id: "selectionId", title: "specimen.selectionId", type: "number" },
-        { id: "selection", title: "specimen.selection", type: "text" }
+        { id: "userAdded", title: "reference.userAdded", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true },
@@ -79,16 +75,6 @@ export default {
         page: 1,
         paginateBy: 50,
         sortBy: ["library"],
-        sortDesc: [true]
-      },
-      defaultSelectionSeriesParams: {
-        id: null,
-        name: null,
-        remarks: null,
-        user_added: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
         sortDesc: [true]
       }
     };
@@ -103,11 +89,7 @@ export default {
       return this.$store.state["activeLibrary"] !== null;
     },
 
-    isSelectionSeriesActive() {
-      return !!this.activeSelectionSeries;
-    },
-
-    ...mapState(["currentUser", "activeSelectionSeries"])
+    ...mapState(["currentUser"])
   },
 
   created() {
@@ -130,28 +112,6 @@ export default {
       title: "header.libraries",
       object: "library",
       field: "library__title_en",
-      agent: this.currentUser
-    });
-
-    // Todo: Fix multiple
-    // Used by sidebar
-    const selectionSearchHistory = this.$localStorage.get(
-      "selectionSeriesSearchHistory",
-      "fallbackValue"
-    );
-    let selectionParams =
-      typeof selectionSearchHistory !== "undefined" &&
-      selectionSearchHistory !== null &&
-      selectionSearchHistory !== "fallbackValue"
-        ? selectionSearchHistory
-        : this.defaultSelectionSeriesParams;
-    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS_2", {
-      searchHistory: "selectionSeriesSearchHistory",
-      search: selectionParams,
-      request: "FETCH_SELECTION_SERIES_2",
-      title: "header.selection_series",
-      object: "selection_series",
-      field: "name",
       agent: this.currentUser
     });
   },
@@ -193,8 +153,6 @@ export default {
         isEstonianReference: null,
         isEstonianAuthor: null,
         solrSearch: null,
-        selectionId: null,
-        selection: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

@@ -439,7 +439,7 @@
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
         v-if="
-          ($route.meta.isTableView &&
+          $route.meta.isTableView &&
             ($route.meta.object === 'specimen' ||
               $route.meta.object === 'sample' ||
               $route.meta.object === 'attachment' ||
@@ -447,10 +447,7 @@
               $route.meta.object === 'taxon' ||
               $route.meta.object === 'analysis') &&
             activeSearchParams &&
-            activeSearchParams.search) ||
-            ($route.meta.object === 'reference' &&
-              activeSearchParams2 &&
-              activeSearchParams2.search)
+            activeSearchParams.search
         "
       >
         <template v-slot:activator>
@@ -463,23 +460,15 @@
         <!-- PAGINATION -->
         <v-list-item
           class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="
-            $route.meta.object === 'reference'
-              ? sidebarList2.totalPages
-              : sidebarList.totalPages
-          "
+          v-if="sidebarList.totalPages"
         >
           <div>
             <v-btn
               icon
               :color="drawerActiveColor"
-              @click="previousPage($route.meta.object === 'reference')"
+              @click="previousPage"
               v-if="
-                $route.meta.object === 'reference'
-                  ? activeSearchParams2.search &&
-                    activeSearchParams2.search.page > 1
-                  : activeSearchParams.search &&
-                    activeSearchParams.search.page > 1
+                activeSearchParams.search && activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -487,24 +476,17 @@
           </div>
 
           <div class="align-self-center">
-            {{
-              $route.meta.object === "reference"
-                ? sidebarList2.page
-                : sidebarList.page
-            }}
+            {{ sidebarList.page }}
           </div>
 
           <div>
             <v-btn
               icon
               :color="drawerActiveColor"
-              @click="nextPage($route.meta.object === 'reference')"
+              @click="nextPage"
               v-if="
-                $route.meta.object === 'reference'
-                  ? activeSearchParams2.search &&
-                    activeSearchParams2.search.page < sidebarList2.totalPages
-                  : activeSearchParams.search &&
-                    activeSearchParams.search.page < sidebarList.totalPages
+                activeSearchParams.search &&
+                  activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -514,9 +496,7 @@
 
         <!-- LIST ITEMS -->
         <v-list-item
-          v-for="entity in $route.meta.object === 'reference'
-            ? sidebarList2.results
-            : sidebarList.results"
+          v-for="entity in sidebarList.results"
           :key="entity.id"
           :color="drawerActiveColor"
           :title="
@@ -536,13 +516,7 @@
               <span class="font-weight-bold">{{ entity.id }}</span>
               <span>
                 -
-                {{
-                  entity[
-                    $route.meta.object === "reference"
-                      ? activeSearchParams2.field
-                      : activeSearchParams.field
-                  ]
-                }}</span
+                {{ entity[activeSearchParams.field] }}</span
               >
             </v-list-item-title>
           </v-list-item-content>
@@ -554,15 +528,11 @@
             <v-btn
               icon
               :color="drawerActiveColor"
-              @click="previousPage($route.meta.object === 'reference')"
+              @click="previousPage"
               v-if="
-                $route.meta.object === 'reference'
-                  ? activeSearchParams2.search &&
-                    sidebarList2.totalPages &&
-                    activeSearchParams2.search.page > 1
-                  : activeSearchParams.search &&
-                    sidebarList.totalPages &&
-                    activeSearchParams.search.page > 1
+                activeSearchParams.search &&
+                  sidebarList.totalPages &&
+                  activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -570,26 +540,18 @@
           </div>
 
           <div class="align-self-center">
-            {{
-              $route.meta.object === "reference"
-                ? sidebarList2.page
-                : sidebarList.page
-            }}
+            {{ sidebarList.page }}
           </div>
 
           <div>
             <v-btn
               icon
               :color="drawerActiveColor"
-              @click="nextPage($route.meta.object === 'reference')"
+              @click="nextPage"
               v-if="
-                $route.meta.object === 'reference'
-                  ? sidebarList2.totalPages &&
-                    activeSearchParams2.search &&
-                    activeSearchParams2.search.page < sidebarList2.totalPages
-                  : sidebarList.totalPages &&
-                    activeSearchParams.search &&
-                    activeSearchParams.search.page < sidebarList.totalPages
+                sidebarList.totalPages &&
+                  activeSearchParams.search &&
+                  activeSearchParams.search.page < sidebarList.totalPages
               "
             >
               <v-icon>fas fa-angle-double-right</v-icon>
@@ -630,9 +592,7 @@ export default {
   computed: {
     ...mapState([
       "activeSearchParams",
-      "activeSearchParams2",
       "sidebarList",
-      "sidebarList2",
       "activeLibrary",
       "activeSelectionSeries"
     ]),
@@ -647,9 +607,6 @@ export default {
     if (this.$store.state["activeSearchParams"] !== null) {
       this.$store.dispatch(this.$store.state["activeSearchParams"].request);
     }
-    if (this.$store.state["activeSearchParams2"] !== null) {
-      this.$store.dispatch(this.$store.state["activeSearchParams2"].request);
-    }
   },
   watch: {
     "activeSearchParams.search.page": {
@@ -663,18 +620,6 @@ export default {
         }
       },
       deep: true
-    },
-    "activeSearchParams2.search.page": {
-      handler: function(newVal) {
-        if (
-          newVal &&
-          this.activeSearchParams2 &&
-          this.activeSearchParams2.request
-        ) {
-          this.$store.dispatch(this.activeSearchParams2.request);
-        }
-      },
-      deep: true
     }
   },
   methods: {
@@ -682,16 +627,12 @@ export default {
       this.$emit("update:drawerState", drawerState);
     },
 
-    nextPage(isReferenceSelection = false) {
-      if (isReferenceSelection) {
-        this.$store.state.activeSearchParams2.search.page += 1;
-      } else this.$store.state.activeSearchParams.search.page += 1;
+    nextPage() {
+      this.$store.state.activeSearchParams.search.page += 1;
     },
 
-    previousPage(isReferenceSelection = false) {
-      if (isReferenceSelection) {
-        this.$store.state.activeSearchParams2.search.page -= 1;
-      } else this.$store.state.activeSearchParams.search.page -= 1;
+    previousPage() {
+      this.$store.state.activeSearchParams.search.page -= 1;
     },
 
     setAction(action, choice) {
