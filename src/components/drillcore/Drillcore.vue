@@ -282,6 +282,7 @@
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
+              :record-options="$route.meta.isEdit"
               :is-draggable="$route.meta.isEdit"
             />
           </div>

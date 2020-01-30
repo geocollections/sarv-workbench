@@ -312,6 +312,7 @@
             :files-from-object="relatedData.attachment_link"
             v-on:update:existing-files="addExistingFiles"
             v-on:file-uploaded="addFiles"
+            :record-options="$route.meta.isEdit"
             accept-multiple
           />
         </div>

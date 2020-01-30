@@ -408,6 +408,7 @@
           <div v-show="activeTab === 'attachment_link'">
             <file-upload
               show-existing
+              :record-options="$route.meta.isEdit"
               :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"

@@ -457,6 +457,17 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <doi-agent-table
+            v-show="activeTab === 'doi_agent'"
+            :response="relatedData.doi_agent"
+            :search-parameters="relatedData.searchParameters.doi_agent"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <div v-show="activeTab === 'attachment_link'">
             <file-upload
               show-existing
@@ -464,6 +475,7 @@
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
+              :record-options="$route.meta.isEdit"
               :is-draggable="$route.meta.isEdit"
             />
           </div>
@@ -485,17 +497,6 @@
             v-show="activeTab === 'doi_geolocation'"
             :response="relatedData.doi_geolocation"
             :search-parameters="relatedData.searchParameters.doi_geolocation"
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
-
-          <doi-agent-table
-            v-show="activeTab === 'doi_agent'"
-            :response="relatedData.doi_agent"
-            :search-parameters="relatedData.searchParameters.doi_agent"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"

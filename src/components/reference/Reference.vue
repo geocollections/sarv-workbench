@@ -622,6 +622,7 @@
                 v-on:update:existing-files="addExistingFiles"
                 v-on:file-uploaded="addFiles"
                 accept-multiple
+                :record-options="$route.meta.isEdit"
                 open-file
               />
             </v-col>
