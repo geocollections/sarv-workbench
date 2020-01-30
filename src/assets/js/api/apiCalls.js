@@ -172,6 +172,13 @@ export function fetchAttachments(data, author) {
       data.locality +
       ";fields:locality__locality,locality__locality_en;lookuptype:icontains";
   }
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+  }
   if (
     data.specimen_image_attachment.length > 0 &&
     data.specimen_image_attachment.length <= 3
@@ -394,6 +401,13 @@ export async function fetchReferences(data) {
   if (data.id !== null && data.id.trim().length > 0) {
     searchFields += "&id__icontains=" + data.id;
   }
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+  }
   if (
     data.libraryAuthorIdTitle &&
     data.libraryAuthorIdTitle.trim().length > 0
@@ -600,6 +614,14 @@ export function fetchLocalities(data) {
 
   if (data.agent !== null && data.agent.trim().length > 0) {
     searchFields += "&user_added__icontains=" + data.agent;
+  }
+
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&selection__selection__name__icontains=${data.selection}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -1409,6 +1431,14 @@ export function fetchAnalyses(data, agent, databaseId) {
     searchFields += `&multi_search=value:${data.agentAndLab};fields:agent__agent,lab_txt;lookuptype:icontains`;
   }
 
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+  }
+
   if (typeof agent !== "undefined" && agent !== null) {
     searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
   }
@@ -1907,6 +1937,14 @@ export function fetchTaxa(data) {
 
   if (data.user_added && data.user_added.trim().length > 0) {
     searchFields += `&user_added__icontains=${data.user_added}`;
+  }
+
+  if (data.selectionId && data.selectionId.trim().length > 0) {
+    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+  }
+
+  if (data.selection && data.selection.trim().length > 0) {
+    searchFields += `&selection__selection__name__icontains=${data.selection}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);

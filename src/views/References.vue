@@ -7,7 +7,7 @@
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
-      :col-size="4"
+      :col-size="3"
       v-on:reset:searchPreferences="resetSearchPreferences"
     />
 

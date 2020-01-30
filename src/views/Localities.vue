@@ -8,6 +8,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       v-on:reset:searchPreferences="resetSearchPreferences"
+      :col-size="4"
     />
 
     <list-module-core
