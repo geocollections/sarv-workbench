@@ -19,7 +19,7 @@ jobs:
           name: Install packages
           command: npm install
       - save_cache:
-          key: v1.11-dependencies-{{ checksum "package-lock.json" }}
+          key: v1.11-npm-deps-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
             - ./package-lock.json
