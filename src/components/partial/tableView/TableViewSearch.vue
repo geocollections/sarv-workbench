@@ -152,6 +152,31 @@
                 </v-col>
               </v-row>
 
+              <!-- ROCK CHECKBOXES -->
+              <v-row
+                class="px-3 mt-3 checkboxes"
+                v-if="$route.meta.object === 'rock'"
+              >
+                <v-col cols="12" class="py-0">
+                  <v-row>
+                    <v-checkbox
+                      v-model="searchParameters.in_portal"
+                      :label="$t('rock.in_portal')"
+                      class="mt-0 pr-6"
+                      :color="appSettings.bodyActiveColor"
+                      hide-details
+                    ></v-checkbox>
+                    <v-checkbox
+                      v-model="searchParameters.in_estonia"
+                      :label="$t('rock.in_estonia')"
+                      class="mt-0"
+                      :color="appSettings.bodyActiveColor"
+                      hide-details
+                    ></v-checkbox>
+                  </v-row>
+                </v-col>
+              </v-row>
+
               <!-- RESET SEARCH PREFERENCES -->
               <v-row class="mt-3">
                 <v-col cols="12">

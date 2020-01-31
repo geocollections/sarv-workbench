@@ -42,6 +42,7 @@
     "requiredFields": "Required fields",
     "author": "Author",
     "user_added": "User added",
+    "user_changed": "User changed",
     "date_added": "Date added"
   },
   "main": {
@@ -100,6 +101,8 @@
     "area": "Add Area",
     "locations": "Storages",
     "location": "Add storage",
+    "rocks": "Rocks",
+    "rock": "Add rock",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -139,6 +142,8 @@
     "editDataset": "Datasets",
     "addLocation": "Add storage",
     "editLocation": "Storages",
+    "addRock": "Add rock",
+    "editRock": "Rocks",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -497,6 +502,10 @@
   "editLocation": {
     "heading": "Storage",
     "editMessage": "Edit storage"
+  },
+  "editRock": {
+    "heading": "Rock",
+    "editMessage": "Edit rock"
   },
   "editDrillcoreBox": {
     "heading": "Drill core box",
@@ -1279,6 +1288,18 @@
     "agent": "Agent: Name",
     "number_items": "Number items",
     "contents": "Contents"
+  },
+  "rock": {
+    "name": "Mineral/rock",
+    "name_en": "Mineral/rock EN",
+    "formula": "Formula",
+    "formula_html": "Formula HTML",
+    "rock_type": "Rock type",
+    "rock_rank": "Rock rank",
+    "in_estonia": "In Estonia",
+    "in_portal": "In portal",
+    "kivid_info": "Kivid.info",
+    "mindat": "Mindat"
   },
   "messages": {
     "langChange": "Changed language!",

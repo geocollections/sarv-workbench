@@ -20,7 +20,9 @@ import {
   fetchDatasets,
   fetchStratigraphies,
   fetchAreas,
-  fetchDrillcoreBoxes, fetchLocations
+  fetchDrillcoreBoxes,
+  fetchLocations,
+  fetchRocks
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -170,6 +172,12 @@ export default {
 
   FETCH_LOCATIONS: ({ commit, state }) => {
     return fetchLocations(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_ROCKS: ({ commit, state }) => {
+    return fetchRocks(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

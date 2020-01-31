@@ -42,6 +42,7 @@
     "requiredFields": "Kohustuslikud väljad",
     "author": "Autor",
     "user_added": "Sisestaja",
+    "user_changed": "Muutja",
     "date_added": "Sisestatud"
   },
   "main": {
@@ -100,6 +101,8 @@
     "area": "Lisa ala",
     "locations": "Asukohad",
     "location": "Lisa asukoht",
+    "rocks": "Kivimid ja mineraalid",
+    "rock": "Lisa kivim või mineraal",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -139,6 +142,8 @@
     "editDataset": "Andmesetid",
     "addLocation": "Lisa asukoht",
     "editLocation": "Asukohad",
+    "addRock": "Lisa kivim või mineraal",
+    "editRock": "Kivimid ja mineraalid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -497,6 +502,10 @@
   "editLocation": {
     "heading": "Asukoht",
     "editMessage": "Muuda asukohta"
+  },
+  "editRock": {
+    "heading": "Kivim/Mineraal",
+    "editMessage": "Muuda kivimit või mineraali"
   },
   "editDrillcoreBox": {
     "heading": "Puursüdamiku kast",
@@ -1279,6 +1288,18 @@
     "agent": "Persoon: Nimi",
     "number_items": "Säilikute arv",
     "contents": "Sisu"
+  },
+  "rock": {
+    "name": "Mineraal/kivim",
+    "name_en": "Mineraal/kivim EN",
+    "formula": "Valem",
+    "formula_html": "Valem HTML",
+    "rock_type": "Tüüp",
+    "rock_rank": "Tase",
+    "in_estonia": "Eestis",
+    "in_portal": "Portaalis",
+    "kivid_info": "Kivid.info",
+    "mindat": "Mindat"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

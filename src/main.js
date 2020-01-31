@@ -302,6 +302,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    rockBoxSearchHistory: {
+      type: Object
+    },
+    rockBoxViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

@@ -311,13 +311,23 @@ export default {
               path: "/specimen/add",
               icon: "far fa-plus-square"
             },
+            { title: "rocks", path: "/rock", icon: "far fa-gem" },
+            {
+              title: "rock",
+              path: "/rock/add",
+              icon: "far fa-plus-square"
+            },
             { title: "collections", path: "/collection", icon: "fas fa-boxes" },
             {
               title: "collection",
               path: "/collection/add",
               icon: "far fa-plus-square"
             },
-            { title: "locations", path: "/location", icon: "fas fa-location-arrow" },
+            {
+              title: "locations",
+              path: "/location",
+              icon: "fas fa-location-arrow"
+            },
             {
               title: "location",
               path: "/location/add",

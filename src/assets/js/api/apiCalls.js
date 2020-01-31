@@ -2814,6 +2814,64 @@ export function fetchLocations(data) {
  ***  LOCATION END  ***
  **********************/
 
+/******************
+ *** ROCK START ***
+ ******************/
+export function fetchRock(id) {
+  return get(`rock/?id=${id}&format=json`);
+}
+
+export function fetchRocks(data) {
+  let fields =
+    "id,name,name_en,formula,formula_html,rock_type__name,rock_type__name_en,rock_rank__name,rock_rank__name,in_estonia,in_portal,mindat_id";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.name && data.name.trim().length > 0) {
+    searchFields += `&name__icontains=${data.name}`;
+  }
+  if (data.name_en && data.name_en.trim().length > 0) {
+    searchFields += `&name_en__icontains=${data.name_en}`;
+  }
+  if (data.formula && data.formula.trim().length > 0) {
+    searchFields += `&formula__icontains=${data.formula}`;
+  }
+  if (data.rock_type && data.rock_type.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.rock_type};fields:rock_type__name,rock_type__name_en;lookuptype:icontains`;
+  }
+  if (data.rock_rank && data.rock_rank.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.rock_rank};fields:rock_rank__name,rock_rank__name_en;lookuptype:icontains`;
+  }
+  if (data.user_changed && data.user_changed.trim().length > 0) {
+    searchFields += `&user_changed__icontains=${data.user_changed}`;
+  }
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `&id__icontains=${data.id}`;
+  }
+  if (data.in_portal) {
+    searchFields += `&in_portal=${data.in_portal}`;
+  }
+  if (data.in_estonia) {
+    searchFields += `&in_estonia=${data.in_estonia}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `rock/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `rock/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/******************
+ ***  ROCK END  ***
+ ******************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/

@@ -1659,6 +1659,66 @@ const router = new Router({
           ]
         },
         {
+          path: "/rock",
+          component: () => import("./views/Rocks.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/rock/RockTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "rock",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/rock/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/rock/Rock.vue"),
+              meta: {
+                isEdit: true,
+                table: "rock",
+                heading: "editRock.heading",
+                requiresAuth: true,
+                object: "rock"
+              }
+            }
+          ]
+        },
+        {
+          path: "/rock/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Rock add",
+              component: () => import("./components/rock/Rock.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.rock",
+                subForms: [{ path: "/rock/add", name: "header.rock" }],
+                requiresAuth: true,
+                object: "rock"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {
