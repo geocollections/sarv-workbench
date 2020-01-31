@@ -1069,8 +1069,8 @@ export default {
     },
 
     updateDateFields(site) {
-      site.date_start = this.unformatDateISOString(site.date_start);
-      site.date_end = this.unformatDateISOString(site.date_end);
+      site.date_start = this.unformatISOStringToDate(site.date_start);
+      site.date_end = this.unformatISOStringToDate(site.date_end);
     },
 
     searchRelatedData: debounce(function(

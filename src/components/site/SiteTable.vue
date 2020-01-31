@@ -41,11 +41,15 @@
     </template>
 
     <template v-slot:item.date_start="{ item }">
-      <span>{{ item.date_start | moment("YYYY-DD-MM HH:mm") }}</span>
+      <span>{{
+        unformatISOStringToDate(item.date_start, "YYYY-MM-DD HH:mm")
+      }}</span>
     </template>
 
     <template v-slot:item.date_end="{ item }">
-      <span>{{ item.date_end | moment("YYYY-DD-MM HH:mm") }}</span>
+      <span>{{
+        unformatISOStringToDate(item.date_end, "YYYY-MM-DD HH:mm")
+      }}</span>
     </template>
   </v-data-table>
 </template>
@@ -109,6 +113,15 @@ export default {
   methods: {
     getGeoDetailUrl(params) {
       return `https://geocollections.info/${params.object}/${params.id}`;
+    },
+
+    unformatISOStringToDate(date, format = "YYYY-MM-DD HH:mm:ss") {
+      if (typeof date !== "undefined" && date !== null) {
+        let datePart = date.split("T")[0];
+        let timePart = date.split("T")[1].slice(0, -1);
+
+        return moment(datePart + " " + timePart).format(format);
+      } else return null;
     }
   }
 };

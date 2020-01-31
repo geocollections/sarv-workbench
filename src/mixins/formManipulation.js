@@ -576,13 +576,12 @@ const formManipulation = {
       return new Date(date - tzoffset).toISOString().split(".")[0] + "Z"; // Without fractions
     },
 
-    unformatDateISOString(date, format = "YYYY-MM-DD HH:mm:ss") {
+    unformatISOStringToDate(date, format = "YYYY-MM-DD HH:mm:ss") {
       if (typeof date !== "undefined" && date !== null) {
-        let tzoffset = new Date().getTimezoneOffset() * 60000;
+        let datePart = date.split("T")[0];
+        let timePart = date.split("T")[1].slice(0, -1);
 
-        date = new Date(date);
-
-        return moment(date - -tzoffset).format(format);
+        return moment(datePart + " " + timePart).format(format);
       } else return null;
     },
 
