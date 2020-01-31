@@ -10,7 +10,9 @@ jobs:
       - attach_workspace:
           at: ~/geocollections/sarv-edit
       - restore_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          keys:
+            - v1-npm-deps-{{ checksum "package-lock.json" }}
+            - v1-npm-deps-
       - run:
           name: Install packages
           command: npm install
