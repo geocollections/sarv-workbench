@@ -320,44 +320,6 @@
             </v-col>
           </v-row>
 
-          <!-- DESCRIPTION and DESCRIPTION_EN -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <textarea-wrapper
-                v-model="stratigraphy.description"
-                :color="bodyActiveColor"
-                :label="$t('common.description')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="6" class="pa-1">
-              <textarea-wrapper
-                v-model="stratigraphy.description_en"
-                :color="bodyActiveColor"
-                :label="$t('common.description_en')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- DEFINITION and DEFINITION_EN -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <textarea-wrapper
-                v-model="stratigraphy.definition"
-                :color="bodyActiveColor"
-                :label="$t('stratigraphy.definition')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="6" class="pa-1">
-              <textarea-wrapper
-                v-model="stratigraphy.definition_en"
-                :color="bodyActiveColor"
-                :label="$t('stratigraphy.definition_en')"
-              />
-            </v-col>
-          </v-row>
-
           <!-- AGE_BASE, AGE_TOP, AGE_PRECISION and AGE_REFERENCE -->
           <v-row no-gutters>
             <v-col cols="12" md="3" class="pa-1">
@@ -439,6 +401,70 @@
                 :label="$t('stratigraphy.approved_esk')"
                 @change="stratigraphy.approved_esk = !stratigraphy.approved_esk"
               />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- DESCRIPTION -->
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("common.description") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.description" class="pa-1">
+          <!-- DESCRIPTION -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <label class="mb-0 px-2">{{ $t("common.description") }}</label>
+              <editor :data.sync="stratigraphy.description" />
+            </v-col>
+          </v-row>
+
+          <!-- DESCRIPTION_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <label class="mb-0 px-2">{{ $t("common.description_en") }}</label>
+              <editor :data.sync="stratigraphy.description_en" />
+            </v-col>
+          </v-row>
+
+          <!-- DEFINITION -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <label class="mb-0 px-2">{{ $t("stratigraphy.definition") }}</label>
+              <editor :data.sync="stratigraphy.definition" />
+            </v-col>
+          </v-row>
+
+          <!-- DEFINITION_EN -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <label class="mb-0 px-2">{{ $t("stratigraphy.definition_en") }}</label>
+              <editor :data.sync="stratigraphy.definition_en" />
             </v-col>
           </v-row>
 
@@ -598,11 +624,13 @@ import StratigraphySynonymTable from "./relatedTables/StratigraphySynonymTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import StratigraphyReferenceTable from "./relatedTables/StratigraphyReferenceTable";
 import StratigraphyStratotypeTable from "./relatedTables/StratigraphyStratotypeTable";
+import Editor from "../partial/editor/Editor";
 
 export default {
   name: "Stratigraphy",
 
   components: {
+    Editor,
     StratigraphyStratotypeTable,
     StratigraphyReferenceTable,
     StratigraphySynonymTable,
@@ -787,7 +815,8 @@ export default {
         stratigraphy: {},
         searchParameters: this.setDefaultSearchParameters(),
         block: {
-          info: true
+          info: true,
+          description: true
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },

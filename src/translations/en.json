@@ -325,7 +325,8 @@
       "info": "General info"
     },
     "stratigraphy": {
-      "info": "General info"
+      "info": "General info",
+      "description": "Description"
     },
     "area": {
       "info": "General info"

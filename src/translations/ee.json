@@ -325,7 +325,8 @@
       "info": "Üldinfo"
     },
     "stratigraphy": {
-      "info": "Üldinfo"
+      "info": "Üldinfo",
+      "description": "Kirjeldus"
     },
     "area": {
       "info": "Üldinfo"
