@@ -36,12 +36,14 @@
     </template>
 
     <template v-slot:item.related_keyword__keyword="{ item }">
-      <span
-        v-translate="{
-          et: item.keyword_category__name,
-          en: item.keyword_category__name_en
-        }"
-      ></span>
+      <router-link
+        :to="{ path: '/keyword/' + item.related_keyword }"
+        :title="$t('editKeyword.editMessage')"
+        class="sarv-link"
+        :class="`${bodyActiveColor}--text`"
+      >
+        {{ item.related_keyword__keyword }}
+      </router-link>
     </template>
   </v-data-table>
 </template>

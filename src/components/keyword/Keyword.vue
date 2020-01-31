@@ -215,7 +215,7 @@ export default {
           keyword_category: [],
           related_keyword: []
         },
-        requiredFields: ["keyword", "language", "keyword_category"],
+        requiredFields: ["keyword", "language"],
         keyword: {
           language: {
             id: 1,
