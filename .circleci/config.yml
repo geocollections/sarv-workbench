@@ -12,6 +12,9 @@ jobs:
           keys:
             - v1.11-npm-deps-{{ checksum "package-lock.json" }}
             - v1.11-npm-deps-
+          paths:
+            - ./node_modules
+            - ./package-lock.json
       - run:
           name: Install packages
           command: npm install
