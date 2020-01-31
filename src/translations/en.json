@@ -40,7 +40,9 @@
     "new": "New",
     "generalInfo": "General info",
     "requiredFields": "Required fields",
-    "author": "Author"
+    "author": "Author",
+    "user_added": "User added",
+    "date_added": "Date added"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -96,6 +98,8 @@
     "stratigraphies": "Stratigraphy",
     "areas": "Areas",
     "area": "Add Area",
+    "locations": "Storages",
+    "location": "Add storage",
     "addAttachment": "Add new file",
     "editAttachment": "My files",
     "addReference": "Add new reference",
@@ -133,6 +137,8 @@
     "editPreparation": "Preparations",
     "addDataset": "Add dataset",
     "editDataset": "Datasets",
+    "addLocation": "Add storage",
+    "editLocation": "Storages",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -333,6 +339,9 @@
     },
     "drillcore_box": {
       "info": "General info"
+    },
+    "location": {
+      "info": "General info"
     }
   },
   "add": {
@@ -484,6 +493,10 @@
   "editArea": {
     "heading": "Area",
     "editMessage": "Edit area"
+  },
+  "editLocation": {
+    "heading": "Storage",
+    "editMessage": "Edit storage"
   },
   "editDrillcoreBox": {
     "heading": "Drill core box",
@@ -1258,6 +1271,14 @@
     "deposit_area_ha": "Deposit (ha)",
     "maakond": "County",
     "egf": "Area EGF"
+  },
+  "location": {
+    "location": "Location",
+    "location_location": "Location",
+    "date_collected_free": "Date collected",
+    "agent": "Agent: Name",
+    "number_items": "Number items",
+    "contents": "Contents"
   },
   "messages": {
     "langChange": "Changed language!",

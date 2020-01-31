@@ -40,7 +40,9 @@
     "new": "Uus",
     "generalInfo": "Üldinfo",
     "requiredFields": "Kohustuslikud väljad",
-    "author": "Autor"
+    "author": "Autor",
+    "user_added": "Sisestaja",
+    "date_added": "Sisestatud"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -96,6 +98,8 @@
     "stratigraphies": "Stratigraafia",
     "areas": "Alad",
     "area": "Lisa ala",
+    "locations": "Asukohad",
+    "location": "Lisa asukoht",
     "addAttachment": "Lisa uus fail",
     "editAttachment": "Minu failid",
     "addReference": "Lisa kirjandus",
@@ -133,6 +137,8 @@
     "editPreparation": "Preparaadid",
     "addDataset": "Lisa andmeset",
     "editDataset": "Andmesetid",
+    "addLocation": "Lisa asukoht",
+    "editLocation": "Asukohad",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -333,6 +339,9 @@
     },
     "drillcore_box": {
       "info": "Üldinfo"
+    },
+    "location": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -484,6 +493,10 @@
   "editArea": {
     "heading": "Ala",
     "editMessage": "Muuda ala"
+  },
+  "editLocation": {
+    "heading": "Asukoht",
+    "editMessage": "Muuda asukohta"
   },
   "editDrillcoreBox": {
     "heading": "Puursüdamiku kast",
@@ -1258,6 +1271,14 @@
     "deposit_area_ha": "Maardla (ha)",
     "maakond": "Maakond",
     "egf": "Ala EGF"
+  },
+  "location": {
+    "location": "Asukoht",
+    "location_location": "Asub",
+    "date_collected_free": "Kogumise aeg",
+    "agent": "Persoon: Nimi",
+    "number_items": "Säilikute arv",
+    "contents": "Sisu"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

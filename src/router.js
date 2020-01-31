@@ -1599,6 +1599,66 @@ const router = new Router({
           ]
         },
         {
+          path: "/location",
+          component: () => import("./views/Locations.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/location/LocationTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "location",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/location/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/location/Location.vue"),
+              meta: {
+                isEdit: true,
+                table: "location",
+                heading: "editLocation.heading",
+                requiresAuth: true,
+                object: "location"
+              }
+            }
+          ]
+        },
+        {
+          path: "/location/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Location add",
+              component: () => import("./components/location/Location.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.location",
+                subForms: [{ path: "/location/add", name: "header.location" }],
+                requiresAuth: true,
+                object: "location"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {

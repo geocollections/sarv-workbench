@@ -295,6 +295,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    locationBoxSearchHistory: {
+      type: Object
+    },
+    locationBoxViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

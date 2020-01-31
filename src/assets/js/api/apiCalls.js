@@ -2765,6 +2765,55 @@ export function fetchListMaakond() {
  ***  AREA END  ***
  ******************/
 
+/**********************
+ *** LOCATION START ***
+ **********************/
+export function fetchLocation(id) {
+  return get(`location/?id=${id}&format=json`);
+}
+
+export function fetchLocations(data) {
+  let fields =
+    "id,location,location_location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,remarks,database,user_added,date_added";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.location && data.location.trim().length > 0) {
+    searchFields += `&location__icontains=${data.location}`;
+  }
+  if (data.location_location && data.location_location.trim().length > 0) {
+    searchFields += `&location_location__icontains=${data.location_location}`;
+  }
+  if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
+    searchFields += `&stratigraphy_free__icontains=${data.stratigraphy_free}`;
+  }
+  if (data.agent && data.agent.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.agent};fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:icontains`;
+  }
+  if (data.user_added && data.user_added.trim().length > 0) {
+    searchFields += `&user_added__icontains=${data.user_added}`;
+  }
+  if (data.date_added && data.date_added.trim().length > 0) {
+    searchFields += `&date_added__icontains=${data.date_added}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `location/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `location/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/**********************
+ ***  LOCATION END  ***
+ **********************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/
