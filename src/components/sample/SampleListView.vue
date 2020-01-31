@@ -48,10 +48,17 @@
             }"
           />
           <span
-            v-else
+            v-else-if="entity.locality_free"
             :style="{ 'font-size': getFontSizeUsingLength(entity) }"
             >{{ entity.locality_free }}</span
           >
+          <span
+            v-if="entity.site__name || entity.site__name_en"
+            v-translate="{
+              et: entity.site__name,
+              en: entity.site__name_en
+            }"
+          />
         </div>
 
         <div

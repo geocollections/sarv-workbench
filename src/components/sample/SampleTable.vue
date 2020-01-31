@@ -49,7 +49,23 @@
 
       <span v-else-if="item.locality_free">{{ item.locality_free }}</span>
 
-      <span v-else-if="item.site__name">{{ item.site__name }}</span>
+      <span v-else-if="item.site">
+        <router-link
+          :to="{ path: '/site/' + item.site }"
+          :title="$t('editSite.viewMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <span
+            v-if="item.site__name || item.site__name_en"
+            v-translate="{
+              et: item.site__name,
+              en: item.site__name_en
+            }"
+          />
+          <span v-else>{{ item.site }}</span>
+        </router-link>
+      </span>
     </template>
 
     <template v-slot:item.locality__locality="{ item }">
