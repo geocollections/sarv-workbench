@@ -1,10 +1,8 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: circleci/node:current
-    resource_class: medium
-    parallelism: 1
+    machine:
+      image: true
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
@@ -28,10 +26,8 @@ jobs:
           root: .
           paths: dist
   depoloy:
-    docker:
-      - image: circleci/node:current
-    resource_class: medium
-    parallelism: 1
+    machine:
+      image: true
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
