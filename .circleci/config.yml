@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:current
-    parallelism: 2
+    parallelism: 1
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
@@ -27,7 +27,7 @@ jobs:
   depoloy:
     docker:
       - image: circleci/node:current
-    parallelism: 2
+    parallelism: 1
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
