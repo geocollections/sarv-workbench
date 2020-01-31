@@ -141,7 +141,6 @@ export default {
   created: function() {
     this.origin = document.location.origin;
     this.shortcuts = this.$store.state["shortcuts"];
-    console.log(this.$router.options.routes);
   },
   beforeDestroy: function() {
     this.$store.dispatch("SAVE_SHORTCUTS", this.shortcuts);

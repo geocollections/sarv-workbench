@@ -4314,9 +4314,9 @@ export default {
 
             if (handledResponse.length > 0) {
               this.$emit("object-exists", true);
-              // this.$set(this, "attachment", this.handleResponse(response)[0])
-              this.attachment = this.handleResponse(response)[0];
-              this.rawAttachment = cloneDeep(this.handleResponse(response)[0]);
+              this.$set(this, "attachment", this.handleResponse(response)[0]);
+              // this.attachment = this.handleResponse(response)[0];
+              this.rawAttachment = cloneDeep(this.attachment);
               this.fillAutocompleteFields(this.attachment);
 
               this.removeUnnecessaryFields(this.attachment, this.copyFields);

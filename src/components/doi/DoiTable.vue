@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    class="project-table"
+    class="doi-table"
     :headers="translatedHeaders"
     hide-default-footer
     dense

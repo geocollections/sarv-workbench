@@ -788,7 +788,8 @@ export default {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.site = this.handleResponse(response)[0];
+            this.$set(this, "site", this.handleResponse(response)[0])
+            // this.site = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.site);
             this.removeUnnecessaryFields(this.site, this.copyFields);
 
@@ -1015,20 +1016,20 @@ export default {
     },
 
     updateLocation(location, method, GPSPosition) {
-      this.$set(this.site, "latitude", location.lat.toFixed(6));
-      this.$set(this.site, "longitude", location.lng.toFixed(6));
+      this.site.latitude = location.lat.toFixed(6);
+      this.site.longitude = location.lng.toFixed(6);
 
       // If user chooses coordinates from map by clicking or dragging the marker then reset gps accuracy and coord_det_method
       if (method === "GPS") {
-        this.$set(this.site, "location_accuracy", GPSPosition.coords.accuracy);
-        this.$set(this.site, "coord_det_method", {
+        this.site.location_accuracy = GPSPosition.coords.accuracy;
+        this.site.coord_det_method = {
           id: 6,
           value: "GPS",
           value_en: "GPS"
-        });
+        };
       } else {
-        this.$set(this.site, "location_accuracy", null);
-        this.$set(this.site, "coord_det_method", null);
+        this.site.location_accuracy = null;
+        this.site.coord_det_method = null;
       }
     },
 
@@ -1045,7 +1046,7 @@ export default {
       fetchLastSiteName(projectId).then(response => {
         if (response.data.results && response.data.results.length > 0) {
           let newName = this.calculateNextName(response.data.results[0].name);
-          this.$set(this.site, "name", newName);
+          this.site.name = newName;
         }
       });
     },

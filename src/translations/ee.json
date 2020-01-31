@@ -72,6 +72,7 @@
   },
   "header": {
     "title": "SARV2",
+    "classifications": "Klassifikatsioonid",
     "attachment": "Fail",
     "attachments": "Failid",
     "files": "Failid",

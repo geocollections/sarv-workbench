@@ -210,7 +210,17 @@ export default {
           title: "sites",
           links: [
             { title: "editSite", path: "/site", icon: "fas fa-globe" },
-            { title: "addSite", path: "/site/add", icon: "far fa-plus-square" }
+            { title: "addSite", path: "/site/add", icon: "far fa-plus-square" },
+            {
+              title: "areas",
+              path: "/area",
+              icon: "fas fa-chart-area"
+            },
+            {
+              title: "area",
+              path: "/area/add",
+              icon: "far fa-plus-square"
+            }
           ]
         },
         {
@@ -254,13 +264,7 @@ export default {
               title: "sample",
               path: "/sample/add",
               icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "analysis",
-          title: "analyses",
-          links: [
+            },
             {
               title: "editAnalysis",
               path: "/analysis",
@@ -270,13 +274,7 @@ export default {
               title: "addAnalysis",
               path: "/analysis/add",
               icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "preparation",
-          title: "preparations",
-          links: [
+            },
             {
               title: "editPreparation",
               path: "/preparation",
@@ -291,12 +289,18 @@ export default {
         },
         {
           name: "taxon",
-          title: "taxa",
+          title: "classifications",
           links: [
             { title: "taxa", path: "/taxon", icon: "fas fa-pastafarianism" },
             {
               title: "taxon",
               path: "/taxon/add",
+              icon: "far fa-plus-square"
+            },
+            { title: "rocks", path: "/rock", icon: "far fa-gem" },
+            {
+              title: "rock",
+              path: "/rock/add",
               icon: "far fa-plus-square"
             }
           ]
@@ -309,12 +313,6 @@ export default {
             {
               title: "specimen",
               path: "/specimen/add",
-              icon: "far fa-plus-square"
-            },
-            { title: "rocks", path: "/rock", icon: "far fa-gem" },
-            {
-              title: "rock",
-              path: "/rock/add",
               icon: "far fa-plus-square"
             },
             { title: "collections", path: "/collection", icon: "fas fa-boxes" },
@@ -405,22 +403,6 @@ export default {
             {
               title: "dataset",
               path: "/dataset/add",
-              icon: "far fa-plus-square"
-            }
-          ]
-        },
-        {
-          name: "area",
-          title: "areas",
-          links: [
-            {
-              title: "areas",
-              path: "/area",
-              icon: "fas fa-chart-area"
-            },
-            {
-              title: "area",
-              path: "/area/add",
               icon: "far fa-plus-square"
             }
           ]
