@@ -1,34 +1,54 @@
 version: 2
 jobs:
-  install_build_deploy:
+  build:
     docker:
       - image: circleci/node:current
+    parallelism: 1
+    working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/geocollections/sarv-edit
       - restore_cache:
-          keys:
-            - v3.0-dependencies-{{ checksum "package.json" }}
-            - v3.0-dependencies-
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
       - run:
           name: Install packages
           command: npm install
+      - save_cache:
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
       - run:
           name: Build production code
           command: npm run build
+      - persist_to_workspace:
+          root: .
+          paths: dist
+  depoloy:
+    docker:
+      - image: circleci/node:current
+    parallelism: 1
+    working_directory: ~/geocollections/sarv-edit
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/geocollections/sarv-edit
       - run:
           name: Directory update
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
       - run:
           name: Copy built files to development
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit-dev
-      - save_cache:
-          paths:
-            - node_modules
-            - package.json
-          key: v3.0-dependencies-{{ checksum "package.json" }}
+
 
 workflows:
   version: 2
-  sarv-edit:
+  buil-and-deploy:
     jobs:
-      - install_build_deploy
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
