@@ -1303,7 +1303,12 @@
     "mindat": "Mindat"
   },
   "permissions": {
-    "title": "Object permissions"
+    "title": "Object permissions",
+    "group": "Group",
+    "user": "User",
+    "view_perms_title": "Viewing permissions",
+    "change_perms_title": "Editing permissions",
+    "update": "Update permissions"
   },
   "messages": {
     "langChange": "Changed language!",
@@ -1319,7 +1324,7 @@
     "fieldsCleared": "Fields cleared!",
     "ObjectDoesNotExist1": "Unfortunately",
     "ObjectDoesNotExist2": "with an ID:",
-    "ObjectDoesNotExist3": "doesn't exist / missing permissions!",
+    "ObjectDoesNotExist3": "doesn't exist or you are missing permissions!",
     "ObjectDoesNotExist4": "Back to",
     "ObjectDoesNotExist5": "search",
     "existingFiles": "Existing files",

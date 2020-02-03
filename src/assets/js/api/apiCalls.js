@@ -2880,6 +2880,34 @@ export function fetchChangePrivacyState(table, id, stateData) {
  ***  UNIVERSAL END  ***
  ***********************/
 
+/*************************
+ *** PERMISSIONS START ***
+ *************************/
+
+export function fetchGroups() {
+  return get(`group/?format=json`);
+}
+
+export function fetchUsers() {
+  return get(`user/?format=json`);
+}
+
+export function fetchObjectGroupPermissions(id, table, permissionName) {
+  return get(
+    `group_object_permission/?object_pk=${id}&content_type__model=${table}&permission__codename=${permissionName}&format=json`
+  );
+}
+
+export function fetchObjectUserPermissions(id, table, permissionName) {
+  return get(
+    `user_object_permission/?object_pk=${id}&content_type__model=${table}&permission__codename=${permissionName}&format=json`
+  );
+}
+
+/*************************
+ ***  PERMISSIONS END  ***
+ *************************/
+
 /*********************
  *** HELPERS START ***
  *********************/

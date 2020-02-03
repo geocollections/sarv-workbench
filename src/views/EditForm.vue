@@ -33,15 +33,19 @@
       v-on:object-exists="toggleObjectState"
     />
 
+    <!-- PERMISSIONS -->
     <object-permissions
+      v-if="
+        typeof data === 'object' &&
+          data !== null &&
+          objectExists &&
+          enablePermissions
+      "
+      :table="$route.meta.table"
+      :object-data="data"
+      :key="permissionsComponentKey"
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
-    />
-
-    <bottom-options
-      :body-color="appSettings.bodyColor"
-      :is-navbar-dark="appSettings.navbarDark"
-      :navbar-color="appSettings.navbarColor"
     />
 
     <!-- LOGS -->
@@ -52,6 +56,12 @@
       :key="logComponentKey"
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
+    />
+
+    <bottom-options
+      :body-color="appSettings.bodyColor"
+      :is-navbar-dark="appSettings.navbarDark"
+      :navbar-color="appSettings.navbarColor"
     />
   </div>
 </template>
@@ -77,12 +87,27 @@ export default {
     return {
       data: null,
       logComponentKey: 0,
+      permissionsComponentKey: 2,
       objectExists: true
     };
   },
 
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState(["appSettings"]),
+
+    // Todo: In the future perms should be available on every view
+    enablePermissions() {
+      let table = this.$route.meta.table;
+      let availableTables = [
+        "drillcore",
+        "project",
+        "reference",
+        "sample",
+        "site"
+      ];
+
+      return availableTables.includes(table);
+    }
   },
 
   methods: {
@@ -93,6 +118,7 @@ export default {
 
     forceRerender() {
       this.logComponentKey += 1;
+      this.permissionsComponentKey += 2;
     },
 
     toggleObjectState(state) {

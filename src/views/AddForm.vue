@@ -29,6 +29,7 @@
     />
 
     <object-permissions
+      v-if="false"
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
     />

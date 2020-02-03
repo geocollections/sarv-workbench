@@ -1303,7 +1303,12 @@
     "mindat": "Mindat"
   },
   "permissions": {
-    "title": "Objekti õigused"
+    "title": "Objekti õigused",
+    "group": "Grupp",
+    "user": "Kasutaja",
+    "view_perms_title": "Vaatamise õigused",
+    "change_perms_title": "Muutmise õigused",
+    "update": "Uuenda õiguseid"
   },
   "messages": {
     "langChange": "Vahetasite keelt!",
@@ -1319,7 +1324,7 @@
     "fieldsCleared": "Väljad puhastatud!",
     "ObjectDoesNotExist1": "Kahjuks",
     "ObjectDoesNotExist2": "objekti, mille ID on",
-    "ObjectDoesNotExist3": "ei eksisteeri / ei ole luba näha!",
+    "ObjectDoesNotExist3": "ei eksisteeri või sul puuduvad õigused seda näha!",
     "ObjectDoesNotExist4": "Tagasi",
     "ObjectDoesNotExist5": "otsingusse",
     "existingFiles": "Olemasolevad failid",
