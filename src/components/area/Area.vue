@@ -259,6 +259,7 @@ export default {
         copyFields: [
           "id",
           "name",
+          "name_en",
           "area_type",
           "maardla",
           "eelis",
