@@ -40,7 +40,7 @@
 
       <template v-slot:item.number="{ item }">
         <router-link
-          :to="{ path: '/drillcore_box/' + item.number }"
+          :to="{ path: '/drillcore_box/' + item.id }"
           :title="$t('editDrillcoreBox.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
