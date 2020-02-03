@@ -569,11 +569,11 @@ const formManipulation = {
     },
 
     formatDateForUpload(date) {
-      date = new Date(date);
-
-      let tzoffset = new Date().getTimezoneOffset() * 60000;
-
-      return new Date(date - tzoffset).toISOString().split(".")[0] + "Z"; // Without fractions
+      return (
+        moment(date)
+          .toISOString(true)
+          .split(".")[0] + "Z"
+      ); // Without fractions
     },
 
     unformatISOStringToDate(date, format = "YYYY-MM-DD HH:mm:ss") {
