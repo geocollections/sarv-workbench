@@ -1302,6 +1302,9 @@
     "kivid_info": "Kivid.info",
     "mindat": "Mindat"
   },
+  "permissions": {
+    "title": "Object permissions"
+  },
   "messages": {
     "langChange": "Changed language!",
     "easterEggError": "What are you trying to do :D ??? If you do not know how did it happen then please contact olle.hints@taltech.ee",

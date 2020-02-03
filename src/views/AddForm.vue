@@ -28,6 +28,11 @@
       :is-body-active-color-dark="appSettings.bodyActiveColorDark"
     />
 
+    <object-permissions
+      :body-color="appSettings.bodyColor"
+      :body-active-color="appSettings.bodyActiveColor"
+    />
+
     <bottom-options
       :body-color="appSettings.bodyColor"
       :is-navbar-dark="appSettings.navbarDark"
@@ -40,10 +45,11 @@
 <script>
 import BottomOptions from "../components/partial/BottomOptions";
 import { mapState } from "vuex";
+import ObjectPermissions from "../components/partial/ObjectPermissions";
 
 export default {
   name: "AddForm",
-  components: { BottomOptions },
+  components: {ObjectPermissions, BottomOptions },
   computed: {
     ...mapState(["appSettings"])
   }

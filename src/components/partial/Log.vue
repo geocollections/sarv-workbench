@@ -18,12 +18,12 @@
       </v-btn>
     </v-card-title>
 
-    <transition name="fade">
-      <div v-show="block.logs" class="px-1 pt-1 pb-2">
+    <transition>
+      <div v-show="block.logs" class="pa-1">
         <div class="row no-gutters">
-          <div class="col px-1">
+          <div class="col px-1 pb-1">
             <div class="table-responsive mb-0">
-              <table class="table table-hover table-bordered">
+              <table class="table table-hover table-bordered mb-0">
                 <thead class="thead-light">
                   <tr>
                     <th>{{ $t("logs.user") }}</th>

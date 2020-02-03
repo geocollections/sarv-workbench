@@ -1302,6 +1302,9 @@
     "kivid_info": "Kivid.info",
     "mindat": "Mindat"
   },
+  "permissions": {
+    "title": "Objekti õigused"
+  },
   "messages": {
     "langChange": "Vahetasite keelt!",
     "easterEggError": "Mida sa teha üritad :D ??? Kui sa ei tea, kuidas see juhtus, siis palun võta ühendust olle.hints@taltech.ee",

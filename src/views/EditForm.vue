@@ -33,6 +33,11 @@
       v-on:object-exists="toggleObjectState"
     />
 
+    <object-permissions
+      :body-color="appSettings.bodyColor"
+      :body-active-color="appSettings.bodyActiveColor"
+    />
+
     <bottom-options
       :body-color="appSettings.bodyColor"
       :is-navbar-dark="appSettings.navbarDark"
@@ -57,10 +62,12 @@ import Log from "@/components/partial/Log.vue";
 import ScrollToLinks from "../components/partial/ScrollToLinks";
 import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist";
 import { mapState } from "vuex";
+import ObjectPermissions from "../components/partial/ObjectPermissions";
 
 export default {
   name: "EditForm",
   components: {
+    ObjectPermissions,
     ObjectDoesNotExist,
     ScrollToLinks,
     BottomOptions,
