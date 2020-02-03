@@ -68,7 +68,6 @@ export default {
   FETCH_SAMPLES: ({ commit, state }) => {
     return fetchSamples(
       state.activeSearchParams.search,
-      state.activeSearchParams.agent,
       state.activeSearchParams.databaseId
     ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
   },

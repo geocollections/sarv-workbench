@@ -143,7 +143,7 @@
 
       <transition>
         <div v-show="block.permissions" class="px-1 pt-1 pb-2">
-          <v-row v-show="block.permissions" class="px-1">
+          <v-row class="px-1">
             <v-col
               cols="12"
               sm="6"

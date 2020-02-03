@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import TableViewSearch from "../components/partial/tableView/TableViewSearch";
-import TableViewTitle from "../components/partial/tableView/TableViewTitle";
+import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import ListModuleCore from "./ListModuleCore";
 import { fetchDrillcoreBoxes } from "../assets/js/api/apiCalls";
 export default {

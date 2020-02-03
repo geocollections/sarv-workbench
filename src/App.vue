@@ -24,6 +24,9 @@ export default {
 };
 </script>
 <style>
+html {
+  overflow-y: auto;
+}
 html,
 body {
   height: 100%;

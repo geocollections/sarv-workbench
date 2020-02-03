@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import AppHeader from "../components/partial/appHeader/AppHeader";
+import AppHeader from "../components/partial/app_header/AppHeader";
 import { mapState } from "vuex";
 import Breadcrumbs from "../components/partial/Breadcrumbs";
 

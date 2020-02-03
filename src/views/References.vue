@@ -31,8 +31,8 @@ import { fetchReferences } from "@/assets/js/api/apiCalls";
 import { fetchAddReferenceToLibrary } from "../assets/js/api/apiCalls";
 import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import { mapState } from "vuex";
-import TableViewTitle from "../components/partial/tableView/TableViewTitle";
-import TableViewSearch from "../components/partial/tableView/TableViewSearch";
+import TableViewTitle from "../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 
 export default {
   components: {

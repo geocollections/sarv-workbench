@@ -26,8 +26,8 @@
 import ListModuleCore from "./ListModuleCore";
 import { fetchProjects } from "@/assets/js/api/apiCalls";
 import { mapState } from "vuex";
-import TableViewTitle from "../components/partial/tableView/TableViewTitle";
-import TableViewSearch from "../components/partial/tableView/TableViewSearch";
+import TableViewTitle from "../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 
 export default {
   components: {

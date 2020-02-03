@@ -282,7 +282,7 @@ import { mapState } from "vuex";
 import AutocompleteWrapper from "./AutocompleteWrapper";
 import CheckboxWrapper from "./CheckboxWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import ImageViewWrapper from "../imageView/ImageViewWrapper";
+import ImageViewWrapper from "../image_view/ImageViewWrapper";
 import EXIF from "exif-js";
 import moment from "moment";
 import { toastError, toastInfo } from "../../../assets/js/iziToast/iziToast";

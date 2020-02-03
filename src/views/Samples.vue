@@ -34,8 +34,8 @@
 import ListModuleCore from "./ListModuleCore";
 import { fetchSamples } from "@/assets/js/api/apiCalls";
 import { mapState } from "vuex";
-import TableViewTitle from "../components/partial/tableView/TableViewTitle";
-import TableViewSearch from "../components/partial/tableView/TableViewSearch";
+import TableViewTitle from "../components/partial/table_view/TableViewTitle";
+import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 
 export default {
   components: {
@@ -119,7 +119,7 @@ export default {
     fetchSamples() {
       return new Promise(resolve => {
         resolve(
-          fetchSamples(this.searchParameters, this.currentUser, this.databaseId)
+          fetchSamples(this.searchParameters, this.databaseId)
         );
       });
     },

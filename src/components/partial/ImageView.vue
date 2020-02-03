@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import ImageViewWrapper from "./imageView/ImageViewWrapper";
+import ImageViewWrapper from "./image_view/ImageViewWrapper";
 
 export default {
   name: "ImageView",

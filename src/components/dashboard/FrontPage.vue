@@ -209,7 +209,7 @@ import RecentActivity from "./RecentActivity";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import SitesMap from "./SitesMap";
-import ImageViewWrapper from "../partial/imageView/ImageViewWrapper";
+import ImageViewWrapper from "../partial/image_view/ImageViewWrapper";
 import { fetchRecentFiles } from "../../assets/js/api/apiCalls";
 
 export default {
