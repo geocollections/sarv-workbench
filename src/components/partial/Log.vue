@@ -50,7 +50,15 @@
                           )"
                           :key="field"
                         >
-                          <div class="mb-3">
+                          <div
+                            class="mb-3"
+                            v-if="
+                              changes &&
+                                changes.old !== '' &&
+                                changes.new !== null &&
+                                changes.old !== changes.new
+                            "
+                          >
                             <div class="log-title mb-1">{{ field }}</div>
 
                             <div v-for="(item, index) in changes" :key="index">
