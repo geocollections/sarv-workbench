@@ -244,7 +244,8 @@ export default {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.location = this.handleResponse(response)[0];
+            this.$set(this, "location", this.handleResponse(response)[0]);
+            // this.location = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.location);
             this.removeUnnecessaryFields(this.location, this.copyFields);
 

@@ -1167,7 +1167,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.reference = this.handleResponse(response)[0];
+            this.$set(this, "reference", this.handleResponse(response)[0]);
+            // this.reference = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.reference);
 
             this.removeUnnecessaryFields(this.reference, this.copyFields);
@@ -1606,10 +1607,10 @@ export default {
         fetchJournalForReference(journalName).then(response => {
           let journal = this.handleResponse(response);
           if (journal.length === 1)
-            this.$set(this.reference, "journal", {
+            this.reference.journal = {
               id: journal[0].id,
               journal_name: journal[0].journal_name
-            });
+            };
         });
       }
 

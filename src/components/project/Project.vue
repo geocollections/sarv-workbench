@@ -761,7 +761,8 @@ export default {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.project = this.handleResponse(response)[0];
+            this.$set(this, "project", this.handleResponse(response)[0]);
+            // this.project = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.project);
             this.removeUnnecessaryFields(this.project, this.copyFields);
             this.project.related_data = {};

@@ -508,7 +508,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.dataset = this.handleResponse(response)[0];
+            this.$set(this, "dataset", this.handleResponse(response)[0]);
+            // this.dataset = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.dataset);
 
             this.removeUnnecessaryFields(this.dataset, this.copyFields);

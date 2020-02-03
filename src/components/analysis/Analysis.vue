@@ -776,7 +776,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.analysis = this.handleResponse(response)[0];
+            this.$set(this, "analysis", this.handleResponse(response)[0]);
+            // this.analysis = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.analysis);
 
             this.removeUnnecessaryFields(this.analysis, this.copyFields);

@@ -227,7 +227,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.journal = this.handleResponse(response)[0];
+            this.$set(this, "journal", this.handleResponse(response)[0]);
+            // this.journal = this.handleResponse(response)[0];
 
             this.removeUnnecessaryFields(this.journal, this.copyFields);
             this.$emit("data-loaded", this.journal);

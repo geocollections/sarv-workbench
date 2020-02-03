@@ -1041,7 +1041,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.specimen = this.handleResponse(response)[0];
+            this.$set(this, "specimen", this.handleResponse(response)[0]);
+            // this.specimen = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.specimen);
 
             this.removeUnnecessaryFields(this.specimen, this.copyFields);

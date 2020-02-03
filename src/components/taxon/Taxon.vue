@@ -937,7 +937,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.taxon = this.handleResponse(response)[0];
+            this.$set(this, "taxon", this.handleResponse(response)[0]);
+            // this.taxon = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.taxon);
 
             this.removeUnnecessaryFields(this.taxon, this.copyFields);

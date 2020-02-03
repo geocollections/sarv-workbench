@@ -308,7 +308,8 @@ export default {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.area = this.handleResponse(response)[0];
+            this.$set(this, "area", this.handleResponse(response)[0]);
+            // this.area = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.area);
             this.removeUnnecessaryFields(this.area, this.copyFields);
 

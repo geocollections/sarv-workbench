@@ -501,7 +501,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.agent = this.handleResponse(response)[0];
+            this.$set(this, "agent", this.handleResponse(response)[0]);
+            // this.agent = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.agent);
 
             this.removeUnnecessaryFields(this.agent, this.copyFields);

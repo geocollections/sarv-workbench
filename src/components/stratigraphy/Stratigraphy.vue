@@ -845,7 +845,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.stratigraphy = this.handleResponse(response)[0];
+            this.$set(this, "stratigraphy", this.handleResponse(response)[0]);
+            // this.stratigraphy = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.stratigraphy);
 
             this.removeUnnecessaryFields(this.stratigraphy, this.copyFields);

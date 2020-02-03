@@ -973,7 +973,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.doi = this.handleResponse(response)[0];
+            this.$set(this, "doi", this.handleResponse(response)[0]);
+            // this.doi = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.doi);
 
             // Loading REFERENCE and DATASET here because they don't need api request

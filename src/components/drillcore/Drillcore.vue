@@ -561,7 +561,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.drillcore = this.handleResponse(response)[0];
+            this.$set(this, "drillcore", this.handleResponse(response)[0]);
+            // this.drillcore = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.drillcore);
 
             this.removeUnnecessaryFields(this.drillcore, this.copyFields);

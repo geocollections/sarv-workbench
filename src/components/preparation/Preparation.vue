@@ -614,7 +614,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.preparation = this.handleResponse(response)[0];
+            this.$set(this, "preparation", this.handleResponse(response)[0]);
+            // this.preparation = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.preparation);
 
             this.removeUnnecessaryFields(this.preparation, this.copyFields);

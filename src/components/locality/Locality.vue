@@ -835,7 +835,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.locality = this.handleResponse(response)[0];
+            this.$set(this, "locality", this.handleResponse(response)[0]);
+            // this.locality = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.locality);
 
             this.removeUnnecessaryFields(this.locality, this.copyFields);

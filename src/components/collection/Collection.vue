@@ -600,7 +600,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.collection = this.handleResponse(response)[0];
+            this.$set(this, "collection", this.handleResponse(response)[0]);
+            // this.collection = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.collection);
 
             // Needs to be before fields are removed

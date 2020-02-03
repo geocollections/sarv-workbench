@@ -509,7 +509,8 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.library = this.handleResponse(response)[0];
+            this.$set(this, "library", this.handleResponse(response)[0]);
+            // this.library = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.library);
 
             this.removeUnnecessaryFields(this.library, this.copyFields);
