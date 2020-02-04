@@ -1,6 +1,7 @@
 <template>
   <div class="list-module-core">
     <ScrollToTop
+      class="d-print-none"
       v-if="$route.meta.isTableView"
       :body-active-color="appSettings.bodyActiveColor"
     />

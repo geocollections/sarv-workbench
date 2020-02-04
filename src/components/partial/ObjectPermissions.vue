@@ -26,9 +26,140 @@
 
     <transition>
       <div v-show="block.permissions" class="pa-1">
+        <v-row no-gutters>
+          <!-- VIEW AND EDIT -->
+          <v-col cols="12" md="6" class="pa-1">
+            <v-card
+              :color="bodyColor.split('n-')[0] + 'n-5'"
+              flat
+              hover
+              class="pa-1"
+            >
+              <v-row no-gutters>
+                <v-col cols="12" class="pa-1 font-weight-bold">
+                  <span>{{ $t("permissions.change_perms_title") }}</span>
+                  <span
+                    ><v-icon small right :color="bodyActiveColor"
+                      >far fa-edit</v-icon
+                    ></span
+                  >
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col cols="12" sm="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="object_permissions.change_group"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.groups"
+                    :loading="autocomplete.loaders.groups"
+                    item-text="name"
+                    :label="$t('permissions.group')"
+                    :multiple="true"
+                    v-on:chip:close="
+                      object_permissions.change_group.splice(
+                        object_permissions.change_group.indexOf($event),
+                        1
+                      )
+                    "
+                    :menu-props="{ maxHeight: 208 }"
+                  />
+                </v-col>
+
+                <v-col cols="12" sm="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="object_permissions.change_user"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.users"
+                    :loading="autocomplete.loaders.users"
+                    item-text="username"
+                    :label="$t('permissions.user')"
+                    :multiple="true"
+                    v-on:chip:close="
+                      object_permissions.change_user.splice(
+                        object_permissions.change_user.indexOf($event),
+                        1
+                      )
+                    "
+                    :menu-props="{ maxHeight: 208 }"
+                  />
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+
+          <!-- VIEW -->
+          <v-col cols="12" md="6" class="pa-1">
+            <v-card
+              :color="bodyColor.split('n-')[0] + 'n-5'"
+              flat
+              hover
+              class="pa-1"
+            >
+              <v-row no-gutters>
+                <v-col cols="12" class="pa-1 font-weight-bold">
+                  <span>{{ $t("permissions.view_perms_title") }}</span>
+                  <span
+                    ><v-icon small right :color="bodyActiveColor"
+                      >fas fa-eye</v-icon
+                    ></span
+                  >
+                </v-col>
+              </v-row>
+
+              <v-row no-gutters>
+                <v-col cols="12" sm="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="object_permissions.view_group"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.groups"
+                    :loading="autocomplete.loaders.groups"
+                    item-text="name"
+                    :label="$t('permissions.group')"
+                    :multiple="true"
+                    v-on:chip:close="
+                      object_permissions.view_group.splice(
+                        object_permissions.view_group.indexOf($event),
+                        1
+                      )
+                    "
+                    :menu-props="{ maxHeight: 208 }"
+                  />
+                </v-col>
+
+                <v-col cols="12" sm="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="object_permissions.view_user"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.users"
+                    :loading="autocomplete.loaders.users"
+                    item-text="username"
+                    :label="$t('permissions.user')"
+                    :multiple="true"
+                    v-on:chip:close="
+                      object_permissions.view_user.splice(
+                        object_permissions.view_user.indexOf($event),
+                        1
+                      )
+                    "
+                    :menu-props="{ maxHeight: 208 }"
+                  />
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-col>
+        </v-row>
 
         <v-row no-gutters>
           <v-col cols="12" class="pa-1">
+            <div class="v-messages theme--light">
+              <div class="v-messages__wrapper mb-1">
+                <div class="v-messages__message">
+                  {{ $t("permissions.update_message") }}
+                </div>
+              </div>
+            </div>
+
             <v-btn
               :color="bodyActiveColor"
               dark
@@ -38,104 +169,6 @@
               {{ $t("permissions.update") }}
               <v-icon small right>fas fa-users-cog</v-icon>
             </v-btn>
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" class="pa-1 font-weight-bold">
-            <span>{{ $t("permissions.view_perms_title") }}</span>
-            <span
-              ><v-icon small right :color="bodyActiveColor"
-                >fas fa-eye</v-icon
-              ></span
-            >
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" md="6" class="pa-1">
-            <autocomplete-wrapper
-              v-model="object_permissions.view_group"
-              :color="bodyActiveColor"
-              :items="autocomplete.groups"
-              :loading="autocomplete.loaders.groups"
-              item-text="name"
-              :label="$t('permissions.group')"
-              :multiple="true"
-              v-on:chip:close="
-                object_permissions.view_group.splice(
-                  object_permissions.view_group.indexOf($event),
-                  1
-                )
-              "
-            />
-          </v-col>
-
-          <v-col cols="12" md="6" class="pa-1">
-            <autocomplete-wrapper
-              v-model="object_permissions.view_user"
-              :color="bodyActiveColor"
-              :items="autocomplete.users"
-              :loading="autocomplete.loaders.users"
-              item-text="username"
-              :label="$t('permissions.user')"
-              :multiple="true"
-              v-on:chip:close="
-                object_permissions.view_user.splice(
-                  object_permissions.view_user.indexOf($event),
-                  1
-                )
-              "
-            />
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" class="pa-1 font-weight-bold">
-            <span>{{ $t("permissions.change_perms_title") }}</span>
-            <span
-              ><v-icon small right :color="bodyActiveColor"
-                >far fa-edit</v-icon
-              ></span
-            >
-          </v-col>
-        </v-row>
-
-        <v-row no-gutters>
-          <v-col cols="12" md="6" class="pa-1">
-            <autocomplete-wrapper
-              v-model="object_permissions.change_group"
-              :color="bodyActiveColor"
-              :items="autocomplete.groups"
-              :loading="autocomplete.loaders.groups"
-              item-text="name"
-              :label="$t('permissions.group')"
-              :multiple="true"
-              v-on:chip:close="
-                object_permissions.change_group.splice(
-                  object_permissions.change_group.indexOf($event),
-                  1
-                )
-              "
-            />
-          </v-col>
-
-          <v-col cols="12" md="6" class="pa-1">
-            <autocomplete-wrapper
-              v-model="object_permissions.change_user"
-              :color="bodyActiveColor"
-              :items="autocomplete.users"
-              :loading="autocomplete.loaders.users"
-              item-text="username"
-              :label="$t('permissions.user')"
-              :multiple="true"
-              v-on:chip:close="
-                object_permissions.change_user.splice(
-                  object_permissions.change_user.indexOf($event),
-                  1
-                )
-              "
-            />
           </v-col>
         </v-row>
       </div>

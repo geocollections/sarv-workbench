@@ -1303,12 +1303,13 @@
     "mindat": "Mindat"
   },
   "permissions": {
-    "title": "Objekti õigused",
+    "title": "Juurdepääsuõigused",
     "group": "Grupp",
     "user": "Kasutaja",
-    "view_perms_title": "Vaatamise õigused",
-    "change_perms_title": "Muutmise õigused",
-    "update": "Uuenda õiguseid"
+    "view_perms_title": "Vaatamise õigus:",
+    "change_perms_title": "Vaatamise ja muutmise õigus:",
+    "update": "Uuenda õiguseid",
+    "update_message": "NB! Enda juurdepääsuõiguste eemaldamisel kaotate võimaluse kirje nägemiseks / muutmiseks."
   },
   "messages": {
     "langChange": "Vahetasite keelt!",

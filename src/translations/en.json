@@ -1303,12 +1303,13 @@
     "mindat": "Mindat"
   },
   "permissions": {
-    "title": "Object permissions",
+    "title": "Data access permissions",
     "group": "Group",
     "user": "User",
-    "view_perms_title": "Viewing permissions",
-    "change_perms_title": "Editing permissions",
-    "update": "Update permissions"
+    "view_perms_title": "View only:",
+    "change_perms_title": "View and edit:",
+    "update": "Update permissions",
+    "update_message": "Note that removing your own permissions will result in loosing access to the record."
   },
   "messages": {
     "langChange": "Changed language!",
