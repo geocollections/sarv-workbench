@@ -348,6 +348,9 @@
     },
     "location": {
       "info": "Üldinfo"
+    },
+    "rock": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -1293,6 +1296,16 @@
   "rock": {
     "name": "Mineraal/kivim",
     "name_en": "Mineraal/kivim EN",
+    "name_ru": "Mineraal/kivim RU",
+    "link_wikipedia": "Vikipeedia",
+    "description": "Kirjeldus",
+    "description_in_estonia": "Esinemine Eestis",
+    "description_usage": "Kasutamine",
+    "description_author": "Kirjelduse autor(id)",
+    "ima_status": "IMA staatus",
+    "synonym_of": "On sünonüümiks",
+    "sort": "Sorteeri",
+    "is_resource": "On maavara?",
     "formula": "Valem",
     "formula_html": "Valem HTML",
     "rock_type": "Tüüp",
@@ -1300,7 +1313,18 @@
     "in_estonia": "Eestis",
     "in_portal": "Portaalis",
     "kivid_info": "Kivid.info",
-    "mindat": "Mindat"
+    "mindat": "Mindat",
+    "relatedTables": {
+      "rock_tree": "Klassifikatsioonid",
+      "rock_classification": "rock_classification ??",
+      "rock_mineral": "Mineraalid",
+      "rock_element": "Keemiline koostis (mineraalid)",
+      "rock_property": "Omadused",
+      "rock_image": "Pildid",
+      "rock_locality": "Leiukohad",
+      "rock_synonym": "Sünonüümid",
+      "rock_reference": "Kirjandusviited"
+    }
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

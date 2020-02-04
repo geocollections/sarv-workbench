@@ -348,6 +348,9 @@
     },
     "location": {
       "info": "General info"
+    },
+    "rock": {
+      "info": "General info"
     }
   },
   "add": {
@@ -1293,6 +1296,16 @@
   "rock": {
     "name": "Mineral/rock",
     "name_en": "Mineral/rock EN",
+    "name_ru": "Mineral/rock RU",
+    "link_wikipedia": "Wikipedia",
+    "description": "Description",
+    "description_in_estonia": "In Estonia",
+    "description_usage": "Usage",
+    "description_author": "Description author(s)",
+    "ima_status": "IMA status",
+    "synonym_of": "Synonym of",
+    "sort": "Sort",
+    "is_resource": "Is resource?",
     "formula": "Formula",
     "formula_html": "Formula HTML",
     "rock_type": "Rock type",
@@ -1300,7 +1313,18 @@
     "in_estonia": "In Estonia",
     "in_portal": "In portal",
     "kivid_info": "Kivid.info",
-    "mindat": "Mindat"
+    "mindat": "Mindat",
+    "relatedTables": {
+      "rock_tree": "Classifications",
+      "rock_classification": "Classifications ???",
+      "rock_mineral": "Minerals",
+      "rock_element": "Chemical compound (minerals)",
+      "rock_property": "Properties",
+      "rock_image": "Images",
+      "rock_locality": "Localities",
+      "rock_synonym": "Synonyms",
+      "rock_reference": "References"
+    }
   },
   "permissions": {
     "title": "Data access permissions",
@@ -1309,7 +1333,7 @@
     "view_perms_title": "View only:",
     "change_perms_title": "View and edit:",
     "update": "Update permissions",
-    "update_message": "Note that removing your own permissions will result in loosing access to the record."
+    "update_message": "Note that removing your own permissions will result in losing access to the record."
   },
   "messages": {
     "langChange": "Changed language!",

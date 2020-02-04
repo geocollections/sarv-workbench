@@ -99,11 +99,18 @@ export default {
     enablePermissions() {
       let table = this.$route.meta.table;
       let availableTables = [
-        "drillcore",
-        "project",
-        "reference",
         "sample",
-        "site"
+        "analysis",
+        "project",
+        "site",
+        "drillcore",
+        "drillcore_box",
+        "dataset"
+        // "attachment",
+        // "collection",
+        // "specimen",
+        // "doi",
+        // "selection"
       ];
 
       return availableTables.includes(table);
