@@ -13,7 +13,7 @@
     "owner_txt": "Owner txt",
     "licence": "Licence",
     "copyright_agent": "Copyright agent",
-    "is_private": "Private",
+    "is_private": "Hidden in public portals",
     "is_locked": "Locked",
     "is_preferred": "Preferred",
     "description": "Description",
