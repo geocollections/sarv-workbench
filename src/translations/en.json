@@ -44,7 +44,8 @@
     "author": "Author",
     "user_added": "User added",
     "user_changed": "User changed",
-    "date_added": "Date added"
+    "date_added": "Date added",
+    "language": "Language"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -197,7 +198,8 @@
     "locality_description": "Locality description",
     "rock_locality": "Rock locality",
     "rock_element": "Rock element",
-    "rock_property": "Rock property"
+    "rock_property": "Rock property",
+    "rock_synonym": "Rock synonym"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1331,6 +1333,7 @@
     "value_txt": "Value txt",
     "value_min": "Value min",
     "value_max": "Value max",
+    "synonym": "Synonym",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Classifications ???",

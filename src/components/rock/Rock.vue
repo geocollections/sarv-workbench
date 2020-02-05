@@ -385,6 +385,9 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+
+          <!-- Todo: rock_classification?? -->
+
           <rock-mineral-table
             v-show="activeTab === 'rock_mineral'"
             :response="relatedData.rock_mineral"
@@ -407,6 +410,19 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <rock-property-table
+            v-show="activeTab === 'rock_property'"
+            :response="relatedData.rock_property"
+            :search-parameters="relatedData.searchParameters.rock_property"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
+          <!-- Todo: rock_image -->
+
           <rock-locality-table
             v-show="activeTab === 'rock_locality'"
             :response="relatedData.rock_locality"
@@ -418,16 +434,19 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <rock-property-table
-            v-show="activeTab === 'rock_property'"
-            :response="relatedData.rock_property"
-            :search-parameters="relatedData.searchParameters.rock_property"
+          <rock-synonym-table
+            v-show="activeTab === 'rock_synonym'"
+            :response="relatedData.rock_synonym"
+            :search-parameters="relatedData.searchParameters.rock_synonym"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
           />
+
+          <!-- Todo: rock_reference -->
+          <!-- Todo: alamad -->
 
           <!-- PAGINATION -->
           <div
@@ -498,11 +517,13 @@ import RockMineralTable from "./related_tables/RockMineralTable";
 import RockLocalityTable from "./related_tables/RockLocalityTable";
 import RockElementTable from "./related_tables/RockElementTable";
 import RockPropertyTable from "./related_tables/RockPropertyTable";
+import RockSynonymTable from "./related_tables/RockSynonymTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockSynonymTable,
     RockPropertyTable,
     RockElementTable,
     RockLocalityTable,

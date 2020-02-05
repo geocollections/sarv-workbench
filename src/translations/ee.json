@@ -44,7 +44,8 @@
     "author": "Autor",
     "user_added": "Sisestaja",
     "user_changed": "Muutja",
-    "date_added": "Sisestatud"
+    "date_added": "Sisestatud",
+    "language": "Keel"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -197,7 +198,8 @@
     "locality_description": "Lokaliteedi kirjeldus",
     "rock_locality": "Kivimi/mineraali lokaliteet",
     "rock_element": "Mineraali keemiline koostis",
-    "rock_property": "Kivimi/mineraali omadus"
+    "rock_property": "Kivimi/mineraali omadus",
+    "rock_synonym": "Kivimi/mineraali Sünonüüm"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1331,6 +1333,7 @@
     "value_txt": "Tekstiline väärtus",
     "value_min": "Arvuline väärtus, min",
     "value_max": "Arvuline väärtus, max",
+    "synonym": "Sünonüüm",
     "relatedTables": {
       "rock_tree": "Klassifikatsioonid",
       "rock_classification": "rock_classification ??",
