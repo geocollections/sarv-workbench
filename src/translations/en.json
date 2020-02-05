@@ -200,7 +200,8 @@
     "rock_element": "Rock element",
     "rock_property": "Rock property",
     "rock_synonym": "Rock synonym",
-    "rock_reference": "Rock reference"
+    "rock_reference": "Rock reference",
+    "rock_tree": "Rock tree"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1335,6 +1336,9 @@
     "value_min": "Value min",
     "value_max": "Value max",
     "synonym": "Synonym",
+    "rock_classification": "Tree",
+    "parent": "Parent",
+    "parent_string": "Hierarchy",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Classifications ???",

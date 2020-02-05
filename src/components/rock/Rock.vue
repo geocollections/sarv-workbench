@@ -387,6 +387,16 @@
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
 
           <!-- Todo: rock_classification?? -->
+          <rock-tree-table
+            v-show="activeTab === 'rock_tree'"
+            :response="relatedData.rock_tree"
+            :search-parameters="relatedData.searchParameters.rock_tree"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <rock-mineral-table
             v-show="activeTab === 'rock_mineral'"
@@ -529,11 +539,13 @@ import RockElementTable from "./related_tables/RockElementTable";
 import RockPropertyTable from "./related_tables/RockPropertyTable";
 import RockSynonymTable from "./related_tables/RockSynonymTable";
 import RockReferenceTable from "./related_tables/RockReferenceTable";
+import RockTreeTable from "./related_tables/RockTreeTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockTreeTable,
     RockReferenceTable,
     RockSynonymTable,
     RockPropertyTable,
@@ -645,14 +657,14 @@ export default {
       return {
         relatedTabs: [
           { name: "rock_tree", iconClass: "fas fa-project-diagram" },
-          { name: "rock_classification", iconClass: "fas fa-project-diagram" },
           { name: "rock_mineral", iconClass: "far fa-gem" },
           { name: "rock_element", iconClass: "fas fa-atom" },
           { name: "rock_property", iconClass: "fas fa-sliders-h" },
           { name: "rock_image", iconClass: "far fa-image" },
           { name: "rock_locality", iconClass: "fas fa-map-marked-alt" },
           { name: "rock_synonym", iconClass: "far fa-copy" },
-          { name: "rock_reference", iconClass: "fas fa-book" }
+          { name: "rock_reference", iconClass: "fas fa-book" },
+          { name: "rock_classification", iconClass: "fas fa-project-diagram" }
         ],
         searchHistory: "rockSearchHistory",
         activeTab: "rock_tree",
@@ -773,10 +785,6 @@ export default {
           count: 0,
           results: []
         },
-        rock_classification: {
-          count: 0,
-          results: []
-        },
         rock_mineral: {
           count: 0,
           results: []
@@ -805,17 +813,15 @@ export default {
           count: 0,
           results: []
         },
+        rock_classification: {
+          count: 0,
+          results: []
+        },
         searchParameters: {
           rock_tree: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true]
-          },
-          rock_classification: {
-            page: 1,
-            paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["rock_classification"],
             sortDesc: [true]
           },
           rock_mineral: {
@@ -858,6 +864,12 @@ export default {
             page: 1,
             paginateBy: 10,
             sortBy: ["reference"],
+            sortDesc: [true]
+          },
+          rock_classification: {
+            page: 1,
+            paginateBy: 10,
+            sortBy: ["id"],
             sortDesc: [true]
           }
         }

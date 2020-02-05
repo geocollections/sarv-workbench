@@ -39,7 +39,24 @@
       </template>
 
       <template v-slot:item.rock_classification="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <div
+            v-if="$route.meta.isEdit"
+            v-translate="{
+              et: item.rock_classification__name,
+              en: item.rock_classification__name_en
+            }"
+          />
+          <div
+            v-else-if="item.rock_classification"
+            v-translate="{
+              et: item.rock_classification.name,
+              en: item.rock_classification.name_en
+            }"
+          />
+        </div>
         <div
+          v-else
           v-translate="{
             et: item.rock_classification__name,
             en: item.rock_classification__name_en
@@ -48,7 +65,24 @@
       </template>
 
       <template v-slot:item.parent="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <div
+            v-if="$route.meta.isEdit"
+            v-translate="{
+              et: item.parent__name,
+              en: item.parent__name_en
+            }"
+          />
+          <div
+            v-else-if="item.parent"
+            v-translate="{
+              et: item.parent.name,
+              en: item.parent.name_en
+            }"
+          />
+        </div>
         <div
+          v-else
           v-translate="{
             et: item.parent__name,
             en: item.parent__name_en
@@ -81,77 +115,45 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.analysis_method"
+                    v-model="item.rock_classification"
                     :color="bodyActiveColor"
-                    :items="autocomplete.analysis_method"
-                    :loading="autocomplete.loaders.analysis_method"
-                    :item-text="analysisMethodLabel"
-                    :label="$t('analysis.analysis_method')"
+                    :items="autocomplete.rock_classification"
+                    :loading="autocomplete.loaders.rock_classification"
+                    :item-text="nameLabel"
+                    :label="$t('rock.rock_classification')"
                     use-state
                     is-searchable
-                    v-on:search:items="autocompleteAnalysisMethodSearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.method_details"
-                    :color="bodyActiveColor"
-                    :label="$t('analysis.method_specification')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.mass"
-                    :color="bodyActiveColor"
-                    :label="$t('analysis.mass')"
-                    type="number"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <date-wrapper
-                    v-model="item.date"
-                    :color="bodyActiveColor"
-                    :label="$t('common.date')"
-                    v-on:date:clear="item.date = null"
-                    v-on:date:update="updateUserInputtedDate('date', $event)"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <date-wrapper
-                    v-model="item.date_end"
-                    :color="bodyActiveColor"
-                    :label="$t('analysis.date_end')"
-                    v-on:date:clear="item.date_end = null"
-                    v-on:date:update="
-                      updateUserInputtedDate('date_end', $event)
-                    "
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.date_free"
-                    :color="bodyActiveColor"
-                    :label="$t('analysis.date_free')"
+                    v-on:search:items="autocompleteRockClassificationSearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.agent"
+                    v-model="item.parent"
                     :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
-                    item-text="agent"
-                    :label="$t('specimen_description.agent')"
-                    is-link
-                    route-object="agent"
+                    :items="autocomplete.rock"
+                    :loading="autocomplete.loaders.rock"
+                    :item-text="nameLabel"
+                    :label="$t('rock.parent')"
                     is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
+                    v-on:search:items="autocompleteRockSearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.parent_string"
+                    :color="bodyActiveColor"
+                    :label="$t('rock.parent_string')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <checkbox-wrapper
+                    v-model="item.is_preferred"
+                    :color="bodyActiveColor"
+                    :label="$t('common.is_preferred')"
+                    @change="item.is_preferred = !item.is_preferred"
                   />
                 </v-col>
 
@@ -160,28 +162,6 @@
                     v-model="item.remarks"
                     :color="bodyActiveColor"
                     :label="$t('common.remarks')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.storage"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.storage"
-                    :loading="autocomplete.loaders.storage"
-                    item-text="location"
-                    :label="$t('specimen_location.storage')"
-                    is-searchable
-                    v-on:search:items="autocompleteStorageSearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <checkbox-wrapper
-                    v-model="item.is_private"
-                    :color="bodyActiveColor"
-                    :label="$t('common.is_private')"
-                    @change="item.is_private = !item.is_private"
                   />
                 </v-col>
               </v-row>
@@ -212,7 +192,6 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import DateWrapper from "../../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 
 export default {
@@ -220,7 +199,6 @@ export default {
 
   components: {
     CheckboxWrapper,
-    DateWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
@@ -264,15 +242,11 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "analysis.analysis_method", value: "analysis_method" },
-      { text: "analysis.analysis_method", value: "analysis_method" },
-      { text: "analysis.mass", value: "mass" },
-      { text: "common.date", value: "date" },
-      { text: "common.date_end", value: "date_end" },
-      { text: "analysis.date_free", value: "date_free" },
-      { text: "analysis.agent", value: "agent" },
+      { text: "rock.rock_classification", value: "rock_classification" },
+      { text: "rock.parent", value: "parent" },
+      { text: "rock.parent_string", value: "parent_string" },
+      { text: "common.is_preferred", value: "is_preferred" },
       { text: "common.remarks", value: "remarks" },
-      { text: "analysis.storage", value: "storage" },
       {
         text: "common.actions",
         value: "action",
@@ -282,26 +256,19 @@ export default {
     ],
     dialog: false,
     item: {
-      analysis_method: null,
-      method_details: "",
-      mass: "",
-      date: null,
-      date_end: null,
-      date_free: "",
-      agent: null,
-      remarks: "",
-      storage: null,
-      is_private: ""
+      rock_classification: null,
+      parent: null,
+      parent_string: "",
+      is_preferred: false,
+      remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      analysis_method: [],
-      agent: [],
-      storage: [],
+      rock_classification: [],
+      rock: [],
       loaders: {
-        analysis_method: false,
-        agent: false,
-        storage: false
+        rock_classification: false,
+        rock: false
       }
     }
   }),
@@ -318,8 +285,8 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.analysis_method !== "undefined" &&
-        this.item.analysis_method !== null
+        typeof this.item.rock_classification !== "undefined" &&
+        this.item.rock_classification !== null
       );
     }
   },
@@ -329,16 +296,11 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        analysis_method: null,
-        method_details: "",
-        mass: "",
-        date: null,
-        date_end: null,
-        date_free: "",
-        agent: null,
-        remarks: "",
-        storage: null,
-        is_private: ""
+        rock_classification: null,
+        parent: null,
+        parent_string: "",
+        is_preferred: false,
+        remarks: ""
       };
     },
 
@@ -348,13 +310,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "analysis",
+          table: "rock_tree",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "analysis",
+          table: "rock_tree",
           item: formattedItem,
           rawItem: this.item
         });
@@ -369,56 +331,46 @@ export default {
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (
-        typeof item.analysis_method !== "object" &&
-        item.analysis_method !== null
+        typeof item.rock_classification !== "object" &&
+        item.rock_classification !== null
       ) {
-        this.item.analysis_method = {
-          id: item.analysis_method,
-          analysis_method: item.analysis_method__analysis_method,
-          method_en: item.analysis_method__method_en
+        this.item.rock_classification = {
+          id: item.rock_classification,
+          name: item.rock_classification__name,
+          name_en: item.rock_classification__name_en
         };
-        this.autocomplete.analysis_method.push(this.item.analysis_method);
-      } else if (item.analysis_method !== null) {
-        this.item.analysis_method = item.analysis_method;
-        this.autocomplete.analysis_method.push(this.item.analysis_method);
+        this.autocomplete.rock_classification.push(
+          this.item.rock_classification
+        );
+      } else if (item.rock_classification !== null) {
+        this.item.rock_classification = item.rock_classification;
+        this.autocomplete.rock_classification.push(
+          this.item.rock_classification
+        );
       }
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent
+      if (typeof item.parent !== "object" && item.parent !== null) {
+        this.item.parent = {
+          id: item.parent,
+          name: item.parent__name,
+          name_en: item.parent__name_en
         };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
-        this.item.agent = item.agent;
-        this.autocomplete.agent.push(this.item.agent);
+        this.autocomplete.rock.push(this.item.parent);
+      } else if (item.parent !== null) {
+        this.item.parent = item.parent;
+        this.autocomplete.rock.push(this.item.parent);
       }
 
-      if (typeof item.storage !== "object" && item.storage !== null) {
-        this.item.storage = {
-          id: item.storage,
-          location: item.storage__location
-        };
-        this.autocomplete.storage.push(this.item.storage);
-      } else if (item.storage !== null) {
-        this.item.storage = item.storage;
-        this.autocomplete.storage.push(this.item.storage);
-      }
-
-      this.item.method_details = item.method_details;
-      this.item.mass = item.mass;
-      this.item.date = item.date;
-      this.item.date_end = item.date_end;
-      this.item.date_free = item.date_free;
+      this.item.parent_string = item.parent_string;
+      this.item.is_preferred = item.is_preferred;
       this.item.remarks = item.remarks;
-      this.item.is_private = item.is_private;
 
       this.dialog = true;
     },
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "analysis",
+        table: "rock_tree",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
@@ -431,14 +383,6 @@ export default {
         }
       });
       return item;
-    },
-
-    updateUserInputtedDate(fieldToBeUpdated, date) {
-      if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
-          this.item[fieldToBeUpdated] = date;
-        }
-      }
     }
   }
 };

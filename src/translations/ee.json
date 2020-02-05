@@ -200,7 +200,8 @@
     "rock_element": "Mineraali keemiline koostis",
     "rock_property": "Kivimi/mineraali omadus",
     "rock_synonym": "Kivimi/mineraali sünonüüm",
-    "rock_reference": "Kivimi/mineraali kirjandusviited"
+    "rock_reference": "Kivimi/mineraali kirjandusviited",
+    "rock_tree": "Kivimi/mineraali klassifikatsioon"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1335,6 +1336,9 @@
     "value_min": "Arvuline väärtus, min",
     "value_max": "Arvuline väärtus, max",
     "synonym": "Sünonüüm",
+    "rock_classification": "Puu",
+    "parent": "Ülemus",
+    "parent_string": "Hierarhia",
     "relatedTables": {
       "rock_tree": "Klassifikatsioonid",
       "rock_classification": "rock_classification ??",

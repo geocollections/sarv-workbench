@@ -333,6 +333,14 @@ const autocompleteMixin = {
         2
       );
     },
+    autocompleteRockClassificationSearch(value) {
+      this.$_autocompleteMixin_search(
+        value,
+        "rock_classification",
+        "rock_classification",
+        2
+      );
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -478,6 +486,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `drillcore/?multi_search=value:${value};fields:drillcore,drillcore_en;lookuptype:icontains&fields=id,drillcore,drillcore_en`;
     case "imageset":
       return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
+    case "rock_classification":
+      return `rock_classification/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "attach_link__collection":
     case "attach_link__dataset":
     case "attach_link__project":
