@@ -195,7 +195,8 @@
     "doi_geolocation": "Doi geolocation",
     "doi_related_identifier": "Doi related identifier",
     "locality_description": "Locality description",
-    "rock_locality": "Rock locality"
+    "rock_locality": "Rock locality",
+    "rock_element": "Rock element"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1319,6 +1320,12 @@
     "mineral": "Mineral",
     "mineral_type": "Mineral type",
     "locality": "Locality",
+    "element": "Element",
+    "content": "Mass %",
+    "content_max": "Mass %, max",
+    "oxide": "Oxide",
+    "content_oxide": "Oxide mass %",
+    "content_oxide_max": "Oxide mass %, max",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Classifications ???",

@@ -396,6 +396,17 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <rock-element-table
+            v-show="activeTab === 'rock_element'"
+            :response="relatedData.rock_element"
+            :search-parameters="relatedData.searchParameters.rock_element"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <rock-locality-table
             v-show="activeTab === 'rock_locality'"
             :response="relatedData.rock_locality"
@@ -474,11 +485,13 @@ import cloneDeep from "lodash/cloneDeep";
 import Spinner from "vue-simple-spinner";
 import RockMineralTable from "./related_tables/RockMineralTable";
 import RockLocalityTable from "./related_tables/RockLocalityTable";
+import RockElementTable from "./related_tables/RockElementTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockElementTable,
     RockLocalityTable,
     RockMineralTable,
     CheckboxWrapper,
@@ -768,7 +781,7 @@ export default {
           rock_element: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["element__element"],
             sortDesc: [true]
           },
           rock_property: {
