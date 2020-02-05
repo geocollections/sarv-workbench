@@ -202,7 +202,8 @@
     "rock_synonym": "Rock synonym",
     "rock_reference": "Rock reference",
     "rock_tree": "Rock tree",
-    "rock_image": "Rock image"
+    "rock_image": "Rock image",
+    "rock_classification": "Subclass"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1344,9 +1345,10 @@
     "link": "Link",
     "title": "Title",
     "title_en": "Title EN",
+    "rock": "Rock",
     "relatedTables": {
       "rock_tree": "Classifications",
-      "rock_classification": "Classifications ???",
+      "rock_classification": "Subclasses",
       "rock_mineral": "Minerals",
       "rock_element": "Chemical compound (minerals)",
       "rock_property": "Properties",

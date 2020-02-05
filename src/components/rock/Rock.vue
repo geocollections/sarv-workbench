@@ -365,7 +365,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in relatedTabs"
+          v-for="tab in computedRelatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -474,7 +474,16 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <!-- Todo: alamad -->
+          <rock-classification-table
+            v-show="activeTab === 'rock_classification' && $route.meta.isEdit"
+            :response="relatedData.rock_classification"
+            :search-parameters="relatedData.searchParameters.rock_classification"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <!-- PAGINATION -->
           <div
@@ -549,11 +558,13 @@ import RockSynonymTable from "./related_tables/RockSynonymTable";
 import RockReferenceTable from "./related_tables/RockReferenceTable";
 import RockTreeTable from "./related_tables/RockTreeTable";
 import RockImageTable from "./related_tables/RockImageTable";
+import RockClassificationTable from "./related_tables/RockClassificationTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockClassificationTable,
     RockImageTable,
     RockTreeTable,
     RockReferenceTable,
@@ -605,6 +616,14 @@ export default {
           ...item,
           text: this.$t(item.text, { num: item.value })
         };
+      });
+    },
+
+    computedRelatedTabs() {
+      return this.relatedTabs.filter(tab => {
+        if (tab.name === "rock_classification") {
+          if (this.$route.meta.isEdit) return tab;
+        } else return tab;
       });
     }
   },
@@ -962,11 +981,6 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.rock_tree
         );
-      } else if (object === "rock_classification") {
-        query = fetchRockClassifications(
-          this.$route.params.id,
-          this.relatedData.searchParameters.rock_classification
-        );
       } else if (object === "rock_mineral") {
         query = fetchRockMinerals(
           this.$route.params.id,
@@ -1001,6 +1015,11 @@ export default {
         query = fetchRockReferences(
           this.$route.params.id,
           this.relatedData.searchParameters.rock_reference
+        );
+      } else if (object === "rock_classification") {
+        query = fetchRockClassifications(
+          this.$route.params.id,
+          this.relatedData.searchParameters.rock_classification
         );
       }
 

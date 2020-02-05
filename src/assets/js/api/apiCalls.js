@@ -2878,7 +2878,7 @@ export function fetchRockClassifications(id, searchParameters) {
     searchParameters.sortDesc
   );
   return get(
-    `rock_classification/?hierarchy_top_rock=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+    `rock_tree/?rock_classification_id=${id}&parent_id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

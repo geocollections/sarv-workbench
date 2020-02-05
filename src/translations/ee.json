@@ -202,7 +202,8 @@
     "rock_synonym": "Kivimi/mineraali sünonüüm",
     "rock_reference": "Kivimi/mineraali kirjandusviide",
     "rock_tree": "Kivimi/mineraali klassifikatsioon",
-    "rock_image": "Kivimi/mineraali pilt"
+    "rock_image": "Kivimi/mineraali pilt",
+    "rock_classification": "Alam"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1344,9 +1345,10 @@
     "link": "Link",
     "title": "Pealkiri",
     "title_en": "Pealkiri EN",
+    "rock": "Kivim",
     "relatedTables": {
       "rock_tree": "Klassifikatsioonid",
-      "rock_classification": "rock_classification ??",
+      "rock_classification": "Alamad",
       "rock_mineral": "Mineraalid",
       "rock_element": "Keemiline koostis (mineraalid)",
       "rock_property": "Omadused",
