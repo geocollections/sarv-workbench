@@ -199,7 +199,8 @@
     "rock_locality": "Rock locality",
     "rock_element": "Rock element",
     "rock_property": "Rock property",
-    "rock_synonym": "Rock synonym"
+    "rock_synonym": "Rock synonym",
+    "rock_reference": "Rock reference"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"

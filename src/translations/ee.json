@@ -199,7 +199,8 @@
     "rock_locality": "Kivimi/mineraali lokaliteet",
     "rock_element": "Mineraali keemiline koostis",
     "rock_property": "Kivimi/mineraali omadus",
-    "rock_synonym": "Kivimi/mineraali Sünonüüm"
+    "rock_synonym": "Kivimi/mineraali sünonüüm",
+    "rock_reference": "Kivimi/mineraali kirjandusviited"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"

@@ -445,7 +445,17 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <!-- Todo: rock_reference -->
+          <rock-reference-table
+            v-show="activeTab === 'rock_reference'"
+            :response="relatedData.rock_reference"
+            :search-parameters="relatedData.searchParameters.rock_reference"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- Todo: alamad -->
 
           <!-- PAGINATION -->
@@ -518,11 +528,13 @@ import RockLocalityTable from "./related_tables/RockLocalityTable";
 import RockElementTable from "./related_tables/RockElementTable";
 import RockPropertyTable from "./related_tables/RockPropertyTable";
 import RockSynonymTable from "./related_tables/RockSynonymTable";
+import RockReferenceTable from "./related_tables/RockReferenceTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockReferenceTable,
     RockSynonymTable,
     RockPropertyTable,
     RockElementTable,
@@ -839,13 +851,13 @@ export default {
           rock_synonym: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["name"],
             sortDesc: [true]
           },
           rock_reference: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["reference"],
             sortDesc: [true]
           }
         }
