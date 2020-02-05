@@ -233,7 +233,13 @@
     "pathInfo2": "näiteks",
     "pathInfo3": ", kus",
     "pathInfo4": "on tee",
-    "isAlwaysVisibleInfo": "valik võimaldab linki ka väiksema ekraani peal näha"
+    "isAlwaysVisibleInfo": "valik võimaldab linki ka väiksema ekraani peal näha",
+    "table": "Tabeli nimi",
+    "add_perms": "Lisa",
+    "change_perms": "Muuda",
+    "delete_perms": "Kustuta",
+    "view_perms": "Vaata",
+    "search": "Otsi"
   },
   "sidebar": {
     "project": {

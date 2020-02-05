@@ -233,7 +233,13 @@
     "pathInfo2": "for example",
     "pathInfo3": " where",
     "pathInfo4": "is path",
-    "isAlwaysVisibleInfo": "option enables you to see link even on smaller screens"
+    "isAlwaysVisibleInfo": "option enables you to see link even on smaller screens",
+    "table": "Table name",
+    "add_perms": "Add",
+    "change_perms": "Change",
+    "delete_perms": "Delete",
+    "view_perms": "View",
+    "search": "Search"
   },
   "sidebar": {
     "project": {
