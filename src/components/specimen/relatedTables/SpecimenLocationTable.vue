@@ -343,7 +343,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.type.length === 0) {
+      if (this.autocomplete.type.length <= 1) {
         this.autocomplete.loaders.type = true;
         fetchListSpecimenType().then(response => {
           if (response.status === 200) {

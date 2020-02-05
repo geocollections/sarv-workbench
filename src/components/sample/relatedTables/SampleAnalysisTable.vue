@@ -420,7 +420,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.analysis_method.length === 0) {
+      if (this.autocomplete.analysis_method.length <= 1) {
         this.autocomplete.loaders.analysis_method = true;
         fetchAnalysisMethod().then(response => {
           if (response.status === 200) {

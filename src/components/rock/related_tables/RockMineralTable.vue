@@ -1,5 +1,5 @@
 <template>
-  <div class="specimen-description-table">
+  <div class="rock-mineral-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,62 +38,82 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.unit="{ item }">
+      <template v-slot:item.mineral="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <router-link
+            v-if="$route.meta.isEdit"
+            :to="{ path: '/rock/' + item.mineral }"
+            :title="$t('editRock.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <div
+              v-translate="{
+                et: item.mineral__name,
+                en: item.mineral__name_en
+              }"
+            />
+          </router-link>
+          <router-link
+            v-else-if="item.mineral"
+            :to="{ path: '/rock/' + item.mineral.id }"
+            :title="$t('editRock.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            <div
+              v-translate="{
+                et: item.mineral.name,
+                en: item.mineral.name_en
+              }"
+            />
+          </router-link>
+        </div>
+        <router-link
+          v-else
+          :to="{ path: '/rock/' + item.mineral }"
+          :title="$t('editRock.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          <div
+            v-translate="{
+              et: item.mineral__name,
+              en: item.mineral__name_en
+            }"
+          />
+        </router-link>
+      </template>
+
+      <template v-slot:item.mineral_type="{ item }">
         <div v-if="isUsedAsRelatedData">
           <span
             v-if="$route.meta.isEdit"
             v-translate="{
-              et: item.unit__value,
-              en: item.unit__value_en
+              et: item.mineral_type__name,
+              en: item.mineral_type__name_en
             }"
           />
           <span
-            v-else-if="item.unit"
+            v-else-if="item.mineral_type"
             v-translate="{
-              et: item.unit.value,
-              en: item.unit.value_en
+              et: item.mineral_type.name,
+              en: item.mineral_type.name_en
             }"
           />
         </div>
         <div
           v-else
           v-translate="{
-            et: item.unit__value,
-            en: item.unit__value_en
+            et: item.mineral_type__name,
+            en: item.mineral_type__name_en
           }"
         ></div>
       </template>
 
-      <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent__agent }}
-        </router-link>
+      <template v-slot:item.is_primary="{ item }">
+        <v-icon v-if="item.is_primary" color="green" small>fas fa-check</v-icon>
+        <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
     </v-data-table>
 
@@ -106,92 +126,70 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{
-              `${$t("common.new")} ${$t("header.specimen_description")}`
-            }}</span>
+            <span class="headline">{{ $t("rock.mineral") }}</span>
           </v-card-title>
 
           <v-card-text>
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.length"
+                  <autocomplete-wrapper
+                    v-model="item.mineral"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_description.length')"
-                    type="number"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.width"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_description.width')"
-                    type="number"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
-                    v-model="item.height"
-                    :color="bodyActiveColor"
-                    :label="$t('specimen_description.height')"
-                    type="number"
+                    :items="autocomplete.rock"
+                    :loading="autocomplete.loaders.rock"
+                    :item-text="nameLabel"
+                    :label="$t('rock.mineral')"
+                    use-state
+                    is-searchable
+                    is-link
+                    route-object="rock"
+                    v-on:search:items="autocompleteRockSearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.unit"
+                    v-model="item.mineral_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.unit"
-                    :loading="autocomplete.loaders.unit"
-                    :item-text="commonLabel"
-                    :label="$t('specimen_description.unit')"
+                    :items="autocomplete.mineral_type"
+                    :loading="autocomplete.loaders.mineral_type"
+                    :item-text="nameLabel"
+                    :label="$t('rock.mineral_type')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.mass"
+                    v-model="item.sort"
                     :color="bodyActiveColor"
-                    :label="$t('specimen_description.mass')"
+                    :label="$t('rock.sort')"
                     type="number"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                  <checkbox-wrapper
+                    v-model="item.is_primary"
+                    :color="bodyActiveColor"
+                    :label="$t('common.is_primary')"
+                    @change="item.is_primary = !item.is_primary"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <textarea-wrapper
                     v-model="item.description"
                     :color="bodyActiveColor"
                     :label="$t('common.description')"
-                    use-state
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.agent"
+                  <textarea-wrapper
+                    v-model="item.description_en"
                     :color="bodyActiveColor"
-                    :items="autocomplete.agent"
-                    :loading="autocomplete.loaders.agent"
-                    item-text="agent"
-                    :label="$t('specimen_description.agent')"
-                    is-link
-                    route-object="agent"
-                    is-searchable
-                    v-on:search:items="autocompleteAgentSearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <date-wrapper
-                    v-model="item.date"
-                    :color="bodyActiveColor"
-                    :label="$t('common.date')"
-                    v-on:date:clear="item.date = null"
-                    v-on:date:update="updateUserInputtedDate('date', $event)"
+                    :label="$t('common.description_en')"
                   />
                 </v-col>
 
@@ -230,14 +228,19 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
-import DateWrapper from "../../partial/inputs/DateWrapper";
-import { fetchListUnit } from "../../../assets/js/api/apiCalls";
+import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
+import {
+  fetchListIdentificationType,
+  fetchListRockMineralType
+} from "../../../assets/js/api/apiCalls";
 
 export default {
-  name: "SpecimenDescriptionTable",
+  name: "RockMineralTable",
 
   components: {
-    DateWrapper,
+    TextareaWrapper,
+    CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
@@ -281,14 +284,12 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "specimen_description.length", value: "length" },
-      { text: "specimen_description.width", value: "width" },
-      { text: "specimen_description.height", value: "height" },
-      { text: "specimen_description.unit", value: "unit" },
-      { text: "specimen_description.mass", value: "mass" },
+      { text: "rock.mineral", value: "mineral" },
+      { text: "rock.mineral_type", value: "mineral_type" },
+      { text: "rock.sort", value: "sort" },
+      { text: "common.is_primary", value: "is_primary" },
       { text: "common.description", value: "description" },
-      { text: "specimen_description.agent", value: "agent" },
-      { text: "common.date", value: "date" },
+      { text: "common.description_en", value: "description_en" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -299,23 +300,21 @@ export default {
     ],
     dialog: false,
     item: {
-      length: "",
-      width: "",
-      height: "",
-      unit: null,
-      mass: "",
+      mineral: null,
+      mineral_type: null,
+      sort: "",
+      is_primary: false,
       description: "",
-      agent: null,
-      date: null,
+      description_en: "",
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      unit: [],
-      agent: [],
+      rock: [],
+      mineral_type: [],
       loaders: {
-        unit: false,
-        agent: false
+        rock: false,
+        mineral_type: false
       }
     }
   }),
@@ -331,7 +330,9 @@ export default {
     },
 
     isItemValid() {
-      return this.item.description !== null && this.item.description.length > 0;
+      return (
+        typeof this.item.mineral !== "undefined" && this.item.mineral !== null
+      );
     }
   },
 
@@ -346,14 +347,12 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        length: "",
-        width: "",
-        height: "",
-        unit: null,
-        mass: "",
+        mineral: null,
+        mineral_type: null,
+        sort: "",
+        is_primary: false,
         description: "",
-        agent: null,
-        date: null,
+        description_en: "",
         remarks: ""
       };
     },
@@ -364,13 +363,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "specimen_description",
+          table: "rock_mineral",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "specimen_description",
+          table: "rock_mineral",
           item: formattedItem,
           rawItem: this.item
         });
@@ -384,31 +383,34 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.agent !== "object" && item.agent !== null) {
-        this.item.agent = {
-          id: item.agent,
-          agent: item.agent__agent
+      if (typeof item.mineral !== "object" && item.mineral !== null) {
+        this.item.mineral = {
+          id: item.mineral,
+          name: item.mineral__name,
+          name_en: item.mineral__name_en
         };
-        this.autocomplete.agent.push(this.item.agent);
-      } else if (item.agent !== null) {
-        this.item.agent = item.agent;
-        this.autocomplete.agent.push(this.item.agent);
+        this.autocomplete.rock.push(this.item.mineral);
+      } else if (item.mineral !== null) {
+        this.item.mineral = item.mineral;
+        this.autocomplete.rock.push(this.item.mineral);
       }
 
-      if (typeof item.unit !== "object" && item.unit !== null) {
-        this.item.unit = {
-          id: item.unit,
-          value: item.unit__value,
-          value_en: item.unit__value_en
+      if (typeof item.mineral_type !== "object" && item.mineral_type !== null) {
+        this.item.mineral_type = {
+          id: item.mineral_type,
+          name: item.mineral_type__name,
+          name_en: item.mineral_type__name_en
         };
+        this.autocomplete.mineral_type.push(this.item.mineral_type);
+      } else if (item.mineral_type !== null) {
+        this.item.mineral_type = item.mineral_type;
+        this.autocomplete.mineral_type.push(this.item.mineral_type);
       }
 
-      this.item.length = item.length;
-      this.item.width = item.width;
-      this.item.height = item.height;
-      this.item.mass = item.mass;
+      this.item.sort = item.sort;
+      this.item.is_primary = item.is_primary;
       this.item.description = item.description;
-      this.item.date = item.date;
+      this.item.description_en = item.description_en;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -416,22 +418,22 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "specimen_description",
+        table: "rock_mineral",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.unit.length <= 1) {
-        this.autocomplete.loaders.unit = true;
-        fetchListUnit().then(response => {
+      if (this.autocomplete.mineral_type.length <= 1) {
+        this.autocomplete.loaders.mineral_type = true;
+        fetchListRockMineralType().then(response => {
           if (response.status === 200) {
-            this.autocomplete.unit =
+            this.autocomplete.mineral_type =
               response.data.count > 0 ? response.data.results : [];
           }
         });
-        this.autocomplete.loaders.unit = false;
+        this.autocomplete.loaders.mineral_type = false;
       }
     },
 
@@ -439,19 +441,9 @@ export default {
       Object.keys(item).forEach(key => {
         if (typeof item[key] === "object" && item[key] !== null) {
           item[key] = item[key].id ? item[key].id : null;
-        } else if (typeof item[key] === "string" && item[key].length === 0) {
-          item[key] = null;
         }
       });
       return item;
-    },
-
-    updateUserInputtedDate(fieldToBeUpdated, date) {
-      if (typeof date !== "undefined" && date !== null && date.length > 0) {
-        if (this.$moment(date, "YYYY-MM-DD", true).isValid()) {
-          this.item[fieldToBeUpdated] = date;
-        }
-      }
     }
   }
 };

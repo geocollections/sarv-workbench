@@ -513,7 +513,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.identification_type.length === 0) {
+      if (this.autocomplete.identification_type.length <= 1) {
         this.autocomplete.loaders.identification_type = true;
         fetchListIdentificationType().then(response => {
           if (response.status === 200) {

@@ -385,16 +385,16 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <!--          <locality-reference-table-->
-          <!--            v-show="activeTab === 'locality_reference'"-->
-          <!--            :response="relatedData.locality_reference"-->
-          <!--            :search-parameters="relatedData.searchParameters.locality_reference"-->
-          <!--            :body-color="bodyColor"-->
-          <!--            :body-active-color="bodyActiveColor"-->
-          <!--            v-on:related:add="addRelatedItem"-->
-          <!--            v-on:related:edit="editRelatedItem"-->
-          <!--            v-on:related:delete="deleteRelatedItem"-->
-          <!--          />-->
+          <rock-mineral-table
+            v-show="activeTab === 'rock_mineral'"
+            :response="relatedData.rock_mineral"
+            :search-parameters="relatedData.searchParameters.rock_mineral"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <!-- PAGINATION -->
           <div
@@ -461,11 +461,13 @@ import {
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import Spinner from "vue-simple-spinner";
+import RockMineralTable from "./related_tables/RockMineralTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockMineralTable,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
@@ -747,7 +749,7 @@ export default {
           rock_mineral: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["sort"],
             sortDesc: [true]
           },
           rock_element: {
@@ -805,6 +807,16 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      uploadableObject.related_data = {};
+      if (!this.$route.meta.isEdit) {
+        this.relatedTabs.forEach(tab => {
+          if (this.relatedData[tab.name].results.length > 0)
+            uploadableObject.related_data[tab.name] = this.relatedData[
+              tab.name
+            ].results;
+        });
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

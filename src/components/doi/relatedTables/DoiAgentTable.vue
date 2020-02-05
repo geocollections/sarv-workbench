@@ -362,7 +362,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.agent_type.length === 0) {
+      if (this.autocomplete.agent_type.length <= 1) {
         this.autocomplete.loaders.agent_type = true;
         fetchDoiAgentType().then(response => {
           if (response.status === 200) {

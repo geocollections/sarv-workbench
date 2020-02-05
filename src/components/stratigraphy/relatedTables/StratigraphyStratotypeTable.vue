@@ -448,7 +448,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.stratotype_type.length === 0) {
+      if (this.autocomplete.stratotype_type.length <= 1) {
         this.autocomplete.loaders.stratotype_type = true;
         fetchListStratotypeType().then(response => {
           if (response.status === 200) {

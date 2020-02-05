@@ -327,7 +327,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.relation_type.length === 0) {
+      if (this.autocomplete.relation_type.length <= 1) {
         this.autocomplete.loaders.relation_type = true;
         fetchDoiRelatedIdentifierType().then(response => {
           if (response.status === 200) {

@@ -25,7 +25,7 @@ export default {
 </script>
 <style>
 html {
-  overflow-y: auto;
+  overflow-y: auto !important;
 }
 html,
 body {

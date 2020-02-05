@@ -591,7 +591,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.type_type.length === 0) {
+      if (this.autocomplete.type_type.length <= 1) {
         this.autocomplete.loaders.type_type = true;
         fetchTaxonTypeType().then(response => {
           if (response.status === 200) {

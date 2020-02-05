@@ -2962,6 +2962,10 @@ export function fetchRockTrees(id, searchParameters) {
   );
 }
 
+export function fetchListRockMineralType() {
+  return get(`rock_mineral_type/?format=json`);
+}
+
 /******************
  ***  ROCK END  ***
  ******************/

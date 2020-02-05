@@ -14,6 +14,7 @@
     "licence": "Licence",
     "copyright_agent": "Copyright agent",
     "is_private": "Hidden in public portals",
+    "is_primary": "Primary",
     "is_locked": "Locked",
     "is_preferred": "Preferred",
     "description": "Description",
@@ -1314,6 +1315,8 @@
     "in_portal": "In portal",
     "kivid_info": "Kivid.info",
     "mindat": "Mindat",
+    "mineral": "Mineral",
+    "mineral_type": "Mineral type",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Classifications ???",

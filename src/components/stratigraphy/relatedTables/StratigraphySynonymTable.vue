@@ -348,7 +348,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.language.length === 0) {
+      if (this.autocomplete.language.length <= 1) {
         this.autocomplete.loaders.language = true;
         fetchListLanguages().then(response => {
           if (response.status === 200) {

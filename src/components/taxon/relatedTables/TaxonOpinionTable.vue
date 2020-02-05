@@ -465,7 +465,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.opinion_type.length === 0) {
+      if (this.autocomplete.opinion_type.length <= 1) {
         this.autocomplete.loaders.opinion_type = true;
         fetchTaxonOpinionType().then(response => {
           if (response.status === 200) {

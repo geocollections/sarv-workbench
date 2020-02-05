@@ -275,7 +275,7 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.date_type.length === 0) {
+      if (this.autocomplete.date_type.length <= 1) {
         this.autocomplete.loaders.date_type = true;
         fetchDoiDateType().then(response => {
           if (response.status === 200) {
