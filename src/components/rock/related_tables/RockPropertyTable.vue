@@ -1,5 +1,5 @@
 <template>
-  <div class="rock-locality-table">
+  <div class="rock-property-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,51 +38,30 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.locality="{ item }">
+      <template v-slot:item.property_type="{ item }">
         <div v-if="isUsedAsRelatedData">
-          <router-link
+          <div
             v-if="$route.meta.isEdit"
-            :to="{ path: '/locality/' + item.locality }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality__locality,
-                en: item.locality__locality_en
-              }"
-            />
-          </router-link>
-          <router-link
-            v-else-if="item.locality"
-            :to="{ path: '/locality/' + item.locality.id }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality.locality,
-                en: item.locality.locality_en
-              }"
-            />
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/locality/' + item.locality }"
-          :title="$t('editLocality.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          <span
             v-translate="{
-              et: item.locality__locality,
-              en: item.locality__locality_en
+              et: item.property_type__property,
+              en: item.property_type__property_en
             }"
           />
-        </router-link>
+          <div
+            v-else-if="item.property_type"
+            v-translate="{
+              et: item.property_type.property,
+              en: item.property_type.property_en
+            }"
+          />
+        </div>
+        <div
+          v-else
+          v-translate="{
+            et: item.property_type__property,
+            en: item.property_type__property_en
+          }"
+        />
       </template>
 
       <template v-slot:item.is_private="{ item }">
@@ -100,7 +79,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ $t("header.rock_locality") }}</span>
+            <span class="headline">{{ $t("header.rock_property") }}</span>
           </v-card-title>
 
           <v-card-text>
@@ -108,53 +87,50 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.locality"
+                    v-model="item.property_type"
                     :color="bodyActiveColor"
-                    :items="autocomplete.locality"
-                    :loading="autocomplete.loaders.locality"
-                    :item-text="localityLabel"
-                    :label="$t('rock.locality')"
+                    :items="autocomplete.property_type"
+                    :loading="autocomplete.loaders.property_type"
+                    :item-text="propertyLabel"
+                    :label="$t('rock.property_type')"
                     use-state
-                    is-link
-                    route-object="locality"
-                    is-searchable
-                    v-on:search:items="autocompleteLocalitySearch"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <textarea-wrapper
-                    v-model="item.description"
-                    :color="bodyActiveColor"
-                    :label="$t('common.description')"
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <textarea-wrapper
-                    v-model="item.description_en"
-                    :color="bodyActiveColor"
-                    :label="$t('common.description_en')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.sort"
+                    v-model="item.value_txt"
                     :color="bodyActiveColor"
-                    :label="$t('rock.sort')"
-                    type="number"
+                    :label="$t('rock.value_txt')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <checkbox-wrapper
-                    v-model="item.is_private"
+                  <input-wrapper
+                    v-model="item.value_min"
                     :color="bodyActiveColor"
-                    :label="$t('common.is_private')"
-                    @change="item.is_private = !item.is_private"
+                    :label="$t('rock.value_min')"
+                    type="number"
+                    step="0.01"
                   />
                 </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.value_max"
+                    :color="bodyActiveColor"
+                    :label="$t('rock.value_max')"
+                    type="number"
+                    step="0.01"
+                  />
+                </v-col>
+
+                <checkbox-wrapper
+                  v-model="item.is_private"
+                  :color="bodyActiveColor"
+                  :label="$t('common.is_private')"
+                  @change="item.is_private = !item.is_private"
+                />
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
@@ -191,14 +167,13 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import { fetchListRockPropertyType } from "../../../assets/js/api/apiCalls";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
-import TextareaWrapper from "../../partial/inputs/TextareaWrapper";
 
 export default {
-  name: "RockLocalityTable",
+  name: "RockPropertyTable",
 
   components: {
-    TextareaWrapper,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper
@@ -243,10 +218,10 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "rock.locality", value: "locality" },
-      { text: "common.description", value: "description" },
-      { text: "common.description_en", value: "description_en" },
-      { text: "rock.sort", value: "sort" },
+      { text: "rock.property_type", value: "property_type" },
+      { text: "rock.value_txt", value: "value_txt" },
+      { text: "rock.value_min", value: "value_min" },
+      { text: "rock.value_max", value: "value_max" },
       { text: "common.is_private", value: "is_private" },
       { text: "common.remarks", value: "remarks" },
       {
@@ -258,18 +233,18 @@ export default {
     ],
     dialog: false,
     item: {
-      locality: null,
-      description: "",
-      description_en: "",
-      sort: "",
+      property_type: null,
+      value_txt: "",
+      value_min: "",
+      value_max: "",
       is_private: false,
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      locality: [],
+      property_type: [],
       loaders: {
-        locality: false
+        property_type: false
       }
     }
   }),
@@ -286,8 +261,15 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.locality !== "undefined" && this.item.locality !== null
+        typeof this.item.property_type !== "undefined" &&
+        this.item.property_type !== null
       );
+    }
+  },
+
+  watch: {
+    dialog() {
+      this.fillListAutocompletes();
     }
   },
 
@@ -296,10 +278,10 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        locality: null,
-        description: "",
-        description_en: "",
-        sort: "",
+        property_type: null,
+        value_txt: "",
+        value_min: "",
+        value_max: "",
         is_private: false,
         remarks: ""
       };
@@ -311,13 +293,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "rock_locality",
+          table: "rock_property",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "rock_locality",
+          table: "rock_property",
           item: formattedItem,
           rawItem: this.item
         });
@@ -331,21 +313,24 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.locality !== "object" && item.locality !== null) {
-        this.item.locality = {
-          id: item.locality,
-          locality: item.locality__locality,
-          locality_en: item.locality__locality_en
+      if (
+        typeof item.property_type !== "object" &&
+        item.property_type !== null
+      ) {
+        this.item.property_type = {
+          id: item.property_type,
+          property: item.property_type__property,
+          property_en: item.property_type__property_en
         };
-        this.autocomplete.locality.push(this.item.locality);
-      } else if (item.locality !== null) {
-        this.item.locality = item.locality;
-        this.autocomplete.locality.push(this.item.locality);
+        this.autocomplete.property_type.push(this.item.property_type);
+      } else if (item.property_type !== null) {
+        this.item.property_type = item.property_type;
+        this.autocomplete.property_type.push(this.item.property_type);
       }
 
-      this.item.description = item.description;
-      this.item.description_en = item.description_en;
-      this.item.sort = item.sort;
+      this.item.value_txt = item.value_txt;
+      this.item.value_min = item.value_min;
+      this.item.value_max = item.value_max;
       this.item.is_private = item.is_private;
       this.item.remarks = item.remarks;
 
@@ -354,10 +339,23 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "rock_locality",
+        table: "rock_property",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
+    },
+
+    fillListAutocompletes() {
+      if (this.autocomplete.property_type.length <= 1) {
+        this.autocomplete.loaders.property_type = true;
+        fetchListRockPropertyType().then(response => {
+          if (response.status === 200) {
+            this.autocomplete.property_type =
+              response.data.count > 0 ? response.data.results : [];
+          }
+        });
+        this.autocomplete.loaders.property_type = false;
+      }
     },
 
     formatItem(item) {

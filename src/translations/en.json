@@ -196,7 +196,8 @@
     "doi_related_identifier": "Doi related identifier",
     "locality_description": "Locality description",
     "rock_locality": "Rock locality",
-    "rock_element": "Rock element"
+    "rock_element": "Rock element",
+    "rock_property": "Rock property"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1326,6 +1327,10 @@
     "oxide": "Oxide",
     "content_oxide": "Oxide mass %",
     "content_oxide_max": "Oxide mass %, max",
+    "property_type": "Property type",
+    "value_txt": "Value txt",
+    "value_min": "Value min",
+    "value_max": "Value max",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Classifications ???",

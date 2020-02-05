@@ -196,7 +196,8 @@
     "doi_related_identifier": "Doi identifikaator",
     "locality_description": "Lokaliteedi kirjeldus",
     "rock_locality": "Kivimi/mineraali lokaliteet",
-    "rock_element": "Mineraali keemiline koostis"
+    "rock_element": "Mineraali keemiline koostis",
+    "rock_property": "Kivimi/mineraali omadus"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1326,6 +1327,10 @@
     "oxide": "Oksiid",
     "content_oxide": "Oksiidi massi %",
     "content_oxide_max": "Oksiidi massi %, max",
+    "property_type": "Omadus",
+    "value_txt": "Tekstiline väärtus",
+    "value_min": "Arvuline väärtus, min",
+    "value_max": "Arvuline väärtus, max",
     "relatedTables": {
       "rock_tree": "Klassifikatsioonid",
       "rock_classification": "rock_classification ??",

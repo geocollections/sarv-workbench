@@ -418,6 +418,17 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <rock-property-table
+            v-show="activeTab === 'rock_property'"
+            :response="relatedData.rock_property"
+            :search-parameters="relatedData.searchParameters.rock_property"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -486,11 +497,13 @@ import Spinner from "vue-simple-spinner";
 import RockMineralTable from "./related_tables/RockMineralTable";
 import RockLocalityTable from "./related_tables/RockLocalityTable";
 import RockElementTable from "./related_tables/RockElementTable";
+import RockPropertyTable from "./related_tables/RockPropertyTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockPropertyTable,
     RockElementTable,
     RockLocalityTable,
     RockMineralTable,
@@ -787,7 +800,7 @@ export default {
           rock_property: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["property_type"],
             sortDesc: [true]
           },
           rock_image: {

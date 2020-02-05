@@ -2970,6 +2970,10 @@ export function fetchListElement() {
   return get(`list_element/?format=json`);
 }
 
+export function fetchListRockPropertyType() {
+  return get(`rock_property_type/?format=json`);
+}
+
 /******************
  ***  ROCK END  ***
  ******************/
