@@ -396,6 +396,17 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <rock-locality-table
+            v-show="activeTab === 'rock_locality'"
+            :response="relatedData.rock_locality"
+            :search-parameters="relatedData.searchParameters.rock_locality"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -462,11 +473,13 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 import Spinner from "vue-simple-spinner";
 import RockMineralTable from "./related_tables/RockMineralTable";
+import RockLocalityTable from "./related_tables/RockLocalityTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockLocalityTable,
     RockMineralTable,
     CheckboxWrapper,
     TextareaWrapper,
@@ -773,7 +786,7 @@ export default {
           rock_locality: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["locality"],
             sortDesc: [true]
           },
           rock_synonym: {

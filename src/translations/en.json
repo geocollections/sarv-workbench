@@ -194,7 +194,8 @@
     "doi_date": "Doi date",
     "doi_geolocation": "Doi geolocation",
     "doi_related_identifier": "Doi related identifier",
-    "locality_description": "Locality description"
+    "locality_description": "Locality description",
+    "rock_locality": "Rock locality"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1317,6 +1318,7 @@
     "mindat": "Mindat",
     "mineral": "Mineral",
     "mineral_type": "Mineral type",
+    "locality": "Locality",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Classifications ???",

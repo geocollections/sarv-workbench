@@ -194,7 +194,8 @@
     "doi_date": "Doi kuupäev",
     "doi_geolocation": "Doi lokaliteet",
     "doi_related_identifier": "Doi identifikaator",
-    "locality_description": "Lokaliteedi kirjeldus"
+    "locality_description": "Lokaliteedi kirjeldus",
+    "rock_locality": "Kivimi/mineraali lokaliteet"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1317,6 +1318,7 @@
     "mindat": "Mindat",
     "mineral": "Mineraal",
     "mineral_type": "Mineraali tüüp",
+    "locality": "Lokaliteet",
     "relatedTables": {
       "rock_tree": "Klassifikatsioonid",
       "rock_classification": "rock_classification ??",
