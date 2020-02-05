@@ -1,5 +1,5 @@
 <template>
-  <div class="rock-tree-table">
+  <div class="rock-image-table">
     <v-data-table
       :headers="translatedHeaders"
       hide-default-footer
@@ -38,83 +38,87 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.rock_classification="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <div
-            v-if="$route.meta.isEdit"
-            v-translate="{
-              et: item.rock_classification__name,
-              en: item.rock_classification__name_en
-            }"
-          />
-          <div
-            v-else-if="item.rock_classification"
-            v-translate="{
-              et: item.rock_classification.name,
-              en: item.rock_classification.name_en
-            }"
-          />
-        </div>
-        <div
-          v-else
-          v-translate="{
-            et: item.rock_classification__name,
-            en: item.rock_classification__name_en
-          }"
-        />
-      </template>
-
-      <template v-slot:item.parent="{ item }">
+      <template v-slot:item.attachment="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
-            :to="{ path: '/rock/' + item.parent }"
+            :to="{ path: '/attachment/' + item.attachment }"
+            :title="$t('editAttachment.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.attachment }}
+          </router-link>
+          <router-link
+            v-else-if="item.attachment"
+            :to="{ path: '/attachment/' + item.attachment.id }"
+            :title="$t('editAttachment.editMessage')"
+            class="sarv-link"
+            :class="`${bodyActiveColor}--text`"
+          >
+            {{ item.attachment.id }}
+          </router-link>
+        </div>
+        <router-link
+          v-else
+          :to="{ path: '/attachment/' + item.attachment }"
+          :title="$t('editAttachment.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.attachment }}
+        </router-link>
+      </template>
+
+      <template v-slot:item.link="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <router-link
+            v-if="$route.meta.isEdit"
+            :to="{ path: '/rock/' + item.link }"
             :title="$t('editRock.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
             <div
               v-translate="{
-                et: item.parent__name,
-                en: item.parent__name_en
+                et: item.link__name,
+                en: item.link__name_en
               }"
             />
           </router-link>
           <router-link
-            v-else-if="item.parent"
-            :to="{ path: '/rock/' + item.parent.id }"
+            v-else-if="item.link"
+            :to="{ path: '/rock/' + item.link.id }"
             :title="$t('editRock.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
             <div
               v-translate="{
-                et: item.parent.name,
-                en: item.parent.name_en
+                et: item.link.name,
+                en: item.link.name_en
               }"
             />
           </router-link>
         </div>
         <router-link
           v-else
-          :to="{ path: '/rock/' + item.parent }"
+          :to="{ path: '/rock/' + item.link }"
           :title="$t('editRock.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
           <div
             v-translate="{
-              et: item.parent__name,
-              en: item.parent__name_en
+              et: item.link__name,
+              en: item.link__name_en
             }"
           />
         </router-link>
       </template>
 
-      <template v-slot:item.is_preferred="{ item }">
-        <v-icon v-if="item.is_preferred" color="green" small
-          >fas fa-check</v-icon
-        >
+      <template v-slot:item.is_private="{ item }">
+        <v-icon v-if="item.is_private" color="green" small>fas fa-check</v-icon>
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
     </v-data-table>
@@ -128,29 +132,29 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{ $t("header.rock_tree") }}</span>
+            <span class="headline">{{ $t("header.rock_image") }}</span>
           </v-card-title>
 
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.rock_classification"
+                    v-model="item.attachment"
                     :color="bodyActiveColor"
-                    :items="autocomplete.rock_classification"
-                    :loading="autocomplete.loaders.rock_classification"
-                    :item-text="nameLabel"
-                    :label="$t('rock.rock_classification')"
+                    :items="autocomplete.attachment"
+                    :loading="autocomplete.loaders.attachment"
+                    :item-text="customLabelForAttachment"
+                    :label="$t('rock.attachment')"
                     use-state
                     is-searchable
-                    v-on:search:items="autocompleteRockClassificationSearch"
+                    v-on:search:items="autocompleteAttachmentSearch"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.parent"
+                    v-model="item.link"
                     :color="bodyActiveColor"
                     :items="autocomplete.rock"
                     :loading="autocomplete.loaders.rock"
@@ -163,18 +167,34 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.parent_string"
+                    v-model="item.title"
                     :color="bodyActiveColor"
-                    :label="$t('rock.parent_string')"
+                    :label="$t('rock.title')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.title_en"
+                    :color="bodyActiveColor"
+                    :label="$t('rock.title_en')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.sort"
+                    :color="bodyActiveColor"
+                    :label="$t('rock.sort')"
                   />
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
-                    v-model="item.is_preferred"
+                    v-model="item.is_private"
                     :color="bodyActiveColor"
-                    :label="$t('common.is_preferred')"
-                    @change="item.is_preferred = !item.is_preferred"
+                    :label="$t('common.is_private')"
+                    @change="item.is_private = !item.is_private"
                   />
                 </v-col>
 
@@ -216,7 +236,7 @@ import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
 
 export default {
-  name: "RockTreeTable",
+  name: "RockImageTable",
 
   components: {
     CheckboxWrapper,
@@ -263,10 +283,12 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "rock.rock_classification", value: "rock_classification" },
-      { text: "rock.parent", value: "parent" },
-      { text: "rock.parent_string", value: "parent_string" },
-      { text: "common.is_preferred", value: "is_preferred" },
+      { text: "rock.attachment", value: "attachment" },
+      { text: "rock.link", value: "link" },
+      { text: "rock.title", value: "title" },
+      { text: "rock.title_en", value: "title_en" },
+      { text: "rock.sort", value: "sort" },
+      { text: "common.is_private", value: "is_private" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -277,18 +299,20 @@ export default {
     ],
     dialog: false,
     item: {
-      rock_classification: null,
-      parent: null,
-      parent_string: "",
-      is_preferred: false,
+      attachment: null,
+      link: null,
+      title: "",
+      title_en: "",
+      sort: "",
+      is_private: false,
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      rock_classification: [],
+      attachment: [],
       rock: [],
       loaders: {
-        rock_classification: false,
+        attachment: false,
         rock: false
       }
     }
@@ -306,8 +330,8 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.rock_classification !== "undefined" &&
-        this.item.rock_classification !== null
+        typeof this.item.attachment !== "undefined" &&
+        this.item.attachment !== null
       );
     }
   },
@@ -317,10 +341,12 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        rock_classification: null,
-        parent: null,
-        parent_string: "",
-        is_preferred: false,
+        attachment: null,
+        link: null,
+        title: "",
+        title_en: "",
+        sort: "",
+        is_private: false,
         remarks: ""
       };
     },
@@ -331,13 +357,13 @@ export default {
 
       if (this.isNewItem) {
         this.$emit("related:add", {
-          table: "rock_tree",
+          table: "rock_image",
           item: formattedItem,
           rawItem: this.item
         });
       } else {
         this.$emit("related:edit", {
-          table: "rock_tree",
+          table: "rock_image",
           item: formattedItem,
           rawItem: this.item
         });
@@ -351,39 +377,33 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (
-        typeof item.rock_classification !== "object" &&
-        item.rock_classification !== null
-      ) {
-        this.item.rock_classification = {
-          id: item.rock_classification,
-          name: item.rock_classification__name,
-          name_en: item.rock_classification__name_en
+      if (typeof item.attachment !== "object" && item.attachment !== null) {
+        this.item.attachment = {
+          id: item.attachment,
+          original_filename: item.attachment__original_filename
         };
-        this.autocomplete.rock_classification.push(
-          this.item.rock_classification
-        );
-      } else if (item.rock_classification !== null) {
-        this.item.rock_classification = item.rock_classification;
-        this.autocomplete.rock_classification.push(
-          this.item.rock_classification
-        );
+        this.autocomplete.attachment.push(this.item.attachment);
+      } else if (item.attachment !== null) {
+        this.item.attachment = item.attachment;
+        this.autocomplete.attachment.push(this.item.attachment);
       }
 
-      if (typeof item.parent !== "object" && item.parent !== null) {
-        this.item.parent = {
-          id: item.parent,
-          name: item.parent__name,
-          name_en: item.parent__name_en
+      if (typeof item.link !== "object" && item.link !== null) {
+        this.item.link = {
+          id: item.link,
+          name: item.link__name,
+          name_en: item.link__name_en
         };
-        this.autocomplete.rock.push(this.item.parent);
-      } else if (item.parent !== null) {
-        this.item.parent = item.parent;
-        this.autocomplete.rock.push(this.item.parent);
+        this.autocomplete.rock.push(this.item.link);
+      } else if (item.link !== null) {
+        this.item.link = item.link;
+        this.autocomplete.rock.push(this.item.link);
       }
 
-      this.item.parent_string = item.parent_string;
-      this.item.is_preferred = item.is_preferred;
+      this.item.title = item.title;
+      this.item.title_en = item.title_en;
+      this.item.sort = item.sort;
+      this.item.is_private = item.is_private;
       this.item.remarks = item.remarks;
 
       this.dialog = true;
@@ -391,7 +411,7 @@ export default {
 
     deleteItem(item) {
       this.$emit("related:delete", {
-        table: "rock_tree",
+        table: "rock_image",
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
@@ -404,7 +424,11 @@ export default {
         }
       });
       return item;
-    }
+    },
+
+    customLabelForAttachment(option) {
+      return `${option.id} - (${option.original_filename})`;
+    },
   }
 };
 </script>

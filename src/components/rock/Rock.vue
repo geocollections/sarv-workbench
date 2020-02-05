@@ -386,7 +386,6 @@
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
 
-          <!-- Todo: rock_classification?? -->
           <rock-tree-table
             v-show="activeTab === 'rock_tree'"
             :response="relatedData.rock_tree"
@@ -431,7 +430,16 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <!-- Todo: rock_image -->
+          <rock-image-table
+            v-show="activeTab === 'rock_image'"
+            :response="relatedData.rock_image"
+            :search-parameters="relatedData.searchParameters.rock_image"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <rock-locality-table
             v-show="activeTab === 'rock_locality'"
@@ -540,11 +548,13 @@ import RockPropertyTable from "./related_tables/RockPropertyTable";
 import RockSynonymTable from "./related_tables/RockSynonymTable";
 import RockReferenceTable from "./related_tables/RockReferenceTable";
 import RockTreeTable from "./related_tables/RockTreeTable";
+import RockImageTable from "./related_tables/RockImageTable";
 
 export default {
   name: "Rock",
 
   components: {
+    RockImageTable,
     RockTreeTable,
     RockReferenceTable,
     RockSynonymTable,
@@ -845,7 +855,7 @@ export default {
           rock_image: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["attachment"],
             sortDesc: [true]
           },
           rock_locality: {

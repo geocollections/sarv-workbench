@@ -201,7 +201,8 @@
     "rock_property": "Rock property",
     "rock_synonym": "Rock synonym",
     "rock_reference": "Rock reference",
-    "rock_tree": "Rock tree"
+    "rock_tree": "Rock tree",
+    "rock_image": "Rock image"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1339,6 +1340,10 @@
     "rock_classification": "Tree",
     "parent": "Parent",
     "parent_string": "Hierarchy",
+    "attachment": "Attachment",
+    "link": "Link",
+    "title": "Title",
+    "title_en": "Title EN",
     "relatedTables": {
       "rock_tree": "Classifications",
       "rock_classification": "Classifications ???",
