@@ -214,7 +214,7 @@
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap && !isLatitudeUndefinedInEditView" class="mt-1">
+            <v-row no-gutters v-show="showMap" class="mt-1">
               <v-col cols="12" class="pa-1">
                 <map-component
                   :show-map="showMap && block.location"
@@ -597,14 +597,6 @@ export default {
       }
     },
 
-    // Checks if site object has latitude key and is edit view, using this check while rendering mapComponent,
-    // because I don't want mapComponent to render if site object is still empty (haven't got data from API yet)
-    isLatitudeUndefinedInEditView() {
-      return (
-        typeof this.site.latitude === "undefined" && this.$route.meta.isEdit
-      );
-    },
-
     activeProject() {
       return this.$store.state["activeProject"];
     },
@@ -816,10 +808,6 @@ export default {
 
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       }
-      this.$root.$on(
-        "add-or-edit-site-from-modal",
-        this.handleUserChoiceFromModal
-      );
     },
 
     setDefaultRelatedData() {

@@ -231,7 +231,6 @@ export default {
 
   watch: {
     showMap(newVal) {
-      console.log(newVal)
       if (newVal && this.map) this.map.invalidateSize();
     },
 
