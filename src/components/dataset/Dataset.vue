@@ -198,7 +198,8 @@
           </span>
           <span
             v-if="relatedData[tab.name].count > 0"
-            class="font-weight-bold ml-2 blue--text"
+            class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
             {{ relatedData[tab.name].count }}
           </span>
@@ -530,6 +531,8 @@ export default {
           "related-data-info",
           this.relatedTabs.map(tab => tab.name)
         );
+      } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 

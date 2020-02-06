@@ -525,6 +525,8 @@ export default {
         this.loadAutocompleteFields();
 
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+      } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 

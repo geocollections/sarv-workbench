@@ -4333,6 +4333,8 @@ export default {
         );
 
         this.loadAutocompleteFields(false, true);
+      } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 

@@ -583,6 +583,8 @@ export default {
           "related-data-info",
           this.relatedTabs.map(tab => tab.name)
         );
+      } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 

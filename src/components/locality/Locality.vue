@@ -854,6 +854,8 @@ export default {
         });
 
         this.$on("tab-changed", this.setTab);
+      } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
 
       if (this.activeRelatedDataTab) this.setTab(this.activeRelatedDataTab);

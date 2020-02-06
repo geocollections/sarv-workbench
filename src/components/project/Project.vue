@@ -781,11 +781,14 @@ export default {
         this.loadRelatedData("projectagent");
         this.loadRelatedData("attachment_link");
       } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
+
         //set default user
         this.project.owner = {
           agent: this.currentUser.user,
           id: this.currentUser.id
         };
+        this.autocomplete.agent.push(this.project.owner);
       }
     },
 

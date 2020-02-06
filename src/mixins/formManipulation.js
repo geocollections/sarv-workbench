@@ -501,6 +501,27 @@ const formManipulation = {
     },
 
     /**
+     * Currently every main object is initialised with empty object {}.
+     * This method adds needed fields with null values which makes it reactive. 
+     * @param {string} objectName - object name from the $route meta (site, project etc.)
+     * @param {array} fields - list of fields to init an object with.
+     */
+    makeObjectReactive(objectName, fields) {
+      if (
+        typeof this[objectName] !== "undefined" &&
+        this[objectName] !== null &&
+        typeof fields !== "undefined" &&
+        fields !== null
+      ) {
+        fields.forEach(field => {
+          if (typeof this[objectName][field] === "undefined") {
+            this.$set(this[objectName], field, null);
+          }
+        });
+      }
+    },
+
+    /**
      * Handles user's bottom options button click by calling add method, route leave or resetting object.
      *
      * @param {string} choice - User's choice in String format e.g., 'SAVE', 'CLEAR', etc.

@@ -615,6 +615,8 @@ export default {
             this.$emit("object-exists", false);
           }
         });
+      } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 

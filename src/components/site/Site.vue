@@ -644,7 +644,6 @@ export default {
         this.setSiteName(this.site.project.id);
       }
 
-      console.log(this.$route);
       // Getting project (only from project view when user presses 'add site button' in detail view or in sidebar)
       if (this.$route.query.project) {
         const dataFromProject = JSON.parse(this.$route.query.project);
@@ -807,6 +806,8 @@ export default {
         });
 
         this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
+      } else {
+        this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
     },
 
