@@ -105,11 +105,45 @@
       </v-card-title>
 
       <transition>
-        <div v-show="block.shortcuts" class="px-1 pt-1 pb-2">
+        <div v-show="block.shortcuts" class="pa-1">
           <shortcuts
             :bodyActiveColor="appSettings.bodyActiveColor"
             :bodyActiveColorDark="appSettings.bodyActiveColorDark"
           />
+        </div>
+      </transition>
+    </v-card>
+
+    <!-- SECURITY -->
+    <v-card
+      class="mt-2"
+      id="block-security"
+      :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.security = !block.security"
+        >
+          <span>{{ $t("settings.security") }}</span>
+          <v-icon right>fas fa-user-shield</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.security = !block.security"
+          :color="appSettings.bodyActiveColor"
+        >
+          <v-icon>{{
+            block.security ? "fas fa-angle-up" : "fas fa-angle-down"
+            }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-if="block.security">
+          <Security/>
         </div>
       </transition>
     </v-card>
@@ -161,21 +195,23 @@ import formSectionsMixin from "../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import Colors from "../components/partial/settings/Colors";
 import PermissionsTable from "../components/partial/settings/PermissionsTable";
+import Security from "../components/partial/settings/Security";
 
 export default {
   name: "Settings",
 
-  components: { PermissionsTable, Colors, Shortcuts, Accessibility },
+  components: {Security, PermissionsTable, Colors, Shortcuts, Accessibility },
 
   mixins: [formSectionsMixin],
 
   data() {
     return {
       block: {
-        shortcuts: true,
-        permissions: true,
-        accessibility: true,
-        colors: false
+        colors: false,
+        accessibility: false,
+        shortcuts: false,
+        security: false,
+        permissions: true
       }
     };
   },

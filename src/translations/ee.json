@@ -239,7 +239,8 @@
     "change_perms": "Muuda",
     "delete_perms": "Kustuta",
     "view_perms": "Vaata",
-    "search": "Otsi"
+    "search": "Otsi",
+    "security": "Turvalisus"
   },
   "sidebar": {
     "project": {

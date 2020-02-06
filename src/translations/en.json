@@ -239,7 +239,8 @@
     "change_perms": "Change",
     "delete_perms": "Delete",
     "view_perms": "View",
-    "search": "Search"
+    "search": "Search",
+    "security": "Security"
   },
   "sidebar": {
     "project": {

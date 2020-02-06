@@ -15,7 +15,6 @@
         <v-btn
           :color="bodyActiveColor"
           dark
-          small
           @click="$parent.$emit('button-clicked', 'COPY_TO_LOCALITY', 'site')"
         >
           <v-icon left small>fas fa-map-marked-alt</v-icon>
@@ -945,7 +944,7 @@ export default {
           name_en: obj.area__name_en,
           id: obj.area
         };
-        this.autocomplete.project.push(this.site.project);
+        this.autocomplete.area.push(this.site.area);
       }
       if (this.isNotEmpty(obj.project)) {
         this.site.project = {

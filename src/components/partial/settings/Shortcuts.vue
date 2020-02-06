@@ -1,10 +1,10 @@
 <template>
-  <div class="shortcuts row no-gutters px-1">
-    <div class="col-12 mb-3">
+  <div class="shortcuts row no-gutters">
+    <div class="col-12">
       <v-btn
         small
         @click="addShortcut"
-        class="mb-2 mr-3"
+        class="ma-1"
         :color="bodyActiveColor"
         :dark="bodyActiveColorDark"
       >
@@ -15,7 +15,7 @@
       <v-btn
         small
         @click="saveShortcuts"
-        class="mb-2"
+        class="ma-1"
         :color="bodyActiveColor"
         :dark="bodyActiveColorDark"
       >
@@ -24,7 +24,7 @@
       </v-btn>
     </div>
 
-    <div class="col-12" v-if="shortcuts.length > 0">
+    <div class="col-12 px-1" v-if="shortcuts.length > 0">
       <div class="row">
         <div class="col">
           <p>
