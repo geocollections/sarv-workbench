@@ -291,6 +291,8 @@ export default {
     },
 
     addItem() {
+      if (this.$route.meta.isEdit) this.item.parent = this.$route.params.id;
+
       let clonedItem = cloneDeep(this.item);
       let formattedItem = this.formatItem(clonedItem);
 
@@ -313,7 +315,10 @@ export default {
     editItem(item) {
       this.isNewItem = false;
 
-      if (this.$route.meta.isEdit) this.item.id = item.id;
+      if (this.$route.meta.isEdit) {
+        this.item.id = item.id;
+        this.item.parent = this.$route.params.id;
+      }
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (typeof item.rock !== "object" && item.rock !== null) {
