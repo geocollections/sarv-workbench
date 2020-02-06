@@ -358,7 +358,8 @@
       "description": "Kirjeldus"
     },
     "area": {
-      "info": "Üldinfo"
+      "info": "Üldinfo",
+      "sites": "Vaatluspunktid"
     },
     "drillcore_box": {
       "info": "Üldinfo"

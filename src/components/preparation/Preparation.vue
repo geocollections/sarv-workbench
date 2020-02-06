@@ -743,7 +743,7 @@ export default {
         }
       });
     },
-    500)
+    50)
   }
 };
 </script>

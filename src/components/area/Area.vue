@@ -163,6 +163,171 @@
         </div>
       </transition>
     </v-card>
+
+    <!-- SITES -->
+    <v-card
+      class="mt-2"
+      id="block-sites"
+      v-if="$route.meta.isEdit"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.sites = !block.sites">
+          <span>{{ $t("project.sites") }}</span>
+          <v-icon right>fas fa-globe-americas</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.sites = !block.sites"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.sites ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.sites" class="px-1 pt-1 pb-2">
+          <!-- MAP SWITCH -->
+          <v-card
+            class="d-flex flex-row justify-content-start mt-1 mx-3"
+            flat
+            tile
+            :color="bodyColor.split('n-')[0] + 'n-5'"
+          >
+            <v-card
+              flat
+              tile
+              class="align-self-center mr-2"
+              :color="bodyColor.split('n-')[0] + 'n-5'"
+            >
+              <v-switch
+                v-model="showMap"
+                hide-details
+                id="map-switch"
+                class="vuetify-switch my-1"
+              ></v-switch>
+            </v-card>
+
+            <v-card
+              flat
+              tile
+              class="align-self-center"
+              :color="bodyColor.split('n-')[0] + 'n-5'"
+            >
+              <label class="m-0" :for="`map-switch`">
+                <i class="far fa-map"></i>
+                {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
+              </label>
+            </v-card>
+          </v-card>
+
+          <!-- MAP -->
+          <transition enter-active-class="animated fadeIn faster">
+            <v-row no-gutters v-show="showMap" class="mt-2">
+              <v-col cols="12" class="px-1">
+                <map-component
+                  :gps-coords="true"
+                  mode="multiple"
+                  v-if="showMap"
+                  module="area"
+                  v-bind:location="{ lat: null, lng: null }"
+                  :locations="relatedData.sites.results"
+                />
+              </v-col>
+            </v-row>
+          </transition>
+
+          <!-- ADD NEW and EXPORT -->
+          <v-card
+            class="d-flex flex-row justify-content-start mt-2 mb-3"
+            flat
+            tile
+            :color="bodyColor.split('n-')[0] + 'n-5'"
+          >
+            <v-card
+              flat
+              tile
+              class="px-1"
+              :color="bodyColor.split('n-')[0] + 'n-5'"
+            >
+              <v-btn
+                :to="{
+                  name: 'Site add',
+                  query: { area: JSON.stringify(area) }
+                }"
+                target="newAreaWindow"
+                :color="bodyActiveColor"
+                :dark="isBodyActiveColorDark"
+                >{{ $t("add.new") }}</v-btn
+              >
+            </v-card>
+
+            <v-card
+              flat
+              tile
+              class="px-1"
+              :color="bodyColor.split('n-')[0] + 'n-5'"
+            >
+              <export-buttons
+                filename="site"
+                :table-data="relatedData.sites.results"
+              ></export-buttons>
+            </v-card>
+          </v-card>
+
+          <!-- PAGINATION -->
+          <div
+            v-if="relatedData.sites.count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
+          >
+            <div class="mr-3 mb-3">
+              <v-select
+                v-model="relatedData.searchParameters.sites.paginateBy"
+                color="blue"
+                dense
+                :items="paginateByOptionsTranslated"
+                item-color="blue"
+                label="Paginate by"
+                hide-details
+              />
+            </div>
+
+            <div>
+              <v-pagination
+                v-model="relatedData.searchParameters.sites.page"
+                color="blue"
+                circle
+                prev-icon="fas fa-angle-left"
+                next-icon="fas fa-angle-right"
+                :length="
+                  Math.ceil(
+                    relatedData.sites.count /
+                      relatedData.searchParameters.sites.paginateBy
+                  )
+                "
+                :total-visible="5"
+              />
+            </div>
+          </div>
+
+          <v-row no-gutters v-if="relatedData.sites.count > 0">
+            <v-col cols="12" class="px-1">
+              <site-table
+                ref="table"
+                :response="relatedData.sites"
+                :search-parameters="relatedData.searchParameters.sites"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
+              />
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
   </div>
 </template>
 
@@ -175,15 +340,24 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import {
   fetchArea,
+  fetchLinkedAreaSites,
   fetchListAreaTypes,
   fetchListMaakond
 } from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import Editor from "../partial/editor/Editor";
+import MapComponent from "../partial/MapComponent";
+import ExportButtons from "../partial/export/ExportButtons";
+import debounce from "lodash/debounce";
+import { mapState } from "vuex";
+import SiteTable from "../site/SiteTable";
 export default {
   name: "Area",
 
   components: {
+    SiteTable,
+    ExportButtons,
+    MapComponent,
     Editor,
     TextareaWrapper,
     InputWrapper,
@@ -242,6 +416,28 @@ export default {
     this.loadFullInfo();
   },
 
+  computed: {
+    ...mapState(["mapSettings"]),
+
+    showMap: {
+      get() {
+        return this.mapSettings.showMap;
+      },
+      set(value) {
+        this.$store.dispatch("updateMapState", value);
+      }
+    },
+
+    paginateByOptionsTranslated() {
+      return this.paginateByOptions.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text, { num: item.value })
+        };
+      });
+    }
+  },
+
   watch: {
     "$route.params.id": {
       handler: function() {
@@ -249,10 +445,44 @@ export default {
         this.reloadData();
       },
       deep: true
+    },
+    "relatedData.searchParameters.sites": {
+      handler(newVal) {
+        if (this.$route.meta.isEdit) {
+          this.searchRelatedData(newVal, this.fetchLinkedSiteWrapper, "sites");
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
 
   methods: {
+    fetchLinkedSiteWrapper() {
+      return new Promise(resolve => {
+        resolve(
+          fetchLinkedAreaSites(
+            this.relatedData.searchParameters.sites,
+            this.$route.params.id
+          )
+        );
+      });
+    },
+
+    searchRelatedData: debounce(function(
+      searchParameters,
+      apiCall,
+      relatedObject
+    ) {
+      apiCall().then(response => {
+        if (response.status === 200) {
+          this.relatedData[relatedObject].count = response.data.count;
+          this.relatedData[relatedObject].results = response.data.results;
+        }
+      });
+    },
+    50),
+
     setInitialData() {
       return {
         searchHistory: "areaSearchHistory",
@@ -284,8 +514,19 @@ export default {
         area: {},
         searchParameters: this.setDefaultSearchParameters(),
         block: {
-          info: true
-        }
+          info: true,
+          sites: true
+        },
+        relatedData: this.setDefaultRalatedData(),
+        paginateByOptions: [
+          { text: "main.pagination", value: 10 },
+          { text: "main.pagination", value: 25 },
+          { text: "main.pagination", value: 50 },
+          { text: "main.pagination", value: 100 },
+          { text: "main.pagination", value: 250 },
+          { text: "main.pagination", value: 500 },
+          { text: "main.pagination", value: 1000 }
+        ]
       };
     },
 
@@ -322,6 +563,23 @@ export default {
           }
         });
       }
+    },
+
+    setDefaultRalatedData() {
+      return {
+        sites: {
+          count: 0,
+          results: []
+        },
+        searchParameters: {
+          sites: {
+            page: 1,
+            paginateBy: 100,
+            sortBy: ["id"],
+            sortDesc: [true]
+          }
+        }
+      };
     },
 
     formatDataForUpload(objectToUpload) {

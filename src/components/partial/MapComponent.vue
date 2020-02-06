@@ -83,9 +83,10 @@ export default {
 
   data() {
     return {
+      map: null,
       marker: null,
       markers: [],
-      map: null,
+      markerLayer: null,
       center: L.latLng(58.5, 25.5),
       currentLocation: null,
       tileLayer: null,
@@ -218,13 +219,52 @@ export default {
 
   mounted() {
     this.initMap();
-    // this.$nextTick(() => {
-    //   this.initMap();
-    // })
   },
 
   beforeDestroy() {
     navigator.geolocation.clearWatch(this.gpsID);
+    this.map.off("baselayerchange", this.handleLayerChange);
+  },
+
+  watch: {
+    location: {
+      handler: function(newVal, oldVal) {
+        if (
+          newVal &&
+          (newVal.lat !== oldVal.lat || newVal.lng !== oldVal.lng)
+        ) {
+          if (this.mode === "multiple") return;
+
+          if (this.isLocationSet) {
+            this.addMarker(newVal);
+          } else {
+            if (this.marker) this.map.removeLayer(this.marker);
+            this.marker = null;
+          }
+        }
+      }
+    },
+
+    locations: {
+      handler: function(newVal) {
+        if (this.mode === "multiple") this.setMarkers(newVal);
+      },
+      deep: true
+    },
+
+    currentLocation: function(newVal, oldVal) {
+      // Centers map on GPS marker on 1st update and only if there are no other markers
+      if (newVal && oldVal === null) {
+        if (!this.isLocationSet && !this.areLocationsSet)
+          this.centerMapOnMarker(newVal, 12);
+      }
+
+      // if (newVal !== null && this.marker !== null) {
+      //   this.setZoom()
+      // } else if (newVal === null && this.marker !== null) {
+      //   this.map.setView(this.marker._latlng, this.zoom);
+      // }
+    }
   },
 
   methods: {
@@ -269,8 +309,6 @@ export default {
       //ZOOM ACTIVATED
       this.map.on("zoomend", event => (this.zoom = event.target._zoom));
 
-      console.log(this.locations);
-
       if (this.mode === "multiple") this.setMarkers(this.locations);
 
       if (this.mode === "single") {
@@ -293,7 +331,6 @@ export default {
       });
 
       if (event.name && event.name === "Maaameti fotokaart") {
-        console.log(this.overlayMaps[0].leafletObject);
         this.map.addLayer(this.overlayMaps[0].leafletObject);
         document.querySelector(
           "#map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label > div > input"
@@ -309,34 +346,50 @@ export default {
     //SET GROUP OF MARKERS
     setMarkers(newVal) {
       if (newVal && newVal.length > 0) {
+        if (this.markerLayer !== null) this.map.removeLayer(this.markerLayer);
         this.markers = [];
 
         newVal.forEach(entity => {
-          let marker = L.marker(
-            {
-              lat: parseFloat(entity.latitude),
-              lng: parseFloat(entity.longitude)
-            },
-            { icon: this.markerIcon }
-          )
-            .addTo(this.map)
-            .on("click", () =>
-              window.open(
-                location.origin + "/site/" + entity.id,
-                "",
-                "width=800,height=750"
-              )
+          if (entity.latitude && entity.longitude) {
+            let marker = L.marker(
+              {
+                lat: parseFloat(entity.latitude),
+                lng: parseFloat(entity.longitude)
+              },
+              { icon: this.markerIcon }
             );
-          marker.bindTooltip(entity.name, {
-            permanent: true,
-            direction: "right",
-            offset: [10, -23]
-          });
-          this.markers.push(marker);
+
+            if (entity.id) {
+              marker.on("click", () =>
+                window.open(
+                  location.origin + "/site/" + entity.id,
+                  "",
+                  "width=800,height=750"
+                )
+              );
+            }
+
+            if (entity.name) {
+              marker.bindTooltip(entity.name, {
+                permanent: true,
+                direction: "right",
+                offset: [10, -23]
+              });
+            }
+            this.markers.push(marker);
+          }
         });
+
+        // Adding marker layer to map
+        this.markerLayer = L.layerGroup(this.markers);
+        this.map.addLayer(this.markerLayer);
+
         let bounds = new L.featureGroup(this.markers).getBounds();
-        this.map.fitBounds(bounds);
-        this.map.setZoom(this.map.getBoundsZoom(bounds) - 2);
+        this.map.fitBounds(bounds, { padding: [50, 50] });
+      } else {
+        // If response is empty then remove markers
+        if (this.markerLayer !== null) this.map.removeLayer(this.markerLayer);
+        this.markers = [];
       }
     },
 
@@ -384,7 +437,6 @@ export default {
     },
 
     successGeo(position) {
-      console.log(position);
       if (position !== null) {
         if (this.currentLocation !== null)
           this.map.removeLayer(this.currentLocation);
@@ -425,7 +477,6 @@ export default {
     },
 
     centerMapOnMarker(marker, zoomLevel) {
-      console.log(marker);
       this.map.setView(marker.getLatLng(), zoomLevel);
     },
 
@@ -477,48 +528,6 @@ export default {
       e = p * Math.sin(FII) + FE;
 
       return [n, e];
-    }
-  },
-  watch: {
-    location: {
-      handler: function(newVal, oldVal) {
-        if (
-          newVal &&
-          (newVal.lat !== oldVal.lat || newVal.lng !== oldVal.lng)
-        ) {
-          if (this.mode === "multiple") return;
-
-          if (this.isLocationSet) {
-            this.addMarker(newVal);
-          } else {
-            if (this.marker) this.map.removeLayer(this.marker);
-            this.marker = null;
-          }
-        }
-      }
-    },
-
-    locations: {
-      handler: function(newVal) {
-        if (newVal && newVal.length > 0) {
-          if (this.mode === "multiple") this.setMarkers(newVal);
-        }
-      },
-      deep: true
-    },
-
-    currentLocation: function(newVal, oldVal) {
-      // Centers map on GPS marker on 1st update and only if there are no other markers
-      if (newVal && oldVal === null) {
-        if (!this.isLocationSet && !this.areLocationsSet)
-          this.centerMapOnMarker(newVal, 12);
-      }
-
-      // if (newVal !== null && this.marker !== null) {
-      //   this.setZoom()
-      // } else if (newVal === null && this.marker !== null) {
-      //   this.map.setView(this.marker._latlng, this.zoom);
-      // }
     }
   }
 };

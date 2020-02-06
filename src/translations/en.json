@@ -358,7 +358,8 @@
       "description": "Description"
     },
     "area": {
-      "info": "General info"
+      "info": "General info",
+      "sites": "Linked sites"
     },
     "drillcore_box": {
       "info": "General info"

@@ -651,18 +651,30 @@ export default {
         };
         this.setSiteName(this.site.project.id);
       }
-    }
 
-    // Getting project (only from project view when user presses 'add site button' in detail view or in sidebar)
-    if (this.$route.params.project) {
-      const dataFromProject = this.$route.params.project;
+      console.log(this.$route);
+      // Getting project (only from project view when user presses 'add site button' in detail view or in sidebar)
+      if (this.$route.query.project) {
+        const dataFromProject = JSON.parse(this.$route.query.project);
 
-      this.site.project = {
-        id: dataFromProject.id,
-        name: dataFromProject.name,
-        name_en: dataFromProject.name_en
-      };
-      this.setSiteName(dataFromProject.id);
+        this.site.project = {
+          id: dataFromProject.id,
+          name: dataFromProject.name,
+          name_en: dataFromProject.name_en
+        };
+        this.autocomplete.project.push(this.site.project);
+        this.setSiteName(dataFromProject.id);
+      }
+      if (this.$route.query.area) {
+        const dataFromArea = JSON.parse(this.$route.query.area);
+
+        this.site.area = {
+          id: dataFromArea.id,
+          name: dataFromArea.name,
+          name_en: dataFromArea.name_en
+        };
+        this.autocomplete.area.push(this.site.area);
+      }
     }
 
     this.loadFullInfo();
@@ -1085,7 +1097,7 @@ export default {
         }
       });
     },
-    500)
+    50)
   }
 };
 </script>

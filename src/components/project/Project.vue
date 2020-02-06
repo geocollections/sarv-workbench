@@ -35,7 +35,10 @@
         <v-btn
           dark
           color="blue"
-          :to="{ name: 'Site add', params: { project: project } }"
+          :to="{
+            name: 'Site add',
+            query: { project: JSON.stringify(project) }
+          }"
         >
           <v-icon left small>fas fa-globe-americas</v-icon>
           {{ $t("project.newSite") }}
@@ -968,7 +971,7 @@ export default {
         }
       });
     },
-    500)
+    50)
   }
 };
 </script>

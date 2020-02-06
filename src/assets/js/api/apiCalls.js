@@ -2757,6 +2757,16 @@ export function fetchListMaakond() {
   return get(`list_maakond`);
 }
 
+export function fetchLinkedAreaSites(data, areaId) {
+  let fields =
+    "id,name,name_en,number,project,project__name,project__name_en,date_start,date_end,latitude,longitude";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  return get(
+    `site/?area=${areaId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  );
+}
+
 /******************
  ***  AREA END  ***
  ******************/
