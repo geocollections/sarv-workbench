@@ -3958,7 +3958,7 @@ export default {
       handler: function(newVal, oldVal) {
         this.reloadData();
         if (!this.$route.meta.isEdit) {
-          if (oldVal) this.clearFiles = true;
+          if (oldVal) this.clearUploadedFiles();
 
           let attachmentHistory;
           let keywords;
@@ -4290,7 +4290,6 @@ export default {
           relatedData: true,
           changeType: false
         },
-        clearFiles: false,
         files: [],
         selectedRelatedTable: null,
         isAttachmentLocked: false,
@@ -4752,7 +4751,6 @@ export default {
     },
 
     clearUploadedFiles() {
-      this.clearFiles = false;
       this.files = [];
     },
 
