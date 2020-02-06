@@ -62,6 +62,9 @@ export default {
     },
     module: {
       type: String
+    },
+    showMap: {
+      type: Boolean
     }
   },
 
@@ -227,6 +230,11 @@ export default {
   },
 
   watch: {
+    showMap(newVal) {
+      console.log(newVal)
+      if (newVal && this.map) this.map.invalidateSize();
+    },
+
     location: {
       handler: function(newVal, oldVal) {
         if (

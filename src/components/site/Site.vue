@@ -214,10 +214,10 @@
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap" class="mt-1">
+            <v-row no-gutters v-show="showMap && !isLatitudeUndefinedInEditView" class="mt-1">
               <v-col cols="12" class="pa-1">
                 <map-component
-                  v-if="showMap && !isLatitudeUndefinedInEditView"
+                  :show-map="showMap && block.location"
                   :gps-coords="true"
                   mode="single"
                   module="site"

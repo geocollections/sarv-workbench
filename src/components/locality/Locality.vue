@@ -198,7 +198,7 @@
             <v-row no-gutters v-show="showMap" class="mt-1">
               <v-col cols="12" class="pa-1">
                 <map-component
-                  v-if="showMap"
+                  :show-map="showMap && block.map"
                   mode="single"
                   v-bind:locations="[]"
                   v-bind:location="{

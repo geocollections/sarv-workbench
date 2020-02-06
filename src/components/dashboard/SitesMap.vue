@@ -18,6 +18,13 @@ import { mapState } from "vuex";
 
 export default {
   name: "SitesMap",
+
+  props: {
+    showMap: {
+      type: Boolean
+    }
+  },
+
   data: () => ({
     map: null,
     sites: [],
@@ -155,6 +162,20 @@ export default {
         }
       },
       deep: true
+    },
+
+    showMap(newVal) {
+      console.log(newVal);
+      if (newVal && this.map) {
+        this.map.invalidateSize();
+        let bounds = new L.featureGroup([
+          ...this.sites,
+          ...this.samples,
+          ...this.specimens,
+          ...this.images
+        ]).getBounds();
+        this.map.fitBounds(bounds, { maxZoom: 10 });
+      }
     }
   },
 

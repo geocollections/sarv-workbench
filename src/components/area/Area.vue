@@ -230,9 +230,9 @@
             <v-row no-gutters v-show="showMap" class="mt-2">
               <v-col cols="12" class="px-1">
                 <map-component
+                  :show-map="showMap && block.sites"
                   :gps-coords="true"
                   mode="multiple"
-                  v-if="showMap"
                   module="area"
                   v-bind:location="{ lat: null, lng: null }"
                   :locations="relatedData.sites.results"
