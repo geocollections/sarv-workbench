@@ -1,7 +1,7 @@
 <template>
   <div class="list-view" :class="bodyColor.split('n-')[0] + 'n-5'">
     <v-row no-gutters>
-      <v-col class="pa-4">
+      <v-col class="list-view-column">
         <reference-list-view
           v-if="module === 'reference'"
           :data="data"
@@ -33,13 +33,13 @@ export default {
 </script>
 
 <style>
-@page {
-  width: 297mm;
-  height: 210mm;
-  margin: 5mm;
-}
-
 @media print {
+  @page {
+    width: 297mm;
+    height: 210mm;
+    margin: 15mm 5mm;
+  }
+
   html,
   body,
   #app,
@@ -49,11 +49,28 @@ export default {
   .v-content__wrap,
   .container,
   .list-module-core,
-  .table-card {
+  .table-card,
+  .v-card,
+  .row,
+  .col {
     all: unset !important;
   }
   a {
     text-decoration: none !important;
+  }
+  .list-view-column {
+    padding: 0 !important;
+  }
+
+  .list-row {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media screen {
+  .list-view-column {
+    padding: 16px !important;
   }
 }
 </style>

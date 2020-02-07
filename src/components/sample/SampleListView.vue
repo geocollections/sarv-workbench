@@ -122,7 +122,7 @@
 
         <div
           class="small-image"
-          style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 1mm;"
+          style="background-color: #fff; border-top: solid 0.25pt #000; border-left: solid 0.25pt #000; position:absolute; bottom: 0mm; right:0mm; padding: 0.5mm;"
         >
           <transition enter-active-class="animated fadeIn faster">
             <div v-show="showQRCode">
@@ -244,6 +244,6 @@ export default {
 }
 
 .small-image >>> img {
-  width: 40px !important;
+  width: 10.5mm !important;
 }
 </style>
