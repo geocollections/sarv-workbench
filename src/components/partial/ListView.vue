@@ -1,7 +1,7 @@
 <template>
   <div class="list-view" :class="bodyColor.split('n-')[0] + 'n-5'">
-    <div class="row">
-      <div class="col">
+    <v-row no-gutters>
+      <v-col class="pa-4">
         <reference-list-view
           v-if="module === 'reference'"
           :data="data"
@@ -11,8 +11,8 @@
         <sample-list-view v-if="module === 'sample'" :data="data" />
 
         <specimen-list-view v-if="module === 'specimen'" :data="data" />
-      </div>
-    </div>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -32,4 +32,28 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+@page {
+  width: 297mm;
+  height: 210mm;
+  margin: 5mm;
+}
+
+@media print {
+  html,
+  body,
+  #app,
+  .v-application--wrap,
+  .dashboard,
+  .v-content,
+  .v-content__wrap,
+  .container,
+  .list-module-core,
+  .table-card {
+    all: unset !important;
+  }
+  a {
+    text-decoration: none !important;
+  }
+}
+</style>

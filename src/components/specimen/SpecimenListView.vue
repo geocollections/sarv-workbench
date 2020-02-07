@@ -264,10 +264,6 @@ export default {
 </script>
 
 <style scoped>
-.list-row {
-  margin: 15px;
-}
-
 .label2:hover {
   cursor: pointer;
   /*opacity: 0.7;*/
