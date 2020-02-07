@@ -787,6 +787,9 @@
     "depth_top": "Ülem. piir (m)",
     "rock": "Kivim",
     "rock_name": "Kivim txt",
+    "coordx": "X koordinaat",
+    "coordy": "Y koordinaat",
+    "epsg": "EPSG",
     "relatedTables": {
       "attachment_link": "Failid",
       "samples": "Seotud proovid",

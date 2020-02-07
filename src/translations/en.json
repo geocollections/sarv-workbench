@@ -787,6 +787,9 @@
     "depth_top": "Depth top (m)",
     "rock": "Rock",
     "rock_name": "Rock txt",
+    "coordx": "X coordinate",
+    "coordy": "Y coordinate",
+    "epsg": "EPSG",
     "relatedTables": {
       "attachment_link": "Files",
       "samples": "Related samples",

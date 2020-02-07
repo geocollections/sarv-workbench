@@ -300,6 +300,36 @@
             </v-col>
           </v-row>
 
+          <!-- COORDX, COORDY and EPSG -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site.coordx"
+                :color="bodyActiveColor"
+                :label="$t('site.coordx')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site.coordy"
+                :color="bodyActiveColor"
+                :label="$t('site.coordy')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site.epsg"
+                :color="bodyActiveColor"
+                :label="$t('site.epsg')"
+                type="number"
+              />
+            </v-col>
+          </v-row>
+
           <!-- REMARKS_LOCATION -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -726,6 +756,9 @@ export default {
           "date_end",
           "coord_det_method",
           "locality",
+          "coordx",
+          "coordy",
+          "epsg",
           "latitude",
           "longitude",
           "location_accuracy",
