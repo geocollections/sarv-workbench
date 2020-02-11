@@ -1107,7 +1107,9 @@ const router = new Router({
             {
               path: "",
               component: () =>
-                import("./components/selection_series/SelectionSeriesTable.vue"),
+                import(
+                  "./components/selection_series/SelectionSeriesTable.vue"
+                ),
               meta: {
                 requiresAuth: true,
                 object: "selection_series",
@@ -1547,7 +1549,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/drillcore_box/DrillcoreBoxTable.vue"),
+              component: () =>
+                import("./components/drillcore_box/DrillcoreBoxTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "drillcore_box",
@@ -1566,7 +1569,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/drillcore_box/DrillcoreBox.vue"),
+              component: () =>
+                import("./components/drillcore_box/DrillcoreBox.vue"),
               meta: {
                 isEdit: true,
                 table: "drillcore_box",
@@ -1587,11 +1591,14 @@ const router = new Router({
             {
               path: "",
               name: "Drillcore box add",
-              component: () => import("./components/drillcore_box/DrillcoreBox.vue"),
+              component: () =>
+                import("./components/drillcore_box/DrillcoreBox.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.drillcoreBox",
-                subForms: [{ path: "/drillcore_box/add", name: "header.drillcore_box" }],
+                subForms: [
+                  { path: "/drillcore_box/add", name: "header.drillcore_box" }
+                ],
                 requiresAuth: true,
                 object: "drillcore_box"
               }
@@ -1607,7 +1614,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/location/LocationTable.vue"),
+              component: () =>
+                import("./components/location/LocationTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "location",

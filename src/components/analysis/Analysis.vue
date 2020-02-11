@@ -870,11 +870,11 @@ export default {
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
-                ].results;
+              ].results;
             }
         });
       } else {
-        console.log(this.relatedData)
+        console.log(this.relatedData);
         if (this.relatedData.attachment_link.results.length > 0) {
           uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
         } else uploadableObject.related_data.attachment = null;

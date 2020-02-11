@@ -301,7 +301,8 @@ import formSectionsMixin from "../../mixins/formSectionsMixin";
 import Spinner from "vue-simple-spinner";
 import { mapState } from "vuex";
 import {
-  fetchDataset, fetchDatasetAnalyses,
+  fetchDataset,
+  fetchDatasetAnalyses,
   fetchDatasetAuthors,
   fetchDatasetReferences,
   fetchListLicences

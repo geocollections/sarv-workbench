@@ -22,7 +22,7 @@
           @click="block.requiredFields = !block.requiredFields"
         >
           <span :class="validate('journal') ? 'green--text' : 'red--text'">{{
-            $t("common.generalInfo")
+            $t("common.requiredFields")
           }}</span>
           <v-icon
             right

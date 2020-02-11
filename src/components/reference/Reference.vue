@@ -322,7 +322,10 @@
           <!-- ABSTRACT and AUTHOR KEYWORDS -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="reference.abstract" :label="$t('reference.abstract')" />
+              <editor
+                v-model="reference.abstract"
+                :label="$t('reference.abstract')"
+              />
               <!--              <textarea-wrapper-->
               <!--                v-model="reference.abstract"-->
               <!--                :color="bodyActiveColor"-->
@@ -881,7 +884,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import Editor from "../partial/editor/Editor";
+import Editor from "../partial/inputs/Editor";
 import FileUpload from "../partial/inputs/FileInput";
 import ExportButtons from "../partial/export/ExportButtons";
 import StratigraphyTable from "../stratigraphy/StratigraphyTable";
@@ -1447,7 +1450,11 @@ export default {
           this.relatedData[object].results = this.handleResponse(response);
         } else {
           this.$set(this.relatedData[object], "count", response.data.count);
-          this.$set(this.relatedData[object], "results", this.handleResponse(response));
+          this.$set(
+            this.relatedData[object],
+            "results",
+            this.handleResponse(response)
+          );
         }
       });
     },

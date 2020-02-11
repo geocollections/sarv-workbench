@@ -439,28 +439,40 @@
           <!-- DESCRIPTION -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="stratigraphy.description" :label="$t('common.description')" />
+              <editor
+                v-model="stratigraphy.description"
+                :label="$t('common.description')"
+              />
             </v-col>
           </v-row>
 
           <!-- DESCRIPTION_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="stratigraphy.description_en" :label="$t('common.description_en')" />
+              <editor
+                v-model="stratigraphy.description_en"
+                :label="$t('common.description_en')"
+              />
             </v-col>
           </v-row>
 
           <!-- DEFINITION -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="stratigraphy.definition" :label="$t('stratigraphy.definition')" />
+              <editor
+                v-model="stratigraphy.definition"
+                :label="$t('stratigraphy.definition')"
+              />
             </v-col>
           </v-row>
 
           <!-- DEFINITION_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="stratigraphy.definition_en" :label="$t('stratigraphy.definition')" />
+              <editor
+                v-model="stratigraphy.definition_en"
+                :label="$t('stratigraphy.definition')"
+              />
             </v-col>
           </v-row>
 
@@ -620,7 +632,7 @@ import StratigraphySynonymTable from "./relatedTables/StratigraphySynonymTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import StratigraphyReferenceTable from "./relatedTables/StratigraphyReferenceTable";
 import StratigraphyStratotypeTable from "./relatedTables/StratigraphyStratotypeTable";
-import Editor from "../partial/editor/Editor";
+import Editor from "../partial/inputs/Editor";
 
 export default {
   name: "Stratigraphy",

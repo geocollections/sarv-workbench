@@ -4774,10 +4774,8 @@ export default {
         }
 
         // DEVICE_TXT
-        if (metadata.Model)
-          this.attachment.device_txt = metadata.Model;
-        else if (metadata.Make)
-          this.attachment.device_txt = metadata.Make;
+        if (metadata.Model) this.attachment.device_txt = metadata.Model;
+        else if (metadata.Make) this.attachment.device_txt = metadata.Make;
 
         // IMAGE DIMENSIONS
         if (metadata.PixelXDimension)

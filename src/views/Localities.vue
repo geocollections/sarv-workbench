@@ -29,7 +29,7 @@ import ListModuleCore from "./ListModuleCore";
 import { fetchLocalities } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import {mapState} from "vuex";
+import { mapState } from "vuex";
 
 export default {
   components: {

@@ -29,12 +29,16 @@
       </template>
 
       <template v-slot:item.change_perms="{ item }">
-        <v-icon v-if="item.change_perms" color="green" small>fas fa-check</v-icon>
+        <v-icon v-if="item.change_perms" color="green" small
+          >fas fa-check</v-icon
+        >
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
 
       <template v-slot:item.delete_perms="{ item }">
-        <v-icon v-if="item.delete_perms" color="green" small>fas fa-check</v-icon>
+        <v-icon v-if="item.delete_perms" color="green" small
+          >fas fa-check</v-icon
+        >
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
 

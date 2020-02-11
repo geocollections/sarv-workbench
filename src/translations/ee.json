@@ -258,6 +258,7 @@
       "samples": "Seotud proovid"
     },
     "reference": {
+      "requiredFields": "Kohustuslikud väljad",
       "info": "Üldinfo",
       "other": "Abstrakt ja muud andmed",
       "description": "Lisainfo ja märksõnad",
@@ -315,6 +316,7 @@
       "relatedData": "Seotud andmed"
     },
     "journal": {
+      "requiredFields": "Kohustuslikud väljad",
       "info": "Üldinfo"
     },
     "collection": {

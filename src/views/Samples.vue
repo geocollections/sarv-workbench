@@ -118,9 +118,7 @@ export default {
   methods: {
     fetchSamples() {
       return new Promise(resolve => {
-        resolve(
-          fetchSamples(this.searchParameters, this.databaseId)
-        );
+        resolve(fetchSamples(this.searchParameters, this.databaseId));
       });
     },
     searchParametersChanged(newParams) {

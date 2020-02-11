@@ -298,7 +298,11 @@ export default {
 
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
-            this.$set(this, "selection_series", this.handleResponse(response)[0]);
+            this.$set(
+              this,
+              "selection_series",
+              this.handleResponse(response)[0]
+            );
             // this.selection_series = this.handleResponse(response)[0];
 
             this.removeUnnecessaryFields(

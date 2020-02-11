@@ -164,7 +164,9 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{$t("header.locality_stratigraphy")}}</span>
+            <span class="headline">{{
+              $t("header.locality_stratigraphy")
+            }}</span>
           </v-card-title>
 
           <v-card-text>

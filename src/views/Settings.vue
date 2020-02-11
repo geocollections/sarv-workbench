@@ -137,13 +137,13 @@
         >
           <v-icon>{{
             block.security ? "fas fa-angle-up" : "fas fa-angle-down"
-            }}</v-icon>
+          }}</v-icon>
         </v-btn>
       </v-card-title>
 
       <transition>
         <div v-if="block.security">
-          <Security/>
+          <Security />
         </div>
       </transition>
     </v-card>
@@ -200,7 +200,7 @@ import Security from "../components/partial/settings/Security";
 export default {
   name: "Settings",
 
-  components: {Security, PermissionsTable, Colors, Shortcuts, Accessibility },
+  components: { Security, PermissionsTable, Colors, Shortcuts, Accessibility },
 
   mixins: [formSectionsMixin],
 

@@ -105,7 +105,10 @@ export default {
         text: "analysis.method",
         value: "analysis__analysis_method__analysis_method"
       },
-      { text: "analysis.method_specification", value: "analysis__method_details" },
+      {
+        text: "analysis.method_specification",
+        value: "analysis__method_details"
+      },
       { text: "analysis.sample", value: "sample" },
       { text: "common.locality", value: "locality" }
     ]

@@ -224,7 +224,7 @@
 
       <template v-slot:item.is_preferred="{ item }">
         <v-icon v-if="item.is_preferred" color="green" small
-        >fas fa-check</v-icon
+          >fas fa-check</v-icon
         >
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>

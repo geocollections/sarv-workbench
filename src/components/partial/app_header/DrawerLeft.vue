@@ -197,7 +197,7 @@ export default {
           name: "project",
           title: "projects",
           links: [
-            { title: "editProject", path: "/project", icon: "fas fa-table" },
+            { title: "editProject", path: "/project", icon: "fas fa-tasks" },
             {
               title: "addProject",
               path: "/project/add",
@@ -425,30 +425,30 @@ export default {
               parentLink.links.push({
                 title: "activeProject",
                 path: `/project/${this.activeProject.id}`,
-                icon: "fas fa-globe-americas"
+                icon: "fas fa-tag"
               });
             }
           } else parentLink.links.splice(2, 1);
         } else if (parentLink.name === "site") {
           if (this.activeSite && this.activeSite.id) {
-            if (parentLink.links.length === 2) {
+            if (parentLink.links.length === 4) {
               parentLink.links.push({
                 title: "activeSite",
                 path: `/site/${this.activeSite.id}`,
                 icon: "fas fa-map-marker-alt"
               });
             }
-          } else parentLink.links.splice(2, 1);
+          } else parentLink.links.splice(4, 1);
         } else if (parentLink.name === "sample") {
           if (this.activeSample && this.activeSample.id) {
-            if (parentLink.links.length === 2) {
+            if (parentLink.links.length === 6) {
               parentLink.links.push({
                 title: "activeSample",
                 path: `/sample/${this.activeSample.id}`,
                 icon: "fas fa-fill-drip"
               });
             }
-          } else parentLink.links.splice(2, 1);
+          } else parentLink.links.splice(6, 1);
         }
         return true;
       });

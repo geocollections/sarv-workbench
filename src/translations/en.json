@@ -258,6 +258,7 @@
       "samples": "Linked samples"
     },
     "reference": {
+      "requiredFields": "Required fields",
       "info": "General info",
       "other": "Abstract and other info",
       "description": "Remarks and keywords",
@@ -315,6 +316,7 @@
       "relatedData": "Related data"
     },
     "journal": {
+      "requiredFields": "Required fields",
       "info": "General info"
     },
     "collection": {

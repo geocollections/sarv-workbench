@@ -134,7 +134,10 @@
           <!-- DESCRIPTION -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="area.description" :label="$t('common.description')" />
+              <editor
+                v-model="area.description"
+                :label="$t('common.description')"
+              />
             </v-col>
           </v-row>
 
@@ -345,7 +348,7 @@ import {
   fetchListMaakond
 } from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import Editor from "../partial/editor/Editor";
+import Editor from "../partial/inputs/Editor";
 import MapComponent from "../partial/MapComponent";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";

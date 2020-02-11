@@ -428,7 +428,7 @@ export default {
 
     customLabelForAttachment(option) {
       return `${option.id} - (${option.original_filename})`;
-    },
+    }
   }
 };
 </script>

@@ -478,7 +478,10 @@ export default {
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      if (typeof item.identification_type !== "object" && item.identification_type !== null) {
+      if (
+        typeof item.identification_type !== "object" &&
+        item.identification_type !== null
+      ) {
         this.item.identification_type = {
           id: item.identification_type,
           value: item.identification_type__value,

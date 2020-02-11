@@ -50,7 +50,7 @@ import ObjectPermissions from "../components/partial/ObjectPermissions";
 
 export default {
   name: "AddForm",
-  components: {ObjectPermissions, BottomOptions },
+  components: { ObjectPermissions, BottomOptions },
   computed: {
     ...mapState(["appSettings"])
   }

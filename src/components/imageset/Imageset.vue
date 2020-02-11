@@ -223,7 +223,6 @@ export default {
     isInImagesetTable(query) {
       fetchIsImagesetNumberInImageset(query).then(response => {
         if (response.status === 200) {
-          console.log(response.data.count > 0);
           this.imagesetNumberExists = response.data.count > 0;
         }
       });

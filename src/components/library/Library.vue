@@ -111,7 +111,10 @@
           <!-- ABSTRACT -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="library.abstract" :label="$t('library.abstract')" />
+              <editor
+                v-model="library.abstract"
+                :label="$t('library.abstract')"
+              />
 
               <textarea-wrapper
                 v-if="false"
@@ -125,7 +128,10 @@
           <!-- ABSTRACT_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="library.abstract_en" :label="$t('library.abstract_en')" />
+              <editor
+                v-model="library.abstract_en"
+                :label="$t('library.abstract_en')"
+              />
 
               <textarea-wrapper
                 v-if="false"
@@ -323,7 +329,7 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import LibraryReferenceTable from "./relatedTables/LibraryReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
-import Editor from "../partial/editor/Editor";
+import Editor from "../partial/inputs/Editor";
 
 export default {
   name: "Library",

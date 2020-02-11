@@ -6,7 +6,11 @@
       v-if="$attrs.label"
       >{{ $attrs.label }}</label
     >
-    <ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
+    <ckeditor
+      v-bind="$attrs"
+      v-on="$listeners"
+      :config="editorConfig"
+    ></ckeditor>
   </div>
 </template>
 
@@ -14,31 +18,12 @@
 import CKEditor from "ckeditor4-vue";
 
 export default {
-  name: "EditorNew",
+  name: "Editor",
 
-  props: {
-    data: {
-      type: String,
-      default: "<p></p>"
-    }
-  },
+  inheritAttrs: false,
 
   components: {
     ckeditor: CKEditor.component
-  },
-
-  computed: {
-    editorData: {
-      get() {
-        if (this.data && this.data.length > 0) return this.data;
-        else return "<p></p>";
-      },
-
-      set(value) {
-        if (value && value.length > 0) this.$emit("update:data", value);
-        else this.$emit("update:data", "<p></p>");
-      }
-    }
   },
 
   data() {

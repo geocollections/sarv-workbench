@@ -385,7 +385,6 @@
 
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-
           <rock-tree-table
             v-show="activeTab === 'rock_tree'"
             :response="relatedData.rock_tree"
@@ -477,7 +476,9 @@
           <rock-classification-table
             v-show="activeTab === 'rock_classification' && $route.meta.isEdit"
             :response="relatedData.rock_classification"
-            :search-parameters="relatedData.searchParameters.rock_classification"
+            :search-parameters="
+              relatedData.searchParameters.rock_classification
+            "
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
