@@ -51,6 +51,9 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/geocollections/sarv-edit
+      - add_ssh_keys:
+          fingerprints:
+            - "da:37:31:66:0f:b9:99:16:61:2a:af:0b:ec:e2:95:d5"
       - run:
           name: Copy built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
