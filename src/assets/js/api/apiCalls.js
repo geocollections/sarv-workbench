@@ -736,7 +736,7 @@ export function fetchAnalysisMethod() {
   return get(`analysis_method/?order_by=analysis_method&format=json`);
 }
 
-export function fetchSamples(data, databaseId) {
+export function fetchSamples(data) {
   const fields =
     "id,locality__locality_en,locality__locality,agent_collected__agent,number,number_additional,number_field,locality_free,depth,stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en,database__name,database__name_en,date_collected,date_collected_free,locality,depth,depth_interval,storage__location,is_private,site,site__name,site__name_en";
   let searchFields = "";
@@ -780,10 +780,6 @@ export function fetchSamples(data, databaseId) {
 
   if (data.selection && data.selection.trim().length > 0) {
     searchFields += `&selection__selection__name__icontains=${data.selection}`;
-  }
-
-  if (typeof databaseId !== "undefined" && databaseId !== null) {
-    searchFields += `&database__id=${databaseId}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);

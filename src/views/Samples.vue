@@ -78,7 +78,7 @@ export default {
       return !!this.activeSelectionSeries;
     },
 
-    ...mapState(["currentUser", "databaseId", "activeSelectionSeries"])
+    ...mapState(["currentUser", "activeSelectionSeries"])
   },
   created() {
     // Used by sidebar
@@ -118,7 +118,7 @@ export default {
   methods: {
     fetchSamples() {
       return new Promise(resolve => {
-        resolve(fetchSamples(this.searchParameters, this.databaseId));
+        resolve(fetchSamples(this.searchParameters));
       });
     },
     searchParametersChanged(newParams) {
