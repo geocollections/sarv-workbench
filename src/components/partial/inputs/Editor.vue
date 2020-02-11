@@ -42,4 +42,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style>
+.cke_maximized {
+  z-index: 100000 !important;
+}
+</style>

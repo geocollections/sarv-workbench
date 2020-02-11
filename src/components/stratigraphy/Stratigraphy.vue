@@ -440,7 +440,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
-                v-model="stratigraphy.description"
+                :data.sync="stratigraphy.description"
                 :label="$t('common.description')"
               />
             </v-col>
@@ -450,7 +450,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
-                v-model="stratigraphy.description_en"
+                :data.sync="stratigraphy.description_en"
                 :label="$t('common.description_en')"
               />
             </v-col>
@@ -460,7 +460,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
-                v-model="stratigraphy.definition"
+                :data.sync="stratigraphy.definition"
                 :label="$t('stratigraphy.definition')"
               />
             </v-col>
@@ -470,7 +470,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
-                v-model="stratigraphy.definition_en"
+                :data.sync="stratigraphy.definition_en"
                 :label="$t('stratigraphy.definition')"
               />
             </v-col>
