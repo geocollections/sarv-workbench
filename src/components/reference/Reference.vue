@@ -255,6 +255,7 @@
                     @click="checkDoi"
                     class="text-none"
                     :color="bodyActiveColor"
+                    dark
                   >
                     {{ $t("reference.checkDoi") }}
                   </v-btn>
