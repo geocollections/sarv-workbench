@@ -1,5 +1,11 @@
 <template>
   <div class="editor">
+    <label
+      class="v-label mb-0 mx-2"
+      style="font-size: 14px;"
+      v-if="$attrs.label"
+      >{{ $attrs.label }}</label
+    >
     <ckeditor v-model="editorData" :config="editorConfig"></ckeditor>
   </div>
 </template>

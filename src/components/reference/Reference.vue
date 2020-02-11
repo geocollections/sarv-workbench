@@ -322,7 +322,7 @@
           <!-- ABSTRACT and AUTHOR KEYWORDS -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="reference.abstract" />
+              <editor :data.sync="reference.abstract" :label="$t('reference.abstract')" />
               <!--              <textarea-wrapper-->
               <!--                v-model="reference.abstract"-->
               <!--                :color="bodyActiveColor"-->

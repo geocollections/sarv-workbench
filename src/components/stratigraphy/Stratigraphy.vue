@@ -439,32 +439,28 @@
           <!-- DESCRIPTION -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <label class="mb-0 px-2">{{ $t("common.description") }}</label>
-              <editor :data.sync="stratigraphy.description" />
+              <editor :data.sync="stratigraphy.description" :label="$t('common.description')" />
             </v-col>
           </v-row>
 
           <!-- DESCRIPTION_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <label class="mb-0 px-2">{{ $t("common.description_en") }}</label>
-              <editor :data.sync="stratigraphy.description_en" />
+              <editor :data.sync="stratigraphy.description_en" :label="$t('common.description_en')" />
             </v-col>
           </v-row>
 
           <!-- DEFINITION -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <label class="mb-0 px-2">{{ $t("stratigraphy.definition") }}</label>
-              <editor :data.sync="stratigraphy.definition" />
+              <editor :data.sync="stratigraphy.definition" :label="$t('stratigraphy.definition')" />
             </v-col>
           </v-row>
 
           <!-- DEFINITION_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <label class="mb-0 px-2">{{ $t("stratigraphy.definition_en") }}</label>
-              <editor :data.sync="stratigraphy.definition_en" />
+              <editor :data.sync="stratigraphy.definition_en" :label="$t('stratigraphy.definition')" />
             </v-col>
           </v-row>
 

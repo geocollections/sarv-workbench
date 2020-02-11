@@ -134,7 +134,7 @@
           <!-- DESCRIPTION -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="area.description" />
+              <editor :data.sync="area.description" :label="$t('common.description')" />
             </v-col>
           </v-row>
 

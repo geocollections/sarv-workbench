@@ -111,7 +111,7 @@
           <!-- ABSTRACT -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="library.abstract" />
+              <editor :data.sync="library.abstract" :label="$t('library.abstract')" />
 
               <textarea-wrapper
                 v-if="false"
@@ -125,7 +125,7 @@
           <!-- ABSTRACT_EN -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <editor :data.sync="library.abstract_en" />
+              <editor :data.sync="library.abstract_en" :label="$t('library.abstract_en')" />
 
               <textarea-wrapper
                 v-if="false"
