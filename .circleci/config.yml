@@ -16,7 +16,7 @@ jobs:
             - ./node_modules
             - ./package-lock.json
       - run:
-          name: Install packages
+          name: Installin packages
           command: npm install
       - save_cache:
           key: v1.12-npm-deps-{{ checksum "package-lock.json" }}
@@ -24,7 +24,7 @@ jobs:
             - ./node_modules
             - ./package-lock.json
       - run:
-          name: Build production code
+          name: Building code
           command: npm run build
       - persist_to_workspace:
           root: .
@@ -52,7 +52,10 @@ jobs:
       - attach_workspace:
           at: ~/geocollections/sarv-edit
       - run:
-          name: Copy built files to development
+          name: SSH connection
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1}
+      - run:
+          name: Copy built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
 
 
