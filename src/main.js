@@ -7,11 +7,8 @@ import VueI18n from "vue-i18n"; // Translations
 import VueCookies from "vue-cookies";
 import { createStore } from "./store";
 import VueScrollTo from "vue-scrollto";
-import CKEditor from "@ckeditor/ckeditor5-vue";
 import animated from "animate.css";
 import vuetify from "./plugins/vuetify";
-
-Vue.use(CKEditor);
 
 // Bootstrap css
 import "bootstrap/dist/css/bootstrap.css";
