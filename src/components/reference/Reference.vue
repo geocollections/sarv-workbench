@@ -324,6 +324,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
+                v-if="typeof reference.abstract !== 'undefined'"
                 v-model="reference.abstract"
                 :label="$t('reference.abstract')"
               />

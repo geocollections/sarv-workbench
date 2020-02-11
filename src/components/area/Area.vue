@@ -135,6 +135,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
+                v-if="typeof area.description !== 'undefined'"
                 v-model="area.description"
                 :label="$t('common.description')"
               />

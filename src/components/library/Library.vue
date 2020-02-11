@@ -112,6 +112,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
+                v-if="typeof library.abstract !== 'undefined'"
                 v-model="library.abstract"
                 :label="$t('library.abstract')"
               />
@@ -129,6 +130,7 @@
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
               <editor
+                v-if="typeof library.abstract_en !== 'undefined'"
                 v-model="library.abstract_en"
                 :label="$t('library.abstract_en')"
               />

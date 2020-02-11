@@ -7,9 +7,9 @@
       >{{ $attrs.label }}</label
     >
     <ckeditor
-      v-bind="$attrs"
-      v-on="$listeners"
+      :value="!!$attrs.value ? $attrs.value : ''"
       :config="editorConfig"
+      v-on="$listeners"
     ></ckeditor>
   </div>
 </template>
