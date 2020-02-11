@@ -41,7 +41,7 @@ jobs:
           name: Directory update
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
       - run:
-          name: Copy built files to development
+          name: Copying built files to development
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit-dev
   deploy_to_production:
     docker:
@@ -52,10 +52,10 @@ jobs:
       - attach_workspace:
           at: ~/geocollections/sarv-edit
       - run:
-          name: Directory update
-          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit'
+          name: Removing current production files
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -r css/ fonts/ img/ js/ favicon.ico index.html'
       - run:
-          name: Copy built files to production
+          name: Copying built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
 
 
