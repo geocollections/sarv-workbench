@@ -1447,12 +1447,12 @@ export default {
         }
       });
 
-      if (this.isNotEmpty(this.databaseId))
-        uploadableObject.database = this.databaseId;
-
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
+        if (this.isNotEmpty(this.databaseId))
+          uploadableObject.database = this.databaseId;
+
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name === "attachment_link") {
