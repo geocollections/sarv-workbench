@@ -351,7 +351,7 @@ export async function fetchReferences(data) {
   }
   if (data.keywords !== null && data.keywords.trim().length > 0) {
     // #247 changing keywords search so that reference_keyword table is used
-    //searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference_reference__keywords;lookuptype:icontains&distinct=true'
+    //searchFields += '&multi_search=value:' + data.keywords + ';fields:tags,libraryreference__keywords;lookuptype:icontains&distinct=true'
 
     let listOfReferenceIDs = await fetchReferenceIDsUsingReferenceKeyword(
       data
@@ -415,7 +415,7 @@ export async function fetchReferences(data) {
     searchFields +=
       "&multi_search=value:" +
       data.libraryAuthorIdTitle +
-      ";fields:libraryreference_reference__library__author__id,libraryreference_reference__library__author__agent,libraryreference_reference__library__author_txt,libraryreference_reference__library__id,libraryreference_reference__library__title,libraryreference_reference__library__title_en;lookuptype:icontains&distinct=true";
+      ";fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains&distinct=true";
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
     searchFields += `&user_added__icontains=${data.userAdded}`;
@@ -483,7 +483,7 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
     searchFields +=
       "&multi_search=value:" +
       data.libraryAuthorIdTitle +
-      ";fields:reference__libraryreference_reference__library__author__id,reference__libraryreference_reference__library__author__agent,reference__libraryreference_reference__library__author_txt,reference__libraryreference_reference__library__id,reference__libraryreference_reference__library__title,reference__libraryreference_reference__library__title_en;lookuptype:icontains&distinct=true";
+      ";fields:reference__libraryreference__library__author__id,reference__libraryreference__library__author__agent,reference__libraryreference__library__author_txt,reference__libraryreference__library__id,reference__libraryreference__library__title,reference__libraryreference__library__title_en;lookuptype:icontains&distinct=true";
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
     searchFields += `&reference__user_added__icontains=${data.userAdded}`;
@@ -887,7 +887,7 @@ export function fetchLibraries(data) {
   }
 
   if (data.reference !== null && data.reference.trim().length > 0) {
-    searchFields += `&libraryreference_reference__reference__reference__icontains=${data.reference}&distinct=true`;
+    searchFields += `&libraryreference__reference__reference__icontains=${data.reference}&distinct=true`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -939,7 +939,7 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.reference !== null &&
     data.reference.trim().length > 0
   ) {
-    searchFields += `&library__libraryreference_reference__reference__reference__icontains=${data.reference}&distinct=true`;
+    searchFields += `&library__libraryreference__reference__reference__icontains=${data.reference}&distinct=true`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -3006,6 +3006,10 @@ export function fetchGroups() {
 
 export function fetchUsers() {
   return get(`user/?format=json`);
+}
+
+export function fetchObjectPermissions(id, table) {
+  return get(`${table}/${id}/getpermissions?format=json`);
 }
 
 export function fetchObjectGroupPermissions(id, table, permissionName) {

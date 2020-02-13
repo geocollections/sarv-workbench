@@ -25,7 +25,7 @@
         <v-btn
           v-if="$vuetify.breakpoint.smAndDown"
           icon
-          exct
+          exact
           :to="{ path: '/dashboard' }"
         >
           <v-icon>fas fa-home</v-icon>

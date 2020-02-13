@@ -181,6 +181,7 @@ import AutocompleteWrapper from "./inputs/AutocompleteWrapper";
 import {
   fetchGroups,
   fetchObjectGroupPermissions,
+  fetchObjectPermissions,
   fetchObjectUserPermissions,
   fetchUsers,
   postRequest
@@ -192,10 +193,12 @@ export default {
   components: { AutocompleteWrapper },
   props: {
     table: {
-      type: String
+      type: String,
+      required: true
     },
     objectData: {
-      type: Object
+      type: Object,
+      required: true
     },
     bodyColor: {
       type: String,
@@ -231,8 +234,7 @@ export default {
     objectData: {
       handler: function(newVal) {
         if (newVal && newVal.id) {
-          this.getObjectGroupPerms(newVal.id, this.table);
-          this.getObjectUserPerms(newVal.id, this.table);
+          this.getObjectPerms();
 
           this.getAutocompletes();
         }
@@ -242,6 +244,60 @@ export default {
   },
 
   methods: {
+    getObjectPerms() {
+      if (this.objectData.id && this.table) {
+        fetchObjectPermissions(this.objectData.id, this.table).then(
+          response => {
+            if (response.status === 200) {
+              if (
+                typeof response.data.user !== "undefined" &&
+                response.data.user !== null &&
+                response.data.user.length > 0
+              ) {
+                this.assignPerms(response.data.user, "user");
+              }
+
+              if (
+                typeof response.data.group !== "undefined" &&
+                response.data.group !== null &&
+                response.data.group.length > 0
+              ) {
+                this.assignPerms(response.data.group, "group");
+              }
+            }
+          }
+        );
+      }
+    },
+
+    assignPerms(arrayOfPerms, identifier) {
+      if (arrayOfPerms && arrayOfPerms.length > 0) {
+        arrayOfPerms.forEach(perm => {
+          let object = {};
+
+          if (identifier === "user") {
+            object.id = perm.user_id;
+            object.username = perm.user__username;
+
+            if (perm.permission__codename.includes("change")) {
+              this.object_permissions.change_user.push(object);
+            } else {
+              this.object_permissions.view_user.push(object);
+            }
+          } else {
+            object.id = perm.group_id;
+            object.name = perm.group__name;
+
+            if (perm.permission__codename.includes("change")) {
+              this.object_permissions.change_group.push(object);
+            } else {
+              this.object_permissions.view_group.push(object);
+            }
+          }
+        });
+      }
+    },
+
     updatePermissions() {
       let perms_data = this.buildPermissionData();
 
@@ -293,82 +349,6 @@ export default {
       });
 
       return permission_data;
-    },
-
-    getObjectGroupPerms(id, table) {
-      if (id && table) {
-        if (table.includes("_")) table = table.replace("_", "");
-
-        fetchObjectGroupPermissions(id, table, `view_${table}`).then(
-          response => {
-            let handledResponse = this.handleResponse(response);
-            if (handledResponse && handledResponse.length > 0) {
-              this.object_permissions.view_group = handledResponse.map(
-                entity => {
-                  return {
-                    id: entity.group_id,
-                    name: entity.group__name
-                  };
-                }
-              );
-            }
-          }
-        );
-
-        fetchObjectGroupPermissions(id, table, `change_${table}`).then(
-          response => {
-            let handledResponse = this.handleResponse(response);
-            if (handledResponse && handledResponse.length > 0) {
-              this.object_permissions.change_group = handledResponse.map(
-                entity => {
-                  return {
-                    id: entity.group_id,
-                    name: entity.group__name
-                  };
-                }
-              );
-            }
-          }
-        );
-      }
-    },
-
-    getObjectUserPerms(id, table) {
-      if (id && table) {
-        if (table.includes("_")) table = table.replace("_", "");
-
-        fetchObjectUserPermissions(id, table, `view_${table}`).then(
-          response => {
-            let handledResponse = this.handleResponse(response);
-            if (handledResponse && handledResponse.length > 0) {
-              this.object_permissions.view_user = handledResponse.map(
-                entity => {
-                  return {
-                    id: entity.user_id,
-                    username: entity.user__username
-                  };
-                }
-              );
-            }
-          }
-        );
-
-        fetchObjectUserPermissions(id, table, `change_${table}`).then(
-          response => {
-            let handledResponse = this.handleResponse(response);
-            if (handledResponse && handledResponse.length > 0) {
-              this.object_permissions.change_user = handledResponse.map(
-                entity => {
-                  return {
-                    id: entity.user_id,
-                    username: entity.user__username
-                  };
-                }
-              );
-            }
-          }
-        );
-      }
     },
 
     getAutocompletes() {
