@@ -694,7 +694,6 @@
                           selectedRelatedTable
                       )
                     "
-                    :no-cache="true"
                     is-link
                     is-searchable
                     :route-object="selectedRelatedTable"
@@ -2476,7 +2475,6 @@
                           selectedRelatedTable
                       )
                     "
-                    :no-cache="true"
                     is-link
                     is-searchable
                     :route-object="selectedRelatedTable"

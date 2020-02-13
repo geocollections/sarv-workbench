@@ -194,34 +194,34 @@ export default {
 
 <style scoped>
 .input-class >>> .v-text-field--outlined {
-  background-color: unset;
+  /*background-color: unset;*/
 }
 
 /* Adding margin right to chip content because delete button has absolute position and otherwise it would overlap */
 .input-class >>> .v-chip__content {
-  margin-right: 18px; /* delete icon width is 18px */
+  /*margin-right: 18px; !* delete icon width is 18px *!*/
 }
 
 /* Making delete button in chip absolute because overlapping issues */
 .input-class >>> .v-chip__content > i {
-  background: white;
-  position: absolute;
-  right: 4px;
-  padding: 12px; /* Adding padding because now when user click near the delete then it deletes */
+  /*background: white;*/
+  /*position: absolute;*/
+  /*right: 4px;*/
+  /*padding: 12px; !* Adding padding because now when user click near the delete then it deletes *!*/
 }
 
 /* Hover opacity fix, otherwise it would be hard to see  */
 .input-class >>> .v-chip__content > i:hover {
-  opacity: 1;
+  /*opacity: 1;*/
 }
 
 /* Adding margin auto to inner icon (close-icon) */
 .input-class >>> .v-input__append-inner {
-  margin: auto !important;
+  /*margin: auto !important;*/
 }
 
 /* Small size to clear icon */
 .input-class >>> .v-input__append-inner > .v-input__icon--clear > .v-icon {
-  font-size: 20px;
+  /*font-size: 20px;*/
 }
 </style>
