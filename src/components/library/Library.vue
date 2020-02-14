@@ -603,7 +603,7 @@ export default {
       if (!this.$route.meta.isEdit) {
         uploadableObject.related_data = {};
 
-        if (this.isNotEmpty(this.relatedData.agent))
+        if (this.isNotEmpty(this.relatedData.library_agent))
           uploadableObject.related_data.library_agent = this.relatedData.library_agent;
 
         this.relatedTabs.forEach(tab => {
