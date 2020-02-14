@@ -44,13 +44,13 @@
 
       <transition>
         <div v-show="block.requiredFields" class="pa-1">
-          <!-- REFERENCE and YEAR -->
+          <!-- AUTHOR, YEAR and REFERENCE -->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="pa-1">
+            <v-col cols="7" class="pa-1">
               <input-wrapper
-                v-model="reference.reference"
+                v-model="reference.author"
                 :color="bodyActiveColor"
-                :label="$t('reference.reference')"
+                :label="$t('reference.author')"
                 use-state
               />
             </v-col>
@@ -65,12 +65,11 @@
               />
             </v-col>
 
-            <!-- AUTHOR -->
-            <v-col cols="7" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
-                v-model="reference.author"
+                v-model="reference.reference"
                 :color="bodyActiveColor"
-                :label="$t('reference.author')"
+                :label="$t('reference.reference')"
                 use-state
               />
             </v-col>
