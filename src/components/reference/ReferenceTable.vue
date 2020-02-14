@@ -55,13 +55,13 @@
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"
-        :href="getGeoDetailUrl({ object: 'reference', id: item.id })"
-        :title="$t('editReference.viewMessage')"
+        :href="getGeoloogiaUrl(item.id)"
+        :title="$t('editReference.viewMessageGeology')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
         icon
       >
-        <v-icon small>fas fa-external-link-alt</v-icon>
+        <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
 
@@ -194,8 +194,8 @@ export default {
     }
   },
   methods: {
-    getGeoDetailUrl(params) {
-      return `https://geocollections.info/${params.object}/${params.id}`;
+    getGeoloogiaUrl(id) {
+      return `https://geoloogia.info/reference/${id}`;
     },
 
     getDoiUrl(doi) {

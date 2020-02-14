@@ -55,7 +55,7 @@
       <v-btn
         v-if="!item.is_private"
         :href="getGeoDetailUrl({ object: 'locality', id: item.id })"
-        :title="$t('editAnalysis.viewMessage')"
+        :title="$t('editLocality.viewMessage')"
         :color="bodyActiveColor"
         target="GeocollectionsWindow"
         icon

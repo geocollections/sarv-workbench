@@ -425,6 +425,7 @@
     "heading": "Reference ID",
     "editMessage": "Edit reference",
     "viewMessage": "View reference in geocollections portal",
+    "viewMessageGeology": "View reference in geoloogia portal",
     "author": "Author",
     "title": "Pealkiri",
     "bookJournal": "Book or journal",

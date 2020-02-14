@@ -7,7 +7,7 @@
         <a
           v-if="reference && !data.is_private"
           class="no-underline"
-          :href="'http://geocollections.info/reference/' + this.data.id"
+          :href="'http://geoloogia.info/reference/' + this.data.id"
           target="_blank"
         >
           <b>{{ $t("edit.referenceLink") }}</b> &nbsp;<i
