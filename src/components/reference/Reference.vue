@@ -62,6 +62,7 @@
                 :label="$t('common.year')"
                 use-state
                 type="number"
+                @change="buildReferenceField"
               />
             </v-col>
 
@@ -1516,6 +1517,37 @@ export default {
           toastError({ text: this.$t("reference.doiCheckUnsuccessful") });
         }
       );
+    },
+
+    buildReferenceField(year) {
+      if (
+        !this.$route.meta.isEdit &&
+        year &&
+        year.length > 2 &&
+        this.reference.author &&
+        this.reference.author.length > 0
+      ) {
+        let authorForReferenceField = "";
+        let countOfCommas = this.reference.author.split(",").length - 1;
+
+        if (countOfCommas === 1) {
+          // Surname, F.,
+          authorForReferenceField = this.reference.author + ",";
+        } else if (countOfCommas === 3) {
+          let authorList = this.reference.author.split(".,");
+          // Surname, F. & Surname,
+          authorForReferenceField =
+            authorList[0] + " &" + authorList[1].split(",")[0] + ",";
+        } else if (countOfCommas > 4) {
+          // Surname et al.,
+          authorForReferenceField =
+            this.reference.author.split(",")[0] + " et al.,";
+        }
+
+        if (authorForReferenceField.length > 0) {
+          this.reference.reference = `${authorForReferenceField} ${year}`;
+        }
+      }
     },
 
     updateFieldsUsingDoi(data) {
