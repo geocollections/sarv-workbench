@@ -1535,9 +1535,12 @@ export default {
           authorForReferenceField = this.reference.author + ",";
         } else if (countOfCommas === 3) {
           let authorList = this.reference.author.split(".,");
-          // Surname, F. & Surname,
+          // Surname & Surname,
           authorForReferenceField =
-            authorList[0] + " &" + authorList[1].split(",")[0] + ",";
+            authorList[0].split(",")[0] +
+            " &" +
+            authorList[1].split(",")[0] +
+            ",";
         } else if (countOfCommas > 4) {
           // Surname et al.,
           authorForReferenceField =
