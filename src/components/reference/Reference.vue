@@ -113,7 +113,7 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
-          <!-- TYPE, LANGUAGE -->
+          <!-- TYPE, LANGUAGE and PAGES -->
           <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
@@ -184,6 +184,36 @@
                 v-model="reference.number"
                 :color="bodyActiveColor"
                 :label="$t('reference.number')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- AUTHOR_ORIGINAL, BOOK_TRANSLATED and BOOK_TRANSLATED_LANGUAGE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="reference.author_original"
+                :color="bodyActiveColor"
+                :label="$t('reference.author_original')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="reference.book_translated"
+                :color="bodyActiveColor"
+                :label="$t('reference.book_translated')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.book_translated_language"
+                :color="bodyActiveColor"
+                :items="autocomplete.languages"
+                :loading="autocomplete.loaders.languages"
+                :item-text="commonLabel"
+                :label="$t('reference.book_translated_language')"
               />
             </v-col>
           </v-row>
@@ -1103,7 +1133,10 @@ export default {
           "is_estonian_author",
           "language",
           "title_translated_language",
-          "licence"
+          "licence",
+          "author_original",
+          "book_translated",
+          "book_translated_language"
         ],
         autocomplete: {
           loaders: {
