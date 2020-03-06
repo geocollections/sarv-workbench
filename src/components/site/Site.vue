@@ -487,7 +487,7 @@
                 <sample-table
                   ref="table"
                   :response="relatedData.samples"
-                  :search-parameters="relatedData.searchParameters.sample"
+                  :search-parameters="relatedData.searchParameters.samples"
                   v-if="relatedData.samples.count > 0"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
@@ -499,7 +499,9 @@
           <site-locality-description-table
             v-show="activeTab === 'locality_description'"
             :response="relatedData.locality_description"
-            :search-parameters="relatedData.searchParameters.v"
+            :search-parameters="
+              relatedData.searchParameters.locality_description
+            "
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -864,7 +866,7 @@ export default {
             paginateBy: 25,
             orderBy: "-id"
           },
-          sample: {
+          samples: {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
@@ -1013,7 +1015,7 @@ export default {
         );
       } else if (object === "samples") {
         query = fetchLinkedSamples(
-          this.relatedData.searchParameters.sample,
+          this.relatedData.searchParameters.samples,
           this.$route.params.id
         );
       } else if (object === "locality_description") {

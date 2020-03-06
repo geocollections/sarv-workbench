@@ -38,53 +38,6 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.locality="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/locality/' + item.locality }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality__locality,
-                en: item.locality__locality_en
-              }"
-            ></span>
-          </router-link>
-          <router-link
-            v-else-if="item.locality"
-            :to="{ path: '/locality/' + item.locality.id }"
-            :title="$t('editLocality.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            <span
-              v-translate="{
-                et: item.locality.locality,
-                en: item.locality.locality_en
-              }"
-            ></span>
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/locality/' + item.locality }"
-          :title="$t('editLocality.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          <span
-            v-translate="{
-              et: item.locality__locality,
-              en: item.locality__locality_en
-            }"
-          ></span>
-        </router-link>
-      </template>
-
       <template v-slot:item.rock="{ item }">
         <div v-if="isUsedAsRelatedData">
           <span
@@ -157,77 +110,6 @@
           ></span>
         </router-link>
       </template>
-
-      <template v-slot:item.reference="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/reference/' + item.reference }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference__reference }}
-          </router-link>
-          <router-link
-            v-else-if="item.reference"
-            :to="{ path: '/reference/' + item.reference.id }"
-            :title="$t('editReference.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.reference.reference }}
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/reference/' + item.reference }"
-          :title="$t('editReference.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.reference__reference }}
-        </router-link>
-      </template>
-
-      <template v-slot:item.agent="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/agent/' + item.agent }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent__agent }}
-          </router-link>
-          <router-link
-            v-else-if="item.agent"
-            :to="{ path: '/agent/' + item.agent.id }"
-            :title="$t('editAgent.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.agent.agent }}
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/agent/' + item.agent }"
-          :title="$t('editAgent.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.agent__agent }}
-        </router-link>
-      </template>
-
-      <template v-slot:item.is_preferred="{ item }">
-        <v-icon v-if="item.is_preferred" color="green" small
-          >fas fa-check</v-icon
-        >
-        <v-icon v-else color="red" small>fas fa-times</v-icon>
-      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -248,21 +130,22 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.locality"
+                  <input-wrapper
+                    v-model="item.depth_top"
                     :color="bodyActiveColor"
-                    :items="autocomplete.locality"
-                    :loading="autocomplete.loaders.locality"
-                    :item-text="localityLabel"
-                    :label="$t('site.locality')"
-                    use-state
-                    is-link
-                    route-object="locality"
-                    is-searchable
-                    v-on:search:items="autocompleteLocalitySearch"
+                    :label="$t('site.depth_top')"
+                    type="number"
                   />
                 </v-col>
 
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_top_interval"
+                    :color="bodyActiveColor"
+                    :label="$t('site.depth_top_interval')"
+                    type="number"
+                  />
+                </v-col>
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
                     v-model="item.depth_base"
@@ -274,9 +157,9 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.depth_top"
+                    v-model="item.depth_base_interval"
                     :color="bodyActiveColor"
-                    :label="$t('site.depth_top')"
+                    :label="$t('site.depth_base_interval')"
                     type="number"
                   />
                 </v-col>
@@ -318,17 +201,34 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.reference"
+                  <input-wrapper
+                    v-model="item.stratigraphy_free"
                     :color="bodyActiveColor"
-                    :items="autocomplete.reference"
-                    :loading="autocomplete.loaders.reference"
-                    item-text="reference"
-                    :label="$t('common.reference')"
-                    is-link
-                    route-object="reference"
-                    is-searchable
-                    v-on:search:items="autocompleteReferenceSearch"
+                    :label="$t('site.stratigraphy_free')"
+                  />
+                </v-col>
+
+                <v-col cols="12" class="pa-1">
+                  <textarea-wrapper
+                    v-model="item.description"
+                    :color="bodyActiveColor"
+                    :label="$t('common.description')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.thickness"
+                    :color="bodyActiveColor"
+                    :label="$t('site.thickness')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.zero_level"
+                    :color="bodyActiveColor"
+                    :label="$t('site.zero_level')"
                   />
                 </v-col>
 
@@ -347,11 +247,26 @@
                   />
                 </v-col>
 
-                <v-col cols="12" class="pa-1">
-                  <textarea-wrapper
-                    v-model="item.description"
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.reference"
                     :color="bodyActiveColor"
-                    :label="$t('common.description')"
+                    :items="autocomplete.reference"
+                    :loading="autocomplete.loaders.reference"
+                    item-text="reference"
+                    :label="$t('common.reference')"
+                    is-link
+                    route-object="reference"
+                    is-searchable
+                    v-on:search:items="autocompleteReferenceSearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.author_free"
+                    :color="bodyActiveColor"
+                    :label="$t('site.author_free')"
                   />
                 </v-col>
 
@@ -363,7 +278,7 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
@@ -379,6 +294,15 @@
                     @change="item.is_preferred = !item.is_preferred"
                   />
                 </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <checkbox-wrapper
+                    v-model="item.is_private"
+                    :color="bodyActiveColor"
+                    :label="$t('common.is_private')"
+                    @change="item.is_private = !item.is_private"
+                  />
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -388,13 +312,9 @@
             <v-btn color="red" text @click="cancel">{{
               $t("buttons.cancel")
             }}</v-btn>
-            <v-btn
-              :disabled="!isItemValid"
-              color="green"
-              text
-              @click="addItem"
-              >{{ isNewItem ? $t("buttons.add") : $t("buttons.edit") }}</v-btn
-            >
+            <v-btn color="green" text @click="addItem">{{
+              isNewItem ? $t("buttons.add") : $t("buttons.edit")
+            }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -459,19 +379,19 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "common.id", value: "id" },
-      { text: "site.locality", value: "locality" },
+      // { text: "common.id", value: "id" },
+      // { text: "site.locality", value: "locality" },
       { text: "site.depth_base", value: "depth_base" },
       { text: "site.depth_top", value: "depth_top" },
       { text: "site.rock", value: "rock" },
-      { text: "site.rock_name", value: "rock_name" },
+      // { text: "site.rock_name", value: "rock_name" },
       { text: "common.stratigraphy", value: "stratigraphy" },
-      { text: "common.reference", value: "reference" },
-      { text: "common.author", value: "agent" },
+      // { text: "common.reference", value: "reference" },
+      // { text: "common.author", value: "agent" },
       { text: "common.description", value: "description" },
-      { text: "common.year", value: "year" },
-      { text: "common.remarks", value: "remarks" },
-      { text: "common.is_preferred", value: "is_preferred" },
+      // { text: "common.year", value: "year" },
+      // { text: "common.remarks", value: "remarks" },
+      // { text: "common.is_preferred", value: "is_preferred" },
       {
         text: "common.actions",
         value: "action",
@@ -481,28 +401,32 @@ export default {
     ],
     dialog: false,
     item: {
-      locality: null,
-      depth_base: "",
       depth_top: "",
+      depth_top_interval: "",
+      depth_base: "",
+      depth_base_interval: "",
       rock: null,
       rock_name: "",
       stratigraphy: null,
-      reference: null,
-      agent: null,
+      stratigraphy_free: "",
       description: "",
-      year: "",
+      thickness: "",
+      zero_level: "",
+      agent: {},
+      reference: null,
+      author_free: "",
+      year: new Date().getFullYear(),
       remarks: "",
-      is_preferred: false
+      is_preferred: false,
+      is_private: false
     },
     isNewItem: true,
     autocomplete: {
-      locality: [],
       rock: [],
       stratigraphy: [],
       reference: [],
       agent: [],
       loaders: {
-        locality: false,
         rock: false,
         stratigraphy: false,
         reference: false,
@@ -519,12 +443,24 @@ export default {
           text: this.$t(header.text)
         };
       });
-    },
+    }
+  },
 
-    isItemValid() {
-      return (
-        typeof this.item.locality !== "undefined" && this.item.locality !== null
-      );
+  watch: {
+    currentUser: {
+      handler(newVal) {
+        if (newVal) {
+          this.item.agent = {
+            id: newVal.id,
+            agent: newVal.agent,
+            forename: newVal.forename,
+            surename: newVal.surename
+          };
+          this.autocomplete.agent.push(this.item.agent);
+        }
+      },
+      immediate: true,
+      deep: true
     }
   },
 
@@ -533,18 +469,24 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        locality: null,
-        depth_base: "",
         depth_top: "",
+        depth_top_interval: "",
+        depth_base: "",
+        depth_base_interval: "",
         rock: null,
         rock_name: "",
         stratigraphy: null,
-        reference: null,
-        agent: null,
+        stratigraphy_free: "",
         description: "",
-        year: "",
+        thickness: "",
+        zero_level: "",
+        agent: null,
+        reference: null,
+        author_free: "",
+        year: new Date().getFullYear(),
         remarks: "",
-        is_preferred: false
+        is_preferred: false,
+        is_private: false
       };
     },
 
@@ -573,18 +515,6 @@ export default {
 
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
-
-      if (typeof item.locality !== "object" && item.locality !== null) {
-        this.item.locality = {
-          id: item.locality,
-          locality: item.locality__locality,
-          locality_en: item.locality__locality_en
-        };
-        this.autocomplete.locality.push(this.item.locality);
-      } else if (item.locality !== null) {
-        this.item.locality = item.locality;
-        this.autocomplete.locality.push(this.item.locality);
-      }
 
       if (typeof item.rock !== "object" && item.rock !== null) {
         this.item.rock = {
@@ -632,13 +562,20 @@ export default {
         this.autocomplete.agent.push(this.item.agent);
       }
 
-      this.item.depth_base = item.depth_base;
       this.item.depth_top = item.depth_top;
+      this.item.depth_top_interval = item.depth_top_interval;
+      this.item.depth_base = item.depth_base;
+      this.item.depth_base_interval = item.depth_base_interval;
       this.item.rock_name = item.rock_name;
+      this.item.stratigraphy_free = item.stratigraphy_free;
       this.item.description = item.description;
+      this.item.thickness = item.thickness;
+      this.item.zero_level = item.zero_level;
+      this.item.author_free = item.author_free;
       this.item.year = item.year;
       this.item.remarks = item.remarks;
       this.item.is_preferred = item.is_preferred;
+      this.item.is_private = item.is_private;
 
       this.dialog = true;
     },

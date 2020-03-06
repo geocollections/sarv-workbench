@@ -195,7 +195,7 @@
     "doi_date": "Doi kuupäev",
     "doi_geolocation": "Doi lokaliteet",
     "doi_related_identifier": "Doi identifikaator",
-    "locality_description": "Lokaliteedi kirjeldus",
+    "locality_description": "Geoloogiline kirjeldus",
     "rock_locality": "Kivimi/mineraali lokaliteet",
     "rock_element": "Mineraali keemiline koostis",
     "rock_property": "Kivimi/mineraali omadus",
@@ -793,10 +793,16 @@
     "coordx": "X koordinaat",
     "coordy": "Y koordinaat",
     "epsg": "EPSG",
+    "depth_top_interval": "Ülem. piir (m, intervall)",
+    "depth_base_interval": "Alum. piir (m, intervall)",
+    "stratigraphy_free": "Stratigraafia txt",
+    "thickness": "Paksus",
+    "zero_level": "Null tase",
+    "author_free": "Autor txt",
     "relatedTables": {
       "attachment_link": "Failid",
       "samples": "Seotud proovid",
-      "locality_description": "Lokaliteedi kirjeldused"
+      "locality_description": "Kirjeldus"
     }
   },
   "analysis": {

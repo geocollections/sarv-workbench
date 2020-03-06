@@ -195,7 +195,7 @@
     "doi_date": "Doi date",
     "doi_geolocation": "Doi geolocation",
     "doi_related_identifier": "Doi related identifier",
-    "locality_description": "Locality description",
+    "locality_description": "Geological description",
     "rock_locality": "Rock locality",
     "rock_element": "Rock element",
     "rock_property": "Rock property",
@@ -793,10 +793,16 @@
     "coordx": "X coordinate",
     "coordy": "Y coordinate",
     "epsg": "EPSG",
+    "depth_top_interval": "Depth top (m, interval)",
+    "depth_base_interval": "Depth base (m, interval)",
+    "stratigraphy_free": "Stratigraphy free",
+    "thickness": "Thickness",
+    "zero_level": "Zero level",
+    "author_free": "Author free",
     "relatedTables": {
       "attachment_link": "Files",
       "samples": "Related samples",
-      "locality_description": "Locality descriptions"
+      "locality_description": "Description"
     }
   },
   "analysis": {
