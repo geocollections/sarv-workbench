@@ -450,7 +450,7 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
     case "attachment3":
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
     case "taxon":
-      return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&fields=id,taxon`;
+      return `taxon/?multi_search=value:${value};fields:taxon;lookuptype:icontains&fields=id,taxon,hierarchy_string`;
     case "project":
     case "parent_project":
       return `project/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;

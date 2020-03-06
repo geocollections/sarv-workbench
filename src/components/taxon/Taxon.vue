@@ -95,6 +95,7 @@
                 route-object="taxon"
                 is-searchable
                 v-on:search:items="autocompleteTaxonParentSearch"
+                @input="updateHierarchyString"
               />
             </v-col>
 
@@ -1232,6 +1233,13 @@ export default {
     addExistingFiles(files) {
       this.relatedData.taxon_image.count = files.length;
       this.relatedData.taxon_image.results = files;
+    },
+
+    updateHierarchyString(parentTaxon) {
+      if (this.$route.meta.isEdit && parentTaxon) {
+        this.taxon.hierarchy_string =
+          parentTaxon.hierarchy_string + "-" + this.$route.params.id;
+      }
     }
   }
 };
