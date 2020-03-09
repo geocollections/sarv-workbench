@@ -159,7 +159,7 @@ const formManipulation = {
 
           if (object === "attachment" && this.files && this.files.length > 0) {
             for (let file in this.files) {
-              if (file === "10" && this.files.length >= 10) break;
+              if (file === "100" && this.files.length >= 100) break;
               else formData.append("file" + file, this.files[file]);
             }
           }
