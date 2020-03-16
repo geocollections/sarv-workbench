@@ -1173,6 +1173,7 @@
     "author_original": "Author (cyrillic)",
     "book_translated": "Book translated",
     "book_translated_language": "Book translated language",
+    "remarksPrivate": "Remarks (private)",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

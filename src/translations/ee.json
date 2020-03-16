@@ -1173,6 +1173,7 @@
     "author_original": "Autor (kirillitsas)",
     "book_translated": "Raamatu pealkiri (tõlgitud)",
     "book_translated_language": "Raamatu keel (tõlgitud)",
+    "remarksPrivate": "Lisainfo (privaatne)",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",

@@ -440,7 +440,7 @@
       </transition>
     </v-card>
 
-    <!-- REMARKS and REFERENCE KEYWORDS -->
+    <!-- REMARKS, REMARKS_PRIVATE and REFERENCE KEYWORDS -->
     <v-card
       class="mt-2"
       id="block-description"
@@ -518,6 +518,17 @@
                 v-model="reference.remarks"
                 :color="bodyActiveColor"
                 :label="$t('common.remarks')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- REMARKS_PRIVATE -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="reference.remarks_private"
+                :color="bodyActiveColor"
+                :label="$t('reference.remarksPrivate')"
               />
             </v-col>
           </v-row>
@@ -1123,6 +1134,7 @@ export default {
           "abstract",
           "author_keywords",
           "remarks",
+          "remarks_private",
           "location_txt",
           "book_editor",
           "figures",
