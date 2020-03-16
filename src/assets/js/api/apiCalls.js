@@ -2121,6 +2121,30 @@ export function fetchListKeywords() {
   return get(`keyword/?format=json`);
 }
 
+export function fetchKeywordRelation(keywordId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `keyword_relation/?keyword=${keywordId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+export function fetchKeywordRelationReverse(keywordId, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `keyword_relation/?related_keyword=${keywordId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+export function fetchKeywordRelationType() {
+  return get(`keyword_relation_type/?format=json`);
+}
+
 /*********************
  ***  KEYWORD END  ***
  *********************/

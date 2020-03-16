@@ -203,7 +203,8 @@
     "rock_reference": "Kivimi/mineraali kirjandusviide",
     "rock_tree": "Kivimi/mineraali klassifikatsioon",
     "rock_image": "Kivimi/mineraali pilt",
-    "rock_classification": "Alam"
+    "rock_classification": "Alam",
+    "keyword_relation": "Seos terminiga"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1295,8 +1296,14 @@
     "keyword": "Termin",
     "language": "Keel",
     "keyword_category": "Kategooria",
+    "keyword_relation_type": "Seotud termini tüüp",
+    "keyword_relation_type_reverse": "Seotud termini tüüp (reverse)",
     "related_keyword": "Seotud termin",
-    "is_primary": "Esmane"
+    "is_primary": "Esmane",
+    "information": "Infoks",
+    "relatedTables": {
+      "keyword_relation": "Seos terminiga"
+    }
   },
   "selectionSeries": {
     "user_added": "Kasutaja",

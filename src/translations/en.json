@@ -203,7 +203,8 @@
     "rock_reference": "Rock reference",
     "rock_tree": "Rock tree",
     "rock_image": "Rock image",
-    "rock_classification": "Subclass"
+    "rock_classification": "Subclass",
+    "keyword_relation": "Keyword relation"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1295,8 +1296,14 @@
     "keyword": "Term",
     "language": "Languge",
     "keyword_category": "Category",
+    "keyword_relation_type": "Keyword relation type",
+    "keyword_relation_type_reverse": "Keyword relation type (reverse)",
     "related_keyword": "Related term",
-    "is_primary": "Primary"
+    "is_primary": "Primary",
+    "information": "For information",
+    "relatedTables": {
+      "keyword_relation": "Keyword relation"
+    }
   },
   "selectionSeries": {
     "user_added": "User added",
