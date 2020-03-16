@@ -146,7 +146,7 @@
           />
 
           <keyword-relation-reverse-table
-            v-show="activeTab === 'keyword_relation' && $route.meta.isEdit"
+            v-show="activeTab === 'keyword_relation' && $route.meta.isEdit && relatedData.keyword_relation_reverse.count > 0"
             :response="relatedData.keyword_relation_reverse"
             :search-parameters="relatedData.searchParameters.keyword_relation_reverse"
             :body-color="bodyColor"
@@ -524,7 +524,6 @@ export default {
         term: null,
         language: null,
         keyword_category: null,
-        related_keyword: null,
         is_primary: null,
         page: 1,
         paginateBy: 10,

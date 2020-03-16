@@ -34,17 +34,6 @@
         }"
       ></span>
     </template>
-
-    <template v-slot:item.related_keyword__keyword="{ item }">
-      <router-link
-        :to="{ path: '/keyword/' + item.related_keyword }"
-        :title="$t('editKeyword.editMessage')"
-        class="sarv-link"
-        :class="`${bodyActiveColor}--text`"
-      >
-        {{ item.related_keyword__keyword }}
-      </router-link>
-    </template>
   </v-data-table>
 </template>
 
@@ -87,7 +76,6 @@ export default {
       { text: "keyword.keyword", value: "keyword" },
       { text: "keyword.language", value: "language__value" },
       { text: "keyword.keyword_category", value: "keyword_category__name" },
-      { text: "keyword.related_keyword", value: "related_keyword__keyword" },
       { text: "keyword.is_primary", value: "is_primary" }
     ],
     names: []

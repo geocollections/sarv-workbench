@@ -15,7 +15,7 @@
       :sort-by.sync="searchParameters.sortBy"
       :sort-desc.sync="searchParameters.sortDesc"
       :server-items-length="response.count"
-      mobile-breakpoint="0"
+      :mobile-breakpoint="0"
       :class="bodyColor.split('n-')[0] + 'n-5'"
     >
       <template v-slot:item.action="{ item }">

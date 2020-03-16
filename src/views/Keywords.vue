@@ -7,7 +7,7 @@
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
-      :col-size="4"
+      :col-size="3"
       v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
@@ -45,11 +45,6 @@ export default {
         {
           id: "keyword_category",
           title: "keyword.keyword_category",
-          type: "text"
-        },
-        {
-          id: "related_keyword",
-          title: "keyword.related_keyword",
           type: "text"
         }
       ],
@@ -89,7 +84,6 @@ export default {
         term: null,
         language: null,
         keyword_category: null,
-        related_keyword: null,
         is_primary: null,
         page: 1,
         paginateBy: 10,
