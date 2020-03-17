@@ -188,37 +188,7 @@
             </v-col>
           </v-row>
 
-          <!-- AUTHOR_ORIGINAL, BOOK_TRANSLATED and BOOK_TRANSLATED_LANGUAGE -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="reference.author_original"
-                :color="bodyActiveColor"
-                :label="$t('reference.author_original')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="reference.book_translated"
-                :color="bodyActiveColor"
-                :label="$t('reference.book_translated')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <autocomplete-wrapper
-                v-model="reference.book_translated_language"
-                :color="bodyActiveColor"
-                :items="autocomplete.languages"
-                :loading="autocomplete.loaders.languages"
-                :item-text="commonLabel"
-                :label="$t('reference.book_translated_language')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- BOOK and BOOK ORIGINAL -->
+          <!-- BOOK, BOOK_EDITOR, PUBLISHER and PUBLISHER_PLACE -->
           <v-row no-gutters>
             <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
@@ -358,14 +328,8 @@
                 v-model="reference.abstract"
                 :label="$t('reference.abstract')"
               />
-              <!--              <textarea-wrapper-->
-              <!--                v-model="reference.abstract"-->
-              <!--                :color="bodyActiveColor"-->
-              <!--                :label="$t('reference.abstract')"-->
-              <!--              />-->
             </v-col>
 
-            <!-- AUTHOR KEYWORDS -->
             <v-col cols="12" class="pa-1">
               <input-wrapper
                 v-model="reference.author_keywords"
@@ -375,9 +339,20 @@
             </v-col>
           </v-row>
 
-          <!-- TITLE ORIGINAL -->
+          <!-- AUTHOR_ORIGINAL -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="reference.author_original"
+                :color="bodyActiveColor"
+                :label="$t('reference.author_original')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- TITLE ORIGINAL, TITLE TRANSLATED and TITLE TRANSLATED LANGUAGE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
               <textarea-wrapper
                 v-model="reference.title_original"
                 :color="bodyActiveColor"
@@ -385,19 +360,15 @@
               />
             </v-col>
 
-            <!-- TITLE TRANSLATED -->
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <textarea-wrapper
                 v-model="reference.title_translated"
                 :color="bodyActiveColor"
                 :label="$t('reference.titleTranslated')"
               />
             </v-col>
-          </v-row>
 
-          <!-- TITLE TRANSLATED LANGUAGE -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
                 v-model="reference.title_translated_language"
                 :color="bodyActiveColor"
@@ -407,13 +378,34 @@
                 :label="$t('reference.titleTranslatedLanguage')"
               />
             </v-col>
+          </v-row>
 
-            <!-- BOOK ORIGINAL -->
-            <v-col cols="12" md="6" class="pa-1">
+          <!-- BOOK_ORIGINAL, BOOK_TRANSLATED and BOOK_TRANSLATED_LANGUAGE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="reference.book_original"
                 :color="bodyActiveColor"
                 :label="$t('reference.bookOriginal')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="reference.book_translated"
+                :color="bodyActiveColor"
+                :label="$t('reference.book_translated')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.book_translated_language"
+                :color="bodyActiveColor"
+                :items="autocomplete.languages"
+                :loading="autocomplete.loaders.languages"
+                :item-text="commonLabel"
+                :label="$t('reference.book_translated_language')"
               />
             </v-col>
           </v-row>
