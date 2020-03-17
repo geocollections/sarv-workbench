@@ -93,7 +93,11 @@
           <v-icon right>fas fa-pen-fancy</v-icon>
         </div>
         <v-spacer></v-spacer>
-        <v-btn icon @click="block.description = !block.description" :color="bodyActiveColor">
+        <v-btn
+          icon
+          @click="block.description = !block.description"
+          :color="bodyActiveColor"
+        >
           <v-icon>{{
             block.description ? "fas fa-angle-up" : "fas fa-angle-down"
           }}</v-icon>
@@ -226,17 +230,21 @@
       </v-tabs-items>
     </v-card>
 
-    <!-- IS PRIMARY -->
-    <v-row no-gutters class="mt-2">
-      <v-col>
-        <checkbox-wrapper
-          v-model="keyword.is_primary"
-          :color="bodyActiveColor"
-          :label="$t('keyword.is_primary')"
-          @change="keyword.is_primary = !keyword.is_primary"
-        />
-      </v-col>
-    </v-row>
+    <!-- IS_PRIMARY and IS_PRIVATE -->
+    <div class="d-flex flex-wrap mt-2">
+      <checkbox-wrapper
+        v-model="keyword.is_primary"
+        :color="bodyActiveColor"
+        :label="$t('keyword.is_primary')"
+        @change="keyword.is_primary = !keyword.is_primary"
+      />
+      <checkbox-wrapper
+        v-model="keyword.is_private"
+        :color="bodyActiveColor"
+        :label="$t('common.is_private')"
+        @change="keyword.is_private = !keyword.is_private"
+      />
+    </div>
   </div>
 </template>
 
@@ -382,7 +390,8 @@ export default {
           "keyword_category",
           "remarks",
           "description",
-          "is_primary"
+          "is_primary",
+          "is_private"
         ],
         autocomplete: {
           loaders: {
@@ -402,7 +411,7 @@ export default {
         searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
-          description: false,
+          description: false
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
