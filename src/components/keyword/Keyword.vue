@@ -128,6 +128,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
+      v-if="$route.meta.isEdit"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -494,18 +495,18 @@ export default {
       });
 
       // Adding related data only on add view
-      if (!this.$route.meta.isEdit) {
-        uploadableObject.related_data = {};
-        this.relatedTabs.forEach(tab => {
-          if (tab.name !== "keyword_relation_reverse") {
-            if (this.isNotEmpty(this.relatedData[tab.name])) {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
-            }
-          }
-        });
-      }
+      // if (!this.$route.meta.isEdit) {
+      //   uploadableObject.related_data = {};
+      //   this.relatedTabs.forEach(tab => {
+      //     if (tab.name !== "keyword_relation_reverse") {
+      //       if (this.isNotEmpty(this.relatedData[tab.name])) {
+      //         uploadableObject.related_data[tab.name] = this.relatedData[
+      //           tab.name
+      //         ].results;
+      //       }
+      //     }
+      //   });
+      // }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
