@@ -73,7 +73,35 @@
               />
             </v-col>
           </v-row>
+        </div>
+      </transition>
+    </v-card>
 
+    <!-- DESCRIPTION -->
+    <v-card
+      class="mt-2"
+      id="block-description"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.description = !block.description"
+        >
+          <span>{{ $t("common.description") }}</span>
+          <v-icon right>fas fa-pen-fancy</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn icon @click="block.description = !block.description" :color="bodyActiveColor">
+          <v-icon>{{
+            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.description" class="pa-1">
           <!-- REMARKS -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -146,9 +174,15 @@
           />
 
           <keyword-relation-reverse-table
-            v-show="activeTab === 'keyword_relation' && $route.meta.isEdit && relatedData.keyword_relation_reverse.count > 0"
+            v-show="
+              activeTab === 'keyword_relation' &&
+                $route.meta.isEdit &&
+                relatedData.keyword_relation_reverse.count > 0
+            "
             :response="relatedData.keyword_relation_reverse"
-            :search-parameters="relatedData.searchParameters.keyword_relation_reverse"
+            :search-parameters="
+              relatedData.searchParameters.keyword_relation_reverse
+            "
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
           />
@@ -366,7 +400,8 @@ export default {
         },
         searchParameters: this.setDefaultSearchParameters(),
         block: {
-          info: true
+          info: true,
+          description: false,
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -459,8 +494,8 @@ export default {
       });
 
       // Adding related data only on add view
-      uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
+        uploadableObject.related_data = {};
         this.relatedTabs.forEach(tab => {
           if (tab.name !== "keyword_relation_reverse") {
             if (this.isNotEmpty(this.relatedData[tab.name])) {
@@ -470,10 +505,6 @@ export default {
             }
           }
         });
-      } else {
-        if (this.relatedData.keyword_relation.results.length > 0) {
-          uploadableObject.related_data.keyword_relation = this.relatedData.keyword_relation.results;
-        } else uploadableObject.related_data.keyword_relation = null;
       }
 
       console.log("This object is sent in string format:");
