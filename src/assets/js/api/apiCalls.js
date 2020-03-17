@@ -82,8 +82,9 @@ async function get(child = "", customUrl) {
   }
 }
 
-async function post(child, data) {
+async function post(child, data, customUrl = "", returnErrorResponse = false) {
   let url = api.url + child;
+  if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
   let useLoginOptions = false;
   let loginOptions;
 
@@ -103,7 +104,9 @@ async function post(child, data) {
     if (useLoginOptions) return await axios(loginOptions);
     else return await axios.post(url, data);
   } catch (error) {
-    return error.request();
+    // console.log(error.response);
+    if (returnErrorResponse) return error.response;
+    else return error.request();
   }
 }
 
@@ -131,8 +134,8 @@ export function fetchIsLoggedIn() {
  ***  LOGIN END  ***
  *******************/
 
-export function postRequest(url, data) {
-  return post(url, data);
+export function postRequest(url, data, customUrl = "", returnErrorResponse = false) {
+  return post(url, data, customUrl, returnErrorResponse);
 }
 
 /*************************

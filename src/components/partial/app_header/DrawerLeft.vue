@@ -87,6 +87,18 @@
           </v-list-item>
         </v-list-group>
       </v-list-group>
+
+      <!-- TEST-DEV -->
+      <v-list-item
+        v-if="isDevUrl && isDevUser"
+        :to="{ path: '/test-dev' }"
+        :color="drawerActiveColor"
+      >
+        <v-list-item-title>Test POST interface</v-list-item-title>
+        <v-list-item-icon>
+          <v-icon>fas fa-code</v-icon>
+        </v-list-item-icon>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -452,6 +464,22 @@ export default {
         }
         return true;
       });
+    },
+
+    isDevUrl() {
+      return (
+        document.location.origin.includes("localhost") ||
+        document.location.origin.includes("edit2")
+      );
+    },
+
+    isDevUser() {
+      return (
+        this.currentUser &&
+        (this.currentUser.user === "enar" ||
+          this.currentUser.user === "olle" ||
+          this.currentUser.user === "urtson")
+      );
     },
 
     ...mapState(["activeProject", "activeSite", "activeSample"]),
