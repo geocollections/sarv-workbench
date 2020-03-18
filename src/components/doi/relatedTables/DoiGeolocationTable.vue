@@ -84,10 +84,24 @@
           />
         </router-link>
       </template>
+
+      <template v-slot:item.polygon="{ item }">
+        <div v-if="item.polygon">
+          <v-btn
+            icon
+            small
+            :color="bodyActiveColor"
+            @click.stop="openPolygonDialog(item.polygon, true)"
+            :title="$t('doi.viewPolygon')"
+          >
+            <v-icon small>far fa-map</v-icon>
+          </v-btn>
+        </div>
+      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
-      <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
+      <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000;">
         <template v-slot:activator="{ on }">
           <v-btn :color="bodyActiveColor" small dark v-on="on">{{
             $t("buttons.add_new")
@@ -109,7 +123,6 @@
                     :loading="autocomplete.loaders.locality"
                     :item-text="localityLabel"
                     :label="$t('doi.locality')"
-                    use-state
                     is-link
                     route-object="locality"
                     is-searchable
@@ -150,7 +163,24 @@
                     :color="bodyActiveColor"
                     :label="$t('doi.polygon')"
                     readonly
+                    clearable
                   />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <div class="d-flex flew-row flex-wrap">
+                    <v-btn
+                      text
+                      :color="bodyActiveColor"
+                      @click.stop="openPolygonDialog(item.polygon, false)"
+                    >
+                      {{
+                        item.polygon
+                          ? $t("doi.editPolygon")
+                          : $t("doi.addPolygon")
+                      }}
+                    </v-btn>
+                  </div>
                 </v-col>
               </v-row>
             </v-container>
@@ -171,6 +201,32 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog
+        v-model="polygonDialog"
+        max-width="500px"
+        style="z-index: 51000;"
+      >
+        <v-card>
+          <v-card-title class="headline">{{
+            $t("doi.polygonMap")
+          }}</v-card-title>
+
+          <PolygonMap
+            v-if="polygonDialog"
+            :map-state="polygonDialog"
+            :polygon="item.polygon"
+            :is-view-only="viewPolygon"
+          />
+
+          <v-card-actions>
+            <v-spacer />
+            <v-btn color="red" text @click="polygonDialog = false">{{
+              $t("buttons.close")
+            }}</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-toolbar>
   </div>
 </template>
@@ -180,11 +236,13 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import PolygonMap from "../../partial/PolygonMap";
 
 export default {
   name: "DoiGeolocationTable",
 
   components: {
+    PolygonMap,
     AutocompleteWrapper,
     InputWrapper
   },
@@ -254,7 +312,9 @@ export default {
       loaders: {
         locality: false
       }
-    }
+    },
+    polygonDialog: false,
+    viewPolygon: false
   }),
 
   computed: {
@@ -269,12 +329,20 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.locality !== "undefined" && this.item.locality !== null
+        (typeof this.item.locality !== "undefined" &&
+          this.item.locality !== null) ||
+        (this.item.polygon && this.item.polygon.length > 0)
       );
     }
   },
 
   methods: {
+    openPolygonDialog(polygon, viewOnly) {
+      this.item.polygon = polygon;
+      this.viewPolygon = viewOnly;
+      this.polygonDialog = true;
+    },
+
     updateFieldsAccordingToLocality(locality) {
       if (typeof locality !== "undefined" && locality !== null) {
         this.item.point_longitude = locality.longitude;

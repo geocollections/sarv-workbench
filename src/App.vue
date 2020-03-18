@@ -43,7 +43,8 @@ body {
 }
 
 /* Overlay must hide everything except app header which has z-index of 50000 */
+/* Had to remove that because of dialog overlay and z index issues (basically multiple dialogs not working properly) */
 .v-overlay--active {
-  z-index: 49999 !important;
+  /*z-index: 49999 !important;*/
 }
 </style>
