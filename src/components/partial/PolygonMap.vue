@@ -206,23 +206,27 @@ export default {
 
         let newCoordinates = [];
 
-        coordinates.forEach(arrays => {
+        coordinates.forEach(polygonArrays => {
           if (type === "MultiPolygon") {
-            // Todo: Switch lat longs
-            let newArrays = arrays.map(latLngArray => {
-              return latLngArray;
+            let polygon = [];
+            polygonArrays.forEach(polygonItem => {
+              let switchedPolygonArray = polygonItem.map(latLngArray => {
+                return [latLngArray[1], latLngArray[0]];
+              });
+              polygon.push(switchedPolygonArray);
             });
-            newCoordinates.push(newArrays);
+
+            newCoordinates.push(polygon);
           } else {
-            let newArrays = arrays.map(latLngArray => {
+            let switchedPolygonArray = polygonArrays.map(latLngArray => {
               return [latLngArray[1], latLngArray[0]];
             });
-            newCoordinates.push(newArrays);
+            newCoordinates.push(switchedPolygonArray);
           }
         });
 
-        console.log(coordinates);
-        console.log(newCoordinates);
+        // console.log(coordinates);
+        // console.log(newCoordinates);
 
         if (returnInStringFormat) return JSON.stringify(newCoordinates);
         else return newCoordinates;
