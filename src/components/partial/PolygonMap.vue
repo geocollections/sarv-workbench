@@ -110,7 +110,6 @@ export default {
     },
 
     newPolygon(newVal) {
-      console.log(newVal);
       if (newVal) {
         this.newPolygon.on("pm:edit", this.handlePmEdit);
         this.newPolygon.on("pm:cut", this.handlePmCut);
@@ -156,7 +155,6 @@ export default {
     },
 
     handlePmCreate(event) {
-      console.log("CREATE");
       if (this.newPolygon) this.newPolygon.removeFrom(this.map);
       this.newPolygon = event.layer;
       let coordinates = this.getPolygonCoordinates(event.layer, true);
@@ -164,20 +162,20 @@ export default {
     },
 
     handlePmEdit(event) {
-      console.log("EDIT");
       let coordinates = this.getPolygonCoordinates(event.target, true);
       this.$emit("polygon:updated", coordinates);
     },
 
     handlePmRemove() {
-      console.log("REMOVE");
       this.$emit("polygon:updated", null);
     },
 
     handlePmCut(event) {
-      console.log("CUT");
       this.newPolygon = event.layer._layers[event.layer._leaflet_id - 1];
-      let coordinates = this.getPolygonCoordinates(event.layer._layers[event.layer._leaflet_id - 1], true);
+      let coordinates = this.getPolygonCoordinates(
+        event.layer._layers[event.layer._leaflet_id - 1],
+        true
+      );
       this.$emit("polygon:updated", coordinates);
     },
 
@@ -189,9 +187,6 @@ export default {
           let polygons = L.polygon(coordinates, { color: "#4CAF50" }).addTo(
             this.map
           );
-
-          console.log(polygons.toGeoJSON())
-
           this.newPolygon = polygons;
 
           let bounds = polygons.getBounds();
@@ -203,19 +198,34 @@ export default {
       }
     },
 
-    // Todo: Need to change lat lng order
     getPolygonCoordinates(polygon, returnInStringFormat = false) {
       if (polygon) {
         let geoJSON = polygon.toGeoJSON();
-        let coordinates = null;
-        if (geoJSON.type === "FeatureCollection") {
-          coordinates = geoJSON.features[0].geometry.coordinates;
-        } else {
-          coordinates = geoJSON.geometry.coordinates;
-        }
+        let type = geoJSON.geometry.type;
+        let coordinates = geoJSON.geometry.coordinates;
 
-        if (returnInStringFormat) return JSON.stringify(coordinates);
-        else return coordinates;
+        let newCoordinates = [];
+
+        coordinates.forEach(arrays => {
+          if (type === "MultiPolygon") {
+            // Todo: Switch lat longs
+            let newArrays = arrays.map(latLngArray => {
+              return latLngArray;
+            });
+            newCoordinates.push(newArrays);
+          } else {
+            let newArrays = arrays.map(latLngArray => {
+              return [latLngArray[1], latLngArray[0]];
+            });
+            newCoordinates.push(newArrays);
+          }
+        });
+
+        console.log(coordinates);
+        console.log(newCoordinates);
+
+        if (returnInStringFormat) return JSON.stringify(newCoordinates);
+        else return newCoordinates;
       } else {
         return "";
       }
