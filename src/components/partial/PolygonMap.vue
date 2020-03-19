@@ -6,6 +6,8 @@
 
 <script>
 import * as L from "leaflet";
+import "@geoman-io/leaflet-geoman-free";
+import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 
 export default {
   name: "PolygonMap",
@@ -27,6 +29,7 @@ export default {
     maxZoom: 13,
     minZoom: 2,
     zoom: 7,
+    newPolygon: null,
     tileProviders: [
       {
         name: "OpenStreetMap",
@@ -89,6 +92,13 @@ export default {
     this.initMap();
   },
 
+  beforeDestroy() {
+    this.map.off("pm:create", this.handlePmCreate);
+    this.map.off("pm:remove", this.handlePmRemove);
+    this.newPolygon.off("pm:edit", this.handlePmEdit);
+    this.newPolygon.off("pm:cut", this.handlePmCut);
+  },
+
   watch: {
     mapState: {
       handler() {
@@ -97,6 +107,14 @@ export default {
         });
       },
       immediate: true
+    },
+
+    newPolygon(newVal) {
+      console.log(newVal);
+      if (newVal) {
+        this.newPolygon.on("pm:edit", this.handlePmEdit);
+        this.newPolygon.on("pm:cut", this.handlePmCut);
+      }
     }
   },
 
@@ -120,7 +138,47 @@ export default {
       L.control.layers(baseLayers).addTo(this.map);
       L.control.scale({ imperial: false }).addTo(this.map);
 
+      if (!this.isViewOnly) {
+        this.map.pm.addControls({
+          position: "topleft",
+          drawMarker: false,
+          drawCircleMarker: false,
+          drawPolyline: false,
+          drawRectangle: false,
+          drawCircle: false
+        });
+
+        this.map.on("pm:create", this.handlePmCreate);
+        this.map.on("pm:remove", this.handlePmRemove);
+      }
+
       if (this.polygon) this.setPolygon(this.polygon);
+    },
+
+    handlePmCreate(event) {
+      console.log("CREATE");
+      if (this.newPolygon) this.newPolygon.removeFrom(this.map);
+      this.newPolygon = event.layer;
+      let coordinates = this.getPolygonCoordinates(event.layer, true);
+      this.$emit("polygon:updated", coordinates);
+    },
+
+    handlePmEdit(event) {
+      console.log("EDIT");
+      let coordinates = this.getPolygonCoordinates(event.target, true);
+      this.$emit("polygon:updated", coordinates);
+    },
+
+    handlePmRemove() {
+      console.log("REMOVE");
+      this.$emit("polygon:updated", null);
+    },
+
+    handlePmCut(event) {
+      console.log("CUT");
+      this.newPolygon = event.layer;
+      let coordinates = this.getPolygonCoordinates(event.layer, true);
+      this.$emit("polygon:updated", coordinates);
     },
 
     setPolygon(arrayOfPoints) {
@@ -131,12 +189,31 @@ export default {
           let polygons = L.polygon(coordinates, { color: "#4CAF50" }).addTo(
             this.map
           );
+
+          this.newPolygon = polygons;
+
           let bounds = polygons.getBounds();
           // nextTick fixes weird zoom issue on first render
           this.$nextTick(() => {
             this.map.fitBounds(bounds);
           });
         }
+      }
+    },
+
+    getPolygonCoordinates(polygon, returnInStringFormat = false) {
+      if (polygon) {
+        let geoJSON = polygon.toGeoJSON();
+        let coordinates = null;
+        console.log(geoJSON);
+        if (geoJSON.type === "FeatureCollection") {
+          coordinates = geoJSON.features[0].geometry.coordinates;
+        } else coordinates = geoJSON.geometry.coordinates;
+
+        if (returnInStringFormat) return JSON.stringify(coordinates);
+        else return coordinates;
+      } else {
+        return "";
       }
     }
   }

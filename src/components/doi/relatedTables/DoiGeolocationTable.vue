@@ -94,7 +94,7 @@
             @click.stop="openPolygonDialog(item.polygon, true)"
             :title="$t('doi.viewPolygon')"
           >
-            <v-icon small>far fa-map</v-icon>
+            <v-icon small>far fa-eye</v-icon>
           </v-btn>
         </div>
       </template>
@@ -217,13 +217,24 @@
             :map-state="polygonDialog"
             :polygon="item.polygon"
             :is-view-only="viewPolygon"
+            v-on:polygon:updated="item.polygon = $event"
           />
 
           <v-card-actions>
             <v-spacer />
-            <v-btn color="red" text @click="polygonDialog = false">{{
-              $t("buttons.close")
-            }}</v-btn>
+            <div v-if="!viewPolygon">
+              <v-btn color="red" text @click="closeAndReset">{{
+                $t("buttons.cancel")
+              }}</v-btn>
+              <v-btn color="green" text @click="polygonDialog = false">{{
+                $t("buttons.edit")
+              }}</v-btn>
+            </div>
+            <div v-else>
+              <v-btn color="red" text @click="polygonDialog = false">{{
+                $t("buttons.close")
+              }}</v-btn>
+            </div>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -314,7 +325,8 @@ export default {
       }
     },
     polygonDialog: false,
-    viewPolygon: false
+    viewPolygon: false,
+    originalPolygon: ""
   }),
 
   computed: {
@@ -337,7 +349,13 @@ export default {
   },
 
   methods: {
+    closeAndReset() {
+      this.polygonDialog = false;
+      this.item.polygon = this.originalPolygon;
+    },
+
     openPolygonDialog(polygon, viewOnly) {
+      this.originalPolygon = polygon;
       this.item.polygon = polygon;
       this.viewPolygon = viewOnly;
       this.polygonDialog = true;
