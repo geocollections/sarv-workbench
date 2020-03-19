@@ -176,8 +176,8 @@ export default {
 
     handlePmCut(event) {
       console.log("CUT");
-      this.newPolygon = event.layer;
-      let coordinates = this.getPolygonCoordinates(event.layer, true);
+      this.newPolygon = event.layer._layers[event.layer._leaflet_id - 1];
+      let coordinates = this.getPolygonCoordinates(event.layer._layers[event.layer._leaflet_id - 1], true);
       this.$emit("polygon:updated", coordinates);
     },
 
@@ -190,6 +190,8 @@ export default {
             this.map
           );
 
+          console.log(polygons.toGeoJSON())
+
           this.newPolygon = polygons;
 
           let bounds = polygons.getBounds();
@@ -201,14 +203,16 @@ export default {
       }
     },
 
+    // Todo: Need to change lat lng order
     getPolygonCoordinates(polygon, returnInStringFormat = false) {
       if (polygon) {
         let geoJSON = polygon.toGeoJSON();
         let coordinates = null;
-        console.log(geoJSON);
         if (geoJSON.type === "FeatureCollection") {
           coordinates = geoJSON.features[0].geometry.coordinates;
-        } else coordinates = geoJSON.geometry.coordinates;
+        } else {
+          coordinates = geoJSON.geometry.coordinates;
+        }
 
         if (returnInStringFormat) return JSON.stringify(coordinates);
         else return coordinates;
