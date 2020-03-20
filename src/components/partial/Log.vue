@@ -55,7 +55,10 @@
                             v-if="
                               changes &&
                                 changes.old !== '' &&
-                                changes.new !== null &&
+                                (changes.new !== null ||
+                                  (changes.new === null &&
+                                    (changes.old !== null ||
+                                      changes.old !== ''))) &&
                                 changes.old !== changes.new
                             "
                           >
