@@ -1139,7 +1139,7 @@
     "titleTranslatedLanguage":"Translated title language",
     "book": "Book",
     "bookOriginal": "Book (cyrillic)",
-    "book_editor": "Toimetaja(d)",
+    "book_editor": "Editor(s)",
     "publisher": "Publisher",
     "publisherPlace": "Publisher place",
     "checkDoi": "Check",
@@ -1183,7 +1183,7 @@
     "book_translated": "Book translated",
     "book_translated_language": "Book translated language",
     "remarksPrivate": "Remarks (private)",
-    "parentReference": "Kuulub kogumikku",
+    "parentReference": "Belongs to reference",
     "relatedTables": {
       "attachmentDigital": "Digital version (pdf)",
       "attachment": "Related data files",

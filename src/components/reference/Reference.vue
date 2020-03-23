@@ -188,9 +188,9 @@
             </v-col>
           </v-row>
 
-          <!-- BOOK, BOOK_EDITOR, PUBLISHER and PUBLISHER_PLACE -->
+          <!-- BOOK and BOOK_EDITOR -->
           <v-row no-gutters>
-            <v-col cols="12" md="3" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
                 v-model="reference.book"
                 :color="bodyActiveColor"
@@ -198,15 +198,33 @@
               />
             </v-col>
 
-            <v-col cols="12" md="3" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
                 v-model="reference.book_editor"
                 :color="bodyActiveColor"
                 :label="$t('reference.book_editor')"
               />
             </v-col>
+          </v-row>
 
-            <v-col cols="12" md="3" class="pa-1">
+          <!-- PARENT_REFERENCE, PUBLISHER and PUBLISHER_PLACE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.parent_reference"
+                :color="bodyActiveColor"
+                :items="autocomplete.reference"
+                :loading="autocomplete.loaders.reference"
+                item-text="reference"
+                :label="$t('reference.parentReference')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteReferenceSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="reference.publisher"
                 :color="bodyActiveColor"
@@ -214,7 +232,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="3" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="reference.publisher_place"
                 :color="bodyActiveColor"
@@ -478,40 +496,6 @@
             </v-col>
           </v-row>
 
-          <!-- PARENT_REFERENCE, ISBN and ISSN -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <autocomplete-wrapper
-                v-model="reference.parent_reference"
-                :color="bodyActiveColor"
-                :items="autocomplete.reference"
-                :loading="autocomplete.loaders.reference"
-                item-text="reference"
-                :label="$t('reference.parentReference')"
-                is-link
-                route-object="reference"
-                is-searchable
-                v-on:search:items="autocompleteReferenceSearch"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="reference.isbn"
-                :color="bodyActiveColor"
-                label="ISBN:"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="reference.issn"
-                :color="bodyActiveColor"
-                label="ISSN:"
-              />
-            </v-col>
-          </v-row>
-
           <!-- REMARKS -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -534,13 +518,29 @@
             </v-col>
           </v-row>
 
-          <!-- LOCATION_TXT -->
+          <!-- LOCATION_TXT, ISBN and ISSN -->
           <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="reference.location_txt"
                 :color="bodyActiveColor"
                 :label="$t('reference.location_txt')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="reference.isbn"
+                :color="bodyActiveColor"
+                label="ISBN:"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="reference.issn"
+                :color="bodyActiveColor"
+                label="ISSN:"
               />
             </v-col>
           </v-row>

@@ -1183,7 +1183,7 @@
     "book_translated": "Kogumiku tõlgitud pealkiri",
     "book_translated_language": "Kogumiku tõlke keel",
     "remarksPrivate": "Lisainfo (privaatne)",
-    "parentReference": "Belongs to reference",
+    "parentReference": "Kuulub kogumikku",
     "relatedTables": {
       "attachmentDigital": "Digitaalne versioon (pdf)",
       "attachment": "Seotud andmefailid",
