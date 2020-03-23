@@ -803,7 +803,9 @@
     "relatedTables": {
       "attachment_link": "Failid",
       "samples": "Seotud proovid",
-      "locality_description": "Kirjeldus"
+      "locality_description": "Kirjeldus",
+      "locality_reference": "Seotud kirjandus",
+      "sites": "Vaatluspunktid"
     }
   },
   "analysis": {

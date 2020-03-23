@@ -803,7 +803,9 @@
     "relatedTables": {
       "attachment_link": "Files",
       "samples": "Related samples",
-      "locality_description": "Description"
+      "locality_description": "Description",
+      "locality_reference": "Related reference",
+      "sites": "Linked sites"
     }
   },
   "analysis": {

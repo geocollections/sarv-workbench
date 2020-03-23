@@ -556,7 +556,10 @@
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.abstract = !block.abstract">
+        <div
+          class="card-title--clickable"
+          @click="block.abstract = !block.abstract"
+        >
           <span>{{ $t("reference.abstract") }}</span>
           <v-icon right>far fa-sticky-note</v-icon>
         </div>

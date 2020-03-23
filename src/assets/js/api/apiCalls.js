@@ -1386,6 +1386,16 @@ export function fetchSiteLocalityDescriptions(id, searchParameters) {
   );
 }
 
+export function fetchSiteLocalityReferences(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `locality_reference/?site=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
 /******************
  ***  SITE END  ***
  ******************/
@@ -2787,6 +2797,16 @@ export function fetchLinkedAreaSites(data, areaId) {
 
   return get(
     `site/?area=${areaId}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+  );
+}
+
+export function fetchAreaLocalityReferences(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `locality_reference/?area=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
 }
 

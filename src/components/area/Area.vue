@@ -168,133 +168,171 @@
       </transition>
     </v-card>
 
-    <!-- SITES -->
+    <!-- RELATED DATA TABS -->
     <v-card
-      class="mt-2"
-      id="block-sites"
       v-if="$route.meta.isEdit"
+      class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
-      <v-card-title class="pt-2 pb-1">
-        <div class="card-title--clickable" @click="block.sites = !block.sites">
-          <span>{{ $t("project.sites") }}</span>
-          <v-icon right>fas fa-globe-americas</v-icon>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.sites = !block.sites"
-          :color="bodyActiveColor"
+      <v-tabs
+        :background-color="bodyColor.split('n-')[0] + 'n-3'"
+        show-arrows
+        grow
+        prev-icon="fas fa-angle-left"
+        next-icon="fas fa-angle-right"
+        :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
+        hide-slider
+      >
+        <v-tab
+          v-for="tab in relatedTabs"
+          :key="tab.name"
+          @click.prevent="setTab(tab.name)"
         >
-          <v-icon>{{
-            block.sites ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.sites" class="px-1 pt-1 pb-2">
-          <!-- MAP SWITCH -->
-          <v-card
-            class="d-flex flex-row justify-content-start mt-1 mx-3"
-            flat
-            tile
-            :color="bodyColor.split('n-')[0] + 'n-5'"
+          <span>{{ $t("site.relatedTables." + tab.name) }}</span>
+          <span class="ml-1">
+            <v-icon small>{{ tab.iconClass }}</v-icon>
+          </span>
+          <span
+            v-if="relatedData[tab.name].count > 0"
+            class="font-weight-bold ml-2"
+            :class="`${bodyActiveColor}--text`"
           >
+            {{ relatedData[tab.name].count }}
+          </span>
+        </v-tab>
+      </v-tabs>
+
+      <v-tabs-items>
+        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+          <div v-if="activeTab === 'sites'">
+            <!-- MAP SWITCH -->
             <v-card
+              class="d-flex flex-row justify-content-start mt-1 mx-3"
               flat
               tile
-              class="align-self-center mr-2"
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
-              <v-switch
-                v-model="showMap"
-                hide-details
-                id="map-switch"
-                class="vuetify-switch my-1"
-              ></v-switch>
+              <v-card
+                flat
+                tile
+                class="align-self-center mr-2"
+                :color="bodyColor.split('n-')[0] + 'n-5'"
+              >
+                <v-switch
+                  v-model="showMap"
+                  hide-details
+                  id="map-switch"
+                  class="vuetify-switch my-1"
+                ></v-switch>
+              </v-card>
+
+              <v-card
+                flat
+                tile
+                class="align-self-center"
+                :color="bodyColor.split('n-')[0] + 'n-5'"
+              >
+                <label class="m-0" :for="`map-switch`">
+                  <i class="far fa-map"></i>
+                  {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
+                </label>
+              </v-card>
             </v-card>
 
+            <!-- MAP -->
+            <transition enter-active-class="animated fadeIn faster">
+              <v-row no-gutters v-show="showMap" class="mt-2">
+                <v-col cols="12" class="px-1">
+                  <map-component
+                    :show-map="showMap && block.sites"
+                    :gps-coords="true"
+                    mode="multiple"
+                    module="area"
+                    v-bind:location="{ lat: null, lng: null }"
+                    :locations="relatedData.sites.results"
+                  />
+                </v-col>
+              </v-row>
+            </transition>
+
+            <!-- ADD NEW and EXPORT -->
             <v-card
+              class="d-flex flex-row justify-content-start mt-2 mb-3"
               flat
               tile
-              class="align-self-center"
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
-              <label class="m-0" :for="`map-switch`">
-                <i class="far fa-map"></i>
-                {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
-              </label>
-            </v-card>
-          </v-card>
-
-          <!-- MAP -->
-          <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap" class="mt-2">
-              <v-col cols="12" class="px-1">
-                <map-component
-                  :show-map="showMap && block.sites"
-                  :gps-coords="true"
-                  mode="multiple"
-                  module="area"
-                  v-bind:location="{ lat: null, lng: null }"
-                  :locations="relatedData.sites.results"
-                />
-              </v-col>
-            </v-row>
-          </transition>
-
-          <!-- ADD NEW and EXPORT -->
-          <v-card
-            class="d-flex flex-row justify-content-start mt-2 mb-3"
-            flat
-            tile
-            :color="bodyColor.split('n-')[0] + 'n-5'"
-          >
-            <v-card
-              flat
-              tile
-              class="px-1"
-              :color="bodyColor.split('n-')[0] + 'n-5'"
-            >
-              <v-btn
-                :to="{
+              <v-card
+                flat
+                tile
+                class="px-1"
+                :color="bodyColor.split('n-')[0] + 'n-5'"
+              >
+                <v-btn
+                  :to="{
                   name: 'Site add',
                   query: { area: JSON.stringify(area) }
                 }"
-                target="newAreaWindow"
-                :color="bodyActiveColor"
-                :dark="isBodyActiveColorDark"
+                  target="newAreaWindow"
+                  :color="bodyActiveColor"
+                  :dark="isBodyActiveColorDark"
                 >{{ $t("add.new") }}</v-btn
+                >
+              </v-card>
+
+              <v-card
+                flat
+                tile
+                class="px-1"
+                :color="bodyColor.split('n-')[0] + 'n-5'"
               >
+                <export-buttons
+                  filename="site"
+                  :table-data="relatedData.sites.results"
+                ></export-buttons>
+              </v-card>
             </v-card>
 
-            <v-card
-              flat
-              tile
-              class="px-1"
-              :color="bodyColor.split('n-')[0] + 'n-5'"
-            >
-              <export-buttons
-                filename="site"
-                :table-data="relatedData.sites.results"
-              ></export-buttons>
-            </v-card>
-          </v-card>
+            <v-row no-gutters v-if="relatedData.sites.count > 0">
+              <v-col cols="12" class="px-1">
+                <site-table
+                  ref="table"
+                  :response="relatedData.sites"
+                  :search-parameters="relatedData.searchParameters.sites"
+                  :body-active-color="bodyActiveColor"
+                  :body-color="bodyColor"
+                />
+              </v-col>
+            </v-row>
+          </div>
+
+
+          <area-locality-reference-table
+            v-show="activeTab === 'locality_reference'"
+            :response="relatedData.locality_reference"
+            :search-parameters="
+              relatedData.searchParameters.locality_reference
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <!-- PAGINATION -->
           <div
-            v-if="relatedData.sites.count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between pa-1 mt-2"
+            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
           >
             <div class="mr-3 mb-3">
               <v-select
-                v-model="relatedData.searchParameters.sites.paginateBy"
-                color="blue"
+                v-model="relatedData.searchParameters[activeTab].paginateBy"
+                :color="bodyActiveColor"
                 dense
                 :items="paginateByOptionsTranslated"
-                item-color="blue"
+                :item-color="bodyActiveColor"
                 label="Paginate by"
                 hide-details
               />
@@ -302,35 +340,23 @@
 
             <div>
               <v-pagination
-                v-model="relatedData.searchParameters.sites.page"
-                color="blue"
+                v-model="relatedData.searchParameters[activeTab].page"
+                :color="bodyActiveColor"
                 circle
                 prev-icon="fas fa-angle-left"
                 next-icon="fas fa-angle-right"
                 :length="
                   Math.ceil(
-                    relatedData.sites.count /
-                      relatedData.searchParameters.sites.paginateBy
+                    relatedData[activeTab].count /
+                      relatedData.searchParameters[activeTab].paginateBy
                   )
                 "
                 :total-visible="5"
               />
             </div>
           </div>
-
-          <v-row no-gutters v-if="relatedData.sites.count > 0">
-            <v-col cols="12" class="px-1">
-              <site-table
-                ref="table"
-                :response="relatedData.sites"
-                :search-parameters="relatedData.searchParameters.sites"
-                :body-active-color="bodyActiveColor"
-                :body-color="bodyColor"
-              />
-            </v-col>
-          </v-row>
-        </div>
-      </transition>
+        </v-card>
+      </v-tabs-items>
     </v-card>
   </div>
 </template>
@@ -343,10 +369,10 @@ import cloneDeep from "lodash/cloneDeep";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import {
-  fetchArea,
-  fetchLinkedAreaSites,
+  fetchArea, fetchAreaLocalityReferences,
+  fetchLinkedAreaSites, fetchLinkedSamples,
   fetchListAreaTypes,
-  fetchListMaakond
+  fetchListMaakond, fetchSiteAttachment, fetchSiteLocalityDescriptions, fetchSiteLocalityReferences
 } from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import Editor from "../partial/inputs/Editor";
@@ -355,10 +381,13 @@ import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
 import { mapState } from "vuex";
 import SiteTable from "../site/SiteTable";
+import AreaLocalityReferenceTable from "./relatedTables/AreaLocalityReferenceTable";
+import requestsMixin from "../../mixins/requestsMixin";
 export default {
   name: "Area",
 
   components: {
+    AreaLocalityReferenceTable,
     SiteTable,
     ExportButtons,
     MapComponent,
@@ -387,7 +416,7 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin],
+  mixins: [formManipulation, autocompleteMixin, requestsMixin],
 
   data() {
     return this.setInitialData();
@@ -439,6 +468,10 @@ export default {
           text: this.$t(item.text, { num: item.value })
         };
       });
+    },
+
+    computedRelatedTabs() {
+      return this.relatedTabs.filter(tab => tab.name !== "sites");
     }
   },
 
@@ -452,16 +485,34 @@ export default {
     },
     "relatedData.searchParameters.sites": {
       handler(newVal) {
-        if (this.$route.meta.isEdit) {
-          this.searchRelatedData(newVal, this.fetchLinkedSiteWrapper, "sites");
-        }
+        // if (this.$route.meta.isEdit) {
+        //   this.searchRelatedData(newVal, this.fetchLinkedSiteWrapper, "sites");
+        // }
       },
       immediate: true,
+      deep: true
+    },
+    "relatedData.searchParameters": {
+      handler: function() {
+        if (this.$route.meta.isEdit) {
+          this.loadRelatedData(this.activeTab);
+        }
+      },
       deep: true
     }
   },
 
   methods: {
+    setTab(type) {
+      if (type) {
+        this.$store.dispatch("updateActiveTab", {
+          tab: type,
+          object: this.$route.meta.object
+        });
+        this.activeTab = type;
+      }
+    },
+
     fetchLinkedSiteWrapper() {
       return new Promise(resolve => {
         resolve(
@@ -489,6 +540,11 @@ export default {
 
     setInitialData() {
       return {
+        relatedTabs: [
+          { name: "sites", iconClass: "fas fa-globe-americas" },
+          { name: "locality_reference", iconClass: "fas fa-book" }
+        ],
+        activeTab: "sites",
         searchHistory: "areaSearchHistory",
         copyFields: [
           "id",
@@ -566,6 +622,8 @@ export default {
             this.$emit("object-exists", false);
           }
         });
+
+        this.relatedTabs.forEach(tab => this.loadRelatedData(tab.name));
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -577,11 +635,21 @@ export default {
           count: 0,
           results: []
         },
+        locality_reference: {
+          count: 0,
+          results: []
+        },
         searchParameters: {
           sites: {
             page: 1,
             paginateBy: 100,
             sortBy: ["id"],
+            sortDesc: [true]
+          },
+          locality_reference: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["reference"],
             sortDesc: [true]
           }
         }
@@ -604,6 +672,16 @@ export default {
         }
       });
 
+      // Adding related data only on add view
+      if (!this.$route.meta.isEdit) {
+        uploadableObject.related_data = {};
+
+        this.relatedTabs.forEach(tab => {
+          if (this.isNotEmpty(this.relatedData[tab.name]))
+            uploadableObject.related_data[tab.name] = this.relatedData[tab.name].results;
+        });
+      }
+
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
@@ -620,6 +698,27 @@ export default {
         maakond: obj.maakond__maakond,
         maakond_en: obj.maakond__maakond_en
       };
+    },
+
+    loadRelatedData(object) {
+      let query;
+
+      if (object === "sites") {
+        query = fetchLinkedAreaSites(
+          this.relatedData.searchParameters.sites,
+          this.$route.params.id
+        );
+      } else if (object === "locality_reference") {
+        query = fetchAreaLocalityReferences(
+          this.$route.params.id,
+          this.relatedData.searchParameters.locality_reference
+        );
+      }
+
+      query.then(response => {
+        this.relatedData[object].count = response.data.count;
+        this.relatedData[object].results = this.handleResponse(response);
+      });
     },
 
     setDefaultSearchParameters() {

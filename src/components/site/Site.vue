@@ -509,6 +509,19 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <site-locality-reference-table
+            v-show="activeTab === 'locality_reference'"
+            :response="relatedData.locality_reference"
+            :search-parameters="
+              relatedData.searchParameters.locality_reference
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -561,7 +574,7 @@ import {
   fetchSiteAttachment,
   fetchLinkedSamples,
   fetchLastSiteName,
-  fetchSiteLocalityDescriptions
+  fetchSiteLocalityDescriptions, fetchSiteLocalityReferences
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
 import sidebarMixin from "../../mixins/sidebarMixin";
@@ -576,10 +589,12 @@ import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import FileUpload from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SiteLocalityDescriptionTable from "./relatedTables/SiteLocalityDescriptionTable";
+import SiteLocalityReferenceTable from "./relatedTables/SiteLocalityReferenceTable";
 
 export default {
   name: "Site",
   components: {
+    SiteLocalityReferenceTable,
     SiteLocalityDescriptionTable,
     FileUpload,
     TextareaWrapper,
@@ -744,7 +759,8 @@ export default {
         relatedTabs: [
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "samples", iconClass: "fas fa-vial" },
-          { name: "locality_description", iconClass: "fas fa-align-left" }
+          { name: "locality_description", iconClass: "fas fa-align-left" },
+          { name: "locality_reference", iconClass: "fas fa-book" }
         ],
         activeTab: "attachment_link",
         relatedData: this.setDefaultRelatedData(),
@@ -860,6 +876,10 @@ export default {
           count: 0,
           results: []
         },
+        locality_reference: {
+          count: 0,
+          results: []
+        },
         searchParameters: {
           attachment_link: {
             page: 1,
@@ -876,6 +896,12 @@ export default {
             page: 1,
             paginateBy: 25,
             sortBy: ["id"],
+            sortDesc: [true]
+          },
+          locality_reference: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["reference"],
             sortDesc: [true]
           }
         }
@@ -1022,6 +1048,11 @@ export default {
         query = fetchSiteLocalityDescriptions(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_description
+        );
+      } else if (object === "locality_reference") {
+        query = fetchSiteLocalityReferences(
+          this.$route.params.id,
+          this.relatedData.searchParameters.locality_reference
         );
       }
 
