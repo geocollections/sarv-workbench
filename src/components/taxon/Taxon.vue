@@ -1058,14 +1058,16 @@ export default {
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
         this.relatedTabs.forEach(tab => {
-          if (this.isNotEmpty(this.relatedData[tab.name]))
-            if (tab.name === "taxon_image") {
-              uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
-            } else {
-              uploadableObject.related_data[tab.name] = this.relatedData[
-                tab.name
-              ].results;
-            }
+          if (tab.name !== "taxon_subclass") {
+            if (this.isNotEmpty(this.relatedData[tab.name]))
+              if (tab.name === "taxon_image") {
+                uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
+              } else {
+                uploadableObject.related_data[tab.name] = this.relatedData[
+                  tab.name
+                ].results;
+              }
+          }
         });
       } else {
         if (this.relatedData.taxon_image.results) {

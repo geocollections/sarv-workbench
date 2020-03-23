@@ -308,7 +308,8 @@
       "description": "Remarks"
     },
     "keyword": {
-      "info": "General info"
+      "info": "General info",
+      "description": "Description"
     },
     "attachment": {
       "info": "General info",

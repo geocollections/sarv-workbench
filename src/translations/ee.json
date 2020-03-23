@@ -308,7 +308,8 @@
       "description": "Lisainfo"
     },
     "keyword": {
-      "info": "Üldinfo"
+      "info": "Üldinfo",
+      "description": "Kirjeldus"
     },
     "attachment": {
       "info": "Üldinfo",

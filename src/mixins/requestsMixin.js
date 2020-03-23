@@ -10,20 +10,28 @@ const requestsMixin = {
   methods: {
     addRelatedItem(payload) {
       console.log(payload);
+      let table = payload.table;
+      if (table === "taxon_subclass") table = "taxon";
 
       if (this.$route.meta.isEdit) {
-        let url = `add/${payload.table}/`;
+        let url = `add/${table}/`;
         let formData = new FormData();
         let uploadableObject = cloneDeep(payload.item);
-        uploadableObject[this.$route.meta.table] = this[
-          this.$route.meta.table
-        ].id;
+
+        let mainObjectKey = this.$route.meta.table;
+        if (payload.table === "taxon_subclass" && table === "taxon") {
+          mainObjectKey = "parent";
+          uploadableObject.taxon = payload.rawItem.taxon.taxon;
+        }
+
+        uploadableObject[mainObjectKey] = this[this.$route.meta.table].id;
+
         formData.append("data", JSON.stringify(uploadableObject));
 
         this.httpRequestWrapper(url, formData).then(response => {
           console.log(response);
           if (response) {
-            this.loadRelatedData(payload.table);
+            this.loadRelatedData(table);
           }
         });
       } else {
@@ -39,26 +47,34 @@ const requestsMixin = {
           }
         });
 
-        this.relatedData[payload.table].results.push(clonedRawItem);
-        this.relatedData[payload.table].count += 1;
+        this.relatedData[table].results.push(clonedRawItem);
+        this.relatedData[table].count += 1;
       }
     },
 
     editRelatedItem(payload) {
       console.log(payload);
+      let table = payload.table;
+      if (table === "taxon_subclass") table = "taxon";
 
       if (this.$route.meta.isEdit) {
-        let url = `change/${payload.table}/${payload.item.id}`;
+        let url = `change/${table}/${payload.item.id}`;
         let formData = new FormData();
         let uploadableObject = cloneDeep(payload.item);
         delete uploadableObject.id;
+
+        if (payload.table === "taxon_subclass" && table === "taxon") {
+          uploadableObject.parent = this[this.$route.meta.table].id;
+          uploadableObject.taxon = payload.rawItem.taxon.taxon;
+        }
+
         console.log(JSON.stringify(uploadableObject));
         formData.append("data", JSON.stringify(uploadableObject));
 
         this.httpRequestWrapper(url, formData).then(response => {
           console.log(response);
           if (response) {
-            this.loadRelatedData(payload.table);
+            this.loadRelatedData(table);
           }
         });
       } else {
