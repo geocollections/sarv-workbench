@@ -46,7 +46,7 @@
         <div v-show="block.requiredFields" class="pa-1">
           <!-- AUTHOR, YEAR and REFERENCE -->
           <v-row no-gutters>
-            <v-col cols="7" class="pa-1">
+            <v-col cols="12" md="7" class="pa-1">
               <input-wrapper
                 v-model="reference.author"
                 :color="bodyActiveColor"
@@ -290,6 +290,93 @@
               </v-btn>
             </div>
           </div>
+
+          <!-- IS ESTONIAN REFERENCE, IS ESTONIAN AUTHOR, OPEN_ACCESS and LICENCE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
+                v-model="reference.is_estonian_reference"
+                :color="bodyActiveColor"
+                :label="$t('reference.is_estonian_reference')"
+                @change="
+                  reference.is_estonian_reference = !reference.is_estonian_reference
+                "
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
+                v-model="reference.is_estonian_author"
+                :color="bodyActiveColor"
+                :label="$t('reference.is_estonian_author')"
+                @change="
+                  reference.is_estonian_author = !reference.is_estonian_author
+                "
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <checkbox-wrapper
+                v-model="reference.is_oa"
+                :color="bodyActiveColor"
+                :label="$t('reference.is_oa')"
+                @change="reference.is_oa = !reference.is_oa"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.licence"
+                :color="bodyActiveColor"
+                :items="autocomplete.licence"
+                :loading="autocomplete.loaders.licence"
+                :item-text="licenceLabel"
+                :label="$t('common.licence')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- REFERENCE KEYWORDS -->
+          <div class="d-flex justify-content-start flex-wrap pa-1">
+            <div class="mr-3 flex-grow-1">
+              <autocomplete-wrapper
+                v-model="relatedData.keyword"
+                :color="bodyActiveColor"
+                :items="autocomplete.keyword"
+                :loading="autocomplete.loaders.keyword"
+                item-text="keyword"
+                :label="$t('reference.referenceKeyword')"
+                is-link
+                route-object="keyword"
+                is-searchable
+                v-on:search:items="autocompleteKeywordSearch"
+                :multiple="true"
+                v-on:chip:close="
+                  relatedData.keyword.splice(
+                    relatedData.keyword.indexOf($event),
+                    1
+                  )
+                "
+                :menu-props="{ maxHeight: 208 }"
+              />
+            </div>
+
+            <div class="mr-2 my-1 align-self-end">
+              <v-btn
+                icon
+                :title="$t('add.new')"
+                @click="
+                  windowOpenNewTab('/keyword/add', {
+                    attachment: JSON.stringify(reference)
+                  })
+                "
+                target="newKeywordWindow"
+                color="green"
+              >
+                <v-icon>fas fa-plus</v-icon>
+              </v-btn>
+            </div>
+          </div>
         </div>
       </transition>
     </v-card>
@@ -320,25 +407,6 @@
 
       <transition>
         <div v-show="block.other" class="pa-1">
-          <!-- ABSTRACT and AUTHOR KEYWORDS -->
-          <v-row no-gutters>
-            <v-col cols="12" class="pa-1">
-              <editor
-                v-if="typeof reference.abstract !== 'undefined'"
-                v-model="reference.abstract"
-                :label="$t('reference.abstract')"
-              />
-            </v-col>
-
-            <v-col cols="12" class="pa-1">
-              <input-wrapper
-                v-model="reference.author_keywords"
-                :color="bodyActiveColor"
-                :label="$t('reference.authorKeywords')"
-              />
-            </v-col>
-          </v-row>
-
           <!-- AUTHOR_ORIGINAL -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -410,9 +478,24 @@
             </v-col>
           </v-row>
 
-          <!-- ISBN and ISSN -->
+          <!-- PARENT_REFERENCE, ISBN and ISSN -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
+              <autocomplete-wrapper
+                v-model="reference.parent_reference"
+                :color="bodyActiveColor"
+                :items="autocomplete.reference"
+                :loading="autocomplete.loaders.reference"
+                item-text="reference"
+                :label="$t('reference.parentReference')"
+                is-link
+                route-object="reference"
+                is-searchable
+                v-on:search:items="autocompleteReferenceSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="reference.isbn"
                 :color="bodyActiveColor"
@@ -420,7 +503,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="reference.issn"
                 :color="bodyActiveColor"
@@ -428,80 +511,6 @@
               />
             </v-col>
           </v-row>
-        </div>
-      </transition>
-    </v-card>
-
-    <!-- REMARKS, REMARKS_PRIVATE and REFERENCE KEYWORDS -->
-    <v-card
-      class="mt-2"
-      id="block-description"
-      :color="bodyColor.split('n-')[0] + 'n-5'"
-      elevation="4"
-    >
-      <v-card-title class="pt-2 pb-1">
-        <div
-          class="card-title--clickable"
-          @click="block.description = !block.description"
-        >
-          <span>{{ $t("common.description") }}</span>
-          <v-icon right>fas fa-pen-fancy</v-icon>
-        </div>
-        <v-spacer></v-spacer>
-        <v-btn
-          icon
-          @click="block.description = !block.description"
-          :color="bodyActiveColor"
-        >
-          <v-icon>{{
-            block.description ? "fas fa-angle-up" : "fas fa-angle-down"
-          }}</v-icon>
-        </v-btn>
-      </v-card-title>
-
-      <transition>
-        <div v-show="block.description" class="pa-1">
-          <!-- REFERENCE KEYWORDS -->
-          <div class="d-flex justify-content-start flex-wrap pa-1">
-            <div class="mr-3 flex-grow-1">
-              <autocomplete-wrapper
-                v-model="relatedData.keyword"
-                :color="bodyActiveColor"
-                :items="autocomplete.keyword"
-                :loading="autocomplete.loaders.keyword"
-                item-text="keyword"
-                :label="$t('reference.referenceKeyword')"
-                is-link
-                route-object="keyword"
-                is-searchable
-                v-on:search:items="autocompleteKeywordSearch"
-                :multiple="true"
-                v-on:chip:close="
-                  relatedData.keyword.splice(
-                    relatedData.keyword.indexOf($event),
-                    1
-                  )
-                "
-                :menu-props="{ maxHeight: 208 }"
-              />
-            </div>
-
-            <div class="mr-2 my-1 align-self-end">
-              <v-btn
-                icon
-                :title="$t('add.new')"
-                @click="
-                  windowOpenNewTab('/keyword/add', {
-                    attachment: JSON.stringify(reference)
-                  })
-                "
-                target="newKeywordWindow"
-                color="green"
-              >
-                <v-icon>fas fa-plus</v-icon>
-              </v-btn>
-            </div>
-          </div>
 
           <!-- REMARKS -->
           <v-row no-gutters>
@@ -525,61 +534,64 @@
             </v-col>
           </v-row>
 
-          <!-- LOCATION TXT, LICENCE and IS OA -->
+          <!-- LOCATION_TXT -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" class="pa-1">
               <input-wrapper
                 v-model="reference.location_txt"
                 :color="bodyActiveColor"
                 :label="$t('reference.location_txt')"
               />
             </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
 
-            <v-col cols="12" md="4" class="pa-1">
-              <autocomplete-wrapper
-                v-model="reference.licence"
-                :color="bodyActiveColor"
-                :items="autocomplete.licence"
-                :loading="autocomplete.loaders.licence"
-                :item-text="licenceLabel"
-                :label="$t('common.licence')"
+    <!-- ABSTRACT -->
+    <v-card
+      class="mt-2"
+      id="block-abstract"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div class="card-title--clickable" @click="block.abstract = !block.abstract">
+          <span>{{ $t("reference.abstract") }}</span>
+          <v-icon right>far fa-sticky-note</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.abstract = !block.abstract"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.abstract ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.abstract" class="pa-1">
+          <!-- ABSTRACT and AUTHOR KEYWORDS -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <editor
+                v-if="typeof reference.abstract !== 'undefined'"
+                v-model="reference.abstract"
+                :label="$t('reference.abstract')"
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
-              <checkbox-wrapper
-                v-model="reference.is_oa"
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="reference.author_keywords"
                 :color="bodyActiveColor"
-                :label="$t('reference.is_oa')"
-                @change="reference.is_oa = !reference.is_oa"
+                :label="$t('reference.authorKeywords')"
               />
             </v-col>
           </v-row>
-
-          <!-- IS ESTONIAN REFERENCE and IS ESTONIAN AUTHOR -->
-          <div class="d-flex flex-row flex-wrap pa-1">
-            <div class="pr-2">
-              <checkbox-wrapper
-                v-model="reference.is_estonian_reference"
-                :color="bodyActiveColor"
-                :label="$t('reference.is_estonian_reference')"
-                @change="
-                  reference.is_estonian_reference = !reference.is_estonian_reference
-                "
-              />
-            </div>
-
-            <div>
-              <checkbox-wrapper
-                v-model="reference.is_estonian_author"
-                :color="bodyActiveColor"
-                :label="$t('reference.is_estonian_author')"
-                @change="
-                  reference.is_estonian_author = !reference.is_estonian_author
-                "
-              />
-            </div>
-          </div>
         </div>
       </transition>
     </v-card>
@@ -1140,7 +1152,8 @@ export default {
           "licence",
           "author_original",
           "book_translated",
-          "book_translated_language"
+          "book_translated_language",
+          "parent_reference"
         ],
         autocomplete: {
           loaders: {
@@ -1153,7 +1166,8 @@ export default {
             attachment3: false, // For #158, regarding p-2
             library: false,
             locality_reference_type: false,
-            licence: false
+            licence: false,
+            reference: false
           },
           types: [],
           languages: [],
@@ -1163,7 +1177,8 @@ export default {
           attachment: [],
           library: [],
           locality_reference_type: [],
-          licence: []
+          licence: [],
+          reference: []
         },
         requiredFields: ["reference", "year", "author", "title"],
         reference: {
@@ -1178,7 +1193,7 @@ export default {
           requiredFields: true,
           info: true,
           other: true,
-          description: true,
+          abstract: true,
           digital: true,
           files: true
         },
@@ -1448,6 +1463,13 @@ export default {
           journal_name: obj.journal__journal_name
         };
         this.autocomplete.journals.push(this.reference.journal);
+      }
+      if (this.isNotEmpty(obj.parent_reference)) {
+        this.reference.parent_reference = {
+          id: obj.parent_reference,
+          reference: obj.parent_reference__reference
+        };
+        this.autocomplete.reference.push(this.reference.parent_reference);
       }
       this.reference.title_translated_language = {
         id: obj.title_translated_language,
