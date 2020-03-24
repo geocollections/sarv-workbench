@@ -88,6 +88,48 @@
         </v-list-group>
       </v-list-group>
 
+      <!-- ROUTES SPECIAL -->
+      <v-list-group
+        prepend-icon="fas fa-user-tag"
+        append-icon="fas fa-angle-down"
+        :color="drawerActiveColor"
+        :value="false"
+      >
+        <template v-slot:activator>
+          <v-list-item-title>{{
+            $t("header.special_functions")
+          }}</v-list-item-title>
+        </template>
+
+        <v-list-group
+          sub-group
+          :color="drawerActiveColor"
+          v-for="entity in routeLinksSpecial"
+          :key="entity.title"
+          v-model="entity.state"
+        >
+          <template v-slot:activator>
+            <v-list-item-title v-text="$t(`header.${entity.title}`)" />
+          </template>
+
+          <v-list-item
+            v-for="(link, index) in entity.links"
+            :to="{ path: link.path }"
+            :key="index"
+            :color="drawerActiveColor"
+            exact
+          >
+            <v-list-item-title
+              style="white-space: unset"
+              v-text="$t(`header.${link.title}`)"
+            />
+            <v-list-item-icon>
+              <v-icon v-text="link.icon" />
+            </v-list-item-icon>
+          </v-list-item>
+        </v-list-group>
+      </v-list-group>
+
       <!-- TEST-DEV -->
       <v-list-item
         v-if="isDevUrl && isDevUser"
@@ -415,6 +457,24 @@ export default {
             {
               title: "dataset",
               path: "/dataset/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        }
+      ],
+      routeLinksSpecial: [
+        {
+          name: "deaccession",
+          title: "deaccessions",
+          links: [
+            {
+              title: "deaccessions",
+              path: "/deaccession",
+              icon: "fas fa-eraser"
+            },
+            {
+              title: "deaccession",
+              path: "/deaccession/add",
               icon: "far fa-plus-square"
             }
           ]

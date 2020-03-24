@@ -45,7 +45,8 @@
     "user_added": "Sisestaja",
     "user_changed": "Muutja",
     "date_added": "Sisestatud",
-    "language": "Keel"
+    "language": "Keel",
+    "number": "Number"
   },
   "main": {
     "pagination": "Kuva {num} kaupa",
@@ -147,6 +148,8 @@
     "editLocation": "Asukohad",
     "addRock": "Lisa kivim või mineraal",
     "editRock": "Kivimid ja mineraalid",
+    "addDeaccession": "Lisa mahakandmisakt",
+    "editDeaccession": "Mahakandmisaktid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -204,7 +207,10 @@
     "rock_tree": "Kivimi/mineraali klassifikatsioon",
     "rock_image": "Kivimi/mineraali pilt",
     "rock_classification": "Alam",
-    "keyword_relation": "Seos terminiga"
+    "keyword_relation": "Seos terminiga",
+    "special_functions": "Erifunktsioonid",
+    "deaccessions": "Mahakandmisaktid",
+    "deaccession": "Lisa mahakandmisakt"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -373,6 +379,9 @@
     },
     "rock": {
       "info": "Üldinfo"
+    },
+    "deaccession": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -538,6 +547,10 @@
     "heading": "Puursüdamiku kast",
     "editMessage": "Muuda puursüdamiku kasti",
     "viewMessage": "Vaata puursüdamikku geokogude portaalis"
+  },
+  "editDeaccession": {
+    "heading": "Mahakandmisakt",
+    "editMessage": "Muuda Mahakandmisakti"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1398,6 +1411,15 @@
       "rock_synonym": "Sünonüümid",
       "rock_reference": "Kirjandusviited"
     }
+  },
+  "deaccession": {
+    "number": "Number",
+    "description": "Põhjendus",
+    "date_signed": "Allkirjastatud",
+    "date_confirmed": "Kinnitatud",
+    "agent_kinnitas": "Kinnitas (nimi)",
+    "agent_kandis": "Kandis maha (nimi)",
+    "number_items": "Säilikute arv"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

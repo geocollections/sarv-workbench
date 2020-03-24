@@ -22,7 +22,7 @@ import {
   fetchAreas,
   fetchDrillcoreBoxes,
   fetchLocations,
-  fetchRocks
+  fetchRocks, fetchDeaccessions
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -177,6 +177,12 @@ export default {
 
   FETCH_ROCKS: ({ commit, state }) => {
     return fetchRocks(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_DEACCESSIONS: ({ commit, state }) => {
+    return fetchDeaccessions(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

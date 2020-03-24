@@ -134,7 +134,12 @@ export function fetchIsLoggedIn() {
  ***  LOGIN END  ***
  *******************/
 
-export function postRequest(url, data, customUrl = "", returnErrorResponse = false) {
+export function postRequest(
+  url,
+  data,
+  customUrl = "",
+  returnErrorResponse = false
+) {
   return post(url, data, customUrl, returnErrorResponse);
 }
 
@@ -3030,6 +3035,43 @@ export function fetchListRockPropertyType() {
 /******************
  ***  ROCK END  ***
  ******************/
+
+/*************************
+ *** DEACCESSION START ***
+ *************************/
+
+export function fetchDeaccessionDetail(id) {
+  return get(`deaccession/?id=${id}&format=json`);
+}
+
+export function fetchDeaccessions(data) {
+  let fields = "id,number,date_signed,agent_kandis,number_items,description";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.number && data.number.trim().length > 0) {
+    searchFields += `&number__icontains=${data.number}`;
+  }
+  if (data.description && data.description.trim().length > 0) {
+    searchFields += `&description__icontains=${data.description}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `deaccession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `deaccession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/*************************
+ ***  DEACCESSION END  ***
+ *************************/
 
 /***********************
  *** UNIVERSAL START ***

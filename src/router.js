@@ -1727,6 +1727,71 @@ const router = new Router({
           ]
         },
         {
+          path: "/deaccession",
+          component: () => import("./views/Deaccessions.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/deaccession/DeaccessionTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "deaccession",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/deaccession/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/deaccession/Deaccession.vue"),
+              meta: {
+                isEdit: true,
+                table: "deaccession",
+                heading: "editDeaccession.heading",
+                requiresAuth: true,
+                object: "deaccession"
+              }
+            }
+          ]
+        },
+        {
+          path: "/deaccession/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Deaccession add",
+              component: () =>
+                import("./components/deaccession/Deaccession.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.deaccession",
+                subForms: [
+                  { path: "/deaccession/add", name: "header.deaccession" }
+                ],
+                requiresAuth: true,
+                object: "deaccession"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {

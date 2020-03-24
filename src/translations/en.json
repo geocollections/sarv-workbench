@@ -45,7 +45,8 @@
     "user_added": "User added",
     "user_changed": "User changed",
     "date_added": "Date added",
-    "language": "Language"
+    "language": "Language",
+    "number": "Number"
   },
   "main": {
     "pagination": "Show {num} results per page",
@@ -147,6 +148,8 @@
     "editLocation": "Storages",
     "addRock": "Add rock",
     "editRock": "Rocks",
+    "addDeaccession": "Add deaccession",
+    "editDeaccession": "Deaccessions",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -204,7 +207,10 @@
     "rock_tree": "Rock tree",
     "rock_image": "Rock image",
     "rock_classification": "Subclass",
-    "keyword_relation": "Keyword relation"
+    "keyword_relation": "Keyword relation",
+    "special_functions": "Special functions",
+    "deaccessions": "Deaccessions",
+    "deaccession": "Add deaccession"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -373,6 +379,9 @@
     },
     "rock": {
       "info": "General info"
+    },
+    "deaccession": {
+      "info": "General info"
     }
   },
   "add": {
@@ -538,6 +547,10 @@
     "heading": "Drill core box",
     "editMessage": "Edit Drill core box",
     "viewMessage": "View drill core box in geocollections portal"
+  },
+  "editDeaccession": {
+    "heading": "Deaccession",
+    "editMessage": "Edit deaccession"
   },
   "references": {
     "tableView": "Table view",
@@ -1398,6 +1411,15 @@
       "rock_synonym": "Synonyms",
       "rock_reference": "References"
     }
+  },
+  "deaccession": {
+    "number": "Number",
+    "description": "Description",
+    "date_signed": "Date signed",
+    "date_confirmed": "Date confirmed",
+    "agent_kinnitas": "Agent signed",
+    "agent_kandis": "Agent confirmed",
+    "number_items": "Number items"
   },
   "permissions": {
     "title": "Data access permissions",
