@@ -3036,6 +3036,63 @@ export function fetchListRockPropertyType() {
  ***  ROCK END  ***
  ******************/
 
+/*******************
+ *** VISIT START ***
+ *******************/
+
+export function fetchVisit(id) {
+  return get(`visit/?id=${id}&format=json`);
+}
+
+export function fetchVisits(data) {
+  let fields =
+    "id,visitor,visitor__agent,visitor_country,visitor_country__value,visitor_country__value_en,date_arrived,date_left,host,host__agent";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.visitor && data.visitor.trim().length > 0) {
+    searchFields += `&visitor__agent__icontains=${data.visitor}`;
+  }
+
+  if (data.date_arrived !== null) {
+    let date = data.date_arrived;
+
+    if (typeof date === "string") date = date.split("T")[0];
+    else {
+      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
+      date = date.toISOString().split("T")[0];
+    }
+    searchFields += `&date_arrived__gte=${date}`;
+  }
+
+  if (data.date_left !== null) {
+    let date = data.date_left;
+
+    if (typeof date === "string") date = date.split("T")[0];
+    else {
+      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
+      date = date.toISOString().split("T")[0];
+    }
+    searchFields += `&date_left__gte=${date}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `visit/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `visit/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/*******************
+ ***  VISIT END  ***
+ *******************/
+
 /***********************
  *** ACCESSION START ***
  ***********************/
@@ -3045,7 +3102,8 @@ export function fetchAccessionDetail(id) {
 }
 
 export function fetchAccessions(data) {
-  let fields = "id,number,date_signed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,number_items,description";
+  let fields =
+    "id,number,date_signed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,number_items,description";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3082,7 +3140,8 @@ export function fetchDeaccessionDetail(id) {
 }
 
 export function fetchDeaccessions(data) {
-  let fields = "id,number,date_signed,agent_kandis,agent_kandis__agent,number_items,description";
+  let fields =
+    "id,number,date_signed,agent_kandis,agent_kandis__agent,number_items,description";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 

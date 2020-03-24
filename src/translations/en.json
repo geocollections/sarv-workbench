@@ -152,6 +152,8 @@
     "editDeaccession": "Deaccessions",
     "addAccession": "Add accession",
     "editAccession": "Accessions",
+    "addVisit": "Add visit to collection",
+    "editVisit": "Visits to collections",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -210,11 +212,13 @@
     "rock_image": "Rock image",
     "rock_classification": "Subclass",
     "keyword_relation": "Keyword relation",
-    "special_functions": "Special functions",
+    "curation": "Curation",
     "deaccessions": "Deaccessions",
     "deaccession": "Add deaccession",
     "accessions": "Accession",
-    "accession": "Add accession"
+    "accession": "Add accession",
+    "visits": "Visits to collections",
+    "visit": "Add visit to collection"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -562,6 +566,10 @@
   "editAccession": {
     "heading": "Accession",
     "editMessage": "Edit accession"
+  },
+  "editVisit": {
+    "heading": "Visit to collection",
+    "editMessage": "Edit visit to collection"
   },
   "references": {
     "tableView": "Table view",
@@ -1441,6 +1449,13 @@
     "agent_vottis": "Agent received",
     "agent_kinnitas": "Agent signed",
     "number_items": "Number items"
+  },
+  "visit": {
+    "visitor": "Visitor",
+    "visitor_country": "Visitor country",
+    "date_arrived": "Date arrived",
+    "date_left": "Date left",
+    "host": "Host"
   },
   "permissions": {
     "title": "Data access permissions",

@@ -1820,8 +1820,7 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () =>
-                import("./components/accession/Accession.vue"),
+              component: () => import("./components/accession/Accession.vue"),
               meta: {
                 isEdit: true,
                 table: "accession",
@@ -1842,8 +1841,7 @@ const router = new Router({
             {
               path: "",
               name: "Accession add",
-              component: () =>
-                import("./components/accession/Accession.vue"),
+              component: () => import("./components/accession/Accession.vue"),
               meta: {
                 isEdit: false,
                 addNew: "header.accession",
@@ -1852,6 +1850,66 @@ const router = new Router({
                 ],
                 requiresAuth: true,
                 object: "accession"
+              }
+            }
+          ]
+        },
+        {
+          path: "/visit",
+          component: () => import("./views/Visits.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/visit/VisitTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "visit",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/visit/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/visit/Visit.vue"),
+              meta: {
+                isEdit: true,
+                table: "visit",
+                heading: "editVisit.heading",
+                requiresAuth: true,
+                object: "visit"
+              }
+            }
+          ]
+        },
+        {
+          path: "/visit/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Visit add",
+              component: () => import("./components/visit/Visit.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.visit",
+                subForms: [{ path: "/visit/add", name: "header.visit" }],
+                requiresAuth: true,
+                object: "visit"
               }
             }
           ]

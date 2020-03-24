@@ -90,15 +90,13 @@
 
       <!-- ROUTES SPECIAL -->
       <v-list-group
-        prepend-icon="fas fa-user-tag"
+        prepend-icon="fas fa-university"
         append-icon="fas fa-angle-down"
         :color="drawerActiveColor"
         :value="false"
       >
         <template v-slot:activator>
-          <v-list-item-title>{{
-            $t("header.special_functions")
-          }}</v-list-item-title>
+          <v-list-item-title>{{ $t("header.curation") }}</v-list-item-title>
         </template>
 
         <v-list-group
@@ -463,6 +461,22 @@ export default {
         }
       ],
       routeLinksSpecial: [
+        {
+          name: "visit",
+          title: "visits",
+          links: [
+            {
+              title: "visits",
+              path: "/visit",
+              icon: "fas fa-user-friends"
+            },
+            {
+              title: "visit",
+              path: "/visit/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
         {
           name: "accession",
           title: "accessions",

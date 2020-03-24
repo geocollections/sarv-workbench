@@ -152,6 +152,8 @@
     "editDeaccession": "Mahakandmisaktid",
     "addAccession": "Lisa vastuvõtuakt",
     "editAccession": "Vastuvõtuaktid",
+    "addVisit": "Lisa kogude külastus",
+    "editVisit": "Kogude külastused",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -210,11 +212,13 @@
     "rock_image": "Kivimi/mineraali pilt",
     "rock_classification": "Alam",
     "keyword_relation": "Seos terminiga",
-    "special_functions": "Erifunktsioonid",
+    "curation": "Kollektsioonihaldus",
     "deaccessions": "Mahakandmisaktid",
     "deaccession": "Lisa mahakandmisakt",
     "accessions": "Vastuvõtuaktid",
-    "accession": "Lisa vastuvõtuakt"
+    "accession": "Lisa vastuvõtuakt",
+    "visits": "Kogude külastused",
+    "visit": "Lisa kogude külastus"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -562,6 +566,10 @@
   "editAccession": {
     "heading": "Vastuvõtuakt",
     "editMessage": "Muuda vastuvõtuakti"
+  },
+  "editVisit": {
+    "heading": "Kogude külastus",
+    "editMessage": "Muuda kogude külastust"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1441,6 +1449,13 @@
     "agent_vottis": "Vastuvõtja",
     "agent_kinnitas": "Kinnitaja",
     "number_items": "Säilikute arv"
+  },
+  "visit": {
+    "visitor": "Külaline",
+    "visitor_country": "Külastaja riik",
+    "date_arrived": "Saabus",
+    "date_left": "Lahkus",
+    "host": "Vastuvõtja"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

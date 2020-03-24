@@ -320,6 +320,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    visitSearchHistory: {
+      type: Object
+    },
+    visitViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },
