@@ -3093,6 +3093,75 @@ export function fetchVisits(data) {
  ***  VISIT END  ***
  *******************/
 
+/******************
+ *** LOAN START ***
+ ******************/
+
+export function fetchLoan(id) {
+  return get(`loan/?id=${id}&format=json`);
+}
+
+export function fetchLoans(data, databaseId) {
+  let fields =
+    "id,loan_number,borrower,borrower__agent,project,date_start,date_end,returned,database";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.loan_number && data.loan_number.trim().length > 0) {
+    searchFields += `&loan_number__icontains=${data.loan_number}`;
+  }
+
+  if (data.project && data.project.trim().length > 0) {
+    searchFields += `&project__icontains=${data.project}`;
+  }
+
+  if (data.borrower && data.borrower.trim().length > 0) {
+    searchFields += `&borrower__agent__icontains=${data.borrower}`;
+  }
+
+  if (data.date_start !== null) {
+    let date = data.date_start;
+
+    if (typeof date === "string") date = date.split("T")[0];
+    else {
+      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
+      date = date.toISOString().split("T")[0];
+    }
+    searchFields += `&date_start__gte=${date}`;
+  }
+
+  if (data.date_end !== null) {
+    let date = data.date_end;
+
+    if (typeof date === "string") date = date.split("T")[0];
+    else {
+      date.setHours(0, -date.getTimezoneOffset(), 0, 0);
+      date = date.toISOString().split("T")[0];
+    }
+    searchFields += `&date_end__gte=${date}`;
+  }
+
+  if (typeof databaseId !== "undefined" && databaseId !== null) {
+    searchFields += `&database__id=${databaseId}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `loan/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `loan/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/******************
+ ***  LOAN END  ***
+ ******************/
+
 /***********************
  *** ACCESSION START ***
  ***********************/

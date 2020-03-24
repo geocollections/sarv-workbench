@@ -218,7 +218,9 @@
     "accessions": "Vastuvõtuaktid",
     "accession": "Lisa vastuvõtuakt",
     "visits": "Kogude külastused",
-    "visit": "Lisa kogude külastus"
+    "visit": "Lisa kogude külastus",
+    "loans": "Laenud",
+    "loan": "Lisa laen"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -395,6 +397,9 @@
       "info": "Üldinfo"
     },
     "visit": {
+      "info": "Üldinfo"
+    },
+    "loan": {
       "info": "Üldinfo"
     }
   },
@@ -573,6 +578,10 @@
   "editVisit": {
     "heading": "Kogude külastus",
     "editMessage": "Muuda kogude külastust"
+  },
+  "editLoan": {
+    "heading": "Laenud",
+    "editMessage": "Muuda laenu"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1464,6 +1473,15 @@
     "purpose": "Tegevus",
     "collections_studied": "Kollektsioonid",
     "number_items": "Säilikute arv"
+  },
+  "loan": {
+    "loan_number": "Number",
+    "borrower": "Borrower",
+    "project": "Project",
+    "date_start": "Date start",
+    "date_end": "Date end",
+    "returned": "Returned",
+    "database": "Database"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

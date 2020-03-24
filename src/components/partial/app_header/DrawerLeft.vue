@@ -478,6 +478,22 @@ export default {
           ]
         },
         {
+          name: "loan",
+          title: "loans",
+          links: [
+            {
+              title: "loans",
+              path: "/loan",
+              icon: "fas fa-people-carry"
+            },
+            {
+              title: "loan",
+              path: "/loan/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
           name: "accession",
           title: "accessions",
           links: [

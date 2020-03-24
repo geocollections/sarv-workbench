@@ -1915,6 +1915,66 @@ const router = new Router({
           ]
         },
         {
+          path: "/loan",
+          component: () => import("./views/Loans.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/loan/LoanTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "loan",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/loan/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/loan/Loan.vue"),
+              meta: {
+                isEdit: true,
+                table: "loan",
+                heading: "editLoan.heading",
+                requiresAuth: true,
+                object: "loan"
+              }
+            }
+          ]
+        },
+        {
+          path: "/loan/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Loan add",
+              component: () => import("./components/loan/Loan.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.loan",
+                subForms: [{ path: "/loan/add", name: "header.loan" }],
+                requiresAuth: true,
+                object: "loan"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {

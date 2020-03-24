@@ -218,7 +218,9 @@
     "accessions": "Accession",
     "accession": "Add accession",
     "visits": "Visits to collections",
-    "visit": "Add visit to collection"
+    "visit": "Add visit to collection",
+    "loans": "Loans",
+    "loan": "Add loan"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -395,6 +397,9 @@
       "info": "General info"
     },
     "visit": {
+      "info": "General info"
+    },
+    "loan": {
       "info": "General info"
     }
   },
@@ -573,6 +578,10 @@
   "editVisit": {
     "heading": "Visit to collection",
     "editMessage": "Edit visit to collection"
+  },
+  "editLoan": {
+    "heading": "Loans",
+    "editMessage": "Edit loan"
   },
   "references": {
     "tableView": "Table view",
@@ -1464,6 +1473,15 @@
     "purpose": "Purpose",
     "collections_studied": "Collections studied",
     "number_items": "Number items"
+  },
+  "loan": {
+    "loan_number": "Number",
+    "borrower": "Laenu saaja",
+    "project": "Projekt",
+    "date_start": "Algus",
+    "date_end": "Lõpp",
+    "returned": "Tagastatud",
+    "database": "Andmebaas"
   },
   "permissions": {
     "title": "Data access permissions",
