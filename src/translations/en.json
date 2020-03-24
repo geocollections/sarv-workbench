@@ -150,6 +150,8 @@
     "editRock": "Rocks",
     "addDeaccession": "Add deaccession",
     "editDeaccession": "Deaccessions",
+    "addAccession": "Add accession",
+    "editAccession": "Accessions",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -210,7 +212,9 @@
     "keyword_relation": "Keyword relation",
     "special_functions": "Special functions",
     "deaccessions": "Deaccessions",
-    "deaccession": "Add deaccession"
+    "deaccession": "Add deaccession",
+    "accessions": "Accession",
+    "accession": "Add accession"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -382,6 +386,9 @@
     },
     "deaccession": {
       "info": "General info"
+    },
+    "accession": {
+      "info": "General info"
     }
   },
   "add": {
@@ -551,6 +558,10 @@
   "editDeaccession": {
     "heading": "Deaccession",
     "editMessage": "Edit deaccession"
+  },
+  "editAccession": {
+    "heading": "Accession",
+    "editMessage": "Edit accession"
   },
   "references": {
     "tableView": "Table view",
@@ -1419,6 +1430,16 @@
     "date_confirmed": "Date confirmed",
     "agent_kinnitas": "Agent signed",
     "agent_kandis": "Agent confirmed",
+    "number_items": "Number items"
+  },
+  "accession": {
+    "number": "Number",
+    "description": "Description",
+    "date_signed": "Date signed",
+    "date_confirmed": "Date confirmed",
+    "agent_andis": "Agent granted",
+    "agent_vottis": "Agent received",
+    "agent_kinnitas": "Agent signed",
     "number_items": "Number items"
   },
   "permissions": {

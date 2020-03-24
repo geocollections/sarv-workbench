@@ -150,6 +150,8 @@
     "editRock": "Kivimid ja mineraalid",
     "addDeaccession": "Lisa mahakandmisakt",
     "editDeaccession": "Mahakandmisaktid",
+    "addAccession": "Lisa vastuvõtuakt",
+    "editAccession": "Vastuvõtuaktid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -210,7 +212,9 @@
     "keyword_relation": "Seos terminiga",
     "special_functions": "Erifunktsioonid",
     "deaccessions": "Mahakandmisaktid",
-    "deaccession": "Lisa mahakandmisakt"
+    "deaccession": "Lisa mahakandmisakt",
+    "accessions": "Vastuvõtuaktid",
+    "accession": "Lisa vastuvõtuakt"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -382,6 +386,9 @@
     },
     "deaccession": {
       "info": "Üldinfo"
+    },
+    "accession": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -550,7 +557,11 @@
   },
   "editDeaccession": {
     "heading": "Mahakandmisakt",
-    "editMessage": "Muuda Mahakandmisakti"
+    "editMessage": "Muuda mahakandmisakti"
+  },
+  "editAccession": {
+    "heading": "Vastuvõtuakt",
+    "editMessage": "Muuda vastuvõtuakti"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1419,6 +1430,16 @@
     "date_confirmed": "Kinnitatud",
     "agent_kinnitas": "Kinnitas (nimi)",
     "agent_kandis": "Kandis maha (nimi)",
+    "number_items": "Säilikute arv"
+  },
+  "accession": {
+    "number": "Number",
+    "description": "Kirjeldus",
+    "date_signed": "Allkirjastatud",
+    "date_confirmed": "Kinnitatud",
+    "agent_andis": "Üleandja",
+    "agent_vottis": "Vastuvõtja",
+    "agent_kinnitas": "Kinnitaja",
     "number_items": "Säilikute arv"
   },
   "permissions": {

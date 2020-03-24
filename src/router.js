@@ -1792,6 +1792,71 @@ const router = new Router({
           ]
         },
         {
+          path: "/accession",
+          component: () => import("./views/Accessions.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/accession/AccessionTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "accession",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/accession/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/accession/Accession.vue"),
+              meta: {
+                isEdit: true,
+                table: "accession",
+                heading: "editAccession.heading",
+                requiresAuth: true,
+                object: "accession"
+              }
+            }
+          ]
+        },
+        {
+          path: "/accession/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Accession add",
+              component: () =>
+                import("./components/accession/Accession.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.accession",
+                subForms: [
+                  { path: "/accession/add", name: "header.accession" }
+                ],
+                requiresAuth: true,
+                object: "accession"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {

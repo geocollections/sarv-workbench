@@ -464,13 +464,29 @@ export default {
       ],
       routeLinksSpecial: [
         {
+          name: "accession",
+          title: "accessions",
+          links: [
+            {
+              title: "accessions",
+              path: "/accession",
+              icon: "far fa-handshake"
+            },
+            {
+              title: "accession",
+              path: "/accession/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
           name: "deaccession",
           title: "deaccessions",
           links: [
             {
               title: "deaccessions",
               path: "/deaccession",
-              icon: "fas fa-eraser"
+              icon: "fas fa-handshake-slash"
             },
             {
               title: "deaccession",

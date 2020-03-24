@@ -313,6 +313,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    accessionSearchHistory: {
+      type: Object
+    },
+    accessionViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

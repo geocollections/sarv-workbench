@@ -3036,6 +3036,43 @@ export function fetchListRockPropertyType() {
  ***  ROCK END  ***
  ******************/
 
+/***********************
+ *** ACCESSION START ***
+ ***********************/
+
+export function fetchAccessionDetail(id) {
+  return get(`accession/?id=${id}&format=json`);
+}
+
+export function fetchAccessions(data) {
+  let fields = "id,number,date_signed,agent_andis,agent_andis__agent,agent_vottis,agent_vottis__agent,number_items,description";
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.number && data.number.trim().length > 0) {
+    searchFields += `&number__icontains=${data.number}`;
+  }
+  if (data.description && data.description.trim().length > 0) {
+    searchFields += `&description__icontains=${data.description}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `accession/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  } else {
+    return get(
+      `accession/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+    );
+  }
+}
+
+/***********************
+ ***  ACCESSION END  ***
+ ***********************/
+
 /*************************
  *** DEACCESSION START ***
  *************************/
@@ -3045,7 +3082,7 @@ export function fetchDeaccessionDetail(id) {
 }
 
 export function fetchDeaccessions(data) {
-  let fields = "id,number,date_signed,agent_kandis,number_items,description";
+  let fields = "id,number,date_signed,agent_kandis,agent_kandis__agent,number_items,description";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
