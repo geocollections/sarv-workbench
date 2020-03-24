@@ -60,8 +60,6 @@
 
         <transition>
           <div v-show="block.fileInput" class="pa-1">
-            <!-- Todo: Implement new file upload component -->
-            <!-- NEW -->
             <file-upload
               accept-multiple
               :record-options="recordOptions"

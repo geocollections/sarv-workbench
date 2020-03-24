@@ -393,6 +393,9 @@
     },
     "accession": {
       "info": "Üldinfo"
+    },
+    "visit": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -1455,7 +1458,12 @@
     "visitor_country": "Külastaja riik",
     "date_arrived": "Saabus",
     "date_left": "Lahkus",
-    "host": "Vastuvõtja"
+    "host": "Vastuvõtja",
+    "visitor_free": "Külaline (txt)",
+    "visitor_institution": "Asutus",
+    "purpose": "Tegevus",
+    "collections_studied": "Kollektsioonid",
+    "number_items": "Säilikute arv"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

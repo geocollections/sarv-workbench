@@ -96,6 +96,7 @@ const formManipulation = {
         if (!this.isNotEmpty(this.files) && !this.$route.meta.isEdit)
           return false;
       }
+      if (object === "visit") child = "visit";
 
       if (child) {
         fields = fields[child];

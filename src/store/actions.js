@@ -22,7 +22,10 @@ import {
   fetchAreas,
   fetchDrillcoreBoxes,
   fetchLocations,
-  fetchRocks, fetchDeaccessions
+  fetchRocks,
+  fetchDeaccessions,
+  fetchAccessions,
+  fetchVisits
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -183,6 +186,18 @@ export default {
 
   FETCH_DEACCESSIONS: ({ commit, state }) => {
     return fetchDeaccessions(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_ACCESSIONS: ({ commit, state }) => {
+    return fetchAccessions(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_VISITS: ({ commit, state }) => {
+    return fetchVisits(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

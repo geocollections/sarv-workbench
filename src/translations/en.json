@@ -393,6 +393,9 @@
     },
     "accession": {
       "info": "General info"
+    },
+    "visit": {
+      "info": "General info"
     }
   },
   "add": {
@@ -1455,7 +1458,12 @@
     "visitor_country": "Visitor country",
     "date_arrived": "Date arrived",
     "date_left": "Date left",
-    "host": "Host"
+    "host": "Host",
+    "visitor_free": "Visitor (txt)",
+    "visitor_institution": "Institution",
+    "purpose": "Purpose",
+    "collections_studied": "Collections studied",
+    "number_items": "Number items"
   },
   "permissions": {
     "title": "Data access permissions",
