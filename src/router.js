@@ -1975,6 +1975,126 @@ const router = new Router({
           ]
         },
         {
+          path: "/web_news",
+          component: () => import("./views/WebNews.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/web_news/WebNewsTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "web_news",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/web_news/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/web_news/WebNews.vue"),
+              meta: {
+                isEdit: true,
+                table: "web_news",
+                heading: "editWebNews.heading",
+                requiresAuth: true,
+                object: "web_news"
+              }
+            }
+          ]
+        },
+        {
+          path: "/web_news/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Web news add",
+              component: () => import("./components/web_news/WebNews.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.web_news",
+                subForms: [{ path: "/web_news/add", name: "header.web_news" }],
+                requiresAuth: true,
+                object: "web_news"
+              }
+            }
+          ]
+        },
+        {
+          path: "/web_pages",
+          component: () => import("./views/WebPages.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/web_pages/WebPagesTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "web_pages",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/web_pages/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/web_pages/WebPages.vue"),
+              meta: {
+                isEdit: true,
+                table: "web_pages",
+                heading: "editWebPages.heading",
+                requiresAuth: true,
+                object: "web_pages"
+              }
+            }
+          ]
+        },
+        {
+          path: "/web_pages/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Web pages add",
+              component: () => import("./components/web_pages/WebPages.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.web_pages",
+                subForms: [{ path: "/web_pages/add", name: "header.web_pages" }],
+                requiresAuth: true,
+                object: "web_pages"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {

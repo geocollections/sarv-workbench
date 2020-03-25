@@ -219,6 +219,10 @@
     "accession": "Lisa vastuvõtuakt",
     "visits": "Kogude külastused",
     "visit": "Lisa kogude külastus",
+    "web_news": "Uudised",
+    "web_news_": "Lisa uudis",
+    "web_pages": "Veebilehed",
+    "web_pages_": "Lisa veebileht",
     "loans": "Laenud",
     "loan": "Lisa laen",
     "loan_specimen": "Laenatud eksemplar",
@@ -403,6 +407,12 @@
     },
     "loan": {
       "info": "Üldinfo"
+    },
+    "web_pages": {
+      "info": "Üldinfo"
+    },
+    "web_news": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -584,6 +594,14 @@
   "editLoan": {
     "heading": "Laenud",
     "editMessage": "Muuda laenu"
+  },
+  "editWebNews": {
+    "heading": "Uudised",
+    "editMessage": "Muuda uudist"
+  },
+  "editWebPages": {
+    "heading": "Veebilehed",
+    "editMessage": "Muuda veebileht"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1499,6 +1517,23 @@
       "loan_specimen": "Eksemplaride nimekiri",
       "loan_sample": "Proovide nimekiri"
     }
+  },
+  "web_news": {
+    "title": "Pealkiri",
+    "text": "Sisu",
+    "title_et": "Pealkiri (EST)",
+    "title_en": "Pealkiri (EN)",
+    "text_et": "Sisu (EST)",
+    "text_en": "Sisu (EN)"
+  },
+  "web_pages": {
+    "title": "Pealkiri",
+    "title_et": "Pealkiri (EST)",
+    "title_en": "Pealkiri (EN)",
+    "content_et": "Sisu (EST)",
+    "content_en": "Sisu (EN)",
+    "text": "Sisu",
+    "public": "Avalikult nähtav"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

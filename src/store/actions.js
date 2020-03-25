@@ -26,7 +26,7 @@ import {
   fetchDeaccessions,
   fetchAccessions,
   fetchVisits,
-  fetchLoans
+  fetchLoans, fetchWebPages, fetchWebNews
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -208,6 +208,18 @@ export default {
       state.activeSearchParams.search,
       state.activeSearchParams.databaseId
     ).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_WEB_PAGES: ({ commit, state }) => {
+    return fetchWebPages(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_WEB_NEWS: ({ commit, state }) => {
+    return fetchWebNews(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

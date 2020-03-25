@@ -327,6 +327,20 @@ new Vue({
       type: String,
       default: "table"
     },
+    webNewsSearchHistory: {
+      type: Object
+    },
+    webNewsViewType: {
+      type: String,
+      default: "table"
+    },
+    webPagesSearchHistory: {
+      type: Object
+    },
+    webPagesViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

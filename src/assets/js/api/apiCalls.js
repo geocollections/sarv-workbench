@@ -3266,6 +3266,64 @@ export function fetchDeaccessions(data) {
  ***  DEACCESSION END  ***
  *************************/
 
+/**********************
+ *** WEB_NEWS START ***
+ **********************/
+
+export function fetchWebNewsDetail(id) {
+  return get(`web_news/?id=${id}&format=json`);
+}
+
+export function fetchWebNews(data) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `web_news/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+      `web_news/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/**********************
+ ***  WEB_NEWS END  ***
+ **********************/
+
+/***********************
+ *** WEB_PAGES START ***
+ ***********************/
+
+export function fetchWebPagesDetail(id) {
+  return get(`web_pages/?id=${id}&format=json`);
+}
+
+export function fetchWebPages(data) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `web_pages/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+      `web_pages/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/***********************
+ ***  WEB_PAGES END  ***
+ ***********************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/

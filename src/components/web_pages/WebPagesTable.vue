@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-    class="visit-table"
+    class="web-pages-table"
     :headers="translatedHeaders"
     hide-default-footer
     dense
@@ -17,8 +17,8 @@
   >
     <template v-slot:item.id="{ item }">
       <router-link
-        :to="{ path: '/visit/' + item.id }"
-        :title="$t('editVisit.editMessage')"
+        :to="{ path: '/web_pages/' + item.id }"
+        :title="$t('editWebPages.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
@@ -26,42 +26,24 @@
       </router-link>
     </template>
 
-    <template v-slot:item.visitor="{ item }">
-      <router-link
-        :to="{ path: '/agent/' + item.visitor }"
-        :title="$t('editAgent.editMessage')"
-        class="sarv-link"
-        :class="`${bodyActiveColor}--text`"
-      >
-        {{ item.visitor__agent }}
-      </router-link>
+    <template v-slot:item.title="{ item }">
+      <div v-translate="{ et: item.title_et, en: item.title_en }"></div>
     </template>
 
-    <template v-slot:item.visitor_country="{ item }">
-      <span
-        v-translate="{
-          et: item.visitor_country__value,
-          en: item.visitor_country__value_en
-        }"
-      ></span>
+    <template v-slot:item.content="{ item }">
+      <div v-translate="{ et: item.content_et, en: item.content_en }"></div>
     </template>
 
-    <template v-slot:item.host="{ item }">
-      <router-link
-        :to="{ path: '/agent/' + item.host }"
-        :title="$t('editAgent.editMessage')"
-        class="sarv-link"
-        :class="`${bodyActiveColor}--text`"
-      >
-        {{ item.host__agent }}
-      </router-link>
+    <template v-slot:item.public="{ item }">
+      <v-icon small v-if="!item.public" color="green">fas fa-check</v-icon>
+      <v-icon small v-else color="red">fas fa-minus</v-icon>
     </template>
   </v-data-table>
 </template>
 
 <script>
 export default {
-  name: "VisitTable",
+  name: "WebPagesTable",
   props: {
     response: {
       type: Object
@@ -95,11 +77,9 @@ export default {
     expanded: [],
     headers: [
       { text: "common.id", value: "id" },
-      { text: "visit.visitor", value: "visitor" },
-      { text: "visit.visitor_country", value: "visitor_country" },
-      { text: "visit.date_arrived", value: "date_arrived" },
-      { text: "visit.date_left", value: "date_left" },
-      { text: "visit.host", value: "host" }
+      { text: "web_pages.title", value: "title" },
+      { text: "web_pages.text", value: "content" },
+      { text: "common.is_private", value: "public", align: "center" }
     ],
     names: []
   }),
@@ -117,8 +97,8 @@ export default {
 </script>
 
 <style scoped>
-.visit-table.v-data-table td,
-.visit-table.v-data-table th {
+.web-pages-table.v-data-table td,
+.web-pages-table.v-data-table th {
   padding: 0 8px;
 }
 </style>

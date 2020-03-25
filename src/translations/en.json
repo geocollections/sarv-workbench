@@ -154,6 +154,10 @@
     "editAccession": "Accessions",
     "addVisit": "Add visit to collection",
     "editVisit": "Visits to collections",
+    "addWebNews": "Add web news",
+    "editWebNews": "Web news",
+    "addWebPages": "Add web pages",
+    "editWebPages": "Web pages",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -219,6 +223,10 @@
     "accession": "Add accession",
     "visits": "Visits to collections",
     "visit": "Add visit to collection",
+    "web_news": "Web news",
+    "web_news_": "Add web news",
+    "web_pages": "Web pages",
+    "web_pages_": "Add web pages",
     "loans": "Loans",
     "loan": "Add loan",
     "loan_specimen": "Loan specimen",
@@ -403,6 +411,12 @@
     },
     "loan": {
       "info": "General info"
+    },
+    "web_pages": {
+      "info": "General info"
+    },
+    "web_news": {
+      "info": "General info"
     }
   },
   "add": {
@@ -584,6 +598,14 @@
   "editLoan": {
     "heading": "Loans",
     "editMessage": "Edit loan"
+  },
+  "editWebNews": {
+    "heading": "Web news",
+    "editMessage": "Edit web news"
+  },
+  "editWebPages": {
+    "heading": "Web pages",
+    "editMessage": "Edit web page"
   },
   "references": {
     "tableView": "Table view",
@@ -1499,6 +1521,23 @@
       "loan_specimen": "Loan specimens",
       "loan_sample": "Loan samples"
     }
+  },
+  "web_news": {
+    "title": "Title",
+    "text": "Content",
+    "title_et": "Title (EST)",
+    "title_en": "Title (EN)",
+    "text_et": "Text (EST)",
+    "text_en": "Text (EN)"
+  },
+  "web_pages": {
+    "title": "Title",
+    "title_et": "Title (EST)",
+    "title_en": "Title (EN)",
+    "content_et": "Content (EST)",
+    "content_en": "Content (EN)",
+    "public": "Publicly visible",
+    "text": "Content"
   },
   "permissions": {
     "title": "Data access permissions",

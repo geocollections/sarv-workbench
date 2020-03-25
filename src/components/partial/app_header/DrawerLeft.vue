@@ -524,6 +524,38 @@ export default {
               icon: "far fa-plus-square"
             }
           ]
+        },
+        {
+          name: "web_news",
+          title: "web_news",
+          links: [
+            {
+              title: "web_news",
+              path: "/web_news",
+              icon: "far fa-newspaper"
+            },
+            {
+              title: "web_news_",
+              path: "/web_news/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
+          name: "web_pages",
+          title: "web_pages",
+          links: [
+            {
+              title: "web_pages",
+              path: "/web_pages",
+              icon: "fas fa-pager"
+            },
+            {
+              title: "web_pages_",
+              path: "/web_pages/add",
+              icon: "far fa-plus-square"
+            }
+          ]
         }
       ]
     };
