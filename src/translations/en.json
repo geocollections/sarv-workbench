@@ -220,7 +220,9 @@
     "visits": "Visits to collections",
     "visit": "Add visit to collection",
     "loans": "Loans",
-    "loan": "Add loan"
+    "loan": "Add loan",
+    "loan_specimen": "Loan specimen",
+    "loan_sample": "Loan sample"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1476,12 +1478,27 @@
   },
   "loan": {
     "loan_number": "Number",
-    "borrower": "Laenu saaja",
-    "project": "Projekt",
-    "date_start": "Algus",
-    "date_end": "Lõpp",
-    "returned": "Tagastatud",
-    "database": "Andmebaas"
+    "borrower": "Borrower",
+    "project": "Project",
+    "date_start": "Date start",
+    "date_end": "Date end",
+    "returned": "Returned",
+    "database": "Database",
+    "type": "Type",
+    "borrower_institution": "Institution",
+    "loaner": "Loaner",
+    "delivery_method": "Delivery method",
+    "deliverer": "Deliverer",
+    "delivery_remarks": "Delivery remarks",
+    "special": "Special",
+    "date_signed": "Date signed",
+    "date_returned": "Date returned",
+    "specimen": "Specimen",
+    "sample": "Sample",
+    "relatedTables": {
+      "loan_specimen": "Loan specimens",
+      "loan_sample": "Loan samples"
+    }
   },
   "permissions": {
     "title": "Data access permissions",

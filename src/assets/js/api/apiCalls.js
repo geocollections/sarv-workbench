@@ -3158,6 +3158,34 @@ export function fetchLoans(data, databaseId) {
   }
 }
 
+export function fetchListLoanType() {
+  return get(`list_loan_type/?format=json`);
+}
+
+export function fetchListLoanDeliveryMethod() {
+  return get(`list_loan_delivery_method/?format=json`);
+}
+
+export function fetchLoanSpecimens(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `loan_specimen/?loan=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+export function fetchLoanSamples(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `loan_sample/?loan=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
 /******************
  ***  LOAN END  ***
  ******************/

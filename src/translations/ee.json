@@ -220,7 +220,9 @@
     "visits": "Kogude külastused",
     "visit": "Lisa kogude külastus",
     "loans": "Laenud",
-    "loan": "Lisa laen"
+    "loan": "Lisa laen",
+    "loan_specimen": "Laenatud eksemplar",
+    "loan_sample": "Laenatud proov"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1476,12 +1478,27 @@
   },
   "loan": {
     "loan_number": "Number",
-    "borrower": "Borrower",
-    "project": "Project",
-    "date_start": "Date start",
-    "date_end": "Date end",
-    "returned": "Returned",
-    "database": "Database"
+    "borrower": "Laenu saaja",
+    "project": "Projekt",
+    "date_start": "Algus",
+    "date_end": "Lõpp",
+    "returned": "Tagastatud",
+    "database": "Andmebaas",
+    "type": "Tüüp",
+    "borrower_institution": "Asutus",
+    "loaner": "Laenu andja",
+    "delivery_method": "Transpordiviis",
+    "deliverer": "Transportija",
+    "delivery_remarks": "Transp. lisainfo",
+    "special": "Eritingimused",
+    "date_signed": "Kuup. allkiri",
+    "date_returned": "Tagastatud",
+    "specimen": "Eksemplar",
+    "sample": "Proov",
+    "relatedTables": {
+      "loan_specimen": "Eksemplaride nimekiri",
+      "loan_sample": "Proovide nimekiri"
+    }
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

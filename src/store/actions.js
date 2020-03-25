@@ -25,7 +25,8 @@ import {
   fetchRocks,
   fetchDeaccessions,
   fetchAccessions,
-  fetchVisits
+  fetchVisits,
+  fetchLoans
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -198,6 +199,15 @@ export default {
 
   FETCH_VISITS: ({ commit, state }) => {
     return fetchVisits(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_LOANS: ({ commit, state }) => {
+    return fetchLoans(
+      state.activeSearchParams.search,
+      state.activeSearchParams.databaseId
+    ).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },
