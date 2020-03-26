@@ -327,6 +327,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    loanSearchHistory: {
+      type: Object
+    },
+    loanViewType: {
+      type: String,
+      default: "table"
+    },
     webNewsSearchHistory: {
       type: Object
     },

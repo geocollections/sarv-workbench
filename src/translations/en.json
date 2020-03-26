@@ -597,7 +597,8 @@
   },
   "editLoan": {
     "heading": "Loans",
-    "editMessage": "Edit loan"
+    "editMessage": "Edit loan",
+    "printMessage": "Print loan act"
   },
   "editWebNews": {
     "heading": "Web news",
@@ -1517,6 +1518,8 @@
     "date_returned": "Date returned",
     "specimen": "Specimen",
     "sample": "Sample",
+    "print": "Print",
+    "isActive": "Show active loans",
     "relatedTables": {
       "loan_specimen": "Loan specimens",
       "loan_sample": "Loan samples"

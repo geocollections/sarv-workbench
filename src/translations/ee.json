@@ -154,6 +154,10 @@
     "editAccession": "Vastuvõtuaktid",
     "addVisit": "Lisa kogude külastus",
     "editVisit": "Kogude külastused",
+    "addWebNews": "Lisa uudis",
+    "editWebNews": "Uudised",
+    "addWebPages": "Lisa veebileht",
+    "editWebPages": "Veebilehed",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -593,7 +597,8 @@
   },
   "editLoan": {
     "heading": "Laenud",
-    "editMessage": "Muuda laenu"
+    "editMessage": "Muuda laenu",
+    "printMessage": "Prindi laenu akt"
   },
   "editWebNews": {
     "heading": "Uudised",
@@ -1513,6 +1518,8 @@
     "date_returned": "Tagastatud",
     "specimen": "Eksemplar",
     "sample": "Proov",
+    "print": "Print",
+    "isActive": "Kuva aktiivsed laenud",
     "relatedTables": {
       "loan_specimen": "Eksemplaride nimekiri",
       "loan_sample": "Proovide nimekiri"

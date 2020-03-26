@@ -1,9 +1,21 @@
 <template>
   <div class="lang-buttons pa-2">
-    <v-btn text dark @click="changeLang('ee')" large class="font-weight-bold">
+    <v-btn
+      text
+      :dark="isDark"
+      @click="changeLang('ee')"
+      large
+      class="font-weight-bold"
+    >
       EST <span class="flag flag-ee flag-squared flag-circle ml-1"></span>
     </v-btn>
-    <v-btn text dark @click="changeLang('en')" large class="font-weight-bold">
+    <v-btn
+      text
+      :dark="isDark"
+      @click="changeLang('en')"
+      large
+      class="font-weight-bold"
+    >
       ENG<span class="flag flag-en flag-squared flag-circle ml-1"></span>
     </v-btn>
   </div>
@@ -14,6 +26,12 @@ import { toastInfo } from "@/assets/js/iziToast/iziToast";
 
 export default {
   name: "lang-buttons",
+  props: {
+    isDark: {
+      type: Boolean,
+      default: true
+    }
+  },
   methods: {
     changeLang(lang) {
       if (this.$localStorage.get("geocollectionsFileUploadLang") === lang)

@@ -15,6 +15,18 @@
     :server-items-length="response.count"
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
+    <template v-slot:item.print="{ item }">
+      <v-btn
+        @click="openLoanPrintView(item.id)"
+        :title="$t('editLoan.printMessage')"
+        :class="`${bodyActiveColor}--text`"
+        icon
+        small
+      >
+        <v-icon small>fas fa-print</v-icon>
+      </v-btn>
+    </template>
+
     <template v-slot:item.id="{ item }">
       <router-link
         :to="{ path: '/loan/' + item.id }"
@@ -90,6 +102,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
+      { text: "loan.print", value: "print", align: "center", sortable: false },
       { text: "common.id", value: "id" },
       { text: "loan.loan_number", value: "loan_number" },
       { text: "loan.borrower", value: "borrower" },
@@ -109,6 +122,14 @@ export default {
           text: this.$t(header.text)
         };
       });
+    }
+  },
+  methods: {
+    openLoanPrintView(id) {
+      let routeData = this.$router.resolve({
+        path: "/loan_print/" + id
+      });
+      window.open(routeData.href, "LoanPrintWindow", "width=800,height=750");
     }
   }
 };

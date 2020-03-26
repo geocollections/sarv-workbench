@@ -695,6 +695,7 @@ export default {
         borrower: null,
         date_start: null,
         date_end: null,
+        isActive: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

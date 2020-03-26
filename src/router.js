@@ -2043,7 +2043,8 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/web_pages/WebPagesTable.vue"),
+              component: () =>
+                import("./components/web_pages/WebPagesTable.vue"),
               meta: {
                 requiresAuth: true,
                 object: "web_pages",
@@ -2087,7 +2088,9 @@ const router = new Router({
               meta: {
                 isEdit: false,
                 addNew: "header.web_pages",
-                subForms: [{ path: "/web_pages/add", name: "header.web_pages" }],
+                subForms: [
+                  { path: "/web_pages/add", name: "header.web_pages" }
+                ],
                 requiresAuth: true,
                 object: "web_pages"
               }
@@ -2102,6 +2105,14 @@ const router = new Router({
           }
         }
       ]
+    },
+    {
+      path: "/loan_print/:id(\\d+)",
+      name: "Loan print",
+      component: () => import("./components/loan/LoanPrint.vue"),
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 });

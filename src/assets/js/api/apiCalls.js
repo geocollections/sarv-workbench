@@ -3141,6 +3141,10 @@ export function fetchLoans(data, databaseId) {
     searchFields += `&date_end__gte=${date}`;
   }
 
+  if (data.isActive) {
+    searchFields += `&returned=${!data.isActive}`;
+  }
+
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database__id=${databaseId}`;
   }
@@ -3167,6 +3171,14 @@ export function fetchListLoanDeliveryMethod() {
 }
 
 export function fetchLoanSpecimens(id, searchParameters) {
+  if (!searchParameters) {
+    searchParameters = {
+      page: 1,
+      paginateBy: 10,
+      sortBy: ["specimen_id"],
+      sortDesc: [true]
+    };
+  }
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
     searchParameters.sortDesc
@@ -3177,6 +3189,14 @@ export function fetchLoanSpecimens(id, searchParameters) {
 }
 
 export function fetchLoanSamples(id, searchParameters) {
+  if (!searchParameters) {
+    searchParameters = {
+      page: 1,
+      paginateBy: 10,
+      sortBy: ["sample"],
+      sortDesc: [true]
+    };
+  }
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
     searchParameters.sortDesc

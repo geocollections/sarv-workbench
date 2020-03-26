@@ -177,6 +177,24 @@
                 </v-col>
               </v-row>
 
+              <!-- LOAN CHECKBOXES -->
+              <v-row
+                class="px-3 mt-3 checkboxes"
+                v-if="$route.meta.object === 'loan'"
+              >
+                <v-col cols="12" class="py-0">
+                  <v-row>
+                    <v-checkbox
+                      v-model="searchParameters.isActive"
+                      :label="$t('loan.isActive')"
+                      class="mt-0 pr-6"
+                      :color="appSettings.bodyActiveColor"
+                      hide-details
+                    ></v-checkbox>
+                  </v-row>
+                </v-col>
+              </v-row>
+
               <!-- RESET SEARCH PREFERENCES -->
               <v-row class="mt-3">
                 <v-col cols="12">

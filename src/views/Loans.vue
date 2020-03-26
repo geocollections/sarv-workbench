@@ -8,6 +8,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       v-on:reset:searchPreferences="resetSearchPreferences"
+      :col-size="4"
     />
 
     <list-module-core
@@ -99,6 +100,7 @@ export default {
         borrower: null,
         date_start: null,
         date_end: null,
+        isActive: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],
