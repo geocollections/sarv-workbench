@@ -11,16 +11,18 @@
         class="pa-2"
       />
       <v-card v-else-if="loan" class="pa-2">
-        <v-row no-gutters class="text-center">
-          <v-col cols="12"
-            >Geological collections of the Department of Geology, Tallinn
-            University of Technology</v-col
-          >
-          <v-col cols="12" style="font-size: 0.7rem;"
-            >Ehitajate tee 5, 19086 Tallinn, Estonia; phone: +372 6203010;
-            http://taltech.ee/geoloogia-instituut; e-mail: gi@taltech.ee</v-col
-          >
-          <v-col>
+        <v-row no-gutters v-if="loan.returned">
+          <v-col cols="12" class="red--text font-weight-bold">
+            {{ $t("loan_print.has_returned") }}
+          </v-col>
+        </v-row>
+
+        <v-row no-gutters class="text-center mt-4">
+          <v-col cols="12">{{ $t("loan_print.title") }}</v-col>
+          <v-col cols="12" style="font-size: 0.7rem;">{{
+            $t("loan_print.title_address")
+          }}</v-col>
+          <v-col cols="12">
             <v-divider class="mt-1" style="border-color: black;"></v-divider>
           </v-col>
         </v-row>
@@ -29,14 +31,16 @@
           <v-col cols="12">
             <div class="h4 font-weight-bold">
               <div v-if="loanSpecimens.length > 0">
-                Shipping invoice of collection specimens (Loan No.
-                {{ loan.loan_number }})
-              </div>
-              <div v-else-if="loanSamples.length > 0">
-                Shipping invoice of geological samples No.
+                {{ $t("loan_print.heading_specimen") }}
                 {{ loan.loan_number }}
               </div>
-              <div v-else>Shipping invoice No. {{ loan.loan_number }}</div>
+              <div v-else-if="loanSamples.length > 0">
+                {{ $t("loan_print.heading_sample") }}
+                {{ loan.loan_number }}
+              </div>
+              <div v-else>
+                {{ $t("loan_print.heading_default") }} {{ loan.loan_number }}
+              </div>
             </div>
           </v-col>
         </v-row>
@@ -44,49 +48,107 @@
         <v-row no-gutters>
           <v-col cols="12">
             <div>
-              To:
+              {{ $t("loan_print.to") }}
             </div>
 
             <div>
               {{ loan.borrower__title }}
               <b>{{ loan.borrower__forename }} {{ loan.borrower__surename }}</b>
+              <span
+                v-if="loan.borrower__profession || loan.borrower__profession_en"
+                >,
+                <span
+                  v-translate="{
+                    et: loan.borrower__profession,
+                    en: loan.borrower__profession_en
+                  }"
+                ></span
+              ></span>
+            </div>
+
+            <div
+              v-translate="{
+                et: loan.borrower_institution__institution_name,
+                en: loan.borrower_institution__institution_name_en
+              }"
+            ></div>
+
+            <div>
+              {{ loan.borrower_institution__address }}
             </div>
 
             <div>
-              {{ loan.borrower_institution__agent }}
+              {{ loan.borrower_institution__address1 }}
             </div>
 
             <div>
-              {{ loan.borrower__address }}
+              {{ loan.borrower_institution__address2 }}
+            </div>
+
+            <div
+              v-translate="{
+                et: loan.borrower_institution__country__value,
+                en: loan.borrower_institution__country__value_en
+              }"
+            ></div>
+
+            <div>
+              {{ loan.borrower_institution__phone }}
             </div>
 
             <div>
-              {{ loan.borrower__address1 }}
+              {{ loan.borrower_institution__email }}
             </div>
 
             <div>
-              {{ loan.borrower__address2 }}
-            </div>
-
-            <div class="my-5">
-              TODO: URL
+              {{ loan.borrower_institution__http }}
             </div>
           </v-col>
         </v-row>
 
-        <div>
-          The
-          {{
-            loanSamples.length > 0
-              ? "samples listed below are"
-              : "material listed below is"
-          }}
-          sent as...
-        </div>
+        <v-row no-gutters class="my-5">
+          <v-col cols="12" v-if="loanSpecimens.length > 0">
+            <div>todo</div>
+          </v-col>
 
-        <div class="mb-5">
-          The material will be delivered as...
-        </div>
+          <v-col cols="12" v-else-if="loanSamples.length > 0">
+            <div>
+              {{ $t("loan_print.sample_info") }}
+              {{ loan.borrower__forename }} {{ loan.borrower__surename }} (<span
+                v-translate="{
+                  et: loan.borrower_institution__institution_name,
+                  en: loan.borrower_institution__institution_name_en
+                }"
+              ></span
+              >).
+              {{ $t("loan_print.sample_info2") }}
+            </div>
+
+            <div>
+              {{ $t("loan_print.sample_info3") }}
+              <span
+                v-translate="{
+                  et: loan.delivery_method__value,
+                  en: loan.delivery_method__value_en
+                }"
+              ></span>
+              <span
+                v-translate="{
+                  et: ' ',
+                  en: ' by '
+                }"
+              ></span>
+              <span>{{ loan.borrower__surename }}</span>
+              <span
+                v-translate="{
+                  et: ' poolt',
+                  en: ''
+                }"
+              ></span
+              >.
+            </div>
+          </v-col>
+        </v-row>
 
         <v-row
           no-gutters
@@ -166,21 +228,49 @@
         <v-row v-if="loanSpecimens.length > 0"> </v-row>
 
         <v-row no-gutters class="mt-5" style="border: 1px solid black">
-          <v-col cols="12" class="pa-1">
-            <div v-if="loanSpecimens.length > 0" class="font-weight-bold">
+          <v-col cols="12" class="pa-1" v-if="loanSpecimens.length > 0">
+            <div class="font-weight-bold">
               Please return a signed copy of this invoice to: Department of
               Geology, Tallinn University of Technology.
             </div>
+          </v-col>
 
-            <div v-else-if="loanSamples.length > 0" class="font-weight-bold">
-              Conditions of using the samples and the data thereof
+          <v-col cols="12" class="pa-2" v-else-if="loanSamples.length > 0">
+            <div class="font-weight-bold mt-3 mb-2">
+              {{ $t("loan_print.sample_extra") }}
             </div>
-            Todo: text 3
+
+            <div class="my-2">
+              {{ $t("loan_print.sample_extra1")
+              }}<a
+                href="https://geocollections.info"
+                class="sarv-link"
+                target="GeocollectionsWindow"
+                >https://geocollections.info</a
+              >
+            </div>
+
+            <div class="my-2">
+              {{ $t("loan_print.sample_extra2") }}
+            </div>
+
+            <div class="mt-2 mb-3">
+              <b>{{ $t("loan_print.sample_extra3") }}</b> {{ loan.special }}
+            </div>
           </v-col>
         </v-row>
 
-        <v-row no-gutters>
-          <v-col cols="12"></v-col>
+        <v-row no-gutters class="mt-12 mb-4">
+          <v-col cols="4"></v-col>
+          <v-col cols="4" class="pr-2">
+            <div style="border-bottom: 1px solid black;"></div>
+            <div class="text-center" v-if="loan.database === 1">{{ $t("loan_print.chief_curator") }}</div>
+            <div class="text-center" v-else>{{ $t("loan_print.signature") }}</div>
+          </v-col>
+          <v-col cols="4">
+            <div style="border-bottom: 1px solid black;"></div>
+            <div class="text-center">{{ $t("common.date") }}</div>
+          </v-col>
         </v-row>
       </v-card>
     </v-container>

@@ -1538,6 +1538,24 @@
       "loan_sample": "Loan samples"
     }
   },
+  "loan_print": {
+    "has_returned": "This loan has been returned.",
+    "title": "Geological collections of the Department of Geology, Tallinn University of Technology",
+    "title_address": "Ehitajate tee 5, 19086 Tallinn, Estonia; phone: +372 6203010; http://taltech.ee/geoloogia-instituut; e-mail: gi@taltech.ee",
+    "heading_specimen": "Shipping invoice of collection specimens No.",
+    "heading_sample": "Shipping invoice of geological samples No.",
+    "heading_default": "Shipping invoice No.",
+    "to": "To:",
+    "sample_info": "The samples listed below are sent to",
+    "sample_info2": "They have no commercial value.",
+    "sample_info3": "The material will be delivered as",
+    "sample_extra": "Conditions of using the samples and the data thereof",
+    "sample_extra1": "In case not all material is used for analysis, and there will be residues or preparations (such as acid digestion residues, matrix samples, SEM stubs, thin sections, micropaleontological preparations etc), these should be returned to the Department of Geology, Tallinn University of Technology. We reserve the right to store metadata on these samples in our database and make it freely accessible on-line at ",
+    "sample_extra2": "In case of publication, the sample numbers given above must be used, and the Department of Geology, Tallinn University of Technology (abbr. GIT) should be acknowledged for the material. For any fossils deriving from the samples, separate numbers for individuals should be acquired from, and the material returned to the Department of Geology, Tallinn University of Technology. Please notify us upon publication of the results.",
+    "sample_extra3": "Notes:",
+    "chief_curator": "Ursula Toom, Chief Curator",
+    "signature": "Signature"
+  },
   "web_news": {
     "title": "Title",
     "text": "Content",
