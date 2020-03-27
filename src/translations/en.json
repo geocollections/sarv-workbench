@@ -230,7 +230,20 @@
     "loans": "Loans",
     "loan": "Add loan",
     "loan_specimen": "Loan specimen",
-    "loan_sample": "Loan sample"
+    "loan_sample": "Loan sample",
+    "taxon_common_name": "Common name",
+    "taxon_description": "Description",
+    "taxon_occurance": "Occurance",
+    "taxon_opinion": "Opinion",
+    "taxon_page": "Taxon page",
+    "taxon_subclass": "Subtaxa",
+    "taxon_synonym": "Synonym",
+    "taxon_type_specimen": "Type specimen",
+    "drillcore_box": "Drillcore box",
+    "drillcore_study": "Drillcore study",
+    "sample_analysis": "Sample analysis",
+    "sample_preparation": "Sample preparation",
+    "sample_taxon_list": "Sample taxon"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"

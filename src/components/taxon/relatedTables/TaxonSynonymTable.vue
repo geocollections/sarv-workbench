@@ -48,9 +48,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{
-              `${$t("common.new")} ${$t("header.dataset_reference")}`
-            }}</span>
+            <span class="headline">{{$t("header.taxon_synonym")}}</span>
           </v-card-title>
 
           <v-card-text>
