@@ -1392,7 +1392,10 @@
     "keyword_relation_type": "Seotud termini tüüp",
     "keyword_relation_type_reverse": "Seotud termini tüüp (reverse)",
     "related_keyword": "Seotud termin",
-    "is_primary": "Esmane",
+    "is_primary": "Baastermin (mida tõlkida)",
+    "is_primary_table": "Baastermin",
+    "is_preferred": "Eelistatud (valitud keeles)",
+    "is_preferred_table": "Eelistatud",
     "information": "Infoks",
     "relatedTables": {
       "keyword_relation": "Seos terminiga"

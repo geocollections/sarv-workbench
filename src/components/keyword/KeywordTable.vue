@@ -34,6 +34,16 @@
         }"
       ></span>
     </template>
+
+    <template v-slot:item.is_primary="{ item }">
+      <v-icon v-if="item.is_primary" small color="green">fas fa-check</v-icon>
+      <v-icon v-else small color="red">fas fa-minus</v-icon>
+    </template>
+
+    <template v-slot:item.is_preferred="{ item }">
+      <v-icon v-if="item.is_preferred" small color="green">fas fa-check</v-icon>
+      <v-icon v-else small color="red">fas fa-minus</v-icon>
+    </template>
   </v-data-table>
 </template>
 
@@ -76,7 +86,8 @@ export default {
       { text: "keyword.keyword", value: "keyword" },
       { text: "keyword.language", value: "language__value" },
       { text: "keyword.keyword_category", value: "keyword_category__name" },
-      { text: "keyword.is_primary", value: "is_primary" }
+      { text: "keyword.is_primary_table", value: "is_primary", align: "center" },
+      { text: "keyword.is_preferred_table", value: "is_preferred", align: "center" }
     ],
     names: []
   }),

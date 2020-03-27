@@ -239,6 +239,12 @@
         @change="keyword.is_primary = !keyword.is_primary"
       />
       <checkbox-wrapper
+        v-model="keyword.is_preferred"
+        :color="bodyActiveColor"
+        :label="$t('keyword.is_preferred')"
+        @change="keyword.is_preferred = !keyword.is_preferred"
+      />
+      <checkbox-wrapper
         v-model="keyword.is_private"
         :color="bodyActiveColor"
         :label="$t('common.is_private')"
@@ -391,6 +397,7 @@ export default {
           "remarks",
           "description",
           "is_primary",
+          "is_preferred",
           "is_private"
         ],
         autocomplete: {

@@ -1392,7 +1392,10 @@
     "keyword_relation_type": "Keyword relation type",
     "keyword_relation_type_reverse": "Keyword relation type (reverse)",
     "related_keyword": "Related term",
-    "is_primary": "Primary",
+    "is_primary": "Base term (to translate etc)",
+    "is_primary_table": "Base term",
+    "is_preferred": "Preferred (in selected language)",
+    "is_preferred_table": "Preferred",
     "information": "For information",
     "relatedTables": {
       "keyword_relation": "Keyword relation"
