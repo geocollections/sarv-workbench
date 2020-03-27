@@ -38,19 +38,19 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.specimen_id="{ item }">
+      <template v-slot:item.specimen="{ item }">
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
-            :to="{ path: '/specimen/' + item.specimen_id }"
+            :to="{ path: '/specimen/' + item.specimen }"
             :title="$t('editSpecimen.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.specimen_id }}
+            {{ item.specimen__specimen_id }}
           </router-link>
           <router-link
-            v-else-if="item.specimen_id"
+            v-else-if="item.specimen"
             :to="{ path: '/specimen/' + item.specimen.id }"
             :title="$t('editSpecimen.editMessage')"
             class="sarv-link"
@@ -61,12 +61,12 @@
         </div>
         <router-link
           v-else
-          :to="{ path: '/specimen/' + item.specimen_id }"
+          :to="{ path: '/specimen/' + item.specimen }"
           :title="$t('editSpecimen.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.specimen_id }}
+          {{ item.specimen__specimen_id }}
         </router-link>
       </template>
     </v-data-table>
@@ -88,7 +88,7 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.specimen_id"
+                    v-model="item.specimen"
                     :color="bodyActiveColor"
                     :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
@@ -185,7 +185,7 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "loan.specimen", value: "specimen_id" },
+      { text: "loan.specimen", value: "specimen" },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -196,7 +196,7 @@ export default {
     ],
     dialog: false,
     item: {
-      specimen_id: null,
+      specimen: null,
       remarks: ""
     },
     isNewItem: true,
@@ -220,8 +220,8 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.specimen_id !== "undefined" &&
-        this.item.specimen_id !== null
+        typeof this.item.specimen !== "undefined" &&
+        this.item.specimen !== null
       );
     }
   },
@@ -231,7 +231,7 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        specimen_id: null,
+        specimen: null,
         remarks: ""
       };
     },
@@ -262,15 +262,15 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.specimen_id !== "object" && item.specimen_id !== null) {
-        this.item.specimen_id = {
-          id: item.specimen_id,
-          specimen_id: item.specimen_id.toString()
+      if (typeof item.specimen !== "object" && item.specimen !== null) {
+        this.item.specimen = {
+          id: item.specimen,
+          specimen_id: item.specimen__specimen_id
         };
-        this.autocomplete.specimen.push(this.item.specimen_id);
-      } else if (item.specimen_id !== null) {
-        this.item.specimen_id = item.specimen_id;
-        this.autocomplete.specimen.push(this.item.specimen_id);
+        this.autocomplete.specimen.push(this.item.specimen);
+      } else if (item.specimen !== null) {
+        this.item.specimen = item.specimen;
+        this.autocomplete.specimen.push(this.item.specimen);
       }
       this.item.remarks = item.remarks;
 

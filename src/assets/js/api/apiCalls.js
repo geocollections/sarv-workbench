@@ -3174,8 +3174,8 @@ export function fetchLoanSpecimens(id, searchParameters) {
   if (!searchParameters) {
     searchParameters = {
       page: 1,
-      paginateBy: 10,
-      sortBy: ["specimen_id"],
+      paginateBy: 1000,
+      sortBy: ["specimen"],
       sortDesc: [true]
     };
   }
@@ -3192,7 +3192,7 @@ export function fetchLoanSamples(id, searchParameters) {
   if (!searchParameters) {
     searchParameters = {
       page: 1,
-      paginateBy: 10,
+      paginateBy: 1000,
       sortBy: ["sample"],
       sortDesc: [true]
     };

@@ -578,7 +578,7 @@ export default {
           loan_specimen: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["specimen_id"],
+            sortBy: ["specimen"],
             sortDesc: [true]
           },
           loan_sample: {

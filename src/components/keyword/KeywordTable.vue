@@ -86,8 +86,16 @@ export default {
       { text: "keyword.keyword", value: "keyword" },
       { text: "keyword.language", value: "language__value" },
       { text: "keyword.keyword_category", value: "keyword_category__name" },
-      { text: "keyword.is_primary_table", value: "is_primary", align: "center" },
-      { text: "keyword.is_preferred_table", value: "is_preferred", align: "center" }
+      {
+        text: "keyword.is_primary_table",
+        value: "is_primary",
+        align: "center"
+      },
+      {
+        text: "keyword.is_preferred_table",
+        value: "is_preferred",
+        align: "center"
+      }
     ],
     names: []
   }),
