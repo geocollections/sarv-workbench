@@ -1,7 +1,7 @@
 <template>
   <div class="keyword-relation-table">
     <v-data-table
-      :headers="translatedHeaders"
+      :headers="translatedAndFilteredHeaders"
       hide-default-footer
       dense
       :items="response.results"
@@ -94,7 +94,7 @@
       </template>
     </v-data-table>
 
-    <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
+    <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'" v-if="!isKeywordBaseTerm">
       <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
         <template v-slot:activator="{ on }">
           <v-btn :color="bodyActiveColor" small dark v-on="on">{{
@@ -205,6 +205,9 @@ export default {
       type: Boolean,
       required: false,
       default: true
+    },
+    isKeywordBaseTerm: {
+      type: Boolean
     }
   },
 
@@ -236,13 +239,19 @@ export default {
   }),
 
   computed: {
-    translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
+    translatedAndFilteredHeaders() {
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(header => {
+          if (this.isKeywordBaseTerm) {
+            return header.value !== "action";
+          } else return header;
+        });
     },
 
     isItemValid() {

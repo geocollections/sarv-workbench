@@ -7,7 +7,8 @@ const axios = require("axios");
 const api = {
   url: "https://rwapi.geocollections.info/",
   checkDoiUrl: "https://api.crossref.org/works/",
-  solrUrl: "https://api.geocollections.info/solr/"
+  solrUrl: "https://api.geocollections.info/solr/",
+  publicApi: "https://api.geocollections.info/"
 };
 
 const attachmentFields =

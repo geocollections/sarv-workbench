@@ -168,7 +168,7 @@
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <keyword-relation-table
-            v-show="activeTab === 'keyword_relation' && !keyword.is_primary"
+            v-show="activeTab === 'keyword_relation'"
             :response="relatedData.keyword_relation"
             :search-parameters="relatedData.searchParameters.keyword_relation"
             :body-color="bodyColor"
@@ -176,6 +176,7 @@
             v-on:related:add="addRelatedItem"
             v-on:related:edit="editRelatedItem"
             v-on:related:delete="deleteRelatedItem"
+            :is-keyword-base-term="!!keyword.is_primary"
           />
 
           <keyword-relation-reverse-table
@@ -309,16 +310,20 @@ export default {
 
   computed: {
     computedRelatedTabs() {
-      return this.relatedTabs.filter(tabs => {
-        if (this.keyword.is_primary) {
-          return (
-            tabs.name !== "keyword_relation" &&
-            this.relatedData.keyword_relation_reverse.count > 0
-          );
-        } else {
-          return tabs.name !== "keyword_relation_reverse";
-        }
-      });
+      // return this.relatedTabs.filter(tabs => {
+      //   if (this.keyword.is_primary) {
+      //     return (
+      //       tabs.name !== "keyword_relation" &&
+      //       this.relatedData.keyword_relation_reverse.count > 0
+      //     );
+      //   } else {
+      //     return tabs.name !== "keyword_relation_reverse";
+      //   }
+      // });
+
+      return this.relatedTabs.filter(
+        tabs => tabs.name !== "keyword_relation_reverse"
+      );
     },
 
     paginateByOptionsTranslated() {
@@ -517,10 +522,10 @@ export default {
         }
       });
 
-      if (uploadableObject.is_primary) {
-        uploadableObject.related_data = {};
-        uploadableObject.related_data.keyword_relation = {};
-      }
+      // if (uploadableObject.is_primary) {
+      //   uploadableObject.related_data = {};
+      //   uploadableObject.related_data.keyword_relation = {};
+      // }
 
       // Adding related data only on add view
       // if (!this.$route.meta.isEdit) {
