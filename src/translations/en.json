@@ -1399,7 +1399,8 @@
     "is_preferred_table": "Preferred",
     "information": "For information",
     "relatedTables": {
-      "keyword_relation": "Keyword relation"
+      "keyword_relation": "Keyword relation",
+      "keyword_relation_reverse": "Keyword translations"
     }
   },
   "selectionSeries": {

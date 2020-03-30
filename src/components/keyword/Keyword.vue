@@ -132,7 +132,7 @@
 
     <!-- SHOWING RELATED_DATA -->
     <v-card
-      v-if="$route.meta.isEdit"
+      v-if="$route.meta.isEdit && computedRelatedTabs.length > 0"
       class="related-tabs mt-2"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
@@ -168,7 +168,7 @@
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <keyword-relation-table
-            v-show="activeTab === 'keyword_relation'"
+            v-show="activeTab === 'keyword_relation' && !keyword.is_primary"
             :response="relatedData.keyword_relation"
             :search-parameters="relatedData.searchParameters.keyword_relation"
             :body-color="bodyColor"
@@ -309,9 +309,16 @@ export default {
 
   computed: {
     computedRelatedTabs() {
-      return this.relatedTabs.filter(
-        tabs => tabs.name !== "keyword_relation_reverse"
-      );
+      return this.relatedTabs.filter(tabs => {
+        if (this.keyword.is_primary) {
+          return (
+            tabs.name !== "keyword_relation" &&
+            this.relatedData.keyword_relation_reverse.count > 0
+          );
+        } else {
+          return tabs.name !== "keyword_relation_reverse";
+        }
+      });
     },
 
     paginateByOptionsTranslated() {
@@ -509,6 +516,11 @@ export default {
           uploadableObject[key] = null;
         }
       });
+
+      if (uploadableObject.is_primary) {
+        uploadableObject.related_data = {};
+        uploadableObject.related_data.keyword_relation = {};
+      }
 
       // Adding related data only on add view
       // if (!this.$route.meta.isEdit) {

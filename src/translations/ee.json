@@ -1399,7 +1399,8 @@
     "is_preferred_table": "Eelistatud",
     "information": "Infoks",
     "relatedTables": {
-      "keyword_relation": "Seos terminiga"
+      "keyword_relation": "Seos terminiga",
+      "keyword_relation_reverse": "Termini tõlked"
     }
   },
   "selectionSeries": {
