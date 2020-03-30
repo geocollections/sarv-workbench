@@ -244,6 +244,7 @@ export default {
 
           if (this.isLocationSet) {
             this.addMarker(newVal);
+            this.map.off("click");
           } else {
             if (this.marker) this.map.removeLayer(this.marker);
             this.marker = null;
@@ -322,8 +323,9 @@ export default {
         if (this.isLocationSet) {
           this.addMarker(this.location);
           this.map.setView(this.marker._latlng, this.zoom);
+        } else {
+          this.map.on("click", event => this.updateCoordinates(event.latlng));
         }
-        this.map.on("click", event => this.updateCoordinates(event.latlng));
       }
     },
 
@@ -413,6 +415,7 @@ export default {
 
     updateCoordinates(coordinates, method, GPSPosition) {
       this.$emit("update-coordinates", coordinates, method, GPSPosition);
+      this.map.off("click");
     },
 
     addMarker(latlng) {

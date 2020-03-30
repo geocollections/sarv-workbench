@@ -62,6 +62,8 @@ export default {
       if (name === "localityInfo") return "fa-map-signs";
       if (name === "details") return "fa-info";
       if (name === "specimen") return "fa-fish";
+      if (name === "abstract") return "fa-sticky-note";
+      else return "fa-fish";
     },
 
     getIconPack() {
