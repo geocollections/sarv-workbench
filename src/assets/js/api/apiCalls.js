@@ -83,7 +83,7 @@ async function get(child = "", customUrl) {
   }
 }
 
-async function post(child, data, customUrl = "", returnErrorResponse = false) {
+async function post(child, data, customUrl = "", returnErrorResponse = false, config = {}) {
   let url = api.url + child;
   if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
   let useLoginOptions = false;
@@ -103,7 +103,7 @@ async function post(child, data, customUrl = "", returnErrorResponse = false) {
 
   try {
     if (useLoginOptions) return await axios(loginOptions);
-    else return await axios.post(url, data);
+    else return await axios.post(url, data, config);
   } catch (error) {
     // console.log(error.response);
     if (returnErrorResponse) return error.response;

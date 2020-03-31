@@ -246,7 +246,16 @@ const formManipulation = {
       this.sendingData = true;
       this.loadingPercent = 0;
 
-      postRequest(url, formData).then(
+      const config = {
+        onUploadProgress: function(progressEvent) {
+          let percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          console.log(percentCompleted);
+        }
+      };
+
+      postRequest(url, formData, "", false, config).then(
         response => {
           console.log(response);
           this.sendingData = false;
