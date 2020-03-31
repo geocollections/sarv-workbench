@@ -5,8 +5,10 @@
       class="loading-overlay"
       size="massive"
       :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
+          `${
+            $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
+          } | ${loadingPercent}`
+        "
     ></spinner>
 
     <!-- REQUIRED INFO -->
