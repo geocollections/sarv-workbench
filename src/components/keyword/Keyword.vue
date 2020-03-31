@@ -237,7 +237,7 @@
         v-model="keyword.is_primary"
         :color="bodyActiveColor"
         :label="$t('keyword.is_primary')"
-        @change="keyword.is_primary = !keyword.is_primary"
+        @change="updateIsPrimary"
       />
       <checkbox-wrapper
         v-model="keyword.is_preferred"
@@ -382,6 +382,12 @@ export default {
   },
 
   methods: {
+    updateIsPrimary() {
+      this.keyword.is_primary = !this.keyword.is_primary;
+      if (this.keyword.is_primary)
+        this.keyword.is_preferred = this.keyword.is_primary;
+    },
+
     setTab(type) {
       if (type) {
         this.$store.dispatch("updateActiveTab", {
@@ -425,7 +431,9 @@ export default {
             id: 1,
             value: "inglise",
             value_en: "English"
-          }
+          },
+          is_primary: false,
+          is_preferred: true
         },
         searchParameters: this.setDefaultSearchParameters(),
         block: {

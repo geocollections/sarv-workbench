@@ -2091,7 +2091,7 @@ export function fetchKeyword(id) {
 
 export function fetchKeywords(data, listOfIDs) {
   let fields =
-    "id,keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,remarks,is_primary";
+    "id,keyword,language,language__value,language__value_en,keyword_category,keyword_category__name,keyword_category__name_en,related_keyword,related_keyword__keyword,remarks,is_primary,is_preferred";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
