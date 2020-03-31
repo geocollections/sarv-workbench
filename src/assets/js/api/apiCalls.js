@@ -139,9 +139,10 @@ export function postRequest(
   url,
   data,
   customUrl = "",
-  returnErrorResponse = false
+  returnErrorResponse = false,
+  config = {}
 ) {
-  return post(url, data, customUrl, returnErrorResponse);
+  return post(url, data, customUrl, returnErrorResponse, config);
 }
 
 /*************************
