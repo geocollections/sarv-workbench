@@ -11,7 +11,7 @@
         v-show="sendingData"
         class="loading-overlay"
         size="massive"
-        :message="$route.meta.isEdit ? `${$t('edit.overlayLoading')} ${loadingPercent} %` : $t('add.overlay')"
+        :message="$route.meta.isEdit ? `${$t('edit.overlayLoading')} ${loadingPercent} %` : `${$t('add.overlay')} ${loadingPercent} %`"
       />
     </template>
 
