@@ -3387,6 +3387,26 @@ export function fetchSampleSeries(data) {
   }
 }
 
+export function fetchSampleSeriesSamples(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `sample/?series=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+export function fetchSampleSeriesAttachments(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `attachment/?attach_link__sample_series=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
 /***************************
  ***  SAMPLE_SERIES END  ***
  **************************/

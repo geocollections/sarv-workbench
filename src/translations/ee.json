@@ -436,6 +436,9 @@
     },
     "web_news": {
       "info": "Üldinfo"
+    },
+    "sample_series": {
+      "info": "Üldinfo"
     }
   },
   "add": {
@@ -1602,13 +1605,27 @@
     "public": "Avalikult nähtav"
   },
   "sample_series": {
-    "title": "Pealkiri",
-    "title_et": "Pealkiri (EST)",
-    "title_en": "Pealkiri (EN)",
-    "content_et": "Sisu (EST)",
-    "content_en": "Sisu (EN)",
-    "text": "Sisu",
-    "public": "Avalikult nähtav"
+    "sampling_purpose": "Eesmärk",
+    "sample_count": "Proovide arv",
+    "sample_numbers": "Proovinumbrid",
+    "number_prefix": "Numbri prefix",
+    "number_start": "Numbri algus",
+    "depth_base": "Süg. (alum)",
+    "depth_top": "Süg. (ülem)",
+    "zero_level": "0-tase",
+    "stratigraphy_base": "Strat. alumine",
+    "stratigraphy_base_free": "Strat. al. vaba",
+    "stratigraphy_top": "Strat. ülemine",
+    "stratigraphy_top_free": "Strat. ül. vaba",
+    "agent_collected": "Koguja",
+    "date_collected": "Kogumise kuupäev",
+    "date_collected_free": "Kogumise kuupäev txt",
+    "location": "Asukoht",
+    "locality_free": "Lokaliteet (txt)",
+    "relatedTables": {
+      "samples": "Proovid",
+      "attachments": "Failid"
+    }
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

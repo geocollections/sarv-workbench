@@ -436,6 +436,9 @@
     },
     "web_news": {
       "info": "General info"
+    },
+    "sample_series": {
+      "info": "General info"
     }
   },
   "add": {
@@ -1602,13 +1605,27 @@
     "text": "Content"
   },
   "sample_series": {
-    "title": "Title",
-    "title_et": "Title (EST)",
-    "title_en": "Title (EN)",
-    "content_et": "Content (EST)",
-    "content_en": "Content (EN)",
-    "public": "Publicly visible",
-    "text": "Content"
+    "sampling_purpose": "Purpose",
+    "sample_count": "Sample count",
+    "sample_numbers": "Sample numbers",
+    "number_prefix": "Number prefix",
+    "number_start": "Number start",
+    "depth_base": "Depth base",
+    "depth_top": "Depth top",
+    "zero_level": "Zero level",
+    "stratigraphy_base": "Stratigraphy base",
+    "stratigraphy_base_free": "Stratigraphy base txt",
+    "stratigraphy_top": "Stratigraphy top",
+    "stratigraphy_top_free": "Stratigraphy top txt",
+    "agent_collected": "Agent collected",
+    "date_collected": "Date collected",
+    "date_collected_free": "Date collected txt",
+    "location": "Location",
+    "locality_free": "Locality (txt)",
+    "relatedTables": {
+      "samples": "Samples",
+      "attachments": "Attachments"
+    }
   },
   "permissions": {
     "title": "Data access permissions",
