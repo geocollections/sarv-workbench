@@ -1,14 +1,5 @@
 <template>
   <div class="preparation">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -436,7 +427,7 @@ import {
   fetchLinkedTaxa,
   fetchPreparation
 } from "../../assets/js/api/apiCalls";
-import Spinner from "vue-simple-spinner";
+
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
 import TaxonListTable from "../taxon/TaxonListTable";
@@ -454,7 +445,6 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     CheckboxWrapper,
-    Spinner,
     TaxonListTable,
     ExportButtons
   },
@@ -607,7 +597,8 @@ export default {
 
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "preparation");
         fetchPreparation(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
@@ -620,9 +611,9 @@ export default {
 
             this.removeUnnecessaryFields(this.preparation, this.copyFields);
             this.$emit("data-loaded", this.preparation);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

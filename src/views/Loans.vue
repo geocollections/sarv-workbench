@@ -26,8 +26,8 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import {fetchLoans} from "../assets/js/api/apiCalls";
-import {mapState} from "vuex";
+import { fetchLoans } from "../assets/js/api/apiCalls";
+import { mapState } from "vuex";
 export default {
   name: "Loans",
 

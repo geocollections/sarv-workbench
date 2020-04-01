@@ -1,14 +1,5 @@
 <template>
   <div class="visit">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -18,10 +9,13 @@
     >
       <v-card-title class="pt-2 pb-1">
         <div class="card-title--clickable" @click="block.info = !block.info">
-          <span :class="validate('visit', 'visit') ? 'green--text' : 'red--text'">{{
-            $t("common.generalInfo")
-          }}</span>
-          <v-icon right :class="validate('visit', 'visit') ? 'green--text' : 'red--text'"
+          <span
+            :class="validate('visit', 'visit') ? 'green--text' : 'red--text'"
+            >{{ $t("common.generalInfo") }}</span
+          >
+          <v-icon
+            right
+            :class="validate('visit', 'visit') ? 'green--text' : 'red--text'"
             >fas fa-project-diagram</v-icon
           >
         </div>
@@ -203,9 +197,13 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {fetchListAgentType, fetchListCountry, fetchVisit} from "../../assets/js/api/apiCalls";
+import {
+  fetchListAgentType,
+  fetchListCountry,
+  fetchVisit
+} from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import Spinner from "vue-simple-spinner";
+
 import DateWrapper from "../partial/inputs/DateWrapper";
 
 export default {
@@ -215,8 +213,7 @@ export default {
     DateWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {
@@ -328,7 +325,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchVisit(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -338,9 +336,9 @@ export default {
             this.removeUnnecessaryFields(this.visit, this.copyFields);
 
             this.$emit("data-loaded", this.visit);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

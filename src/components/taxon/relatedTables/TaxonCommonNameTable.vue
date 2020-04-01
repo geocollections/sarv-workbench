@@ -79,7 +79,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{$t("header.taxon_common_name")}}</span>
+            <span class="headline">{{ $t("header.taxon_common_name") }}</span>
           </v-card-title>
 
           <v-card-text>

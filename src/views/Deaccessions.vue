@@ -28,7 +28,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import {fetchDeaccessions} from "../assets/js/api/apiCalls";
+import { fetchDeaccessions } from "../assets/js/api/apiCalls";
 export default {
   name: "Deaccessions",
 

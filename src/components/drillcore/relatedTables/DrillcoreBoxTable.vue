@@ -153,7 +153,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{$t("header.drillcore_box")}}</span>
+            <span class="headline">{{ $t("header.drillcore_box") }}</span>
           </v-card-title>
 
           <v-card-text>

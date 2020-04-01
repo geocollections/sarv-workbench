@@ -1,14 +1,5 @@
 <template>
   <div class="dataset">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -298,7 +289,6 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import Spinner from "vue-simple-spinner";
 import { mapState } from "vuex";
 import {
   fetchDataset,
@@ -329,8 +319,7 @@ export default {
     AutocompleteWrapper,
     DateWrapper,
     TextareaWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {
@@ -503,7 +492,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "dataset");
         fetchDataset(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
@@ -516,9 +506,9 @@ export default {
 
             this.removeUnnecessaryFields(this.dataset, this.copyFields);
             this.$emit("data-loaded", this.dataset);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

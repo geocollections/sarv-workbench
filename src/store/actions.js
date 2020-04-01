@@ -26,7 +26,9 @@ import {
   fetchDeaccessions,
   fetchAccessions,
   fetchVisits,
-  fetchLoans, fetchWebPages, fetchWebNews
+  fetchLoans,
+  fetchWebPages,
+  fetchWebNews
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -314,5 +316,17 @@ export default {
 
   initialiseMapSettings({ commit }) {
     commit("INITIALISE_MAP_SETTINGS");
+  },
+
+  setLoadingState({ commit }, bool) {
+    commit("SET_LOADING_STATE", bool);
+  },
+
+  setLoadingType({ commit }, type) {
+    commit("SET_LOADING_TYPE", type);
+  },
+
+  setLoadingPercent({ commit }, percent) {
+    commit("SET_LOADING_PERCENT", percent);
   }
 };

@@ -106,7 +106,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{$t("header.sample_analysis")}}</span>
+            <span class="headline">{{ $t("header.sample_analysis") }}</span>
           </v-card-title>
 
           <v-card-text>

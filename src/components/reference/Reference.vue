@@ -1,12 +1,5 @@
 <template>
   <div class="reference">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="$route.meta.isEdit ? `${$t('edit.overlayLoading')} ${loadingPercent} %` : `${$t('add.overlay')} ${loadingPercent} %`"
-    ></spinner>
-
     <!-- REQUIRED INFO -->
     <v-card
       class="mt-2"
@@ -904,7 +897,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import {
   fetchReference,
   fetchListReferenceTypes,
@@ -954,8 +946,7 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    NewDoiButton,
-    Spinner
+    NewDoiButton
   },
   props: {
     isBodyActiveColorDark: {
@@ -1220,7 +1211,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchReference(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -1232,9 +1224,9 @@ export default {
 
             this.removeUnnecessaryFields(this.reference, this.copyFields);
             this.$emit("data-loaded", this.reference);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });
@@ -1562,10 +1554,11 @@ export default {
     },
 
     checkDoi() {
-      this.sendingData = true;
+      this.setLoadingState(true);
+      this.setLoadingType("fetch");
       fetchDoiCheck(this.reference.doi).then(
         response => {
-          this.sendingData = false;
+          this.setLoadingState(false);
           if (response.status === 200) {
             if (response.data.status === "ok") {
               this.updateFieldsUsingDoi(response.data.message);
@@ -1574,7 +1567,7 @@ export default {
         },
         () => {
           // console.log(errResponse)
-          this.sendingData = false;
+          this.setLoadingState(false);
           toastError({ text: this.$t("reference.doiCheckUnsuccessful") });
         }
       );

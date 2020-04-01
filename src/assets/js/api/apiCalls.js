@@ -83,7 +83,13 @@ async function get(child = "", customUrl) {
   }
 }
 
-async function post(child, data, customUrl = "", returnErrorResponse = false, config = {}) {
+async function post(
+  child,
+  data,
+  customUrl = "",
+  returnErrorResponse = false,
+  config = {}
+) {
   let url = api.url + child;
   if (customUrl && customUrl.length > 0) url = customUrl + child + "/";
   let useLoginOptions = false;

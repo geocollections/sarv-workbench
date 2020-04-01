@@ -1,14 +1,5 @@
 <template>
   <div class="journal">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    ></spinner>
-
     <!-- REQUIRED INFO -->
     <v-card
       class="mt-2"
@@ -116,7 +107,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
@@ -129,8 +119,7 @@ export default {
 
   components: {
     TextareaWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {
@@ -221,7 +210,8 @@ export default {
 
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchJournal(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -232,9 +222,9 @@ export default {
 
             this.removeUnnecessaryFields(this.journal, this.copyFields);
             this.$emit("data-loaded", this.journal);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

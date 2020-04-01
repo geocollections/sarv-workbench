@@ -1,14 +1,5 @@
 <template>
   <div class="deaccession">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -150,9 +141,8 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import {fetchDeaccessionDetail} from "../../assets/js/api/apiCalls";
+import { fetchDeaccessionDetail } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import Spinner from "vue-simple-spinner";
 import DateWrapper from "../partial/inputs/DateWrapper";
 
 export default {
@@ -162,8 +152,7 @@ export default {
     DateWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {
@@ -263,7 +252,8 @@ export default {
 
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchDeaccessionDetail(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -273,9 +263,9 @@ export default {
             this.removeUnnecessaryFields(this.deaccession, this.copyFields);
 
             this.$emit("data-loaded", this.deaccession);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

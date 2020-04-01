@@ -6,15 +6,6 @@
     :is-digitised-reference="isDigitisedReference"
     :is-locked="isAttachmentLocked"
   >
-    <template v-slot:loader>
-      <spinner
-        v-show="sendingData"
-        class="loading-overlay"
-        size="massive"
-        :message="$route.meta.isEdit ? `${$t('edit.overlayLoading')} ${loadingPercent} %` : `${$t('add.overlay')} ${loadingPercent} %`"
-      />
-    </template>
-
     <template v-slot:locked-info>
       <div class="locked-info">
         <v-alert
@@ -3710,7 +3701,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -3767,7 +3757,6 @@ export default {
     FilePreview,
     FileInformation,
     AttachmentWrapper,
-    Spinner,
     MapComponent
   },
 
@@ -4303,7 +4292,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         // fetchAttachment(this.$route.params.id).then(
         fetchAttachment(this.$route.params.id, this.currentUser).then(
           response => {
@@ -4318,9 +4308,9 @@ export default {
 
               this.removeUnnecessaryFields(this.attachment, this.copyFields);
               this.$emit("data-loaded", this.attachment);
-              this.sendingData = false;
+              this.setLoadingState(false);
             } else {
-              this.sendingData = false;
+              this.setLoadingState(false);
               this.$emit("object-exists", false);
             }
           }

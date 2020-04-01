@@ -1,14 +1,5 @@
 <template>
   <div class="selectionSeries">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-3"
@@ -153,7 +144,7 @@ import {
   fetchSelectedTaxa,
   fetchSelectionSerie
 } from "../../assets/js/api/apiCalls";
-import Spinner from "vue-simple-spinner";
+
 import InputWrapper from "../partial/inputs/InputWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
@@ -161,7 +152,7 @@ import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
 export default {
   name: "SelectionSeries",
 
-  components: { SelectionSeriesDataTable, InputWrapper, Spinner },
+  components: { SelectionSeriesDataTable, InputWrapper },
 
   props: {
     isBodyActiveColorDark: {
@@ -291,7 +282,8 @@ export default {
 
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "selection_series");
         fetchSelectionSerie(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
@@ -310,9 +302,9 @@ export default {
               this.copyFields
             );
             this.$emit("data-loaded", this.selection_series);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

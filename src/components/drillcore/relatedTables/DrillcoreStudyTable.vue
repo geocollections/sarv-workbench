@@ -80,7 +80,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{$t("header.drillcore_study")}}</span>
+            <span class="headline">{{ $t("header.drillcore_study") }}</span>
           </v-card-title>
 
           <v-card-text>

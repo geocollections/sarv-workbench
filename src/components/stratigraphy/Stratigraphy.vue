@@ -1,14 +1,5 @@
 <template>
   <div class="stratigraphy">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -615,7 +606,7 @@ import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
-import Spinner from "vue-simple-spinner";
+
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -649,8 +640,7 @@ export default {
     CheckboxWrapper,
     AutocompleteWrapper,
     TextareaWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {
@@ -851,7 +841,8 @@ export default {
       this.loadAutocompleteFields(true, true);
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchStratigraphy(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -863,9 +854,9 @@ export default {
 
             this.removeUnnecessaryFields(this.stratigraphy, this.copyFields);
             this.$emit("data-loaded", this.stratigraphy);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

@@ -46,7 +46,10 @@
     "user_changed": "Muutja",
     "date_added": "Sisestatud",
     "language": "Keel",
-    "number": "Number"
+    "number": "Number",
+    "loadingEdit": "Palun oodake! Muudan andmeid...",
+    "loadingAdd": "Palun oodake! Lisan andmeid...",
+    "loading": "Palun oodake! Pärin andmeid..."
   },
   "main": {
     "pagination": "Kuva {num} kaupa",

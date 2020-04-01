@@ -1,16 +1,5 @@
 <template>
   <sample-wrapper :simple-view="isSimpleView">
-    <template slot="loader">
-      <spinner
-        v-show="sendingData"
-        class="loading-overlay"
-        size="massive"
-        :message="
-          $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-        "
-      />
-    </template>
-
     <template slot="switch">
       <v-row>
         <v-col>
@@ -1022,7 +1011,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import {
   fetchSample,
   fetchSamplePurpose,
@@ -1065,8 +1053,7 @@ export default {
     AutocompleteWrapper,
     InputWrapper,
     CheckboxWrapper,
-    SampleWrapper,
-    Spinner
+    SampleWrapper
   },
 
   props: {
@@ -1333,7 +1320,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "sample");
 
         fetchSample(this.$route.params.id).then(response => {
@@ -1347,9 +1335,9 @@ export default {
 
             this.removeUnnecessaryFields(this.sample, this.copyFields);
             this.$emit("data-loaded", this.sample);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

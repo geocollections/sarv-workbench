@@ -1,14 +1,5 @@
 <template>
   <div class="area">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -271,13 +262,13 @@
               >
                 <v-btn
                   :to="{
-                  name: 'Site add',
-                  query: { area: JSON.stringify(area) }
-                }"
+                    name: 'Site add',
+                    query: { area: JSON.stringify(area) }
+                  }"
                   target="newAreaWindow"
                   :color="bodyActiveColor"
                   :dark="isBodyActiveColorDark"
-                >{{ $t("add.new") }}</v-btn
+                  >{{ $t("add.new") }}</v-btn
                 >
               </v-card>
 
@@ -307,13 +298,10 @@
             </v-row>
           </div>
 
-
           <area-locality-reference-table
             v-show="activeTab === 'locality_reference'"
             :response="relatedData.locality_reference"
-            :search-parameters="
-              relatedData.searchParameters.locality_reference
-            "
+            :search-parameters="relatedData.searchParameters.locality_reference"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -362,17 +350,21 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import {
-  fetchArea, fetchAreaLocalityReferences,
-  fetchLinkedAreaSites, fetchLinkedSamples,
+  fetchArea,
+  fetchAreaLocalityReferences,
+  fetchLinkedAreaSites,
+  fetchLinkedSamples,
   fetchListAreaTypes,
-  fetchListMaakond, fetchSiteAttachment, fetchSiteLocalityDescriptions, fetchSiteLocalityReferences
+  fetchListMaakond,
+  fetchSiteAttachment,
+  fetchSiteLocalityDescriptions,
+  fetchSiteLocalityReferences
 } from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import Editor from "../partial/inputs/Editor";
@@ -394,8 +386,7 @@ export default {
     Editor,
     TextareaWrapper,
     InputWrapper,
-    AutocompleteWrapper,
-    Spinner
+    AutocompleteWrapper
   },
 
   props: {
@@ -605,7 +596,8 @@ export default {
       });
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchArea(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -616,9 +608,9 @@ export default {
             this.removeUnnecessaryFields(this.area, this.copyFields);
 
             this.$emit("data-loaded", this.area);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });
@@ -678,7 +670,9 @@ export default {
 
         this.relatedTabs.forEach(tab => {
           if (this.isNotEmpty(this.relatedData[tab.name]))
-            uploadableObject.related_data[tab.name] = this.relatedData[tab.name].results;
+            uploadableObject.related_data[tab.name] = this.relatedData[
+              tab.name
+            ].results;
         });
       }
 

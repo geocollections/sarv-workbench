@@ -80,7 +80,7 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">{{$t("header.locality_reference")}}</span>
+            <span class="headline">{{ $t("header.locality_reference") }}</span>
           </v-card-title>
 
           <v-card-text>

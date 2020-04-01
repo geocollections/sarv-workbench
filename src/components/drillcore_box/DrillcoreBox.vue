@@ -1,14 +1,5 @@
 <template>
   <div class="drillcoreBox">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -315,7 +306,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
@@ -338,8 +328,7 @@ export default {
     FileUpload,
     TextareaWrapper,
     InputWrapper,
-    AutocompleteWrapper,
-    Spinner
+    AutocompleteWrapper
   },
 
   props: {
@@ -504,7 +493,8 @@ export default {
 
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchDrillcoreBox(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -515,9 +505,9 @@ export default {
             this.removeUnnecessaryFields(this.drillcore_box, this.copyFields);
 
             this.$emit("data-loaded", this.drillcore_box);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

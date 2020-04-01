@@ -24,6 +24,8 @@
       v-if="$route.meta.object !== 'attachment'"
     />
 
+    <SpinnerWrapper />
+
     <router-view
       v-show="objectExists"
       :body-color="appSettings.bodyColor"
@@ -73,10 +75,12 @@ import ScrollToLinks from "../components/partial/ScrollToLinks";
 import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist";
 import { mapState } from "vuex";
 import ObjectPermissions from "../components/partial/ObjectPermissions";
+import SpinnerWrapper from "../components/partial/SpinnerWrapper";
 
 export default {
   name: "EditForm",
   components: {
+    SpinnerWrapper,
     ObjectPermissions,
     ObjectDoesNotExist,
     ScrollToLinks,

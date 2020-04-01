@@ -1,14 +1,5 @@
 <template>
   <div class="collection">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    ></spinner>
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -400,7 +391,6 @@ import {
   fetchSpecimens
 } from "../../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
-import Spinner from "vue-simple-spinner";
 import SpecimenTable from "../specimen/SpecimenTable";
 import { mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -414,7 +404,6 @@ export default {
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
-    Spinner,
     SpecimenTable
   },
 
@@ -593,7 +582,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "collection");
         fetchCollection(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
@@ -609,9 +599,9 @@ export default {
 
             this.removeUnnecessaryFields(this.collection, this.copyFields);
             this.$emit("data-loaded", this.collection);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

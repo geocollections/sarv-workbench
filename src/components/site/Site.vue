@@ -1,14 +1,5 @@
 <template>
   <div class="site">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- CONVERT TO LOCALITY -->
     <v-row v-if="$route.meta.isEdit">
       <v-col cols="12" class="text-right">
@@ -512,9 +503,7 @@
           <site-locality-reference-table
             v-show="activeTab === 'locality_reference'"
             :response="relatedData.locality_reference"
-            :search-parameters="
-              relatedData.searchParameters.locality_reference
-            "
+            :search-parameters="relatedData.searchParameters.locality_reference"
             :body-color="bodyColor"
             :body-active-color="bodyActiveColor"
             v-on:related:add="addRelatedItem"
@@ -563,7 +552,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
@@ -574,7 +562,8 @@ import {
   fetchSiteAttachment,
   fetchLinkedSamples,
   fetchLastSiteName,
-  fetchSiteLocalityDescriptions, fetchSiteLocalityReferences
+  fetchSiteLocalityDescriptions,
+  fetchSiteLocalityReferences
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
 import sidebarMixin from "../../mixins/sidebarMixin";
@@ -602,7 +591,6 @@ export default {
     InputWrapper,
     SampleTable,
     MapComponent,
-    Spinner,
     ExportButtons
   },
   props: {
@@ -834,7 +822,7 @@ export default {
       });
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
         this.$emit("set-object", "site");
 
         fetchSite(this.$route.params.id).then(response => {
@@ -849,9 +837,9 @@ export default {
             this.updateDateFields(this.site);
 
             this.$emit("data-loaded", this.site);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

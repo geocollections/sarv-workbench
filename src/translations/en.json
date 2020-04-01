@@ -46,7 +46,10 @@
     "user_changed": "User changed",
     "date_added": "Date added",
     "language": "Language",
-    "number": "Number"
+    "number": "Number",
+    "loadingEdit": "Please wait! Changing data...",
+    "loadingAdd": "Please wait! Adding data...",
+    "loading": "Please wait! Fetching data..."
   },
   "main": {
     "pagination": "Show {num} results per page",

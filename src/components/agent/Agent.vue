@@ -1,14 +1,5 @@
 <template>
   <div class="agent">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    ></spinner>
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -361,7 +352,6 @@ import {
   fetchListCountry
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import Spinner from "vue-simple-spinner";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
@@ -373,8 +363,7 @@ export default {
     TextareaWrapper,
     DateWrapper,
     AutocompleteWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
   props: {
     isBodyActiveColorDark: {
@@ -495,7 +484,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchAgent(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -507,9 +497,9 @@ export default {
 
             this.removeUnnecessaryFields(this.agent, this.copyFields);
             this.$emit("data-loaded", this.agent);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

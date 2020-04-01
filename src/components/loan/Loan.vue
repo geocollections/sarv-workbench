@@ -1,14 +1,5 @@
 <template>
   <div class="loan">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -368,7 +359,7 @@ import {
   fetchLoanSpecimens
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import Spinner from "vue-simple-spinner";
+
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import { mapState } from "vuex";
@@ -386,8 +377,7 @@ export default {
     DateWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {
@@ -546,7 +536,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchLoan(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -556,9 +547,9 @@ export default {
             this.removeUnnecessaryFields(this.loan, this.copyFields);
 
             this.$emit("data-loaded", this.loan);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

@@ -220,8 +220,7 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.specimen !== "undefined" &&
-        this.item.specimen !== null
+        typeof this.item.specimen !== "undefined" && this.item.specimen !== null
       );
     }
   },

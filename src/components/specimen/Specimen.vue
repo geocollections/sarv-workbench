@@ -1,14 +1,5 @@
 <template>
   <div class="specimen">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    ></spinner>
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -699,7 +690,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -754,8 +744,7 @@ export default {
     DateWrapper,
     TextareaWrapper,
     InputWrapper,
-    AutocompleteWrapper,
-    Spinner
+    AutocompleteWrapper
   },
 
   props: {
@@ -1036,7 +1025,7 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
         fetchSpecimen(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
 
@@ -1048,7 +1037,7 @@ export default {
 
             this.removeUnnecessaryFields(this.specimen, this.copyFields);
             this.$emit("data-loaded", this.specimen);
-            this.sendingData = false;
+            this.setLoadingState(false);
 
             // Set default tab
             if (
@@ -1081,7 +1070,7 @@ export default {
               else this.setTab("specimen_reference");
             }
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

@@ -49,7 +49,8 @@ export default {
   methods: {
     addNewDoi() {
       if (confirm(this.$t(this.object + ".doiConfirmation"))) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
 
         let doi = this.buildDoiObject(this.object);
         if (typeof doi !== "undefined") {
@@ -74,7 +75,7 @@ export default {
           );
         }
 
-        this.sendingData = false;
+        this.setLoadingState(false);
       } else toastInfo({ text: this.$t("messages.userCancelled") });
     },
 

@@ -1,14 +1,5 @@
 <template>
-  <div>
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
+  <div class="locality">
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -580,7 +571,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import {
   fetchListLocalityTypes,
   fetchListLocalityExtent,
@@ -621,7 +611,6 @@ export default {
     CheckboxWrapper,
     TextareaWrapper,
     InputWrapper,
-    Spinner,
     MapComponent
   },
 
@@ -827,7 +816,8 @@ export default {
       this.loadAutocompleteFields();
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "locality");
 
         fetchLocality(this.$route.params.id).then(response => {
@@ -841,9 +831,9 @@ export default {
 
             this.removeUnnecessaryFields(this.locality, this.copyFields);
             this.$emit("data-loaded", this.locality);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

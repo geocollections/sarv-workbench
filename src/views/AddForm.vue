@@ -22,6 +22,8 @@
       </v-tabs>
     </div>
 
+    <SpinnerWrapper />
+
     <router-view
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
@@ -47,10 +49,11 @@
 import BottomOptions from "../components/partial/BottomOptions";
 import { mapState } from "vuex";
 import ObjectPermissions from "../components/partial/ObjectPermissions";
+import SpinnerWrapper from "../components/partial/SpinnerWrapper";
 
 export default {
   name: "AddForm",
-  components: { ObjectPermissions, BottomOptions },
+  components: { SpinnerWrapper, ObjectPermissions, BottomOptions },
   computed: {
     ...mapState(["appSettings"])
   }

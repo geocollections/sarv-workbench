@@ -5,7 +5,7 @@ import {
   toastInfo,
   toastSuccess
 } from "../assets/js/iziToast/iziToast";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { postRequest } from "../assets/js/api/apiCalls";
 
 const formManipulation = {
@@ -13,8 +13,6 @@ const formManipulation = {
     return {
       fileUrl: "https://files.geocollections.info",
       apiUrl: "https://rwapi.geocollections.info/",
-      loadingPercent: 0,
-      sendingData: false,
       editMode: false,
       isFileAddedAsObject: null
     };
@@ -26,9 +24,11 @@ const formManipulation = {
     this.$parent.$off("button-clicked", this.bottomOptionClicked);
   },
   computed: {
-    ...mapState(["currentUser"])
+    ...mapState(["currentUser", "loadingState"])
   },
   methods: {
+    ...mapActions(["setLoadingState", "setLoadingType", "setLoadingPercent"]),
+
     /**
      * Checks if variable is not empty and returns corresponding boolean.
      *
@@ -136,7 +136,7 @@ const formManipulation = {
       return new Promise(resolve => {
         if (
           this.validate(object) &&
-          !this.sendingData &&
+          !this.loadingState &&
           !this.isObjectLocked(object)
         ) {
           let objectToUpload = cloneDeep(this[object]);
@@ -223,7 +223,7 @@ const formManipulation = {
             },
             () => resolve(false)
           );
-        } else if (this.sendingData) {
+        } else if (this.loadingState) {
           // This runs only if user deletes html elements and tries to press 'add' button again
           toastError({ text: this.$t("messages.easterEggError") });
           resolve(false);
@@ -243,21 +243,23 @@ const formManipulation = {
     },
 
     request(object, formData, url, resolve) {
-      this.sendingData = true;
-      this.loadingPercent = 0;
+      this.setLoadingState(true);
+      this.setLoadingType(url.startsWith("change") ? "edit" : "add");
+      this.setLoadingPercent(0);
 
       postRequest(url, formData, "", false, {
         onUploadProgress: progressEvent => {
           if (progressEvent.lengthComputable) {
-            this.loadingPercent = Math.round(
+            let loadingPercent = Math.round(
               (progressEvent.loaded * 100) / progressEvent.total
             );
+            this.setLoadingPercent(loadingPercent);
           }
         }
       }).then(
         response => {
           console.log(response);
-          this.sendingData = false;
+          this.setLoadingState(false);
           if (response.status === 200) {
             if (response.data) {
               if (this.$i18n.locale === "ee") {
@@ -286,7 +288,7 @@ const formManipulation = {
           } else resolve(undefined);
         },
         errResponse => {
-          this.sendingData = false;
+          this.setLoadingState(false);
           console.log("ERROR: " + JSON.stringify(errResponse));
           toastError({ text: this.$t("messages.uploadError") });
           resolve(undefined);

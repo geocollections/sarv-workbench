@@ -26,7 +26,7 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import {fetchVisits} from "../assets/js/api/apiCalls";
+import { fetchVisits } from "../assets/js/api/apiCalls";
 export default {
   name: "Visits",
 

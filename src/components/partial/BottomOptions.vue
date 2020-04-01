@@ -34,7 +34,7 @@
         :icon="$vuetify.breakpoint.smAndDown"
         color="blue"
         dark
-        :loading="sendingData"
+        :loading="loadingState"
         @click="handleClick('FINISH')"
         title="Finish record"
         v-if="$route.meta.object === 'site' && !$route.meta.isEdit"
@@ -56,7 +56,7 @@
         :icon="$vuetify.breakpoint.smAndDown"
         color="green"
         dark
-        :loading="sendingData"
+        :loading="loadingState"
         @click="handleClick('SAVE_AND_LEAVE')"
         title="Save record and go back to list view"
         v-else
@@ -78,7 +78,7 @@
         :icon="$vuetify.breakpoint.smAndDown"
         color="green"
         dark
-        :loading="sendingData"
+        :loading="loadingState"
         @click="handleClick('SAVE')"
         title="Save record"
         retain-focus-on-click
@@ -99,7 +99,7 @@
         :icon="$vuetify.breakpoint.smAndDown"
         color="red"
         dark
-        :loading="sendingData"
+        :loading="loadingState"
         @click="
           $route.meta.isEdit ? handleClick('CANCEL') : handleClick('CLEAR')
         "
@@ -125,7 +125,7 @@
         :icon="$vuetify.breakpoint.smAndDown"
         color="orange"
         dark
-        :loading="sendingData"
+        :loading="loadingState"
         @click="handleClick('SAVE_AS_NEW')"
         title="Save record as new"
         retain-focus-on-click
@@ -167,7 +167,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "BottomOptions",
@@ -190,7 +190,6 @@ export default {
   },
   data() {
     return {
-      sendingData: false,
       previousId: null,
       nextId: null,
       listOfIDs: [],
@@ -198,7 +197,12 @@ export default {
     };
   },
   computed: {
-    ...mapState(["sidebarList", "drawerState", "drawerRightState"])
+    ...mapState([
+      "sidebarList",
+      "drawerState",
+      "drawerRightState",
+      "loadingState"
+    ])
   },
   watch: {
     sidebarList: {
@@ -226,16 +230,11 @@ export default {
   },
   methods: {
     async handleClick(action) {
-      this.sendingData = true;
       await this.$parent.$emit(
         "button-clicked",
         action,
         this.$route.meta.object
       );
-      setTimeout(() => {
-        // will run after $emit is done in 500ms
-        this.sendingData = false;
-      }, 500);
     },
 
     initNavigationButtons(list) {

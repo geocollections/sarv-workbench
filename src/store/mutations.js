@@ -231,5 +231,17 @@ export default {
     ) {
       Vue.set(state, "mapSettings", mapSettings);
     }
+  },
+
+  SET_LOADING_STATE(state, bool) {
+    state.loadingState = bool;
+  },
+
+  SET_LOADING_TYPE(state, type) {
+    state.loadingType = type;
+  },
+
+  SET_LOADING_PERCENT(state, percent) {
+    state.loadingPercent = percent;
   }
 };

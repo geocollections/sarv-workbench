@@ -1,14 +1,5 @@
 <template>
   <div class="project">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    ></spinner>
-
     <!-- ACTIVE PROJECT and NEW SITE -->
     <v-row v-if="$route.meta.isEdit">
       <v-col>
@@ -503,7 +494,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import sidebarMixin from "../../mixins/sidebarMixin";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -540,7 +530,6 @@ export default {
     TextareaWrapper,
     InputWrapper,
     MapComponent,
-    Spinner,
     ExportButtons,
     SiteTable
   },
@@ -758,7 +747,8 @@ export default {
       });
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "project");
         fetchProject(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
@@ -771,10 +761,10 @@ export default {
             this.project.related_data = {};
             // this.$set(this,'activeProject', this.checkIfProjectIsActive());
             this.$emit("data-loaded", this.project);
-            this.sendingData = false;
+            this.setLoadingState(false);
             // this.getListRecords('project')
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

@@ -1,14 +1,5 @@
 <template>
   <div class="imageset">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    ></spinner>
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -114,7 +105,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -132,8 +122,7 @@ export default {
   components: {
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {

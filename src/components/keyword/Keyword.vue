@@ -1,14 +1,5 @@
 <template>
   <div class="keyword">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -256,7 +247,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import {
@@ -282,8 +272,7 @@ export default {
     Editor,
     InputWrapper,
     AutocompleteWrapper,
-    CheckboxWrapper,
-    Spinner
+    CheckboxWrapper
   },
   props: {
     isBodyActiveColorDark: {
@@ -463,7 +452,8 @@ export default {
       });
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchKeyword(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -474,9 +464,9 @@ export default {
             this.removeUnnecessaryFields(this.keyword, this.copyFields);
 
             this.$emit("data-loaded", this.keyword);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });

@@ -1,14 +1,5 @@
 <template>
   <div class="doi">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- REQUIRED INFO -->
     <v-card
       class="mt-2"
@@ -690,7 +681,6 @@
 </template>
 
 <script>
-import Spinner from "vue-simple-spinner";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import cloneDeep from "lodash/cloneDeep";
@@ -739,8 +729,7 @@ export default {
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,
-    InputWrapper,
-    Spinner
+    InputWrapper
   },
 
   props: {
@@ -970,7 +959,8 @@ export default {
       }
 
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         this.$emit("set-object", "doi");
 
         fetchDoi(this.$route.params.id).then(response => {
@@ -988,9 +978,9 @@ export default {
 
             this.removeUnnecessaryFields(this.doi, this.copyFields);
             this.$emit("data-loaded", this.doi);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });
@@ -1455,7 +1445,8 @@ export default {
               : this.$t("doi.doiDataCiteRegisterConfirmation")
           )
         ) {
-          this.sendingData = true;
+          this.setLoadingState(true);
+          this.setLoadingType("fetch");
 
           fetchRegisterMetadataToDataCite(this.$route.params.id).then(
             response => {
@@ -1475,14 +1466,14 @@ export default {
                     this.setCurrentTimeToDataCiteDateFields();
                     this.showMetadataButton = false;
                     this.showMetadataUpdateMessage = false;
-                    this.sendingData = false;
+                    this.setLoadingState(false);
                     this.add(true, "doi");
                     this.checkDoiUrl();
                   } else {
                     toastError({
                       text: this.$t("doi.dataciteMetadataUpdateFailed")
                     });
-                    this.sendingData = false;
+                    this.setLoadingState(false);
                   }
                 }
               }
@@ -1501,7 +1492,8 @@ export default {
               : this.$t("doi.doiDataCiteRegisterConfirmation")
           )
         ) {
-          this.sendingData = true;
+          this.setLoadingState(true);
+          this.setLoadingType("fetch");
 
           fetchRegisterDoiUrlToDataCite(this.$route.params.id).then(
             response => {
@@ -1527,7 +1519,7 @@ export default {
                   }
                 }
               }
-              this.sendingData = false;
+              this.setLoadingState(false);
             }
           );
         } else toastInfo({ text: this.$t("messages.userCancelled") });

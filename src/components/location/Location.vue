@@ -1,14 +1,5 @@
 <template>
   <div class="location">
-    <spinner
-      v-show="sendingData"
-      class="loading-overlay"
-      size="massive"
-      :message="
-        $route.meta.isEdit ? $t('edit.overlayLoading') : $t('add.overlay')
-      "
-    />
-
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -135,12 +126,11 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import { fetchLocation } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import Spinner from "vue-simple-spinner";
 
 export default {
   name: "Location",
 
-  components: { TextareaWrapper, AutocompleteWrapper, InputWrapper, Spinner },
+  components: { TextareaWrapper, AutocompleteWrapper, InputWrapper },
 
   props: {
     isBodyActiveColorDark: {
@@ -239,7 +229,8 @@ export default {
 
     loadFullInfo() {
       if (this.$route.meta.isEdit) {
-        this.sendingData = true;
+        this.setLoadingState(true);
+        this.setLoadingType("fetch");
         fetchLocation(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
           if (handledResponse.length > 0) {
@@ -250,9 +241,9 @@ export default {
             this.removeUnnecessaryFields(this.location, this.copyFields);
 
             this.$emit("data-loaded", this.location);
-            this.sendingData = false;
+            this.setLoadingState(false);
           } else {
-            this.sendingData = false;
+            this.setLoadingState(false);
             this.$emit("object-exists", false);
           }
         });
