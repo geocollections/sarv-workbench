@@ -318,6 +318,16 @@ export default {
               icon: "far fa-plus-square"
             },
             {
+              title: "sample_series",
+              path: "/sample_series",
+              icon: "fas fa-vials"
+            },
+            {
+              title: "sample_serie",
+              path: "/sample_series/add",
+              icon: "far fa-plus-square"
+            },
+            {
               title: "editAnalysis",
               path: "/analysis",
               icon: "far fa-chart-bar"

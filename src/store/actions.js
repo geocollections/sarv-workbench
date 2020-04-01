@@ -28,7 +28,8 @@ import {
   fetchVisits,
   fetchLoans,
   fetchWebPages,
-  fetchWebNews
+  fetchWebNews,
+  fetchSampleSeries
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -222,6 +223,12 @@ export default {
 
   FETCH_WEB_NEWS: ({ commit, state }) => {
     return fetchWebNews(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_SAMPLE_SERIES: ({ commit, state }) => {
+    return fetchSampleSeries(state.activeSearchParams.search).then(resp => {
       commit("SET_SIDEBAR_LIST", { resp });
     });
   },

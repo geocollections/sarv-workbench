@@ -3352,6 +3352,45 @@ export function fetchWebPages(data) {
  ***  WEB_PAGES END  ***
  ***********************/
 
+/***************************
+ *** SAMPLE_SERIES START ***
+ **************************/
+
+export function fetchSampleSeriesDetail(id) {
+  return get(`sample_series/?id=${id}&format=json`);
+}
+
+export function fetchSampleSeries(data) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.name && data.name.trim().length > 0) {
+    searchFields += `&name__icontains=${data.name}`;
+  }
+  if (data.locality && data.locality.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.locality};fields:locality_free,locality__locality,locality__locality_en;lookuptype:icontains`;
+  }
+  if (data.agent_collected && data.agent_collected.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:icontains`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `sample_series/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+      `sample_series/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/***************************
+ ***  SAMPLE_SERIES END  ***
+ **************************/
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/

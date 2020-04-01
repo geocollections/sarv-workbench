@@ -2098,6 +2098,71 @@ const router = new Router({
           ]
         },
         {
+          path: "/sample_series",
+          component: () => import("./views/SampleSeries.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/sample_series/SampleSeriesTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "sample_series",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/sample_series/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/sample_series/SampleSeries.vue"),
+              meta: {
+                isEdit: true,
+                table: "sample_series",
+                heading: "editSampleSeries.heading",
+                requiresAuth: true,
+                object: "sample_series"
+              }
+            }
+          ]
+        },
+        {
+          path: "/sample_series/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Sample series add",
+              component: () =>
+                import("./components/sample_series/SampleSeries.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.sample_series",
+                subForms: [
+                  { path: "/sample_series/add", name: "header.sample_series" }
+                ],
+                requiresAuth: true,
+                object: "sample_series"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {

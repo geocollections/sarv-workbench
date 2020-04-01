@@ -348,6 +348,13 @@ new Vue({
       type: String,
       default: "table"
     },
+    sampleSeriesSearchHistory: {
+      type: Object
+    },
+    sampleSeriesViewType: {
+      type: String,
+      default: "table"
+    },
     formSections: {
       type: Object
     },

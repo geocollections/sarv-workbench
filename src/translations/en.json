@@ -246,7 +246,9 @@
     "drillcore_study": "Drillcore study",
     "sample_analysis": "Sample analysis",
     "sample_preparation": "Sample preparation",
-    "sample_taxon_list": "Sample taxon"
+    "sample_taxon_list": "Sample taxon",
+    "sample_series": "Sample series",
+    "sample_serie": "Add sample series"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -624,6 +626,10 @@
   "editWebPages": {
     "heading": "Web pages",
     "editMessage": "Edit web page"
+  },
+  "editSampleSeries": {
+    "heading": "Sample series",
+    "editMessage": "Edit sample series"
   },
   "references": {
     "tableView": "Table view",
@@ -1587,6 +1593,15 @@
     "text_en": "Text (EN)"
   },
   "web_pages": {
+    "title": "Title",
+    "title_et": "Title (EST)",
+    "title_en": "Title (EN)",
+    "content_et": "Content (EST)",
+    "content_en": "Content (EN)",
+    "public": "Publicly visible",
+    "text": "Content"
+  },
+  "sample_series": {
     "title": "Title",
     "title_et": "Title (EST)",
     "title_en": "Title (EN)",
