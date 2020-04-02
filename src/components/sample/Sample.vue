@@ -1598,6 +1598,7 @@ export default {
         selectionId: null,
         selection: null,
         id: null,
+        loan: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

@@ -67,7 +67,8 @@ export default {
           type: "text"
         },
         { id: "selectionId", title: "specimen.selectionId", type: "number" },
-        { id: "selection", title: "specimen.selection", type: "text" }
+        { id: "selection", title: "specimen.selection", type: "text" },
+        { id: "loan", title: "specimen.loan", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true },
@@ -157,6 +158,7 @@ export default {
         storage: null,
         selectionId: null,
         selection: null,
+        loan: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

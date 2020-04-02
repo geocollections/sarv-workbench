@@ -769,6 +769,7 @@
     "details": "Specimen details",
     "selectionId": "Selection ID",
     "selection": "Selection",
+    "loan": "Loan",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",

@@ -769,6 +769,7 @@
     "details": "Säiliku info",
     "selectionId": "Valiku ID",
     "selection": "Valik",
+    "loan": "Laen",
     "relatedTables": {
       "specimen_identification": "Taksoni nimed",
       "specimen_identification_geology": "Kivi nimed",

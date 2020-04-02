@@ -808,6 +808,10 @@ export function fetchSamples(data) {
     searchFields += `&selection__selection__name__icontains=${data.selection}`;
   }
 
+  if (data.loan && data.loan.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.loan};fields:loansample__loan__id,loansample__loan__loan_number;lookuptype:iexact`;
+  }
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
@@ -1632,6 +1636,10 @@ export function fetchSpecimens(data, databaseId) {
     searchFields += `&selection__selection__name__icontains=${data.selection}`;
   }
 
+  if (data.loan && data.loan.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.loan};fields:loanspecimen__loan__id,loanspecimen__loan__loan_number;lookuptype:iexact`;
+  }
+
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database__id=${databaseId}`;
   }
@@ -1696,6 +1704,10 @@ export function fetchSpecimenImages(data, databaseId) {
 
   if (data.selection && data.selection.trim().length > 0) {
     searchFields += `&specimen__selection__selection__name__icontains=${data.selection}`;
+  }
+
+  if (data.loan && data.loan.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.loan};fields:specimen__loanspecimen__loan__id,specimen__loanspecimen__loan__loan_number;lookuptype:iexact`;
   }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
