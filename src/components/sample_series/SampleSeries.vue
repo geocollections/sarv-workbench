@@ -314,16 +314,16 @@
           flat
           :color="bodyColor.split('n-')[0] + 'n-5'"
         >
-          <!--          <loan-specimen-table-->
-          <!--            v-show="activeTab === 'loan_specimen'"-->
-          <!--            :response="relatedData.loan_specimen"-->
-          <!--            :search-parameters="relatedData.searchParameters.loan_specimen"-->
-          <!--            :body-color="bodyColor"-->
-          <!--            :body-active-color="bodyActiveColor"-->
-          <!--            v-on:related:add="addRelatedItem"-->
-          <!--            v-on:related:edit="editRelatedItem"-->
-          <!--            v-on:related:delete="deleteRelatedItem"-->
-          <!--          />-->
+          <sample-series-samples-table
+            v-show="activeTab === 'samples'"
+            :response="relatedData.samples"
+            :search-parameters="relatedData.searchParameters.samples"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem($event, 'series')"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <!-- PAGINATION -->
           <div
@@ -381,11 +381,13 @@ import cloneDeep from "lodash/cloneDeep";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
+import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
 
 export default {
   name: "SampleSeries",
 
   components: {
+    SampleSeriesSamplesTable,
     CheckboxWrapper,
     DateWrapper,
     TextareaWrapper,

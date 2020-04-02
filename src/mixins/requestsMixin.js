@@ -8,7 +8,7 @@ const requestsMixin = {
   }),
 
   methods: {
-    addRelatedItem(payload) {
+    addRelatedItem(payload, connectionField = null) {
       console.log(payload);
       let table = payload.table;
       if (table === "taxon_subclass") table = "taxon";
@@ -19,6 +19,7 @@ const requestsMixin = {
         let uploadableObject = cloneDeep(payload.item);
 
         let mainObjectKey = this.$route.meta.table;
+        if (connectionField) mainObjectKey = connectionField;
         if (payload.table === "taxon_subclass" && table === "taxon") {
           mainObjectKey = "parent";
           uploadableObject.taxon = payload.rawItem.taxon.taxon;
