@@ -325,6 +325,18 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <div v-show="activeTab === 'attachments'">
+            <file-upload
+              show-existing
+              :files-from-object="relatedData.attachments.results"
+              v-on:update:existing-files="addExistingFiles"
+              v-on:file-uploaded="addFiles"
+              accept-multiple
+              :record-options="$route.meta.isEdit"
+              :is-draggable="$route.meta.isEdit"
+            />
+          </div>
+
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -382,11 +394,13 @@ import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
+import FileUpload from "../partial/inputs/FileInput";
 
 export default {
   name: "SampleSeries",
 
   components: {
+    FileUpload,
     SampleSeriesSamplesTable,
     CheckboxWrapper,
     DateWrapper,
@@ -618,6 +632,23 @@ export default {
         }
       });
 
+      // Adding related data only on add view
+      uploadableObject.related_data = {};
+      if (!this.$route.meta.isEdit) {
+        this.relatedTabs.forEach(tab => {
+          if (
+            tab.name === "attachments" &&
+            this.isNotEmpty(this.relatedData[tab.name])
+          ) {
+            uploadableObject.related_data.attachment = this.relatedData.attachments.results;
+          }
+        });
+      } else {
+        if (this.relatedData.attachments.results.length > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachments.results;
+        } else uploadableObject.related_data.attachment = null;
+      }
+
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
@@ -698,6 +729,15 @@ export default {
         sortBy: ["id"],
         sortDesc: [true]
       };
+    },
+
+    addFiles(files) {
+      this.addFileAsRelatedDataNew(files, "sample_series");
+    },
+
+    addExistingFiles(files) {
+      this.relatedData.attachments.count = files.length;
+      this.relatedData.attachments.results = files;
     }
   }
 };
