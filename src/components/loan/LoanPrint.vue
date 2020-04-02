@@ -393,7 +393,7 @@
           </v-col>
         </v-row>
 
-        <v-row no-gutters class="my-5" style="border: 1px solid black">
+        <v-row no-gutters class="my-5" style="border: 1px solid black; page-break-inside: avoid">
           <v-col cols="12" class="pa-1" v-if="loanSpecimens.length > 0">
             <div class="font-weight-bold mt-4 mb-3">
               {{ $t("loan_print.specimen_extra") }}

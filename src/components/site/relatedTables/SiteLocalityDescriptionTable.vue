@@ -415,7 +415,7 @@ export default {
       agent: {},
       reference: null,
       author_free: "",
-      year: new Date().getFullYear(),
+      year: new Date().getFullYear().toString(),
       remarks: "",
       is_preferred: false,
       is_private: false
@@ -483,7 +483,7 @@ export default {
         agent: null,
         reference: null,
         author_free: "",
-        year: new Date().getFullYear(),
+        year: new Date().getFullYear().toString(),
         remarks: "",
         is_preferred: false,
         is_private: false
