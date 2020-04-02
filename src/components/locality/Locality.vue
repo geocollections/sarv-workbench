@@ -530,6 +530,19 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
+          <locality-description-table
+            v-show="activeTab === 'locality_description'"
+            :response="relatedData.locality_description"
+            :search-parameters="
+              relatedData.searchParameters.locality_description
+            "
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
+
           <!-- PAGINATION -->
           <div
             v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
@@ -571,18 +584,18 @@
 </template>
 
 <script>
-import {
-  fetchListLocalityTypes,
-  fetchListLocalityExtent,
-  fetchListCoordinateMethod,
-  fetchListCoordinatePrecision,
-  fetchListCountry,
-  fetchLocality,
-  fetchLocalityReference,
-  fetchLocalitySynonym,
-  fetchLocalityAttachment,
-  fetchLocalityStratigraphy
-} from "../../assets/js/api/apiCalls";
+  import {
+    fetchListLocalityTypes,
+    fetchListLocalityExtent,
+    fetchListCoordinateMethod,
+    fetchListCoordinatePrecision,
+    fetchListCountry,
+    fetchLocality,
+    fetchLocalityReference,
+    fetchLocalitySynonym,
+    fetchLocalityAttachment,
+    fetchLocalityStratigraphy, fetchSiteLocalityDescriptions, fetchLocalityDescriptions
+  } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
@@ -598,11 +611,13 @@ import LocalityReferenceTable from "./relatedTables/LocalityReferenceTable";
 import LocalitySynonymTable from "./relatedTables/LocalitySynonymTable";
 import LocalityStratigraphyTable from "./relatedTables/LocalityStratigraphyTable";
 import requestsMixin from "../../mixins/requestsMixin";
+import LocalityDescriptionTable from "./relatedTables/LocalityDescriptionTable";
 
 export default {
   name: "Locality",
 
   components: {
+    LocalityDescriptionTable,
     LocalityStratigraphyTable,
     LocalitySynonymTable,
     LocalityReferenceTable,
@@ -724,7 +739,8 @@ export default {
           { name: "locality_reference", iconClass: "fas fa-book" },
           { name: "locality_synonym", iconClass: "fas fa-font" },
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
-          { name: "locality_stratigraphy", iconClass: "fas fa-globe-asia" }
+          { name: "locality_stratigraphy", iconClass: "fas fa-globe-asia" },
+          { name: "locality_description", iconClass: "fas fa-align-left" }
         ],
         searchHistory: "localitySearchHistory",
         activeTab: "locality_reference",
@@ -879,6 +895,10 @@ export default {
         locality_synonym: { count: 0, results: [] },
         attachment_link: { count: 0, results: [] },
         locality_stratigraphy: { count: 0, results: [] },
+        locality_description: {
+          count: 0,
+          results: []
+        },
         searchParameters: {
           locality_reference: {
             page: 1,
@@ -903,7 +923,13 @@ export default {
             paginateBy: 25,
             sortBy: ["depth_base", "depth_top"],
             sortDesc: [false, false]
-          }
+          },
+          locality_description: {
+            page: 1,
+            paginateBy: 25,
+            sortBy: ["id"],
+            sortDesc: [true]
+          },
         }
       };
     },
@@ -1052,6 +1078,11 @@ export default {
         query = fetchLocalityStratigraphy(
           this.$route.params.id,
           this.relatedData.searchParameters.locality_stratigraphy
+        );
+      } else if (type === "locality_description") {
+        query = fetchLocalityDescriptions(
+          this.$route.params.id,
+          this.relatedData.searchParameters.locality_description
         );
       }
 

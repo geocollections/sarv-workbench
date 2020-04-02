@@ -1129,7 +1129,8 @@
       "locality_reference": "Kirjandusviited",
       "locality_synonym": "Nime sünonüümid",
       "attachment_link": "Manused",
-      "locality_stratigraphy": "Strat. piirid"
+      "locality_stratigraphy": "Strat. piirid",
+      "locality_description": "Kirjeldus"
     }
   },
   "agent": {

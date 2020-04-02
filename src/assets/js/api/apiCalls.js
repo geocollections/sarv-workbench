@@ -602,9 +602,9 @@ export function fetchLatestLogs(data) {
  *** LOGS END ***
  ******************/
 
-/************************
- *** LOCALITIES START ***
- ************************/
+/**********************
+ *** LOCALITY START ***
+ **********************/
 
 export function fetchLocalities(data) {
   const fields =
@@ -721,9 +721,19 @@ export function fetchLocalityStratigraphy(id, searchParameters) {
   );
 }
 
-/************************
- ***  LOCALITIES END  ***
- ************************/
+export function fetchLocalityDescriptions(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `locality_description/?locality=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+/**********************
+ ***  LOCALITY END  ***
+ **********************/
 
 /************************
  ***  SAMPLES START  ***
