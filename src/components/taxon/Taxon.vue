@@ -1050,7 +1050,7 @@ export default {
       if (!this.$route.meta.isEdit) {
         this.relatedTabs.forEach(tab => {
           if (tab.name !== "taxon_subclass") {
-            if (this.isNotEmpty(this.relatedData[tab.name]))
+            if (this.relatedData[tab.name].count > 0)
               if (tab.name === "taxon_image") {
                 uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
               } else {
@@ -1065,6 +1065,8 @@ export default {
           uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
         } else delete uploadableObject.related_data.attachment;
       }
+
+      if (!this.isNotEmpty(uploadableObject.related_data)) delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
