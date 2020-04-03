@@ -55,9 +55,12 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                  <autocomplete-wrapper
                     v-model="item.language"
                     :color="bodyActiveColor"
+                    :items="autocomplete.language"
+                    :loading="autocomplete.loaders.language"
+                    item-text="iso1"
                     :label="$t('taxon.language')"
                   />
                 </v-col>
@@ -145,6 +148,7 @@ import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
 
 export default {
   name: "TaxonPageTable",
@@ -220,8 +224,10 @@ export default {
     isNewItem: true,
     autocomplete: {
       agent: [],
+      language: [],
       loaders: {
-        agent: false
+        agent: false,
+        language: false
       }
     }
   }),
@@ -238,6 +244,12 @@ export default {
 
     isItemValid() {
       return this.item.frontpage !== null && this.item.frontpage.length > 0;
+    }
+  },
+
+  watch: {
+    dialog() {
+      this.fillListAutocompletes();
     }
   },
 
@@ -293,6 +305,7 @@ export default {
         this.autocomplete.agent.push(this.item.author);
       }
 
+      console.log(item.language);
       this.item.language = item.language;
       this.item.frontpage = item.frontpage;
       this.item.frontpage_title = item.frontpage_title;
@@ -310,6 +323,21 @@ export default {
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
+    },
+
+    fillListAutocompletes() {
+      if (this.autocomplete.language.length <= 1) {
+        this.autocomplete.loaders.language = true;
+        fetchListLanguages().then(response => {
+          if (response.status === 200) {
+            this.autocomplete.language =
+              response.data.count > 0
+                ? response.data.results.map(item => item.iso1)
+                : [];
+          }
+        });
+        this.autocomplete.loaders.language = false;
+      }
     },
 
     formatItem(item) {
