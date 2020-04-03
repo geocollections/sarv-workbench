@@ -88,10 +88,17 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
+                  <autocomplete-wrapper
                     v-model="item.author"
                     :color="bodyActiveColor"
+                    :items="autocomplete.agent"
+                    :loading="autocomplete.loaders.agent"
+                    item-text="agent"
                     :label="$t('taxon.author')"
+                    is-link
+                    route-object="agent"
+                    is-searchable
+                    v-on:search:items="autocompleteAgentSearch"
                   />
                 </v-col>
 
@@ -136,13 +143,18 @@
 <script>
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
 export default {
   name: "TaxonPageTable",
 
   components: {
+    AutocompleteWrapper,
     InputWrapper
   },
+
+  mixins: [autocompleteMixin],
 
   props: {
     response: {
@@ -201,11 +213,17 @@ export default {
       frontpage: "",
       frontpage_title: "",
       title: "",
-      author: "",
+      author: null,
       author_txt: "",
       date_txt: ""
     },
-    isNewItem: true
+    isNewItem: true,
+    autocomplete: {
+      agent: [],
+      loaders: {
+        agent: false
+      }
+    }
   }),
 
   computed: {
@@ -232,7 +250,7 @@ export default {
         frontpage: "",
         frontpage_title: "",
         title: "",
-        author: "",
+        author: null,
         author_txt: "",
         date_txt: ""
       };
@@ -263,6 +281,17 @@ export default {
 
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
+
+      if (typeof item.author !== "object" && item.author !== null) {
+        this.item.author = {
+          id: item.author,
+          agent: item.author__agent
+        };
+        this.autocomplete.agent.push(this.item.author);
+      } else if (item.author !== null) {
+        this.item.author = item.author;
+        this.autocomplete.agent.push(this.item.author);
+      }
 
       this.item.language = item.language;
       this.item.frontpage = item.frontpage;
