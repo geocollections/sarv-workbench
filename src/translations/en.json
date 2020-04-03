@@ -694,7 +694,8 @@
       "attach_link__storage": "Storage",
       "attach_link__attachment": "Attachment",
       "attach_link__project": "Project",
-      "attach_link__site": "Site"
+      "attach_link__site": "Site",
+      "attach_link__locality_description": "Geological description"
     },
     "imagesetId": "Imageset ID",
     "imagePlace": "Image place",

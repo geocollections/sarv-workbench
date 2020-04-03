@@ -3407,6 +3407,55 @@
                     </table>
                   </div>
                 </div>
+
+                <!-- LOCALITY_DESCRIPTION -->
+                <div
+                  class="col-sm-6 pa-1"
+                  v-if="
+                    relatedData.attach_link__locality_description !== null &&
+                      relatedData.attach_link__locality_description.length > 0
+                  "
+                >
+                  <p class="h4">
+                    {{ $t("attachment.relatedTables.attach_link__locality_description") }}
+                  </p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                        <tr>
+                          <th>ID</th>
+                          <th>{{ $t("common.description") }}</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr
+                          v-for="(entity,
+                          index) in relatedData.attach_link__locality_description"
+                          :key="index"
+                        >
+                          <td>{{ entity.id }}
+                          </td>
+
+                          <td>
+                            {{ entity.description }}
+                          </td>
+
+                          <td
+                            class="text-center delete-relation"
+                            @click="
+                              relatedData.attach_link__locality_description.splice(index, 1)
+                            "
+                          >
+                            <i class="fas fa-times"></i>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </v-row>
             </div>
           </transition>
@@ -4134,6 +4183,11 @@ export default {
             name: "attach_link__site",
             name_short: "site",
             iconClass: "fas fa-map-pin"
+          },
+          {
+            name: "attach_link__locality_description",
+            name_short: "locality_description",
+            iconClass: "fas fa-align-left"
           }
         ],
         ratings: [
@@ -4219,7 +4273,8 @@ export default {
             attach_link__reference: false,
             attach_link__storage: false,
             attach_link__project: false,
-            attach_link__site: false
+            attach_link__site: false,
+            attach_link__locality_description: false
           },
           agent: [],
           imageset: [],
@@ -4246,7 +4301,8 @@ export default {
           attach_link__reference: [],
           attach_link__storage: [],
           attach_link__project: [],
-          attach_link__site: []
+          attach_link__site: [],
+          attach_link__locality_description: []
         },
         requiredFields: {
           photo_archive: ["imageset"],
@@ -4546,6 +4602,7 @@ export default {
         attach_link__storage: [],
         attach_link__project: [],
         attach_link__site: [],
+        attach_link__locality_description: [],
         searchParameters: {
           keyword: {
             page: 1,

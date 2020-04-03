@@ -694,7 +694,8 @@
       "attach_link__storage": "Hoidla",
       "attach_link__attachment": "Fail",
       "attach_link__project": "Projekt",
-      "attach_link__site": "Vaatluspunkt"
+      "attach_link__site": "Vaatluspunkt",
+      "attach_link__locality_description": "Geoloogiline kirjeldus"
     },
     "imagesetId": "Pildiseeria ID",
     "imagePlace": "Pildi koht",
