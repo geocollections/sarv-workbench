@@ -1073,7 +1073,7 @@ export default {
           }
         });
       } else {
-        if (this.relatedData.taxon_image.results) {
+        if (this.relatedData.taxon_image.count > 0) {
           uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
         } else delete uploadableObject.related_data.attachment;
       }
