@@ -1063,7 +1063,7 @@ export default {
       } else {
         if (this.relatedData.taxon_image.results) {
           uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
-        } else uploadableObject.related_data.attachment = null;
+        } else delete uploadableObject.related_data.attachment;
       }
 
       console.log("This object is sent in string format:");
