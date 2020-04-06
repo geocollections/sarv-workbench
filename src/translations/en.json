@@ -242,6 +242,7 @@
     "taxon_subclass": "Subtaxa",
     "taxon_synonym": "Synonym",
     "taxon_type_specimen": "Type specimen",
+    "taxon_image": "Image",
     "drillcore_box": "Drillcore box",
     "drillcore_study": "Drillcore study",
     "sample_analysis": "Sample analysis",
@@ -695,7 +696,8 @@
       "attach_link__attachment": "Attachment",
       "attach_link__project": "Project",
       "attach_link__site": "Site",
-      "attach_link__locality_description": "Geological description"
+      "attach_link__locality_description": "Geological description",
+      "attach_link__taxon": "Taxon"
     },
     "imagesetId": "Imageset ID",
     "imagePlace": "Image place",
@@ -1009,7 +1011,10 @@
     "frontpage_title": "Front page title",
     "author_txt": "Author txt",
     "title": "Title",
+    "title_en": "Title (EN)",
     "locality_free": "Locality txt",
+    "attachment": "Image",
+    "attachment_filename": "Filename",
     "relatedTables": {
       "taxon_subclass": "Subtaxa",
       "taxon_synonym": "Synonymy",
@@ -1019,6 +1024,7 @@
       "taxon_common_name": "Names",
       "taxon_description": "Descriptions",
       "taxon_page": "Webpages",
+      "attachment": "Files",
       "taxon_image": "Images"
     }
   },

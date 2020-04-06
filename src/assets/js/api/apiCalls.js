@@ -331,6 +331,18 @@ export function fetchAttachmentLinkSites(id) {
   );
 }
 
+export function fetchAttachmentLinkLocalityDescriptions(id) {
+  return get(
+    `attachment_link/?attachment=${id}&locality_description__isnull=false&fields=locality_description,locality_description__description&format=json`
+  );
+}
+
+export function fetchAttachmentLinkTaxa(id) {
+  return get(
+    `attachment_link/?attachment=${id}&taxon__isnull=false&fields=taxon,taxon__taxon,taxon__author_year&format=json`
+  );
+}
+
 export function fetchRecentImages(currentUserId) {
   return get(
     `attachment/?author_id=${currentUserId}&image_latitude!=null&order_by=-id&paginate_by=30&fields=image_latitude,image_longitude,id,image_place`
@@ -2085,6 +2097,16 @@ export function fetchTaxonPage(taxonId, searchParameters) {
   );
   return get(
     `taxon_page/?taxon_id=${taxonId}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+export function fetchTaxonAttachments(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `attachment/?attach_link__taxon=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
   );
 }
 

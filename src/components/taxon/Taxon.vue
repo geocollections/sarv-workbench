@@ -571,10 +571,10 @@
             v-on:related:delete="deleteRelatedItem"
           />
 
-          <div v-show="activeTab === 'taxon_image'">
+          <div v-show="activeTab === 'attachment'">
             <file-upload
               show-existing
-              :files-from-object="relatedData.taxon_image.results"
+              :files-from-object="relatedData.attachment.results"
               v-on:update:existing-files="addExistingFiles"
               v-on:file-uploaded="addFiles"
               accept-multiple
@@ -582,6 +582,17 @@
               :is-draggable="$route.meta.isEdit"
             />
           </div>
+
+          <taxon-image-table
+            v-show="activeTab === 'taxon_image'"
+            :response="relatedData.taxon_image"
+            :search-parameters="relatedData.searchParameters.taxon_image"
+            :body-color="bodyColor"
+            :body-active-color="bodyActiveColor"
+            v-on:related:add="addRelatedItem"
+            v-on:related:edit="editRelatedItem"
+            v-on:related:delete="deleteRelatedItem"
+          />
 
           <!-- PAGINATION -->
           <div
@@ -652,7 +663,8 @@ import {
   fetchTaxonPage,
   fetchTaxonRank,
   fetchTaxonSynonym,
-  fetchTaxonTypeSpecimen
+  fetchTaxonTypeSpecimen,
+  fetchTaxonAttachments
 } from "../../assets/js/api/apiCalls";
 
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -669,11 +681,13 @@ import TaxonOpinionTable from "./relatedTables/TaxonOpinionTable";
 import TaxonCommonNameTable from "./relatedTables/TaxonCommonNameTable";
 import TaxonDescriptionTable from "./relatedTables/TaxonDescriptionTable";
 import TaxonPageTable from "./relatedTables/TaxonPageTable";
+import TaxonImageTable from "./relatedTables/TaxonImageTable";
 
 export default {
   name: "Taxon",
 
   components: {
+    TaxonImageTable,
     TaxonPageTable,
     TaxonDescriptionTable,
     TaxonCommonNameTable,
@@ -816,6 +830,7 @@ export default {
           { name: "taxon_common_name", iconClass: "fas fa-signature" },
           { name: "taxon_description", iconClass: "far fa-comment-dots" },
           { name: "taxon_page", iconClass: "fas fa-pager" },
+          { name: "attachment", iconClass: "far fa-file" },
           { name: "taxon_image", iconClass: "far fa-image" }
         ],
         searchHistory: "taxonSearchHistory",
@@ -969,6 +984,7 @@ export default {
         taxon_common_name: { count: 0, results: [] },
         taxon_description: { count: 0, results: [] },
         taxon_page: { count: 0, results: [] },
+        attachment: { count: 0, results: [] },
         taxon_image: { count: 0, results: [] },
         searchParameters: {
           taxon_subclass: {
@@ -1019,6 +1035,12 @@ export default {
             sortBy: ["id"],
             sortDesc: [true]
           },
+          attachment: {
+            page: 1,
+            paginateBy: 100,
+            sortBy: ["id"],
+            sortDesc: [true]
+          },
           taxon_image: {
             page: 1,
             paginateBy: 100,
@@ -1051,8 +1073,8 @@ export default {
         this.relatedTabs.forEach(tab => {
           if (tab.name !== "taxon_subclass") {
             if (this.relatedData[tab.name].count > 0)
-              if (tab.name === "taxon_image") {
-                uploadableObject.related_data.attachment = this.relatedData.taxon_image.results.map(
+              if (tab.name === "attachment") {
+                uploadableObject.related_data.attachment = this.relatedData.attachment.results.map(
                   item => {
                     return { id: item.id };
                   }
@@ -1073,8 +1095,12 @@ export default {
           }
         });
       } else {
-        if (this.relatedData.taxon_image.count > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.taxon_image.results;
+        if (this.relatedData.attachment.count > 0) {
+          uploadableObject.related_data.attachment = this.relatedData.attachment.results.map(
+            item => {
+              return { id: item.id };
+            }
+          );
         } else delete uploadableObject.related_data.attachment;
       }
 
@@ -1187,6 +1213,11 @@ export default {
           this.$route.params.id,
           this.relatedData.searchParameters.taxon_page
         );
+      } else if (object === "attachment") {
+        query = fetchTaxonAttachments(
+          this.$route.params.id,
+          this.relatedData.searchParameters.attachment
+        );
       } else if (object === "taxon_image") {
         query = fetchTaxonImage(
           this.$route.params.id,
@@ -1195,27 +1226,7 @@ export default {
       }
 
       query.then(response => {
-        if (object === "taxon_image") {
-          let taxonImageResponse = this.handleResponse(response);
-
-          this.relatedData.taxon_image.results = taxonImageResponse.map(
-            image => {
-              return {
-                id: image.attachment,
-                author__agent: image.attachment__author__agent,
-                original_filename: image.attachment__original_filename,
-                description: image.attachment__description,
-                description_en: image.attachment__description_en,
-                remarks: image.attachment__remarks,
-                uuid_filename: image.attachment__uuid_filename,
-                attachment_format__value:
-                  image.attachment__attachment_format__value
-              };
-            }
-          );
-        } else {
-          this.relatedData[object].results = this.handleResponse(response);
-        }
+        this.relatedData[object].results = this.handleResponse(response);
         this.relatedData[object].count = response.data.count;
       });
     },
@@ -1239,8 +1250,8 @@ export default {
     },
 
     addExistingFiles(files) {
-      this.relatedData.taxon_image.count = files.length;
-      this.relatedData.taxon_image.results = files;
+      this.relatedData.attachment.count = files.length;
+      this.relatedData.attachment.results = files;
     },
 
     updateHierarchyString(parentTaxon) {

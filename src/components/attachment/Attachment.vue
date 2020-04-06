@@ -3417,7 +3417,11 @@
                   "
                 >
                   <p class="h4">
-                    {{ $t("attachment.relatedTables.attach_link__locality_description") }}
+                    {{
+                      $t(
+                        "attachment.relatedTables.attach_link__locality_description"
+                      )
+                    }}
                   </p>
 
                   <div class="table-responsive">
@@ -3436,8 +3440,7 @@
                           index) in relatedData.attach_link__locality_description"
                           :key="index"
                         >
-                          <td>{{ entity.id }}
-                          </td>
+                          <td>{{ entity.id }}</td>
 
                           <td>
                             {{ entity.description }}
@@ -3446,7 +3449,68 @@
                           <td
                             class="text-center delete-relation"
                             @click="
-                              relatedData.attach_link__locality_description.splice(index, 1)
+                              relatedData.attach_link__locality_description.splice(
+                                index,
+                                1
+                              )
+                            "
+                          >
+                            <i class="fas fa-times"></i>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- TAXON -->
+                <div
+                  class="col-sm-6 pa-1"
+                  v-if="
+                    relatedData.attach_link__taxon !== null &&
+                      relatedData.attach_link__taxon.length > 0
+                  "
+                >
+                  <p class="h4">
+                    {{ $t("attachment.relatedTables.attach_link__taxon") }}
+                  </p>
+
+                  <div class="table-responsive">
+                    <table class="table table-hover table-bordered">
+                      <thead class="thead-light">
+                        <tr>
+                          <th>ID</th>
+                          <th>{{ $t("taxon.taxon") }}</th>
+                          <th>{{ $t("taxon.author_year") }}</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr
+                          v-for="(entity,
+                          index) in relatedData.attach_link__taxon"
+                          :key="index"
+                        >
+                          <td>
+                            <router-link
+                              :to="{ path: '/taxon/' + entity.id }"
+                              >{{ entity.id }}</router-link
+                            >
+                          </td>
+
+                          <td>
+                            {{ entity.taxon }}
+                          </td>
+
+                          <td>
+                            {{ entity.author_year }}
+                          </td>
+
+                          <td
+                            class="text-center delete-relation"
+                            @click="
+                              relatedData.attach_link__taxon.splice(index, 1)
                             "
                           >
                             <i class="fas fa-times"></i>
@@ -3765,6 +3829,7 @@ import {
   fetchAttachmentLinkDrillcoreBoxes,
   fetchAttachmentLinkDrillcores,
   fetchAttachmentLinkLocalities,
+  fetchAttachmentLinkLocalityDescriptions,
   fetchAttachmentLinkPreparations,
   fetchAttachmentLinkProjects,
   fetchAttachmentLinkReferences,
@@ -3773,6 +3838,7 @@ import {
   fetchAttachmentLinkSites,
   fetchAttachmentLinkSpecimens,
   fetchAttachmentLinkStorages,
+  fetchAttachmentLinkTaxa,
   fetchListAttachmentType,
   fetchListImageType,
   fetchListLicences
@@ -4188,6 +4254,11 @@ export default {
             name: "attach_link__locality_description",
             name_short: "locality_description",
             iconClass: "fas fa-align-left"
+          },
+          {
+            name: "attach_link__taxon",
+            name_short: "taxon",
+            iconClass: "fas fa-pastafarianism"
           }
         ],
         ratings: [
@@ -4274,7 +4345,8 @@ export default {
             attach_link__storage: false,
             attach_link__project: false,
             attach_link__site: false,
-            attach_link__locality_description: false
+            attach_link__locality_description: false,
+            attach_link__taxon: false
           },
           agent: [],
           imageset: [],
@@ -4302,7 +4374,8 @@ export default {
           attach_link__storage: [],
           attach_link__project: [],
           attach_link__site: [],
-          attach_link__locality_description: []
+          attach_link__locality_description: [],
+          attach_link__taxon: []
         },
         requiredFields: {
           photo_archive: ["imageset"],
@@ -4581,6 +4654,31 @@ export default {
           });
           this.autocomplete.attach_link__site = this.relatedData.attach_link__site;
         });
+        fetchAttachmentLinkLocalityDescriptions(this.$route.params.id).then(
+          response => {
+            let collections = this.handleResponse(response);
+            this.relatedData.attach_link__locality_description = collections.map(
+              entity => {
+                return {
+                  id: entity.locality_description,
+                  description: entity.locality_description__description
+                };
+              }
+            );
+            this.autocomplete.attach_link__locality_description = this.relatedData.attach_link__locality_description;
+          }
+        );
+        fetchAttachmentLinkTaxa(this.$route.params.id).then(response => {
+          let collections = this.handleResponse(response);
+          this.relatedData.attach_link__taxon = collections.map(entity => {
+            return {
+              id: entity.taxon,
+              taxon: entity.taxon__taxon,
+              author_year: entity.taxon__author_year
+            };
+          });
+          this.autocomplete.attach_link__taxon = this.relatedData.attach_link__taxon;
+        });
       }
     },
 
@@ -4603,6 +4701,7 @@ export default {
         attach_link__project: [],
         attach_link__site: [],
         attach_link__locality_description: [],
+        attach_link__taxon: [],
         searchParameters: {
           keyword: {
             page: 1,
@@ -5001,6 +5100,8 @@ export default {
           return `${option.id} - (${option.preparation_number})`;
         case "reference":
           return `${option.id} - (${option.reference})`;
+        case "taxon":
+          return `${option.id} - (${option.taxon})`;
         case "storage":
           if (option.contents === null)
             return `${option.id} - (${option.location})`;

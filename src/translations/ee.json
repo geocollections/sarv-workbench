@@ -242,6 +242,7 @@
     "taxon_subclass": "Alamtakson",
     "taxon_synonym": "Sünonüüm",
     "taxon_type_specimen": "Tüüpeksemplar",
+    "taxon_image": "Pilt",
     "drillcore_box": "Südamikukast",
     "drillcore_study": "Töö südamikuga",
     "sample_analysis": "Analüüs",
@@ -695,7 +696,8 @@
       "attach_link__attachment": "Fail",
       "attach_link__project": "Projekt",
       "attach_link__site": "Vaatluspunkt",
-      "attach_link__locality_description": "Geoloogiline kirjeldus"
+      "attach_link__locality_description": "Geoloogiline kirjeldus",
+      "attach_link__taxon": "Takson"
     },
     "imagesetId": "Pildiseeria ID",
     "imagePlace": "Pildi koht",
@@ -1009,7 +1011,10 @@
     "frontpage_title": "Avalehe pealkiri",
     "author_txt": "Autor txt",
     "title": "Pealkiri",
+    "title_en": "Pealkiri (EN)",
     "locality_free": "Leiukoht txt",
+    "attachment": "Pilt",
+    "attachment_filename": "Failinimi",
     "relatedTables": {
       "taxon_subclass": "Alamtaksonid",
       "taxon_synonym": "Sünonüümika",
@@ -1019,6 +1024,7 @@
       "taxon_common_name": "Tavanimed",
       "taxon_description": "Kirjeldused",
       "taxon_page": "Veebilehed",
+      "attachment": "Failid",
       "taxon_image": "Pildid"
     }
   },

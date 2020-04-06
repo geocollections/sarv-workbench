@@ -225,6 +225,9 @@ const autocompleteMixin = {
     autocompletePublicAttachmentSearch(value) {
       this.$_autocompleteMixin_search(value, "attachment_public", "attachment");
     },
+    autocompletePublicAttachmentImageSearch(value) {
+      this.$_autocompleteMixin_search(value, "attachment_public_image", "attachment");
+    },
     autocompleteJournalSearch(value) {
       this.$_autocompleteMixin_search(value, "journals", "journals", 1);
     },
@@ -447,6 +450,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename,attachment_format__value`;
     case "attachment_public":
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
+    case "attachment_public_image":
+      return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&is_private=0&attachment_format__value__icontains=image&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename,attachment_format__value`;
     case "attachment3":
       return `attachment/?multi_search=value:${value};fields:id,author__agent,original_filename,description,description_en;lookuptype:icontains&or_search=user_added__iexact:${currentUser.user};is_private__iexact:0&fields=id,author__agent,original_filename,description,description_en,remarks,uuid_filename`;
     case "taxon":
@@ -539,6 +544,10 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `${
         type.split("__")[1]
       }/?multi_search=value:${value};fields:id,description;lookuptype:icontains&fields=id,description`;
+    case "attach_link__taxon":
+      return `${
+        type.split("__")[1]
+      }/?multi_search=value:${value};fields:id,taxon;lookuptype:icontains&fields=id,taxon,author_year`;
     case "attach_link__storage":
       return `location/?multi_search=value:${value};fields:id,location,contents;lookuptype:icontains&fields=id,location,contents`;
     default:
