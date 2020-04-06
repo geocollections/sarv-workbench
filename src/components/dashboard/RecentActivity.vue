@@ -36,7 +36,7 @@
                   <div v-else>{{ entity.table_name }}: {{ entity.row_id }}</div>
                 </td>
                 <td>
-                  {{ entity.time | moment("YYYY-DD-MM HH:mm") }}
+                  {{ entity.time | moment("YYYY-MM-DD HH:mm") }}
                 </td>
               </tr>
             </tbody>
@@ -81,7 +81,7 @@
                   <div v-else>{{ entity.table_name }}: {{ entity.row_id }}</div>
                 </td>
                 <td>
-                  {{ entity.time | moment("YYYY-DD-MM HH:mm") }}
+                  {{ entity.time | moment("YYYY-MM-DD HH:mm") }}
                 </td>
               </tr>
             </tbody>
