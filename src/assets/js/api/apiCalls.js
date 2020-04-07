@@ -206,6 +206,12 @@ export function fetchAttachments(data, author) {
   if (data.specimen_image_attachment.length === 0) {
     searchFields += "&specimen_image_attachment=0";
   }
+  if (data.keyword !== null && data.keyword.trim().length > 0) {
+    searchFields +=
+      "&multi_search=value:" +
+      data.keyword +
+      ";fields:attachmentkeyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:icontains&distinct=true";
+  }
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {

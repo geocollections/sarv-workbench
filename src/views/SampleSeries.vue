@@ -56,27 +56,6 @@ export default {
       block: { search: true }
     };
   },
-  created() {
-    // Used by sidebar
-    const searchHistory = this.$localStorage.get(
-      "sampleSeriesSearchHistory",
-      "fallbackValue"
-    );
-    let params =
-      typeof searchHistory !== "undefined" &&
-      searchHistory !== null &&
-      searchHistory !== "fallbackValue"
-        ? searchHistory
-        : this.defaultSelectionSeriesParams;
-    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-      searchHistory: "sampleSeriesSearchHistory",
-      search: params,
-      request: "FETCH_SAMPLE_SERIES",
-      title: "header.sample_series",
-      object: "sample_series",
-      field: "name"
-    });
-  },
   watch: {
     searchParameters: {
       handler: function(newVal) {

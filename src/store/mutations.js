@@ -94,10 +94,6 @@ export default {
     Vue.set(state, "activeSearchParams", params);
   },
 
-  SET_ACTIVE_SEARCH_PARAMS_2: (state, params) => {
-    Vue.set(state, "activeSearchParams2", params);
-  },
-
   SET_SIDEBAR_LIST: (state, { resp }) => {
     /* false means page not found */
     Vue.set(state, "sidebarList", {

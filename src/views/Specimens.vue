@@ -38,6 +38,7 @@ import { mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSpecimenImages, fetchSpecimens } from "../assets/js/api/apiCalls";
+import isEmpty from "lodash";
 
 export default {
   components: {
@@ -98,14 +99,10 @@ export default {
     // Used by sidebar
     const searchHistory = this.$localStorage.get(
       "selectionSeriesSearchHistory",
-      "fallbackValue"
+      null
     );
-
     let params =
-      searchHistory &&
-      searchHistory !== "fallbackValue" &&
-      Object.entries(searchHistory).length > 0 &&
-      searchHistory.constructor === Object
+      !!searchHistory && !isEmpty(searchHistory)
         ? searchHistory
         : this.defaultSelectionSeriesParams;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {

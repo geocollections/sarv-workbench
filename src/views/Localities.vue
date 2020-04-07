@@ -30,6 +30,7 @@ import { fetchLocalities } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { mapState } from "vuex";
+import isEmpty from "lodash";
 
 export default {
   components: {
@@ -91,12 +92,10 @@ export default {
     // Used by sidebar
     const searchHistory = this.$localStorage.get(
       "selectionSeriesSearchHistory",
-      "fallbackValue"
+      null
     );
     let params =
-      typeof searchHistory !== "undefined" &&
-      searchHistory !== null &&
-      searchHistory !== "fallbackValue"
+      !!searchHistory && !isEmpty(searchHistory)
         ? searchHistory
         : this.defaultSelectionSeriesParams;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {

@@ -215,7 +215,8 @@ export default {
       rgba(255, 255, 255, 0.2) 0%,
       rgba(0, 0, 0, 0.7) 100%
     ),
-    url("https://files.geocollections.info/img/doi-header-bg.jpg");
+    /*url("https://files.geocollections.info/img/doi-header-bg.jpg");*/
+    url("../assets/img/background_1.jpg");
   background-size: cover;
 }
 

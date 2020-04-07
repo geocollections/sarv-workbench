@@ -10,7 +10,7 @@
       v-on:update:showSearch="block.search = $event"
       :filters="filters"
       :search-parameters="searchParameters"
-      :col-size="4"
+      :col-size="3"
       v-on:reset:searchPreferences="resetSearchPreferences"
     />
 
@@ -34,6 +34,7 @@ import { fetchAttachments } from "../assets/js/api/apiCalls";
 import { mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import isEmpty from "lodash";
 
 export default {
   components: {
@@ -53,7 +54,8 @@ export default {
         { id: "imageInfo", title: "attachment.imageInfo", type: "text" },
         { id: "locality", title: "attachment.locality", type: "text" },
         { id: "selectionId", title: "specimen.selectionId", type: "number" },
-        { id: "selection", title: "specimen.selection", type: "text" }
+        { id: "selection", title: "specimen.selection", type: "text" },
+        { id: "keyword", title: "keyword.keyword", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true },
@@ -82,12 +84,10 @@ export default {
     // Used by sidebar
     const searchHistory = this.$localStorage.get(
       "selectionSeriesSearchHistory",
-      "fallbackValue"
+      null
     );
     let params =
-      typeof searchHistory !== "undefined" &&
-      searchHistory !== null &&
-      searchHistory !== "fallbackValue"
+      !!searchHistory && !isEmpty(searchHistory)
         ? searchHistory
         : this.defaultSelectionSeriesParams;
     this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
@@ -133,6 +133,7 @@ export default {
         locality: null,
         selectionId: null,
         selection: null,
+        keyword: null,
         specimen_image_attachment: ["2", "1", "3", "4"],
         page: 1,
         paginateBy: 50,
