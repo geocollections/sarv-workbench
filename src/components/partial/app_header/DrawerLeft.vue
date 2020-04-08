@@ -323,11 +323,11 @@ export default {
               path: "/sample_series",
               icon: "fas fa-vials"
             },
-            {
-              title: "sample_serie",
-              path: "/sample_series/add",
-              icon: "far fa-plus-square"
-            },
+            // {
+            //   title: "sample_serie",
+            //   path: "/sample_series/add",
+            //   icon: "far fa-plus-square"
+            // },
             {
               title: "editAnalysis",
               path: "/analysis",
@@ -341,7 +341,7 @@ export default {
             {
               title: "editPreparation",
               path: "/preparation",
-              icon: "fas fa-vials"
+              icon: "fas fa-prescription-bottle"
             },
             {
               title: "addPreparation",
@@ -579,7 +579,9 @@ export default {
     },
 
     allowedRouteLinksSpecial() {
-      return this.routeLinksSpecial.filter(link => this.isUserAllowedTo("add", link.name));
+      return this.routeLinksSpecial.filter(link =>
+        this.isUserAllowedTo("add", link.name)
+      );
     },
 
     filteredRouteLinks() {

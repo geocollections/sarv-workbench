@@ -176,21 +176,18 @@
                 />
               </v-col>
 
-              <v-col cols="6" md="3" class="pa-1">
-                <input-wrapper
-                  v-model="sample.latitude1"
+              <v-col cols="12" md="6" class="pa-1">
+                <autocomplete-wrapper
+                  v-model="sample.site"
                   :color="bodyActiveColor"
-                  :label="$t('common.latitude')"
-                  type="number"
-                />
-              </v-col>
-
-              <v-col cols="6" md="3" class="pa-1">
-                <input-wrapper
-                  v-model="sample.longitude1"
-                  :color="bodyActiveColor"
-                  :label="$t('common.longitude')"
-                  type="number"
+                  :items="autocomplete.site"
+                  :loading="autocomplete.loaders.site"
+                  :item-text="siteLabel"
+                  :label="$t('sample.site')"
+                  is-link
+                  route-object="site"
+                  is-searchable
+                  v-on:search:items="autocompleteSiteSearch"
                 />
               </v-col>
             </v-row>
@@ -329,7 +326,7 @@
               </v-col>
             </v-row>
 
-            <!-- MASS, STORAGE and OWNER -->
+            <!-- MASS, STORAGE, STORAGE_ADDITIONAL and OWNER -->
             <v-row no-gutters>
               <v-col cols="12" md="3" class="pa-1">
                 <input-wrapper
@@ -414,9 +411,9 @@
 
         <transition>
           <div v-show="block.relatedInfo" class="pa-1">
-            <!-- PARENT SAMPLE, PARENT SPECIMEN and SITE -->
+            <!-- PARENT SAMPLE and PARENT SPECIMEN -->
             <v-row no-gutters>
-              <v-col cols="12" md="4" class="pa-1">
+              <v-col cols="12" md="6" class="pa-1">
                 <autocomplete-wrapper
                   v-model="sample.parent_sample"
                   :color="bodyActiveColor"
@@ -431,7 +428,7 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="4" class="pa-1">
+              <v-col cols="12" md="6" class="pa-1">
                 <autocomplete-wrapper
                   v-model="sample.parent_specimen"
                   :color="bodyActiveColor"
@@ -443,21 +440,6 @@
                   route-object="specimen"
                   is-searchable
                   v-on:search:items="autocompleteSpecimenSearch"
-                />
-              </v-col>
-
-              <v-col cols="12" md="4" class="pa-1">
-                <autocomplete-wrapper
-                  v-model="sample.site"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.site"
-                  :loading="autocomplete.loaders.site"
-                  :item-text="siteLabel"
-                  :label="$t('sample.site')"
-                  is-link
-                  route-object="site"
-                  is-searchable
-                  v-on:search:items="autocompleteSiteSearch"
                 />
               </v-col>
             </v-row>
@@ -660,7 +642,7 @@
               </v-col>
             </v-row>
 
-            <!-- AGENT_COLLECTED, DATE_COLLECTED and OWNER -->
+            <!-- AGENT_COLLECTED, DATE_COLLECTED and SITE -->
             <v-row no-gutters>
               <v-col cols="12" md="4" class="pa-1">
                 <autocomplete-wrapper
@@ -691,16 +673,16 @@
 
               <v-col cols="12" md="4" class="pa-1">
                 <autocomplete-wrapper
-                  v-model="sample.owner"
+                  v-model="sample.site"
                   :color="bodyActiveColor"
-                  :items="autocomplete.agent"
-                  :loading="autocomplete.loaders.owner"
-                  item-text="agent"
-                  :label="$t('sample.storage_additional')"
+                  :items="autocomplete.site"
+                  :loading="autocomplete.loaders.site"
+                  :item-text="siteLabel"
+                  :label="$t('sample.site')"
                   is-link
-                  route-object="agent"
+                  route-object="site"
                   is-searchable
-                  v-on:search:items="autocompleteOwnerSearch"
+                  v-on:search:items="autocompleteSiteSearch"
                 />
               </v-col>
             </v-row>
@@ -769,9 +751,9 @@
 
         <transition>
           <div v-show="block.relatedInfo" class="pa-1">
-            <!-- PARENT SAMPLE, PARENT SPECIMEN and SITE -->
+            <!-- PARENT SAMPLE and PARENT SPECIMEN -->
             <v-row no-gutters>
-              <v-col cols="12" md="4" class="pa-1">
+              <v-col cols="12" md="6" class="pa-1">
                 <autocomplete-wrapper
                   v-model="sample.parent_sample"
                   :color="bodyActiveColor"
@@ -786,7 +768,7 @@
                 />
               </v-col>
 
-              <v-col cols="12" md="4" class="pa-1">
+              <v-col cols="12" md="6" class="pa-1">
                 <autocomplete-wrapper
                   v-model="sample.parent_specimen"
                   :color="bodyActiveColor"
@@ -798,21 +780,6 @@
                   route-object="specimen"
                   is-searchable
                   v-on:search:items="autocompleteSpecimenSearch"
-                />
-              </v-col>
-
-              <v-col cols="12" md="4" class="pa-1">
-                <autocomplete-wrapper
-                  v-model="sample.site"
-                  :color="bodyActiveColor"
-                  :items="autocomplete.site"
-                  :loading="autocomplete.loaders.site"
-                  :item-text="siteLabel"
-                  :label="$t('sample.site')"
-                  is-link
-                  route-object="site"
-                  is-searchable
-                  v-on:search:items="autocompleteSiteSearch"
                 />
               </v-col>
             </v-row>
@@ -1207,8 +1174,6 @@ export default {
           "parent_specimen",
           "depth",
           "depth_interval",
-          "latitude1",
-          "longitude1",
           "stratigraphy",
           "lithostratigraphy",
           "stratigraphy_free",

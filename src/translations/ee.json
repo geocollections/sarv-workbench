@@ -248,8 +248,8 @@
     "sample_analysis": "Analüüs",
     "sample_preparation": "Preparaat",
     "sample_taxon_list": "Takson",
-    "sample_series": "Proovi valikud",
-    "sample_serie": "Lisa proovi valik"
+    "sample_series": "Prooviseeriad",
+    "sample_serie": "Lisa prooviseeria"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -632,8 +632,8 @@
     "editMessage": "Muuda veebileht"
   },
   "editSampleSeries": {
-    "heading": "Proovi valikud",
-    "editMessage": "Muuda proovi valikut"
+    "heading": "Prooviseeria",
+    "editMessage": "Muuda prooviseeriat"
   },
   "references": {
     "tableView": "Tabeli vaade",
