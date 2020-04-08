@@ -90,6 +90,7 @@
 
       <!-- ROUTES SPECIAL -->
       <v-list-group
+        v-if="allowedRouteLinksSpecial && allowedRouteLinksSpecial.length > 0"
         prepend-icon="fas fa-university"
         append-icon="fas fa-angle-down"
         :color="drawerActiveColor"
@@ -102,7 +103,7 @@
         <v-list-group
           sub-group
           :color="drawerActiveColor"
-          v-for="entity in routeLinksSpecial"
+          v-for="entity in allowedRouteLinksSpecial"
           :key="entity.title"
           v-model="entity.state"
         >
@@ -575,6 +576,10 @@ export default {
       return this.routeLinks.filter(link =>
         this.isUserAllowedTo("add", link.name)
       );
+    },
+
+    allowedRouteLinksSpecial() {
+      return this.routeLinksSpecial.filter(link => this.isUserAllowedTo("add", link.name));
     },
 
     filteredRouteLinks() {
