@@ -249,7 +249,9 @@
     "sample_preparation": "Sample preparation",
     "sample_taxon_list": "Sample taxon",
     "sample_series": "Sample series",
-    "sample_serie": "Add sample series"
+    "sample_serie": "Add sample series",
+    "editSiteGroundwater": "Hydrogeology",
+    "site_groundwater": "Hydrogeology"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -634,6 +636,10 @@
   "editSampleSeries": {
     "heading": "Sample series",
     "editMessage": "Edit sample series"
+  },
+  "editSiteGroundwater": {
+    "heading": "Hydrogeology sites",
+    "editMessage": "Edit Hydrogeology site"
   },
   "references": {
     "tableView": "Table view",
@@ -1635,6 +1641,9 @@
       "samples": "Samples",
       "attachments": "Attachments"
     }
+  },
+  "site_groundwater": {
+    "site": "Site"
   },
   "permissions": {
     "title": "Data access permissions",

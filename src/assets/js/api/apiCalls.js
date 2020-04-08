@@ -3402,6 +3402,35 @@ export function fetchWebPages(data) {
  ***  WEB_PAGES END  ***
  ***********************/
 
+/******************************
+ *** SITE_GROUNDWATER START ***
+ ******************************/
+
+export function fetchSiteGroundwater(id) {
+  return get(`site_groundwater/?id=${id}&format=json`);
+}
+
+export function fetchSiteGroundwaters(data) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `site_groundwater/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+      `site_groundwater/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/******************************
+ ***  SITE_GROUNDWATER END  ***
+ ******************************/
+
 /***************************
  *** SAMPLE_SERIES START ***
  **************************/

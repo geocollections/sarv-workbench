@@ -2163,6 +2163,76 @@ const router = new Router({
           ]
         },
         {
+          path: "/site_groundwater",
+          component: () => import("./views/SiteGroundwaters.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import(
+                  "./components/site_groundwater/SiteGroundwaterTable.vue"
+                ),
+              meta: {
+                requiresAuth: true,
+                object: "site_groundwater",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/site_groundwater/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                import("./components/site_groundwater/SiteGroundwater.vue"),
+              meta: {
+                isEdit: true,
+                table: "site_groundwater",
+                heading: "editSiteGroundwater.heading",
+                requiresAuth: true,
+                object: "site_groundwater"
+              }
+            }
+          ]
+        },
+        {
+          path: "/site_groundwater/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Site groundwater add",
+              component: () =>
+                import("./components/site_groundwater/SiteGroundwater.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.site_groundwater",
+                subForms: [
+                  {
+                    path: "/site_groundwater/add",
+                    name: "header.site_groundwater"
+                  }
+                ],
+                requiresAuth: true,
+                object: "site_groundwater"
+              }
+            }
+          ]
+        },
+        {
           path: "/test-dev",
           component: () => import("./components/partial/test/Test.vue"),
           meta: {

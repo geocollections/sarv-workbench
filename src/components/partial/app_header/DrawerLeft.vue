@@ -265,6 +265,11 @@ export default {
             { title: "editSite", path: "/site", icon: "fas fa-globe" },
             { title: "addSite", path: "/site/add", icon: "far fa-plus-square" },
             {
+              title: "editSiteGroundwater",
+              path: "/site_groundwater",
+              icon: "fas fa-water"
+            },
+            {
               title: "areas",
               path: "/area",
               icon: "fas fa-chart-area"

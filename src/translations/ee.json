@@ -249,7 +249,9 @@
     "sample_preparation": "Preparaat",
     "sample_taxon_list": "Takson",
     "sample_series": "Prooviseeriad",
-    "sample_serie": "Lisa prooviseeria"
+    "sample_serie": "Lisa prooviseeria",
+    "editSiteGroundwater": "Hüdrogeoloogia",
+    "site_groundwater": "Hüdrogeoloogia"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -634,6 +636,10 @@
   "editSampleSeries": {
     "heading": "Prooviseeria",
     "editMessage": "Muuda prooviseeriat"
+  },
+  "editSiteGroundwater": {
+    "heading": "Hüdrogeoloogia proovipunktid",
+    "editMessage": "Muuda hüdrogeoloogia proovipunkti"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1635,6 +1641,9 @@
       "samples": "Proovid",
       "attachments": "Failid"
     }
+  },
+  "site_groundwater": {
+    "site": "Proovipunkt"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",
