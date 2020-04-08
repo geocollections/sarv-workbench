@@ -145,7 +145,7 @@
 
     <!-- HELP -->
     <v-row id="block-help">
-      <v-col class="py-6">
+      <v-col>
         <v-card
           :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
           elevation="4"
