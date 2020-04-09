@@ -921,6 +921,8 @@ export default {
           url = "change/site_groundwater/" + this.site_groundwater.id;
         } else url = "add/site_groundwater/";
 
+        delete this.site_groundwater.id;
+
         let formData = new FormData();
         formData.append("data", JSON.stringify(this.site_groundwater));
 
