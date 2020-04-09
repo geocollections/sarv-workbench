@@ -514,7 +514,7 @@
   },
   "editSite": {
     "heading": "Site",
-    "editMessage": "Muuda site",
+    "editMessage": "Muuda proovipunkti",
     "viewMessage": "Vaata proovipunkti"
   },
   "editLocality": {
@@ -641,7 +641,8 @@
   },
   "editSiteGroundwater": {
     "heading": "Hüdrogeoloogia proovipunktid",
-    "editMessage": "Muuda hüdrogeoloogia proovipunkti"
+    "editMessage": "Muuda hüdrogeoloogia proovipunkti",
+    "viewMessage": "Ava VEKA link"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1657,6 +1658,7 @@
     "filter_bottom": "Filter alumine (b.g.s)",
     "filter_bottom_z": "Filter alumine (a.s.l)",
     "url_veka": "VEKA link",
+    "url_veka_short": "VEKA",
     "save": "Salvesta põhjavee andmestik",
     "dataMissing": "Täida mõni väli Põhjavee lisamoodulist"
   },

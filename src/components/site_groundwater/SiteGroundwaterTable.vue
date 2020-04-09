@@ -17,12 +17,12 @@
   >
     <template v-slot:item.id="{ item }">
       <router-link
-        :to="{ path: '/site_groundwater/' + item.id }"
-        :title="$t('editSiteGroundwater.editMessage')"
+        :to="{ path: '/site/' + item.site }"
+        :title="$t('editSite.editMessage')"
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        {{ item.id }}
+        {{ item.site }}
       </router-link>
     </template>
 
@@ -33,8 +33,23 @@
         class="sarv-link"
         :class="`${bodyActiveColor}--text`"
       >
-        <div v-translate="{ et: item.site__name, en: item.site__name_en }"></div>
+        <div
+          v-translate="{ et: item.site__name, en: item.site__name_en }"
+        ></div>
       </router-link>
+    </template>
+
+    <template v-slot:item.url_veka="{ item }">
+      <v-btn
+        v-if="item.url_veka"
+        :href="item.url_veka"
+        :title="$t('editSiteGroundwater.viewMessage')"
+        :color="bodyActiveColor"
+        target="VekaWindow"
+        icon
+      >
+        <v-icon>fas fa-external-link-alt</v-icon>
+      </v-btn>
     </template>
   </v-data-table>
 </template>
@@ -75,13 +90,17 @@ export default {
     expanded: [],
     headers: [
       { text: "common.id", value: "id" },
-      { text: "site_groundwater.site", value: "site" },
-      // { text: "loan.borrower", value: "borrower" },
-      // { text: "loan.project", value: "project" },
-      // { text: "loan.date_start", value: "date_start" },
-      // { text: "loan.date_end", value: "date_end" },
-      // { text: "loan.returned", value: "returned", align: "center" },
-      // { text: "loan.database", value: "database", align: "center" }
+      { text: "site_groundwater.type_txt", value: "type_txt" },
+      { text: "site_groundwater.aquifer_system", value: "aquifer_system" },
+      { text: "site_groundwater.aquifer", value: "aquifer" },
+      { text: "site_groundwater.well_depth", value: "well_depth" },
+      { text: "site_groundwater.filter_type", value: "filter_type" },
+      { text: "site_groundwater.filter_top", value: "filter_top" },
+      { text: "site_groundwater.filter_bottom", value: "filter_bottom" },
+      { text: "site_groundwater.filter_top_z", value: "filter_top_z" },
+      { text: "site_groundwater.filter_bottom_z", value: "filter_bottom_z" },
+      { text: "site_groundwater.url_veka_short", value: "url_veka" },
+      { text: "common.remarks", value: "remarks" }
     ],
     names: []
   }),

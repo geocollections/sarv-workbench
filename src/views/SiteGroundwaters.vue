@@ -1,9 +1,6 @@
 <template>
   <div class="site-groundwaters">
-    <table-view-title
-      title="header.site_groundwater"
-      buttonPath="/site_groundwater/add"
-    />
+    <table-view-title title="header.site_groundwater" buttonPath="/site/add" />
 
     <table-view-search
       :show-search="block.search"
@@ -43,9 +40,50 @@ export default {
     return {
       response: {},
       filters: [
-        // { id: "loan_number", title: "loan.loan_number", type: "text" },
-        // { id: "project", title: "loan.project", type: "text" },
-        // { id: "borrower", title: "loan.borrower", type: "text" }
+        { title: "site_groundwater.site", id: "site", type: "text" },
+        { title: "site_groundwater.type_txt", id: "type_txt", type: "text" },
+        {
+          title: "site_groundwater.aquifer_system",
+          id: "aquifer_system",
+          type: "text"
+        },
+        { title: "site_groundwater.aquifer", id: "aquifer", type: "text" },
+        {
+          title: "site_groundwater.well_depth",
+          id: "well_depth",
+          type: "number"
+        },
+        {
+          title: "site_groundwater.filter_type",
+          id: "filter_type",
+          type: "text"
+        },
+        {
+          title: "site_groundwater.filter_top",
+          id: "filter_top",
+          type: "text"
+        },
+        {
+          title: "site_groundwater.filter_top_z",
+          id: "filter_top_z",
+          type: "text"
+        },
+        {
+          title: "site_groundwater.filter_bottom",
+          id: "filter_bottom",
+          type: "text"
+        },
+        {
+          title: "site_groundwater.filter_bottom_z",
+          id: "filter_bottom_z",
+          type: "text"
+        },
+        {
+          title: "site_groundwater.url_veka_short",
+          id: "url_veka",
+          type: "text"
+        },
+        { title: "common.remarks", id: "remarks", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
@@ -77,6 +115,18 @@ export default {
     },
     setDefaultSearchParameters() {
       return {
+        site: null,
+        type_txt: null,
+        aquifer_system: null,
+        aquifer: null,
+        well_depth: null,
+        filter_type: null,
+        filter_top: null,
+        filter_top_z: null,
+        filter_bottom: null,
+        filter_bottom_z: null,
+        url_veka: null,
+        remarks: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

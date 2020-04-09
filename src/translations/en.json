@@ -641,7 +641,8 @@
   },
   "editSiteGroundwater": {
     "heading": "Hydrogeology sites",
-    "editMessage": "Edit Hydrogeology site"
+    "editMessage": "Edit Hydrogeology site",
+    "viewMessage": "Open VEKA link"
   },
   "references": {
     "tableView": "Table view",
@@ -1657,6 +1658,7 @@
     "filter_bottom": "Filter bottom (b.g.s)",
     "filter_bottom_z": "Filter bottom (a.s.l)",
     "url_veka": "VEKA link",
+    "url_veka_short": "VEKA",
     "save": "Save groundwater data",
     "dataMissing": "Add some data to groundwater extension"
   },

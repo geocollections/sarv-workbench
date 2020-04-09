@@ -3418,6 +3418,43 @@ export function fetchSiteGroundwaters(data) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
+  if (data.site && data.site.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.site};fields:site__name,site__name_en;lookuptype:icontains`;
+  }
+  if (data.type_txt && data.type_txt.trim().length > 0) {
+    searchFields += `&type_txt__icontains=${data.type_txt}`;
+  }
+  if (data.aquifer_system && data.aquifer_system.trim().length > 0) {
+    searchFields += `&aquifer_system__icontains=${data.aquifer_system}`;
+  }
+  if (data.aquifer && data.aquifer.trim().length > 0) {
+    searchFields += `&aquifer__icontains=${data.aquifer}`;
+  }
+  if (data.well_depth && data.well_depth.trim().length > 0) {
+    searchFields += `&well_depth__icontains=${data.well_depth}`;
+  }
+  if (data.filter_type && data.filter_type.trim().length > 0) {
+    searchFields += `&filter_type__icontains=${data.filter_type}`;
+  }
+  if (data.filter_top && data.filter_top.trim().length > 0) {
+    searchFields += `&filter_top__icontains=${data.filter_top}`;
+  }
+  if (data.filter_top_z && data.filter_top_z.trim().length > 0) {
+    searchFields += `&filter_top_z__icontains=${data.filter_top_z}`;
+  }
+  if (data.filter_bottom && data.filter_bottom.trim().length > 0) {
+    searchFields += `&filter_bottom__icontains=${data.filter_bottom}`;
+  }
+  if (data.filter_bottom_z && data.filter_bottom_z.trim().length > 0) {
+    searchFields += `&filter_bottom_z__icontains=${data.filter_bottom_z}`;
+  }
+  if (data.url_veka && data.url_veka.trim().length > 0) {
+    searchFields += `&url_veka__icontains=${data.url_veka}`;
+  }
+  if (data.remarks && data.remarks.trim().length > 0) {
+    searchFields += `&remarks__icontains=${data.remarks}`;
+  }
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {
