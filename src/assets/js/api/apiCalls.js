@@ -3410,6 +3410,10 @@ export function fetchSiteGroundwater(id) {
   return get(`site_groundwater/?id=${id}&format=json`);
 }
 
+export function fetchSiteGroundwaterUsingSite(siteId) {
+  return get(`site_groundwater/?site=${siteId}&format=json`);
+}
+
 export function fetchSiteGroundwaters(data) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);

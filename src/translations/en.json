@@ -303,7 +303,8 @@
       "location": "Location",
       "description": "Description | Remarks",
       "files": "Files",
-      "samples": "Linked samples"
+      "samples": "Linked samples",
+      "groundwater": "Groundwater extension"
     },
     "reference": {
       "requiredFields": "Required fields",
@@ -907,6 +908,7 @@
     "thickness": "Thickness",
     "zero_level": "Zero level",
     "author_free": "Author free",
+    "groundwater": "Groundwater extension",
     "relatedTables": {
       "attachment_link": "Files",
       "samples": "Related samples",
@@ -1644,7 +1646,18 @@
     }
   },
   "site_groundwater": {
-    "site": "Site"
+    "site": "Site",
+    "type_txt": "Type",
+    "aquifer_system": "Aquifer system",
+    "aquifer": "Aquifer",
+    "well_depth": "Well depth",
+    "filter_type": "Filter type",
+    "filter_top": "Filter top (b.g.s)",
+    "filter_top_z": "Filter top (a.s.l)",
+    "filter_bottom": "Filter bottom (b.g.s)",
+    "filter_bottom_z": "Filter bottom (a.s.l)",
+    "url_veka": "VEKA link",
+    "save": "Save groundwater data"
   },
   "permissions": {
     "title": "Data access permissions",

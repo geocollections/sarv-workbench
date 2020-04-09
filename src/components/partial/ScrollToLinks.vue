@@ -63,6 +63,7 @@ export default {
       if (name === "details") return "fa-info";
       if (name === "specimen") return "fa-fish";
       if (name === "abstract") return "fa-sticky-note";
+      if (name === "groundwater") return "fa-water";
       else return "fa-fish";
     },
 

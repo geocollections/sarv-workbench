@@ -556,6 +556,169 @@
         </v-card>
       </v-tabs-items>
     </v-card>
+
+    <!-- SITE_GROUNDWATER -->
+    <v-card
+      v-if="$route.meta.isEdit && isUserAllowedTo('add', 'site_groundwater')"
+      class="mt-2"
+      id="block-groundwater"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.groundwater = !block.groundwater"
+        >
+          <span>{{ $t("site.groundwater") }}</span>
+          <v-icon right>fas fa-water</v-icon>
+        </div>
+        <v-spacer />
+        <v-btn
+          icon
+          @click="block.groundwater = !block.groundwater"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.groundwater ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.groundwater" class="pa-1">
+          <!-- TYPE_TXT, AQUIFER_STSTEM and AQUIFER -->
+          <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.type_txt"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.type_txt')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.aquifer_system"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.aquifer_system')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.aquifer"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.aquifer')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- WELL_DEPTH and FILTER_TYPE -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.well_depth"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.well_depth')"
+                type="number"
+                step="0.01"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.filter_type"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.filter_type')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- FILTER_TOP, FILTER_BOTTOM, FILTER_TOP_Z, FILTER_BOTTOM_Z -->
+          <v-row no-gutters>
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.filter_top"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.filter_top')"
+                type="number"
+                step="0.01"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.filter_bottom"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.filter_bottom')"
+                type="number"
+                step="0.01"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.filter_top_z"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.filter_top_z')"
+                type="number"
+                step="0.01"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.filter_bottom_z"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.filter_bottom_z')"
+                type="number"
+                step="0.01"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- URL_VEKA and REMARKS -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.url_veka"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.url_veka')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.remarks"
+                :color="bodyActiveColor"
+                :label="$t('common.remarks')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- SAVE GROUNDWATER DATA -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <v-btn
+                :color="!isNotEmpty(this.site_groundwater) ? 'red' : 'green'"
+                dark
+                @click="saveGroundwater"
+                :title="$t('site_groundwater.save')"
+                retain-focus-on-click
+                :small="$vuetify.breakpoint.smAndDown"
+                class="text-none"
+              >
+                <v-icon :small="$vuetify.breakpoint.smAndDown" left
+                  >fas fa-save</v-icon
+                >
+                <span>{{ $t("site_groundwater.save") }}</span>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
   </div>
 </template>
 
@@ -571,18 +734,25 @@ import {
   fetchLinkedSamples,
   fetchLastSiteName,
   fetchSiteLocalityDescriptions,
-  fetchSiteLocalityReferences
+  fetchSiteLocalityReferences,
+  fetchSiteGroundwater,
+  fetchSiteGroundwaterUsingSite,
+  postRequest
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
 import sidebarMixin from "../../mixins/sidebarMixin";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import { toastInfo } from "../../assets/js/iziToast/iziToast";
+import {
+  toastError,
+  toastInfo,
+  toastSuccess
+} from "../../assets/js/iziToast/iziToast";
 import FileUpload from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SiteLocalityDescriptionTable from "./relatedTables/SiteLocalityDescriptionTable";
@@ -630,6 +800,8 @@ export default {
   },
   computed: {
     ...mapState(["sidebarUserAction", "mapSettings"]),
+
+    ...mapGetters(["isUserAllowedTo"]),
 
     showMap: {
       get() {
@@ -740,6 +912,44 @@ export default {
   },
 
   methods: {
+    saveGroundwater() {
+      console.log("Todo: Save groundwater");
+      console.log(this.site_groundwater);
+      if (this.isNotEmpty(this.site_groundwater)) {
+        this.site_groundwater.site = this.$route.params.id;
+
+        let url = "";
+        if (this.site_groundwater.id) {
+          url = "change/site_groundwater/" + this.site_groundwater.id;
+        } else url = "add/site_groundwater/";
+
+        let formData = new FormData();
+        formData.append("data", JSON.stringify(this.site_groundwater));
+
+        postRequest(url, formData)
+          .then(response => {
+            if (response.status === 200) {
+              if (response.data) {
+                if (response.data.error) {
+                  toastError({ text: response.data.error });
+                } else {
+                  if (this.$i18n.locale === "ee") {
+                    toastSuccess({ text: response.data.message_et });
+                  } else {
+                    toastSuccess({ text: response.data.message });
+                  }
+                }
+              }
+            }
+          })
+          .catch(err => {
+            toastError({ text: this.$t("messages.uploadError") });
+          });
+      } else {
+        toastInfo({ text: "Add some data to Groundwater extensions" });
+      }
+    },
+
     setTab(type) {
       if (type) {
         this.$store.dispatch("updateActiveTab", {
@@ -785,6 +995,21 @@ export default {
           "remarks",
           "area"
         ],
+        siteGroundwaterCopyFields: [
+          "id",
+          "site",
+          "aquifer_system",
+          "aquifer",
+          "well_depth",
+          "type_txt",
+          "filter_type",
+          "filter_top",
+          "filter_top_z",
+          "filter_bottom",
+          "filter_bottom_z",
+          "url_veka",
+          "remarks"
+        ],
         autocomplete: {
           loaders: {
             project: false,
@@ -801,11 +1026,13 @@ export default {
         },
         requiredFields: ["latitude", "longitude"],
         site: {},
+        site_groundwater: {},
         searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,
-          description: false
+          description: false,
+          groundwater: false
         },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -838,7 +1065,6 @@ export default {
           if (handledResponse.length > 0) {
             this.$emit("object-exists", true);
             this.$set(this, "site", this.handleResponse(response)[0]);
-            // this.site = this.handleResponse(response)[0];
             this.fillAutocompleteFields(this.site);
             this.removeUnnecessaryFields(this.site, this.copyFields);
 
@@ -849,6 +1075,21 @@ export default {
           } else {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
+          }
+        });
+
+        fetchSiteGroundwaterUsingSite(this.$route.params.id).then(response => {
+          let handledResponse = this.handleResponse(response);
+          if (handledResponse.length > 0) {
+            this.$set(
+              this,
+              "site_groundwater",
+              this.handleResponse(response)[0]
+            );
+            this.removeUnnecessaryFields(
+              this.site_groundwater,
+              this.siteGroundwaterCopyFields
+            );
           }
         });
 
