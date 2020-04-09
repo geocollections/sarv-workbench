@@ -77,8 +77,16 @@
             </v-col>
           </v-row>
 
-          <!-- DATE_START and DATE_END -->
+          <!-- NAME_EN, DATE_START and DATE_END -->
           <v-row no-gutters>
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site.name_en"
+                :color="bodyActiveColor"
+                :label="$t('common.name_en')"
+              />
+            </v-col>
+
             <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="site.date_start"
