@@ -1657,7 +1657,8 @@
     "filter_bottom": "Filter bottom (b.g.s)",
     "filter_bottom_z": "Filter bottom (a.s.l)",
     "url_veka": "VEKA link",
-    "save": "Save groundwater data"
+    "save": "Save groundwater data",
+    "dataMissing": "Add some data to groundwater extension"
   },
   "permissions": {
     "title": "Data access permissions",

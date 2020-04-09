@@ -1657,7 +1657,8 @@
     "filter_bottom": "Filter alumine (b.g.s)",
     "filter_bottom_z": "Filter alumine (a.s.l)",
     "url_veka": "VEKA link",
-    "save": "Salvesta põhjavee andmestik"
+    "save": "Salvesta põhjavee andmestik",
+    "dataMissing": "Täida mõni väli Põhjavee lisamoodulist"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

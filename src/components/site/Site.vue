@@ -913,8 +913,6 @@ export default {
 
   methods: {
     saveGroundwater() {
-      console.log("Todo: Save groundwater");
-      console.log(this.site_groundwater);
       if (this.isNotEmpty(this.site_groundwater)) {
         this.site_groundwater.site = this.$route.params.id;
 
@@ -946,7 +944,7 @@ export default {
             toastError({ text: this.$t("messages.uploadError") });
           });
       } else {
-        toastInfo({ text: "Add some data to Groundwater extensions" });
+        toastInfo({ text: this.$t("site_groundwater.dataMissing") });
       }
     },
 
