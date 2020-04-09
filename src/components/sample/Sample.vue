@@ -1,6 +1,6 @@
 <template>
   <sample-wrapper :simple-view="isSimpleView">
-    <template slot="switch">
+    <template v-slot:switch>
       <v-row>
         <v-col>
           <v-switch
@@ -27,13 +27,13 @@
             }"
           >
             <v-icon left small>fas fa-chart-pie</v-icon>
-            {{ this.$t("sample.addAnalysis") }}
+            {{ $t("sample.addAnalysis") }}
           </v-btn>
         </v-col>
       </v-row>
     </template>
 
-    <template slot="basic-form">
+    <template v-slot:basic-form>
       <!-- GENERAL INFO -->
       <v-card
         class="mt-2"
@@ -128,7 +128,7 @@
               </v-col>
             </v-row>
 
-            <!-- LOCALITY and DEPTH -->
+            <!-- LOCALITY, DEPTH and DEPTH_INTERVAL -->
             <v-row no-gutters>
               <v-col cols="12" md="6" class="pa-1">
                 <autocomplete-wrapper
@@ -166,7 +166,7 @@
               </v-col>
             </v-row>
 
-            <!-- LOCALITY FREE, LATITUDE and LONGITUDE  -->
+            <!-- LOCALITY FREE and SITE  -->
             <v-row no-gutters>
               <v-col cols="12" md="6" class="pa-1">
                 <input-wrapper
@@ -182,7 +182,7 @@
                   :color="bodyActiveColor"
                   :items="autocomplete.site"
                   :loading="autocomplete.loaders.site"
-                  :item-text="siteLabel"
+                  item-text="name"
                   :label="$t('sample.site')"
                   is-link
                   route-object="site"
@@ -491,7 +491,7 @@
       </v-card>
     </template>
 
-    <template slot="simplified-form">
+    <template v-slot:simplified-form>
       <!-- GENERAL INFO SIMPLE -->
       <v-card
         class="mt-2"
@@ -677,7 +677,7 @@
                   :color="bodyActiveColor"
                   :items="autocomplete.site"
                   :loading="autocomplete.loaders.site"
-                  :item-text="siteLabel"
+                  item-text="name"
                   :label="$t('sample.site')"
                   is-link
                   route-object="site"
@@ -831,7 +831,7 @@
       </v-card>
     </template>
 
-    <template slot="privacy">
+    <template v-slot:privacy>
       <v-row class="my-2">
         <v-col>
           <checkbox-wrapper
@@ -844,7 +844,7 @@
       </v-row>
     </template>
 
-    <template slot="related-data">
+    <template v-slot:related-data>
       <v-card
         class="related-tabs mt-2"
         :color="bodyColor.split('n-')[0] + 'n-5'"
@@ -1572,7 +1572,7 @@ export default {
     },
 
     siteLabel(option) {
-      if (option.id === null) return;
+      console.log(option)
       return `id: ${option.id} - ${option.name}`;
     },
 

@@ -513,7 +513,8 @@
   },
   "editSite": {
     "heading": "Site ID",
-    "editMessage": "Edit site"
+    "editMessage": "Edit site",
+    "viewMessage": "View site"
   },
   "editLocality": {
     "heading": "Locality ID",

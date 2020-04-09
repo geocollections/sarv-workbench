@@ -513,7 +513,8 @@
   },
   "editSite": {
     "heading": "Site",
-    "editMessage": "Muuda site"
+    "editMessage": "Muuda site",
+    "viewMessage": "Vaata proovipunkti"
   },
   "editLocality": {
     "heading": "Lokaliteet",
