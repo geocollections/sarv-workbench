@@ -40,6 +40,11 @@
       </router-link>
     </template>
 
+    <template v-slot:item.depth="{ item }">
+      <div v-if="item.depth">{{ item.depth }}</div>
+      <div v-else>{{ item.locality__depth }}</div>
+    </template>
+
     <template v-slot:item.link="{ item }">
       <v-btn
         v-if="!item.is_private"

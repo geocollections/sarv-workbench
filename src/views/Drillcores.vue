@@ -8,6 +8,7 @@
       :filters="filters"
       :search-parameters="searchParameters"
       v-on:reset:searchPreferences="resetSearchPreferences"
+      :col-size="4"
     />
 
     <!-- SEARCH FIELDS END -->
@@ -39,9 +40,10 @@ export default {
     return {
       response: {},
       filters: [
-        { id: "drillcore", title: "drillcore.drillcore", type: "number" },
+        { id: "drillcore", title: "drillcore.drillcoreAndLocality", type: "text" },
+        { id: "id", title: "drillcore.drillcoreId", type: "number" },
         { id: "boxes", title: "drillcore.boxes", type: "text" },
-        { id: "locality", title: "drillcore.locality", type: "text" },
+        { id: "locality", title: "drillcore.depth", type: "text" },
         { id: "storage", title: "drillcore.storage", type: "text" }
       ],
       searchParameters: this.setDefaultSearchParameters(),

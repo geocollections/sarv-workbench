@@ -1177,6 +1177,9 @@
   },
   "drillcore": {
     "drillcore": "Drill core",
+    "drillcoreId": "Drill core ID",
+    "depth": "Depth",
+    "drillcoreAndLocality": "Drill core / Locality",
     "box_numbers": "Box numbers",
     "location": "Location",
     "agent": "Agent",

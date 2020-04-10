@@ -1177,6 +1177,9 @@
   },
   "drillcore": {
     "drillcore": "Puursüdamik",
+    "drillcoreId": "Puursüdamiku ID",
+    "depth": "Sügavus",
+    "drillcoreAndLocality": "Puursüdamik / Lokaliteet",
     "box_numbers": "Kastinumbrid",
     "location": "Asukoht",
     "agent": "Puurija",

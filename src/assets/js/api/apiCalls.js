@@ -189,7 +189,7 @@ export function fetchAttachments(data, author) {
       ";fields:locality__locality,locality__locality_en;lookuptype:icontains";
   }
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -433,10 +433,10 @@ export async function fetchReferences(data) {
       ";fields:abstract,remarks;lookuptype:icontains";
   }
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += "&id__icontains=" + data.id;
+    searchFields += "&id__iexact=" + data.id;
   }
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -508,7 +508,7 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
     searchFields += `&multi_search=value:${data.keywords};fields:keyword__keyword,keyword_txt;lookuptype:icontains`;
   }
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += "&reference__id__icontains=" + data.id;
+    searchFields += "&reference__id__iexact=" + data.id;
   }
   if (
     data.libraryAuthorIdTitle &&
@@ -631,7 +631,7 @@ export function fetchLocalities(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.locality !== null && data.locality.trim().length > 0) {
@@ -651,7 +651,7 @@ export function fetchLocalities(data) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -787,7 +787,7 @@ export function fetchSamples(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.number !== null && data.number.trim().length > 0) {
@@ -819,7 +819,7 @@ export function fetchSamples(data) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -1251,7 +1251,7 @@ export function fetchProjects(data, agent) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.name !== null && data.name.trim().length > 0) {
@@ -1294,7 +1294,7 @@ export function fetchSites(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.name !== null && data.name.trim().length > 0) {
@@ -1376,7 +1376,7 @@ export function fetchLinkedSamples(data, siteID) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
   if (data.number && data.number.trim().length > 0) {
     searchFields += `&multi_search=value:${data.number};fields:number,number_additional,number_field;lookuptype:icontains`;
@@ -1469,7 +1469,7 @@ export function fetchAnalyses(data, agent, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.analysis_method !== null && data.analysis_method.trim().length > 0) {
@@ -1481,7 +1481,7 @@ export function fetchAnalyses(data, agent, databaseId) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -1647,7 +1647,7 @@ export function fetchSpecimens(data, databaseId) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -1717,7 +1717,7 @@ export function fetchSpecimenImages(data, databaseId) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&specimen__selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&specimen__selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -1910,11 +1910,11 @@ export function fetchCollections(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.number && data.number.trim().length > 0) {
-    searchFields += `&collection_id__icontains=${data.number}`;
+    searchFields += `&collection_id__iexact=${data.number}`;
   }
 
   if (data.name && data.name.trim().length > 0) {
@@ -1973,7 +1973,7 @@ export function fetchTaxa(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.taxon && data.taxon.trim().length > 0) {
@@ -1997,7 +1997,7 @@ export function fetchTaxa(data) {
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__icontains=${data.selectionId}`;
+    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
@@ -2156,7 +2156,7 @@ export function fetchKeywords(data, listOfIDs) {
     searchFields += `id__in=${listOfIDs}`;
   }
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__icontains=${data.id}`;
+    searchFields += `&id__iexact=${data.id}`;
   }
   if (data.term && data.term.trim().length > 0) {
     searchFields += `&keyword__icontains=${data.term}`;
@@ -2241,7 +2241,7 @@ export function fetchAgents(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.agent && data.agent.trim().length > 0) {
@@ -2293,7 +2293,7 @@ export function fetchSelectionSeries(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__icontains=${data.id}`;
+    searchFields += `&id__iexact=${data.id}`;
   }
   if (data.name && data.name.trim().length > 0) {
     searchFields += `&name__icontains=${data.name}`;
@@ -2418,24 +2418,28 @@ export function fetchDrillcore(id) {
 
 export function fetchDrillcores(data) {
   const fields =
-    "id,drillcore,drillcore_en,depth,boxes,box_numbers,location,year,agent__agent,remarks";
+    "id,drillcore,drillcore_en,locality__locality,locality__locality_en,depth,locality__depth,boxes,box_numbers,location,year,agent__agent,remarks,storage__location,depository__value";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__iexact=${data.id}`;
+  }
+
   if (data.drillcore && data.drillcore.trim().length > 0) {
-    searchFields += `id__icontains=${data.drillcore}`;
+    searchFields += `&multi_search=value:${data.drillcore};fields:drillcore,drillcore_en,locality__locality,locality__locality_en;lookuptype:icontains`;
   }
 
   if (data.boxes && data.boxes.trim().length > 0) {
-    searchFields += `&boxes__gt=${data.boxes}`;
+    searchFields += `&boxes__gte=${data.boxes}`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&locality__icontains=${data.locality}`;
+    searchFields += `&multi_search=value:${data.drillcore};fields:depth,locality__depth;lookuptype:gte`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__icontains=${data.storage}`;
+    searchFields += `&multi_search=value:${data.storage};fields:storage__location,depository__value;lookuptype:icontains`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2578,7 +2582,7 @@ export function fetchLinkedTaxa(data, prepId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.taxon && data.taxon.trim().length > 0) {
@@ -2712,7 +2716,7 @@ export function fetchStratigraphies(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__icontains=${data.id}`;
+    searchFields += `id__iexact=${data.id}`;
   }
 
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
@@ -2958,7 +2962,7 @@ export function fetchRocks(data) {
     searchFields += `&user_changed__icontains=${data.user_changed}`;
   }
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__icontains=${data.id}`;
+    searchFields += `&id__iexact=${data.id}`;
   }
   if (data.in_portal) {
     searchFields += `&in_portal=${data.in_portal}`;
