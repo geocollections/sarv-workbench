@@ -1972,7 +1972,7 @@ export function fetchListCollectionType() {
 
 export function fetchTaxa(data) {
   const fields =
-    "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference";
+    "id,taxon,author_year,taxon_epithet,parent_id,parent__taxon,fossil_group__taxon,reference,is_private";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
