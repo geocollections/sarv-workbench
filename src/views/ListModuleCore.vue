@@ -165,7 +165,6 @@ import {
   fetchAddItemToSelection,
   fetchChangePrivacyState
 } from "../assets/js/api/apiCalls";
-import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import debounce from "lodash/debounce";
 import ImageView from "../components/partial/ImageView";
 import { mapState } from "vuex";
@@ -361,21 +360,21 @@ export default {
           if (response && response.data) {
             if (this.$i18n.locale === "ee") {
               if (response.data.message_et)
-                toastSuccess({ text: response.data.message_et });
+                this.toastSuccess({ text: response.data.message_et });
               else if (response.data.error_et)
-                toastError({ text: response.data.error_et });
+                this.toastError({ text: response.data.error_et });
             } else {
               if (response.data.message)
-                toastSuccess({ text: response.data.message });
+                this.toastSuccess({ text: response.data.message });
               else if (response.data.error)
-                toastError({ text: response.data.error });
+                this.toastError({ text: response.data.error });
             }
           }
         },
         errResponse => {
           if (errResponse && errResponse.data && errResponse.data.error)
-            toastError({ text: errResponse.data.error });
-          toastError({ text: this.$t("messages.uploadError") });
+            this.toastError({ text: errResponse.data.error });
+          this.toastError({ text: this.$t("messages.uploadError") });
         }
       );
     },
@@ -398,9 +397,9 @@ export default {
                 this.$i18n.locale === "ee" &&
                 typeof response.data.message_et !== "undefined"
               ) {
-                toastSuccess({ text: response.data.message_et });
+                this.toastSuccess({ text: response.data.message_et });
               } else {
-                toastSuccess({ text: response.data.message });
+                this.toastSuccess({ text: response.data.message });
               }
             }
             if (typeof response.data.error !== "undefined") {
@@ -409,9 +408,9 @@ export default {
                 this.$i18n.locale === "ee" &&
                 typeof response.data.error_et !== "undefined"
               ) {
-                toastError({ text: response.data.error_et });
+                this.toastError({ text: response.data.error_et });
               } else {
-                toastError({ text: response.data.error });
+                this.toastError({ text: response.data.error });
               }
             }
           },
@@ -420,8 +419,8 @@ export default {
               typeof errResponse.data !== "undefined" &&
               typeof errResponse.data.error !== "undefined"
             )
-              toastError({ text: errResponse.data.error });
-            toastError({ text: this.$t("messages.uploadError") });
+              this.toastError({ text: errResponse.data.error });
+            this.toastError({ text: this.$t("messages.uploadError") });
           }
         );
       } else {

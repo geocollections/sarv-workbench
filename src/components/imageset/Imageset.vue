@@ -110,7 +110,6 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
-import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import { fetchIsImagesetNumberInImageset } from "../../assets/js/api/apiCalls";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -219,7 +218,7 @@ export default {
 
     clearLocalStorage() {
       this.$localStorage.remove("imageset");
-      toastInfo({ text: this.$t("messages.defaultsRemoved") });
+      this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
     }
   }
 };

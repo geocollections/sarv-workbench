@@ -1,14 +1,11 @@
 import cloneDeep from "lodash/cloneDeep";
 import moment from "moment";
-import {
-  toastError,
-  toastInfo,
-  toastSuccess
-} from "../assets/js/iziToast/iziToast";
 import { mapActions, mapState } from "vuex";
 import { postRequest } from "../assets/js/api/apiCalls";
+import toastMixin from "./toastMixin";
 
 const formManipulation = {
+  mixins: [toastMixin],
   data() {
     return {
       fileUrl: "https://files.geocollections.info",
@@ -225,12 +222,12 @@ const formManipulation = {
           );
         } else if (this.loadingState) {
           // This runs only if user deletes html elements and tries to press 'add' button again
-          toastError({ text: this.$t("messages.easterEggError") });
+          this.toastError({ text: this.$t("messages.easterEggError") });
           resolve(false);
         } else {
           if (object === "attachment" && this.isAttachmentLocked)
-            toastError({ text: this.$t("messages.lockedForm") });
-          else toastError({ text: this.$t("messages.checkForm") });
+            this.toastError({ text: this.$t("messages.lockedForm") });
+          else this.toastError({ text: this.$t("messages.checkForm") });
           resolve(false);
         }
       });
@@ -264,18 +261,18 @@ const formManipulation = {
             if (response.data) {
               if (this.$i18n.locale === "ee") {
                 if (response.data.message_et)
-                  toastSuccess({ text: response.data.message_et });
+                  this.toastSuccess({ text: response.data.message_et });
                 else if (response.data.message)
-                  toastSuccess({ text: response.data.message });
+                  this.toastSuccess({ text: response.data.message });
                 else if (response.data.error_et)
-                  toastError({ text: response.data.error_et });
+                  this.toastError({ text: response.data.error_et });
                 else if (response.data.error)
-                  toastError({ text: response.data.error });
+                  this.toastError({ text: response.data.error });
               } else {
                 if (response.data.message)
-                  toastSuccess({ text: response.data.message });
+                  this.toastSuccess({ text: response.data.message });
                 else if (response.data.error)
-                  toastError({ text: response.data.error });
+                  this.toastError({ text: response.data.error });
               }
 
               if (object === "attachment" && response.data.attachments_ids) {
@@ -290,7 +287,7 @@ const formManipulation = {
         errResponse => {
           this.setLoadingState(false);
           console.log("ERROR: " + JSON.stringify(errResponse));
-          toastError({ text: this.$t("messages.uploadError") });
+          this.toastError({ text: this.$t("messages.uploadError") });
           resolve(undefined);
         }
       );
@@ -409,7 +406,7 @@ const formManipulation = {
       else if (isEdit) this.$router.push({ path: "/" + object });
       else {
         this[object] = {};
-        toastInfo({ text: this.$t("messages.fieldsCleared") });
+        this.toastInfo({ text: this.$t("messages.fieldsCleared") });
       }
       // isEdit ? this.$router.push({ path: '/' + object }) : this[object] = {};
     },
@@ -560,7 +557,7 @@ const formManipulation = {
         this.setInitialData();
         this.reloadData();
         if (object === "attachment") this.$set(this.$data, "clearFiles", true);
-        toastInfo({ text: this.$t("messages.fieldsCleared") });
+        this.toastInfo({ text: this.$t("messages.fieldsCleared") });
       }
 
       if (choice === "CANCEL") this.$router.push({ path: "/" + object });

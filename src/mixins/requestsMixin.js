@@ -1,8 +1,9 @@
 import cloneDeep from "lodash/cloneDeep";
-import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import { postRequest } from "../assets/js/api/apiCalls";
+import toastMixin from "./toastMixin";
 
 const requestsMixin = {
+  mixins: [toastMixin],
   data: () => ({
     apiUrl: "https://rwapi.geocollections.info/"
   }),
@@ -29,12 +30,14 @@ const requestsMixin = {
 
         formData.append("data", JSON.stringify(uploadableObject));
 
-        this.httpRequestWrapper(url, formData).then(response => {
-          console.log(response);
-          if (response) {
-            this.loadRelatedData(table);
+        this.$_requestsMixin_httpRequestWrapper(url, formData).then(
+          response => {
+            console.log(response);
+            if (response) {
+              this.loadRelatedData(table);
+            }
           }
-        });
+        );
       } else {
         let clonedRawItem = cloneDeep(payload.rawItem);
 
@@ -72,12 +75,14 @@ const requestsMixin = {
         console.log(JSON.stringify(uploadableObject));
         formData.append("data", JSON.stringify(uploadableObject));
 
-        this.httpRequestWrapper(url, formData).then(response => {
-          console.log(response);
-          if (response) {
-            this.loadRelatedData(table);
+        this.$_requestsMixin_httpRequestWrapper(url, formData).then(
+          response => {
+            console.log(response);
+            if (response) {
+              this.loadRelatedData(table);
+            }
           }
-        });
+        );
       } else {
         // Todo
       }
@@ -88,17 +93,17 @@ const requestsMixin = {
       // Todo
     },
 
-    httpRequestWrapper(url, formData) {
+    $_requestsMixin_httpRequestWrapper(url, formData) {
       return new Promise(resolve => {
-        this.httpRequest(url, formData, resolve);
+        this.$_requestsMixin_httpRequest(url, formData, resolve);
       });
     },
 
-    httpRequest(url, formData, resolve) {
+    $_requestsMixin_httpRequest(url, formData, resolve) {
       postRequest(url, formData).then(
         response => {
           if (response.status === 200) {
-            this.toastResponseMessage(response);
+            this.$_requestsMixin_toastResponseMessage(response);
             if (!!response.data && !!response.data.id) {
               resolve(response.data.id);
             } else resolve(false);
@@ -106,25 +111,27 @@ const requestsMixin = {
         },
         errResponse => {
           console.log("ERROR: " + JSON.stringify(errResponse));
-          toastError({ text: this.$t("messages.uploadError") });
+          this.toastError({ text: this.$t("messages.uploadError") });
           resolve(false);
         }
       );
     },
 
-    toastResponseMessage(response) {
+    $_requestsMixin_toastResponseMessage(response) {
       if (this.$i18n.locale === "ee") {
         if (response.data.message_et)
-          toastSuccess({ text: response.data.message_et });
+          this.toastSuccess({ text: response.data.message_et });
         else if (response.data.message)
-          toastSuccess({ text: response.data.message });
+          this.toastSuccess({ text: response.data.message });
         else if (response.data.error_et)
-          toastError({ text: response.data.error_et });
-        else if (response.data.error) toastError({ text: response.data.error });
+          this.toastError({ text: response.data.error_et });
+        else if (response.data.error)
+          this.toastError({ text: response.data.error });
       } else {
         if (response.data.message)
-          toastSuccess({ text: response.data.message });
-        else if (response.data.error) toastError({ text: response.data.error });
+          this.toastSuccess({ text: response.data.message });
+        else if (response.data.error)
+          this.toastError({ text: response.data.error });
       }
     }
   }

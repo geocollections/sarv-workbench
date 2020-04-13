@@ -1,11 +1,12 @@
-import { toastSuccess, toastError } from "../assets/js/iziToast/iziToast";
 import {
   fetchLogin,
   fetchLoginId,
   fetchLogout
 } from "../assets/js/api/apiCalls";
+import toastMixin from "./toastMixin";
 
 const authenticationMixin = {
+  mixins: [toastMixin],
   methods: {
     /**
      * Authenticates user according to the information entered.
@@ -49,7 +50,7 @@ const authenticationMixin = {
           );
         }
       } else {
-        toastError({ text: this.$t("messages.easterEggError") });
+        this.toastError({ text: this.$t("messages.easterEggError") });
       }
     },
 
@@ -70,8 +71,15 @@ const authenticationMixin = {
             name: "Geocollections Data Management",
             params: { dontShowSessionExpired: true }
           });
-          toastSuccessMessage(response, this.$i18n.locale);
-        } else getErrorMessage(response, this.$i18n.locale);
+          this.$_authenticationMixin_toastSuccessMessage(
+            response,
+            this.$i18n.locale
+          );
+        } else
+          this.$_authenticationMixin_getErrorMessage(
+            response,
+            this.$i18n.locale
+          );
       });
     },
 
@@ -110,13 +118,22 @@ const authenticationMixin = {
           } else {
             this.$router.push({ path: "/dashboard" });
           }
-          toastSuccessMessage(response, this.$i18n.locale);
+          this.$_authenticationMixin_toastSuccessMessage(
+            response,
+            this.$i18n.locale
+          );
         } else {
           if (authenticationType === "password") {
-            this.passMessage = getErrorMessage(response, this.$i18n.locale);
+            this.passMessage = this.$_authenticationMixin_getErrorMessage(
+              response,
+              this.$i18n.locale
+            );
             this.passError = true;
           } else if (authenticationType === "id") {
-            this.idMessage = getErrorMessage(response, this.$i18n.locale);
+            this.idMessage = this.$_authenticationMixin_getErrorMessage(
+              response,
+              this.$i18n.locale
+            );
             this.idError = true;
           }
         }
@@ -138,43 +155,43 @@ const authenticationMixin = {
       if (authenticationType === "password") {
         this.passMessage = this.$t("messages.loginError");
         this.passError = true;
-        toastError({ text: this.$t("messages.loginError") });
+        this.toastError({ text: this.$t("messages.loginError") });
       } else if (authenticationType === "id") {
         this.idMessage = this.$t("messages.loginIdError");
         this.idError = true;
-        toastError({ text: this.$t("messages.loginIdError") });
+        this.toastError({ text: this.$t("messages.loginIdError") });
       }
 
       this.loggingIn = false;
+    },
+
+    /**
+     * Toast success message.
+     * @param response - Success response from request
+     * @param locale - Current language preference
+     */
+    $_authenticationMixin_toastSuccessMessage(response, locale) {
+      if (locale === "ee" && response.data.message_et)
+        this.toastSuccess({ text: response.data.message_et });
+      else this.toastSuccess({ text: response.data.message });
+    },
+
+    /**
+     * Toasts and returns error message
+     * @param response - Error response from request
+     * @param locale - Current language preference
+     * @returns {String} - Message to show why request failed
+     */
+    $_authenticationMixin_getErrorMessage(response, locale) {
+      if (locale === "ee" && response.data.message_et) {
+        this.toastError({ text: response.data.message_et });
+        return response.data.message_et;
+      } else {
+        this.toastError({ text: response.data.message });
+        return response.data.message;
+      }
     }
   }
 };
-
-/**
- * Toast success message.
- * @param response - Success response from request
- * @param locale - Current language preference
- */
-function toastSuccessMessage(response, locale) {
-  if (locale === "ee" && response.data.message_et)
-    toastSuccess({ text: response.data.message_et });
-  else toastSuccess({ text: response.data.message });
-}
-
-/**
- * Toasts and returns error message
- * @param response - Error response from request
- * @param locale - Current language preference
- * @returns {String} - Message to show why request failed
- */
-function getErrorMessage(response, locale) {
-  if (locale === "ee" && response.data.message_et) {
-    toastError({ text: response.data.message_et });
-    return response.data.message_et;
-  } else {
-    toastError({ text: response.data.message });
-    return response.data.message;
-  }
-}
 
 export default authenticationMixin;

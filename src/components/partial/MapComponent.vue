@@ -34,7 +34,6 @@
 
 <script>
 import * as L from "leaflet";
-import { toastError } from "../../assets/js/iziToast/iziToast";
 import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
@@ -443,7 +442,7 @@ export default {
           this.errorGeo
         );
       } else
-        toastError({ text: "Geolocation is not supported by this browser." });
+        this.toastError({ text: "Geolocation is not supported by this browser." });
     },
 
     successGeo(position) {
@@ -467,7 +466,7 @@ export default {
     },
 
     errorGeo(error) {
-      toastError({ text: error.message });
+      this.toastError({ text: error.message });
     },
 
     handleGPSMarkerClick(event, position) {

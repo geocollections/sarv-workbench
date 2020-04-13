@@ -29,11 +29,11 @@
 import ListModuleCore from "./ListModuleCore";
 import { fetchReferences } from "@/assets/js/api/apiCalls";
 import { fetchAddReferenceToLibrary } from "../assets/js/api/apiCalls";
-import { toastError, toastSuccess } from "../assets/js/iziToast/iziToast";
 import { mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import isEmpty from "lodash";
+import toastMixin from "../mixins/toastMixin";
 
 export default {
   components: {
@@ -41,6 +41,7 @@ export default {
     TableViewTitle,
     TableViewSearch
   },
+  mixins: [toastMixin],
   name: "References",
   data() {
     return {
@@ -183,9 +184,9 @@ export default {
               this.$i18n.locale === "ee" &&
               typeof response.data.message_et !== "undefined"
             ) {
-              toastSuccess({ text: response.data.message_et });
+              this.toastSuccess({ text: response.data.message_et });
             } else {
-              toastSuccess({ text: response.data.message });
+              this.toastSuccess({ text: response.data.message });
             }
           }
           if (typeof response.data.error !== "undefined") {
@@ -194,9 +195,9 @@ export default {
               this.$i18n.locale === "ee" &&
               typeof response.data.error_et !== "undefined"
             ) {
-              toastError({ text: response.data.error_et });
+              this.toastError({ text: response.data.error_et });
             } else {
-              toastError({ text: response.data.error });
+              this.toastError({ text: response.data.error });
             }
           }
         },
@@ -205,8 +206,8 @@ export default {
             typeof errResponse.data !== "undefined" &&
             typeof errResponse.data.error !== "undefined"
           )
-            toastError({ text: errResponse.data.error });
-          toastError({ text: this.$t("messages.uploadError") });
+            this.toastError({ text: errResponse.data.error });
+          this.toastError({ text: this.$t("messages.uploadError") });
         }
       );
     }

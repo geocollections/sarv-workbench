@@ -138,7 +138,6 @@ import authenticationMixin from "../../../mixins/authenticationMixin";
 import { mapState } from "vuex";
 import DrawerLeft from "./DrawerLeft";
 import DrawerRight from "./DrawerRight";
-import { toastInfo } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   name: "AppBar",
@@ -184,7 +183,7 @@ export default {
         return;
       this.$i18n.locale = lang;
       this.$localStorage.set("geocollectionsFileUploadLang", lang);
-      toastInfo({ text: this.$t("messages.langChange") });
+      this.toastInfo({ text: this.$t("messages.langChange") });
     }
   }
 };

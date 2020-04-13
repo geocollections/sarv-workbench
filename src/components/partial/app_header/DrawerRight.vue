@@ -564,7 +564,6 @@
 </template>
 
 <script>
-import { toastInfo } from "../../../assets/js/iziToast/iziToast";
 import { mapState } from "vuex";
 
 export default {
@@ -661,29 +660,29 @@ export default {
       if (makeActive) {
         this.$store.dispatch(activeObject, entity);
         if (activeObject === "setActiveLibrary") {
-          toastInfo({
+          this.toastInfo({
             text: `Library ${entity.library} is active!`,
             timeout: 1000
           });
         } else if (activeObject === "setActiveSelectionSeries") {
-          toastInfo({
+          this.toastInfo({
             text: `Selection series ${entity.id} is active!`,
             timeout: 1000
           });
-        } else toastInfo({ text: "Object is active!", timeout: 1000 });
+        } else this.toastInfo({ text: "Object is active!", timeout: 1000 });
       } else {
         this.$store.dispatch(activeObject, null);
         if (activeObject === "setActiveLibrary") {
-          toastInfo({
+          this.toastInfo({
             text: `Library ${entity.library} is inactive!`,
             timeout: 1000
           });
         } else if (activeObject === "setActiveSelectionSeries") {
-          toastInfo({
+          this.toastInfo({
             text: `Selection series ${entity.id} is inactive!`,
             timeout: 1000
           });
-        } else toastInfo({ text: "Object is inactive!", timeout: 1000 });
+        } else this.toastInfo({ text: "Object is inactive!", timeout: 1000 });
       }
     },
 

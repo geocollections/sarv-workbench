@@ -13,11 +13,6 @@
 
 <script>
 import { fetchAddDoi } from "../../assets/js/api/apiCalls";
-import {
-  toastError,
-  toastInfo,
-  toastSuccess
-} from "../../assets/js/iziToast/iziToast";
 
 export default {
   props: {
@@ -61,22 +56,22 @@ export default {
             response => {
               if (response && response.data) {
                 if (typeof response.data.message !== "undefined")
-                  toastSuccess({ text: response.data.message });
+                  this.toastSuccess({ text: response.data.message });
                 else if (typeof response.data.error !== "undefined")
-                  toastError({ text: response.data.error });
+                  this.toastError({ text: response.data.error });
 
                 if (response.data.id)
                   this.$router.push({ path: "/doi/" + response.data.id });
               }
             },
             () => {
-              toastError({ text: "DOI upload failed!" });
+              this.toastError({ text: "DOI upload failed!" });
             }
           );
         }
 
         this.setLoadingState(false);
-      } else toastInfo({ text: this.$t("messages.userCancelled") });
+      } else this.toastInfo({ text: this.$t("messages.userCancelled") });
     },
 
     buildDoiObject(object) {

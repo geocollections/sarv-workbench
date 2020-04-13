@@ -109,7 +109,6 @@
 
 <script>
 import draggable from "vuedraggable";
-import { toastSuccess } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   components: {
@@ -156,7 +155,7 @@ export default {
 
     saveShortcuts() {
       this.$store.dispatch("SAVE_SHORTCUTS", this.shortcuts);
-      toastSuccess({ text: this.$t("settings.shortcutsSaved") });
+      this.toastSuccess({ text: this.$t("settings.shortcutsSaved") });
     }
   }
 };

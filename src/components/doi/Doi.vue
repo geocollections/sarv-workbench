@@ -701,11 +701,6 @@ import {
   fetchDoiUsingEGF,
   fetchAgentUsingName
 } from "../../assets/js/api/apiCalls";
-import {
-  toastSuccess,
-  toastError,
-  toastInfo
-} from "../../assets/js/iziToast/iziToast";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -996,7 +991,7 @@ export default {
         fetchDoiUsingEGF(this.$route.params.id).then(response => {
           if (response) this.assignEgfFieldsToDoiObject(response);
           else
-            toastError({
+            this.toastError({
               text: `Couldn't fetch <b>Fond</b> with an ID: <b>${this.$route.params.id}</b>`
             });
         });
@@ -1382,7 +1377,7 @@ export default {
               if (dataCiteResponse[0].update_datacite_metadata) {
                 this.showDataCiteButton = true;
                 this.showUpdateMessage = true;
-                toastInfo({
+                this.toastInfo({
                   text: this.$t("doi.dataCiteNeedsUpdate"),
                   timeout: 7000
                 });
@@ -1395,7 +1390,7 @@ export default {
             ) {
               if (dataCiteResponse[0].update_datacite_url) {
                 this.showDataCiteUrlButton = true;
-                toastInfo({
+                this.toastInfo({
                   text: this.$t("doi.dataCiteUrlNeedsUpdate"),
                   timeout: 7000
                 });
@@ -1408,18 +1403,18 @@ export default {
               this.showDataCiteButton = true;
               this.showUpdateMessage = false;
               if (this.$i18n.locale === "ee")
-                toastInfo({
+                this.toastInfo({
                   text: dataCiteResponse[0].error_et,
                   timeout: 7000
                 });
               else
-                toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
+                this.toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
             }
           } else {
             // Unsuccessful response and doi doesn't exist in sarv database (if not in sarv then it can't be in datacite)
             if (this.$i18n.locale === "ee")
-              toastInfo({ text: dataCiteResponse[0].error_et, timeout: 7000 });
-            else toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
+              this.toastInfo({ text: dataCiteResponse[0].error_et, timeout: 7000 });
+            else this.toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
           }
         }
       }
@@ -1456,7 +1451,7 @@ export default {
                   response.data.results.length > 0
                 ) {
                   if (response.data.results[0].success) {
-                    toastSuccess({
+                    this.toastSuccess({
                       text:
                         this.$t("doi.dataciteMetadataUpdated") +
                         " DataCite response: " +
@@ -1470,7 +1465,7 @@ export default {
                     this.add(true, "doi");
                     this.checkDoiUrl();
                   } else {
-                    toastError({
+                    this.toastError({
                       text: this.$t("doi.dataciteMetadataUpdateFailed")
                     });
                     this.setLoadingState(false);
@@ -1479,8 +1474,8 @@ export default {
               }
             }
           );
-        } else toastInfo({ text: this.$t("messages.userCancelled") });
-      } else toastError({ text: this.$t("messages.checkForm") });
+        } else this.toastInfo({ text: this.$t("messages.userCancelled") });
+      } else this.toastError({ text: this.$t("messages.checkForm") });
     },
 
     registerDoiUrl() {
@@ -1503,7 +1498,7 @@ export default {
                   response.data.results.length > 0
                 ) {
                   if (response.data.results[0].success) {
-                    toastSuccess({
+                    this.toastSuccess({
                       text:
                         this.$t("doi.dataciteUrlUpdated") +
                         " DataCite response: " +
@@ -1513,7 +1508,7 @@ export default {
                     this.showDoiUrlButton = false;
                     this.showDoiUrlUpdateMessage = false;
                   } else {
-                    toastError({
+                    this.toastError({
                       text: this.$t("doi.dataciteUrlUpdateFailed")
                     });
                   }
@@ -1522,8 +1517,8 @@ export default {
               this.setLoadingState(false);
             }
           );
-        } else toastInfo({ text: this.$t("messages.userCancelled") });
-      } else toastError({ text: this.$t("messages.checkForm") });
+        } else this.toastInfo({ text: this.$t("messages.userCancelled") });
+      } else this.toastError({ text: this.$t("messages.checkForm") });
     },
 
     // Checks metadata from DataCite
@@ -1540,7 +1535,7 @@ export default {
                 this.showMetadataUpdateMessage = true;
                 this.sarvXML = response.data.results[0].sarv_xml;
                 this.dataciteXML = response.data.results[0].datacite_xml;
-                toastInfo({ text: this.$t("doi.dataciteMetadataNeedsUpdate") });
+                this.toastInfo({ text: this.$t("doi.dataciteMetadataNeedsUpdate") });
               } else {
                 this.showMetadataButton = false;
                 this.showMetadataUpdateMessage = false;
@@ -1551,8 +1546,8 @@ export default {
                   response.data.results[0].error_et !== "undefined"
                 ) {
                   if (this.$i18n.locale === "ee")
-                    toastInfo({ text: response.data.results[0].error_et });
-                  else toastInfo({ text: response.data.results[0].error });
+                    this.toastInfo({ text: response.data.results[0].error_et });
+                  else this.toastInfo({ text: response.data.results[0].error });
                 }
               }
             } else if (response.data.results[0].error_code === 404) {
@@ -1801,7 +1796,7 @@ export default {
                     this.relatedData["doi_agent"].count++;
                     this.relatedData["doi_agent"].results.push(doiAgentObject);
                   } else
-                    toastError({
+                    this.toastError({
                       text: `Author(s) with the same information already exists!`
                     });
                 } else {
@@ -1818,7 +1813,7 @@ export default {
                     this.relatedData["doi_agent"].count++;
                     this.relatedData["doi_agent"].results.push(doiAgentObject);
                   } else
-                    toastError({
+                    this.toastError({
                       text: `Author(s) with the same name already exists!`
                     });
                 }
@@ -1833,7 +1828,7 @@ export default {
                   this.relatedData["doi_agent"].count++;
                   this.relatedData["doi_agent"].results.push(doiAgentObject);
                 } else
-                  toastError({
+                  this.toastError({
                     text: `Author(s) with the same name already exists!`
                   });
               }

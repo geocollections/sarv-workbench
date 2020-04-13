@@ -285,7 +285,6 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../image_view/ImageViewWrapper";
 import EXIF from "exif-js";
 import moment from "moment";
-import { toastError, toastInfo } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   name: "FileUpload",
@@ -427,7 +426,7 @@ export default {
             if (this.isValidFormat(file)) this.readFileSrc(file);
             else {
               object.splice(index, 1);
-              toastError({
+              this.toastError({
                 text: this.$t("messages.validFileFormat", {
                   file: file.name
                 })
@@ -542,10 +541,10 @@ export default {
 
     showDisabledError() {
       if (this.isFilesValid) {
-        toastInfo({ text: "You have already uploaded one file." });
+        this.toastInfo({ text: "You have already uploaded one file." });
       } else if (this.isExistingFilesValid) {
-        toastInfo({ text: "You have already added one existing file." });
-      } else toastInfo({ text: "You have already uploaded one file." });
+        this.toastInfo({ text: "You have already added one existing file." });
+      } else this.toastInfo({ text: "You have already uploaded one file." });
     }
   }
 };

@@ -725,7 +725,6 @@
                 v-model="site_groundwater.keskkonnaregister_id"
                 :color="bodyActiveColor"
                 :label="$t('site_groundwater.keskkonnaregister_id')"
-                type="number"
               />
             </v-col>
 
@@ -799,11 +798,6 @@ import { mapGetters, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import {
-  toastError,
-  toastInfo,
-  toastSuccess
-} from "../../assets/js/iziToast/iziToast";
 import FileUpload from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SiteLocalityDescriptionTable from "./relatedTables/SiteLocalityDescriptionTable";
@@ -965,7 +959,7 @@ export default {
   methods: {
     saveGroundwater() {
       if (this.isNotEmpty(this.site_groundwater)) {
-        this.site_groundwater.site = this.$route.params.id;
+        this.site_groundwater.site = parseInt(this.$route.params.id);
 
         let url = "";
         if (this.site_groundwater.id) {
@@ -982,22 +976,22 @@ export default {
             if (response.status === 200) {
               if (response.data) {
                 if (response.data.error) {
-                  toastError({ text: response.data.error });
+                  this.toastError({ text: response.data.error });
                 } else {
                   if (this.$i18n.locale === "ee") {
-                    toastSuccess({ text: response.data.message_et });
+                    this.toastSuccess({ text: response.data.message_et });
                   } else {
-                    toastSuccess({ text: response.data.message });
+                    this.toastSuccess({ text: response.data.message });
                   }
                 }
               }
             }
           })
           .catch(err => {
-            toastError({ text: this.$t("messages.uploadError") });
+            this.toastError({ text: this.$t("messages.uploadError") });
           });
       } else {
-        toastInfo({ text: this.$t("site_groundwater.dataMissing") });
+        this.toastInfo({ text: this.$t("site_groundwater.dataMissing") });
       }
     },
 
@@ -1218,7 +1212,7 @@ export default {
         } else {
           this.site.date_start = null;
           uploadableObject.date_start = null;
-          toastInfo({ text: "Field 'Date start' is invalid" });
+          this.toastInfo({ text: "Field 'Date start' is invalid" });
         }
       }
       if (this.isNotEmpty(uploadableObject.date_end)) {
@@ -1229,7 +1223,7 @@ export default {
         } else {
           this.site.date_end = null;
           uploadableObject.date_end = null;
-          toastInfo({ text: "Field 'Date end' is invalid" });
+          this.toastInfo({ text: "Field 'Date end' is invalid" });
         }
       }
 

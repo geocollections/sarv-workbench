@@ -914,10 +914,8 @@ import {
   fetchLinkedStratigraphyReference
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
-import { toastError } from "@/assets/js/iziToast/iziToast";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
-import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
 import { mapGetters, mapState } from "vuex";
 import NewDoiButton from "../partial/NewDoiButton";
@@ -1568,7 +1566,7 @@ export default {
         () => {
           // console.log(errResponse)
           this.setLoadingState(false);
-          toastError({ text: this.$t("reference.doiCheckUnsuccessful") });
+          this.toastError({ text: this.$t("reference.doiCheckUnsuccessful") });
         }
       );
     },
@@ -1746,7 +1744,7 @@ export default {
         };
       }
 
-      toastInfo({ text: this.$t("reference.doiCheckSuccessful") });
+      this.toastInfo({ text: this.$t("reference.doiCheckSuccessful") });
     },
 
     addPDF(fileData) {

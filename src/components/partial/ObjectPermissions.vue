@@ -186,7 +186,6 @@ import {
   fetchUsers,
   postRequest
 } from "../../assets/js/api/apiCalls";
-import { toastError, toastSuccess } from "../../assets/js/iziToast/iziToast";
 
 export default {
   name: "ObjectPermissions",
@@ -310,12 +309,12 @@ export default {
           if (response.status === 200) {
             if (response.data) {
               if (response.data.error) {
-                toastError({ text: response.data.error });
+                this.toastError({ text: response.data.error });
               } else {
                 if (this.$i18n.locale === "ee") {
-                  toastSuccess({ text: response.data.message_et });
+                  this.toastSuccess({ text: response.data.message_et });
                 } else {
-                  toastSuccess({ text: response.data.message });
+                  this.toastSuccess({ text: response.data.message });
                 }
               }
             }
@@ -323,7 +322,7 @@ export default {
         },
         errResponse => {
           console.log("ERROR: " + JSON.stringify(errResponse));
-          toastError({ text: this.$t("messages.uploadError") });
+          this.toastError({ text: this.$t("messages.uploadError") });
         }
       );
     },

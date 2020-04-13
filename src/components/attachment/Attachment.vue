@@ -3845,7 +3845,6 @@ import {
 } from "../../assets/js/api/apiCalls";
 import AttachmentWrapper from "./AttachmentWrapper";
 import MapComponent from "../partial/MapComponent";
-import { toastInfo } from "../../assets/js/iziToast/iziToast";
 import FileInformation from "../partial/FileInformation";
 import FilePreview from "../partial/FilePreview";
 import NewDoiButton from "../partial/NewDoiButton";
@@ -5039,7 +5038,7 @@ export default {
       } else if (this.isDigitisedReference)
         this.$localStorage.remove("digitisedReference");
 
-      toastInfo({ text: this.$t("messages.defaultsRemoved") });
+      this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
     },
 
     customSpecimenLabel(option) {

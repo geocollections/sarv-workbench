@@ -32,7 +32,6 @@
 </template>
 
 <script>
-import { toastError, toastSuccess } from "../../../assets/js/iziToast/iziToast";
 
 export default {
   props: {
@@ -61,7 +60,7 @@ export default {
       let csvString = this.convertJsonToCsv(this.tableData);
 
       if (csvString.length === 0) {
-        toastError({ text: "Download failed: Not enough data!" });
+        this.toastError({ text: "Download failed: Not enough data!" });
         return;
       }
 
@@ -84,7 +83,7 @@ export default {
         }, 0);
       }
 
-      toastSuccess({ text: "Exported to <strong>CSV</strong>" });
+      this.toastSuccess({ text: "Exported to <strong>CSV</strong>" });
     },
 
     convertJsonToCsv(jsonArray) {
@@ -98,7 +97,7 @@ export default {
         const parser = new Parser(opts);
         return parser.parse(jsonArray);
       } catch (err) {
-        toastError({ text: err });
+        this.toastError({ text: err });
         return "";
       }
     },
@@ -135,14 +134,14 @@ export default {
       document.execCommand("Copy");
       sel.removeAllRanges();
 
-      toastSuccess({ text: "Copied to <strong>clipboard!</strong>" });
+      this.toastSuccess({ text: "Copied to <strong>clipboard!</strong>" });
     },
 
     exportToRIS() {
       let risString = this.convertJsonToRis(this.tableData);
 
       if (risString.length === 0) {
-        toastError({ text: "Download failed: Not enough data!" });
+        this.toastError({ text: "Download failed: Not enough data!" });
         return;
       }
 
@@ -165,7 +164,7 @@ export default {
         }, 0);
       }
 
-      toastSuccess({ text: "Exported to <strong>RIS</strong>" });
+      this.toastSuccess({ text: "Exported to <strong>RIS</strong>" });
     },
 
     convertJsonToRis(jsonArray) {
