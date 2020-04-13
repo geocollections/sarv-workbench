@@ -787,7 +787,8 @@ import {
   fetchSiteLocalityDescriptions,
   fetchSiteLocalityReferences,
   fetchSiteGroundwaterUsingSite,
-  postRequest, fetchListSiteType
+  postRequest,
+  fetchListSiteType
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
 import sidebarMixin from "../../mixins/sidebarMixin";
@@ -959,17 +960,31 @@ export default {
   methods: {
     saveGroundwater() {
       if (this.isNotEmpty(this.site_groundwater)) {
-        this.site_groundwater.site = this.$route.params.id;
+        let uploadableObject = cloneDeep(this.site_groundwater);
+
+        if (this.$route.params.id)
+          uploadableObject.site = this.$route.params.id;
 
         let url = "";
-        if (this.site_groundwater.id) {
-          url = "change/site_groundwater/" + this.site_groundwater.id;
+        if (uploadableObject.id) {
+          url = "change/site_groundwater/" + uploadableObject.id;
         } else url = "add/site_groundwater/";
 
-        delete this.site_groundwater.id;
+        delete uploadableObject.id;
+
+        Object.keys(uploadableObject).forEach(key => {
+          if (typeof uploadableObject[key] === "undefined")
+            uploadableObject[key] = null;
+          else if (
+            typeof uploadableObject[key] === "string" &&
+            uploadableObject[key].length === 0
+          ) {
+            uploadableObject[key] = null;
+          }
+        });
 
         let formData = new FormData();
-        formData.append("data", JSON.stringify(this.site_groundwater));
+        formData.append("data", JSON.stringify(uploadableObject));
 
         postRequest(url, formData)
           .then(response => {
