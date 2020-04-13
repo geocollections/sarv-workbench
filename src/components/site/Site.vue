@@ -959,7 +959,7 @@ export default {
   methods: {
     saveGroundwater() {
       if (this.isNotEmpty(this.site_groundwater)) {
-        this.site_groundwater.site = parseInt(this.$route.params.id);
+        this.site_groundwater.site = { id: this.$route.params.id };
 
         let url = "";
         if (this.site_groundwater.id) {
