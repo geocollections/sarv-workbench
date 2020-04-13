@@ -890,7 +890,7 @@
     "date_start_info":"Date start (yyyy-mm-dd hh:mm:ss)",
     "date_end":"Date end",
     "date_end_info":"Date end (yyyy-mm-dd hh:mm:ss)",
-    "date_free":"Txt",
+    "date_free":"Date txt",
     "files": "Files",
     "relatedSamples": "Related samples",
     "mapEnabled": "Map enabled",
@@ -1661,6 +1661,8 @@
     "filter_bottom": "Filter bottom (b.g.s)",
     "filter_bottom_z": "Filter bottom (a.s.l)",
     "url_veka": "VEKA link",
+    "kataster_id": "Kataster ID",
+    "keskkonnaregister_id": "Keskkonnaregister ID",
     "url_veka_short": "VEKA",
     "save": "Save groundwater data",
     "dataMissing": "Add some data to groundwater extension"

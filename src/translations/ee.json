@@ -890,7 +890,7 @@
     "date_start_info":"Algus (yyyy-mm-dd hh:mm:ss)",
     "date_end":"Lõpp",
     "date_end_info":"Lõpp (yyyy-mm-dd hh:mm:ss)",
-    "date_free":"Txt",
+    "date_free":"Kuup. txt",
     "files": "Failid",
     "relatedSamples": "Seotud proovid",
     "mapEnabled": "Kaart nähtaval",
@@ -1661,6 +1661,8 @@
     "filter_bottom": "Filter alumine (b.g.s)",
     "filter_bottom_z": "Filter alumine (a.s.l)",
     "url_veka": "VEKA link",
+    "kataster_id": "Kataster ID",
+    "keskkonnaregister_id": "Keskkonnaregister ID",
     "url_veka_short": "VEKA",
     "save": "Salvesta põhjavee andmestik",
     "dataMissing": "Täida mõni väli Põhjavee lisamoodulist"

@@ -1441,6 +1441,10 @@ export function fetchSiteLocalityReferences(id, searchParameters) {
   );
 }
 
+export function fetchListSiteType() {
+  return get(`site_type`);
+}
+
 /******************
  ***  SITE END  ***
  ******************/

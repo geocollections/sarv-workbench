@@ -36,9 +36,9 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
-          <!-- NAME, AREA and PROJECT -->
+          <!-- NAME, NAME_EN, NUMBER and TYPE -->
           <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
                 v-model="site.name"
                 :color="bodyActiveColor"
@@ -46,7 +46,65 @@
               />
             </v-col>
 
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="site.name_en"
+                :color="bodyActiveColor"
+                :label="$t('common.name_en')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="site.number"
+                :color="bodyActiveColor"
+                :label="$t('common.number')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
+                v-model="site.site_type"
+                :color="bodyActiveColor"
+                :items="autocomplete.site_type"
+                :loading="autocomplete.loaders.site_type"
+                :item-text="commonLabel"
+                :label="$t('common.type')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- DATE_START, DATE_END and DATE_FREE -->
+          <v-row no-gutters>
             <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site.date_start"
+                :color="bodyActiveColor"
+                :label="$t('site.date_start_info')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site.date_end"
+                :color="bodyActiveColor"
+                :label="$t('site.date_end_info')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site.date_free"
+                :color="bodyActiveColor"
+                :label="$t('site.date_free')"
+              />
+            </v-col>
+          </v-row>
+
+          <!-- AREA and PROJECT -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
                 v-model="site.area"
                 :color="bodyActiveColor"
@@ -61,7 +119,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="4" class="pa-1">
+            <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
                 v-model="site.project"
                 :color="bodyActiveColor"
@@ -73,33 +131,6 @@
                 route-object="project"
                 is-searchable
                 v-on:search:items="autocompleteProjectSearch"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- NAME_EN, DATE_START and DATE_END -->
-          <v-row no-gutters>
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site.name_en"
-                :color="bodyActiveColor"
-                :label="$t('common.name_en')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site.date_start"
-                :color="bodyActiveColor"
-                :label="$t('site.date_start_info')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="4" class="pa-1">
-              <input-wrapper
-                v-model="site.date_end"
-                :color="bodyActiveColor"
-                :label="$t('site.date_end_info')"
               />
             </v-col>
           </v-row>
@@ -678,17 +709,38 @@
             </v-col>
           </v-row>
 
-          <!-- URL_VEKA and REMARKS -->
+          <!-- KATASTER_ID, KESKONNAREGISTER_ID and URL_VEKA -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.kataster_id"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.kataster_id')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="site_groundwater.keskkonnaregister_id"
+                :color="bodyActiveColor"
+                :label="$t('site_groundwater.keskkonnaregister_id')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
                 v-model="site_groundwater.url_veka"
                 :color="bodyActiveColor"
                 :label="$t('site_groundwater.url_veka')"
               />
             </v-col>
+          </v-row>
 
-            <v-col cols="12" md="6" class="pa-1">
+          <!-- REMARKS -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
               <input-wrapper
                 v-model="site_groundwater.remarks"
                 :color="bodyActiveColor"
@@ -735,9 +787,8 @@ import {
   fetchLastSiteName,
   fetchSiteLocalityDescriptions,
   fetchSiteLocalityReferences,
-  fetchSiteGroundwater,
   fetchSiteGroundwaterUsingSite,
-  postRequest
+  postRequest, fetchListSiteType
 } from "../../assets/js/api/apiCalls";
 import MapComponent from "../partial/MapComponent";
 import sidebarMixin from "../../mixins/sidebarMixin";
@@ -975,9 +1026,12 @@ export default {
           "id",
           "name",
           "name_en",
+          "site_type",
+          "number",
           "project",
           "date_start",
           "date_end",
+          "date_free",
           "coord_det_method",
           "locality",
           "coordx",
@@ -1008,7 +1062,9 @@ export default {
           "filter_bottom",
           "filter_bottom_z",
           "url_veka",
-          "remarks"
+          "remarks",
+          "kataster_id",
+          "keskkonnaregister_id"
         ],
         autocomplete: {
           loaders: {
@@ -1016,13 +1072,15 @@ export default {
             attachment: false,
             coordMethod: false,
             locality: false,
-            area: false
+            area: false,
+            site_type: false
           },
           project: [],
           attachment: [],
           coordMethod: [],
           locality: [],
-          area: []
+          area: [],
+          site_type: []
         },
         requiredFields: ["latitude", "longitude"],
         site: {},
@@ -1054,6 +1112,10 @@ export default {
     loadFullInfo() {
       fetchListCoordinateMethod().then(response => {
         this.autocomplete.coordMethod = this.handleResponse(response);
+      });
+
+      fetchListSiteType().then(response => {
+        this.autocomplete.site_type = this.handleResponse(response);
       });
 
       if (this.$route.meta.isEdit) {
@@ -1257,6 +1319,11 @@ export default {
         value: obj.coord_det_method__value,
         value_en: obj.coord_det_method__value_en,
         id: obj.coord_det_method
+      };
+      this.site.site_type = {
+        value: obj.site_type__value,
+        value_en: obj.site_type__value_en,
+        id: obj.site_type
       };
       if (this.isNotEmpty(obj.locality__id)) {
         this.site.locality = {
