@@ -152,7 +152,7 @@ const formManipulation = {
             : `add/${object}/`;
           if (objectToUpload.id) delete objectToUpload.id;
 
-          const dataToUpload = this.formatDataForUpload(objectToUpload);
+          const dataToUpload = this.formatDataForUpload(objectToUpload, saveAsNew);
           let formData = new FormData();
           formData.append("data", dataToUpload);
 

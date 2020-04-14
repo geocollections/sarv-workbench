@@ -1051,7 +1051,7 @@ export default {
       };
     },
 
-    formatDataForUpload(objectToUpload) {
+    formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
 
       Object.keys(uploadableObject).forEach(key => {
@@ -1106,6 +1106,10 @@ export default {
 
       if (!this.isNotEmpty(uploadableObject.related_data))
         delete uploadableObject.related_data;
+
+      if (saveAsNew) {
+        uploadableObject.taxon += " (copy)";
+      }
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
