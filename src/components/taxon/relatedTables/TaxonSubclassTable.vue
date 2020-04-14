@@ -39,28 +39,7 @@
       </template>
 
       <template v-slot:item.taxon="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon }}
-          </router-link>
-          <router-link
-            v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.id }"
-            :title="$t('editTaxon.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.taxon.taxon }}
-          </router-link>
-        </div>
         <router-link
-          v-else
           :to="{ path: '/taxon/' + item.id }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
@@ -87,18 +66,11 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
+                  <input-wrapper
                     v-model="item.taxon"
                     :color="bodyActiveColor"
-                    :items="autocomplete.taxon"
-                    :loading="autocomplete.loaders.taxon"
-                    item-text="taxon"
                     :label="$t('taxon.taxon')"
                     use-state
-                    is-link
-                    route-object="taxon"
-                    is-searchable
-                    v-on:search:items="autocompleteTaxonSearch"
                   />
                 </v-col>
 
@@ -141,8 +113,6 @@
 </template>
 
 <script>
-import autocompleteMixin from "../../../mixins/autocompleteMixin";
-import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 
@@ -150,11 +120,8 @@ export default {
   name: "TaxonSubclassTable",
 
   components: {
-    AutocompleteWrapper,
     InputWrapper
   },
-
-  mixins: [autocompleteMixin],
 
   props: {
     response: {
@@ -205,17 +172,11 @@ export default {
     ],
     dialog: false,
     item: {
-      taxon: null,
+      taxon: "",
       author_year: "",
       remarks: ""
     },
-    isNewItem: true,
-    autocomplete: {
-      taxon: [],
-      loaders: {
-        taxon: false
-      }
-    }
+    isNewItem: true
   }),
 
   computed: {
@@ -229,7 +190,7 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.taxon !== "undefined" && this.item.taxon !== null;
+      return this.item.taxon && this.item.taxon.length > 0;
     }
   },
 
@@ -238,7 +199,7 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        taxon: null,
+        taxon: "",
         author_year: "",
         remarks: ""
       };
@@ -270,17 +231,7 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.taxon !== "object" && item.taxon !== null) {
-        this.item.taxon = {
-          id: item.id,
-          taxon: item.taxon
-        };
-        this.autocomplete.taxon.push(this.item.taxon);
-      } else if (item.taxon !== null) {
-        this.item.taxon = item.taxon;
-        this.autocomplete.taxon.push(this.item.taxon);
-      }
-
+      this.item.taxon = item.taxon;
       this.item.author_year = item.author_year;
       this.item.remarks = item.remarks;
 

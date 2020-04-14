@@ -23,7 +23,7 @@ const requestsMixin = {
         if (connectionField) mainObjectKey = connectionField;
         if (payload.table === "taxon_subclass" && table === "taxon") {
           mainObjectKey = "parent";
-          uploadableObject.taxon = payload.rawItem.taxon.taxon;
+          uploadableObject.taxon = payload.rawItem.taxon;
         }
 
         uploadableObject[mainObjectKey] = this[this.$route.meta.table].id;
@@ -69,7 +69,7 @@ const requestsMixin = {
 
         if (payload.table === "taxon_subclass" && table === "taxon") {
           uploadableObject.parent = this[this.$route.meta.table].id;
-          uploadableObject.taxon = payload.rawItem.taxon.taxon;
+          uploadableObject.taxon = payload.rawItem.taxon;
         }
 
         console.log(JSON.stringify(uploadableObject));
