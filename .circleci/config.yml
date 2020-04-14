@@ -63,7 +63,10 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            branches:
+              only: [development, master]
       - deploy_to_development:
           requires:
             - build

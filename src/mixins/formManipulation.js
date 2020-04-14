@@ -138,6 +138,7 @@ const formManipulation = {
         ) {
           let objectToUpload = cloneDeep(this[object]);
 
+          // Todo: Fix unique fields error, i.e. taxon
           if (saveAsNew) delete objectToUpload.id;
 
           if (saveAsDifferentObject) {
