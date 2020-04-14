@@ -36,6 +36,46 @@
           <v-icon small>far fa-trash-alt</v-icon>
         </v-btn>
       </template>
+
+      <template v-slot:item.parameter="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <div v-if="$route.meta.isEdit">
+            <div
+              v-if="item.parameter__parameter_html"
+              v-html="item.parameter__parameter_html"
+            />
+          </div>
+          <div v-else-if="item.parameter">
+            <div
+              v-if="item.parameter.parameter_html"
+              v-html="item.parameter.parameter_html"
+            />
+          </div>
+        </div>
+        <div v-else>
+          <div
+            v-if="item.parameter__parameter_html"
+            v-html="item.parameter__parameter_html"
+          />
+        </div>
+      </template>
+
+      <template v-slot:item.unit="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <div
+            v-if="$route.meta.isEdit"
+            v-translate="{ et: item.unit__value, en: item.unit__value_en }"
+          />
+          <div
+            v-else-if="item.unit"
+            v-translate="{ et: item.unit.value, en: item.unit.value_en }"
+          />
+        </div>
+        <div
+          v-else
+          v-translate="{ et: item.unit__value, en: item.unit__value_en }"
+        />
+      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -48,9 +88,7 @@
         <v-card>
           <v-card-title>
             <span class="headline">{{
-              `${$t("common.new")} ${$t(
-                "analysis.relatedTables.analysis_results"
-              )}`
+              $t("analysis.relatedTables.analysis_results")
             }}</span>
           </v-card-title>
 
@@ -58,6 +96,30 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.parameter"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.analysis_parameter"
+                    :loading="autocomplete.loaders.analysis_parameter"
+                    item-text="parameter"
+                    :label="$t('analysis.analysis_parameter')"
+                    is-searchable
+                    v-on:search:items="autocompleteAnalysisParameterSearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.unit"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.list_unit"
+                    :loading="autocomplete.loaders.list_unit"
+                    :item-text="commonLabel"
+                    :label="$t('analysis.unit')"
+                  />
+                </v-col>
+
+                <v-col cols="12" class="pa-1">
                   <input-wrapper
                     v-model="item.name"
                     :color="bodyActiveColor"
@@ -77,10 +139,9 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.value_max"
+                    v-model="item.value_txt"
                     :color="bodyActiveColor"
-                    :label="$t('analysis.relatedTables.result_max')"
-                    type="number"
+                    :label="$t('analysis.relatedTables.result_txt')"
                   />
                 </v-col>
 
@@ -89,6 +150,15 @@
                     v-model="item.value_min"
                     :color="bodyActiveColor"
                     :label="$t('analysis.relatedTables.result_min')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.value_max"
+                    :color="bodyActiveColor"
+                    :label="$t('analysis.relatedTables.result_max')"
                     type="number"
                   />
                 </v-col>
@@ -104,9 +174,18 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.value_txt"
+                    v-model="item.value_error"
                     :color="bodyActiveColor"
-                    :label="$t('analysis.relatedTables.result_txt')"
+                    :label="$t('analysis.relatedTables.result_error')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" class="pa-1">
+                  <input-wrapper
+                    v-model="item.remarks"
+                    :color="bodyActiveColor"
+                    :label="$t('common.remarks')"
                   />
                 </v-col>
               </v-row>
@@ -136,11 +215,16 @@
 import InputWrapper from "../../partial/inputs/InputWrapper";
 import { cloneDeep } from "lodash";
 import CheckboxWrapper from "../../partial/inputs/CheckboxWrapper";
+import { fetchListUnit } from "../../../assets/js/api/apiCalls";
+import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
+import autocompleteMixin from "../../../mixins/autocompleteMixin";
 
 export default {
   name: "AnalysisResultsTable",
 
-  components: { CheckboxWrapper, InputWrapper },
+  components: { AutocompleteWrapper, CheckboxWrapper, InputWrapper },
+
+  mixins: [autocompleteMixin],
 
   props: {
     response: {
@@ -180,11 +264,16 @@ export default {
   data: () => ({
     headers: [
       { text: "analysis.relatedTables.result_name", value: "name" },
+      {
+        text: "analysis.relatedTables.parameter",
+        value: "parameter"
+      },
+      { text: "analysis.relatedTables.unit_value", value: "unit" },
       { text: "analysis.relatedTables.result_value", value: "value" },
-      { text: "analysis.relatedTables.result_max", value: "value_max" },
-      { text: "analysis.relatedTables.result_min", value: "value_min" },
-      { text: "analysis.relatedTables.result_bin", value: "value_bin" },
       { text: "analysis.relatedTables.result_txt", value: "value_txt" },
+      { text: "analysis.relatedTables.result_min", value: "value_min" },
+      { text: "analysis.relatedTables.result_max", value: "value_max" },
+      { text: "analysis.relatedTables.result_error", value: "value_error" },
       {
         text: "common.actions",
         value: "action",
@@ -194,14 +283,25 @@ export default {
     ],
     dialog: false,
     item: {
+      parameter: null,
+      unit: null,
       name: "",
       value: "",
       value_max: "",
       value_min: "",
-      value_bin: "",
-      value_txt: ""
+      value_bin: false,
+      value_txt: "",
+      remarks: ""
     },
-    isNewItem: true
+    isNewItem: true,
+    autocomplete: {
+      analysis_parameter: [],
+      list_unit: [],
+      loaders: {
+        analysis_parameter: false,
+        list_unit: false
+      }
+    }
   }),
 
   computed: {
@@ -219,17 +319,26 @@ export default {
     }
   },
 
+  watch: {
+    dialog() {
+      this.fillListAutocompletes();
+    }
+  },
+
   methods: {
     cancel() {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
+        parameter: null,
+        unit: null,
         name: "",
         value: "",
         value_max: "",
         value_min: "",
-        value_bin: "",
-        value_txt: ""
+        value_bin: false,
+        value_txt: "",
+        remarks: ""
       };
     },
 
@@ -259,12 +368,37 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
+      if (typeof item.parameter !== "object" && item.parameter !== null) {
+        this.item.parameter = {
+          id: item.parameter,
+          parameter: item.parameter__parameter,
+          parameter_html: item.parameter__parameter_html
+        };
+        this.autocomplete.analysis_parameter.push(this.item.parameter);
+      } else if (item.parameter !== null) {
+        this.item.parameter = item.parameter;
+        this.autocomplete.analysis_parameter.push(this.item.parameter);
+      }
+
+      if (typeof item.unit !== "object" && item.unit !== null) {
+        this.item.unit = {
+          id: item.unit,
+          value: item.unit__value,
+          value_en: item.unit_value_en
+        };
+        this.autocomplete.list_unit.push(this.item.unit);
+      } else if (item.unit !== null) {
+        this.item.unit = item.unit;
+        this.autocomplete.list_unit.push(this.item.unit);
+      }
+
       this.item.name = item.name;
       this.item.value = item.value;
       this.item.value_max = item.value_max;
       this.item.value_min = item.value_min;
       this.item.value_bin = item.value_bin;
       this.item.value_txt = item.value_txt;
+      this.item.remarks = item.remarks;
 
       this.dialog = true;
     },
@@ -275,6 +409,19 @@ export default {
         item: item,
         onDeleteIndex: this.response.results.indexOf(item)
       });
+    },
+
+    fillListAutocompletes() {
+      if (this.autocomplete.list_unit.length <= 1) {
+        this.autocomplete.loaders.list_unit = true;
+        fetchListUnit().then(response => {
+          if (response.status === 200) {
+            this.autocomplete.list_unit =
+              response.data.count > 0 ? response.data.results : [];
+          }
+        });
+        this.autocomplete.loaders.list_unit = false;
+      }
     },
 
     formatItem(item) {

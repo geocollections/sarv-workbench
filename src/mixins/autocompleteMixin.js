@@ -344,6 +344,9 @@ const autocompleteMixin = {
         2
       );
     },
+    autocompleteAnalysisParameterSearch(value) {
+      this.$_autocompleteMixin_search(value, "analysis_parameter", "analysis_parameter", 2);
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -489,6 +492,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `analysis_method/?multi_search=value:${value};fields:analysis_method,method_en;lookuptype:icontains&fields=id,analysis_method,method_en`;
     case "drillcore":
       return `drillcore/?multi_search=value:${value};fields:drillcore,drillcore_en;lookuptype:icontains&fields=id,drillcore,drillcore_en`;
+    case "analysis_parameter":
+      return `analysis_parameter/?multi_search=value:${value};fields:parameter,parameter_name,parameter_name_en;lookuptype:icontains&fields=id,parameter,parameter_name,parameter_name_en,parameter_html`;
     case "imageset":
       return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
     case "rock_classification":

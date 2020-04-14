@@ -52,6 +52,8 @@ export default {
           type: "text"
         },
         { id: "agentAndLab", title: "analysis.agentAndLab", type: "text" },
+        { id: "sample", title: "analysis.sampleIdAndNumber", type: "text" },
+        { id: "datasetId", title: "analysis.datasetId", type: "number" },
         { id: "selectionId", title: "specimen.selectionId", type: "number" },
         { id: "selection", title: "specimen.selection", type: "text" }
       ],
@@ -136,6 +138,8 @@ export default {
         agentAndLab: null,
         selectionId: null,
         selection: null,
+        sample: null,
+        datasetId: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

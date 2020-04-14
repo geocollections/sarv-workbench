@@ -928,8 +928,8 @@
     "labor_txt": "Labor txt",
     "labor_sample": "Labori proovinumber",
     "labor_number": "Laborinumber",
-    "tool": "Tööriist",
-    "tool_txt": "Tööriist tekstina",
+    "tool": "Seade",
+    "tool_txt": "Seade txt",
     "analyzer": "Analüüsija",
     "analyzer_txt": "Analüüsija txt",
     "first_dataset": "Esmane andmeset",
@@ -942,6 +942,8 @@
     "analysis_method": "Meetod",
     "date_": "Kuupäev",
     "agentAndLab": "Analüüsija / labor txt",
+    "sampleIdAndNumber": "Proov",
+    "datasetId": "Andmeseti ID",
     "method": "Metoodika",
     "method_specification": "Met. täpsustus",
     "mass": "Mass",
@@ -951,15 +953,20 @@
     "location": "Asukoht",
     "labInfo": "Labori andmed",
     "otherInfo": "Muu info",
+    "analysis_parameter": "Parameeter",
+    "unit": "Ühik",
     "relatedTables": {
       "analysis_results": "Analüüsi tulemused",
       "attachment_link": "Failid",
       "result_name": "Nimi",
+      "parameter": "Nimi (html)",
+      "unit_value": "Ühik",
       "result_value": "Väärtus",
       "result_txt": "Txt",
       "result_bin": "Bin",
       "result_max": "Max",
-      "result_min": "Min"
+      "result_min": "Min",
+      "result_error": "Error"
     }
   },
   "taxon": {

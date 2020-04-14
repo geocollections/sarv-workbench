@@ -823,7 +823,7 @@ export default {
           analysis_results: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["name"],
             sortDesc: [true]
           }
         }
@@ -960,6 +960,10 @@ export default {
         id: null,
         analysis_method: null,
         agentAndLab: null,
+        selectionId: null,
+        selection: null,
+        sample: null,
+        datasetId: null,
         page: 1,
         paginateBy: 50,
         sortBy: ["id"],

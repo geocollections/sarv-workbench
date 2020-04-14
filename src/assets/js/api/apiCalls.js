@@ -1492,9 +1492,17 @@ export function fetchAnalyses(data, agent, databaseId) {
     searchFields += `&selection__selection__name__icontains=${data.selection}`;
   }
 
-  if (typeof agent !== "undefined" && agent !== null) {
-    searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
+  if (data.sample && data.sample.trim().length > 0) {
+    searchFields += `&multi_search=value:${data.sample};fields:sample__id,sample__number,sample__number_additional;lookuptype:icontains`;
   }
+
+  if (data.datasetId && data.datasetId.trim().length > 0) {
+    searchFields += `&dataset__id__iexact=${data.datasetId}`;
+  }
+
+  // if (typeof agent !== "undefined" && agent !== null) {
+  //   searchFields += `&or_search=agent__id:${agent.id};user_added:${agent.user};owner__id:${agent.id}`;
+  // }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
     searchFields += `&database__id=${databaseId}`;
