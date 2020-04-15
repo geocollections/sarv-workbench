@@ -1001,6 +1001,8 @@
     "in_baltoscandia": "In Baltoscandia",
     "stratigraphy_top": "Disappears",
     "stratigraphy_base": "Appears",
+    "stratigraphic_distribution": "Stratigraphic distribution",
+    "stratigraphic_distribution_en": "Stratigraphic distribution (EN)",
     "taxon_id_pbdb": "PaleoDB ID",
     "taxon_id_plutof": "PlutoF ID",
     "taxon_id_tol": "ToL ID",

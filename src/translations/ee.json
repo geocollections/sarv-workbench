@@ -1001,6 +1001,8 @@
     "in_baltoscandia": "Baltoskandias",
     "stratigraphy_top": "Kaob",
     "stratigraphy_base": "Ilmub",
+    "stratigraphic_distribution": "Stratigraafiline jaotus",
+    "stratigraphic_distribution_en": "Stratigraafiline jaotus (EN)",
     "taxon_id_pbdb": "PaleoDB ID",
     "taxon_id_plutof": "PlutoF ID",
     "taxon_id_tol": "ToL ID",

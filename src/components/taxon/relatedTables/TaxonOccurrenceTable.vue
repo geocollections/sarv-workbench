@@ -210,6 +210,15 @@
           ></span>
         </router-link>
       </template>
+
+      <template v-slot:item.stratigraphic_distribution="{ item }">
+        <div
+          v-translate="{
+            et: item.stratigraphic_distribution,
+            en: item.stratigraphic_distribution_en
+          }"
+        ></div>
+      </template>
     </v-data-table>
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
@@ -293,6 +302,22 @@
                     route-object="stratigraphy"
                     is-searchable
                     v-on:search:items="autocompleteStratigraphyTopSearch"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.stratigraphic_distribution"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.stratigraphic_distribution')"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.stratigraphic_distribution_en"
+                    :color="bodyActiveColor"
+                    :label="$t('taxon.stratigraphic_distribution_en')"
                   />
                 </v-col>
 
@@ -384,6 +409,10 @@ export default {
       { text: "taxon.locality_free", value: "locality_free" },
       { text: "taxon.stratigraphy_base", value: "stratigraphy_base" },
       { text: "taxon.stratigraphy_top", value: "stratigraphy_top" },
+      {
+        text: "taxon.stratigraphic_distribution",
+        value: "stratigraphic_distribution"
+      },
       { text: "common.remarks", value: "remarks" },
       {
         text: "common.actions",
@@ -399,6 +428,8 @@ export default {
       locality_free: "",
       stratigraphy_base: null,
       stratigraphy_top: null,
+      stratigraphic_distribution: "",
+      stratigraphic_distribution_en: "",
       remarks: ""
     },
     isNewItem: true,
@@ -444,6 +475,8 @@ export default {
         locality_free: "",
         stratigraphy_base: null,
         stratigraphy_top: null,
+        stratigraphic_distribution: "",
+        stratigraphic_distribution_en: "",
         remarks: ""
       };
     },
@@ -527,6 +560,8 @@ export default {
         this.autocomplete.stratigraphy_top.push(this.item.stratigraphy_top);
       }
 
+      this.item.stratigraphic_distribution = item.stratigraphic_distribution;
+      this.item.stratigraphic_distribution_en = item.stratigraphic_distribution_en;
       this.item.locality_free = item.locality_free;
       this.item.remarks = item.remarks;
 
