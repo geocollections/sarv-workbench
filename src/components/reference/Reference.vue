@@ -1422,7 +1422,7 @@ export default {
                 remarks: loc_ref.remarks ? loc_ref.remarks : null
               };
             });
-        } else uploadableObject.related_data.locality_reference = null;
+        }
       }
 
       if (!this.isNotEmpty(uploadableObject.related_data))

@@ -542,19 +542,38 @@ export default {
           if (this.isNotEmpty(this.relatedData[tab.name]))
             if (tab.name !== "attachment") {
               if (tab.name === "add_attachment") {
-                uploadableObject.related_data.attachment = this.relatedData.add_attachment.results;
+                uploadableObject.related_data.attachment = this.relatedData.add_attachment.results.map(
+                  item => {
+                    return { id: item.id };
+                  }
+                );
               } else {
                 uploadableObject.related_data[tab.name] = this.relatedData[
                   tab.name
                 ].results;
+
+                uploadableObject.related_data[tab.name].forEach(item => {
+                  Object.keys(item).forEach(key => {
+                    if (typeof item[key] === "object" && item[key] !== null) {
+                      item[key] = item[key].id ? item[key].id : null;
+                    }
+                  });
+                });
               }
             }
         });
       } else {
         if (this.relatedData.add_attachment.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.add_attachment.results;
+          uploadableObject.related_data.attachment = this.relatedData.add_attachment.results.map(
+            item => {
+              return { id: item.id };
+            }
+          );
         } else uploadableObject.related_data.attachment = null;
       }
+
+      if (!this.isNotEmpty(uploadableObject.related_data))
+        delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

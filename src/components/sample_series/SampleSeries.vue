@@ -638,16 +638,27 @@ export default {
         this.relatedTabs.forEach(tab => {
           if (
             tab.name === "attachments" &&
-            this.isNotEmpty(this.relatedData[tab.name])
+            this.relatedData[tab.name].count > 0
           ) {
-            uploadableObject.related_data.attachment = this.relatedData.attachments.results;
+            uploadableObject.related_data.attachment = this.relatedData.attachments.results.map(
+              item => {
+                return { id: item.id };
+              }
+            );
           }
         });
       } else {
         if (this.relatedData.attachments.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachments.results;
+          uploadableObject.related_data.attachment = this.relatedData.attachments.results.map(
+            item => {
+              return { id: item.id };
+            }
+          );
         } else uploadableObject.related_data.attachment = null;
       }
+
+      if (!this.isNotEmpty(uploadableObject.related_data))
+        delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

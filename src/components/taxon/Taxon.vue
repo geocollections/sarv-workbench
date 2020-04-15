@@ -1101,7 +1101,7 @@ export default {
               return { id: item.id };
             }
           );
-        } else delete uploadableObject.related_data.attachment;
+        } else uploadableObject.related_data.attachment = null;
       }
 
       if (!this.isNotEmpty(uploadableObject.related_data))

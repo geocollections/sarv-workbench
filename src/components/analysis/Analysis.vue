@@ -854,21 +854,39 @@ export default {
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
         this.relatedTabs.forEach(tab => {
-          if (this.isNotEmpty(this.relatedData[tab.name].results))
+          if (this.relatedData[tab.name].count > 0)
             if (tab.name === "attachment_link") {
-              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+              uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
+                item => {
+                  return { id: item.id };
+                }
+              );
             } else {
               uploadableObject.related_data[tab.name] = this.relatedData[
                 tab.name
               ].results;
+
+              uploadableObject.related_data[tab.name].forEach(item => {
+                Object.keys(item).forEach(key => {
+                  if (typeof item[key] === "object" && item[key] !== null) {
+                    item[key] = item[key].id ? item[key].id : null;
+                  }
+                });
+              });
             }
         });
       } else {
-        console.log(this.relatedData);
         if (this.relatedData.attachment_link.results.length > 0) {
-          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results;
+          uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
+            item => {
+              return { id: item.id };
+            }
+          );
         } else uploadableObject.related_data.attachment = null;
       }
+
+      if (!this.isNotEmpty(uploadableObject.related_data))
+        delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
