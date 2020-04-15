@@ -669,6 +669,7 @@
                 :record-options="$route.meta.isEdit"
                 open-file
                 acceptable-format="*/*"
+                :is-draggable="$route.meta.isEdit"
               />
             </v-col>
           </v-row>
@@ -1315,7 +1316,6 @@ export default {
       return {
         attachment: [],
         keyword: [],
-        locality: [],
         library: {
           count: 0,
           results: []
@@ -1345,11 +1345,6 @@ export default {
             orderBy: "id"
           },
           keyword: {
-            page: 1,
-            paginateBy: 10,
-            orderBy: "id"
-          },
-          locality: {
             page: 1,
             paginateBy: 10,
             orderBy: "id"
@@ -1388,7 +1383,6 @@ export default {
 
       // Adding related data
       uploadableObject.related_data = {};
-
       if (this.isNotEmpty(this.relatedData.keyword))
         uploadableObject.related_data.keyword = this.relatedData.keyword;
       else uploadableObject.related_data.keyword = null;
@@ -1405,31 +1399,34 @@ export default {
         uploadableObject.related_data.library = cloneDeep(
           this.relatedData.library.results
         );
-        uploadableObject.related_data.library.forEach((library, index) => {
+        uploadableObject.related_data.library.forEach((lib, index) => {
           uploadableObject.related_data.library[index] = {
-            id: library.library ? library.library : library.id
+            id: lib.library ? lib.library : lib.id
           };
         });
       } else uploadableObject.related_data.library = null;
 
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {
-        if (this.isNotEmpty(this.relatedData.locality_reference)) {
+        if (this.relatedData.locality_reference.count > 0) {
           let clonedLocalities = cloneDeep(
             this.relatedData.locality_reference.results
           );
-          uploadableObject.related_data.locality = clonedLocalities
+          uploadableObject.related_data.locality_reference = clonedLocalities
             .filter(entity => this.isNotEmpty(entity.locality))
             .map(loc_ref => {
               return {
-                id: loc_ref.locality.id,
+                locality: loc_ref.locality.id,
                 pages: loc_ref.pages ? loc_ref.pages : null,
                 figures: loc_ref.figures ? loc_ref.figures : null,
                 remarks: loc_ref.remarks ? loc_ref.remarks : null
               };
             });
-        } else uploadableObject.related_data.locality = null;
+        } else uploadableObject.related_data.locality_reference = null;
       }
+
+      if (!this.isNotEmpty(uploadableObject.related_data))
+        delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);

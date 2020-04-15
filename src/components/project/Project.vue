@@ -826,9 +826,17 @@ export default {
         uploadableObject.related_data.agent = this.relatedData.projectagent;
       } else uploadableObject.related_data.agent = null;
       if (this.relatedData.attachment_link.length > 0) {
-        uploadableObject.related_data.attachment = this.relatedData.attachment_link;
+        uploadableObject.related_data.attachment = this.relatedData.attachment_link.map(
+          item => {
+            return { id: item.id };
+          }
+        );
       } else uploadableObject.related_data.attachment = null;
 
+      if (!this.isNotEmpty(uploadableObject.related_data))
+        delete uploadableObject.related_data;
+
+      console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
     },

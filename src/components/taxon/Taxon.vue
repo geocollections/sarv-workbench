@@ -253,21 +253,8 @@
             </v-col>
           </v-row>
 
-          <!-- STRATIGRAPHY_TOP and STRATIGRAPHY_BASE -->
+          <!-- STRATIGRAPHY_BASE and STRATIGRAPHY_TOP -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <autocomplete-wrapper
-                v-model="taxon.stratigraphy_top"
-                :color="bodyActiveColor"
-                :items="autocomplete.stratigraphy_top"
-                :loading="autocomplete.loaders.stratigraphy_top"
-                :item-text="stratigraphyLabel"
-                :label="$t('taxon.stratigraphy_top')"
-                is-searchable
-                v-on:search:items="autocompleteStratigraphyTopSearch"
-              />
-            </v-col>
-
             <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
                 v-model="taxon.stratigraphy_base"
@@ -278,6 +265,19 @@
                 :label="$t('taxon.stratigraphy_base')"
                 is-searchable
                 v-on:search:items="autocompleteStratigraphyBaseSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <autocomplete-wrapper
+                v-model="taxon.stratigraphy_top"
+                :color="bodyActiveColor"
+                :items="autocomplete.stratigraphy_top"
+                :loading="autocomplete.loaders.stratigraphy_top"
+                :item-text="stratigraphyLabel"
+                :label="$t('taxon.stratigraphy_top')"
+                is-searchable
+                v-on:search:items="autocompleteStratigraphyTopSearch"
               />
             </v-col>
           </v-row>

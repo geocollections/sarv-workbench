@@ -1096,7 +1096,8 @@ export default {
         uploadableObject.related_data.attachment = this.relatedData.attachment_link.results.map(
           item => {
             return {
-              ...item,
+              // ...item,
+              id: item.id,
               is_locked: true
             };
           }
@@ -1110,11 +1111,11 @@ export default {
             .filter(entity => this.isNotEmpty(entity.name))
             .map(entity => {
               return {
-                affiliation: entity.affiliation ? entity.affiliation : null,
-                agent: entity.agent ? entity.agent : null,
-                agent_type: entity.agent_type ? entity.agent_type : null,
-                name: entity.name,
-                orcid: entity.orcid ? entity.orcid : null
+                affiliation: entity?.affiliation || null,
+                agent: entity?.agent?.id || null,
+                agent_type: entity?.agent_type?.id || null,
+                name: entity?.name || null,
+                orcid: entity?.orcid || null
               };
             });
           if (uploadableObject.related_data.doi_agent.length === 0)
@@ -1127,15 +1128,11 @@ export default {
             // .filter(entity => this.isNotEmpty(entity.locality))
             .map(entity => {
               return {
-                polygon: entity.polygon ? entity.polygon : null,
-                locality: entity.locality ? entity.locality : null,
-                place: entity.place ? entity.place : null,
-                point_latitude: entity.point_latitude
-                  ? entity.point_latitude
-                  : null,
-                point_longitude: entity.point_longitude
-                  ? entity.point_longitude
-                  : null
+                polygon: entity?.polygon || null,
+                locality: entity?.locality?.id || null,
+                place: entity?.place || null,
+                point_latitude: entity?.point_latitude || null,
+                point_longitude: entity?.point_longitude || null
               };
             });
           if (uploadableObject.related_data.doi_geolocation.length === 0)
@@ -1150,12 +1147,10 @@ export default {
             .filter(entity => this.isNotEmpty(entity.identifier_type))
             .map(entity => {
               return {
-                identifier_type: entity.identifier_type,
-                relation_type: entity.relation_type
-                  ? entity.relation_type
-                  : null,
-                remarks: entity.remarks ? entity.remarks : null,
-                value: entity.value ? entity.value : null
+                identifier_type: entity?.identifier_type?.id || null,
+                relation_type: entity?.relation_type?.id || null,
+                remarks: entity?.remarks || null,
+                value: entity?.value || null
               };
             });
           if (uploadableObject.related_data.doi_related_identifier.length === 0)
@@ -1168,15 +1163,18 @@ export default {
             // .filter(entity => this.isNotEmpty(entity.date))
             .map(entity => {
               return {
-                date: entity.date,
-                date_type: entity.date_type ? entity.date_type : null,
-                remarks: entity.remarks ? entity.remarks : null
+                date: entity?.date || null,
+                date_type: entity?.date_type?.id || null,
+                remarks: entity?.remarks || null
               };
             });
           if (uploadableObject.related_data.doi_date.length === 0)
             uploadableObject.related_data.doi_date = null;
         } else uploadableObject.related_data.doi_date = null;
       }
+
+      if (!this.isNotEmpty(uploadableObject.related_data))
+        delete uploadableObject.related_data;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
