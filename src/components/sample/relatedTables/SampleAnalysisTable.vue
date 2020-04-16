@@ -38,6 +38,17 @@
         </v-btn>
       </template>
 
+      <template v-slot:item.id="{ item }">
+        <router-link
+          :to="{ path: '/analysis/' + item.id }"
+          :title="$t('editAnalysis.editMessage')"
+          class="sarv-link"
+          :class="`${bodyActiveColor}--text`"
+        >
+          {{ item.id }}
+        </router-link>
+      </template>
+
       <template v-slot:item.method="{ item }">
         <div v-if="isUsedAsRelatedData">
           <span
@@ -274,6 +285,7 @@ export default {
 
   data: () => ({
     headers: [
+      { text: "common.id", value: "id" },
       { text: "analysis.method", value: "method" },
       { text: "analysis.method_specification", value: "method_details" },
       { text: "analysis.mass", value: "mass" },
@@ -313,12 +325,18 @@ export default {
 
   computed: {
     translatedHeaders() {
-      return this.headers.map(header => {
-        return {
-          ...header,
-          text: this.$t(header.text)
-        };
-      });
+      return this.headers
+        .map(header => {
+          return {
+            ...header,
+            text: this.$t(header.text)
+          };
+        })
+        .filter(header => {
+          if (header.value === "id") {
+            return this.$route.meta.isEdit;
+          } else return true;
+        });
     },
 
     isItemValid() {
