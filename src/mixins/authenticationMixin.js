@@ -8,6 +8,7 @@ import toastMixin from "./toastMixin";
 const authenticationMixin = {
   mixins: [toastMixin],
   methods: {
+    // ...mapActions("user", ["setAuthUser", "removeAuthUser"]),
     /**
      * Authenticates user according to the information entered.
      *
@@ -63,6 +64,7 @@ const authenticationMixin = {
     logOut() {
       this.$cookies.remove("csrftokenLocalhost", null, "localhost");
       this.$cookies.remove("csrftoken", null, "geocollections.info");
+      // this.removeAuthUser();
       this.$localStorage.remove("authUser");
 
       fetchLogout().then(response => {
@@ -111,6 +113,7 @@ const authenticationMixin = {
             null,
             "localhost"
           );
+          // this.setAuthUser(response.data);
           this.$localStorage.set("authUser", response.data);
 
           if (this.$route.query.from) {

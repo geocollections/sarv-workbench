@@ -233,14 +233,6 @@ export default {
     });
   },
 
-  SAVE_SHORTCUTS: ({ commit }, shortcuts) => {
-    commit("SET_SHORTCUTS", { shortcuts });
-  },
-
-  GET_SHORTCUTS: ({ commit }) => {
-    commit("GET_SHORTCUTS");
-  },
-
   setActiveLibrary: ({ commit }, library) => {
     commit("SET_ACTIVE_LIBRARY", library);
   },
@@ -265,8 +257,58 @@ export default {
     commit("SET_ACTIVE_OBJECTS");
   },
 
-  INITIALISE_USER_DATA: ({ commit }) => {
-    commit("SET_CURRENT_USER");
+  SIDEBAR_USER_ACTION: ({ commit }, userAction) => {
+    commit("SET_SIDEBAR_USER_ACTION", userAction);
+  },
+
+  updateSearchParameters({ commit }, payload) {
+    commit("UPDATE_SEARCH_PARAMETERS", payload);
+  },
+
+  updateActiveTab({ commit }, payload) {
+    commit("UPDATE_ACTIVE_TAB", payload);
+  },
+
+
+
+  // into settings module start
+  updateSettings({ commit }, settings) {
+    commit("UPDATE_APP_SETTINGS", settings);
+  },
+
+  updateDrawerState({ commit }, payload) {
+    commit("UPDATE_DRAWER_STATE", payload);
+  },
+
+  updateDrawerRightState({ commit }, payload) {
+    commit("UPDATE_DRAWER_RIGHT_STATE", payload);
+  },
+
+  SAVE_SHORTCUTS: ({ commit }, shortcuts) => {
+    commit("SET_SHORTCUTS", { shortcuts });
+  },
+
+  GET_SHORTCUTS: ({ commit }) => {
+    commit("GET_SHORTCUTS");
+  },
+
+  updateAppZoom({ commit }, zoomLevel) {
+    commit("UPDATE_APP_ZOOM", zoomLevel);
+  },
+  // into settings module end
+
+
+  // into search module start
+  setLoadingState({ commit }, bool) {
+    commit("SET_LOADING_STATE", bool);
+  },
+
+  setLoadingType({ commit }, type) {
+    commit("SET_LOADING_TYPE", type);
+  },
+
+  setLoadingPercent({ commit }, percent) {
+    commit("SET_LOADING_PERCENT", percent);
   },
 
   initialiseRecentUrls: ({ commit }) => {
@@ -280,39 +322,19 @@ export default {
   updateRecentUrlsState({ commit }, recentUrlsState) {
     commit("UPDATE_RECENT_URLS_STATE", recentUrlsState);
   },
+  // into search module end
 
-  SIDEBAR_USER_ACTION: ({ commit }, userAction) => {
-    commit("SET_SIDEBAR_USER_ACTION", userAction);
+
+
+  // into user module start
+  INITIALISE_USER_DATA: ({ commit }) => {
+    commit("SET_CURRENT_USER");
   },
+  // into user module end
 
-  updateSearchParameters({ commit }, payload) {
-    commit("UPDATE_SEARCH_PARAMETERS", payload);
-  },
 
-  updateActiveTab({ commit }, payload) {
-    commit("UPDATE_ACTIVE_TAB", payload);
-  },
 
-  updateDrawerState({ commit }, payload) {
-    commit("UPDATE_DRAWER_STATE", payload);
-  },
-
-  updateDrawerRightState({ commit }, payload) {
-    commit("UPDATE_DRAWER_RIGHT_STATE", payload);
-  },
-
-  updateAppZoom({ commit }, zoomLevel) {
-    commit("UPDATE_APP_ZOOM", zoomLevel);
-  },
-
-  updateSettings({ commit }, settings) {
-    commit("UPDATE_APP_SETTINGS", settings);
-  },
-
-  initialiseAppSettings({ commit }) {
-    commit("INITIALISE_APP_SETTINGS");
-  },
-
+  // into map module start
   updateMapState({ commit }, mapState) {
     commit("UPDATE_MAP_STATE", mapState);
   },
@@ -323,17 +345,9 @@ export default {
 
   initialiseMapSettings({ commit }) {
     commit("INITIALISE_MAP_SETTINGS");
-  },
-
-  setLoadingState({ commit }, bool) {
-    commit("SET_LOADING_STATE", bool);
-  },
-
-  setLoadingType({ commit }, type) {
-    commit("SET_LOADING_TYPE", type);
-  },
-
-  setLoadingPercent({ commit }, percent) {
-    commit("SET_LOADING_PERCENT", percent);
   }
+  // into map module end
+
+
+
 };

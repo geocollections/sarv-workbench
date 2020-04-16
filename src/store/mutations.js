@@ -24,72 +24,6 @@ export default {
       Vue.set(state, "activeSelectionSeries", activeSelectionSeries);
   },
 
-  SET_CURRENT_USER: state => {
-    const authUser = Vue.localStorage.get("authUser", null);
-
-    let currentUser = {
-      id: authUser.agent_id,
-      agent: authUser.agent,
-      forename: authUser.name,
-      surename: authUser.surname,
-      user: authUser.user
-    };
-    let permissions = authUser.permissions;
-    let databaseId = authUser.database_id;
-
-    if (authUser && !isEmpty(authUser)) {
-      Vue.set(state, "currentUser", currentUser);
-      Vue.set(state, "permissions", permissions);
-      Vue.set(state, "databaseId", databaseId);
-    }
-  },
-
-  SET_RECENT_URLS: state => {
-    const recentUrls = Vue.localStorage.get("recentUrls", null);
-    const recentUrlsState = Vue.localStorage.get("recentUrlsState", false);
-
-    if (recentUrls && !isEmpty(recentUrls))
-      Vue.set(state, "recentUrls", recentUrls);
-    if (typeof recentUrlsState === "boolean")
-      Vue.set(state, "recentUrlsState", recentUrlsState);
-  },
-
-  UPDATE_RECENT_URLS: (state, urlObject) => {
-    let recentUrls = Vue.localStorage.get("recentUrls", null);
-
-    if (recentUrls && !isEmpty(recentUrls)) {
-      recentUrls.push(urlObject);
-      if (recentUrls.length > 10) recentUrls.shift();
-
-      // If after removing is still over 10 then empty that (I don't want to use loop here);
-      if (recentUrls.length > 10) recentUrls = [];
-    } else {
-      recentUrls = [];
-      recentUrls.push(urlObject);
-    }
-
-    Vue.localStorage.set("recentUrls", recentUrls);
-    Vue.set(state, "recentUrls", recentUrls);
-  },
-
-  UPDATE_RECENT_URLS_STATE: (state, boolValue) => {
-    Vue.localStorage.set("recentUrlsState", boolValue);
-    Vue.set(state, "recentUrlsState", boolValue);
-  },
-
-  CREATE_RELATION_OBJECT: (state, { createRelationWith }) => {
-    Vue.set(state, "createRelationWith", createRelationWith);
-  },
-
-  REMOVE_RELATION_OBJECT: state => {
-    Vue.set(state, "createRelationWith", {
-      object: null,
-      data: null,
-      info: null,
-      edit: null
-    });
-  },
-
   SET_ACTIVE_SEARCH_PARAMS: (state, params) => {
     Vue.set(state, "activeSearchParams", params);
   },
@@ -132,6 +66,33 @@ export default {
     Vue.set(state, "activeSite", object);
   },
 
+  UPDATE_SEARCH_PARAMETERS(state, payload) {
+    Vue.set(state.tableSearchParameters, payload.module, {
+      searchParameters: payload.params,
+      filters: payload.filters
+    });
+  },
+
+  UPDATE_ACTIVE_TAB(state, payload) {
+    Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
+  },
+
+
+
+  // into settings module start
+  UPDATE_APP_SETTINGS(state, settings) {
+    Vue.localStorage.set("SARV_APP_SETTINGS", settings);
+    Vue.set(state, "appSettings", settings);
+  },
+
+  UPDATE_DRAWER_STATE(state, payload) {
+    Vue.set(state, "drawerState", payload);
+  },
+
+  UPDATE_DRAWER_RIGHT_STATE(state, payload) {
+    Vue.set(state, "drawerRightState", payload);
+  },
+
   SET_SHORTCUTS: (state, { shortcuts }) => {
     Vue.localStorage.set("shortcuts", JSON.stringify(shortcuts));
     Vue.set(state, "shortcuts", shortcuts);
@@ -151,45 +112,87 @@ export default {
     }
   },
 
-  UPDATE_SEARCH_PARAMETERS(state, payload) {
-    Vue.set(state.tableSearchParameters, payload.module, {
-      searchParameters: payload.params,
-      filters: payload.filters
-    });
-  },
-
-  UPDATE_ACTIVE_TAB(state, payload) {
-    Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
-  },
-
-  UPDATE_DRAWER_STATE(state, payload) {
-    Vue.set(state, "drawerState", payload);
-  },
-
-  UPDATE_DRAWER_RIGHT_STATE(state, payload) {
-    Vue.set(state, "drawerRightState", payload);
-  },
-
   UPDATE_APP_ZOOM(state, zoomLevel) {
     Vue.set(state.accessibility, "zoom", zoomLevel);
   },
+  // into settings module end
 
-  UPDATE_APP_SETTINGS(state, settings) {
-    Vue.localStorage.set("SARV_APP_SETTINGS", settings);
-    Vue.set(state, "appSettings", settings);
+
+
+  // into search module start
+  SET_LOADING_STATE(state, bool) {
+    state.loadingState = bool;
   },
 
-  INITIALISE_APP_SETTINGS(state) {
-    let settings = Vue.localStorage.get("SARV_APP_SETTINGS");
-    if (
-      settings &&
-      Object.entries(settings).length > 0 &&
-      settings.constructor === Object
-    ) {
-      Vue.set(state, "appSettings", settings);
+  SET_LOADING_TYPE(state, type) {
+    state.loadingType = type;
+  },
+
+  SET_LOADING_PERCENT(state, percent) {
+    state.loadingPercent = percent;
+  },
+
+  SET_RECENT_URLS: state => {
+    const recentUrls = Vue.localStorage.get("recentUrls", null);
+    const recentUrlsState = Vue.localStorage.get("recentUrlsState", false);
+
+    if (recentUrls && !isEmpty(recentUrls))
+      Vue.set(state, "recentUrls", recentUrls);
+    if (typeof recentUrlsState === "boolean")
+      Vue.set(state, "recentUrlsState", recentUrlsState);
+  },
+
+  UPDATE_RECENT_URLS: (state, urlObject) => {
+    let recentUrls = Vue.localStorage.get("recentUrls", null);
+
+    if (recentUrls && !isEmpty(recentUrls)) {
+      recentUrls.push(urlObject);
+      if (recentUrls.length > 10) recentUrls.shift();
+
+      // If after removing is still over 10 then empty that (I don't want to use loop here);
+      if (recentUrls.length > 10) recentUrls = [];
+    } else {
+      recentUrls = [];
+      recentUrls.push(urlObject);
+    }
+
+    Vue.localStorage.set("recentUrls", recentUrls);
+    Vue.set(state, "recentUrls", recentUrls);
+  },
+
+  UPDATE_RECENT_URLS_STATE: (state, boolValue) => {
+    Vue.localStorage.set("recentUrlsState", boolValue);
+    Vue.set(state, "recentUrlsState", boolValue);
+  },
+  // into search module end
+
+
+
+  // into user module start
+  SET_CURRENT_USER: state => {
+    const authUser = Vue.localStorage.get("authUser", null);
+
+    let currentUser = {
+      id: authUser.agent_id,
+      agent: authUser.agent,
+      forename: authUser.name,
+      surename: authUser.surname,
+      user: authUser.user
+    };
+    let permissions = authUser.permissions;
+    let databaseId = authUser.database_id;
+
+    if (authUser && !isEmpty(authUser)) {
+      Vue.set(state, "currentUser", currentUser);
+      Vue.set(state, "permissions", permissions);
+      Vue.set(state, "databaseId", databaseId);
     }
   },
+  // into user module end
 
+
+
+  // into map module start
   UPDATE_MAP_STATE(state, mapState) {
     let mapSettings = Vue.localStorage.get("SARV_MAP_SETTINGS", null);
 
@@ -227,17 +230,9 @@ export default {
     ) {
       Vue.set(state, "mapSettings", mapSettings);
     }
-  },
-
-  SET_LOADING_STATE(state, bool) {
-    state.loadingState = bool;
-  },
-
-  SET_LOADING_TYPE(state, type) {
-    state.loadingType = type;
-  },
-
-  SET_LOADING_PERCENT(state, percent) {
-    state.loadingPercent = percent;
   }
+  // into map module end
+
+
+
 };

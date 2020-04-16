@@ -174,10 +174,6 @@ export default {
     idError: false
   }),
 
-  beforeCreate() {
-    this.$store.dispatch("initialiseAppSettings");
-  },
-
   created() {
     window.addEventListener("keyup", this.handleKeyUp);
   },
@@ -216,7 +212,7 @@ export default {
       rgba(0, 0, 0, 0.7) 100%
     ),
     /*url("https://files.geocollections.info/img/doi-header-bg.jpg");*/
-    url("../assets/img/background_1.jpg");
+      url("../assets/img/background_1.jpg");
   background-size: cover;
 }
 

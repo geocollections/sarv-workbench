@@ -42,7 +42,6 @@ export default {
     this.$store.dispatch("INITIALISE_USER_DATA");
     this.$store.dispatch("initialiseRecentUrls");
     this.$store.dispatch("initialiseMapSettings");
-    this.$store.dispatch("initialiseAppSettings");
   },
   beforeRouteUpdate(to, from, next) {
     this.$store.dispatch("appendRecentUrls", {

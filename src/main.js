@@ -77,9 +77,6 @@ new Vue({
   router,
   vuetify,
   localStorage: {
-    createRelationWith: {
-      type: Object
-    },
     sampleView: {
       type: Boolean,
       default: true

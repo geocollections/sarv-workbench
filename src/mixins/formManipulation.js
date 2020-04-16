@@ -399,12 +399,7 @@ const formManipulation = {
 
     reset(object, isEdit) {
       console.log("reset");
-      if (
-        typeof this.createRelationWith !== "undefined" &&
-        this.createRelationWith.object !== null
-      )
-        window.close();
-      else if (isEdit) this.$router.push({ path: "/" + object });
+      if (isEdit) this.$router.push({ path: "/" + object });
       else {
         this[object] = {};
         this.toastInfo({ text: this.$t("messages.fieldsCleared") });
