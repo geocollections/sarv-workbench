@@ -33,6 +33,34 @@ import {
 } from "../assets/js/api/apiCalls";
 
 export default {
+  // into settings module start
+  updateSettings({ commit }, settings) {
+    commit("UPDATE_APP_SETTINGS", settings);
+  },
+
+  updateDrawerState({ commit }, payload) {
+    commit("UPDATE_DRAWER_STATE", payload);
+  },
+
+  updateDrawerRightState({ commit }, payload) {
+    commit("UPDATE_DRAWER_RIGHT_STATE", payload);
+  },
+
+  SAVE_SHORTCUTS: ({ commit }, shortcuts) => {
+    commit("SET_SHORTCUTS", { shortcuts });
+  },
+
+  GET_SHORTCUTS: ({ commit }) => {
+    commit("GET_SHORTCUTS");
+  },
+
+  updateAppZoom({ commit }, zoomLevel) {
+    commit("UPDATE_APP_ZOOM", zoomLevel);
+  },
+  // into settings module end
+
+
+  // into search module start
   FETCH_PROJECTS: ({ commit, state }) => {
     return fetchProjects(
       state.activeSearchParams.search,
@@ -233,6 +261,30 @@ export default {
     });
   },
 
+  setLoadingState({ commit }, bool) {
+    commit("SET_LOADING_STATE", bool);
+  },
+
+  setLoadingType({ commit }, type) {
+    commit("SET_LOADING_TYPE", type);
+  },
+
+  setLoadingPercent({ commit }, percent) {
+    commit("SET_LOADING_PERCENT", percent);
+  },
+
+  initialiseRecentUrls: ({ commit }) => {
+    commit("SET_RECENT_URLS");
+  },
+
+  appendRecentUrls: ({ commit }, urlObject) => {
+    commit("UPDATE_RECENT_URLS", urlObject);
+  },
+
+  updateRecentUrlsState({ commit }, recentUrlsState) {
+    commit("UPDATE_RECENT_URLS_STATE", recentUrlsState);
+  },
+
   setActiveLibrary: ({ commit }, library) => {
     commit("SET_ACTIVE_LIBRARY", library);
   },
@@ -267,60 +319,6 @@ export default {
 
   updateActiveTab({ commit }, payload) {
     commit("UPDATE_ACTIVE_TAB", payload);
-  },
-
-
-
-  // into settings module start
-  updateSettings({ commit }, settings) {
-    commit("UPDATE_APP_SETTINGS", settings);
-  },
-
-  updateDrawerState({ commit }, payload) {
-    commit("UPDATE_DRAWER_STATE", payload);
-  },
-
-  updateDrawerRightState({ commit }, payload) {
-    commit("UPDATE_DRAWER_RIGHT_STATE", payload);
-  },
-
-  SAVE_SHORTCUTS: ({ commit }, shortcuts) => {
-    commit("SET_SHORTCUTS", { shortcuts });
-  },
-
-  GET_SHORTCUTS: ({ commit }) => {
-    commit("GET_SHORTCUTS");
-  },
-
-  updateAppZoom({ commit }, zoomLevel) {
-    commit("UPDATE_APP_ZOOM", zoomLevel);
-  },
-  // into settings module end
-
-
-  // into search module start
-  setLoadingState({ commit }, bool) {
-    commit("SET_LOADING_STATE", bool);
-  },
-
-  setLoadingType({ commit }, type) {
-    commit("SET_LOADING_TYPE", type);
-  },
-
-  setLoadingPercent({ commit }, percent) {
-    commit("SET_LOADING_PERCENT", percent);
-  },
-
-  initialiseRecentUrls: ({ commit }) => {
-    commit("SET_RECENT_URLS");
-  },
-
-  appendRecentUrls: ({ commit }, urlObject) => {
-    commit("UPDATE_RECENT_URLS", urlObject);
-  },
-
-  updateRecentUrlsState({ commit }, recentUrlsState) {
-    commit("UPDATE_RECENT_URLS_STATE", recentUrlsState);
   },
   // into search module end
 

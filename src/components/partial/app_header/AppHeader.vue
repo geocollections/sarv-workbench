@@ -1,8 +1,8 @@
 <template>
   <v-card tile id="app-bar" class="d-print-none">
     <drawer-left
-      :current-user="currentUser"
-      :user-shortcuts="userShortcuts"
+      :current-user="getCurrentUser"
+      :user-shortcuts="shortcuts"
       :drawerState="drawer"
       :drawer-color="appSettings.drawerLeftColor"
       :is-drawer-dark="appSettings.drawerLeftDark"
@@ -37,10 +37,10 @@
         </v-btn>
       </v-toolbar-items>
 
-      <v-toolbar-items v-if="userShortcuts.length > 0">
+      <v-toolbar-items v-if="shortcuts.length > 0">
         <v-btn
           text
-          v-for="(entity, index) in userShortcuts"
+          v-for="(entity, index) in shortcuts"
           :class="{ 'd-none d-md-flex': !entity.isAlwaysVisible }"
           :key="index"
           :to="{ path: entity.path }"
@@ -72,7 +72,7 @@
         <v-menu v-model="showDropdown" offset-y z-index="50100">
           <template v-slot:activator="{ on }">
             <v-btn text v-on="on">
-              {{ currentUser.forename }}&nbsp;
+              {{ getCurrentUser.forename }}&nbsp;
               <v-icon>{{
                 showDropdown ? "fas fa-caret-up" : "fas fa-caret-down"
               }}</v-icon>
@@ -135,7 +135,7 @@
 
 <script>
 import authenticationMixin from "../../../mixins/authenticationMixin";
-import { mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import DrawerLeft from "./DrawerLeft";
 import DrawerRight from "./DrawerRight";
 
@@ -160,24 +160,20 @@ export default {
       return document.location.origin.includes("localhost");
     },
 
-    userShortcuts() {
-      return this.$store.state["shortcuts"];
-    },
-
-    ...mapState(["currentUser", "appSettings"])
-  },
-  beforeCreate: function() {
-    this.$store.dispatch("GET_SHORTCUTS");
+    ...mapState("settings", ["appSettings", "shortcuts"]),
+    ...mapGetters("user", ["getCurrentUser"])
   },
   watch: {
     drawer(newVal) {
-      this.$store.dispatch("updateDrawerState", newVal);
+      this.updateDrawerState(newVal);
     },
     drawerRight(newVal) {
-      this.$store.dispatch("updateDrawerRightState", newVal);
+      this.updateDrawerRightState(newVal);
     }
   },
   methods: {
+    ...mapActions("settings", ["updateDrawerState", "updateDrawerRightState"]),
+
     changeLang(lang) {
       if (this.$localStorage.get("geocollectionsFileUploadLang") === lang)
         return;

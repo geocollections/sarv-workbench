@@ -248,7 +248,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["appSettings"]),
+    ...mapState("settings", ["appSettings"]),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {

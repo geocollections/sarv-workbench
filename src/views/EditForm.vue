@@ -97,7 +97,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["appSettings"]),
+    ...mapState("settings", ["appSettings"]),
 
     // Todo: In the future perms should be available on every view
     enablePermissions() {

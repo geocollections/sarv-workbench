@@ -21,6 +21,7 @@ const state = {
   },
   drawerState: null,
   drawerRightState: null,
+  shortcuts: []
 };
 
 const getters = {};
@@ -40,11 +41,7 @@ const actions = {
 
   updateShortcuts({ commit }, shortcuts) {
     commit("UPDATE_SHORTCUTS", shortcuts);
-  },
-
-  updateAppZoom({ commit }, zoomLevel) {
-    commit("UPDATE_APP_ZOOM", zoomLevel);
-  },
+  }
 };
 
 const mutations = {
@@ -62,11 +59,7 @@ const mutations = {
 
   UPDATE_SHORTCUTS(state, payload) {
     state.shortcuts = payload;
-  },
-
-  UPDATE_APP_ZOOM(state, payload) {
-    state.zoom = payload;
-  },
+  }
 };
 
 export default {

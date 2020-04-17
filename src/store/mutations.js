@@ -1,7 +1,73 @@
 import Vue from "vue";
 import isEmpty from "lodash/isEmpty";
+import {
+  fetchAccessions,
+  fetchAgents,
+  fetchAnalyses,
+  fetchAreas,
+  fetchAttachments,
+  fetchCollections,
+  fetchDatasets, fetchDeaccessions,
+  fetchDois,
+  fetchDrillcoreBoxes,
+  fetchDrillcores,
+  fetchJournals,
+  fetchKeywords,
+  fetchLibrariesFromLibraryAgent, fetchLoans,
+  fetchLocalities, fetchLocations,
+  fetchPreparations,
+  fetchProjects,
+  fetchReferences, fetchRocks,
+  fetchSamples, fetchSampleSeries,
+  fetchSelectionSeries,
+  fetchSites,
+  fetchSpecimens,
+  fetchStratigraphies,
+  fetchTaxa, fetchVisits, fetchWebNews, fetchWebPages
+} from "../assets/js/api/apiCalls";
 
 export default {
+  // into settings module start
+  UPDATE_APP_SETTINGS(state, settings) {
+    Vue.localStorage.set("SARV_APP_SETTINGS", settings);
+    Vue.set(state, "appSettings", settings);
+  },
+
+  UPDATE_DRAWER_STATE(state, payload) {
+    Vue.set(state, "drawerState", payload);
+  },
+
+  UPDATE_DRAWER_RIGHT_STATE(state, payload) {
+    Vue.set(state, "drawerRightState", payload);
+  },
+
+  SET_SHORTCUTS: (state, { shortcuts }) => {
+    Vue.localStorage.set("shortcuts", JSON.stringify(shortcuts));
+    Vue.set(state, "shortcuts", shortcuts);
+  },
+
+  GET_SHORTCUTS: state => {
+    const shortcuts = Vue.localStorage.get("shortcuts", null);
+
+    if (
+      typeof shortcuts !== "undefined" &&
+      shortcuts !== null &&
+      !isEmpty(shortcuts)
+    ) {
+      Vue.set(state, "shortcuts", JSON.parse(shortcuts));
+    } else {
+      Vue.set(state, "shortcuts", []);
+    }
+  },
+
+  UPDATE_APP_ZOOM(state, zoomLevel) {
+    Vue.set(state.accessibility, "zoom", zoomLevel);
+  },
+  // into settings module end
+
+
+
+  // into search module start
   SET_ACTIVE_OBJECTS: state => {
     const activeLibrary = Vue.localStorage.get("activeLibrary", null);
     const activeProject = Vue.localStorage.get("activeProject", null);
@@ -22,19 +88,6 @@ export default {
       Vue.set(state, "activeSample", activeSample);
     if (activeSelectionSeries && !isEmpty(activeSelectionSeries))
       Vue.set(state, "activeSelectionSeries", activeSelectionSeries);
-  },
-
-  SET_ACTIVE_SEARCH_PARAMS: (state, params) => {
-    Vue.set(state, "activeSearchParams", params);
-  },
-
-  SET_SIDEBAR_LIST: (state, { resp }) => {
-    /* false means page not found */
-    Vue.set(state, "sidebarList", {
-      results: resp.data.results || false,
-      page: resp.data.page,
-      totalPages: resp.data.page ? resp.data.page.split(" of ")[1] : undefined
-    });
   },
 
   SET_SIDEBAR_USER_ACTION: (state, userAction) => {
@@ -77,49 +130,6 @@ export default {
     Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
   },
 
-
-
-  // into settings module start
-  UPDATE_APP_SETTINGS(state, settings) {
-    Vue.localStorage.set("SARV_APP_SETTINGS", settings);
-    Vue.set(state, "appSettings", settings);
-  },
-
-  UPDATE_DRAWER_STATE(state, payload) {
-    Vue.set(state, "drawerState", payload);
-  },
-
-  UPDATE_DRAWER_RIGHT_STATE(state, payload) {
-    Vue.set(state, "drawerRightState", payload);
-  },
-
-  SET_SHORTCUTS: (state, { shortcuts }) => {
-    Vue.localStorage.set("shortcuts", JSON.stringify(shortcuts));
-    Vue.set(state, "shortcuts", shortcuts);
-  },
-
-  GET_SHORTCUTS: state => {
-    const shortcuts = Vue.localStorage.get("shortcuts", null);
-
-    if (
-      typeof shortcuts !== "undefined" &&
-      shortcuts !== null &&
-      !isEmpty(shortcuts)
-    ) {
-      Vue.set(state, "shortcuts", JSON.parse(shortcuts));
-    } else {
-      Vue.set(state, "shortcuts", []);
-    }
-  },
-
-  UPDATE_APP_ZOOM(state, zoomLevel) {
-    Vue.set(state.accessibility, "zoom", zoomLevel);
-  },
-  // into settings module end
-
-
-
-  // into search module start
   SET_LOADING_STATE(state, bool) {
     state.loadingState = bool;
   },
@@ -163,6 +173,219 @@ export default {
   UPDATE_RECENT_URLS_STATE: (state, boolValue) => {
     Vue.localStorage.set("recentUrlsState", boolValue);
     Vue.set(state, "recentUrlsState", boolValue);
+  },
+
+  SET_SIDEBAR_LIST: (state, { resp }) => {
+    /* false means page not found */
+    Vue.set(state, "sidebarList", {
+      results: resp.data.results || false,
+      page: resp.data.page,
+      totalPages: resp.data.page ? resp.data.page.split(" of ")[1] : undefined
+    });
+  },
+
+  FETCH_PROJECTS: ({ commit, state }) => {
+    return fetchProjects(
+      state.activeSearchParams.search,
+      state.currentUser.id
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+  },
+
+  FETCH_SITES: ({ commit, state }) => {
+    return fetchSites(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
+  },
+
+  FETCH_ATTACHMENTS: ({ commit, state }) => {
+    return fetchAttachments(
+      state.activeSearchParams.search,
+      state.currentUser
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+  },
+
+  FETCH_REFERENCES: ({ commit, state }) => {
+    return fetchReferences(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
+  },
+
+  FETCH_LIBRARIES: ({ commit, state }) => {
+    return fetchLibrariesFromLibraryAgent(
+      state.activeSearchParams.search,
+      state.activeSearchParams.agent
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+  },
+
+  FETCH_LOCALITIES: ({ commit, state }) => {
+    return fetchLocalities(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
+  },
+
+  FETCH_SAMPLES: ({ commit, state }) => {
+    return fetchSamples(
+      state.activeSearchParams.search,
+      state.activeSearchParams.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+  },
+
+  FETCH_ANALYSES: ({ commit, state }) => {
+    return fetchAnalyses(
+      state.activeSearchParams.search,
+      state.activeSearchParams.agent,
+      state.activeSearchParams.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+  },
+
+  FETCH_DOIS: ({ commit, state }) => {
+    return fetchDois(
+      state.activeSearchParams.search,
+      state.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+  },
+
+  FETCH_SPECIMENS: ({ commit, state }) => {
+    return fetchSpecimens(
+      state.activeSearchParams.search,
+      state.activeSearchParams.databaseId
+    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+  },
+
+  FETCH_KEYWORDS: ({ commit, state }) => {
+    return fetchKeywords(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
+  },
+
+  FETCH_JOURNALS: ({ commit, state }) => {
+    return fetchJournals(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", { resp })
+    );
+  },
+
+  FETCH_COLLECTIONS: ({ commit, state }) => {
+    return fetchCollections(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_TAXA: ({ commit, state }) => {
+    return fetchTaxa(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_SELECTION_SERIES: ({ commit, state }) => {
+    return fetchSelectionSeries(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_AGENTS: ({ commit, state }) => {
+    return fetchAgents(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_PREPARATIONS: ({ commit, state }) => {
+    return fetchPreparations(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_DRILLCORES: ({ commit, state }) => {
+    return fetchDrillcores(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_DATASETS: ({ commit, state }) => {
+    return fetchDatasets(
+      state.activeSearchParams.search,
+      state.activeSearchParams.databaseId
+    ).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_STRATIGRAPHY: ({ commit, state }) => {
+    return fetchStratigraphies(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_AREAS: ({ commit, state }) => {
+    return fetchAreas(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_DRILLCORE_BOXES: ({ commit, state }) => {
+    return fetchDrillcoreBoxes(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_LOCATIONS: ({ commit, state }) => {
+    return fetchLocations(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_ROCKS: ({ commit, state }) => {
+    return fetchRocks(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_DEACCESSIONS: ({ commit, state }) => {
+    return fetchDeaccessions(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_ACCESSIONS: ({ commit, state }) => {
+    return fetchAccessions(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_VISITS: ({ commit, state }) => {
+    return fetchVisits(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_LOANS: ({ commit, state }) => {
+    return fetchLoans(
+      state.activeSearchParams.search,
+      state.activeSearchParams.databaseId
+    ).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_WEB_PAGES: ({ commit, state }) => {
+    return fetchWebPages(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_WEB_NEWS: ({ commit, state }) => {
+    return fetchWebNews(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  FETCH_SAMPLE_SERIES: ({ commit, state }) => {
+    return fetchSampleSeries(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", { resp });
+    });
+  },
+
+  SET_ACTIVE_SEARCH_PARAMS: (state, params) => {
+    Vue.set(state, "activeSearchParams", params);
   },
   // into search module end
 

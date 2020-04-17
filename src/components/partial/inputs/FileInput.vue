@@ -328,7 +328,7 @@ export default {
     openFile: Boolean
   },
   computed: {
-    ...mapState(["appSettings"]),
+    ...mapState("settings", ["appSettings"]),
 
     isFilesValid() {
       return this.files && this.files.length > 0;

@@ -55,7 +55,7 @@ export default {
   name: "AddForm",
   components: { SpinnerWrapper, ObjectPermissions, BottomOptions },
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState("settings", ["appSettings"])
   }
 };
 </script>

@@ -5,7 +5,7 @@ import VueLocalStorage from "vue-localstorage"; // VueLocalStorage for using loc
 import VueIziToast from "vue-izitoast"; // Pop-up messages
 import VueI18n from "vue-i18n"; // Translations
 import VueCookies from "vue-cookies";
-import { createStore } from "./store";
+import store from "./store";
 import VueScrollTo from "vue-scrollto";
 import animated from "animate.css";
 import vuetify from "./plugins/vuetify";
@@ -70,7 +70,6 @@ Vue.directive("translate", function(el, binding) {
   el.innerHTML = typeof value !== "undefined" && value !== null ? value : "";
 });
 
-const store = createStore();
 new Vue({
   i18n,
   store,

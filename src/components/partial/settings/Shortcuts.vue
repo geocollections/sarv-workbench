@@ -134,9 +134,6 @@ export default {
       shortcuts: []
     };
   },
-  beforeCreate: function() {
-    this.$store.dispatch("GET_SHORTCUTS");
-  },
   created: function() {
     this.origin = document.location.origin;
     this.shortcuts = this.$store.state["shortcuts"];

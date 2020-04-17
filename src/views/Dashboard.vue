@@ -25,7 +25,7 @@
 
 <script>
 import AppHeader from "../components/partial/app_header/AppHeader";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import Breadcrumbs from "../components/partial/Breadcrumbs";
 
 export default {
@@ -35,20 +35,18 @@ export default {
   },
   name: "Dashboard",
   computed: {
-    ...mapState(["appSettings", "recentUrls", "recentUrlsState"])
-  },
-  beforeCreate() {
-    this.$store.dispatch("INITIALISE_ACTIVE_OBJECTS");
-    this.$store.dispatch("INITIALISE_USER_DATA");
-    this.$store.dispatch("initialiseRecentUrls");
-    this.$store.dispatch("initialiseMapSettings");
+    ...mapState("settings", ["appSettings"]),
+    ...mapState("search", ["recentUrls", "recentUrlsState"])
   },
   beforeRouteUpdate(to, from, next) {
-    this.$store.dispatch("appendRecentUrls", {
+    this.updateRecentUrls({
       text: from.path,
       href: from.path
     });
     next();
+  },
+  methods: {
+    ...mapActions("search", ["updateRecentUrls"])
   }
 };
 </script>

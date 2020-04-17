@@ -94,7 +94,7 @@ export default {
     requestResponse: null
   }),
   computed: {
-    ...mapState(["appSettings"]),
+    ...mapState("settings", ["appSettings"]),
 
     requestUrl() {
       return this.test.url + this.test.table;

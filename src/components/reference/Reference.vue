@@ -987,7 +987,7 @@ export default {
     },
 
     ...mapState(["currentUser", "databaseId"]),
-    ...mapGetters(["isUserAllowedTo"]),
+    ...mapGetters("user", ["isUserAllowedTo"]),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {

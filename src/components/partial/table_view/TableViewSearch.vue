@@ -244,7 +244,7 @@ export default {
     calendarMenu: false
   }),
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState("settings", ["appSettings"])
   }
 };
 </script>

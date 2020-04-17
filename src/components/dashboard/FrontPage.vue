@@ -7,8 +7,8 @@
           <v-card-title class="pl-0">
             <span class="h3 text-capitalize break-word">
               {{
-                `${$t("frontPage.welcome")}, ${currentUser.forename} ${
-                  currentUser.surename
+                `${$t("frontPage.welcome")}, ${getCurrentUser.forename} ${
+                  getCurrentUser.surename
                 }!`
               }}
             </span>
@@ -138,7 +138,7 @@
     </v-row>
 
     <recent-activity
-      :user="currentUser.user"
+      :user="getCurrentUser.user"
       :body-color="appSettings.bodyColor"
       :body-active-color="appSettings.bodyActiveColor"
     />
@@ -207,7 +207,7 @@
 <script>
 import RecentActivity from "./RecentActivity";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 import SitesMap from "./SitesMap";
 import ImageViewWrapper from "../partial/image_view/ImageViewWrapper";
 import { fetchRecentFiles } from "../../assets/js/api/apiCalls";
@@ -228,7 +228,8 @@ export default {
   }),
 
   computed: {
-    ...mapState(["currentUser", "appSettings"])
+    ...mapState("settings", ["appSettings"]),
+    ...mapGetters("user", ["getCurrentUser"])
   },
 
   watch: {
@@ -242,7 +243,7 @@ export default {
 
   methods: {
     getRecentFiles(paginateBy) {
-      fetchRecentFiles(this.currentUser.id, paginateBy).then(response => {
+      fetchRecentFiles(this.getCurrentUser.id, paginateBy).then(response => {
         if (response.status === 200) {
           if (response.data.count > 0) this.recentFiles = response.data.results;
           else this.recentFiles = [];

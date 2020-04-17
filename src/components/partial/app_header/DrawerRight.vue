@@ -16,9 +16,9 @@
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
         v-if="
-          tableSearchParameters &&
-            tableSearchParameters.filters &&
-            tableSearchParameters.filters.length > 0
+          computedTableSearchParameters &&
+            computedTableSearchParameters.filters &&
+            computedTableSearchParameters.filters.length > 0
         "
       >
         <template v-slot:activator>
@@ -37,7 +37,7 @@
 
         <v-list-item
           class="d-flex flex-column justify-content-end"
-          v-for="(field, index) in tableSearchParameters.filters"
+          v-for="(field, index) in computedTableSearchParameters.filters"
           :key="index"
         >
           <!-- DATEPICKER -->
@@ -54,7 +54,7 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 hide-details
-                v-model="tableSearchParameters.searchParameters[field.id]"
+                v-model="computedTableSearchParameters.searchParameters[field.id]"
                 :label="$t(field.title)"
                 prepend-inner-icon="far fa-calendar-alt"
                 :color="drawerActiveColor"
@@ -65,7 +65,7 @@
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="tableSearchParameters.searchParameters[field.id]"
+              v-model="computedTableSearchParameters.searchParameters[field.id]"
               @input="field.calendarStateDrawer = false"
               :color="drawerActiveColor"
               :header-color="drawerActiveColor"
@@ -78,7 +78,7 @@
             v-else
             class="w-100"
             :label="$t(field.title)"
-            v-model="tableSearchParameters.searchParameters[field.id]"
+            v-model="computedTableSearchParameters.searchParameters[field.id]"
             :color="drawerActiveColor"
             :type="field.type"
             hide-details
@@ -90,7 +90,7 @@
         <v-list-item class="mt-2" v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters.specimen_image_attachment
             "
             :label="$t('attachment.photoArchive')"
             value="2"
@@ -104,7 +104,7 @@
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters.specimen_image_attachment
             "
             :label="$t('attachment.specimenImage')"
             value="1"
@@ -118,7 +118,7 @@
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters.specimen_image_attachment
             "
             :label="$t('attachment.otherFiles')"
             value="3"
@@ -132,7 +132,7 @@
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters.specimen_image_attachment
             "
             :label="$t('attachment.digitisedReference')"
             value="4"
@@ -145,7 +145,7 @@
         <!-- IS_ESTONIAN_REFERENCE -->
         <v-list-item class="mt-2" v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="tableSearchParameters.searchParameters.isEstonianReference"
+            v-model="computedTableSearchParameters.searchParameters.isEstonianReference"
             :label="$t('reference.is_estonian_reference')"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
@@ -156,7 +156,7 @@
         <!-- IS_ESTONIAN_AUTHOR -->
         <v-list-item v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="tableSearchParameters.searchParameters.isEstonianAuthor"
+            v-model="computedTableSearchParameters.searchParameters.isEstonianAuthor"
             :label="$t('reference.is_estonian_author')"
             class="mt-0"
             :color="drawerActiveColor"
@@ -589,22 +589,21 @@ export default {
     }
   },
   computed: {
-    ...mapState([
+    ...mapState("search", [
       "activeSearchParams",
       "sidebarList",
       "activeLibrary",
-      "activeSelectionSeries"
+      "activeSelectionSeries",
+      "tableSearchParameters"
     ]),
 
-    tableSearchParameters() {
-      return this.$store.state["tableSearchParameters"][
-        this.$route.meta.object
-      ];
+    computedTableSearchParameters() {
+      return this.tableSearchParameters[this.$route.meta.object];
     }
   },
   created() {
-    if (this.$store.state["activeSearchParams"] !== null) {
-      this.$store.dispatch(this.$store.state["activeSearchParams"].request);
+    if (this.activeSearchParams) {
+      this.$store.dispatch(this.activeSearchParams.request);
     }
   },
   watch: {
@@ -689,7 +688,7 @@ export default {
     searchRecords() {
       this.$localStorage.set(
         `${this.$route.meta.object}SearchHistory`,
-        this.tableSearchParameters.searchParameters
+        this.computedTableSearchParameters.searchParameters
       );
       this.$router.push({ path: "/" + this.$route.meta.object });
     }

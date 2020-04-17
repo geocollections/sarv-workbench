@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState("settings", ["appSettings"])
   }
 };
 </script>

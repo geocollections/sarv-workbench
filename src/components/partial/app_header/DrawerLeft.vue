@@ -643,7 +643,7 @@ export default {
     },
 
     ...mapState(["activeProject", "activeSite", "activeSample"]),
-    ...mapGetters(["isUserAllowedTo"])
+    ...mapGetters("user", ["isUserAllowedTo"])
   },
   methods: {
     changeDrawerState(drawerState) {
