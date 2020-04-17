@@ -253,6 +253,8 @@
 </template>
 
 <script>
+import {mapActions} from "vuex";
+
 export default {
   name: "Colors",
   data: () => ({
@@ -351,10 +353,14 @@ export default {
   watch: {
     settings: {
       handler(newVal) {
-        this.$store.dispatch("updateSettings", newVal);
+        this.updateSettings(newVal);
       },
       deep: true
     }
+  },
+
+  methods: {
+    ...mapActions("settings", ["updateSettings"])
   }
 };
 </script>

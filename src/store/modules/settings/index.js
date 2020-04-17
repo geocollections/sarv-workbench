@@ -1,6 +1,3 @@
-import Vue from "vue";
-import isEmpty from "lodash/isEmpty";
-
 const state = {
   recentUrls: [],
   recentUrlsState: false,

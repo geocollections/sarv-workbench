@@ -24,7 +24,7 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchLibrariesFromLibraryAgent } from "../assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 
@@ -50,7 +50,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser"])
+    ...mapGetters("user", ["getCurrentUser"])
   },
 
   watch: {
@@ -73,7 +73,7 @@ export default {
         resolve(
           fetchLibrariesFromLibraryAgent(
             this.searchParameters,
-            this.currentUser
+            this.getCurrentUser
           )
         );
       });

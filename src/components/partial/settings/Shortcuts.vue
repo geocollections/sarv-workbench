@@ -109,6 +109,7 @@
 
 <script>
 import draggable from "vuedraggable";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -134,14 +135,18 @@ export default {
       shortcuts: []
     };
   },
-  created: function() {
+  created() {
     this.origin = document.location.origin;
-    this.shortcuts = this.$store.state["shortcuts"];
+    console.log(this.$store.state)
+    this.shortcuts = [...this.$store.state.settings.shortcuts];
   },
-  beforeDestroy: function() {
-    this.$store.dispatch("SAVE_SHORTCUTS", this.shortcuts);
+  watch: {
+    shortcuts(newVal) {
+      this.updateShortcuts(newVal);
+    }
   },
   methods: {
+    ...mapActions("settings", ["updateShortcuts"]),
     addShortcut() {
       this.shortcuts.push({ title: "", path: "", isAlwaysVisible: false });
     },

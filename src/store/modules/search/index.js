@@ -274,36 +274,12 @@ const actions = {
     });
   },
 
-  setActiveLibrary: ({ commit }, library) => {
-    commit("SET_ACTIVE_LIBRARY", library);
-  },
-
-  setActiveSelectionSeries: ({ commit }, selection_series) => {
-    commit("SET_ACTIVE_SELECTION_SERIES", selection_series);
-  },
-
-  setActiveProject: ({ commit }, project) => {
-    commit("SET_ACTIVE_PROJECT", project);
-  },
-
-  setActiveSite: ({ commit }, site) => {
-    commit("SET_ACTIVE_SITE", site);
-  },
-
-  setActiveSample: ({ commit }, sample) => {
-    commit("SET_ACTIVE_SAMPLE", sample);
-  },
-
-  INITIALISE_ACTIVE_OBJECTS: ({ commit }) => {
-    commit("SET_ACTIVE_OBJECTS");
-  },
-
   SIDEBAR_USER_ACTION: ({ commit }, userAction) => {
     commit("SET_SIDEBAR_USER_ACTION", userAction);
   },
 
-  updateSearchParameters({ commit }, payload) {
-    commit("UPDATE_SEARCH_PARAMETERS", payload);
+  updateSearchParameters({ commit }, params) {
+    commit("UPDATE_SEARCH_PARAMETERS", params);
   },
 
   updateActiveTab({ commit }, payload) {
@@ -325,37 +301,33 @@ const mutations = {
   },
 
   UPDATE_RECENT_URLS: (state, payload) => {
-    let recentUrls = [...payload];
+    let recentUrls = [...state.recentUrls, payload];
 
-    if (recentUrls && recentUrls.length > 0) {
-      recentUrls.push(payload);
-      if (recentUrls.length > 10) recentUrls.shift();
+    if (recentUrls.length > 10) recentUrls.shift();
 
-      // If after removing is still over 10 then empty that (I don't want to use loop here);
-      if (recentUrls.length > 10) recentUrls = [];
-    } else {
-      recentUrls = [];
-      recentUrls.push(payload);
-    }
+    // If after removing is still over 10 then empty that list;
+    if (recentUrls.length > 10) recentUrls = [];
 
     state.recentUrls = recentUrls;
   },
 
-  UPDATE_RECENT_URLS_STATE: (state, payload) => {
+  UPDATE_RECENT_URLS_STATE(state, payload) {
     state.recentUrlsState = payload;
   },
 
-  SET_SIDEBAR_LIST: (state, { resp }) => {
+  SET_SIDEBAR_LIST(state, payload) {
     /* false means page not found */
-    Vue.set(state, "sidebarList", {
-      results: resp.data.results || false,
-      page: resp.data.page,
-      totalPages: resp.data.page ? resp.data.page.split(" of ")[1] : undefined
-    });
+    state.sidebarList = {
+      results: payload?.data?.results || false,
+      page: payload?.data?.page,
+      totalPages: payload?.data?.page
+        ? payload.data.page.split(" of ")[1]
+        : undefined
+    };
   },
 
   SET_ACTIVE_SEARCH_PARAMS(state, params) {
-    Vue.set(state, "activeSearchParams", params);
+    state.activeSearchParams = params;
   },
 
   UPDATE_SEARCH_PARAMETERS(state, payload) {
@@ -363,6 +335,14 @@ const mutations = {
       searchParameters: payload.params,
       filters: payload.filters
     };
+  },
+
+  UPDATE_ACTIVE_TAB(state, payload) {
+    Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
+  },
+
+  SET_SIDEBAR_USER_ACTION(state, payload) {
+    state.sidebarUserAction = payload;
   }
 };
 

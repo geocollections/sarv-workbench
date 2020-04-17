@@ -178,7 +178,7 @@
       <transition>
         <div v-if="block.permissions">
           <PermissionsTable
-            :perms="permissions"
+            :perms="getPermissions"
             :body-color="appSettings.bodyColor"
           />
         </div>
@@ -192,7 +192,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Shortcuts from "../components/partial/settings/Shortcuts";
 import Accessibility from "../components/partial/settings/Accessibility";
 import formSectionsMixin from "../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 import Colors from "../components/partial/settings/Colors";
 import PermissionsTable from "../components/partial/settings/PermissionsTable";
 import Security from "../components/partial/settings/Security";
@@ -217,7 +217,8 @@ export default {
   },
 
   computed: {
-    ...mapState(["permissions", "appSettings", "showRecentUrls"])
+    ...mapState("settings", ["appSettings", "showRecentUrls"]),
+    ...mapGetters("user", ["getPermissions"])
   }
 };
 </script>

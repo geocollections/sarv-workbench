@@ -536,7 +536,7 @@ import {
   fetchAnalysisMethod
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -603,8 +603,8 @@ export default {
         object: "analysis",
         field: "sample__number",
         block: this.block,
-        agent: this.currentUser,
-        databaseId: this.databaseId
+        agent: this.getCurrentUser,
+        databaseId: this.getDatabaseId
       });
     }
 
@@ -635,7 +635,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser", "databaseId"]),
+    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"]),
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -848,7 +848,7 @@ export default {
 
       if (!this.isNotEmpty(uploadableObject.mass)) uploadableObject.mass = null;
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       // Adding related data only on add view
       uploadableObject.related_data = {};
