@@ -54,7 +54,9 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 hide-details
-                v-model="computedTableSearchParameters.searchParameters[field.id]"
+                v-model="
+                  computedTableSearchParameters.searchParameters[field.id]
+                "
                 :label="$t(field.title)"
                 prepend-inner-icon="far fa-calendar-alt"
                 :color="drawerActiveColor"
@@ -90,7 +92,8 @@
         <v-list-item class="mt-2" v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              computedTableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters
+                .specimen_image_attachment
             "
             :label="$t('attachment.photoArchive')"
             value="2"
@@ -104,7 +107,8 @@
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              computedTableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters
+                .specimen_image_attachment
             "
             :label="$t('attachment.specimenImage')"
             value="1"
@@ -118,7 +122,8 @@
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              computedTableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters
+                .specimen_image_attachment
             "
             :label="$t('attachment.otherFiles')"
             value="3"
@@ -132,7 +137,8 @@
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
             v-model="
-              computedTableSearchParameters.searchParameters.specimen_image_attachment
+              computedTableSearchParameters.searchParameters
+                .specimen_image_attachment
             "
             :label="$t('attachment.digitisedReference')"
             value="4"
@@ -145,7 +151,9 @@
         <!-- IS_ESTONIAN_REFERENCE -->
         <v-list-item class="mt-2" v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="computedTableSearchParameters.searchParameters.isEstonianReference"
+            v-model="
+              computedTableSearchParameters.searchParameters.isEstonianReference
+            "
             :label="$t('reference.is_estonian_reference')"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
@@ -156,7 +164,9 @@
         <!-- IS_ESTONIAN_AUTHOR -->
         <v-list-item v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="computedTableSearchParameters.searchParameters.isEstonianAuthor"
+            v-model="
+              computedTableSearchParameters.searchParameters.isEstonianAuthor
+            "
             :label="$t('reference.is_estonian_author')"
             class="mt-0"
             :color="drawerActiveColor"

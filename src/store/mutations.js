@@ -7,23 +7,31 @@ import {
   fetchAreas,
   fetchAttachments,
   fetchCollections,
-  fetchDatasets, fetchDeaccessions,
+  fetchDatasets,
+  fetchDeaccessions,
   fetchDois,
   fetchDrillcoreBoxes,
   fetchDrillcores,
   fetchJournals,
   fetchKeywords,
-  fetchLibrariesFromLibraryAgent, fetchLoans,
-  fetchLocalities, fetchLocations,
+  fetchLibrariesFromLibraryAgent,
+  fetchLoans,
+  fetchLocalities,
+  fetchLocations,
   fetchPreparations,
   fetchProjects,
-  fetchReferences, fetchRocks,
-  fetchSamples, fetchSampleSeries,
+  fetchReferences,
+  fetchRocks,
+  fetchSamples,
+  fetchSampleSeries,
   fetchSelectionSeries,
   fetchSites,
   fetchSpecimens,
   fetchStratigraphies,
-  fetchTaxa, fetchVisits, fetchWebNews, fetchWebPages
+  fetchTaxa,
+  fetchVisits,
+  fetchWebNews,
+  fetchWebPages
 } from "../assets/js/api/apiCalls";
 
 export default {
@@ -64,8 +72,6 @@ export default {
     Vue.set(state.accessibility, "zoom", zoomLevel);
   },
   // into settings module end
-
-
 
   // into search module start
   SET_ACTIVE_OBJECTS: state => {
@@ -389,8 +395,6 @@ export default {
   },
   // into search module end
 
-
-
   // into user module start
   SET_CURRENT_USER: state => {
     const authUser = Vue.localStorage.get("authUser", null);
@@ -412,8 +416,6 @@ export default {
     }
   },
   // into user module end
-
-
 
   // into map module start
   UPDATE_MAP_STATE(state, mapState) {
@@ -455,7 +457,4 @@ export default {
     }
   }
   // into map module end
-
-
-
 };

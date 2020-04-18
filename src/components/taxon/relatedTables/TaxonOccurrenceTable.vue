@@ -561,7 +561,8 @@ export default {
       }
 
       this.item.stratigraphic_distribution = item.stratigraphic_distribution;
-      this.item.stratigraphic_distribution_en = item.stratigraphic_distribution_en;
+      this.item.stratigraphic_distribution_en =
+        item.stratigraphic_distribution_en;
       this.item.locality_free = item.locality_free;
       this.item.remarks = item.remarks;
 

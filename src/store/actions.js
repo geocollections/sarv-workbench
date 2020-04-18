@@ -59,7 +59,6 @@ export default {
   },
   // into settings module end
 
-
   // into search module start
   FETCH_PROJECTS: ({ commit, state }) => {
     return fetchProjects(
@@ -322,15 +321,11 @@ export default {
   },
   // into search module end
 
-
-
   // into user module start
   INITIALISE_USER_DATA: ({ commit }) => {
     commit("SET_CURRENT_USER");
   },
   // into user module end
-
-
 
   // into map module start
   updateMapState({ commit }, mapState) {
@@ -345,7 +340,4 @@ export default {
     commit("INITIALISE_MAP_SETTINGS");
   }
   // into map module end
-
-
-
 };

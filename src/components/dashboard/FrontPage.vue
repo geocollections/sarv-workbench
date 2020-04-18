@@ -16,7 +16,7 @@
             <v-btn
               icon
               :to="{ path: '/settings' }"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
               :title="$t('header.settings')"
             >
               <v-icon>fas fa-user-cog</v-icon>
@@ -29,10 +29,7 @@
     <!-- MAP -->
     <v-row>
       <v-col class="pb-0">
-        <v-card
-          :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
             <div class="card-title--clickable" @click="block.map = !block.map">
               <span>{{ $t("frontPage.sitesMap") }}</span>
@@ -44,7 +41,7 @@
             <v-btn
               icon
               @click="block.map = !block.map"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
             >
               <v-icon>{{
                 block.map ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -64,10 +61,7 @@
     <!-- IMAGES/FILES -->
     <v-row class="py-6">
       <v-col class="pb-0">
-        <v-card
-          :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
             <div
               class="card-title--clickable"
@@ -80,7 +74,7 @@
             <v-btn
               icon
               @click="block.files = !block.files"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
             >
               <v-icon>{{
                 block.files ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -100,26 +94,10 @@
                     label="Number of recent files: "
                     class="mt-0 radio-buttons"
                   >
-                    <v-radio
-                      label="6"
-                      :value="6"
-                      :color="appSettings.bodyActiveColor"
-                    />
-                    <v-radio
-                      label="12"
-                      :value="12"
-                      :color="appSettings.bodyActiveColor"
-                    />
-                    <v-radio
-                      label="24"
-                      :value="24"
-                      :color="appSettings.bodyActiveColor"
-                    />
-                    <v-radio
-                      label="36"
-                      :value="36"
-                      :color="appSettings.bodyActiveColor"
-                    />
+                    <v-radio label="6" :value="6" :color="bodyActiveColor" />
+                    <v-radio label="12" :value="12" :color="bodyActiveColor" />
+                    <v-radio label="24" :value="24" :color="bodyActiveColor" />
+                    <v-radio label="36" :value="36" :color="bodyActiveColor" />
                   </v-radio-group>
                 </v-col>
               </v-row>
@@ -127,8 +105,8 @@
               <image-view-wrapper
                 class="pb-3"
                 :data="recentFiles"
-                :body-active-color="appSettings.bodyActiveColor"
-                :body-color="appSettings.bodyColor"
+                :body-active-color="bodyActiveColor"
+                :body-color="bodyColor"
                 clear-item-background
               />
             </div>
@@ -139,17 +117,14 @@
 
     <recent-activity
       :user="getCurrentUser.user"
-      :body-color="appSettings.bodyColor"
-      :body-active-color="appSettings.bodyActiveColor"
+      :body-color="bodyColor"
+      :body-active-color="bodyActiveColor"
     />
 
     <!-- HELP -->
     <v-row id="block-help">
       <v-col>
-        <v-card
-          :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
-          elevation="4"
-        >
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
             <div
               class="card-title--clickable"
@@ -164,7 +139,7 @@
             <v-btn
               icon
               @click="block.help = !block.help"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
             >
               <v-icon>{{
                 block.help ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -207,7 +182,7 @@
 <script>
 import RecentActivity from "./RecentActivity";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {mapGetters, mapState} from "vuex";
+import { mapGetters, mapState } from "vuex";
 import SitesMap from "./SitesMap";
 import ImageViewWrapper from "../partial/image_view/ImageViewWrapper";
 import { fetchRecentFiles } from "../../assets/js/api/apiCalls";
@@ -228,7 +203,7 @@ export default {
   }),
 
   computed: {
-    ...mapState("settings", ["appSettings"]),
+    ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapGetters("user", ["getCurrentUser"])
   },
 

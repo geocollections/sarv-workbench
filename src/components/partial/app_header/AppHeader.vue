@@ -4,9 +4,9 @@
       :current-user="getCurrentUser"
       :user-shortcuts="shortcuts"
       :drawerState="drawer"
-      :drawer-color="appSettings.drawerLeftColor"
-      :is-drawer-dark="appSettings.drawerLeftDark"
-      :drawer-active-color="appSettings.drawerLeftActiveColor"
+      :drawer-color="drawerLeftColor"
+      :is-drawer-dark="drawerLeftDark"
+      :drawer-active-color="drawerLeftActiveColor"
       v-on:update:drawerState="drawer = $event"
     />
 
@@ -15,8 +15,8 @@
       clipped-left
       clipped-right
       fixed
-      :color="appSettings.navbarColor"
-      :dark="appSettings.navbarDark"
+      :color="navbarColor"
+      :dark="navbarDark"
       dense
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
@@ -80,8 +80,8 @@
           </template>
 
           <v-list
-            :color="appSettings.navbarColor"
-            :dark="appSettings.navbarDark"
+            :color="navbarColor"
+            :dark="navbarDark"
             dense
             style="border-radius: 0;"
           >
@@ -125,9 +125,9 @@
 
     <drawer-right
       :drawerState="drawerRight"
-      :drawer-color="appSettings.drawerRightColor"
-      :is-drawer-dark="appSettings.drawerRightDark"
-      :drawer-active-color="appSettings.drawerRightActiveColor"
+      :drawer-color="drawerRightColor"
+      :is-drawer-dark="drawerRightDark"
+      :drawer-active-color="drawerRightActiveColor"
       v-on:update:drawerState="drawerRight = $event"
     />
   </v-card>
@@ -160,7 +160,17 @@ export default {
       return document.location.origin.includes("localhost");
     },
 
-    ...mapState("settings", ["appSettings", "shortcuts"]),
+    ...mapState("settings", [
+      "drawerLeftColor",
+      "drawerLeftDark",
+      "drawerLeftActiveColor",
+      "navbarColor",
+      "navbarDark",
+      "drawerRightColor",
+      "drawerRightDark",
+      "drawerRightActiveColor",
+      "shortcuts"
+    ]),
     ...mapGetters("user", ["getCurrentUser"])
   },
   watch: {

@@ -1,10 +1,6 @@
 <template>
   <div
-    :class="[
-      'dashboard',
-      appSettings.bodyDark ? 'white--text' : 'black--text',
-      appSettings.bodyColor
-    ]"
+    :class="['dashboard', bodyDark ? 'white--text' : 'black--text', bodyColor]"
   >
     <app-header />
 
@@ -14,7 +10,7 @@
           class="d-print-none"
           v-if="recentUrlsState"
           :items="recentUrls"
-          :body-active-color="appSettings.bodyActiveColor"
+          :body-active-color="bodyActiveColor"
         />
 
         <router-view />
@@ -35,8 +31,13 @@ export default {
   },
   name: "Dashboard",
   computed: {
-    ...mapState("settings", ["appSettings"]),
-    ...mapState("search", ["recentUrls", "recentUrlsState"])
+    ...mapState("settings", [
+      "bodyDark",
+      "bodyColor",
+      "bodyActiveColor",
+      "recentUrls",
+      "recentUrlsState"
+    ])
   },
   beforeRouteUpdate(to, from, next) {
     this.updateRecentUrls({
@@ -46,7 +47,7 @@ export default {
     next();
   },
   methods: {
-    ...mapActions("search", ["updateRecentUrls"])
+    ...mapActions("settings", ["updateRecentUrls"])
   }
 };
 </script>

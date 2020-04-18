@@ -7,11 +7,11 @@
           class="mt-0 mb-2"
           :ripple="false"
           :color="bodyActiveColor"
-          v-model="showRecentUrls"
+          v-model="myRecentUrlsState"
         >
           <template v-slot:label>
-            <span class="mr-1">Show recent URLs:</span>
-            <span class="font-weight-bold">{{ showRecentUrls }}</span>
+            <span class="mr-1">{{ $t("settings.recentUrls") }}:</span>
+            <span class="font-weight-bold">{{ myRecentUrlsState }}</span>
           </template>
         </v-checkbox>
       </v-col>
@@ -37,12 +37,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(["recentUrlsState"]),
-    showRecentUrls: {
+    ...mapState("settings", ["recentUrlsState"]),
+    myRecentUrlsState: {
       get() {
         return this.recentUrlsState;
       },
-
       set(value) {
         this.updateRecentUrlsState(value);
       }
@@ -50,7 +49,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["updateRecentUrlsState"])
+    ...mapActions("settings", ["updateRecentUrlsState"])
   }
 };
 </script>

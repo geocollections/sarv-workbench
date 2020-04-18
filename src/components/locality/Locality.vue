@@ -584,18 +584,20 @@
 </template>
 
 <script>
-  import {
-    fetchListLocalityTypes,
-    fetchListLocalityExtent,
-    fetchListCoordinateMethod,
-    fetchListCoordinatePrecision,
-    fetchListCountry,
-    fetchLocality,
-    fetchLocalityReference,
-    fetchLocalitySynonym,
-    fetchLocalityAttachment,
-    fetchLocalityStratigraphy, fetchSiteLocalityDescriptions, fetchLocalityDescriptions
-  } from "../../assets/js/api/apiCalls";
+import {
+  fetchListLocalityTypes,
+  fetchListLocalityExtent,
+  fetchListCoordinateMethod,
+  fetchListCoordinatePrecision,
+  fetchListCountry,
+  fetchLocality,
+  fetchLocalityReference,
+  fetchLocalitySynonym,
+  fetchLocalityAttachment,
+  fetchLocalityStratigraphy,
+  fetchSiteLocalityDescriptions,
+  fetchLocalityDescriptions
+} from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";

@@ -37,8 +37,6 @@ const state = {
   loadingState: false,
   loadingType: "fetch",
   loadingPercent: 0,
-  recentUrls: [],
-  recentUrlsState: false,
   sidebarList: [],
   activeObject: null,
   tableSearchParameters: {},
@@ -64,14 +62,6 @@ const actions = {
 
   setLoadingPercent({ commit }, percent) {
     commit("SET_LOADING_PERCENT", percent);
-  },
-
-  updateRecentUrls: ({ commit }, recentUrls) => {
-    commit("UPDATE_RECENT_URLS", recentUrls);
-  },
-
-  updateRecentUrlsState({ commit }, boolVal) {
-    commit("UPDATE_RECENT_URLS_STATE", boolVal);
   },
 
   FETCH_PROJECTS({ commit, state }) {
@@ -298,21 +288,6 @@ const mutations = {
 
   SET_LOADING_PERCENT(state, payload) {
     state.loadingPercent = payload;
-  },
-
-  UPDATE_RECENT_URLS: (state, payload) => {
-    let recentUrls = [...state.recentUrls, payload];
-
-    if (recentUrls.length > 10) recentUrls.shift();
-
-    // If after removing is still over 10 then empty that list;
-    if (recentUrls.length > 10) recentUrls = [];
-
-    state.recentUrls = recentUrls;
-  },
-
-  UPDATE_RECENT_URLS_STATE(state, payload) {
-    state.recentUrlsState = payload;
   },
 
   SET_SIDEBAR_LIST(state, payload) {

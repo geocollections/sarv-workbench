@@ -10,7 +10,7 @@
     <v-card
       class="mt-2"
       id="block-colors"
-      :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -25,7 +25,7 @@
         <v-btn
           icon
           @click="block.colors = !block.colors"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
         >
           <v-icon>{{
             block.colors ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -44,7 +44,7 @@
     <v-card
       class="mt-2"
       id="block-accessibility"
-      :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -59,7 +59,7 @@
         <v-btn
           icon
           @click="block.accessibility = !block.accessibility"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
         >
           <v-icon>{{
             block.accessibility ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -70,8 +70,8 @@
       <transition>
         <div v-show="block.accessibility" class="px-1 pt-1 pb-2">
           <Accessibility
-            :body-active-color="appSettings.bodyActiveColor"
-            :body-dark="appSettings.bodyDark"
+            :body-active-color="bodyActiveColor"
+            :body-dark="bodyDark"
           />
         </div>
       </transition>
@@ -81,7 +81,7 @@
     <v-card
       class="mt-2"
       id="block-shortcuts"
-      :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -96,7 +96,7 @@
         <v-btn
           icon
           @click="block.shortcuts = !block.shortcuts"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
         >
           <v-icon>{{
             block.shortcuts ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -107,8 +107,8 @@
       <transition>
         <div v-show="block.shortcuts" class="pa-1">
           <shortcuts
-            :bodyActiveColor="appSettings.bodyActiveColor"
-            :bodyActiveColorDark="appSettings.bodyActiveColorDark"
+            :bodyActiveColor="bodyActiveColor"
+            :bodyActiveColorDark="bodyActiveColorDark"
           />
         </div>
       </transition>
@@ -118,7 +118,7 @@
     <v-card
       class="mt-2"
       id="block-security"
-      :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -133,7 +133,7 @@
         <v-btn
           icon
           @click="block.security = !block.security"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
         >
           <v-icon>{{
             block.security ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -152,7 +152,7 @@
     <v-card
       class="mt-2"
       id="block-permissions"
-      :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
       <v-card-title class="pt-2 pb-1">
@@ -167,7 +167,7 @@
         <v-btn
           icon
           @click="block.permissions = !block.permissions"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
         >
           <v-icon>{{
             block.permissions ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -177,10 +177,7 @@
 
       <transition>
         <div v-if="block.permissions">
-          <PermissionsTable
-            :perms="getPermissions"
-            :body-color="appSettings.bodyColor"
-          />
+          <PermissionsTable :perms="getPermissions" :body-color="bodyColor" />
         </div>
       </transition>
     </v-card>
@@ -192,7 +189,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Shortcuts from "../components/partial/settings/Shortcuts";
 import Accessibility from "../components/partial/settings/Accessibility";
 import formSectionsMixin from "../mixins/formSectionsMixin";
-import {mapGetters, mapState} from "vuex";
+import { mapGetters, mapState } from "vuex";
 import Colors from "../components/partial/settings/Colors";
 import PermissionsTable from "../components/partial/settings/PermissionsTable";
 import Security from "../components/partial/settings/Security";
@@ -217,7 +214,13 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["appSettings", "showRecentUrls"]),
+    ...mapState("settings", [
+      "bodyColor",
+      "bodyDark",
+      "bodyActiveColor",
+      "bodyActiveColorDark",
+      "showRecentUrls"
+    ]),
     ...mapGetters("user", ["getPermissions"])
   }
 };

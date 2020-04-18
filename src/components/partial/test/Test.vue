@@ -1,6 +1,6 @@
 <template>
   <div class="test mt-1">
-    <v-card elevation="4" :color="appSettings.bodyColor.split('n-')[0] + 'n-5'">
+    <v-card elevation="4" :color="bodyColor.split('n-')[0] + 'n-5'">
       <v-card-title class="pt-2 pb-1">Test POST interface</v-card-title>
 
       <div class="pa-1">
@@ -9,7 +9,7 @@
             <input-wrapper
               v-model="test.url"
               label="URL"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
             />
           </v-col>
 
@@ -17,7 +17,7 @@
             <input-wrapper
               v-model="test.table"
               label="TABLE"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
             />
           </v-col>
         </v-row>
@@ -37,7 +37,7 @@
             <input-wrapper
               v-model="test.textKey"
               label="KEY"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
             />
           </v-col>
 
@@ -45,7 +45,7 @@
             <input-wrapper
               v-model="test.textValue"
               label="VALUE"
-              :color="appSettings.bodyActiveColor"
+              :color="bodyActiveColor"
             />
           </v-col>
         </v-row>
@@ -64,7 +64,7 @@
 
         <v-row no-gutters>
           <v-col cols="12" class="pa-1">
-            <v-btn @click="upload" :color="appSettings.bodyActiveColor" dark>
+            <v-btn @click="upload" :color="bodyActiveColor" dark>
               Send request
             </v-btn>
           </v-col>
@@ -94,7 +94,7 @@ export default {
     requestResponse: null
   }),
   computed: {
-    ...mapState("settings", ["appSettings"]),
+    ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
 
     requestUrl() {
       return this.test.url + this.test.table;

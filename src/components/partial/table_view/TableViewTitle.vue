@@ -8,8 +8,8 @@
     <v-col class="text-right" align-self="center">
       <v-btn
         :to="{ path: buttonPath }"
-        :color="appSettings.bodyActiveColor"
-        :dark="appSettings.bodyActiveColorDark"
+        :color="bodyActiveColor"
+        :dark="bodyActiveColorDark"
       >
         {{ $t("add.new") }}
       </v-btn>
@@ -33,7 +33,7 @@ export default {
     }
   },
   computed: {
-    ...mapState("settings", ["appSettings"])
+    ...mapState("settings", ["bodyActiveColor", "bodyActiveColorDark"])
   }
 };
 </script>

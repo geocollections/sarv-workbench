@@ -24,7 +24,7 @@
       </v-btn>
     </div>
 
-    <div class="col-12 px-1" v-if="shortcuts.length > 0">
+    <div class="col-12 px-1" v-if="myShortcuts.length > 0">
       <div class="row">
         <div class="col">
           <p>
@@ -54,8 +54,8 @@
             </tr>
           </thead>
 
-          <draggable :list="shortcuts" tag="tbody" handle=".handle">
-            <tr v-for="(entity, index) in shortcuts" :key="index">
+          <draggable v-model="myShortcuts" tag="tbody" handle=".handle">
+            <tr v-for="(entity, index) in myShortcuts" :key="index">
               <td class="handle text-center" style="vertical-align: middle;">
                 <v-icon color="black">fas fa-align-justify</v-icon>
               </td>
@@ -63,29 +63,32 @@
               <td>
                 <v-text-field
                   hide-details
-                  v-model="entity.title"
+                  :value="entity.title"
                   :label="$t('settings.title')"
                   class="mt-0"
                   :color="bodyActiveColor"
+                  @input="updateTitle($event, index)"
                 ></v-text-field>
               </td>
 
               <td>
                 <v-text-field
                   hide-details
-                  v-model="entity.path"
+                  :value="entity.path"
                   :label="$t('settings.path')"
                   class="mt-0"
                   :color="bodyActiveColor"
+                  @input="updatePath($event, index)"
                 ></v-text-field>
               </td>
 
               <td class="vuetify-checkbox" style="vertical-align: middle;">
                 <v-checkbox
-                  v-model="entity.isAlwaysVisible"
+                  :input-value="entity.isAlwaysVisible"
                   hide-details
                   :color="bodyActiveColor"
                   class="mt-0 justify-center"
+                  @change="updateIsAlwaysVisible($event, index)"
                 ></v-checkbox>
               </td>
 
@@ -109,13 +112,16 @@
 
 <script>
 import draggable from "vuedraggable";
-import { mapActions } from "vuex";
+import { mapActions, mapState } from "vuex";
+import toastMixin from "../../../mixins/toastMixin";
 
 export default {
   components: {
     draggable
   },
+
   name: "Shortcuts",
+
   props: {
     bodyActiveColorDark: {
       type: Boolean,
@@ -128,35 +134,60 @@ export default {
       default: "black"
     }
   },
+
+  mixins: [toastMixin],
+
   data() {
     return {
-      origin: "",
-      // Max 7
-      shortcuts: []
+      origin: ""
     };
   },
-  created() {
-    this.origin = document.location.origin;
-    console.log(this.$store.state)
-    this.shortcuts = [...this.$store.state.settings.shortcuts];
-  },
-  watch: {
-    shortcuts(newVal) {
-      this.updateShortcuts(newVal);
+
+  computed: {
+    ...mapState("settings", ["shortcuts"]),
+
+    myShortcuts: {
+      get() {
+        return this.shortcuts;
+      },
+      set(value) {
+        this.setShortcuts(value);
+      }
     }
   },
+
+  created() {
+    this.origin = document.location.origin;
+  },
+
+  beforeDestroy() {
+    this.setShortcuts(this.myShortcuts);
+  },
+
   methods: {
-    ...mapActions("settings", ["updateShortcuts"]),
-    addShortcut() {
-      this.shortcuts.push({ title: "", path: "", isAlwaysVisible: false });
+    ...mapActions("settings", [
+      "setShortcuts",
+      "addShortcut",
+      "removeShortcut",
+      "shortcutUpdateTitle",
+      "shortcutUpdatePath",
+      "shortcutUpdateIsAlwaysVisible"
+    ]),
+
+    updateTitle(event, index) {
+      this.shortcutUpdateTitle({ event: event, index: index });
     },
 
-    removeShortcut(index) {
-      this.shortcuts.splice(index, 1);
+    updatePath(event, index) {
+      this.shortcutUpdatePath({ event: event, index: index });
+    },
+
+    updateIsAlwaysVisible(event, index) {
+      this.shortcutUpdateIsAlwaysVisible({ event: event, index: index });
     },
 
     saveShortcuts() {
-      this.$store.dispatch("SAVE_SHORTCUTS", this.shortcuts);
+      this.setShortcuts(this.myShortcuts);
       this.toastSuccess({ text: this.$t("settings.shortcutsSaved") });
     }
   }

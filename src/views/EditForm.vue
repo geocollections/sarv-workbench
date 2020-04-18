@@ -9,8 +9,8 @@
       <div class=" text-right">
         <v-btn
           :to="{ path: '/' + $route.meta.object }"
-          :color="appSettings.bodyActiveColor"
-          :dark="appSettings.bodyActiveColorDark"
+          :color="bodyActiveColor"
+          :dark="bodyActiveColorDark"
         >
           {{ $t("buttons.listView") }}
         </v-btn>
@@ -28,9 +28,9 @@
 
     <router-view
       v-show="objectExists"
-      :body-color="appSettings.bodyColor"
-      :body-active-color="appSettings.bodyActiveColor"
-      :is-body-active-color-dark="appSettings.bodyActiveColorDark"
+      :body-color="bodyColor"
+      :body-active-color="bodyActiveColor"
+      :is-body-active-color-dark="bodyActiveColorDark"
       v-on:data-loaded="setData"
       v-on:object-exists="toggleObjectState"
     />
@@ -46,8 +46,8 @@
       :table="$route.meta.table"
       :object-data="data"
       :key="permissionsComponentKey"
-      :body-color="appSettings.bodyColor"
-      :body-active-color="appSettings.bodyActiveColor"
+      :body-color="bodyColor"
+      :body-active-color="bodyActiveColor"
     />
 
     <!-- LOGS -->
@@ -56,14 +56,14 @@
       :table="$route.meta.table"
       :object-data="data"
       :key="logComponentKey"
-      :body-color="appSettings.bodyColor"
-      :body-active-color="appSettings.bodyActiveColor"
+      :body-color="bodyColor"
+      :body-active-color="bodyActiveColor"
     />
 
     <bottom-options
-      :body-color="appSettings.bodyColor"
-      :is-navbar-dark="appSettings.navbarDark"
-      :navbar-color="appSettings.navbarColor"
+      :body-color="bodyColor"
+      :is-navbar-dark="navbarDark"
+      :navbar-color="navbarColor"
     />
   </div>
 </template>
@@ -97,7 +97,13 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["appSettings"]),
+    ...mapState("settings", [
+      "bodyColor",
+      "bodyActiveColor",
+      "bodyActiveColorDark",
+      "navbarDark",
+      "navbarColor"
+    ]),
 
     // Todo: In the future perms should be available on every view
     enablePermissions() {

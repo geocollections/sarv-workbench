@@ -3,7 +3,7 @@
     <ScrollToTop
       class="d-print-none"
       v-if="$route.meta.isTableView"
-      :body-active-color="appSettings.bodyActiveColor"
+      :body-active-color="bodyActiveColor"
     />
 
     <!-- EXPORT and OPTIONS -->
@@ -13,7 +13,7 @@
         <export-buttons
           :filename="module"
           :table-data="response.results"
-          :body-active-color="appSettings.bodyActiveColor"
+          :body-active-color="bodyActiveColor"
         />
       </div>
 
@@ -29,7 +29,7 @@
             value="table"
             class="mb-2"
             :label="$t('references.tableView')"
-            :color="appSettings.bodyActiveColor"
+            :color="bodyActiveColor"
           />
           <v-radio
             v-if="useListView"
@@ -41,14 +41,14 @@
                 ? $t('references.labelView')
                 : $t('references.listView')
             "
-            :color="appSettings.bodyActiveColor"
+            :color="bodyActiveColor"
           />
           <v-radio
             v-if="useImageView"
             class="mb-2"
             value="image"
             :label="$t('buttons.imageView')"
-            :color="appSettings.bodyActiveColor"
+            :color="bodyActiveColor"
           />
         </v-radio-group>
       </div>
@@ -62,10 +62,10 @@
       <div class="mr-3 mb-3">
         <v-select
           v-model="searchParameters.paginateBy"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
           dense
           :items="paginateByOptionsTranslated"
-          :item-color="appSettings.bodyActiveColor"
+          :item-color="bodyActiveColor"
           label="Paginate by"
           hide-details
         />
@@ -74,7 +74,7 @@
       <div>
         <v-pagination
           v-model="searchParameters.page"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
           circle
           prev-icon="fas fa-angle-left"
           next-icon="fas fa-angle-right"
@@ -87,14 +87,14 @@
     <!-- DATA TABLE -->
     <v-card
       elevation="4"
-      :color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
+      :color="bodyColor.split('n-')[0] + 'n-3'"
       class="table-card my-1"
       :loading="isLoading"
     >
       <template v-slot:progress>
         <v-progress-linear
           indeterminate
-          :color="appSettings.bodyColor.split('n-')[0] + 'n-1'"
+          :color="bodyColor.split('n-')[0] + 'n-1'"
         ></v-progress-linear>
       </template>
 
@@ -114,7 +114,7 @@
         <!--          label="Filter records"-->
         <!--          clear-icon="fas fa-times"-->
         <!--          clearable-->
-        <!--          :color="appSettings.bodyActiveColor"-->
+        <!--          :color="bodyActiveColor"-->
         <!--        ></v-text-field>-->
       </v-card-title>
 
@@ -123,8 +123,8 @@
         v-if="isListView && response.count > 0"
         :module="module"
         :data="response.results"
-        :body-color="appSettings.bodyColor"
-        :body-active-color="appSettings.bodyActiveColor"
+        :body-color="bodyColor"
+        :body-active-color="bodyActiveColor"
       />
 
       <!-- IMAGE VIEW -->
@@ -132,8 +132,8 @@
         v-if="isImageView && response.count > 0"
         :module="module"
         :data="response.results"
-        :body-color="appSettings.bodyColor"
-        :body-active-color="appSettings.bodyActiveColor"
+        :body-color="bodyColor"
+        :body-active-color="bodyActiveColor"
       />
 
       <router-view
@@ -151,8 +151,8 @@
         "
         v-on:add-item-to-selection-series="addItemToSelectionSeries"
         v-on:toggle-select-all="toggleSelectAll"
-        :body-color="appSettings.bodyColor"
-        :body-active-color="appSettings.bodyActiveColor"
+        :body-color="bodyColor"
+        :body-active-color="bodyActiveColor"
       />
     </v-card>
   </div>
@@ -248,7 +248,7 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["appSettings"]),
+    ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {

@@ -226,7 +226,11 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "attachment_public", "attachment");
     },
     autocompletePublicAttachmentImageSearch(value) {
-      this.$_autocompleteMixin_search(value, "attachment_public_image", "attachment");
+      this.$_autocompleteMixin_search(
+        value,
+        "attachment_public_image",
+        "attachment"
+      );
     },
     autocompleteJournalSearch(value) {
       this.$_autocompleteMixin_search(value, "journals", "journals", 1);
@@ -345,7 +349,12 @@ const autocompleteMixin = {
       );
     },
     autocompleteAnalysisParameterSearch(value) {
-      this.$_autocompleteMixin_search(value, "analysis_parameter", "analysis_parameter", 2);
+      this.$_autocompleteMixin_search(
+        value,
+        "analysis_parameter",
+        "analysis_parameter",
+        2
+      );
     },
 
     /**

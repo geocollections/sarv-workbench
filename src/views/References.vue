@@ -96,10 +96,7 @@ export default {
 
   created() {
     // Used by sidebar
-    const searchHistory = this.$localStorage.get(
-      "librarySearchHistory",
-      null
-    );
+    const searchHistory = this.$localStorage.get("librarySearchHistory", null);
     let params =
       !!searchHistory && !isEmpty(searchHistory)
         ? searchHistory

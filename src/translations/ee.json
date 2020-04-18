@@ -288,7 +288,20 @@
     "delete_perms": "Kustuta",
     "view_perms": "Vaata",
     "search": "Otsi",
-    "security": "Turvalisus"
+    "security": "Turvalisus",
+    "recentUrls": "Kuva hiljutised URL-id",
+    "body": "Põhiosa värv",
+    "bodyActive": "Põhiosa aktiivne värv",
+    "navbar": "Navigatsiooni rea värv",
+    "drawerLeft": "Vasaku külgrea värv",
+    "drawerLeftActive": "Vasaku külgrea aktiivne värv",
+    "drawerRight": "Parema külgrea värv",
+    "drawerRightActive": "Parema külgrea aktiivne värv",
+    "text": "tekst",
+    "dark": "Tume",
+    "light": "Hele",
+    "drawer": "külgriba",
+    "navbarText": "navigatsiooniriba"
   },
   "sidebar": {
     "project": {

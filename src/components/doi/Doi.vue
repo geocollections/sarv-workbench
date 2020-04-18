@@ -1406,13 +1406,23 @@ export default {
                   timeout: 7000
                 });
               else
-                this.toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
+                this.toastInfo({
+                  text: dataCiteResponse[0].error,
+                  timeout: 7000
+                });
             }
           } else {
             // Unsuccessful response and doi doesn't exist in sarv database (if not in sarv then it can't be in datacite)
             if (this.$i18n.locale === "ee")
-              this.toastInfo({ text: dataCiteResponse[0].error_et, timeout: 7000 });
-            else this.toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
+              this.toastInfo({
+                text: dataCiteResponse[0].error_et,
+                timeout: 7000
+              });
+            else
+              this.toastInfo({
+                text: dataCiteResponse[0].error,
+                timeout: 7000
+              });
           }
         }
       }
@@ -1533,7 +1543,9 @@ export default {
                 this.showMetadataUpdateMessage = true;
                 this.sarvXML = response.data.results[0].sarv_xml;
                 this.dataciteXML = response.data.results[0].datacite_xml;
-                this.toastInfo({ text: this.$t("doi.dataciteMetadataNeedsUpdate") });
+                this.toastInfo({
+                  text: this.$t("doi.dataciteMetadataNeedsUpdate")
+                });
               } else {
                 this.showMetadataButton = false;
                 this.showMetadataUpdateMessage = false;

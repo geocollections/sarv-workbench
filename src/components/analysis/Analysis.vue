@@ -536,7 +536,7 @@ import {
   fetchAnalysisMethod
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {mapGetters, mapState} from "vuex";
+import { mapGetters, mapState } from "vuex";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";

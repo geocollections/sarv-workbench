@@ -40,7 +40,11 @@ export default {
     return {
       response: {},
       filters: [
-        { id: "drillcore", title: "drillcore.drillcoreAndLocality", type: "text" },
+        {
+          id: "drillcore",
+          title: "drillcore.drillcoreAndLocality",
+          type: "text"
+        },
         { id: "id", title: "drillcore.drillcoreId", type: "number" },
         { id: "boxes", title: "drillcore.boxes", type: "text" },
         { id: "locality", title: "drillcore.depth", type: "text" },
