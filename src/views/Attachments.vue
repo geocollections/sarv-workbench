@@ -8,7 +8,7 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
       :col-size="3"
       v-on:update:searchParameters="updateSearchParamsByField"
@@ -49,16 +49,6 @@ export default {
 
   data() {
     return {
-      filters: [
-        { id: "image_number", title: "attachment.imageNumber", type: "text" },
-        { id: "filename", title: "attachment.filename", type: "text" },
-        { id: "specimen", title: "attachment.specimen", type: "text" },
-        { id: "imageInfo", title: "attachment.imageInfo", type: "text" },
-        { id: "locality", title: "attachment.locality", type: "text" },
-        { id: "selectionId", title: "specimen.selectionId", type: "number" },
-        { id: "selection", title: "specimen.selection", type: "text" },
-        { id: "keyword", title: "keyword.keyword", type: "text" }
-      ],
       block: { search: true }
     };
   },
@@ -70,7 +60,8 @@ export default {
 
     ...mapState("search", [
       "activeSelectionSeries",
-      "selectionSeriesSearchParameters"
+      "selectionSeriesSearchParameters",
+      "activeSearchParametersFilters"
     ]),
 
     ...mapGetters("user", ["getCurrentUser"])
@@ -87,10 +78,24 @@ export default {
       field: "name",
       agent: this.getCurrentUser
     });
+
+    this.setActiveSearchParametersFilters([
+      { id: "image_number", title: "attachment.imageNumber", type: "text" },
+      { id: "filename", title: "attachment.filename", type: "text" },
+      { id: "specimen", title: "attachment.specimen", type: "text" },
+      { id: "imageInfo", title: "attachment.imageInfo", type: "text" },
+      { id: "locality", title: "attachment.locality", type: "text" },
+      { id: "selectionId", title: "specimen.selectionId", type: "number" },
+      { id: "selection", title: "specimen.selection", type: "text" },
+      { id: "keyword", title: "keyword.keyword", type: "text" }
+    ]);
   },
 
   methods: {
-    ...mapActions("search", ["setActiveSearchParameters"]),
+    ...mapActions("search", [
+      "setActiveSearchParameters",
+      "setActiveSearchParametersFilters"
+    ]),
 
     fetchAttachments() {
       return new Promise(resolve => {

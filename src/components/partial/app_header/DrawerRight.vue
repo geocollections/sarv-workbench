@@ -15,11 +15,7 @@
         :value="$route.meta.isTableView"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="
-          computedTableSearchParameters &&
-            computedTableSearchParameters.filters &&
-            computedTableSearchParameters.filters.length > 0
-        "
+        v-if="activeSearchParametersFilters.length > 0"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -37,7 +33,7 @@
 
         <v-list-item
           class="d-flex flex-column justify-content-end"
-          v-for="(field, index) in computedTableSearchParameters.filters"
+          v-for="(field, index) in activeSearchParametersFilters"
           :key="index"
         >
           <!-- DATEPICKER -->
@@ -80,10 +76,11 @@
             v-else
             class="w-100"
             :label="$t(field.title)"
-            v-model="computedTableSearchParameters.searchParameters[field.id]"
+            :value="searchParameters[field.id]"
             :color="drawerActiveColor"
             :type="field.type"
             hide-details
+            @input="updateSearchParamsByField($event, field.id)"
           ></v-text-field>
         </v-list-item>
 
@@ -91,86 +88,76 @@
         <!-- PHOTO_ARCHIVE -->
         <v-list-item class="mt-2" v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              computedTableSearchParameters.searchParameters
-                .specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.photoArchive')"
             value="2"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
           ></v-checkbox>
         </v-list-item>
 
         <!-- SPECIMEN_IMAGE -->
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              computedTableSearchParameters.searchParameters
-                .specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.specimenImage')"
             value="1"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
           ></v-checkbox>
         </v-list-item>
 
         <!-- OTHER_FILE -->
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              computedTableSearchParameters.searchParameters
-                .specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.otherFiles')"
             value="3"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
           ></v-checkbox>
         </v-list-item>
 
         <!-- DIGITISED_REFERENCE -->
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              computedTableSearchParameters.searchParameters
-                .specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.digitisedReference')"
             value="4"
             class="mt-0"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
           ></v-checkbox>
         </v-list-item>
 
         <!-- IS_ESTONIAN_REFERENCE -->
         <v-list-item class="mt-2" v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="
-              computedTableSearchParameters.searchParameters.isEstonianReference
-            "
+            :input-value="searchParameters.isEstonianReference"
             :label="$t('reference.is_estonian_reference')"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'isEstonianReference')"
           ></v-checkbox>
         </v-list-item>
 
         <!-- IS_ESTONIAN_AUTHOR -->
         <v-list-item v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="
-              computedTableSearchParameters.searchParameters.isEstonianAuthor
-            "
+            :input-value="searchParameters.isEstonianAuthor"
             :label="$t('reference.is_estonian_author')"
             class="mt-0"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'isEstonianAuthor')"
           ></v-checkbox>
         </v-list-item>
         <!-- CHECKBOXES END -->
@@ -575,6 +562,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import searchParametersMixin from "../../../mixins/searchParametersMixin";
 
 export default {
   name: "DrawerRight",
@@ -598,8 +586,10 @@ export default {
       default: "deep-orange"
     }
   },
+  mixins: [searchParametersMixin],
   computed: {
     ...mapState("search", [
+      "activeSearchParametersFilters",
       "activeSearchParams",
       "sidebarList",
       "activeLibrary",
@@ -695,10 +685,6 @@ export default {
     },
 
     searchRecords() {
-      this.$localStorage.set(
-        `${this.$route.meta.object}SearchHistory`,
-        this.computedTableSearchParameters.searchParameters
-      );
       this.$router.push({ path: "/" + this.$route.meta.object });
     }
   }

@@ -47,7 +47,8 @@ const state = {
   activeSite: null,
   activeSelectionSeries: null,
   activeRelatedDataTab: {},
-  activeSearchParams: {},
+  activeSearchParams: null,
+  activeSearchParametersFilters: [],
   attachmentSearchParameters: {
     image_number: null,
     filename: null,
@@ -93,6 +94,10 @@ const actions = {
 
   resetSearchParameters({ commit }, module) {
     commit("RESET_SEARCH_PARAMETERS", module);
+  },
+
+  setActiveSearchParametersFilters({ commit }, filters) {
+    commit("SET_ACTIVE_SEARCH_PARAMETERS_FILTERS", filters)
   },
 
   setLoadingState({ commit }, boolVal) {
@@ -354,6 +359,10 @@ const mutations = {
         state[`${payload}SearchParameters`][key] = ["2", "1", "3", "4"];
       else state[`${payload}SearchParameters`][key] = null;
     });
+  },
+
+  SET_ACTIVE_SEARCH_PARAMETERS_FILTERS(state, payload) {
+    state.activeSearchParametersFilters = payload;
   },
 
   SET_LOADING_STATE(state, payload) {
