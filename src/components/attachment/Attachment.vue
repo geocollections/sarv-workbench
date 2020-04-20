@@ -1752,7 +1752,7 @@
                     :color="bodyActiveColor"
                     :items="autocomplete.specimen"
                     :loading="autocomplete.loaders.specimen"
-                    item-text="specimen_id"
+                    :item-text="customLabelForSpecimen"
                     :label="$t('attachment.specimen')"
                     use-state
                     is-link
@@ -5053,6 +5053,10 @@ export default {
 
     customLabelForReference(option) {
       return `${option.id} - (${option.reference})`;
+    },
+
+    customLabelForSpecimen(option) {
+      return `ID: ${option.id} - (${option.coll__number} ${option.specimen_id})`;
     },
 
     customLabelForRelatedData(option) {
