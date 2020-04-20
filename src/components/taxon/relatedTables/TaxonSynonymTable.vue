@@ -60,6 +60,7 @@
                     :color="bodyActiveColor"
                     :label="$t('taxon.synonym')"
                     use-state
+                    name="taxon_synonym"
                   />
                 </v-col>
 
@@ -68,6 +69,7 @@
                     v-model="item.author"
                     :color="bodyActiveColor"
                     :label="$t('taxon.author')"
+                    name="author"
                   />
                 </v-col>
 
@@ -77,6 +79,7 @@
                     :color="bodyActiveColor"
                     :label="$t('common.year')"
                     type="number"
+                    name="year"
                   />
                 </v-col>
 
@@ -85,6 +88,7 @@
                     v-model="item.pages"
                     :color="bodyActiveColor"
                     :label="$t('taxon.pages')"
+                    name="pages"
                   />
                 </v-col>
 
@@ -93,6 +97,7 @@
                     v-model="item.figures"
                     :color="bodyActiveColor"
                     :label="$t('taxon.figures')"
+                    name="figures"
                   />
                 </v-col>
 
@@ -101,6 +106,7 @@
                     v-model="item.remarks"
                     :color="bodyActiveColor"
                     :label="$t('common.remarks')"
+                    name="remarks"
                   />
                 </v-col>
               </v-row>

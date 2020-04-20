@@ -433,11 +433,7 @@
         <div v-show="block.description" class="pa-1">
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <textarea-wrapper
-                v-model="taxon.remarks"
-                :color="bodyActiveColor"
-                :label="$t('common.remarks')"
-              />
+              <editor v-model="taxon.remarks" :label="$t('common.remarks')" />
             </v-col>
           </v-row>
         </div>
@@ -669,7 +665,6 @@ import {
 
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
-import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import FileUpload from "../partial/inputs/FileInput";
 import TaxonSubclassTable from "./relatedTables/TaxonSubclassTable";
@@ -682,11 +677,13 @@ import TaxonCommonNameTable from "./relatedTables/TaxonCommonNameTable";
 import TaxonDescriptionTable from "./relatedTables/TaxonDescriptionTable";
 import TaxonPageTable from "./relatedTables/TaxonPageTable";
 import TaxonImageTable from "./relatedTables/TaxonImageTable";
+import Editor from "../partial/inputs/Editor";
 
 export default {
   name: "Taxon",
 
   components: {
+    Editor,
     TaxonImageTable,
     TaxonPageTable,
     TaxonDescriptionTable,
@@ -698,7 +695,6 @@ export default {
     TaxonSubclassTable,
     FileUpload,
     CheckboxWrapper,
-    TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper
   },
