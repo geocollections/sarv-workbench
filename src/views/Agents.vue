@@ -27,6 +27,7 @@ import ListModuleCore from "./ListModuleCore";
 import { fetchAgents } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -52,7 +53,7 @@ export default {
   watch: {
     searchParameters: {
       handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
+        this.updateSearchParameters({
           module: "agent",
           filters: this.filters,
           params: newVal
@@ -64,6 +65,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateSearchParameters"]),
+
     fetchAgents() {
       return new Promise(resolve => {
         resolve(fetchAgents(this.searchParameters));

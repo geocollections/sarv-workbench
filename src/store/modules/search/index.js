@@ -46,12 +46,55 @@ const state = {
   activeSample: null,
   activeSite: null,
   activeSelectionSeries: null,
-  activeRelatedDataTab: {}
+  activeRelatedDataTab: {},
+  activeSearchParams: {},
+  attachmentSearchParameters: {
+    image_number: null,
+    filename: null,
+    specimen: null,
+    imageInfo: null,
+    locality: null,
+    selectionId: null,
+    selection: null,
+    keyword: null,
+    specimen_image_attachment: ["2", "1", "3", "4"],
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  attachmentViewType: "table",
+  selectionSeriesSearchParameters: {
+    id: null,
+    name: null,
+    remarks: null,
+    user_added: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  }
 };
 
 const getters = {};
 
 const actions = {
+  updateViewType({ commit }, payload) {
+    commit("UPDATE_VIEW_TYPE", payload);
+  },
+
+  updateSearchParameters({ commit }, payload) {
+    commit("UPDATE_SEARCH_PARAMETERS", payload);
+  },
+
+  updateSearchParametersByField({ commit }, payload) {
+    commit("UPDATE_SEARCH_PARAMETERS_BY_FIELD", payload);
+  },
+
+  resetSearchParameters({ commit }, module) {
+    commit("RESET_SEARCH_PARAMETERS", module);
+  },
+
   setLoadingState({ commit }, boolVal) {
     commit("SET_LOADING_STATE", boolVal);
   },
@@ -264,12 +307,20 @@ const actions = {
     });
   },
 
-  SIDEBAR_USER_ACTION: ({ commit }, userAction) => {
+  setSidebarUserAction: ({ commit }, userAction) => {
     commit("SET_SIDEBAR_USER_ACTION", userAction);
   },
 
-  updateSearchParameters({ commit }, params) {
-    commit("UPDATE_SEARCH_PARAMETERS", params);
+  setActiveSearchParameters({ commit }, params) {
+    commit("SET_ACTIVE_SEARCH_PARAMETERS", params);
+  },
+
+  activeSearchParamsNextPage({ commit }) {
+    commit("UPDATE_ACTIVE_SEARCH_PARAMETERS_PAGE", 1);
+  },
+
+  activeSearchParamsPreviousPage({ commit }) {
+    commit("UPDATE_ACTIVE_SEARCH_PARAMETERS_PAGE", -1);
   },
 
   updateActiveTab({ commit }, payload) {
@@ -278,6 +329,33 @@ const actions = {
 };
 
 const mutations = {
+  UPDATE_VIEW_TYPE(state, payload) {
+    state[`${payload.module}ViewType`] = payload.type;
+  },
+
+  UPDATE_SEARCH_PARAMETERS(state, payload) {
+    state[`${payload.module}SearchParameters`] = payload.parameters;
+  },
+
+  UPDATE_SEARCH_PARAMETERS_BY_FIELD(state, payload) {
+    state[`${payload.module}SearchParameters`][payload.field] = payload.value;
+  },
+
+  RESET_SEARCH_PARAMETERS(state, payload) {
+    Object.keys(state[`${payload}SearchParameters`]).forEach(key => {
+      if (key === "page") state[`${payload}SearchParameters`][key] = 1;
+      else if (key === "paginateBy")
+        state[`${payload}SearchParameters`][key] = 50;
+      else if (key === "sortBy")
+        state[`${payload}SearchParameters`][key] = ["id"];
+      else if (key === "sortDesc")
+        state[`${payload}SearchParameters`][key] = [true];
+      else if (key === "specimen_image_attachment")
+        state[`${payload}SearchParameters`][key] = ["2", "1", "3", "4"];
+      else state[`${payload}SearchParameters`][key] = null;
+    });
+  },
+
   SET_LOADING_STATE(state, payload) {
     state.loadingState = payload;
   },
@@ -301,15 +379,16 @@ const mutations = {
     };
   },
 
-  SET_ACTIVE_SEARCH_PARAMS(state, params) {
-    state.activeSearchParams = params;
+  SET_ACTIVE_SEARCH_PARAMETERS(state, payload) {
+    state.activeSearchParams = payload;
   },
 
-  UPDATE_SEARCH_PARAMETERS(state, payload) {
-    state.tableSearchParameters[payload.module] = {
-      searchParameters: payload.params,
-      filters: payload.filters
-    };
+  UPDATE_ACTIVE_SEARCH_PARAMETERS_PAGE(state, payload) {
+    state.activeSearchParams.search.page += payload;
+  },
+
+  SET_ACTIVE_SEARCH_PARAMS(state, params) {
+    state.activeSearchParams = params;
   },
 
   UPDATE_ACTIVE_TAB(state, payload) {

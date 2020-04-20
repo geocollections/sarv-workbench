@@ -21,7 +21,7 @@
       <div v-if="useListView || useImageView" class="mb-2">
         <v-radio-group
           class="radio-buttons mt-0"
-          v-model="currentView"
+          v-model="currentViewType"
           row
           hide-details
         >
@@ -36,8 +36,7 @@
             class="mb-2"
             value="list"
             :label="
-              $route.meta.object === 'sample' ||
-              $route.meta.object === 'specimen'
+              module === 'sample' || module === 'specimen'
                 ? $t('references.labelView')
                 : $t('references.listView')
             "
@@ -61,25 +60,27 @@
     >
       <div class="mr-3 mb-3">
         <v-select
-          v-model="searchParameters.paginateBy"
+          :value="searchParameters.paginateBy"
           :color="bodyActiveColor"
           dense
           :items="paginateByOptionsTranslated"
           :item-color="bodyActiveColor"
           label="Paginate by"
           hide-details
+          @change="$emit('update:searchParameters', $event, 'paginateBy')"
         />
       </div>
 
       <div>
         <v-pagination
-          v-model="searchParameters.page"
+          :value="searchParameters.page"
           :color="bodyActiveColor"
           circle
           prev-icon="fas fa-angle-left"
           next-icon="fas fa-angle-right"
           :length="Math.ceil(response.count / searchParameters.paginateBy)"
           :total-visible="5"
+          @input="$emit('update:searchParameters', $event, 'page')"
         />
       </div>
     </div>
@@ -106,21 +107,11 @@
           <span>{{ $t("main.records") }}</span>
         </span>
         <div class="flex-grow-1"></div>
-        <!-- Todo: Not working properly with server-items-length #330 -->
-        <!--        <v-text-field-->
-        <!--          v-if="module === 'reference' && isTableView"-->
-        <!--          v-model="filterTable"-->
-        <!--          append-outer-icon="fas fa-search"-->
-        <!--          label="Filter records"-->
-        <!--          clear-icon="fas fa-times"-->
-        <!--          clearable-->
-        <!--          :color="bodyActiveColor"-->
-        <!--        ></v-text-field>-->
       </v-card-title>
 
       <!-- LIST VIEW -->
       <list-view
-        v-if="isListView && response.count > 0"
+        v-if="isCurrentViewTypeList && response.count > 0"
         :module="module"
         :data="response.results"
         :body-color="bodyColor"
@@ -129,7 +120,7 @@
 
       <!-- IMAGE VIEW -->
       <image-view
-        v-if="isImageView && response.count > 0"
+        v-if="isCurrentViewTypeImage && response.count > 0"
         :module="module"
         :data="response.results"
         :body-color="bodyColor"
@@ -144,7 +135,7 @@
         :is-library-active="isLibraryActive"
         :is-selection-series-active="isSelectionSeriesActive"
         :active-selection-series="activeSelectionSeries"
-        v-if="isTableView && response.count > 0"
+        v-if="isCurrentViewTypeTable && response.count > 0"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:add-reference-to-active-library="
           $emit('add-reference-to-active-library', $event)
@@ -167,8 +158,9 @@ import {
 } from "../assets/js/api/apiCalls";
 import debounce from "lodash/debounce";
 import ImageView from "../components/partial/ImageView";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import ScrollToTop from "../components/partial/ScrollToTop";
+import toastMixin from "../mixins/toastMixin";
 
 export default {
   components: {
@@ -192,38 +184,29 @@ export default {
       type: String,
       default: null
     },
-    viewType: {
-      type: String,
-      default: null
-    },
-
     exportButtons: {
       type: Boolean,
       default: true
     },
-
     useListView: {
       type: Boolean,
       default: false
     },
-
     useImageView: {
       type: Boolean,
       default: false
     },
-
     isLibraryActive: {
       type: Boolean
     },
-
     isSelectionSeriesActive: {
       type: Boolean
     },
-
     activeSelectionSeries: {
       type: Object
     }
   },
+  mixins: [toastMixin],
   name: "ListModuleCore",
   data() {
     return {
@@ -242,13 +225,34 @@ export default {
       response: {
         count: 0,
         results: []
-      },
-      currentView: "table"
+      }
     };
   },
 
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
+
+    currentViewType: {
+      get() {
+        return this.$store.state.search[`${this.module}ViewType`];
+      },
+
+      set(value) {
+        this.updateViewType({ module: this.module, type: value });
+      }
+    },
+
+    isCurrentViewTypeTable() {
+      return this.currentViewType === "table";
+    },
+
+    isCurrentViewTypeImage() {
+      return this.currentViewType === "image";
+    },
+
+    isCurrentViewTypeList() {
+      return this.currentViewType === "list";
+    },
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
@@ -257,37 +261,17 @@ export default {
           text: this.$t(item.text, { num: item.value })
         };
       });
-    },
-
-    isTableView() {
-      // true and false checks are put just in case, because of migrating from old viewType value page didn't show table.
-      // Clear filtering button fixes it but just in case
-      return (
-        this.currentView === "table" ||
-        this.currentView === "false" ||
-        this.currentView === "true" ||
-        typeof this.currentView === "boolean"
-      );
-    },
-
-    isListView() {
-      return this.currentView === "list";
-    },
-
-    isImageView() {
-      return this.currentView === "image";
     }
   },
   watch: {
     searchParameters: {
-      handler: function() {
-        this.search(this.searchParameters);
+      handler() {
+        this.search();
       },
+      immediate: true,
       deep: true
     },
-    currentView(newVal, oldVal) {
-      this.$localStorage.set(this.viewType, newVal);
-
+    currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
       if (this.module === "specimen" && newVal === "image") {
         this.response = { count: 0, results: [] };
@@ -299,41 +283,11 @@ export default {
     }
   },
 
-  created: function() {
-    const searchHistory = this.$localStorage.get(
-      this.searchHistory,
-      "fallbackValue"
-    );
-
-    if (
-      searchHistory !== "fallbackValue" &&
-      Object.keys(searchHistory).length !== 0 &&
-      searchHistory.constructor === Object
-    ) {
-      this.$emit("search-params-changed", searchHistory);
-    } else {
-      this.search(this.searchParameters);
-    }
-
-    let viewingType = this.$localStorage.get(this.viewType, "table");
-    // Changes old boolean value to correct string (maybe make the storage value into object or something?)
-    if (
-      viewingType === "false" ||
-      viewingType === "true" ||
-      typeof viewingType === "boolean"
-    )
-      this.currentView = "table";
-    else this.currentView = viewingType;
-  },
-
   methods: {
-    search: debounce(function(searchParameters) {
+    ...mapActions("search", ["updateViewType"]),
+
+    search: debounce(function() {
       this.isLoading = true;
-      //I don't know how to check if an object is serializable... at least i haven't found the solution
-      //sample search returns [object Object] but locality object {locality:null,...}
-      // if(this.searchHistory === 'sampleSearchHistory') searchParameters = JSON.stringify(searchParameters);
-      this.$localStorage.set(this.searchHistory, searchParameters);
-      this.$emit("search-params-changed", searchParameters);
 
       this.apiCall().then(
         response => {

@@ -26,6 +26,7 @@ import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchAccessions } from "../assets/js/api/apiCalls";
+import { mapActions } from "vuex";
 export default {
   name: "Accessions",
 
@@ -49,8 +50,8 @@ export default {
 
   watch: {
     searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
+      handler(newVal) {
+        this.updateSearchParameters({
           module: "accession",
           filters: this.filters,
           params: newVal
@@ -62,6 +63,7 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateSearchParameters"]),
     fetchAccessions() {
       return new Promise(resolve => {
         resolve(fetchAccessions(this.searchParameters));
@@ -95,10 +97,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 5px 0 0 0;
-  color: #999;
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

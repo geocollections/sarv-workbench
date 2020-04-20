@@ -18,7 +18,7 @@ export default {
     Spinner
   },
   computed: {
-    ...mapState(["loadingState", "loadingType", "loadingPercent"]),
+    ...mapState("search", ["loadingState", "loadingType", "loadingPercent"]),
 
     spinnerMessage() {
       if (this.loadingType === "edit")

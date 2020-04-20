@@ -574,7 +574,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "DrawerRight",
@@ -612,39 +612,38 @@ export default {
     }
   },
   created() {
-    if (this.activeSearchParams) {
-      this.$store.dispatch(this.activeSearchParams.request);
+    if (this?.activeSearchParams?.request) {
+      this.$store.dispatch(`search/${this.activeSearchParams.request}`);
     }
   },
   watch: {
-    "activeSearchParams.search.page": {
-      handler: function(newVal) {
-        if (
-          newVal &&
-          this.activeSearchParams &&
-          this.activeSearchParams.request
-        ) {
-          this.$store.dispatch(this.activeSearchParams.request);
-        }
-      },
-      deep: true
+    "activeSearchParams.search.page"(newVal) {
+      if (newVal && this?.activeSearchParams?.request) {
+        this.$store.dispatch(`search/${this.activeSearchParams.request}`);
+      }
     }
   },
   methods: {
+    ...mapActions("search", [
+      "activeSearchParamsNextPage",
+      "activeSearchParamsPreviousPage",
+      "setSidebarUserAction"
+    ]),
+
     changeDrawerState(drawerState) {
       this.$emit("update:drawerState", drawerState);
     },
 
     nextPage() {
-      this.$store.state.activeSearchParams.search.page += 1;
+      this.activeSearchParamsNextPage();
     },
 
     previousPage() {
-      this.$store.state.activeSearchParams.search.page -= 1;
+      this.activeSearchParamsPreviousPage();
     },
 
     setAction(action, choice) {
-      this.$store.dispatch("SIDEBAR_USER_ACTION", {
+      this.setSidebarUserAction({
         userAction: { action: action, choice: choice }
       });
     },

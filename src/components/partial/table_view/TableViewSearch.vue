@@ -69,12 +69,13 @@
                   <!-- REGULAR SEARCH FIELD -->
                   <v-text-field
                     v-else
-                    v-model="searchParameters[field.id]"
+                    :value="searchParameters[field.id]"
                     :label="$t(field.title)"
                     :color="bodyActiveColor"
                     hide-details
                     :class="bodyActiveColor + '--text'"
                     :type="field.type"
+                    @input="$emit('update:searchParameters', $event, field.id)"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -87,36 +88,40 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.photoArchive')"
                       value="2"
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
                     />
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.specimenImage')"
                       value="1"
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
                     />
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.otherFiles')"
                       value="3"
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
                     />
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.digitisedReference')"
                       value="4"
                       class="mt-0"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
                     />
                   </v-row>
                 </v-col>
@@ -130,18 +135,20 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.isEstonianReference"
+                      :input-value="searchParameters.isEstonianReference"
                       :label="$t('reference.is_estonian_reference')"
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'isEstonianReference')"
                     ></v-checkbox>
                     <v-checkbox
-                      v-model="searchParameters.isEstonianAuthor"
+                      :input-value="searchParameters.isEstonianAuthor"
                       :label="$t('reference.is_estonian_author')"
                       class="mt-0"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'isEstonianAuthor')"
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -155,18 +162,20 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.in_portal"
+                      :input-value="searchParameters.in_portal"
                       :label="$t('rock.in_portal')"
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'in_portal')"
                     ></v-checkbox>
                     <v-checkbox
-                      v-model="searchParameters.in_estonia"
+                      :input-value="searchParameters.in_estonia"
                       :label="$t('rock.in_estonia')"
                       class="mt-0"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'in_estonia')"
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -180,11 +189,12 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.isActive"
+                      :input-value="searchParameters.isActive"
                       :label="$t('loan.isActive')"
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
+                      @change="$emit('update:searchParameters', $event, 'isActive')"
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -194,7 +204,7 @@
               <v-row class="mt-3">
                 <v-col cols="12">
                   <v-btn
-                    @click="$emit('reset:searchPreferences', true)"
+                    @click="$emit('reset:searchParameters')"
                     :color="bodyActiveColor"
                     dark
                   >

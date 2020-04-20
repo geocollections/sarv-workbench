@@ -371,7 +371,7 @@ import Editor from "../partial/inputs/Editor";
 import MapComponent from "../partial/MapComponent";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
-import { mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 import SiteTable from "../site/SiteTable";
 import AreaLocalityReferenceTable from "./relatedTables/AreaLocalityReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -441,14 +441,14 @@ export default {
   },
 
   computed: {
-    ...mapState(["mapSettings"]),
+    ...mapState("map", ["showMap"]),
 
     showMap: {
       get() {
-        return this.mapSettings.showMap;
+        return this.showMap;
       },
       set(value) {
-        this.$store.dispatch("updateMapState", value);
+        this.updateShowMap(value)
       }
     },
 
@@ -494,6 +494,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("map", ["updateShowMap"]),
+
     setTab(type) {
       if (type) {
         this.$store.dispatch("updateActiveTab", {
