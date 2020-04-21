@@ -1,5 +1,5 @@
 import { autocompleteSearch } from "@/assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import debounce from "lodash/debounce";
 
 const autocompleteMixin = {
@@ -58,7 +58,7 @@ const autocompleteMixin = {
         ? "institution_name"
         : "institution_name_en";
     },
-    ...mapState(["currentUser"])
+    ...mapGetters("user", ["getCurrentUser"])
   },
   methods: {
     autocompleteAnalysisSearch(value) {
@@ -381,7 +381,7 @@ const autocompleteMixin = {
           let query = buildAutocompleteQuery(
             type,
             value,
-            this.currentUser,
+            this.getCurrentUser,
             groupByField
           );
           if (query.length === 0) return;

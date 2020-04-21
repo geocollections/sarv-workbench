@@ -97,7 +97,7 @@ const actions = {
   },
 
   setActiveSearchParametersFilters({ commit }, filters) {
-    commit("SET_ACTIVE_SEARCH_PARAMETERS_FILTERS", filters)
+    commit("SET_ACTIVE_SEARCH_PARAMETERS_FILTERS", filters);
   },
 
   setLoadingState({ commit }, boolVal) {
@@ -125,11 +125,11 @@ const actions = {
     );
   },
 
-  FETCH_ATTACHMENTS({ commit, state }) {
+  FETCH_ATTACHMENTS({ commit, state, rootGetters }) {
     return fetchAttachments(
       state.activeSearchParams.search,
-      state.currentUser
-    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+      rootGetters["user/getCurrentUser"]
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
   FETCH_REFERENCES({ commit, state }) {
@@ -206,7 +206,7 @@ const actions = {
 
   FETCH_SELECTION_SERIES({ commit, state }) {
     return fetchSelectionSeries(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
@@ -320,12 +320,36 @@ const actions = {
     commit("SET_ACTIVE_SEARCH_PARAMETERS", params);
   },
 
+  resetActiveSearchParameters({ commit }) {
+    commit("RESET_ACTIVE_SEARCH_PARAMETERS");
+  },
+
   activeSearchParamsNextPage({ commit }) {
     commit("UPDATE_ACTIVE_SEARCH_PARAMETERS_PAGE", 1);
   },
 
   activeSearchParamsPreviousPage({ commit }) {
     commit("UPDATE_ACTIVE_SEARCH_PARAMETERS_PAGE", -1);
+  },
+
+  setActiveLibrary: ({ commit }, library) => {
+    commit("SET_ACTIVE_LIBRARY", library);
+  },
+
+  setActiveSelectionSeries: ({ commit }, selection_series) => {
+    commit("SET_ACTIVE_SELECTION_SERIES", selection_series);
+  },
+
+  setActiveProject: ({ commit }, project) => {
+    commit("SET_ACTIVE_PROJECT", project);
+  },
+
+  setActiveSite: ({ commit }, site) => {
+    commit("SET_ACTIVE_SITE", site);
+  },
+
+  setActiveSample: ({ commit }, sample) => {
+    commit("SET_ACTIVE_SAMPLE", sample);
   },
 
   updateActiveTab({ commit }, payload) {
@@ -378,13 +402,12 @@ const mutations = {
   },
 
   SET_SIDEBAR_LIST(state, payload) {
-    /* false means page not found */
     state.sidebarList = {
-      results: payload?.data?.results || false,
+      results: payload?.data?.results,
       page: payload?.data?.page,
       totalPages: payload?.data?.page
         ? payload.data.page.split(" of ")[1]
-        : undefined
+        : null
     };
   },
 
@@ -392,12 +415,32 @@ const mutations = {
     state.activeSearchParams = payload;
   },
 
+  RESET_ACTIVE_SEARCH_PARAMETERS(state) {
+    state.activeSearchParams = null;
+  },
+
   UPDATE_ACTIVE_SEARCH_PARAMETERS_PAGE(state, payload) {
     state.activeSearchParams.search.page += payload;
   },
 
-  SET_ACTIVE_SEARCH_PARAMS(state, params) {
-    state.activeSearchParams = params;
+  SET_ACTIVE_LIBRARY: (state, payload) => {
+    state.activeLibrary = payload;
+  },
+
+  SET_ACTIVE_SELECTION_SERIES: (state, payload) => {
+    state.activeSelectionSeries = payload;
+  },
+
+  SET_ACTIVE_PROJECT: (state, payload) => {
+    state.activeProject = payload;
+  },
+
+  SET_ACTIVE_SAMPLE: (state, payload) => {
+    state.activeSample = payload;
+  },
+
+  SET_ACTIVE_SITE: (state, payload) => {
+    state.activeSite = payload;
   },
 
   UPDATE_ACTIVE_TAB(state, payload) {

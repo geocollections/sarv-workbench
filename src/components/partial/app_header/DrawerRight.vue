@@ -15,7 +15,7 @@
         :value="$route.meta.isTableView"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="activeSearchParametersFilters.length > 0"
+        v-if="activeSearchParametersFilters.length > 0 && searchParameters"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -25,7 +25,7 @@
         </template>
 
         <!-- SEARCH BUTTON -->
-        <v-list-item v-if="$route.meta.isEdit" class="justify-center">
+        <v-list-item v-if="!$route.meta.isTableView" class="justify-center">
           <v-btn :color="drawerActiveColor" dark small @click="searchRecords">
             {{ $t("buttons.search") }}
           </v-btn>
@@ -94,7 +94,9 @@
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
-            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
@@ -107,7 +109,9 @@
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
-            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
@@ -120,7 +124,9 @@
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
-            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
@@ -133,7 +139,9 @@
             class="mt-0"
             :color="drawerActiveColor"
             hide-details
-            @change="updateSearchParamsByField($event, 'specimen_image_attachment')"
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
@@ -435,17 +443,7 @@
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="
-          $route.meta.isTableView &&
-            ($route.meta.object === 'specimen' ||
-              $route.meta.object === 'sample' ||
-              $route.meta.object === 'attachment' ||
-              $route.meta.object === 'locality' ||
-              $route.meta.object === 'taxon' ||
-              $route.meta.object === 'analysis') &&
-            activeSearchParams &&
-            activeSearchParams.search
-        "
+        v-if="isSelectionSeriesAvailable"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -457,7 +455,7 @@
         <!-- PAGINATION -->
         <v-list-item
           class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList.totalPages"
+          v-if="sidebarList && sidebarList.totalPages"
         >
           <div>
             <v-btn
@@ -520,16 +518,17 @@
         </v-list-item>
 
         <!-- PAGINATION -->
-        <v-list-item class="d-flex flex-row flex-nowrap justify-space-between">
+        <v-list-item
+          class="d-flex flex-row flex-nowrap justify-space-between"
+          v-if="sidebarList && sidebarList.totalPages"
+        >
           <div>
             <v-btn
               icon
               :color="drawerActiveColor"
               @click="previousPage"
               v-if="
-                activeSearchParams.search &&
-                  sidebarList.totalPages &&
-                  activeSearchParams.search.page > 1
+                activeSearchParams.search && activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -546,8 +545,7 @@
               :color="drawerActiveColor"
               @click="nextPage"
               v-if="
-                sidebarList.totalPages &&
-                  activeSearchParams.search &&
+                activeSearchParams.search &&
                   activeSearchParams.search.page < sidebarList.totalPages
               "
             >
@@ -563,6 +561,7 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import searchParametersMixin from "../../../mixins/searchParametersMixin";
+import toastMixin from "../../../mixins/toastMixin";
 
 export default {
   name: "DrawerRight",
@@ -586,7 +585,7 @@ export default {
       default: "deep-orange"
     }
   },
-  mixins: [searchParametersMixin],
+  mixins: [searchParametersMixin, toastMixin],
   computed: {
     ...mapState("search", [
       "activeSearchParametersFilters",
@@ -599,14 +598,29 @@ export default {
 
     computedTableSearchParameters() {
       return this.tableSearchParameters[this.$route.meta.object];
-    }
-  },
-  created() {
-    if (this?.activeSearchParams?.request) {
-      this.$store.dispatch(`search/${this.activeSearchParams.request}`);
+    },
+
+    isSelectionSeriesAvailable() {
+      return (
+        this.$route.meta.isTableView &&
+        (this.$route.meta.object === "specimen" ||
+          this.$route.meta.object === "sample" ||
+          this.$route.meta.object === "attachment" ||
+          this.$route.meta.object === "locality" ||
+          this.$route.meta.object === "taxon" ||
+          this.$route.meta.object === "analysis") &&
+        this?.activeSearchParams?.search
+      );
     }
   },
   watch: {
+    "activeSearchParams.request": {
+      handler(newVal) {
+        this.$store.dispatch(`search/${newVal}`);
+      },
+      immediate: true
+    },
+
     "activeSearchParams.search.page"(newVal) {
       if (newVal && this?.activeSearchParams?.request) {
         this.$store.dispatch(`search/${this.activeSearchParams.request}`);
@@ -656,7 +670,7 @@ export default {
       }
 
       if (makeActive) {
-        this.$store.dispatch(activeObject, entity);
+        this.$store.dispatch(`search/${activeObject}`, entity);
         if (activeObject === "setActiveLibrary") {
           this.toastInfo({
             text: `Library ${entity.library} is active!`,
@@ -669,7 +683,7 @@ export default {
           });
         } else this.toastInfo({ text: "Object is active!", timeout: 1000 });
       } else {
-        this.$store.dispatch(activeObject, null);
+        this.$store.dispatch(`search/${activeObject}`, null);
         if (activeObject === "setActiveLibrary") {
           this.toastInfo({
             text: `Library ${entity.library} is inactive!`,

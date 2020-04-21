@@ -73,7 +73,7 @@ import BottomOptions from "../components/partial/BottomOptions";
 import Log from "@/components/partial/Log.vue";
 import ScrollToLinks from "../components/partial/ScrollToLinks";
 import ObjectDoesNotExist from "../components/partial/errors/ObjectDoesNotExist";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import ObjectPermissions from "../components/partial/ObjectPermissions";
 import SpinnerWrapper from "../components/partial/SpinnerWrapper";
 
@@ -142,10 +142,6 @@ export default {
     toggleObjectState(state) {
       this.objectExists = state;
     }
-  },
-  beforeRouteLeave(to, from, next) {
-    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", null);
-    next();
   }
 };
 </script>

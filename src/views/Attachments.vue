@@ -34,7 +34,6 @@ import { fetchAttachments } from "../assets/js/api/apiCalls";
 import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import isEmpty from "lodash";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {

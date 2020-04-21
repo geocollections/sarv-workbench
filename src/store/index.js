@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersistence from "vuex-persist";
+import detail from "./modules/detail";
 import map from "./modules/map";
 import search from "./modules/search";
 import settings from "./modules/settings";
@@ -31,6 +32,7 @@ const vuexLocal = new VuexPersistence({
 
 export default new Vuex.Store({
   modules: {
+    detail,
     map,
     search,
     settings,
