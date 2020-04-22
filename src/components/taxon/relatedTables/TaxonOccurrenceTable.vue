@@ -269,6 +269,24 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
+                    v-model="item.depth"
+                    :color="bodyActiveColor"
+                    :label="$t('common.depth')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.depth_interval"
+                    :color="bodyActiveColor"
+                    :label="$t('common.depth_interval')"
+                    type="number"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
                     v-model="item.locality_free"
                     :color="bodyActiveColor"
                     :label="$t('taxon.locality_free')"
@@ -425,6 +443,8 @@ export default {
     item: {
       reference: null,
       locality: null,
+      depth: "",
+      depth_interval: "",
       locality_free: "",
       stratigraphy_base: null,
       stratigraphy_top: null,
@@ -472,6 +492,8 @@ export default {
       this.item = {
         reference: null,
         locality: null,
+        depth: "",
+        depth_interval: "",
         locality_free: "",
         stratigraphy_base: null,
         stratigraphy_top: null,
@@ -560,8 +582,11 @@ export default {
         this.autocomplete.stratigraphy_top.push(this.item.stratigraphy_top);
       }
 
+      this.item.depth = item.depth;
+      this.item.depth_interval = item.depth_interval;
       this.item.stratigraphic_distribution = item.stratigraphic_distribution;
-      this.item.stratigraphic_distribution_en = item.stratigraphic_distribution_en;
+      this.item.stratigraphic_distribution_en =
+        item.stratigraphic_distribution_en;
       this.item.locality_free = item.locality_free;
       this.item.remarks = item.remarks;
 
