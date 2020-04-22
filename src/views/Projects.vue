@@ -5,19 +5,18 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <!-- SEARCH FIELDS END -->
     <list-module-core
-      module="project"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchProjects"
-      search-history="projectSearchHistory"
-      view-type="projectViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -25,9 +24,10 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchProjects } from "@/assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   components: {
@@ -35,66 +35,33 @@ export default {
     TableViewTitle,
     TableViewSearch
   },
+
   name: "Projects",
+
+  mixins: [searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "name", title: "common.name", type: "text" },
-        { id: "id", title: "common.id", type: "number" }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
-  computed: {
-    ...mapState(["currentUser"])
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "name", title: "common.name", type: "text" },
+      { id: "id", title: "common.id", type: "number" }
+    ]);
   },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "project",
-          filters: this.filters,
-          params: newVal
-        });
-      },
-      deep: true,
-      immediate: true
-    }
+  computed: {
+    ...mapGetters("user", ["getCurrentUser"])
   },
 
   methods: {
     fetchProjects() {
       return new Promise(resolve => {
-        resolve(fetchProjects(this.searchParameters, this.currentUser.id));
+        resolve(fetchProjects(this.searchParameters, this.getCurrentUser.id));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    setDefaultSearchParameters() {
-      return {
-        name: null,
-        id: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("projectSearchHistory");
-      this.$localStorage.remove("projectViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };

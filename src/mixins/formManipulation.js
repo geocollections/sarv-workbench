@@ -22,14 +22,16 @@ const formManipulation = {
   },
   computed: {
     ...mapState("search", ["loadingState"]),
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"])
   },
   methods: {
     ...mapActions("search", [
       "setLoadingState",
       "setLoadingType",
-      "setLoadingPercent"
+      "setLoadingPercent",
+      "setActiveSearchParameters"
     ]),
+    ...mapActions("detail", ["saveFields", "resetFields"]),
 
     /**
      * Checks if variable is not empty and returns corresponding boolean.

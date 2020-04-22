@@ -637,7 +637,7 @@
         <v-btn
           v-if="$route.meta.isEdit && showMetadataButton && validate('doi')"
           class="mr-2 mb-2 text-none"
-          :disabled="sendingData"
+          :disabled="loadingState"
           @click="registerMetadata"
           :color="bodyActiveColor"
           :dark="isBodyActiveColorDark"
@@ -658,7 +658,7 @@
         <v-btn
           v-if="$route.meta.isEdit && showDoiUrlButton && validate('doi')"
           class="mr-2 mb-2 text-none"
-          :disabled="sendingData"
+          :disabled="loadingState"
           @click="registerDoiUrl"
           :color="bodyActiveColor"
           :dark="isBodyActiveColorDark"
@@ -702,7 +702,7 @@ import {
   fetchAgentUsingName
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -761,23 +761,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "doiSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.doiSearchParameters,
         request: "FETCH_DOIS",
         title: "header.dois",
         object: "doi",
-        field: "title",
-        block: this.block
+        field: "title"
       });
     }
 
@@ -799,7 +788,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
+    ...mapState("search", ["doiSearchParameters"]),
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -819,9 +808,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -913,7 +904,6 @@ export default {
           "title"
         ],
         doi: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           requiredFields: true,
           info: true,
@@ -1313,19 +1303,6 @@ export default {
     customLabelForDataset(option) {
       if (this.$i18n.locale === "ee") return `${option.id} - (${option.name})`;
       return `${option.id} - (${option.name_en})`;
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        identifier: null,
-        creators: null,
-        publication_year: null,
-        title: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     /**

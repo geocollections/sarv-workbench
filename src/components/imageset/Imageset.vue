@@ -45,6 +45,7 @@
                 :success="
                   isNotEmpty(imageset.imageset_number) && !imagesetNumberExists
                 "
+                name="imageset_number"
               />
               <div
                 class="m-0 caption"
@@ -75,6 +76,7 @@
                 route-object="agent"
                 is-searchable
                 v-on:search:items="autocompleteAgentSearch"
+                name="author"
               />
             </v-col>
           </v-row>
@@ -86,6 +88,7 @@
                 v-model="imageset.description"
                 :color="bodyActiveColor"
                 :label="$t('common.description')"
+                name="description"
               />
             </v-col>
           </v-row>
@@ -109,7 +112,7 @@ import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { fetchIsImagesetNumberInImageset } from "../../assets/js/api/apiCalls";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -149,21 +152,19 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser", "databaseId"])
+    ...mapState("detail", ["imagesetDetail"])
   },
 
   created() {
-    // Gets saved form values from local storage
-    const imageset = this.$localStorage.get("imageset", "fallbackValue");
-    if (this.isNotEmpty(imageset) && imageset !== "fallbackValue")
-      this.imageset = imageset;
+    if (this.imagesetDetail) this.imageset = cloneDeep(this.imagesetDetail);
 
     this.imageset.author = {
-      id: this.currentUser.id,
-      agent: this.currentUser.agent,
-      forename: this.currentUser.forename,
-      surename: this.currentUser.surename
+      id: this.getCurrentUser.id,
+      agent: this.getCurrentUser.agent,
+      forename: this.getCurrentUser.forename,
+      surename: this.getCurrentUser.surename
     };
+    this.autocomplete.agent.push(this.imageset.author);
   },
 
   watch: {
@@ -175,6 +176,10 @@ export default {
   },
 
   methods: {
+    reloadData() {
+      this.imageset = {};
+    },
+
     setInitialData() {
       return {
         autocomplete: {
@@ -194,13 +199,13 @@ export default {
       let uploadableObject = cloneDeep(objectToUpload);
 
       if (!this.$route.meta.isEdit)
-        this.$localStorage.set("imageset", uploadableObject);
+        this.saveFields({ key: "imagesetDetail", value: objectToUpload });
 
       if (this.isNotEmpty(uploadableObject.author))
         uploadableObject.author = uploadableObject.author.id;
       else uploadableObject.author = null;
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -217,17 +222,11 @@ export default {
     },
 
     clearLocalStorage() {
-      this.$localStorage.remove("imageset");
+      this.resetFields("imagesetDetail");
       this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
     }
   }
 };
 </script>
 
-<style scoped>
-label {
-  margin: 5px 0 0 0;
-  color: #999;
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

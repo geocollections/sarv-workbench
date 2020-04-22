@@ -314,7 +314,7 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import LibraryReferenceListView from "./relatedTables/LibraryReferenceListView";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -365,24 +365,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "librarySearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.librarySearchParameters,
         request: "FETCH_LIBRARIES",
         title: "header.libraries",
         object: "library",
-        field: "library__title_en",
-        block: this.block,
-        agent: this.currentUser
+        field: "library__title_en"
       });
     }
 
@@ -407,7 +395,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser", "databaseId"]),
+    ...mapState("search", ["librarySearchParameters"]),
 
     filteredRelatedTabs() {
       return this.relatedTabs.filter(tab => {
@@ -479,7 +467,6 @@ export default {
         },
         requiredFields: [],
         library: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: { info: true, members: true },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -644,20 +631,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        author_txt: null,
-        year: null,
-        title: null,
-        reference: null,
-        id: null,
-        page: 1,
-        paginateBy: 100,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

@@ -3912,11 +3912,7 @@ export default {
       "digitisedReference",
       "digitisedReferenceKeywords"
     ]),
-    ...mapGetters("user", [
-      "isUserAllowedTo",
-      "getDatabaseId",
-      "getCurrentUser"
-    ]),
+    ...mapGetters("user", ["isUserAllowedTo"]),
 
     myShowMap: {
       get() {
@@ -4045,15 +4041,11 @@ export default {
   created() {
     if (this.$route.meta.isEdit) {
       this.setActiveSearchParameters({
-        searchHistory: "attachmentSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
         search: this.attachmentSearchParameters,
         request: "FETCH_ATTACHMENTS",
         title: "header.attachments",
         object: "attachment",
-        field: "original_filename",
-        databaseId: this.getDatabaseId,
-        block: this.block
+        field: "original_filename"
       });
     }
   },
@@ -4152,9 +4144,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", ["setActiveSearchParameters"]),
     ...mapActions("map", ["updateShowMap"]),
-    ...mapActions("detail", ["saveFields", "resetFields"]),
 
     setInitialData() {
       return {
@@ -4375,7 +4365,6 @@ export default {
         },
         attachment: this.setDefaultAttachmentFields(),
         rawAttachment: null,
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           fileInput: true,
           file: true,
@@ -5119,24 +5108,6 @@ export default {
         defaultFields.stars = null;
       }
       return defaultFields;
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        image_number: null,
-        filename: null,
-        specimen: null,
-        imageInfo: null,
-        locality: null,
-        selectionId: null,
-        selection: null,
-        keyword: null,
-        specimen_image_attachment: ["2", "1", "3", "4"],
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     formatMetadataDate(dateFromMetadata) {

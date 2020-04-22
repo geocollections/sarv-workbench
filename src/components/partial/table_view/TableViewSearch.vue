@@ -36,7 +36,7 @@
                   <!-- DATEPICKER -->
                   <v-menu
                     v-if="field.isDate"
-                    v-model="field.calendarState"
+                    v-model="calendarMenus[field.id]"
                     :close-on-content-click="false"
                     :nudge-right="40"
                     transition="scale-transition"
@@ -46,11 +46,14 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         hide-details
-                        v-model="searchParameters[field.id]"
+                        :value="searchParameters[field.id]"
                         :label="$t(field.title)"
                         prepend-inner-icon="far fa-calendar-alt"
                         :color="bodyActiveColor"
                         clearable
+                        @click:clear="
+                          $emit('update:searchParameters', null, field.id)
+                        "
                         clear-icon="fas fa-times"
                         readonly
                         :class="bodyActiveColor + '--text'"
@@ -58,8 +61,8 @@
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="searchParameters[field.id]"
-                      @input="field.calendarState = false"
+                      :value="searchParameters[field.id]"
+                      @input="updateDate($event, field.id)"
                       :color="bodyActiveColor"
                       :header-color="`${bodyActiveColor} darken-3`"
                       scrollable
@@ -94,7 +97,13 @@
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                     <v-checkbox
                       :input-value="searchParameters.specimen_image_attachment"
@@ -103,7 +112,13 @@
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                     <v-checkbox
                       :input-value="searchParameters.specimen_image_attachment"
@@ -112,7 +127,13 @@
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                     <v-checkbox
                       :input-value="searchParameters.specimen_image_attachment"
@@ -121,7 +142,13 @@
                       class="mt-0"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'specimen_image_attachment')"
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                   </v-row>
                 </v-col>
@@ -140,7 +167,13 @@
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'isEstonianReference')"
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'isEstonianReference'
+                        )
+                      "
                     ></v-checkbox>
                     <v-checkbox
                       :input-value="searchParameters.isEstonianAuthor"
@@ -148,7 +181,13 @@
                       class="mt-0"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'isEstonianAuthor')"
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'isEstonianAuthor'
+                        )
+                      "
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -167,7 +206,9 @@
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'in_portal')"
+                      @change="
+                        $emit('update:searchParameters', $event, 'in_portal')
+                      "
                     ></v-checkbox>
                     <v-checkbox
                       :input-value="searchParameters.in_estonia"
@@ -175,7 +216,9 @@
                       class="mt-0"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'in_estonia')"
+                      @change="
+                        $emit('update:searchParameters', $event, 'in_estonia')
+                      "
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -194,7 +237,9 @@
                       class="mt-0 pr-6"
                       :color="bodyActiveColor"
                       hide-details
-                      @change="$emit('update:searchParameters', $event, 'isActive')"
+                      @change="
+                        $emit('update:searchParameters', $event, 'isActive')
+                      "
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -245,11 +290,19 @@ export default {
       default: 6
     }
   },
-  data: () => ({
-    calendarMenu: false
-  }),
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"])
+  },
+  data: () => ({
+    date_start: false,
+    date_end: false,
+    calendarMenus: ["date_start", "date_end"]
+  }),
+  methods: {
+    updateDate(event, fieldId, index) {
+      this.$emit("update:searchParameters", event, fieldId);
+      this.calendarMenus[fieldId] = false;
+    }
   }
 };
 </script>

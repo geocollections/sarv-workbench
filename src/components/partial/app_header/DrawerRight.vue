@@ -40,7 +40,7 @@
           <v-menu
             z-index="50050"
             v-if="field.isDate"
-            v-model="field.calendarStateDrawer"
+            v-model="calendarMenus[field.id]"
             :close-on-content-click="false"
             :nudge-right="40"
             transition="scale-transition"
@@ -50,21 +50,20 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 hide-details
-                v-model="
-                  computedTableSearchParameters.searchParameters[field.id]
-                "
+                :value="searchParameters[field.id]"
                 :label="$t(field.title)"
                 prepend-inner-icon="far fa-calendar-alt"
                 :color="drawerActiveColor"
                 clearable
+                @click:clear="updateSearchParamsByField(null, field.id)"
                 clear-icon="fas fa-times"
                 readonly
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="computedTableSearchParameters.searchParameters[field.id]"
-              @input="field.calendarStateDrawer = false"
+              :value="searchParameters[field.id]"
+              @input="updateDate($event, field.id)"
               :color="drawerActiveColor"
               :header-color="drawerActiveColor"
               scrollable
@@ -295,22 +294,13 @@
         </v-list-item>
       </v-list-group>
 
-      <!-- SITES only for Project -->
-      <v-list-item
-        v-if="$route.meta.isEdit && $route.meta.table === 'project'"
-        @click="setAction('add', 'Site')"
-        dense
-      >
-        <v-list-item-title class="text-uppercase">
-          {{ $t("header.addSite") }}
-          <v-icon small>far fa-plus-square</v-icon>
-        </v-list-item-title>
-      </v-list-item>
-
       <!-- SAMPLES only for Site -->
       <v-list-item
         v-if="$route.meta.isEdit && $route.meta.table === 'site'"
-        @click="setAction('add', 'Sample')"
+        :to="{
+          name: 'Sample add',
+          query: { site: JSON.stringify(this.activeSite) }
+        }"
         dense
       >
         <v-list-item-title class="text-uppercase">
@@ -324,12 +314,7 @@
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="
-          $route.meta.isTableView &&
-            $route.meta.object === 'reference' &&
-            activeSearchParams &&
-            activeSearchParams.search
-        "
+        v-if="isLibraryAvailable"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -341,7 +326,7 @@
         <!-- PAGINATION -->
         <v-list-item
           class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList.totalPages"
+          v-if="sidebarList && sidebarList.totalPages"
         >
           <div>
             <v-btn
@@ -401,16 +386,17 @@
         </v-list-item>
 
         <!-- PAGINATION -->
-        <v-list-item class="d-flex flex-row flex-nowrap justify-space-between">
+        <v-list-item
+          class="d-flex flex-row flex-nowrap justify-space-between"
+          v-if="sidebarList && sidebarList.totalPages"
+        >
           <div>
             <v-btn
               icon
               :color="drawerActiveColor"
               @click="previousPage"
               v-if="
-                activeSearchParams.search &&
-                  sidebarList.totalPages &&
-                  activeSearchParams.search.page > 1
+                activeSearchParams.search && activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -427,8 +413,7 @@
               :color="drawerActiveColor"
               @click="nextPage"
               v-if="
-                sidebarList.totalPages &&
-                  activeSearchParams.search &&
+                activeSearchParams.search &&
                   activeSearchParams.search.page < sidebarList.totalPages
               "
             >
@@ -565,6 +550,7 @@ import toastMixin from "../../../mixins/toastMixin";
 
 export default {
   name: "DrawerRight",
+
   props: {
     drawerState: {
       required: true
@@ -585,13 +571,22 @@ export default {
       default: "deep-orange"
     }
   },
+
   mixins: [searchParametersMixin, toastMixin],
+
+  data: () => ({
+    date_start: false,
+    date_end: false,
+    calendarMenus: ["date_start", "date_end"]
+  }),
+
   computed: {
     ...mapState("search", [
       "activeSearchParametersFilters",
       "activeSearchParams",
       "sidebarList",
       "activeLibrary",
+      "activeSite",
       "activeSelectionSeries",
       "tableSearchParameters"
     ]),
@@ -611,8 +606,18 @@ export default {
           this.$route.meta.object === "analysis") &&
         this?.activeSearchParams?.search
       );
+    },
+
+    isLibraryAvailable() {
+      return (
+        this.$route.meta.isTableView &&
+        this.$route.meta.object === "reference" &&
+        this.activeSearchParams &&
+        this.activeSearchParams.search
+      );
     }
   },
+
   watch: {
     "activeSearchParams.request": {
       handler(newVal) {
@@ -627,12 +632,18 @@ export default {
       }
     }
   },
+
   methods: {
     ...mapActions("search", [
       "activeSearchParamsNextPage",
       "activeSearchParamsPreviousPage",
       "setSidebarUserAction"
     ]),
+
+    updateDate(event, fieldId) {
+      this.updateSearchParamsByField(event, fieldId);
+      this.calendarMenus[fieldId] = false;
+    },
 
     changeDrawerState(drawerState) {
       this.$emit("update:drawerState", drawerState);

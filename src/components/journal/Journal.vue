@@ -109,7 +109,7 @@
 <script>
 import formManipulation from "../../mixins/formManipulation";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import { fetchJournal } from "../../assets/js/api/apiCalls";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -149,24 +149,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "journalSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.journalSearchParameters,
         request: "FETCH_JOURNALS",
         title: "header.journals",
         object: "journal",
-        field: "journal_name",
-        block: this.block,
-        agent: this.currentUser
+        field: "journal_name"
       });
     }
 
@@ -183,7 +171,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser"])
+    ...mapState("search", ["journalSearchParameters"])
   },
 
   methods: {
@@ -237,18 +225,6 @@ export default {
       console.log("This object is sent in string format:");
       console.log(objectToUpload);
       return JSON.stringify(objectToUpload);
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        journal: null,
-        publisher: null,
-        remarks: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

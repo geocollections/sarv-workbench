@@ -6,7 +6,9 @@ const state = {
   otherFiles: null,
   otherFilesArchiveKeywords: null,
   digitisedReference: null,
-  digitisedReferenceKeywords: null
+  digitisedReferenceKeywords: null,
+  imagesetDetail: null,
+  referenceDetail: null
 };
 
 const getters = {};

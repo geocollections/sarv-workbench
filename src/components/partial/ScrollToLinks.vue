@@ -32,12 +32,12 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "ScrollToLinks",
   computed: {
-    activeSearchParams() {
-      return this.$store.state["activeSearchParams"];
-    }
+    ...mapState("search", ["activeSearchParams"])
   },
   methods: {
     getIcon(name) {

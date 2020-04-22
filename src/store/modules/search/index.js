@@ -65,6 +65,25 @@ const state = {
     sortDesc: [true]
   },
   attachmentViewType: "table",
+  referenceSearchParameters: {
+    author: null,
+    year: null,
+    title: null,
+    bookJournal: null,
+    abstractRemarks: null,
+    keywords: null,
+    id: null,
+    libraryAuthorIdTitle: null,
+    userAdded: null,
+    isEstonianReference: null,
+    isEstonianAuthor: null,
+    solrSearch: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  referenceViewType: "table",
   selectionSeriesSearchParameters: {
     id: null,
     name: null,
@@ -74,7 +93,74 @@ const state = {
     paginateBy: 50,
     sortBy: ["id"],
     sortDesc: [true]
-  }
+  },
+  librarySearchParameters: {
+    author_txt: null,
+    year: null,
+    title: null,
+    reference: null,
+    id: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["library"],
+    sortDesc: [true]
+  },
+  libraryViewType: "table",
+  journalSearchParameters: {
+    journal: null,
+    publisher: null,
+    remarks: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  journalViewType: "table",
+  keywordSearchParameters: {
+    id: null,
+    term: null,
+    language: null,
+    keyword_category: null,
+    is_primary: null,
+    page: 1,
+    paginateBy: 10,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  keywordViewType: "table",
+  doiSearchParameters: {
+    identifier: null,
+    creators: null,
+    publication_year: null,
+    title: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  doiViewType: "table",
+  projectSearchParameters: {
+    name: null,
+    id: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  projectViewType: "table",
+  siteSearchParameters: {
+    id: null,
+    name: null,
+    number: null,
+    project: null,
+    date_start: null,
+    date_end: null,
+    page: 1,
+    paginateBy: 10,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  siteViewType: "table"
 };
 
 const getters = {};
@@ -112,16 +198,16 @@ const actions = {
     commit("SET_LOADING_PERCENT", percent);
   },
 
-  FETCH_PROJECTS({ commit, state }) {
+  FETCH_PROJECTS({ commit, state, rootGetters }) {
     return fetchProjects(
       state.activeSearchParams.search,
-      state.currentUser.id
-    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+      rootGetters["user/getCurrentUser"].id
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
   FETCH_SITES({ commit, state }) {
     return fetchSites(state.activeSearchParams.search).then(resp =>
-      commit("SET_SIDEBAR_LIST", { resp })
+      commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
@@ -134,73 +220,73 @@ const actions = {
 
   FETCH_REFERENCES({ commit, state }) {
     return fetchReferences(state.activeSearchParams.search).then(resp =>
-      commit("SET_SIDEBAR_LIST", { resp })
+      commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
-  FETCH_LIBRARIES({ commit, state }) {
+  FETCH_LIBRARIES({ commit, state, rootGetters }) {
     return fetchLibrariesFromLibraryAgent(
       state.activeSearchParams.search,
-      state.activeSearchParams.agent
-    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+      rootGetters["user/getCurrentUser"]
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
   FETCH_LOCALITIES({ commit, state }) {
     return fetchLocalities(state.activeSearchParams.search).then(resp =>
-      commit("SET_SIDEBAR_LIST", { resp })
+      commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
-  FETCH_SAMPLES({ commit, state }) {
+  FETCH_SAMPLES({ commit, state, rootGetters }) {
     return fetchSamples(
       state.activeSearchParams.search,
-      state.activeSearchParams.databaseId
-    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+      rootGetters["user/getDatabaseId"]
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
-  FETCH_ANALYSES({ commit, state }) {
+  FETCH_ANALYSES({ commit, state, rootGetters }) {
     return fetchAnalyses(
       state.activeSearchParams.search,
-      state.activeSearchParams.agent,
-      state.activeSearchParams.databaseId
-    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+      rootGetters["user/getCurrentUser"],
+      rootGetters["user/getDatabaseId"]
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
-  FETCH_DOIS({ commit, state }) {
+  FETCH_DOIS({ commit, state, rootGetters }) {
     return fetchDois(
       state.activeSearchParams.search,
-      state.databaseId
-    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+      rootGetters["user/getDatabaseId"]
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
-  FETCH_SPECIMENS({ commit, state }) {
+  FETCH_SPECIMENS({ commit, state, rootGetters }) {
     return fetchSpecimens(
       state.activeSearchParams.search,
-      state.activeSearchParams.databaseId
-    ).then(resp => commit("SET_SIDEBAR_LIST", { resp }));
+      rootGetters["user/getDatabaseId"]
+    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
   },
 
   FETCH_KEYWORDS({ commit, state }) {
     return fetchKeywords(state.activeSearchParams.search).then(resp =>
-      commit("SET_SIDEBAR_LIST", { resp })
+      commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_JOURNALS({ commit, state }) {
     return fetchJournals(state.activeSearchParams.search).then(resp =>
-      commit("SET_SIDEBAR_LIST", { resp })
+      commit("SET_SIDEBAR_LIST", resp)
     );
   },
 
   FETCH_COLLECTIONS({ commit, state }) {
     return fetchCollections(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_TAXA({ commit, state }) {
     return fetchTaxa(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
@@ -212,103 +298,103 @@ const actions = {
 
   FETCH_AGENTS({ commit, state }) {
     return fetchAgents(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_PREPARATIONS({ commit, state }) {
     return fetchPreparations(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_DRILLCORES({ commit, state }) {
     return fetchDrillcores(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
-  FETCH_DATASETS({ commit, state }) {
+  FETCH_DATASETS({ commit, state, rootGetters }) {
     return fetchDatasets(
       state.activeSearchParams.search,
-      state.activeSearchParams.databaseId
+      rootGetters["user/getDatabaseId"]
     ).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_STRATIGRAPHY({ commit, state }) {
     return fetchStratigraphies(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_AREAS({ commit, state }) {
     return fetchAreas(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_DRILLCORE_BOXES({ commit, state }) {
     return fetchDrillcoreBoxes(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_LOCATIONS({ commit, state }) {
     return fetchLocations(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_ROCKS({ commit, state }) {
     return fetchRocks(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_DEACCESSIONS({ commit, state }) {
     return fetchDeaccessions(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_ACCESSIONS({ commit, state }) {
     return fetchAccessions(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_VISITS({ commit, state }) {
     return fetchVisits(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
-  FETCH_LOANS({ commit, state }) {
+  FETCH_LOANS({ commit, state, rootGetters }) {
     return fetchLoans(
       state.activeSearchParams.search,
-      state.activeSearchParams.databaseId
+      rootGetters["user/getDatabaseId"]
     ).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_WEB_PAGES({ commit, state }) {
     return fetchWebPages(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_WEB_NEWS({ commit, state }) {
     return fetchWebNews(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
   FETCH_SAMPLE_SERIES({ commit, state }) {
     return fetchSampleSeries(state.activeSearchParams.search).then(resp => {
-      commit("SET_SIDEBAR_LIST", { resp });
+      commit("SET_SIDEBAR_LIST", resp);
     });
   },
 
@@ -368,6 +454,10 @@ const mutations = {
 
   UPDATE_SEARCH_PARAMETERS_BY_FIELD(state, payload) {
     state[`${payload.module}SearchParameters`][payload.field] = payload.value;
+    if (payload.isDate) {
+      // state["activeSearchParametersFilters"].find(item => item.id === payload.field).calendarState = false;
+      // state["activeSearchParametersFilters"].find(item => item.id === payload.field).calendarStateDrawer = false;
+    }
   },
 
   RESET_SEARCH_PARAMETERS(state, payload) {

@@ -21,7 +21,6 @@
       :api-call="fetchAttachments"
       :is-selection-series-active="isSelectionSeriesActive"
       :active-selection-series="activeSelectionSeries"
-      search-history="attachmentSearchHistory"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -59,8 +58,7 @@ export default {
 
     ...mapState("search", [
       "activeSelectionSeries",
-      "selectionSeriesSearchParameters",
-      "activeSearchParametersFilters"
+      "selectionSeriesSearchParameters"
     ]),
 
     ...mapGetters("user", ["getCurrentUser"])
@@ -91,10 +89,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("search", [
-      "setActiveSearchParameters",
-      "setActiveSearchParametersFilters"
-    ]),
+    ...mapActions("search", ["setActiveSearchParameters"]),
 
     fetchAttachments() {
       return new Promise(resolve => {

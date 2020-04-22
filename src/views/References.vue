@@ -5,21 +5,20 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
       :col-size="3"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-      module="reference"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchReferences"
-      search-history="referenceSearchHistory"
-      view-type="referenceViewType"
       :use-list-view="true"
       :is-library-active="isLibraryActive"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
       v-on:add-reference-to-active-library="addReferenceToActiveLibrary"
     />
   </div>
@@ -29,11 +28,11 @@
 import ListModuleCore from "./ListModuleCore";
 import { fetchReferences } from "@/assets/js/api/apiCalls";
 import { fetchAddReferenceToLibrary } from "../assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
-import isEmpty from "lodash";
 import toastMixin from "../mixins/toastMixin";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   components: {
@@ -41,44 +40,14 @@ export default {
     TableViewTitle,
     TableViewSearch
   },
-  mixins: [toastMixin],
+
   name: "References",
+
+  mixins: [toastMixin, searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "author", title: "reference.author", type: "text" },
-        { id: "year", title: "common.year", type: "number" },
-        { id: "title", title: "reference.title", type: "text" },
-        { id: "bookJournal", title: "reference.bookJournal", type: "text" },
-        {
-          id: "abstractRemarks",
-          title: "reference.abstractRemarks",
-          type: "text"
-        },
-        { id: "keywords", title: "reference.keywordsSearch", type: "text" },
-        { id: "id", title: "common.id", type: "number" },
-        {
-          id: "libraryAuthorIdTitle",
-          title: "reference.libraryAuthorIdTitle",
-          type: "text"
-        },
-        // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
-        { id: "userAdded", title: "reference.userAdded", type: "text" }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
-      block: { search: true },
-      defaultLibrarySearchParams: {
-        author_txt: null,
-        year: null,
-        title: null,
-        reference: null,
-        id: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["library"],
-        sortDesc: [true]
-      }
+      block: { search: true }
     };
   },
 
@@ -88,83 +57,55 @@ export default {
     },
 
     isLibraryActive() {
-      return this.$store.state["activeLibrary"] !== null;
+      return this.activeLibrary !== null;
     },
 
-    ...mapState(["currentUser"])
+    ...mapState("search", ["activeLibrary", "librarySearchParameters"]),
+
+    ...mapGetters("user", ["getCurrentUser"])
   },
 
   created() {
     // Used by sidebar
-    const searchHistory = this.$localStorage.get("librarySearchHistory", null);
-    let params =
-      !!searchHistory && !isEmpty(searchHistory)
-        ? searchHistory
-        : this.defaultLibrarySearchParams;
-    this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
+    this.setActiveSearchParameters({
       searchHistory: "librarySearchHistory",
-      search: params,
+      search: this.librarySearchParameters,
       request: "FETCH_LIBRARIES",
       title: "header.libraries",
       object: "library",
       field: "library__title_en",
-      agent: this.currentUser
+      agent: this.getCurrentUser
     });
-  },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "reference",
-          filters: this.filters,
-          params: newVal
-        });
+    this.setActiveSearchParametersFilters([
+      { id: "author", title: "reference.author", type: "text" },
+      { id: "year", title: "common.year", type: "number" },
+      { id: "title", title: "reference.title", type: "text" },
+      { id: "bookJournal", title: "reference.bookJournal", type: "text" },
+      {
+        id: "abstractRemarks",
+        title: "reference.abstractRemarks",
+        type: "text"
       },
-      deep: true,
-      immediate: true
-    }
+      { id: "keywords", title: "reference.keywordsSearch", type: "text" },
+      { id: "id", title: "common.id", type: "number" },
+      {
+        id: "libraryAuthorIdTitle",
+        title: "reference.libraryAuthorIdTitle",
+        type: "text"
+      },
+      // {id: "solrSearch", title: "reference.solrSearch", type: "text"},
+      { id: "userAdded", title: "reference.userAdded", type: "text" }
+    ]);
   },
 
   methods: {
+    ...mapActions("search", ["setActiveSearchParameters"]),
+
     fetchReferences() {
       return new Promise(resolve => {
         resolve(fetchReferences(this.searchParameters));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    setDefaultSearchParameters() {
-      return {
-        author: null,
-        year: null,
-        title: null,
-        bookJournal: null,
-        abstractRemarks: null,
-        keywords: null,
-        id: null,
-        libraryAuthorIdTitle: null,
-        userAdded: null,
-        isEstonianReference: null,
-        isEstonianAuthor: null,
-        solrSearch: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("referenceSearchHistory");
-      this.$localStorage.remove("referenceViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     },
 
     addReferenceToActiveLibrary(id) {

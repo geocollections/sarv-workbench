@@ -5,18 +5,17 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-      module="doi"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchDois"
-      search-history="doiSearchHistory"
-      view-type="doiViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -24,9 +23,10 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchDois } from "../assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   components: {
@@ -34,80 +34,38 @@ export default {
     TableViewSearch,
     TableViewTitle
   },
+
   name: "Dois",
+
+  mixins: [searchParametersMixin],
 
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "identifier", title: "doi.identifier", type: "text" },
-        { id: "creators", title: "doi.creators", type: "text" },
-        { id: "publication_year", title: "common.year", type: "number" },
-        { id: "title", title: "doi.title", type: "text" }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
   computed: {
-    ...mapState(["databaseId"])
+    ...mapGetters("user", ["getDatabaseId"])
   },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "doi",
-          filters: this.filters,
-          params: newVal
-        });
-      },
-      deep: true,
-      immediate: true
-    }
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "identifier", title: "doi.identifier", type: "text" },
+      { id: "creators", title: "doi.creators", type: "text" },
+      { id: "publication_year", title: "common.year", type: "number" },
+      { id: "title", title: "doi.title", type: "text" }
+    ]);
   },
 
   methods: {
     fetchDois() {
       return new Promise(resolve => {
-        resolve(fetchDois(this.searchParameters, this.databaseId));
+        resolve(fetchDois(this.searchParameters, this.getDatabaseId));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    setDefaultSearchParameters() {
-      return {
-        identifier: null,
-        creators: null,
-        publication_year: null,
-        title: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("doiSearchHistory");
-      this.$localStorage.remove("doiViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };
 </script>
 
-<style scoped>
-label {
-  margin: 5px 0 0 0;
-  color: #999;
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

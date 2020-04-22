@@ -858,6 +858,7 @@
       </v-tabs-items>
     </v-card>
 
+    <!-- NEW DOI BUTTON -->
     <div class="d-flex justify-content-end mt-2" v-if="$route.meta.isEdit">
       <new-doi-button
         v-if="
@@ -918,7 +919,7 @@ import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import NewDoiButton from "../partial/NewDoiButton";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -985,8 +986,7 @@ export default {
         return regex.test(this.reference.url);
       } else return true;
     },
-
-    ...mapState(["currentUser", "databaseId"]),
+    ...mapState("search", ["referenceSearchParameters"]),
     ...mapGetters("user", ["isUserAllowedTo"]),
 
     paginateByOptionsTranslated() {
@@ -1026,23 +1026,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "referenceSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.referenceSearchParameters,
         request: "FETCH_REFERENCES",
         title: "header.references",
         object: "reference",
-        field: "reference",
-        block: this.block
+        field: "reference"
       });
     } else {
       if (this.$route.params.journal) {
@@ -1082,9 +1071,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -1178,7 +1169,6 @@ export default {
         },
         previousRecord: {},
         nextRecord: {},
-        searchParameters: this.setDefaultSearchParameters(),
         attachment: [],
         doi: {},
         block: {
@@ -1507,27 +1497,6 @@ export default {
           );
         }
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        author: null,
-        year: null,
-        title: null,
-        bookJournal: null,
-        abstractRemarks: null,
-        keywords: null,
-        id: null,
-        libraryAuthorIdTitle: null,
-        userAdded: null,
-        isEstonianReference: null,
-        isEstonianAuthor: null,
-        solrSearch: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     customLabelForAttachment(option) {
