@@ -58,7 +58,7 @@ export default {
 
     ...mapState("search", [
       "activeSelectionSeries",
-      "selectionSeriesSearchParameters"
+      "selection_seriesSearchParameters"
     ]),
 
     ...mapGetters("user", ["getCurrentUser"])
@@ -67,13 +67,11 @@ export default {
   created() {
     // Used by sidebar
     this.setActiveSearchParameters({
-      searchHistory: "selectionSeriesSearchHistory",
-      search: this.selectionSeriesSearchParameters,
+      search: this.selection_seriesSearchParameters,
       request: "FETCH_SELECTION_SERIES",
       title: "header.selection_series",
       object: "selection_series",
-      field: "name",
-      agent: this.getCurrentUser
+      field: "name"
     });
 
     this.setActiveSearchParametersFilters([

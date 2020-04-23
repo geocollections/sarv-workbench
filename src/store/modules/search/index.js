@@ -84,7 +84,7 @@ const state = {
     sortDesc: [true]
   },
   referenceViewType: "table",
-  selectionSeriesSearchParameters: {
+  selection_seriesSearchParameters: {
     id: null,
     name: null,
     remarks: null,
@@ -94,6 +94,7 @@ const state = {
     sortBy: ["id"],
     sortDesc: [true]
   },
+  selection_seriesViewType: "table",
   librarySearchParameters: {
     author_txt: null,
     year: null,
@@ -160,7 +161,52 @@ const state = {
     sortBy: ["id"],
     sortDesc: [true]
   },
-  siteViewType: "table"
+  siteViewType: "table",
+  site_groundwaterSearchParameters: {
+    site: null,
+    type_txt: null,
+    aquifer_system: null,
+    aquifer: null,
+    well_depth: null,
+    filter_type: null,
+    filter_top: null,
+    filter_top_z: null,
+    filter_bottom: null,
+    filter_bottom_z: null,
+    url_veka: null,
+    remarks: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  site_groundwaterViewType: "table",
+  areaSearchParameters: {
+    name: null,
+    type: null,
+    area_ha: null,
+    maakond: null,
+    page: 1,
+    paginateBy: 10,
+    sortBy: ["name"],
+    sortDesc: [true]
+  },
+  areaViewType: "table",
+  localitySearchParameters: {
+    locality: null,
+    number: null,
+    county: null,
+    country: null,
+    agent: null,
+    id: null,
+    selectionId: null,
+    selection: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  localityViewType: "table"
 };
 
 const getters = {};
