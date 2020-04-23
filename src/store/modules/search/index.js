@@ -206,7 +206,100 @@ const state = {
     sortBy: ["id"],
     sortDesc: [true]
   },
-  localityViewType: "table"
+  localityViewType: "table",
+  stratigraphySearchParameters: {
+    id: null,
+    stratigraphy: null,
+    type: null,
+    rank: null,
+    scope: null,
+    parent: null,
+    page: 1,
+    paginateBy: 10,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  stratigraphyViewType: "table",
+  sampleSearchParameters: {
+    locality: null,
+    number: null,
+    depth: null,
+    stratigraphy: null,
+    agent: null,
+    storage: null,
+    site: null,
+    selectionId: null,
+    selection: null,
+    id: null,
+    loan: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  sampleViewType: "table",
+  isSampleSimpleView: false,
+  sample_seriesSearchParameters: {
+    name: null,
+    locality: null,
+    agent_collected: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  sample_seriesViewType: "table",
+  analysisSearchParameters: {
+    id: null,
+    analysis_method: null,
+    agentAndLab: null,
+    selectionId: null,
+    selection: null,
+    sample: null,
+    datasetId: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  analysisViewType: "table",
+  preparationSearchParameters: {
+    preparation_number: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  preparationViewType: "table",
+  taxonSearchParameters: {
+    id: null,
+    taxon: null,
+    author_year: null,
+    taxon_epithet: null,
+    parent__taxon: null,
+    selectionId: null,
+    selection: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  taxonViewType: "table",
+  rockSearchParameters: {
+    name: null,
+    name_en: null,
+    formula: null,
+    rock_type: null,
+    rock_rank: null,
+    in_portal: null,
+    in_estonia: null,
+    user_changed: null,
+    page: 1,
+    paginateBy: 10,
+    sortBy: ["name"],
+    sortDesc: [true]
+  },
+  rockViewType: "table"
 };
 
 const getters = {};
@@ -444,6 +537,10 @@ const actions = {
     });
   },
 
+  updateIsSampleSimpleView({ commit }, boolVal) {
+    commit("UPDATE_IS_SAMPLE_SIMPLE_VIEW", boolVal);
+  },
+
   setSidebarUserAction: ({ commit }, userAction) => {
     commit("SET_SIDEBAR_USER_ACTION", userAction);
   },
@@ -581,6 +678,10 @@ const mutations = {
 
   UPDATE_ACTIVE_TAB(state, payload) {
     Vue.set(state.activeRelatedDataTab, payload.object, payload.tab);
+  },
+
+  UPDATE_IS_SAMPLE_SIMPLE_VIEW(state, payload) {
+    state.isSampleSimpleView = payload;
   },
 
   SET_SIDEBAR_USER_ACTION(state, payload) {

@@ -860,7 +860,7 @@ export default {
         return this.showMap;
       },
       set(value) {
-        this.updateMapState(value);
+        this.updateShowMap(value);
       }
     },
 
@@ -950,6 +950,7 @@ export default {
 
   methods: {
     ...mapActions("search", ["setActiveSite", "updateActiveTab"]),
+    ...mapActions("map", ["updateShowMap"]),
 
     saveGroundwater() {
       if (this.isNotEmpty(this.site_groundwater)) {
@@ -1087,7 +1088,6 @@ export default {
         requiredFields: ["latitude", "longitude"],
         site: {},
         site_groundwater: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,
@@ -1385,19 +1385,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        name: null,
-        project: null,
-        projectId: null,
-        page: 1,
-        paginateBy: 8,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     customLabelForAttachment(option) {

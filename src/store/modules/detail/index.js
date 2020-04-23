@@ -8,7 +8,8 @@ const state = {
   digitisedReference: null,
   digitisedReferenceKeywords: null,
   imagesetDetail: null,
-  referenceDetail: null
+  referenceDetail: null,
+  taxonDetail: null
 };
 
 const getters = {};

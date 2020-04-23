@@ -551,6 +551,7 @@ import RockReferenceTable from "./related_tables/RockReferenceTable";
 import RockTreeTable from "./related_tables/RockTreeTable";
 import RockImageTable from "./related_tables/RockImageTable";
 import RockClassificationTable from "./related_tables/RockClassificationTable";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Rock",
@@ -601,6 +602,8 @@ export default {
   },
 
   computed: {
+    ...mapState("search", ["rockSearchParameters"]),
+
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -622,23 +625,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "rockSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.rockSearchParameters,
         request: "FETCH_ROCKS",
         title: "header.rocks",
         object: "rock",
-        field: "rock",
-        block: this.block
+        field: "name_en"
       });
     }
 
@@ -663,9 +655,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -738,7 +732,6 @@ export default {
           lithostratigraphy: []
         },
         requiredFields: ["name"],
-        searchParameters: this.setDefaultSearchParameters(),
         rock: {},
         block: {
           info: true
@@ -1037,23 +1030,6 @@ export default {
           this.handleResponse(response)
         );
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        name: null,
-        name_en: null,
-        formula: null,
-        rock_type: null,
-        rock_rank: null,
-        in_portal: null,
-        in_estonia: null,
-        user_changed: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["name"],
-        sortDesc: [true]
-      };
     }
   }
 };

@@ -536,7 +536,7 @@ import {
   fetchAnalysisMethod
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -586,25 +586,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "analysisSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.analysisSearchParameters,
         request: "FETCH_ANALYSES",
         title: "header.analyses",
         object: "analysis",
-        field: "sample__number",
-        block: this.block,
-        agent: this.getCurrentUser,
-        databaseId: this.getDatabaseId
+        field: "sample__number"
       });
     }
 
@@ -635,7 +622,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"]),
+    ...mapState("search", ["analysisSearchParameters"]),
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -655,9 +642,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -730,7 +719,6 @@ export default {
         },
         requiredFields: ["analysis_method"],
         analysis: {},
-        searchParameters: this.setDefaultSearchParameters(),
         componentKey: 0,
         block: {
           info: true,
@@ -971,22 +959,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        analysis_method: null,
-        agentAndLab: null,
-        selectionId: null,
-        selection: null,
-        sample: null,
-        datasetId: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     addFiles(files) {

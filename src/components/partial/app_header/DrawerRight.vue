@@ -167,6 +167,30 @@
             @change="updateSearchParamsByField($event, 'isEstonianAuthor')"
           ></v-checkbox>
         </v-list-item>
+
+        <!-- IN_PORTAL -->
+        <v-list-item v-if="$route.meta.object === 'rock'">
+          <v-checkbox
+            :input-value="searchParameters.in_portal"
+            :label="$t('rock.in_portal')"
+            class="mt-0"
+            :color="drawerActiveColor"
+            hide-details
+            @change="updateSearchParamsByField($event, 'in_portal')"
+          ></v-checkbox>
+        </v-list-item>
+
+        <!-- IN_ESTONIA -->
+        <v-list-item v-if="$route.meta.object === 'rock'">
+          <v-checkbox
+            :input-value="searchParameters.in_estonia"
+            :label="$t('rock.in_estonia')"
+            class="mt-0"
+            :color="drawerActiveColor"
+            hide-details
+            @change="updateSearchParamsByField($event, 'in_estonia')"
+          ></v-checkbox>
+        </v-list-item>
         <!-- CHECKBOXES END -->
       </v-list-group>
 

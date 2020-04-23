@@ -643,6 +643,13 @@
         />
       </v-col>
     </v-row>
+
+    <!-- CLEAR SAVED FIELDS -->
+    <div class="d-flex mt-3">
+      <v-btn @click="clearSavedFields" class="text-none" color="yellow">
+        {{ $t("buttons.clearLocalStorage") }}
+      </v-btn>
+    </div>
   </div>
 </template>
 
@@ -650,7 +657,7 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 import cloneDeep from "lodash/cloneDeep";
 import {
   fetchTaxon,
@@ -730,33 +737,17 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "taxonSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.taxonSearchParameters,
         request: "FETCH_TAXA",
         title: "header.taxa",
         object: "taxon",
-        field: "taxon",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "taxon"
       });
     } else {
       // Adding taxon default values from local storage
-      const taxonHistory = this.$localStorage.get("taxon", "fallbackValue");
-      if (
-        taxonHistory !== "fallbackValue" &&
-        Object.keys(taxonHistory).length !== 0 &&
-        taxonHistory.constructor === Object
-      ) {
+      const taxonHistory = cloneDeep(this.taxonDetail);
+      if (taxonHistory) {
         this.taxon = taxonHistory;
       }
     }
@@ -781,7 +772,8 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
+    ...mapState("search", ["taxonSearchParameters"]),
+    ...mapState("detail", ["taxonDetail"]),
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -809,9 +801,17 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+    ...mapActions("detail", ["saveFields", "resetFields"]),
+
+    clearSavedFields() {
+      this.resetFields("taxonDetail");
+      this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
+    },
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -909,7 +909,6 @@ export default {
         },
         requiredFields: ["taxon"],
         taxon: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           details: true,
@@ -1053,6 +1052,10 @@ export default {
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
+
+      if (!this.$route.meta.isEdit) {
+        this.saveFields({ key: "taxonDetail", value: objectToUpload });
+      }
 
       Object.keys(uploadableObject).forEach(key => {
         if (
@@ -1233,20 +1236,6 @@ export default {
         this.relatedData[object].results = this.handleResponse(response);
         this.relatedData[object].count = response.data.count;
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        taxon: null,
-        author_year: null,
-        taxon_epithet: null,
-        parent__taxon: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     addFiles(files) {

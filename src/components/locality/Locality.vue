@@ -164,7 +164,7 @@
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <v-switch
-                v-model="showMap"
+                v-model="myShowMap"
                 hide-details
                 id="map-switch"
                 class="vuetify-switch my-1"
@@ -179,17 +179,17 @@
             >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
-                {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
+                {{ myShowMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
               </label>
             </v-card>
           </v-card>
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap" class="mt-1">
+            <v-row no-gutters v-show="myShowMap" class="mt-1">
               <v-col cols="12" class="pa-1">
                 <map-component
-                  :show-map="showMap && block.map"
+                  :show-map="myShowMap && block.map"
                   mode="single"
                   v-bind:locations="[]"
                   v-bind:location="{
@@ -603,7 +603,7 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import MapComponent from "../partial/MapComponent";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import {mapActions, mapState} from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
@@ -658,23 +658,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "localitySearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.localitySearchParameters,
         request: "FETCH_LOCALITIES",
         title: "header.localities",
         object: "locality",
-        field: "locality_en",
-        block: this.block
+        field: "locality_en"
       });
     }
     this.loadFullInfo();
@@ -696,14 +685,16 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId", "mapSettings"]),
+    ...mapState("search", ["localitySearchParameters"]),
 
-    showMap: {
+    ...mapState("map", ["showMap"]),
+
+    myShowMap: {
       get() {
-        return this.mapSettings.showMap;
+        return this.showMap;
       },
       set(value) {
-        this.$store.dispatch("updateMapState", value);
+        this.updateShowMap(value);
       }
     },
 
@@ -725,9 +716,12 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+    ...mapActions("map", ["updateShowMap"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -806,7 +800,6 @@ export default {
         },
         requiredFields: ["locality", "locality_en"],
         locality: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           map: true,
@@ -1116,21 +1109,6 @@ export default {
     updateLocation(location) {
       this.locality.latitude = location.lat.toFixed(6);
       this.locality.longitude = location.lng.toFixed(6);
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        locality: null,
-        number: null,
-        county: null,
-        country: null,
-        agent: null,
-        id: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     addFiles(files) {
