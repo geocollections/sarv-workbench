@@ -205,6 +205,7 @@ import {
 import cloneDeep from "lodash/cloneDeep";
 
 import DateWrapper from "../partial/inputs/DateWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "Visit",
@@ -243,24 +244,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "visitSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.visitSearchParameters,
         request: "FETCH_VISITS",
         title: "header.visits",
         object: "visit",
-        field: "visitor__agent",
-        block: this.block
+        field: "visitor__agent"
       });
     }
 
@@ -274,6 +263,10 @@ export default {
       },
       deep: true
     }
+  },
+
+  computed: {
+    ...mapState("search", ["visitSearchParameters"])
   },
 
   methods: {
@@ -309,7 +302,6 @@ export default {
         optionalFields: {
           visit: ["visitor", "visitor_free"]
         },
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         }
@@ -401,18 +393,6 @@ export default {
         id: obj.country,
         value: obj.visitor_country__value,
         value_en: obj.visitor_country__value_en
-      };
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        visitor: null,
-        date_arrived: null,
-        date_left: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
       };
     }
   }

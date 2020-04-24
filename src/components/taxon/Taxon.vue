@@ -657,7 +657,7 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 import cloneDeep from "lodash/cloneDeep";
 import {
   fetchTaxon,

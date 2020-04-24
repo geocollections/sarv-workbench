@@ -96,8 +96,8 @@ export default {
         resolve(
           fetchAnalyses(
             this.searchParameters,
-            this.currentUser,
-            this.databaseId
+            this.getCurrentUser,
+            this.getDatabaseId
           )
         );
       });
@@ -106,5 +106,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

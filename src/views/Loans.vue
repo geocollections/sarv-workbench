@@ -5,19 +5,18 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
       :col-size="4"
     />
 
     <list-module-core
-      module="loan"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchLoans"
-      search-history="loanSearchHistory"
-      view-type="loanViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -28,6 +27,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchLoans } from "../assets/js/api/apiCalls";
 import { mapState } from "vuex";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 export default {
   name: "Loans",
 
@@ -37,95 +37,46 @@ export default {
     TableViewSearch
   },
 
+  mixins: [searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "loan_number", title: "loan.loan_number", type: "text" },
-        { id: "project", title: "loan.project", type: "text" },
-        { id: "borrower", title: "loan.borrower", type: "text" },
-        {
-          id: "date_start",
-          title: "loan.date_start",
-          type: "text",
-          isDate: true,
-          calendarState: false,
-          calendarStateDrawer: false
-        },
-        {
-          id: "date_end",
-          title: "loan.date_end",
-          type: "text",
-          isDate: true,
-          calendarState: false,
-          calendarStateDrawer: false
-        }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
-  computed: {
-    ...mapState(["databaseId"])
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "loan_number", title: "loan.loan_number", type: "text" },
+      { id: "project", title: "loan.project", type: "text" },
+      { id: "borrower", title: "loan.borrower", type: "text" },
+      {
+        id: "date_start",
+        title: "loan.date_start",
+        type: "text",
+        isDate: true
+      },
+      {
+        id: "date_end",
+        title: "loan.date_end",
+        type: "text",
+        isDate: true
+      }
+    ]);
   },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "loan",
-          filters: this.filters,
-          params: newVal
-        });
-      },
-      deep: true,
-      immediate: true
-    }
+  computed: {
+    ...mapState("user", ["getDatabaseId"])
   },
 
   methods: {
     fetchLoans() {
       return new Promise(resolve => {
-        resolve(fetchLoans(this.searchParameters, this.databaseId));
+        resolve(fetchLoans(this.searchParameters, this.getDatabaseId));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    setDefaultSearchParameters() {
-      return {
-        loan_number: null,
-        project: null,
-        borrower: null,
-        date_start: null,
-        date_end: null,
-        isActive: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("loanSearchHistory");
-      this.$localStorage.remove("loanViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };
 </script>
 
-<style scoped>
-label {
-  margin: 5px 0 0 0;
-  color: #999;
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

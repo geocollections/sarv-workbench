@@ -27,6 +27,7 @@ import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSiteGroundwaters } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import { mapState } from "vuex";
 export default {
   name: "SiteGroundwaters",
 
@@ -93,10 +94,16 @@ export default {
     ]);
   },
 
+  computed: {
+    ...mapState("user", ["getDatabaseId"])
+  },
+
   methods: {
     fetchSiteGroundwaters() {
       return new Promise(resolve => {
-        resolve(fetchSiteGroundwaters(this.searchParameters, this.databaseId));
+        resolve(
+          fetchSiteGroundwaters(this.searchParameters, this.getDatabaseId)
+        );
       });
     }
   }

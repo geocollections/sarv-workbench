@@ -5,19 +5,18 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <!-- SEARCH FIELDS END -->
     <list-module-core
-      module="agent"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchAgents"
-      search-history="agentSearchHistory"
-      view-type="agentViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -28,6 +27,7 @@ import { fetchAgents } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { mapActions } from "vuex";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   components: {
@@ -35,68 +35,31 @@ export default {
     TableViewTitle,
     TableViewSearch
   },
+
   name: "Agents",
+
+  mixins: [searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "id", title: "common.id", type: "number" },
-        { id: "agent", title: "common.name", type: "text" },
-        { id: "forename", title: "common.forename", type: "text" },
-        { id: "surename", title: "common.surename", type: "text" }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.updateSearchParameters({
-          module: "agent",
-          filters: this.filters,
-          params: newVal
-        });
-      },
-      deep: true,
-      immediate: true
-    }
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "id", title: "common.id", type: "number" },
+      { id: "agent", title: "common.name", type: "text" },
+      { id: "forename", title: "common.forename", type: "text" },
+      { id: "surename", title: "common.surename", type: "text" }
+    ]);
   },
 
   methods: {
-    ...mapActions("search", ["updateSearchParameters"]),
-
     fetchAgents() {
       return new Promise(resolve => {
         resolve(fetchAgents(this.searchParameters));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        agent: null,
-        forename: null,
-        surename: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["agent"],
-        sortDesc: [false]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("agentSearchHistory");
-      this.$localStorage.remove("agentViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };

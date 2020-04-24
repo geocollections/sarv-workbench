@@ -355,6 +355,7 @@ import FileUpload from "../partial/inputs/FileInput";
 import DrillcoreBoxTable from "./relatedTables/DrillcoreBoxTable";
 import DrillcoreStudyTable from "./relatedTables/DrillcoreStudyTable";
 import requestsMixin from "../../mixins/requestsMixin";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Drillcore",
@@ -401,23 +402,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "drillcoreSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.drillcoreSearchParameters,
         request: "FETCH_DRILLCORES",
         title: "header.drillcores",
         object: "drillcore",
-        field: "drillcore",
-        block: this.block
+        field: "drillcore"
       });
     }
 
@@ -441,12 +431,10 @@ export default {
   },
 
   computed: {
-    activeRelatedDataTab() {
-      let tabObject = this.$store.state.activeRelatedDataTab;
-      if (tabObject && tabObject[this.$route.meta.object]) {
-        return tabObject[this.$route.meta.object];
-      } else return null;
-    },
+    ...mapState("search", ["drillcoreSearchParameters"]),
+    ...mapState("search", {
+      activeRelatedDataTab: state => state.activeRelatedDataTab.drillcore
+    }),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
@@ -459,9 +447,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -517,7 +507,6 @@ export default {
         },
         requiredFields: ["drillcore", "drillcore_en"],
         drillcore: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           details: true
@@ -728,19 +717,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        drillcore: null,
-        boxes: null,
-        locality: null,
-        storage: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     addFiles(files) {

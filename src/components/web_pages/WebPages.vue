@@ -96,6 +96,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import Editor from "../partial/inputs/Editor";
+import { mapState } from "vuex";
 
 export default {
   name: "WebPages",
@@ -133,24 +134,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "webPagesSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.web_pagesSearchParameters,
         request: "FETCH_WEB_PAGES",
         title: "header.web_pages",
         object: "web_pages",
-        field: "title_en",
-        block: this.block
+        field: "title_en"
       });
     }
 
@@ -164,6 +153,10 @@ export default {
       },
       deep: true
     }
+  },
+
+  computed: {
+    ...mapState("search", ["web_pagesSearchParameters"])
   },
 
   methods: {
@@ -180,7 +173,6 @@ export default {
         ],
         web_pages: {},
         requiredFields: [],
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         }
@@ -234,15 +226,6 @@ export default {
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
       return JSON.stringify(uploadableObject);
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

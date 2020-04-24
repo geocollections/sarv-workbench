@@ -712,7 +712,7 @@ import {
   fetchSpecimenLocations,
   fetchSpecimenReferences
 } from "../../assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -779,36 +779,17 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "specimenSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.specimenSearchParameters,
         request: "FETCH_SPECIMENS",
         title: "header.specimens",
         object: "specimen",
-        field: "specimen_id",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "specimen_id"
       });
     } else {
       // Adding specimen default values from local storage
-      const specimenHistory = this.$localStorage.get(
-        "specimen",
-        "fallbackValue"
-      );
-      if (
-        specimenHistory !== "fallbackValue" &&
-        Object.keys(specimenHistory).length !== 0 &&
-        specimenHistory.constructor === Object
-      ) {
+      const specimenHistory = cloneDeep(this.specimenDetail);
+      if (specimenHistory) {
         this.specimen = specimenHistory;
       }
     }
@@ -833,14 +814,11 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
-
-    activeRelatedDataTab() {
-      let tabObject = this.$store.state.activeRelatedDataTab;
-      if (tabObject && tabObject[this.$route.meta.object]) {
-        return tabObject[this.$route.meta.object];
-      } else return null;
-    },
+    ...mapState("search", ["specimenSearchParameters"]),
+    ...mapState("search", {
+      activeRelatedDataTab: state => state.activeRelatedDataTab.specimen
+    }),
+    ...mapState("detail", ["specimenDetail"]),
 
     computedRelatedTabs() {
       return this.relatedTabs.filter(tab => {
@@ -876,9 +854,12 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+    ...mapActions("detail", ["saveFields"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -997,7 +978,6 @@ export default {
         },
         requiredFields: ["fossil"],
         specimen: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           localityInfo: true,
@@ -1210,7 +1190,7 @@ export default {
       // Todo: Api doesn't save specimen_nr and throws error
       delete uploadableObject.specimen_nr;
       if (!this.$route.meta.isEdit)
-        this.$localStorage.set("specimen", objectToUpload);
+        this.saveFields({ key: "specimenDetail", value: objectToUpload });
 
       Object.keys(uploadableObject).forEach(key => {
         if (
@@ -1230,7 +1210,7 @@ export default {
       if (!this.isNotEmpty(uploadableObject.depth_interval))
         uploadableObject.depth_interval = null;
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       // Adding related data only on add view
       uploadableObject.related_data = {};
@@ -1418,26 +1398,6 @@ export default {
       });
     },
 
-    setDefaultSearchParameters() {
-      return {
-        idSpecimen: null,
-        collNumber: null,
-        fossil: null,
-        mineralRock: null,
-        locality: null,
-        stratigraphy: null,
-        agent_collected: null,
-        storage: null,
-        selectionId: null,
-        selection: null,
-        loan: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-
     addFiles(files) {
       this.addFileAsRelatedDataNew(files, "specimen");
     },
@@ -1450,10 +1410,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

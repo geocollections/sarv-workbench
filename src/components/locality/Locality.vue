@@ -603,7 +603,7 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import MapComponent from "../partial/MapComponent";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";

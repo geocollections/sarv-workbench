@@ -299,7 +299,148 @@ const state = {
     sortBy: ["name"],
     sortDesc: [true]
   },
-  rockViewType: "table"
+  rockViewType: "table",
+  specimenSearchParameters: {
+    idSpecimen: null,
+    collNumber: null,
+    fossil: null,
+    mineralRock: null,
+    locality: null,
+    stratigraphy: null,
+    agent_collected: null,
+    storage: null,
+    selectionId: null,
+    selection: null,
+    loan: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  specimenViewType: "table",
+  collectionSearchParameters: {
+    id: null,
+    number: null,
+    name: null,
+    agent: null,
+    locality: null,
+    reference: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["collection_id"],
+    sortDesc: [true]
+  },
+  collectionViewType: "table",
+  locationSearchParameters: {
+    location: null,
+    location_location: null,
+    stratigraphy_free: null,
+    agent: null,
+    user_added: null,
+    date_added: null,
+    page: 1,
+    paginateBy: 10,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  locationViewType: "table",
+  agentSearchParameters: {
+    id: null,
+    agent: null,
+    forename: null,
+    surename: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["agent"],
+    sortDesc: [false]
+  },
+  agentViewType: "table",
+  drillcoreSearchParameters: {
+    drillcore: null,
+    boxes: null,
+    locality: null,
+    storage: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  drillcoreViewType: "table",
+  drillcore_boxSearchParameters: {
+    storage: null,
+    drillcore: null,
+    page: 1,
+    paginateBy: 10,
+    sortBy: ["drillcore"],
+    sortDesc: [true]
+  },
+  drillcore_boxViewType: "table",
+  datasetSearchParameters: {
+    name: null,
+    owner: null,
+    date: null,
+    remarks: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  datasetViewType: "table",
+  visitSearchParameters: {
+    visitor: null,
+    date_arrived: null,
+    date_left: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  visitViewType: "table",
+  loanSearchParameters: {
+    loan_number: null,
+    project: null,
+    borrower: null,
+    date_start: null,
+    date_end: null,
+    isActive: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  loanViewType: "table",
+  accessionSearchParameters: {
+    number: null,
+    description: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["number"],
+    sortDesc: [true]
+  },
+  accessionViewType: "table",
+  deaccessionSearchParameters: {
+    number: null,
+    description: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["number"],
+    sortDesc: [true]
+  },
+  deaccessionViewType: "table",
+  web_newsSearchParameters: {
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  web_newsViewType: "table",
+  web_pagesSearchParameters: {
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  web_pagesViewType: "table"
 };
 
 const getters = {};

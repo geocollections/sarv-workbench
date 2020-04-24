@@ -395,7 +395,7 @@ import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
 import FileUpload from "../partial/inputs/FileInput";
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "SampleSeries",

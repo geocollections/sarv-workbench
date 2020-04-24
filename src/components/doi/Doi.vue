@@ -1076,7 +1076,7 @@ export default {
         uploadableObject.dataset = this.relatedData.dataset.id;
       } else uploadableObject.dataset = null;
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       if (this.$route.meta.isEGF) uploadableObject.egf = this.$route.params.id;
 

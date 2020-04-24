@@ -319,6 +319,7 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import FileUpload from "../partial/inputs/FileInput";
 import DrillcoreBoxAttachmentTable from "./related_tables/DrillcoreBoxAttachmentTable";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "DrillcoreBox",
@@ -358,24 +359,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "drillcoreBoxSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.drillcore_boxSearchParameters,
         request: "FETCH_DRILLCORE_BOXES",
         title: "header.drillcoreBoxes",
         object: "drillcore_box",
-        field: "number",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "number"
       });
     }
 
@@ -401,6 +390,8 @@ export default {
   },
 
   computed: {
+    ...mapState("search", ["drillcore_boxSearchParameters"]),
+
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -419,9 +410,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });

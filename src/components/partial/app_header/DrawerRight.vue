@@ -191,6 +191,18 @@
             @change="updateSearchParamsByField($event, 'in_estonia')"
           ></v-checkbox>
         </v-list-item>
+
+        <!-- IS_ACTIVE -->
+        <v-list-item v-if="$route.meta.object === 'loan'">
+          <v-checkbox
+            :input-value="searchParameters.isActive"
+            :label="$t('loan.isActive')"
+            class="mt-0"
+            :color="drawerActiveColor"
+            hide-details
+            @change="updateSearchParamsByField($event, 'isActive')"
+          ></v-checkbox>
+        </v-list-item>
         <!-- CHECKBOXES END -->
       </v-list-group>
 

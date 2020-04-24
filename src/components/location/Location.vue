@@ -126,6 +126,7 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import { fetchLocation } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
+import { mapState } from "vuex";
 
 export default {
   name: "Location",
@@ -159,24 +160,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "locationSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.locationSearchParameters,
         request: "FETCH_LOCATIONS",
         title: "header.locations",
         object: "location",
-        field: "location",
-        block: this.block
+        field: "location"
       });
     }
 
@@ -190,6 +179,10 @@ export default {
       },
       deep: true
     }
+  },
+
+  computed: {
+    ...mapState("search", ["locationSearchParameters"])
   },
 
   methods: {
@@ -215,7 +208,6 @@ export default {
         },
         location: {},
         requiredFields: ["location"],
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         }
@@ -281,21 +273,6 @@ export default {
         };
         this.autocomplete.agent.push(this.location.agent);
       }
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        location: null,
-        location_location: null,
-        stratigraphy_free: null,
-        agent: null,
-        user_added: null,
-        date_added: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

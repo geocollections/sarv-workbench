@@ -158,6 +158,7 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import { fetchAccessionDetail } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import DateWrapper from "../partial/inputs/DateWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "Accession",
@@ -196,24 +197,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "accessionSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.accessionSearchParameters,
         request: "FETCH_ACCESSIONS",
         title: "header.accessions",
         object: "accession",
-        field: "number",
-        block: this.block
+        field: "number"
       });
     }
 
@@ -227,6 +216,10 @@ export default {
       },
       deep: true
     }
+  },
+
+  computed: {
+    ...mapState("search", ["accessionSearchParameters"])
   },
 
   methods: {
@@ -254,7 +247,6 @@ export default {
         },
         accession: {},
         requiredFields: ["number"],
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         }
@@ -333,17 +325,6 @@ export default {
         };
         this.autocomplete.agent.push(this.accession.agent_kinnitas);
       }
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        number: null,
-        description: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["number"],
-        sortDesc: [true]
-      };
     }
   }
 };

@@ -2447,7 +2447,7 @@ export function fetchDrillcores(data) {
   }
 
   if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.drillcore};fields:depth,locality__depth;lookuptype:gte`;
+    searchFields += `&multi_search=value:${data.locality};fields:depth,locality__depth;lookuptype:gte`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {

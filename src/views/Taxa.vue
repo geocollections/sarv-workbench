@@ -33,7 +33,7 @@ import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchTaxa } from "../assets/js/api/apiCalls";
-import {mapActions, mapGetters, mapState} from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import isEmpty from "lodash";
 import searchParametersMixin from "../mixins/searchParametersMixin";
 

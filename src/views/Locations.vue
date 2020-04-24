@@ -5,19 +5,18 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
       :col-size="4"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-      module="keyword"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchLocations"
-      search-history="locationsSearchHistory"
-      view-type="locationsViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -27,6 +26,7 @@ import ListModuleCore from "./ListModuleCore";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import { fetchLocations } from "../assets/js/api/apiCalls";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   name: "Locations",
@@ -37,38 +37,27 @@ export default {
     TableViewTitle
   },
 
+  mixins: [searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "location", title: "location.location", type: "text" },
-        {
-          id: "location_location",
-          title: "location.location_location",
-          type: "text"
-        },
-        { id: "stratigraphy_free", title: "common.stratigraphy", type: "text" },
-        { id: "agent", title: "location.agent", type: "text" },
-        { id: "user_added", title: "common.user_added", type: "text" },
-        { id: "date_added", title: "common.date_added", type: "text" }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "location",
-          filters: this.filters,
-          params: newVal
-        });
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "location", title: "location.location", type: "text" },
+      {
+        id: "location_location",
+        title: "location.location_location",
+        type: "text"
       },
-      deep: true,
-      immediate: true
-    }
+      { id: "stratigraphy_free", title: "common.stratigraphy", type: "text" },
+      { id: "agent", title: "location.agent", type: "text" },
+      { id: "user_added", title: "common.user_added", type: "text" },
+      { id: "date_added", title: "common.date_added", type: "text" }
+    ]);
   },
 
   methods: {
@@ -76,36 +65,6 @@ export default {
       return new Promise(resolve => {
         resolve(fetchLocations(this.searchParameters));
       });
-    },
-
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        location: null,
-        location_location: null,
-        stratigraphy_free: null,
-        agent: null,
-        user_added: null,
-        date_added: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("locationSearchHistory");
-      this.$localStorage.remove("locationViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };
