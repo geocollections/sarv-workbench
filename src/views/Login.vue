@@ -5,18 +5,13 @@
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
-          <v-card
-            :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
-            elevation="8"
-          >
+          <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="8">
             <v-tabs
               v-model="tab"
               grow
-              :background-color="appSettings.bodyColor.split('n-')[0] + 'n-3'"
+              :background-color="bodyColor.split('n-')[0] + 'n-3'"
               hide-slider
-              :active-class="
-                appSettings.bodyColor.split('n-')[0] + 'n-5 black--text'
-              "
+              :active-class="bodyColor.split('n-')[0] + 'n-5 black--text'"
             >
               <v-tabs-slider></v-tabs-slider>
 
@@ -27,10 +22,7 @@
 
             <v-tabs-items v-model="tab">
               <v-tab-item>
-                <v-card
-                  flat
-                  :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
-                >
+                <v-card flat :color="bodyColor.split('n-')[0] + 'n-5'">
                   <v-card-text>
                     <v-alert
                       class="mb-0"
@@ -65,10 +57,7 @@
               </v-tab-item>
 
               <v-tab-item>
-                <v-card
-                  flat
-                  :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
-                >
+                <v-card flat :color="bodyColor.split('n-')[0] + 'n-5'">
                   <v-card-text>
                     <v-alert
                       border="right"
@@ -174,10 +163,6 @@ export default {
     idError: false
   }),
 
-  beforeCreate() {
-    this.$store.dispatch("initialiseAppSettings");
-  },
-
   created() {
     window.addEventListener("keyup", this.handleKeyUp);
   },
@@ -187,7 +172,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState("settings", ["bodyColor"])
   },
 
   methods: {
@@ -216,7 +201,7 @@ export default {
       rgba(0, 0, 0, 0.7) 100%
     ),
     /*url("https://files.geocollections.info/img/doi-header-bg.jpg");*/
-    url("../assets/img/background_1.jpg");
+      url("../assets/img/background_1.jpg");
   background-size: cover;
 }
 

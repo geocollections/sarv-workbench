@@ -3,16 +3,11 @@
     <!-- BODY -->
     <v-row no-gutters>
       <v-col cols="12" class="px-1">
-        <p class="font-weight-bold mb-0">Body</p>
+        <p class="font-weight-bold mb-0">{{ $t("settings.body") }}</p>
       </v-col>
 
       <v-col cols="12" class="px-1">
-        <v-radio-group
-          v-model="settings.bodyColor"
-          row
-          hide-details
-          class="mt-1 mx-3"
-        >
+        <v-radio-group v-model="myBodyColor" row hide-details class="mt-1 mx-3">
           <v-radio
             v-for="(entity, index) in colorsLight"
             :key="index"
@@ -29,21 +24,25 @@
     <!-- BODY ACTIVE COLOR -->
     <v-row no-gutters class="mt-3">
       <v-col cols="12" class="px-1">
-        <p class="font-weight-bold mb-0">Body active color</p>
+        <p class="font-weight-bold mb-0">{{ $t("settings.bodyActive") }}</p>
       </v-col>
 
       <v-col cols="12" class="px-1">
         <v-switch
-          v-model="settings.bodyActiveColorDark"
+          v-model="myBodyActiveColorDark"
           class="mt-2 mx-3"
           hide-details
           inset
-          :color="settings.bodyActiveColorDark ? 'black' : 'white'"
+          :color="myBodyActiveColorDark ? 'black' : 'white'"
         >
           <template v-slot:label>
             <span>
-              <b>{{ settings.bodyActiveColorDark ? "Dark" : "Light" }}</b>
-              text
+              <b>{{
+                myBodyActiveColorDark
+                  ? $t("settings.dark")
+                  : $t("settings.light")
+              }}</b>
+              {{ $t("settings.text") }}
             </span>
           </template>
         </v-switch>
@@ -51,7 +50,7 @@
 
       <v-col cols="12" class="px-1">
         <v-radio-group
-          v-model="settings.bodyActiveColor"
+          v-model="myBodyActiveColor"
           row
           hide-details
           class="mt-1 mx-3"
@@ -72,21 +71,23 @@
     <!-- NAVBAR -->
     <v-row no-gutters class="mt-3">
       <v-col cols="12" class="px-1">
-        <p class="font-weight-bold mb-0">Navbar</p>
+        <p class="font-weight-bold mb-0">{{ $t("settings.navbar") }}</p>
       </v-col>
 
       <v-col cols="12" class="px-1">
         <v-switch
-          v-model="settings.navbarDark"
+          v-model="myNavbarDark"
           class="mt-2 mx-3"
           hide-details
           inset
-          :color="settings.navbarDark ? 'black' : 'white'"
+          :color="myNavbarDark ? 'black' : 'white'"
         >
           <template v-slot:label>
             <span>
-              <b>{{ settings.navbarDark ? "Dark" : "Light" }}</b>
-              navbar
+              <b>{{
+                myNavbarDark ? $t("settings.dark") : $t("settings.light")
+              }}</b>
+              {{ $t("settings.navbarText") }}
             </span>
           </template>
         </v-switch>
@@ -94,7 +95,7 @@
 
       <v-col cols="12" class="px-1">
         <v-radio-group
-          v-model="settings.navbarColor"
+          v-model="myNavbarColor"
           row
           hide-details
           class="mt-1 mx-3"
@@ -115,21 +116,23 @@
     <!-- DRAWER LEFT -->
     <v-row no-gutters class="mt-3">
       <v-col cols="12" class="px-1">
-        <p class="font-weight-bold mb-0">Drawer left</p>
+        <p class="font-weight-bold mb-0">{{ $t("settings.drawerLeft") }}</p>
       </v-col>
 
       <v-col cols="12" class="px-1">
         <v-switch
-          v-model="settings.drawerLeftDark"
+          v-model="myDrawerLeftDark"
           class="mt-2 mx-3"
           hide-details
           inset
-          :color="settings.drawerLeftDark ? 'black' : 'white'"
+          :color="myDrawerLeftDark ? 'black' : 'white'"
         >
           <template v-slot:label>
             <span>
-              <b>{{ settings.drawerLeftDark ? "Dark" : "Light" }}</b>
-              drawer
+              <b>{{
+                myDrawerLeftDark ? $t("settings.dark") : $t("settings.light")
+              }}</b>
+              {{ $t("settings.drawer") }}
             </span>
           </template>
         </v-switch>
@@ -137,7 +140,7 @@
 
       <v-col cols="12" class="px-1">
         <v-radio-group
-          v-model="settings.drawerLeftColor"
+          v-model="myDrawerLeftColor"
           row
           hide-details
           class="mt-1 mx-3"
@@ -158,12 +161,14 @@
     <!-- DRAWER LEFT ACTIVE COLOR -->
     <v-row no-gutters class="mt-3">
       <v-col cols="12" class="px-1">
-        <p class="font-weight-bold mb-0">Drawer left active color</p>
+        <p class="font-weight-bold mb-0">
+          {{ $t("settings.drawerLeftActive") }}
+        </p>
       </v-col>
 
       <v-col cols="12" class="px-1">
         <v-radio-group
-          v-model="settings.drawerLeftActiveColor"
+          v-model="myDrawerLeftActiveColor"
           row
           hide-details
           class="mt-1 mx-3"
@@ -184,21 +189,23 @@
     <!-- DRAWER RIGHT -->
     <v-row no-gutters class="mt-3">
       <v-col cols="12" class="px-1">
-        <p class="font-weight-bold mb-0">Drawer right</p>
+        <p class="font-weight-bold mb-0">{{ $t("settings.drawerRight") }}</p>
       </v-col>
 
       <v-col cols="12" class="px-1">
         <v-switch
-          v-model="settings.drawerRightDark"
+          v-model="myDrawerRightDark"
           class="mt-2 mx-3"
           hide-details
           inset
-          :color="settings.drawerRightDark ? 'black' : 'white'"
+          :color="myDrawerRightDark ? 'black' : 'white'"
         >
           <template v-slot:label>
             <span>
-              <b>{{ settings.drawerRightDark ? "Dark" : "Light" }}</b>
-              drawer
+              <b>{{
+                myDrawerRightDark ? $t("settings.dark") : $t("settings.light")
+              }}</b>
+              {{ $t("settings.drawer") }}
             </span>
           </template>
         </v-switch>
@@ -206,7 +213,7 @@
 
       <v-col cols="12" class="px-1">
         <v-radio-group
-          v-model="settings.drawerRightColor"
+          v-model="myDrawerRightColor"
           row
           hide-details
           class="mt-1 mx-3"
@@ -227,12 +234,14 @@
     <!-- DRAWER RIGHT ACTIVE COLOR -->
     <v-row no-gutters class="mt-3">
       <v-col cols="12" class="px-1">
-        <p class="font-weight-bold mb-0">Drawer right active color</p>
+        <p class="font-weight-bold mb-0">
+          {{ $t("settings.drawerRightActive") }}
+        </p>
       </v-col>
 
       <v-col cols="12" class="px-1">
         <v-radio-group
-          v-model="settings.drawerRightActiveColor"
+          v-model="myDrawerRightActiveColor"
           row
           hide-details
           class="mt-1 mx-3"
@@ -253,23 +262,11 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 export default {
   name: "Colors",
   data: () => ({
-    settings: {
-      bodyColor: "grey lighten-4",
-      bodyDark: false,
-      bodyActiveColor: "deep-orange",
-      bodyActiveColorDark: true,
-      navbarColor: "blue-grey",
-      navbarDark: true,
-      drawerLeftColor: "white",
-      drawerLeftDark: false,
-      drawerLeftActiveColor: "black",
-      drawerRightColor: "white",
-      drawerRightDark: false,
-      drawerRightActiveColor: "deep-orange"
-    },
     colors: [
       "red",
       "pink",
@@ -337,24 +334,159 @@ export default {
     // { name: "white", hex: "#FFFFFF" }
   }),
 
-  created() {
-    let settings = this.$localStorage.get("SARV_APP_SETTINGS");
-    if (
-      settings &&
-      Object.entries(settings).length > 0 &&
-      settings.constructor === Object
-    ) {
-      this.settings = settings;
+  computed: {
+    ...mapState("settings", [
+      "bodyColor",
+      "bodyDark",
+      "bodyActiveColor",
+      "bodyActiveColorDark",
+      "navbarColor",
+      "navbarDark",
+      "drawerLeftColor",
+      "drawerLeftDark",
+      "drawerLeftActiveColor",
+      "drawerRightColor",
+      "drawerRightDark",
+      "drawerRightActiveColor"
+    ]),
+
+    myBodyColor: {
+      get() {
+        return this.bodyColor;
+      },
+
+      set(value) {
+        this.updateBodyColor(value);
+      }
+    },
+
+    myBodyDark: {
+      get() {
+        return this.bodyDark;
+      },
+
+      set(value) {
+        this.updateBodyDark(value);
+      }
+    },
+
+    myBodyActiveColor: {
+      get() {
+        return this.bodyActiveColor;
+      },
+
+      set(value) {
+        this.updateBodyActiveColor(value);
+      }
+    },
+
+    myBodyActiveColorDark: {
+      get() {
+        return this.bodyActiveColorDark;
+      },
+
+      set(value) {
+        this.updateBodyActiveColorDark(value);
+      }
+    },
+
+    myNavbarColor: {
+      get() {
+        return this.navbarColor;
+      },
+
+      set(value) {
+        this.updateNavbarColor(value);
+      }
+    },
+
+    myNavbarDark: {
+      get() {
+        return this.navbarDark;
+      },
+
+      set(value) {
+        this.updateNavbarDark(value);
+      }
+    },
+
+    myDrawerLeftColor: {
+      get() {
+        return this.drawerLeftColor;
+      },
+
+      set(value) {
+        this.updateDrawerLeftColor(value);
+      }
+    },
+
+    myDrawerLeftDark: {
+      get() {
+        return this.drawerLeftDark;
+      },
+
+      set(value) {
+        this.updateDrawerLeftDark(value);
+      }
+    },
+
+    myDrawerLeftActiveColor: {
+      get() {
+        return this.drawerLeftActiveColor;
+      },
+
+      set(value) {
+        this.updateDrawerLeftActiveColor(value);
+      }
+    },
+
+    myDrawerRightColor: {
+      get() {
+        return this.drawerRightColor;
+      },
+
+      set(value) {
+        this.updateDrawerRightColor(value);
+      }
+    },
+
+    myDrawerRightDark: {
+      get() {
+        return this.drawerRightDark;
+      },
+
+      set(value) {
+        this.updateDrawerRightDark(value);
+      }
+    },
+
+    myDrawerRightActiveColor: {
+      get() {
+        return this.drawerRightActiveColor;
+      },
+
+      set(value) {
+        this.updateDrawerLeftRightColor(value);
+      }
     }
   },
 
-  watch: {
-    settings: {
-      handler(newVal) {
-        this.$store.dispatch("updateSettings", newVal);
-      },
-      deep: true
-    }
+  methods: {
+    ...mapActions("settings", [
+      "updateSettings",
+      "updateBodyColor",
+      "updateBodyDark",
+      "updateBodyActiveColor",
+      "updateBodyActiveColorDark",
+      "updateNavbarColor",
+      "updateNavbarDark",
+      "updateDrawerLeftColor",
+      "updateDrawerLeftDark",
+      "updateDrawerLeftActiveColor",
+      "updateDrawerRightColor",
+      "updateDrawerRightDark",
+      "updateDrawerLeftRightColor"
+    ])
   }
 };
 </script>

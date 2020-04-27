@@ -392,7 +392,7 @@ import {
 } from "../../assets/js/api/apiCalls";
 import { cloneDeep } from "lodash";
 import SpecimenTable from "../specimen/SpecimenTable";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -427,7 +427,8 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
+    ...mapState("search", ["collectionSearchParameters"]),
+    ...mapState("detail", ["collectionDetail"]),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
@@ -442,36 +443,17 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "collectionSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.collectionSearchParameters,
         request: "FETCH_COLLECTIONS",
         title: "header.collections",
         object: "collection",
-        field: "number",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "number"
       });
     } else {
       // Adding collection default values from local storage
-      const collectionHistory = this.$localStorage.get(
-        "collection",
-        "fallbackValue"
-      );
-      if (
-        collectionHistory !== "fallbackValue" &&
-        Object.keys(collectionHistory).length !== 0 &&
-        collectionHistory.constructor === Object
-      ) {
+      const collectionHistory = cloneDeep(this.collectionDetail);
+      if (collectionHistory) {
         this.collection = collectionHistory;
       }
     }
@@ -497,6 +479,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("detail", ["saveFields"]),
+
     setInitialData() {
       return {
         searchHistory: "collectionSearchHistory",
@@ -536,7 +520,6 @@ export default {
         },
         requiredFields: ["collection_id", "number"],
         collection: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           relatedInfo: true,
@@ -630,6 +613,10 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
+      if (!this.$route.meta.isEdit) {
+        this.saveFields({ key: "collectionDetail", value: objectToUpload });
+      }
+
       Object.keys(uploadableObject).forEach(key => {
         if (
           typeof uploadableObject[key] === "object" &&
@@ -643,7 +630,7 @@ export default {
         }
       });
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       console.log("This object is sent in string format:");
       console.log(uploadableObject);
@@ -693,21 +680,6 @@ export default {
         };
         this.autocomplete.reference.push(this.collection.reference);
       }
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        number: null,
-        name: null,
-        agent: null,
-        locality: null,
-        reference: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["collection_id"],
-        sortDesc: [true]
-      };
     }
   }
 };

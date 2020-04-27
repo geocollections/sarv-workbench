@@ -144,6 +144,7 @@ import autocompleteMixin from "../../mixins/autocompleteMixin";
 import { fetchDeaccessionDetail } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import DateWrapper from "../partial/inputs/DateWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "Deaccession",
@@ -182,24 +183,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "deaccessionSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.deaccessionSearchParameters,
         request: "FETCH_DEACCESSIONS",
         title: "header.deaccessions",
         object: "deaccession",
-        field: "number",
-        block: this.block
+        field: "number"
       });
     }
 
@@ -213,6 +202,10 @@ export default {
       },
       deep: true
     }
+  },
+
+  computed: {
+    ...mapState("search", ["deaccessionSearchParameters"])
   },
 
   methods: {
@@ -238,7 +231,6 @@ export default {
         },
         deaccession: {},
         requiredFields: ["number"],
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         }
@@ -310,17 +302,6 @@ export default {
         };
         this.autocomplete.agent.push(this.deaccession.agent_kinnitas);
       }
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        number: null,
-        description: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["number"],
-        sortDesc: [true]
-      };
     }
   }
 };

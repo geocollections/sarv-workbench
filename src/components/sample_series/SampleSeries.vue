@@ -395,6 +395,7 @@ import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
 import FileUpload from "../partial/inputs/FileInput";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "SampleSeries",
@@ -436,24 +437,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "sampleSeriesSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.sample_seriesSearchParameters,
         request: "FETCH_SAMPLE_SERIES",
         title: "header.sample_series",
         object: "sample_series",
-        field: "name",
-        block: this.block
+        field: "name"
       });
     }
 
@@ -476,6 +465,8 @@ export default {
   },
 
   computed: {
+    ...mapState("search", ["sample_seriesSearchParameters"]),
+
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -487,9 +478,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -547,7 +540,6 @@ export default {
         },
         sample_series: {},
         requiredFields: ["name"],
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         },
@@ -728,18 +720,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        name: null,
-        locality: null,
-        agent_collected: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     addFiles(files) {

@@ -108,7 +108,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["isUserAllowedTo"])
+    ...mapGetters("user", ["isUserAllowedTo"])
   },
 
   created: function() {

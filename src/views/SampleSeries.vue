@@ -10,19 +10,18 @@
       class="d-print-none"
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
       :col-size="4"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-      module="sample_series"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchSampleSeries"
-      search-history="sampleSeriesSearchHistory"
-      view-type="sampleSeriesViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -32,6 +31,7 @@ import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSampleSeries } from "../assets/js/api/apiCalls";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   components: {
@@ -39,75 +39,37 @@ export default {
     TableViewSearch,
     TableViewTitle
   },
+
   name: "SamplesSeries",
+
+  mixins: [searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "name", title: "common.name", type: "text" },
-        { id: "locality", title: "common.locality", type: "text" },
-        {
-          id: "agent_collected",
-          title: "specimen.agent_collected",
-          type: "text"
-        }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "sample_series",
-          filters: this.filters,
-          params: newVal
-        });
-      },
-      deep: true,
-      immediate: true
-    }
+
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "name", title: "common.name", type: "text" },
+      { id: "locality", title: "common.locality", type: "text" },
+      {
+        id: "agent_collected",
+        title: "specimen.agent_collected",
+        type: "text"
+      }
+    ]);
   },
+
   methods: {
     fetchSampleSeries() {
       return new Promise(resolve => {
         resolve(fetchSampleSeries(this.searchParameters));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    setDefaultSearchParameters() {
-      return {
-        name: null,
-        locality: null,
-        agent_collected: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("sampleSeriesSearchHistory");
-      this.$localStorage.remove("sampleSeriesViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };
 </script>
 
-<style scoped>
-label {
-  margin: 5px 0 0 0;
-  color: #999;
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

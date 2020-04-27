@@ -436,6 +436,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "Preparation",
@@ -473,27 +474,20 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "preparationSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.preparationSearchParameters,
         request: "FETCH_PREPARATIONS",
         title: "header.preparations",
         object: "preparation",
-        field: "preparation_number",
-        block: this.block
+        field: "preparation_number"
       });
     }
 
     this.loadFullInfo();
+  },
+
+  computed: {
+    ...mapState("search", ["preparationSearchParameters"])
   },
 
   watch: {
@@ -571,7 +565,6 @@ export default {
         },
         requiredFields: ["preparation_number"],
         preparation: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           details: true,
@@ -714,16 +707,6 @@ export default {
       }
     },
 
-    setDefaultSearchParameters() {
-      return {
-        preparation_number: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-
     searchRelatedData: debounce(function(
       searchParameters,
       apiCall,
@@ -741,10 +724,4 @@ export default {
 };
 </script>
 
-<style scoped>
-label {
-  margin: 0;
-  color: rgba(0, 0, 0, 0.54);
-  font-size: 0.8rem;
-}
-</style>
+<style scoped></style>

@@ -628,6 +628,7 @@ import requestsMixin from "../../mixins/requestsMixin";
 import StratigraphyReferenceTable from "./relatedTables/StratigraphyReferenceTable";
 import StratigraphyStratotypeTable from "./relatedTables/StratigraphyStratotypeTable";
 import Editor from "../partial/inputs/Editor";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Stratigraphy",
@@ -675,23 +676,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "stratigraphySearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.stratigraphySearchParameters,
         request: "FETCH_STRATIGRAPHY",
         title: "header.stratigraphies",
         object: "stratigraphy",
-        field: "name",
-        block: this.block
+        field: "stratigraphy_en"
       });
     }
 
@@ -717,6 +707,8 @@ export default {
   },
 
   computed: {
+    ...mapState("search", ["stratigraphySearchParameters"]),
+
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -728,9 +720,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -815,7 +809,6 @@ export default {
         },
         requiredFields: ["stratigraphy", "stratigraphy_en"],
         stratigraphy: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           description: true
@@ -1072,21 +1065,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        stratigraphy: null,
-        type: null,
-        rank: null,
-        scope: null,
-        parent: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

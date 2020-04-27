@@ -15,11 +15,7 @@
         :value="$route.meta.isTableView"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="
-          tableSearchParameters &&
-            tableSearchParameters.filters &&
-            tableSearchParameters.filters.length > 0
-        "
+        v-if="activeSearchParametersFilters.length > 0 && searchParameters"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -29,7 +25,7 @@
         </template>
 
         <!-- SEARCH BUTTON -->
-        <v-list-item v-if="$route.meta.isEdit" class="justify-center">
+        <v-list-item v-if="!$route.meta.isTableView" class="justify-center">
           <v-btn :color="drawerActiveColor" dark small @click="searchRecords">
             {{ $t("buttons.search") }}
           </v-btn>
@@ -37,14 +33,14 @@
 
         <v-list-item
           class="d-flex flex-column justify-content-end"
-          v-for="(field, index) in tableSearchParameters.filters"
+          v-for="(field, index) in activeSearchParametersFilters"
           :key="index"
         >
           <!-- DATEPICKER -->
           <v-menu
             z-index="50050"
             v-if="field.isDate"
-            v-model="field.calendarStateDrawer"
+            v-model="calendarMenus[field.id]"
             :close-on-content-click="false"
             :nudge-right="40"
             transition="scale-transition"
@@ -54,19 +50,20 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                 hide-details
-                v-model="tableSearchParameters.searchParameters[field.id]"
+                :value="searchParameters[field.id]"
                 :label="$t(field.title)"
                 prepend-inner-icon="far fa-calendar-alt"
                 :color="drawerActiveColor"
                 clearable
+                @click:clear="updateSearchParamsByField(null, field.id)"
                 clear-icon="fas fa-times"
                 readonly
                 v-on="on"
               ></v-text-field>
             </template>
             <v-date-picker
-              v-model="tableSearchParameters.searchParameters[field.id]"
-              @input="field.calendarStateDrawer = false"
+              :value="searchParameters[field.id]"
+              @input="updateDate($event, field.id)"
               :color="drawerActiveColor"
               :header-color="drawerActiveColor"
               scrollable
@@ -78,10 +75,11 @@
             v-else
             class="w-100"
             :label="$t(field.title)"
-            v-model="tableSearchParameters.searchParameters[field.id]"
+            :value="searchParameters[field.id]"
             :color="drawerActiveColor"
             :type="field.type"
             hide-details
+            @input="updateSearchParamsByField($event, field.id)"
           ></v-text-field>
         </v-list-item>
 
@@ -89,78 +87,120 @@
         <!-- PHOTO_ARCHIVE -->
         <v-list-item class="mt-2" v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.photoArchive')"
             value="2"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
         <!-- SPECIMEN_IMAGE -->
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.specimenImage')"
             value="1"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
         <!-- OTHER_FILE -->
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.otherFiles')"
             value="3"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
         <!-- DIGITISED_REFERENCE -->
         <v-list-item v-if="$route.meta.object === 'attachment'">
           <v-checkbox
-            v-model="
-              tableSearchParameters.searchParameters.specimen_image_attachment
-            "
+            :input-value="searchParameters.specimen_image_attachment"
             :label="$t('attachment.digitisedReference')"
             value="4"
             class="mt-0"
             :color="drawerActiveColor"
             hide-details
+            @change="
+              updateSearchParamsByField($event, 'specimen_image_attachment')
+            "
           ></v-checkbox>
         </v-list-item>
 
         <!-- IS_ESTONIAN_REFERENCE -->
         <v-list-item class="mt-2" v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="tableSearchParameters.searchParameters.isEstonianReference"
+            :input-value="searchParameters.isEstonianReference"
             :label="$t('reference.is_estonian_reference')"
             class="mt-0 pr-6"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'isEstonianReference')"
           ></v-checkbox>
         </v-list-item>
 
         <!-- IS_ESTONIAN_AUTHOR -->
         <v-list-item v-if="$route.meta.object === 'reference'">
           <v-checkbox
-            v-model="tableSearchParameters.searchParameters.isEstonianAuthor"
+            :input-value="searchParameters.isEstonianAuthor"
             :label="$t('reference.is_estonian_author')"
             class="mt-0"
             :color="drawerActiveColor"
             hide-details
+            @change="updateSearchParamsByField($event, 'isEstonianAuthor')"
+          ></v-checkbox>
+        </v-list-item>
+
+        <!-- IN_PORTAL -->
+        <v-list-item v-if="$route.meta.object === 'rock'">
+          <v-checkbox
+            :input-value="searchParameters.in_portal"
+            :label="$t('rock.in_portal')"
+            class="mt-0"
+            :color="drawerActiveColor"
+            hide-details
+            @change="updateSearchParamsByField($event, 'in_portal')"
+          ></v-checkbox>
+        </v-list-item>
+
+        <!-- IN_ESTONIA -->
+        <v-list-item v-if="$route.meta.object === 'rock'">
+          <v-checkbox
+            :input-value="searchParameters.in_estonia"
+            :label="$t('rock.in_estonia')"
+            class="mt-0"
+            :color="drawerActiveColor"
+            hide-details
+            @change="updateSearchParamsByField($event, 'in_estonia')"
+          ></v-checkbox>
+        </v-list-item>
+
+        <!-- IS_ACTIVE -->
+        <v-list-item v-if="$route.meta.object === 'loan'">
+          <v-checkbox
+            :input-value="searchParameters.isActive"
+            :label="$t('loan.isActive')"
+            class="mt-0"
+            :color="drawerActiveColor"
+            hide-details
+            @change="updateSearchParamsByField($event, 'isActive')"
           ></v-checkbox>
         </v-list-item>
         <!-- CHECKBOXES END -->
@@ -290,22 +330,13 @@
         </v-list-item>
       </v-list-group>
 
-      <!-- SITES only for Project -->
-      <v-list-item
-        v-if="$route.meta.isEdit && $route.meta.table === 'project'"
-        @click="setAction('add', 'Site')"
-        dense
-      >
-        <v-list-item-title class="text-uppercase">
-          {{ $t("header.addSite") }}
-          <v-icon small>far fa-plus-square</v-icon>
-        </v-list-item-title>
-      </v-list-item>
-
       <!-- SAMPLES only for Site -->
       <v-list-item
         v-if="$route.meta.isEdit && $route.meta.table === 'site'"
-        @click="setAction('add', 'Sample')"
+        :to="{
+          name: 'Sample add',
+          query: { site: JSON.stringify(this.activeSite) }
+        }"
         dense
       >
         <v-list-item-title class="text-uppercase">
@@ -319,12 +350,7 @@
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="
-          $route.meta.isTableView &&
-            $route.meta.object === 'reference' &&
-            activeSearchParams &&
-            activeSearchParams.search
-        "
+        v-if="isLibraryAvailable"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -336,7 +362,7 @@
         <!-- PAGINATION -->
         <v-list-item
           class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList.totalPages"
+          v-if="sidebarList && sidebarList.totalPages"
         >
           <div>
             <v-btn
@@ -396,16 +422,17 @@
         </v-list-item>
 
         <!-- PAGINATION -->
-        <v-list-item class="d-flex flex-row flex-nowrap justify-space-between">
+        <v-list-item
+          class="d-flex flex-row flex-nowrap justify-space-between"
+          v-if="sidebarList && sidebarList.totalPages"
+        >
           <div>
             <v-btn
               icon
               :color="drawerActiveColor"
               @click="previousPage"
               v-if="
-                activeSearchParams.search &&
-                  sidebarList.totalPages &&
-                  activeSearchParams.search.page > 1
+                activeSearchParams.search && activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -422,8 +449,7 @@
               :color="drawerActiveColor"
               @click="nextPage"
               v-if="
-                sidebarList.totalPages &&
-                  activeSearchParams.search &&
+                activeSearchParams.search &&
                   activeSearchParams.search.page < sidebarList.totalPages
               "
             >
@@ -438,17 +464,7 @@
         :value="true"
         :color="drawerActiveColor"
         append-icon="fas fa-angle-down"
-        v-if="
-          $route.meta.isTableView &&
-            ($route.meta.object === 'specimen' ||
-              $route.meta.object === 'sample' ||
-              $route.meta.object === 'attachment' ||
-              $route.meta.object === 'locality' ||
-              $route.meta.object === 'taxon' ||
-              $route.meta.object === 'analysis') &&
-            activeSearchParams &&
-            activeSearchParams.search
-        "
+        v-if="isSelectionSeriesAvailable"
       >
         <template v-slot:activator>
           <v-list-item-title class="text-uppercase">
@@ -460,7 +476,7 @@
         <!-- PAGINATION -->
         <v-list-item
           class="d-flex flex-row flex-nowrap justify-space-between"
-          v-if="sidebarList.totalPages"
+          v-if="sidebarList && sidebarList.totalPages"
         >
           <div>
             <v-btn
@@ -523,16 +539,17 @@
         </v-list-item>
 
         <!-- PAGINATION -->
-        <v-list-item class="d-flex flex-row flex-nowrap justify-space-between">
+        <v-list-item
+          class="d-flex flex-row flex-nowrap justify-space-between"
+          v-if="sidebarList && sidebarList.totalPages"
+        >
           <div>
             <v-btn
               icon
               :color="drawerActiveColor"
               @click="previousPage"
               v-if="
-                activeSearchParams.search &&
-                  sidebarList.totalPages &&
-                  activeSearchParams.search.page > 1
+                activeSearchParams.search && activeSearchParams.search.page > 1
               "
             >
               <v-icon>fas fa-angle-double-left</v-icon>
@@ -549,8 +566,7 @@
               :color="drawerActiveColor"
               @click="nextPage"
               v-if="
-                sidebarList.totalPages &&
-                  activeSearchParams.search &&
+                activeSearchParams.search &&
                   activeSearchParams.search.page < sidebarList.totalPages
               "
             >
@@ -564,10 +580,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
+import searchParametersMixin from "../../../mixins/searchParametersMixin";
+import toastMixin from "../../../mixins/toastMixin";
 
 export default {
   name: "DrawerRight",
+
   props: {
     drawerState: {
       required: true
@@ -588,54 +607,96 @@ export default {
       default: "deep-orange"
     }
   },
+
+  mixins: [searchParametersMixin, toastMixin],
+
+  data: () => ({
+    date_start: false,
+    date_end: false,
+    calendarMenus: ["date_start", "date_end"]
+  }),
+
   computed: {
-    ...mapState([
+    ...mapState("search", [
+      "activeSearchParametersFilters",
       "activeSearchParams",
       "sidebarList",
       "activeLibrary",
-      "activeSelectionSeries"
+      "activeSite",
+      "activeSelectionSeries",
+      "tableSearchParameters"
     ]),
 
-    tableSearchParameters() {
-      return this.$store.state["tableSearchParameters"][
-        this.$route.meta.object
-      ];
+    computedTableSearchParameters() {
+      return this.tableSearchParameters[this.$route.meta.object];
+    },
+
+    isSelectionSeriesAvailable() {
+      return (
+        this.$route.meta.isTableView &&
+        (this.$route.meta.object === "specimen" ||
+          this.$route.meta.object === "sample" ||
+          this.$route.meta.object === "attachment" ||
+          this.$route.meta.object === "locality" ||
+          this.$route.meta.object === "taxon" ||
+          this.$route.meta.object === "analysis") &&
+        this?.activeSearchParams?.search
+      );
+    },
+
+    isLibraryAvailable() {
+      return (
+        this.$route.meta.isTableView &&
+        this.$route.meta.object === "reference" &&
+        this.activeSearchParams &&
+        this.activeSearchParams.search
+      );
     }
   },
-  created() {
-    if (this.$store.state["activeSearchParams"] !== null) {
-      this.$store.dispatch(this.$store.state["activeSearchParams"].request);
-    }
-  },
+
   watch: {
-    "activeSearchParams.search.page": {
-      handler: function(newVal) {
-        if (
-          newVal &&
-          this.activeSearchParams &&
-          this.activeSearchParams.request
-        ) {
-          this.$store.dispatch(this.activeSearchParams.request);
+    "activeSearchParams.request": {
+      handler(newVal) {
+        if (newVal) {
+          this.$store.dispatch(`search/${newVal}`);
         }
       },
-      deep: true
+      immediate: true
+    },
+
+    "activeSearchParams.search.page"(newVal) {
+      if (newVal && this?.activeSearchParams?.request) {
+        this.$store.dispatch(`search/${this.activeSearchParams.request}`);
+      }
     }
   },
+
   methods: {
+    ...mapActions("search", [
+      "activeSearchParamsNextPage",
+      "activeSearchParamsPreviousPage",
+      "setSidebarUserAction"
+    ]),
+
+    updateDate(event, fieldId) {
+      this.updateSearchParamsByField(event, fieldId);
+      this.calendarMenus[fieldId] = false;
+    },
+
     changeDrawerState(drawerState) {
       this.$emit("update:drawerState", drawerState);
     },
 
     nextPage() {
-      this.$store.state.activeSearchParams.search.page += 1;
+      this.activeSearchParamsNextPage();
     },
 
     previousPage() {
-      this.$store.state.activeSearchParams.search.page -= 1;
+      this.activeSearchParamsPreviousPage();
     },
 
     setAction(action, choice) {
-      this.$store.dispatch("SIDEBAR_USER_ACTION", {
+      this.setSidebarUserAction({
         userAction: { action: action, choice: choice }
       });
     },
@@ -658,7 +719,7 @@ export default {
       }
 
       if (makeActive) {
-        this.$store.dispatch(activeObject, entity);
+        this.$store.dispatch(`search/${activeObject}`, entity);
         if (activeObject === "setActiveLibrary") {
           this.toastInfo({
             text: `Library ${entity.library} is active!`,
@@ -671,7 +732,7 @@ export default {
           });
         } else this.toastInfo({ text: "Object is active!", timeout: 1000 });
       } else {
-        this.$store.dispatch(activeObject, null);
+        this.$store.dispatch(`search/${activeObject}`, null);
         if (activeObject === "setActiveLibrary") {
           this.toastInfo({
             text: `Library ${entity.library} is inactive!`,
@@ -687,10 +748,6 @@ export default {
     },
 
     searchRecords() {
-      this.$localStorage.set(
-        `${this.$route.meta.object}SearchHistory`,
-        this.tableSearchParameters.searchParameters
-      );
       this.$router.push({ path: "/" + this.$route.meta.object });
     }
   }

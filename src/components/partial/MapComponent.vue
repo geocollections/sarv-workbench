@@ -442,7 +442,9 @@ export default {
           this.errorGeo
         );
       } else
-        this.toastError({ text: "Geolocation is not supported by this browser." });
+        this.toastError({
+          text: "Geolocation is not supported by this browser."
+        });
     },
 
     successGeo(position) {

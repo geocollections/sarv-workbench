@@ -362,7 +362,7 @@ import cloneDeep from "lodash/cloneDeep";
 
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import LoanSampleTable from "./relatedTables/LoanSampleTable";
 import LoanSpecimenTable from "./relatedTables/LoanSpecimenTable";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -407,25 +407,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "loanSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.loanSearchParameters,
         request: "FETCH_LOANS",
         title: "header.loans",
         object: "loan",
-        field: "loan_number",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "loan_number"
       });
     }
 
@@ -448,7 +435,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
+    ...mapState("search", ["loanSearchParameters"]),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
@@ -461,9 +448,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -511,7 +500,6 @@ export default {
         },
         loan: {},
         requiredFields: ["loan_number"],
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         },
@@ -677,21 +665,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        loan_number: null,
-        project: null,
-        borrower: null,
-        date_start: null,
-        date_end: null,
-        isActive: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

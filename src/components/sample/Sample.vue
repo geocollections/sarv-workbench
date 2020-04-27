@@ -993,7 +993,7 @@ import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import SampleWrapper from "./SampleWrapper";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
@@ -1050,30 +1050,14 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "sampleSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.sampleSearchParameters,
         request: "FETCH_SAMPLES",
         title: "header.samples",
         object: "sample",
-        field: "number",
-        agent: this.currentUser,
-        databaseId: this.databaseId,
-        block: this.block
+        field: "number"
       });
     }
-
-    // SIMPLE VIEW
-    this.isSimpleView = this.$localStorage.get("sampleView", false);
 
     if (this.$route.query.site)
       this.addSiteDataToSampleObject(JSON.parse(this.$route.query.site));
@@ -1090,15 +1074,9 @@ export default {
     );
   },
 
-  beforeRouteUpdate(to, from, next) {
-    this.$localStorage.set("sampleView", this.isSimpleView);
-    next();
-  },
-
   beforeRouteLeave(to, from, next) {
-    this.$localStorage.set("sampleView", this.isSimpleView);
     if (this.$route.meta.isEdit) {
-      this.$store.dispatch("setActiveSample", this.sample);
+      this.setActiveSample(this.sample);
     }
     next();
   },
@@ -1107,7 +1085,6 @@ export default {
     "$route.params.id": {
       handler: function() {
         this.reloadData();
-        this.isSimpleView = this.$localStorage.get("sampleView", false);
       },
       deep: true
     },
@@ -1120,7 +1097,17 @@ export default {
   },
 
   computed: {
-    ...mapState(["currentUser", "databaseId"]),
+    ...mapState("search", ["sampleSearchParameters", "isSampleSimpleView"]),
+
+    isSimpleView: {
+      get() {
+        return this.isSampleSimpleView;
+      },
+
+      set(value) {
+        this.updateIsSampleSimpleView(value);
+      }
+    },
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -1140,9 +1127,15 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", [
+      "updateActiveTab",
+      "updateIsSampleSimpleView",
+      "setActiveSample"
+    ]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -1261,9 +1254,7 @@ export default {
         },
         requiredFields: [],
         sample: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: { info: true, relatedInfo: true, description: true },
-        isSimpleView: false,
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
           { text: "main.pagination", value: 25 },
@@ -1403,8 +1394,8 @@ export default {
       // Adding related data only on add view
       uploadableObject.related_data = {};
       if (!this.$route.meta.isEdit) {
-        if (this.isNotEmpty(this.databaseId))
-          uploadableObject.database = this.databaseId;
+        if (this.isNotEmpty(this.getDatabaseId))
+          uploadableObject.database = this.getDatabaseId;
 
         this.relatedTabs.forEach(tab => {
           if (this.relatedData[tab.name].count > 0)
@@ -1570,28 +1561,8 @@ export default {
       });
     },
 
-    setDefaultSearchParameters() {
-      return {
-        locality: null,
-        number: null,
-        depth: null,
-        stratigraphy: null,
-        agent: null,
-        storage: null,
-        site: null,
-        selectionId: null,
-        selection: null,
-        id: null,
-        loan: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-
     siteLabel(option) {
-      console.log(option)
+      console.log(option);
       return `id: ${option.id} - ${option.name}`;
     },
 
@@ -1602,14 +1573,14 @@ export default {
         this.autocomplete.site.push(this.sample.site);
       }
       this.sample.agent_collected = {
-        id: this.currentUser.id,
-        agent: this.currentUser.user
+        id: this.getCurrentUser.id,
+        agent: this.getCurrentUser.user
       };
       this.autocomplete.agent.push(this.sample.agent_collected);
       this.sample.date_collected = this.getCurrentFormattedDate("YYYY-MM-DD");
       this.sample.owner = {
-        id: this.currentUser.id,
-        agent: this.currentUser.user
+        id: this.getCurrentUser.id,
+        agent: this.getCurrentUser.user
       };
       this.autocomplete.agent.push(this.sample.owner);
 

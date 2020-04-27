@@ -3,7 +3,7 @@ import Router from "vue-router";
 import Login from "./views/Login.vue";
 import Dashboard from "./views/Dashboard.vue";
 import { fetchIsLoggedIn, fetchLogout } from "./assets/js/api/apiCalls";
-
+import store from "./store";
 Vue.use(Router);
 
 const router = new Router({
@@ -2260,7 +2260,7 @@ function checkCookiesAndStorage(user) {
     // Getting user data from cookies and storage
     let csrftoken = Vue.$cookies.get("csrftoken");
     let csrftokenLocalhost = Vue.$cookies.get("csrftokenLocalhost");
-    let authUser = Vue.localStorage.get("authUser");
+    let authUser = store?.state?.user?.authUser;
 
     if ((csrftoken || csrftokenLocalhost) && authUser) {
       if (authUser.user) return authUser.user === user;
@@ -2274,7 +2274,6 @@ function removeBrowserDataAndLogout() {
   // Deleting cookies and local storage
   Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
   Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-  Vue.localStorage.remove("authUser");
 
   // Sending logout request to API
   fetchLogout().then(

@@ -13,6 +13,8 @@
 
 <script>
 import { fetchAddDoi } from "../../assets/js/api/apiCalls";
+import toastMixin from "../../mixins/toastMixin";
+import { mapActions } from "vuex";
 
 export default {
   props: {
@@ -36,12 +38,15 @@ export default {
     }
   },
   name: "NewDoiButton",
+  mixins: [toastMixin],
   data() {
     return {
       sendingData: false
     };
   },
   methods: {
+    ...mapActions("search", ["setLoadingState", "setLoadingType"]),
+
     addNewDoi() {
       if (confirm(this.$t(this.object + ".doiConfirmation"))) {
         this.setLoadingState(true);
@@ -50,6 +55,7 @@ export default {
         let doi = this.buildDoiObject(this.object);
         if (typeof doi !== "undefined") {
           let doiFormData = new FormData();
+          // Todo: Format objects
           doiFormData.append("data", JSON.stringify(doi));
 
           fetchAddDoi(doiFormData).then(

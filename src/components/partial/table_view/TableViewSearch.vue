@@ -1,25 +1,20 @@
 <template>
   <v-row class="table-view-search d-print-none" v-if="filters.length > 0">
     <v-col class="py-4">
-      <v-card
-        :color="appSettings.bodyColor.split('n-')[0] + 'n-5'"
-        elevation="4"
-      >
+      <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title class="pb-0">
           <div
             class="card-title--clickable"
             @click="$emit('update:showSearch', !showSearch)"
           >
             <span>{{ $t("edit.search") }}</span>
-            <v-icon right :color="appSettings.bodyActiveColor"
-              >fas fa-search</v-icon
-            >
+            <v-icon right :color="bodyActiveColor">fas fa-search</v-icon>
           </div>
           <v-spacer></v-spacer>
           <v-btn
             icon
             @click="$emit('update:showSearch', !showSearch)"
-            :color="appSettings.bodyActiveColor"
+            :color="bodyActiveColor"
           >
             <v-icon>{{
               showSearch ? "fas fa-angle-up" : "fas fa-angle-down"
@@ -41,7 +36,7 @@
                   <!-- DATEPICKER -->
                   <v-menu
                     v-if="field.isDate"
-                    v-model="field.calendarState"
+                    v-model="calendarMenus[field.id]"
                     :close-on-content-click="false"
                     :nudge-right="40"
                     transition="scale-transition"
@@ -51,22 +46,25 @@
                     <template v-slot:activator="{ on }">
                       <v-text-field
                         hide-details
-                        v-model="searchParameters[field.id]"
+                        :value="searchParameters[field.id]"
                         :label="$t(field.title)"
                         prepend-inner-icon="far fa-calendar-alt"
-                        :color="appSettings.bodyActiveColor"
+                        :color="bodyActiveColor"
                         clearable
+                        @click:clear="
+                          $emit('update:searchParameters', null, field.id)
+                        "
                         clear-icon="fas fa-times"
                         readonly
-                        :class="appSettings.bodyActiveColor + '--text'"
+                        :class="bodyActiveColor + '--text'"
                         v-on="on"
                       ></v-text-field>
                     </template>
                     <v-date-picker
-                      v-model="searchParameters[field.id]"
-                      @input="field.calendarState = false"
-                      :color="appSettings.bodyActiveColor"
-                      :header-color="`${appSettings.bodyActiveColor} darken-3`"
+                      :value="searchParameters[field.id]"
+                      @input="updateDate($event, field.id)"
+                      :color="bodyActiveColor"
+                      :header-color="`${bodyActiveColor} darken-3`"
                       scrollable
                     ></v-date-picker>
                   </v-menu>
@@ -74,12 +72,13 @@
                   <!-- REGULAR SEARCH FIELD -->
                   <v-text-field
                     v-else
-                    v-model="searchParameters[field.id]"
+                    :value="searchParameters[field.id]"
                     :label="$t(field.title)"
-                    :color="appSettings.bodyActiveColor"
+                    :color="bodyActiveColor"
                     hide-details
-                    :class="appSettings.bodyActiveColor + '--text'"
+                    :class="bodyActiveColor + '--text'"
                     :type="field.type"
+                    @input="$emit('update:searchParameters', $event, field.id)"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -92,36 +91,64 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.photoArchive')"
                       value="2"
                       class="mt-0 pr-6"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.specimenImage')"
                       value="1"
                       class="mt-0 pr-6"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.otherFiles')"
                       value="3"
                       class="mt-0 pr-6"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                     <v-checkbox
-                      v-model="searchParameters.specimen_image_attachment"
+                      :input-value="searchParameters.specimen_image_attachment"
                       :label="$t('attachment.digitisedReference')"
                       value="4"
                       class="mt-0"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'specimen_image_attachment'
+                        )
+                      "
                     />
                   </v-row>
                 </v-col>
@@ -135,18 +162,32 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.isEstonianReference"
+                      :input-value="searchParameters.isEstonianReference"
                       :label="$t('reference.is_estonian_reference')"
                       class="mt-0 pr-6"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'isEstonianReference'
+                        )
+                      "
                     ></v-checkbox>
                     <v-checkbox
-                      v-model="searchParameters.isEstonianAuthor"
+                      :input-value="searchParameters.isEstonianAuthor"
                       :label="$t('reference.is_estonian_author')"
                       class="mt-0"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit(
+                          'update:searchParameters',
+                          $event,
+                          'isEstonianAuthor'
+                        )
+                      "
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -160,18 +201,24 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.in_portal"
+                      :input-value="searchParameters.in_portal"
                       :label="$t('rock.in_portal')"
                       class="mt-0 pr-6"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit('update:searchParameters', $event, 'in_portal')
+                      "
                     ></v-checkbox>
                     <v-checkbox
-                      v-model="searchParameters.in_estonia"
+                      :input-value="searchParameters.in_estonia"
                       :label="$t('rock.in_estonia')"
                       class="mt-0"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit('update:searchParameters', $event, 'in_estonia')
+                      "
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -185,11 +232,14 @@
                 <v-col cols="12" class="py-0">
                   <v-row>
                     <v-checkbox
-                      v-model="searchParameters.isActive"
+                      :input-value="searchParameters.isActive"
                       :label="$t('loan.isActive')"
                       class="mt-0 pr-6"
-                      :color="appSettings.bodyActiveColor"
+                      :color="bodyActiveColor"
                       hide-details
+                      @change="
+                        $emit('update:searchParameters', $event, 'isActive')
+                      "
                     ></v-checkbox>
                   </v-row>
                 </v-col>
@@ -199,8 +249,8 @@
               <v-row class="mt-3">
                 <v-col cols="12">
                   <v-btn
-                    @click="$emit('reset:searchPreferences', true)"
-                    :color="appSettings.bodyActiveColor"
+                    @click="$emit('reset:searchParameters')"
+                    :color="bodyActiveColor"
                     dark
                   >
                     <v-icon left>fas fa-filter</v-icon>
@@ -240,11 +290,19 @@ export default {
       default: 6
     }
   },
-  data: () => ({
-    calendarMenu: false
-  }),
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState("settings", ["bodyColor", "bodyActiveColor"])
+  },
+  data: () => ({
+    date_start: false,
+    date_end: false,
+    calendarMenus: ["date_start", "date_end"]
+  }),
+  methods: {
+    updateDate(event, fieldId, index) {
+      this.$emit("update:searchParameters", event, fieldId);
+      this.calendarMenus[fieldId] = false;
+    }
   }
 };
 </script>

@@ -222,7 +222,7 @@
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <v-switch
-                v-model="showMap"
+                v-model="myShowMap"
                 hide-details
                 id="map-switch"
                 class="vuetify-switch my-1"
@@ -237,17 +237,17 @@
             >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map" />
-                {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
+                {{ myShowMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
               </label>
             </v-card>
           </v-card>
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap" class="mt-1">
+            <v-row no-gutters v-show="myShowMap" class="mt-1">
               <v-col cols="12" class="pa-1">
                 <map-component
-                  :show-map="showMap && block.location"
+                  :show-map="myShowMap && block.location"
                   :gps-coords="true"
                   mode="single"
                   module="site"
@@ -795,7 +795,7 @@ import sidebarMixin from "../../mixins/sidebarMixin";
 import SampleTable from "../sample/SampleTable";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -845,21 +845,23 @@ export default {
     return this.setInitialData();
   },
   computed: {
-    ...mapState(["sidebarUserAction", "mapSettings"]),
+    ...mapState("search", [
+      "siteSearchParameters",
+      "sidebarUserAction",
+      "activeProject"
+    ]),
 
-    ...mapGetters(["isUserAllowedTo"]),
+    ...mapState("map", ["showMap"]),
 
-    showMap: {
+    ...mapGetters("user", ["isUserAllowedTo"]),
+
+    myShowMap: {
       get() {
-        return this.mapSettings.showMap;
+        return this.showMap;
       },
       set(value) {
-        this.$store.dispatch("updateMapState", value);
+        this.updateShowMap(value);
       }
-    },
-
-    activeProject() {
-      return this.$store.state["activeProject"];
     },
 
     paginateByOptionsTranslated() {
@@ -874,23 +876,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "siteSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.siteSearchParameters,
         request: "FETCH_SITES",
         title: "header.sites",
         object: "site",
-        field: "name",
-        block: this.block
+        field: "name"
       });
     } else {
       // Add view
@@ -933,7 +924,7 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     if (this.$route.meta.isEdit) {
-      this.$store.dispatch("setActiveSite", this.site);
+      this.setActiveSite(this.site);
     }
     next();
   },
@@ -958,6 +949,9 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["setActiveSite", "updateActiveTab"]),
+    ...mapActions("map", ["updateShowMap"]),
+
     saveGroundwater() {
       if (this.isNotEmpty(this.site_groundwater)) {
         let uploadableObject = cloneDeep(this.site_groundwater);
@@ -1012,7 +1006,7 @@ export default {
 
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -1094,7 +1088,6 @@ export default {
         requiredFields: ["latitude", "longitude"],
         site: {},
         site_groundwater: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: !this.$route.meta.isEdit,
           location: this.$route.meta.isEdit,
@@ -1392,19 +1385,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        name: null,
-        project: null,
-        projectId: null,
-        page: 1,
-        paginateBy: 8,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     customLabelForAttachment(option) {

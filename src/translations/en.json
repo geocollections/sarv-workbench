@@ -288,7 +288,20 @@
     "delete_perms": "Delete",
     "view_perms": "View",
     "search": "Search",
-    "security": "Security"
+    "security": "Security",
+    "recentUrls": "Show recent URLs",
+    "body": "Body color",
+    "bodyActive": "Body active color",
+    "navbar": "Navbar color",
+    "drawerLeft": "Drawer left color",
+    "drawerLeftActive": "Drawer left active color",
+    "drawerRight": "Drawer right color",
+    "drawerRightActive": "Drawer right active color",
+    "text": "text",
+    "dark": "Dark",
+    "light": "Light",
+    "drawer": "drawer",
+    "navbarText": "navbar"
   },
   "sidebar": {
     "project": {

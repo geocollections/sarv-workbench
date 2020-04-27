@@ -7,8 +7,8 @@
 
       <v-tabs
         v-if="$route.meta.object === 'attachment'"
-        :color="appSettings.bodyActiveColor"
-        :background-color="appSettings.bodyColor"
+        :color="bodyActiveColor"
+        :background-color="bodyColor"
         right
         show-arrows
       >
@@ -25,21 +25,21 @@
     <SpinnerWrapper />
 
     <router-view
-      :body-color="appSettings.bodyColor"
-      :body-active-color="appSettings.bodyActiveColor"
-      :is-body-active-color-dark="appSettings.bodyActiveColorDark"
+      :body-color="bodyColor"
+      :body-active-color="bodyActiveColor"
+      :is-body-active-color-dark="bodyActiveColorDark"
     />
 
     <object-permissions
       v-if="false"
-      :body-color="appSettings.bodyColor"
-      :body-active-color="appSettings.bodyActiveColor"
+      :body-color="bodyColor"
+      :body-active-color="bodyActiveColor"
     />
 
     <bottom-options
-      :body-color="appSettings.bodyColor"
-      :is-navbar-dark="appSettings.navbarDark"
-      :navbar-color="appSettings.navbarColor"
+      :body-color="bodyColor"
+      :is-navbar-dark="navbarDark"
+      :navbar-color="navbarColor"
       :object="$route.meta.object"
     />
   </div>
@@ -55,7 +55,13 @@ export default {
   name: "AddForm",
   components: { SpinnerWrapper, ObjectPermissions, BottomOptions },
   computed: {
-    ...mapState(["appSettings"])
+    ...mapState("settings", [
+      "bodyColor",
+      "bodyActiveColor",
+      "bodyActiveColorDark",
+      "navbarDark",
+      "navbarColor"
+    ])
   }
 };
 </script>

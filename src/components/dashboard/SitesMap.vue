@@ -14,7 +14,7 @@ import {
   fetchRecentSites,
   fetchRecentSpecimens
 } from "../../assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "SitesMap",
@@ -142,12 +142,13 @@ export default {
   }),
 
   computed: {
-    ...mapState(["currentUser", "mapSettings"])
+    ...mapState("map", ["mapSettings"]),
+    ...mapGetters("user", ["getCurrentUser"])
   },
 
   created() {
-    if (this.currentUser && this.currentUser.id)
-      this.fetchRecentData(this.currentUser.id);
+    if (this.getCurrentUser && this.getCurrentUser.id)
+      this.fetchRecentData(this.getCurrentUser.id);
   },
 
   watch: {

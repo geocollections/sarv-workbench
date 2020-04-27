@@ -1,5 +1,5 @@
 import { autocompleteSearch } from "@/assets/js/api/apiCalls";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import debounce from "lodash/debounce";
 
 const autocompleteMixin = {
@@ -58,7 +58,7 @@ const autocompleteMixin = {
         ? "institution_name"
         : "institution_name_en";
     },
-    ...mapState(["currentUser"])
+    ...mapGetters("user", ["getCurrentUser"])
   },
   methods: {
     autocompleteAnalysisSearch(value) {
@@ -226,7 +226,11 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "attachment_public", "attachment");
     },
     autocompletePublicAttachmentImageSearch(value) {
-      this.$_autocompleteMixin_search(value, "attachment_public_image", "attachment");
+      this.$_autocompleteMixin_search(
+        value,
+        "attachment_public_image",
+        "attachment"
+      );
     },
     autocompleteJournalSearch(value) {
       this.$_autocompleteMixin_search(value, "journals", "journals", 1);
@@ -345,7 +349,12 @@ const autocompleteMixin = {
       );
     },
     autocompleteAnalysisParameterSearch(value) {
-      this.$_autocompleteMixin_search(value, "analysis_parameter", "analysis_parameter", 2);
+      this.$_autocompleteMixin_search(
+        value,
+        "analysis_parameter",
+        "analysis_parameter",
+        2
+      );
     },
 
     /**
@@ -372,7 +381,7 @@ const autocompleteMixin = {
           let query = buildAutocompleteQuery(
             type,
             value,
-            this.currentUser,
+            this.getCurrentUser,
             groupByField
           );
           if (query.length === 0) return;

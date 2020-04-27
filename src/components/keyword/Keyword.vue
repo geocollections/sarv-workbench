@@ -263,6 +263,7 @@ import Editor from "../partial/inputs/Editor";
 import KeywordRelationTable from "./relatedTables/KeywordRelationTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import KeywordRelationReverseTable from "./relatedTables/KeywordRelationReverseTable";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Keyword",
@@ -298,6 +299,8 @@ export default {
   },
 
   computed: {
+    ...mapState("search", ["keywordSearchParameters"]),
+
     computedRelatedTabs() {
       // return this.relatedTabs.filter(tabs => {
       //   if (this.keyword.is_primary) {
@@ -328,25 +331,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      // let params = this.isNotEmpty(searchHistory) && searchHistory.hasOwnProperty('id') && searchHistory !== 'fallbackValue' && searchHistory !== '[object Object]' ? searchHistory : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "keywordSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.keywordSearchParameters,
         request: "FETCH_KEYWORDS",
         title: "header.keywords",
         object: "keyword",
-        field: "keyword",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "keyword"
       });
     }
 
@@ -424,7 +414,6 @@ export default {
           is_primary: false,
           is_preferred: true
         },
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           description: false
@@ -579,20 +568,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        term: null,
-        language: null,
-        keyword_category: null,
-        is_primary: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

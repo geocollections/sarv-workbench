@@ -148,6 +148,7 @@ import {
 import InputWrapper from "../partial/inputs/InputWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SelectionSeriesDataTable from "./relatedTables/SelectionSeriesDataTable";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "SelectionSeries",
@@ -181,23 +182,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "selectionSeriesSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.selection_seriesSearchParameters,
         request: "FETCH_SELECTION_SERIES",
         title: "header.selectionSeries",
         object: "selection_series",
-        field: "name",
-        block: this.block
+        field: "name"
       });
     }
 
@@ -223,6 +213,8 @@ export default {
   },
 
   computed: {
+    ...mapState("search", ["selection_seriesSearchParameters"]),
+
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
         return {
@@ -234,9 +226,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -261,7 +255,6 @@ export default {
         copyFields: ["id", "name", "remarks"],
         requiredFields: ["name"],
         selection_series: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: { info: true },
         paginateByOptions: [
           { text: "main.pagination", value: 10 },
@@ -421,19 +414,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        name: null,
-        remarks: null,
-        user_added: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

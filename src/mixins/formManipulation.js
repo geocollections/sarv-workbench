@@ -1,6 +1,6 @@
 import cloneDeep from "lodash/cloneDeep";
 import moment from "moment";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { postRequest } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 
@@ -21,10 +21,17 @@ const formManipulation = {
     this.$parent.$off("button-clicked", this.bottomOptionClicked);
   },
   computed: {
-    ...mapState(["currentUser", "loadingState"])
+    ...mapState("search", ["loadingState"]),
+    ...mapGetters("user", ["getCurrentUser", "getDatabaseId"])
   },
   methods: {
-    ...mapActions(["setLoadingState", "setLoadingType", "setLoadingPercent"]),
+    ...mapActions("search", [
+      "setLoadingState",
+      "setLoadingType",
+      "setLoadingPercent",
+      "setActiveSearchParameters"
+    ]),
+    ...mapActions("detail", ["saveFields", "resetFields"]),
 
     /**
      * Checks if variable is not empty and returns corresponding boolean.
@@ -152,7 +159,10 @@ const formManipulation = {
             : `add/${object}/`;
           if (objectToUpload.id) delete objectToUpload.id;
 
-          const dataToUpload = this.formatDataForUpload(objectToUpload, saveAsNew);
+          const dataToUpload = this.formatDataForUpload(
+            objectToUpload,
+            saveAsNew
+          );
           let formData = new FormData();
           formData.append("data", dataToUpload);
 
@@ -308,7 +318,7 @@ const formManipulation = {
                 relatedObject +
                 ": " +
                 this[relatedObject].id,
-            author: file.type.includes("pdf") ? null : this.currentUser.id,
+            author: file.type.includes("pdf") ? null : this.getCurrentUser.id,
             date_created: file.type.includes("pdf")
               ? null
               : this.getCurrentFormattedDate("YYYY-MM-DD"),
@@ -356,7 +366,7 @@ const formManipulation = {
                 relatedObject +
                 ": " +
                 this[relatedObject].id,
-              author: this.currentUser.id,
+              author: this.getCurrentUser.id,
               date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
               is_private: true,
               is_locked: relatedObject === "doi",
@@ -399,12 +409,7 @@ const formManipulation = {
 
     reset(object, isEdit) {
       console.log("reset");
-      if (
-        typeof this.createRelationWith !== "undefined" &&
-        this.createRelationWith.object !== null
-      )
-        window.close();
-      else if (isEdit) this.$router.push({ path: "/" + object });
+      if (isEdit) this.$router.push({ path: "/" + object });
       else {
         this[object] = {};
         this.toastInfo({ text: this.$t("messages.fieldsCleared") });

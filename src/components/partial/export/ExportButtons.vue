@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import toastMixin from "../../../mixins/toastMixin";
 
 export default {
   props: {
@@ -54,6 +55,7 @@ export default {
     small: Boolean
   },
   name: "ExportButtons",
+  mixins: [toastMixin],
 
   methods: {
     exportToCSV() {

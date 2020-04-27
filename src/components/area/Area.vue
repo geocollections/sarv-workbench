@@ -211,7 +211,7 @@
                 :color="bodyColor.split('n-')[0] + 'n-5'"
               >
                 <v-switch
-                  v-model="showMap"
+                  v-model="myShowMap"
                   hide-details
                   id="map-switch"
                   class="vuetify-switch my-1"
@@ -226,17 +226,19 @@
               >
                 <label class="m-0" :for="`map-switch`">
                   <i class="far fa-map"></i>
-                  {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
+                  {{
+                    myShowMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
+                  }}
                 </label>
               </v-card>
             </v-card>
 
             <!-- MAP -->
             <transition enter-active-class="animated fadeIn faster">
-              <v-row no-gutters v-show="showMap" class="mt-2">
+              <v-row no-gutters v-show="myShowMap" class="mt-2">
                 <v-col cols="12" class="px-1">
                   <map-component
-                    :show-map="showMap && block.sites"
+                    :show-map="myShowMap && block.sites"
                     :gps-coords="true"
                     mode="multiple"
                     module="area"
@@ -371,7 +373,7 @@ import Editor from "../partial/inputs/Editor";
 import MapComponent from "../partial/MapComponent";
 import ExportButtons from "../partial/export/ExportButtons";
 import debounce from "lodash/debounce";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import SiteTable from "../site/SiteTable";
 import AreaLocalityReferenceTable from "./relatedTables/AreaLocalityReferenceTable";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -416,24 +418,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        searchHistory && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "areaSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.areaSearchParameters,
         request: "FETCH_AREAS",
         title: "header.areas",
         object: "area",
-        field: "name",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "name"
       });
     }
 
@@ -441,14 +431,15 @@ export default {
   },
 
   computed: {
-    ...mapState(["mapSettings"]),
+    ...mapState("map", ["showMap"]),
+    ...mapState("search", ["areaSearchParameters"]),
 
-    showMap: {
+    myShowMap: {
       get() {
-        return this.mapSettings.showMap;
+        return this.showMap;
       },
       set(value) {
-        this.$store.dispatch("updateMapState", value);
+        this.updateShowMap(value);
       }
     },
 
@@ -494,9 +485,12 @@ export default {
   },
 
   methods: {
+    ...mapActions("map", ["updateShowMap"]),
+    ...mapActions("search", ["setActiveSearchParameters", "updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -563,7 +557,6 @@ export default {
         },
         requiredFields: ["name"],
         area: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           sites: true
@@ -725,19 +718,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        name: null,
-        type: null,
-        area_ha: null,
-        maakond: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["name"],
-        sortDesc: [true]
-      };
     }
   }
 };

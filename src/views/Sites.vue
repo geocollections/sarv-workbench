@@ -5,19 +5,18 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
       :col-size="4"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-      module="site"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchSites"
-      search-history="siteSearchHistory"
-      view-type="siteViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -27,6 +26,7 @@ import ListModuleCore from "./ListModuleCore";
 import { fetchSites } from "@/assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   components: {
@@ -34,7 +34,11 @@ export default {
     TableViewTitle,
     TableViewSearch
   },
+
   name: "Sites",
+
+  mixins: [searchParametersMixin],
+
   props: {
     project: {
       type: String,
@@ -48,47 +52,29 @@ export default {
   },
   data() {
     return {
-      response: {},
-      sites: [],
-      filters: [
-        { id: "id", title: "common.id", type: "number" },
-        { id: "name", title: "common.name", type: "text" },
-        { id: "number", title: "site.number", type: "text" },
-        { id: "project", title: "site.relatedProject", type: "text" },
-        {
-          id: "date_start",
-          title: "common.date_start",
-          type: "text",
-          isDate: true,
-          calendarState: false,
-          calendarStateDrawer: false
-        },
-        {
-          id: "date_end",
-          title: "common.date_end",
-          type: "text",
-          isDate: true,
-          calendarState: false,
-          calendarStateDrawer: false
-        }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "site",
-          filters: this.filters,
-          params: newVal
-        });
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "id", title: "common.id", type: "number" },
+      { id: "name", title: "common.name", type: "text" },
+      { id: "number", title: "site.number", type: "text" },
+      { id: "project", title: "site.relatedProject", type: "text" },
+      {
+        id: "date_start",
+        title: "common.date_start",
+        type: "text",
+        isDate: true
       },
-      deep: true,
-      immediate: true
-    }
+      {
+        id: "date_end",
+        title: "common.date_end",
+        type: "text",
+        isDate: true
+      }
+    ]);
   },
 
   methods: {
@@ -96,34 +82,6 @@ export default {
       return new Promise(resolve => {
         resolve(fetchSites(this.searchParameters));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("siteSearchHistory");
-      this.$localStorage.remove("siteViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
-    },
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        name: null,
-        number: null,
-        project: null,
-        date_start: null,
-        date_end: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

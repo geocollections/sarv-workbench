@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "lang-buttons",
@@ -31,12 +32,16 @@ export default {
       default: true
     }
   },
+  computed: {
+    ...mapState("settings", ["lang"])
+  },
   methods: {
-    changeLang(lang) {
-      if (this.$localStorage.get("geocollectionsFileUploadLang") === lang)
-        return;
-      this.$i18n.locale = lang;
-      this.$localStorage.set("geocollectionsFileUploadLang", lang);
+    ...mapActions("settings", ["updateLang"]),
+
+    changeLang(newLang) {
+      if (this.lang === newLang) return;
+      this.$i18n.locale = newLang;
+      this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
     }
   }

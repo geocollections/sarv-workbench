@@ -289,7 +289,7 @@
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import {
   fetchDataset,
   fetchDatasetAnalyses,
@@ -354,24 +354,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "datasetSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.datasetSearchParameters,
         request: "FETCH_DATASETS",
         title: "header.datasets",
         object: "dataset",
-        field: "name",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "name"
       });
     }
 
@@ -395,14 +383,10 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
-
-    activeRelatedDataTab() {
-      let tabObject = this.$store.state.activeRelatedDataTab;
-      if (tabObject && tabObject[this.$route.meta.object]) {
-        return tabObject[this.$route.meta.object];
-      } else return null;
-    },
+    ...mapState("search", ["datasetSearchParameters"]),
+    ...mapState("search", {
+      activeRelatedDataTab: state => state.activeRelatedDataTab.dataset
+    }),
 
     paginateByOptionsTranslated() {
       return this.paginateByOptions.map(item => {
@@ -415,9 +399,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -466,7 +452,6 @@ export default {
         },
         requiredFields: ["name", "name_en"],
         dataset: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true
         },
@@ -577,7 +562,7 @@ export default {
         }
       });
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       // Adding related data only on add view
       if (!this.$route.meta.isEdit) {
@@ -654,19 +639,6 @@ export default {
         this.relatedData[object].count = response.data.count;
         this.relatedData[object].results = this.handleResponse(response);
       });
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        name: null,
-        owner: null,
-        date: null,
-        remarks: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     }
   }
 };

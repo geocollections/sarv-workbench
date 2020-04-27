@@ -10,20 +10,19 @@
       class="d-print-none"
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
       :col-size="3"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-      module="selectionSeries"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchSelectionSeries"
-      search-history="selectionSeriesSearchHistory"
-      view-type="selectionSeriesViewType"
       :multi-ordering="true"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -33,71 +32,39 @@ import ListModuleCore from "./ListModuleCore";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import { fetchSelectionSeries } from "../assets/js/api/apiCalls";
+import searchParametersMixin from "../mixins/searchParametersMixin";
 
 export default {
   name: "SelectionSeries",
+
   components: {
     ListModuleCore,
     TableViewTitle,
     TableViewSearch
   },
+
+  mixins: [searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "id", title: "common.id", type: "number" },
-        { id: "name", title: "common.name", type: "text" },
-        { id: "remarks", title: "common.remarks", type: "text" },
-        { id: "user_added", title: "selectionSeries.user_added", type: "text" }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "selection_series",
-          filters: this.filters,
-          params: newVal
-        });
-      },
-      deep: true,
-      immediate: true
-    }
+
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "id", title: "common.id", type: "number" },
+      { id: "name", title: "common.name", type: "text" },
+      { id: "remarks", title: "common.remarks", type: "text" },
+      { id: "user_added", title: "selectionSeries.user_added", type: "text" }
+    ]);
   },
+
   methods: {
     fetchSelectionSeries() {
       return new Promise(resolve => {
         resolve(fetchSelectionSeries(this.searchParameters));
       });
-    },
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        name: null,
-        remarks: null,
-        user_added: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("selectionSeriesSearchHistory");
-      this.$localStorage.remove("selectionSeriesViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };

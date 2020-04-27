@@ -362,7 +362,7 @@
                   :color="bodyColor.split('n-')[0] + 'n-5'"
                 >
                   <v-switch
-                    v-model="showMap"
+                    v-model="myShowMap"
                     hide-details
                     id="map-switch"
                     class="vuetify-switch my-1"
@@ -378,7 +378,7 @@
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                      showMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
+                      myShowMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
                     }}
                   </label>
                 </v-card>
@@ -386,10 +386,10 @@
 
               <!-- MAP -->
               <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="showMap" class="mt-1">
+                <v-row no-gutters v-show="myShowMap" class="mt-1">
                   <v-col cols="12" class="pa-1">
                     <map-component
-                      :show-map="showMap && block.map"
+                      :show-map="myShowMap && block.map"
                       mode="single"
                       module="attachment"
                       v-bind:locations="[]"
@@ -2194,7 +2194,7 @@
                   :color="bodyColor.split('n-')[0] + 'n-5'"
                 >
                   <v-switch
-                    v-model="showMap"
+                    v-model="myShowMap"
                     hide-details
                     id="map-switch"
                     class="vuetify-switch my-1"
@@ -2210,7 +2210,7 @@
                   <label class="m-0" :for="`map-switch`">
                     <i class="far fa-map"></i>
                     {{
-                      showMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
+                      myShowMap ? $t("site.mapEnabled") : $t("site.mapDisabled")
                     }}
                   </label>
                 </v-card>
@@ -2218,10 +2218,10 @@
 
               <!-- MAP -->
               <transition enter-active-class="animated fadeIn faster">
-                <v-row no-gutters v-show="showMap" class="mt-1">
+                <v-row no-gutters v-show="myShowMap" class="mt-1">
                   <v-col cols="12" class="pa-1">
                     <map-component
-                      :show-map="showMap && block.map"
+                      :show-map="myShowMap && block.map"
                       mode="single"
                       module="attachment"
                       v-bind:locations="[]"
@@ -3788,7 +3788,7 @@
 
     <template v-slot:local-storage>
       <div class="d-flex mt-3">
-        <v-btn @click="clearLocalStorage" class="text-none" color="yellow">
+        <v-btn @click="clearSavedFields" class="text-none" color="yellow">
           {{ $t("buttons.clearLocalStorage") }}
         </v-btn>
       </div>
@@ -3818,7 +3818,7 @@ import cloneDeep from "lodash/cloneDeep";
 import formManipulation from "../../mixins/formManipulation";
 import autocompleteMixin from "../../mixins/autocompleteMixin";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import {
   fetchAttachment,
   fetchAttachmentKeyword,
@@ -3855,9 +3855,10 @@ import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import SelectWrapper from "../partial/inputs/SelectWrapper";
 import FileUpload from "../partial/inputs/FileInput";
+import toastMixin from "../../mixins/toastMixin";
 
 export default {
-  name: "AttachmentNew",
+  name: "Attachment",
 
   components: {
     FileUpload,
@@ -3892,22 +3893,33 @@ export default {
     }
   },
 
-  mixins: [formManipulation, autocompleteMixin, formSectionsMixin],
+  mixins: [formManipulation, autocompleteMixin, formSectionsMixin, toastMixin],
 
   data() {
     return this.setInitialData();
   },
 
   computed: {
-    ...mapState(["databaseId", "currentUser", "mapSettings"]),
-    ...mapGetters(["isUserAllowedTo"]),
+    ...mapState("search", ["attachmentSearchParameters"]),
+    ...mapState("map", ["showMap"]),
+    ...mapState("detail", [
+      "photoArchive",
+      "photoArchiveKeywords",
+      "specimenImage",
+      "specimenImageKeywords",
+      "otherFiles",
+      "otherFilesKeywords",
+      "digitisedReference",
+      "digitisedReferenceKeywords"
+    ]),
+    ...mapGetters("user", ["isUserAllowedTo"]),
 
-    showMap: {
+    myShowMap: {
       get() {
-        return this.mapSettings.showMap;
+        return this.showMap;
       },
       set(value) {
-        this.$store.dispatch("updateMapState", value);
+        this.updateShowMap(value);
       }
     },
 
@@ -4028,24 +4040,12 @@ export default {
 
   created() {
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "attachmentSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.attachmentSearchParameters,
         request: "FETCH_ATTACHMENTS",
         title: "header.attachments",
         object: "attachment",
-        field: "original_filename",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "original_filename"
       });
     }
   },
@@ -4060,42 +4060,19 @@ export default {
           let attachmentHistory;
           let keywords;
           if (this.isPhotoArchive) {
-            attachmentHistory = this.$localStorage.get(
-              "photoArchive",
-              "fallbackValue"
-            );
-            keywords = this.$localStorage.get(
-              "photoArchiveKeywords",
-              "fallbackValue"
-            );
+            attachmentHistory = cloneDeep(this.photoArchive);
+            keywords = cloneDeep(this.photoArchiveKeywords);
           } else if (this.isSpecimenImage) {
-            attachmentHistory = this.$localStorage.get(
-              "specimenImage",
-              "fallbackValue"
-            );
-            keywords = this.$localStorage.get(
-              "specimenImageKeywords",
-              "fallbackValue"
-            );
+            attachmentHistory = cloneDeep(this.specimenImage);
+            keywords = cloneDeep(this.specimenImageKeywords);
           } else if (this.isOtherFile) {
-            attachmentHistory = this.$localStorage.get(
-              "otherFiles",
-              "fallbackValue"
-            );
-            keywords = this.$localStorage.get(
-              "otherFilesKeywords",
-              "fallbackValue"
-            );
+            attachmentHistory = cloneDeep(this.otherFiles);
+            keywords = cloneDeep(this.otherFilesKeywords);
           } else if (this.isDigitisedReference)
-            attachmentHistory = this.$localStorage.get(
-              "digitisedReference",
-              "fallbackValue"
-            );
+            attachmentHistory = cloneDeep(this.digitisedReference);
+          keywords = cloneDeep(this.digitisedReferenceKeywords);
 
-          if (
-            this.isNotEmpty(attachmentHistory) &&
-            attachmentHistory !== "fallbackValue"
-          ) {
+          if (attachmentHistory) {
             this.attachment = attachmentHistory;
             this.removeUnnecessaryFields(this.attachment, this.copyFields);
             if (this.isNotEmpty(this.attachment.specimen)) {
@@ -4121,11 +4098,7 @@ export default {
               this.autocomplete.reference.push(this.attachment.reference);
             }
           }
-          if (
-            this.isNotEmpty(keywords) &&
-            keywords !== "fallbackValue" &&
-            keywords.length > 0
-          ) {
+          if (keywords && keywords.length > 0) {
             this.relatedData.keyword = keywords;
             this.autocomplete.keyword = this.relatedData.keyword;
           }
@@ -4143,10 +4116,10 @@ export default {
 
           if (!this.isDigitisedReference) {
             this.$set(this.attachment, "author", {
-              id: this.currentUser.id,
-              agent: this.currentUser.agent,
-              forename: this.currentUser.forename,
-              surename: this.currentUser.surename
+              id: this.getCurrentUser.id,
+              agent: this.getCurrentUser.agent,
+              forename: this.getCurrentUser.forename,
+              surename: this.getCurrentUser.surename
             });
             this.autocomplete.agent.push(this.attachment.author);
           }
@@ -4171,6 +4144,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("map", ["updateShowMap"]),
+
     setInitialData() {
       return {
         relatedTabs: [
@@ -4390,7 +4365,6 @@ export default {
         },
         attachment: this.setDefaultAttachmentFields(),
         rawAttachment: null,
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           fileInput: true,
           file: true,
@@ -4423,7 +4397,7 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         // fetchAttachment(this.$route.params.id).then(
-        fetchAttachment(this.$route.params.id, this.currentUser).then(
+        fetchAttachment(this.$route.params.id, this.getCurrentUser).then(
           response => {
             let handledResponse = this.handleResponse(response);
 
@@ -4719,26 +4693,22 @@ export default {
 
       if (!this.$route.meta.isEdit) {
         if (this.isPhotoArchive) {
-          this.$localStorage.set("photoArchive", objectToUpload);
-          this.$localStorage.set(
-            "photoArchiveKeywords",
-            this.relatedData.keyword
-          );
+          this.saveFields({ key: "photoArchive", value: objectToUpload });
+          this.saveFields({
+            key: "photoArchiveKeywords",
+            value: objectToUpload
+          });
         } else if (this.isSpecimenImage) {
-          this.$localStorage.set("specimenImage", objectToUpload);
-          this.$localStorage.set(
-            "specimenImageKeywords",
-            this.relatedData.keyword
-          );
+          this.saveFields({ key: "specimenImage", value: objectToUpload });
+          this.saveFields({
+            key: "specimenImageKeywords",
+            value: objectToUpload
+          });
         } else if (this.isOtherFile) {
-          this.$localStorage.set("otherFiles", objectToUpload);
-          this.$localStorage.set(
-            "otherFilesKeywords",
-            this.relatedData.keyword
-          );
+          this.saveFields({ key: "otherFiles", value: objectToUpload });
+          this.saveFields({ key: "otherFilesKeywords", value: objectToUpload });
         } else if (this.isDigitisedReference)
-          this.$localStorage.set("digitisedReference", objectToUpload);
-        // this.$localStorage.set('attachment', objectToUpload);
+          this.saveFields({ key: "digitisedReference", value: objectToUpload });
       }
 
       if (this.isNotEmpty(uploadableObject.image_latitude))
@@ -4765,7 +4735,7 @@ export default {
         }
       });
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       /* Related Data START */
       uploadableObject.related_data = {};
@@ -4901,15 +4871,13 @@ export default {
       if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
         // DATE
         if (metadata.DateTimeOriginal) {
-          let formattedMetadataDate = this.formatMetadataDate(
+          this.attachment.date_created = this.formatMetadataDate(
             metadata.DateTimeOriginal
           );
-          this.attachment.date_created = formattedMetadataDate;
         } else if (metadata.DateTime) {
-          let formattedMetadataDate = this.formatMetadataDate(
+          this.attachment.date_created = this.formatMetadataDate(
             metadata.DateTime
           );
-          this.attachment.date_created = formattedMetadataDate;
         }
 
         // DEVICE_TXT
@@ -5025,18 +4993,18 @@ export default {
       else if (type === 4) return "digitisedReference";
     },
 
-    clearLocalStorage() {
+    clearSavedFields() {
       if (this.isPhotoArchive) {
-        this.$localStorage.remove("photoArchive");
-        this.$localStorage.remove("photoArchiveKeywords");
+        this.resetFields("photoArchive");
+        this.resetFields("photoArchiveKeywords");
       } else if (this.isSpecimenImage) {
-        this.$localStorage.remove("specimenImage");
-        this.$localStorage.remove("specimenImageKeywords");
+        this.resetFields("specimenImage");
+        this.resetFields("specimenImageKeywords");
       } else if (this.isOtherFile) {
-        this.$localStorage.remove("otherFiles");
-        this.$localStorage.remove("otherFilesKeywords");
+        this.resetFields("otherFiles");
+        this.resetFields("otherFilesKeywords");
       } else if (this.isDigitisedReference)
-        this.$localStorage.remove("digitisedReference");
+        this.resetFields("digitisedReference");
 
       this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
     },
@@ -5144,24 +5112,6 @@ export default {
         defaultFields.stars = null;
       }
       return defaultFields;
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        image_number: null,
-        filename: null,
-        specimen: null,
-        imageInfo: null,
-        locality: null,
-        selectionId: null,
-        selection: null,
-        keyword: null,
-        specimen_image_attachment: ["2", "1", "3", "4"],
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     formatMetadataDate(dateFromMetadata) {

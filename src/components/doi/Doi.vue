@@ -637,7 +637,7 @@
         <v-btn
           v-if="$route.meta.isEdit && showMetadataButton && validate('doi')"
           class="mr-2 mb-2 text-none"
-          :disabled="sendingData"
+          :disabled="loadingState"
           @click="registerMetadata"
           :color="bodyActiveColor"
           :dark="isBodyActiveColorDark"
@@ -658,7 +658,7 @@
         <v-btn
           v-if="$route.meta.isEdit && showDoiUrlButton && validate('doi')"
           class="mr-2 mb-2 text-none"
-          :disabled="sendingData"
+          :disabled="loadingState"
           @click="registerDoiUrl"
           :color="bodyActiveColor"
           :dark="isBodyActiveColorDark"
@@ -702,7 +702,7 @@ import {
   fetchAgentUsingName
 } from "../../assets/js/api/apiCalls";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
@@ -761,23 +761,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "doiSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.doiSearchParameters,
         request: "FETCH_DOIS",
         title: "header.dois",
         object: "doi",
-        field: "title",
-        block: this.block
+        field: "title"
       });
     }
 
@@ -799,7 +788,7 @@ export default {
   },
 
   computed: {
-    ...mapState(["databaseId"]),
+    ...mapState("search", ["doiSearchParameters"]),
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -819,9 +808,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["updateActiveTab"]),
+
     setTab(type) {
       if (type) {
-        this.$store.dispatch("updateActiveTab", {
+        this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
         });
@@ -913,7 +904,6 @@ export default {
           "title"
         ],
         doi: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           requiredFields: true,
           info: true,
@@ -1086,7 +1076,7 @@ export default {
         uploadableObject.dataset = this.relatedData.dataset.id;
       } else uploadableObject.dataset = null;
 
-      if (this.databaseId) uploadableObject.database = this.databaseId;
+      if (this.getDatabaseId) uploadableObject.database = this.getDatabaseId;
 
       if (this.$route.meta.isEGF) uploadableObject.egf = this.$route.params.id;
 
@@ -1315,19 +1305,6 @@ export default {
       return `${option.id} - (${option.name_en})`;
     },
 
-    setDefaultSearchParameters() {
-      return {
-        identifier: null,
-        creators: null,
-        publication_year: null,
-        title: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-
     /**
      * Updates DOI creators field using persons (Creators) in doi_agent
      * Always overwrites creators field, because doi_agent is more reliable than user entered creators field!
@@ -1406,13 +1383,23 @@ export default {
                   timeout: 7000
                 });
               else
-                this.toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
+                this.toastInfo({
+                  text: dataCiteResponse[0].error,
+                  timeout: 7000
+                });
             }
           } else {
             // Unsuccessful response and doi doesn't exist in sarv database (if not in sarv then it can't be in datacite)
             if (this.$i18n.locale === "ee")
-              this.toastInfo({ text: dataCiteResponse[0].error_et, timeout: 7000 });
-            else this.toastInfo({ text: dataCiteResponse[0].error, timeout: 7000 });
+              this.toastInfo({
+                text: dataCiteResponse[0].error_et,
+                timeout: 7000
+              });
+            else
+              this.toastInfo({
+                text: dataCiteResponse[0].error,
+                timeout: 7000
+              });
           }
         }
       }
@@ -1533,7 +1520,9 @@ export default {
                 this.showMetadataUpdateMessage = true;
                 this.sarvXML = response.data.results[0].sarv_xml;
                 this.dataciteXML = response.data.results[0].datacite_xml;
-                this.toastInfo({ text: this.$t("doi.dataciteMetadataNeedsUpdate") });
+                this.toastInfo({
+                  text: this.$t("doi.dataciteMetadataNeedsUpdate")
+                });
               } else {
                 this.showMetadataButton = false;
                 this.showMetadataUpdateMessage = false;

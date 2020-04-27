@@ -32,8 +32,8 @@
         <v-btn
           :icon="$vuetify.breakpoint.mdAndDown"
           class="text-none"
-          :color="appSettings.bodyActiveColor"
-          :dark="appSettings.bodyActiveColorDark"
+          :color="bodyActiveColor"
+          :dark="bodyActiveColorDark"
           :title="$t('add.photo')"
           @click="trigger('photoUpload')"
         >
@@ -60,8 +60,8 @@
         <v-btn
           :icon="$vuetify.breakpoint.mdAndDown"
           class="text-none"
-          :color="appSettings.bodyActiveColor"
-          :dark="appSettings.bodyActiveColorDark"
+          :color="bodyActiveColor"
+          :dark="bodyActiveColorDark"
           :title="$t('add.video')"
           @click="trigger('videoUpload')"
         >
@@ -88,8 +88,8 @@
         <v-btn
           :icon="$vuetify.breakpoint.mdAndDown"
           class="text-none"
-          :color="appSettings.bodyActiveColor"
-          :dark="appSettings.bodyActiveColorDark"
+          :color="bodyActiveColor"
+          :dark="bodyActiveColorDark"
           :title="$t('add.audio')"
           @click="trigger('audioUpload')"
         >
@@ -128,7 +128,7 @@
           :icon="$vuetify.breakpoint.mdAndDown"
           class="text-none"
           color="red"
-          :dark="appSettings.bodyActiveColorDark"
+          :dark="bodyActiveColorDark"
           :title="$t('buttons.clear')"
           @click="clearFile"
         >
@@ -149,7 +149,7 @@
       <v-col cols="12" class="pa-1">
         <autocomplete-wrapper
           v-model="existingFiles"
-          :color="appSettings.bodyActiveColor"
+          :color="bodyActiveColor"
           :items="autocomplete.attachment"
           :loading="autocomplete.loaders.attachment"
           item-text="original_filename"
@@ -182,8 +182,8 @@
       <v-col cols="12" class="pa-1">
         <image-view-wrapper
           :data="Array.isArray(existingFiles) ? existingFiles : [existingFiles]"
-          :body-color="appSettings.bodyColor"
-          :body-active-color="appSettings.bodyActiveColor"
+          :body-color="bodyColor"
+          :body-active-color="bodyActiveColor"
           clear-item-background
           :open-file="openFile"
         />
@@ -210,17 +210,13 @@
               :md="realSize ? 12 : 3"
               :lg="realSize ? 12 : 2"
             >
-              <v-tooltip
-                bottom
-                :color="appSettings.bodyActiveColor"
-                z-index="51000"
-              >
+              <v-tooltip bottom :color="bodyActiveColor" z-index="51000">
                 <template v-slot:activator="{ on }">
                   <v-card
                     flat
                     class="d-flex"
                     v-on="on"
-                    :class="appSettings.bodyColor.split('n-')[0] + 'n-5'"
+                    :class="bodyColor.split('n-')[0] + 'n-5'"
                     hover
                   >
                     <!-- IMAGE -->
@@ -252,7 +248,7 @@
                         <div class="py-3">
                           <v-icon
                             style="font-size: 6rem"
-                            :class="appSettings.bodyActiveColor + '--text'"
+                            :class="bodyActiveColor + '--text'"
                             >far {{ getAttachmentIcon(file) }}</v-icon
                           >
                         </div>
@@ -328,7 +324,11 @@ export default {
     openFile: Boolean
   },
   computed: {
-    ...mapState(["appSettings"]),
+    ...mapState("settings", [
+      "bodyColor",
+      "bodyActiveColor",
+      "bodyActiveColorDark"
+    ]),
 
     isFilesValid() {
       return this.files && this.files.length > 0;

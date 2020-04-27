@@ -4,10 +4,12 @@ import {
   fetchLogout
 } from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
+import { mapActions } from "vuex";
 
 const authenticationMixin = {
   mixins: [toastMixin],
   methods: {
+    ...mapActions("user", ["setAuthUser", "removeAuthUser"]),
     /**
      * Authenticates user according to the information entered.
      *
@@ -63,7 +65,7 @@ const authenticationMixin = {
     logOut() {
       this.$cookies.remove("csrftokenLocalhost", null, "localhost");
       this.$cookies.remove("csrftoken", null, "geocollections.info");
-      this.$localStorage.remove("authUser");
+      this.removeAuthUser();
 
       fetchLogout().then(response => {
         if (response.status === 200) {
@@ -111,7 +113,7 @@ const authenticationMixin = {
             null,
             "localhost"
           );
-          this.$localStorage.set("authUser", response.data);
+          this.setAuthUser(response.data);
 
           if (this.$route.query.from) {
             this.$router.push({ path: this.$route.query.from });

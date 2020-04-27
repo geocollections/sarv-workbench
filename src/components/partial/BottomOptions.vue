@@ -197,12 +197,9 @@ export default {
     };
   },
   computed: {
-    ...mapState([
-      "sidebarList",
-      "drawerState",
-      "drawerRightState",
-      "loadingState"
-    ])
+    ...mapState("search", ["sidebarList", "loadingState"]),
+
+    ...mapState("settings", ["drawerState", "drawerRightState"])
   },
   watch: {
     sidebarList: {

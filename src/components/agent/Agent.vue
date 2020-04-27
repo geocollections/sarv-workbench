@@ -356,6 +356,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
+import { mapState } from "vuex";
 
 export default {
   name: "Agent",
@@ -389,24 +390,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "agentSearchHistory",
-        defaultSearch: this.setDefaultSearchParameters(),
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.agentSearchParameters,
         request: "FETCH_AGENTS",
         title: "header.agents",
         object: "agent",
-        field: "agent",
-        databaseId: this.databaseId,
-        block: this.block
+        field: "agent"
       });
     }
 
@@ -420,6 +409,9 @@ export default {
       },
       deep: true
     }
+  },
+  computed: {
+    ...mapState("search", ["agentSearchParameters"])
   },
   methods: {
     setInitialData() {
@@ -464,7 +456,6 @@ export default {
         },
         requiredFields: ["agent"],
         agent: {},
-        searchParameters: this.setDefaultSearchParameters(),
         block: {
           info: true,
           details: true,
@@ -558,19 +549,6 @@ export default {
         id: obj.country,
         value: obj.country__value,
         value_en: obj.country__value_en
-      };
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        agent: null,
-        forename: null,
-        surename: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["agent"],
-        sortDesc: [false]
       };
     }
   }

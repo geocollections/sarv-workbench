@@ -354,7 +354,7 @@
               :color="bodyColor.split('n-')[0] + 'n-5'"
             >
               <v-switch
-                v-model="showMap"
+                v-model="myShowMap"
                 hide-details
                 id="map-switch"
                 class="vuetify-switch my-1"
@@ -369,17 +369,17 @@
             >
               <label class="m-0" :for="`map-switch`">
                 <i class="far fa-map"></i>
-                {{ showMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
+                {{ myShowMap ? $t("site.mapEnabled") : $t("site.mapDisabled") }}
               </label>
             </v-card>
           </v-card>
 
           <!-- MAP -->
           <transition enter-active-class="animated fadeIn faster">
-            <v-row no-gutters v-show="showMap" class="mt-2">
+            <v-row no-gutters v-show="myShowMap" class="mt-2">
               <v-col cols="12" class="px-1">
                 <map-component
-                  :show-map="showMap && block.sites"
+                  :show-map="myShowMap && block.sites"
                   :gps-coords="true"
                   mode="multiple"
                   module="project"
@@ -509,7 +509,7 @@ import {
 
 import MapComponent from "../partial/MapComponent";
 
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import ExportButtons from "../partial/export/ExportButtons";
 import SiteTable from "../site/SiteTable";
 import debounce from "lodash/debounce";
@@ -560,20 +560,22 @@ export default {
   data() {
     return this.setInitialData();
   },
-  computed: {
-    ...mapState(["currentUser", "databaseId", "activeProject", "mapSettings"]),
 
-    showMap: {
+  computed: {
+    ...mapState("search", [
+      "projectSearchParameters",
+      "activeProject",
+      "sidebarUserAction"
+    ]),
+    ...mapState("map", ["showMap"]),
+
+    myShowMap: {
       get() {
-        return this.mapSettings.showMap;
+        return this.showMap;
       },
       set(value) {
-        this.$store.dispatch("updateMapState", value);
+        this.updateShowMap(value);
       }
-    },
-
-    sidebarUserAction() {
-      return this.$store.state["sidebarUserAction"];
     },
 
     paginateByOptionsTranslated() {
@@ -588,23 +590,12 @@ export default {
   created() {
     // USED BY SIDEBAR
     if (this.$route.meta.isEdit) {
-      const searchHistory = this.$localStorage.get(
-        this.searchHistory,
-        "fallbackValue"
-      );
-      let params =
-        this.isNotEmpty(searchHistory) && searchHistory !== "fallbackValue"
-          ? searchHistory
-          : this.searchParameters;
-      this.$store.commit("SET_ACTIVE_SEARCH_PARAMS", {
-        searchHistory: "projectSearchHistory",
-        defaultSearch: this.searchParameters,
-        search: params,
+      this.setActiveSearchParameters({
+        search: this.projectSearchParameters,
         request: "FETCH_PROJECTS",
         title: "header.projects",
         object: "project",
-        field: "name",
-        block: this.block
+        field: "name"
       });
     }
 
@@ -633,6 +624,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("search", ["setActiveProject"]),
+
     fetchLinkedSiteWrapper() {
       return new Promise(resolve => {
         resolve(
@@ -646,8 +639,8 @@ export default {
 
     setActiveProject(switchValue) {
       console.log(switchValue);
-      if (switchValue) this.$store.dispatch("setActiveProject", this.project);
-      else this.$store.dispatch("setActiveProject", null);
+      if (switchValue) this.setActiveProject(this.project);
+      else this.setActiveProject(null);
     },
 
     setInitialData() {
@@ -691,7 +684,6 @@ export default {
         project: {},
         previousRecord: {},
         nextRecord: {},
-        searchParameters: this.setDefaultSearchParameters(),
         columns: [
           { id: "id", title: "common.id", type: "number" },
           { id: "name", title: "common.name", type: "text" },
@@ -775,8 +767,8 @@ export default {
 
         //set default user
         this.project.owner = {
-          agent: this.currentUser.user,
-          id: this.currentUser.id
+          agent: this.getCurrentUser.user,
+          id: this.getCurrentUser.id
         };
         this.autocomplete.agent.push(this.project.owner);
       }
@@ -933,17 +925,6 @@ export default {
 
       // console.log(JSON.stringify(uploadableObject));
       return JSON.stringify(uploadableObject);
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        name: null,
-        id: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
     },
 
     customLabelForAttachment(option) {

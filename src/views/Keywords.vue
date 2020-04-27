@@ -5,19 +5,18 @@
     <table-view-search
       :show-search="block.search"
       v-on:update:showSearch="block.search = $event"
-      :filters="filters"
+      :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
       :col-size="3"
-      v-on:reset:searchPreferences="resetSearchPreferences"
+      v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:reset:searchParameters="resetSearchParams"
     />
 
     <list-module-core
-      module="keyword"
+      :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchKeywords"
-      search-history="keywordSearchHistory"
-      view-type="keywordViewType"
-      v-on:search-params-changed="searchParametersChanged"
+      v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
 </template>
@@ -27,44 +26,37 @@ import ListModuleCore from "./ListModuleCore";
 import { fetchKeywords } from "../assets/js/api/apiCalls";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
+import searchParametersMixin from "../mixins/searchParametersMixin";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "Keyword",
+
   components: {
     ListModuleCore,
     TableViewSearch,
     TableViewTitle
   },
+
+  mixins: [searchParametersMixin],
+
   data() {
     return {
-      response: {},
-      filters: [
-        { id: "id", title: "common.id", type: "number" },
-        { id: "term", title: "keyword.keyword", type: "text" },
-        { id: "language", title: "keyword.language", type: "text" },
-        {
-          id: "keyword_category",
-          title: "keyword.keyword_category",
-          type: "text"
-        }
-      ],
-      searchParameters: this.setDefaultSearchParameters(),
       block: { search: true }
     };
   },
 
-  watch: {
-    searchParameters: {
-      handler: function(newVal) {
-        this.$store.dispatch("updateSearchParameters", {
-          module: "keyword",
-          filters: this.filters,
-          params: newVal
-        });
-      },
-      deep: true,
-      immediate: true
-    }
+  created() {
+    this.setActiveSearchParametersFilters([
+      { id: "id", title: "common.id", type: "number" },
+      { id: "term", title: "keyword.keyword", type: "text" },
+      { id: "language", title: "keyword.language", type: "text" },
+      {
+        id: "keyword_category",
+        title: "keyword.keyword_category",
+        type: "text"
+      }
+    ]);
   },
 
   methods: {
@@ -72,35 +64,6 @@ export default {
       return new Promise(resolve => {
         resolve(fetchKeywords(this.searchParameters));
       });
-    },
-
-    searchParametersChanged(newParams) {
-      this.searchParameters = newParams;
-    },
-
-    setDefaultSearchParameters() {
-      return {
-        id: null,
-        term: null,
-        language: null,
-        keyword_category: null,
-        is_primary: null,
-        page: 1,
-        paginateBy: 10,
-        sortBy: ["id"],
-        sortDesc: [true]
-      };
-    },
-    resetSearchPreferences() {
-      this.resetStorage();
-      this.resetSearchParameters();
-    },
-    resetStorage() {
-      this.$localStorage.remove("keywordSearchHistory");
-      this.$localStorage.remove("keywordViewType");
-    },
-    resetSearchParameters() {
-      this.searchParameters = this.setDefaultSearchParameters();
     }
   }
 };
