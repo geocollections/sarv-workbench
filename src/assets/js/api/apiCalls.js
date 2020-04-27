@@ -2146,6 +2146,10 @@ export function fetchTaxonOpinionType() {
   return get(`taxon_opinion_type/?format=json`);
 }
 
+export function fetchTaxonByTaxonTypeId(taxonTypeId) {
+  return get(`taxon/?id=${taxonTypeId}&fields=id,taxon&format=json`);
+}
+
 /*******************
  ***  TAXON END  ***
  *******************/

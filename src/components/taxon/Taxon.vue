@@ -660,7 +660,7 @@ import {
   fetchTaxonRank,
   fetchTaxonSynonym,
   fetchTaxonTypeSpecimen,
-  fetchTaxonAttachments
+  fetchTaxonAttachments, fetchTaxonByTaxonTypeId
 } from "../../assets/js/api/apiCalls";
 
 import InputWrapper from "../partial/inputs/InputWrapper";
@@ -1146,11 +1146,13 @@ export default {
         this.autocomplete.fossil_group.push(this.taxon.fossil_group);
       }
       if (this.isNotEmpty(obj.type_taxon_id)) {
-        this.taxon.type_taxon_id = {
-          id: obj.type_taxon_id,
-          taxon: obj.type_taxon
-        };
-        this.autocomplete.type_taxon_id.push(this.taxon.type_taxon_id);
+        fetchTaxonByTaxonTypeId(obj.type_taxon_id).then(res => {
+          this.taxon.type_taxon_id = {
+            id: obj.type_taxon_id,
+            taxon: res?.data?.results?.[0]?.taxon
+          };
+          this.autocomplete.type_taxon_id.push(this.taxon.type_taxon_id);
+        });
       }
       if (this.isNotEmpty(obj.stratigraphy_top)) {
         this.taxon.stratigraphy_top = {
