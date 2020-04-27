@@ -575,6 +575,41 @@
           </div>
         </v-list-item>
       </v-list-group>
+
+      <!-- RECENT URLS -->
+      <v-list-group
+        :value="true"
+        :color="drawerActiveColor"
+        append-icon="fas fa-angle-down"
+        v-if="
+          recentUrls.length > 0 &&
+            ($route.meta.object === 'dashboard' ||
+              $route.meta.object === 'settings')
+        "
+      >
+        <template v-slot:activator>
+          <v-list-item-title class="text-uppercase">
+            {{ $t("sidebar.recentUrls") }}
+            <v-icon small>far fa-list-alt</v-icon>
+          </v-list-item-title>
+        </template>
+
+        <!-- LIST ITEMS -->
+        <!-- Todo: Don't want to use 'inactive' prop yet, because of https://github.com/vuetifyjs/vuetify/issues/9999 -->
+        <v-list-item
+          v-for="(entity, index) in reversedRecentUrls"
+          :key="index"
+          :to="{ path: entity.href }"
+          dense
+          exact-active-class="replaces-inactive-prop"
+        >
+          <v-list-item-content>
+            <v-list-item-title style="white-space: unset">
+              {{ entity.text }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -626,6 +661,12 @@ export default {
       "activeSelectionSeries",
       "tableSearchParameters"
     ]),
+
+    ...mapState("settings", ["recentUrls"]),
+
+    reversedRecentUrls() {
+      return this.recentUrls.slice(0).reverse();
+    },
 
     computedTableSearchParameters() {
       return this.tableSearchParameters[this.$route.meta.object];
@@ -754,4 +795,14 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+/* Have to use class instead of prop */
+.replaces-inactive-prop {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+/* Have to use class instead of prop */
+.replaces-inactive-prop:before {
+  opacity: 0;
+}
+</style>

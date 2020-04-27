@@ -304,6 +304,7 @@
     "navbarText": "navbar"
   },
   "sidebar": {
+    "recentUrls": "History",
     "project": {
       "info": "General info",
       "description": "Description | Remarks",

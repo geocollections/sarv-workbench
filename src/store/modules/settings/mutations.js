@@ -60,10 +60,10 @@ const mutations = {
   UPDATE_RECENT_URLS: (state, payload) => {
     let recentUrls = [...state.recentUrls, payload];
 
-    if (recentUrls.length > 10) recentUrls.shift();
+    if (recentUrls.length > 100) recentUrls.shift();
 
-    // If after removing is still over 10 then empty that list;
-    if (recentUrls.length > 10) recentUrls = [];
+    // If after removing is still over 100 then empty that list;
+    if (recentUrls.length > 100) recentUrls = [];
 
     Vue.set(state, "recentUrls", [...recentUrls]);
   },

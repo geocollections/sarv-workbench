@@ -8,7 +8,7 @@
       >
         {{ entity.text }}
       </router-link>
-      <span v-if="index !== items.length - 1" class="mx-1">
+      <span v-if="index !== reverseHistory.length - 1" class="mx-1">
         {{ divider }}
       </span>
     </span>
@@ -36,7 +36,10 @@ export default {
   },
   computed: {
     reverseHistory() {
-      return this.items.slice(0).reverse();
+      return this.items
+        .slice(0)
+        .slice(-10)
+        .reverse();
     }
   }
 };

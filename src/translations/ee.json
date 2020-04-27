@@ -304,6 +304,7 @@
     "navbarText": "navigatsiooniriba"
   },
   "sidebar": {
+    "recentUrls": "Ajalugu",
     "project": {
       "info": "Üldinfo",
       "description": "Kirjeldus | Lisainfo",
