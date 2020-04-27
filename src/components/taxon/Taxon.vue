@@ -188,26 +188,26 @@
             </v-col>
           </v-row>
 
-          <!-- TYPE_TAXON_ID and TYPE_TAXON -->
+          <!-- TYPE_TAXON and TYPE_TAXON_TXT -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
               <autocomplete-wrapper
-                v-model="taxon.type_taxon_id"
+                v-model="taxon.type_taxon"
                 :color="bodyActiveColor"
-                :items="autocomplete.type_taxon_id"
-                :loading="autocomplete.loaders.type_taxon_id"
+                :items="autocomplete.type_taxon"
+                :loading="autocomplete.loaders.type_taxon"
                 item-text="taxon"
                 :label="$t('taxon.type_taxon_id')"
                 is-link
                 route-object="taxon"
                 is-searchable
-                v-on:search:items="autocompleteTypeTaxonIdSearch"
+                v-on:search:items="autocompleteTypeTaxonSearch"
               />
             </v-col>
 
             <v-col cols="12" md="6" class="pa-1">
               <input-wrapper
-                v-model="taxon.type_taxon"
+                v-model="taxon.type_taxon_txt"
                 :color="bodyActiveColor"
                 :label="$t('taxon.type_taxon')"
               />
@@ -844,8 +844,8 @@ export default {
           "hierarchy_string",
           "rank",
           "rank_original",
-          "type_taxon_id",
           "type_taxon",
+          "type_taxon_txt",
           "stratigraphy_base",
           "stratigraphy_top",
           "in_estonia",
@@ -872,7 +872,7 @@ export default {
             parent: false,
             fossil_group: false,
             rank_original: false,
-            type_taxon_id: false,
+            type_taxon: false,
             stratigraphy_top: false,
             stratigraphy_base: false,
             agent: false,
@@ -890,7 +890,7 @@ export default {
           parent: [],
           fossil_group: [],
           rank_original: [],
-          type_taxon_id: [],
+          type_taxon: [],
           stratigraphy_top: [],
           stratigraphy_base: [],
           agent: [],
@@ -1145,14 +1145,12 @@ export default {
         };
         this.autocomplete.fossil_group.push(this.taxon.fossil_group);
       }
-      if (this.isNotEmpty(obj.type_taxon_id)) {
-        fetchTaxonByTaxonTypeId(obj.type_taxon_id).then(res => {
-          this.taxon.type_taxon_id = {
-            id: obj.type_taxon_id,
-            taxon: res?.data?.results?.[0]?.taxon
-          };
-          this.autocomplete.type_taxon_id.push(this.taxon.type_taxon_id);
-        });
+      if (this.isNotEmpty(obj.type_taxon)) {
+        this.taxon.type_taxon = {
+          id: obj.type_taxon,
+          taxon: obj.type_taxon__taxon
+        };
+        this.autocomplete.type_taxon.push(this.taxon.type_taxon);
       }
       if (this.isNotEmpty(obj.stratigraphy_top)) {
         this.taxon.stratigraphy_top = {

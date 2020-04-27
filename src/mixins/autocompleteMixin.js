@@ -95,8 +95,8 @@ const autocompleteMixin = {
     autocompleteTaxonFossilGroupSearch(value) {
       this.$_autocompleteMixin_search(value, "taxon", "fossil_group");
     },
-    autocompleteTypeTaxonIdSearch(value) {
-      this.$_autocompleteMixin_search(value, "taxon", "type_taxon_id");
+    autocompleteTypeTaxonSearch(value) {
+      this.$_autocompleteMixin_search(value, "taxon", "type_taxon");
     },
     autocompleteStratigraphySearch(value) {
       this.$_autocompleteMixin_search(value, "stratigraphy", "stratigraphy");
