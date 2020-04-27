@@ -47,7 +47,6 @@ axios.interceptors.response.use(function(response) {
     if (response.data.error_not_logged_in) {
       Vue.$cookies.remove("csrftokenLocalhost", null, "localhost");
       Vue.$cookies.remove("csrftoken", null, "geocollections.info");
-      Vue.localStorage.remove("authUser");
       Vue.prototype.toast.error("Please log back in", "Session expired", {
         position: "bottomRight",
         timeout: 5000,

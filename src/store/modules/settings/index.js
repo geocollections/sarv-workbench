@@ -18,8 +18,10 @@ const state = {
   drawerRightDark: false,
   drawerRightActiveColor: "deep-orange",
   recentUrls: [],
-  recentUrlsState: false,
-  shortcuts: []
+  recentUrlsState: true,
+  shortcuts: [],
+  lang: "ee",
+  formSections: {}
 };
 
 export default {

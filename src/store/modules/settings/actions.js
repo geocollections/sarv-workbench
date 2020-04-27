@@ -93,6 +93,15 @@ const actions = {
     let shortcuts = cloneDeep(state.shortcuts);
     shortcuts[payload.index].isAlwaysVisible = payload.event;
     commit("SET_SHORTCUTS", shortcuts);
+  },
+
+  updateLang({ commit }, lang) {
+    commit("UPDATE_LANG", lang);
+  },
+
+  updateFormSections({ state, commit }, payload) {
+    let clonedPayload = cloneDeep(payload);
+    commit("UPDATE_FORM_SECTIONS", clonedPayload);
   }
 };
 

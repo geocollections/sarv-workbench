@@ -1,63 +1,64 @@
+import { mapActions, mapState } from "vuex";
+import { cloneDeep } from "lodash";
+
 const formSectionsMixin = {
-  data() {
-    return {
-      formSections: null
-    };
-  },
+  data: () => ({
+    routeJustUpdated: false
+  }),
 
-  created() {
-    this.formSections = this.$localStorage.get("formSections");
-    this.$_localStorageMixin_setBlock();
-  },
+  computed: {
+    ...mapState("settings", ["formSections"]),
 
-  updated() {
-    this.$_localStorageMixin_setBlock();
+    routeObject() {
+      let object = this.$route.meta.object;
+      if (object === "attachment" && !this.$route.meta.isEdit)
+        object = this.$route.meta.child;
+      return object;
+    }
   },
 
   beforeRouteUpdate(to, from, next) {
-    let object = this.$route.meta.object;
-    if (object === "attachment" && !this.$route.meta.isEdit)
-      object = this.$route.meta.child;
-    if (this.block && this.formSections) {
-      this.formSections[object] = this.block;
-      this.$localStorage.set("formSections", this.formSections);
+    if (this.block) {
+      this.routeJustUpdated = true;
     }
     next();
   },
 
   beforeRouteLeave(to, from, next) {
-    let object = this.$route.meta.object;
-    if (object === "attachment" && !this.$route.meta.isEdit)
-      object = this.$route.meta.child;
-    if (this.block && this.formSections) {
-      this.formSections[object] = this.block;
-      this.$localStorage.set("formSections", this.formSections);
+    if (this.block) {
+      this.routeJustUpdated = true;
     }
     next();
   },
 
-  methods: {
-    $_localStorageMixin_setBlock() {
-      let object = this.$route.meta.object;
-      if (object === "attachment" && !this.$route.meta.isEdit)
-        object = this.$route.meta.child;
-      if (this.formSections && this.formSections[object] && this.block) {
-        if (
-          Object.keys(this.formSections[object]).length >=
-            Object.keys(this.block).length &&
-          compareObjectKeys(this.formSections[object], this.block)
-        ) {
-          this.block = this.formSections[object];
-        }
-      }
+  created() {
+    if (this?.formSections?.[this.routeObject]) {
+      this.block = cloneDeep(this.formSections[this.routeObject]);
+    } else if (this.block) {
+      this.updateFormSections({ key: this.routeObject, value: this.block });
     }
+  },
+
+  watch: {
+    block: {
+      handler(newVal) {
+        if (this.routeJustUpdated) {
+          this.block = cloneDeep(this.formSections[this.routeObject]);
+          this.routeJustUpdated = false;
+        } else if (newVal) {
+          this.updateFormSections({
+            key: this.routeObject,
+            value: newVal
+          });
+        }
+      },
+      deep: true
+    }
+  },
+
+  methods: {
+    ...mapActions("settings", ["updateFormSections"])
   }
 };
-
-function compareObjectKeys(objectA, objectB) {
-  let aKeys = Object.keys(objectA).sort();
-  let bKeys = Object.keys(objectB).sort();
-  return JSON.stringify(aKeys) === JSON.stringify(bKeys);
-}
 
 export default formSectionsMixin;

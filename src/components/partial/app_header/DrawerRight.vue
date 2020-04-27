@@ -657,7 +657,9 @@ export default {
   watch: {
     "activeSearchParams.request": {
       handler(newVal) {
-        this.$store.dispatch(`search/${newVal}`);
+        if (newVal) {
+          this.$store.dispatch(`search/${newVal}`);
+        }
       },
       immediate: true
     },

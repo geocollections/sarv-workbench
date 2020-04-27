@@ -144,6 +144,7 @@
         v-on:toggle-select-all="toggleSelectAll"
         :body-color="bodyColor"
         :body-active-color="bodyActiveColor"
+        v-on:update:sorting="$emit('update:searchParameters', $event.value, $event.key)"
       />
     </v-card>
   </div>

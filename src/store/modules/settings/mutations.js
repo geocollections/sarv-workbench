@@ -82,6 +82,14 @@ const mutations = {
 
   REMOVE_SHORTCUT(state, payload) {
     state.shortcuts.splice(payload, 1);
+  },
+
+  UPDATE_LANG(state, payload) {
+    state.lang = payload;
+  },
+
+  UPDATE_FORM_SECTIONS(state, payload) {
+    state.formSections[payload.key] = payload.value;
   }
 };
 

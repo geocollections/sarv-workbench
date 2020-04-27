@@ -169,7 +169,8 @@ export default {
       "drawerRightColor",
       "drawerRightDark",
       "drawerRightActiveColor",
-      "shortcuts"
+      "shortcuts",
+      "lang"
     ]),
     ...mapGetters("user", ["getCurrentUser"])
   },
@@ -182,13 +183,16 @@ export default {
     }
   },
   methods: {
-    ...mapActions("settings", ["updateDrawerState", "updateDrawerRightState"]),
+    ...mapActions("settings", [
+      "updateDrawerState",
+      "updateDrawerRightState",
+      "updateLang"
+    ]),
 
-    changeLang(lang) {
-      if (this.$localStorage.get("geocollectionsFileUploadLang") === lang)
-        return;
-      this.$i18n.locale = lang;
-      this.$localStorage.set("geocollectionsFileUploadLang", lang);
+    changeLang(newLang) {
+      if (this.lang === newLang) return;
+      this.$i18n.locale = newLang;
+      this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
     }
   }

@@ -9,8 +9,10 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
-    :sort-by.sync="searchParameters.sortBy"
-    :sort-desc.sync="searchParameters.sortDesc"
+    :sort-by="searchParameters.sortBy"
+    :sort-desc="searchParameters.sortDesc"
+    @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
+    @update:sort-desc="$emit('update:sorting', { value: $event, key: 'sortDesc' })"
     :server-items-length="response.count"
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
