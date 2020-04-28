@@ -762,6 +762,7 @@
     "agent_collected": "Collector",
     "storage": "Storage",
     "idSpecimen": "ID or specimen no",
+    "specimenNr": "Specimen former no",
     "mineralRock": "Mineral or Rock",
     "editMessage": "Edit specimen",
     "viewMessage": "View specimen in geocollections portal",

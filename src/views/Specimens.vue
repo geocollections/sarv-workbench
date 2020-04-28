@@ -93,6 +93,7 @@ export default {
 
     this.setActiveSearchParametersFilters([
       { id: "idSpecimen", title: "specimen.idSpecimen", type: "text" },
+      { id: "specimenNr", title: "specimen.specimenNr", type: "text" },
       { id: "collNumber", title: "specimen.coll__number", type: "text" },
       { id: "fossil", title: "specimen.fossilSearch", type: "text" },
       { id: "mineralRock", title: "specimen.mineralRock", type: "text" },

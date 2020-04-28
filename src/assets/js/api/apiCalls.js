@@ -1623,7 +1623,11 @@ export function fetchSpecimens(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:icontains`;
+    searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:iexact`;
+  }
+
+  if (data.specimenNr && data.specimenNr.trim().length > 0) {
+    searchFields += `&specimen_nr__iexact=${data.specimenNr}`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {
@@ -1693,7 +1697,11 @@ export function fetchSpecimenImages(data, databaseId) {
   let orderBy = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `multi_search=value:${data.idSpecimen};fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:icontains`;
+    searchFields += `multi_search=value:${data.idSpecimen};fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:iexact`;
+  }
+
+  if (data.specimenNr && data.specimenNr.trim().length > 0) {
+    searchFields += `&specimen_nr__iexact=${data.specimenNr}`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {

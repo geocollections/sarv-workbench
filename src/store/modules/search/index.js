@@ -302,6 +302,7 @@ const state = {
   rockViewType: "table",
   specimenSearchParameters: {
     idSpecimen: null,
+    specimenNr: null,
     collNumber: null,
     fossil: null,
     mineralRock: null,

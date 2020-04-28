@@ -762,6 +762,7 @@
     "agent_collected": "Koguja",
     "storage": "Hoiukoht",
     "idSpecimen": "ID või eksemplari nr",
+    "specimenNr": "Eksemplari vana nr",
     "mineralRock": "Mineraal või kivim",
     "editMessage": "Muuda eksemplari",
     "viewMessage": "Vaata eksemplari geokogude portaalis",
