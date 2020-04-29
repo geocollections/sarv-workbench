@@ -9,7 +9,6 @@ const state = {
   digitisedReferenceKeywords: null,
   imagesetDetail: null,
   referenceDetail: null,
-  taxonDetail: null,
   specimenDetail: null,
   collectionDetail: null
 };

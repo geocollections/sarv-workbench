@@ -639,13 +639,6 @@
         />
       </v-col>
     </v-row>
-
-    <!-- CLEAR SAVED FIELDS -->
-    <div class="d-flex mt-3">
-      <v-btn @click="clearSavedFields" class="text-none" color="yellow">
-        {{ $t("buttons.clearLocalStorage") }}
-      </v-btn>
-    </div>
   </div>
 </template>
 
@@ -740,12 +733,6 @@ export default {
         object: "taxon",
         field: "taxon"
       });
-    } else {
-      // Adding taxon default values from local storage
-      const taxonHistory = cloneDeep(this.taxonDetail);
-      if (taxonHistory) {
-        this.taxon = taxonHistory;
-      }
     }
 
     this.loadFullInfo();
@@ -769,7 +756,6 @@ export default {
 
   computed: {
     ...mapState("search", ["taxonSearchParameters"]),
-    ...mapState("detail", ["taxonDetail"]),
 
     activeRelatedDataTab() {
       let tabObject = this.$store.state.activeRelatedDataTab;
@@ -799,11 +785,6 @@ export default {
   methods: {
     ...mapActions("search", ["updateActiveTab"]),
     ...mapActions("detail", ["saveFields", "resetFields"]),
-
-    clearSavedFields() {
-      this.resetFields("taxonDetail");
-      this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
-    },
 
     setTab(type) {
       if (type) {
@@ -1048,10 +1029,6 @@ export default {
 
     formatDataForUpload(objectToUpload, saveAsNew = false) {
       let uploadableObject = cloneDeep(objectToUpload);
-
-      if (!this.$route.meta.isEdit) {
-        this.saveFields({ key: "taxonDetail", value: objectToUpload });
-      }
 
       Object.keys(uploadableObject).forEach(key => {
         if (
