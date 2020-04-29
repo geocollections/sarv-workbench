@@ -65,7 +65,14 @@
     "rating-4": "-4 - väga halb",
     "rating-5": "-5 - kasutuskõlbmatu",
     "found": "Leitud",
-    "records": "kirjet"
+    "records": "kirjet",
+    "iexact": "võrdne",
+    "icontains": "sisaldab",
+    "istartswith": "algab",
+    "iendswith": "lõpeb",
+    "gte": "suurem kui",
+    "lte": "väiksem kui",
+    "lookUpType": "Filter"
   },
   "login": {
     "password": "Parool",

@@ -441,7 +441,16 @@ const state = {
     sortBy: ["id"],
     sortDesc: [true]
   },
-  web_pagesViewType: "table"
+  web_pagesViewType: "table",
+  lookUpTypes: [
+    //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy
+    { text: "main.iexact", value: "iexact" },
+    { text: "main.icontains", value: "icontains" },
+    { text: "main.istartswith", value: "istartswith" },
+    { text: "main.iendswith", value: "iendswith" },
+    { text: "main.gte", value: "gte" },
+    { text: "main.lte", value: "lte" }
+  ]
 };
 
 const getters = {};
@@ -738,11 +747,8 @@ const mutations = {
   },
 
   UPDATE_SEARCH_PARAMETERS_BY_FIELD(state, payload) {
-    state[`${payload.module}SearchParameters`][payload.field] = payload.value;
-    if (payload.isDate) {
-      // state["activeSearchParametersFilters"].find(item => item.id === payload.field).calendarState = false;
-      // state["activeSearchParametersFilters"].find(item => item.id === payload.field).calendarStateDrawer = false;
-    }
+    Vue.set(state[`${payload.module}SearchParameters`], payload.field, payload.value);
+    // state[`${payload.module}SearchParameters`][payload.field] = payload.value;
   },
 
   RESET_SEARCH_PARAMETERS(state, payload) {

@@ -70,16 +70,43 @@
                   </v-menu>
 
                   <!-- REGULAR SEARCH FIELD -->
-                  <v-text-field
-                    v-else
-                    :value="searchParameters[field.id]"
-                    :label="$t(field.title)"
-                    :color="bodyActiveColor"
-                    hide-details
-                    :class="bodyActiveColor + '--text'"
-                    :type="field.type"
-                    @input="$emit('update:searchParameters', $event, field.id)"
-                  ></v-text-field>
+                  <v-row v-else class="pa-2">
+                    <v-col cols="6" class="py-0 px-1">
+                      <v-text-field
+                        :value="searchParameters[field.id]"
+                        :label="$t(field.title)"
+                        :color="bodyActiveColor"
+                        hide-details
+                        :class="bodyActiveColor + '--text'"
+                        :type="field.type"
+                        @input="
+                          $emit('update:searchParameters', $event, field.id)
+                        "
+                      ></v-text-field>
+                    </v-col>
+
+                    <v-col cols="6" class="py-0 px-1">
+                      <v-select
+                        :value="
+                          searchParameters[`${field.id}__lookuptype`] ||
+                            'icontains'
+                        "
+                        :color="bodyActiveColor"
+                        :item-color="bodyActiveColor"
+                        disable-lookup
+                        hide-details
+                        :items="translatedLookUpTypes"
+                        :label="$t('main.lookUpType')"
+                        @input="
+                          $emit(
+                            'update:searchParameters',
+                            $event,
+                            `${field.id}__lookuptype`
+                          )
+                        "
+                      ></v-select>
+                    </v-col>
+                  </v-row>
                 </v-col>
               </v-row>
 
@@ -291,7 +318,17 @@ export default {
     }
   },
   computed: {
-    ...mapState("settings", ["bodyColor", "bodyActiveColor"])
+    ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
+    ...mapState("search", ["lookUpTypes"]),
+
+    translatedLookUpTypes() {
+      return this.lookUpTypes.map(item => {
+        return {
+          ...item,
+          text: this.$t(item.text)
+        };
+      });
+    }
   },
   data: () => ({
     date_start: false,

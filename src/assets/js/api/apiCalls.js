@@ -161,38 +161,45 @@ export function fetchAttachments(data, author) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.image_number !== null && data.image_number.trim().length > 0) {
-    searchFields += "image_number__icontains=" + data.image_number;
+    searchFields += `image_number__${data.image_number__lookuptype ||
+      "icontains"}=${data.image_number}`;
   }
   if (data.filename !== null && data.filename.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.filename +
-      ";fields:original_filename,uuid_filename;lookuptype:icontains";
+      ";fields:original_filename,uuid_filename;lookuptype:" +
+      `${data.filename__lookuptype || "icontains"}`;
   }
   if (data.specimen !== null && data.specimen.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.specimen +
-      ";fields:specimen__id,specimen__specimen_id;lookuptype:icontains";
+      ";fields:specimen__id,specimen__specimen_id;lookuptype:" +
+      `${data.specimen__lookuptype || "icontains"}`;
   }
   if (data.imageInfo !== null && data.imageInfo.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.imageInfo +
-      ";fields:description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:icontains";
+      ";fields:description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
+      `${data.imageInfo__lookuptype || "icontains"}`;
   }
   if (data.locality !== null && data.locality.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.locality +
-      ";fields:locality__locality,locality__locality_en;lookuptype:icontains";
+      ";fields:locality__locality,locality__locality_en;lookuptype:" +
+      `${data.locality__lookuptype || "icontains"}`;
   }
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
   if (
     data.specimen_image_attachment.length > 0 &&
@@ -209,7 +216,8 @@ export function fetchAttachments(data, author) {
     searchFields +=
       "&multi_search=value:" +
       data.keyword +
-      ";fields:attachmentkeyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:icontains&distinct=true";
+      ";fields:attachmentkeyword__keyword__keyword,description,description_en,image_place,image_object,image_people,image_description,image_description_en,tags;lookuptype:" +
+      `${data.keyword__lookuptype || "icontains"}&distinct=true`;
   }
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 

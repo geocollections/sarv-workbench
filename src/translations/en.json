@@ -65,7 +65,14 @@
     "rating-4": "-4 - very poor",
     "rating-5": "-5 - useless",
     "found": "Found",
-    "records": "records"
+    "records": "records",
+    "iexact": "exact",
+    "icontains": "contains",
+    "istartswith": "starts with",
+    "iendswith": "ends with",
+    "gte": "greater than",
+    "lte": "lower than",
+    "lookUpType": "Look up type"
   },
   "login": {
     "password": "Password",
