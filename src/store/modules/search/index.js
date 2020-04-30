@@ -762,6 +762,8 @@ const mutations = {
         state[`${payload}SearchParameters`][key] = [true];
       else if (key === "specimen_image_attachment")
         state[`${payload}SearchParameters`][key] = ["2", "1", "3", "4"];
+      else if (key.endsWith("__lookuptype"))
+        state[`${payload}SearchParameters`][key] = "icontains";
       else state[`${payload}SearchParameters`][key] = null;
     });
   },

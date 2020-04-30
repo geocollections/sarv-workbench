@@ -416,38 +416,47 @@ export async function fetchReferences(data) {
   let searchFields = "";
 
   if (data.author !== null && data.author.trim().length > 0) {
-    searchFields += "author__icontains=" + data.author;
+    searchFields += `author__${data.author__lookuptype || "icontains"}=${
+      data.author
+    }`;
   }
   if (data.year !== null && data.year.trim().length > 0) {
-    searchFields += "&year__icontains=" + data.year;
+    searchFields += `&year__${data.year__lookuptype || "icontains"}=${
+      data.year
+    }`;
   }
   if (data.title !== null && data.title.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.title +
-      ";fields:title,title_original;lookuptype:icontains";
+      ";fields:title,title_original;lookuptype:" +
+      `${data.title__lookuptype || "icontains"}`;
   }
   if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.bookJournal +
-      ";fields:book,book_editor,journal__journal_name;lookuptype:icontains";
+      ";fields:book,book_editor,journal__journal_name;lookuptype:" +
+      `${data.bookJournal__lookuptype || "icontains"}`;
   }
   if (data.abstractRemarks && data.abstractRemarks.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.abstractRemarks +
-      ";fields:abstract,remarks;lookuptype:icontains";
+      ";fields:abstract,remarks;lookuptype:" +
+      `${data.abstractRemarks__lookuptype || "icontains"}`;
   }
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += "&id__iexact=" + data.id;
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
   if (
     data.libraryAuthorIdTitle &&
@@ -456,10 +465,12 @@ export async function fetchReferences(data) {
     searchFields +=
       "&multi_search=value:" +
       data.libraryAuthorIdTitle +
-      ";fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:icontains&distinct=true";
+      ";fields:libraryreference__library__author__id,libraryreference__library__author__agent,libraryreference__library__author_txt,libraryreference__library__id,libraryreference__library__title,libraryreference__library__title_en;lookuptype:" +
+      `${data.libraryAuthorIdTitle__lookuptype || "icontains"}&distinct=true`;
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
-    searchFields += `&user_added__icontains=${data.userAdded}`;
+    searchFields += `&user_added__${data.userAdded__lookuptype ||
+      "icontains"}=${data.userAdded}`;
   }
   if (data.isEstonianReference) {
     searchFields += `&is_estonian_reference=${data.isEstonianReference}`;
@@ -488,34 +499,44 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
   let searchFields = "";
 
   if (data.author !== null && data.author.trim().length > 0) {
-    searchFields += "reference__author__icontains=" + data.author;
+    searchFields += `reference__author__${data.author__lookuptype ||
+      "icontains"}=${data.author}`;
   }
   if (data.year !== null && data.year.trim().length > 0) {
-    searchFields += "&reference__year__icontains=" + data.year;
+    searchFields += `&reference__year__${data.year__lookuptype ||
+      "icontains"}=${data.year}`;
   }
   if (data.title !== null && data.title.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.title +
-      ";fields:reference__title,reference__title_original;lookuptype:icontains";
+      ";fields:reference__title,reference__title_original;lookuptype:" +
+      `${data.title__lookuptype || "icontains"}`;
   }
   if (data.bookJournal !== null && data.bookJournal.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.bookJournal +
-      ";fields:reference__book,reference__book_editor,reference__journal__journal_name;lookuptype:icontains";
+      ";fields:reference__book,reference__book_editor,reference__journal__journal_name;lookuptype:" +
+      `${data.bookJournal__lookuptype || "icontains"}`;
   }
   if (data.abstractRemarks && data.abstractRemarks.trim().length > 0) {
     searchFields +=
       "&multi_search=value:" +
       data.abstractRemarks +
-      ";fields:reference__abstract,reference__remarks;lookuptype:icontains";
+      ";fields:reference__abstract,reference__remarks;lookuptype:" +
+      `${data.abstractRemarks__lookuptype || "icontains"}`;
   }
   if (data.keywords !== null && data.keywords.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.keywords};fields:keyword__keyword,keyword_txt;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.keywords
+    };fields:keyword__keyword,keyword_txt;lookuptype:${data.keywords__lookuptype ||
+      "icontains"}`;
   }
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += "&reference__id__iexact=" + data.id;
+    searchFields += `&reference__id__${data.id__lookuptype || "icontains"}=${
+      data.id
+    }`;
   }
   if (
     data.libraryAuthorIdTitle &&
@@ -524,10 +545,12 @@ function fetchReferenceIDsUsingReferenceKeyword(data) {
     searchFields +=
       "&multi_search=value:" +
       data.libraryAuthorIdTitle +
-      ";fields:reference__libraryreference__library__author__id,reference__libraryreference__library__author__agent,reference__libraryreference__library__author_txt,reference__libraryreference__library__id,reference__libraryreference__library__title,reference__libraryreference__library__title_en;lookuptype:icontains&distinct=true";
+      ";fields:reference__libraryreference__library__author__id,reference__libraryreference__library__author__agent,reference__libraryreference__library__author_txt,reference__libraryreference__library__id,reference__libraryreference__library__title,reference__libraryreference__library__title_en;lookuptype:" +
+      `${data.libraryAuthorIdTitle__lookuptype || "icontains"}&distinct=true`;
   }
   if (data.userAdded && data.userAdded.trim().length > 0) {
-    searchFields += `&reference__user_added__icontains=${data.userAdded}`;
+    searchFields += `&reference__user_added__${data.userAdded__lookuptype ||
+      "icontains"}=${data.userAdded}`;
   }
   if (data.isEstonianReference) {
     searchFields += `&reference__is_estonian_reference=${data.isEstonianReference}`;
@@ -930,19 +953,23 @@ export function fetchLibraries(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.author_txt !== null && data.author_txt.trim().length > 0) {
-    searchFields += `author_txt__icontains=${data.author_txt}`;
+    searchFields += `author_txt__${data.author_txt__lookuptype || "icontains"}=${
+      data.author_txt
+    }`;
   }
 
   if (data.year !== null && data.year.trim().length > 0) {
-    searchFields += `&year__icontains=${data.year}`;
+    searchFields += `&year__${data.year__lookuptype || "icontains"}=${
+      data.year
+    }`;
   }
 
   if (data.title !== null && data.title.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.title};fields:title,title_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${data.title};fields:title,title_en;lookuptype:${data.title__lookuptype || "icontains"}`;
   }
 
   if (data.reference !== null && data.reference.trim().length > 0) {
-    searchFields += `&libraryreference__reference__reference__icontains=${data.reference}&distinct=true`;
+    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype || "icontains"}=${data.reference}&distinct=true`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -970,7 +997,9 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.author_txt !== null &&
     data.author_txt.trim().length > 0
   ) {
-    searchFields += `&library__author_txt__icontains=${data.author_txt}`;
+    searchFields += `&library__author_txt__${data.author_txt__lookuptype || "icontains"}=${
+      data.author_txt
+    }`;
   }
 
   if (
@@ -978,7 +1007,9 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.year !== null &&
     data.year.trim().length > 0
   ) {
-    searchFields += `&library__year__icontains=${data.year}`;
+    searchFields += `&library__year__${data.year__lookuptype || "icontains"}=${
+      data.year
+    }`;
   }
 
   if (
@@ -986,7 +1017,7 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.title !== null &&
     data.title.trim().length > 0
   ) {
-    searchFields += `&multi_search=value:${data.title};fields:library__title,library__title_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${data.title};fields:library__title,library__title_en;lookuptype:${data.title__lookuptype || "icontains"}`;
   }
 
   if (
@@ -994,7 +1025,7 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.reference !== null &&
     data.reference.trim().length > 0
   ) {
-    searchFields += `&library__libraryreference__reference__reference__icontains=${data.reference}&distinct=true`;
+    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype || "icontains"}=${data.reference}&distinct=true`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
