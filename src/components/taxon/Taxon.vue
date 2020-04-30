@@ -660,7 +660,8 @@ import {
   fetchTaxonRank,
   fetchTaxonSynonym,
   fetchTaxonTypeSpecimen,
-  fetchTaxonAttachments, fetchTaxonByTaxonTypeId
+  fetchTaxonAttachments,
+  fetchTaxonByTaxonTypeId
 } from "../../assets/js/api/apiCalls";
 
 import InputWrapper from "../partial/inputs/InputWrapper";

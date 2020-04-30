@@ -747,7 +747,11 @@ const mutations = {
   },
 
   UPDATE_SEARCH_PARAMETERS_BY_FIELD(state, payload) {
-    Vue.set(state[`${payload.module}SearchParameters`], payload.field, payload.value);
+    Vue.set(
+      state[`${payload.module}SearchParameters`],
+      payload.field,
+      payload.value
+    );
     // state[`${payload.module}SearchParameters`][payload.field] = payload.value;
   },
 

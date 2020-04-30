@@ -34,40 +34,43 @@
                   class="py-0"
                 >
                   <!-- DATEPICKER -->
-                  <v-menu
-                    v-if="field.isDate"
-                    v-model="calendarMenus[field.id]"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    transition="scale-transition"
-                    offset-y
-                    min-width="290px"
-                  >
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        hide-details
-                        :value="searchParameters[field.id]"
-                        :label="$t(field.title)"
-                        prepend-inner-icon="far fa-calendar-alt"
-                        :color="bodyActiveColor"
-                        clearable
-                        @click:clear="
-                          $emit('update:searchParameters', null, field.id)
-                        "
-                        clear-icon="fas fa-times"
-                        readonly
-                        :class="bodyActiveColor + '--text'"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker
-                      :value="searchParameters[field.id]"
-                      @input="updateDate($event, field.id)"
-                      :color="bodyActiveColor"
-                      :header-color="`${bodyActiveColor} darken-3`"
-                      scrollable
-                    ></v-date-picker>
-                  </v-menu>
+                  <v-row v-if="field.isDate" class="pa-2">
+                    <v-col cols="12" class="py-0 px-1">
+                      <v-menu
+                        v-model="calendarMenus[field.id]"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        transition="scale-transition"
+                        offset-y
+                        min-width="290px"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-text-field
+                            hide-details
+                            :value="searchParameters[field.id]"
+                            :label="$t(field.title)"
+                            prepend-inner-icon="far fa-calendar-alt"
+                            :color="bodyActiveColor"
+                            clearable
+                            @click:clear="
+                              $emit('update:searchParameters', null, field.id)
+                            "
+                            clear-icon="fas fa-times"
+                            readonly
+                            :class="bodyActiveColor + '--text'"
+                            v-on="on"
+                          ></v-text-field>
+                        </template>
+                        <v-date-picker
+                          :value="searchParameters[field.id]"
+                          @input="updateDate($event, field.id)"
+                          :color="bodyActiveColor"
+                          :header-color="`${bodyActiveColor} darken-3`"
+                          scrollable
+                        ></v-date-picker>
+                      </v-menu>
+                    </v-col>
+                  </v-row>
 
                   <!-- REGULAR SEARCH FIELD -->
                   <v-row v-else class="pa-2">
@@ -92,6 +95,7 @@
                             'icontains'
                         "
                         :color="bodyActiveColor"
+                        :class="bodyActiveColor + '--text'"
                         :item-color="bodyActiveColor"
                         disable-lookup
                         hide-details

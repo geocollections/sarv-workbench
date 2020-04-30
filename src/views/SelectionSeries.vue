@@ -12,7 +12,6 @@
       v-on:update:showSearch="block.search = $event"
       :filters="activeSearchParametersFilters"
       :search-parameters="searchParameters"
-      :col-size="4"
       v-on:update:searchParameters="updateSearchParamsByField"
       v-on:reset:searchParameters="resetSearchParams"
     />

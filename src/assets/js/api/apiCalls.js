@@ -661,31 +661,43 @@ export function fetchLocalities(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:locality_en,locality;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.locality
+    };fields:locality_en,locality;lookuptype:${data.locality__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&number__icontains=${data.number}`;
+    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
+      data.number
+    }`;
   }
 
   if (data.country !== null && data.country.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.country};fields:country__value_en,country__value;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.country
+    };fields:country__value_en,country__value;lookuptype:${data.country__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += "&user_added__icontains=" + data.agent;
+    searchFields += `&user_added__${data.agent__lookuptype || "icontains"}=${
+      data.agent
+    }`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -817,47 +829,69 @@ export function fetchSamples(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.number};fields:number,number_additional,number_field;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.number
+    };fields:number,number_additional,number_field;lookuptype:${data.number__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.locality !== null && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:locality__locality_en,locality__locality,locality_free,site__name,site__name_en,site__id;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.locality
+    };fields:locality__locality_en,locality__locality,locality_free,site__name,site__name_en,site__id;lookuptype:${data.locality__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.depth !== null && data.depth.trim().length > 0) {
     //searchFields += '&depth__exact='+data.depth
-    searchFields += `&multi_search=value:${data.depth};fields:depth,depth_interval;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.depth
+    };fields:depth,depth_interval;lookuptype:${data.depth__lookuptype ||
+      "icontains"}`;
   }
   if (data.stratigraphy !== null && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.stratigraphy
+    };fields:stratigraphy__stratigraphy_en,stratigraphy__stratigraphy,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.agent !== null && data.agent.trim().length > 0) {
-    searchFields += `&agent_collected__agent__icontains=${data.agent}`;
+    searchFields += `&agent_collected__agent__${data.agent__lookuptype ||
+      "icontains"}=${data.agent}`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__icontains=${data.storage}`;
+    searchFields += `&storage__location__${data.storage__lookuptype ||
+      "icontains"}=${data.storage}`;
   }
 
   if (data.site !== null && data.site.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.site};fields:site__id,site__name,site__project__id,site__project__name;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.site
+    };fields:site__id,site__name,site__project__id,site__project__name;lookuptype:${data.site__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
 
   if (data.loan && data.loan.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.loan};fields:loansample__loan__id,loansample__loan__loan_number;lookuptype:iexact`;
+    searchFields += `&multi_search=value:${
+      data.loan
+    };fields:loansample__loan__id,loansample__loan__loan_number;lookuptype:${data.loan__lookuptype ||
+      "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -953,9 +987,8 @@ export function fetchLibraries(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.author_txt !== null && data.author_txt.trim().length > 0) {
-    searchFields += `author_txt__${data.author_txt__lookuptype || "icontains"}=${
-      data.author_txt
-    }`;
+    searchFields += `author_txt__${data.author_txt__lookuptype ||
+      "icontains"}=${data.author_txt}`;
   }
 
   if (data.year !== null && data.year.trim().length > 0) {
@@ -965,11 +998,15 @@ export function fetchLibraries(data) {
   }
 
   if (data.title !== null && data.title.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.title};fields:title,title_en;lookuptype:${data.title__lookuptype || "icontains"}`;
+    searchFields += `&multi_search=value:${
+      data.title
+    };fields:title,title_en;lookuptype:${data.title__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.reference !== null && data.reference.trim().length > 0) {
-    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype || "icontains"}=${data.reference}&distinct=true`;
+    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype ||
+      "icontains"}=${data.reference}&distinct=true`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -997,9 +1034,8 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.author_txt !== null &&
     data.author_txt.trim().length > 0
   ) {
-    searchFields += `&library__author_txt__${data.author_txt__lookuptype || "icontains"}=${
-      data.author_txt
-    }`;
+    searchFields += `&library__author_txt__${data.author_txt__lookuptype ||
+      "icontains"}=${data.author_txt}`;
   }
 
   if (
@@ -1017,7 +1053,10 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.title !== null &&
     data.title.trim().length > 0
   ) {
-    searchFields += `&multi_search=value:${data.title};fields:library__title,library__title_en;lookuptype:${data.title__lookuptype || "icontains"}`;
+    searchFields += `&multi_search=value:${
+      data.title
+    };fields:library__title,library__title_en;lookuptype:${data.title__lookuptype ||
+      "icontains"}`;
   }
 
   if (
@@ -1025,7 +1064,8 @@ export function fetchLibrariesFromLibraryAgent(data, agent) {
     data.reference !== null &&
     data.reference.trim().length > 0
   ) {
-    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype || "icontains"}=${data.reference}&distinct=true`;
+    searchFields += `&library__libraryreference_library__reference__reference__${data.reference__lookuptype ||
+      "icontains"}=${data.reference}&distinct=true`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -1078,22 +1118,28 @@ export function fetchDois(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.identifier !== null && data.identifier.trim().length > 0) {
-    searchFields += `&identifier__icontains=${data.identifier}`;
+    searchFields += `&identifier__${data.identifier__lookuptype ||
+      "icontains"}=${data.identifier}`;
   }
 
   if (data.creators !== null && data.creators.trim().length > 0) {
-    searchFields += `&creators__icontains=${data.creators}`;
+    searchFields += `&creators__${data.creators__lookuptype || "icontains"}=${
+      data.creators
+    }`;
   }
 
   if (
     data.publication_year !== null &&
     data.publication_year.trim().length > 0
   ) {
-    searchFields += `&publication_year__icontains=${data.publication_year}`;
+    searchFields += `&publication_year__${data.publication_year__lookuptype ||
+      "icontains"}=${data.publication_year}`;
   }
 
   if (data.title !== null && data.title.trim().length > 0) {
-    searchFields += `&title__icontains=${data.title}`;
+    searchFields += `&title__${data.title__lookuptype || "icontains"}=${
+      data.title
+    }`;
   }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
@@ -1289,11 +1335,13 @@ export function fetchProjects(data, agent) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.name !== null && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.name
+    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -1332,19 +1380,26 @@ export function fetchSites(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.name !== null && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.name
+    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
   }
 
   if (data.number !== null && data.number.trim().length > 0) {
-    searchFields += `&number__icontains=${data.number}`;
+    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
+      data.number
+    }`;
   }
 
   if (data.project !== null && data.project.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.project};fields:project__name,project__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.project
+    };fields:project__name,project__name_en;lookuptype:${data.project__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.date_start !== null) {
@@ -1511,31 +1566,43 @@ export function fetchAnalyses(data, agent, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.analysis_method !== null && data.analysis_method.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.analysis_method};fields:analysis_method__analysis_method,analysis_method__method_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.analysis_method
+    };fields:analysis_method__analysis_method,analysis_method__method_en;lookuptype:${data.analysis_method__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.agentAndLab !== null && data.agentAndLab.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agentAndLab};fields:agent__agent,lab_txt;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.agentAndLab
+    };fields:agent__agent,lab_txt;lookuptype:${data.agentAndLab__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
 
   if (data.sample && data.sample.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.sample};fields:sample__id,sample__number,sample__number_additional;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.sample
+    };fields:sample__id,sample__number,sample__number_additional;lookuptype:${data.sample__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.datasetId && data.datasetId.trim().length > 0) {
-    searchFields += `&dataset__id__iexact=${data.datasetId}`;
+    searchFields += `&dataset__id__${data.datasetId__lookuptype ||
+      "icontains"}=${data.datasetId}`;
   }
 
   // if (typeof agent !== "undefined" && agent !== null) {
@@ -1597,15 +1664,23 @@ export function fetchJournals(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.journal !== null && data.journal.trim().length > 0) {
-    searchFields += `multi_search=value:${data.journal};fields:journal_name,journal_short,journal_original;lookuptype:icontains`;
+    searchFields += `multi_search=value:${
+      data.journal
+    };fields:journal_name,journal_short,journal_original;lookuptype:${data.journal__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.publisher !== null && data.publisher.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.publisher};fields:publisher,publisher_place;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.publisher
+    };fields:publisher,publisher_place;lookuptype:${data.publisher__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.remarks !== null && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__icontains=${data.remarks}`;
+    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
+      data.remarks
+    }`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -1662,54 +1737,80 @@ export function fetchSpecimens(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `multi_search=value:${data.idSpecimen};fields:id,specimen_id,specimen_nr;lookuptype:iexact`;
+    searchFields += `multi_search=value:${
+      data.idSpecimen
+    };fields:id,specimen_id,specimen_nr;lookuptype:${data.idSpecimen__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.specimenNr && data.specimenNr.trim().length > 0) {
-    searchFields += `&specimen_nr__iexact=${data.specimenNr}`;
+    searchFields += `&specimen_nr__${data.specimenNr__lookuptype ||
+      "icontains"}=${data.specimenNr}`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {
-    searchFields += `&coll__number__icontains=${data.collNumber}`;
+    searchFields += `&coll__number__${data.collNumber__lookuptype ||
+      "icontains"}=${data.collNumber}`;
   }
 
   if (data.fossil && data.fossil.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.fossil};fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.fossil
+    };fields:specimenidentification__name,specimenidentification__taxon__taxon;lookuptype:${data.fossil__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.mineralRock && data.mineralRock.trim().length > 0) {
     // Todo: Duplicate records issue, but distinct makes it slow
     if (data.fossil && data.fossil.trim().length > 0)
       searchFields += "&distinct=true";
-    searchFields += `&multi_search=value:${data.mineralRock};fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.mineralRock
+    };fields:specimenidentificationgeologies__name,specimenidentificationgeologies__name_en,specimenidentificationgeologies__rock__name,specimenidentificationgeologies__rock__name_en;lookuptype:${data.mineralRock__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:locality__locality,locality__locality_en,locality_free;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.locality
+    };fields:locality__locality,locality__locality_en,locality_free;lookuptype:${data.locality__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.stratigraphy
+    };fields:stratigraphy__stratigraphy,stratigraphy__stratigraphy_en,stratigraphy_free,lithostratigraphy__stratigraphy,lithostratigraphy__stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.agent_collected
+    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename,agent_collected_free;lookuptype:${data.agent_collected__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&storage__location__icontains=${data.storage}`;
+    searchFields += `&storage__location__${data.storage__lookuptype ||
+      "icontains"}=${data.storage}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
 
   if (data.loan && data.loan.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.loan};fields:loanspecimen__loan__id,loanspecimen__loan__loan_number;lookuptype:iexact`;
+    searchFields += `&multi_search=value:${
+      data.loan
+    };fields:loanspecimen__loan__id,loanspecimen__loan__loan_number;lookuptype:${data.loan__lookuptype ||
+      "icontains"}`;
   }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
@@ -1736,50 +1837,73 @@ export function fetchSpecimenImages(data, databaseId) {
   let orderBy = "";
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `multi_search=value:${data.idSpecimen};fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:iexact`;
+    searchFields += `multi_search=value:${
+      data.idSpecimen
+    };fields:specimen__id,specimen__specimen_id,specimen__specimen_nr;lookuptype:${data.idSpecimen__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.specimenNr && data.specimenNr.trim().length > 0) {
-    searchFields += `&specimen_nr__iexact=${data.specimenNr}`;
+    searchFields += `&specimen__specimen_nr__${data.specimenNr__lookuptype ||
+      "icontains"}=${data.specimenNr}`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {
-    searchFields += `&specimen__coll__number__icontains=${data.collNumber}`;
+    searchFields += `&specimen__coll__number__${data.collNumber__lookuptype ||
+      "icontains"}=${data.collNumber}`;
   }
 
   if (data.fossil && data.fossil.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.fossil};fields:specimen__specimenidentification__name,specimen__specimenidentification__taxon__taxon;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.fossil
+    };fields:specimen__specimenidentification__name,specimen__specimenidentification__taxon__taxon;lookuptype:${data.fossil__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.mineralRock && data.mineralRock.trim().length > 0) {
     // Todo: Duplicate records issue, but distinct makes it slow
     if (data.fossil && data.fossil.trim().length > 0)
       searchFields += "&distinct=true";
-    searchFields += `&multi_search=value:${data.mineralRock};fields:specimen__specimenidentificationgeologies__name,specimen__specimenidentificationgeologies__name_en,specimen__specimenidentificationgeologies__rock__name,specimen__specimenidentificationgeologies__rock__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.mineralRock
+    };fields:specimen__specimenidentificationgeologies__name,specimen__specimenidentificationgeologies__name_en,specimen__specimenidentificationgeologies__rock__name,specimen__specimenidentificationgeologies__rock__name_en;lookuptype:${data.mineralRock__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.locality
+    };fields:specimen__locality__locality,specimen__locality__locality_en,specimen__locality_free;lookuptype:${data.locality__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.stratigraphy};fields:specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.stratigraphy
+    };fields:specimen__stratigraphy__stratigraphy,specimen__stratigraphy__stratigraphy_en,specimen__stratigraphy_free,specimen__lithostratigraphy__stratigraphy,specimen__lithostratigraphy__stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agent_collected};fields:specimen__agent_collected__agent,specimen__agent_collected__forename,specimen__agent_collected__surename,specimen__agent_collected_free;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.agent_collected
+    };fields:specimen__agent_collected__agent,specimen__agent_collected__forename,specimen__agent_collected__surename,specimen__agent_collected_free;lookuptype:${data.agent_collected__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&specimen__storage__location__icontains=${data.storage}`;
+    searchFields += `&specimen__storage__location__${data.storage__lookuptype ||
+      "icontains"}=${data.storage}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&specimen__selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&specimen__selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&specimen__selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&specimen__selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
 
   if (data.loan && data.loan.trim().length > 0) {
@@ -1968,27 +2092,40 @@ export function fetchCollections(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.number && data.number.trim().length > 0) {
-    searchFields += `&collection_id__iexact=${data.number}`;
+    searchFields += `&collection_id__${data.number__lookuptype ||
+      "icontains"}=${data.number}`;
   }
 
   if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.name};fields:name,name_en,name_long,name_long_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.name
+    };fields:name,name_en,name_long,name_long_en;lookuptype:${data.name__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agent};fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.agent
+    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${data.agent__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:locality__id,locality__locality,locality__locality_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.locality
+    };fields:locality__id,locality__locality,locality__locality_en;lookuptype:${data.locality__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.reference && data.reference.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.reference};fields:reference__id,reference__reference;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.reference
+    };fields:reference__id,reference__reference;lookuptype:${data.reference__lookuptype ||
+      "icontains"}`;
   }
 
   if (typeof databaseId !== "undefined" && databaseId !== null) {
@@ -2031,35 +2168,43 @@ export function fetchTaxa(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.taxon && data.taxon.trim().length > 0) {
-    searchFields += `&taxon__icontains=${data.taxon}`;
+    searchFields += `&taxon__${data.taxon__lookuptype || "icontains"}=${
+      data.taxon
+    }`;
   }
 
   if (data.author_year && data.author_year.trim().length > 0) {
-    searchFields += `&author_year__icontains=${data.author_year}`;
+    searchFields += `&author_year__${data.author_year__lookuptype ||
+      "icontains"}=${data.author_year}`;
   }
 
   if (data.parent__taxon && data.parent__taxon.trim().length > 0) {
-    searchFields += `&parent__taxon__icontains=${data.parent__taxon}`;
+    searchFields += `&parent__taxon__${data.parent__taxon__lookuptype ||
+      "icontains"}=${data.parent__taxon}`;
   }
 
   if (data.taxon_epithet && data.taxon_epithet.trim().length > 0) {
-    searchFields += `&taxon_epithet__icontains=${data.taxon_epithet}`;
+    searchFields += `&taxon_epithet__${data.taxon_epithet__lookuptype ||
+      "icontains"}=${data.taxon_epithet}`;
   }
 
   if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__icontains=${data.user_added}`;
+    searchFields += `&user_added__${data.user_added__lookuptype ||
+      "icontains"}=${data.user_added}`;
   }
 
   if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__iexact=${data.selectionId}`;
+    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
+      "icontains"}=${data.selectionId}`;
   }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__icontains=${data.selection}`;
+    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
+      "icontains"}=${data.selection}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2218,16 +2363,24 @@ export function fetchKeywords(data, listOfIDs) {
     searchFields += `id__in=${listOfIDs}`;
   }
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__iexact=${data.id}`;
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
   if (data.term && data.term.trim().length > 0) {
-    searchFields += `&keyword__icontains=${data.term}`;
+    searchFields += `&keyword__${data.term__lookuptype || "icontains"}=${
+      data.term
+    }`;
   }
   if (data.language && data.language.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.language};fields:language__value,language__value_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.language
+    };fields:language__value,language__value_en;lookuptype:${data.language__lookuptype ||
+      "icontains"}`;
   }
   if (data.keyword_category && data.keyword_category.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.keyword_category};fields:keyword_category__name,keyword_category__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.keyword_category
+    };fields:keyword_category__name,keyword_category__name_en;lookuptype:${data.keyword_category__lookuptype ||
+      "icontains"}`;
   }
   if (data.related_keyword && data.related_keyword.trim().length > 0) {
     searchFields += `&related_keyword__keyword__icontains=${data.related_keyword}`;
@@ -2303,19 +2456,25 @@ export function fetchAgents(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&agent__icontains=${data.agent}`;
+    searchFields += `&agent__${data.agent__lookuptype || "icontains"}=${
+      data.agent
+    }`;
   }
 
   if (data.forename && data.forename.trim().length > 0) {
-    searchFields += `&forename__icontains=${data.forename}`;
+    searchFields += `&forename__${data.forename__lookuptype || "icontains"}=${
+      data.forename
+    }`;
   }
 
   if (data.surename && data.surename.trim().length > 0) {
-    searchFields += `&surename__icontains=${data.surename}`;
+    searchFields += `&surename__${data.surename__lookuptype || "icontains"}=${
+      data.surename
+    }`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2355,16 +2514,21 @@ export function fetchSelectionSeries(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__iexact=${data.id}`;
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
   if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__icontains=${data.name}`;
+    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
+      data.name
+    }`;
   }
   if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__icontains=${data.remarks}`;
+    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
+      data.remarks
+    }`;
   }
   if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__icontains=${data.user_added}`;
+    searchFields += `&user_added__${data.user_added__lookuptype ||
+      "icontains"}=${data.user_added}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2485,23 +2649,34 @@ export function fetchDrillcores(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.drillcore && data.drillcore.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.drillcore};fields:drillcore,drillcore_en,locality__locality,locality__locality_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.drillcore
+    };fields:drillcore,drillcore_en,locality__locality,locality__locality_en;lookuptype:${data.drillcore__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.boxes && data.boxes.trim().length > 0) {
-    searchFields += `&boxes__gte=${data.boxes}`;
+    searchFields += `&boxes__${data.boxes__lookuptype || "icontains"}=${
+      data.boxes
+    }`;
   }
 
   if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:depth,locality__depth;lookuptype:gte`;
+    searchFields += `&multi_search=value:${
+      data.locality
+    };fields:depth,locality__depth;lookuptype:${data.locality__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.storage};fields:storage__location,depository__value;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.storage
+    };fields:storage__location,depository__value;lookuptype:${data.storage__lookuptype ||
+      "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2570,11 +2745,15 @@ export function fetchDrillcoreBoxes(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.storage && data.storage.trim().length > 0) {
-    searchFields += `storage__location__icontains=${data.storage}`;
+    searchFields += `storage__location__${data.storage__lookuptype ||
+      "icontains"}=${data.storage}`;
   }
 
   if (data.drillcore && data.drillcore.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.drillcore};fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.drillcore
+    };fields:drillcore__drillcore,drillcore__drillcore_en;lookuptype:${data.drillcore__lookuptype ||
+      "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2621,7 +2800,8 @@ export function fetchPreparations(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.preparation_number && data.preparation_number.trim().length > 0) {
-    searchFields += `preparation_number__icontains=${data.preparation_number}`;
+    searchFields += `preparation_number__${data.preparation_number__lookuptype ||
+      "icontains"}=${data.preparation_number}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2699,19 +2879,28 @@ export function fetchDatasets(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.name
+    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
   }
 
   if (data.owner && data.owner.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.owner};fields:owner__id,owner__agent,owner__forename,owner__surename,owner_txt;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.owner
+    };fields:owner__id,owner__agent,owner__forename,owner__surename,owner_txt;lookuptype:${data.owner__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.date && data.date.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.date};fields:date,date_txt;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.date
+    };fields:date,date_txt;lookuptype:${data.date__lookuptype || "icontains"}`;
   }
 
   if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__icontains=${data.remarks}`;
+    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
+      data.remarks
+    }`;
   }
 
   if (databaseId) searchFields += `&database__id=${databaseId}`;
@@ -2778,27 +2967,42 @@ export function fetchStratigraphies(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `id__iexact=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
 
   if (data.stratigraphy && data.stratigraphy.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.stratigraphy};fields:stratigraphy,stratigraphy_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.stratigraphy
+    };fields:stratigraphy,stratigraphy_en;lookuptype:${data.stratigraphy__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.type && data.type.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.type};fields:type__value,type__value_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.type
+    };fields:type__value,type__value_en;lookuptype:${data.type__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.rank && data.rank.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.rank};fields:rank__value,rank__value_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.rank
+    };fields:rank__value,rank__value_en;lookuptype:${data.rank__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.scope && data.scope.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.scope};fields:scope__value,scope__value_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.scope
+    };fields:scope__value,scope__value_en;lookuptype:${data.scope__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.parent && data.parent.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.parent};fields:parent__stratigraphy,parent__stratigraphy_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.parent
+    };fields:parent__stratigraphy,parent__stratigraphy_en;lookuptype:${data.parent__lookuptype ||
+      "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2883,19 +3087,29 @@ export function fetchAreas(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.name && data.name.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.name};fields:name,name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.name
+    };fields:name,name_en;lookuptype:${data.name__lookuptype || "icontains"}`;
   }
 
   if (data.type && data.type.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.type};fields:area_type__name,area_type__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.type
+    };fields:area_type__name,area_type__name_en;lookuptype:${data.type__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.area_ha && data.area_ha.trim().length > 0) {
-    searchFields += `&area_ha__icontains=${data.area_ha}`;
+    searchFields += `&area_ha__${data.area_ha__lookuptype || "icontains"}=${
+      data.area_ha
+    }`;
   }
 
   if (data.maakond && data.maakond.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.maakond};fields:maakond__maakond,maakond__maakond_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.maakond
+    };fields:maakond__maakond,maakond__maakond_en;lookuptype:${data.maakond__lookuptype ||
+      "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -2957,22 +3171,31 @@ export function fetchLocations(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.location && data.location.trim().length > 0) {
-    searchFields += `&location__icontains=${data.location}`;
+    searchFields += `&location__${data.location__lookuptype || "icontains"}=${
+      data.location
+    }`;
   }
   if (data.location_location && data.location_location.trim().length > 0) {
-    searchFields += `&location_location__icontains=${data.location_location}`;
+    searchFields += `&location_location__${data.location_location__lookuptype ||
+      "icontains"}=${data.location_location}`;
   }
   if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
-    searchFields += `&stratigraphy_free__icontains=${data.stratigraphy_free}`;
+    searchFields += `&stratigraphy_free__${data.stratigraphy_free__lookuptype ||
+      "icontains"}=${data.stratigraphy_free}`;
   }
   if (data.agent && data.agent.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agent};fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.agent
+    };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${data.agent__lookuptype ||
+      "icontains"}`;
   }
   if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__icontains=${data.user_added}`;
+    searchFields += `&user_added__${data.user_added__lookuptype ||
+      "icontains"}=${data.user_added}`;
   }
   if (data.date_added && data.date_added.trim().length > 0) {
-    searchFields += `&date_added__icontains=${data.date_added}`;
+    searchFields += `&date_added__${data.date_added__lookuptype ||
+      "icontains"}=${data.date_added}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -3006,25 +3229,38 @@ export function fetchRocks(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__icontains=${data.name}`;
+    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
+      data.name
+    }`;
   }
   if (data.name_en && data.name_en.trim().length > 0) {
-    searchFields += `&name_en__icontains=${data.name_en}`;
+    searchFields += `&name_en__${data.name_en__lookuptype || "icontains"}=${
+      data.name_en
+    }`;
   }
   if (data.formula && data.formula.trim().length > 0) {
-    searchFields += `&formula__icontains=${data.formula}`;
+    searchFields += `&formula__${data.formula__lookuptype || "icontains"}=${
+      data.formula
+    }`;
   }
   if (data.rock_type && data.rock_type.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.rock_type};fields:rock_type__name,rock_type__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.rock_type
+    };fields:rock_type__name,rock_type__name_en;lookuptype:${data.rock_type__lookuptype ||
+      "icontains"}`;
   }
   if (data.rock_rank && data.rock_rank.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.rock_rank};fields:rock_rank__name,rock_rank__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.rock_rank
+    };fields:rock_rank__name,rock_rank__name_en;lookuptype:${data.rock_rank__lookuptype ||
+      "icontains"}`;
   }
   if (data.user_changed && data.user_changed.trim().length > 0) {
-    searchFields += `&user_changed__icontains=${data.user_changed}`;
+    searchFields += `&user_changed__${data.user_changed__lookuptype ||
+      "icontains"}=${data.user_changed}`;
   }
   if (data.id && data.id.trim().length > 0) {
-    searchFields += `&id__iexact=${data.id}`;
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
   if (data.in_portal) {
     searchFields += `&in_portal=${data.in_portal}`;
@@ -3175,7 +3411,8 @@ export function fetchVisits(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.visitor && data.visitor.trim().length > 0) {
-    searchFields += `&visitor__agent__icontains=${data.visitor}`;
+    searchFields += `&visitor__agent__${data.visitor__lookuptype ||
+      "icontains"}=${data.visitor}`;
   }
 
   if (data.date_arrived !== null) {
@@ -3232,15 +3469,19 @@ export function fetchLoans(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.loan_number && data.loan_number.trim().length > 0) {
-    searchFields += `&loan_number__icontains=${data.loan_number}`;
+    searchFields += `&loan_number__${data.loan_number__lookuptype ||
+      "icontains"}=${data.loan_number}`;
   }
 
   if (data.project && data.project.trim().length > 0) {
-    searchFields += `&project__icontains=${data.project}`;
+    searchFields += `&project__${data.project__lookuptype || "icontains"}=${
+      data.project
+    }`;
   }
 
   if (data.borrower && data.borrower.trim().length > 0) {
-    searchFields += `&borrower__agent__icontains=${data.borrower}`;
+    searchFields += `&borrower__agent__${data.borrower__lookuptype ||
+      "icontains"}=${data.borrower}`;
   }
 
   if (data.date_start !== null) {
@@ -3349,10 +3590,13 @@ export function fetchAccessions(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.number && data.number.trim().length > 0) {
-    searchFields += `&number__icontains=${data.number}`;
+    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
+      data.number
+    }`;
   }
   if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__icontains=${data.description}`;
+    searchFields += `&description__${data.description__lookuptype ||
+      "icontains"}=${data.description}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -3387,10 +3631,13 @@ export function fetchDeaccessions(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.number && data.number.trim().length > 0) {
-    searchFields += `&number__icontains=${data.number}`;
+    searchFields += `&number__${data.number__lookuptype || "icontains"}=${
+      data.number
+    }`;
   }
   if (data.description && data.description.trim().length > 0) {
-    searchFields += `&description__icontains=${data.description}`;
+    searchFields += `&description__${data.description__lookuptype ||
+      "icontains"}=${data.description}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -3485,40 +3732,58 @@ export function fetchSiteGroundwaters(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.site && data.site.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.site};fields:site__name,site__name_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.site
+    };fields:site__name,site__name_en;lookuptype:${data.site__lookuptype ||
+      "icontains"}`;
   }
   if (data.type_txt && data.type_txt.trim().length > 0) {
-    searchFields += `&type_txt__icontains=${data.type_txt}`;
+    searchFields += `&type_txt__${data.type_txt__lookuptype || "icontains"}=${
+      data.type_txt
+    }`;
   }
   if (data.aquifer_system && data.aquifer_system.trim().length > 0) {
-    searchFields += `&aquifer_system__icontains=${data.aquifer_system}`;
+    searchFields += `&aquifer_system__${data.aquifer_system__lookuptype ||
+      "icontains"}=${data.aquifer_system}`;
   }
   if (data.aquifer && data.aquifer.trim().length > 0) {
-    searchFields += `&aquifer__icontains=${data.aquifer}`;
+    searchFields += `&aquifer__${data.aquifer__lookuptype || "icontains"}=${
+      data.aquifer
+    }`;
   }
   if (data.well_depth && data.well_depth.trim().length > 0) {
-    searchFields += `&well_depth__icontains=${data.well_depth}`;
+    searchFields += `&well_depth__${data.well_depth__lookuptype ||
+      "icontains"}=${data.well_depth}`;
   }
   if (data.filter_type && data.filter_type.trim().length > 0) {
-    searchFields += `&filter_type__icontains=${data.filter_type}`;
+    searchFields += `&filter_type__${data.filter_type__lookuptype ||
+      "icontains"}=${data.filter_type}`;
   }
   if (data.filter_top && data.filter_top.trim().length > 0) {
-    searchFields += `&filter_top__icontains=${data.filter_top}`;
+    searchFields += `&filter_top__${data.filter_top__lookuptype ||
+      "icontains"}=${data.filter_top}`;
   }
   if (data.filter_top_z && data.filter_top_z.trim().length > 0) {
-    searchFields += `&filter_top_z__icontains=${data.filter_top_z}`;
+    searchFields += `&filter_top_z__${data.filter_top_z__lookuptype ||
+      "icontains"}=${data.filter_top_z}`;
   }
   if (data.filter_bottom && data.filter_bottom.trim().length > 0) {
-    searchFields += `&filter_bottom__icontains=${data.filter_bottom}`;
+    searchFields += `&filter_bottom__${data.filter_bottom__lookuptype ||
+      "icontains"}=${data.filter_bottom}`;
   }
   if (data.filter_bottom_z && data.filter_bottom_z.trim().length > 0) {
-    searchFields += `&filter_bottom_z__icontains=${data.filter_bottom_z}`;
+    searchFields += `&filter_bottom_z__${data.filter_bottom_z__lookuptype ||
+      "icontains"}=${data.filter_bottom_z}`;
   }
   if (data.url_veka && data.url_veka.trim().length > 0) {
-    searchFields += `&url_veka__icontains=${data.url_veka}`;
+    searchFields += `&url_veka__${data.url_veka__lookuptype || "icontains"}=${
+      data.url_veka
+    }`;
   }
   if (data.remarks && data.remarks.trim().length > 0) {
-    searchFields += `&remarks__icontains=${data.remarks}`;
+    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
+      data.remarks
+    }`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
@@ -3551,13 +3816,21 @@ export function fetchSampleSeries(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.name && data.name.trim().length > 0) {
-    searchFields += `&name__icontains=${data.name}`;
+    searchFields += `&name__${data.name__lookuptype || "icontains"}=${
+      data.name
+    }`;
   }
   if (data.locality && data.locality.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.locality};fields:locality_free,locality__locality,locality__locality_en;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.locality
+    };fields:locality_free,locality__locality,locality__locality_en;lookuptype:${data.locality__lookuptype ||
+      "icontains"}`;
   }
   if (data.agent_collected && data.agent_collected.trim().length > 0) {
-    searchFields += `&multi_search=value:${data.agent_collected};fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:icontains`;
+    searchFields += `&multi_search=value:${
+      data.agent_collected
+    };fields:agent_collected__agent,agent_collected__forename,agent_collected__surename;lookuptype:${data.agent_collected__lookuptype ||
+      "icontains"}`;
   }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
