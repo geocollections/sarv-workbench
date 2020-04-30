@@ -10,10 +10,7 @@ const formSectionsMixin = {
     ...mapState("settings", ["formSections"]),
 
     routeObject() {
-      let object = this.$route.meta.object;
-      if (object === "attachment" && !this.$route.meta.isEdit)
-        object = this.$route.meta.child;
-      return object;
+      return this.$route.meta.object;
     }
   },
 
