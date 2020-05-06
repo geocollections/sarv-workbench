@@ -74,28 +74,13 @@
 
                   <!-- REGULAR SEARCH FIELD -->
                   <v-row v-else class="pa-2">
-                    <v-col cols="6" class="py-0 px-1">
-                      <v-text-field
-                        :value="searchParameters[field.id]"
-                        :label="$t(field.title)"
-                        :color="bodyActiveColor"
-                        hide-details
-                        :class="bodyActiveColor + '--text'"
-                        :type="field.type"
-                        @input="
-                          $emit('update:searchParameters', $event, field.id)
-                        "
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="6" class="py-0 px-1">
+                    <v-col cols="3" xl="2" class="py-0 px-1">
                       <v-select
                         :value="
                           searchParameters[`${field.id}__lookuptype`] ||
                             'icontains'
                         "
                         :color="bodyActiveColor"
-                        :class="bodyActiveColor + '--text'"
                         :item-color="bodyActiveColor"
                         disable-lookup
                         hide-details
@@ -108,7 +93,36 @@
                             `${field.id}__lookuptype`
                           )
                         "
-                      ></v-select>
+                      >
+                        <template v-slot:selection="{item}">
+                          <div class="font-weight-bold">
+                            {{item.symbol}}
+                          </div>
+                        </template>
+
+<!--                        <template v-slot:item="{item}">-->
+<!--                          <div class="v-list-item__content">-->
+<!--                            <div class="v-list-item__title">-->
+<!--                              <b>{{ item.text.split(" ")[0] }}</b>-->
+<!--                              {{ item.text.split(" ")[1] }}-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </template>-->
+                      </v-select>
+                    </v-col>
+
+                    <v-col cols="9" xl="10" class="py-0 px-1">
+                      <v-text-field
+                        :value="searchParameters[field.id]"
+                        :label="$t(field.title)"
+                        :color="bodyActiveColor"
+                        hide-details
+                        :class="bodyActiveColor + '--text'"
+                        :type="field.type"
+                        @input="
+                          $emit('update:searchParameters', $event, field.id)
+                        "
+                      ></v-text-field>
                     </v-col>
                   </v-row>
                 </v-col>

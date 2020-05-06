@@ -444,12 +444,12 @@ const state = {
   web_pagesViewType: "table",
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy
-    { text: "main.iexact", value: "iexact" },
-    { text: "main.icontains", value: "icontains" },
-    { text: "main.istartswith", value: "istartswith" },
-    { text: "main.iendswith", value: "iendswith" },
-    { text: "main.gte", value: "gte" },
-    { text: "main.lte", value: "lte" }
+    { text: "main.iexact", value: "iexact", symbol: "=" },
+    { text: "main.icontains", value: "icontains", symbol: "*" },
+    { text: "main.istartswith", value: "istartswith", symbol: "*=" },
+    { text: "main.iendswith", value: "iendswith", symbol: "*=" },
+    { text: "main.gte", value: "gte", symbol: ">" },
+    { text: "main.lte", value: "lte", symbol: "<" }
   ]
 };
 
