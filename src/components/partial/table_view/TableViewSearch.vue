@@ -118,7 +118,6 @@
                         :color="bodyActiveColor"
                         hide-details
                         :class="bodyActiveColor + '--text'"
-                        :type="field.type"
                         @input="
                           $emit('update:searchParameters', $event, field.id)
                         "

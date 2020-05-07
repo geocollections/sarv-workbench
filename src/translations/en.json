@@ -73,7 +73,8 @@
     "gte": "> greater than",
     "lte": "< lower than",
     "between": "<> between",
-    "not": "! not",
+    "doesnotcontain": "!* does not contain",
+    "doesnotequal": "!= does not equal",
     "lookUpType": "Look up type"
   },
   "login": {

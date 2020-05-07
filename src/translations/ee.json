@@ -72,8 +72,9 @@
     "iendswith": "*= lõpeb",
     "gte": "> suurem kui",
     "lte": "< väiksem kui",
-    "between": "<> vahel",
-    "not": "! mitte",
+    "between": "<> vahemikus",
+    "doesnotcontain": "!* ei sisalda",
+    "doesnotequal": "!= ei võrdu",
     "lookUpType": "Filter"
   },
   "login": {

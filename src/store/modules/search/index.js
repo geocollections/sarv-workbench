@@ -449,7 +449,10 @@ const state = {
     { text: "main.istartswith", value: "istartswith", symbol: "*=" },
     { text: "main.iendswith", value: "iendswith", symbol: "*=" },
     { text: "main.gte", value: "gte", symbol: ">" },
-    { text: "main.lte", value: "lte", symbol: "<" }
+    { text: "main.lte", value: "lte", symbol: "<" },
+    { text: "main.between", value: "range", symbol: "<>" },
+    { text: "main.doesnotequal", value: "iexact!", symbol: "!=" },
+    { text: "main.doesnotcontain", value: "icontains!", symbol: "!*" }
   ]
 };
 
