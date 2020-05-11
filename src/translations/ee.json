@@ -1728,7 +1728,11 @@
     "ObjectDoesNotExist4": "Tagasi",
     "ObjectDoesNotExist5": "otsingusse",
     "existingFiles": "Olemasolevad failid",
-    "newFiles": "Uued failid"
+    "newFiles": "Uued failid",
+    "confirmation": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",
+    "confirmationClose": "Jah, lahku",
+    "confirmationCont": "Jätka muutmist",
+    "confirmationSave": "Salvesta kirje"
   },
   "logs": {
     "title": "Kirje ajalugu",

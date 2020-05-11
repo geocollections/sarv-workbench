@@ -1728,7 +1728,11 @@
     "ObjectDoesNotExist4": "Back to",
     "ObjectDoesNotExist5": "search",
     "existingFiles": "Existing files",
-    "newFiles": "New files"
+    "newFiles": "New files",
+    "confirmation": "Are you sure you want to leave without saving the edits?",
+    "confirmationClose": "Yes, leave",
+    "confirmationCont": "Continue editing",
+    "confirmationSave": "Save the record"
   },
   "logs": {
     "title": "Editing history",

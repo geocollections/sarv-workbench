@@ -3,6 +3,7 @@
     <v-divider />
 
     <div>
+      {{ confirmationDialog }}
       HAS CHANGED:
       <b>
         {{ initialEditViewDataHasChangedState }}
@@ -99,6 +100,12 @@
       :is-navbar-dark="navbarDark"
       :navbar-color="navbarColor"
     />
+
+    <ConfirmationDialog
+      :dialog="confirmationDialog"
+      :body-color="bodyColor"
+      v-on:action:dialog="actionConfirmationDialog"
+    />
   </div>
 </template>
 
@@ -111,10 +118,12 @@ import { mapActions, mapState } from "vuex";
 import ObjectPermissions from "../components/partial/ObjectPermissions";
 import SpinnerWrapper from "../components/partial/SpinnerWrapper";
 import { cloneDeep } from "lodash";
+import ConfirmationDialog from "../components/partial/ConfirmationDialog";
 
 export default {
   name: "EditForm",
   components: {
+    ConfirmationDialog,
     SpinnerWrapper,
     ObjectPermissions,
     ObjectDoesNotExist,
@@ -128,7 +137,10 @@ export default {
       data: null,
       logComponentKey: 0,
       permissionsComponentKey: 2,
-      objectExists: true
+      objectExists: true,
+      confirmationDialog: false,
+      resolve: null,
+      reject: null
     };
   },
 
@@ -166,25 +178,29 @@ export default {
     }
   },
 
-  beforeRouteUpdate(to, from, next) {
+  async beforeRouteUpdate(to, from, next) {
     if (this.initialEditViewDataHasChangedState) {
-      // Todo: Ask "Yes, leave" / "Continue editing" / "Save the record".
+      const dialogResponse = await this.openConfirmationDialog();
 
-      const answer = window.confirm(
-        'Are you sure you want to leave without saving the edits?" / "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata'
-      );
-      if (answer) next();
-      else next(false);
+      if (dialogResponse === "close") next();
+      else if (dialogResponse === "continue") next(false);
+      else if (dialogResponse === "save") {
+        await this.$emit("button-clicked", "SAVE", this.$route.meta.object);
+        next();
+      } else next();
     } else next();
   },
-  beforeRouteLeave(to, from, next) {
+
+  async beforeRouteLeave(to, from, next) {
     if (this.initialEditViewDataHasChangedState) {
-      // Todo: Ask "Yes, leave" / "Continue editing" / "Save the record".
-      const answer = window.confirm(
-        'Are you sure you want to leave without saving the edits?" / "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata'
-      );
-      if (answer) next();
-      else next(false);
+      const dialogResponse = await this.openConfirmationDialog();
+
+      if (dialogResponse === "close") next();
+      else if (dialogResponse === "continue") next(false);
+      else if (dialogResponse === "save") {
+        await this.$emit("button-clicked", "SAVE", this.$route.meta.object);
+        next();
+      } else next();
     } else next();
   },
 
@@ -197,22 +213,28 @@ export default {
         });
       },
       deep: true
-    },
-
-    "$route.params.id"(newVal) {
-      // Todo fix data change issue on next and previous buttons
-      console.log(newVal);
-      console.log(this.data)
-      this.initialData = cloneDeep(this.data);
     }
   },
 
   methods: {
     ...mapActions("detail", ["updateInitialEditViewDataHasChangedState"]),
 
+    openConfirmationDialog() {
+      this.confirmationDialog = true;
+      return new Promise(resolve => {
+        this.resolve = resolve;
+      });
+    },
+
+    actionConfirmationDialog(action) {
+      this.confirmationDialog = false;
+      this.resolve(action);
+    },
+
     setData(data) {
-      if (this.data === null) this.initialData = cloneDeep(data);
       this.data = data;
+      if (this.data === null || this.data?.id !== this.initialData?.id)
+        this.initialData = cloneDeep(data);
       this.forceRerender();
     },
 
