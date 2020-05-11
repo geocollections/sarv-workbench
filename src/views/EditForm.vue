@@ -163,7 +163,11 @@ export default {
       if (dialogResponse === "close") next();
       else if (dialogResponse === "continue") next(false);
       else if (dialogResponse === "save") {
-        await this.$emit("button-clicked", "SAVE", this.$route.meta.object);
+        await this.$emit(
+          "button-clicked",
+          "SAVE_AND_LEAVE",
+          this.$route.meta.object
+        );
         next();
       } else next();
     } else next();
