@@ -31,7 +31,11 @@ const formManipulation = {
       "setLoadingPercent",
       "setActiveSearchParameters"
     ]),
-    ...mapActions("detail", ["saveFields", "resetFields"]),
+    ...mapActions("detail", [
+      "saveFields",
+      "resetFields",
+      "setInitialEditViewDataHasChangedState"
+    ]),
 
     /**
      * Checks if variable is not empty and returns corresponding boolean.
@@ -544,6 +548,10 @@ const formManipulation = {
      * @example bottomOptionClicked('SAVE', 'doi')
      */
     bottomOptionClicked(choice, object) {
+      // Setting 'initialEditViewDataHasChangedState' to false because of bottom option click
+      // which is intended as an intentional click and shouldn't ask for confirmation.
+      this.setInitialEditViewDataHasChangedState(false);
+
       if (choice === "SAVE") this.add(true, object);
 
       if (choice === "FINISH") {

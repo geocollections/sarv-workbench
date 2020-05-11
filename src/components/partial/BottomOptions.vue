@@ -14,11 +14,11 @@
         :color="navbarColor"
         :dark="!previousId ? false : isNavbarDark"
         :disabled="!previousId"
-        :to="{ path: `/${$route.meta.object}/${previousId}` }"
         title="Go to previous record"
         retain-focus-on-click
         :small="$vuetify.breakpoint.mdAndUp"
         class="text-none"
+        @click="previousPage"
       >
         <v-icon
           :small="$vuetify.breakpoint.mdAndUp"
@@ -147,11 +147,11 @@
         :color="navbarColor"
         :dark="!nextId ? false : isNavbarDark"
         :disabled="!nextId"
-        :to="{ path: `/${$route.meta.object}/${nextId}` }"
         title="Go to next record"
         retain-focus-on-click
         :small="$vuetify.breakpoint.mdAndUp"
         class="text-none"
+        @click="nextPage"
       >
         <span v-show="$vuetify.breakpoint.mdAndUp"
           >{{ $t("buttons.next") }}&nbsp;</span
@@ -226,12 +226,26 @@ export default {
     }
   },
   methods: {
+    ...mapActions("detail", ["setInitialEditViewDataHasChangedState"]),
+
     async handleClick(action) {
       await this.$parent.$emit(
         "button-clicked",
         action,
         this.$route.meta.object
       );
+    },
+
+    nextPage() {
+      this.setInitialEditViewDataHasChangedState(false);
+      this.$router.push({ path: `/${this.$route.meta.object}/${this.nextId}` });
+    },
+
+    previousPage() {
+      this.setInitialEditViewDataHasChangedState(false);
+      this.$router.push({
+        path: `/${this.$route.meta.object}/${this.previousId}`
+      });
     },
 
     initNavigationButtons(list) {
