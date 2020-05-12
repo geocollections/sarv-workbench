@@ -160,7 +160,7 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <autocomplete-wrapper
                     v-model="item.taxon"
                     :color="bodyActiveColor"
@@ -168,7 +168,6 @@
                     :loading="autocomplete.loaders.taxon"
                     item-text="taxon"
                     :label="$t('taxon.taxon')"
-                    use-state
                     is-link
                     route-object="taxon"
                     is-searchable
@@ -176,7 +175,7 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <input-wrapper
                     v-model="item.name"
                     :color="bodyActiveColor"
@@ -253,7 +252,7 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
+                <v-col cols="12" class="pa-1">
                   <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
@@ -392,7 +391,11 @@ export default {
     },
 
     isItemValid() {
-      return typeof this.item.taxon === "object" && this.item.taxon !== null;
+      // return (
+      //   (typeof this.item.taxon === "object" && this.item.taxon !== null) ||
+      //   this.item.name.length > 0
+      // );
+      return true;
     }
   },
 
@@ -479,7 +482,6 @@ export default {
       this.item.frequency = item.frequency;
       this.item.date_identified = item.date_identified;
       this.item.extra = item.extra === true;
-      this.item.preparation_number = item.preparation_number;
       this.item.is_private = item.is_private === true;
       this.item.remarks = item.remarks;
 
