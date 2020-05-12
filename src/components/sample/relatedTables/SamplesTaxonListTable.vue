@@ -107,37 +107,37 @@
         <v-icon v-else small>fas fa-minus</v-icon>
       </template>
 
-      <template v-slot:item.preparation="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <router-link
-            v-if="$route.meta.isEdit"
-            :to="{ path: '/preparation/' + item.preparation }"
-            :title="$t('editPreparation.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.preparation_number }}
-          </router-link>
-          <router-link
-            v-else-if="item.preparation"
-            :to="{ path: '/preparation/' + item.preparation.id }"
-            :title="$t('editPreparation.editMessage')"
-            class="sarv-link"
-            :class="`${bodyActiveColor}--text`"
-          >
-            {{ item.preparation.preparation_number }}
-          </router-link>
-        </div>
-        <router-link
-          v-else
-          :to="{ path: '/preparation/' + item.preparation }"
-          :title="$t('editPreparation.editMessage')"
-          class="sarv-link"
-          :class="`${bodyActiveColor}--text`"
-        >
-          {{ item.preparation_number }}
-        </router-link>
-      </template>
+<!--      <template v-slot:item.preparation="{ item }">-->
+<!--        <div v-if="isUsedAsRelatedData">-->
+<!--          <router-link-->
+<!--            v-if="$route.meta.isEdit"-->
+<!--            :to="{ path: '/preparation/' + item.preparation }"-->
+<!--            :title="$t('editPreparation.editMessage')"-->
+<!--            class="sarv-link"-->
+<!--            :class="`${bodyActiveColor}&#45;&#45;text`"-->
+<!--          >-->
+<!--            {{ item.preparation_number }}-->
+<!--          </router-link>-->
+<!--          <router-link-->
+<!--            v-else-if="item.preparation"-->
+<!--            :to="{ path: '/preparation/' + item.preparation.id }"-->
+<!--            :title="$t('editPreparation.editMessage')"-->
+<!--            class="sarv-link"-->
+<!--            :class="`${bodyActiveColor}&#45;&#45;text`"-->
+<!--          >-->
+<!--            {{ item.preparation.preparation_number }}-->
+<!--          </router-link>-->
+<!--        </div>-->
+<!--        <router-link-->
+<!--          v-else-->
+<!--          :to="{ path: '/preparation/' + item.preparation }"-->
+<!--          :title="$t('editPreparation.editMessage')"-->
+<!--          class="sarv-link"-->
+<!--          :class="`${bodyActiveColor}&#45;&#45;text`"-->
+<!--        >-->
+<!--          {{ item.preparation_number }}-->
+<!--        </router-link>-->
+<!--      </template>-->
 
       <template v-slot:item.is_private="{ item }">
         <v-icon v-if="item.is_private" small>fas fa-plus</v-icon>
@@ -228,20 +228,20 @@
                   />
                 </v-col>
 
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
-                    v-model="item.preparation"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.preparation"
-                    :loading="autocomplete.loaders.preparation"
-                    item-text="preparation_number"
-                    :label="$t('taxon.preparation')"
-                    is-link
-                    route-object="preparation"
-                    is-searchable
-                    v-on:search:items="autocompletePreparationSearch"
-                  />
-                </v-col>
+<!--                <v-col cols="12" md="6" class="pa-1">-->
+<!--                  <autocomplete-wrapper-->
+<!--                    v-model="item.preparation"-->
+<!--                    :color="bodyActiveColor"-->
+<!--                    :items="autocomplete.preparation"-->
+<!--                    :loading="autocomplete.loaders.preparation"-->
+<!--                    item-text="preparation_number"-->
+<!--                    :label="$t('taxon.preparation')"-->
+<!--                    is-link-->
+<!--                    route-object="preparation"-->
+<!--                    is-searchable-->
+<!--                    v-on:search:items="autocompletePreparationSearch"-->
+<!--                  />-->
+<!--                </v-col>-->
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
@@ -345,7 +345,7 @@ export default {
       { text: "taxon.det_agent", value: "agent_identified" },
       { text: "taxon.det_date", value: "date_identified" },
       { text: "taxon.extra", value: "extra" },
-      { text: "taxon.preparation", value: "preparation" },
+      // { text: "taxon.preparation", value: "preparation" },
       { text: "common.is_private", value: "is_private" },
       { text: "common.remarks", value: "remarks" },
       {
@@ -363,7 +363,7 @@ export default {
       agent_identified: null,
       date_identified: "",
       extra: "",
-      preparation: null,
+      // preparation: null,
       is_private: false,
       remarks: ""
     },
@@ -371,11 +371,11 @@ export default {
     autocomplete: {
       taxon: [],
       agent: [],
-      preparation: [],
+      // preparation: [],
       loaders: {
         taxon: false,
         agent: false,
-        preparation: false
+        // preparation: false
       }
     }
   }),
@@ -410,7 +410,7 @@ export default {
         agent_identified: null,
         date_identified: "",
         extra: "",
-        preparation: null,
+        // preparation: null,
         is_private: false,
         remarks: ""
       };
@@ -467,16 +467,16 @@ export default {
         this.autocomplete.agent.push(this.item.agent_identified);
       }
 
-      if (typeof item.preparation !== "object" && item.preparation !== null) {
-        this.item.preparation = {
-          id: item.preparation,
-          preparation_number: item.preparation_number
-        };
-        this.autocomplete.preparation.push(this.item.preparation);
-      } else if (item.preparation !== null) {
-        this.item.preparation = item.preparation;
-        this.autocomplete.preparation.push(this.item.preparation);
-      }
+      // if (typeof item.preparation !== "object" && item.preparation !== null) {
+      //   this.item.preparation = {
+      //     id: item.preparation,
+      //     preparation_number: item.preparation_number
+      //   };
+      //   this.autocomplete.preparation.push(this.item.preparation);
+      // } else if (item.preparation !== null) {
+      //   this.item.preparation = item.preparation;
+      //   this.autocomplete.preparation.push(this.item.preparation);
+      // }
 
       this.item.name = item.name;
       this.item.frequency = item.frequency;
