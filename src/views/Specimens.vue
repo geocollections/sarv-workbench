@@ -54,7 +54,6 @@ export default {
   data() {
     return {
       block: { search: true },
-      searchImages: false,
       defaultSelectionSeriesParams: {
         id: null,
         name: null,
@@ -75,7 +74,8 @@ export default {
 
     ...mapState("search", [
       "activeSelectionSeries",
-      "selection_seriesSearchParameters"
+      "selection_seriesSearchParameters",
+      "specimenViewType"
     ]),
 
     ...mapGetters("user", ["getDatabaseId"])
@@ -121,14 +121,13 @@ export default {
     fetchSpecimens() {
       return new Promise(resolve => {
         resolve(
-          this.searchImages
+          this.specimenViewType === "image"
             ? fetchSpecimenImages(this.searchParameters, this.getDatabaseId)
             : fetchSpecimens(this.searchParameters, this.getDatabaseId)
         );
       });
     },
     searchSpecimenImages(searchImages) {
-      this.searchImages = searchImages;
       // Just to trigger change
       if (searchImages) {
         this.updateSearchParamsByField(["date_added"], "sortBy");
