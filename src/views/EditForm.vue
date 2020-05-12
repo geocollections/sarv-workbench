@@ -1,5 +1,45 @@
 <template>
   <div class="edit-form">
+
+
+
+    <v-divider />
+
+    <div>
+      {{ confirmationDialog }}
+      HAS CHANGED:
+      <b>
+        {{ initialEditViewDataHasChangedState }}
+      </b>
+    </div>
+
+    <br />
+
+    <div>
+      DATA
+    </div>
+
+    <br />
+
+    <div>
+      {{ data }}
+    </div>
+
+    <br />
+
+    <div>
+      INITIAL DATA
+    </div>
+
+    <br />
+
+    <div>
+      {{ initialData }}
+    </div>
+    <v-divider />
+
+
+
     <div class="d-flex flex-wrap mt-2 mb-1 page-title justify-space-between">
       <div class="">
         <p class="h2 float-left mb-1 mr-2">

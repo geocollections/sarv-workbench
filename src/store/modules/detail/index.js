@@ -30,9 +30,29 @@ const actions = {
   updateInitialEditViewDataHasChangedState({ commit }, payload) {
     let initData = cloneDeep(payload.initialData);
     let currentData = cloneDeep(payload.currentData);
-    // Removing abstract from diff check because of newline (\n) issue at the end giving false positives
+    // Removing ckeditor fields from some components because of newline (\n) issue at the end giving false positives
     if (initData?.abstract) delete initData.abstract;
     if (currentData?.abstract) delete currentData.abstract;
+    if (initData?.abstract_en) delete initData.abstract_en;
+    if (currentData?.abstract_en) delete currentData.abstract_en;
+    if (initData?.description) delete initData.description;
+    if (currentData?.description) delete currentData.description;
+    if (initData?.description_en) delete initData.description_en;
+    if (currentData?.description_en) delete currentData.description_en;
+    if (initData?.definition) delete initData.definition;
+    if (currentData?.definition) delete currentData.definition;
+    if (initData?.definition_en) delete initData.definition_en;
+    if (currentData?.definition_en) delete currentData.definition_en;
+    if (initData?.remarks) delete initData.remarks;
+    if (currentData?.remarks) delete currentData.remarks;
+    if (initData?.text_et) delete initData.text_et;
+    if (currentData?.text_et) delete currentData.text_et;
+    if (initData?.text_en) delete initData.text_en;
+    if (currentData?.text_en) delete currentData.text_en;
+    if (initData?.content_et) delete initData.content_et;
+    if (currentData?.content_et) delete currentData.content_et;
+    if (initData?.content_en) delete initData.content_en;
+    if (currentData?.content_en) delete currentData.content_en;
 
     let boolVal = JSON.stringify(initData) !== JSON.stringify(currentData);
     commit("UPDATE_INITIAL_EDIT_VIEW_DATA_HAS_CHANGED_STATE", boolVal);
