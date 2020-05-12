@@ -465,7 +465,7 @@ export default {
         this.item.rock = {
           id: item.rock,
           name: item.rock__name,
-          name_ne: item.rock__name_en
+          name_en: item.rock__name_en
         };
         this.autocomplete.rock.push(this.item.rock);
       } else if (item.rock !== null) {
