@@ -118,6 +118,10 @@
             </v-list-item>
           </v-list>
         </v-menu>
+
+        <v-btn icon to="/sarv_issue" :title="$t('sarv_issue.my_messages')">
+          <v-icon>far fa-envelope</v-icon>
+        </v-btn>
       </v-toolbar-items>
 
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />

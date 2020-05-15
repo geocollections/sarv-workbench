@@ -261,7 +261,9 @@
     "sample_series": "Prooviseeriad",
     "sample_serie": "Lisa prooviseeria",
     "editSiteGroundwater": "Hüdrogeoloogia",
-    "site_groundwater": "Hüdrogeoloogia"
+    "site_groundwater": "Hüdrogeoloogia",
+    "sarv_issue": "Saada sõnum",
+    "sarv_issues": "Minu sõnumid"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -667,6 +669,10 @@
     "heading": "Hüdrogeoloogia proovipunktid",
     "editMessage": "Muuda hüdrogeoloogia proovipunkti",
     "viewMessage": "Ava VEKA link"
+  },
+  "editSarvIssue": {
+    "heading": "Sõnum",
+    "editMessage": "Vaata sõnumit"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1700,6 +1706,15 @@
     "url_veka_short": "VEKA",
     "save": "Salvesta põhjavee andmestik",
     "dataMissing": "Täida mõni väli Põhjavee lisamoodulist"
+  },
+  "sarv_issue": {
+    "my_messages": "Minu sõnumid",
+    "title": "Sõnumi pealkiri",
+    "description": "Sõnumi sisu",
+    "from_user": "Saatja",
+    "to_user": "Saaja",
+    "url": "URL",
+    "response": "Vastus sõnumile"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

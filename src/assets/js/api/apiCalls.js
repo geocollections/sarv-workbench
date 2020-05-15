@@ -3803,6 +3803,53 @@ export function fetchSiteGroundwaters(data) {
  ***  SITE_GROUNDWATER END  ***
  ******************************/
 
+/************************
+ *** SARV_ISSUE START ***
+ ************************/
+
+export function fetchSarvIssue(id, currentUser) {
+  return get(
+    `sarv_issue/?to_user__username__icontains=${currentUser.forename}&id=${id}&format=json`
+  );
+}
+
+export function fetchSarvIssues(data, currentUser) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.title !== null && data.title.trim().length > 0) {
+    searchFields += `title__${data.title__lookuptype || "icontains"}=${
+      data.title
+    }`;
+  }
+
+  if (data.description !== null && data.description.trim().length > 0) {
+    searchFields += `&description__${data.description__lookuptype ||
+      "icontains"}=${data.description}`;
+  }
+
+  if (data.from_user !== null && data.from_user.trim().length > 0) {
+    searchFields += `&from_user__username__${data.from_user__lookuptype ||
+      "icontains"}=${data.from_user}`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+      `sarv_issue/?${searchFields}&multi_search=value:${currentUser.forename};fields:to_user__username,from_user__username;lookuptype:iexact&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+      `sarv_issue/?multi_search=value:${currentUser.forename};fields:to_user__username,from_user__username;lookuptype:iexact&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
+/***********************
+ ***  SARV_ISSUE END  ***
+ ************************/
+
 /***************************
  *** SAMPLE_SERIES START ***
  **************************/

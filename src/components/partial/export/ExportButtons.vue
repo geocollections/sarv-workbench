@@ -59,33 +59,37 @@ export default {
 
   methods: {
     exportToCSV() {
-      let csvString = this.convertJsonToCsv(this.tableData);
+      if (this.tableData) {
+        let csvString = this.convertJsonToCsv(this.tableData);
 
-      if (csvString.length === 0) {
+        if (csvString.length === 0) {
+          this.toastError({ text: "Download failed: Not enough data!" });
+          return;
+        }
+
+        let file = new Blob([csvString], { type: "text/plain" });
+
+        if (window.navigator.msSaveOrOpenBlob)
+          // IE10+
+          window.navigator.msSaveOrOpenBlob(file, this.filename + ".csv");
+        else {
+          // Others
+          let a = document.createElement("a");
+          let url = URL.createObjectURL(file);
+          a.href = url;
+          a.download = this.filename + ".csv";
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function() {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 0);
+        }
+
+        this.toastSuccess({ text: "Exported to <strong>CSV</strong>" });
+      } else {
         this.toastError({ text: "Download failed: Not enough data!" });
-        return;
       }
-
-      let file = new Blob([csvString], { type: "text/plain" });
-
-      if (window.navigator.msSaveOrOpenBlob)
-        // IE10+
-        window.navigator.msSaveOrOpenBlob(file, this.filename + ".csv");
-      else {
-        // Others
-        let a = document.createElement("a");
-        let url = URL.createObjectURL(file);
-        a.href = url;
-        a.download = this.filename + ".csv";
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(function() {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 0);
-      }
-
-      this.toastSuccess({ text: "Exported to <strong>CSV</strong>" });
     },
 
     convertJsonToCsv(jsonArray) {
@@ -105,38 +109,42 @@ export default {
     },
 
     copyToClipboard() {
-      let el;
-      if (this.clipboardClass) {
-        el = document.getElementsByClassName(this.clipboardClass);
-      } else {
-        el = document.getElementsByClassName(
-          `${this.$route.meta.object}-table`
-        );
-      }
-
-      let body = document.body,
-        range,
-        sel;
-      if (document.createRange && window.getSelection) {
-        range = document.createRange();
-        sel = window.getSelection();
-        sel.removeAllRanges();
-        try {
-          range.selectNodeContents(el[0]);
-          sel.addRange(range);
-        } catch (e) {
-          range.selectNode(el[0]);
-          sel.addRange(range);
+      if (this.tableData) {
+        let el;
+        if (this.clipboardClass) {
+          el = document.getElementsByClassName(this.clipboardClass);
+        } else {
+          el = document.getElementsByClassName(
+            `${this.$route.meta.object}-table`
+          );
         }
-      } else if (body.createTextRange) {
-        range = body.createTextRange();
-        range.moveToElementText(el[0]);
-        range.select();
-      }
-      document.execCommand("Copy");
-      sel.removeAllRanges();
 
-      this.toastSuccess({ text: "Copied to <strong>clipboard!</strong>" });
+        let body = document.body,
+          range,
+          sel;
+        if (document.createRange && window.getSelection) {
+          range = document.createRange();
+          sel = window.getSelection();
+          sel.removeAllRanges();
+          try {
+            range.selectNodeContents(el[0]);
+            sel.addRange(range);
+          } catch (e) {
+            range.selectNode(el[0]);
+            sel.addRange(range);
+          }
+        } else if (body.createTextRange) {
+          range = body.createTextRange();
+          range.moveToElementText(el[0]);
+          range.select();
+        }
+        document.execCommand("Copy");
+        sel.removeAllRanges();
+
+        this.toastSuccess({ text: "Copied to <strong>clipboard!</strong>" });
+      } else {
+        this.toastError({ text: "Copying failed: Nothing to copy!" });
+      }
     },
 
     exportToRIS() {

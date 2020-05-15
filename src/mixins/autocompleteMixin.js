@@ -356,6 +356,9 @@ const autocompleteMixin = {
         2
       );
     },
+    autocompleteUserSearch(value) {
+      this.$_autocompleteMixin_search(value, "user", "user", 2);
+    },
 
     /**
      * Initiates autocomplete search and sets results to autocomplete object.
@@ -505,6 +508,8 @@ function buildAutocompleteQuery(type, value, currentUser, groupByField) {
       return `analysis_parameter/?multi_search=value:${value};fields:parameter,parameter_name,parameter_name_en;lookuptype:icontains&fields=id,parameter,parameter_name,parameter_name_en,parameter_html`;
     case "imageset":
       return `imageset/?imageset_number__icontains=${value}&or_search=user_added:${currentUser.forename};author__id:${currentUser.id}`;
+    case "user":
+      return `user/?username__icontains=${value}&fields=id,username`;
     case "rock_classification":
       return `rock_classification/?multi_search=value:${value};fields:name,name_en;lookuptype:icontains&fields=id,name,name_en`;
     case "attach_link__collection":

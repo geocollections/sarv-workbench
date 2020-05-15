@@ -21,7 +21,7 @@ import {
   fetchReferences,
   fetchRocks,
   fetchSamples,
-  fetchSampleSeries,
+  fetchSampleSeries, fetchSarvIssues,
   fetchSelectionSeries,
   fetchSites,
   fetchSpecimens,
@@ -442,6 +442,16 @@ const state = {
     sortDesc: [true]
   },
   web_pagesViewType: "table",
+  sarv_issueSearchParameters: {
+    title: null,
+    description: null,
+    from_user: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  sarv_issueViewType: "table",
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy
     { text: "main.iexact", value: "iexact", symbol: "=" },
@@ -687,6 +697,12 @@ const actions = {
 
   FETCH_SAMPLE_SERIES({ commit, state }) {
     return fetchSampleSeries(state.activeSearchParams.search).then(resp => {
+      commit("SET_SIDEBAR_LIST", resp);
+    });
+  },
+
+  FETCH_SARV_ISSUES({ commit, state, rootGetters }) {
+    return fetchSarvIssues(state.activeSearchParams.search, rootGetters["user/getCurrentUser"]).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },

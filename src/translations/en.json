@@ -75,7 +75,7 @@
     "between": "<> between",
     "doesnotcontain": "!* does not contain",
     "doesnotequal": "!= does not equal",
-    "lookUpType": "Look up type"
+    "lookUpType": "Filter"
   },
   "login": {
     "password": "Password",
@@ -261,7 +261,9 @@
     "sample_series": "Sample series",
     "sample_serie": "Add sample series",
     "editSiteGroundwater": "Hydrogeology",
-    "site_groundwater": "Hydrogeology"
+    "site_groundwater": "Hydrogeology",
+    "sarv_issue": "Send a message",
+    "sarv_issues": "My messages"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -667,6 +669,10 @@
     "heading": "Hydrogeology sites",
     "editMessage": "Edit Hydrogeology site",
     "viewMessage": "Open VEKA link"
+  },
+  "editSarvIssue": {
+    "heading": "Message",
+    "editMessage": "View message"
   },
   "references": {
     "tableView": "Table view",
@@ -1700,6 +1706,15 @@
     "url_veka_short": "VEKA",
     "save": "Save groundwater data",
     "dataMissing": "Add some data to groundwater extension"
+  },
+  "sarv_issue": {
+    "my_messages": "My messages",
+    "title": "Message title",
+    "description": "Message content",
+    "from_user": "Sender",
+    "to_user": "Receiver",
+    "url": "URL",
+    "response": "Response to a message"
   },
   "permissions": {
     "title": "Data access permissions",
