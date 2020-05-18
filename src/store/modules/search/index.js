@@ -450,7 +450,7 @@ const state = {
     from_user: null,
     page: 1,
     paginateBy: 50,
-    sortBy: ["id"],
+    sortBy: ["response"],
     sortDesc: [true]
   },
   sarv_issueViewType: "table",
@@ -468,7 +468,11 @@ const state = {
   ]
 };
 
-const getters = {};
+const getters = {
+  getActiveSarvIssuesCount: state => {
+    return state.activeSarvIssues?.count;
+  }
+};
 
 const actions = {
   updateViewType({ commit }, payload) {

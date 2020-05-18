@@ -121,15 +121,7 @@
 
         <v-btn icon to="/sarv_issue" :title="$t('sarv_issue.my_messages')">
           <v-icon>far fa-envelope</v-icon>
-          <sup
-            class="font-weight-bold"
-            v-if="
-              activeSarvIssues &&
-                activeSarvIssues.count &&
-                activeSarvIssues.count > 0
-            "
-            >{{ activeSarvIssues.count }}</sup
-          >
+          <sup class="font-weight-bold">{{ getActiveSarvIssuesCount() }}</sup>
         </v-btn>
       </v-toolbar-items>
 
@@ -185,8 +177,7 @@ export default {
       "shortcuts",
       "lang"
     ]),
-    ...mapGetters("user", ["getCurrentUser"]),
-    ...mapState("search", ["activeSarvIssues"])
+    ...mapGetters("user", ["getCurrentUser"])
   },
   watch: {
     drawer(newVal) {
@@ -205,6 +196,7 @@ export default {
       "updateDrawerRightState",
       "updateLang"
     ]),
+    ...mapGetters("search", ["getActiveSarvIssuesCount"]),
 
     ...mapActions("search", ["fetchActiveSarvIssues"]),
 
