@@ -1,5 +1,6 @@
 import {
   fetchAccessions,
+  fetchActiveSarvIssues,
   fetchAgents,
   fetchAnalyses,
   fetchAreas,
@@ -21,7 +22,8 @@ import {
   fetchReferences,
   fetchRocks,
   fetchSamples,
-  fetchSampleSeries, fetchSarvIssues,
+  fetchSampleSeries,
+  fetchSarvIssues,
   fetchSelectionSeries,
   fetchSites,
   fetchSpecimens,
@@ -702,8 +704,17 @@ const actions = {
   },
 
   FETCH_SARV_ISSUES({ commit, state, rootGetters }) {
-    return fetchSarvIssues(state.activeSearchParams.search, rootGetters["user/getUserId"]).then(resp => {
+    return fetchSarvIssues(
+      state.activeSearchParams.search,
+      rootGetters["user/getUserId"]
+    ).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
+    });
+  },
+
+  fetchActiveSarvIssues({ commit, rootGetters }) {
+    return fetchActiveSarvIssues(rootGetters["user/getUserId"]).then(resp => {
+      commit("SET_ACTIVE_SARV_ISSUES", resp);
     });
   },
 
@@ -815,6 +826,10 @@ const mutations = {
         ? payload.data.page.split(" of ")[1]
         : null
     };
+  },
+
+  SET_ACTIVE_SARV_ISSUES(state, payload) {
+    state.activeSarvIssues = payload.data;
   },
 
   SET_ACTIVE_SEARCH_PARAMETERS(state, payload) {

@@ -90,11 +90,14 @@
           <!-- RESPONSE -->
           <v-row no-gutters v-if="$route.meta.isEdit && canUserWriteAResponse">
             <v-col cols="12" class="pa-1">
+              <div class="ml-3 mb-1 font-weight-bold success--text" v-if="this.isNotEmpty(initialResponse)">{{ $t("sarv_issue.message_answered") }}</div>
+
               <textarea-wrapper
                 v-model="sarv_issue.response"
                 :color="bodyActiveColor"
                 :label="$t('sarv_issue.response')"
                 use-state
+                :disabled="this.isNotEmpty(initialResponse)"
               />
             </v-col>
           </v-row>
@@ -173,10 +176,7 @@ export default {
 
     canUserWriteAResponse() {
       if (this.$route.meta.isEdit && this.sarv_issue) {
-        return (
-          this.sarv_issue?.to_user?.username ===
-          this.getCurrentUser.forename.toLowerCase()
-        );
+        return this.sarv_issue?.to_user?.id === this.getUserId;
       } else return false;
     }
   },
@@ -190,7 +190,8 @@ export default {
           "description",
           "url",
           "to_user",
-          "from_user"
+          "from_user",
+          "response"
         ],
         sarv_issue: {},
         requiredFields: ["title", "description", "to_user"],
@@ -199,7 +200,8 @@ export default {
         },
         block: {
           info: true
-        }
+        },
+        initialResponse: null
       };
     },
 
@@ -214,23 +216,22 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchSarvIssue(this.$route.params.id, this.getUserId).then(
-          response => {
-            let handledResponse = this.handleResponse(response);
-            if (handledResponse.length > 0) {
-              this.$emit("object-exists", true);
-              this.$set(this, "sarv_issue", this.handleResponse(response)[0]);
-              this.fillAutocompleteFields(this.sarv_issue);
-              this.removeUnnecessaryFields(this.sarv_issue, this.copyFields);
+        fetchSarvIssue(this.$route.params.id, this.getUserId).then(response => {
+          let handledResponse = this.handleResponse(response);
+          if (handledResponse.length > 0) {
+            this.$emit("object-exists", true);
+            this.$set(this, "sarv_issue", this.handleResponse(response)[0]);
+            this.fillAutocompleteFields(this.sarv_issue);
+            this.removeUnnecessaryFields(this.sarv_issue, this.copyFields);
+            this.setInitialResponse(this.sarv_issue);
 
-              this.$emit("data-loaded", this.sarv_issue);
-              this.setLoadingState(false);
-            } else {
-              this.setLoadingState(false);
-              this.$emit("object-exists", false);
-            }
+            this.$emit("data-loaded", this.sarv_issue);
+            this.setLoadingState(false);
+          } else {
+            this.setLoadingState(false);
+            this.$emit("object-exists", false);
           }
-        );
+        });
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }
@@ -257,6 +258,10 @@ export default {
         };
         this.autocomplete.users.push(this.sarv_issue.from_user);
       }
+    },
+
+    setInitialResponse(sarv_issue) {
+      this.initialResponse = cloneDeep(sarv_issue.response);
     },
 
     formatDataForUpload(objectToUpload) {

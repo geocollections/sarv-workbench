@@ -1713,8 +1713,10 @@
     "description": "Message content",
     "from_user": "Sender",
     "to_user": "Receiver",
-    "url": "URL",
-    "response": "Response to a message"
+    "url": "Problematic URL",
+    "response": "Response to a message",
+    "replied": "Replied",
+    "message_answered": "The message has already been replied!"
   },
   "permissions": {
     "title": "Data access permissions",

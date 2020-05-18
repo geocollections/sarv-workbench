@@ -19,6 +19,16 @@
     :server-items-length="response.count"
     :class="bodyColor.split('n-')[0] + 'n-5'"
   >
+    <template v-slot:item.replied="{ item }">
+      <v-icon
+        v-if="item.response !== null && item.response !== ''"
+        color="green"
+        small
+        >fas fa-check</v-icon
+      >
+      <v-icon v-else color="red" small>fas fa-times</v-icon>
+    </template>
+
     <template v-slot:item.id="{ item }">
       <router-link
         :to="{ path: '/sarv_issue/' + item.id }"
@@ -67,6 +77,7 @@ export default {
   data: () => ({
     expanded: [],
     headers: [
+      { text: "sarv_issue.replied", value: "replied", sortable: false },
       { text: "common.id", value: "id" },
       { text: "sarv_issue.from_user", value: "from_user__username" },
       { text: "sarv_issue.to_user", value: "to_user__username" },

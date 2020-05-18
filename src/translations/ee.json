@@ -1713,8 +1713,10 @@
     "description": "Sõnumi sisu",
     "from_user": "Saatja",
     "to_user": "Saaja",
-    "url": "URL",
-    "response": "Vastus sõnumile"
+    "url": "Probleemne URL",
+    "response": "Vastus sõnumile",
+    "replied": "Vastatud",
+    "message_answered": "Sõnumile on juba vastatud!"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

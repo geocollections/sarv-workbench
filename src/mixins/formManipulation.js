@@ -131,6 +131,8 @@ const formManipulation = {
     isObjectLocked(object) {
       if (this.$route.meta.isEdit && object === "attachment") {
         return !!this.isAttachmentLocked;
+      } else if (this.$route.meta.isEdit && object === "sarv_issue") {
+        return this.isNotEmpty(this.initialResponse);
       } else return false;
     },
 
@@ -242,6 +244,8 @@ const formManipulation = {
         } else {
           if (object === "attachment" && this.isAttachmentLocked)
             this.toastError({ text: this.$t("messages.lockedForm") });
+          if (object === "sarv_issue" && this.isNotEmpty(this.initialResponse))
+            this.toastError({ text: this.$t("sarv_issue.message_answered") });
           else this.toastError({ text: this.$t("messages.checkForm") });
           resolve(false);
         }

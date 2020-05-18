@@ -3811,6 +3811,12 @@ export function fetchSarvIssue(id, currentUserId) {
   return get(`sarv_issue/?to_user=${currentUserId}&id=${id}&format=json`);
 }
 
+export function fetchActiveSarvIssues(currentUserId) {
+  return get(
+    `sarv_issue/?to_user=${currentUserId}&or_search=response__isnull:true;response:%20&format=json`
+  );
+}
+
 export function fetchSarvIssues(data, currentUserId) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
