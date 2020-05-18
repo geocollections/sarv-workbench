@@ -42,7 +42,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getUserId"])
   },
 
   created() {
@@ -58,7 +58,7 @@ export default {
 
     fetchSarvIssues() {
       return new Promise(resolve => {
-        resolve(fetchSarvIssues(this.searchParameters, this.getCurrentUser));
+        resolve(fetchSarvIssues(this.searchParameters, this.getUserId));
       });
     }
   }

@@ -702,7 +702,7 @@ const actions = {
   },
 
   FETCH_SARV_ISSUES({ commit, state, rootGetters }) {
-    return fetchSarvIssues(state.activeSearchParams.search, rootGetters["user/getCurrentUser"]).then(resp => {
+    return fetchSarvIssues(state.activeSearchParams.search, rootGetters["user/getUserId"]).then(resp => {
       commit("SET_SIDEBAR_LIST", resp);
     });
   },

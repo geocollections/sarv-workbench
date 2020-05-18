@@ -3807,13 +3807,11 @@ export function fetchSiteGroundwaters(data) {
  *** SARV_ISSUE START ***
  ************************/
 
-export function fetchSarvIssue(id, currentUser) {
-  return get(
-    `sarv_issue/?to_user__username__icontains=${currentUser.forename}&id=${id}&format=json`
-  );
+export function fetchSarvIssue(id, currentUserId) {
+  return get(`sarv_issue/?to_user=${currentUserId}&id=${id}&format=json`);
 }
 
-export function fetchSarvIssues(data, currentUser) {
+export function fetchSarvIssues(data, currentUserId) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
@@ -3837,11 +3835,11 @@ export function fetchSarvIssues(data, currentUser) {
 
   if (searchFields.length > 0) {
     return get(
-      `sarv_issue/?${searchFields}&multi_search=value:${currentUser.forename};fields:to_user__username,from_user__username;lookuptype:iexact&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `sarv_issue/?${searchFields}&multi_search=value:${currentUserId};fields:to_user,from_user&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   } else {
     return get(
-      `sarv_issue/?multi_search=value:${currentUser.forename};fields:to_user__username,from_user__username;lookuptype:iexact&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+      `sarv_issue/?multi_search=value:${currentUserId};fields:to_user,from_user&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
     );
   }
 }

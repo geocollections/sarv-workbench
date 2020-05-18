@@ -121,7 +121,7 @@
       </v-btn>
 
       <v-btn
-        v-if="$route.meta.isEdit"
+        v-if="$route.meta.isEdit && $route.meta.object !== 'sarv_issue'"
         :icon="$vuetify.breakpoint.smAndDown"
         color="orange"
         dark

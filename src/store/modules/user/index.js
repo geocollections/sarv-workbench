@@ -21,6 +21,10 @@ const getters = {
     };
   },
 
+  getUserId: state => {
+    return state.authUser?.user_id;
+  },
+
   isUserAllowedTo: (state, getters) => (action, table) => {
     if (getters.getPermissions && getters.getPermissions[table]) {
       return getters.getPermissions[table].includes(action);

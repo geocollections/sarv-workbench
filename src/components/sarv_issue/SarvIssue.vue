@@ -169,7 +169,7 @@ export default {
   computed: {
     ...mapState("search", ["sarv_issueSearchParameters"]),
 
-    ...mapGetters("user", ["getCurrentUser"]),
+    ...mapGetters("user", ["getCurrentUser", "getUserId"]),
 
     canUserWriteAResponse() {
       if (this.$route.meta.isEdit && this.sarv_issue) {
@@ -214,7 +214,7 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        fetchSarvIssue(this.$route.params.id, this.getCurrentUser).then(
+        fetchSarvIssue(this.$route.params.id, this.getUserId).then(
           response => {
             let handledResponse = this.handleResponse(response);
             if (handledResponse.length > 0) {
@@ -280,7 +280,7 @@ export default {
           }
         });
 
-        delete uploadableObject.from_user;
+        uploadableObject.from_user = cloneDeep(this.getUserId);
       }
 
       console.log("This object is sent in string format:");

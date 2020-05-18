@@ -42,16 +42,16 @@
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.id }"
+            :to="{ path: '/taxon/' + item.taxon }"
             :title="$t('editTaxon.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.taxon }}
+            {{ item.taxon__taxon }}
           </router-link>
           <router-link
             v-else-if="item.taxon"
-            :to="{ path: '/taxon/' + item.id }"
+            :to="{ path: '/taxon/' + item.taxon }"
             :title="$t('editTaxon.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
@@ -61,12 +61,12 @@
         </div>
         <router-link
           v-else
-          :to="{ path: '/taxon/' + item.id }"
+          :to="{ path: '/taxon/' + item.taxon }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.taxon }}
+          {{ item.taxon__taxon }}
         </router-link>
       </template>
 
