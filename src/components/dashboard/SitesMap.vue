@@ -267,100 +267,108 @@ export default {
       this.images = [];
 
       // SITES
-      recentData.recentSites.forEach(site => {
-        let marker = L.marker(
-          {
-            lat: parseFloat(site.latitude),
-            lng: parseFloat(site.longitude)
-          },
-          { icon: this.sitesIcon }
-        ).addTo(this.map);
-        if (site.id)
-          marker.on("click", () => {
-            let routeData = this.$router.resolve({
-              path: "/site/" + site.id
+      if (recentData.recentSites) {
+        recentData.recentSites.forEach(site => {
+          let marker = L.marker(
+            {
+              lat: parseFloat(site.latitude),
+              lng: parseFloat(site.longitude)
+            },
+            { icon: this.sitesIcon }
+          ).addTo(this.map);
+          if (site.id)
+            marker.on("click", () => {
+              let routeData = this.$router.resolve({
+                path: "/site/" + site.id
+              });
+              window.open(routeData.href, "SiteWindow");
             });
-            window.open(routeData.href, "SiteWindow");
+          marker.bindTooltip(site.name, {
+            permanent: false,
+            direction: "right",
+            offset: [7, 0]
           });
-        marker.bindTooltip(site.name, {
-          permanent: false,
-          direction: "right",
-          offset: [7, 0]
+          this.sites.push(marker);
         });
-        this.sites.push(marker);
-      });
+      }
 
       // SAMPLES
-      recentData.recentSamples.forEach(sample => {
-        let marker = L.marker(
-          {
-            lat: parseFloat(sample.locality__latitude),
-            lng: parseFloat(sample.locality__longitude)
-          },
-          { icon: this.samplesIcon }
-        ).addTo(this.map);
-        if (sample.locality__id)
-          marker.on("click", () => {
-            let routeData = this.$router.resolve({
-              path: "/locality/" + sample.locality__id
+      if (recentData.recentSamples) {
+        recentData.recentSamples.forEach(sample => {
+          let marker = L.marker(
+            {
+              lat: parseFloat(sample.locality__latitude),
+              lng: parseFloat(sample.locality__longitude)
+            },
+            { icon: this.samplesIcon }
+          ).addTo(this.map);
+          if (sample.locality__id)
+            marker.on("click", () => {
+              let routeData = this.$router.resolve({
+                path: "/locality/" + sample.locality__id
+              });
+              window.open(routeData.href, "LocalityWindow");
             });
-            window.open(routeData.href, "LocalityWindow");
+          marker.bindTooltip(sample.locality__locality, {
+            permanent: false,
+            direction: "right",
+            offset: [7, 0]
           });
-        marker.bindTooltip(sample.locality__locality, {
-          permanent: false,
-          direction: "right",
-          offset: [7, 0]
+          this.samples.push(marker);
         });
-        this.samples.push(marker);
-      });
+      }
 
       // SPECIMENS
-      recentData.recentSpecimens.forEach(specimen => {
-        let marker = L.marker(
-          {
-            lat: parseFloat(specimen.locality__latitude),
-            lng: parseFloat(specimen.locality__longitude)
-          },
-          { icon: this.specimensIcon }
-        ).addTo(this.map);
-        if (specimen.locality__id)
-          marker.on("click", () => {
-            let routeData = this.$router.resolve({
-              path: "/locality/" + specimen.locality__id
+      if (recentData.recentSpecimens) {
+        recentData.recentSpecimens.forEach(specimen => {
+          let marker = L.marker(
+            {
+              lat: parseFloat(specimen.locality__latitude),
+              lng: parseFloat(specimen.locality__longitude)
+            },
+            { icon: this.specimensIcon }
+          ).addTo(this.map);
+          if (specimen.locality__id)
+            marker.on("click", () => {
+              let routeData = this.$router.resolve({
+                path: "/locality/" + specimen.locality__id
+              });
+              window.open(routeData.href, "LocalityWindow");
             });
-            window.open(routeData.href, "LocalityWindow");
+          marker.bindTooltip(specimen.locality__locality, {
+            permanent: false,
+            direction: "right",
+            offset: [7, 0]
           });
-        marker.bindTooltip(specimen.locality__locality, {
-          permanent: false,
-          direction: "right",
-          offset: [7, 0]
+          this.specimens.push(marker);
         });
-        this.specimens.push(marker);
-      });
+      }
 
       // IMAGES
-      recentData.recentImages.forEach(image => {
-        let marker = L.marker(
-          {
-            lat: parseFloat(image.image_latitude),
-            lng: parseFloat(image.image_longitude)
-          },
-          { icon: this.imagesIcon }
-        ).addTo(this.map);
-        if (image.id)
-          marker.on("click", () => {
-            let routeData = this.$router.resolve({
-              path: "/attachment/" + image.id
+      if (recentData.recentImages) {
+        recentData.recentImages.forEach(image => {
+          let marker = L.marker(
+            {
+              lat: parseFloat(image.image_latitude),
+              lng: parseFloat(image.image_longitude)
+            },
+            { icon: this.imagesIcon }
+          ).addTo(this.map);
+          if (image.id)
+            marker.on("click", () => {
+              let routeData = this.$router.resolve({
+                path: "/attachment/" + image.id
+              });
+              window.open(routeData.href, "ImageWindow");
             });
-            window.open(routeData.href, "ImageWindow");
+          marker.bindTooltip(image.image_place, {
+            permanent: false,
+            direction: "right",
+            offset: [7, 0]
           });
-        marker.bindTooltip(image.image_place, {
-          permanent: false,
-          direction: "right",
-          offset: [7, 0]
+          this.images.push(marker);
         });
-        this.images.push(marker);
-      });
+      }
 
       let bounds = new L.featureGroup([
         ...this.sites,

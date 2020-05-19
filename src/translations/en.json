@@ -1716,7 +1716,8 @@
     "url": "Problematic URL",
     "response": "Response to a message",
     "replied": "Replied",
-    "message_answered": "The message has already been replied!"
+    "message_answered": "The message has already been replied!",
+    "unanswered": "Unanswered"
   },
   "permissions": {
     "title": "Data access permissions",

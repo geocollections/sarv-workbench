@@ -1195,7 +1195,7 @@
     "institution": "Asutus",
     "institution__institution": "Kuulub",
     "agent": "Nimi",
-    "institution_name": "Asututse nimi (ainult asutuse puhul)",
+    "institution_name": "Asutuse nimi (ainult asutuse puhul)",
     "institution_name_en": "Asutuse nimi (EN)",
     "title": "Tiitle",
     "profession": "Amet",
@@ -1716,7 +1716,8 @@
     "url": "Probleemne URL",
     "response": "Vastus sõnumile",
     "replied": "Vastatud",
-    "message_answered": "Sõnumile on juba vastatud!"
+    "message_answered": "Sõnumile on juba vastatud!",
+    "unanswered": "Vastamata"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

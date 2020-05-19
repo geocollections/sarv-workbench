@@ -3808,7 +3808,7 @@ export function fetchSiteGroundwaters(data) {
  ************************/
 
 export function fetchSarvIssue(id, currentUserId) {
-  return get(`sarv_issue/?to_user=${currentUserId}&id=${id}&format=json`);
+  return get(`sarv_issue/?or_search=to_user:${currentUserId};from_user:${currentUserId}&id=${id}&format=json`);
 }
 
 export function fetchActiveSarvIssues(currentUserId) {

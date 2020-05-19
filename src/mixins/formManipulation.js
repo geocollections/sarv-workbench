@@ -184,6 +184,14 @@ const formManipulation = {
               console.log(savedObjectId);
               console.log("^^^^^^ Saved object ID ^^^^^^ ");
 
+              if (
+                this.$route.meta.isEdit &&
+                addAnother &&
+                object === "sarv_issue"
+              ) {
+                this.setInitialResponse(this[object]);
+              }
+
               if (saveAsNew) {
                 if (this.isNotEmpty(savedObjectId)) {
                   this.$router.push({
@@ -238,7 +246,7 @@ const formManipulation = {
             () => resolve(false)
           );
         } else if (this.loadingState) {
-          // This runs only if user deletes html elements and tries to press 'add' button again
+          // This runs only if loadingState is true which shouldn't happen normally
           this.toastError({ text: this.$t("messages.easterEggError") });
           resolve(false);
         } else {

@@ -90,7 +90,12 @@
           <!-- RESPONSE -->
           <v-row no-gutters v-if="$route.meta.isEdit && canUserWriteAResponse">
             <v-col cols="12" class="pa-1">
-              <div class="ml-3 mb-1 font-weight-bold success--text" v-if="this.isNotEmpty(initialResponse)">{{ $t("sarv_issue.message_answered") }}</div>
+              <div
+                class="ml-3 mb-1 font-weight-bold success--text"
+                v-if="isNotEmpty(initialResponse)"
+              >
+                {{ $t("sarv_issue.message_answered") }}
+              </div>
 
               <textarea-wrapper
                 v-model="sarv_issue.response"
@@ -101,6 +106,17 @@
               />
             </v-col>
           </v-row>
+
+          <!-- VIEW RESPONSE -->
+          <v-card v-else flat class="d-flex flex-row flex-wrap pa-1">
+            <v-card flat class="font-weight-bold mr-2"
+              >{{ $t("sarv_issue.response") }}:</v-card
+            >
+            <v-card flat v-if="isNotEmpty(sarv_issue.response)">{{
+              sarv_issue.response
+            }}</v-card>
+            <v-card flat v-else>{{ $t("sarv_issue.unanswered") }}</v-card>
+          </v-card>
         </div>
       </transition>
     </v-card>

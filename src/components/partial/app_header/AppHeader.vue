@@ -121,7 +121,9 @@
 
         <v-btn icon to="/sarv_issue" :title="$t('sarv_issue.my_messages')">
           <v-icon>far fa-envelope</v-icon>
-          <sup class="font-weight-bold">{{ getActiveSarvIssuesCount() }}</sup>
+          <sup class="font-weight-bold" v-if="getActiveSarvIssuesCount() > 0">{{
+            getActiveSarvIssuesCount()
+          }}</sup>
         </v-btn>
       </v-toolbar-items>
 
