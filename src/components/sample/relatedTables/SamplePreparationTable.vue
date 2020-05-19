@@ -42,31 +42,31 @@
         <div v-if="isUsedAsRelatedData">
           <router-link
             v-if="$route.meta.isEdit"
-            :to="{ path: '/taxon/' + item.id }"
+            :to="{ path: '/taxon/' + item.taxon }"
             :title="$t('editTaxon.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.fossil_group }}
+            {{ item.taxon__taxon }}
           </router-link>
           <router-link
-            v-else-if="item.fossil_group"
-            :to="{ path: '/taxon/' + item.id }"
+            v-else-if="item.taxon"
+            :to="{ path: '/taxon/' + item.taxon.id }"
             :title="$t('editTaxon.editMessage')"
             class="sarv-link"
             :class="`${bodyActiveColor}--text`"
           >
-            {{ item.fossil_group.taxon }}
+            {{ item.taxon.taxon }}
           </router-link>
         </div>
         <router-link
           v-else
-          :to="{ path: '/taxon/' + item.id }"
+          :to="{ path: '/taxon/' + item.taxon }"
           :title="$t('editTaxon.editMessage')"
           class="sarv-link"
           :class="`${bodyActiveColor}--text`"
         >
-          {{ item.fossil_group }}
+          {{ item.taxon__taxon }}
         </router-link>
       </template>
 
@@ -105,7 +105,7 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.fossil_group"
+                    v-model="item.taxon"
                     :color="bodyActiveColor"
                     :items="autocomplete.taxon"
                     :loading="autocomplete.loaders.taxon"
@@ -228,7 +228,7 @@ export default {
     dialog: false,
     item: {
       preparation_number: "",
-      fossil_group: null,
+      taxon: null,
       storage: null,
       remarks: ""
     },
@@ -267,7 +267,7 @@ export default {
       this.isNewItem = true;
       this.item = {
         preparation_number: "",
-        fossil_group: null,
+        taxon: null,
         storage: null,
         remarks: ""
       };
@@ -299,15 +299,15 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
-      if (typeof item.fossil_group !== "object" && item.fossil_group !== null) {
-        this.item.fossil_group = {
-          id: item.id,
-          taxon: item.taxon
+      if (typeof item.taxon !== "object" && item.taxon !== null) {
+        this.item.taxon = {
+          id: item.taxon,
+          taxon: item.taxon__taxon
         };
-        this.autocomplete.taxon.push(this.item.fossil_group);
-      } else if (item.fossil_group !== null) {
-        this.item.fossil_group = item.fossil_group;
-        this.autocomplete.taxon.push(this.item.fossil_group);
+        this.autocomplete.taxon.push(this.item.taxon);
+      } else if (item.taxon !== null) {
+        this.item.taxon = item.taxon;
+        this.autocomplete.taxon.push(this.item.taxon);
       }
 
       if (typeof item.storage !== "object" && item.storage !== null) {
