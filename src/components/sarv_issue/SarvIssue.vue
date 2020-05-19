@@ -108,15 +108,18 @@
           </v-row>
 
           <!-- VIEW RESPONSE -->
-          <v-card v-else flat class="d-flex flex-row flex-wrap pa-1">
-            <v-card flat class="font-weight-bold mr-2"
-              >{{ $t("sarv_issue.response") }}:</v-card
-            >
-            <v-card flat v-if="isNotEmpty(sarv_issue.response)">{{
-              sarv_issue.response
-            }}</v-card>
-            <v-card flat v-else>{{ $t("sarv_issue.unanswered") }}</v-card>
-          </v-card>
+          <div
+            v-else-if="$route.meta.isEdit"
+            class="d-flex flex-row flex-wrap pa-1"
+          >
+            <div class="font-weight-bold mr-2">
+              {{ $t("sarv_issue.response") }}:
+            </div>
+            <div v-if="isNotEmpty(sarv_issue.response)">
+              {{ sarv_issue.response }}
+            </div>
+            <v-card flat v-else class="error--text">{{ $t("sarv_issue.unanswered") }}</v-card>
+          </div>
         </div>
       </transition>
     </v-card>

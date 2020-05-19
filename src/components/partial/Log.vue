@@ -53,13 +53,7 @@
                           <div
                             class="mb-3"
                             v-if="
-                              changes &&
-                                changes.old !== '' &&
-                                (changes.new !== null ||
-                                  (changes.new === null &&
-                                    (changes.old !== null ||
-                                      changes.old !== ''))) &&
-                                changes.old !== changes.new
+                              changes && (changes.old !== '' || (changes.old === '' && (changes.new !== null || changes.new !== ''))) && (changes.new !== null || (changes.new === null && (changes.old !== null || changes.old !== ''))) && changes.old !== changes.new
                             "
                           >
                             <div class="log-title mb-1">{{ field }}</div>

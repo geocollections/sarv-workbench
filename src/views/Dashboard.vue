@@ -46,8 +46,12 @@ export default {
     });
     next();
   },
+  created() {
+    this.fetchActiveSarvIssues();
+  },
   methods: {
-    ...mapActions("settings", ["updateRecentUrls"])
+    ...mapActions("settings", ["updateRecentUrls"]),
+    ...mapActions("search", ["fetchActiveSarvIssues"])
   }
 };
 </script>

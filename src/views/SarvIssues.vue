@@ -46,6 +46,8 @@ export default {
   },
 
   created() {
+    this.fetchActiveSarvIssues();
+
     this.setActiveSearchParametersFilters([
       { id: "title", title: "sarv_issue.title", type: "text" },
       { id: "description", title: "sarv_issue.description", type: "text" },
@@ -55,6 +57,7 @@ export default {
 
   methods: {
     ...mapActions("search", ["setActiveSearchParameters"]),
+    ...mapActions("search", ["fetchActiveSarvIssues"]),
 
     fetchSarvIssues() {
       return new Promise(resolve => {
