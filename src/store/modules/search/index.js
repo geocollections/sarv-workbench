@@ -454,6 +454,7 @@ const state = {
     sortDesc: [true]
   },
   sarv_issueViewType: "table",
+  activeSarvIssues: null,
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy
     { text: "main.iexact", value: "iexact", symbol: "=" },
