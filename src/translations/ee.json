@@ -1711,12 +1711,13 @@
     "my_messages": "Minu sõnumid",
     "title": "Sõnumi pealkiri",
     "description": "Sõnumi sisu",
+    "date_added": "Saadetud",
     "from_user": "Saatja",
     "to_user": "Saaja",
     "url": "Probleemne URL",
     "response": "Vastus sõnumile",
     "replied": "Vastatud",
-    "message_answered": "Sõnumile on juba vastatud!",
+    "message_answered": "Sa oled juba sõnumile vastanud!",
     "unanswered": "Vastamata"
   },
   "permissions": {

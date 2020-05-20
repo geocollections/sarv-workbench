@@ -1711,12 +1711,13 @@
     "my_messages": "My messages",
     "title": "Message title",
     "description": "Message content",
+    "date_added": "Sent",
     "from_user": "Sender",
     "to_user": "Receiver",
     "url": "Problematic URL",
     "response": "Response to a message",
     "replied": "Replied",
-    "message_answered": "The message has already been replied!",
+    "message_answered": "You have already replied to the message!",
     "unanswered": "Unanswered"
   },
   "permissions": {
