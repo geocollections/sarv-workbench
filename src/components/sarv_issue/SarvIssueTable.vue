@@ -41,7 +41,7 @@
     </template>
 
     <template v-slot:item.date_added="{ item }">
-      <div>{{ item.date_added | moment("YYYY-MM-DD HH:mm") }}</div>
+      <div>{{ item.date_added | moment("MMMM Do YYYY HH:mm") }}</div>
     </template>
   </v-data-table>
 </template>

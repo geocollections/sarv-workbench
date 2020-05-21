@@ -205,6 +205,7 @@ export default {
     changeLang(newLang) {
       if (this.lang === newLang) return;
       this.$i18n.locale = newLang;
+      this.$moment.locale(newLang === "ee" ? "et" : "en");
       this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
     }

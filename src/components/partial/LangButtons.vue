@@ -23,6 +23,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import toastMixin from "../../mixins/toastMixin";
 
 export default {
   name: "lang-buttons",
@@ -32,6 +33,7 @@ export default {
       default: true
     }
   },
+  mixins: [toastMixin],
   computed: {
     ...mapState("settings", ["lang"])
   },
@@ -41,6 +43,7 @@ export default {
     changeLang(newLang) {
       if (this.lang === newLang) return;
       this.$i18n.locale = newLang;
+      this.$moment.locale(newLang === "ee" ? "et" : "en");
       this.updateLang(newLang);
       this.toastInfo({ text: this.$t("messages.langChange") });
     }

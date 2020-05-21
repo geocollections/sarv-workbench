@@ -8,6 +8,8 @@ import store from "./store";
 import VueScrollTo from "vue-scrollto";
 import animated from "animate.css";
 import vuetify from "./plugins/vuetify";
+import moment from "moment";
+require("moment/locale/et");
 
 // Bootstrap css
 import "bootstrap/dist/css/bootstrap.css";
@@ -35,7 +37,7 @@ Vue.use(VueScrollTo, {
   y: true
 });
 Vue.use(animated);
-Vue.use(require("vue-moment"));
+Vue.use(require("vue-moment"), { moment });
 
 Vue.config.productionTip = false;
 
