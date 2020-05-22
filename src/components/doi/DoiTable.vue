@@ -31,7 +31,7 @@
     </template>
 
     <template v-slot:item.datacite_created="{ item }">
-      <span>{{ item.datacite_created | moment("YYYY-DD-MM HH:mm") }}</span>
+      <span>{{ item.datacite_created | moment("YYYY-MM-DD HH:mm") }}</span>
     </template>
 
     <template v-slot:item.link="{ item }">
