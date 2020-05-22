@@ -1718,7 +1718,8 @@
     "response": "Vastus sõnumile",
     "replied": "Vastatud",
     "message_answered": "Sa oled juba sõnumile vastanud!",
-    "unanswered": "Vastamata"
+    "unanswered": "Vastamata",
+    "activeIssues": "Aktiivsed sõnumid / probleemid"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

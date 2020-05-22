@@ -26,6 +26,17 @@
       </v-col>
     </v-row>
 
+    <!-- MESSAGES -->
+    <v-row class="pb-6" v-if="activeSarvIssues !== null">
+      <v-col>
+        <messages
+          :sarv-issues="activeSarvIssues"
+          :body-color="bodyColor"
+          :body-active-color="bodyActiveColor"
+        />
+      </v-col>
+    </v-row>
+
     <!-- MAP -->
     <v-row>
       <v-col class="pb-0">
@@ -115,6 +126,7 @@
       </v-col>
     </v-row>
 
+    <!-- RECENT ACTIVITY -->
     <recent-activity
       :user="getCurrentUser.user"
       :body-color="bodyColor"
@@ -182,13 +194,15 @@
 <script>
 import RecentActivity from "./RecentActivity";
 import formSectionsMixin from "../../mixins/formSectionsMixin";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import SitesMap from "./SitesMap";
 import ImageViewWrapper from "../partial/image_view/ImageViewWrapper";
 import { fetchRecentFiles } from "../../assets/js/api/apiCalls";
+import Messages from "./Messages";
 
 export default {
   components: {
+    Messages,
     ImageViewWrapper,
     RecentActivity,
     SitesMap
@@ -204,6 +218,7 @@ export default {
 
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
+    ...mapState("search", ["activeSarvIssues"]),
     ...mapGetters("user", ["getCurrentUser"])
   },
 
@@ -216,7 +231,13 @@ export default {
     }
   },
 
+  created() {
+    this.fetchActiveSarvIssues();
+  },
+
   methods: {
+    ...mapActions("search", ["fetchActiveSarvIssues"]),
+
     getRecentFiles(paginateBy) {
       fetchRecentFiles(this.getCurrentUser.id, paginateBy).then(response => {
         if (response.status === 200) {

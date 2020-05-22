@@ -3808,12 +3808,14 @@ export function fetchSiteGroundwaters(data) {
  ************************/
 
 export function fetchSarvIssue(id, currentUserId) {
-  return get(`sarv_issue/?or_search=to_user:${currentUserId};from_user:${currentUserId}&id=${id}&format=json`);
+  return get(
+    `sarv_issue/?or_search=to_user:${currentUserId};from_user:${currentUserId}&id=${id}&format=json`
+  );
 }
 
 export function fetchActiveSarvIssues(currentUserId) {
   return get(
-    `sarv_issue/?to_user=${currentUserId}&or_search=response__isnull:true;response:%20&format=json`
+    `sarv_issue/?to_user=${currentUserId}&or_search=response__isnull:true;response:%20&order_by=-id&format=json`
   );
 }
 

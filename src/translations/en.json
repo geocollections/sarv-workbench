@@ -1718,7 +1718,8 @@
     "response": "Response to a message",
     "replied": "Replied",
     "message_answered": "You have already replied to the message!",
-    "unanswered": "Unanswered"
+    "unanswered": "Unanswered",
+    "activeIssues": "Active messages / issues"
   },
   "permissions": {
     "title": "Data access permissions",
