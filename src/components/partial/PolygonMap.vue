@@ -95,8 +95,10 @@ export default {
   beforeDestroy() {
     this.map.off("pm:create", this.handlePmCreate);
     this.map.off("pm:remove", this.handlePmRemove);
-    this.newPolygon.off("pm:edit", this.handlePmEdit);
-    this.newPolygon.off("pm:cut", this.handlePmCut);
+    if (this.newPolygon) {
+      this.newPolygon.off("pm:edit", this.handlePmEdit);
+      this.newPolygon.off("pm:cut", this.handlePmCut);
+    }
   },
 
   watch: {
