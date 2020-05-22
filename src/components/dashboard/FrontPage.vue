@@ -27,7 +27,7 @@
     </v-row>
 
     <!-- MESSAGES -->
-    <v-row class="pb-6" v-if="activeSarvIssues !== null">
+    <v-row class="pb-6" v-if="activeSarvIssues !== null && activeSarvIssues.count > 0">
       <v-col>
         <messages
           :sarv-issues="activeSarvIssues"
