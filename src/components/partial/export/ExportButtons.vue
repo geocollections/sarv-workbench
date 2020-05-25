@@ -189,6 +189,8 @@ export default {
             // Todo: Add certain fields to certain types --> if (item.type__ris_type === 'JOUR') {} etc.
 
             if (item.title) risString += "TI  - " + item.title.trim() + "\n";
+            if (item.title_translated)
+              risString += "TT  - " + item.title_translated.trim() + "\n";
 
             if (item.author) {
               if (item.author.includes(".,")) {
@@ -216,6 +218,32 @@ export default {
             ) {
               risString += "T2  - " + item.journal__journal_name.trim() + "\n";
               risString += "JO  - " + item.journal__journal_name.trim() + "\n";
+            }
+
+            if (item.book && item.type__ris_type === "BOOK") {
+              risString += "BT  - " + item.book.trim() + "\n";
+            }
+
+            if (item.book_editor && item.type__ris_type === "BOOK") {
+              risString += "ED  - " + item.book_editor.trim() + "\n";
+            }
+
+            if (item.publisher) {
+              risString += "PB  - " + item.publisher.trim() + "\n";
+            }
+
+            if (item.publisher_place) {
+              risString += "PP  - " + item.publisher_place.trim() + "\n";
+            }
+
+            if (item.isbn || item.issn) {
+              risString += "SN  - ";
+              if (item.isbn) risString += item.isbn.trim();
+              if (item.issn) {
+                risString += (item.isbn ? " / " : "") + item.issn.trim();
+              }
+
+              risString += "\n";
             }
 
             if (item.volume) risString += "VL  - " + item.volume.trim() + "\n";
