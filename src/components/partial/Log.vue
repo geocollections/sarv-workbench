@@ -53,7 +53,16 @@
                           <div
                             class="mb-3"
                             v-if="
-                              changes && (changes.old !== '' || (changes.old === '' && (changes.new !== null || changes.new !== ''))) && (changes.new !== null || (changes.new === null && (changes.old !== null || changes.old !== ''))) && changes.old !== changes.new
+                              changes &&
+                                (changes.old !== '' ||
+                                  (changes.old === '' &&
+                                    (changes.new !== null ||
+                                      changes.new !== ''))) &&
+                                (changes.new !== null ||
+                                  (changes.new === null &&
+                                    (changes.old !== null ||
+                                      changes.old !== ''))) &&
+                                changes.old !== changes.new
                             "
                           >
                             <div class="log-title mb-1">{{ field }}</div>
@@ -170,7 +179,12 @@ export default {
         changes !== null &&
         changes.trim().length > 0
       ) {
-        return JSON.parse(changes);
+        try {
+          return JSON.parse(changes);
+        } catch (e) {
+          console.log(e);
+          return {};
+        }
       } else return {};
     }
   }
