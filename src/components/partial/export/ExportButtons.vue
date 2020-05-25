@@ -249,8 +249,11 @@ export default {
               else risString += "KW  - " + item.author_keywords.trim() + "\n";
             }
 
-            if (item.abstract)
-              risString += "AB  - " + item.abstract.trim() + "\n";
+            if (item.abstract) {
+              let abstractRegex = /(<\w+>|<\/\w+>)/g;
+              let newAbstract = item.abstract.trim().replace(abstractRegex, "");
+              risString += "AB  - " + newAbstract + "\n";
+            }
             risString += "ER  - \n";
           }
         });
