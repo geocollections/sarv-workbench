@@ -263,7 +263,8 @@
     "editSiteGroundwater": "Hüdrogeoloogia",
     "site_groundwater": "Hüdrogeoloogia",
     "sarv_issue": "Saada sõnum",
-    "sarv_issues": "Minu sõnumid"
+    "sarv_issues": "Minu sõnumid",
+    "admin": "Admin"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"

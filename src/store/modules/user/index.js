@@ -29,6 +29,14 @@ const getters = {
     if (getters.getPermissions && getters.getPermissions[table]) {
       return getters.getPermissions[table].includes(action);
     } else return false;
+  },
+
+  isUserSuperuser: state => {
+    return state.authUser?.is_superuser;
+  },
+
+  isUserStaff: staff => {
+    return state.authUser?.is_staff;
   }
 };
 

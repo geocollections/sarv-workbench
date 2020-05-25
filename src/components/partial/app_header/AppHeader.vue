@@ -110,6 +110,11 @@
               <v-list-item-title>{{ $t("header.settings") }}</v-list-item-title>
             </v-list-item>
 
+            <v-list-item :to="{ path: '/admin' }" v-if="isUserSuperuser">
+              <v-list-item-icon><v-icon>fa fa-user-shield</v-icon></v-list-item-icon>
+              <v-list-item-title>{{ $t("header.admin") }}</v-list-item-title>
+            </v-list-item>
+
             <v-list-item @click="logOut()">
               <v-list-item-icon
                 ><v-icon>fas fa-sign-out-alt</v-icon></v-list-item-icon
@@ -179,7 +184,7 @@ export default {
       "shortcuts",
       "lang"
     ]),
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getCurrentUser", "isUserSuperuser"])
   },
   watch: {
     drawer(newVal) {

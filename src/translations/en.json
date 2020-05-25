@@ -263,7 +263,8 @@
     "editSiteGroundwater": "Hydrogeology",
     "site_groundwater": "Hydrogeology",
     "sarv_issue": "Send a message",
-    "sarv_issues": "My messages"
+    "sarv_issues": "My messages",
+    "admin": "Admin"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"

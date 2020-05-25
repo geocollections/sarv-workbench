@@ -131,7 +131,7 @@
 
       <!-- TEST-DEV -->
       <v-list-item
-        v-if="isDevUrl && isDevUser"
+        v-if="isDevUrl && isUserSuperuser"
         :to="{ path: '/test-dev' }"
         :color="drawerActiveColor"
       >
@@ -577,6 +577,8 @@ export default {
     };
   },
   computed: {
+    ...mapGetters("user", ["isUserSuperuser"]),
+
     allowedRouteLinks() {
       return this.routeLinks.filter(link =>
         this.isUserAllowedTo("add", link.name)
@@ -630,15 +632,6 @@ export default {
       return (
         document.location.origin.includes("localhost") ||
         document.location.origin.includes("edit2")
-      );
-    },
-
-    isDevUser() {
-      return (
-        this.currentUser &&
-        (this.currentUser.user === "enar" ||
-          this.currentUser.user === "olle" ||
-          this.currentUser.user === "urtson")
       );
     },
 
