@@ -38,7 +38,7 @@ import "leaflet-fullscreen/dist/leaflet.fullscreen.css";
 import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
 import "leaflet-measure/dist/leaflet-measure";
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "MapComponent",
@@ -65,22 +65,6 @@ export default {
     showMap: {
       type: Boolean
     }
-  },
-
-  head: {
-    script: [
-      {
-        src:
-          "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js"
-      }
-    ],
-    link: [
-      {
-        href:
-          "https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css",
-        rel: "stylesheet"
-      }
-    ]
   },
 
   data() {
@@ -210,7 +194,7 @@ export default {
       );
     },
 
-    ...mapState(["mapSettings"])
+    ...mapState("map", ["defaultLayer"])
   },
 
   created() {
@@ -275,6 +259,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("map", ["updateDefaultLayer"]),
+
     initMap() {
       this.map = L.map("map", {
         layers: [this.tileProviders[0].leafletObject],
@@ -294,10 +280,10 @@ export default {
       L.control.scale({ imperial: false }).addTo(this.map);
 
       // Default layer
-      if (this.mapSettings && this.mapSettings.defaultLayer) {
+      if (this.defaultLayer) {
         this.map.removeLayer(baseLayers["OpenStreetMap"]);
-        this.map.addLayer(baseLayers[this.mapSettings.defaultLayer]);
-        if (this.mapSettings.defaultLayer === "Maaameti fotokaart") {
+        this.map.addLayer(baseLayers[this.defaultLayer]);
+        if (this.defaultLayer === "Maaameti fotokaart") {
           this.map.addLayer(this.overlayMaps[0].leafletObject);
         }
       }
@@ -329,7 +315,7 @@ export default {
     },
 
     handleLayerChange(event) {
-      this.$store.dispatch("updateMapDefaultLayer", event.name);
+      this.updateDefaultLayer(event.name);
 
       this.tileProviders.forEach(tile => {
         if (tile.name === event.name) {

@@ -8,6 +8,7 @@
 import * as L from "leaflet";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "PolygonMap",
@@ -54,25 +55,9 @@ export default {
         )
       },
       {
-        name: "Maaameti kaart",
+        name: "Maaameti fotokaart",
         leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/kaart/{z}/{x}/{y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
-          {
-            attribution:
-              "<a href='http://www.maaamet.ee/' target='MapReferenceWindow'>&copy; Maa-amet</a>",
-            tms: true,
-            detectRetina: true,
-            updateWhenIdle: true,
-            zIndex: 1,
-            worldCopyJump: true,
-            continuousWorld: true
-          }
-        )
-      },
-      {
-        name: "Maaameti Fotokaart",
-        leafletObject: L.tileLayer(
-          "https://tiles.maaamet.ee/tm/tms/1.0.0/foto/{z}/{x}/{y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+          "https://tiles.maaamet.ee/tm/tms/1.0.0/foto@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
           {
             attribution:
               "<a  href='http://www.maaamet.ee/' target='MapReferenceWindow'>&copy; Maa-amet</a>",
@@ -84,9 +69,49 @@ export default {
             continuousWorld: true
           }
         )
+      },
+      {
+        name: "Maaameti kaart",
+        leafletObject: L.tileLayer(
+          "https://tiles.maaamet.ee/tm/tms/1.0.0/kaart@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+          {
+            attribution:
+              "<a href='http://www.maaamet.ee/' target='MapReferenceWindow'>&copy; Maa-amet</a>",
+            tms: true,
+            detectRetina: true,
+            updateWhenIdle: true,
+            zIndex: 1,
+            worldCopyJump: true,
+            continuousWorld: true
+          }
+        )
+      }
+    ],
+    overlayMaps: [
+      {
+        name: "Maaameti hübriidkaart",
+        leafletObject: L.tileLayer(
+          "https://tiles.maaamet.ee/tm/tms/1.0.0/hybriid@GMC/{z}/{x}/{-y}.png&ASUTUS=TALTECH&KESKKOND=LIVE&IS=SARV",
+          {
+            attribution:
+              "Eesti kaardid: <a  href='http://www.maaamet.ee/'>Maa-amet</a>",
+            tms: true,
+            worldCopyJump: true,
+            detectRetina: true,
+            zIndex: 2,
+            updateWhenIdle: true,
+            continuousWorld: true
+          }
+        ),
+        minZoom: 6,
+        maxZoom: 18
       }
     ]
   }),
+
+  computed: {
+    ...mapState("map", ["defaultLayer"])
+  },
 
   mounted() {
     this.initMap();
@@ -120,6 +145,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("map", ["updateDefaultLayer"]),
+
     initMap() {
       this.map = L.map("polygon-map", {
         layers: [this.tileProviders[0].leafletObject],
@@ -135,9 +162,22 @@ export default {
       this.tileProviders.forEach(provider => {
         baseLayers[provider.name] = provider.leafletObject;
       });
+      let overlayMaps = {};
+      this.overlayMaps.forEach(
+        provider => (overlayMaps[provider.name] = provider.leafletObject)
+      );
 
-      L.control.layers(baseLayers).addTo(this.map);
+      L.control.layers(baseLayers, overlayMaps).addTo(this.map);
       L.control.scale({ imperial: false }).addTo(this.map);
+
+      // Default layer
+      if (this.defaultLayer) {
+        this.map.removeLayer(baseLayers["OpenStreetMap"]);
+        this.map.addLayer(baseLayers[this.defaultLayer]);
+        if (this.defaultLayer === "Maaameti fotokaart") {
+          this.map.addLayer(this.overlayMaps[0].leafletObject);
+        }
+      }
 
       if (!this.isViewOnly) {
         this.map.pm.addControls({
@@ -154,6 +194,9 @@ export default {
       }
 
       if (this.polygon) this.setPolygon(this.polygon);
+
+      //LAYERS CHANGED
+      this.map.on("baselayerchange", this.handleLayerChange);
     },
 
     handlePmCreate(event) {
@@ -234,6 +277,23 @@ export default {
         else return newCoordinates;
       } else {
         return "";
+      }
+    },
+
+    handleLayerChange(event) {
+      this.updateDefaultLayer(event.name);
+
+      if (event.name && event.name === "Maaameti fotokaart") {
+        console.log(this.overlayMaps[0].leafletObject);
+        this.map.addLayer(this.overlayMaps[0].leafletObject);
+        document.querySelector(
+          "#polygon-map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label > div > input"
+        ).checked = true;
+      } else {
+        this.map.removeLayer(this.overlayMaps[0].leafletObject);
+        document.querySelector(
+          "#polygon-map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label > div > input"
+        ).checked = false;
       }
     }
   }

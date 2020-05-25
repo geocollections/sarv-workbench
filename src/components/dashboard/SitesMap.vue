@@ -14,7 +14,7 @@ import {
   fetchRecentSites,
   fetchRecentSpecimens
 } from "../../assets/js/api/apiCalls";
-import { mapGetters, mapState } from "vuex";
+import {mapActions, mapGetters, mapState} from "vuex";
 
 export default {
   name: "SitesMap",
@@ -142,7 +142,7 @@ export default {
   }),
 
   computed: {
-    ...mapState("map", ["mapSettings"]),
+    ...mapState("map", ["defaultLayer"]),
     ...mapGetters("user", ["getCurrentUser"])
   },
 
@@ -181,6 +181,8 @@ export default {
   },
 
   methods: {
+    ...mapActions("map", ["updateDefaultLayer"]),
+
     async fetchRecentData(userId) {
       const recentSites = await fetchRecentSites(userId);
       const recentSamples = await fetchRecentSamples(userId);
@@ -226,10 +228,10 @@ export default {
       L.control.scale({ imperial: false }).addTo(this.map);
 
       // Default layer
-      if (this.mapSettings && this.mapSettings.defaultLayer) {
+      if (this.defaultLayer) {
         this.map.removeLayer(baseMaps["OpenStreetMap"]);
-        this.map.addLayer(baseMaps[this.mapSettings.defaultLayer]);
-        if (this.mapSettings.defaultLayer === "Maaameti fotokaart") {
+        this.map.addLayer(baseMaps[this.defaultLayer]);
+        if (this.defaultLayer === "Maaameti fotokaart") {
           this.map.addLayer(this.overlayMaps[0].leafletObject);
         }
       }
@@ -244,7 +246,7 @@ export default {
     },
 
     handleLayerChange(event) {
-      this.$store.dispatch("updateMapDefaultLayer", event.name);
+      this.updateDefaultLayer(event.name);
 
       if (event.name && event.name === "Maaameti fotokaart") {
         console.log(this.overlayMaps[0].leafletObject);
