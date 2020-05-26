@@ -60,6 +60,10 @@ const router = new Router({
           meta: {
             requiresAuth: true,
             object: "admin"
+          },
+          beforeEnter: (to, from, next) => {
+            if (store?.getters?.["user/isUserSuperuser"]) next();
+            else next("/");
           }
         },
         {

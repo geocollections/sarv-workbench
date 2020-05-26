@@ -14,7 +14,7 @@ import {
   fetchRecentSites,
   fetchRecentSpecimens
 } from "../../assets/js/api/apiCalls";
-import {mapActions, mapGetters, mapState} from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "SitesMap",
@@ -372,13 +372,16 @@ export default {
         });
       }
 
-      let bounds = new L.featureGroup([
+      let listOfDifferentItems = [
         ...this.sites,
         ...this.samples,
         ...this.specimens,
         ...this.images
-      ]).getBounds();
-      this.map.fitBounds(bounds, { maxZoom: 10 });
+      ];
+      if (listOfDifferentItems.length > 0) {
+        let bounds = new L.featureGroup(listOfDifferentItems).getBounds();
+        this.map.fitBounds(bounds, { maxZoom: 10 });
+      }
     }
   }
 };

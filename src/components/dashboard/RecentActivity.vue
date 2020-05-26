@@ -46,7 +46,7 @@
     </v-col>
 
     <!-- RECENTLY UPDATED -->
-    <v-col cols="12" md="6">
+    <v-col cols="12" md="6" class="mb-6">
       <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
         <v-card-title>
           <span>
