@@ -6,6 +6,7 @@ import map from "./modules/map";
 import search from "./modules/search";
 import settings from "./modules/settings";
 import user from "./modules/user";
+import admin from "./modules/admin";
 
 Vue.use(Vuex);
 
@@ -36,7 +37,8 @@ export default new Vuex.Store({
     map,
     search,
     settings,
-    user
+    user,
+    admin
   },
   plugins: [vuexLocal.plugin],
   strict: process.env.NODE_ENV !== "production"

@@ -274,7 +274,8 @@
     "help": "Help",
     "files": "Recent files",
     "sitesMap": "Recently visited/inserted objects",
-    "active":"Active"
+    "active":"Active",
+    "lastLogin":"Last login"
   },
   "settings": {
     "permissions": "My permissions",
@@ -1721,6 +1722,11 @@
     "message_answered": "You have already replied to the message!",
     "unanswered": "Unanswered",
     "activeIssues": "Active messages / issues"
+  },
+  "admin": {
+    "activeUsers": "Active users",
+    "user": "User",
+    "session_start": "Session start"
   },
   "permissions": {
     "title": "Data access permissions",

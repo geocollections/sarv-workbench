@@ -274,7 +274,8 @@
     "help": "Abi",
     "files": "Hiljutised failid",
     "sitesMap": "Viimati külastatud/sisestatud objektid",
-    "active":"Aktiivne"
+    "active":"Aktiivne",
+    "lastLogin":"Viimane sisselogimine"
   },
   "settings": {
     "permissions": "Minu õigused",
@@ -1721,6 +1722,11 @@
     "message_answered": "Sa oled juba sõnumile vastanud!",
     "unanswered": "Vastamata",
     "activeIssues": "Aktiivsed sõnumid / probleemid"
+  },
+  "admin": {
+    "activeUsers": "Aktiivseid kasutajaid",
+    "user": "Kasutajanimi",
+    "session_start": "Sessiooni algus"
   },
   "permissions": {
     "title": "Juurdepääsuõigused",

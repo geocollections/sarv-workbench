@@ -3852,8 +3852,28 @@ export function fetchSarvIssues(data, currentUserId) {
   }
 }
 
-/***********************
+/************************
  ***  SARV_ISSUE END  ***
+ ************************/
+
+/************************
+ *** SARV_SESSION START ***
+ ************************/
+
+export function fetchLastLoggedInDate(currentUserId) {
+  return get(
+    `sarv_session/?userid=${currentUserId}&order_by=-id&paginate_by=1&session_end!=null&format=json`
+  );
+}
+
+export function fetchCurrentlyActiveUsers() {
+  return get(
+    `sarv_session/?session_end=null&active=1&paginate_by=100&order_by=-session_start&format=json`
+  );
+}
+
+/************************
+ ***  SARV_SESSION END  ***
  ************************/
 
 /***************************

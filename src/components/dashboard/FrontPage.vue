@@ -12,7 +12,20 @@
                 }!`
               }}
             </span>
+
             <v-spacer></v-spacer>
+
+            <span
+              class="mx-2 align-self-start"
+              style="font-size: 12px"
+              v-if="getLastLoginDate"
+            >
+              <span>({{ $t("frontPage.lastLogin") }}: </span>
+              <span
+                >{{ getLastLoginDate | moment("MMMM Do YYYY HH:mm") }})</span
+              >
+            </span>
+
             <v-btn
               icon
               :to="{ path: '/settings' }"
@@ -27,7 +40,10 @@
     </v-row>
 
     <!-- MESSAGES -->
-    <v-row class="pb-6" v-if="activeSarvIssues !== null && activeSarvIssues.count > 0">
+    <v-row
+      class="pb-6"
+      v-if="activeSarvIssues !== null && activeSarvIssues.count > 0"
+    >
       <v-col>
         <messages
           :sarv-issues="activeSarvIssues"
@@ -219,7 +235,7 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["activeSarvIssues"]),
-    ...mapGetters("user", ["getCurrentUser"])
+    ...mapGetters("user", ["getCurrentUser", "getLastLoginDate"])
   },
 
   watch: {

@@ -48,10 +48,12 @@ export default {
   },
   created() {
     this.fetchActiveSarvIssues();
+    this.fetchLastLoggedInDate();
   },
   methods: {
     ...mapActions("settings", ["updateRecentUrls"]),
-    ...mapActions("search", ["fetchActiveSarvIssues"])
+    ...mapActions("search", ["fetchActiveSarvIssues"]),
+    ...mapActions("user", ["fetchLastLoggedInDate"])
   }
 };
 </script>

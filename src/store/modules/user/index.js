@@ -1,5 +1,8 @@
+import { fetchLastLoggedInDate } from "../../../assets/js/api/apiCalls";
+
 const state = {
-  authUser: null
+  authUser: null,
+  lastLogin: null
 };
 
 const getters = {
@@ -37,6 +40,10 @@ const getters = {
 
   isUserStaff: staff => {
     return state.authUser?.is_staff;
+  },
+
+  getLastLoginDate: state => {
+    return state.lastLogin?.session_start;
   }
 };
 
@@ -47,12 +54,24 @@ const actions = {
 
   removeAuthUser({ commit }) {
     commit("SET_AUTH_USER", null);
+  },
+
+  fetchLastLoggedInDate({ commit, rootGetters }) {
+    return fetchLastLoggedInDate(rootGetters["user/getUserId"]).then(resp => {
+      commit("SET_LAST_LOGIN", resp);
+    });
   }
 };
 
 const mutations = {
   SET_AUTH_USER(state, payload) {
     state.authUser = payload;
+  },
+
+  SET_LAST_LOGIN(state, payload) {
+    if (payload?.data?.results && payload?.data?.results.length === 1) {
+      state.lastLogin = payload.data.results[0];
+    }
   }
 };
 
