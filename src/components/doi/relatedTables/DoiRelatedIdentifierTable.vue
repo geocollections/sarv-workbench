@@ -38,16 +38,6 @@
         </v-btn>
       </template>
 
-      <template v-slot:item.relation_type="{ item }">
-        <div v-if="isUsedAsRelatedData">
-          <span v-if="$route.meta.isEdit">{{ item.relation_type__value }}</span>
-          <span v-else-if="item.relation_type">{{
-            item.relation_type.value
-          }}</span>
-        </div>
-        <div v-else>{{ item.relation_type__value }}</div>
-      </template>
-
       <template v-slot:item.identifier_type="{ item }">
         <div v-if="isUsedAsRelatedData">
           <span v-if="$route.meta.isEdit">{{
@@ -58,6 +48,16 @@
           }}</span>
         </div>
         <div v-else>{{ item.identifier_type__value }}</div>
+      </template>
+
+      <template v-slot:item.relation_type="{ item }">
+        <div v-if="isUsedAsRelatedData">
+          <span v-if="$route.meta.isEdit">{{ item.relation_type__value }}</span>
+          <span v-else-if="item.relation_type">{{
+            item.relation_type.value
+          }}</span>
+        </div>
+        <div v-else>{{ item.relation_type__value }}</div>
       </template>
     </v-data-table>
 
@@ -80,24 +80,24 @@
               <v-row>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
-                    v-model="item.relation_type"
-                    :color="bodyActiveColor"
-                    :items="autocomplete.relation_type"
-                    :loading="autocomplete.loaders.relation_type"
-                    item-text="value"
-                    :label="$t('doi.relatedType')"
-                    use-state
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <autocomplete-wrapper
                     v-model="item.identifier_type"
                     :color="bodyActiveColor"
                     :items="autocomplete.identifier_type"
                     :loading="autocomplete.loaders.identifier_type"
                     item-text="value"
                     :label="$t('doi.identifierType')"
+                    use-state
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <autocomplete-wrapper
+                    v-model="item.relation_type"
+                    :color="bodyActiveColor"
+                    :items="autocomplete.relation_type"
+                    :loading="autocomplete.loaders.relation_type"
+                    item-text="value"
+                    :label="$t('doi.relatedType')"
                     use-state
                   />
                 </v-col>
@@ -197,8 +197,8 @@ export default {
 
   data: () => ({
     headers: [
-      { text: "doi.relatedType", value: "relation_type" },
       { text: "doi.identifierType", value: "identifier_type" },
+      { text: "doi.relatedType", value: "relation_type" },
       { text: "doi.value", value: "value" },
       { text: "common.remarks", value: "remarks" },
       {
@@ -210,18 +210,18 @@ export default {
     ],
     dialog: false,
     item: {
-      relation_type: null,
       identifier_type: null,
+      relation_type: null,
       value: "",
       remarks: ""
     },
     isNewItem: true,
     autocomplete: {
-      relation_type: [],
       identifier_type: [],
+      relation_type: [],
       loaders: {
-        relation_type: false,
-        identifier_type: false
+        identifier_type: false,
+        relation_type: false
       }
     }
   }),
@@ -238,10 +238,10 @@ export default {
 
     isItemValid() {
       return (
-        typeof this.item.relation_type !== "undefined" &&
-        this.item.relation_type !== null &&
         typeof this.item.identifier_type !== "undefined" &&
-        this.item.identifier_type !== null
+        this.item.identifier_type !== null &&
+        typeof this.item.relation_type !== "undefined" &&
+        this.item.relation_type !== null
       );
     }
   },
@@ -257,8 +257,8 @@ export default {
       this.dialog = false;
       this.isNewItem = true;
       this.item = {
-        relation_type: null,
         identifier_type: null,
+        relation_type: null,
         value: "",
         remarks: ""
       };
@@ -291,17 +291,6 @@ export default {
       // else this.item.onEditIndex = this.response.results.indexOf(item);
 
       if (
-        typeof item.relation_type !== "object" &&
-        item.relation_type !== null
-      ) {
-        this.item.relation_type = {
-          id: item.relation_type,
-          value: item.relation_type__value,
-          value_en: item.relation_type__value_en
-        };
-      } else this.item.relation_type = item.relation_type;
-
-      if (
         typeof item.identifier_type !== "object" &&
         item.identifier_type !== null
       ) {
@@ -311,6 +300,17 @@ export default {
           value_en: item.identifier_type__value_en
         };
       } else this.item.identifier_type = item.identifier_type;
+
+      if (
+        typeof item.relation_type !== "object" &&
+        item.relation_type !== null
+      ) {
+        this.item.relation_type = {
+          id: item.relation_type,
+          value: item.relation_type__value,
+          value_en: item.relation_type__value_en
+        };
+      } else this.item.relation_type = item.relation_type;
 
       this.item.value = item.value;
       this.item.remarks = item.remarks;
@@ -327,25 +327,25 @@ export default {
     },
 
     fillListAutocompletes() {
-      if (this.autocomplete.relation_type.length <= 1) {
-        this.autocomplete.loaders.relation_type = true;
-        fetchDoiRelatedIdentifierType().then(response => {
-          if (response.status === 200) {
-            this.autocomplete.relation_type =
-              response.data.count > 0 ? response.data.results : [];
-          }
-        });
-        this.autocomplete.loaders.relation_type = false;
-      }
-      if (this.autocomplete.identifier_type.length === 0) {
+      if (this.autocomplete.identifier_type.length <= 1) {
         this.autocomplete.loaders.identifier_type = true;
-        fetchDoiRelationType().then(response => {
+        fetchDoiRelatedIdentifierType().then(response => {
           if (response.status === 200) {
             this.autocomplete.identifier_type =
               response.data.count > 0 ? response.data.results : [];
           }
         });
         this.autocomplete.loaders.identifier_type = false;
+      }
+      if (this.autocomplete.relation_type.length === 0) {
+        this.autocomplete.loaders.relation_type = true;
+        fetchDoiRelationType().then(response => {
+          if (response.status === 200) {
+            this.autocomplete.relation_type =
+              response.data.count > 0 ? response.data.results : [];
+          }
+        });
+        this.autocomplete.loaders.relation_type = false;
       }
     },
 
