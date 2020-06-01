@@ -2,6 +2,7 @@
   <div class="input-class">
     <v-autocomplete
       background-color="white"
+      :class="bodyColor.split('n-')[0] + 'n-5'"
       clearable
       clear-icon="fas fa-times"
       dense
@@ -65,6 +66,8 @@
 </template>
 
 <script>
+import {mapState} from "vuex";
+
 export default {
   name: "AutocompleteWrapper",
   inheritAttrs: false,
@@ -82,6 +85,8 @@ export default {
     search: null
   }),
   computed: {
+    ...mapState("settings", ["bodyColor"]),
+
     isValidLink() {
       if (this.isLink) {
         if (this.routeObject && this.routeObject.trim().length > 0) {

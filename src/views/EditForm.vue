@@ -131,7 +131,8 @@ export default {
         "drillcore",
         "drillcore_box",
         "dataset",
-        "sample_series"
+        "sample_series",
+        "location"
         // "attachment",
         // "collection",
         // "specimen",
