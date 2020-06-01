@@ -186,10 +186,12 @@ import {
   fetchUsers,
   postRequest
 } from "../../assets/js/api/apiCalls";
+import toastMixin from "../../mixins/toastMixin";
 
 export default {
   name: "ObjectPermissions",
   components: { AutocompleteWrapper },
+  mixins: [toastMixin],
   props: {
     table: {
       type: String,
