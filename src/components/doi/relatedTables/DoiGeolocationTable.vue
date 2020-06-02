@@ -107,7 +107,7 @@
             $t("buttons.add_new")
           }}</v-btn>
         </template>
-        <v-card>
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title>
             <span class="headline">{{ $t("header.doi_geolocation") }}</span>
           </v-card-title>
@@ -207,7 +207,7 @@
         max-width="500px"
         style="z-index: 51000;"
       >
-        <v-card>
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title class="headline">{{
             $t("doi.polygonMap")
           }}</v-card-title>

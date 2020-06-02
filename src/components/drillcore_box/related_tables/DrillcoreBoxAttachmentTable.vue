@@ -76,7 +76,7 @@
 
     <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
       <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
-        <v-card>
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title>
             <span class="headline">{{ $t("header.attachment") }}</span>
           </v-card-title>

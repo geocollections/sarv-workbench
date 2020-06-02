@@ -7,7 +7,7 @@
         style="z-index: 50000"
         persistent
       >
-        <v-card>
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title
             class="title text-center"
             :class="bodyColor.split('n-')[0] + 'n-5'"

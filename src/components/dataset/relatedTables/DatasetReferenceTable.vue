@@ -78,7 +78,7 @@
             $t("buttons.add_new")
           }}</v-btn>
         </template>
-        <v-card>
+        <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title>
             <span class="headline">{{ $t("header.dataset_reference") }}</span>
           </v-card-title>

@@ -453,7 +453,10 @@
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
+<!--      {{ activeTab }}-->
+<!--      {{ tabIndex }}-->
       <v-tabs
+        v-model="tabIndex"
         :background-color="bodyColor.split('n-')[0] + 'n-3'"
         show-arrows
         grow
@@ -463,7 +466,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in relatedTabs"
+          v-for="tab in computedRelatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -481,147 +484,144 @@
         </v-tab>
       </v-tabs>
 
-      <v-tabs-items>
-        <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
-          <specimen-identification-table
-            v-show="
-              specimen.fossil &&
-                (specimen.fossil.id === 1 || specimen.fossil.id === 7) &&
-                activeTab === 'specimen_identification'
-            "
-            :response="relatedData.specimen_identification"
-            :search-parameters="
-              relatedData.searchParameters.specimen_identification
-            "
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
-
-          <specimen-identification-geology-table
-            v-show="
-              specimen.fossil &&
-                specimen.fossil.id !== 1 &&
-                specimen.fossil.id !== 7 &&
-                activeTab === 'specimen_identification_geology'
-            "
-            :response="relatedData.specimen_identification_geology"
-            :search-parameters="
-              relatedData.searchParameters.specimen_identification_geology
-            "
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
-
-          <specimen-reference-table
-            v-show="activeTab === 'specimen_reference'"
-            :response="relatedData.specimen_reference"
-            :search-parameters="relatedData.searchParameters.specimen_reference"
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
-
-          <specimen-description-table
-            v-show="activeTab === 'specimen_description'"
-            :response="relatedData.specimen_description"
-            :search-parameters="
-              relatedData.searchParameters.specimen_description
-            "
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
-
-          <div v-show="activeTab === 'attachment'">
-            <file-upload
-              show-existing
-              :files-from-object="relatedData.attachment.results"
-              v-on:update:existing-files="addExistingFiles"
-              v-on:file-uploaded="addFiles"
-              accept-multiple
-              :record-options="$route.meta.isEdit"
-              :is-draggable="$route.meta.isEdit"
+      <v-tabs-items v-model="tabIndex">
+        <v-tab-item v-for="tab in computedRelatedTabs" :key="tab.name">
+          <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
+            <specimen-identification-table
+              v-show="activeTab === 'specimen_identification'"
+              :response="relatedData.specimen_identification"
+              :search-parameters="
+                relatedData.searchParameters.specimen_identification
+              "
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
             />
-          </div>
 
-          <specimen-location-table
-            v-show="activeTab === 'specimen_location'"
-            :response="relatedData.specimen_location"
-            :search-parameters="relatedData.searchParameters.specimen_location"
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
+            <specimen-identification-geology-table
+              v-show="activeTab === 'specimen_identification_geology'"
+              :response="relatedData.specimen_identification_geology"
+              :search-parameters="
+                relatedData.searchParameters.specimen_identification_geology
+              "
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
+            />
 
-          <specimen-history-table
-            v-show="activeTab === 'specimen_history'"
-            :response="relatedData.specimen_history"
-            :search-parameters="relatedData.searchParameters.specimen_history"
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
+            <specimen-reference-table
+              v-show="activeTab === 'specimen_reference'"
+              :response="relatedData.specimen_reference"
+              :search-parameters="
+                relatedData.searchParameters.specimen_reference
+              "
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
+            />
 
-          <specimen-analysis-table
-            v-show="activeTab === 'analysis'"
-            :response="relatedData.analysis"
-            :search-parameters="relatedData.searchParameters.analysis"
-            :body-color="bodyColor"
-            :body-active-color="bodyActiveColor"
-            v-on:related:add="addRelatedItem"
-            v-on:related:edit="editRelatedItem"
-            v-on:related:delete="deleteRelatedItem"
-          />
+            <specimen-description-table
+              v-show="activeTab === 'specimen_description'"
+              :response="relatedData.specimen_description"
+              :search-parameters="
+                relatedData.searchParameters.specimen_description
+              "
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
+            />
 
-          <!-- PAGINATION -->
-          <div
-            v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
-            class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
-          >
-            <div class="mr-3 mb-3">
-              <v-select
-                v-model="relatedData.searchParameters[activeTab].paginateBy"
-                :color="bodyActiveColor"
-                dense
-                :items="paginateByOptionsTranslated"
-                :item-color="bodyActiveColor"
-                label="Paginate by"
-                hide-details
+            <div v-show="activeTab === 'attachment'">
+              <file-upload
+                show-existing
+                :files-from-object="relatedData.attachment.results"
+                v-on:update:existing-files="addExistingFiles"
+                v-on:file-uploaded="addFiles"
+                accept-multiple
+                :record-options="$route.meta.isEdit"
+                :is-draggable="$route.meta.isEdit"
               />
             </div>
 
-            <div>
-              <v-pagination
-                v-model="relatedData.searchParameters[activeTab].page"
-                :color="bodyActiveColor"
-                circle
-                prev-icon="fas fa-angle-left"
-                next-icon="fas fa-angle-right"
-                :length="
-                  Math.ceil(
-                    relatedData[activeTab].count /
-                      relatedData.searchParameters[activeTab].paginateBy
-                  )
-                "
-                :total-visible="5"
-              />
+            <specimen-location-table
+              v-show="activeTab === 'specimen_location'"
+              :response="relatedData.specimen_location"
+              :search-parameters="
+                relatedData.searchParameters.specimen_location
+              "
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
+            />
+
+            <specimen-history-table
+              v-show="activeTab === 'specimen_history'"
+              :response="relatedData.specimen_history"
+              :search-parameters="relatedData.searchParameters.specimen_history"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
+            />
+
+            <specimen-analysis-table
+              v-show="activeTab === 'analysis'"
+              :response="relatedData.analysis"
+              :search-parameters="relatedData.searchParameters.analysis"
+              :body-color="bodyColor"
+              :body-active-color="bodyActiveColor"
+              v-on:related:add="addRelatedItem"
+              v-on:related:edit="editRelatedItem"
+              v-on:related:delete="deleteRelatedItem"
+            />
+
+            <!-- PAGINATION -->
+            <div
+              v-if="$route.meta.isEdit && relatedData[activeTab].count > 10"
+              class="d-flex flex-column justify-space-around flex-md-row justify-md-space-between d-print-none pa-1 mt-2"
+            >
+              <div class="mr-3 mb-3">
+                <v-select
+                  v-model="relatedData.searchParameters[activeTab].paginateBy"
+                  :color="bodyActiveColor"
+                  dense
+                  :items="paginateByOptionsTranslated"
+                  :item-color="bodyActiveColor"
+                  label="Paginate by"
+                  hide-details
+                />
+              </div>
+
+              <div>
+                <v-pagination
+                  v-model="relatedData.searchParameters[activeTab].page"
+                  :color="bodyActiveColor"
+                  circle
+                  prev-icon="fas fa-angle-left"
+                  next-icon="fas fa-angle-right"
+                  :length="
+                    Math.ceil(
+                      relatedData[activeTab].count /
+                        relatedData.searchParameters[activeTab].paginateBy
+                    )
+                  "
+                  :total-visible="5"
+                />
+              </div>
             </div>
-          </div>
-        </v-card>
+          </v-card>
+        </v-tab-item>
       </v-tabs-items>
     </v-card>
 
@@ -824,18 +824,15 @@ export default {
       return this.relatedTabs.filter(tab => {
         if (tab.name === "specimen_identification") {
           if (
-            this.specimen &&
-            this.specimen.fossil &&
-            (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7)
+            this.specimen?.fossil?.id === 1 ||
+            this.specimen?.fossil?.id === 7
           ) {
             return tab;
           }
         } else if (tab.name === "specimen_identification_geology") {
           if (
-            this.specimen &&
-            this.specimen.fossil &&
-            this.specimen.fossil.id !== 1 &&
-            this.specimen.fossil.id !== 7
+            this.specimen?.fossil?.id !== 1 &&
+            this.specimen?.fossil?.id !== 7
           ) {
             return tab;
           }
@@ -859,6 +856,7 @@ export default {
 
     setTab(type) {
       if (type) {
+        // console.log(this.computedRelatedTabs)
         this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
@@ -869,6 +867,7 @@ export default {
 
     setInitialData() {
       return {
+        tabIndex: null,
         relatedTabs: [
           { name: "specimen_identification", iconClass: "fas fa-atlas" },
           { name: "specimen_identification_geology", iconClass: "far fa-gem" },
@@ -1020,13 +1019,10 @@ export default {
             this.setLoadingState(false);
 
             // Set default tab
-            if (
-              this.isNotEmpty(this.specimen) &&
-              this.isNotEmpty(this.specimen.fossil)
-            ) {
+            if (this.specimen?.fossil) {
               if (
-                this.specimen.fossil.id === 1 ||
-                this.specimen.fossil.id === 7
+                this.specimen?.fossil?.id === 1 ||
+                this.specimen?.fossil?.id === 7
               ) {
                 if (
                   this.activeRelatedDataTab &&
@@ -1060,11 +1056,8 @@ export default {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
 
         // Set default tab
-        if (
-          this.isNotEmpty(this.specimen) &&
-          this.isNotEmpty(this.specimen.fossil)
-        ) {
-          if (this.specimen.fossil.id === 1 || this.specimen.fossil.id === 7) {
+        if (this.specimen?.fossil) {
+          if (this.specimen?.fossil?.id === 1 || this.specimen?.fossil?.id === 7) {
             if (
               this.activeRelatedDataTab &&
               this.activeRelatedDataTab !== "specimen_identification_geology"
