@@ -664,6 +664,14 @@
             </v-col>
 
             <v-col cols="12" class="pa-1">
+              <textarea-wrapper
+                v-model="specimen.remarks_internal"
+                :color="bodyActiveColor"
+                :label="$t('specimen.remarks_internal')"
+              />
+            </v-col>
+
+            <v-col cols="12" class="pa-1">
               <input-wrapper
                 v-model="specimen.tags"
                 :color="bodyActiveColor"
