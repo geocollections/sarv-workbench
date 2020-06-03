@@ -1737,15 +1737,15 @@ export function fetchSpecimens(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `multi_search=value:${
-      data.idSpecimen
-    };fields:id,specimen_id,specimen_nr;lookuptype:${data.idSpecimen__lookuptype ||
-      "icontains"}`;
+    searchFields += `&id__${data.idSpecimen__lookuptype ||
+      "icontains"}=${data.idSpecimen}`;
   }
 
   if (data.specimenNr && data.specimenNr.trim().length > 0) {
-    searchFields += `&specimen_nr__${data.specimenNr__lookuptype ||
-      "icontains"}=${data.specimenNr}`;
+    searchFields += `multi_search=value:${
+      data.specimenNr
+    };fields:specimen_id,specimen_nr;lookuptype:${data.specimenNr__lookuptype ||
+      "icontains"}`;
   }
 
   if (data.collNumber && data.collNumber.trim().length > 0) {
