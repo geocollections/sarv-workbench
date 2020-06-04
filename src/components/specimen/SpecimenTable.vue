@@ -328,10 +328,20 @@ export default {
           }
 
           if (taxonList.length > 0 && rockList.length > 0) {
-            rockList.forEach(taxon => {
-              let item = taxonList.find(rock => taxon.id === rock.id);
-              item ? this.names.push(item) : this.names.push(taxon);
+            rockList.forEach(rock => {
+              let item = taxonList.find(taxon => rock.id === taxon.id);
+              item ? this.names.push(item) : this.names.push(rock);
             });
+
+            taxonList.forEach(taxonItem => {
+              let secondItem = rockList.find(
+                rockItem => taxonItem.id === rockItem.id
+              );
+              secondItem
+                ? this.names.push(secondItem)
+                : this.names.push(taxonItem);
+            });
+            console.log(this.names);
           } else if (taxonList.length > 0) this.names = taxonList;
           else if (rockList.length > 0) this.names = rockList;
         }
