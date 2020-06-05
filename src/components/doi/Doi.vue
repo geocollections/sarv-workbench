@@ -979,7 +979,7 @@ export default {
         });
       } else if (this.$route.meta.isEGF && !this.$route.meta.isEdit) {
         fetchDoiUsingEGF(this.$route.params.id).then(response => {
-          if (response) this.assignEgfFieldsToDoiObject(response);
+          if (response?.data) this.assignEgfFieldsToDoiObject(response?.data);
           else
             this.toastError({
               text: `Couldn't fetch <b>Fond</b> with an ID: <b>${this.$route.params.id}</b>`
@@ -1717,6 +1717,14 @@ export default {
             this.doi.remarks.length > 0
               ? ", " + egfDoiObject.restricted_reason
               : egfDoiObject.restricted_reason;
+        if (
+          egfDoiObject.min_resource &&
+          egfDoiObject.min_resource.trim().length > 0
+        )
+          this.doi.remarks +=
+            this.doi.remarks.length > 0
+              ? ", " + egfDoiObject.min_resource
+              : egfDoiObject.min_resource;
         if (egfDoiObject.geometry) {
           if (
             egfDoiObject.geometry.coordinates &&

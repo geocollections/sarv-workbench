@@ -16,7 +16,7 @@ const attachmentFields =
 
 // Add a request interceptor
 axios.interceptors.request.use(function(config) {
-  if (config.url.includes("rwapi")) {
+  if (config.url.includes("rwapi") && !config.url.includes("/egf/")) {
     let csrftoken = Vue.$cookies.get("csrftoken");
     config.withCredentials = true;
     config.headers["X-CSRFTOKEN"] = csrftoken;
