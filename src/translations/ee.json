@@ -1721,7 +1721,8 @@
     "replied": "Vastatud",
     "message_answered": "Sa oled juba sõnumile vastanud!",
     "unanswered": "Vastamata",
-    "activeIssues": "Aktiivsed sõnumid / probleemid"
+    "activeIssues": "Aktiivsed sõnumid / probleemid",
+    "answer": "Vasta"
   },
   "admin": {
     "activeUsers": "Aktiivseid kasutajaid",

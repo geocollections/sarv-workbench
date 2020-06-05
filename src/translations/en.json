@@ -1721,7 +1721,8 @@
     "replied": "Replied",
     "message_answered": "You have already replied to the message!",
     "unanswered": "Unanswered",
-    "activeIssues": "Active messages / issues"
+    "activeIssues": "Active messages / issues",
+    "answer": "Reply"
   },
   "admin": {
     "activeUsers": "Active users",

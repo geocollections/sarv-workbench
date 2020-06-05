@@ -75,6 +75,20 @@
           <div class="text-right">
             {{ entity.date_added | moment("MMMM Do YYYY HH:mm") }}
           </div>
+
+          <v-btn
+            :to="{ path: '/sarv_issue/' + entity.id }"
+            :title="$t('editSarvIssue.editMessage')"
+            class="text-right"
+            elevation="2"
+            absolute
+            x-small
+            :color="bodyActiveColor"
+            style="right: 8px;"
+          >
+            {{ $t("sarv_issue.answer") }}
+            <v-icon x-small class="ml-1">fas fa-reply</v-icon>
+          </v-btn>
         </div>
       </v-alert>
     </div>
