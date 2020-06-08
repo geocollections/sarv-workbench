@@ -11,7 +11,6 @@ const state = {
   digitisedReferenceKeywords: null,
   imagesetDetail: null,
   referenceDetail: null,
-  specimenDetail: null,
   collectionDetail: null,
   initialEditViewDataHasChangedState: false
 };

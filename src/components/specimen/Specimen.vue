@@ -794,12 +794,6 @@ export default {
         object: "specimen",
         field: "specimen_id"
       });
-    } else {
-      // Adding specimen default values from local storage
-      const specimenHistory = cloneDeep(this.specimenDetail);
-      if (specimenHistory) {
-        this.specimen = specimenHistory;
-      }
     }
 
     this.loadFullInfo();
@@ -826,7 +820,6 @@ export default {
     ...mapState("search", {
       activeRelatedDataTab: state => state.activeRelatedDataTab.specimen
     }),
-    ...mapState("detail", ["specimenDetail"]),
 
     computedRelatedTabs() {
       return this.relatedTabs.filter(tab => {
@@ -1190,8 +1183,6 @@ export default {
 
       // Todo: Api doesn't save specimen_nr and throws error
       delete uploadableObject.specimen_nr;
-      if (!this.$route.meta.isEdit)
-        this.saveFields({ key: "specimenDetail", value: objectToUpload });
 
       Object.keys(uploadableObject).forEach(key => {
         if (
