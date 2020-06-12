@@ -1731,6 +1731,8 @@ export default {
             egfDoiObject.geometry.coordinates.length > 0
           ) {
             if (egfDoiObject.geometry.type === "Polygon") {
+              this.swapCoordinates(egfDoiObject.geometry.coordinates[0]);
+
               let coordinates = JSON.stringify(
                 egfDoiObject.geometry.coordinates[0]
               );
@@ -1740,6 +1742,8 @@ export default {
               });
             } else if (egfDoiObject.geometry.type === "MultiPolygon") {
               egfDoiObject.geometry.coordinates.forEach(coordinates => {
+                this.swapCoordinates(coordinates[0]);
+
                 this.relatedData.doi_geolocation.count++;
                 this.relatedData.doi_geolocation.results.push({
                   polygon: JSON.stringify(coordinates[0])
@@ -1748,6 +1752,20 @@ export default {
             }
           }
         }
+      }
+    },
+
+    swapCoordinates(arr) {
+      if (arr && arr.length > 0) {
+        arr.forEach(el => this.swapArrayElements(el, 0, 1));
+      }
+    },
+
+    swapArrayElements(arr, indexA, indexB) {
+      if (arr && arr[indexA] && arr[indexB]) {
+        let temp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = temp;
       }
     },
 
