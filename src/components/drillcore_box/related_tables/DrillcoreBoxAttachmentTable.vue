@@ -68,8 +68,8 @@
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
 
-      <template v-slot:item.is_wet="{ item }">
-        <v-icon v-if="item.is_wet" color="green" small>fas fa-check</v-icon>
+      <template v-slot:item.boolean1="{ item }">
+        <v-icon v-if="item.boolean1" color="green" small>fas fa-check</v-icon>
         <v-icon v-else color="red" small>fas fa-times</v-icon>
       </template>
     </v-data-table>
@@ -95,10 +95,10 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
-                    v-model="item.is_wet"
+                    v-model="item.boolean1"
                     :color="bodyActiveColor"
                     :label="$t('drillcore_box.is_wet')"
-                    @change="item.is_wet = !item.is_wet"
+                    @change="item.boolean1 = !item.boolean1"
                   />
                 </v-col>
               </v-row>
@@ -170,7 +170,7 @@ export default {
     headers: [
       { text: "drillcore_box.attachment", value: "id" },
       { text: "drillcore_box.is_preferred", value: "is_preferred" },
-      { text: "drillcore_box.is_wet", value: "is_wet" },
+      { text: "drillcore_box.is_wet", value: "boolean1" },
       {
         text: "common.actions",
         value: "action",
@@ -181,7 +181,7 @@ export default {
     dialog: false,
     item: {
       is_preferred: false,
-      is_wet: false
+      boolean1: false
     },
     widths: {}
   }),
@@ -215,12 +215,11 @@ export default {
       this.dialog = false;
       this.item = {
         is_preferred: false,
-        is_wet: false
+        boolean1: false
       };
     },
 
     addItem() {
-      delete this.item.is_wet; // Todo: functionality needs implementing
       let clonedItem = cloneDeep(this.item);
       let formattedItem = this.formatItem(clonedItem);
 
@@ -236,7 +235,7 @@ export default {
       if (this.$route.meta.isEdit) this.item.id = item.id;
 
       this.item.is_preferred = item.is_preferred;
-      // this.item.is_wet = item.is_wet; Todo: functionality needs implementing
+      this.item.boolean1 = item.boolean1;
 
       this.dialog = true;
     },
