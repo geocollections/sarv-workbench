@@ -713,6 +713,7 @@ import DoiGeolocationTable from "./relatedTables/DoiGeolocationTable";
 import DoiAgentTable from "./relatedTables/DoiAgentTable";
 import DoiDateTable from "./relatedTables/DoiDateTable";
 import requestsMixin from "../../mixins/requestsMixin";
+import toastMixin from "../../mixins/toastMixin";
 
 export default {
   components: {
@@ -749,7 +750,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
+    toastMixin
   ],
 
   name: "Doi",
