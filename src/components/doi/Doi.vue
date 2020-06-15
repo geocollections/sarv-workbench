@@ -1603,21 +1603,27 @@ export default {
           }
 
           let formattedCreatorsList = [];
-          creatorsList.forEach(creator => {
-            let firstName = creator.substring(0, creator.lastIndexOf(".") + 1);
-            let lastName = creator.substring(creator.lastIndexOf(".") + 1);
-            let formattedName = `${lastName.trim()}, ${firstName.trim()}`;
-            formattedCreatorsList.push(formattedName);
+          if (creatorsList && creatorsList.length > 0) {
+            creatorsList.forEach(creator => {
+              let firstName = creator.substring(0, creator.lastIndexOf(".") + 1);
+              let lastName = creator.substring(creator.lastIndexOf(".") + 1);
+              let formattedName = `${lastName.trim()}, ${firstName.trim()}`;
+              formattedCreatorsList.push(formattedName);
 
-            this.relatedData.doi_agent.count++;
-            this.relatedData.doi_agent.results.push({
-              name: formattedName,
-              agent_type: 1,
-              agent_type__value: "Creator"
+              this.relatedData.doi_agent.count++;
+              this.relatedData.doi_agent.results.push({
+                affiliation: "",
+                orcid: "",
+                name: formattedName,
+                agent: null,
+                agent_type: 1,
+                agent_type__value: "Creator"
+              });
             });
-          });
 
-          this.doi.creators = formattedCreatorsList.join("; ");
+            this.doi.creators = formattedCreatorsList.join("; ");
+          }
+
         }
         if (egfDoiObject.title) {
           this.doi.title = egfDoiObject.title;
@@ -1673,14 +1679,18 @@ export default {
             funderList = egfDoiObject.funder.split(",");
           else funderList.push(egfDoiObject.funder);
 
-          funderList.forEach(funder => {
-            this.relatedData.doi_agent.count++;
-            this.relatedData.doi_agent.results.push({
-              name: funder,
-              agent_type: 22,
-              agent_type__value: "Sponsor"
+          if (funderList && funderList.length > 0) {
+            funderList.forEach(funder => {
+              this.relatedData.doi_agent.count++;
+              this.relatedData.doi_agent.results.push({
+                affiliation: "",
+                orcid: "",
+                name: funder,
+                agent_type: 22,
+                agent_type__value: "Sponsor"
+              });
             });
-          });
+          }
         }
         if (egfDoiObject.performer) {
           let performerList = [];
@@ -1688,14 +1698,18 @@ export default {
             performerList = egfDoiObject.performer.split(",");
           else performerList.push(egfDoiObject.performer);
 
-          performerList.forEach(performer => {
-            this.relatedData.doi_agent.count++;
-            this.relatedData.doi_agent.results.push({
-              name: performer,
-              agent_type: 12,
-              agent_type__value: "Producer"
+          if (performerList && performerList.length > 0) {
+            performerList.forEach(performer => {
+              this.relatedData.doi_agent.count++;
+              this.relatedData.doi_agent.results.push({
+                affiliation: "",
+                orcid: "",
+                name: performer,
+                agent_type: 12,
+                agent_type__value: "Producer"
+              });
             });
-          });
+          }
         }
         if (
           egfDoiObject.emk_protocol &&

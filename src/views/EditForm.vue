@@ -4,6 +4,8 @@
       <div class="">
         <p class="h2 float-left mb-1 mr-2">
           {{ $t($route.meta.heading) }}: <b>{{ $route.params.id }}</b>
+
+          <span>{{ data.egf }}</span>
         </p>
       </div>
       <div class=" text-right">
