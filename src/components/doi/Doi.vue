@@ -863,7 +863,8 @@ export default {
           "is_private",
           "is_locked",
           "datacite_created",
-          "datacite_updated"
+          "datacite_updated",
+          "egf"
         ],
         autocomplete: {
           loaders: {
@@ -1056,6 +1057,8 @@ export default {
 
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
+
+      if (uploadableObject.egf) delete uploadableObject.egf;
 
       Object.keys(uploadableObject).forEach(key => {
         if (
@@ -1607,7 +1610,10 @@ export default {
           let formattedCreatorsList = [];
           if (creatorsList && creatorsList.length > 0) {
             creatorsList.forEach(creator => {
-              let firstName = creator.substring(0, creator.lastIndexOf(".") + 1);
+              let firstName = creator.substring(
+                0,
+                creator.lastIndexOf(".") + 1
+              );
               let lastName = creator.substring(creator.lastIndexOf(".") + 1);
               let formattedName = `${lastName.trim()}, ${firstName.trim()}`;
               formattedCreatorsList.push(formattedName);
@@ -1628,7 +1634,6 @@ export default {
 
             this.doi.creators = formattedCreatorsList.join("; ");
           }
-
         }
         if (egfDoiObject.title) {
           this.doi.title = egfDoiObject.title;
@@ -1646,14 +1651,19 @@ export default {
             value_en: "English"
           };
         }
-        if (egfDoiObject.title_orig && egfDoiObject.title !== egfDoiObject.title_orig) {
+        if (
+          egfDoiObject.title_orig &&
+          egfDoiObject.title !== egfDoiObject.title_orig
+        ) {
           this.doi.title_alternative = egfDoiObject.title_orig;
-          // Todo: Language update
-          // this.doi.language = {
-          //   id: 4,
-          //   value: "eesti",
-          //   value_en: "Estonian"
-          // };
+          const cyrillicPattern = /[а-яА-ЯЁё]/;
+          if (egfDoiObject.title_orig.match(cyrillicPattern)) {
+            this.doi.language = {
+              id: 5,
+              value: "vene",
+              value_en: "Russian"
+            };
+          }
         }
         if (egfDoiObject.date) this.doi.publication_year = egfDoiObject.date;
         if (egfDoiObject.tags && egfDoiObject.tags.trim().length > 0)

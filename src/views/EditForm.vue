@@ -1,12 +1,26 @@
 <template>
   <div class="edit-form">
     <div class="d-flex flex-wrap mt-2 mb-1 page-title justify-space-between">
-      <div class="">
-        <p class="h2 float-left mb-1 mr-2">
+      <div class="h2 float-left mb-1 mr-2">
+        <span>
           {{ $t($route.meta.heading) }}: <b>{{ $route.params.id }}</b>
-        </p>
+        </span>
+
+        <span v-if="data && data.egf">
+          <v-btn
+            style="margin-top: -4px"
+            class="ml-1"
+            icon
+            :href="`https://fond.egt.ee/fond/egf/${data.egf}`"
+            :title="`https://fond.egt.ee/fond/egf/${data.egf}`"
+            :color="bodyActiveColor"
+            target="FondWindow"
+          >
+            <v-icon>fas fa-link</v-icon>
+          </v-btn>
+        </span>
       </div>
-      <div class=" text-right">
+      <div class="text-right">
         <v-btn
           :to="{ path: '/' + $route.meta.object }"
           :color="bodyActiveColor"
