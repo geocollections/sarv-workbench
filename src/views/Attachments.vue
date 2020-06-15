@@ -30,7 +30,7 @@
 <script>
 import ListModuleCore from "./ListModuleCore";
 import { fetchAttachments } from "../assets/js/api/apiCalls";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import searchParametersMixin from "../mixins/searchParametersMixin";
@@ -59,9 +59,7 @@ export default {
     ...mapState("search", [
       "activeSelectionSeries",
       "selection_seriesSearchParameters"
-    ]),
-
-    ...mapGetters("user", ["getCurrentUser"])
+    ])
   },
 
   created() {
@@ -82,7 +80,8 @@ export default {
       { id: "locality", title: "attachment.locality", type: "text" },
       { id: "selectionId", title: "specimen.selectionId", type: "number" },
       { id: "selection", title: "specimen.selection", type: "text" },
-      { id: "keyword", title: "keyword.keyword", type: "text" }
+      { id: "keyword", title: "keyword.keyword", type: "text" },
+      { id: "author", title: "attachment.author", type: "text" }
     ]);
   },
 
@@ -91,7 +90,7 @@ export default {
 
     fetchAttachments() {
       return new Promise(resolve => {
-        resolve(fetchAttachments(this.searchParameters, this.getCurrentUser));
+        resolve(fetchAttachments(this.searchParameters));
       });
     }
   }

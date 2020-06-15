@@ -118,7 +118,9 @@
             <div v-if="isNotEmpty(sarv_issue.response)">
               {{ sarv_issue.response }}
             </div>
-            <v-card flat v-else class="error--text">{{ $t("sarv_issue.unanswered") }}</v-card>
+            <v-card flat v-else class="error--text">{{
+              $t("sarv_issue.unanswered")
+            }}</v-card>
           </div>
         </div>
       </transition>

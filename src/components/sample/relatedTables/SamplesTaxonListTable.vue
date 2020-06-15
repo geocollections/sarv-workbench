@@ -107,37 +107,37 @@
         <v-icon v-else small>fas fa-minus</v-icon>
       </template>
 
-<!--      <template v-slot:item.preparation="{ item }">-->
-<!--        <div v-if="isUsedAsRelatedData">-->
-<!--          <router-link-->
-<!--            v-if="$route.meta.isEdit"-->
-<!--            :to="{ path: '/preparation/' + item.preparation }"-->
-<!--            :title="$t('editPreparation.editMessage')"-->
-<!--            class="sarv-link"-->
-<!--            :class="`${bodyActiveColor}&#45;&#45;text`"-->
-<!--          >-->
-<!--            {{ item.preparation_number }}-->
-<!--          </router-link>-->
-<!--          <router-link-->
-<!--            v-else-if="item.preparation"-->
-<!--            :to="{ path: '/preparation/' + item.preparation.id }"-->
-<!--            :title="$t('editPreparation.editMessage')"-->
-<!--            class="sarv-link"-->
-<!--            :class="`${bodyActiveColor}&#45;&#45;text`"-->
-<!--          >-->
-<!--            {{ item.preparation.preparation_number }}-->
-<!--          </router-link>-->
-<!--        </div>-->
-<!--        <router-link-->
-<!--          v-else-->
-<!--          :to="{ path: '/preparation/' + item.preparation }"-->
-<!--          :title="$t('editPreparation.editMessage')"-->
-<!--          class="sarv-link"-->
-<!--          :class="`${bodyActiveColor}&#45;&#45;text`"-->
-<!--        >-->
-<!--          {{ item.preparation_number }}-->
-<!--        </router-link>-->
-<!--      </template>-->
+      <!--      <template v-slot:item.preparation="{ item }">-->
+      <!--        <div v-if="isUsedAsRelatedData">-->
+      <!--          <router-link-->
+      <!--            v-if="$route.meta.isEdit"-->
+      <!--            :to="{ path: '/preparation/' + item.preparation }"-->
+      <!--            :title="$t('editPreparation.editMessage')"-->
+      <!--            class="sarv-link"-->
+      <!--            :class="`${bodyActiveColor}&#45;&#45;text`"-->
+      <!--          >-->
+      <!--            {{ item.preparation_number }}-->
+      <!--          </router-link>-->
+      <!--          <router-link-->
+      <!--            v-else-if="item.preparation"-->
+      <!--            :to="{ path: '/preparation/' + item.preparation.id }"-->
+      <!--            :title="$t('editPreparation.editMessage')"-->
+      <!--            class="sarv-link"-->
+      <!--            :class="`${bodyActiveColor}&#45;&#45;text`"-->
+      <!--          >-->
+      <!--            {{ item.preparation.preparation_number }}-->
+      <!--          </router-link>-->
+      <!--        </div>-->
+      <!--        <router-link-->
+      <!--          v-else-->
+      <!--          :to="{ path: '/preparation/' + item.preparation }"-->
+      <!--          :title="$t('editPreparation.editMessage')"-->
+      <!--          class="sarv-link"-->
+      <!--          :class="`${bodyActiveColor}&#45;&#45;text`"-->
+      <!--        >-->
+      <!--          {{ item.preparation_number }}-->
+      <!--        </router-link>-->
+      <!--      </template>-->
 
       <template v-slot:item.is_private="{ item }">
         <v-icon v-if="item.is_private" small>fas fa-plus</v-icon>
@@ -228,20 +228,20 @@
                   />
                 </v-col>
 
-<!--                <v-col cols="12" md="6" class="pa-1">-->
-<!--                  <autocomplete-wrapper-->
-<!--                    v-model="item.preparation"-->
-<!--                    :color="bodyActiveColor"-->
-<!--                    :items="autocomplete.preparation"-->
-<!--                    :loading="autocomplete.loaders.preparation"-->
-<!--                    item-text="preparation_number"-->
-<!--                    :label="$t('taxon.preparation')"-->
-<!--                    is-link-->
-<!--                    route-object="preparation"-->
-<!--                    is-searchable-->
-<!--                    v-on:search:items="autocompletePreparationSearch"-->
-<!--                  />-->
-<!--                </v-col>-->
+                <!--                <v-col cols="12" md="6" class="pa-1">-->
+                <!--                  <autocomplete-wrapper-->
+                <!--                    v-model="item.preparation"-->
+                <!--                    :color="bodyActiveColor"-->
+                <!--                    :items="autocomplete.preparation"-->
+                <!--                    :loading="autocomplete.loaders.preparation"-->
+                <!--                    item-text="preparation_number"-->
+                <!--                    :label="$t('taxon.preparation')"-->
+                <!--                    is-link-->
+                <!--                    route-object="preparation"-->
+                <!--                    is-searchable-->
+                <!--                    v-on:search:items="autocompletePreparationSearch"-->
+                <!--                  />-->
+                <!--                </v-col>-->
 
                 <v-col cols="12" md="6" class="pa-1">
                   <checkbox-wrapper
@@ -374,7 +374,7 @@ export default {
       // preparation: [],
       loaders: {
         taxon: false,
-        agent: false,
+        agent: false
         // preparation: false
       }
     }

@@ -60,6 +60,7 @@ const state = {
     selectionId: null,
     selection: null,
     keyword: null,
+    author: null,
     specimen_image_attachment: ["2", "1", "3", "4"],
     page: 1,
     paginateBy: 50,
@@ -521,11 +522,10 @@ const actions = {
     );
   },
 
-  FETCH_ATTACHMENTS({ commit, state, rootGetters }) {
-    return fetchAttachments(
-      state.activeSearchParams.search,
-      rootGetters["user/getCurrentUser"]
-    ).then(resp => commit("SET_SIDEBAR_LIST", resp));
+  FETCH_ATTACHMENTS({ commit, state }) {
+    return fetchAttachments(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
+    );
   },
 
   FETCH_REFERENCES({ commit, state }) {

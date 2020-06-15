@@ -154,7 +154,7 @@ export function postRequest(
  *** ATTACHMENTS START ***
  *************************/
 
-export function fetchAttachments(data, author) {
+export function fetchAttachments(data) {
   const fields =
     "id,uuid_filename,original_filename,author__agent,author_free,date_created,date_created_free,image_number,specimen,reference_id,reference__reference,specimen_image_attachment,is_private,attachment_format__value";
   let searchFields = "";
@@ -201,6 +201,15 @@ export function fetchAttachments(data, author) {
     searchFields += `&selection__selection__name__${data.selection__lookuptype ||
       "icontains"}=${data.selection}`;
   }
+
+  if (data.author && data.author.trim().length > 0) {
+    searchFields +=
+      "&multi_search=value:" +
+      data.author +
+      ";fields:author__agent,author__forename,author__surename,author_free,user_added;lookuptype:" +
+      `${data.author__lookuptype || "icontains"}`;
+  }
+
   if (
     data.specimen_image_attachment.length > 0 &&
     data.specimen_image_attachment.length <= 3
@@ -223,23 +232,17 @@ export function fetchAttachments(data, author) {
 
   if (searchFields.length > 0) {
     return get(
-      `attachment/?${searchFields}&or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
-    // return get(`attachment/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   } else {
     return get(
-      `attachment/?or_search=author_id:${author.id};user_added:${author.user}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
+      `attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&fields=${fields}&format=json`
     );
-    // return get(`attachment/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${data.orderBy}&fields=${fields}&format=json`)
   }
 }
 
-export function fetchAttachment(id, author) {
-  if (author)
-    return get(
-      `attachment/?id=${id}&or_search=author_id:${author.id};user_added:${author.user};user_changed:${author.user}&format=json`
-    );
-  else return get(`attachment/?id=${id}&format=json`);
+export function fetchAttachment(id) {
+  return get(`attachment/?id=${id}&format=json`);
 }
 
 export function fetchListImageType() {
@@ -1737,8 +1740,9 @@ export function fetchSpecimens(data, databaseId) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.idSpecimen && data.idSpecimen.trim().length > 0) {
-    searchFields += `&id__${data.idSpecimen__lookuptype ||
-      "icontains"}=${data.idSpecimen}`;
+    searchFields += `&id__${data.idSpecimen__lookuptype || "icontains"}=${
+      data.idSpecimen
+    }`;
   }
 
   if (data.specimenNr && data.specimenNr.trim().length > 0) {

@@ -13,7 +13,7 @@
           border="left"
           elevation="3"
           prominent
-          :color="bodyColor.split('n-')[0] + 'n-3'"
+          :color="bodyColor.split('n-')[0] + 'n-2'"
         >
           <b>{{ $t("messages.lockedForm") }}</b>
         </v-alert>
@@ -3558,7 +3558,7 @@
 
           <transition>
             <div v-show="block.requiredFields" class="pa-1">
-              <!-- AUTHOR and AUTHOR FREE -->
+              <!-- REFERENCE and AUTHOR FREE -->
               <v-row no-gutters>
                 <v-col cols="12" md="6" class="pa-1">
                   <autocomplete-wrapper
@@ -3581,7 +3581,6 @@
                     v-model="attachment.author_free"
                     :color="bodyActiveColor"
                     :label="$t('attachment.author_free')"
-                    use-state
                   />
                 </v-col>
               </v-row>
@@ -4397,26 +4396,24 @@ export default {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
         // fetchAttachment(this.$route.params.id).then(
-        fetchAttachment(this.$route.params.id, this.getCurrentUser).then(
-          response => {
-            let handledResponse = this.handleResponse(response);
+        fetchAttachment(this.$route.params.id).then(response => {
+          let handledResponse = this.handleResponse(response);
 
-            if (handledResponse.length > 0) {
-              this.$emit("object-exists", true);
-              this.$set(this, "attachment", this.handleResponse(response)[0]);
-              // this.attachment = this.handleResponse(response)[0];
-              this.rawAttachment = cloneDeep(this.attachment);
-              this.fillAutocompleteFields(this.attachment);
+          if (handledResponse.length > 0) {
+            this.$emit("object-exists", true);
+            this.$set(this, "attachment", this.handleResponse(response)[0]);
+            // this.attachment = this.handleResponse(response)[0];
+            this.rawAttachment = cloneDeep(this.attachment);
+            this.fillAutocompleteFields(this.attachment);
 
-              this.removeUnnecessaryFields(this.attachment, this.copyFields);
-              this.$emit("data-loaded", this.attachment);
-              this.setLoadingState(false);
-            } else {
-              this.setLoadingState(false);
-              this.$emit("object-exists", false);
-            }
+            this.removeUnnecessaryFields(this.attachment, this.copyFields);
+            this.$emit("data-loaded", this.attachment);
+            this.setLoadingState(false);
+          } else {
+            this.setLoadingState(false);
+            this.$emit("object-exists", false);
           }
-        );
+        });
 
         this.loadAutocompleteFields(false, true);
       } else {

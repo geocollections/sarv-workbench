@@ -30,7 +30,7 @@
         :to="{ path: '/attachment/' + item.id }"
       >
         <v-img
-          v-if="!!item.attachment_format__value.includes('image')"
+          v-if="isAttachmentImage(item.attachment_format__value)"
           :src="getFileUrl(item.uuid_filename, 'small')"
           :lazy-src="getFileUrl(item.uuid_filename, 'small')"
           class="grey lighten-2 attachment-table-image-preview my-1"
@@ -241,6 +241,10 @@ export default {
           2
         )}/${uuid.substring(2, 4)}/${uuid}`;
       }
+    },
+
+    isAttachmentImage(type) {
+      return type && type.includes("image");
     }
   }
 };

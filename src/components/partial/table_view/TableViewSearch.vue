@@ -94,20 +94,20 @@
                           )
                         "
                       >
-                        <template v-slot:selection="{item}">
+                        <template v-slot:selection="{ item }">
                           <div class="font-weight-bold">
-                            {{item.symbol}}
+                            {{ item.symbol }}
                           </div>
                         </template>
 
-<!--                        <template v-slot:item="{item}">-->
-<!--                          <div class="v-list-item__content">-->
-<!--                            <div class="v-list-item__title">-->
-<!--                              <b>{{ item.text.split(" ")[0] }}</b>-->
-<!--                              {{ item.text.split(" ")[1] }}-->
-<!--                            </div>-->
-<!--                          </div>-->
-<!--                        </template>-->
+                        <!--                        <template v-slot:item="{item}">-->
+                        <!--                          <div class="v-list-item__content">-->
+                        <!--                            <div class="v-list-item__title">-->
+                        <!--                              <b>{{ item.text.split(" ")[0] }}</b>-->
+                        <!--                              {{ item.text.split(" ")[1] }}-->
+                        <!--                            </div>-->
+                        <!--                          </div>-->
+                        <!--                        </template>-->
                       </v-select>
                     </v-col>
 

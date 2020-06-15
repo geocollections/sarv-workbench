@@ -453,8 +453,8 @@
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
-<!--      {{ activeTab }}-->
-<!--      {{ tabIndex }}-->
+      <!--      {{ activeTab }}-->
+      <!--      {{ tabIndex }}-->
       <v-tabs
         v-model="tabIndex"
         :background-color="bodyColor.split('n-')[0] + 'n-3'"
@@ -1060,7 +1060,10 @@ export default {
 
         // Set default tab
         if (this.specimen?.fossil) {
-          if (this.specimen?.fossil?.id === 1 || this.specimen?.fossil?.id === 7) {
+          if (
+            this.specimen?.fossil?.id === 1 ||
+            this.specimen?.fossil?.id === 7
+          ) {
             if (
               this.activeRelatedDataTab &&
               this.activeRelatedDataTab !== "specimen_identification_geology"

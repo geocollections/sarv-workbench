@@ -111,7 +111,9 @@
             </v-list-item>
 
             <v-list-item :to="{ path: '/admin' }" v-if="isUserSuperuser">
-              <v-list-item-icon><v-icon>fa fa-user-shield</v-icon></v-list-item-icon>
+              <v-list-item-icon
+                ><v-icon>fa fa-user-shield</v-icon></v-list-item-icon
+              >
               <v-list-item-title>{{ $t("header.admin") }}</v-list-item-title>
             </v-list-item>
 
