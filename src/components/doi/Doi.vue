@@ -1587,9 +1587,9 @@ export default {
         this.doi.publisher = "Geoloogiafond";
         this.doi.version = "1.0";
         this.doi.licence = {
-          id: 4,
-          licence: "CC BY-SA",
-          licence_en: "CC BY-SA"
+          id: 3,
+          licence: "CC BY 4.0",
+          licence_en: "CC BY 4.0"
         };
         this.doi.subjects = ""; // Needed because otherwise undefined will be written also.
         this.doi.remarks = ""; // Needed because otherwise undefined will be written also.
@@ -1687,6 +1687,7 @@ export default {
               this.relatedData.doi_agent.results.push({
                 affiliation: "",
                 orcid: "",
+                agent: null,
                 name: funder,
                 agent_type: 22,
                 agent_type__value: "Sponsor"
@@ -1706,6 +1707,7 @@ export default {
               this.relatedData.doi_agent.results.push({
                 affiliation: "",
                 orcid: "",
+                agent: null,
                 name: performer,
                 agent_type: 12,
                 agent_type__value: "Producer"

@@ -1,5 +1,5 @@
 module.exports = {
   // Disable source viewing in production
-  productionSourceMap: false,
+  productionSourceMap: true,
   transpileDependencies: ["vuetify"]
 };

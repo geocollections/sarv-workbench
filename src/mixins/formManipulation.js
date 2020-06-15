@@ -288,18 +288,26 @@ const formManipulation = {
             if (response.data) {
               if (this.$i18n.locale === "ee") {
                 if (response.data.message_et)
-                  this.toastSuccess({ text: response?.data?.message_et || "Success" });
+                  this.toastSuccess({
+                    text: response?.data?.message_et.toString() || "Success"
+                  });
                 else if (response.data.message)
-                  this.toastSuccess({ text: response?.data?.message || "Success" });
+                  this.toastSuccess({
+                    text: response?.data?.message.toString() || "Success"
+                  });
                 else if (response.data.error_et)
-                  this.toastError({ text: response?.data?.error_et || "Error" });
+                  this.toastError({
+                    text: response?.data?.error_et.toString() || "Error"
+                  });
                 else if (response.data.error)
-                  this.toastError({ text: response?.data?.error || "Error" });
+                  this.toastError({ text: response?.data?.error.toString()  || "Error" });
               } else {
                 if (response.data.message)
-                  this.toastSuccess({ text: response?.data?.message || "Success" });
+                  this.toastSuccess({
+                    text: response?.data?.message.toString() || "Success"
+                  });
                 else if (response.data.error)
-                  this.toastError({ text: response?.data?.error || "Error" });
+                  this.toastError({ text: response?.data?.error.toString() || "Error" });
               }
 
               if (object === "attachment" && response.data.attachments_ids) {

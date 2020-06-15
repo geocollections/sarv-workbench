@@ -87,7 +87,6 @@
           }}</v-btn>
         </template>
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
-          {{item}}
           <v-card-title>
             <span class="headline">{{ $t("header.doi_agent") }}</span>
           </v-card-title>
