@@ -947,7 +947,8 @@ export default {
             attachment: false,
             list_specimen_type: false,
             list_history_type: false,
-            analysis_method: false
+            analysis_method: false,
+            parent: false
           },
           coll: [],
           specimen_kind: [],
@@ -974,7 +975,8 @@ export default {
           attachment: [],
           list_specimen_type: [],
           list_history_type: [],
-          analysis_method: []
+          analysis_method: [],
+          parent: []
         },
         requiredFields: ["fossil"],
         specimen: {},
