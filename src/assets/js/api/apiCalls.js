@@ -3005,7 +3005,21 @@ export function fetchStratigraphies(data) {
   if (data.parent && data.parent.trim().length > 0) {
     searchFields += `&multi_search=value:${
       data.parent
-    };fields:parent__stratigraphy,parent__stratigraphy_en;lookuptype:${data.parent__lookuptype ||
+    };fields:parent__id,parent__stratigraphy,parent__stratigraphy_en;lookuptype:${data.parent__lookuptype ||
+      "icontains"}`;
+  }
+
+  if (data.indexes && data.indexes.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+      data.indexes
+    };fields:index_main,index_additional,index_old;lookuptype:${data.indexes__lookuptype ||
+      "icontains"}`;
+  }
+
+  if (data.author && data.author.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+      data.author
+    };fields:author_free,user_added;lookuptype:${data.author__lookuptype ||
       "icontains"}`;
   }
 

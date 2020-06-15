@@ -1620,16 +1620,30 @@ export default {
           this.doi.creators = formattedCreatorsList.join("; ");
         }
         if (egfDoiObject.title) {
-          this.doi.title_translated = egfDoiObject.title;
-          this.doi.title_translated_language = {
+          this.doi.title = egfDoiObject.title;
+          this.doi.language = {
             id: 4,
             value: "eesti",
             value_en: "Estonian"
           };
         }
-        if (egfDoiObject.title_eng)
-          this.doi.title_alternative = egfDoiObject.title_eng;
-        if (egfDoiObject.title_orig) this.doi.title = egfDoiObject.title_orig;
+        if (egfDoiObject.title_eng) {
+          this.doi.title_tranlated = egfDoiObject.title_eng;
+          this.doi.title_translated_language = {
+            id: 1,
+            value: "inglise",
+            value_en: "English"
+          };
+        }
+        if (egfDoiObject.title_orig && egfDoiObject.title !== egfDoiObject.title_orig) {
+          this.doi.title_alternative = egfDoiObject.title_orig;
+          // Todo: Language update
+          // this.doi.language = {
+          //   id: 4,
+          //   value: "eesti",
+          //   value_en: "Estonian"
+          // };
+        }
         if (egfDoiObject.date) this.doi.publication_year = egfDoiObject.date;
         if (egfDoiObject.tags && egfDoiObject.tags.trim().length > 0)
           this.doi.subjects += egfDoiObject.tags;
@@ -1699,8 +1713,19 @@ export default {
             this.doi.subjects.length > 0
               ? ", " + egfDoiObject.evpk_protocol
               : egfDoiObject.evpk_protocol;
+
+        if (
+          egfDoiObject.min_resource &&
+          egfDoiObject.min_resource.trim().length > 0
+        )
+          this.doi.subjects +=
+            this.doi.subjects.length > 0
+              ? ", " + egfDoiObject.min_resource
+              : egfDoiObject.min_resource;
+
         if (egfDoiObject.note && egfDoiObject.note.trim().length > 0)
           this.doi.remarks += egfDoiObject.note;
+
         if (
           egfDoiObject.restricted_untill &&
           egfDoiObject.restricted_untill.trim().length > 0
@@ -1709,6 +1734,7 @@ export default {
             this.doi.remarks.length > 0
               ? ", " + egfDoiObject.restricted_untill
               : egfDoiObject.restricted_untill;
+
         if (
           egfDoiObject.restricted_reason &&
           egfDoiObject.restricted_reason.trim().length > 0
@@ -1717,14 +1743,7 @@ export default {
             this.doi.remarks.length > 0
               ? ", " + egfDoiObject.restricted_reason
               : egfDoiObject.restricted_reason;
-        if (
-          egfDoiObject.min_resource &&
-          egfDoiObject.min_resource.trim().length > 0
-        )
-          this.doi.remarks +=
-            this.doi.remarks.length > 0
-              ? ", " + egfDoiObject.min_resource
-              : egfDoiObject.min_resource;
+
         if (egfDoiObject.geometry) {
           if (
             egfDoiObject.geometry.coordinates &&

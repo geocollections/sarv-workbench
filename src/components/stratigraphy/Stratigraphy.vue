@@ -151,6 +151,26 @@
             </v-col>
           </v-row>
 
+          <!-- MAAAMET_KOOD, INDEX_OLD -->
+          <v-row no-gutters>
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.maaamet_kood"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.maaamet_kood')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="6" class="pa-1">
+              <input-wrapper
+                v-model="stratigraphy.index_old"
+                :color="bodyActiveColor"
+                :label="$t('stratigraphy.index_old')"
+              />
+            </v-col>
+          </v-row>
+
           <!-- COLOR_CODE_CGMW and COLOR_CODE_ADDITIONAL -->
           <v-row no-gutters>
             <v-col cols="12" md="6" class="pa-1">
@@ -783,7 +803,9 @@ export default {
           "approved_ics",
           "approved_esk",
           "is_private",
-          "remarks"
+          "remarks",
+          "index_old",
+          "maaamet_kood"
         ],
         autocomplete: {
           loaders: {

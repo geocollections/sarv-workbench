@@ -58,7 +58,9 @@ export default {
       { id: "type", title: "common.type", type: "text" },
       { id: "rank", title: "stratigraphy.rank", type: "text" },
       { id: "scope", title: "stratigraphy.scope", type: "text" },
-      { id: "parent", title: "stratigraphy.parent", type: "text" }
+      { id: "parent", title: "stratigraphy.parent", type: "text" },
+      { id: "indexes", title: "stratigraphy.indexes", type: "text" },
+      { id: "author", title: "stratigraphy.author", type: "text" }
     ]);
   },
 
