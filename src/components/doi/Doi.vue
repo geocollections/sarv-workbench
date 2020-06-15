@@ -1618,8 +1618,11 @@ export default {
                 orcid: "",
                 name: formattedName,
                 agent: null,
-                agent_type: 1,
-                agent_type__value: "Creator"
+                agent_type: {
+                  id: 1,
+                  value: "Creator"
+                }
+                // agent_type__value: "Creator"
               });
             });
 
@@ -1689,8 +1692,12 @@ export default {
                 orcid: "",
                 agent: null,
                 name: funder,
-                agent_type: 22,
-                agent_type__value: "Sponsor"
+                agent_type: {
+                  id: 22,
+                  value: "Sponsor"
+                }
+                // 22,
+                // agent_type__value: "Sponsor"
               });
             });
           }
@@ -1709,8 +1716,11 @@ export default {
                 orcid: "",
                 agent: null,
                 name: performer,
-                agent_type: 12,
-                agent_type__value: "Producer"
+                agent_type: {
+                  id: 12,
+                  value: "Producer"
+                }
+                // agent_type__value: "Producer"
               });
             });
           }
