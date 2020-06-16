@@ -54,7 +54,14 @@
     </v-row>
 
     <!-- MAP -->
-    <v-row>
+    <v-row
+      v-if="
+        isUserAllowedTo('add', 'site') &&
+          isUserAllowedTo('add', 'sample') &&
+          isUserAllowedTo('add', 'specimen') &&
+          isUserAllowedTo('add', 'attachment')
+      "
+    >
       <v-col class="pb-0">
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
@@ -86,7 +93,7 @@
     </v-row>
 
     <!-- IMAGES/FILES -->
-    <v-row class="py-6">
+    <v-row class="py-6" v-if="isUserAllowedTo('add', 'attachment')">
       <v-col class="pb-0">
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="4">
           <v-card-title class="pt-2 pb-1">
@@ -235,7 +242,11 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["activeSarvIssues"]),
-    ...mapGetters("user", ["getCurrentUser", "getLastLoginDate"])
+    ...mapGetters("user", [
+      "getCurrentUser",
+      "getLastLoginDate",
+      "isUserAllowedTo"
+    ])
   },
 
   watch: {
