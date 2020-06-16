@@ -82,7 +82,8 @@ export default {
       { text: "location.location", value: "location" },
       { text: "location.location_location", value: "location_location" },
       { text: "location.agent", value: "agent" },
-      { text: "common.stratigraphy", value: "stratigraphy_free" }
+      { text: "common.stratigraphy", value: "stratigraphy_free" },
+      { text: "location.contents", value: "contents" }
     ],
     names: []
   }),

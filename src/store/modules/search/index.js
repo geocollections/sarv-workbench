@@ -342,6 +342,7 @@ const state = {
     agent: null,
     user_added: null,
     date_added: null,
+    contents: null,
     page: 1,
     paginateBy: 10,
     sortBy: ["id"],

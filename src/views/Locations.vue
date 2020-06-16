@@ -56,7 +56,8 @@ export default {
       { id: "stratigraphy_free", title: "common.stratigraphy", type: "text" },
       { id: "agent", title: "location.agent", type: "text" },
       { id: "user_added", title: "common.user_added", type: "text" },
-      { id: "date_added", title: "common.date_added", type: "text" }
+      { id: "date_added", title: "common.date_added", type: "text" },
+      { id: "contents", title: "location.contents", type: "text" }
     ]);
   },
 

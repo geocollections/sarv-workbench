@@ -3215,6 +3215,11 @@ export function fetchLocations(data) {
     searchFields += `&date_added__${data.date_added__lookuptype ||
       "icontains"}=${data.date_added}`;
   }
+  if (data.contents && data.contents.trim().length > 0) {
+    searchFields += `&contents__${data.contents__lookuptype || "icontains"}=${
+      data.contents
+    }`;
+  }
 
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
