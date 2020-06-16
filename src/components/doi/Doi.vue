@@ -684,7 +684,7 @@
       id="block-dataciteDiff"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
-      v-if="$route.meta.isEdit"
+      v-if="$route.meta.isEdit && showMetadataButton"
     >
       <v-card-title class="pt-2 pb-1">
         <div
