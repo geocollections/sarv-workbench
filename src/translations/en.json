@@ -360,7 +360,8 @@
       "info": "Additional metadata",
       "referenceAndDataset": "Reference ja Dataset",
       "description": "Remarks",
-      "datacite": "Datacite"
+      "datacite": "Datacite",
+      "dataciteDiff": "Datacite metadata difference"
     },
     "analysis": {
       "info": "General info",
@@ -1154,6 +1155,11 @@
     "removePolygon": "Remove polygon",
     "polygonMapEdit": "Polygon map (editing)",
     "polygonMap": "Polygon map",
+    "dataciteDiff": "Datacite metadata difference",
+    "diffNotFound": "Differences not found",
+    "diffAdded": "Added",
+    "diffDeleted": "Deleted",
+    "diffEqual": "Equal",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "attachment_link": "Files",

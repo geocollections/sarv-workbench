@@ -677,6 +677,88 @@
         </v-btn>
       </div>
     </div>
+
+    <!-- DOI METADATA DIFF -->
+    <v-card
+      class="mt-2"
+      id="block-dataciteDiff"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+      v-if="$route.meta.isEdit"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.dataciteDiff = !block.dataciteDiff"
+        >
+          <span>{{ $t("doi.dataciteDiff") }}</span>
+          <v-icon right>fas fa-exchange-alt</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.dataciteDiff = !block.dataciteDiff"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.dataciteDiff ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.dataciteDiff" class="pa-1">
+          <v-row no-gutters v-if="xmlDiff && xmlDiff.length > 0">
+            <v-col cols="12" class="pa-1">
+              <div class="d-flex flex-row flex-wrap justify-space-around">
+                <v-card
+                  @click="$scrollTo('.scroll-inserted')"
+                  hover
+                  class="diff-inserted py-1 px-3 ma-1"
+                  >{{ $t("doi.diffAdded") }}</v-card
+                >
+                <v-card
+                  @click="$scrollTo('.scroll-deleted')"
+                  hover
+                  class="diff-deleted py-1 px-3 ma-1"
+                  >{{ $t("doi.diffDeleted") }}</v-card
+                >
+                <v-card
+                  @click="$scrollTo('.scroll-equal')"
+                  hover
+                  class="diff-equal py-1 px-3 ma-1"
+                  >{{ $t("doi.diffEqual") }}</v-card
+                >
+              </div>
+            </v-col>
+
+            <v-col
+              cols="12"
+              class="pa-1"
+              v-for="(entity, index) in xmlDiff"
+              :key="index"
+            >
+              <div
+                class="pa-1 text-justify"
+                :class="{
+                  'diff-inserted scroll-inserted': entity[0] === 1,
+                  'diff-deleted scroll-deleted': entity[0] === -1,
+                  'diff-equal scroll-equal': entity[0] === 0
+                }"
+              >
+                <span>{{ entity[1] }}</span>
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-row v-else no-gutters>
+            <v-col cols="12" class="pa-1">
+              {{ $t("doi.diffNotFound") }}
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
   </div>
 </template>
 
@@ -714,6 +796,7 @@ import DoiAgentTable from "./relatedTables/DoiAgentTable";
 import DoiDateTable from "./relatedTables/DoiDateTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import toastMixin from "../../mixins/toastMixin";
+import DiffMatchPatch from "diff-match-patch";
 
 export default {
   components: {
@@ -806,6 +889,16 @@ export default {
           text: this.$t(item.text, { num: item.value })
         };
       });
+    },
+
+    xmlDiff() {
+      if (this.dataciteXML && this.sarvXML) {
+        const dmp = new DiffMatchPatch();
+        let diff = dmp.diff_main(this.dataciteXML, this.sarvXML);
+        dmp.diff_cleanupSemantic(diff);
+        console.log(diff);
+        return diff;
+      } else return null;
     }
   },
 
@@ -912,7 +1005,8 @@ export default {
           info: true,
           referenceAndDataset: false,
           description: true,
-          datacite: true
+          datacite: true,
+          dataciteDiff: false
         },
         showMetadataButton: false,
         showDoiUrlButton: false,
@@ -1923,4 +2017,16 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.diff-inserted {
+  background-color: rgba(76, 175, 80, 0.33);
+}
+
+.diff-deleted {
+  background-color: rgba(244, 67, 54, 0.33);
+}
+
+.diff-equal {
+  background-color: rgba(33, 150, 243, 0.33);
+}
+</style>

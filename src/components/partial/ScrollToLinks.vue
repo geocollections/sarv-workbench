@@ -2,10 +2,7 @@
   <div
     class="scroll-to-links mb-2"
     v-if="
-      $route.meta.isEdit &&
-        activeSearchParams !== null &&
-        typeof activeSearchParams.block !== 'undefined' &&
-        activeSearchParams.block !== null
+      $route.meta.isEdit && formSections
     "
   >
     <v-btn-toggle
@@ -16,7 +13,7 @@
       style="background: unset"
     >
       <v-btn
-        v-for="(value, name) in activeSearchParams.block"
+        v-for="(value, name) in formSections"
         class="scroll-to-button text-none"
         :key="name"
         v-scroll-to="'#block-' + name"
@@ -37,7 +34,12 @@ import { mapState } from "vuex";
 export default {
   name: "ScrollToLinks",
   computed: {
-    ...mapState("search", ["activeSearchParams"])
+    // ...mapState("settings", ["formSections"])
+    ...mapState("settings", {
+      formSections: function(state) {
+        return state.formSections[this.$route.meta.object];
+      }
+    })
   },
   methods: {
     getIcon(name) {

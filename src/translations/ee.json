@@ -360,7 +360,8 @@
       "info": "Täiendavad metaandmed",
       "referenceAndDataset": "Kirjandus ja Andmekogum",
       "description": "Lisainfo ja märksõnad",
-      "datacite": "Datacite"
+      "datacite": "Datacite",
+      "dataciteDiff": "Datacite metaandmete erinevus"
     },
     "analysis": {
       "info": "Üldinfo",
@@ -1154,6 +1155,11 @@
     "removePolygon": "Eemalda polügoon",
     "polygonMapEdit": "Polügooni kaart (muutmine)",
     "polygonMap": "Polügooni kaart",
+    "dataciteDiff": "Datacite metaandmete erinevus",
+    "diffNotFound": "Erinevusi ei leitud",
+    "diffAdded": "Lisatud",
+    "diffDeleted": "Kustutatud",
+    "diffEqual": "Võrdne",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "attachment_link": "Failid",
