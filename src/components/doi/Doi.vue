@@ -708,6 +708,12 @@
 
       <transition>
         <div v-show="block.dataciteDiff" class="pa-1">
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <div>{{ this.$t("doi.diffComparison") }}:</div>
+            </v-col>
+          </v-row>
+
           <v-row no-gutters v-if="xmlDiff && xmlDiff.length > 0">
             <v-col cols="12" class="pa-1">
               <div class="d-flex flex-row flex-wrap justify-space-around">
@@ -752,7 +758,7 @@
           </v-row>
 
           <v-row v-else no-gutters>
-            <v-col cols="12" class="pa-1">
+            <v-col cols="12" class="pa-1 title">
               {{ $t("doi.diffNotFound") }}
             </v-col>
           </v-row>
@@ -896,6 +902,7 @@ export default {
         const dmp = new DiffMatchPatch();
         let diff = dmp.diff_main(this.dataciteXML, this.sarvXML);
         dmp.diff_cleanupSemantic(diff);
+        dmp.diff_prettyHtml(diff);
         console.log(diff);
         return diff;
       } else return null;

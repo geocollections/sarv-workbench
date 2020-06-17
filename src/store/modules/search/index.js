@@ -52,12 +52,12 @@ const state = {
   activeSearchParams: null,
   activeSearchParametersFilters: [],
   attachmentSearchParameters: {
+    id: null,
     image_number: null,
     filename: null,
     specimen: null,
     imageInfo: null,
     locality: null,
-    selectionId: null,
     selection: null,
     keyword: null,
     author: null,

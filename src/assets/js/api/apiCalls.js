@@ -160,6 +160,10 @@ export function fetchAttachments(data) {
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
+  if (data.id !== null && data.id.trim().length > 0) {
+    searchFields += `id__${data.id__lookuptype ||
+    "icontains"}=${data.id}`;
+  }
   if (data.image_number !== null && data.image_number.trim().length > 0) {
     searchFields += `image_number__${data.image_number__lookuptype ||
       "icontains"}=${data.image_number}`;
@@ -192,14 +196,13 @@ export function fetchAttachments(data) {
       ";fields:locality__locality,locality__locality_en;lookuptype:" +
       `${data.locality__lookuptype || "icontains"}`;
   }
-  if (data.selectionId && data.selectionId.trim().length > 0) {
-    searchFields += `&selection__selection__id__${data.selectionId__lookuptype ||
-      "icontains"}=${data.selectionId}`;
-  }
 
   if (data.selection && data.selection.trim().length > 0) {
-    searchFields += `&selection__selection__name__${data.selection__lookuptype ||
-      "icontains"}=${data.selection}`;
+    searchFields +=
+      "&multi_search=value:" +
+      data.selection +
+      ";fields:selection__selection__name,selection__selection__id;lookuptype:" +
+      `${data.selection__lookuptype || "icontains"}`;
   }
 
   if (data.author && data.author.trim().length > 0) {

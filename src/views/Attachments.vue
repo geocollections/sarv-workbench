@@ -73,12 +73,12 @@ export default {
     });
 
     this.setActiveSearchParametersFilters([
-      { id: "image_number", title: "attachment.imageNumber", type: "text" },
+      { id: "id", title: "common.id", type: "text" },
       { id: "filename", title: "attachment.filename", type: "text" },
+      { id: "image_number", title: "attachment.photoNumber", type: "text" },
       { id: "specimen", title: "attachment.specimen", type: "text" },
       { id: "imageInfo", title: "attachment.imageInfo", type: "text" },
       { id: "locality", title: "attachment.locality", type: "text" },
-      { id: "selectionId", title: "specimen.selectionId", type: "number" },
       { id: "selection", title: "specimen.selection", type: "text" },
       { id: "keyword", title: "keyword.keyword", type: "text" },
       { id: "author", title: "attachment.author", type: "text" }

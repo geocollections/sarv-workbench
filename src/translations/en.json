@@ -686,6 +686,7 @@
   "attachment": {
     "info": "General info",
     "imageNumber": "Image number",
+    "photoNumber": "Photo number",
     "imageNumber_short": "Pildi no.",
     "filename": "Filename",
     "specimen": "Specimen",
@@ -1160,6 +1161,7 @@
     "diffAdded": "Added",
     "diffDeleted": "Deleted",
     "diffEqual": "Equal",
+    "diffComparison": "Datacite data compared to SARV data",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "attachment_link": "Files",

@@ -166,7 +166,6 @@ export default {
     },
 
     showMap(newVal) {
-      console.log(newVal);
       if (newVal && this.map) {
         this.map.invalidateSize();
         let bounds = new L.featureGroup([

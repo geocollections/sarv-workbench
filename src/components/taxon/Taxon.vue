@@ -973,7 +973,7 @@ export default {
           taxon_synonym: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
+            sortBy: ["year"],
             sortDesc: [true]
           },
           taxon_type_specimen: {

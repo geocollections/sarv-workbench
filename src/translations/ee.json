@@ -686,6 +686,7 @@
   "attachment": {
     "info": "Üldinfo",
     "imageNumber": "Pildi number",
+    "photoNumber": "Fotoarhiivi number",
     "imageNumber_short": "Pildi nr.",
     "filename": "Failinimi",
     "specimen": "Eksemplar",
@@ -1160,6 +1161,7 @@
     "diffAdded": "Lisatud",
     "diffDeleted": "Kustutatud",
     "diffEqual": "Võrdne",
+    "diffComparison": "Datacite andmed võrreldes SARV andmetega",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "attachment_link": "Failid",

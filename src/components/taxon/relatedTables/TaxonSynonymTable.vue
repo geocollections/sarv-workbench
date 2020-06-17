@@ -180,9 +180,9 @@ export default {
 
   data: () => ({
     headers: [
+      { text: "common.year", value: "year" },
       { text: "taxon.synonym", value: "taxon_synonym" },
       { text: "taxon.author", value: "author" },
-      { text: "common.year", value: "year" },
       { text: "taxon.pages", value: "pages" },
       { text: "taxon.figures", value: "figures" },
       { text: "common.remarks", value: "remarks" },
