@@ -1162,6 +1162,7 @@
     "diffDeleted": "Kustutatud",
     "diffEqual": "Võrdne",
     "diffComparison": "Datacite andmed võrreldes SARV andmetega",
+    "sort": "Jrk",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "attachment_link": "Failid",

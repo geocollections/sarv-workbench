@@ -1162,6 +1162,7 @@
     "diffDeleted": "Deleted",
     "diffEqual": "Equal",
     "diffComparison": "Datacite data compared to SARV data",
+    "sort": "Order",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "attachment_link": "Files",

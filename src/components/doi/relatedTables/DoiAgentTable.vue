@@ -145,6 +145,14 @@
                     @change="updateFieldsAccordingToAgent"
                   />
                 </v-col>
+
+                <v-col cols="12" md="6" class="pa-1">
+                  <input-wrapper
+                    v-model="item.sort"
+                    :color="bodyActiveColor"
+                    :label="$t('doi.sort')"
+                  />
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -222,11 +230,13 @@ export default {
 
   data: () => ({
     headers: [
+      { text: "common.id", value: "id" },
       { text: "common.name", value: "name" },
       { text: "doi.affiliation", value: "affiliation" },
       { text: "doi.agent_type", value: "agent_type" },
       { text: "doi.orcid", value: "orcid" },
       { text: "doi.agent", value: "agent" },
+      { text: "doi.sort", value: "sort" },
       {
         text: "common.actions",
         value: "action",
@@ -243,7 +253,8 @@ export default {
         value: "Creator"
       },
       orcid: "",
-      agent: null
+      agent: null,
+      sort: ""
     },
     isNewItem: true,
     autocomplete: {
@@ -297,7 +308,8 @@ export default {
           value: "Creator"
         },
         orcid: "",
-        agent: null
+        agent: null,
+        sort: null
       };
     },
 
@@ -349,6 +361,7 @@ export default {
       this.item.name = item.name;
       this.item.affiliation = item.affiliation;
       this.item.orcid = item.orcid;
+      this.item.sort = item.sort;
 
       this.dialog = true;
     },

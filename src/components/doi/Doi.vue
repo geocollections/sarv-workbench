@@ -1139,8 +1139,8 @@ export default {
           doi_agent: {
             page: 1,
             paginateBy: 10,
-            sortBy: ["id"],
-            sortDesc: [true]
+            sortBy: ["sort", "id"],
+            sortDesc: [false, false]
           },
           doi_date: {
             page: 1,
@@ -1211,7 +1211,8 @@ export default {
                 agent: entity?.agent?.id || null,
                 agent_type: entity?.agent_type?.id || null,
                 name: entity?.name || null,
-                orcid: entity?.orcid || null
+                orcid: entity?.orcid || null,
+                sort: entity?.sort || null
               };
             });
           if (uploadableObject.related_data.doi_agent.length === 0)
@@ -1929,6 +1930,7 @@ export default {
 
     addCreatorsToRelatedData() {
       let creators = this.doi.creators;
+      this.relatedData["doi_agent"] = { count: 0, results: [] };
       let listOfCreators = [];
 
       if (creators && creators.trim().length > 0) {
@@ -1937,45 +1939,68 @@ export default {
       }
 
       if (listOfCreators.length > 0) {
-        listOfCreators.forEach(creator => {
+        listOfCreators.forEach((creator, index) => {
           let doiAgentObject = {};
           if (creator.trim().length > 0) {
-            fetchAgentUsingName(creator.trim()).then(
-              response => {
-                let agentObject = this.handleResponse(response)[0];
+            fetchAgentUsingName(creator.trim())
+              .then(
+                response => {
+                  let agentObject = this.handleResponse(response)[0];
 
-                if (this.isNotEmpty(agentObject)) {
-                  doiAgentObject.name = agentObject.agent;
-                  doiAgentObject.orcid = agentObject.orcid;
-                  doiAgentObject.affiliation =
-                    agentObject.institution__institution_name_en;
-                  doiAgentObject.agent = {
-                    id: agentObject.id,
-                    agent: agentObject.agent
-                  };
-                  doiAgentObject.agent_type = {
-                    id: 1,
-                    value: "Creator"
-                  };
-                  if (
-                    !this.relatedData["doi_agent"].results.find(
-                      agent =>
-                        agent.id === doiAgentObject.agent ||
-                        agent.name === doiAgentObject.name
-                    )
-                  ) {
-                    this.relatedData["doi_agent"].count++;
-                    this.relatedData["doi_agent"].results.push(doiAgentObject);
-                  } else
-                    this.toastError({
-                      text: `Author(s) with the same information already exists!`
-                    });
-                } else {
+                  if (this.isNotEmpty(agentObject)) {
+                    doiAgentObject.name = agentObject.agent;
+                    doiAgentObject.orcid = agentObject.orcid;
+                    doiAgentObject.affiliation =
+                      agentObject.institution__institution_name_en;
+                    doiAgentObject.agent = {
+                      id: agentObject.id,
+                      agent: agentObject.agent
+                    };
+                    doiAgentObject.agent_type = {
+                      id: 1,
+                      value: "Creator"
+                    };
+                    doiAgentObject.sort = index + 1;
+                    if (
+                      !this.relatedData["doi_agent"].results.find(
+                        agent =>
+                          agent.id === doiAgentObject.agent ||
+                          agent.name === doiAgentObject.name
+                      )
+                    ) {
+                      this.relatedData["doi_agent"].count++;
+                      this.relatedData["doi_agent"].results.push(
+                        doiAgentObject
+                      );
+                    } else
+                      this.toastError({
+                        text: `Author(s) with the same information already exists!`
+                      });
+                  } else {
+                    doiAgentObject.name = creator.trim();
+                    doiAgentObject.agent_type = {
+                      id: 1,
+                      value: "Creator"
+                    };
+                    doiAgentObject.sort = index + 1;
+                    if (
+                      !this.relatedData["doi_agent"].results.find(
+                        agent => agent.name === doiAgentObject.name
+                      )
+                    ) {
+                      this.relatedData["doi_agent"].count++;
+                      this.relatedData["doi_agent"].results.push(
+                        doiAgentObject
+                      );
+                    } else
+                      this.toastError({
+                        text: `Author(s) with the same name already exists!`
+                      });
+                  }
+                },
+                () => {
                   doiAgentObject.name = creator.trim();
-                  doiAgentObject.agent_type = {
-                    id: 1,
-                    value: "Creator"
-                  };
+                  doiAgentObject.sort = index + 1;
                   if (
                     !this.relatedData["doi_agent"].results.find(
                       agent => agent.name === doiAgentObject.name
@@ -1988,22 +2013,14 @@ export default {
                       text: `Author(s) with the same name already exists!`
                     });
                 }
-              },
-              () => {
-                doiAgentObject.name = creator.trim();
-                if (
-                  !this.relatedData["doi_agent"].results.find(
-                    agent => agent.name === doiAgentObject.name
-                  )
-                ) {
-                  this.relatedData["doi_agent"].count++;
-                  this.relatedData["doi_agent"].results.push(doiAgentObject);
-                } else
-                  this.toastError({
-                    text: `Author(s) with the same name already exists!`
-                  });
-              }
-            );
+              )
+              .then(() => {
+                if (this.relatedData["doi_agent"].count > 0) {
+                  this.relatedData["doi_agent"].results.sort((a, b) =>
+                    a.sort > b.sort ? 1 : -1
+                  );
+                }
+              });
           }
         });
       } else {
