@@ -6,9 +6,9 @@
         <!-- REFERENCE -->
         <a
           v-if="reference && !data.is_private"
-          class="no-underline"
+          class="no-underline external-link"
           :href="'http://geoloogia.info/reference/' + this.data.id"
-          target="_blank"
+          target="ReferenceWindow"
         >
           <b>{{ $t("edit.referenceLink") }}</b> &nbsp;<i
             class="fas fa-file"
@@ -18,9 +18,9 @@
         <!-- FILE -->
         <a
           v-else-if="!data.is_private"
-          class="no-underline"
+          class="no-underline external-link"
           :href="'http://geocollections.info/file/' + this.data.id"
-          target="_blank"
+          target="GeocollectionsWindow"
         >
           <b>{{ $t("edit.link") }}</b>
         </a>
@@ -140,5 +140,9 @@ export default {
 <style scoped>
 .no-underline {
   text-decoration: none;
+}
+
+.external-link:hover {
+  opacity: 0.7;
 }
 </style>

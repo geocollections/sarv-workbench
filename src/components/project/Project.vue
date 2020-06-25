@@ -308,6 +308,7 @@
             v-on:file-uploaded="addFiles"
             :record-options="$route.meta.isEdit"
             accept-multiple
+            show-attachment-link
           />
         </div>
       </transition>

@@ -22,7 +22,7 @@
                   : bodyColor.split('n-')[0] + 'n-3'
               "
               hover
-              :title="$t(editMessage)"
+              :title="openFile ? $t(viewMessage) : $t(editMessage)"
               @click="
                 openFile
                   ? openFileInNewWindow(image)
@@ -97,6 +97,27 @@
             </span>
           </span>
         </v-tooltip>
+
+        <div
+          class="d-flex flex-column justify-space-around pa-1"
+          v-if="showAttachmentLink"
+        >
+          <v-btn
+            :title="$t(viewMessage)"
+            icon
+            color="blue"
+            @click="openFileInNewWindow(image)"
+          >
+            <v-icon>fas fa-eye</v-icon>
+          </v-btn>
+          <v-btn
+            color="green"
+            :title="$t(editMessage)"
+            icon
+            @click="openInNewTab(object, image[idField])"
+            ><v-icon>fas fa-edit</v-icon></v-btn
+          >
+        </div>
       </v-col>
     </v-row>
   </div>
@@ -124,12 +145,18 @@ export default {
       default: "grey lighten-4"
     },
     clearItemBackground: Boolean,
-    openFile: Boolean
+    openFile: Boolean,
+    showAttachmentLink: Boolean
   },
   computed: {
     editMessage() {
       if (this.object === "specimen") return "editSpecimen.editMessage";
       else return "editAttachment.editMessage";
+    },
+
+    viewMessage() {
+      if (this.object === "specimen") return "editSpecimen.viewMessage";
+      else return "editAttachment.viewMessage1";
     },
 
     idField() {
@@ -206,6 +233,11 @@ export default {
         // As of 18.09.2019 total of 1508 attachments are without attachment_format__value which 859 are jpg and 2 png
         return !!(fileType.includes("jpg") || fileType.includes("png"));
       }
+    },
+
+    openInNewTab(object, id) {
+      let routeData = this.$router.resolve({ path: `/${object}/${id}` });
+      window.open(routeData.href, "AttachmentWindow");
     }
   }
 };

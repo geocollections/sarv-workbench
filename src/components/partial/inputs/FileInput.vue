@@ -186,6 +186,7 @@
           :body-active-color="bodyActiveColor"
           clear-item-background
           :open-file="openFile"
+          :show-attachment-link="showAttachmentLink"
         />
       </v-col>
     </v-row>
@@ -321,7 +322,8 @@ export default {
       type: Boolean,
       default: true
     },
-    openFile: Boolean
+    openFile: Boolean,
+    showAttachmentLink: Boolean
   },
   computed: {
     ...mapState("settings", [

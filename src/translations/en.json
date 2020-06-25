@@ -570,6 +570,7 @@
   "editAttachment": {
     "heading": "File",
     "viewMessage": "View file in geocollections portal",
+    "viewMessage1": "View file",
     "editMessage": "Edit file"
   },
   "editSpecimen": {

@@ -2901,7 +2901,7 @@
                               {{ entity.id }}
                             </a>
                           </td>
-
+                          
                           <td>{{ entity.identifier }}</td>
 
                           <td
@@ -4586,7 +4586,7 @@ export default {
           this.relatedData.attach_link__doi = collections.map(entity => {
             return {
               id: entity.doi,
-              identifier: entity.doi_identifier
+              identifier: entity.doi__identifier
             };
           });
           this.autocomplete.attach_link__doi = this.relatedData.attach_link__doi;

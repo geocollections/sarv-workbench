@@ -464,6 +464,7 @@
               v-on:file-uploaded="addFiles"
               accept-multiple
               :is-draggable="$route.meta.isEdit"
+              show-attachment-link
             />
           </div>
 

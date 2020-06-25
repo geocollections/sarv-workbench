@@ -334,6 +334,7 @@
               accept-multiple
               :record-options="$route.meta.isEdit"
               :is-draggable="$route.meta.isEdit"
+              show-attachment-link
             />
           </div>
 

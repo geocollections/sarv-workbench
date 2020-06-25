@@ -570,6 +570,7 @@
   "editAttachment": {
     "heading": "Fail",
     "viewMessage": "Vaata faili geokogude portaalis",
+    "viewMessage1": "Vaata faili",
     "editMessage": "Muuda faili"
   },
   "editSpecimen": {

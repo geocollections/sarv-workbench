@@ -627,6 +627,7 @@
             :is-clearable="false"
             :is-draggable="!(attachment && attachment.length > 0)"
             open-file
+            show-attachment-link
           />
         </div>
       </transition>
@@ -670,6 +671,7 @@
                 open-file
                 acceptable-format="*/*"
                 :is-draggable="$route.meta.isEdit"
+                show-attachment-link
               />
             </v-col>
           </v-row>
