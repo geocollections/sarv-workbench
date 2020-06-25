@@ -2901,7 +2901,7 @@
                               {{ entity.id }}
                             </a>
                           </td>
-                          
+
                           <td>{{ entity.identifier }}</td>
 
                           <td
