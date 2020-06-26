@@ -10,8 +10,8 @@ jobs:
           at: ~/geocollections/sarv-edit
       - restore_cache:
           keys:
-            - v1.14-npm-deps-{{ checksum "package-lock.json" }}
-            - v1.14-npm-deps-
+            - v1.15-npm-deps-{{ checksum "package-lock.json" }}
+            - v1.15-npm-deps-
           paths:
             - ./node_modules
             - ./package-lock.json
@@ -19,7 +19,7 @@ jobs:
           name: Installin packages
           command: npm install
       - save_cache:
-          key: v1.14-npm-deps-{{ checksum "package-lock.json" }}
+          key: v1.15-npm-deps-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
             - ./package-lock.json
@@ -43,6 +43,20 @@ jobs:
       - run:
           name: Copying built files to development
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit-dev
+  deploy_to_developement2:
+    docker:
+      - image: circleci/node:lts
+    working_directory: ~/geocollections/sarv-edit
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/geocollections/sarv-edit
+      - run:
+          name: Removing current production files
+          command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_2} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
+      - run:
+          name: Copying built files to production
+          command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_2}:/var/www/sarv-edit
   deploy_to_production:
     docker:
       - image: circleci/node:lts
@@ -68,6 +82,12 @@ workflows:
             branches:
               only: [development, master]
       - deploy_to_development:
+          requires:
+            - build
+          filters:
+            branches:
+              only: development
+      - deploy_to_development2:
           requires:
             - build
           filters:
