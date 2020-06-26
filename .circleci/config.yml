@@ -94,7 +94,7 @@ jobs:
           key: v1-bundle-{{ checksum "package-lock.json" }}
       - restore_cache:
           key: v1-build-{{ checksum "package-lock.json" }}
-    - run:
+      - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
       - run:
