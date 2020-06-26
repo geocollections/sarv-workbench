@@ -43,7 +43,7 @@ jobs:
       - run:
           name: Copying built files to development
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit-dev
-  deploy_to_developement2:
+  deploy_to_developement_2:
     docker:
       - image: circleci/node:lts
     working_directory: ~/geocollections/sarv-edit
@@ -87,7 +87,7 @@ workflows:
           filters:
             branches:
               only: development
-      - deploy_to_development2:
+      - deploy_to_development_2:
           requires:
             - build
           filters:
