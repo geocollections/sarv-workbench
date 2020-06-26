@@ -637,7 +637,8 @@ export default {
     isDevUrl() {
       return (
         document.location.origin.includes("localhost") ||
-        document.location.origin.includes("edit2")
+        document.location.origin.includes("edit2") ||
+        document.location.origin.includes("edit3")
       );
     },
 

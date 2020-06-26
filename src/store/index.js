@@ -17,7 +17,7 @@ function buildLocalStorageKey() {
   const localVersion = "_v1.0.5";
 
   if (hostname) {
-    if (hostname.startsWith("edit2.")) {
+    if (hostname.startsWith("edit2.") || hostname.startsWith("edit3.")) {
       return hostname + devVersion;
     } else if (hostname.startsWith("edit.")) {
       return hostname + liveVersion;
