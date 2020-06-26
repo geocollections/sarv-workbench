@@ -28,9 +28,9 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
-          <!-- LOCATION and LOCATION_LOCATION -->
+          <!-- LOCATION, PARENT_LOCATION, NUMBER_ITEMS and NUMBER_ITEMS_REGISTERED -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="3" class="pa-1">
               <input-wrapper
                 v-model="location.location"
                 :color="bodyActiveColor"
@@ -39,37 +39,43 @@
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="location.location_location"
+            <v-col cols="12" md="3" class="pa-1">
+              <autocomplete-wrapper
+                v-model="location.parent_location"
                 :color="bodyActiveColor"
+                :items="autocomplete.storage"
+                :loading="autocomplete.loaders.storage"
+                item-text="location"
                 :label="$t('location.location_location')"
+                is-link
+                route-object="location"
+                is-searchable
+                v-on:search:items="autocompleteStorageSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="location.number_items"
+                :color="bodyActiveColor"
+                :label="$t('location.number_items')"
+                type="number"
+              />
+            </v-col>
+
+            <v-col cols="12" md="3" class="pa-1">
+              <input-wrapper
+                v-model="location.number_items_registered"
+                :color="bodyActiveColor"
+                :label="$t('location.number_items_registered')"
+                type="number"
               />
             </v-col>
           </v-row>
 
-          <!-- DATE_COLLECTED_FREE and STRATIGRAPHY_FREE -->
+          <!-- AUTHOR, STRATIGRAPHY_FREE and DATE_COLLECTED_FREE -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="location.date_collected_free"
-                :color="bodyActiveColor"
-                :label="$t('location.date_collected_free')"
-              />
-            </v-col>
-
-            <v-col cols="12" md="6" class="pa-1">
-              <input-wrapper
-                v-model="location.stratigraphy_free"
-                :color="bodyActiveColor"
-                :label="$t('common.stratigraphy')"
-              />
-            </v-col>
-          </v-row>
-
-          <!-- AGENT and NUMBER_ITEMS -->
-          <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
                 v-model="location.agent"
                 :color="bodyActiveColor"
@@ -84,12 +90,19 @@
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <input-wrapper
-                v-model="location.number_items"
+                v-model="location.stratigraphy_free"
                 :color="bodyActiveColor"
-                :label="$t('location.number_items')"
-                type="number"
+                :label="$t('common.stratigraphy')"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="location.date_collected_free"
+                :color="bodyActiveColor"
+                :label="$t('location.date_collected_free')"
               />
             </v-col>
           </v-row>
@@ -192,19 +205,22 @@ export default {
         copyFields: [
           "id",
           "location",
-          "location_location",
-          "date_collected_free",
-          "stratigraphy_free",
-          "agent",
+          "parent_location",
           "number_items",
+          "number_items_registered",
+          "agent",
+          "stratigraphy_free",
+          "date_collected_free",
           "contents",
           "remarks"
         ],
         autocomplete: {
           loaders: {
-            agent: false
+            agent: false,
+            storage: false
           },
-          agent: []
+          agent: [],
+          storage: []
         },
         location: {},
         requiredFields: ["location"],
@@ -272,6 +288,13 @@ export default {
           agent: obj.agent__agent
         };
         this.autocomplete.agent.push(this.location.agent);
+      }
+      if (this.isNotEmpty(obj.parent_location)) {
+        this.location.parent_location = {
+          id: obj.parent_location,
+          location: obj.parent_location__location
+        };
+        this.autocomplete.storage.push(this.location.parent_location);
       }
     }
   }

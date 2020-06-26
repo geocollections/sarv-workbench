@@ -123,7 +123,7 @@ const autocompleteMixin = {
       );
     },
     autocompleteStorageSearch(value) {
-      this.$_autocompleteMixin_search(value, "storage", "storage");
+      this.$_autocompleteMixin_search(value, "storage", "storage", 2);
     },
     autocompleteAdditionalStorageSearch(value) {
       this.$_autocompleteMixin_search(
