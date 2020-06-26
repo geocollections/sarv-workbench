@@ -1,102 +1,135 @@
 version: 2
+
 jobs:
-  build:
+  checkout_code:
     docker:
       - image: circleci/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/geocollections/sarv-edit
-      - restore_cache:
-          keys:
-            - v1.15-npm-deps-{{ checksum "package-lock.json" }}
-            - v1.15-npm-deps-
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - ./node_modules
-            - ./package-lock.json
+            - ~/geocollections/sarv-edit
+
+  bundle_dependencies:
+    docker:
+      - image: circleci/node:lts
+    working_directory: ~/geocollections/sarv-edit
+    steps:
+      - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: v1-bundle-{{ checksum "package-lock.json" }}
       - run:
-          name: Installin packages
+          name: Installing packages
           command: npm install
       - save_cache:
-          key: v1.15-npm-deps-{{ checksum "package-lock.json" }}
+          key: v1-bundle-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
             - ./package-lock.json
-      - run:
-          name: Building code
-          command: npm run build
-      - persist_to_workspace:
-          root: .
-          paths: dist
-  deploy_to_development:
+
+  build_dependencies:
     docker:
       - image: circleci/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
-      - checkout
-      - attach_workspace:
-          at: ~/geocollections/sarv-edit
+      - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: v1-bundle-{{ checksum "package-lock.json" }}
+      - run:
+          name: Building application
+          command: npm run build
+      - save_cache:
+          key: v1-build-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/geocollections/sarv-edit
+
+  deploy_to_dev:
+    docker:
+      - image: circleci/node:lts
+    working_directory: ~/geocollections/sarv-edit
+    steps:
+      - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: v1-bundle-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: v1-build-{{ checksum "package-lock.json" }}
       - run:
           name: Directory update
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
       - run:
           name: Copying built files to development
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit-dev
-  deploy_to_developement_2:
+
+  deploy_to_dev_2:
     docker:
       - image: circleci/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
-      - checkout
-      - attach_workspace:
-          at: ~/geocollections/sarv-edit
+      - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: v1-bundle-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: v1-build-{{ checksum "package-lock.json" }}
       - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_2} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
       - run:
           name: Copying built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_2}:/var/www/sarv-edit
-  deploy_to_production:
+
+  deploy_to_prod:
     docker:
       - image: circleci/node:lts
     working_directory: ~/geocollections/sarv-edit
     steps:
-      - checkout
-      - attach_workspace:
-          at: ~/geocollections/sarv-edit
-      - run:
+      - restore_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+      - restore_cache:
+          key: v1-bundle-{{ checksum "package-lock.json" }}
+      - restore_cache:
+          key: v1-build-{{ checksum "package-lock.json" }}
+    - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
       - run:
           name: Copying built files to production
           command: scp -P ${PORT} -r dist/* ${USER}@${ADDRESS_1}:/var/www/sarv-edit
 
-
 workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build:
+      - checkout_code
+      - bundle_dependencies:
+          required:
+            - checkout_code
+      - build_dependencies:
+          required:
+            - bundle_dependencies
           filters:
             branches:
               only: [development, master]
-      # Todo: Should add tests
-      - deploy_to_development:
-          requires:
-            - build
+      - deploy_to_dev:
+          required:
+            - build_dependencies
           filters:
             branches:
               only: development
-      - deploy_to_development_2:
-          requires:
-            - build
+      - deploy_to_dev_2:
+          required:
+            - build_dependencies
           filters:
             branches:
               only: development
-      - deploy_to_production:
-          requires:
-            - build
+      - deploy_to_prod:
+          required:
+            - build_dependencies
           filters:
             branches:
               only: master
