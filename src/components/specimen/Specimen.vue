@@ -370,9 +370,9 @@
             </v-col>
           </v-row>
 
-          <!-- PRESENCE and STORAGE -->
+          <!-- PRESENCE, STORAGE and NUMBER_PIECES -->
           <v-row no-gutters>
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
                 v-model="specimen.presence"
                 :color="bodyActiveColor"
@@ -383,7 +383,7 @@
               />
             </v-col>
 
-            <v-col cols="12" md="6" class="pa-1">
+            <v-col cols="12" md="4" class="pa-1">
               <autocomplete-wrapper
                 v-model="specimen.storage"
                 :color="bodyActiveColor"
@@ -393,6 +393,14 @@
                 :label="$t('common.storage')"
                 is-searchable
                 v-on:search:items="autocompleteStorageSearch"
+              />
+            </v-col>
+
+            <v-col cols="12" md="4" class="pa-1">
+              <input-wrapper
+                v-model="specimen.number_pieces"
+                :color="bodyActiveColor"
+                :label="$t('specimen.number_pieces')"
               />
             </v-col>
           </v-row>
@@ -919,7 +927,8 @@ export default {
           "tags",
           "status",
           "original_status",
-          "parent"
+          "parent",
+          "number_pieces",
         ],
         autocomplete: {
           loaders: {

@@ -819,6 +819,7 @@
     "selectionId": "Valiku ID",
     "selection": "Valik",
     "loan": "Laen",
+    "number_pieces": "Tükkide arv",
     "relatedTables": {
       "specimen_identification": "Taksoni nimed",
       "specimen_identification_geology": "Kivi nimed",
