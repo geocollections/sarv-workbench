@@ -388,16 +388,6 @@ export default {
               title: "collection",
               path: "/collection/add",
               icon: "far fa-plus-square"
-            },
-            {
-              title: "locations",
-              path: "/location",
-              icon: "fas fa-location-arrow"
-            },
-            {
-              title: "location",
-              path: "/location/add",
-              icon: "far fa-plus-square"
             }
           ]
         },
@@ -477,6 +467,22 @@ export default {
         }
       ],
       routeLinksSpecial: [
+        {
+          name: "location",
+          title: "locations",
+          links: [
+            {
+              title: "locations",
+              path: "/location",
+              icon: "fas fa-location-arrow"
+            },
+            {
+              title: "location",
+              path: "/location/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
         {
           name: "visit",
           title: "visits",
