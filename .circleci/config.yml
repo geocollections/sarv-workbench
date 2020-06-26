@@ -87,7 +87,7 @@ jobs:
             - "f7:03:80:ab:4d:82:59:7a:a2:2a:7e:7f:8f:4a:5d:b9"
       - run:
           name: Add ssh key to known hosts
-          command: ssh-keyscan ${ADDRESS_2} >> ~/.ssh/known_hosts
+          command: ssh-keyscan -H $ADDRESS_2 >> ~/.ssh/known_hosts && cat ~/.ssh/known_hosts
       - run:
           name: Removing current production files
           command: ssh -p ${PORT} ${USER}@${ADDRESS_2} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
