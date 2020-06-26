@@ -235,9 +235,10 @@ export default {
     objectData: {
       handler: function(newVal) {
         if (newVal && newVal.id) {
-          this.getObjectPerms();
-
-          this.getAutocompletes();
+          if (newVal.id.toString() === this.$route.params.id) {
+            this.getObjectPerms();
+            this.getAutocompletes();
+          }
         }
       },
       immediate: true

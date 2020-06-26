@@ -3241,6 +3241,36 @@ export function fetchLocations(data) {
   }
 }
 
+export function fetchLocationAttachment(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `attachment/?attach_link__storage__id=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&fields=${attachmentFields}&format=json`
+  );
+}
+
+export function fetchLocationSpecimens(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `specimen/?storage=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
+export function fetchLocationSamples(id, searchParameters) {
+  let orderBy = buildOrderBy(
+    searchParameters.sortBy,
+    searchParameters.sortDesc
+  );
+  return get(
+    `sample/?storage=${id}&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
+  );
+}
+
 /**********************
  ***  LOCATION END  ***
  **********************/

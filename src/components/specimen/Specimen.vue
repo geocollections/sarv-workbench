@@ -805,6 +805,15 @@ export default {
       });
     }
 
+    if (this.$route.query.storage) {
+      let storage = JSON.parse(this.$route.query.storage);
+      this.specimen.storage = {
+        id: storage.id,
+        location: storage.location
+      };
+      this.autocomplete.storage.push(this.specimen.storage);
+    }
+
     this.loadFullInfo();
   },
 
@@ -928,7 +937,7 @@ export default {
           "status",
           "original_status",
           "parent",
-          "number_pieces",
+          "number_pieces"
         ],
         autocomplete: {
           loaders: {

@@ -3271,7 +3271,12 @@
                           index) in relatedData.attach_link__storage"
                           :key="index"
                         >
-                          <td>{{ entity.id }}</td>
+                          <td>
+                            <router-link
+                              :to="{ path: '/location/' + entity.id }"
+                            >{{ entity.id }}</router-link
+                            >
+                          </td>
 
                           <td>
                             <span v-if="entity.contents !== null"

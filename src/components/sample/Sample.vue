@@ -1064,6 +1064,14 @@ export default {
       this.addSiteDataToSampleObject(JSON.parse(this.$route.query.site));
     else if (this.$route.params.site)
       this.addSiteDataToSampleObject(this.$route.params.site);
+    else if (this.$route.query.storage) {
+      let storage = JSON.parse(this.$route.query.storage);
+      this.sample.storage = {
+        id: storage.id,
+        location: storage.location
+      };
+      this.autocomplete.storage.push(this.sample.storage);
+    }
 
     this.loadFullInfo();
   },

@@ -522,6 +522,7 @@
                   v-if="relatedData.samples.count > 0"
                   :body-active-color="bodyActiveColor"
                   :body-color="bodyColor"
+                  v-on:update:sorting="relatedData.searchParameters[activeTab][$event.key] = $event.value"
                 />
               </v-col>
             </v-row>

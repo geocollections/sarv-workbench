@@ -830,7 +830,6 @@ export default {
       if (this.$route.meta.isEdit) {
         this.setLoadingState(true);
         this.setLoadingType("fetch");
-        this.$emit("set-object", "locality");
 
         fetchLocality(this.$route.params.id).then(response => {
           let handledResponse = this.handleResponse(response);
@@ -854,8 +853,6 @@ export default {
         this.relatedTabs.forEach(tab => {
           this.loadRelatedData(tab.name);
         });
-
-        this.$on("tab-changed", this.setTab);
       } else {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
       }

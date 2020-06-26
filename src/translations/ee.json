@@ -1521,7 +1521,12 @@
     "agent": "Persoon: Nimi",
     "number_items": "Säilikute arv",
     "number_items_registered": "Registreeritud säilikute arv",
-    "contents": "Sisu"
+    "contents": "Sisu",
+    "relatedTables": {
+      "attachment_link": "Failid",
+      "specimen": "Eksemplarid",
+      "sample": "Proovid"
+    }
   },
   "rock": {
     "name": "Mineraal/kivim",

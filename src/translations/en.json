@@ -1521,7 +1521,12 @@
     "agent": "Agent: Name",
     "number_items": "Number items",
     "number_items_registered": "Number items registered",
-    "contents": "Contents"
+    "contents": "Contents",
+    "relatedTables": {
+      "attachment_link": "Files",
+      "specimen": "Specimens",
+      "sample": "Samples"
+    }
   },
   "rock": {
     "name": "Mineral/rock",
