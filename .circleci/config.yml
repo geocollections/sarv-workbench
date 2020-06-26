@@ -107,28 +107,28 @@ workflows:
     jobs:
       - checkout_code
       - bundle_dependencies:
-          required:
+          requires:
             - checkout_code
       - build_dependencies:
-          required:
+          requires:
             - bundle_dependencies
           filters:
             branches:
               only: [development, master]
       - deploy_to_dev:
-          required:
+          requires:
             - build_dependencies
           filters:
             branches:
               only: development
       - deploy_to_dev_2:
-          required:
+          requires:
             - build_dependencies
           filters:
             branches:
               only: development
       - deploy_to_prod:
-          required:
+          requires:
             - build_dependencies
           filters:
             branches:
