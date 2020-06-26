@@ -3187,9 +3187,13 @@ export function fetchLocation(id) {
 
 export function fetchLocations(data) {
   let fields =
-    "id,location,location_location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,remarks,database,user_added,date_added";
+    "id,location,parent_location__location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,remarks,database,user_added,date_added";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
+  }
 
   if (data.location && data.location.trim().length > 0) {
     searchFields += `&location__${data.location__lookuptype || "icontains"}=${
@@ -3210,14 +3214,14 @@ export function fetchLocations(data) {
     };fields:agent__id,agent__agent,agent__forename,agent__surename;lookuptype:${data.agent__lookuptype ||
       "icontains"}`;
   }
-  if (data.user_added && data.user_added.trim().length > 0) {
-    searchFields += `&user_added__${data.user_added__lookuptype ||
-      "icontains"}=${data.user_added}`;
-  }
-  if (data.date_added && data.date_added.trim().length > 0) {
-    searchFields += `&date_added__${data.date_added__lookuptype ||
-      "icontains"}=${data.date_added}`;
-  }
+  // if (data.user_added && data.user_added.trim().length > 0) {
+  //   searchFields += `&user_added__${data.user_added__lookuptype ||
+  //     "icontains"}=${data.user_added}`;
+  // }
+  // if (data.date_added && data.date_added.trim().length > 0) {
+  //   searchFields += `&date_added__${data.date_added__lookuptype ||
+  //     "icontains"}=${data.date_added}`;
+  // }
   if (data.contents && data.contents.trim().length > 0) {
     searchFields += `&contents__${data.contents__lookuptype || "icontains"}=${
       data.contents

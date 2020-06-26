@@ -336,12 +336,11 @@ const state = {
   },
   collectionViewType: "table",
   locationSearchParameters: {
+    id: null,
     location: null,
     location_location: null,
     stratigraphy_free: null,
     agent: null,
-    user_added: null,
-    date_added: null,
     contents: null,
     page: 1,
     paginateBy: 10,
