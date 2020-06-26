@@ -35,7 +35,14 @@
     </template>
 
     <template v-slot:item.content="{ item }">
-      <div v-translate="{ et: item.content_et, en: item.content_en }"></div>
+      <div
+        v-translate="{
+          et: item.content_et,
+          en: item.content_en,
+          useInnerText: true,
+          characterLimit: 1000
+        }"
+      ></div>
     </template>
 
     <template v-slot:item.public="{ item }">
@@ -81,6 +88,7 @@ export default {
     expanded: [],
     headers: [
       { text: "common.id", value: "id" },
+      { text: "web_pages.site", value: "site" },
       { text: "web_pages.title", value: "title" },
       { text: "web_pages.text", value: "content" },
       { text: "common.is_private", value: "public", align: "center" }

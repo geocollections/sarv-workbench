@@ -28,6 +28,17 @@
 
       <transition>
         <div v-show="block.info" class="pa-1">
+          <!-- SITE -->
+          <v-row no-gutters>
+            <v-col cols="12" class="pa-1">
+              <input-wrapper
+                v-model="web_pages.site"
+                :color="bodyActiveColor"
+                :label="$t('web_pages.site')"
+              />
+            </v-col>
+          </v-row>
+
           <!-- TITLE_ET -->
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
@@ -165,6 +176,7 @@ export default {
         searchHistory: "webPagesSearchHistory",
         copyFields: [
           "id",
+          "site",
           "title_et",
           "title_en",
           "content_en",

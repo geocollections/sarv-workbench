@@ -67,7 +67,14 @@ const i18n = new VueI18n({
 
 Vue.directive("translate", function(el, binding) {
   let value = i18n.locale === "ee" ? binding.value.et : binding.value.en;
-  el.innerHTML = typeof value !== "undefined" && value !== null ? value : "";
+  if (
+    value &&
+    binding.value.characterLimit &&
+    value.length > binding.value.characterLimit
+  )
+    value = value.substring(0, binding.value.characterLimit) + "...";
+  if (binding.value.useInnerText) el.innerText = value ? value : "";
+  else el.innerHTML = value ? value : "";
 });
 
 new Vue({
