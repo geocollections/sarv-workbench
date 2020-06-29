@@ -1,5 +1,5 @@
 <template>
-  <v-content class="login">
+  <v-main class="login">
     <lang-buttons v-if="$route.meta.isLogin" />
 
     <v-container fill-height>
@@ -126,7 +126,7 @@
         </v-col>
       </v-row>
     </v-container>
-  </v-content>
+  </v-main>
 </template>
 
 <script>

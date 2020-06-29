@@ -1,5 +1,5 @@
 <template>
-  <v-content class="loan-print">
+  <v-main class="loan-print">
     <lang-buttons style="z-index: 10" :is-dark="false" class="d-print-none" />
 
     <v-container fluid>
@@ -475,7 +475,7 @@
         </v-row>
       </v-card>
     </v-container>
-  </v-content>
+  </v-main>
 </template>
 
 <script>

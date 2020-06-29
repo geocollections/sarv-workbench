@@ -4,7 +4,7 @@
     app
     clipped
     @input="changeDrawerState"
-    mobile-break-point="992"
+    mobile-breakpoint="992"
     :dark="isDrawerDark"
     :color="drawerColor"
   >

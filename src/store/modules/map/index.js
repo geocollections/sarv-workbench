@@ -1,6 +1,6 @@
 const state = {
   showMap: true,
-  defaultLayer: "OpenStreetMap"
+  defaultLayer: "CartoDB"
 };
 
 const getters = {};

@@ -4,7 +4,7 @@
   >
     <app-header />
 
-    <v-content>
+    <v-main>
       <v-container fluid>
         <breadcrumbs
           class="d-print-none"
@@ -15,7 +15,7 @@
 
         <router-view />
       </v-container>
-    </v-content>
+    </v-main>
   </div>
 </template>
 

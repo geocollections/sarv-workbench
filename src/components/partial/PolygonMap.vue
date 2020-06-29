@@ -33,9 +33,21 @@ export default {
     newPolygon: null,
     tileProviders: [
       {
+        name: "CartoDB",
+        leafletObject: L.tileLayer(
+          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+          {
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+          }
+        ),
+        minZoom: 1,
+        maxZoom: 18
+      },
+      {
         name: "OpenStreetMap",
         leafletObject: L.tileLayer(
-          "https://api.tiles.mapbox.com/v4/mapbox.light/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia3V1dG9iaW5lIiwiYSI6ImNpZWlxdXAzcjAwM2Nzd204enJvN2NieXYifQ.tp6-mmPsr95hfIWu3ASz2w",
+          "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           {
             attribution:
               '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -172,7 +184,7 @@ export default {
 
       // Default layer
       if (this.defaultLayer) {
-        this.map.removeLayer(baseLayers["OpenStreetMap"]);
+        this.map.removeLayer(baseLayers["CartoDB"]);
         this.map.addLayer(baseLayers[this.defaultLayer]);
         if (this.defaultLayer === "Maaameti fotokaart") {
           this.map.addLayer(this.overlayMaps[0].leafletObject);
