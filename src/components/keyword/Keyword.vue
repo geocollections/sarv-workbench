@@ -385,7 +385,6 @@ export default {
         ],
         activeTab: "keyword_relation",
         relatedData: this.setDefaultRelatedData(),
-        searchHistory: "keywordSearchHistory",
         copyFields: [
           "id",
           "keyword",

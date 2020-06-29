@@ -739,7 +739,6 @@ export default {
           { name: "locality_stratigraphy", iconClass: "fas fa-globe-asia" },
           { name: "locality_description", iconClass: "fas fa-align-left" }
         ],
-        searchHistory: "localitySearchHistory",
         activeTab: "locality_reference",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

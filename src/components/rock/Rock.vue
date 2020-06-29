@@ -680,7 +680,6 @@ export default {
           { name: "rock_reference", iconClass: "fas fa-book" },
           { name: "rock_classification", iconClass: "fas fa-project-diagram" }
         ],
-        searchHistory: "rockSearchHistory",
         activeTab: "rock_tree",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

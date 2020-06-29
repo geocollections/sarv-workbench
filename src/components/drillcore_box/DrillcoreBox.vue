@@ -431,7 +431,6 @@ export default {
         ],
         activeTab: "attachment",
         relatedData: this.setDefaultRelatedData(),
-        searchHistory: "drillcoreBoxSearchHistory",
         copyFields: [
           "id",
           "drillcore",

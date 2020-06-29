@@ -4258,7 +4258,6 @@ export default {
           { name: "otherFile", value: 3, disabled: false },
           { name: "digitisedReference", value: 4, disabled: false }
         ],
-        searchHistory: "attachmentSearchHistory",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [
           "agent_digitised",

@@ -68,7 +68,6 @@ export default {
   created() {
     // Used by sidebar
     this.setActiveSearchParameters({
-      searchHistory: "librarySearchHistory",
       search: this.librarySearchParameters,
       request: "FETCH_LIBRARIES",
       title: "header.libraries",

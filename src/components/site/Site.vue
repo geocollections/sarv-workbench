@@ -1026,7 +1026,6 @@ export default {
         ],
         activeTab: "attachment_link",
         relatedData: this.setDefaultRelatedData(),
-        searchHistory: "siteSearchHistory",
         copyFields: [
           "id",
           "name",

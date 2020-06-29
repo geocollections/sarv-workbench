@@ -483,7 +483,6 @@ export default {
 
     setInitialData() {
       return {
-        searchHistory: "collectionSearchHistory",
         copyFields: [
           "id",
           "number",

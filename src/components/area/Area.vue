@@ -530,7 +530,6 @@ export default {
           { name: "locality_reference", iconClass: "fas fa-book" }
         ],
         activeTab: "sites",
-        searchHistory: "areaSearchHistory",
         copyFields: [
           "id",
           "name",

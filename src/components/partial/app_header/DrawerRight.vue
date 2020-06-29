@@ -32,7 +32,6 @@
         </v-list-item>
 
         <v-list-item
-          class="d-flex flex-column justify-content-end"
           v-for="(field, index) in activeSearchParametersFilters"
           :key="index"
         >
@@ -658,18 +657,13 @@ export default {
       "sidebarList",
       "activeLibrary",
       "activeSite",
-      "activeSelectionSeries",
-      "tableSearchParameters"
+      "activeSelectionSeries"
     ]),
 
     ...mapState("settings", ["recentUrls"]),
 
     reversedRecentUrls() {
       return this.recentUrls.slice(0).reverse();
-    },
-
-    computedTableSearchParameters() {
-      return this.tableSearchParameters[this.$route.meta.object];
     },
 
     isSelectionSeriesAvailable() {
@@ -689,8 +683,7 @@ export default {
       return (
         this.$route.meta.isTableView &&
         this.$route.meta.object === "reference" &&
-        this.activeSearchParams &&
-        this.activeSearchParams.search
+        this?.activeSearchParams?.search
       );
     }
   },
@@ -734,12 +727,6 @@ export default {
 
     previousPage() {
       this.activeSearchParamsPreviousPage();
-    },
-
-    setAction(action, choice) {
-      this.setSidebarUserAction({
-        userAction: { action: action, choice: choice }
-      });
     },
 
     toggleActive(entity, activeObject) {

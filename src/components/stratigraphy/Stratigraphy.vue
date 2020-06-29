@@ -759,7 +759,6 @@ export default {
           { name: "stratigraphy_stratotype", iconClass: "fas fa-cut" },
           { name: "stratigraphy_synonym", iconClass: "fas fa-list-ol" }
         ],
-        searchHistory: "stratigraphySearchHistory",
         activeTab: "stratigraphy_reference",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

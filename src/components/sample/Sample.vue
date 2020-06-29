@@ -1161,7 +1161,6 @@ export default {
           { name: "attachment_link", iconClass: "fas fa-folder-open" },
           { name: "sample_reference", iconClass: "fas fa-book" }
         ],
-        searchHistory: "sampleSearchHistory",
         activeTab: "analysis",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

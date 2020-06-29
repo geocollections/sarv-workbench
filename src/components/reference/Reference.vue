@@ -1093,7 +1093,6 @@ export default {
           { name: "taxon", iconClass: "fas fa-pastafarianism" },
           { name: "locality_reference", iconClass: "fas fa-globe" }
         ],
-        searchHistory: "referenceSearchHistory",
         activeTab: "library",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

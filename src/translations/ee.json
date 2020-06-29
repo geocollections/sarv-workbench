@@ -906,7 +906,7 @@
     }
   },
   "project":{
-    "parent_project":"Parent",
+    "parent_project":"Kuulub",
     "newSite": "Uus vaatluspunkt",
     "members": "Projekti liikmed",
     "files": "Projekti failid",
@@ -1376,7 +1376,7 @@
   "stratigraphy": {
     "rank":"Tase",
     "scope":"Skoop",
-    "parent":" Ülemine",
+    "parent":"Kuulub",
     "base":"Alum. piir (m)",
     "top":"Ülem. piir (m)",
     "reference":"Kirjandus",

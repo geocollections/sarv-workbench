@@ -183,10 +183,6 @@ export default {
     searchParameters: {
       type: Object
     },
-    searchHistory: {
-      type: String,
-      default: null
-    },
     exportButtons: {
       type: Boolean,
       default: true

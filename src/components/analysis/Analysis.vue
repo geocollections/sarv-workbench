@@ -661,7 +661,6 @@ export default {
           { name: "analysis_results", iconClass: "far fa-chart-bar" },
           { name: "attachment_link", iconClass: "fas fa-folder-open" }
         ],
-        searchHistory: "analysisSearchHistory",
         activeTab: "analysis_results",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

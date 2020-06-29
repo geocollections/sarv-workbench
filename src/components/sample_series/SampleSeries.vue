@@ -499,7 +499,6 @@ export default {
         ],
         activeTab: "samples",
         relatedData: this.setDefaultRelatedData(),
-        searchHistory: "sampleSeriesSearchHistory",
         copyFields: [
           "id",
           "name",

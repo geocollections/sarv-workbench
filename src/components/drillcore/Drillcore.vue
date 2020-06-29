@@ -467,7 +467,6 @@ export default {
           { name: "drillcore_study", iconClass: "fas fa-school" },
           { name: "attachment_link", iconClass: "far fa-folder-open" }
         ],
-        searchHistory: "drillcoreSearchHistory",
         activeTab: "drillcore_box",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

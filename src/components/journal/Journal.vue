@@ -177,7 +177,6 @@ export default {
   methods: {
     setInitialData() {
       return {
-        searchHistory: "journalSearchHistory",
         copyFields: [
           "id",
           "journal_name",

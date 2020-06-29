@@ -1005,7 +1005,6 @@ export default {
           },
           { name: "doi_date", iconClass: "far fa-calendar-alt" }
         ],
-        searchHistory: "doiSearchHistory",
         activeTab: "doi_agent",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

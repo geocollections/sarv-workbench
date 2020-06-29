@@ -646,7 +646,6 @@ export default {
 
     setInitialData() {
       return {
-        searchHistory: "projectSearchHistory",
         window: {
           width: 0,
           height: 0

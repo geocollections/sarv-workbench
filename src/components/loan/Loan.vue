@@ -468,7 +468,6 @@ export default {
         ],
         activeTab: "loan_specimen",
         relatedData: this.setDefaultRelatedData(),
-        searchHistory: "loanSearchHistory",
         copyFields: [
           "id",
           "loan_number",

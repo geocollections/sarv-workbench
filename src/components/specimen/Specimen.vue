@@ -897,7 +897,6 @@ export default {
           { name: "specimen_history", iconClass: "fas fa-history" },
           { name: "analysis", iconClass: "far fa-chart-bar" }
         ],
-        searchHistory: "specimenSearchHistory",
         activeTab: "specimen_identification",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

@@ -272,7 +272,6 @@ export default {
   methods: {
     setInitialData() {
       return {
-        searchHistory: "visitSearchHistory",
         copyFields: [
           "id",
           "visitor",

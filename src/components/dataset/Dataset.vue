@@ -418,7 +418,6 @@ export default {
           { name: "dataset_reference", iconClass: "fas fa-book" },
           { name: "dataset_analysis", iconClass: "far fa-chart-bar" }
         ],
-        searchHistory: "datasetSearchHistory",
         activeTab: "dataset_author",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

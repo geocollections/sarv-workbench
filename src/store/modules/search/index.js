@@ -41,7 +41,6 @@ const state = {
   loadingPercent: 0,
   sidebarList: [],
   activeObject: null,
-  tableSearchParameters: {},
   sidebarUserAction: null,
   activeLibrary: null,
   activeProject: null,

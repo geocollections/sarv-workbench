@@ -440,7 +440,6 @@ export default {
             iconClass: "fas fa-list-ol"
           }
         ],
-        searchHistory: "librarySearchHistory",
         activeTab: "library_reference",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

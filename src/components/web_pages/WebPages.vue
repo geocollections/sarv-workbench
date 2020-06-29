@@ -173,7 +173,6 @@ export default {
   methods: {
     setInitialData() {
       return {
-        searchHistory: "webPagesSearchHistory",
         copyFields: [
           "id",
           "site",

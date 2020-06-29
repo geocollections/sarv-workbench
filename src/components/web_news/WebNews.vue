@@ -161,7 +161,6 @@ export default {
   methods: {
     setInitialData() {
       return {
-        searchHistory: "webNewsSearchHistory",
         copyFields: [
           "id",
           "title_et",

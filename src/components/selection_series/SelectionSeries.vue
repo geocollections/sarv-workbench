@@ -240,7 +240,6 @@ export default {
 
     setInitialData() {
       return {
-        searchHistory: "selectionSeriesSearchHistory",
         relatedTabs: [
           { name: "specimen", iconClass: "fas fa-fish" },
           { name: "sample", iconClass: "fas fa-vial" },

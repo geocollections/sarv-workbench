@@ -812,7 +812,6 @@ export default {
           { name: "attachment", iconClass: "far fa-file" },
           { name: "taxon_image", iconClass: "far fa-image" }
         ],
-        searchHistory: "taxonSearchHistory",
         activeTab: this.$route.meta.isEdit ? "taxon_subclass" : "taxon_synonym",
         relatedData: this.setDefaultRelatedData(),
         copyFields: [

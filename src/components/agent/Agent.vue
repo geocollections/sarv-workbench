@@ -416,7 +416,6 @@ export default {
   methods: {
     setInitialData() {
       return {
-        searchHistory: "agentSearchHistory",
         copyFields: [
           "id",
           "agent",

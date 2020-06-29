@@ -523,7 +523,6 @@ export default {
 
     setInitialData() {
       return {
-        searchHistory: "preparationSearchHistory",
         relatedData: this.setDefaultRalatedData(),
         copyFields: [
           "id",

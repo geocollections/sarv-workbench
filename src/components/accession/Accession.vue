@@ -225,7 +225,6 @@ export default {
   methods: {
     setInitialData() {
       return {
-        searchHistory: "accessionSearchHistory",
         copyFields: [
           "id",
           "number",
