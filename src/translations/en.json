@@ -361,7 +361,8 @@
       "referenceAndDataset": "Reference ja Dataset",
       "description": "Remarks",
       "datacite": "Datacite",
-      "dataciteDiff": "Datacite metadata difference"
+      "dataciteDiff": "Datacite metadata difference",
+      "dataciteUrlDiff": "Datacite URL difference"
     },
     "analysis": {
       "info": "General info",
@@ -1159,12 +1160,15 @@
     "polygonMapEdit": "Polygon map (editing)",
     "polygonMap": "Polygon map",
     "dataciteDiff": "Datacite metadata difference",
+    "dataciteUrlDiff": "Datacite URL difference",
     "diffNotFound": "Differences not found",
     "diffAdded": "Added",
     "diffDeleted": "Deleted",
     "diffEqual": "Equal",
     "diffComparison": "Datacite data compared to SARV data",
     "sort": "Order",
+    "currentUrl": "Current link",
+    "newUrl": "New link",
     "relatedTables": {
       "doi_agent": "Related persons and institutions",
       "attachment_link": "Files",

@@ -361,7 +361,8 @@
       "referenceAndDataset": "Kirjandus ja Andmekogum",
       "description": "Lisainfo ja märksõnad",
       "datacite": "Datacite",
-      "dataciteDiff": "Datacite metaandmete erinevus"
+      "dataciteDiff": "Datacite metaandmete erinevus",
+      "dataciteUrlDiff": "Datacite URL erinevus"
     },
     "analysis": {
       "info": "Üldinfo",
@@ -1159,12 +1160,15 @@
     "polygonMapEdit": "Polügooni kaart (muutmine)",
     "polygonMap": "Polügooni kaart",
     "dataciteDiff": "Datacite metaandmete erinevus",
+    "dataciteUrlDiff": "Datacite URL erinevus",
     "diffNotFound": "Erinevusi ei leitud",
     "diffAdded": "Lisatud",
     "diffDeleted": "Kustutatud",
     "diffEqual": "Võrdne",
     "diffComparison": "Datacite andmed võrreldes SARV andmetega",
     "sort": "Jrk",
+    "currentUrl": "Praegune link",
+    "newUrl": "Uus link",
     "relatedTables": {
       "doi_agent": "Seotud inimesed ja institutsioonid",
       "attachment_link": "Failid",

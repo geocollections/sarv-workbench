@@ -766,6 +766,71 @@
         </div>
       </transition>
     </v-card>
+
+    <!-- DOI URL DIFF -->
+    <v-card
+      class="mt-2"
+      id="block-dataciteUrlDiff"
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+      elevation="4"
+      v-if="$route.meta.isEdit && showDoiUrlButton"
+    >
+      <v-card-title class="pt-2 pb-1">
+        <div
+          class="card-title--clickable"
+          @click="block.dataciteUrlDiff = !block.dataciteUrlDiff"
+        >
+          <span>{{ $t("doi.dataciteUrlDiff") }}</span>
+          <v-icon right>fas fa-exchange-alt</v-icon>
+        </div>
+        <v-spacer></v-spacer>
+        <v-btn
+          icon
+          @click="block.dataciteUrlDiff = !block.dataciteUrlDiff"
+          :color="bodyActiveColor"
+        >
+          <v-icon>{{
+            block.dataciteUrlDiff ? "fas fa-angle-up" : "fas fa-angle-down"
+          }}</v-icon>
+        </v-btn>
+      </v-card-title>
+
+      <transition>
+        <div v-show="block.dataciteUrlDiff" class="pa-1">
+          <v-row no-gutters v-if="urlDiff">
+            <v-col cols="12" class="pa-1">
+              <div class="pa-1">
+                DataCite URL ({{ $t("doi.currentUrl") }}):
+                <a
+                  :href="dataciteURL"
+                  class="font-weight-bold red--text text-decoration-underline url-link"
+                  target="OldDoi"
+                  :title="$t('doi.currentUrl')"
+                  >{{ dataciteURL }}</a
+                >
+              </div>
+
+              <div class="pa-1">
+                SARV URL ({{ $t("doi.newUrl") }}):
+                <a
+                  :href="doiURL"
+                  class="font-weight-bold green--text text-decoration-underline url-link"
+                  target="NewDoi"
+                  :title="$t('doi.newUrl')"
+                  >{{ doiURL }}</a
+                >
+              </div>
+            </v-col>
+          </v-row>
+
+          <v-row v-else no-gutters>
+            <v-col cols="12" class="pa-1 title">
+              {{ $t("doi.diffNotFound") }}
+            </v-col>
+          </v-row>
+        </div>
+      </transition>
+    </v-card>
   </div>
 </template>
 
@@ -904,9 +969,14 @@ export default {
         let diff = dmp.diff_main(this.dataciteXML, this.sarvXML);
         dmp.diff_cleanupSemantic(diff);
         dmp.diff_prettyHtml(diff);
-        console.log(diff);
         return diff;
       } else return null;
+    },
+
+    urlDiff() {
+      return (
+        this.dataciteURL && this.doiURL && this.dataciteURL !== this.doiURL
+      );
     }
   },
 
@@ -1014,7 +1084,8 @@ export default {
           referenceAndDataset: false,
           description: true,
           datacite: true,
-          dataciteDiff: false
+          dataciteDiff: false,
+          dataciteUrlDiff: false
         },
         showMetadataButton: false,
         showDoiUrlButton: false,
@@ -2053,5 +2124,9 @@ export default {
 
 .diff-equal {
   background-color: rgba(33, 150, 243, 0.33);
+}
+
+.url-link:hover {
+  opacity: 0.7;
 }
 </style>
