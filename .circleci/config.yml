@@ -43,7 +43,7 @@ jobs:
           name: Building application
           command: npm run build
       - save_cache:
-          key: v1-build-{{ checksum "package-lock.json" }}
+          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/geocollections/sarv-edit
 
@@ -57,7 +57,7 @@ jobs:
       - restore_cache:
           key: v1-bundle-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: v1-build-{{ checksum "package-lock.json" }}
+          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Directory update
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
@@ -75,7 +75,7 @@ jobs:
       - restore_cache:
           key: v1-bundle-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: v1-build-{{ checksum "package-lock.json" }}
+          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_2} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
@@ -93,7 +93,7 @@ jobs:
       - restore_cache:
           key: v1-bundle-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: v1-build-{{ checksum "package-lock.json" }}
+          key: v1-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
