@@ -12,6 +12,10 @@
     expand-icon="fas fa-caret-down"
     :sort-by="searchParameters.sortBy"
     :sort-desc="searchParameters.sortDesc"
+    :show-select="!!activeLibrary"
+    @item-selected="$emit('add-reference-to-active-library', $event)"
+    @toggle-select-all="$emit('toggle-select-all', $event, 'reference')"
+    :value="selected"
     @update:sort-by="$emit('update:sorting', { value: $event, key: 'sortBy' })"
     @update:sort-desc="
       $emit('update:sorting', { value: $event, key: 'sortDesc' })
@@ -107,30 +111,17 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
-
-    <template v-slot:item.library="{ item }">
-      <v-btn
-        v-if="isLibraryActive"
-        @click="$emit('add-reference-to-active-library', item.id)"
-        :title="$t('reference.addReferenceToLibrary')"
-        color="green"
-        icon
-      >
-        <v-icon>far fa-plus-square</v-icon>
-      </v-btn>
-    </template>
   </v-data-table>
 </template>
 
 <script>
+import activeListMixin from "../../mixins/activeListMixin";
+
 export default {
   name: "ReferenceTable",
   props: {
     response: {
       type: Object
-    },
-    isLibraryActive: {
-      type: Boolean
     },
     filter: {
       type: String,
@@ -157,8 +148,8 @@ export default {
       default: "deep-orange"
     }
   },
+  mixins: [activeListMixin],
   data: () => ({
-    expanded: [],
     headers: [
       { text: "common.id", value: "id" },
       { text: "reference.author", value: "author" },
@@ -178,23 +169,17 @@ export default {
       { text: "", value: "link", sortable: false },
       { text: "reference.doi", value: "doi" },
       { text: "reference.pdf", value: "attachment__filename" },
-      { text: "reference.url", value: "url" },
-      { text: "reference.library_short", value: "library", sortable: false }
+      { text: "reference.url", value: "url" }
     ]
   }),
   computed: {
     translatedHeaders() {
-      return this.headers
-        .map(header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        })
-        .filter(item => {
-          if (this.isLibraryActive) return item;
-          else if (item.value !== "library") return item;
-        });
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
     }
   },
   methods: {

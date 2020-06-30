@@ -21,8 +21,6 @@
       :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchTaxa"
-      :is-selection-series-active="isSelectionSeriesActive"
-      :active-selection-series="activeSelectionSeries"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -55,14 +53,7 @@ export default {
   },
 
   computed: {
-    isSelectionSeriesActive() {
-      return !!this.activeSelectionSeries;
-    },
-
-    ...mapState("search", [
-      "activeSelectionSeries",
-      "selection_seriesSearchParameters"
-    ])
+    ...mapState("search", ["selection_seriesSearchParameters"])
   },
 
   created() {
@@ -92,7 +83,7 @@ export default {
 
     fetchTaxa() {
       return new Promise(resolve => {
-        resolve(fetchTaxa(this.searchParameters, this.databaseId));
+        resolve(fetchTaxa(this.searchParameters));
       });
     }
   }

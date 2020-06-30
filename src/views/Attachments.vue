@@ -19,8 +19,6 @@
       :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchAttachments"
-      :is-selection-series-active="isSelectionSeriesActive"
-      :active-selection-series="activeSelectionSeries"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
@@ -52,14 +50,7 @@ export default {
   },
 
   computed: {
-    isSelectionSeriesActive() {
-      return !!this.activeSelectionSeries;
-    },
-
-    ...mapState("search", [
-      "activeSelectionSeries",
-      "selection_seriesSearchParameters"
-    ])
+    ...mapState("search", ["selection_seriesSearchParameters"])
   },
 
   created() {

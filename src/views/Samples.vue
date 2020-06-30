@@ -22,8 +22,6 @@
       :searchParameters="searchParameters"
       :api-call="fetchSamples"
       :use-list-view="true"
-      :is-selection-series-active="isSelectionSeriesActive"
-      :active-selection-series="activeSelectionSeries"
       v-on:update:searchParameters="updateSearchParamsByField"
     />
   </div>
@@ -56,14 +54,7 @@ export default {
   },
 
   computed: {
-    isSelectionSeriesActive() {
-      return !!this.activeSelectionSeries;
-    },
-
-    ...mapState("search", [
-      "activeSelectionSeries",
-      "selection_seriesSearchParameters"
-    ]),
+    ...mapState("search", ["selection_seriesSearchParameters"]),
 
     ...mapGetters("user", ["getCurrentUser"])
   },

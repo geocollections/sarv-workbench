@@ -23,8 +23,6 @@
       :api-call="fetchSpecimens"
       :use-list-view="true"
       :use-image-view="true"
-      :is-selection-series-active="isSelectionSeriesActive"
-      :active-selection-series="activeSelectionSeries"
       v-on:update:searchParameters="updateSearchParamsByField"
       v-on:search:specimenImages="searchSpecimenImages"
     />
@@ -53,27 +51,12 @@ export default {
 
   data() {
     return {
-      block: { search: true },
-      defaultSelectionSeriesParams: {
-        id: null,
-        name: null,
-        remarks: null,
-        user_added: null,
-        page: 1,
-        paginateBy: 50,
-        sortBy: ["id"],
-        sortDesc: [true]
-      }
+      block: { search: true }
     };
   },
 
   computed: {
-    isSelectionSeriesActive() {
-      return !!this.activeSelectionSeries;
-    },
-
     ...mapState("search", [
-      "activeSelectionSeries",
       "selection_seriesSearchParameters",
       "specimenViewType"
     ]),

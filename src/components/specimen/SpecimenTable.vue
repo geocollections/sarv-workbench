@@ -9,7 +9,7 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
-    :show-select="isSelectionSeriesActive"
+    :show-select="!!activeSelectionSeries"
     @item-selected="$emit('add-item-to-selection-series', $event, 'specimen')"
     @toggle-select-all="$emit('toggle-select-all', $event, 'specimen')"
     expand-icon="fas fa-caret-down"
@@ -151,18 +151,6 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
-
-    <template v-slot:item.selection_series="{ item }">
-      <v-btn
-        v-if="isSelectionSeriesActive"
-        @click="$emit('add-item-to-selection-series', item.id, 'specimen')"
-        title="Add specimen to selection series"
-        color="amber"
-        icon
-      >
-        <v-icon>fas fa-plus-square</v-icon>
-      </v-btn>
-    </template>
   </v-data-table>
 </template>
 
@@ -171,6 +159,8 @@ import {
   fetchSpecimenIdentificationGeologiesList,
   fetchSpecimenIdentificationsList
 } from "../../assets/js/api/apiCalls";
+import { mapState } from "vuex";
+import activeListMixin from "../../mixins/activeListMixin";
 
 export default {
   name: "SpecimenTable",
@@ -192,12 +182,6 @@ export default {
         };
       }
     },
-    isSelectionSeriesActive: {
-      type: Boolean
-    },
-    activeSelectionSeries: {
-      type: Object
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -209,8 +193,8 @@ export default {
       default: "deep-orange"
     }
   },
+  mixins: [activeListMixin],
   data: () => ({
-    expanded: [],
     headers: [
       { text: "common.id", value: "id" },
       { text: "specimen.number", value: "specimen_id" },
@@ -220,26 +204,18 @@ export default {
       { text: "common.stratigraphy", value: "stratigraphy__stratigraphy" },
       { text: "specimen.agent_collected", value: "agent_collected__agent" },
       { text: "specimen.storage", value: "storage__location" },
-      { text: "", value: "link", sortable: false },
-      { text: "", value: "selection_series", sortable: false }
+      { text: "", value: "link", sortable: false }
     ],
-    names: [],
-    // Todo: Get all item from active selection series
-    selected: []
+    names: []
   }),
   computed: {
     translatedHeaders() {
-      return this.headers
-        .map(header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        })
-        .filter(item => {
-          if (this.isSelectionSeriesActive) return item;
-          else if (item.value !== "selection_series") return item;
-        });
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
     }
   },
   watch: {
@@ -341,7 +317,7 @@ export default {
                 ? this.names.push(secondItem)
                 : this.names.push(taxonItem);
             });
-            console.log(this.names);
+            // console.log(this.names);
           } else if (taxonList.length > 0) this.names = taxonList;
           else if (rockList.length > 0) this.names = rockList;
         }

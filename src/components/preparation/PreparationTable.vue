@@ -111,12 +111,6 @@ export default {
         };
       }
     },
-    isSelectionSeriesActive: {
-      type: Boolean
-    },
-    activeSelectionSeries: {
-      type: Object
-    },
     bodyColor: {
       type: String,
       required: false,

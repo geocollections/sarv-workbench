@@ -17,9 +17,7 @@
       :searchParameters="searchParameters"
       :api-call="fetchReferences"
       :use-list-view="true"
-      :is-library-active="isLibraryActive"
       v-on:update:searchParameters="updateSearchParamsByField"
-      v-on:add-reference-to-active-library="addReferenceToActiveLibrary"
     />
   </div>
 </template>
@@ -52,15 +50,7 @@ export default {
   },
 
   computed: {
-    activeLibrary() {
-      return this.$store.state["activeLibrary"];
-    },
-
-    isLibraryActive() {
-      return this.activeLibrary !== null;
-    },
-
-    ...mapState("search", ["activeLibrary", "librarySearchParameters"]),
+    ...mapState("search", ["librarySearchParameters"]),
 
     ...mapGetters("user", ["getCurrentUser"])
   },
@@ -105,48 +95,6 @@ export default {
       return new Promise(resolve => {
         resolve(fetchReferences(this.searchParameters));
       });
-    },
-
-    addReferenceToActiveLibrary(id) {
-      let formData = new FormData();
-      formData.append(
-        "data",
-        JSON.stringify({ reference: id, library: this.activeLibrary.library })
-      );
-
-      fetchAddReferenceToLibrary(formData).then(
-        response => {
-          if (typeof response.data.message !== "undefined") {
-            if (
-              this.$i18n.locale === "ee" &&
-              typeof response.data.message_et !== "undefined"
-            ) {
-              this.toastSuccess({ text: response.data.message_et });
-            } else {
-              this.toastSuccess({ text: response.data.message });
-            }
-          }
-          if (typeof response.data.error !== "undefined") {
-            if (
-              this.$i18n &&
-              this.$i18n.locale === "ee" &&
-              typeof response.data.error_et !== "undefined"
-            ) {
-              this.toastError({ text: response.data.error_et });
-            } else {
-              this.toastError({ text: response.data.error });
-            }
-          }
-        },
-        errResponse => {
-          if (
-            typeof errResponse.data !== "undefined" &&
-            typeof errResponse.data.error !== "undefined"
-          )
-            this.toastError({ text: errResponse.data.error });
-          this.toastError({ text: this.$t("messages.uploadError") });
-        }
-      );
     }
   }
 };

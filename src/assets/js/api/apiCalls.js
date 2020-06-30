@@ -1109,6 +1109,10 @@ export function fetchChangeLibraryState(id, data) {
   return post(`change/library/${id}`, data);
 }
 
+export function fetchActiveLibraryList(libraryId) {
+  return get(`library_reference/?library=${libraryId}&fields=reference&reference__isnull=false&format=json`);
+}
+
 /***********************
  ***  LIBRARIES END  ***
  ***********************/
@@ -2635,6 +2639,10 @@ export function fetchSelectedAnalyses(selectionSeriesId, searchParameters) {
   return get(
     `selection/?selection=${selectionSeriesId}&analysis!=null&page=${searchParameters.page}&paginate_by=${searchParameters.paginateBy}&order_by=${orderBy}&format=json`
   );
+}
+
+export function fetchActiveSelectionSeriesList(table, selectionSeriesId) {
+  return get(`selection/?selection=${selectionSeriesId}&fields=${table}&${table}__isnull=false&format=json`);
 }
 
 /***********************

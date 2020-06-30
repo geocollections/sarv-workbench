@@ -9,7 +9,7 @@
     multi-sort
     :page="searchParameters.page"
     :search="filter"
-    :show-select="isSelectionSeriesActive"
+    :show-select="!!activeSelectionSeries"
     @item-selected="$emit('add-item-to-selection-series', $event, 'locality')"
     @toggle-select-all="$emit('toggle-select-all', $event, 'locality')"
     expand-icon="fas fa-caret-down"
@@ -67,22 +67,12 @@
         <v-icon>fas fa-external-link-alt</v-icon>
       </v-btn>
     </template>
-
-    <template v-slot:item.selection_series="{ item }">
-      <v-btn
-        v-if="isSelectionSeriesActive"
-        @click="$emit('add-item-to-selection-series', item.id, 'locality')"
-        title="Add locality to selection series"
-        color="amber"
-        icon
-      >
-        <v-icon>fas fa-plus-square</v-icon>
-      </v-btn>
-    </template>
   </v-data-table>
 </template>
 
 <script>
+import activeListMixin from "../../mixins/activeListMixin";
+
 export default {
   name: "LocalityTable",
   props: {
@@ -103,12 +93,6 @@ export default {
         };
       }
     },
-    isSelectionSeriesActive: {
-      type: Boolean
-    },
-    activeSelectionSeries: {
-      type: Object
-    },
     bodyColor: {
       type: String,
       required: false,
@@ -120,34 +104,26 @@ export default {
       default: "deep-orange"
     }
   },
+  mixins: [activeListMixin],
   data: () => ({
-    expanded: [],
     headers: [
       { text: "common.id", value: "id" },
       { text: "locality.locality", value: "locality" },
       { text: "locality.number", value: "number" },
       { text: "locality.country", value: "country__value" },
       { text: "locality.agent", value: "user_added" },
-      { text: "", value: "link", sortable: false },
-      { text: "", value: "selection_series", sortable: false }
+      { text: "", value: "link", sortable: false }
     ],
-    names: [],
-    // Todo: Get all item from active selection series
-    selected: []
+    names: []
   }),
   computed: {
     translatedHeaders() {
-      return this.headers
-        .map(header => {
-          return {
-            ...header,
-            text: this.$t(header.text)
-          };
-        })
-        .filter(item => {
-          if (this.isSelectionSeriesActive) return item;
-          else if (item.value !== "selection_series") return item;
-        });
+      return this.headers.map(header => {
+        return {
+          ...header,
+          text: this.$t(header.text)
+        };
+      });
     }
   },
   methods: {

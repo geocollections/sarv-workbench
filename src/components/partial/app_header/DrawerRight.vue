@@ -662,6 +662,12 @@ export default {
 
     ...mapState("settings", ["recentUrls"]),
 
+    ...mapState("search", {
+      searchParameters: function(state) {
+        return state[`${this.$route.meta.object}SearchParameters`];
+      }
+    }),
+
     reversedRecentUrls() {
       return this.recentUrls.slice(0).reverse();
     },
@@ -702,6 +708,13 @@ export default {
       if (newVal && this?.activeSearchParams?.request) {
         this.$store.dispatch(`search/${this.activeSearchParams.request}`);
       }
+    },
+
+    searchParameters: {
+      handler() {
+        this.resetActiveObject();
+      },
+      deep: true
     }
   },
 
@@ -709,8 +722,20 @@ export default {
     ...mapActions("search", [
       "activeSearchParamsNextPage",
       "activeSearchParamsPreviousPage",
-      "setSidebarUserAction"
+      "setSidebarUserAction",
+      "getActiveSelectionSeriesList",
+      "getActiveLibraryList"
     ]),
+
+    resetActiveObject() {
+      if (this.isSelectionSeriesAvailable && this.activeSelectionSeries) {
+        this.$store.dispatch(`search/setActiveSelectionSeries`, null);
+        this.$store.dispatch(`search/resetActiveSelectionSeriesList`);
+      } else if (this.isLibraryAvailable && this.activeLibrary) {
+        this.$store.dispatch(`search/setActiveLibrary`, null);
+        this.$store.dispatch(`search/resetActiveLibraryList`);
+      }
+    },
 
     updateDate(event, fieldId) {
       this.updateSearchParamsByField(event, fieldId);
@@ -749,11 +774,16 @@ export default {
       if (makeActive) {
         this.$store.dispatch(`search/${activeObject}`, entity);
         if (activeObject === "setActiveLibrary") {
+          this.getActiveLibraryList({ libraryId: entity.library });
           this.toastInfo({
             text: `Library ${entity.library} is active!`,
             timeout: 1000
           });
         } else if (activeObject === "setActiveSelectionSeries") {
+          this.getActiveSelectionSeriesList({
+            routeObject: this.$route.meta.object,
+            selectionSeriesId: entity.id
+          });
           this.toastInfo({
             text: `Selection series ${entity.id} is active!`,
             timeout: 1000
