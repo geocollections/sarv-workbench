@@ -73,21 +73,25 @@ const activeListMixin = {
           );
 
           fetchAddItemToSelection(formData).then(
-            response => this.handleResponseMessages(response, true),
+            response => {
+              this.handleResponseMessages(response, true);
+              this.getActiveSelectionSeriesList({
+                routeObject: this.$route.meta.object,
+                selectionSeriesId: this.activeSelectionSeries.id
+              });
+            },
             errResponse => this.handleResponseMessages(errResponse, false)
           );
-          this.getActiveSelectionSeriesList({
-            routeObject: this.$route.meta.object,
-            selectionSeriesId: this.activeSelectionSeries.id
-          });
         } else {
-          let id = this.activeSelectionSeriesList.find(
-            item => item[this.$route.meta.object] === selection.item.id
-          ).id;
-          fetchRemoveRecordFromSelection(id).then(
-            response => this.handleResponseMessages(response, true, true),
-            errResponse => this.handleResponseMessages(errResponse, false, true)
-          );
+          if (this.activeSelectionSeriesList && this.activeSelectionSeriesList.length > 0) {
+            let id = this.activeSelectionSeriesList.find(
+              item => item[this.$route.meta.object] === selection.item.id
+            ).id;
+            fetchRemoveRecordFromSelection(id).then(
+              response => this.handleResponseMessages(response, true, true),
+              errResponse => this.handleResponseMessages(errResponse, false, true)
+            );
+          }
         }
       }
     },
@@ -107,18 +111,24 @@ const activeListMixin = {
 
         if (selection.value) {
           fetchAddReferenceToLibrary(formData).then(
-            response => this.handleResponseMessages(response, true),
+            response => {
+              this.handleResponseMessages(response, true);
+              this.getActiveLibraryList({
+                libraryId: this.activeLibrary.library
+              });
+            },
             errResponse => this.handleResponseMessages(errResponse, false)
           );
-          this.getActiveLibraryList({ libraryId: this.activeLibrary.library });
         } else {
-          let id = this.activeLibraryList.find(
-            item => item.reference === selection.item.id
-          ).id;
-          fetchRemoveReferenceFromLibrary(id).then(
-            response => this.handleResponseMessages(response, true, true),
-            errResponse => this.handleResponseMessages(errResponse, false, true)
-          );
+          if (this.activeLibraryList && this.activeLibraryList.length > 0) {
+            let id = this.activeLibraryList.find(
+              item => item.reference === selection.item.id
+            ).id;
+            fetchRemoveReferenceFromLibrary(id).then(
+              response => this.handleResponseMessages(response, true, true),
+              errResponse => this.handleResponseMessages(errResponse, false, true)
+            );
+          }
         }
       }
     },

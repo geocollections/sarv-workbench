@@ -13,6 +13,7 @@
     :sort-by="searchParameters.sortBy"
     :sort-desc="searchParameters.sortDesc"
     :show-select="!!activeLibrary"
+    :single-select="true"
     @item-selected="$emit('add-reference-to-active-library', $event)"
     @toggle-select-all="$emit('toggle-select-all', $event, 'reference')"
     :value="selected"
