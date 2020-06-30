@@ -338,7 +338,7 @@ const actions = {
     ).then(response => {
       let results = response?.data?.results || null;
       if (results && results.length > 0) {
-        results = results.map(item => item[payload.routeObject]);
+        // results = results.map(item => item[payload.routeObject]);
         commit("SET_ACTIVE_SELECTION_SERIES_LIST", results);
       } else commit("SET_ACTIVE_SELECTION_SERIES_LIST", null);
     });
@@ -348,7 +348,7 @@ const actions = {
     fetchActiveLibraryList(payload.libraryId).then(response => {
       let results = response?.data?.results || null;
       if (results && results.length > 0) {
-        results = results.map(item => item.reference);
+        // results = results.map(item => item.reference);
         commit("SET_ACTIVE_LIBRARY_LIST", results);
       } else commit("SET_ACTIVE_LIBRARY_LIST", null);
     });

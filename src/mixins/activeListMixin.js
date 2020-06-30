@@ -1,7 +1,9 @@
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import {
   fetchAddItemToSelection,
-  fetchAddReferenceToLibrary
+  fetchAddReferenceToLibrary,
+  fetchRemoveRecordFromSelection,
+  fetchRemoveReferenceFromLibrary
 } from "../assets/js/api/apiCalls";
 
 const activeListMixin = {
@@ -41,8 +43,14 @@ const activeListMixin = {
   },
 
   methods: {
-    fillSelectedValues(listOfIds) {
+    ...mapActions("search", [
+      "getActiveSelectionSeriesList",
+      "getActiveLibraryList"
+    ]),
+
+    fillSelectedValues(objectList) {
       if (this?.response?.results && this.response.results.length > 0) {
+        let listOfIds = objectList.map(item => item[this.$route.meta.object]);
         this.response.results.forEach(item => {
           if (listOfIds.includes(item.id)) this.selected.push(item);
         });
@@ -54,24 +62,31 @@ const activeListMixin = {
       console.log(relation);
 
       if (selection?.item?.id) {
-        let formData = new FormData();
-        formData.append(
-          "data",
-          JSON.stringify({
-            [relation]: selection?.item?.id,
-            selection: this.activeSelectionSeries.id
-          })
-        );
-
         if (selection.value) {
+          let formData = new FormData();
+          formData.append(
+            "data",
+            JSON.stringify({
+              [relation]: selection?.item?.id,
+              selection: this.activeSelectionSeries.id
+            })
+          );
+
           fetchAddItemToSelection(formData).then(
             response => this.handleResponseMessages(response, true),
             errResponse => this.handleResponseMessages(errResponse, false)
           );
+          this.getActiveSelectionSeriesList({
+            routeObject: this.$route.meta.object,
+            selectionSeriesId: this.activeSelectionSeries.id
+          });
         } else {
-          // Todo: Remove
-          console.log(
-            `Todo: Remove ${relation} (${selection?.item?.id}) from selection ${this.activeSelectionSeries.id}`
+          let id = this.activeSelectionSeriesList.find(
+            item => item[this.$route.meta.object] === selection.item.id
+          ).id;
+          fetchRemoveRecordFromSelection(id).then(
+            response => this.handleResponseMessages(response, true, true),
+            errResponse => this.handleResponseMessages(errResponse, false, true)
           );
         }
       }
@@ -95,10 +110,14 @@ const activeListMixin = {
             response => this.handleResponseMessages(response, true),
             errResponse => this.handleResponseMessages(errResponse, false)
           );
+          this.getActiveLibraryList({ libraryId: this.activeLibrary.library });
         } else {
-          // Todo: Remove
-          console.log(
-            `Todo: Remove reference (${selection?.item?.id}) from library ${this.activeLibrary.library}`
+          let id = this.activeLibraryList.find(
+            item => item.reference === selection.item.id
+          ).id;
+          fetchRemoveReferenceFromLibrary(id).then(
+            response => this.handleResponseMessages(response, true, true),
+            errResponse => this.handleResponseMessages(errResponse, false, true)
           );
         }
       }
@@ -129,7 +148,7 @@ const activeListMixin = {
       }
     },
 
-    handleResponseMessages(response, isSuccess) {
+    handleResponseMessages(response, isSuccess, isDelete = false) {
       if (isSuccess) {
         if (typeof response.data.message !== "undefined") {
           if (
@@ -158,7 +177,11 @@ const activeListMixin = {
           typeof response.data.error !== "undefined"
         )
           this.toastError({ text: response.data.error });
-        this.toastError({ text: this.$t("messages.uploadError") });
+        this.toastError({
+          text: isDelete
+            ? this.$t("messages.deleteError")
+            : this.$t("messages.uploadError")
+        });
       }
     }
   }

@@ -116,6 +116,18 @@ async function post(
   }
 }
 
+async function post_delete(child, returnErrorResponse = false) {
+  let url = `${api.url}delete/${child}`;
+
+  try {
+    return await axios.delete(url);
+  } catch (error) {
+    // console.log(error.response);
+    if (returnErrorResponse) return error.response;
+    else return error.request();
+  }
+}
+
 /*******************
  *** LOGIN START ***
  *******************/
@@ -161,8 +173,7 @@ export function fetchAttachments(data) {
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 
   if (data.id !== null && data.id.trim().length > 0) {
-    searchFields += `id__${data.id__lookuptype ||
-    "icontains"}=${data.id}`;
+    searchFields += `id__${data.id__lookuptype || "icontains"}=${data.id}`;
   }
   if (data.image_number !== null && data.image_number.trim().length > 0) {
     searchFields += `image_number__${data.image_number__lookuptype ||
@@ -1110,7 +1121,13 @@ export function fetchChangeLibraryState(id, data) {
 }
 
 export function fetchActiveLibraryList(libraryId) {
-  return get(`library_reference/?library=${libraryId}&fields=reference&reference__isnull=false&format=json`);
+  return get(
+    `library_reference/?library=${libraryId}&fields=reference,id&reference__isnull=false&format=json`
+  );
+}
+
+export function fetchRemoveReferenceFromLibrary(id) {
+  return post_delete(`library_reference/${id}`);
 }
 
 /***********************
@@ -2642,7 +2659,13 @@ export function fetchSelectedAnalyses(selectionSeriesId, searchParameters) {
 }
 
 export function fetchActiveSelectionSeriesList(table, selectionSeriesId) {
-  return get(`selection/?selection=${selectionSeriesId}&fields=${table}&${table}__isnull=false&format=json`);
+  return get(
+    `selection/?selection=${selectionSeriesId}&fields=id,${table}&${table}__isnull=false&format=json`
+  );
+}
+
+export function fetchRemoveRecordFromSelection(id) {
+  return post_delete(`selection/${id}`);
 }
 
 /***********************
