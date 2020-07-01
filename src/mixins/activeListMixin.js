@@ -88,7 +88,13 @@ const activeListMixin = {
               item => item[this.$route.meta.object] === selection.item.id
             ).id;
             fetchRemoveRecordFromSelection(id).then(
-              response => this.handleResponseMessages(response, true, true),
+              response => {
+                this.handleResponseMessages(response, true, true)
+                this.getActiveSelectionSeriesList({
+                  routeObject: this.$route.meta.object,
+                  selectionSeriesId: this.activeSelectionSeries.id
+                });
+              },
               errResponse => this.handleResponseMessages(errResponse, false, true)
             );
           }
@@ -125,7 +131,12 @@ const activeListMixin = {
               item => item.reference === selection.item.id
             ).id;
             fetchRemoveReferenceFromLibrary(id).then(
-              response => this.handleResponseMessages(response, true, true),
+              response => {
+                this.handleResponseMessages(response, true, true)
+                this.getActiveLibraryList({
+                  libraryId: this.activeLibrary.library
+                });
+              },
               errResponse => this.handleResponseMessages(errResponse, false, true)
             );
           }
