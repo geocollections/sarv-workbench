@@ -636,7 +636,12 @@
     <div class="row mt-3">
       <div class="col">
         <v-btn
-          v-if="$route.meta.isEdit && showMetadataButton && validate('doi')"
+          v-if="
+            $route.meta.isEdit &&
+              showMetadataButton &&
+              validate('doi') &&
+              doiContainsFile
+          "
           class="mr-2 mb-2 text-none"
           :disabled="loadingState"
           @click="registerMetadata"
@@ -657,7 +662,12 @@
         </v-btn>
 
         <v-btn
-          v-if="$route.meta.isEdit && showDoiUrlButton && validate('doi')"
+          v-if="
+            $route.meta.isEdit &&
+              showDoiUrlButton &&
+              validate('doi') &&
+              doiContainsFile
+          "
           class="mr-2 mb-2 text-none"
           :disabled="loadingState"
           @click="registerDoiUrl"
@@ -685,7 +695,7 @@
       id="block-dataciteDiff"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
-      v-if="$route.meta.isEdit && showMetadataButton"
+      v-if="$route.meta.isEdit && showMetadataButton && doiContainsFile"
     >
       <v-card-title class="pt-2 pb-1">
         <div
@@ -773,7 +783,7 @@
       id="block-dataciteUrlDiff"
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
-      v-if="$route.meta.isEdit && showDoiUrlButton"
+      v-if="$route.meta.isEdit && showDoiUrlButton && doiContainsFile"
     >
       <v-card-title class="pt-2 pb-1">
         <div
@@ -977,6 +987,12 @@ export default {
       return (
         this.dataciteURL && this.doiURL && this.dataciteURL !== this.doiURL
       );
+    },
+
+    doiContainsFile() {
+      // Does not apply to egf #516
+      if (this.doi.egf) return true;
+      else return this.relatedData.attachment_link.count > 0;
     }
   },
 

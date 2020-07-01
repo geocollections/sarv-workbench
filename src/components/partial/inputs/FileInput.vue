@@ -27,7 +27,7 @@
     </v-row>
 
     <!-- BUTTONS -->
-    <div class="d-flex">
+    <div class="d-flex flex-wrap">
       <div class="ma-1" v-if="recordOptions && recordImage">
         <v-btn
           :icon="$vuetify.breakpoint.mdAndDown"

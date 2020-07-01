@@ -31,6 +31,7 @@
             >
               <v-img
                 max-height="400"
+                min-width="72"
                 aspect-ratio="1"
                 v-if="isImageFile(image)"
                 :src="getFileUrl(image.uuid_filename, 'small')"
@@ -98,26 +99,31 @@
           </span>
         </v-tooltip>
 
-        <div
-          class="d-flex flex-column justify-space-around pa-1"
-          v-if="showAttachmentLink"
-        >
-          <v-btn
-            :title="$t(viewMessage)"
-            icon
-            color="blue"
-            @click="openFileInNewWindow(image)"
-          >
-            <v-icon>fas fa-eye</v-icon>
-          </v-btn>
-          <v-btn
-            color="green"
-            :title="$t(editMessage)"
-            icon
-            @click="openInNewTab(object, image[idField])"
-            ><v-icon>fas fa-edit</v-icon></v-btn
-          >
-        </div>
+        <v-row no-gutters class="pr-2">
+          <v-col cols="12" class="pa-1 align-self-center">
+            <v-btn
+              :title="$t(viewMessage)"
+              icon
+              color="blue"
+              @click="openFileInNewWindow(image)"
+              :small="$vuetify.breakpoint.xsOnly"
+            >
+              <v-icon :small="$vuetify.breakpoint.xsOnly">fas fa-eye</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col cols="12" class="pa-1 align-self-center">
+            <v-btn
+              color="green"
+              :title="$t(editMessage)"
+              icon
+              @click="openInNewTab(object, image[idField])"
+              :small="$vuetify.breakpoint.xsOnly"
+              ><v-icon :small="$vuetify.breakpoint.xsOnly"
+                >fas fa-edit</v-icon
+              ></v-btn
+            >
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
   </div>
