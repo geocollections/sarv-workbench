@@ -5,6 +5,7 @@ import {
   fetchRemoveRecordFromSelection,
   fetchRemoveReferenceFromLibrary
 } from "../assets/js/api/apiCalls";
+import { cloneDeep } from "lodash";
 
 const activeListMixin = {
   data: () => ({
@@ -21,24 +22,29 @@ const activeListMixin = {
   },
 
   watch: {
-    activeSelectionSeries() {
-      this.selected = [];
+    activeSelectionSeriesList: {
+      handler(newVal) {
+        if (
+          this.$route.meta.object === "specimen" ||
+          this.$route.meta.object === "sample" ||
+          this.$route.meta.object === "attachment" ||
+          this.$route.meta.object === "locality" ||
+          this.$route.meta.object === "taxon" ||
+          this.$route.meta.object === "analysis"
+        ) {
+          this.fillSelectedValues(newVal);
+        }
+      },
+      immediate: true
     },
 
-    activeLibrary() {
-      this.selected = [];
-    },
-
-    activeSelectionSeriesList(newVal) {
-      if (newVal && newVal.length > 0) {
-        this.fillSelectedValues(newVal);
-      } else this.selected = [];
-    },
-
-    activeLibraryList(newVal) {
-      if (newVal && newVal.length > 0) {
-        this.fillSelectedValues(newVal);
-      } else this.selected = [];
+    activeLibraryList: {
+      handler(newVal) {
+        if (this.$route.meta.object === "reference") {
+          this.fillSelectedValues(newVal);
+        }
+      },
+      immediate: true
     }
   },
 
@@ -48,13 +54,17 @@ const activeListMixin = {
       "getActiveLibraryList"
     ]),
 
-    fillSelectedValues(objectList) {
-      if (this?.response?.results && this.response.results.length > 0) {
-        let listOfIds = objectList.map(item => item[this.$route.meta.object]);
-        this.response.results.forEach(item => {
-          if (listOfIds.includes(item.id)) this.selected.push(item);
-        });
-      }
+    fillSelectedValues(activeList) {
+      if (activeList && activeList.length > 0) {
+        if (this?.response?.results && this.response.results.length > 0) {
+          let listOfIds = activeList.map(item => item[this.$route.meta.object]);
+          let listOfSelectedItems = [];
+          this.response.results.forEach(item => {
+            if (listOfIds.includes(item.id)) listOfSelectedItems.push(item);
+          });
+          this.selected = cloneDeep(listOfSelectedItems);
+        } else this.selected = [];
+      } else this.selected = [];
     },
 
     addItemToSelectionSeries(selection, relation) {
@@ -80,42 +90,59 @@ const activeListMixin = {
                 selectionSeriesId: this.activeSelectionSeries.id
               });
             },
-            errResponse => this.handleResponseMessages(errResponse, false)
+            errResponse => {
+              this.handleResponseMessages(errResponse, false);
+              this.getActiveSelectionSeriesList({
+                routeObject: this.$route.meta.object,
+                selectionSeriesId: this.activeSelectionSeries.id
+              });
+            }
           );
         } else {
-          if (this.activeSelectionSeriesList && this.activeSelectionSeriesList.length > 0) {
+          if (
+            this.activeSelectionSeriesList &&
+            this.activeSelectionSeriesList.length > 0
+          ) {
             let id = this.activeSelectionSeriesList.find(
               item => item[this.$route.meta.object] === selection.item.id
-            ).id;
-            fetchRemoveRecordFromSelection(id).then(
-              response => {
-                this.handleResponseMessages(response, true, true)
-                this.getActiveSelectionSeriesList({
-                  routeObject: this.$route.meta.object,
-                  selectionSeriesId: this.activeSelectionSeries.id
-                });
-              },
-              errResponse => this.handleResponseMessages(errResponse, false, true)
-            );
+            )?.id;
+            if (id) {
+              fetchRemoveRecordFromSelection(id).then(
+                response => {
+                  this.handleResponseMessages(response, true, true);
+                  this.getActiveSelectionSeriesList({
+                    routeObject: this.$route.meta.object,
+                    selectionSeriesId: this.activeSelectionSeries.id
+                  });
+                },
+                errResponse => {
+                  this.handleResponseMessages(errResponse, false, true);
+                  this.getActiveSelectionSeriesList({
+                    routeObject: this.$route.meta.object,
+                    selectionSeriesId: this.activeSelectionSeries.id
+                  });
+                }
+              );
+            }
           }
         }
       }
     },
 
-    addReferenceToActiveLibrary(selection) {
+    toggleReferenceInActiveLibrary(selection) {
       console.log(selection);
 
       if (selection?.item?.id) {
-        let formData = new FormData();
-        formData.append(
-          "data",
-          JSON.stringify({
-            reference: selection?.item?.id,
-            library: this.activeLibrary.library
-          })
-        );
-
         if (selection.value) {
+          let formData = new FormData();
+          formData.append(
+            "data",
+            JSON.stringify({
+              reference: selection?.item?.id,
+              library: this.activeLibrary.library
+            })
+          );
+
           fetchAddReferenceToLibrary(formData).then(
             response => {
               this.handleResponseMessages(response, true);
@@ -123,21 +150,31 @@ const activeListMixin = {
                 libraryId: this.activeLibrary.library
               });
             },
-            errResponse => this.handleResponseMessages(errResponse, false)
+            errResponse => {
+              this.handleResponseMessages(errResponse, false);
+              this.getActiveLibraryList({
+                libraryId: this.activeLibrary.library
+              });
+            }
           );
         } else {
           if (this.activeLibraryList && this.activeLibraryList.length > 0) {
             let id = this.activeLibraryList.find(
               item => item.reference === selection.item.id
-            ).id;
+            )?.id;
             fetchRemoveReferenceFromLibrary(id).then(
               response => {
-                this.handleResponseMessages(response, true, true)
+                this.handleResponseMessages(response, true, true);
                 this.getActiveLibraryList({
                   libraryId: this.activeLibrary.library
                 });
               },
-              errResponse => this.handleResponseMessages(errResponse, false, true)
+              errResponse => {
+                this.handleResponseMessages(errResponse, false, true);
+                this.getActiveLibraryList({
+                  libraryId: this.activeLibrary.library
+                });
+              }
             );
           }
         }
@@ -146,6 +183,21 @@ const activeListMixin = {
 
     toggleSelectAll(selection, relation) {
       // Todo: Mass adding/removing
+
+      this.toastInfo({ text: this.$t("messages.underDevelopment") });
+
+      if (relation === "reference") {
+        this.getActiveLibraryList({
+          libraryId: this.activeLibrary.library
+        });
+      } else {
+        this.getActiveSelectionSeriesList({
+          routeObject: this.$route.meta.object,
+          selectionSeriesId: this.activeSelectionSeries.id
+        });
+      }
+
+      // Todo: Distinguish references to library, others to selection
       if (selection?.items && selection?.items.length > 0) {
         let items = selection.items.map(item => item.id);
         let formData = new FormData();

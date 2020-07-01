@@ -1773,6 +1773,7 @@
     "loginIdError": "Midagi läks valesti! Proovi brauserile restarti teha ja kontrolli, et ID-kaart oleks arvutiga ühendatud.",
     "uploadError": "Üleslaadimine ebaõnnestus!",
     "deleteError": "Kustutamine ebaõnnestus!",
+    "underDevelopment": "See funktsionaalsus on alles arenduses!",
     "defaultsRemoved": "Vaikimisi väärtused eemaldatud!",
     "validFileFormat": "Fail '{file}' ei ole õiges formaadis ning eemaldati!",
     "userCancelled": "Tegevus katkestati",

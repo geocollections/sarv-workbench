@@ -1773,6 +1773,7 @@
     "loginIdError": "Something went wrong! Try restarting your browser and make sure that ID-card is connected to a computer.",
     "uploadError": "Upload failed!",
     "deleteError": "Deletion failed!",
+    "underDevelopment": "This functionality is under development!",
     "defaultsRemoved": "Defaults removed!",
     "validFileFormat": "File '{file}' is not in correct format and was removed!",
     "userCancelled": "Action cancelled",

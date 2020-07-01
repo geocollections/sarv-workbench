@@ -134,7 +134,7 @@
         :search-parameters="searchParameters"
         v-if="isCurrentViewTypeTable && response.count > 0"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
-        v-on:add-reference-to-active-library="addReferenceToActiveLibrary"
+        v-on:toggle-reference-in-active-library="toggleReferenceInActiveLibrary"
         v-on:add-item-to-selection-series="addItemToSelectionSeries"
         v-on:toggle-select-all="toggleSelectAll"
         :body-color="bodyColor"

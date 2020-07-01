@@ -724,16 +724,18 @@ export default {
       "activeSearchParamsPreviousPage",
       "setSidebarUserAction",
       "getActiveSelectionSeriesList",
-      "getActiveLibraryList"
+      "getActiveLibraryList",
+      "resetActiveSelectionSeriesList",
+      "resetActiveLibraryList"
     ]),
 
     resetActiveObject() {
       if (this.isSelectionSeriesAvailable && this.activeSelectionSeries) {
         this.$store.dispatch(`search/setActiveSelectionSeries`, null);
-        this.$store.dispatch(`search/resetActiveSelectionSeriesList`);
+        this.resetActiveSelectionSeriesList();
       } else if (this.isLibraryAvailable && this.activeLibrary) {
         this.$store.dispatch(`search/setActiveLibrary`, null);
-        this.$store.dispatch(`search/resetActiveLibraryList`);
+        this.resetActiveLibraryList();
       }
     },
 
@@ -792,11 +794,13 @@ export default {
       } else {
         this.$store.dispatch(`search/${activeObject}`, null);
         if (activeObject === "setActiveLibrary") {
+          this.resetActiveLibraryList();
           this.toastInfo({
             text: `Library ${entity.library} is inactive!`,
             timeout: 1000
           });
         } else if (activeObject === "setActiveSelectionSeries") {
+          this.resetActiveSelectionSeriesList();
           this.toastInfo({
             text: `Selection series ${entity.id} is inactive!`,
             timeout: 1000
