@@ -3274,7 +3274,7 @@
                           <td>
                             <router-link
                               :to="{ path: '/location/' + entity.id }"
-                            >{{ entity.id }}</router-link
+                              >{{ entity.id }}</router-link
                             >
                           </td>
 

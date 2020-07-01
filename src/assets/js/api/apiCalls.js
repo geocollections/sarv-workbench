@@ -1130,6 +1130,10 @@ export function fetchRemoveReferenceFromLibrary(id) {
   return post_delete(`library_reference/${id}`);
 }
 
+export function fetchMultiRemoveReferencesFromLibrary(data) {
+  return post(`delete_multi/library_reference/`, data);
+}
+
 /***********************
  ***  LIBRARIES END  ***
  ***********************/
@@ -2666,6 +2670,10 @@ export function fetchActiveSelectionSeriesList(table, selectionSeriesId) {
 
 export function fetchRemoveRecordFromSelection(id) {
   return post_delete(`selection/${id}`);
+}
+
+export function fetchMultiRemoveRecordFromSelection(data) {
+  return post(`delete_multi/selection/`, data);
 }
 
 /***********************

@@ -99,7 +99,7 @@
           </span>
         </v-tooltip>
 
-        <v-row no-gutters class="pr-2">
+        <v-row no-gutters class="pr-2" style="max-width: 50px;">
           <v-col cols="12" class="pa-1 align-self-center">
             <v-btn
               :title="$t(viewMessage)"

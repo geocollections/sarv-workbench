@@ -1,10 +1,5 @@
 <template>
-  <div
-    class="scroll-to-links mb-2"
-    v-if="
-      $route.meta.isEdit && formSections
-    "
-  >
+  <div class="scroll-to-links mb-2" v-if="$route.meta.isEdit && formSections">
     <v-btn-toggle
       dense
       borderless

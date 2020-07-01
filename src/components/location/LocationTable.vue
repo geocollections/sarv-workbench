@@ -80,7 +80,10 @@ export default {
     headers: [
       { text: "common.id", value: "id" },
       { text: "location.location", value: "location" },
-      { text: "location.location_location", value: "parent_location__location" },
+      {
+        text: "location.location_location",
+        value: "parent_location__location"
+      },
       { text: "location.agent", value: "agent" },
       // { text: "common.stratigraphy", value: "stratigraphy_free" },
       { text: "location.contents", value: "contents" }

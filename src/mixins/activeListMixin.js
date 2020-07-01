@@ -2,6 +2,8 @@ import { mapActions, mapState } from "vuex";
 import {
   fetchAddItemToSelection,
   fetchAddReferenceToLibrary,
+  fetchMultiRemoveRecordFromSelection,
+  fetchMultiRemoveReferencesFromLibrary,
   fetchRemoveRecordFromSelection,
   fetchRemoveReferenceFromLibrary
 } from "../assets/js/api/apiCalls";
@@ -67,7 +69,7 @@ const activeListMixin = {
       } else this.selected = [];
     },
 
-    addItemToSelectionSeries(selection, relation) {
+    toggleItemInSelectionSeries(selection, relation) {
       console.log(selection);
       console.log(relation);
 
@@ -182,41 +184,84 @@ const activeListMixin = {
     },
 
     toggleSelectAll(selection, relation) {
-      // Todo: Mass adding/removing
+      console.log(selection);
+      console.log(relation);
 
-      this.toastInfo({ text: this.$t("messages.underDevelopment") });
+      if (selection?.items && selection.items.length > 0) {
+        let listOfIds = [];
 
-      if (relation === "reference") {
-        this.getActiveLibraryList({
-          libraryId: this.activeLibrary.library
-        });
-      } else {
-        this.getActiveSelectionSeriesList({
-          routeObject: this.$route.meta.object,
-          selectionSeriesId: this.activeSelectionSeries.id
-        });
-      }
-
-      // Todo: Distinguish references to library, others to selection
-      if (selection?.items && selection?.items.length > 0) {
-        let items = selection.items.map(item => item.id);
-        let formData = new FormData();
-        formData.append(
-          "data",
-          JSON.stringify({
-            [relation]: items,
-            selection: this.activeSelectionSeries.id
-          })
-        );
+        if (relation === "reference") {
+          selection.items.forEach(deletableItem => {
+            let id = this.activeLibraryList.find(
+              item => item.reference === deletableItem.id
+            )?.id;
+            if (id) listOfIds.push(id);
+          });
+        } else {
+          selection.items.forEach(deletableItem => {
+            let id = this.activeSelectionSeriesList.find(
+              item => item[relation] === deletableItem.id
+            )?.id;
+            if (id) listOfIds.push(id);
+          });
+        }
 
         if (selection.value) {
-          console.log(
-            `Todo: Add ${selection?.items.length} ${relation}s to selection ${this.activeSelectionSeries.id}`
-          );
+          // Todo: Multi add
+
+          if (relation === "reference") {
+            this.getActiveLibraryList({
+              libraryId: this.activeLibrary.library
+            });
+          } else {
+            this.getActiveSelectionSeriesList({
+              routeObject: this.$route.meta.object,
+              selectionSeriesId: this.activeSelectionSeries.id
+            });
+          }
+          this.toastInfo({ text: this.$t("messages.underDevelopment") });
         } else {
-          console.log(
-            `Todo: Remove ${selection?.items.length} ${relation}s from selection ${this.activeSelectionSeries.id}`
+          let formData = new FormData();
+          formData.append(
+            "data",
+            JSON.stringify({
+              delete: listOfIds
+            })
           );
+
+          if (relation === "reference") {
+            fetchMultiRemoveReferencesFromLibrary(formData).then(
+              response => {
+                this.handleResponseMessages(response, true, true);
+                this.getActiveLibraryList({
+                  libraryId: this.activeLibrary.library
+                });
+              },
+              errResponse => {
+                this.handleResponseMessages(errResponse, false, true);
+                this.getActiveLibraryList({
+                  libraryId: this.activeLibrary.library
+                });
+              }
+            );
+          } else {
+            fetchMultiRemoveRecordFromSelection(formData).then(
+              response => {
+                this.handleResponseMessages(response, true, true);
+                this.getActiveSelectionSeriesList({
+                  routeObject: this.$route.meta.object,
+                  selectionSeriesId: this.activeSelectionSeries.id
+                });
+              },
+              errResponse => {
+                this.handleResponseMessages(errResponse, false, true);
+                this.getActiveSelectionSeriesList({
+                  routeObject: this.$route.meta.object,
+                  selectionSeriesId: this.activeSelectionSeries.id
+                });
+              }
+            );
+          }
         }
       }
     },

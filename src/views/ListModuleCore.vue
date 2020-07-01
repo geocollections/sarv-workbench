@@ -135,7 +135,7 @@
         v-if="isCurrentViewTypeTable && response.count > 0"
         v-on:toggle-privacy-state="changeObjectsPrivacyState"
         v-on:toggle-reference-in-active-library="toggleReferenceInActiveLibrary"
-        v-on:add-item-to-selection-series="addItemToSelectionSeries"
+        v-on:toggle-item-in-selection-series="toggleItemInSelectionSeries"
         v-on:toggle-select-all="toggleSelectAll"
         :body-color="bodyColor"
         :body-active-color="bodyActiveColor"
