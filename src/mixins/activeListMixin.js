@@ -188,24 +188,6 @@ const activeListMixin = {
       console.log(relation);
 
       if (selection?.items && selection.items.length > 0) {
-        let listOfIds = [];
-
-        if (relation === "reference") {
-          selection.items.forEach(deletableItem => {
-            let id = this.activeLibraryList.find(
-              item => item.reference === deletableItem.id
-            )?.id;
-            if (id) listOfIds.push(id);
-          });
-        } else {
-          selection.items.forEach(deletableItem => {
-            let id = this.activeSelectionSeriesList.find(
-              item => item[relation] === deletableItem.id
-            )?.id;
-            if (id) listOfIds.push(id);
-          });
-        }
-
         if (selection.value) {
           // Todo: Multi add
 
@@ -221,6 +203,28 @@ const activeListMixin = {
           }
           this.toastInfo({ text: this.$t("messages.underDevelopment") });
         } else {
+          let listOfIds = [];
+
+          if (relation === "reference") {
+            if (this.activeLibraryList && this.activeLibraryList.length > 0) {
+              selection.items.forEach(deletableItem => {
+                let id = this.activeLibraryList.find(
+                  item => item.reference === deletableItem.id
+                )?.id;
+                if (id) listOfIds.push(id);
+              });
+            }
+          } else {
+            if (this.activeSelectionSeriesList && this.activeSelectionSeriesList.length > 0) {
+              selection.items.forEach(deletableItem => {
+                let id = this.activeSelectionSeriesList.find(
+                  item => item[relation] === deletableItem.id
+                )?.id;
+                if (id) listOfIds.push(id);
+              });
+            }
+          }
+
           let formData = new FormData();
           formData.append(
             "data",
