@@ -266,8 +266,6 @@ const activeListMixin = {
               }
             );
           }
-
-          this.toastInfo({ text: this.$t("messages.underDevelopment") });
         } else {
           let listOfIds = [];
 
