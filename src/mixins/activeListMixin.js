@@ -1,7 +1,7 @@
 import { mapActions, mapState } from "vuex";
 import {
   fetchAddItemToSelection,
-  fetchAddReferenceToLibrary,
+  fetchAddReferenceToLibrary, fetchMultiAddRecordToSelection, fetchMultiAddReferencesToLibrary,
   fetchMultiRemoveRecordFromSelection,
   fetchMultiRemoveReferencesFromLibrary,
   fetchRemoveRecordFromSelection,
@@ -188,41 +188,96 @@ const activeListMixin = {
       console.log(relation);
 
       if (selection?.items && selection.items.length > 0) {
+        const keyForActiveList =
+          relation === "reference"
+            ? "activeLibraryList"
+            : "activeSelectionSeriesList";
+
         if (selection.value) {
-          // Todo: Multi add
+          let listOfObjects = [];
+          const keyForListOfObjects =
+            relation === "reference" ? "library" : "selection";
+
+          listOfObjects = selection.items.map(item => {
+            return {
+              [relation]: item.id,
+              [keyForListOfObjects]:
+                relation === "reference"
+                  ? this.activeLibrary.library
+                  : this.activeSelectionSeries.id
+            };
+          });
+
+          // Removing duplicates
+          if (this[keyForActiveList] && this[keyForActiveList].length > 0) {
+            let listOfDuplicateIds = [];
+
+            listOfObjects.forEach((uploadableItem, index) => {
+              let duplicate = this[keyForActiveList].find(
+                item => item[relation] === uploadableItem[relation]
+              );
+              if (duplicate) listOfDuplicateIds.push(duplicate[relation]);
+            });
+            listOfObjects = listOfObjects.filter(
+              item => !listOfDuplicateIds.includes(item[relation])
+            );
+          }
+
+          let formData = new FormData();
+          formData.append(
+            "data",
+            JSON.stringify({
+              add: listOfObjects
+            })
+          );
+
+          console.log(listOfObjects);
 
           if (relation === "reference") {
-            this.getActiveLibraryList({
-              libraryId: this.activeLibrary.library
-            });
+            fetchMultiAddReferencesToLibrary(formData).then(
+              response => {
+                this.handleResponseMessages(response, true);
+                this.getActiveLibraryList({
+                  libraryId: this.activeLibrary.library
+                });
+              },
+              errResponse => {
+                this.handleResponseMessages(errResponse, false);
+                this.getActiveLibraryList({
+                  libraryId: this.activeLibrary.library
+                });
+              }
+            );
           } else {
-            this.getActiveSelectionSeriesList({
-              routeObject: this.$route.meta.object,
-              selectionSeriesId: this.activeSelectionSeries.id
-            });
+            fetchMultiAddRecordToSelection(formData).then(
+              response => {
+                this.handleResponseMessages(response, true);
+                this.getActiveSelectionSeriesList({
+                  routeObject: this.$route.meta.object,
+                  selectionSeriesId: this.activeSelectionSeries.id
+                });
+              },
+              errResponse => {
+                this.handleResponseMessages(errResponse, false);
+                this.getActiveSelectionSeriesList({
+                  routeObject: this.$route.meta.object,
+                  selectionSeriesId: this.activeSelectionSeries.id
+                });
+              }
+            );
           }
+
           this.toastInfo({ text: this.$t("messages.underDevelopment") });
         } else {
           let listOfIds = [];
 
-          if (relation === "reference") {
-            if (this.activeLibraryList && this.activeLibraryList.length > 0) {
-              selection.items.forEach(deletableItem => {
-                let id = this.activeLibraryList.find(
-                  item => item.reference === deletableItem.id
-                )?.id;
-                if (id) listOfIds.push(id);
-              });
-            }
-          } else {
-            if (this.activeSelectionSeriesList && this.activeSelectionSeriesList.length > 0) {
-              selection.items.forEach(deletableItem => {
-                let id = this.activeSelectionSeriesList.find(
-                  item => item[relation] === deletableItem.id
-                )?.id;
-                if (id) listOfIds.push(id);
-              });
-            }
+          if (this[keyForActiveList] && this[keyForActiveList].length > 0) {
+            selection.items.forEach(deletableItem => {
+              let id = this[keyForActiveList].find(
+                item => item[relation] === deletableItem.id
+              )?.id;
+              if (id) listOfIds.push(id);
+            });
           }
 
           let formData = new FormData();

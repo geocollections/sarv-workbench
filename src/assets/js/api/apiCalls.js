@@ -1134,6 +1134,10 @@ export function fetchMultiRemoveReferencesFromLibrary(data) {
   return post(`delete_multi/library_reference/`, data);
 }
 
+export function fetchMultiAddReferencesToLibrary(data) {
+  return post(`add_multi/library_reference/`, data);
+}
+
 /***********************
  ***  LIBRARIES END  ***
  ***********************/
@@ -2674,6 +2678,10 @@ export function fetchRemoveRecordFromSelection(id) {
 
 export function fetchMultiRemoveRecordFromSelection(data) {
   return post(`delete_multi/selection/`, data);
+}
+
+export function fetchMultiAddRecordToSelection(data) {
+  return post(`add_multi/selection/`, data);
 }
 
 /***********************
