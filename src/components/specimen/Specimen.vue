@@ -1204,9 +1204,6 @@ export default {
     formatDataForUpload(objectToUpload) {
       let uploadableObject = cloneDeep(objectToUpload);
 
-      // Todo: Api doesn't save specimen_nr and throws error
-      delete uploadableObject.specimen_nr;
-
       Object.keys(uploadableObject).forEach(key => {
         if (
           typeof uploadableObject[key] === "object" &&
