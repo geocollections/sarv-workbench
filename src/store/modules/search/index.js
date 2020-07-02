@@ -201,6 +201,7 @@ const state = {
     selection: null,
     id: null,
     loan: null,
+    series: null,
     page: 1,
     paginateBy: 50,
     sortBy: ["id"],

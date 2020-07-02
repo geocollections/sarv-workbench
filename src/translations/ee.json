@@ -897,6 +897,7 @@
     "basicForm": "Täisvaade",
     "addAnalysis": "Lisa analüüs",
     "site": "Vaatluspunkt",
+    "series_search": "Seeria ID või nimi",
     "relatedTables": {
       "sample_reference": "Kirjandusviited",
       "analysis": "Analüüsid",

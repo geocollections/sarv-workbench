@@ -80,7 +80,8 @@ export default {
       { id: "site", title: "sample.site", type: "text" },
       { id: "selectionId", title: "specimen.selectionId", type: "number" },
       { id: "selection", title: "specimen.selection", type: "text" },
-      { id: "loan", title: "specimen.loan", type: "text" }
+      { id: "loan", title: "specimen.loan", type: "text" },
+      { id: "series", title: "sample.series_search", type: "text" }
     ]);
   },
 

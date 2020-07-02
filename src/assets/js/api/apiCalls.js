@@ -911,6 +911,13 @@ export function fetchSamples(data) {
       "icontains"}`;
   }
 
+  if (data.series && data.series.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+      data.series
+    };fields:series__id,series__name;lookuptype:${data.series__lookuptype ||
+      "icontains"}`;
+  }
+
   if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
 
   if (searchFields.length > 0) {

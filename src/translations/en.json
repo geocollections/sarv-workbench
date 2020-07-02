@@ -897,6 +897,7 @@
     "basicForm": "Full view",
     "addAnalysis": "Add analysis",
     "site": "Site",
+    "series_search": "Series ID or name",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",
