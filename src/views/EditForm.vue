@@ -20,6 +20,19 @@
           </v-btn>
         </span>
       </div>
+
+      <div class="flex-grow-1"></div>
+
+      <div class="mr-2">
+        <v-btn
+          :to="{ path: `/${$route.meta.object}/add` }"
+          :color="bodyActiveColor"
+          :dark="bodyActiveColorDark"
+        >
+          {{ $t("buttons.add_new") }}
+        </v-btn>
+      </div>
+
       <div class="text-right">
         <v-btn
           :to="{ path: '/' + $route.meta.object }"
