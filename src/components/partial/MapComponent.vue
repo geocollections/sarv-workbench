@@ -243,6 +243,9 @@ export default {
           } else {
             if (this.marker) this.map.removeLayer(this.marker);
             this.marker = null;
+            // #523 removing event listener (just in case) and adding it again when there is no marker
+            this.map.off("click");
+            this.map.on("click", event => this.updateCoordinates(event.latlng));
           }
         }
       }
