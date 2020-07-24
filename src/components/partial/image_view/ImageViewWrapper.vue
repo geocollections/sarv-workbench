@@ -99,31 +99,73 @@
           </span>
         </v-tooltip>
 
-        <v-row no-gutters class="pr-2" style="max-width: 50px;">
-          <v-col cols="12" class="pa-1 align-self-center">
-            <v-btn
-              :title="$t(viewMessage)"
-              icon
-              color="blue"
-              @click="openFileInNewWindow(image)"
-              :small="$vuetify.breakpoint.xsOnly"
-            >
-              <v-icon :small="$vuetify.breakpoint.xsOnly">fas fa-eye</v-icon>
-            </v-btn>
-          </v-col>
-          <v-col cols="12" class="pa-1 align-self-center">
-            <v-btn
-              color="green"
-              :title="$t(editMessage)"
-              icon
-              @click="openInNewTab(object, image[idField])"
-              :small="$vuetify.breakpoint.xsOnly"
-              ><v-icon :small="$vuetify.breakpoint.xsOnly"
-                >fas fa-edit</v-icon
-              ></v-btn
-            >
-          </v-col>
-        </v-row>
+        <div
+          class="d-flex flex-row justify-space-around"
+          style="position: absolute; padding-right: 30px; bottom: 5px; width: 100%"
+        >
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-on="on"
+                icon
+                dark
+                @click.stop="openFileInNewWindow(image)"
+              >
+                <v-icon
+                  style="text-shadow: 0 0 6px #000, 0 0 4px #2196F3;"
+                  small
+                  >fas fa-eye</v-icon
+                >
+              </v-btn>
+            </template>
+
+            <span>{{ $t(viewMessage) }}</span>
+          </v-tooltip>
+
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                v-on="on"
+                dark
+                icon
+                @click.stop="openInNewTab(object, image[idField])"
+                ><v-icon
+                  style="text-shadow: 0 0 6px #000, 0 0 4px #4CAF50;"
+                  small
+                  >fas fa-edit</v-icon
+                ></v-btn
+              >
+            </template>
+
+            <span>{{ $t(editMessage) }}</span>
+          </v-tooltip>
+        </div>
+
+        <!--        <v-row no-gutters class="pr-2" style="max-width: 50px;">-->
+        <!--          <v-col cols="12" class="pa-1 align-self-center">-->
+        <!--            <v-btn-->
+        <!--              :title="$t(viewMessage)"-->
+        <!--              icon-->
+        <!--              color="blue"-->
+        <!--              @click="openFileInNewWindow(image)"-->
+        <!--              :small="$vuetify.breakpoint.xsOnly"-->
+        <!--            >-->
+        <!--              <v-icon :small="$vuetify.breakpoint.xsOnly">fas fa-eye</v-icon>-->
+        <!--            </v-btn>-->
+        <!--          </v-col>-->
+        <!--          <v-col cols="12" class="pa-1 align-self-center">-->
+        <!--            <v-btn-->
+        <!--              color="green"-->
+        <!--              :title="$t(editMessage)"-->
+        <!--              icon-->
+        <!--              @click="openInNewTab(object, image[idField])"-->
+        <!--              :small="$vuetify.breakpoint.xsOnly"-->
+        <!--              ><v-icon :small="$vuetify.breakpoint.xsOnly"-->
+        <!--                >fas fa-edit</v-icon-->
+        <!--              ></v-btn-->
+        <!--            >-->
+        <!--          </v-col>-->
+        <!--        </v-row>-->
       </v-col>
     </v-row>
   </div>
