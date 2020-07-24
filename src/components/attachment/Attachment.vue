@@ -292,6 +292,7 @@
                     route-object="locality"
                     is-searchable
                     v-on:search:items="autocompleteLocalitySearch"
+                    @change="updateLocationUsingLocality"
                   />
                 </v-col>
               </v-row>
@@ -372,7 +373,7 @@
                 <v-card
                   flat
                   tile
-                  class="align-self-center"
+                  class="align-self-center flex-grow-1"
                   :color="bodyColor.split('n-')[0] + 'n-5'"
                 >
                   <label class="m-0" :for="`map-switch`">
@@ -382,6 +383,16 @@
                     }}
                   </label>
                 </v-card>
+
+                <v-btn
+                  class="align-self-center ml-2"
+                  v-if="attachment.image_latitude || attachment.image_longitude"
+                  small
+                  @click="resetLocation"
+                  color="error"
+                  >Reset location
+                  <v-icon right small>fas fa-map-marker-alt</v-icon>
+                </v-btn>
               </v-card>
 
               <!-- MAP -->
@@ -2204,7 +2215,7 @@
                 <v-card
                   flat
                   tile
-                  class="align-self-center"
+                  class="align-self-center flex-grow-1"
                   :color="bodyColor.split('n-')[0] + 'n-5'"
                 >
                   <label class="m-0" :for="`map-switch`">
@@ -2214,6 +2225,16 @@
                     }}
                   </label>
                 </v-card>
+
+                <v-btn
+                  class="align-self-center ml-2"
+                  v-if="attachment.image_latitude || attachment.image_longitude"
+                  small
+                  @click="resetLocation"
+                  color="error"
+                  >Reset location
+                  <v-icon right small>fas fa-map-marker-alt</v-icon>
+                </v-btn>
               </v-card>
 
               <!-- MAP -->
@@ -3793,7 +3814,7 @@
     <template v-slot:local-storage>
       <div class="d-flex mt-3">
         <v-btn @click="clearSavedFields" class="text-none" color="yellow">
-          {{ $t("buttons.clearLocalStorage") }}
+          {{ $t("buttons.clearLocalStorageAndFields") }}
         </v-btn>
       </div>
     </template>
@@ -4967,6 +4988,24 @@ export default {
       this.attachment.image_latitude = location.lat.toFixed(6);
       this.attachment.image_longitude = location.lng.toFixed(6);
     },
+
+    resetLocation() {
+      this.attachment.image_latitude = null;
+      this.attachment.image_longitude = null;
+    },
+
+    updateLocationUsingLocality(event) {
+      if (
+        event &&
+        event.latitude &&
+        event.longitude &&
+        !this.attachment.image_latitude &&
+        !this.attachment.image_longitude
+      ) {
+        this.attachment.image_latitude = event.latitude.toFixed(6);
+        this.attachment.image_longitude = event.longitude.toFixed(6);
+      }
+    },
     /* MapComponent Event END */
 
     // This method is run if author field changes
@@ -5007,7 +5046,9 @@ export default {
       } else if (this.isDigitisedReference)
         this.resetFields("digitisedReference");
 
-      this.toastInfo({ text: this.$t("messages.defaultsRemoved") });
+      this.attachment = this.setDefaultAttachmentFields();
+
+      this.toastInfo({ text: this.$t("messages.defaultsRemovedAndFieldsCleared") });
     },
 
     customSpecimenLabel(option) {

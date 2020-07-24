@@ -1776,6 +1776,7 @@
     "deleteError": "Kustutamine ebaõnnestus!",
     "underDevelopment": "See funktsionaalsus on alles arenduses!",
     "defaultsRemoved": "Vaikimisi väärtused eemaldatud!",
+    "defaultsRemovedAndFieldsCleared": "Vaikimisi väärtused eemaldatud ja väljad puhastatud!",
     "validFileFormat": "Fail '{file}' ei ole õiges formaadis ning eemaldati!",
     "userCancelled": "Tegevus katkestati",
     "fieldsCleared": "Väljad puhastatud!",
@@ -1819,6 +1820,7 @@
     "search": "Otsi",
     "listView": "Loendivaade",
     "imageView": "Pildid",
-    "clearLocalStorage": "Eemalda vaikimisi väärtused"
+    "clearLocalStorage": "Eemalda vaikimisi väärtused",
+    "clearLocalStorageAndFields": "Eemalda vaikimisi väärtused ja puhasta väljad"
   }
 }

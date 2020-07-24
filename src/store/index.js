@@ -27,8 +27,11 @@ function buildLocalStorageKey() {
 
 const vuexLocal = new VuexPersistence({
   key: buildLocalStorageKey(),
-  storage: window.localStorage
-  // reducer: state => ({ settings: state.settings })
+  storage: window.localStorage,
+  reducer: state => ({
+    ...state,
+    search: { ...state.search, loadingState: false, loadingPercent: 0 }
+  })
 });
 
 export default new Vuex.Store({

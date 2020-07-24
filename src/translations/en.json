@@ -1776,6 +1776,7 @@
     "deleteError": "Deletion failed!",
     "underDevelopment": "This functionality is under development!",
     "defaultsRemoved": "Defaults removed!",
+    "defaultsRemovedAndFieldsCleared": "Defaults removed and fields cleared!",
     "validFileFormat": "File '{file}' is not in correct format and was removed!",
     "userCancelled": "Action cancelled",
     "fieldsCleared": "Fields cleared!",
@@ -1819,6 +1820,7 @@
     "search": "Search",
     "listView": "List view",
     "imageView": "Image view",
-    "clearLocalStorage": "Remove defaults"
+    "clearLocalStorage": "Remove defaults",
+    "clearLocalStorageAndFields": "Remove defaults and clear fields"
   }
 }
