@@ -626,6 +626,7 @@ export default {
 
   methods: {
     ...mapActions("search", ["setActiveProject"]),
+    ...mapActions("map", ["updateShowMap"]),
 
     fetchLinkedSiteWrapper() {
       return new Promise(resolve => {

@@ -2338,8 +2338,6 @@ function checkCookiesAndStorage(user) {
     // Getting user data from cookies and storage
     let csrftoken = Vue.$cookies.get("csrftoken");
     let csrftokenLocalhost = Vue.$cookies.get("csrftokenLocalhost");
-    console.log(csrftoken);
-    console.log(csrftokenLocalhost);
     let authUser = store?.state?.user?.authUser;
 
     if ((csrftoken || csrftokenLocalhost) && authUser) {
