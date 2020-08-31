@@ -10,7 +10,9 @@
     :page="searchParameters.page"
     :search="filter"
     :show-select="!!activeSelectionSeries"
-    @item-selected="$emit('toggle-item-in-selection-series', $event, 'locality')"
+    @item-selected="
+      $emit('toggle-item-in-selection-series', $event, 'locality')
+    "
     @toggle-select-all="$emit('toggle-select-all', $event, 'locality')"
     expand-icon="fas fa-caret-down"
     :value="selected"

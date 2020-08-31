@@ -1811,6 +1811,7 @@
     "delete": "Delete",
     "close": "Close",
     "add_new": "Add new",
+    "add_new_unavailable_specimen": "'ADD NEW' is not available! Specimen 'category' has to be 'fossil' or 'recent organism'",
     "next": "Next",
     "previous": "Previous",
     "clear": "Clear",

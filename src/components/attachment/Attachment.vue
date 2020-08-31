@@ -5048,7 +5048,9 @@ export default {
 
       this.attachment = this.setDefaultAttachmentFields();
 
-      this.toastInfo({ text: this.$t("messages.defaultsRemovedAndFieldsCleared") });
+      this.toastInfo({
+        text: this.$t("messages.defaultsRemovedAndFieldsCleared")
+      });
     },
 
     customSpecimenLabel(option) {

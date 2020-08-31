@@ -16,7 +16,10 @@ const router = new Router({
     } else {
       // if same route like /doi or /reference and only id changes then sets previous scrollbar location
       if (isSameRoute(to, from))
-        return { x: from.meta.scrollbar.x, y: from.meta.scrollbar.y };
+        return {
+          x: from?.meta?.scrollbar?.x || 0,
+          y: from?.meta?.scrollbar?.y || 0
+        };
       else return { x: 0, y: 0 };
     }
   },
@@ -2314,7 +2317,7 @@ router.beforeEach(async (to, from, next) => {
     }
   } else {
     if (from.fullPath !== "/") {
-      if (!to.params.dontShowSessionExpired) {
+      if (to.params.dontShowSessionExpired === false) {
         Vue.prototype.toast.error("Please log back in", "Session expired", {
           position: "bottomRight",
           timeout: 5000,
@@ -2335,6 +2338,8 @@ function checkCookiesAndStorage(user) {
     // Getting user data from cookies and storage
     let csrftoken = Vue.$cookies.get("csrftoken");
     let csrftokenLocalhost = Vue.$cookies.get("csrftokenLocalhost");
+    console.log(csrftoken);
+    console.log(csrftokenLocalhost);
     let authUser = store?.state?.user?.authUser;
 
     if ((csrftoken || csrftokenLocalhost) && authUser) {
@@ -2367,13 +2372,7 @@ function removeBrowserDataAndLogout() {
 
 function handleResponse(response) {
   if (response.status === 200) {
-    if (
-      response.data &&
-      response.data.results &&
-      response.data.results.success
-    ) {
-      return response.data.results.success;
-    } else return false;
+    return !!response?.data?.results?.success;
   } else return false;
 }
 

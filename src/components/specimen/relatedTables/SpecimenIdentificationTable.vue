@@ -166,13 +166,23 @@
       </template>
     </v-data-table>
 
-    <v-toolbar dense flat :color="bodyColor.split('n-')[0] + 'n-5'">
-      <v-dialog v-model="dialog" max-width="500px" style="z-index: 50000">
+    <v-toolbar
+      :dense="isAddNewAvailable"
+      flat
+      :color="bodyColor.split('n-')[0] + 'n-5'"
+    >
+      <v-dialog
+        v-if="isAddNewAvailable"
+        v-model="dialog"
+        max-width="500px"
+        style="z-index: 50000"
+      >
         <template v-slot:activator="{ on }">
           <v-btn :color="bodyActiveColor" small dark v-on="on">{{
             $t("buttons.add_new")
           }}</v-btn>
         </template>
+
         <v-card :color="bodyColor.split('n-')[0] + 'n-5'">
           <v-card-title>
             <span class="headline">{{
@@ -287,6 +297,17 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-alert
+        v-else
+        class="mb-0"
+        border="left"
+        color="red lighten-5"
+        dense
+        elevation="3"
+        icon="fas fa-info"
+        >{{ $t("buttons.add_new_unavailable_specimen") }}</v-alert
+      >
     </v-toolbar>
   </div>
 </template>
@@ -341,6 +362,11 @@ export default {
       default: "deep-orange"
     },
     isUsedAsRelatedData: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    isAddNewAvailable: {
       type: Boolean,
       required: false,
       default: true

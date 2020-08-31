@@ -111,9 +111,13 @@ const authenticationMixin = {
             "test token",
             "1d",
             null,
-            "localhost"
+            "localhost",
+            true,
+            "Lax"
           );
           this.setAuthUser(response.data);
+
+          console.log(this.$route.query.from)
 
           if (this.$route.query.from) {
             this.$router.push({ path: this.$route.query.from });

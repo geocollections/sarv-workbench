@@ -1,7 +1,9 @@
 import { mapActions, mapState } from "vuex";
 import {
   fetchAddItemToSelection,
-  fetchAddReferenceToLibrary, fetchMultiAddRecordToSelection, fetchMultiAddReferencesToLibrary,
+  fetchAddReferenceToLibrary,
+  fetchMultiAddRecordToSelection,
+  fetchMultiAddReferencesToLibrary,
   fetchMultiRemoveRecordFromSelection,
   fetchMultiRemoveReferencesFromLibrary,
   fetchRemoveRecordFromSelection,

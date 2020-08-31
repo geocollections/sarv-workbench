@@ -10,7 +10,9 @@
     :page="searchParameters.page"
     :search="filter"
     :show-select="!!activeSelectionSeries"
-    @item-selected="$emit('toggle-item-in-selection-series', $event, 'attachment')"
+    @item-selected="
+      $emit('toggle-item-in-selection-series', $event, 'attachment')
+    "
     @toggle-select-all="$emit('toggle-select-all', $event, 'attachment')"
     expand-icon="fas fa-caret-down"
     :value="selected"

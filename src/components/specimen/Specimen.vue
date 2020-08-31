@@ -461,8 +461,6 @@
       :color="bodyColor.split('n-')[0] + 'n-5'"
       elevation="4"
     >
-      <!--      {{ activeTab }}-->
-      <!--      {{ tabIndex }}-->
       <v-tabs
         v-model="tabIndex"
         :background-color="bodyColor.split('n-')[0] + 'n-3'"
@@ -474,7 +472,7 @@
         hide-slider
       >
         <v-tab
-          v-for="tab in computedRelatedTabs"
+          v-for="tab in relatedTabs"
           :key="tab.name"
           @click.prevent="setTab(tab.name)"
         >
@@ -493,7 +491,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="tabIndex">
-        <v-tab-item v-for="tab in computedRelatedTabs" :key="tab.name">
+        <v-tab-item v-for="tab in relatedTabs" :key="tab.name">
           <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
             <specimen-identification-table
               v-show="activeTab === 'specimen_identification'"
@@ -506,6 +504,7 @@
               v-on:related:add="addRelatedItem"
               v-on:related:edit="editRelatedItem"
               v-on:related:delete="deleteRelatedItem"
+              :is-add-new-available="areSpecimenIdentificationsAvailable"
             />
 
             <specimen-identification-geology-table
@@ -519,6 +518,7 @@
               v-on:related:add="addRelatedItem"
               v-on:related:edit="editRelatedItem"
               v-on:related:delete="deleteRelatedItem"
+              :is-add-new-available="areSpecimenIdentificationsAvailable"
             />
 
             <specimen-reference-table
@@ -839,20 +839,22 @@ export default {
       activeRelatedDataTab: state => state.activeRelatedDataTab.specimen
     }),
 
+    areSpecimenIdentificationsAvailable() {
+      let fossilId = this.specimen?.fossil?.id;
+
+      return fossilId === 1 || fossilId === 7;
+    },
+
     computedRelatedTabs() {
       return this.relatedTabs.filter(tab => {
+        let fossilId = this.specimen?.fossil?.id;
+
         if (tab.name === "specimen_identification") {
-          if (
-            this.specimen?.fossil?.id === 1 ||
-            this.specimen?.fossil?.id === 7
-          ) {
+          if (fossilId === 1 || fossilId === 7) {
             return tab;
           }
         } else if (tab.name === "specimen_identification_geology") {
-          if (
-            this.specimen?.fossil?.id !== 1 &&
-            this.specimen?.fossil?.id !== 7
-          ) {
+          if (fossilId === 1 || fossilId === 7) {
             return tab;
           }
         } else return tab;
@@ -875,7 +877,6 @@ export default {
 
     setTab(type) {
       if (type) {
-        // console.log(this.computedRelatedTabs)
         this.updateActiveTab({
           tab: type,
           object: this.$route.meta.object
@@ -1040,32 +1041,32 @@ export default {
             this.setLoadingState(false);
 
             // Set default tab
-            if (this.specimen?.fossil) {
-              if (
-                this.specimen?.fossil?.id === 1 ||
-                this.specimen?.fossil?.id === 7
-              ) {
-                if (
-                  this.activeRelatedDataTab &&
-                  this.activeRelatedDataTab !==
-                    "specimen_identification_geology"
-                )
-                  this.setTab(this.activeRelatedDataTab);
-                else this.setTab("specimen_identification");
-              } else {
-                if (this.activeRelatedDataTab)
-                  this.setTab(this.activeRelatedDataTab);
-                else this.setTab("specimen_identification_geology");
-              }
-            } else {
-              if (
-                this.activeRelatedDataTab &&
-                this.activeRelatedDataTab !== "specimen_identification" &&
-                this.activeRelatedDataTab !== "specimen_identification_geology"
-              )
-                this.setTab(this.activeRelatedDataTab);
-              else this.setTab("specimen_reference");
-            }
+            // if (this.specimen?.fossil) {
+            //   if (
+            //     this.specimen?.fossil?.id === 1 ||
+            //     this.specimen?.fossil?.id === 7
+            //   ) {
+            //     if (
+            //       this.activeRelatedDataTab &&
+            //       this.activeRelatedDataTab !==
+            //         "specimen_identification_geology"
+            //     )
+            //       this.setTab(this.activeRelatedDataTab);
+            //     else this.setTab("specimen_identification");
+            //   } else {
+            //     if (this.activeRelatedDataTab)
+            //       this.setTab(this.activeRelatedDataTab);
+            //     else this.setTab("specimen_identification_geology");
+            //   }
+            // } else {
+            //   if (
+            //     this.activeRelatedDataTab &&
+            //     this.activeRelatedDataTab !== "specimen_identification" &&
+            //     this.activeRelatedDataTab !== "specimen_identification_geology"
+            //   )
+            //     this.setTab(this.activeRelatedDataTab);
+            //   else this.setTab("specimen_reference");
+            // }
           } else {
             this.setLoadingState(false);
             this.$emit("object-exists", false);
@@ -1077,31 +1078,31 @@ export default {
         this.makeObjectReactive(this.$route.meta.object, this.copyFields);
 
         // Set default tab
-        if (this.specimen?.fossil) {
-          if (
-            this.specimen?.fossil?.id === 1 ||
-            this.specimen?.fossil?.id === 7
-          ) {
-            if (
-              this.activeRelatedDataTab &&
-              this.activeRelatedDataTab !== "specimen_identification_geology"
-            )
-              this.setTab(this.activeRelatedDataTab);
-            else this.setTab("specimen_identification");
-          } else {
-            if (this.activeRelatedDataTab)
-              this.setTab(this.activeRelatedDataTab);
-            else this.setTab("specimen_identification_geology");
-          }
-        } else {
-          if (
-            this.activeRelatedDataTab &&
-            this.activeRelatedDataTab !== "specimen_identification" &&
-            this.activeRelatedDataTab !== "specimen_identification_geology"
-          )
-            this.setTab(this.activeRelatedDataTab);
-          else this.setTab("specimen_reference");
-        }
+        // if (this.specimen?.fossil) {
+        //   if (
+        //     this.specimen?.fossil?.id === 1 ||
+        //     this.specimen?.fossil?.id === 7
+        //   ) {
+        //     if (
+        //       this.activeRelatedDataTab &&
+        //       this.activeRelatedDataTab !== "specimen_identification_geology"
+        //     )
+        //       this.setTab(this.activeRelatedDataTab);
+        //     else this.setTab("specimen_identification");
+        //   } else {
+        //     if (this.activeRelatedDataTab)
+        //       this.setTab(this.activeRelatedDataTab);
+        //     else this.setTab("specimen_identification_geology");
+        //   }
+        // } else {
+        //   if (
+        //     this.activeRelatedDataTab &&
+        //     this.activeRelatedDataTab !== "specimen_identification" &&
+        //     this.activeRelatedDataTab !== "specimen_identification_geology"
+        //   )
+        //     this.setTab(this.activeRelatedDataTab);
+        //   else this.setTab("specimen_reference");
+        // }
       }
     },
 
