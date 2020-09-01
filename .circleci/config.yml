@@ -2,7 +2,7 @@ version: 2.1
 
 parameters:
   package-version:
-    type: string,
+    type: string
     default: "v3.1"
 
 jobs:
