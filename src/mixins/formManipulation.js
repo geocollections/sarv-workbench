@@ -374,7 +374,9 @@ const formManipulation = {
 
     addFileAsRelatedDataNew(files, relatedObject) {
       console.log(files);
-      let attach_link = "attach_link__" + relatedObject;
+      let attach_link = `attach_link__${
+        relatedObject === "location" ? "storage" : relatedObject
+      }`;
 
       let formData = new FormData();
       files.forEach((file, index) => {

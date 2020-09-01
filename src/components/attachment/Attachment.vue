@@ -4930,7 +4930,7 @@ export default {
           }
         }
 
-        if (this.isPhotoArchive) {
+        if (this.isPhotoArchive || this.isOtherFile) {
           // GPS DATA
           if (metadata.GPSLatitude) {
             const degrees =
