@@ -25,12 +25,12 @@ jobs:
       - restore_cache:
           key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Installing packages
           command: npm install
       - save_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ./node_modules
             - ./package-lock.json
@@ -43,7 +43,7 @@ jobs:
       - restore_cache:
           key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Building application
           command: npm run build
@@ -60,7 +60,7 @@ jobs:
       - restore_cache:
           key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
@@ -78,7 +78,7 @@ jobs:
       - restore_cache:
           key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
@@ -96,7 +96,7 @@ jobs:
       - restore_cache:
           key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
           key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
