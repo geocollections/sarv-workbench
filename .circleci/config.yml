@@ -3,7 +3,7 @@ version: 2.0
 parameters:
   package-version:
     type: string,
-    default: "v1.1"
+    default: "v3.1"
 
 jobs:
   checkout_code:
@@ -13,7 +13,7 @@ jobs:
     steps:
       - checkout
       - save_cache:
-          key: v1.1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/geocollections/sarv-edit
 
@@ -23,14 +23,14 @@ jobs:
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: v1.1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: v1.1-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
       - run:
           name: Installing packages
           command: npm install
       - save_cache:
-          key: v1.1-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
           paths:
             - ./node_modules
             - ./package-lock.json
@@ -41,14 +41,14 @@ jobs:
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: v1.1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: v1.1-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
       - run:
           name: Building application
           command: npm run build
       - save_cache:
-          key: v1.1-build-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - ~/geocollections/sarv-edit
 
@@ -58,11 +58,11 @@ jobs:
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: v1.1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: v1.1-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: v1.1-build-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Directory update
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit-dev/script && . directory_update.sh'
@@ -76,11 +76,11 @@ jobs:
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: v1.1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: v1.1-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: v1.1-build-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_2} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
@@ -94,11 +94,11 @@ jobs:
     working_directory: ~/geocollections/sarv-edit
     steps:
       - restore_cache:
-          key: v1.1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-repo-{{ .Environment.CIRCLE_SHA1 }}
       - restore_cache:
-          key: v1.1-bundle-{{ checksum "package-lock.json" }}
+          key: << pipeline.parameters.package-version >>-bundle-{{ checksum "package-lock.json" }}
       - restore_cache:
-          key: v1.1-build-{{ .Environment.CIRCLE_SHA1 }}
+          key: << pipeline.parameters.package-version >>-build-{{ .Environment.CIRCLE_SHA1 }}
       - run:
           name: Removing current production files
           command: ssh -o "StrictHostKeyChecking no" -p ${PORT} ${USER}@${ADDRESS_1} 'cd /var/www/sarv-edit && rm -rf css/ fonts/ img/ js/ favicon.ico index.html'
