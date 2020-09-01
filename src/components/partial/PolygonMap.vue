@@ -296,7 +296,6 @@ export default {
       this.updateDefaultLayer(event.name);
 
       if (event.name && event.name === "Maaameti fotokaart") {
-        console.log(this.overlayMaps[0].leafletObject);
         this.map.addLayer(this.overlayMaps[0].leafletObject);
         document.querySelector(
           "#polygon-map > div.leaflet-control-container > div.leaflet-top.leaflet-right > div > section > div.leaflet-control-layers-overlays > label > div > input"

@@ -1434,7 +1434,6 @@ export default {
     },
 
     handleUserChoiceFromModal(choice) {
-      console.log(choice);
       let vm = this;
       if (choice === "SAVE_AND_LEAVE") {
         this.add(false, "site", true).then(() => {

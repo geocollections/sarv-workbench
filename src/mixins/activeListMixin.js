@@ -72,9 +72,6 @@ const activeListMixin = {
     },
 
     toggleItemInSelectionSeries(selection, relation) {
-      console.log(selection);
-      console.log(relation);
-
       if (selection?.item?.id) {
         if (selection.value) {
           let formData = new FormData();
@@ -134,8 +131,6 @@ const activeListMixin = {
     },
 
     toggleReferenceInActiveLibrary(selection) {
-      console.log(selection);
-
       if (selection?.item?.id) {
         if (selection.value) {
           let formData = new FormData();
@@ -186,9 +181,6 @@ const activeListMixin = {
     },
 
     toggleSelectAll(selection, relation) {
-      console.log(selection);
-      console.log(relation);
-
       if (selection?.items && selection.items.length > 0) {
         const keyForActiveList =
           relation === "reference"
@@ -232,8 +224,6 @@ const activeListMixin = {
               add: listOfObjects
             })
           );
-
-          console.log(listOfObjects);
 
           if (relation === "reference") {
             fetchMultiAddReferencesToLibrary(formData).then(

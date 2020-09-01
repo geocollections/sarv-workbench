@@ -1570,7 +1570,6 @@ export default {
     },
 
     siteLabel(option) {
-      console.log(option);
       return `id: ${option.id} - ${option.name}`;
     },
 

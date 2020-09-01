@@ -159,7 +159,6 @@ const autocompleteMixin = {
       this.$_autocompleteMixin_search(value, "agent", "identification_agent");
     },
     autocompleteCopyrightAgentSearch(value) {
-      console.log(value);
       this.$_autocompleteMixin_search(
         value,
         "copyright_agent",

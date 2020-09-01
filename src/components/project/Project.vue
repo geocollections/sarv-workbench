@@ -640,7 +640,6 @@ export default {
     },
 
     setActiveProject(switchValue) {
-      console.log(switchValue);
       if (switchValue) this.setActiveProject(this.project);
       else this.setActiveProject(null);
     },

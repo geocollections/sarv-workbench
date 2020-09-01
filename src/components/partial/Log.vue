@@ -182,6 +182,7 @@ export default {
         try {
           return JSON.parse(changes);
         } catch (e) {
+          console.log("LOG READING ERROR: ");
           console.log(e);
           return {};
         }

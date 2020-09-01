@@ -120,7 +120,6 @@ export default {
           );
         }
       } else if (object === "attachment") {
-        console.log(this.data);
         doiObject = {
           creators: this.data.author
             ? this.data.author.agent

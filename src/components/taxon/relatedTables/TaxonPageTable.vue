@@ -305,7 +305,6 @@ export default {
         this.autocomplete.agent.push(this.item.author);
       }
 
-      console.log(item.language);
       this.item.language = item.language;
       this.item.frontpage = item.frontpage;
       this.item.frontpage_title = item.frontpage_title;
