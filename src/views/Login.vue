@@ -126,6 +126,7 @@
         </v-col>
       </v-row>
     </v-container>
+    <site-icons></site-icons>
   </v-main>
 </template>
 
@@ -133,10 +134,12 @@
 import authenticationMixin from "../mixins/authenticationMixin";
 import LangButtons from "../components/partial/LangButtons";
 import { mapState } from "vuex";
+import SiteIcons from "@/components/partial/SiteIcons";
 
 export default {
   name: "Login",
   components: {
+    SiteIcons,
     LangButtons
   },
   mixins: [authenticationMixin],
