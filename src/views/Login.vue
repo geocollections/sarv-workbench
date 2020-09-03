@@ -1,11 +1,21 @@
 <template>
-  <v-main class="login">
-    <lang-buttons v-if="$route.meta.isLogin" />
-
+  <v-main
+    class="login"
+    :style="{
+      backgroundImage: `url('${image}')`,
+      transition: 'background 5s ease-in-out'
+    }"
+  >
+    <lang-buttons v-if="$route.meta.isLogin" style="z-index: 3" />
+    <div class="gradient"></div>
     <v-container fill-height>
       <v-row align="center" justify="center">
         <v-col sm="10" md="8" lg="6" style="margin: 48px 0;">
-          <v-card :color="bodyColor.split('n-')[0] + 'n-5'" elevation="8">
+          <v-card
+            :color="bodyColor.split('n-')[0] + 'n-5'"
+            elevation="8"
+            style="z-index: 3"
+          >
             <v-tabs
               v-model="tab"
               grow
@@ -126,7 +136,7 @@
         </v-col>
       </v-row>
     </v-container>
-    <site-icons></site-icons>
+    <site-icons style="z-index: 3"></site-icons>
   </v-main>
 </template>
 
@@ -163,11 +173,21 @@ export default {
     passMessage: null,
     passError: false,
     idMessage: null,
-    idError: false
+    idError: false,
+    imageId: 0,
+    images: [
+      "https://files.geocollections.info/img/sarv-edit/background_1.jpg",
+      "https://files.geocollections.info/img/sarv-edit/background_2.jpg",
+      "https://files.geocollections.info/img/sarv-edit/background_3.jpg",
+      "https://files.geocollections.info/img/sarv-edit/background_4.jpg"
+    ],
+    imageInterval: 60000
   }),
 
   created() {
     window.addEventListener("keyup", this.handleKeyUp);
+    this.changeImage();
+    this.preloadImages();
   },
 
   beforeDestroy() {
@@ -175,7 +195,10 @@ export default {
   },
 
   computed: {
-    ...mapState("settings", ["bodyColor"])
+    ...mapState("settings", ["bodyColor"]),
+    image() {
+      return this.images[this.imageId];
+    }
   },
 
   methods: {
@@ -187,24 +210,44 @@ export default {
         });
       }
     },
-
     handleKeyUp(event) {
       if (this.tab === 1 && (event.key === "Enter" || event.keyCode === 13))
         this.login();
+    },
+    changeImage() {
+      if (this.images.length > 0) {
+        setInterval(() => {
+          if (this.imageId >= this.images.length - 1) this.imageId = 0;
+          else this.imageId++;
+        }, this.imageInterval);
+      }
+    },
+    preloadImages() {
+      this.images.forEach(item => {
+        const linkEl = document.createElement("link");
+        linkEl.setAttribute("rel", "preload");
+        linkEl.setAttribute("href", item);
+        linkEl.setAttribute("as", "image");
+        document.head.appendChild(linkEl);
+      });
     }
   }
 };
 </script>
 
 <style>
+.gradient {
+  background: linear-gradient(
+    to top right,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+}
 .login {
-  background-image: linear-gradient(
-      to top right,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(0, 0, 0, 0.7) 100%
-    ),
-    /*url("https://files.geocollections.info/img/doi-header-bg.jpg");*/
-      url("../assets/img/background_2.jpg");
   background-size: cover;
 }
 
