@@ -4890,7 +4890,8 @@ export default {
     updateFields(metadata) {
       console.log("FILE METADATA: ");
       console.log(metadata);
-      if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
+
+      if (metadata && (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile)) {
         // DATE
         if (metadata.DateTimeOriginal) {
           this.attachment.date_created = this.formatMetadataDate(
@@ -4912,8 +4913,8 @@ export default {
         if (metadata.PixelYDimension)
           this.attachment.image_height = metadata.PixelYDimension;
 
+        // DESCRIPTION
         if (this.isSpecimenImage) {
-          // DESCRIPTION
           if (
             metadata.ImageDescription &&
             metadata.ImageDescription.trim().length > 0
@@ -4921,7 +4922,6 @@ export default {
             this.attachment.image_description_en = metadata.ImageDescription.trim();
           }
         } else {
-          // DESCRIPTION
           if (
             metadata.ImageDescription &&
             metadata.ImageDescription.trim().length > 0
@@ -4930,8 +4930,8 @@ export default {
           }
         }
 
-        if (this.isPhotoArchive || this.isOtherFile) {
-          // GPS DATA
+        // GPS DATA
+        if (this.isPhotoArchive || this.isSpecimenImage || this.isOtherFile) {
           if (metadata.GPSLatitude) {
             const degrees =
               metadata.GPSLatitude[0].numerator /
