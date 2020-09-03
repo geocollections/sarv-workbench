@@ -204,19 +204,14 @@
 
                 <v-col cols="12" md="6" class="pa-1">
                   <input-wrapper
-                    v-model="item.description"
-                    :color="bodyActiveColor"
-                    :label="$t('common.description')"
-                    use-state
-                  />
-                </v-col>
-
-                <v-col cols="12" md="6" class="pa-1">
-                  <input-wrapper
                     v-model="item.remarks"
                     :color="bodyActiveColor"
                     :label="$t('common.remarks')"
                   />
+                </v-col>
+
+                <v-col cols="12" class="pa-1">
+                  <editor v-model="item.description" :label="$t('common.description')" />
                 </v-col>
               </v-row>
             </v-container>
@@ -247,11 +242,13 @@ import { cloneDeep } from "lodash";
 import AutocompleteWrapper from "../../partial/inputs/AutocompleteWrapper";
 import { fetchListLanguages } from "../../../assets/js/api/apiCalls";
 import autocompleteMixin from "../../../mixins/autocompleteMixin";
+import Editor from "@/components/partial/inputs/Editor";
 
 export default {
   name: "TaxonDescriptionTable",
 
   components: {
+    Editor,
     AutocompleteWrapper,
     InputWrapper
   },
