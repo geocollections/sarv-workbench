@@ -39,9 +39,11 @@ import "leaflet-fullscreen/dist/Leaflet.fullscreen";
 import "leaflet-measure/dist/leaflet-measure.css";
 import "leaflet-measure/dist/leaflet-measure";
 import { mapActions, mapState } from "vuex";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
   name: "MapComponent",
+  mixins: [toastMixin],
   props: {
     location: {
       type: Object,

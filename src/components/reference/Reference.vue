@@ -1718,8 +1718,8 @@ export default {
       this.addFileAsObject(fileData, "reference");
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "reference");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "reference", singleFileMetadata);
     },
 
     addExistingFiles(files) {

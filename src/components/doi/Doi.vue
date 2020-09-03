@@ -2116,8 +2116,8 @@ export default {
       }
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "doi");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "doi", singleFileMetadata);
     },
 
     addExistingFiles(files) {

@@ -1602,8 +1602,8 @@ export default {
       });
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "sample");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "sample", singleFileMetadata);
     },
 
     addExistingFiles(files) {

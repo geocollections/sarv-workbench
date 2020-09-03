@@ -1108,8 +1108,8 @@ export default {
       this.locality.longitude = location.lng.toFixed(6);
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "locality");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "locality", singleFileMetadata);
     },
 
     addExistingFiles(files) {

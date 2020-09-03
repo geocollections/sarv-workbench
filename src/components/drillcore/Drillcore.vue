@@ -719,8 +719,8 @@ export default {
       });
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "drillcore");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "drillcore", singleFileMetadata);
     },
 
     addExistingFiles(files) {

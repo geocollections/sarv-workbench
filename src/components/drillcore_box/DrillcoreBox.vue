@@ -653,8 +653,8 @@ export default {
       });
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "drillcore_box");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "drillcore_box", singleFileMetadata);
     },
 
     addExistingFiles(files) {

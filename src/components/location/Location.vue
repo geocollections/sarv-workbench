@@ -657,8 +657,8 @@ export default {
       });
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "location");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "location", singleFileMetadata);
     },
 
     addExistingFiles(files) {

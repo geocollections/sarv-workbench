@@ -372,8 +372,9 @@ const formManipulation = {
       }
     },
 
-    addFileAsRelatedDataNew(files, relatedObject) {
+    addFileAsRelatedDataNew(files, relatedObject, singleFileMetadata) {
       console.log(files);
+      console.log(singleFileMetadata);
       let attach_link = `attach_link__${
         relatedObject === "location" ? "storage" : relatedObject
       }`;
@@ -381,28 +382,33 @@ const formManipulation = {
       let formData = new FormData();
       files.forEach((file, index) => {
         if (!file.isAlreadyUploaded) {
-          formData.append(
-            "data",
-            JSON.stringify({
-              description:
-                file.type +
-                " for " +
-                relatedObject +
-                ": " +
-                this[relatedObject].id,
-              description_en:
-                file.type +
-                " for " +
-                relatedObject +
-                ": " +
-                this[relatedObject].id,
-              author: this.getCurrentUser.id,
-              date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
-              is_private: true,
-              is_locked: relatedObject === "doi",
-              related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
-            })
-          );
+          let newUploadableObject = {
+            description:
+              file.type +
+              " for " +
+              relatedObject +
+              ": " +
+              this[relatedObject].id,
+            description_en:
+              file.type +
+              " for " +
+              relatedObject +
+              ": " +
+              this[relatedObject].id,
+            author: this.getCurrentUser.id,
+            date_created: this.getCurrentFormattedDate("YYYY-MM-DD"),
+            is_private: true,
+            is_locked: relatedObject === "doi",
+            related_data: { [attach_link]: [{ id: this[relatedObject].id }] }
+          };
+
+          if (singleFileMetadata)
+            newUploadableObject = {
+              ...singleFileMetadata,
+              ...newUploadableObject
+            };
+
+          formData.append("data", JSON.stringify(newUploadableObject));
           formData.append("file" + [index], file);
 
           file.isAlreadyUploaded = true;

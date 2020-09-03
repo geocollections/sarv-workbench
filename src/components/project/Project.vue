@@ -933,8 +933,8 @@ export default {
         : `${option.id} - (${option.description_en}) (${option.author__agent})`;
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "project");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "project", singleFileMetadata);
     },
 
     addExistingFiles(files) {

@@ -1415,8 +1415,8 @@ export default {
       }
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "site");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "site", singleFileMetadata);
     },
 
     addExistingFiles(files) {

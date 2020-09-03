@@ -358,7 +358,8 @@ export default {
       loaders: { attachment: false }
     },
     sourceList: [],
-    id: null
+    id: null,
+    singleFileMetadata: null
   }),
   mounted() {
     this.id = this._uid;
@@ -421,7 +422,7 @@ export default {
       } else this.files = file;
     },
 
-    readFile(listOfFiles) {
+    async readFile(listOfFiles) {
       if (listOfFiles && listOfFiles.length > 0) {
         listOfFiles.forEach((file, index, object) => {
           if (!file.isAlreadyRead) {
@@ -437,9 +438,14 @@ export default {
           }
         });
 
-        if (listOfFiles.length > 0) this.$emit("file-uploaded", listOfFiles);
-
-        if (listOfFiles.length === 1) this.readFileMetaData(listOfFiles[0]);
+        if (listOfFiles.length > 0) {
+          if (listOfFiles.length === 1) {
+            const fileMetadata = await this.readFileMetaData(listOfFiles[0]);
+            if (fileMetadata) this.$emit("metadata-loaded", fileMetadata);
+            this.updateSingleFileMetadata(fileMetadata);
+            this.$emit("file-uploaded", listOfFiles, this.singleFileMetadata);
+          } else this.$emit("file-uploaded", listOfFiles);
+        }
       }
     },
 
@@ -460,12 +466,71 @@ export default {
     },
 
     readFileMetaData(file) {
-      let reader = new FileReader();
-      reader.onload = event => {
-        let fileMetaData = EXIF.readFromBinaryFile(event.target.result);
-        this.$emit("metadata-loaded", fileMetaData);
-      };
-      reader.readAsArrayBuffer(file);
+      return new Promise((resolve, reject) => {
+        try {
+          let reader = new FileReader();
+          reader.onload = event => {
+            let fileMetaData = EXIF.readFromBinaryFile(event.target.result);
+            resolve(fileMetaData);
+          };
+          reader.readAsArrayBuffer(file);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    },
+
+    updateSingleFileMetadata(metadata) {
+      this.singleFileMetadata = {};
+      if (metadata) {
+        // GPS DATA
+        if (metadata.GPSLatitude) {
+          const degrees =
+            metadata.GPSLatitude[0].numerator /
+            metadata.GPSLatitude[0].denominator;
+          const minutes =
+            metadata.GPSLatitude[1].numerator /
+            metadata.GPSLatitude[1].denominator;
+          const seconds =
+            metadata.GPSLatitude[2].numerator /
+            metadata.GPSLatitude[2].denominator;
+          const latitude = this.convertExifGPSToDecimal(
+            degrees,
+            minutes,
+            seconds,
+            metadata.GPSLatitudeRef
+          );
+          this.singleFileMetadata.image_latitude = latitude.toFixed(6);
+        }
+        if (metadata.GPSLongitude) {
+          const degrees =
+            metadata.GPSLongitude[0].numerator /
+            metadata.GPSLongitude[0].denominator;
+          const minutes =
+            metadata.GPSLongitude[1].numerator /
+            metadata.GPSLongitude[1].denominator;
+          const seconds =
+            metadata.GPSLongitude[2].numerator /
+            metadata.GPSLongitude[2].denominator;
+          const longitude = this.convertExifGPSToDecimal(
+            degrees,
+            minutes,
+            seconds,
+            metadata.GPSLatitudeRef
+          );
+
+          this.singleFileMetadata.image_longitude = longitude.toFixed(6);
+        }
+      }
+    },
+
+    convertExifGPSToDecimal(degrees, minutes, seconds, direction) {
+      // Formula from https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Coordinate_format_conversion
+      let decimalDegrees = degrees + minutes / 60 + seconds / 3600;
+      if (direction === "S" || direction === "W") {
+        decimalDegrees = decimalDegrees * -1;
+      }
+      return decimalDegrees;
     },
 
     clearFile() {

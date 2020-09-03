@@ -1212,8 +1212,8 @@ export default {
       });
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "taxon");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "taxon", singleFileMetadata);
     },
 
     addExistingFiles(files) {

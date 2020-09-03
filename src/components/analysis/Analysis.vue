@@ -961,8 +961,8 @@ export default {
       });
     },
 
-    addFiles(files) {
-      this.addFileAsRelatedDataNew(files, "analysis");
+    addFiles(files, singleFileMetadata) {
+      this.addFileAsRelatedDataNew(files, "analysis", singleFileMetadata);
     },
 
     addExistingFiles(files) {
