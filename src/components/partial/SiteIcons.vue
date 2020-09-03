@@ -1,42 +1,24 @@
 <template>
   <div class="site-icons d-flex justify-center">
-    <!--  Buttons for screens larger than xs  -->
     <v-btn
       v-for="site in sites"
       :key="site.key"
-      class="align-self-center pa-2 d-none d-sm-block"
+      :class="classObject"
       tile
       depressed
       :ripple="false"
       color="transparent"
-      height="fit-content"
-      width="fit-content"
+      height="max-content"
+      width="max-content"
       :href="site.url"
       target="window"
     >
       <v-img
-        :max-height="100"
+        :max-height="getHeight"
         :max-width="100"
         contain
         :src="site.icon"
       ></v-img>
-    </v-btn>
-
-    <!--  Buttons for screens size xs  -->
-    <v-btn
-      v-for="site in sites"
-      :key="site.key"
-      class="d-block d-sm-none align-self-center pa-2"
-      tile
-      depressed
-      :ripple="false"
-      color="transparent"
-      height="fit-content"
-      width="fit-content"
-      :href="site.url"
-      target="window"
-    >
-      <v-img :max-height="45" :max-width="100" contain :src="site.icon"></v-img>
     </v-btn>
   </div>
 </template>
@@ -59,6 +41,19 @@ export default {
         }
       ]
     };
+  },
+  computed: {
+    classObject() {
+      return {
+        "align-self-center": true,
+        "pa-2": true,
+        "d-block": this.$vuetify.breakpoint.xsOnly,
+        "d-sm-none": this.$vuetify.breakpoint.xsOnly
+      };
+    },
+    getHeight() {
+      return this.$vuetify.breakpoint.smAndUp ? 100 : 45;
+    }
   }
 };
 </script>
@@ -68,6 +63,7 @@ export default {
   position: absolute;
   bottom: 0;
   width: 100%;
+  height: max-content;
 }
 .v-btn::before {
   background-color: transparent;
