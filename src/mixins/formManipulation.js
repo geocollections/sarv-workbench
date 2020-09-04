@@ -155,7 +155,7 @@ const formManipulation = {
           if (saveAsNew) delete objectToUpload.id;
 
           if (saveAsDifferentObject) {
-            delete objectToUpload.id;
+            if (objectToUpload.id) delete objectToUpload.id;
             object = saveAsDifferentObject;
             this.updateNewObjectsFields(objectToUpload, saveAsDifferentObject);
           }
