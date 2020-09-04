@@ -270,7 +270,8 @@
     "sarv_issue": "Send a message",
     "sarv_issues": "My messages",
     "admin": "Admin",
-    "analysis_parameter": "Analysis parameters"
+    "analysis_parameter": "Analysis parameters",
+    "analysis_method": "Analysis methods"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -483,6 +484,10 @@
     "analysis_parameter": {
       "info": "General info",
       "description": "Description"
+    },
+    "analysis_method": {
+      "info": "General info",
+      "description": "Description"
     }
   },
   "add": {
@@ -692,6 +697,10 @@
   "editAnalysisParameter": {
     "heading": "Analysis parameters",
     "editMessage": "Edit analysis parameter"
+  },
+  "editAnalysisMethod": {
+    "heading": "Analysis methods",
+    "editMessage": "Edit analysis method"
   },
   "references": {
     "tableView": "Table view",
@@ -1773,6 +1782,12 @@
     "parameter_name_en": "Name (EN)",
     "synonyms": "Synonyms",
     "parent_parameter": "Related parameter"
+  },
+  "analysis_method": {
+    "analysis_method": "Analysis method",
+    "parent_method__analysis_method": "Related analysis method",
+    "parent_method": "Related method",
+    "method_en": "Analysis method (EN)"
   },
   "admin": {
     "activeUsers": "Active users",

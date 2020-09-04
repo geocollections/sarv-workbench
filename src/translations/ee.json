@@ -270,7 +270,8 @@
     "sarv_issue": "Saada sõnum",
     "sarv_issues": "Minu sõnumid",
     "admin": "Admin",
-    "analysis_parameter": "Analüüsi parameetrid"
+    "analysis_parameter": "Analüüsi parameetrid",
+    "analysis_method": "Analüüsi meetodid"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -483,6 +484,10 @@
     "analysis_parameter": {
       "info": "Üldinfo",
       "description": "Kirjeldus"
+    },
+    "analysis_method": {
+      "info": "Üldinfo",
+      "description": "Kirjeldus"
     }
   },
   "add": {
@@ -692,6 +697,10 @@
   "editAnalysisParameter": {
     "heading": "Analüüsi parameetrid",
     "editMessage": "Muuda analüüsi parameetrit"
+  },
+  "editAnalysisMethod": {
+    "heading": "Analüüsi meetodid",
+    "editMessage": "Muuda analüüsi meetodit"
   },
   "references": {
     "tableView": "Tabeli vaade",
@@ -1773,6 +1782,12 @@
     "parameter_name_en": "Nimi (EN)",
     "synonyms": "Sünonüümid",
     "parent_parameter": "Seotud parameeter"
+  },
+  "analysis_method": {
+    "analysis_method": "Analüüsi meetod",
+    "parent_method__analysis_method": "Seotud analüüsi meetod",
+    "parent_method": "Seotud meetod",
+    "method_en": "Analüüsi meetod (EN)"
   },
   "admin": {
     "activeUsers": "Aktiivseid kasutajaid",

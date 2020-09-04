@@ -33,9 +33,10 @@ import {
   fetchTaxa,
   fetchVisits,
   fetchWebNews,
-  fetchWebPages
-} from "../../../assets/js/api/apiCalls";
-import {fetchAnalysisParameters} from "@/assets/js/api/apiCalls";
+  fetchWebPages,
+  fetchAnalysisMethods,
+  fetchAnalysisParameters
+} from "@/assets/js/api/apiCalls";
 
 const actions = {
   updateViewType({ commit }, payload) {
@@ -110,7 +111,13 @@ const actions = {
 
   FETCH_ANALYSIS_PARAMETERS({ commit, state }) {
     return fetchAnalysisParameters(state.activeSearchParams.search).then(resp =>
-        commit("SET_SIDEBAR_LIST", resp)
+      commit("SET_SIDEBAR_LIST", resp)
+    );
+  },
+
+  FETCH_ANALYSIS_METHODS({ commit, state }) {
+    return fetchAnalysisMethods(state.activeSearchParams.search).then(resp =>
+      commit("SET_SIDEBAR_LIST", resp)
     );
   },
 

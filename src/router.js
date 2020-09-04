@@ -2295,10 +2295,73 @@ const router = new Router({
                 isEdit: false,
                 addNew: "header.analysis_parameter",
                 subForms: [
-                  { path: "/sarv_issue/add", name: "header.analysis_parameter" }
+                  { path: "/analysis_parameter/add", name: "header.analysis_parameter" }
                 ],
                 requiresAuth: true,
                 object: "analysis_parameter"
+              }
+            }
+          ]
+        },
+        {
+          path: "/analysis_method",
+          component: () => import("./views/AnalysisMethods.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                  import("./components/analysis_method/AnalysisMethodTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "analysis_method",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/analysis_method/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/analysis_method/AnalysisMethod.vue"),
+              meta: {
+                isEdit: true,
+                table: "analysis_method",
+                heading: "editAnalysisMethod.heading",
+                requiresAuth: true,
+                object: "analysis_method"
+              }
+            }
+          ]
+        },
+        {
+          path: "/analysis_method/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Analysis method add",
+              component: () => import("./components/analysis_method/AnalysisMethod.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.analysis_method",
+                subForms: [
+                  { path: "/analysis_method/add", name: "header.analysis_method" }
+                ],
+                requiresAuth: true,
+                object: "analysis_method"
               }
             }
           ]
