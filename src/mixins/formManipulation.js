@@ -449,20 +449,55 @@ const formManipulation = {
         currentData.locality = {};
         currentData.locality.id = site.name;
       } else if (object === "sample") {
-        let specimen = cloneDeep(currentData);
+        delete currentData.specimen_id;
+        delete currentData.coll;
+        delete currentData.specimen_nr;
+        delete currentData.fossil;
+        delete currentData.type;
+        delete currentData.part;
+        delete currentData.locality;
+        delete currentData.locality_free;
+        delete currentData.sample;
+        delete currentData.sample_number;
+        delete currentData.agent_collected;
+        delete currentData.presence;
+        delete currentData.classification;
+        delete currentData.locality_is_private;
+        delete currentData.remarks_collecting;
+        delete currentData.stratigraphy_free;
+        delete currentData.accession;
+        delete currentData.deaccession;
+        delete currentData.remarks_internal;
+        delete currentData.tags;
+        delete currentData.status;
+        delete currentData.original_status;
+        delete currentData.parent;
+        delete currentData.number_pieces;
 
-        console.log(specimen)
-
-        // Todo: Remove specimen fields which do not belong to sample object or maybe add/change some fields
-        Object.keys(specimen).map(item => {
-          console.log(item)
-        });
-
-        currentData.testing = "testing_new_sample";
+        currentData.remarks += " (This record was added from specimen form)";
       } else if (object === "specimen") {
-        let sample = cloneDeep(currentData);
+        delete currentData.number;
+        delete currentData.number_additional;
+        delete currentData.series;
+        delete currentData.sample_purpose;
+        delete currentData.sample_type;
+        delete currentData.parent_sample;
+        delete currentData.parent_specimen;
+        delete currentData.stratigraphy_free;
+        delete currentData.stratigraphy_bed;
+        delete currentData.classification_rock;
+        delete currentData.rock;
+        delete currentData.rock_en;
+        delete currentData.fossils;
+        delete currentData.mass;
+        delete currentData.storage_additional;
+        delete currentData.owner;
+        delete currentData.palaeontology;
+        delete currentData.analysis;
+        delete currentData.locality;
+        delete currentData.locality_free;
 
-        currentData.testing = "testing_new_specimen";
+        currentData.remarks += " (This record was added from sample form)";
       }
     },
 
