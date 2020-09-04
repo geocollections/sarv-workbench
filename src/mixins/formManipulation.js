@@ -380,7 +380,10 @@ const formManipulation = {
       }`;
 
       let formData = new FormData();
-      files.forEach((file, index) => {
+
+      let notYetUploadedFiles = files.filter(file => !file.isAlreadyUploaded);
+
+      notYetUploadedFiles.forEach((file, index) => {
         if (!file.isAlreadyUploaded) {
           let newUploadableObject = {
             description:
@@ -419,6 +422,12 @@ const formManipulation = {
         this.saveData("attachment", formData, "add/attachment/").then(
           savedObjectId => {
             console.log(savedObjectId);
+            if (savedObjectId) {
+              if (this.isNotEmpty(this.relatedData.attachment))
+                this.loadRelatedData("attachment");
+              else if (this.isNotEmpty(this.relatedData.attachment_link))
+                this.loadRelatedData("attachment_link");
+            }
           }
         );
       } catch (e) {
