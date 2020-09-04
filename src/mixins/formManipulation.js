@@ -497,7 +497,8 @@ const formManipulation = {
         delete currentData.locality;
         delete currentData.locality_free;
 
-        currentData.remarks += " (This record was added from sample form)";
+        currentData.remarks_internal +=
+          "(This record was added from sample form)";
       }
     },
 

@@ -5,7 +5,7 @@
       <v-btn
         dark
         :color="bodyActiveColor"
-        @click="saveAsNew(specimen, 'sample')"
+        @click="saveAsNew($route.meta.object, 'sample')"
       >
         <v-icon left small>fas fa-vial</v-icon>
         {{ $t("specimen.save_as_new_sample") }}
