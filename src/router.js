@@ -2241,6 +2241,69 @@ const router = new Router({
           ]
         },
         {
+          path: "/analysis_parameter",
+          component: () => import("./views/AnalysisParameters.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () =>
+                  import("./components/analysis_parameter/AnalysisParameterTable.vue"),
+              meta: {
+                requiresAuth: true,
+                object: "analysis_parameter",
+                isTableView: true
+              }
+            }
+          ]
+        },
+        {
+          path: "/analysis_parameter/:id(\\d+)",
+          props: true,
+          component: () => import("./views/EditForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              component: () => import("./components/sarv_issue/SarvIssue.vue"),
+              meta: {
+                isEdit: true,
+                table: "analysis_parameter",
+                heading: "editSarvIssue.heading",
+                requiresAuth: true,
+                object: "analysis_parameter"
+              }
+            }
+          ]
+        },
+        {
+          path: "/analysis_parameter/add",
+          component: () => import("./views/AddForm.vue"),
+          meta: {
+            requiresAuth: true
+          },
+          children: [
+            {
+              path: "",
+              name: "Sarv issue add",
+              component: () => import("./components/sarv_issue/SarvIssue.vue"),
+              meta: {
+                isEdit: false,
+                addNew: "header.sarv_issue",
+                subForms: [
+                  { path: "/sarv_issue/add", name: "header.sarv_issue" }
+                ],
+                requiresAuth: true,
+                object: "sarv_issue"
+              }
+            }
+          ]
+        },
+        {
           path: "/site_groundwater",
           component: () => import("./views/SiteGroundwaters.vue"),
           meta: {

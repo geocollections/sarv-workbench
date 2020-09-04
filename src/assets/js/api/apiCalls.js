@@ -4057,6 +4057,47 @@ export function fetchSampleSeriesAttachments(id, searchParameters) {
  ***  SAMPLE_SERIES END  ***
  **************************/
 
+export function fetchAnalysisParameters(data) {
+  let searchFields = "";
+  let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `&id__${data.id__lookuptype || "icontains"}=${
+        data.id
+    }`;
+  }
+
+  if (data.parameter_name && data.parameter_name.trim().length > 0) {
+    searchFields += `&parameter_name__${data.parameter_name__lookuptype || "icontains"}=${
+        data.parameter_name
+    }`;
+  }
+
+  if (data.parameter_name_en && data.parameter_name_en.trim().length > 0) {
+    searchFields += `&parameter_name_en__${data.parameter_name__lookuptype || "icontains"}=${
+        data.parameter_name_en
+    }`;
+  }
+
+  if (data.remarks && data.remarks.trim().length > 0) {
+    searchFields += `&remarks__${data.remarks__lookuptype || "icontains"}=${
+        data.remarks
+    }`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+        `analysis_parameter/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  } else {
+    return get(
+        `analysis_parameter/?page=${data.page}&paginate_by=${data.paginateBy}&order_by=${orderBy}&format=json`
+    );
+  }
+}
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/

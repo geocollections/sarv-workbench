@@ -265,7 +265,8 @@
     "site_groundwater": "Hydrogeology",
     "sarv_issue": "Send a message",
     "sarv_issues": "My messages",
-    "admin": "Admin"
+    "admin": "Admin",
+    "analysis_parameter": "Analysis parameters"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -1752,6 +1753,14 @@
     "unanswered": "Unanswered",
     "activeIssues": "Active messages / issues",
     "answer": "Reply"
+  },
+  "analysis_parameter": {
+    "parameter": "Parameter",
+    "parameter_html": "HTML",
+    "parameter_name": "Name",
+    "parameter_name_en": "Name (EN)",
+    "synonyms": "Synonyms",
+    "parent_parameter": "Related parameter"
   },
   "admin": {
     "activeUsers": "Active users",

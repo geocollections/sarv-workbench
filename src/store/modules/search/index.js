@@ -422,6 +422,17 @@ const state = {
     sortDesc: [true]
   },
   sarv_issueViewType: "table",
+  analysis_parameterSearchParameters: {
+    id: null,
+    parameter_name: null,
+    parameter_name_en: null,
+    remarks: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  analysis_parameterViewType: "table",
   activeSarvIssues: null,
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy
