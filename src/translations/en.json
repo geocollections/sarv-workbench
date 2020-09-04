@@ -821,6 +821,7 @@
     "selection": "Selection",
     "loan": "Loan",
     "number_pieces": "Number of pieces",
+    "save_as_new_sample": "Save as new sample",
     "relatedTables": {
       "specimen_identification": "Taxon names",
       "specimen_identification_geology": "Rock names",
@@ -896,7 +897,7 @@
     "simpleForm": "Simple view",
     "basicForm": "Full view",
     "addAnalysis": "Add analysis",
-    "saveAsNewSpecimen": "Save as new specimen",
+    "save_as_new_specimen": "Save as new specimen",
     "site": "Site",
     "series_search": "Series ID or name",
     "relatedTables": {

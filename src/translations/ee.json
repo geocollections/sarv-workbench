@@ -821,6 +821,7 @@
     "selection": "Valik",
     "loan": "Laen",
     "number_pieces": "Tükkide arv",
+    "save_as_new_sample": "Salvesta uue proovina",
     "relatedTables": {
       "specimen_identification": "Taksoni nimed",
       "specimen_identification_geology": "Kivi nimed",
@@ -896,7 +897,7 @@
     "simpleForm": "Lihtne vaade",
     "basicForm": "Täisvaade",
     "addAnalysis": "Lisa analüüs",
-    "saveAsNewSpecimen": "Salvesta uue eksemplarina",
+    "save_as_new_specimen": "Salvesta uue eksemplarina",
     "site": "Vaatluspunkt",
     "series_search": "Seeria ID või nimi",
     "relatedTables": {

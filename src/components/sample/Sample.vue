@@ -23,7 +23,8 @@
           class="d-flex flex-sm-row flex-wrap flex-column justify-end flex-grow-1"
         >
           <v-btn
-            class="mr-0 mr-sm-2 mb-2 mb-sm-0"
+            class="mr-0 mb-2 mb-sm-0"
+            :class="{ 'mr-sm-2': $route.meta.isEdit }"
             dark
             :color="bodyActiveColor"
             :to="{
@@ -36,6 +37,7 @@
           </v-btn>
 
           <v-btn
+            v-if="$route.meta.isEdit"
             dark
             :color="bodyActiveColor"
             @click="saveAsNew(sample, 'specimen')"

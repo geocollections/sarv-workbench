@@ -1,5 +1,17 @@
 <template>
   <div class="specimen">
+    <!-- SAVE AS NEW -->
+    <div class="text-center text-sm-left" v-if="$route.meta.isEdit">
+      <v-btn
+        dark
+        :color="bodyActiveColor"
+        @click="saveAsNew(specimen, 'sample')"
+      >
+        <v-icon left small>fas fa-vial</v-icon>
+        {{ $t("specimen.save_as_new_sample") }}
+      </v-btn>
+    </div>
+
     <!-- GENERAL INFO -->
     <v-card
       class="mt-2"
@@ -744,6 +756,7 @@ import SpecimenDescriptionTable from "./relatedTables/SpecimenDescriptionTable";
 import SpecimenLocationTable from "./relatedTables/SpecimenLocationTable";
 import SpecimenHistoryTable from "./relatedTables/SpecimenHistoryTable";
 import SpecimenAnalysisTable from "./relatedTables/SpecimenAnalysisTable";
+import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 
 export default {
   name: "Specimen",
@@ -786,7 +799,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
+    saveAsNewMixin
   ],
 
   data() {
