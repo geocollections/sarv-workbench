@@ -475,6 +475,10 @@
     },
     "sample_series": {
       "info": "General info"
+    },
+    "analysis_parameter": {
+      "info": "General info",
+      "description": "Description"
     }
   },
   "add": {
@@ -680,6 +684,9 @@
   "editSarvIssue": {
     "heading": "Message",
     "editMessage": "View message"
+  },
+  "editAnalysisParameter": {
+    "heading": "Analysis parameters"
   },
   "references": {
     "tableView": "Table view",

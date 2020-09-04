@@ -198,7 +198,7 @@ export default {
       "https://files.geocollections.info/img/sarv-edit/background_3.jpg",
       "https://files.geocollections.info/img/sarv-edit/background_4.jpg"
     ],
-    imageInterval: 5000
+    imageInterval: 60000
   }),
 
   created() {

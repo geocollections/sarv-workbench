@@ -2269,11 +2269,11 @@ const router = new Router({
           children: [
             {
               path: "",
-              component: () => import("./components/sarv_issue/SarvIssue.vue"),
+              component: () => import("./components/analysis_parameter/AnalysisParameter.vue"),
               meta: {
                 isEdit: true,
                 table: "analysis_parameter",
-                heading: "editSarvIssue.heading",
+                heading: "editAnalysisParameter.heading",
                 requiresAuth: true,
                 object: "analysis_parameter"
               }
@@ -2289,16 +2289,16 @@ const router = new Router({
           children: [
             {
               path: "",
-              name: "Sarv issue add",
-              component: () => import("./components/sarv_issue/SarvIssue.vue"),
+              name: "Analysis parameter add",
+              component: () => import("./components/analysis_parameter/AnalysisParameter.vue"),
               meta: {
                 isEdit: false,
-                addNew: "header.sarv_issue",
+                addNew: "header.analysis_parameter",
                 subForms: [
-                  { path: "/sarv_issue/add", name: "header.sarv_issue" }
+                  { path: "/sarv_issue/add", name: "header.analysis_parameter" }
                 ],
                 requiresAuth: true,
-                object: "sarv_issue"
+                object: "analysis_parameter"
               }
             }
           ]
