@@ -40,7 +40,7 @@
             v-if="$route.meta.isEdit"
             dark
             :color="bodyActiveColor"
-            @click="saveAsNew(sample, 'specimen')"
+            @click="saveAsNew($route.meta.object, 'specimen')"
           >
             <v-icon left small>fas fa-fish</v-icon>
             {{ $t("sample.save_as_new_specimen") }}
