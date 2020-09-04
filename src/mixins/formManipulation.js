@@ -1,7 +1,7 @@
 import cloneDeep from "lodash/cloneDeep";
 import moment from "moment";
 import { mapActions, mapGetters, mapState } from "vuex";
-import { postRequest } from "../assets/js/api/apiCalls";
+import {fetchAttachmentForReference, postRequest} from "../assets/js/api/apiCalls";
 import toastMixin from "./toastMixin";
 
 const formManipulation = {
@@ -332,10 +332,13 @@ const formManipulation = {
       );
     },
 
+    // Currently this method has only one use case and it is in Reference.vue when adding digital version (pdf)
     addFileAsObject(files, relatedObject) {
       let formData = new FormData();
 
-      files.forEach((file, index) => {
+      let notYetUploadedFiles = files.filter(file => !file.isAlreadyUploaded);
+
+      notYetUploadedFiles.forEach((file, index) => {
         formData.append(
           "data",
           JSON.stringify({
@@ -357,13 +360,22 @@ const formManipulation = {
         );
 
         formData.append("file" + [index], file);
+
+        file.isAlreadyUploaded = true;
       });
 
       try {
         this.saveData("attachment", formData, "add/attachment/").then(
           savedObjectId => {
-            if (this.isNotEmpty(savedObjectId))
+            if (this.isNotEmpty(savedObjectId)) {
               this.isFileAddedAsObject = savedObjectId;
+
+              if (this.$route.meta.object === "reference") {
+                fetchAttachmentForReference(this.$route.params.id).then(
+                  response => (this.attachment = this.handleResponse(response))
+                );
+              }
+            }
           }
         );
       } catch (e) {

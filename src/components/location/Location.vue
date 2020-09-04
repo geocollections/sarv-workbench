@@ -166,7 +166,7 @@
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <div v-show="activeTab === 'attachment_link'">
-            <file-upload
+            <file-input
               show-existing
               :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
@@ -340,7 +340,7 @@ import {
 } from "../../assets/js/api/apiCalls";
 import cloneDeep from "lodash/cloneDeep";
 import { mapActions, mapState } from "vuex";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SpecimenTable from "../specimen/SpecimenTable";
 import SampleTable from "../sample/SampleTable";
@@ -353,7 +353,7 @@ export default {
     ExportButtons,
     SampleTable,
     SpecimenTable,
-    FileUpload,
+    FileInput,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper

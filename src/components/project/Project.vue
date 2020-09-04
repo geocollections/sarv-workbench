@@ -301,7 +301,7 @@
 
       <transition>
         <div v-show="block.files" class="px-1 pt-1 pb-2">
-          <file-upload
+          <file-input
             show-existing
             :files-from-object="relatedData.attachment_link"
             v-on:update:existing-files="addExistingFiles"
@@ -519,12 +519,12 @@ import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 
 export default {
   name: "Project",
   components: {
-    FileUpload,
+    FileInput,
     CheckboxWrapper,
     AutocompleteWrapper,
     DateWrapper,
