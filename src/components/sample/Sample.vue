@@ -1,8 +1,10 @@
 <template>
   <sample-wrapper :simple-view="isSimpleView">
     <template v-slot:switch>
-      <v-row>
-        <v-col>
+      <div
+        class="d-flex flex-sm-row flex-wrap justify-space-between flex-column"
+      >
+        <div class="mr-0 mr-sm-2 mb-2">
           <v-switch
             class="vuetify-switch mt-0"
             inset
@@ -15,10 +17,13 @@
             hide-details
             :color="bodyActiveColor"
           />
-        </v-col>
+        </div>
 
-        <v-col class="text-right">
+        <div
+          class="d-flex flex-sm-row flex-wrap flex-column justify-end flex-grow-1"
+        >
           <v-btn
+            class="mr-0 mr-sm-2 mb-2 mb-sm-0"
             dark
             :color="bodyActiveColor"
             :to="{
@@ -29,8 +34,17 @@
             <v-icon left small>fas fa-chart-pie</v-icon>
             {{ $t("sample.addAnalysis") }}
           </v-btn>
-        </v-col>
-      </v-row>
+
+          <v-btn
+            dark
+            :color="bodyActiveColor"
+            @click="saveAsNew(sample, 'specimen')"
+          >
+            <v-icon left small>fas fa-fish</v-icon>
+            {{ $t("sample.saveAsNewSpecimen") }}
+          </v-btn>
+        </div>
+      </div>
     </template>
 
     <template v-slot:basic-form>
@@ -1006,6 +1020,7 @@ import requestsMixin from "../../mixins/requestsMixin";
 import SamplePreparationTable from "./relatedTables/SamplePreparationTable";
 import SampleTaxonListTable from "./relatedTables/SamplesTaxonListTable";
 import SampleReferenceTable from "./relatedTables/SampleReferenceTable";
+import saveAsNewMixin from "@/mixins/saveAsNewMixin";
 
 export default {
   name: "Sample",
@@ -1041,7 +1056,8 @@ export default {
     formManipulation,
     autocompleteMixin,
     formSectionsMixin,
-    requestsMixin
+    requestsMixin,
+    saveAsNewMixin
   ],
 
   data() {

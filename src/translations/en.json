@@ -896,6 +896,7 @@
     "simpleForm": "Simple view",
     "basicForm": "Full view",
     "addAnalysis": "Add analysis",
+    "saveAsNewSpecimen": "Save as new specimen",
     "site": "Site",
     "series_search": "Series ID or name",
     "relatedTables": {
