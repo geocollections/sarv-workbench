@@ -138,7 +138,22 @@
     </v-container>
     <site-icons style="z-index: 3"></site-icons>
     <!--  Load in background images  -->
-    <img :v-for="image in images" :src="image" :key="image" v-show="false" />
+    <img
+      src="https://files.geocollections.info/img/sarv-edit/background_1.jpg"
+      v-show="false"
+    />
+    <img
+      src="https://files.geocollections.info/img/sarv-edit/background_2.jpg"
+      v-show="false"
+    />
+    <img
+      src="https://files.geocollections.info/img/sarv-edit/background_3.jpg"
+      v-show="false"
+    />
+    <img
+      src="https://files.geocollections.info/img/sarv-edit/background_4.jpg"
+      v-show="false"
+    />
   </v-main>
 </template>
 
@@ -183,7 +198,7 @@ export default {
       "https://files.geocollections.info/img/sarv-edit/background_3.jpg",
       "https://files.geocollections.info/img/sarv-edit/background_4.jpg"
     ],
-    imageInterval: 60000
+    imageInterval: 5000
   }),
 
   created() {
