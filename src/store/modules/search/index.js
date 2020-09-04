@@ -433,6 +433,17 @@ const state = {
     sortDesc: [true]
   },
   analysis_parameterViewType: "table",
+  analysis_methodSearchParameters: {
+    id: null,
+    analysis_method: null,
+    parent_method__analysis_method: null,
+    remarks: null,
+    page: 1,
+    paginateBy: 50,
+    sortBy: ["id"],
+    sortDesc: [true]
+  },
+  analysis_methodViewType: "table",
   activeSarvIssues: null,
   lookUpTypes: [
     //exact, iexact, in, range, contains, icontains, startswith, istartswith, endswith, iendswith, gt, lt, gte, lte, isnull, hierarchy
