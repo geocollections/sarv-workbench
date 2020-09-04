@@ -1813,7 +1813,8 @@
     "confirmation": "Kas olete kindel, et soovite lahkuda ilma muudatusi salvestamata?",
     "confirmationClose": "Jah, lahku",
     "confirmationCont": "Jätka muutmist",
-    "confirmationSave": "Salvesta kirje"
+    "confirmationSave": "Salvesta kirje",
+    "reference_file_upload_failed": "Faili üleslaadimine ebaõnnestus! Vajutage allolevale nupule, et puhastada failid."
   },
   "logs": {
     "title": "Kirje ajalugu",
@@ -1845,6 +1846,7 @@
     "listView": "Loendivaade",
     "imageView": "Pildid",
     "clearLocalStorage": "Eemalda vaikimisi väärtused",
-    "clearLocalStorageAndFields": "Eemalda vaikimisi väärtused ja puhasta väljad"
+    "clearLocalStorageAndFields": "Eemalda vaikimisi väärtused ja puhasta väljad",
+    "reset_files": "Puhasta ebaõnnestunud faili(d)"
   }
 }
