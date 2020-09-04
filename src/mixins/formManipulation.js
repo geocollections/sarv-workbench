@@ -427,9 +427,17 @@ const formManipulation = {
       }
     },
 
+    /**
+     * Todo: As of writing this there are only 3 use cases: Site -> Locality and Sample <-> Specimen
+     * Todo: If there should come more use cases then the following method must become more dynamical
+     * Todo: Fields could come from: https://rwapi.geocollections.info/fields/{tableName}
+     * This method formats currentData object according to new object which will be saved.
+     * @param currentData - Data which is saved (current active data)
+     * @param object - New object name as string
+     */
     updateNewObjectsFields(currentData, object) {
       if (object === "locality") {
-        let locality = cloneDeep(currentData);
+        let site = cloneDeep(currentData);
         delete currentData.date_end;
         delete currentData.date_start;
         delete currentData.related_data;
@@ -439,7 +447,22 @@ const formManipulation = {
         delete currentData.name_en;
         delete currentData.project;
         currentData.locality = {};
-        currentData.locality.id = locality.name;
+        currentData.locality.id = site.name;
+      } else if (object === "sample") {
+        let specimen = cloneDeep(currentData);
+
+        console.log(specimen)
+
+        // Todo: Remove specimen fields which do not belong to sample object or maybe add/change some fields
+        Object.keys(specimen).map(item => {
+          console.log(item)
+        });
+
+        currentData.testing = "testing_new_sample";
+      } else if (object === "specimen") {
+        let sample = cloneDeep(currentData);
+
+        currentData.testing = "testing_new_specimen";
       }
     },
 
