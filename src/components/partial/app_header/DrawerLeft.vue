@@ -334,6 +334,22 @@ export default {
             //   icon: "far fa-plus-square"
             // },
             {
+              title: "editPreparation",
+              path: "/preparation",
+              icon: "fas fa-prescription-bottle"
+            },
+            {
+              title: "addPreparation",
+              path: "/preparation/add",
+              icon: "far fa-plus-square"
+            }
+          ]
+        },
+        {
+          name: "analysis",
+          title: "analyses",
+          links: [
+            {
               title: "editAnalysis",
               path: "/analysis",
               icon: "far fa-chart-bar"
@@ -344,13 +360,23 @@ export default {
               icon: "far fa-plus-square"
             },
             {
-              title: "editPreparation",
-              path: "/preparation",
-              icon: "fas fa-prescription-bottle"
+              title: "editAnalysisParameter",
+              path: "/analysis_parameter",
+              icon: "fas fa-percent"
             },
             {
-              title: "addPreparation",
-              path: "/preparation/add",
+              title: "addAnalysisParameter",
+              path: "/analysis_parameter/add",
+              icon: "far fa-plus-square"
+            },
+            {
+              title: "editAnalysisMethod",
+              path: "/analysis_method",
+              icon: "fas fa-screwdriver"
+            },
+            {
+              title: "addAnalysisMethod",
+              path: "/analysis_method/add",
               icon: "far fa-plus-square"
             }
           ]
