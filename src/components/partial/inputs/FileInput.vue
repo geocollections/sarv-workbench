@@ -192,7 +192,8 @@
     </v-row>
 
     <!-- NEW FILES -->
-    <v-row no-gutters v-if="isFilesValid">
+    <!-- Todo: Can be removed because now reloading related_data after file upload -->
+    <v-row no-gutters v-if="isFilesValid && false">
       <v-col cols="12" class="pa-1" v-if="showExisting">
         <div class="title">
           {{ $t("messages.newFiles") }}: <b>{{ files.length }}</b>
