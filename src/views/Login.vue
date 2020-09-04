@@ -137,6 +137,8 @@
       </v-row>
     </v-container>
     <site-icons style="z-index: 3"></site-icons>
+    <!--  Load in background images  -->
+    <img :v-for="image in images" :src="image" :key="image" v-show="false" />
   </v-main>
 </template>
 
@@ -187,7 +189,6 @@ export default {
   created() {
     window.addEventListener("keyup", this.handleKeyUp);
     this.changeImage();
-    this.preloadImages();
   },
 
   beforeDestroy() {
@@ -221,15 +222,6 @@ export default {
           else this.imageId++;
         }, this.imageInterval);
       }
-    },
-    preloadImages() {
-      this.images.forEach(item => {
-        const linkEl = document.createElement("link");
-        linkEl.setAttribute("rel", "preload");
-        linkEl.setAttribute("href", item);
-        linkEl.setAttribute("as", "image");
-        document.head.appendChild(linkEl);
-      });
     }
   }
 };
