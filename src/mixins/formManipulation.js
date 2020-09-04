@@ -410,7 +410,7 @@ const formManipulation = {
               ...singleFileMetadata,
               ...newUploadableObject
             };
-          
+
           formData.append("data", JSON.stringify(newUploadableObject));
           formData.append("file" + [index], file);
 
@@ -422,6 +422,7 @@ const formManipulation = {
         this.saveData("attachment", formData, "add/attachment/").then(
           savedObjectId => {
             console.log(savedObjectId);
+            if (savedObjectId) this.addExistingFiles(files);
           }
         );
       } catch (e) {
