@@ -172,6 +172,10 @@
     "editWebNews": "Web news",
     "addWebPages": "Add web pages",
     "editWebPages": "Web pages",
+    "addAnalysisParameter": "Add analysis parameter",
+    "editAnalysisParameter": "Analysis parameters",
+    "addAnalysisMethod": "Add analysis method",
+    "editAnalysisMethod": "Analysis methods",
     "lang": "{lang}",
     "settings": "Settings",
     "logOut": "Log out",
@@ -686,7 +690,8 @@
     "editMessage": "View message"
   },
   "editAnalysisParameter": {
-    "heading": "Analysis parameters"
+    "heading": "Analysis parameters",
+    "editMessage": "Edit analysis parameter"
   },
   "references": {
     "tableView": "Table view",

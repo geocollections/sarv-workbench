@@ -129,7 +129,7 @@
     "editLocality": "Lokaliteedid",
     "addSample": "Lisa proov",
     "editSample": "Proovid",
-    "addAnalysis": "lisa uus analüüs",
+    "addAnalysis": "Lisa analüüs",
     "editAnalysis": "Analüüsid",
     "addSite": "Lisa vaatluspunkt",
     "editSite": "Vaatluspunktid",
@@ -172,6 +172,10 @@
     "editWebNews": "Uudised",
     "addWebPages": "Lisa veebileht",
     "editWebPages": "Veebilehed",
+    "addAnalysisParameter": "Lisa analüüsi parameeter",
+    "editAnalysisParameter": "Analüüsi parameetrid",
+    "addAnalysisMethod": "Lisa analüüsi meetod",
+    "editAnalysisMethod": "Analüüsi meetodid",
     "lang": "{lang}",
     "settings": "Seaded",
     "logOut": "Logi välja",
@@ -686,7 +690,8 @@
     "editMessage": "Vaata sõnumit"
   },
   "editAnalysisParameter": {
-    "heading": "Analüüsi parameetrid"
+    "heading": "Analüüsi parameetrid",
+    "editMessage": "Muuda analüüsi parameetrit"
   },
   "references": {
     "tableView": "Tabeli vaade",
