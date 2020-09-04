@@ -43,7 +43,7 @@
             @click="saveAsNew(sample, 'specimen')"
           >
             <v-icon left small>fas fa-fish</v-icon>
-            {{ $t("sample.saveAsNewSpecimen") }}
+            {{ $t("sample.save_as_new_specimen") }}
           </v-btn>
         </div>
       </div>
