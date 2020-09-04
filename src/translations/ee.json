@@ -265,7 +265,8 @@
     "site_groundwater": "Hüdrogeoloogia",
     "sarv_issue": "Saada sõnum",
     "sarv_issues": "Minu sõnumid",
-    "admin": "Admin"
+    "admin": "Admin",
+    "analysis_parameter": "Analüüsi parameetrid"
   },
   "footer": {
     "info": "Küsimused andmebaasi ja veebilehe kohta: Olle Hints"
@@ -1752,6 +1753,14 @@
     "unanswered": "Vastamata",
     "activeIssues": "Aktiivsed sõnumid / probleemid",
     "answer": "Vasta"
+  },
+  "analysis_parameter": {
+    "parameter": "Parameeter",
+    "parameter_html": "HTML",
+    "parameter_name": "Nimi",
+    "parameter_name_en": "Nimi (EN)",
+    "synonyms": "Sünonüümid",
+    "parent_parameter": "Seotud parameeter"
   },
   "admin": {
     "activeUsers": "Aktiivseid kasutajaid",
