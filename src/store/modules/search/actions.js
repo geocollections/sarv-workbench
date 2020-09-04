@@ -35,6 +35,7 @@ import {
   fetchWebNews,
   fetchWebPages
 } from "../../../assets/js/api/apiCalls";
+import {fetchAnalysisParameters} from "@/assets/js/api/apiCalls";
 
 const actions = {
   updateViewType({ commit }, payload) {
@@ -104,6 +105,12 @@ const actions = {
   FETCH_LOCALITIES({ commit, state }) {
     return fetchLocalities(state.activeSearchParams.search).then(resp =>
       commit("SET_SIDEBAR_LIST", resp)
+    );
+  },
+
+  FETCH_ANALYSIS_PARAMETERS({ commit, state }) {
+    return fetchAnalysisParameters(state.activeSearchParams.search).then(resp =>
+        commit("SET_SIDEBAR_LIST", resp)
     );
   },
 

@@ -475,6 +475,10 @@
     },
     "sample_series": {
       "info": "Üldinfo"
+    },
+    "analysis_parameter": {
+      "info": "Üldinfo",
+      "description": "Kirjeldus"
     }
   },
   "add": {
@@ -680,6 +684,9 @@
   "editSarvIssue": {
     "heading": "Sõnum",
     "editMessage": "Vaata sõnumit"
+  },
+  "editAnalysisParameter": {
+    "heading": "Analüüsi parameetrid"
   },
   "references": {
     "tableView": "Tabeli vaade",

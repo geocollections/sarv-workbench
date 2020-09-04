@@ -4098,6 +4098,11 @@ export function fetchAnalysisParameters(data) {
   }
 }
 
+
+export function fetchAnalysisParameter(id) {
+  return get(`analysis_parameter/?id=${id}&format=json`);
+}
+
 /***********************
  *** UNIVERSAL START ***
  ***********************/
