@@ -256,13 +256,14 @@ export default {
     },
     currentViewType(newVal, oldVal) {
       // Because specimen image and table use different search url
-      if (this.module === "specimen" && newVal === "image") {
+      if ((this.module === "specimen" || this.module === "location") && newVal === "image") {
         this.response = { count: 0, results: [] };
-        this.$emit("search:specimenImages", true);
-      } else if (this.module === "specimen" && oldVal === "image") {
+        this.$emit("search:images", true);
+      } else if ((this.module === "specimen" || this.module === "location") && oldVal === "image") {
         this.response = { count: 0, results: [] };
-        this.$emit("search:specimenImages", false);
+        this.$emit("search:images", false);
       }
+
     }
   },
 

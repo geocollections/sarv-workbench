@@ -97,6 +97,15 @@
               {{ image.specimen__specimen_id }}
             </span>
           </span>
+          <span v-else-if="object === 'location'">
+            <span
+                v-if="
+                image.attach_link__storage__location
+              "
+            >
+              {{ image.attach_link__storage__location }}
+            </span>
+          </span>
         </v-tooltip>
 
         <div
@@ -209,6 +218,7 @@ export default {
 
     idField() {
       if (this.object === "specimen") return "specimen_id";
+      if (this.object === "location") return "attach_link__storage__id";
       else return "id";
     }
   },

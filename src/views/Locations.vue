@@ -16,7 +16,9 @@
       :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchLocations"
+      :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
+      v-on:search:images="searchLocationImages"
     />
   </div>
 </template>
@@ -25,8 +27,9 @@
 import ListModuleCore from "./ListModuleCore";
 import TableViewSearch from "../components/partial/table_view/TableViewSearch";
 import TableViewTitle from "../components/partial/table_view/TableViewTitle";
-import { fetchLocations } from "../assets/js/api/apiCalls";
+import { fetchLocations, fetchLocationImages } from "../assets/js/api/apiCalls";
 import searchParametersMixin from "../mixins/searchParametersMixin";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   name: "Locations",
@@ -44,7 +47,9 @@ export default {
       block: { search: true }
     };
   },
-
+  computed: {
+    ...mapState("search", ["locationViewType"])
+  },
   created() {
     this.setActiveSearchParametersFilters([
       { id: "id", title: "common.id", type: "number" },
@@ -63,8 +68,22 @@ export default {
   methods: {
     fetchLocations() {
       return new Promise(resolve => {
-        resolve(fetchLocations(this.searchParameters));
+        resolve(
+          this.locationViewType === "image"
+            ? fetchLocationImages(this.searchParameters)
+            : fetchLocations(this.searchParameters)
+        );
       });
+    },
+    searchLocationImages(searchImages) {
+      // Just to trigger change
+      if (searchImages) {
+        this.updateSearchParamsByField(["date_added"], "sortBy");
+        this.updateSearchParamsByField([true], "sortDesc");
+      } else {
+        this.updateSearchParamsByField(["id"], "sortBy");
+        this.updateSearchParamsByField([true], "sortDesc");
+      }
     }
   }
 };
