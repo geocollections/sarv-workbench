@@ -628,7 +628,6 @@
             :is-draggable="!(attachment && attachment.length > 0)"
             open-file
             show-attachment-link
-            show-new-files-immediately
             show-reset-files-button
           />
         </div>
