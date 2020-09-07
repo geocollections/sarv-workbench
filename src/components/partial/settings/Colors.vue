@@ -258,6 +258,19 @@
         </v-radio-group>
       </v-col>
     </v-row>
+    <v-divider class="ma-1"></v-divider>
+    <v-row>
+      <v-col>
+        <v-btn
+          class="ma-1"
+          :color="myBodyActiveColor"
+          :dark="bodyActiveColorDark"
+          v-on:click="resetColors"
+        >
+          Reset colors
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -333,7 +346,6 @@ export default {
     // { name: "black", hex: "#000000" },
     // { name: "white", hex: "#FFFFFF" }
   }),
-
   computed: {
     ...mapState("settings", [
       "bodyColor",
@@ -485,7 +497,8 @@ export default {
       "updateDrawerLeftActiveColor",
       "updateDrawerRightColor",
       "updateDrawerRightDark",
-      "updateDrawerLeftRightColor"
+      "updateDrawerLeftRightColor",
+      "resetColors"
     ])
   }
 };

@@ -102,6 +102,22 @@ const actions = {
   updateFormSections({ state, commit }, payload) {
     let clonedPayload = cloneDeep(payload);
     commit("UPDATE_FORM_SECTIONS", clonedPayload);
+  },
+
+  resetColors({ commit }) {
+    commit("UPDATE_BODY_COLOR", "grey lighten-5");
+    commit("UPDATE_BODY_DARK", false);
+    commit("UPDATE_BODY_ACTIVE_COLOR", "deep-orange");
+    commit("UPDATE_BODY_ACTIVE_COLOR_DARK", true);
+    commit("UPDATE_NAVBAR_COLOR", "blue-grey");
+    commit("UPDATE_NAVBAR_DARK", true);
+    commit("UPDATE_DRAWER_LEFT_COLOR", "white");
+    commit("UPDATE_DRAWER_LEFT_DARK", false);
+    commit("UPDATE_DRAWER_LEFT_ACTIVE_COLOR", "black");
+    commit("UPDATE_DRAWER_RIGHT_COLOR", "white");
+    commit("UPDATE_DRAWER_RIGHT_DARK", false);
+    commit("UPDATE_DRAWER_RIGHT_ACTIVE_COLOR", "deep-orange");
+
   }
 };
 
