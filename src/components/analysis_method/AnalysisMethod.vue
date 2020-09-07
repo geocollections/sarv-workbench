@@ -259,11 +259,16 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.analysis_method.parent_method = {
-        id: obj.parent_method,
-        analysis_method: obj.parent_method__analysis_method,
-        method_en: obj.parent_method__method_en
-      };
+      if (this.isNotEmpty(obj.parent_method)) {
+        this.analysis_method.parent_method = {
+          id: obj.parent_method,
+          analysis_method: obj.parent_method__analysis_method,
+          method_en: obj.parent_method__method_en
+        };
+        this.autocomplete.analysis_method.push(
+          this.analysis_method.parent_method
+        );
+      }
     }
   }
 };

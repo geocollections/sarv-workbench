@@ -217,9 +217,9 @@ export default {
         ],
         autocomplete: {
           loaders: {
-            analysis_parameter: false,
+            analysis_parameter: false
           },
-          analysis_parameter: [],
+          analysis_parameter: []
         },
         requiredFields: ["parameter"],
         analysis_parameter: {},
@@ -284,11 +284,14 @@ export default {
     },
 
     fillAutocompleteFields(obj) {
-      this.analysis_parameter.parent_parameter = {
-        id: obj.parent_parameter,
-        parameter_name: obj.parent_parameter__parameter_name,
-        parameter_name_en: obj.parent_parameter__parameter_name_en
-      };
+      if (this.isNotEmpty(obj.parent_parameter)) {
+        this.analysis_parameter.parent_parameter = {
+          id: obj.parent_parameter,
+          parameter_name: obj.parent_parameter__parameter_name,
+          parameter_name_en: obj.parent_parameter__parameter_name_en
+        };
+        this.autocomplete.analysis_parameter.push(this.analysis_parameter.parent_parameter)
+      }
     }
   }
 };
