@@ -620,7 +620,7 @@
 
       <transition>
         <div v-show="block.digital" class="pa-1">
-          <file-upload
+          <file-input
             :files-from-object="attachment"
             v-on:file-uploaded="addPDF"
             acceptable-format="application/pdf"
@@ -628,6 +628,8 @@
             :is-draggable="!(attachment && attachment.length > 0)"
             open-file
             show-attachment-link
+            show-new-files-immediately
+            show-reset-files-button
           />
         </div>
       </transition>
@@ -661,7 +663,7 @@
         <div v-show="block.files" class="pa-1">
           <v-row no-gutters>
             <v-col cols="12" class="pa-1">
-              <file-upload
+              <file-input
                 show-existing
                 :files-from-object="relatedData.attachment"
                 v-on:update:existing-files="addExistingFiles"
@@ -928,7 +930,7 @@ import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import Editor from "../partial/inputs/Editor";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import ExportButtons from "../partial/export/ExportButtons";
 import StratigraphyTable from "../stratigraphy/StratigraphyTable";
 import TaxonTable from "../taxon/TaxonTable";
@@ -942,7 +944,7 @@ export default {
     TaxonTable,
     StratigraphyTable,
     ExportButtons,
-    FileUpload,
+    FileInput,
     Editor,
     CheckboxWrapper,
     TextareaWrapper,

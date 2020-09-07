@@ -456,7 +456,7 @@
           />
 
           <div v-show="activeTab === 'attachment_link'">
-            <file-upload
+            <file-input
               show-existing
               :record-options="$route.meta.isEdit"
               :files-from-object="relatedData.attachment_link.results"
@@ -543,14 +543,14 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import AnalysisResultsTable from "./relatedTables/AnalysisResultsTable";
 import requestsMixin from "../../mixins/requestsMixin";
 
 export default {
   components: {
     AnalysisResultsTable,
-    FileUpload,
+    FileInput,
     CheckboxWrapper,
     DateWrapper,
     AutocompleteWrapper,

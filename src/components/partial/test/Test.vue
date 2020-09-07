@@ -24,7 +24,8 @@
 
         <v-row no-gutters>
           <v-col cols="12" class="pa-1">
-            <file-upload
+            <file-input
+              show-new-files-immediately
               v-on:file-uploaded="addFiles"
               v-on:files-cleared="clearFiles"
               acceptable-format="*/*"
@@ -75,14 +76,14 @@
 </template>
 
 <script>
-import FileUpload from "../inputs/FileInput";
+import FileInput from "../inputs/FileInput";
 import InputWrapper from "../inputs/InputWrapper";
 import { mapState } from "vuex";
 import { postRequest } from "../../../assets/js/api/apiCalls";
 
 export default {
   name: "Test",
-  components: { InputWrapper, FileUpload },
+  components: { InputWrapper, FileInput },
   data: () => ({
     test: {
       url: "https://rwapi.geocollections.info/",

@@ -461,7 +461,7 @@
           />
 
           <div v-show="activeTab === 'attachment_link'">
-            <file-upload
+            <file-input
               show-existing
               :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
@@ -871,7 +871,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import DoiRelatedIdentifierTable from "./relatedTables/DoiRelatedIdentifierTable";
 import DoiGeolocationTable from "./relatedTables/DoiGeolocationTable";
 import DoiAgentTable from "./relatedTables/DoiAgentTable";
@@ -886,7 +886,7 @@ export default {
     DoiAgentTable,
     DoiGeolocationTable,
     DoiRelatedIdentifierTable,
-    FileUpload,
+    FileInput,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,

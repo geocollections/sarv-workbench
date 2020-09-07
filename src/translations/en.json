@@ -1828,7 +1828,8 @@
     "confirmation": "Are you sure you want to leave without saving the edits?",
     "confirmationClose": "Yes, leave",
     "confirmationCont": "Continue editing",
-    "confirmationSave": "Save the record"
+    "confirmationSave": "Save the record",
+    "reference_file_upload_failed": "File upload failed! Please click the following button to clear files."
   },
   "logs": {
     "title": "Editing history",
@@ -1860,6 +1861,7 @@
     "listView": "List view",
     "imageView": "Image view",
     "clearLocalStorage": "Remove defaults",
-    "clearLocalStorageAndFields": "Remove defaults and clear fields"
+    "clearLocalStorageAndFields": "Remove defaults and clear fields",
+    "reset_files": "Clear failed file(s)"
   }
 }

@@ -49,7 +49,8 @@
 
         <transition>
           <div v-show="block.fileInput" class="pa-1">
-            <file-upload
+            <file-input
+              show-new-files-immediately
               accept-multiple
               :record-options="recordOptions"
               :record-image="recordImage"
@@ -3879,14 +3880,14 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import SelectWrapper from "../partial/inputs/SelectWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import toastMixin from "../../mixins/toastMixin";
 
 export default {
   name: "Attachment",
 
   components: {
-    FileUpload,
+    FileInput,
     SelectWrapper,
     TextareaWrapper,
     DateWrapper,
@@ -4878,7 +4879,7 @@ export default {
       }
     },
 
-    /* FileUpload Events START */
+    /* FileInput Events START */
     addFiles(files) {
       this.files = files;
     },
@@ -4981,7 +4982,7 @@ export default {
       }
       return decimalDegrees;
     },
-    /* FileUpload Events END */
+    /* FileInput Events END */
 
     /* MapComponent Event START */
     updateLocation(location) {

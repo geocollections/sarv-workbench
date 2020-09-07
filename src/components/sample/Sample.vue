@@ -930,7 +930,7 @@
             />
 
             <div v-show="activeTab === 'attachment_link'">
-              <file-upload
+              <file-input
                 show-existing
                 :files-from-object="relatedData.attachment_link.results"
                 v-on:update:existing-files="addExistingFiles"
@@ -1016,7 +1016,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import SampleAnalysisTable from "./relatedTables/SampleAnalysisTable";
 import requestsMixin from "../../mixins/requestsMixin";
 import SamplePreparationTable from "./relatedTables/SamplePreparationTable";
@@ -1032,7 +1032,7 @@ export default {
     SampleTaxonListTable,
     SamplePreparationTable,
     SampleAnalysisTable,
-    FileUpload,
+    FileInput,
     TextareaWrapper,
     DateWrapper,
     AutocompleteWrapper,

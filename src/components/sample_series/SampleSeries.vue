@@ -326,7 +326,7 @@
           />
 
           <div v-show="activeTab === 'attachments'">
-            <file-upload
+            <file-input
               show-existing
               :files-from-object="relatedData.attachments.results"
               v-on:update:existing-files="addExistingFiles"
@@ -395,14 +395,14 @@ import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
 import SampleSeriesSamplesTable from "./relatedTables/SampleSeriesSamplesTable";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import { mapActions, mapState } from "vuex";
 
 export default {
   name: "SampleSeries",
 
   components: {
-    FileUpload,
+    FileInput,
     SampleSeriesSamplesTable,
     CheckboxWrapper,
     DateWrapper,

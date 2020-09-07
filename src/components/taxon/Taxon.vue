@@ -568,7 +568,7 @@
           />
 
           <div v-show="activeTab === 'attachment'">
-            <file-upload
+            <file-input
               show-existing
               :files-from-object="relatedData.attachment.results"
               v-on:update:existing-files="addExistingFiles"
@@ -668,7 +668,7 @@ import {
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import TaxonSubclassTable from "./relatedTables/TaxonSubclassTable";
 import TaxonSynonymTable from "./relatedTables/TaxonSynonymTable";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -695,7 +695,7 @@ export default {
     TaxonTypeSpecimenTable,
     TaxonSynonymTable,
     TaxonSubclassTable,
-    FileUpload,
+    FileInput,
     CheckboxWrapper,
     AutocompleteWrapper,
     InputWrapper

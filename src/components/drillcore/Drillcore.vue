@@ -267,7 +267,7 @@
           />
 
           <div v-show="activeTab === 'attachment_link'">
-            <file-upload
+            <file-input
               show-existing
               :files-from-object="relatedData.attachment_link.results"
               v-on:update:existing-files="addExistingFiles"
@@ -352,7 +352,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import DrillcoreBoxTable from "./relatedTables/DrillcoreBoxTable";
 import DrillcoreStudyTable from "./relatedTables/DrillcoreStudyTable";
 import requestsMixin from "../../mixins/requestsMixin";
@@ -364,7 +364,7 @@ export default {
   components: {
     DrillcoreStudyTable,
     DrillcoreBoxTable,
-    FileUpload,
+    FileInput,
     CheckboxWrapper,
     TextareaWrapper,
     AutocompleteWrapper,

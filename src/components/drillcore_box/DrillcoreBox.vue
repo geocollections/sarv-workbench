@@ -254,7 +254,7 @@
           />
 
           <div v-show="activeTab === 'add_attachment'">
-            <file-upload
+            <file-input
               show-existing
               :files-from-object="relatedData.add_attachment.results"
               v-on:update:existing-files="addExistingFiles"
@@ -318,7 +318,7 @@ import {
 } from "../../assets/js/api/apiCalls";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import requestsMixin from "../../mixins/requestsMixin";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import DrillcoreBoxAttachmentTable from "./related_tables/DrillcoreBoxAttachmentTable";
 import { mapActions, mapState } from "vuex";
 
@@ -327,7 +327,7 @@ export default {
 
   components: {
     DrillcoreBoxAttachmentTable,
-    FileUpload,
+    FileInput,
     TextareaWrapper,
     InputWrapper,
     AutocompleteWrapper

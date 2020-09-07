@@ -560,7 +560,7 @@
             />
 
             <div v-show="activeTab === 'attachment'">
-              <file-upload
+              <file-input
                 show-existing
                 :files-from-object="relatedData.attachment.results"
                 v-on:update:existing-files="addExistingFiles"
@@ -747,7 +747,7 @@ import InputWrapper from "../partial/inputs/InputWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
 import DateWrapper from "../partial/inputs/DateWrapper";
 import CheckboxWrapper from "../partial/inputs/CheckboxWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SpecimenIdentificationTable from "./relatedTables/SpecimenIdentificationTable";
 import SpecimenIdentificationGeologyTable from "./relatedTables/SpecimenIdentificationGeologyTable";
@@ -769,7 +769,7 @@ export default {
     SpecimenReferenceTable,
     SpecimenIdentificationGeologyTable,
     SpecimenIdentificationTable,
-    FileUpload,
+    FileInput,
     CheckboxWrapper,
     DateWrapper,
     TextareaWrapper,

@@ -26,6 +26,31 @@
       </v-col>
     </v-row>
 
+    <!-- This is special use case for reference digital version (pdf). -->
+    <div
+      class="ma-2"
+      v-if="
+        showResetFilesButton &&
+          $route.meta.object === 'reference' &&
+          !acceptMultiple &&
+          userHasInsertedFiles &&
+          !isExistingFilesValid
+      "
+    >
+      <v-alert
+        class="mb-3"
+        border="left"
+        :color="bodyColor.split('n-')[0] + 'n-2'"
+        elevation="3"
+        icon="fas fa-info"
+        >{{ $t("messages.reference_file_upload_failed") }}</v-alert
+      >
+      <v-btn @click="files = null" :dark="bodyActiveColorDark" :color="bodyActiveColor"
+        >{{ $t("buttons.reset_files") }}
+        <v-icon right>far fa-trash-alt</v-icon></v-btn
+      >
+    </div>
+
     <!-- BUTTONS -->
     <div class="d-flex flex-wrap">
       <div class="ma-1" v-if="recordOptions && recordImage">
@@ -192,8 +217,8 @@
     </v-row>
 
     <!-- NEW FILES -->
-    <!-- Todo: Can be removed because now reloading related_data after file upload -->
-    <v-row no-gutters v-if="isFilesValid && false">
+    <!-- Todo: Can be removed because now reloading related_data after file upload #546 -->
+    <v-row no-gutters v-if="isFilesValid && showNewFilesImmediately">
       <v-col cols="12" class="pa-1" v-if="showExisting">
         <div class="title">
           {{ $t("messages.newFiles") }}: <b>{{ files.length }}</b>
@@ -283,10 +308,11 @@ import autocompleteMixin from "../../../mixins/autocompleteMixin";
 import ImageViewWrapper from "../image_view/ImageViewWrapper";
 import EXIF from "exif-js";
 import moment from "moment";
+import toastMixin from "@/mixins/toastMixin";
 
 export default {
-  name: "FileUpload",
-  mixins: [autocompleteMixin],
+  name: "FileInput",
+  mixins: [autocompleteMixin, toastMixin],
   components: { ImageViewWrapper, CheckboxWrapper, AutocompleteWrapper },
   props: {
     recordOptions: Boolean,
@@ -303,6 +329,8 @@ export default {
       default: true
     },
     showExisting: Boolean,
+    showNewFilesImmediately: Boolean,
+    showResetFilesButton: Boolean,
     acceptMultiple: Boolean,
     acceptableFormat: {
       type: String,

@@ -465,7 +465,7 @@
       <v-tabs-items>
         <v-card class="pa-1" flat :color="bodyColor.split('n-')[0] + 'n-5'">
           <div v-show="activeTab === 'attachment_link'">
-            <file-upload
+            <file-input
               show-existing
               :record-options="$route.meta.isEdit"
               :files-from-object="relatedData.attachment_link.results"
@@ -804,7 +804,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import InputWrapper from "../partial/inputs/InputWrapper";
 import AutocompleteWrapper from "../partial/inputs/AutocompleteWrapper";
 import TextareaWrapper from "../partial/inputs/TextareaWrapper";
-import FileUpload from "../partial/inputs/FileInput";
+import FileInput from "../partial/inputs/FileInput";
 import requestsMixin from "../../mixins/requestsMixin";
 import SiteLocalityDescriptionTable from "./relatedTables/SiteLocalityDescriptionTable";
 import SiteLocalityReferenceTable from "./relatedTables/SiteLocalityReferenceTable";
@@ -814,7 +814,7 @@ export default {
   components: {
     SiteLocalityReferenceTable,
     SiteLocalityDescriptionTable,
-    FileUpload,
+    FileInput,
     TextareaWrapper,
     AutocompleteWrapper,
     InputWrapper,
