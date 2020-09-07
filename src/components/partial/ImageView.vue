@@ -4,7 +4,7 @@
       <div class="col">
         <image-view-wrapper
           :object="module"
-          :data="data"
+          :data="computedData"
           :body-active-color="bodyActiveColor"
           :body-color="bodyColor"
         />
@@ -19,7 +19,19 @@ import ImageViewWrapper from "./image_view/ImageViewWrapper";
 export default {
   name: "ImageView",
   components: { ImageViewWrapper },
-  props: ["module", "data", "bodyActiveColor", "bodyColor"]
+  props: ["module", "data", "bodyActiveColor", "bodyColor"],
+  computed: {
+    computedData() {
+      if (this.module === "location") {
+
+        const data = this.data.map(item => {
+          return {...item, uuid_filename: item.attachment__uuid_filename}
+        })
+        return data;
+      }
+      return this.data
+    }
+  }
 };
 </script>
 

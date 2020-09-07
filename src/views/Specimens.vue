@@ -24,7 +24,7 @@
       :use-list-view="true"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
-      v-on:search:specimenImages="searchSpecimenImages"
+      v-on:search:images="searchSpecimenImages"
     />
   </div>
 </template>

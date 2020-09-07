@@ -3295,6 +3295,61 @@ export function fetchLocations(data) {
   }
 }
 
+export function fetchLocationImages(data) {
+  let fields = "attachment__uuid_filename,storage__id,storage__location"
+  let searchFields = "";
+
+  if (data.id && data.id.trim().length > 0) {
+    searchFields += `storage__id__${data.id__lookuptype || "icontains"}=${data.id}`;
+  }
+
+  if (data.location && data.location.trim().length > 0) {
+    searchFields += `&storage__location__${data.location__lookuptype || "icontains"}=${
+        data.location
+    }`;
+  }
+  if (data.location_location && data.location_location.trim().length > 0) {
+    searchFields += `&storage__location_location__${data.location_location__lookuptype ||
+    "icontains"}=${data.location_location}`;
+  }
+  if (data.stratigraphy_free && data.stratigraphy_free.trim().length > 0) {
+    searchFields += `&storage__stratigraphy_free__${data.stratigraphy_free__lookuptype ||
+    "icontains"}=${data.stratigraphy_free}`;
+  }
+  if (data.agent && data.agent.trim().length > 0) {
+    searchFields += `&multi_search=value:${
+        data.agent
+    };fields:storage__agent__id,storage__agent__agent,storage__agent__forename,storage__agent__surename;lookuptype:${data.agent__lookuptype ||
+    "icontains"}`;
+  }
+  // if (data.user_added && data.user_added.trim().length > 0) {
+  //   searchFields += `&user_added__${data.user_added__lookuptype ||
+  //     "icontains"}=${data.user_added}`;
+  // }
+  // if (data.date_added && data.date_added.trim().length > 0) {
+  //   searchFields += `&date_added__${data.date_added__lookuptype ||
+  //     "icontains"}=${data.date_added}`;
+  // }
+  if (data.contents && data.contents.trim().length > 0) {
+    searchFields += `&storage__contents__${data.contents__lookuptype || "icontains"}=${
+        data.contents
+    }`;
+  }
+
+  if (searchFields.startsWith("&")) searchFields = searchFields.substring(1);
+
+  if (searchFields.length > 0) {
+    return get(
+        `attachment_link/?${searchFields}&page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
+    );
+  } else {
+    return get(
+        `attachment_link/?page=${data.page}&paginate_by=${data.paginateBy}&fields=${fields}&format=json&storage__id__isnull=false`
+    );
+  }
+}
+
+
 export function fetchLocationAttachment(id, searchParameters) {
   let orderBy = buildOrderBy(
     searchParameters.sortBy,
