@@ -82,7 +82,7 @@
       <v-skeleton-loader type="table"></v-skeleton-loader>
     </v-card>
 
-    
+
     <!-- TODO: Attachment card -->
     <!-- TODO: Samples card -->
     <!-- TODO: Analyses card -->
