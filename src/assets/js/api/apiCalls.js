@@ -3241,7 +3241,7 @@ export function fetchLocation(id) {
 
 export function fetchLocations(data) {
   let fields =
-    "id,location,parent_location__location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,remarks,database,user_added,date_added";
+    "id,location,parent_location__location,contents,agent,agent__agent,date_collected_free,stratigraphy_free,number_items,remarks,database,database__name,database__name_en,user_added,date_added";
   let searchFields = "";
   let orderBy = buildOrderBy(data.sortBy, data.sortDesc);
 

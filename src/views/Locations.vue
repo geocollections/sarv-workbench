@@ -16,6 +16,7 @@
       :module="$route.meta.object"
       :searchParameters="searchParameters"
       :api-call="fetchLocations"
+      :use-list-view="true"
       :use-image-view="true"
       v-on:update:searchParameters="updateSearchParamsByField"
       v-on:search:images="searchLocationImages"

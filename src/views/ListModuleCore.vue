@@ -36,7 +36,7 @@
             class="mb-2"
             value="list"
             :label="
-              module === 'sample' || module === 'specimen'
+              module === 'sample' || module === 'specimen' || module === 'location'
                 ? $t('references.labelView')
                 : $t('references.listView')
             "
