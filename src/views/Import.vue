@@ -99,11 +99,16 @@
 
         <v-alert v-else type="error" text border="right">
           <span class="mr-2">
-          {{ $t("messages.attachment_upload_error") }}
+            {{ $t("messages.attachment_upload_error") }}
           </span>
 
           <v-btn
-            v-if="isFileAdded && isFileImportSuccess && !attachment && !isAttachmentSuccess"
+            v-if="
+              isFileAdded &&
+                isFileImportSuccess &&
+                !attachment &&
+                !isAttachmentSuccess
+            "
             small
             @click="retryUploadImportedFileAsNewAttachment"
             :color="bodyActiveColor"
@@ -138,7 +143,7 @@
 import SpinnerWrapper from "@/components/partial/SpinnerWrapper";
 import FileInput from "@/components/partial/inputs/FileInput";
 import toastMixin from "@/mixins/toastMixin";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { postRequest } from "@/assets/js/api/apiCalls";
 export default {
   name: "Import",
@@ -169,6 +174,7 @@ export default {
   computed: {
     ...mapState("settings", ["bodyColor", "bodyActiveColor"]),
     ...mapState("search", ["loadingState"]),
+    ...mapGetters("user", ["getCurrentUser"]),
 
     isFileAdded() {
       return this.fileImport.file && this.fileImport.file.length === 1;
@@ -230,11 +236,11 @@ export default {
             else this.toastSuccess({ text: "File successfully imported!" });
 
             this.fileImportResponse = message;
-          }
 
-          await this.uploadImportedFileAsNewAttachment();
-          await this.getNewlyAddedRecords();
-
+            await this.uploadImportedFileAsNewAttachment();
+            await this.getNewlyAddedRecords();
+          } else if (fileUploadResponse?.data?.error)
+            this.toastError({ text: fileUploadResponse.data.error });
         } else {
           this.toastError({ text: "File import failed!" });
           this.fileImportResponse = fileUploadResponse?.data;
@@ -270,13 +276,16 @@ export default {
     },
 
     async uploadImportedFileAsNewAttachment() {
+      console.log(this.getCurrentUser.id);
       let data = {
         description: `See fail loodi kasutades faili importi. Failinimi: ${
           this.fileImport.file[0].name
         }, Kuupäev: ${new Date().toISOString().split("T")[0]}`,
         description_en: `This attachment was created using file import. Filename: ${
           this.fileImport.file[0].name
-        }, Date: ${new Date().toISOString().split("T")[0]}`
+        }, Date: ${new Date().toISOString().split("T")[0]}`,
+        is_private: true,
+        author: this.getCurrentUser.id
       };
 
       let formData = new FormData();
