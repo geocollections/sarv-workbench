@@ -1,6 +1,6 @@
 <template>
   <div class="analyses">
-    <table-view-title title="header.analyses" buttonPath="/analysis/add" />
+    <table-view-title title="header.analyses" buttonPath="/analysis/add" show-import-button />
 
     <table-view-search
       :show-search="block.search"

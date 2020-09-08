@@ -272,7 +272,8 @@
     "admin": "Admin",
     "analysis_parameter": "Analysis parameters",
     "analysis_method": "Analysis methods",
-    "sample_import": "Import sample file"
+    "sample_import": "Import sample file",
+    "analysis_import": "Import analysis file"
   },
   "footer": {
     "info": "Questions and comments about the database and website: Olle Hints"
@@ -923,8 +924,6 @@
     "save_as_new_specimen": "Save as new specimen",
     "site": "Site",
     "series_search": "Series ID or name",
-    "sample_import1": "A file named",
-    "sample_import2": "will be uploaded",
     "relatedTables": {
       "sample_reference": "References",
       "analysis": "Analyses",
@@ -1833,7 +1832,9 @@
     "confirmationCont": "Continue editing",
     "confirmationSave": "Save the record",
     "reference_file_upload_failed": "File upload failed! Please click the following button to clear files.",
-    "response": "Response"
+    "response": "Response",
+    "file_import1": "A file named",
+    "file_import2": "will be uploaded"
   },
   "logs": {
     "title": "Editing history",
@@ -1868,6 +1869,7 @@
     "send_request": "Send request",
     "clearLocalStorage": "Remove defaults",
     "clearLocalStorageAndFields": "Remove defaults and clear fields",
-    "reset_files": "Clear failed file(s)"
+    "reset_files": "Clear failed file(s)",
+    "import": "Import file"
   }
 }
